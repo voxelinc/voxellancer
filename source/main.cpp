@@ -10,6 +10,7 @@
 #include <glowwindow/WindowEventHandler.h>
 
 #include <memory>
+#include <iostream>
 
 #include "game.h"
 
@@ -30,7 +31,7 @@ public:
 	virtual void initializeEvent(glow::Window & window)
     {
 		glow::DebugMessageOutput::enable();
-		m_game.initialization();
+		m_game.initialize();
 		m_timer.reset();
     }
     
@@ -41,11 +42,12 @@ public:
     {
 		glViewport(0, 0, width, height);
 		m_game.resizeEvent(width, height);
+        std::cout << "resize" << std::endl;
     }
 
 	virtual void paintEvent(glow::Window & window)
     {
-		float delta = static_cast<float>(m_timer.elapsed());
+		float delta = static_cast<float>(m_timer.elapsed() / 1000000000.0);
 		m_timer.reset();
 
 		m_game.update(delta);
