@@ -42,7 +42,7 @@ public:
     {
 		glViewport(0, 0, width, height);
 		m_game.resizeEvent(width, height);
-        std::cout << "resize" << std::endl;
+        std::cout << "resize " << width << "x" << height << std::endl;
     }
 
 	virtual void paintEvent(glow::Window & window)
@@ -57,6 +57,22 @@ public:
 	virtual void idleEvent(glow::Window & window)
     {
         window.repaint();
+    }
+
+    virtual void keyPressEvent(glow::Window & window, glow::KeyEvent & event) {
+        switch (event.key())
+        {
+        case glow::KeyEvent::KeyF5:
+            glow::ShaderFile::reloadAll();
+            break;
+
+        default:
+            break;
+        }
+    }
+
+    virtual void keyReleaseEvent(glow::Window & window, glow::KeyEvent & event) {
+
     }
 
 protected:
