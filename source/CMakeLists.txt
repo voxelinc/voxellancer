@@ -29,6 +29,7 @@ target_link_libraries(${target}
     ${GLOW_LIBRARY}
     ${GLOW_UTILS_LIBRARY}
     ${GLOW_WINDOW_LIBRARY}
+    ${FMOD_LIBRARY}
 )
 
 set_target_properties(${target}

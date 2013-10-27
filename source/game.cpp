@@ -21,8 +21,20 @@
 #include <glow/AutoTimer.h>
 #include <glow/logging.h>
 
+#include <fmod.hpp>
+#include <fmod_dsp.h>
+#include <fmod_errors.h>
 
 #include "game.h"
+
+void ERRCHECK(FMOD_RESULT result)
+{
+    if (result != FMOD_OK)
+    {
+        printf("FMOD error! (%d) %s\n", result, FMOD_ErrorString(result));
+        exit(-1);
+    }
+}
 
 Game::Game():
     m_shaderProgram(0),
@@ -40,6 +52,22 @@ void Game::initialize()
 	createAndSetupTexture();
 	createAndSetupShaders();
 	createAndSetupGeometry();
+    
+    FMOD::System * system = 0;
+    FMOD::Sound  * sound = 0;
+    FMOD::Channel *channel = 0;
+
+    FMOD_RESULT result = FMOD::System_Create(&system);
+    ERRCHECK(result);
+
+    result = system->init(32, FMOD_INIT_NORMAL, 0);
+    ERRCHECK(result);
+
+    result = system->createSound("data/LASER.mp3", FMOD_SOFTWARE, 0, &sound);
+    ERRCHECK(result);
+
+    result = system->playSound(FMOD_CHANNEL_FREE, sound, false, &channel);
+    ERRCHECK(result);
 
     m_cube = new Cube();
     

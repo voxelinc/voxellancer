@@ -16,14 +16,11 @@ set(META_AUTHOR_DOMAIN       "https://github.com/voxelinc/voxellancer/")
 
 option(OPTION_LIMIT_CONFIGS  "Generate limited configs (Release; Debug)" ON)
 option(OPTION_LOCAL_INSTALL  "Install to a local directory instead of the system" OFF)
-option(OPTION_BUILD_STATIC   "Build static libraries" OFF)
-option(OPTION_BUILD_EXAMPLES "Build examples" ON)
 option(OPTION_ERRORS_AS_EXCEPTION "Throw exceptions" OFF)
 
 
 # CMAKE CONFIGURATION
 
-set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 set(DATA_DIR ${CMAKE_CURRENT_SOURCE_DIR}/data)
 
 
@@ -150,6 +147,7 @@ find_package(OpenGL REQUIRED)
 find_package(GLM REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(GLOW REQUIRED)
+find_package(FMOD REQUIRED)
 
 # Include directories
 include_directories(
@@ -158,7 +156,9 @@ include_directories(
     ${OPENGL_INCLUDE_DIR}
     ${GLM_INCLUDE_DIR}
     ${GLEW_INCLUDE_DIR}
-    ${GLOW_INCLUDE_DIR})
+    ${GLOW_INCLUDE_DIR}
+    ${FMOD_INCLUDE_DIR}
+)
 
 
 add_subdirectory(source)
