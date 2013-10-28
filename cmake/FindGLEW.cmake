@@ -19,7 +19,7 @@ find_library(GLEW_LIBRARY
     PATHS
     $ENV{GLEWDIR}/lib
     $ENV{GLEW_HOME}/lib
-    $ENV{GLEW_HOME}/lib/release/x64
+    $ENV{GLEW_HOME}/lib/Release/x64
     /usr/lib64
     /usr/local/lib64
     /sw/lib64
@@ -31,12 +31,12 @@ find_library(GLEW_LIBRARY
     DOC "The GLEW library")
 
 if(WIN32)
-
     find_file(GLEW_BINARY
         NAMES glew32.dll glew32s.dll
         PATHS
         $ENV{GLEWDIR}/bin
         $ENV{GLEW_HOME}/bin
+        $ENV{GLEW_HOME}/bin/Release/x64
         DOC "The GLEW binary")
 
 endif()

@@ -41,6 +41,14 @@ FIND_LIBRARY(FMOD_LIBRARY
     /usr/freeware/lib64
 )
 
+if(WIN32)
+    find_file(FMOD_BINARY
+        NAMES fmodex64.dll
+        PATHS
+        $ENV{FMOD_DIR}
+        DOC "The FMOD binary")
+endif()
+
 IF(FMOD_LIBRARY AND FMOD_INCLUDE_DIR)
     SET(FMOD_FOUND "YES")
     SET( FMOD_LIBRARIES ${FMOD_LIBRARY} )
