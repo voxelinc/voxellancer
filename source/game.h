@@ -13,11 +13,14 @@ class Game {
 public:
     Game();
 	void initialize();
-	void update(float delta_sec);
+
+
+    void update(float delta_sec);
 	void draw();
 	void resizeEvent(const unsigned int width, const unsigned int height);
 
 private:
+    void testFMOD();
 	void createAndSetupTexture();
 	void createAndSetupShaders();
 	void createAndSetupGeometry();

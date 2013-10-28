@@ -65,7 +65,6 @@ public:
         case glow::KeyEvent::KeyF5:
             glow::ShaderFile::reloadAll();
             break;
-
         default:
             break;
         }

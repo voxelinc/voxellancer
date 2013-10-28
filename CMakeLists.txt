@@ -146,16 +146,15 @@ file(WRITE ${CMAKE_BINARY_DIR}/revision ${GIT_REV})
 find_package(OpenGL REQUIRED)
 find_package(GLM REQUIRED)
 find_package(GLEW REQUIRED)
-find_package(GLOW REQUIRED)
 find_package(FMOD REQUIRED)
+find_package(GLOW REQUIRED)
+
 
 # Include directories
 include_directories(
-    ${GLOW_SOURCE_DIR}  # for Meta.h
-    ${GLOW_SOURCE_DIR}/include
     ${OPENGL_INCLUDE_DIR}
-    ${GLM_INCLUDE_DIR}
     ${GLEW_INCLUDE_DIR}
+    ${GLM_INCLUDE_DIR}
     ${GLOW_INCLUDE_DIR}
     ${FMOD_INCLUDE_DIR}
 )

@@ -8,6 +8,6 @@ out vec2 v_uv;
 
 void main()
 {
-	v_uv = a_vertex.xy;
+	v_uv = vec2(a_vertex.x, 1.0f - a_vertex.y);
 	gl_Position = projection * modelView * vec4(a_vertex, 1.0);
 }

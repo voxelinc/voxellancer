@@ -1,5 +1,5 @@
 
-#include "GL/glew.h"
+#include <GL/glew.h>
 
 #include <algorithm>
 #include <random>
@@ -11,6 +11,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
+
 
 #include <glow/Error.h>
 #include <glow/Uniform.h>
@@ -26,15 +27,8 @@
 #include <fmod_errors.h>
 
 #include "game.h"
+#include "ddstexture.h"
 
-void ERRCHECK(FMOD_RESULT result)
-{
-    if (result != FMOD_OK)
-    {
-        printf("FMOD error! (%d) %s\n", result, FMOD_ErrorString(result));
-        exit(-1);
-    }
-}
 
 Game::Game():
     m_shaderProgram(0),
@@ -53,21 +47,7 @@ void Game::initialize()
 	createAndSetupShaders();
 	createAndSetupGeometry();
     
-    FMOD::System * system = 0;
-    FMOD::Sound  * sound = 0;
-    FMOD::Channel *channel = 0;
-
-    FMOD_RESULT result = FMOD::System_Create(&system);
-    ERRCHECK(result);
-
-    result = system->init(32, FMOD_INIT_NORMAL, 0);
-    ERRCHECK(result);
-
-    result = system->createSound("data/LASER.mp3", FMOD_SOFTWARE, 0, &sound);
-    ERRCHECK(result);
-
-    result = system->playSound(FMOD_CHANNEL_FREE, sound, false, &channel);
-    ERRCHECK(result);
+    testFMOD();
 
     m_cube = new Cube();
     
@@ -110,33 +90,13 @@ void Game::draw()
 
 void Game::createAndSetupTexture()
 {
-	static const int w(1024);
-	static const int h(1024);
-	std::unique_ptr<char[]> data(new char[w * h * 4]);
-
-    data[0] = 'x';
-
-    std::ifstream file("data/skybox/nebula_1024_back6.1024.1024.rgba.ub.raw", std::ios::in | std::ios::binary | std::ios::ate);
-    if (file.is_open())
-    {
-        size_t size = file.tellg();
-        assert(size == w*h * 4);
-        file.seekg(0, std::ios::beg);
-        file.read(data.get(), size);
-        file.close();
-    } else std::cout << "Unable to open file";
-    
-	m_texture = new glow::Texture(GL_TEXTURE_2D);
-
-	m_texture->setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    m_texture = DdsTexture::load("data/skybox/nebula_1024_back6.dds");
+    m_texture->setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	m_texture->setParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	m_texture->setParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	m_texture->setParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	m_texture->setParameter(GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-
-	m_texture->image2D(0, GL_RGBA8, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data.get());
-
 }
 
 void Game::createAndSetupShaders()
@@ -172,6 +132,34 @@ void Game::createAndSetupGeometry()
 	binding1->setFormat(3, GL_FLOAT, GL_FALSE, 0);
 
 	m_vertexArrayObject->enable(a_vertex);
+}
+
+void ERRCHECK(FMOD_RESULT result)
+{
+    if (result != FMOD_OK)
+    {
+        printf("FMOD error! (%d) %s\n", result, FMOD_ErrorString(result));
+        exit(-1);
+    }
+}
+
+void Game::testFMOD()
+{
+    FMOD::System * system = 0;
+    FMOD::Sound  * sound = 0;
+    FMOD::Channel *channel = 0;
+
+    FMOD_RESULT result = FMOD::System_Create(&system);
+    ERRCHECK(result);
+
+    result = system->init(32, FMOD_INIT_NORMAL, 0);
+    ERRCHECK(result);
+
+    result = system->createSound("data/LASER.mp3", FMOD_SOFTWARE, 0, &sound);
+    ERRCHECK(result);
+
+    result = system->playSound(FMOD_CHANNEL_FREE, sound, false, &channel);
+    ERRCHECK(result);
 }
 
 
