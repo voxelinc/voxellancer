@@ -1,4 +1,4 @@
-#include "glow\Array.h"
+#include "glow/Array.h"
 
 #include "cube.h"
 

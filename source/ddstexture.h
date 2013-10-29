@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 
-#include <glow\Texture.h>
+#include <glow/Texture.h>
 
 class DdsTexture
 {

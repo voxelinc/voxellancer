@@ -21,7 +21,6 @@ option(OPTION_ERRORS_AS_EXCEPTION "Throw exceptions" OFF)
 
 # CMAKE CONFIGURATION
 
-set(DATA_DIR ${CMAKE_CURRENT_SOURCE_DIR}/data)
 set(LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 
 # Include cmake modules from ./cmake
@@ -78,58 +77,6 @@ else()
     message(WARNING "Unsupported platform/compiler combination")
 endif()
 
-
-# INSTALL
-
-if(X64)
-    # http://public.kitware.com/Bug/view.php?id=9094
-    set(CPACK_NSIS_INSTALL_ROOT "$PROGRAMFILES64")
-endif()
-
-set(project ${META_PROJECT_NAME})
-if(WIN32)
-    set(INSTALL_BIN           ".")                      # C:\Programme\<project>
-    set(INSTALL_SHARED        ".")                      # C:\Programme\<project>
-    set(INSTALL_LIB           "lib")                    # C:\Programme\<project>\lib
-    set(INSTALL_INCLUDE       "include")                # C:\Programme\<project>\include
-    set(INSTALL_DOC           "doc")                    # C:\Programme\<project>\doc
-    set(INSTALL_APPLICATIONS  "")                       # Not available under Windows
-    set(INSTALL_ICONS         "")                       # Not available under Windows
-    set(INSTALL_INIT          "")                       # Not available under Windows
-    set(INSTALL_DATA          ".")                      # C:\Programme\<project>
-    set(INSTALL_EXAMPLES      ".")                      # C:\Programme\<project>
-elseif(LINUX)
-    set(INSTALL_BIN           "bin")                    # /usr/[local]/bin
-    set(INSTALL_SHARED        "lib")                    # /usr/[local]/lib
-    set(INSTALL_LIB           "lib")                    # /usr/[local]/lib
-    set(INSTALL_INCLUDE       "include")                # /usr/[local]/include
-    set(INSTALL_DOC           "share/doc/${project}")   # /usr/[local]/share/doc/<project>
-    set(INSTALL_APPLICATIONS  "share/applications")     # /usr/[local]/share/applications
-    set(INSTALL_ICONS         "share/pixmaps")          # /usr/[local]/share/pixmaps
-    set(INSTALL_INIT          "/etc/init")              # /etc/init (upstart init scripts)
-    set(INSTALL_DATA          "share/${project}")       # /usr/[local]/share/<project>
-    set(INSTALL_EXAMPLES      "share/${project}")       # /usr/[local]/share/<project>
-
-    # Adjust target paths for Local installs
-    if(OPTION_LOCAL_INSTALL)
-        # Put binaries in root directory and keep data directory name
-        set(INSTALL_BIN                       ".")           # /<INSTALL_PREFIX>
-        set(INSTALL_DATA                      ".")           # /<INSTALL_PREFIX>
-
-        # We have to change the RPATH of binaries to achieve a usable local install.
-        # [TODO] For binaries, "$ORIGIN/lib" is right, so that libraries are found in ./lib.
-        #        However, I have not yet tested what happens when libraries use other libraries.
-        #        In that case, they might need the rpath $ORIGIN instead ...
-        set(CMAKE_SKIP_BUILD_RPATH            FALSE)         # Use automatic rpath for build
-        set(CMAKE_BUILD_WITH_INSTALL_RPATH    FALSE)         # Use specific rpath for INSTALL
-        set(CMAKE_INSTALL_RPATH_USE_LINK_PATH FALSE)         # NO automatic rpath for INSTALL
-        set(CMAKE_INSTALL_RPATH               "$ORIGIN/lib") # Libraries are relative to binary
-    endif()
-endif()
-
-install(DIRECTORY ${SOURCE_DIR}/include/ DESTINATION ${INSTALL_INCLUDE})
-
-
 # GET REPOSITORY VERSION
 
 # Add a revision file containing the git-head tag for cpack and install
@@ -147,11 +94,10 @@ find_package(OpenGL REQUIRED)
 find_package(GLM REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(FMOD REQUIRED)
-#find_package(GLOW REQUIRED)
 
 set(GLOW_DIRECTORY glow)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib/${GLOW_DIRECTORY}/include)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib/${GLOW_DIRECTORY})
+include_directories(${LIB_DIR}/${GLOW_DIRECTORY}/include)
+add_subdirectory(${LIB_DIR}/${GLOW_DIRECTORY})
 
 
 # Include directories
@@ -159,9 +105,68 @@ include_directories(
     ${OPENGL_INCLUDE_DIR}
     ${GLEW_INCLUDE_DIR}
     ${GLM_INCLUDE_DIR}
-    ${GLOW_INCLUDE_DIR}
     ${FMOD_INCLUDE_DIR}
 )
 
 
-add_subdirectory(source)
+
+set(target voxellancer)
+
+message(STATUS "${target}")
+
+include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+file(GLOB SRC_FILES
+    "source/*.h"
+    "source/*.cpp"
+)
+
+file(GLOB SHADER_FILES
+    "data/*.vert"
+    "data/*.frag"
+)
+
+source_group("Shader Files" FILES ${SHADER_FILES})
+
+add_executable(${target} 
+    ${SRC_FILES}
+    ${SHADER_FILES}
+)
+
+target_link_libraries(${target} 
+    ${OPENGL_LIBRARIES}
+    ${GLEW_LIBRARY}
+    ${FMOD_LIBRARY}
+    glow
+    glowutils
+    glowwindow
+)
+
+set_target_properties(${target}
+    PROPERTIES
+    LINKER_LANGUAGE CXX
+    COMPILE_DEFINITIONS_DEBUG   "${DEFAULT_COMPILE_DEFS_DEBUG}"
+    COMPILE_DEFINITIONS_RELEASE "${DEFAULT_COMPILE_DEFS_RELEASE}"
+    COMPILE_FLAGS               "${DEFAULT_COMPILE_FLAGS}"
+    LINK_FLAGS_DEBUG            "${DEFAULT_LINKER_FLAGS_DEBUG}"
+    LINK_FLAGS_RELEASE          "${DEFAULT_LINKER_FLAGS_RELEASE}"
+    DEBUG_POSTFIX               "d${DEBUG_POSTFIX}"
+)
+
+if(WIN32)
+    add_custom_command(TARGET ${target} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy ${GLEW_BINARY} $<TARGET_FILE_DIR:${target}>)
+    add_custom_command(TARGET ${target} POST_BUILD
+       COMMAND ${CMAKE_COMMAND} -E copy ${FMOD_BINARY} $<TARGET_FILE_DIR:${target}>)    
+endif()
+
+install(TARGETS ${target} 
+        RUNTIME DESTINATION .)
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/data DESTINATION .)
+install(FILES ${GLEW_BINARY} ${FMOD_BINARY} DESTINATION .)
+
+ set(CPACK_NSIS_CREATE_ICONS "CreateShortCut '\$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\${PROJECT_NAME}.lnk' '\$INSTDIR\\\\${PROJECT_NAME}.exe'") 
+ 
+include(CPack)
