@@ -27,9 +27,9 @@ add_executable(${target}
 target_link_libraries(${target} 
     ${OPENGL_LIBRARIES}
     ${GLEW_LIBRARY}
-    ${GLOW_LIBRARY}
-    ${GLOW_UTILS_LIBRARY}
-    ${GLOW_WINDOW_LIBRARY}
+    glow
+    glowutils
+    glowwindow
     ${FMOD_LIBRARY}
 )
 
@@ -49,12 +49,6 @@ if(WIN32)
         COMMAND ${CMAKE_COMMAND} -E copy ${GLEW_BINARY} $<TARGET_FILE_DIR:${target}>)
     add_custom_command(TARGET ${target} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy ${FMOD_BINARY} $<TARGET_FILE_DIR:${target}>)    
-    add_custom_command(TARGET ${target} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy ${GLOW_BINARY} $<TARGET_FILE_DIR:${target}>)   
-    add_custom_command(TARGET ${target} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy ${GLOW_UTILS_BINARY} $<TARGET_FILE_DIR:${target}>)   
-    add_custom_command(TARGET ${target} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy ${GLOW_WINDOW_BINARY} $<TARGET_FILE_DIR:${target}>)   
 endif()
 
 install(TARGETS ${target}

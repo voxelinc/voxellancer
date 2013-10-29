@@ -4,7 +4,6 @@
 # GLEW_LIBRARY
 # GLEW_BINARY
 
-message(status "XXXX ${LIB_DIR}/glew-1.10.0/include")
 
 find_path(GLEW_INCLUDE_DIR GL/glew.h
     ${LIB_DIR}/glew-1.10.0/include

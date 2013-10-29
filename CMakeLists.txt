@@ -147,7 +147,11 @@ find_package(OpenGL REQUIRED)
 find_package(GLM REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(FMOD REQUIRED)
-find_package(GLOW REQUIRED)
+#find_package(GLOW REQUIRED)
+
+set(GLOW_DIRECTORY glow)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib/${GLOW_DIRECTORY}/include)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib/${GLOW_DIRECTORY})
 
 
 # Include directories
