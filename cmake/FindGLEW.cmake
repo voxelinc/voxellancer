@@ -4,7 +4,10 @@
 # GLEW_LIBRARY
 # GLEW_BINARY
 
+message(status "XXXX ${LIB_DIR}/glew-1.10.0/include")
+
 find_path(GLEW_INCLUDE_DIR GL/glew.h
+    ${LIB_DIR}/glew-1.10.0/include
     $ENV{GLEWDIR}/include
     $ENV{GLEW_HOME}/include
     $ENV{PROGRAMFILES}/GLEW/include
@@ -17,6 +20,7 @@ find_path(GLEW_INCLUDE_DIR GL/glew.h
 find_library(GLEW_LIBRARY
     NAMES GLEW glew glew32 glew32s
     PATHS
+    ${LIB_DIR}/glew-1.10.0/lib/Release/x64
     $ENV{GLEWDIR}/lib
     $ENV{GLEW_HOME}/lib
     $ENV{GLEW_HOME}/lib/Release/x64
@@ -34,6 +38,7 @@ if(WIN32)
     find_file(GLEW_BINARY
         NAMES glew32.dll glew32s.dll
         PATHS
+        ${LIB_DIR}/glew-1.10.0/bin/Release/x64
         $ENV{GLEWDIR}/bin
         $ENV{GLEW_HOME}/bin
         $ENV{GLEW_HOME}/bin/Release/x64

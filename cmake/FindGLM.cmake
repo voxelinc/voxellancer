@@ -2,7 +2,9 @@
 # GLM_FOUND
 # GLM_INCLUDE_DIR
 
+
 FIND_PATH(GLM_INCLUDE_DIR glm/glm.hpp
+    ${LIB_DIR}/glm-0.9.4.6
     $ENV{GLM_HOME}
     $ENV{GLMDIR}
     /usr/include

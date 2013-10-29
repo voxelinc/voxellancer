@@ -1,0 +1,3 @@
+[submodule "lib/glow"]
+	path = lib/glow
+	url = git@github.com:voxelinc/glow.git

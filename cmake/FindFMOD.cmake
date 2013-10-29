@@ -11,10 +11,10 @@ IF(FMOD_LIBRARY AND FMOD_INCLUDE_DIR)
     SET(FMOD_FIND_QUIETLY TRUE)
 ENDIF(FMOD_LIBRARY AND FMOD_INCLUDE_DIR)
 
-
 FIND_PATH(FMOD_INCLUDE_DIR
     fmod.h
     PATHS
+    ${LIB_DIR}/fmod/api/inc
     $ENV{FMOD_DIR}/inc
     $ENV{FMOD_DIR}/include
     /usr/local/include
@@ -29,6 +29,7 @@ FIND_PATH(FMOD_INCLUDE_DIR
 FIND_LIBRARY(FMOD_LIBRARY
     NAMES fmod fmodex64_vc libfmod
     PATHS
+    ${LIB_DIR}/fmod/api/lib
     $ENV{FMOD_DIR}/lib
     /usr/local/lib
     /usr/lib
@@ -45,6 +46,7 @@ if(WIN32)
     find_file(FMOD_BINARY
         NAMES fmodex64.dll
         PATHS
+        ${LIB_DIR}/fmod/api/
         $ENV{FMOD_DIR}
         DOC "The FMOD binary")
 endif()

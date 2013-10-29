@@ -22,7 +22,7 @@ option(OPTION_ERRORS_AS_EXCEPTION "Throw exceptions" OFF)
 # CMAKE CONFIGURATION
 
 set(DATA_DIR ${CMAKE_CURRENT_SOURCE_DIR}/data)
-
+set(LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 
 # Include cmake modules from ./cmake
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
