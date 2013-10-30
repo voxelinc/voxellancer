@@ -1,4 +1,4 @@
-#version 410
+#version 400
 
 uniform mat4 modelView;
 uniform mat4 projection;
@@ -21,5 +21,5 @@ void main()
 
 	gl_Position = projection * (modelView * vec4(a_vertex, 1.0) + offset);
     
-    normal = modelView * vec4(a_normal, 0.0); // dont multiply with view!
+    normal = (modelView * vec4(a_normal, 0.0)).xyz; // dont multiply with view!
 }
