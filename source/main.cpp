@@ -92,7 +92,7 @@ int main(int argc, char** argv)
 	glow::Window window;
     window.assign(new EventHandler());
 
-    window.create(format, "Simple Texture Example");
+    window.create(format, "Voxellancer");
 	window.context()->setSwapInterval(glow::Context::AdaptiveVerticalSyncronization);
 	window.show();
 

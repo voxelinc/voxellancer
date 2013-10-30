@@ -12,6 +12,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
 
+//#include <GLFW/glfw3.h>
 
 #include <glow/Error.h>
 #include <glow/Uniform.h>
@@ -90,7 +91,8 @@ void Game::draw()
 
 void Game::createAndSetupTexture()
 {
-    m_texture = DdsTexture::load("data/skybox/nebula_1024_back6.dds");
+	m_texture = new glow::Texture(GL_TEXTURE_2D);
+	DdsTexture::loadImage2d(m_texture, "data/skybox/nebula_1024_back6.dds");
     m_texture->setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	m_texture->setParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 

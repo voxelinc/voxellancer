@@ -5,17 +5,16 @@
 #include "ddstexture.h"
 
 
-glow::Texture * DdsTexture::load(std::string path)
+bool DdsTexture::loadImage2d(glow::Texture * texture, std::string path)
 {
     char header[124];
-
 
     /* try to open the file */
     std::ifstream file(path, std::ios::in | std::ios::binary | std::ios::ate);
 
     if (!file.is_open()) {
         std::cout << "DdsTexture: could not read:" << path;
-        return nullptr;
+        return false;
     }
 
     file.seekg(0, std::ios::beg);
@@ -27,7 +26,7 @@ glow::Texture * DdsTexture::load(std::string path)
     if (strncmp(filecode, "DDS ", 4) != 0) {
         file.close();
         std::cout << "DdsTexture: not a dds file:" << path;
-        return nullptr;
+        return false;
     }
 
     /* get the surface desc */
@@ -62,10 +61,8 @@ glow::Texture * DdsTexture::load(std::string path)
     default:
         delete[] buffer;
         std::cout << "DdsTexture: not a supported dds format:" << path;
-        return nullptr;
+        return false;
     }
-    // Create one OpenGL texture
-    glow::Texture * texture = new glow::Texture(GL_TEXTURE_2D);
     
     unsigned int blockSize = (format == GL_COMPRESSED_RGBA_S3TC_DXT1_EXT) ? 8 : 16;
     unsigned int offset = 0;
@@ -81,6 +78,6 @@ glow::Texture * DdsTexture::load(std::string path)
     }
     delete[] buffer;
 
-    return texture;
+    return true;
 
 }

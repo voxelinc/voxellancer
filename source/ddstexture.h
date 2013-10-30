@@ -6,7 +6,8 @@
 class DdsTexture
 {
 public:
-    static glow::Texture * load(std::string path);
+	static bool DdsTexture::loadImage2d(glow::Texture * texture, std::string path);
+
 
 private:
     const static int FOURCC_DXT1 = 0x31545844;
