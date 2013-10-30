@@ -5,6 +5,7 @@
 #include "glow/Program.h"
 #include "glow/VertexArrayObject.h"
 #include "glow/Buffer.h"
+#include "glowutils/Camera.h"
 
 #include "cube.h"
 
@@ -31,4 +32,9 @@ private:
 	glow::ref_ptr<glow::VertexArrayObject> m_vertexArrayObject;
 	glow::ref_ptr<glow::Buffer> m_vertexBuffer;
     Cube * m_cube;
+	glow::Camera * m_cam;
+	float angX, angY;
+
+	static const float s_angle_translate;
+	static const float s_move_translate;
 };

@@ -5,7 +5,7 @@
 
 Cube::Cube() : Thing()
 {
-    m_model_matrix = glm::translate(glm::vec3(0.0, 0.0, -1.0f)) * glm::scale(glm::vec3(0.08f));
+    m_model_matrix = glm::translate(glm::vec3(0.0, 0.0, 0.0f)) * glm::scale(glm::vec3(0.08f));
     createAndSetupShaders();
     createAndSetupGeometry();
 
@@ -21,9 +21,18 @@ void Cube::update(float delta_sec)
 
 void Cube::draw()
 {
-    m_shaderProgram->use();
-    m_vertexArrayObject->drawArraysInstanced(GL_TRIANGLES, 0, 36, 1000);
-    m_shaderProgram->release();
+	m_shaderProgram->use();
+	m_vertexArrayObject->drawArraysInstanced(GL_TRIANGLES, 0, 36, 1000);
+	m_shaderProgram->release();
+
+}
+
+void Cube::drawtest(glm::mat4 projection)
+{
+	m_shaderProgram->setUniform("projection", projection);
+	m_shaderProgram->use();
+	m_vertexArrayObject->drawArraysInstanced(GL_TRIANGLES, 0, 36, 1000);
+	m_shaderProgram->release();
 
 }
 

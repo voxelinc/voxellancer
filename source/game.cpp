@@ -29,14 +29,18 @@
 #include "game.h"
 #include "ddstexture.h"
 
+const float Game::s_angle_translate = 0.001f;
+const float Game::s_move_translate = 0.01f;
 
 Game::Game():
     m_shaderProgram(0),
     m_texture(0),
     m_vertexArrayObject(0),
     m_vertexBuffer(0),
-    m_cube(0)
+    m_cube(0),
+	m_cam(0)
 {
+
 }
 
 
@@ -47,10 +51,20 @@ void Game::initialize()
 	createAndSetupShaders();
 	createAndSetupGeometry();
     
-    testFMOD();
+    //testFMOD();
 
     m_cube = new Cube();
-    
+	m_cam = new glow::Camera();
+	m_cam->setViewport(glm::ivec2(16, 9));
+	m_cam->setCenter(glm::vec3(0, 0, 1));
+	m_cam->setUp(glm::vec3(0, 1, 0));
+	m_cam->setEye(glm::vec3(0, 0, 0));
+	m_cam->setZNear(0.1f);
+	m_cam->setZFar(999999);
+	angX = 0;
+	angY = 0;
+	SetCursorPos(100, 100);
+
     glClearColor(0.2f, 0.3f, 0.4f, 1.f);
 }
 
@@ -59,26 +73,52 @@ void Game::resizeEvent(
 	, const unsigned int height)
 {
 	m_shaderProgram->setUniform("modelView", glm::mat4());
-	m_shaderProgram->setUniform("projection", glm::ortho(0.f, 1.f, 0.f, 1.f, 0.f, 1.f));
+	//m_shaderProgram->setUniform("projection", glm::ortho(0.f, 1.f, 0.f, 1.f, 0.f, 1.f));
 }
 
 
 void Game::update(float delta_sec)
 {
     m_cube->update(delta_sec);
+	glm::vec3 lookVec = m_cam->center() - m_cam->eye();
+
+	// position "eye"
+	if (GetKeyState(*"W") & 0x80){
+		m_cam->setEye(m_cam->eye() + lookVec*s_move_translate);
+	} 
+	if (GetKeyState(*"A") & 0x80){
+		m_cam->setEye(m_cam->eye() - glm::cross(lookVec, m_cam->up())*s_move_translate);
+	} 
+	if (GetKeyState(*"S") & 0x80){
+		m_cam->setEye(m_cam->eye() - lookVec*s_move_translate);
+	} 
+	if (GetKeyState(*"D") & 0x80){
+		m_cam->setEye(m_cam->eye() + glm::cross(lookVec, m_cam->up())*s_move_translate);
+	}
+
+	// lookAt
+	POINT cp;
+	GetCursorPos(&cp);
+	angX += (cp.x - 100)*s_angle_translate;
+	angY += (cp.y - 100)*s_angle_translate;
+	m_cam->setCenter(m_cam->eye() + glm::normalize(glm::vec3(glm::cos(angX),glm::sin(-angY),glm::sin(angX))));
+	SetCursorPos(100, 100);
 }
 
 void Game::draw()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glEnable(GL_DEPTH_TEST);
-    glFrontFace(GL_CCW);
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
-    
-    m_cube->draw();
+	glEnable(GL_DEPTH_TEST);
+	glFrontFace(GL_CCW);
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
 
-    m_texture->bind();
+	m_cube->drawtest(m_cam->viewProjection());
+	//m_cube->draw();
+
+	m_texture->bind();
+	m_shaderProgram->setUniform("projection", m_cam->viewProjection());
+	//m_shaderProgram->setUniform("modelView", m_cam->view());
 	m_shaderProgram->use();
 
 	m_vertexArrayObject->drawArrays(GL_TRIANGLE_FAN, 0, 4);
@@ -114,10 +154,10 @@ void Game::createAndSetupShaders()
 void Game::createAndSetupGeometry()
 {
 	auto vertices = glow::Array<glm::vec3>()
-		<< glm::vec3(0, 0, -0.99)
-        << glm::vec3(1, 0, -0.99)
-        << glm::vec3(1, 1, -0.99)
-        << glm::vec3(0, 1, -0.99);
+		<< glm::vec3(1, -1, +0.99)
+        << glm::vec3(-1, -1, +0.99)
+        << glm::vec3(-1, 1, +0.99)
+        << glm::vec3(1, 1, +0.99);
 
 	m_vertexArrayObject = new glow::VertexArrayObject();
 
