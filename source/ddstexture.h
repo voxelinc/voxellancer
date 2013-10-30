@@ -6,7 +6,7 @@
 class DdsTexture
 {
 public:
-	static bool DdsTexture::loadImage2d(glow::Texture * texture, std::string path);
+	static bool loadImage2d(glow::Texture * texture, std::string path);
 
 
 private:
