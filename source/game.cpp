@@ -80,9 +80,9 @@ void Game::resizeEvent(
 
 void Game::update(float delta_sec)
 {
-    //m_cube->update(delta_sec);
-	glm::vec3 lookVec = m_cam->center() - m_cam->eye();
+    m_cube->update(delta_sec);
 
+	glm::vec3 lookVec = m_cam->center() - m_cam->eye();
 	// position "eye"
 	if (GetKeyState(*"W") & 0x80){
 		m_cam->setEye(m_cam->eye() + lookVec*s_move_translate);
@@ -102,9 +102,20 @@ void Game::update(float delta_sec)
 	GetCursorPos(&cp);
 	angX += (cp.x - 100)*s_angle_translate;
 	angY += (cp.y - 100)*s_angle_translate; 
-	if (angY > glm::radians(90.0f)) angY = glm::radians(90.0f);
-	else if (angY < glm::radians(-90.0f)) angY = glm::radians(-90.0f);
-	m_cam->setCenter(m_cam->eye() + glm::normalize(glm::vec3(glm::cos(angX),glm::sin(-angY),glm::sin(angX))));
+	// block at 90°, set Up to avoid camera flipping
+	if (angY >= glm::radians(90.0f)){
+		angY = glm::radians(90.0f);
+		m_cam->setUp(glm::vec3(cos(angX), 1, sin(angX)));
+	}
+	else if (angY <= glm::radians(-90.0f)){
+		angY = glm::radians(-90.0f);
+		m_cam->setUp(glm::vec3(-cos(angX), 1, -sin(angX)));
+	}
+	else {
+		m_cam->setUp(glm::vec3(0, 1, 0));
+	}
+	m_cam->setCenter(m_cam->eye() + glm::normalize(glm::vec3(glm::cos(angX)*glm::cos(-angY), glm::sin(-angY), glm::sin(angX)*glm::cos(-angY))));
+	
 	SetCursorPos(100, 100);
 }
 
@@ -121,9 +132,8 @@ void Game::draw()
 	glm::vec3 camCenter = m_cam->center();
 	m_cam->setEye(glm::vec3(0, 0, 0));
 	m_cam->setCenter(camCenter - camEye);
-	m_shaderProgram->setUniform("projection_actual", m_cam->viewInverted());
+	m_shaderProgram->setUniform("viewInverted", m_cam->viewInverted());
 	m_shaderProgram->setUniform("projection", m_cam->projection());
-	//m_shaderProgram->setUniform("projection_actual", glm::rotate(glm::degrees(angX), glm::vec3(0, 1, 0))*glm::rotate(glm::degrees(-angY), glm::vec3(0,0,1)));
 	m_shaderProgram->use();
 
 	m_vertexArrayObject->drawArrays(GL_TRIANGLE_FAN, 0, 4);
