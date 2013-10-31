@@ -26,8 +26,14 @@ FIND_PATH(FMOD_INCLUDE_DIR
     PATH_SUFFIXES fmod fmod3
 )
 
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+	set(FMOD_LIBRARY_NAMES fmod fmodex64_vc fmodex64)
+else()
+	set(FMOD_LIBRARY_NAMES fmod fmodex libfmod)
+endif()
+
 FIND_LIBRARY(FMOD_LIBRARY
-    NAMES fmod fmodex64_vc libfmod
+    NAMES ${FMOD_LIBRARY_NAMES}
     PATHS
     ${LIB_DIR}/fmod/api/lib
     $ENV{FMOD_DIR}/lib
@@ -41,6 +47,8 @@ FIND_LIBRARY(FMOD_LIBRARY
     /opt/lib
     /usr/freeware/lib64
 )
+
+
 
 if(WIN32)
     find_file(FMOD_BINARY

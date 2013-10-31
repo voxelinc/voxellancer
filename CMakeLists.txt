@@ -20,7 +20,7 @@ option(OPTION_ERRORS_AS_EXCEPTION "Throw exceptions" OFF)
 
 
 # CMAKE CONFIGURATION
-
+set(CMAKE_VERBOSE_MAKEFILE 1)
 set(LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 
 # Include cmake modules from ./cmake
@@ -96,6 +96,12 @@ find_package(GLEW REQUIRED)
 find_package(GLFW REQUIRED)
 find_package(FMOD REQUIRED)
 
+
+
+
+
+
+
 set(GLOW_DIRECTORY glow)
 include_directories(${LIB_DIR}/${GLOW_DIRECTORY}/include)
 add_subdirectory(${LIB_DIR}/${GLOW_DIRECTORY})
@@ -144,8 +150,12 @@ target_link_libraries(${target}
     ${FMOD_LIBRARY}
     glow
     glowutils
-    glowwindow
 )
+
+if(UNIX)
+	target_link_libraries(${target} X11 Xrandr Xi Xxf86vm)
+endif()
+
 
 set_target_properties(${target}
     PROPERTIES

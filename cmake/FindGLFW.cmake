@@ -7,6 +7,7 @@
 
 find_path(GLFW_INCLUDE_DIR GLFW/glfw3.h
     ${LIB_DIR}/glfw-3.0.3/include
+    ${LIB_DIR}/glfw/include
     $ENV{GLFWDIR}/include
     $ENV{GLFW_HOME}/include
     $ENV{PROGRAMFILES}/GLFW/include
@@ -20,6 +21,7 @@ find_library(GLFW_LIBRARY
     NAMES GLFW glfw3 glfw
     PATHS
     ${LIB_DIR}/glfw-3.0.3/lib-msvc110
+    ${LIB_DIR}/glfw/lib
     $ENV{GLFWDIR}/lib
     $ENV{GLFW_HOME}/lib
     $ENV{GLFW_HOME}/lib/Release/x64

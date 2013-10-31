@@ -1,6 +1,7 @@
 
 #include <GL/glew.h>
 
+#include <GLFW/glfw3.h>
 #include <glow/Error.h>
 #include <glow/logging.h>
 #include <glow/Timer.h>
@@ -85,18 +86,35 @@ protected:
 */
 int main(int argc, char** argv)
 {
+    GLFWwindow* window;
+
     glewExperimental = GL_TRUE;
 
-	glow::ContextFormat format;
+    if (!glfwInit())
+        return -1;
+        
+    window = glfwCreateWindow(640, 480, "Voxellancer", NULL, NULL);
+    if (!window)
+    {
+        glfwTerminate();
+        return -1;
+    }
+    
+    glfwMakeContextCurrent(window);
 
-	glow::Window window;
-    window.assign(new EventHandler());
+    while (!glfwWindowShouldClose(window))
+    {
+        /* Render here */
 
-    window.create(format, "Voxellancer");
-	window.context()->setSwapInterval(glow::Context::AdaptiveVerticalSyncronization);
-	window.show();
+        /* Swap front and back buffers */
+        glfwSwapBuffers(window);
 
-	return glow::Window::run();
+        /* Poll for and process events */
+        glfwPollEvents();
+    }
+
+    glfwTerminate();
+    return 0;
 }
 
 
