@@ -86,7 +86,7 @@ void DdsTextureCube::loadSingleTexture(std::string path, glow::Texture *texture,
 	for (unsigned int level = 0; level < mipMapCount && (width || height); ++level)
 	{
 		unsigned int size = ((width + 3) / 4)*((height + 3) / 4)*blockSize;
-		texture->compressedImage2D(target, level, format, width, height, 0, size, buffer + offset);
+		texture->compressedImage2D(level, format, width, height, 0, size, buffer + offset, target);
 		offset += size;
 		width /= 2;
 		height /= 2;
