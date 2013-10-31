@@ -12,7 +12,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
 
-
 #include <glow/Error.h>
 #include <glow/Uniform.h>
 #include <glow/Array.h>
@@ -30,10 +29,16 @@
 #include "ddstexture.h"
 #include "ddstexturecube.h"
 
+#include <iostream>
+
+using namespace std;
+
+
 const float Game::s_angle_translate = 0.001f;
 const float Game::s_move_translate = 0.01f;
 
-Game::Game():
+Game::Game(GLFWwindow *window):
+	m_window(window),
     m_shaderProgram(0),
     m_texture(0),
     m_vertexArrayObject(0),
@@ -48,13 +53,20 @@ Game::Game():
 void Game::initialize()
 {
     glow::AutoTimer t("Initialize Game");
+    cout << "createAndSetupTexture()" << endl;
 	createAndSetupTexture();
+    cout << "createAndSetupShaders()" << endl;
 	createAndSetupShaders();
+    cout << "createAndSetupGeometry()" << endl;
 	createAndSetupGeometry();
     
-    //testFMOD();
+    cout << "test FMOD()" << endl;
+    testFMOD();
 
+    cout << "Create cube" << endl;
     m_cube = new Cube();
+
+	cout << "Create cam" << endl;
 	m_cam = new glow::Camera();
 	m_cam->setViewport(glm::ivec2(16, 9));
 	m_cam->setCenter(glm::vec3(0, 0, 1));
@@ -64,9 +76,14 @@ void Game::initialize()
 	m_cam->setZFar(999999);
 	angX = glm::radians(90.0f);
 	angY = 0;
-	SetCursorPos(100, 100);
+	int x, y;
+	getWindowCenter(&x, &y);
+	glfwSetCursorPos(m_window, x, y);
+	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	
 
     glClearColor(0.2f, 0.3f, 0.4f, 1.f);
+    cout << "Done" << endl;
 }
 
 void Game::resizeEvent(
@@ -80,43 +97,48 @@ void Game::resizeEvent(
 
 void Game::update(float delta_sec)
 {
-    m_cube->update(delta_sec);
+	m_cube->update(delta_sec);
 
-	glm::vec3 lookVec = m_cam->center() - m_cam->eye();
-	// position "eye"
-	if (GetKeyState(*"W") & 0x80){
-		m_cam->setEye(m_cam->eye() + lookVec*s_move_translate);
-	} 
-	if (GetKeyState(*"A") & 0x80){
-		m_cam->setEye(m_cam->eye() - glm::cross(lookVec, m_cam->up())*s_move_translate);
-	} 
-	if (GetKeyState(*"S") & 0x80){
-		m_cam->setEye(m_cam->eye() - lookVec*s_move_translate);
-	} 
-	if (GetKeyState(*"D") & 0x80){
-		m_cam->setEye(m_cam->eye() + glm::cross(lookVec, m_cam->up())*s_move_translate);
-	}
+	if (glfwGetWindowAttrib(m_window, GLFW_FOCUSED)){
 
-	// lookAt
-	POINT cp;
-	GetCursorPos(&cp);
-	angX += (cp.x - 100)*s_angle_translate;
-	angY += (cp.y - 100)*s_angle_translate; 
-	// block at 90°, set Up to avoid camera flipping
-	if (angY >= glm::radians(90.0f)){
-		angY = glm::radians(90.0f);
-		m_cam->setUp(glm::vec3(cos(angX), 1, sin(angX)));
+		glm::vec3 lookVec = m_cam->center() - m_cam->eye();
+		// position "eye"
+		if (glfwGetKey(m_window, GLFW_KEY_W) == GLFW_PRESS){
+			m_cam->setEye(m_cam->eye() + lookVec*s_move_translate);
+		} 
+		if (glfwGetKey(m_window, GLFW_KEY_A) == GLFW_PRESS){
+			m_cam->setEye(m_cam->eye() - glm::cross(lookVec, m_cam->up())*s_move_translate);
+		} 
+		if (glfwGetKey(m_window, GLFW_KEY_S) == GLFW_PRESS){
+			m_cam->setEye(m_cam->eye() - lookVec*s_move_translate);
+		} 
+		if (glfwGetKey(m_window, GLFW_KEY_D) == GLFW_PRESS){
+			m_cam->setEye(m_cam->eye() + glm::cross(lookVec, m_cam->up())*s_move_translate);
+		}
+
+		// lookAt
+		int wx, wy;
+		double x, y;
+		getWindowCenter(&wx, &wy);
+		glfwGetCursorPos(m_window, &x, &y);
+		angX += ((int)floor(x) - wx) * s_angle_translate;
+		angY += ((int)floor(y) - wy) * s_angle_translate;
+		// block at 90°, set Up to avoid camera flipping
+		if (angY >= glm::radians(90.0f)){
+			angY = glm::radians(90.0f);
+			m_cam->setUp(glm::vec3(cos(angX), 1, sin(angX)));
+		}
+		else if (angY <= glm::radians(-90.0f)){
+			angY = glm::radians(-90.0f);
+			m_cam->setUp(glm::vec3(-cos(angX), 1, -sin(angX)));
+		}
+		else {
+			m_cam->setUp(glm::vec3(0, 1, 0));
+		}
+		m_cam->setCenter(m_cam->eye() + glm::normalize(glm::vec3(glm::cos(angX)*glm::cos(-angY), glm::sin(-angY), glm::sin(angX)*glm::cos(-angY))));
+
+		glfwSetCursorPos(m_window, wx, wy);
 	}
-	else if (angY <= glm::radians(-90.0f)){
-		angY = glm::radians(-90.0f);
-		m_cam->setUp(glm::vec3(-cos(angX), 1, -sin(angX)));
-	}
-	else {
-		m_cam->setUp(glm::vec3(0, 1, 0));
-	}
-	m_cam->setCenter(m_cam->eye() + glm::normalize(glm::vec3(glm::cos(angX)*glm::cos(-angY), glm::sin(-angY), glm::sin(angX)*glm::cos(-angY))));
-	
-	SetCursorPos(100, 100);
 }
 
 void Game::draw()
@@ -201,6 +223,14 @@ void Game::createAndSetupGeometry()
 	binding1->setFormat(3, GL_FLOAT, GL_FALSE, 0);
 
 	m_vertexArrayObject->enable(a_vertex);
+}
+
+void Game::getWindowCenter(int *x, int *y){
+	int sx, sy;
+	glfwGetWindowPos(m_window, x, y);
+	glfwGetWindowSize(m_window, &sx, &sy);
+	*x += (sx / 2);
+	*y += (sy / 2);
 }
 
 void ERRCHECK(FMOD_RESULT result)

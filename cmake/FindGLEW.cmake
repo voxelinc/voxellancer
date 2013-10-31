@@ -7,6 +7,7 @@
 
 find_path(GLEW_INCLUDE_DIR GL/glew.h
     ${LIB_DIR}/glew-1.10.0/include
+    ${LIB_DIR}/glew/include
     $ENV{GLEWDIR}/include
     $ENV{GLEW_HOME}/include
     $ENV{PROGRAMFILES}/GLEW/include
@@ -20,6 +21,7 @@ find_library(GLEW_LIBRARY
     NAMES GLEW glew glew32 glew32s
     PATHS
     ${LIB_DIR}/glew-1.10.0/lib/Release/x64
+    ${LIB_DIR}/glew/lib/
     $ENV{GLEWDIR}/lib
     $ENV{GLEW_HOME}/lib
     $ENV{GLEW_HOME}/lib/Release/x64

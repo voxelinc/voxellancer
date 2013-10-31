@@ -20,7 +20,7 @@ option(OPTION_ERRORS_AS_EXCEPTION "Throw exceptions" OFF)
 
 
 # CMAKE CONFIGURATION
-
+set(CMAKE_VERBOSE_MAKEFILE 1)
 set(LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 
 # Include cmake modules from ./cmake
@@ -93,7 +93,14 @@ file(WRITE ${CMAKE_BINARY_DIR}/revision ${GIT_REV})
 find_package(OpenGL REQUIRED)
 find_package(GLM REQUIRED)
 find_package(GLEW REQUIRED)
+find_package(GLFW REQUIRED)
 find_package(FMOD REQUIRED)
+
+
+
+
+
+
 
 set(GLOW_DIRECTORY glow)
 include_directories(${LIB_DIR}/${GLOW_DIRECTORY}/include)
@@ -104,6 +111,7 @@ add_subdirectory(${LIB_DIR}/${GLOW_DIRECTORY})
 include_directories(
     ${OPENGL_INCLUDE_DIR}
     ${GLEW_INCLUDE_DIR}
+    ${GLFW_INCLUDE_DIR}
     ${GLM_INCLUDE_DIR}
     ${FMOD_INCLUDE_DIR}
 )
@@ -138,11 +146,16 @@ add_executable(${target}
 target_link_libraries(${target} 
     ${OPENGL_LIBRARIES}
     ${GLEW_LIBRARY}
+    ${GLFW_LIBRARY}
     ${FMOD_LIBRARY}
     glow
     glowutils
-    glowwindow
 )
+
+if(UNIX)
+	target_link_libraries(${target} X11 Xrandr Xi Xxf86vm)
+endif()
+
 
 set_target_properties(${target}
     PROPERTIES
@@ -159,13 +172,15 @@ if(WIN32)
     add_custom_command(TARGET ${target} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy ${GLEW_BINARY} $<TARGET_FILE_DIR:${target}>)
     add_custom_command(TARGET ${target} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy ${GLFW_BINARY} $<TARGET_FILE_DIR:${target}>)
+    add_custom_command(TARGET ${target} POST_BUILD
        COMMAND ${CMAKE_COMMAND} -E copy ${FMOD_BINARY} $<TARGET_FILE_DIR:${target}>)    
 endif()
 
 install(TARGETS ${target} 
         RUNTIME DESTINATION .)
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/data DESTINATION .)
-install(FILES ${GLEW_BINARY} ${FMOD_BINARY} DESTINATION .)
+install(FILES ${GLEW_BINARY} {GLFW_BINARY} ${FMOD_BINARY} DESTINATION .)
 
  set(CPACK_NSIS_CREATE_ICONS "CreateShortCut '\$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\${PROJECT_NAME}.lnk' '\$INSTDIR\\\\${PROJECT_NAME}.exe'") 
  
