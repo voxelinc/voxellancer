@@ -101,6 +101,8 @@ void Game::update(float delta_sec)
 	GetCursorPos(&cp);
 	angX += (cp.x - 100)*s_angle_translate;
 	angY += (cp.y - 100)*s_angle_translate;
+	if (angY > glm::radians(90.0f)) angY = glm::radians(90.0f);
+	else if (angY < glm::radians(-90.0f)) angY = glm::radians(-90.0f);
 	m_cam->setCenter(m_cam->eye() + glm::normalize(glm::vec3(glm::cos(angX),glm::sin(-angY),glm::sin(angX))));
 	SetCursorPos(100, 100);
 }
