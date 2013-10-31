@@ -7,5 +7,5 @@ layout (location = 0) out vec4 fragColor;
 
 void main()
 {
-	fragColor = texture(texture, v_uv);
+	fragColor = texture2D(texture, v_uv);
 }
