@@ -117,7 +117,8 @@ int main(void)
     glfwSwapInterval(1);
 #endif
     
-    game = new Game();
+    game = new Game(window);
+
     game->initialize();
 
     int width, height;
