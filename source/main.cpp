@@ -1,6 +1,5 @@
 
 #include <GL/glew.h>
-#include <GLFW/glfw3.h>
 
 #ifdef WIN32
 #include <windows.h>
@@ -9,22 +8,21 @@
 #include <GLFW/glfw3.h>
 
 #include <glow/logging.h>
+#include <glow/global.h>
 
 #include "game.h"
 #include <iostream>
 
-static GLint MajorVersionRequire = 4;
-static GLint MinorVersionRequire = 0;
+static GLint MajorVersionRequire = 3;
+static GLint MinorVersionRequire = 1;
 
 static Game * game;
 
 using namespace std;
 
 static void checkVersion() {
-    GLint MajorVersionContext = 0;
-    GLint MinorVersionContext = 0;
-    glGetIntegerv(GL_MAJOR_VERSION, &MajorVersionContext);
-    glGetIntegerv(GL_MINOR_VERSION, &MinorVersionContext);
+    GLint MajorVersionContext = glow::query::majorVersion();
+    GLint MinorVersionContext = glow::query::minorVersion();
     printf("OpenGL Version Needed %d.%d (%d.%d Found)\n",
         MajorVersionRequire, MinorVersionRequire,
         MajorVersionContext, MinorVersionContext);
@@ -79,7 +77,7 @@ int main(void)
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, MajorVersionRequire);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, MinorVersionRequire);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
 #if defined(NDEBUG)
@@ -109,8 +107,9 @@ int main(void)
     cout << "-> done" << endl;
     glGetError();
     
-   // glow::DebugMessageOutput::enable();  
-
+#ifdef WIN32 // TODO: find a way to correctly detect debug extension in linux
+    glow::DebugMessageOutput::enable();  
+#endif
     
 #ifdef WIN32
     wglSwapIntervalEXT(1); // glfw doesn't work!?
