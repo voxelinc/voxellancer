@@ -30,6 +30,9 @@
 #include "game.h"
 #include "ddstexture.h"
 
+#include <iostream>
+
+using namespace std;
 
 Game::Game():
     m_shaderProgram(0),
@@ -44,15 +47,21 @@ Game::Game():
 void Game::initialize()
 {
     glow::AutoTimer t("Initialize Game");
+    cout << "createAndSetupTexture()" << endl;
 	createAndSetupTexture();
+    cout << "createAndSetupShaders()" << endl;
 	createAndSetupShaders();
+    cout << "createAndSetupGeometry()" << endl;
 	createAndSetupGeometry();
     
+    cout << "test FMOD()" << endl;
     testFMOD();
 
+    cout << "Create cube" << endl;
     m_cube = new Cube();
     
     glClearColor(0.2f, 0.3f, 0.4f, 1.f);
+    cout << "Done" << endl;
 }
 
 void Game::resizeEvent(

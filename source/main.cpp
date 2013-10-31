@@ -14,7 +14,10 @@
 #include <iostream>
 
 #include "game.h"
+#include <iostream>
 
+
+using namespace std;
 
 class EventHandler : public glow::WindowEventHandler
 {
@@ -86,26 +89,40 @@ protected:
 */
 int main(int argc, char** argv)
 {
+    cout << "Welcome to voxellancer" << endl;
+     
+    cout << "Initializing glfw" << endl;
     GLFWwindow* window;
-
     glewExperimental = GL_TRUE;
-
     if (!glfwInit())
-        return -1;
-        
+        return -1;        
     window = glfwCreateWindow(640, 480, "Voxellancer", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
         return -1;
+    }    
+    glfwMakeContextCurrent(window); 
+    
+    cout << "Initializing glew" << endl;
+    if(glewInit() != GLEW_OK) {
+        cout << "  Couldn't init glew" << endl;
+        return 1;
     }
     
-    glfwMakeContextCurrent(window);
+    cout << "Initializing game" << endl;
+    Game game;   
+    game.initialize();
+    
 
+
+    cout << "Entering mainloop" << endl;
     while (!glfwWindowShouldClose(window))
     {
         /* Render here */
-
+        game.update(0.1);
+        game.draw();
+        
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
 

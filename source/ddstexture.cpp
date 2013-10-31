@@ -5,16 +5,17 @@
 
 #include "ddstexture.h"
 
+using namespace std;
 
 bool DdsTexture::loadImage2d(glow::Texture * texture, std::string path)
 {
     char header[124];
 
     /* try to open the file */
-    std::ifstream file(path, std::ios::in | std::ios::binary | std::ios::ate);
+    std::ifstream file(path, std::ios::in | std::ios::binary);
 
     if (!file.is_open()) {
-        std::cout << "DdsTexture: could not read:" << path;
+        std::cout << "DdsTexture: could not read:" << path << endl;
         return false;
     }
 
@@ -26,7 +27,7 @@ bool DdsTexture::loadImage2d(glow::Texture * texture, std::string path)
     
     if (strncmp(filecode, "DDS ", 4) != 0) {
         file.close();
-        std::cout << "DdsTexture: not a dds file:" << path;
+        std::cout << "DdsTexture: not a dds file:" << path << endl;
         return false;
     }
 
@@ -72,7 +73,9 @@ bool DdsTexture::loadImage2d(glow::Texture * texture, std::string path)
     for (unsigned int level = 0; level < mipMapCount && (width || height); ++level)
     {
         unsigned int size = ((width + 3) / 4)*((height + 3) / 4)*blockSize;
+        cout << "Loading into: " << texture << endl;
         texture->compressedImage2D(level, format, width, height, 0, size, buffer + offset);
+        cout << "Done" << endl;
         offset += size;
         width /= 2;
         height /= 2;
