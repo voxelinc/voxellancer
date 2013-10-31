@@ -28,6 +28,7 @@
 
 #include "game.h"
 #include "ddstexture.h"
+#include "ddstexturecube.h"
 
 const float Game::s_angle_translate = 0.001f;
 const float Game::s_move_translate = 0.01f;
@@ -61,7 +62,7 @@ void Game::initialize()
 	m_cam->setEye(glm::vec3(0, 0, 0));
 	m_cam->setZNear(0.1f);
 	m_cam->setZFar(999999);
-	angX = 0;
+	angX = glm::radians(90.0f);
 	angY = 0;
 	SetCursorPos(100, 100);
 
@@ -73,13 +74,13 @@ void Game::resizeEvent(
 	, const unsigned int height)
 {
 	m_shaderProgram->setUniform("modelView", glm::mat4());
-	//m_shaderProgram->setUniform("projection", glm::ortho(0.f, 1.f, 0.f, 1.f, 0.f, 1.f));
+	m_shaderProgram->setUniform("projection", glm::mat4()); // glm::ortho(0.f, 1.f, 0.f, 1.f, 0.f, 1.f));
 }
 
 
 void Game::update(float delta_sec)
 {
-    m_cube->update(delta_sec);
+    //m_cube->update(delta_sec);
 	glm::vec3 lookVec = m_cam->center() - m_cam->eye();
 
 	// position "eye"
@@ -100,7 +101,7 @@ void Game::update(float delta_sec)
 	POINT cp;
 	GetCursorPos(&cp);
 	angX += (cp.x - 100)*s_angle_translate;
-	angY += (cp.y - 100)*s_angle_translate;
+	angY += (cp.y - 100)*s_angle_translate; 
 	if (angY > glm::radians(90.0f)) angY = glm::radians(90.0f);
 	else if (angY < glm::radians(-90.0f)) angY = glm::radians(-90.0f);
 	m_cam->setCenter(m_cam->eye() + glm::normalize(glm::vec3(glm::cos(angX),glm::sin(-angY),glm::sin(angX))));
@@ -110,35 +111,51 @@ void Game::update(float delta_sec)
 void Game::draw()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glEnable(GL_DEPTH_TEST);
+	glDisable(GL_DEPTH_TEST);
 	glFrontFace(GL_CCW);
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 
-	m_cube->drawtest(m_cam->viewProjection());
-	//m_cube->draw();
-
 	m_texture->bind();
-	m_shaderProgram->setUniform("projection", m_cam->viewProjection());
-	//m_shaderProgram->setUniform("modelView", m_cam->view());
+	glm::vec3 camEye = m_cam->eye();
+	glm::vec3 camCenter = m_cam->center();
+	m_cam->setEye(glm::vec3(0, 0, 0));
+	m_cam->setCenter(camCenter - camEye);
+	m_shaderProgram->setUniform("projection_actual", m_cam->viewInverted());
+	m_shaderProgram->setUniform("projection", m_cam->projection());
+	//m_shaderProgram->setUniform("projection_actual", glm::rotate(glm::degrees(angX), glm::vec3(0, 1, 0))*glm::rotate(glm::degrees(-angY), glm::vec3(0,0,1)));
 	m_shaderProgram->use();
 
 	m_vertexArrayObject->drawArrays(GL_TRIANGLE_FAN, 0, 4);
 
+	m_cam->setEye(camEye);
+	m_cam->setCenter(camCenter);
 	m_shaderProgram->release();
 	m_texture->unbind();
+
+	glEnable(GL_DEPTH_TEST);
+	m_cube->drawtest(m_cam->viewProjection());
+	//m_cube->draw();
+
 
 }
 
 void Game::createAndSetupTexture()
 {
-    m_texture = DdsTexture::load("data/skybox/nebula_1024_back6.dds");
+	m_texture = DdsTextureCube::load("data/skybox/nebula_1024_right1.dds",
+		"data/skybox/nebula_1024_left2.dds",
+		"data/skybox/nebula_1024_top3.dds",
+		"data/skybox/nebula_1024_bottom4.dds",
+		"data/skybox/nebula_1024_front5.dds",
+		"data/skybox/nebula_1024_back6.dds");
     m_texture->setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	m_texture->setParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	m_texture->setParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	m_texture->setParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	m_texture->setParameter(GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+
 }
 
 void Game::createAndSetupShaders()
@@ -156,10 +173,10 @@ void Game::createAndSetupShaders()
 void Game::createAndSetupGeometry()
 {
 	auto vertices = glow::Array<glm::vec3>()
-		<< glm::vec3(1, -1, +0.99)
-        << glm::vec3(-1, -1, +0.99)
-        << glm::vec3(-1, 1, +0.99)
-        << glm::vec3(1, 1, +0.99);
+		<< glm::vec3(-1, -1, -1)
+        << glm::vec3(1, -1, -1)
+        << glm::vec3(1, 1, -1)
+        << glm::vec3(-1, 1, -1);
 
 	m_vertexArrayObject = new glow::VertexArrayObject();
 
