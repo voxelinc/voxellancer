@@ -27,7 +27,6 @@
 
 #include "game.h"
 #include "ddstexture.h"
-#include "ddstexturecube.h"
 
 #include <iostream>
 
@@ -174,7 +173,9 @@ void Game::draw()
 
 void Game::createAndSetupTexture()
 {
-	m_texture = DdsTextureCube::load("data/skybox/nebula_1024_right1.dds",
+	m_texture = new glow::Texture(GL_TEXTURE_CUBE_MAP);
+	DdsTexture::loadImageCube(m_texture,
+	"data/skybox/nebula_1024_right1.dds",
 		"data/skybox/nebula_1024_left2.dds",
 		"data/skybox/nebula_1024_top3.dds",
 		"data/skybox/nebula_1024_bottom4.dds",
