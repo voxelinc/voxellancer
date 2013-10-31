@@ -1,102 +1,135 @@
 
 #include <GL/glew.h>
+#include <windows.h>
+#include <GLFW/glfw3.h>
 
-#include <glow/Error.h>
+
 #include <glow/logging.h>
-#include <glow/Timer.h>
-#include <glowwindow/ContextFormat.h>
-#include <glowwindow/Context.h>
-#include <glowwindow/Window.h>
-#include <glowwindow/WindowEventHandler.h>
-
-#include <memory>
-#include <iostream>
 
 #include "game.h"
 
+static GLint MajorVersionRequire = 4;
+static GLint MinorVersionRequire = 0;
 
-class EventHandler : public glow::WindowEventHandler
+static Game * game;
+
+
+static void checkVersion() {
+    GLint MajorVersionContext = 0;
+    GLint MinorVersionContext = 0;
+    glGetIntegerv(GL_MAJOR_VERSION, &MajorVersionContext);
+    glGetIntegerv(GL_MINOR_VERSION, &MinorVersionContext);
+    printf("OpenGL Version Needed %d.%d (%d.%d Found)\n",
+        MajorVersionRequire, MinorVersionRequire,
+        MajorVersionContext, MinorVersionContext);
+}
+
+static void errorCallback(int error, const char* description)
 {
-public:
-    EventHandler() : 
-		m_game(),
-		m_timer()
-    {
+    glow::warning(description);
+}
+
+static void resizeCallback(GLFWwindow* window, int width, int height)
+{
+    glViewport(0, 0, width, height);
+    game->resizeEvent(width, height);
+}
+
+static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, GL_TRUE);
+    if (key == GLFW_KEY_F5 && action == GLFW_PRESS)
+        glow::ShaderFile::reloadAll();
+}
+
+static void mouseButtonCallback(GLFWwindow* window, int Button, int Action, int mods) {
+
+}
+
+static void cursorPositionCallback(GLFWwindow* window, double x, double y) {
+
+}
+
+void setCallbacks(GLFWwindow* window)
+{
+    glfwSetMouseButtonCallback(window, mouseButtonCallback);
+    glfwSetCursorPosCallback(window, cursorPositionCallback);
+    glfwSetKeyCallback(window, keyCallback);
+    glfwSetWindowSizeCallback(window, resizeCallback);
+}
+
+
+int main(void)
+{
+    GLFWwindow* window;
+    
+    if (!glfwInit()) {
+        glow::fatal("could not init glfw");
+        exit(-1);
     }
 
-    virtual ~EventHandler()
-    {
-    }
+    glfwSetErrorCallback(errorCallback);
 
-	virtual void initializeEvent(glow::Window & window)
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, MajorVersionRequire);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, MinorVersionRequire);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+
+#if defined(NDEBUG)
+    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_FALSE);
+#else
+    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
+#endif
+
+    window = glfwCreateWindow(1280, 720, "Voxellancer", NULL, NULL);
+    if (!window)
     {
-		glow::DebugMessageOutput::enable();
-		m_game.initialize();
-		m_timer.reset();
+        glfwTerminate();
+        glow::fatal("could not create window");
+        exit(-1);
     }
     
-    virtual void resizeEvent(
-		glow::Window & window
-    ,   const unsigned int width
-    ,   const unsigned int height)
-    {
-		glViewport(0, 0, width, height);
-		m_game.resizeEvent(width, height);
-        std::cout << "resize " << width << "x" << height << std::endl;
-    }
+    glfwMakeContextCurrent(window);
 
-	virtual void paintEvent(glow::Window & window)
-    {
-		float delta = static_cast<float>(m_timer.elapsed() / 1000000000.0);
-		m_timer.reset();
+    setCallbacks(window);
 
-		m_game.update(delta);
-		m_game.draw();
-    }
+    checkVersion();
 
-	virtual void idleEvent(glow::Window & window)
-    {
-        window.repaint();
-    }
-
-    virtual void keyPressEvent(glow::Window & window, glow::KeyEvent & event) {
-        switch (event.key())
-        {
-        case glow::KeyEvent::KeyF5:
-            glow::ShaderFile::reloadAll();
-            break;
-        default:
-            break;
-        }
-    }
-
-    virtual void keyReleaseEvent(glow::Window & window, glow::KeyEvent & event) {
-
-    }
-
-protected:
-	Game m_game;
-	glow::Timer m_timer;
-    
-};
-
-
-/** This example shows ... .
-*/
-int main(int argc, char** argv)
-{
     glewExperimental = GL_TRUE;
+    glewInit();
+    glGetError();
 
-	glow::ContextFormat format;
+    glow::DebugMessageOutput::enable();  
 
-	glow::Window window;
-    window.assign(new EventHandler());
+#ifdef WIN32
+    wglSwapIntervalEXT(1); // glfw doesn't work!?
+#else 
+    glfwSwapInterval(1);
+#endif
 
-    window.create(format, "Voxellancer");
-	window.context()->setSwapInterval(glow::Context::AdaptiveVerticalSyncronization);
-	window.show();
+    game = new Game();
+    game->initialize();
 
-	return glow::Window::run();
+    int width, height;
+    glfwGetFramebufferSize(window, &width, &height);
+    game->resizeEvent(width, height);
+    
+    double time = glfwGetTime();
+    while (!glfwWindowShouldClose(window))
+    {
+        double delta = glfwGetTime() - time;
+        time += delta;
+        game->update(static_cast<float>(delta));
+        game->draw();
+        glfwSwapBuffers(window);
+        glfwPollEvents();
+    }
+
+    delete game;
+    glfwDestroyWindow(window);
+    glfwTerminate();
+    
 }
 
 

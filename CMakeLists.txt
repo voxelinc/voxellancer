@@ -144,7 +144,6 @@ target_link_libraries(${target}
     ${FMOD_LIBRARY}
     glow
     glowutils
-    glowwindow
 )
 
 set_target_properties(${target}
