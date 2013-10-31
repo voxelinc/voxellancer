@@ -12,8 +12,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
 
-//#include <GLFW/glfw3.h>
-
 #include <glow/Error.h>
 #include <glow/Uniform.h>
 #include <glow/Array.h>
@@ -125,7 +123,7 @@ void Game::createAndSetupShaders()
 void Game::createAndSetupGeometry()
 {
 	auto vertices = glow::Array<glm::vec3>()
-		<< glm::vec3(0, 0, -0.99)
+        << glm::vec3(0, 0, -0.99)
         << glm::vec3(1, 0, -0.99)
         << glm::vec3(1, 1, -0.99)
         << glm::vec3(0, 1, -0.99);

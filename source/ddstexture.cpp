@@ -3,6 +3,8 @@
 #include <fstream>
 #include <string.h>
 
+#include "glow/logging.h"
+
 #include "ddstexture.h"
 
 using namespace std;
@@ -15,7 +17,7 @@ bool DdsTexture::loadImage2d(glow::Texture * texture, std::string path)
     std::ifstream file(path, std::ios::in | std::ios::binary);
 
     if (!file.is_open()) {
-        std::cout << "DdsTexture: could not read:" << path << endl;
+        glow::fatal("DdsTexture: could not read: %s", path);
         return false;
     }
 
