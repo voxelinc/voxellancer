@@ -67,7 +67,7 @@ void Game::initialize()
 
 	cout << "Create cam" << endl;
 	m_cam = new glow::Camera();
-	m_cam->setViewport(glm::ivec2(16, 9));
+	//viewport set in resize
 	m_cam->setCenter(glm::vec3(0, 0, 1));
 	m_cam->setUp(glm::vec3(0, 1, 0));
 	m_cam->setEye(glm::vec3(0, 0, 0));
@@ -75,14 +75,13 @@ void Game::initialize()
 	m_cam->setZFar(999999);
 	angX = glm::radians(90.0f);
 	angY = 0;
-	int x, y;
-	getWindowCenter(&x, &y);
+
 	glfwGetWindowSize(m_window, &windowWidth, &windowHeight);
 	glfwSetCursorPos(m_window, windowWidth / 2, windowHeight / 2);
 	cursorMaxDistance = min(windowHeight, windowWidth);
 
 	fpsControls = true;
-	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
     glClearColor(0.2f, 0.3f, 0.4f, 1.f);
     cout << "Done" << endl;
@@ -92,8 +91,8 @@ void Game::resizeEvent(
 	  const unsigned int width
 	, const unsigned int height)
 {
-	m_shaderProgram->setUniform("modelView", glm::mat4());
-	m_shaderProgram->setUniform("projection", glm::mat4()); // glm::ortho(0.f, 1.f, 0.f, 1.f, 0.f, 1.f));
+	glfwGetWindowSize(m_window, &windowWidth, &windowHeight);
+	m_cam->setViewport(glm::ivec2(windowWidth, windowHeight));
 }
 
 
@@ -234,14 +233,6 @@ void Game::createAndSetupGeometry()
 	m_vertexArrayObject->enable(a_vertex);
 }
 
-void Game::getWindowCenter(int *x, int *y){
-	int sx, sy;
-	glfwGetWindowPos(m_window, x, y);
-	glfwGetWindowSize(m_window, &sx, &sy);
-	*x += (sx / 2);
-	*y += (sy / 2);
-}
-
 void ERRCHECK(FMOD_RESULT result)
 {
     if (result != FMOD_OK)
@@ -280,7 +271,7 @@ void Game::toggleControls()
 	else
 	{
 		fpsControls = !fpsControls;
-		glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 	}
 }
 
