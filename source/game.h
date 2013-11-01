@@ -21,6 +21,7 @@ public:
     void update(float delta_sec);
 	void draw();
 	void resizeEvent(const unsigned int width, const unsigned int height);
+	void toggleControls();
 
 private:
     void testFMOD();
@@ -38,6 +39,8 @@ private:
     Cube * m_cube;
 	glow::Camera * m_cam;
 	float angX, angY;
+	int cursorMaxDistance, windowWidth, windowHeight;
+	int fpsControls;
 
 	static const float s_angle_translate;
 	static const float s_move_translate;

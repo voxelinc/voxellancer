@@ -33,7 +33,7 @@
 using namespace std;
 
 
-const float Game::s_angle_translate = 0.001f;
+const float Game::s_angle_translate = 0.0001f;
 const float Game::s_move_translate = 0.01f;
 
 Game::Game(GLFWwindow *window):
@@ -77,9 +77,12 @@ void Game::initialize()
 	angY = 0;
 	int x, y;
 	getWindowCenter(&x, &y);
-	glfwSetCursorPos(m_window, x, y);
+	glfwGetWindowSize(m_window, &windowWidth, &windowHeight);
+	glfwSetCursorPos(m_window, windowWidth / 2, windowHeight / 2);
+	cursorMaxDistance = min(windowHeight, windowWidth);
+
+	fpsControls = true;
 	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-	
 
     glClearColor(0.2f, 0.3f, 0.4f, 1.f);
     cout << "Done" << endl;
@@ -116,13 +119,20 @@ void Game::update(float delta_sec)
 		}
 
 		// lookAt
-		int wx, wy;
 		double x, y;
-		getWindowCenter(&wx, &wy);
 		glfwGetCursorPos(m_window, &x, &y);
-		angX += ((int)floor(x) - wx) * s_angle_translate;
-		angY += ((int)floor(y) - wy) * s_angle_translate;
-		// block at 90°, set Up to avoid camera flipping
+		float rel = 10;
+		if (!fpsControls) {
+			rel = (float)max(1.0,(sqrt(pow(windowWidth - (int)floor(x), 2) + pow(windowHeight - (int)floor(y), 2))) / cursorMaxDistance);
+		}
+		else
+		{
+			glfwSetCursorPos(m_window, windowWidth / 2, windowHeight / 2);
+		}
+
+		angX += ((int)floor(x) - windowWidth/2) * s_angle_translate * rel;
+		angY += ((int)floor(y) - windowHeight/2) * s_angle_translate * rel;
+			// block at 90°, set Up to avoid camera flipping
 		if (angY >= glm::radians(90.0f)){
 			angY = glm::radians(90.0f);
 			m_cam->setUp(glm::vec3(cos(angX), 1, sin(angX)));
@@ -135,8 +145,6 @@ void Game::update(float delta_sec)
 			m_cam->setUp(glm::vec3(0, 1, 0));
 		}
 		m_cam->setCenter(m_cam->eye() + glm::normalize(glm::vec3(glm::cos(angX)*glm::cos(-angY), glm::sin(-angY), glm::sin(angX)*glm::cos(-angY))));
-
-		glfwSetCursorPos(m_window, wx, wy);
 	}
 }
 
@@ -260,6 +268,20 @@ void Game::testFMOD()
 
     result = system->playSound(FMOD_CHANNEL_FREE, sound, false, &channel);
     ERRCHECK(result);
+}
+
+void Game::toggleControls()
+{
+	if (fpsControls)
+	{
+		fpsControls = !fpsControls;
+		glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	}
+	else
+	{
+		fpsControls = !fpsControls;
+		glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	}
 }
 
 

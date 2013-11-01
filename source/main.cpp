@@ -45,6 +45,8 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
         glfwSetWindowShouldClose(window, GL_TRUE);
     if (key == GLFW_KEY_F5 && action == GLFW_PRESS)
         glow::ShaderFile::reloadAll();
+	if (key == GLFW_KEY_F1 && action == GLFW_PRESS)
+		game->toggleControls();
 }
 
 static void mouseButtonCallback(GLFWwindow* window, int Button, int Action, int mods) {
