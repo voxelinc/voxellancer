@@ -1,11 +1,11 @@
 #pragma once
 
-#include "glow/ref_ptr.h"
-#include "glow/Texture.h"
-#include "glow/Program.h"
-#include "glow/VertexArrayObject.h"
-#include "glow/Buffer.h"
-#include "glowutils/Camera.h"
+#include <glow/ref_ptr.h>
+#include <glow/Texture.h>
+#include <glow/Program.h>
+#include <glow/VertexArrayObject.h>
+#include <glow/Buffer.h>
+#include <glowutils/Camera.h>
 
 #include <GLFW/glfw3.h>
 

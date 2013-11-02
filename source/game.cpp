@@ -141,11 +141,11 @@ void Game::update(float delta_sec)
 void Game::draw()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glDisable(GL_DEPTH_TEST);
 	glFrontFace(GL_CCW);
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 
+	glDisable(GL_DEPTH_TEST);
 	m_texture->bind();
 	glm::vec3 camEye = m_cam->eye();
 	glm::vec3 camCenter = m_cam->center();

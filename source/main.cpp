@@ -23,9 +23,14 @@ using namespace std;
 static void checkVersion() {
     GLint MajorVersionContext = glow::query::majorVersion();
     GLint MinorVersionContext = glow::query::minorVersion();
-    printf("OpenGL Version Needed %d.%d (%d.%d Found)\n",
+    printf("OpenGL Version Needed %i.%i (%i.%i Found)\n",
         MajorVersionRequire, MinorVersionRequire,
         MajorVersionContext, MinorVersionContext);
+    glow::info("version %s", glow::query::version().toString());
+    glow::info("vendor: %s", glow::query::vendor());
+    glow::info("renderer %s", glow::query::renderer());
+    glow::info("core profile: %s", glow::query::isCoreProfile() ? "true" : "false");
+    glow::info("GLSL version: %s", glow::query::getString(GL_SHADING_LANGUAGE_VERSION));
 }
 
 static void errorCallback(int error, const char* description)
@@ -70,7 +75,7 @@ int main(void)
     
     if (!glfwInit()) {
         glow::fatal("could not init glfw");
-        exit(-1);
+        return -1;
     }
 
     glfwSetErrorCallback(errorCallback);
@@ -90,22 +95,20 @@ int main(void)
     if (!window) {
         glfwTerminate();
         glow::fatal("could not create window");
-        exit(-1);
+        return -1;
     }
     
     glfwMakeContextCurrent(window);
 
     setCallbacks(window);
-
     checkVersion();
-
     glewExperimental = GL_TRUE;
     cout << "glewInit()..." << endl;
     if(glewInit() != GLEW_OK) {
         glow::fatal("glewInit() failed");
+        return -1;
     }
     cout << "-> done" << endl;
-    glGetError();
     
 #ifdef WIN32 // TODO: find a way to correctly detect debug extension in linux
     glow::DebugMessageOutput::enable();  
