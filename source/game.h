@@ -6,6 +6,8 @@
 #include "glow/VertexArrayObject.h"
 #include "glow/Buffer.h"
 
+#include "worldtree/worldtree.hpp"
+
 #include "cube.h"
 
 class Game {
@@ -26,6 +28,8 @@ private:
 	void createAndSetupGeometry();
 
 private:
+    Worldtree m_worldTree;
+
 	glow::ref_ptr<glow::Texture> m_texture;
 	glow::ref_ptr<glow::Program> m_shaderProgram;
 	glow::ref_ptr<glow::VertexArrayObject> m_vertexArrayObject;

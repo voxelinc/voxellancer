@@ -1,4 +1,3 @@
-
 #include <GL/glew.h>
 
 #include <algorithm>
@@ -51,13 +50,13 @@ void Game::initialize()
 	createAndSetupShaders();
     cout << "createAndSetupGeometry()" << endl;
 	createAndSetupGeometry();
-    
+
     cout << "test FMOD()" << endl;
     testFMOD();
 
     cout << "Create cube" << endl;
     m_cube = new Cube();
-    
+
     glClearColor(0.2f, 0.3f, 0.4f, 1.f);
     cout << "Done" << endl;
 }
@@ -83,7 +82,7 @@ void Game::draw()
     glFrontFace(GL_CCW);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
-    
+
     m_cube->draw();
 
     m_texture->bind();
