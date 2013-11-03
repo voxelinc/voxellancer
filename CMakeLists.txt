@@ -22,6 +22,7 @@ option(OPTION_ERRORS_AS_EXCEPTION "Throw exceptions" OFF)
 # CMAKE CONFIGURATION
 set(CMAKE_VERBOSE_MAKEFILE 1)
 set(LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib)
+set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/source)
 
 # Include cmake modules from ./cmake
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
@@ -38,6 +39,7 @@ endif()
 
 # Project
 project(${META_PROJECT_NAME} C CXX)
+
 
 # Generate folders
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
@@ -126,10 +128,13 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-file(GLOB SRC_FILES
+file(GLOB_RECURSE SRC_FILES
     "source/*.h"
     "source/*.cpp"
 )
+
+set(SRC_FILES_EXCEPT_MAIN ${SRC_FILES})
+list(REMOVE_ITEM SRC_FILES_EXCEPT_MAIN ${SRC_DIR}/main.cpp)
 
 file(GLOB SHADER_FILES
     "data/*.vert"
@@ -143,13 +148,17 @@ add_executable(${target}
     ${SHADER_FILES}
 )
 
-target_link_libraries(${target} 
-    ${OPENGL_LIBRARIES}
+set(LIBS_TO_LINK
+	${OPENGL_LIBRARIES}
     ${GLEW_LIBRARY}
     ${GLFW_LIBRARY}
     ${FMOD_LIBRARY}
     glow
     glowutils
+)
+
+target_link_libraries(${target} 
+    ${LIBS_TO_LINK}
 )
 
 if(UNIX)
@@ -185,3 +194,7 @@ install(FILES ${GLEW_BINARY} {GLFW_BINARY} ${FMOD_BINARY} DESTINATION .)
  set(CPACK_NSIS_CREATE_ICONS "CreateShortCut '\$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\${PROJECT_NAME}.lnk' '\$INSTDIR\\\\${PROJECT_NAME}.exe'") 
  
 include(CPack)
+
+include_directories(${SRC_DIR})
+
+add_subdirectory(test)

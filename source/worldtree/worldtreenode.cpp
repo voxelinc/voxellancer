@@ -1,6 +1,11 @@
 #include "worldtreenode.h"
+
 #include <assert.h>
 #include <algorithm>
+#include <iostream>
+
+#include "utils/tostring.h"
+
 
 WorldtreeNode::WorldtreeNode(int level, WorldtreeNode *parent, const AABB &aabb):
     m_level(level),
@@ -11,7 +16,7 @@ WorldtreeNode::WorldtreeNode(int level, WorldtreeNode *parent, const AABB &aabb)
 
 }
 
-virtual WorldtreeNode::~WorldtreeNode() {
+WorldtreeNode::~WorldtreeNode() {
     for(WorldtreeNode *subnode : m_subnodes) {
         delete subnode;
     }
@@ -19,6 +24,10 @@ virtual WorldtreeNode::~WorldtreeNode() {
 
 const AABB &WorldtreeNode::aabb() const {
     return m_aabb;
+}
+
+int WorldtreeNode::totalNumGeodes() const {
+    return m_totalNumGeodes;
 }
 
 const std::list<WorldtreeGeode*> &WorldtreeNode::geodes() const {
@@ -42,30 +51,30 @@ bool WorldtreeNode::isLeaf() const {
 }
 
 bool WorldtreeNode::isRootnode() const {
-    return parent == nullptr;
+    return m_parent == nullptr;
 }
 
 void WorldtreeNode::insert(WorldtreeGeode *geode) {
     if(m_aabb.contains(geode->aabb())) {
-        geode->setContainingNode(geode);
+        geode->setContainingNode(this);
+    }
+
+    if(isRootnode()) {
+        if(!m_aabb.contains(geode->aabb())) {
+            octuple(geode->aabb());
+            insert(geode);
+            return;
+        }
     }
 
     if(isLeaf()) {
-        if(isRootnode()) {
-            if(!m_aabb.contains(geode->aabb())) {
-                octuple(geode->aabb());
-                insert(geode);
-                return;
-            }
-        }
-
         m_geodes.push_back(geode);
-        if(m_geodes.size() > MAX_GEODES && m_level < MAX_LEVEL) {
+        if(m_geodes.size() > MAX_GEODES && m_level < MAX_DEPTH) {
             split();
         }
     }
     else {
-        for(WorldTreeNode *subnode : m_subnodes) {
+        for(WorldtreeNode *subnode : m_subnodes) {
             if(subnode->aabb().intersects(geode->aabb())) {
                 subnode->insert(geode);
             }
@@ -77,7 +86,7 @@ void WorldtreeNode::insert(WorldtreeGeode *geode) {
 
 bool WorldtreeNode::remove(WorldtreeGeode *geode) {
     if(isLeaf()) {
-        std::list<WorldtreeGeode>::iterator i = std::find(m_geodes.begin(), m_geodes.end(), geode);
+        std::list<WorldtreeGeode*>::iterator i = std::find(m_geodes.begin(), m_geodes.end(), geode);
         if(i != m_geodes.end()) {
             m_geodes.erase(i);
             m_totalNumGeodes--;
@@ -101,8 +110,8 @@ bool WorldtreeNode::remove(WorldtreeGeode *geode) {
     }
 }
 
-std::set<WorldtreeGeode*> WorldtreeNode::geodesInAABB(const AABB &aabb) {
-    std::set<WorltreeGeode*> result;
+std::set<WorldtreeGeode*> WorldtreeNode::geodesInAABB(const AABB &aabb) const {
+    std::set<WorldtreeGeode*> result;
 
     if(isLeaf()) {
         for(WorldtreeGeode *geode : m_geodes) {
@@ -112,9 +121,9 @@ std::set<WorldtreeGeode*> WorldtreeNode::geodesInAABB(const AABB &aabb) {
         }
     }
     else {
-        for(WorldTreeNode *subnode : m_subnodes) {
+        for(WorldtreeNode *subnode : m_subnodes) {
             if(aabb.intersects(subnode->aabb())) {
-                std::set<WorldtreeGeode> subresult = subnode->geodesInAABB(aabb);
+                std::set<WorldtreeGeode*> subresult = subnode->geodesInAABB(aabb);
                 result.insert(subresult.begin(), subresult.end());
             }
         }
@@ -136,7 +145,7 @@ void WorldtreeNode::aabbChanged(WorldtreeGeode *geode) {
             return;
         }
         else {
-            parent->aabbChanged(geode);
+            m_parent->aabbChanged(geode);
         }
     }
 }
@@ -144,15 +153,15 @@ void WorldtreeNode::aabbChanged(WorldtreeGeode *geode) {
 void WorldtreeNode::split() {
     assert(isLeaf());
 
-    std::list<AABB> aabbs = m_aabb.recursiveSplit(3, AABB::SplitX);
+    std::list<AABB> aabbs = m_aabb.recursiveSplit(2, XAxis);
 
     for(AABB &aabb : aabbs) {
         m_subnodes.push_back(new WorldtreeNode(m_level+1, this, aabb));
     }
 
     for(WorldtreeNode *subnode : m_subnodes) {
-        for(WorldtreeGeode *geode : m_geode) {
-            if(subnode->aabb().intersectes(geode->aabb())) {
+        for(WorldtreeGeode *geode : m_geodes) {
+            if(subnode->aabb().intersects(geode->aabb())) {
                 subnode->insert(geode);
             }
         }
@@ -178,40 +187,27 @@ void WorldtreeNode::unsplit() {
 
 void WorldtreeNode::octuple(const AABB &aabb) {
     WorldtreeNode *oldThis = new WorldtreeNode(m_level+1, this, m_aabb);
+    oldThis->m_geodes.splice(oldThis->m_geodes.end(), m_geodes);
+    oldThis->m_subnodes.splice(oldThis->m_subnodes.end(), m_subnodes);
 
     m_subnodes.clear();
     m_geodes.clear();
 
     m_subnodes.push_back(oldThis);
 
-    if(aabb.right() <= m_aabb.left()) {
-        m_subnodes.push_back(new WorldtreeNode(m_level+1, this, m_aabb.movedLeft(m_aabb.width())));
-    }
-    else {
-        m_subnodes.push_back(new WorldtreeNode(m_level+1, this, m_aabb.movedRight(m_aabb.width())));
-    }
+    for(int a = 0; a < 3; a++) {
+        Axis axis = (Axis)a;
+        int extentDir = aabb.axisMin(axis) <= m_aabb.axisMin(axis) ? -1 : 1;
 
-    std::list<WorldtreeNode*> newSubnodes;
-    for(WorldtreeNode *subnode : m_subnodes) {
-        if(aabb.back() <= m_aabb.front()) {
-            newSubnodes.push_back(new WorldtreeNode(m_level+1, this, subnode->aabb().movedFront(subnode->aabb().depth())));
+        std::list<WorldtreeNode*> mirroredSubnodes;
+        for(WorldtreeNode *subnode : m_subnodes) {
+            WorldtreeNode *mirroredNode = new WorldtreeNode(m_level+1, this, subnode->aabb().moved(axis, extentDir * subnode->aabb().extent(axis)));
+            mirroredSubnodes.push_back(mirroredNode);
         }
-        else {
-            newSubnodes.push_back(new WorldtreeNode(m_level+1, this, subnode->aabb().movedBack(subnode->aabb().depth())));
-        }
-    }
-    m_subnodes.splice(m_subnodes.end(), newSubnodes);
+        m_subnodes.splice(m_subnodes.end(), mirroredSubnodes);
 
-    newSubnodes.clear();
-    for(WorldtreeNode *subnode : m_subnodes) {
-        if(aabb.top() <= m_aabb.bottom()) {
-            newSubnodes.push_back(new WorldtreeNode(m_level+1, this, subnode->aabb().movedDown(subnode->aabb().depth())));
-        }
-        else {
-            newSubnodes.push_back(new WorldtreeNode(m_level+1, this, subnode->aabb().movedUp(subnode->aabb().depth())));
-        }
+        m_aabb.expand(axis, extentDir * m_aabb.extent(axis));
     }
-    m_subnodes.splice(m_subnodes.end(), newSubnodes);
 }
 
 

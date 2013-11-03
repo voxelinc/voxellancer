@@ -36,7 +36,8 @@ Game::Game():
     m_texture(0),
     m_vertexArrayObject(0),
     m_vertexBuffer(0),
-    m_cube(0)
+    m_cube(0),
+    m_worldTree()
 {
 }
 

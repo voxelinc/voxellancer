@@ -3,7 +3,7 @@
 #include <list>
 #include <glm/glm.hpp>
 
-#include "geometry/aabb.h"
+#include "../geometry/aabb.h"
 
 #include "worldtreenode.h"
 
@@ -15,8 +15,8 @@ public:
 
     void remove(WorldtreeGeode *geode);
 
-    std::set<WorldtreeGeode*> geodesInAABB(const AABB &aabb);
-    std::set<WorldtreeGeode*> geodesInAABB(const AABB &aabb, WorldtreeNode *nodeHint);
+    std::set<WorldtreeGeode*> geodesInAABB(const AABB &aabb) const;
+    std::set<WorldtreeGeode*> geodesInAABB(const AABB &aabb, WorldtreeNode *nodeHint) const;
 
     void aabbChanged(WorldtreeGeode *geode);
 

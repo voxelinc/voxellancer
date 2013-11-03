@@ -6,7 +6,7 @@
 #include "glow/VertexArrayObject.h"
 #include "glow/Buffer.h"
 
-#include "worldtree/worldtree.hpp"
+#include "worldtree/worldtree.h"
 
 #include "cube.h"
 
@@ -36,3 +36,4 @@ private:
 	glow::ref_ptr<glow::Buffer> m_vertexBuffer;
     Cube * m_cube;
 };
+

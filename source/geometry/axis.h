@@ -1,5 +1,8 @@
 #pragma once
 
 enum Axis {
-    XAxis, YAxis, ZAxis;
+    XAxis = 0,
+    YAxis = 1,
+    ZAxis = 2
 };
+

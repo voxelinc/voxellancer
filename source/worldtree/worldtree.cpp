@@ -10,16 +10,16 @@ Worldtree::~Worldtree() {
 
 }
 
-std::set<WorldtreeGeode*> Worldtree::geodesInAABB(const AABB &aabb) {
+std::set<WorldtreeGeode*> Worldtree::geodesInAABB(const AABB &aabb) const {
     return WorldtreeNode::geodesInAABB(aabb);
 }
 
-std::set<WorldtreeGeode*> Worldtree::geodesInAABB(const AABB &aabb, WorldtreeGeode *nodeHint) {
-    if(nodeHint == nullptr || geodeHint->aabb().contains(aabb)) {
+std::set<WorldtreeGeode*> Worldtree::geodesInAABB(const AABB &aabb, WorldtreeNode *nodeHint) const {
+    if(nodeHint == nullptr || nodeHint->aabb().contains(aabb)) {
         return geodesInAABB(aabb);
     }
     else {
-        return geodesInAABB(aabb, nodeHint->parent())
+        return geodesInAABB(aabb, nodeHint->parent());
     }
 }
 
