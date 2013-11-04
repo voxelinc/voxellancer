@@ -10,8 +10,7 @@
 WorldtreeNode::WorldtreeNode(int level, WorldtreeNode *parent, const AABB &aabb):
     m_level(level),
     m_parent(parent),
-    m_aabb(aabb),
-    m_totalNumGeodes(0)
+    m_aabb(aabb)
 {
 
 }
@@ -24,10 +23,6 @@ WorldtreeNode::~WorldtreeNode() {
 
 const AABB &WorldtreeNode::aabb() const {
     return m_aabb;
-}
-
-int WorldtreeNode::totalNumGeodes() const {
-    return m_totalNumGeodes;
 }
 
 const std::list<WorldtreeGeode*> &WorldtreeNode::geodes() const {
@@ -80,32 +75,18 @@ void WorldtreeNode::insert(WorldtreeGeode *geode) {
             }
         }
     }
-
-    m_totalNumGeodes++;
 }
 
-bool WorldtreeNode::remove(WorldtreeGeode *geode) {
+void WorldtreeNode::remove(WorldtreeGeode *geode) {
     if(isLeaf()) {
         std::list<WorldtreeGeode*>::iterator i = std::find(m_geodes.begin(), m_geodes.end(), geode);
         if(i != m_geodes.end()) {
             m_geodes.erase(i);
-            m_totalNumGeodes--;
-            return true;
         }
     }
     else {
-        bool removedFromSubnode = false;
-
         for(WorldtreeNode *subnode : m_subnodes) {
-            removedFromSubnode |= subnode->remove(geode);
-        }
-
-        if(removedFromSubnode) {
-            m_totalNumGeodes--;
-
-            if(m_totalNumGeodes <= MAX_GEODES) {
-                unsplit();
-            }
+            subnode->remove(geode);
         }
     }
 }
@@ -170,9 +151,10 @@ void WorldtreeNode::split() {
 
 void WorldtreeNode::unsplit() {
     assert(!isLeaf());
-    assert(m_totalNumGeodes <= MAX_GEODES);
 
     for(WorldtreeNode *subnode : m_subnodes) {
+        assert(subnode->isLeaf());
+
         for(WorldtreeGeode *geode : subnode->m_geodes) {
             if(geode->containingNode() == subnode) {
                 geode->setContainingNode(this);
@@ -189,6 +171,12 @@ void WorldtreeNode::octuple(const AABB &aabb) {
     WorldtreeNode *oldThis = new WorldtreeNode(m_level+1, this, m_aabb);
     oldThis->m_geodes.splice(oldThis->m_geodes.end(), m_geodes);
     oldThis->m_subnodes.splice(oldThis->m_subnodes.end(), m_subnodes);
+
+    for(WorldtreeGeode *geode : oldThis->m_geodes) {
+        if(geode->containingNode() == this) {
+            geode->setContainingNode(oldThis);
+        }
+    }
 
     m_subnodes.clear();
     m_geodes.clear();

@@ -62,7 +62,6 @@ BOOST_AUTO_TEST_CASE(inAABB) {
     node->insert(a);
     node->insert(b);
     node->insert(c);
-    BOOST_CHECK_EQUAL(node->totalNumGeodes(), 5);
 
     std::set<WorldtreeGeode*> q1 = node->geodesInAABB(AABB(glm::vec3(-100, -100, -100), glm::vec3(100, 100, 100)));
     BOOST_CHECK_EQUAL(q1.size(), 5);

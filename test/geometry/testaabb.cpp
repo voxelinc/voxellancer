@@ -3,7 +3,6 @@
 #include <iostream>
 #include <boost/test/included/unit_test.hpp>
 
-#include "testaabb.h"
 
 #include "geometry/aabb.h"
 

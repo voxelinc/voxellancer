@@ -14,11 +14,10 @@ class WorldtreeNode
 
 public:
     WorldtreeNode(int level, WorldtreeNode *parent, const AABB &aabb);
+    WorldtreeNode(const WorldtreeNode &other);
     virtual ~WorldtreeNode();
 
     const AABB &aabb() const;
-
-    int totalNumGeodes() const;
 
     const std::list<WorldtreeGeode*> &geodes() const;
     const std::list<WorldtreeNode*> &subnodes() const;
@@ -30,7 +29,7 @@ public:
     bool isRootnode() const;
 
     void insert(WorldtreeGeode *geode);
-    bool remove(WorldtreeGeode *geode);
+    void remove(WorldtreeGeode *geode);
 
     std::set<WorldtreeGeode*> geodesInAABB(const AABB &aabb) const;
 
@@ -41,7 +40,6 @@ protected:
     WorldtreeNode *m_parent;
     AABB m_aabb;
     int m_level;
-    int m_totalNumGeodes;
     std::list<WorldtreeGeode*> m_geodes;
     std::list<WorldtreeNode*> m_subnodes;
 
