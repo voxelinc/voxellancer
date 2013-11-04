@@ -9,9 +9,11 @@
 
 #include <glow/logging.h>
 #include <glow/global.h>
+#include <glow/ShaderFile.h>
+
+#include <iostream>
 
 #include "game.h"
-#include <iostream>
 
 static GLint MajorVersionRequire = 3;
 static GLint MinorVersionRequire = 1;
@@ -103,12 +105,10 @@ int main(void)
     setCallbacks(window);
     checkVersion();
     glewExperimental = GL_TRUE;
-    cout << "glewInit()..." << endl;
     if(glewInit() != GLEW_OK) {
         glow::fatal("glewInit() failed");
         return -1;
     }
-    cout << "-> done" << endl;
     
 #ifdef WIN32 // TODO: find a way to correctly detect debug extension in linux
     glow::DebugMessageOutput::enable();  

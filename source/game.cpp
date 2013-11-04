@@ -15,9 +15,11 @@
 #include <glow/Error.h>
 #include <glow/Uniform.h>
 #include <glow/Array.h>
+#include <glow/Shader.h>
 #include <glow/ShaderFile.h>
 #include <glow/Program.h>
 #include <glow/VertexArrayObject.h>
+#include <glow/VertexAttributeBinding.h>
 #include <glow/AutoTimer.h>
 #include <glow/logging.h>
 
@@ -51,20 +53,14 @@ Game::Game(GLFWwindow *window):
 void Game::initialize()
 {
     glow::AutoTimer t("Initialize Game");
-    cout << "createAndSetupTexture()" << endl;
 	createAndSetupTexture();
-    cout << "createAndSetupShaders()" << endl;
 	createAndSetupShaders();
-    cout << "createAndSetupGeometry()" << endl;
 	createAndSetupGeometry();
     
-    cout << "test FMOD()" << endl;
     testFMOD();
 
-    cout << "Create cube" << endl;
     m_cube = new Cube();
 
-	cout << "Create cam" << endl;
 	m_cam = new glow::Camera();
 	m_cam->setViewport(glm::ivec2(16, 9));
 	m_cam->setCenter(glm::vec3(0, 0, 1));
@@ -81,7 +77,6 @@ void Game::initialize()
 	
 
     glClearColor(0.2f, 0.3f, 0.4f, 1.f);
-    cout << "Done" << endl;
 }
 
 void Game::resizeEvent(
