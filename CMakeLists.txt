@@ -99,11 +99,6 @@ find_package(GLFW REQUIRED)
 find_package(FMOD REQUIRED)
 
 
-
-
-
-
-
 set(GLOW_DIRECTORY glow)
 include_directories(${LIB_DIR}/${GLOW_DIRECTORY}/include)
 add_subdirectory(${LIB_DIR}/${GLOW_DIRECTORY})
@@ -117,8 +112,6 @@ include_directories(
     ${GLM_INCLUDE_DIR}
     ${FMOD_INCLUDE_DIR}
 )
-
-
 
 set(target voxellancer)
 
@@ -157,13 +150,14 @@ set(LIBS_TO_LINK
     glowutils
 )
 
+if(UNIX)
+	set(LIBS_TO_LINK ${LIBS_TO_LINK} Xxf86vm X11 Xrandr Xi )
+endif()
+
 target_link_libraries(${target} 
     ${LIBS_TO_LINK}
 )
 
-if(UNIX)
-	target_link_libraries(${target} X11 Xrandr Xi Xxf86vm)
-endif()
 
 
 set_target_properties(${target}
@@ -177,19 +171,21 @@ set_target_properties(${target}
     DEBUG_POSTFIX               "d${DEBUG_POSTFIX}"
 )
 
+set(BINARIES ${GLEW_BINARY} ${GLFW_BINARY} ${FMOD_BINARY})
+
 if(WIN32)
+    foreach( binary ${BINARIES})
     add_custom_command(TARGET ${target} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy ${GLEW_BINARY} $<TARGET_FILE_DIR:${target}>)
-    add_custom_command(TARGET ${target} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy ${GLFW_BINARY} $<TARGET_FILE_DIR:${target}>)
-    add_custom_command(TARGET ${target} POST_BUILD
-       COMMAND ${CMAKE_COMMAND} -E copy ${FMOD_BINARY} $<TARGET_FILE_DIR:${target}>)    
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${binary} $<TARGET_FILE_DIR:${target}>)
+    endforeach( file_i )   
 endif()
 
 install(TARGETS ${target} 
         RUNTIME DESTINATION .)
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/data DESTINATION .)
-install(FILES ${GLEW_BINARY} {GLFW_BINARY} ${FMOD_BINARY} DESTINATION .)
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/data 
+        DESTINATION . 
+        PATTERN "*.png" EXCLUDE)
+install(FILES ${BINARIES} DESTINATION .)
 
  set(CPACK_NSIS_CREATE_ICONS "CreateShortCut '\$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\${PROJECT_NAME}.lnk' '\$INSTDIR\\\\${PROJECT_NAME}.exe'") 
  

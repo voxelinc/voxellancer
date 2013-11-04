@@ -1,10 +1,13 @@
 #pragma once
 
-#include "glow/ref_ptr.h"
-#include "glow/Texture.h"
-#include "glow/Program.h"
-#include "glow/VertexArrayObject.h"
-#include "glow/Buffer.h"
+#include <glow/ref_ptr.h>
+#include <glow/Texture.h>
+#include <glow/Program.h>
+#include <glow/VertexArrayObject.h>
+#include <glow/Buffer.h>
+#include <glowutils/Camera.h>
+
+#include <GLFW/glfw3.h>
 
 #include "worldtree/worldtree.h"
 
@@ -13,7 +16,7 @@
 class Game {
 
 public:
-    Game();
+    Game(GLFWwindow *window);
 	void initialize();
 
 
@@ -26,14 +29,21 @@ private:
 	void createAndSetupTexture();
 	void createAndSetupShaders();
 	void createAndSetupGeometry();
+	void getWindowCenter(int *x, int *y);
 
 private:
     Worldtree m_worldTree;
+	GLFWwindow *m_window;
 
 	glow::ref_ptr<glow::Texture> m_texture;
 	glow::ref_ptr<glow::Program> m_shaderProgram;
 	glow::ref_ptr<glow::VertexArrayObject> m_vertexArrayObject;
 	glow::ref_ptr<glow::Buffer> m_vertexBuffer;
     Cube * m_cube;
+	glow::Camera * m_cam;
+	float angX, angY;
+
+	static const float s_angle_translate;
+	static const float s_move_translate;
 };
 

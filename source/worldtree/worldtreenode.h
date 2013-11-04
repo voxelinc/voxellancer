@@ -15,15 +15,14 @@
 */
 class WorldtreeNode
 {
-    static const int MAX_DEPTH = 8;
-    static const int MAX_GEODES = 8;
-
 public:
     WorldtreeNode(int level, WorldtreeNode *parent, const AABB &aabb);
     WorldtreeNode(const WorldtreeNode &other);
     virtual ~WorldtreeNode();
 
     const AABB &aabb() const;
+
+    int level() const;
 
     const std::list<WorldtreeGeode*> &geodes() const;
     const std::list<WorldtreeNode*> &subnodes() const;
@@ -43,6 +42,11 @@ public:
 
 
 protected:
+    static const int MAX_DEPTH = 8;
+    static const int MAX_GEODES = 8;
+
+    friend class WorldtreeCleaner;
+
     WorldtreeNode *m_parent;
     AABB m_aabb;
     int m_level;
