@@ -25,6 +25,10 @@ const AABB &WorldtreeNode::aabb() const {
     return m_aabb;
 }
 
+int WorldtreeNode::level() const {
+    return m_level;
+}
+
 const std::list<WorldtreeGeode*> &WorldtreeNode::geodes() const {
     return m_geodes;
 }
@@ -197,5 +201,4 @@ void WorldtreeNode::octuple(const AABB &aabb) {
         m_aabb.expand(axis, extentDir * m_aabb.extent(axis));
     }
 }
-
 

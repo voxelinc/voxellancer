@@ -6,7 +6,13 @@
 #include "worldtreegeode.h"
 #include "../geometry/aabb.h"
 
+/*!
+    remove() doesn't unsplit. This could happen recursive upwards the tree,
+    which is unclean since subnodes would have to order their parents to delete them.
 
+    unsplitting should happen regulary by a different entity, maybe using tokens, that
+    mark changed nodes
+*/
 class WorldtreeNode
 {
     static const int MAX_DEPTH = 8;
