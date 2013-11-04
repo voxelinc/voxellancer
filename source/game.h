@@ -10,6 +10,7 @@
 #include <GLFW/glfw3.h>
 
 #include "cube.h"
+#include "player.h"
 
 class Game {
 
@@ -37,8 +38,9 @@ private:
 	glow::ref_ptr<glow::VertexArrayObject> m_vertexArrayObject;
 	glow::ref_ptr<glow::Buffer> m_vertexBuffer;
     Cube * m_cube;
+    Player m_player;
+
 	glow::Camera * m_cam;
-	float angX, angY;
 	int cursorMaxDistance, windowWidth, windowHeight;
 	int fpsControls;
 

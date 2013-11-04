@@ -33,8 +33,8 @@
 using namespace std;
 
 
-const float Game::s_angle_translate = 0.0001f;
-const float Game::s_move_translate = 0.01f;
+const float Game::s_angle_translate = 0.1f;
+const float Game::s_move_translate = 0.5f;
 
 Game::Game(GLFWwindow *window):
 	m_window(window),
@@ -43,7 +43,8 @@ Game::Game(GLFWwindow *window):
     m_vertexArrayObject(0),
     m_vertexBuffer(0),
     m_cube(0),
-	m_cam(0)
+	m_cam(0),
+    m_player()
 {
 
 }
@@ -72,9 +73,7 @@ void Game::initialize()
 	m_cam->setUp(glm::vec3(0, 1, 0));
 	m_cam->setEye(glm::vec3(0, 0, 0));
 	m_cam->setZNear(0.1f);
-	m_cam->setZFar(999999);
-	angX = glm::radians(90.0f);
-	angY = 0;
+	m_cam->setZFar(99999);
 
 	glfwGetWindowSize(m_window, &windowWidth, &windowHeight);
 	glfwSetCursorPos(m_window, windowWidth / 2, windowHeight / 2);
@@ -105,76 +104,77 @@ void Game::update(float delta_sec)
 		glm::vec3 lookVec = m_cam->center() - m_cam->eye();
 		// position "eye"
 		if (glfwGetKey(m_window, GLFW_KEY_W) == GLFW_PRESS){
-			m_cam->setEye(m_cam->eye() + lookVec*s_move_translate);
+            m_player.move(glm::vec3(0, 0, s_move_translate* delta_sec));
 		} 
 		if (glfwGetKey(m_window, GLFW_KEY_A) == GLFW_PRESS){
-			m_cam->setEye(m_cam->eye() - glm::cross(lookVec, m_cam->up())*s_move_translate);
-		} 
-		if (glfwGetKey(m_window, GLFW_KEY_S) == GLFW_PRESS){
-			m_cam->setEye(m_cam->eye() - lookVec*s_move_translate);
-		} 
-		if (glfwGetKey(m_window, GLFW_KEY_D) == GLFW_PRESS){
-			m_cam->setEye(m_cam->eye() + glm::cross(lookVec, m_cam->up())*s_move_translate);
-		}
+            m_player.move(glm::vec3(s_move_translate * delta_sec, 0, 0));
+
+        }
+        if (glfwGetKey(m_window, GLFW_KEY_S) == GLFW_PRESS){
+            m_player.move(glm::vec3(0, 0, -s_move_translate* delta_sec));
+
+        }
+        if (glfwGetKey(m_window, GLFW_KEY_D) == GLFW_PRESS){
+            m_player.move(glm::vec3(-s_move_translate* delta_sec, 0, 0));
+        }
+        if (glfwGetKey(m_window, GLFW_KEY_Q) == GLFW_PRESS){
+            m_player.rotateZ(-50*delta_sec);
+
+        }
+        if (glfwGetKey(m_window, GLFW_KEY_E) == GLFW_PRESS){
+            m_player.rotateZ(50 * delta_sec);
+        }
 
 		// lookAt
 		double x, y;
 		glfwGetCursorPos(m_window, &x, &y);
 		float rel = 10;
+        float deadzone = 0.1f;
 		if (!fpsControls) {
 			rel = (float)max(1.0,(sqrt(pow(windowWidth - (int)floor(x), 2) + pow(windowHeight - (int)floor(y), 2))) / cursorMaxDistance);
-		}
+            rel = max(0.0f, rel - deadzone) / (1-deadzone);
+            rel = glm::smoothstep(0.f,1.f,rel);
+        }
 		else
 		{
 			glfwSetCursorPos(m_window, windowWidth / 2, windowHeight / 2);
 		}
 
-		angX += ((int)floor(x) - windowWidth/2) * s_angle_translate * rel;
-		angY += ((int)floor(y) - windowHeight/2) * s_angle_translate * rel;
-			// block at 90°, set Up to avoid camera flipping
-		if (angY >= glm::radians(90.0f)){
-			angY = glm::radians(90.0f);
-			m_cam->setUp(glm::vec3(cos(angX), 1, sin(angX)));
-		}
-		else if (angY <= glm::radians(-90.0f)){
-			angY = glm::radians(-90.0f);
-			m_cam->setUp(glm::vec3(-cos(angX), 1, -sin(angX)));
-		}
-		else {
-			m_cam->setUp(glm::vec3(0, 1, 0));
-		}
-		m_cam->setCenter(m_cam->eye() + glm::normalize(glm::vec3(glm::cos(angX)*glm::cos(-angY), glm::sin(-angY), glm::sin(angX)*glm::cos(-angY))));
-	}
+		float angX = ((int)floor(x) - windowWidth/2) * s_angle_translate * rel;
+		float angY = ((int)floor(y) - windowHeight/2) * s_angle_translate * rel;
+	
+        m_player.rotateX(angY*delta_sec);
+        m_player.rotateY(angX*delta_sec);
+
+    }
 }
 
 void Game::draw()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glDisable(GL_DEPTH_TEST);
 	glFrontFace(GL_CCW);
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 
-	m_texture->bind();
-	glm::vec3 camEye = m_cam->eye();
-	glm::vec3 camCenter = m_cam->center();
-	m_cam->setEye(glm::vec3(0, 0, 0));
-	m_cam->setCenter(camCenter - camEye);
-	m_shaderProgram->setUniform("viewInverted", m_cam->viewInverted());
+    glDisable(GL_DEPTH_TEST);
+
+    m_texture->bind();
+	m_shaderProgram->setUniform("viewInverted", glm::inverse(glm::mat4_cast(m_player.orientation())));
 	m_shaderProgram->setUniform("projection", m_cam->projection());
 	m_shaderProgram->use();
 
 	m_vertexArrayObject->drawArrays(GL_TRIANGLE_FAN, 0, 4);
 
-	m_cam->setEye(camEye);
-	m_cam->setCenter(camCenter);
 	m_shaderProgram->release();
 	m_texture->unbind();
 
-	glEnable(GL_DEPTH_TEST);
-	m_cube->drawtest(m_cam->viewProjection());
-	//m_cube->draw();
+    glEnable(GL_DEPTH_TEST);
 
+    m_cube->drawtest(m_cam->projection() * m_player.matrix());
+    
+	m_shaderProgram->use();
+	m_vertexArrayObject->drawArrays(GL_POINTS, 0, 1);
+	m_shaderProgram->release();
 
 }
 
