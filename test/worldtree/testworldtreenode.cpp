@@ -22,19 +22,19 @@ BOOST_AUTO_TEST_CASE(simpleInsert) {
     BOOST_CHECK_EQUAL(node->subnodes().size(), 0);
     BOOST_CHECK_EQUAL(b->containingNode(), node);
 
-    float oldWidth = node->aabb().width();
+    float oldWidth = node->aabb().extent(XAxis);
 
     node->insert(a);
     BOOST_CHECK_EQUAL(node->geodes().size(), 0);
     BOOST_CHECK_EQUAL(node->subnodes().size(), 8);
-    BOOST_CHECK_CLOSE(node->aabb().width(), oldWidth*2, 5);
+    BOOST_CHECK_CLOSE(node->aabb().extent(XAxis), oldWidth*2, 5);
     BOOST_CHECK_EQUAL(a->containingNode(), node);
 
     node->insert(c);
     BOOST_CHECK_EQUAL(node->geodes().size(), 0);
     BOOST_CHECK_EQUAL(node->subnodes().size(), 8);
     BOOST_CHECK_EQUAL(c->containingNode(), node);
-    BOOST_CHECK_CLOSE(node->aabb().width(), oldWidth*4, 5);
+    BOOST_CHECK_CLOSE(node->aabb().extent(XAxis), oldWidth*4, 5);
 }
 
 BOOST_AUTO_TEST_CASE(inAABB) {

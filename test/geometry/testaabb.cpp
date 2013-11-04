@@ -12,24 +12,15 @@ BOOST_AUTO_TEST_CASE(bounds) {
     AABB a(glm::vec3(3, -2, 1), glm::vec3(8, 5, 3));
 
 
-    BOOST_CHECK_EQUAL(a.width(), 5);
     BOOST_CHECK_EQUAL(a.extent(XAxis), 5);
-    BOOST_CHECK_EQUAL(a.height(), 7);
     BOOST_CHECK_EQUAL(a.extent(YAxis), 7);
-    BOOST_CHECK_EQUAL(a.depth(), 2);
     BOOST_CHECK_EQUAL(a.extent(ZAxis), 2);
 
-    BOOST_CHECK_EQUAL(a.left(), 3);
     BOOST_CHECK_EQUAL(a.axisMin(XAxis), 3);
-    BOOST_CHECK_EQUAL(a.right(), 8);
     BOOST_CHECK_EQUAL(a.axisMax(XAxis), 8);
-    BOOST_CHECK_EQUAL(a.front(), 1);
     BOOST_CHECK_EQUAL(a.axisMin(ZAxis), 1);
-    BOOST_CHECK_EQUAL(a.back(), 3);
     BOOST_CHECK_EQUAL(a.axisMax(ZAxis), 3);
-    BOOST_CHECK_EQUAL(a.top(), 5);
     BOOST_CHECK_EQUAL(a.axisMax(YAxis), 5);
-    BOOST_CHECK_EQUAL(a.bottom(), -2);
     BOOST_CHECK_EQUAL(a.axisMin(YAxis), -2);
 }
 
@@ -87,9 +78,9 @@ BOOST_AUTO_TEST_CASE(splitting) {
 
         BOOST_CHECK(a.contains(b) && a.contains(c));
 
-        BOOST_CHECK_EQUAL(b.width(), c.width());
-        BOOST_CHECK_EQUAL(b.height(), c.height());
-        BOOST_CHECK_EQUAL(b.depth(), c.depth());
+        BOOST_CHECK_EQUAL(b.extent(XAxis), c.extent(XAxis));
+        BOOST_CHECK_EQUAL(b.extent(YAxis), c.extent(YAxis));
+        BOOST_CHECK_EQUAL(b.extent(ZAxis), c.extent(ZAxis));
 
         BOOST_CHECK_CLOSE_FRACTION(b.extent(axis) + c.extent(axis) , a.extent(axis), 0.1f);
         BOOST_CHECK_CLOSE_FRACTION(b.axisMin(axis) + b.extent(axis) , c.axisMin(axis), 0.1f);
@@ -106,9 +97,9 @@ BOOST_AUTO_TEST_CASE(recursiveSplitting) {
     std::vector<AABB> splittedv(splitted.begin(), splitted.end());
 
     for(int b = 0; b < 8; b++) {
-        BOOST_CHECK_EQUAL(splittedv[b].width(), 4);
-        BOOST_CHECK_EQUAL(splittedv[b].height(), 32);
-        BOOST_CHECK_EQUAL(splittedv[b].depth(), 16);
+        BOOST_CHECK_EQUAL(splittedv[b].extent(XAxis), 4);
+        BOOST_CHECK_EQUAL(splittedv[b].extent(YAxis), 32);
+        BOOST_CHECK_EQUAL(splittedv[b].extent(ZAxis), 16);
     }
 }
 

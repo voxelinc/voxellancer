@@ -39,30 +39,6 @@ void AABB::setRub(const glm::vec3 &rub) {
     m_rub = rub;
 }
 
-float AABB::left() const {
-    return m_llf.x;
-}
-
-float AABB::right() const {
-    return m_rub.x;
-}
-
-float AABB::front() const {
-    return m_llf.z;
-}
-
-float AABB::back() const {
-    return m_rub.z;
-}
-
-float AABB::top() const {
-    return m_rub.y;
-}
-
-float AABB::bottom() const {
-    return m_llf.y;
-}
-
 float AABB::axisMin(Axis axis) const {
     return m_llf[(int)axis];
 }
@@ -71,44 +47,8 @@ float AABB::axisMax(Axis axis) const {
     return m_rub[(int)axis];
 }
 
-float AABB::width() const {
-    return m_rub.x - m_llf.x;
-}
-
-float AABB::height() const {
-    return m_rub.y - m_llf.y;
-}
-
-float AABB::depth() const {
-    return m_rub.z - m_llf.z;
-}
-
 float AABB::extent(Axis axis) const {
     return m_rub[(int)axis] - m_llf[(int)axis];
-}
-
-AABB AABB::movedLeft(float delta) const {
-    return AABB(glm::vec3(m_llf.x - delta, m_llf.y, m_llf.z), glm::vec3(m_rub.x - delta, m_rub.y, m_rub.z));
-}
-
-AABB AABB::movedRight(float delta) const {
-    return AABB(glm::vec3(m_llf.x + delta, m_llf.y, m_llf.z), glm::vec3(m_rub.x + delta, m_rub.y, m_rub.z));
-}
-
-AABB AABB::movedFront(float delta) const {
-    return AABB(glm::vec3(m_llf.x, m_llf.y, m_llf.z - delta), glm::vec3(m_rub.x, m_rub.y, m_rub.z - delta));
-}
-
-AABB AABB::movedBack(float delta) const {
-    return AABB(glm::vec3(m_llf.x, m_llf.y, m_llf.z + delta), glm::vec3(m_rub.x, m_rub.y, m_rub.z + delta));
-}
-
-AABB AABB::movedUp(float delta) const {
-    return AABB(glm::vec3(m_llf.x, m_llf.y + delta, m_llf.z), glm::vec3(m_rub.x, m_rub.y + delta, m_rub.z));
-}
-
-AABB AABB::movedDown(float delta) const {
-    return AABB(glm::vec3(m_llf.x, m_llf.y - delta, m_llf.z), glm::vec3(m_rub.x, m_rub.y - delta, m_rub.z));
 }
 
 AABB AABB::moved(Axis axis, float delta) const {
@@ -119,36 +59,6 @@ AABB AABB::moved(Axis axis, float delta) const {
 
 AABB AABB::moved(const glm::vec3 &delta) const {
     return AABB(m_llf + delta, m_rub + delta);
-}
-
-void AABB::moveLeft(float delta) {
-    m_llf.x -= delta;
-    m_rub.x -= delta;
-}
-
-void AABB::moveRight(float delta) {
-    m_llf.x += delta;
-    m_rub.x += delta;
-}
-
-void AABB::moveFront(float delta) {
-    m_llf.z -= delta;
-    m_rub.z -= delta;
-}
-
-void AABB::moveBack(float delta) {
-    m_llf.z += delta;
-    m_rub.z += delta;
-}
-
-void AABB::moveUp(float delta) {
-    m_llf.y += delta;
-    m_rub.y += delta;
-}
-
-void AABB::moveDown(float delta) {
-    m_llf.y -= delta;
-    m_rub.y -= delta;
 }
 
 void AABB::move(Axis axis, float delta) {
@@ -180,9 +90,9 @@ bool AABB::intersects(const AABB& other) const {
     AABB unitedAABB(united(other));
 
     return
-        unitedAABB.width() < width() + other.width() &&
-        unitedAABB.height() < height() + other.height() &&
-        unitedAABB.depth() < depth() + other.depth();
+        unitedAABB.extent(XAxis) < extent(XAxis) + other.extent(XAxis) &&
+        unitedAABB.extent(YAxis) < extent(YAxis) + other.extent(YAxis) &&
+        unitedAABB.extent(ZAxis) < extent(ZAxis) + other.extent(ZAxis);
 }
 
 bool AABB::contains(const AABB& other) const {

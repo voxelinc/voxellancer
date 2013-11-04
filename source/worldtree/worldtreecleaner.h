@@ -14,7 +14,7 @@ public:
 
 
 protected:
-    Worldtree &worldtree;
+    Worldtree &m_worldtree;
 
     void invoke(WorldtreeNode *node);
 };

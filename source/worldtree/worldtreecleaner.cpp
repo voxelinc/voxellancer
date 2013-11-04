@@ -13,20 +13,20 @@ WorldtreeCleaner::~WorldtreeCleaner() {
 }
 
 void WorldtreeCleaner::invoke() {
-    if(m_worldtreenode.isLeaf()) {
+    if(m_worldtree.isLeaf()) {
         return;
     }
 
-    invoke(&m_worldtreenode);
+    invoke(&m_worldtree);
 }
 
 
 void WorldtreeCleaner::invoke(WorldtreeNode *node) {
-    assert(!m_worldtree.isLeaf());
+    assert(!node->isLeaf());
 
     int geodesInSubnodes = 0;
 
-    for(const WorldtreeNode *subnode : node->m_sunodes) {
+    for(WorldtreeNode *subnode : node->m_subnodes) {
         if(!subnode->isLeaf()) {
             invoke(subnode);
             if(!subnode->isLeaf()) {
@@ -37,7 +37,7 @@ void WorldtreeCleaner::invoke(WorldtreeNode *node) {
     }
 
     if(geodesInSubnodes <= WorldtreeNode::MAX_GEODES) {
-        subnode->unsplit();
+        node->unsplit();
     }
 }
 
