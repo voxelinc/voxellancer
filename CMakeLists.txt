@@ -119,27 +119,17 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/source)
-
-set(HEADER_GROUP "Header Files")
-set(SOURCE_GROUP "Source Files")
-set(SHADER_GROUP "Shader Files")
-
-file(GLOB_RECURSE SRC_FILES
+file(GLOB SRC_FILES
     "source/*.h"
     "source/*.cpp"
 )
 
-file(GLOB_RECURSE SHADER_FILES
+file(GLOB SHADER_FILES
     "data/*.vert"
     "data/*.frag"
 )
 
-source_group(${SHADER_GROUP} FILES ${SHADER_FILES})
-
-
-source_group_by_path(${SOURCE_DIR} "\\\\.cpp$|\\\\.c$|\\\\.h$|\\\\.hpp$|\\\\.inl$" 
-    ${SOURCE_GROUP} ${SRC_FILES})
+source_group("Shader Files" FILES ${SHADER_FILES})
 
 add_executable(${target} 
     ${SRC_FILES}
@@ -177,7 +167,7 @@ if(WIN32)
     foreach( binary ${BINARIES})
     add_custom_command(TARGET ${target} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different ${binary} $<TARGET_FILE_DIR:${target}>)
-    endforeach( binary )   
+    endforeach( file_i )   
 endif()
 
 install(TARGETS ${target} 

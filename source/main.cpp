@@ -14,8 +14,6 @@
 #include <iostream>
 
 #include "game.h"
-#include "property/propertymanager.h"
-#include "property/floatproperty.h"
 
 static GLint MajorVersionRequire = 3;
 static GLint MinorVersionRequire = 1;
@@ -75,13 +73,6 @@ void setCallbacks(GLFWwindow* window)
 
 int main(void)
 {
-
-    FloatProperty fProp("player.size");
-    PropertyManager::getInstance()->load("data/conf.ini");
-    FloatProperty fProp2("player.height");
-    float x = fProp + fProp2;
-    cout << x;
-
     GLFWwindow* window;
     
     if (!glfwInit()) {
