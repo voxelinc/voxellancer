@@ -1,6 +1,4 @@
 
-#include <glm/gtc/quaternion.hpp>
-#include <glm/gtx/transform.hpp>
 
 #include "worldobject.h"
 
@@ -18,6 +16,10 @@ WorldObject::~WorldObject(){
 void WorldObject::move(glm::vec3 dist)
 {
     m_position += dist * m_orientation;
+}
+
+void WorldObject::moveTo(glm::vec3 pos){
+	m_position = pos;
 }
 
 void WorldObject::rotateX(float rot)
@@ -38,12 +40,16 @@ void WorldObject::rotateZ(float rot)
     m_orientation = qrot * m_orientation;
 }
 
-const glm::mat4 WorldObject::matrix()
+void WorldObject::rotateTo(glm::quat quat){
+	m_orientation = quat;
+}
+
+const glm::mat4 & WorldObject::matrix()
 {
     return glm::mat4_cast(m_orientation) * glm::translate(m_position);
 }
 
-const glm::quat WorldObject::orientation()
+const glm::quat & WorldObject::orientation()
 {
     return m_orientation;
 }

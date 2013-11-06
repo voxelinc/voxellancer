@@ -43,8 +43,7 @@ Game::Game(GLFWwindow *window):
     m_vertexArrayObject(0),
     m_vertexBuffer(0),
     m_cube(0),
-	m_cam(0),
-    m_player()
+	m_camera()
 {
 
 }
@@ -63,17 +62,15 @@ void Game::initialize()
 	glow::debug("Game::testFMOD()");
     testFMOD();
 
-	glow::debug("Game:: create cube");
+	glow::debug("Create Cube");
     m_cube = new Cube();
 
-	glow::debug("Game:: create cam");
-	m_cam = new glow::Camera();
+	glow::debug("Setup Camera");
 	//viewport set in resize
-	m_cam->setCenter(glm::vec3(0, 0, 1));
-	m_cam->setUp(glm::vec3(0, 1, 0));
-	m_cam->setEye(glm::vec3(0, 0, 0));
-	m_cam->setZNear(0.1f);
-	m_cam->setZFar(99999);
+	m_camera.moveTo(glm::vec3(0, 0, 1));
+	m_camera.rotateTo(glm::angleAxis(180.0f, glm::vec3(0, 1, 0)));
+	m_camera.setZNear(0.1f);
+	m_camera.setZFar(99999);
 
 	glfwGetWindowSize(m_window, &windowWidth, &windowHeight);
 	glfwSetCursorPos(m_window, windowWidth / 2, windowHeight / 2);
@@ -91,7 +88,7 @@ void Game::resizeEvent(
 	, const unsigned int height)
 {
 	glfwGetWindowSize(m_window, &windowWidth, &windowHeight);
-	m_cam->setViewport(glm::ivec2(windowWidth, windowHeight));
+	m_camera.setViewport(glm::ivec2(windowWidth, windowHeight));
 }
 
 
@@ -101,28 +98,27 @@ void Game::update(float delta_sec)
 
 	if (glfwGetWindowAttrib(m_window, GLFW_FOCUSED)){
 
-		glm::vec3 lookVec = m_cam->center() - m_cam->eye();
 		// position "eye"
 		if (glfwGetKey(m_window, GLFW_KEY_W) == GLFW_PRESS){
-            m_player.move(glm::vec3(0, 0, s_move_translate* delta_sec));
+			m_camera.move(glm::vec3(0, 0, s_move_translate* delta_sec));
 		} 
 		if (glfwGetKey(m_window, GLFW_KEY_A) == GLFW_PRESS){
-            m_player.move(glm::vec3(s_move_translate * delta_sec, 0, 0));
+            m_camera.move(glm::vec3(s_move_translate * delta_sec, 0, 0));
 
         }
         if (glfwGetKey(m_window, GLFW_KEY_S) == GLFW_PRESS){
-            m_player.move(glm::vec3(0, 0, -s_move_translate* delta_sec));
+            m_camera.move(glm::vec3(0, 0, -s_move_translate* delta_sec));
 
         }
         if (glfwGetKey(m_window, GLFW_KEY_D) == GLFW_PRESS){
-            m_player.move(glm::vec3(-s_move_translate* delta_sec, 0, 0));
+            m_camera.move(glm::vec3(-s_move_translate* delta_sec, 0, 0));
         }
         if (glfwGetKey(m_window, GLFW_KEY_Q) == GLFW_PRESS){
-            m_player.rotateZ(-50*delta_sec);
+            m_camera.rotateZ(-50*delta_sec);
 
         }
         if (glfwGetKey(m_window, GLFW_KEY_E) == GLFW_PRESS){
-            m_player.rotateZ(50 * delta_sec);
+            m_camera.rotateZ(50 * delta_sec);
         }
 
 		// lookAt
@@ -143,8 +139,8 @@ void Game::update(float delta_sec)
 		float angX = ((int)floor(x) - windowWidth/2) * s_angle_translate * rel;
 		float angY = ((int)floor(y) - windowHeight/2) * s_angle_translate * rel;
 	
-        m_player.rotateX(angY*delta_sec);
-        m_player.rotateY(angX*delta_sec);
+        m_camera.rotateX(angY*delta_sec);
+        m_camera.rotateY(angX*delta_sec);
 
     }
 }
@@ -159,8 +155,9 @@ void Game::draw()
     glDisable(GL_DEPTH_TEST);
 
     m_texture->bind();
-	m_shaderProgram->setUniform("viewInverted", glm::inverse(glm::mat4_cast(m_player.orientation())));
-	m_shaderProgram->setUniform("projection", m_cam->projection());
+	// we don't use viewInverted because the skybbox does not travel with the camera
+	m_shaderProgram->setUniform("viewInverted", glm::mat4_cast(glm::inverse(m_camera.orientation())));
+	m_shaderProgram->setUniform("projection", m_camera.projection());
 	m_shaderProgram->use();
 
 	m_vertexArrayObject->drawArrays(GL_TRIANGLE_FAN, 0, 4);
@@ -170,7 +167,7 @@ void Game::draw()
 
     glEnable(GL_DEPTH_TEST);
 
-    m_cube->drawtest(m_cam->projection() * m_player.matrix());
+    m_cube->drawtest(m_camera.projection() * m_camera.view());
     
 	m_shaderProgram->use();
 	m_vertexArrayObject->drawArrays(GL_POINTS, 0, 1);

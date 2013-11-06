@@ -5,8 +5,6 @@
 #include "glow/VertexArrayObject.h"
 #include "glow/Buffer.h"
 
-#include <glm/glm.hpp>
-#include <glm/gtx/transform.hpp>
 
 class Cube {
 public:

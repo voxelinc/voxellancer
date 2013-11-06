@@ -2,6 +2,7 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/transform.hpp>
 
 /* General Object in our 3D world with position and orientation
 */
@@ -11,17 +12,19 @@ public:
 	WorldObject();
 	virtual ~WorldObject();
 
-    void move(glm::vec3 dist);
+	void move(glm::vec3 dist);
+	void moveTo(glm::vec3 pos);
 
-    void rotateX(float rot);
-    void rotateY(float rot);
-    void rotateZ(float rot);
+	void rotateX(float rot);
+	void rotateY(float rot);
+	void rotateZ(float rot);
+	void rotateTo(glm::quat quat);
 
-    const glm::mat4 matrix();
-    const glm::quat orientation();
+	const glm::mat4 & matrix();
+	const glm::quat & orientation();
 
-private:
-    glm::vec3 m_position;
+protected:
+	glm::vec3 m_position;
     glm::quat m_orientation;
 
 };
