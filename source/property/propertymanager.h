@@ -2,7 +2,9 @@
 
 #include <string>
 
+#include <glm/glm.hpp>
 #include <glow/Changeable.h>
+
 #include "property.hpp"
 #include "propertycollection.hpp"
 
@@ -27,12 +29,14 @@ public:
     void registerProp(Property<char> * prop);
     void registerProp(Property<bool> * prop);
     void registerProp(Property<std::string> * prop);
+    void registerProp(Property<glm::vec3> * prop);
     
     void unregisterProp(Property<float> * prop);
     void unregisterProp(Property<int> * prop);
     void unregisterProp(Property<char> * prop);
     void unregisterProp(Property<bool> * prop);
     void unregisterProp(Property<std::string> * prop);
+    void unregisterProp(Property<glm::vec3> * prop);
 
     static PropertyManager * getInstance();
     static void clear();
@@ -44,6 +48,7 @@ private:
     PropertyCollection<char> m_charProperties;
     PropertyCollection<bool> m_boolProperties;
     PropertyCollection<std::string> m_stringProperties;
+    PropertyCollection<glm::vec3> m_vec3Properties;
         
     static PropertyManager * s_instance;
 };

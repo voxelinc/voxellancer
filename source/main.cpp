@@ -25,16 +25,13 @@ static Game * game;
 using namespace std;
 
 static void checkVersion() {
-    GLint MajorVersionContext = glow::query::majorVersion();
-    GLint MinorVersionContext = glow::query::minorVersion();
-    glow::info("OpenGL Version Needed %;.%; (%;.%; Found)\n",
+    glow::info("OpenGL Version Needed %;.%; (%;.%; Found)",
         MajorVersionRequire, MinorVersionRequire,
-        MajorVersionContext, MinorVersionContext);
-    glow::info("version %;", glow::query::version().toString());
+        glow::query::majorVersion(), glow::query::minorVersion());
     glow::info("vendor: %;", glow::query::vendor());
     glow::info("renderer %;", glow::query::renderer());
     glow::info("core profile: %;", glow::query::isCoreProfile() ? "true" : "false");
-    glow::info("GLSL version: %;", glow::query::getString(GL_SHADING_LANGUAGE_VERSION));
+    glow::info("GLSL version: %;\n", glow::query::getString(GL_SHADING_LANGUAGE_VERSION));
 }
 
 static void errorCallback(int error, const char* description)

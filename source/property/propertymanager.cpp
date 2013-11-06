@@ -12,19 +12,31 @@
 static std::regex line_regex(R"(^([\w\.]*) *= *(.+?)( *#.*)?$)");
 static std::regex title_regex(R"(^\[(\w+)\])");
 
-static std::regex float_regex(R"(^\d*\.?\d*$)");
-static std::regex int_regex(R"(^\d+$)");
+static std::regex float_regex(R"(^[-+]?\d*\.?\d*$)");
+static std::regex int_regex(R"(^[-+]?\d+$)");
 static std::regex bool_regex(R"(^(true|false)$)");
 static std::regex char_regex(R"(^\w$)");
 static std::regex string_regex(R"(^.*$)");
+static std::regex vec3_regex(R"(^([-+]?\d*\.?\d*), ?([-+]?\d*\.?\d*), ?([-+]?\d*\.?\d*)$)");
 
+glm::vec3 vec3converter(std::string s) {
+    std::smatch matches;
+    std::regex_match(s, matches, vec3_regex);
+    
+    float x = std::stof(matches[1]);
+    float y = std::stof(matches[2]);
+    float z = std::stof(matches[3]);
+
+    return glm::vec3(x, y, z);
+}
 
 PropertyManager::PropertyManager() :
 m_floatProperties(float_regex, [](std::string s) { return std::stof(s); }),
 m_intProperties(int_regex, [](std::string s) { return std::stoi(s); }),
 m_charProperties(char_regex, [](std::string s) { return s[0]; }),
 m_boolProperties(bool_regex, [](std::string s) { return s == "true" ? true : false; }),
-m_stringProperties(string_regex, [](std::string s) { return s; })
+m_stringProperties(string_regex, [](std::string s) { return s; }),
+m_vec3Properties(vec3_regex, vec3converter)
 {
 
 }
@@ -65,6 +77,7 @@ void PropertyManager::load(std::string file)
             if (m_boolProperties.update(key, value)) success++;
             if (m_charProperties.update(key, value)) success++;
             if (m_stringProperties.update(key, value)) success++;
+            if (m_vec3Properties.update(key, value)) success++;
 
             if (success == 0) {
                 glow::warning("PropertyManager: no match %;: %; (line: %;)", key, value, line);
@@ -108,6 +121,12 @@ void PropertyManager::registerProp(Property<std::string> * prop)
     m_stringProperties.registerProp(prop);
 }
 
+void PropertyManager::registerProp(Property<glm::vec3> * prop)
+{
+    m_vec3Properties.registerProp(prop);
+}
+
+
 void PropertyManager::unregisterProp(Property<float> * prop)
 {
     m_floatProperties.unregisterProp(prop);
@@ -131,6 +150,11 @@ void PropertyManager::unregisterProp(Property<char> * prop)
 void PropertyManager::unregisterProp(Property<std::string> * prop)
 {
     m_stringProperties.unregisterProp(prop);
+}
+
+void PropertyManager::unregisterProp(Property<glm::vec3> * prop)
+{
+    m_vec3Properties.unregisterProp(prop);
 }
 
 void PropertyManager::clear()

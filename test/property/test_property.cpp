@@ -2,9 +2,11 @@
 
 #include <boost/test/included/unit_test.hpp>
 
+#include <glm/glm.hpp>
 #include <glow/ChangeListener.h>
+#include <glow/logging.h>
+
 #include "property/propertymanager.h"
-#include "glow/logging.h"
 
 
 class Listener : public glow::ChangeListener {
@@ -32,6 +34,7 @@ BOOST_AUTO_TEST_CASE(test_prop_after_load) {
     Property<std::string> sProp2("section.name");
     Property<char> cProp("section.forward");
     Property<bool> bProp2("player.is_true");
+    Property<glm::vec3> v3Prop("player.pos");
     
     BOOST_CHECK_EQUAL(iSize.get(), 1);
     BOOST_CHECK_EQUAL(fProp.get(), 1);
@@ -40,6 +43,9 @@ BOOST_AUTO_TEST_CASE(test_prop_after_load) {
     BOOST_CHECK_EQUAL(sProp2.get(), "peter");
     BOOST_CHECK_EQUAL(cProp.get(), 'w');
     BOOST_CHECK_EQUAL(bProp2.get(), true);
+    BOOST_CHECK_EQUAL(v3Prop.get().x, 1.0);
+    BOOST_CHECK_EQUAL(v3Prop.get().y, 0);
+    BOOST_CHECK_EQUAL(v3Prop.get().z, .5);
 
     PropertyManager::clear();
 }
