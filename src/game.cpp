@@ -20,7 +20,7 @@
 #include <fmod_dsp.h>
 #include <fmod_errors.h>
 
-#include "ddstexture.h"
+#include "property/propertymanager.h"
 
 using namespace std;
 
@@ -29,10 +29,20 @@ using namespace std;
 Game::Game(GLFWwindow *window):
 	m_window(window),
 	m_camera(),
-	m_inputHandler(window,&m_camera),
+	m_inputHandler(0),
     m_cube(0)
 {
+	reloadConfig();
+	m_inputHandler = new InputHandler(window, &m_camera);
+}
 
+Game::~Game(){
+	if (m_inputHandler) delete m_inputHandler;
+	if (m_cube) delete m_cube;
+}
+
+void Game::reloadConfig(){
+	PropertyManager::getInstance()->load("data/config.ini");
 }
 
 void Game::initialize()
@@ -59,7 +69,7 @@ void Game::initialize()
 
 void Game::update(float delta_sec)
 {
-	m_inputHandler.update(delta_sec);
+	m_inputHandler->update(delta_sec);
 	m_cube->update(delta_sec);
 
 }

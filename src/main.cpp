@@ -45,7 +45,7 @@ static void errorCallback(int error, const char* description)
 static void resizeCallback(GLFWwindow* window, int width, int height)
 {
     glViewport(0, 0, width, height);
-    game->m_inputHandler.resizeEvent(width, height);
+    game->m_inputHandler->resizeEvent(width, height);
 }
 
 static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -55,7 +55,7 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
     if (key == GLFW_KEY_F5 && action == GLFW_PRESS)
         glow::ShaderFile::reloadAll();
 	if (key == GLFW_KEY_F1 && action == GLFW_PRESS)
-		game->m_inputHandler.toggleControls();
+		game->m_inputHandler->toggleControls();
 }
 
 static void mouseButtonCallback(GLFWwindow* window, int Button, int Action, int mods) {
@@ -152,7 +152,7 @@ int main(void)
 
 		int width, height;
 		glfwGetFramebufferSize(window, &width, &height);
-		game->m_inputHandler.resizeEvent(width, height);
+		game->m_inputHandler->resizeEvent(width, height);
 
 		cout << "Entering mainloop" << endl;
 		double time = glfwGetTime();

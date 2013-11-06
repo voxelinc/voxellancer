@@ -16,15 +16,17 @@
 class Game {
 
 public:
-    Game(GLFWwindow *window);
+	Game(GLFWwindow *window);
+	virtual ~Game();
 	void initialize();
+	void reloadConfig();
 
 
     void update(float delta_sec);
 	void draw();
 
 
-	InputHandler m_inputHandler;
+	InputHandler *m_inputHandler;
 
 private:
     void testFMOD();

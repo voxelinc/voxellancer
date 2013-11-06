@@ -3,6 +3,9 @@
 #include <GLFW/glfw3.h>
 
 #include "camera.h"
+// TODO: the first of these should not be necessary
+#include "property\propertymanager.h"
+#include "property\property.hpp"
 
 class InputHandler {
 public:
@@ -22,6 +25,6 @@ protected:
 	int m_cursorMaxDistance;
 	int m_fpsControls;
 
-	static float s_angle_translate;
-	static float s_move_translate;
+	Property<float> m_angle_translate;
+	Property<float> m_move_translate;
 };
