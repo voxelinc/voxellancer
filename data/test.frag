@@ -1,11 +1,11 @@
 #version 330
 
-uniform sampler2D texture;
+uniform samplerCube texCube;
 
-in vec2 v_uv;
+in vec3 v_tex;
 layout (location = 0) out vec4 fragColor;
 
 void main()
 {
-	fragColor = texture2D(texture, v_uv);
+	fragColor = texture(texCube, v_tex);
 }

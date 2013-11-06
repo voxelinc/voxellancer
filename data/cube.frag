@@ -12,5 +12,5 @@ void main()
     vec3 n_normal = normalize(normal);
     float diffuse = dot(n_normal, normalize(vec3(0.1f, 0.2f, 1.0f)));
 	//fragColor = vec4(n_normal + 1.0f / 2.0f, 1.0f);
-    fragColor = vec4(vec3(diffuse), 1.0);
+    fragColor = vec4(vec3(max(0.1, diffuse)), 1.0);
 }

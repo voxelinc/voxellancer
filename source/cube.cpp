@@ -1,11 +1,13 @@
-#include "glow/Array.h"
+#include <glow/Array.h>
+#include <glow/Shader.h>
+#include <glow/VertexAttributeBinding.h>
 
 #include "cube.h"
 
 
 Cube::Cube() : Thing()
 {
-    m_model_matrix = glm::translate(glm::vec3(0.0, 0.0, -1.0f)) * glm::scale(glm::vec3(0.08f));
+    m_model_matrix = glm::translate(glm::vec3(0.0, 0.0, 0.0f)) * glm::scale(glm::vec3(0.08f));
     createAndSetupShaders();
     createAndSetupGeometry();
 
@@ -21,9 +23,18 @@ void Cube::update(float delta_sec)
 
 void Cube::draw()
 {
-    m_shaderProgram->use();
-    m_vertexArrayObject->drawArraysInstanced(GL_TRIANGLES, 0, 36, 1000);
-    m_shaderProgram->release();
+	m_shaderProgram->use();
+	m_vertexArrayObject->drawArraysInstanced(GL_TRIANGLES, 0, 36, 1000);
+	m_shaderProgram->release();
+
+}
+
+void Cube::drawtest(glm::mat4 projection)
+{
+	m_shaderProgram->setUniform("projection", projection);
+	m_shaderProgram->use();
+	m_vertexArrayObject->drawArraysInstanced(GL_TRIANGLES, 0, 36, 1000);
+	m_shaderProgram->release();
 
 }
 
@@ -125,13 +136,13 @@ void Cube::createAndSetupGeometry()
     binding0->setAttribute(a_vertex);
     binding0->setBuffer(m_vertexBuffer, 0, sizeof(glm::vec3) * 2);
     binding0->setFormat(3, GL_FLOAT, GL_FALSE, 0);
-    m_vertexArrayObject->enable(0);
+    m_vertexArrayObject->enable(a_vertex);
 
     auto binding1 = m_vertexArrayObject->binding(1);
     auto a_normal = m_shaderProgram->getAttributeLocation("a_normal");
     binding1->setAttribute(a_normal);
     binding1->setBuffer(m_vertexBuffer, 0, sizeof(glm::vec3) * 2);
     binding1->setFormat(3, GL_FLOAT, GL_TRUE, sizeof(glm::vec3));
-    m_vertexArrayObject->enable(1);
+    m_vertexArrayObject->enable(a_normal);
     
 }
