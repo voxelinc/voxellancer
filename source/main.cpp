@@ -75,12 +75,24 @@ void setCallbacks(GLFWwindow* window)
 
 int main(void)
 {
-
-    Property<float> fProp("player.size");
-    PropertyManager::getInstance()->load("data/conf.ini");
+    // TODO: move to test!
+    Property<float> iProp("player.size");
+    Property<int> fProp("player.size");
+    PropertyManager::getInstance()->load("test/test.ini");
     Property<float> fProp2("player.height");
+    Property<std::string> sProp1("player.name");
+    Property<std::string> sProp2("section.name");
+    Property<char> cProp("section.forward");
+    Property<bool> bProp2("player.is_true");
     float x = fProp.get() + fProp2.get();
-    cout << x;
+    assert(iProp == 1);
+    assert(sProp1.get() == "hans");
+    assert(sProp2.get() == "peter");
+    assert(cProp == 'w');
+    assert(bProp2 == true);
+    PropertyManager::getInstance()->load("test/test2.ini");
+    assert(sProp1.get() == "hans meier");
+
 
     GLFWwindow* window;
     

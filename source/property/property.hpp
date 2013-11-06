@@ -21,8 +21,8 @@ private:
 
 template <class T>
 Property<T>::Property(char * name) :
-m_name(name),
-m_value(0)
+    m_name(name),
+    m_value()
 {
     PropertyManager::getInstance()->registerProp(this);
 }
