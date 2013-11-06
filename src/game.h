@@ -8,6 +8,7 @@
 
 #include <GLFW/glfw3.h>
 
+#include "inputhandler.h"
 #include "camera.h"
 #include "skybox.h"
 #include "cube.h"
@@ -21,8 +22,9 @@ public:
 
     void update(float delta_sec);
 	void draw();
-	void resizeEvent(const unsigned int width, const unsigned int height);
-	void toggleControls();
+
+
+	InputHandler m_inputHandler;
 
 private:
     void testFMOD();
@@ -33,9 +35,4 @@ private:
 	Skybox m_skybox;
     Cube *m_cube;
 
-	int cursorMaxDistance, windowWidth, windowHeight;
-	int fpsControls;
-
-	static const float s_angle_translate;
-	static const float s_move_translate;
 };
