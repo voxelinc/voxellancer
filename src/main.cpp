@@ -51,9 +51,11 @@ static void resizeCallback(GLFWwindow* window, int width, int height)
 static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, GL_TRUE);
-    if (key == GLFW_KEY_F5 && action == GLFW_PRESS)
-        glow::ShaderFile::reloadAll();
+		glfwSetWindowShouldClose(window, GL_TRUE);
+	if (key == GLFW_KEY_F5 && action == GLFW_PRESS)
+		glow::ShaderFile::reloadAll();
+	if (key == GLFW_KEY_F6 && action == GLFW_PRESS)
+		game->reloadConfig();
 	if (key == GLFW_KEY_F1 && action == GLFW_PRESS)
 		game->m_inputHandler->toggleControls();
 }
