@@ -10,11 +10,13 @@
 using namespace std;
 
 bool DdsTexture::loadImage2d(glow::Texture * texture, std::string path){
-	return loadImage2d(texture, path, NULL);
+    assert(texture->target() != GL_TEXTURE_CUBE_MAP);
+    return loadImage2d(texture, path, texture->target());
 }
 
 bool DdsTexture::loadImageCube(glow::Texture * texture, std::string pathXp, std::string pathXn,
 	std::string pathYp, std::string pathYn, std::string pathZp, std::string pathZn){
+    assert(texture->target() == GL_TEXTURE_CUBE_MAP);
 
 	/* load all six textures */
 	if (!loadImage2d(texture, pathXp, GL_TEXTURE_CUBE_MAP_POSITIVE_X)) return false;
@@ -27,7 +29,7 @@ bool DdsTexture::loadImageCube(glow::Texture * texture, std::string pathXp, std:
 	return true;
 }
 
-bool DdsTexture::loadImage2d(glow::Texture * texture, std::string path, GLenum targetOverride)
+bool DdsTexture::loadImage2d(glow::Texture * texture, std::string path, GLenum target)
 {
     char header[124];
 
@@ -93,12 +95,7 @@ bool DdsTexture::loadImage2d(glow::Texture * texture, std::string path, GLenum t
     for (unsigned int level = 0; level < mipMapCount && (width || height); ++level)
     {
         unsigned int size = ((width + 3) / 4)*((height + 3) / 4)*blockSize;
-        cout << "Loading into: " << texture << endl;
-		if (targetOverride)
-			texture->compressedImage2D(level, format, width, height, 0, size, buffer + offset, targetOverride);
-		else
-			texture->compressedImage2D(level, format, width, height, 0, size, buffer + offset);
-        cout << "Done" << endl;
+        texture->compressedImage2D(level, format, width, height, 0, size, buffer + offset, target);
         offset += size;
         width /= 2;
         height /= 2;

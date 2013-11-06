@@ -126,17 +126,28 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-file(GLOB SRC_FILES
+set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
+
+set(HEADER_GROUP "Header Files")
+set(SOURCE_GROUP "Source Files")
+set(SHADER_GROUP "Shader Files")
+
+file(GLOB_RECURSE SRC_FILES
     "src/*.h"
+    "src/*.hpp"
     "src/*.cpp"
 )
 
-file(GLOB SHADER_FILES
+file(GLOB_RECURSE SHADER_FILES
     "data/*.vert"
     "data/*.frag"
 )
 
-source_group("Shader Files" FILES ${SHADER_FILES})
+source_group(${SHADER_GROUP} FILES ${SHADER_FILES})
+
+
+source_group_by_path(${SOURCE_DIR} "\\\\.cpp$|\\\\.c$|\\\\.h$|\\\\.hpp$|\\\\.inl$"
+    ${SOURCE_GROUP} ${SRC_FILES})
 
 add_executable(${target} 
     ${SRC_FILES}
