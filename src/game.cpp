@@ -53,20 +53,20 @@ Game::Game(GLFWwindow *window):
 void Game::initialize()
 {
     glow::AutoTimer t("Initialize Game");
-    cout << "createAndSetupTexture()" << endl;
+	glow::debug("Game::createAndSetupTexture()");
 	createAndSetupTexture();
-    cout << "createAndSetupShaders()" << endl;
+	glow::debug("Game::createAndSetupShaders()");
 	createAndSetupShaders();
-    cout << "createAndSetupGeometry()" << endl;
+	glow::debug("Game::createAndSetupGeometry()");
 	createAndSetupGeometry();
     
-    cout << "test FMOD()" << endl;
+	glow::debug("Game::testFMOD()");
     testFMOD();
 
-    cout << "Create cube" << endl;
+	glow::debug("Game:: create cube");
     m_cube = new Cube();
 
-	cout << "Create cam" << endl;
+	glow::debug("Game:: create cam");
 	m_cam = new glow::Camera();
 	//viewport set in resize
 	m_cam->setCenter(glm::vec3(0, 0, 1));
@@ -83,7 +83,7 @@ void Game::initialize()
 	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
     glClearColor(0.2f, 0.3f, 0.4f, 1.f);
-    cout << "Done" << endl;
+	glow::debug("Game::initialize Done");
 }
 
 void Game::resizeEvent(

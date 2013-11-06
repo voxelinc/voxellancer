@@ -3,10 +3,13 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 
-class Player {
+/* General Object in our 3D world with position and orientation
+*/
+class WorldObject {
 
 public:
-    Player();
+	WorldObject();
+	virtual ~WorldObject();
 
     void move(glm::vec3 dist);
 

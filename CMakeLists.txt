@@ -127,8 +127,8 @@ include_directories(
 )
 
 file(GLOB SRC_FILES
-    "source/*.h"
-    "source/*.cpp"
+    "src/*.h"
+    "src/*.cpp"
 )
 
 file(GLOB SHADER_FILES

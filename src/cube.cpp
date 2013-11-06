@@ -3,12 +3,21 @@
 #include "cube.h"
 
 
-Cube::Cube() : Thing()
+Cube::Cube() :
+m_texture(0),
+m_shaderProgram(0),
+m_vertexArrayObject(0),
+m_vertexBuffer(0)
 {
-    m_model_matrix = glm::translate(glm::vec3(0.0, 0.0, 0.0f)) * glm::scale(glm::vec3(0.08f));
-    createAndSetupShaders();
-    createAndSetupGeometry();
+	m_model_matrix = glm::translate(glm::vec3(0.0, 0.0, 0.0f)) * glm::scale(glm::vec3(0.08f));
+	createAndSetupShaders();
+	createAndSetupGeometry();
 
+}
+
+const glm::vec4 Cube::center()
+{
+	return m_model_matrix * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
 }
 
 void Cube::update(float delta_sec)
