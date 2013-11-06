@@ -68,80 +68,90 @@ void setCallbacks(GLFWwindow* window)
 
 int main(void)
 {
-    GLFWwindow* window;
-    
-    if (!glfwInit()) {
-        glow::fatal("could not init glfw");
-        exit(-1);
-    }
+	GLFWwindow* window;
 
-    glfwSetErrorCallback(errorCallback);
+	if (!glfwInit()) {
+		glow::fatal("could not init glfw");
+		exit(-1);
+	}
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, MajorVersionRequire);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, MinorVersionRequire);
-    //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+	glfwSetErrorCallback(errorCallback);
+
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, MajorVersionRequire);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, MinorVersionRequire);
+	//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	//glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
 #if defined(NDEBUG)
-    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_FALSE);
+	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_FALSE);
 #else
-    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
+	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
 #endif
 
-    window = glfwCreateWindow(1280, 720, "Voxellancer", NULL, NULL);
-    if (!window) {
-        glfwTerminate();
-        glow::fatal("could not create window");
-        exit(-1);
-    }
-    
-    glfwMakeContextCurrent(window);
+	window = glfwCreateWindow(1280, 720, "Voxellancer", NULL, NULL);
+	if (!window) {
+		glfwTerminate();
+		glow::fatal("could not create window");
+		exit(-1);
+	}
 
-    setCallbacks(window);
+	glfwMakeContextCurrent(window);
 
-    checkVersion();
+	setCallbacks(window);
 
-    glewExperimental = GL_TRUE;
-    cout << "glewInit()..." << endl;
-    if(glewInit() != GLEW_OK) {
-        glow::fatal("glewInit() failed");
-    }
-    cout << "-> done" << endl;
-    glGetError();
-    
+	checkVersion();
+
+	glewExperimental = GL_TRUE;
+	cout << "glewInit()..." << endl;
+	if (glewInit() != GLEW_OK) {
+		glow::fatal("glewInit() failed");
+	}
+	cout << "-> done" << endl;
+	glGetError();
+
 #ifdef WIN32 // TODO: find a way to correctly detect debug extension in linux
-    glow::DebugMessageOutput::enable();  
+	glow::DebugMessageOutput::enable();
 #endif
-    
+
 #ifdef WIN32
-    wglSwapIntervalEXT(1); // glfw doesn't work!?
+	wglSwapIntervalEXT(1); // glfw doesn't work!?
 #else 
-    glfwSwapInterval(1);
+	glfwSwapInterval(1);
 #endif
-    
-    game = new Game(window);
-    game->initialize();
+	try {
+		game = new Game(window);
+		game->initialize();
 
-    int width, height;
-    glfwGetFramebufferSize(window, &width, &height);
-    game->resizeEvent(width, height);
-    
-    cout << "Entering mainloop" << endl;
-    double time = glfwGetTime();
-    while (!glfwWindowShouldClose(window))
-    {
-        double delta = glfwGetTime() - time;
-        time += delta;
-        game->update(static_cast<float>(delta));
-        game->draw();
-        glfwSwapBuffers(window);
-        glfwPollEvents();
-    }
+		int width, height;
+		glfwGetFramebufferSize(window, &width, &height);
+		game->resizeEvent(width, height);
 
-    delete game;
-    glfwDestroyWindow(window);
-    glfwTerminate();
-    
+		cout << "Entering mainloop" << endl;
+		double time = glfwGetTime();
+		while (!glfwWindowShouldClose(window))
+		{
+			double delta = glfwGetTime() - time;
+			time += delta;
+			game->update(static_cast<float>(delta));
+			game->draw();
+			glfwSwapBuffers(window);
+			glfwPollEvents();
+		}
+
+		delete game;
+		glfwDestroyWindow(window);
+		glfwTerminate();
+
+	}
+	catch (exception e){
+		glfwDestroyWindow(window);
+		glfwTerminate();
+		glow::fatal("Termination after Exception: %", e.what());
+		cout << "Hit enter to quit" << endl;
+		cin.ignore(1, '\n');
+	}
+
+
     return 0;
 }
 

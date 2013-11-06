@@ -1,13 +1,14 @@
-#include <glm/gtx/transform.hpp>
-
 #include "camera.h"
 
+#include <glm/gtx/transform.hpp>
+
+
 Camera::Camera(): 
-  m_fovy(40.f)
-, m_aspect(1.f)
-, m_zNear(0.1f)
-, m_zFar(64.0f)
-, m_viewport(0,0)
+	m_fovy(40.f),
+	m_aspect(1.f),
+	m_zNear(0.1f),
+	m_zFar(64.0f),
+	m_viewport(0,0)
 {
 }
 

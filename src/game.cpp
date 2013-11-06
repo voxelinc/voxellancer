@@ -1,3 +1,4 @@
+#include "game.h"
 
 #include <GL/glew.h>
 
@@ -25,10 +26,7 @@
 #include <fmod_dsp.h>
 #include <fmod_errors.h>
 
-#include "game.h"
 #include "ddstexture.h"
-
-#include <iostream>
 
 using namespace std;
 
@@ -38,10 +36,6 @@ const float Game::s_move_translate = 0.5f;
 
 Game::Game(GLFWwindow *window):
 	m_window(window),
-    m_shaderProgram(0),
-    m_texture(0),
-    m_vertexArrayObject(0),
-    m_vertexBuffer(0),
     m_cube(0),
 	m_camera()
 {
@@ -52,12 +46,6 @@ Game::Game(GLFWwindow *window):
 void Game::initialize()
 {
     glow::AutoTimer t("Initialize Game");
-	glow::debug("Game::createAndSetupTexture()");
-	createAndSetupTexture();
-	glow::debug("Game::createAndSetupShaders()");
-	createAndSetupShaders();
-	glow::debug("Game::createAndSetupGeometry()");
-	createAndSetupGeometry();
     
 	glow::debug("Game::testFMOD()");
     testFMOD();
@@ -152,82 +140,17 @@ void Game::draw()
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 
-    glDisable(GL_DEPTH_TEST);
-
-    m_texture->bind();
-	// we don't use viewInverted because the skybbox does not travel with the camera
-	m_shaderProgram->setUniform("viewInverted", glm::mat4_cast(glm::inverse(m_camera.orientation())));
-	m_shaderProgram->setUniform("projection", m_camera.projection());
-	m_shaderProgram->use();
-
-	m_vertexArrayObject->drawArrays(GL_TRIANGLE_FAN, 0, 4);
-
-	m_shaderProgram->release();
-	m_texture->unbind();
-
-    glEnable(GL_DEPTH_TEST);
+	m_skybox.draw(&m_camera);
 
     m_cube->drawtest(m_camera.projection() * m_camera.view());
-    
+   
+	/* Added as hd7000 fix
+	* @xchrdw: why? where to put?
 	m_shaderProgram->use();
 	m_vertexArrayObject->drawArrays(GL_POINTS, 0, 1);
 	m_shaderProgram->release();
+	*/
 
-}
-
-void Game::createAndSetupTexture()
-{
-	m_texture = new glow::Texture(GL_TEXTURE_CUBE_MAP);
-	DdsTexture::loadImageCube(m_texture,
-	"data/skybox/nebula_1024_right1.dds",
-		"data/skybox/nebula_1024_left2.dds",
-		"data/skybox/nebula_1024_top3.dds",
-		"data/skybox/nebula_1024_bottom4.dds",
-		"data/skybox/nebula_1024_front5.dds",
-		"data/skybox/nebula_1024_back6.dds");
-    m_texture->setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	m_texture->setParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	m_texture->setParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	m_texture->setParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	m_texture->setParameter(GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-
-
-}
-
-void Game::createAndSetupShaders()
-{
-	glow::Shader * vertexShader = glow::Shader::fromFile(GL_VERTEX_SHADER, "data/test.vert");
-	glow::Shader * fragmentShader = glow::Shader::fromFile(GL_FRAGMENT_SHADER, "data/test.frag");
-
-	m_shaderProgram = new glow::Program();
-	m_shaderProgram->attach(vertexShader, fragmentShader);
-	m_shaderProgram->bindFragDataLocation(0, "fragColor");
-
-	m_shaderProgram->getUniform<GLint>("texture")->set(0);
-}
-
-void Game::createAndSetupGeometry()
-{
-	auto vertices = glow::Array<glm::vec3>()
-		<< glm::vec3(-1, -1, -1)
-        << glm::vec3(1, -1, -1)
-        << glm::vec3(1, 1, -1)
-        << glm::vec3(-1, 1, -1);
-
-	m_vertexArrayObject = new glow::VertexArrayObject();
-
-	m_vertexBuffer = new glow::Buffer(GL_ARRAY_BUFFER);
-	m_vertexBuffer->setData(vertices);
-
-	auto binding1 = m_vertexArrayObject->binding(0);
-	auto a_vertex = m_shaderProgram->getAttributeLocation("a_vertex");
-
-	binding1->setAttribute(a_vertex);
-	binding1->setBuffer(m_vertexBuffer, 0, sizeof(glm::vec3));
-	binding1->setFormat(3, GL_FLOAT, GL_FALSE, 0);
-
-	m_vertexArrayObject->enable(a_vertex);
 }
 
 void ERRCHECK(FMOD_RESULT result)
