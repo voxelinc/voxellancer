@@ -27,14 +27,14 @@ using namespace std;
 static void checkVersion() {
     GLint MajorVersionContext = glow::query::majorVersion();
     GLint MinorVersionContext = glow::query::minorVersion();
-    printf("OpenGL Version Needed %i.%i (%i.%i Found)\n",
+    glow::info("OpenGL Version Needed %;.%; (%;.%; Found)\n",
         MajorVersionRequire, MinorVersionRequire,
         MajorVersionContext, MinorVersionContext);
-    glow::info("version %s", glow::query::version().toString());
-    glow::info("vendor: %s", glow::query::vendor());
-    glow::info("renderer %s", glow::query::renderer());
-    glow::info("core profile: %s", glow::query::isCoreProfile() ? "true" : "false");
-    glow::info("GLSL version: %s", glow::query::getString(GL_SHADING_LANGUAGE_VERSION));
+    glow::info("version %;", glow::query::version().toString());
+    glow::info("vendor: %;", glow::query::vendor());
+    glow::info("renderer %;", glow::query::renderer());
+    glow::info("core profile: %;", glow::query::isCoreProfile() ? "true" : "false");
+    glow::info("GLSL version: %;", glow::query::getString(GL_SHADING_LANGUAGE_VERSION));
 }
 
 static void errorCallback(int error, const char* description)
@@ -75,25 +75,6 @@ void setCallbacks(GLFWwindow* window)
 
 int main(void)
 {
-    // TODO: move to test!
-    Property<float> iProp("player.size");
-    Property<int> fProp("player.size");
-    PropertyManager::getInstance()->load("test/test.ini");
-    Property<float> fProp2("player.height");
-    Property<std::string> sProp1("player.name");
-    Property<std::string> sProp2("section.name");
-    Property<char> cProp("section.forward");
-    Property<bool> bProp2("player.is_true");
-    float x = fProp.get() + fProp2.get();
-    assert(iProp == 1);
-    assert(sProp1.get() == "hans");
-    assert(sProp2.get() == "peter");
-    assert(cProp == 'w');
-    assert(bProp2 == true);
-    PropertyManager::getInstance()->load("test/test2.ini");
-    assert(sProp1.get() == "hans meier");
-
-
     GLFWwindow* window;
     
     if (!glfwInit()) {

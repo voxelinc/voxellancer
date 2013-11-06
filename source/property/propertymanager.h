@@ -17,6 +17,7 @@
 class PropertyManager : public glow::Changeable {
 
 public:
+    PropertyManager();
     virtual ~PropertyManager();
     
     void load(std::string file);
@@ -34,9 +35,9 @@ public:
     void unregisterProp(Property<std::string> * prop);
 
     static PropertyManager * getInstance();
+    static void clear();
 
 private:
-    PropertyManager();
 
     PropertyCollection<float> m_floatProperties;
     PropertyCollection<int> m_intProperties;

@@ -1,6 +1,9 @@
 #include <regex>
+#include <string>
 #include <fstream>
 #include <iostream>
+
+#include <glow/logging.h>
 
 #include "propertymanager.h"
 
@@ -13,13 +16,32 @@ static std::regex float_regex(R"(^\d*\.?\d*$)");
 static std::regex int_regex(R"(^\d+$)");
 static std::regex bool_regex(R"(^(true|false)$)");
 static std::regex char_regex(R"(^\w$)");
+static std::regex string_regex(R"(^.*$)");
 
+
+PropertyManager::PropertyManager() :
+m_floatProperties(float_regex, [](std::string s) { return std::stof(s); }),
+m_intProperties(int_regex, [](std::string s) { return std::stoi(s); }),
+m_charProperties(char_regex, [](std::string s) { return s[0]; }),
+m_boolProperties(bool_regex, [](std::string s) { return s == "true" ? true : false; }),
+m_stringProperties(string_regex, [](std::string s) { return s; })
+{
+
+}
+
+PropertyManager::~PropertyManager()
+{
+}
 
 void PropertyManager::load(std::string file)
 {
     std::ifstream input(file);
     std::string line;
     std::string title = "";
+
+    if (!input.is_open()) {
+        glow::warning("PropertyManager: could not open %;", file);
+    }
 
     while (std::getline(input, line))
     {
@@ -36,21 +58,17 @@ void PropertyManager::load(std::string file)
             key_temp = matches[1];
             key = title + '.' + key_temp;
             value = matches[2];
+            int success = 0;
 
-            if (std::regex_match(value, float_regex)) {
-                m_floatProperties.update(key, std::stof(value));
-            } 
-            if (std::regex_match(value, int_regex)) {
-                m_intProperties.update(key, std::stoi(value));
-            } 
-            if (std::regex_match(value, bool_regex)) {
-                bool bValue = value == "true" ? true : false;
-                m_boolProperties.update(key, bValue);
-            } 
-            if (std::regex_match(value, char_regex)) {
-                m_charProperties.update(key, value[0]);
-            } 
-            m_stringProperties.update(key, value);
+            if (m_floatProperties.update(key, value)) success++;
+            if (m_intProperties.update(key, value)) success++;
+            if (m_boolProperties.update(key, value)) success++;
+            if (m_charProperties.update(key, value)) success++;
+            if (m_stringProperties.update(key, value)) success++;
+
+            if (success == 0) {
+                glow::warning("PropertyManager: no match %;: %; (line: %;)", key, value, line);
+            }
         }
     }
 
@@ -115,20 +133,12 @@ void PropertyManager::unregisterProp(Property<std::string> * prop)
     m_stringProperties.unregisterProp(prop);
 }
 
-
-PropertyManager::PropertyManager() :
-    m_floatProperties(),
-    m_intProperties(),
-    m_charProperties(),
-    m_boolProperties(),
-    m_stringProperties()
+void PropertyManager::clear()
 {
-    
-}
-
-PropertyManager::~PropertyManager()
-{
-
+    if (s_instance != nullptr) {
+        delete s_instance;
+        s_instance = nullptr;
+    }
 }
 
 PropertyManager * PropertyManager::s_instance;
