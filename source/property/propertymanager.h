@@ -2,10 +2,19 @@
 
 #include <string>
 
+#include <glow/Changeable.h>
 #include "property.hpp"
 #include "propertycollection.hpp"
 
-class PropertyManager {
+
+/**
+* Keeps track of properties and loads ini files.
+* Properties will be updated when a new ini file is loaded.
+*
+* Implements glow::Changeable, so glow::ChangeListener can 
+* be notified about changes.
+**/
+class PropertyManager : public glow::Changeable {
 
 public:
     virtual ~PropertyManager();

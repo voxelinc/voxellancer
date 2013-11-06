@@ -51,9 +51,10 @@ void PropertyManager::load(std::string file)
                 m_charProperties.update(key, value[0]);
             } 
             m_stringProperties.update(key, value);
-            
         }
     }
+
+    changed();
 }
 
 PropertyManager * PropertyManager::getInstance()
