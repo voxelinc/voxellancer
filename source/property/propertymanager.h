@@ -1,8 +1,9 @@
 #pragma once
-#include <map>
 
-class FloatProperty;
+#include <string>
 
+#include "property.hpp"
+#include "propertycollection.hpp"
 
 class PropertyManager {
 
@@ -11,18 +12,29 @@ public:
     
     void load(std::string file);
 
-    void registerFloatProp(FloatProperty * prop);
-    void unregisterFloatProp(FloatProperty * prop);
+    void registerProp(Property<float> * prop);
+    void registerProp(Property<int> * prop);
+    void registerProp(Property<char> * prop);
+    void registerProp(Property<bool> * prop);
+    void registerProp(Property<std::string> * prop);
+    
+    void unregisterProp(Property<float> * prop);
+    void unregisterProp(Property<int> * prop);
+    void unregisterProp(Property<char> * prop);
+    void unregisterProp(Property<bool> * prop);
+    void unregisterProp(Property<std::string> * prop);
 
     static PropertyManager * getInstance();
 
 private:
     PropertyManager();
-    void updateFloatProps(std::string key, float value);
 
-    std::map<std::string, float> m_floatValues;
-    std::multimap<std::string, FloatProperty *> m_floatProps;
-
+    PropertyCollection<float> m_floatProperties;
+    PropertyCollection<int> m_intProperties;
+    PropertyCollection<char> m_charProperties;
+    PropertyCollection<bool> m_boolProperties;
+    PropertyCollection<std::string> m_stringProperties;
+        
     static PropertyManager * s_instance;
 };
 

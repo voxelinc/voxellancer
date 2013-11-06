@@ -1,17 +1,19 @@
 #include <regex>
 #include <fstream>
-
-#include "propertymanager.h"
-#include "floatproperty.h"
 #include <iostream>
 
+#include "propertymanager.h"
 
-// some string, some spaces, equals, some spaces, some string
-static std::regex line_regex(R"(^([\w\.]*) *= *(".*?"|[\w\.]*))");
+
+// some string, some spaces, equals, some spaces, some string, maybe a comment
+static std::regex line_regex(R"(^([\w\.]*) *= *(.+?)( *#.*)?$)");
 static std::regex title_regex(R"(^\[(\w+)\])");
 
 static std::regex float_regex(R"(^\d*\.?\d*$)");
 static std::regex int_regex(R"(^\d+$)");
+static std::regex bool_regex(R"(^(true|false)$)");
+static std::regex char_regex(R"(^\w$)");
+
 
 void PropertyManager::load(std::string file)
 {
@@ -35,26 +37,22 @@ void PropertyManager::load(std::string file)
             key = title + '.' + key_temp;
             value = matches[2];
 
-            //m_stringValues[key] = value;
             if (std::regex_match(value, float_regex)) {
-                float fValue = std::stof(value);
-                m_floatValues[key] = fValue;
-                updateFloatProps(key, fValue);
-            }
+                m_floatProperties.update(key, std::stof(value));
+            } 
             if (std::regex_match(value, int_regex)) {
-                //m_intValues[key] = std::stoi(value);
-            }
+                m_intProperties.update(key, std::stoi(value));
+            } 
+            if (std::regex_match(value, bool_regex)) {
+                bool bValue = value == "true" ? true : false;
+                m_boolProperties.update(key, bValue);
+            } 
+            if (std::regex_match(value, char_regex)) {
+                m_charProperties.update(key, value[0]);
+            } 
+            m_stringProperties.update(key, value);
+            
         }
-    }
-}
-
-void PropertyManager::updateFloatProps(std::string key, float value)
-{
-    auto result = m_floatProps.equal_range(key);
-    for (auto iter = result.first; iter != result.second; ++iter)
-    {
-        FloatProperty * prop = (*iter).second;
-        prop->set(value);
     }
 }
 
@@ -66,29 +64,63 @@ PropertyManager * PropertyManager::getInstance()
     return s_instance;
 }
 
-void PropertyManager::registerFloatProp(FloatProperty * prop)
+void PropertyManager::registerProp(Property<float> * prop)
 {
-    m_floatProps.insert(std::pair<std::string, FloatProperty *>(prop->name(), prop));
-    auto iter = m_floatValues.find(prop->name());
-    if (iter != m_floatValues.end()) {
-        prop->set(iter->second);
-    }
+    m_floatProperties.registerProp(prop);
 }
 
-void PropertyManager::unregisterFloatProp(FloatProperty * prop)
+void PropertyManager::registerProp(Property<int> * prop)
 {
-    auto iter = m_floatProps.find(prop->name());
-    for (; iter != m_floatProps.end(); ++iter) {
-        if (iter->second == prop) {
-            m_floatProps.erase(iter);
-            break;
-        }
-    }
+    m_intProperties.registerProp(prop);
 }
+
+void PropertyManager::registerProp(Property<bool> * prop)
+{
+    m_boolProperties.registerProp(prop);
+}
+
+void PropertyManager::registerProp(Property<char> * prop)
+{
+    m_charProperties.registerProp(prop);
+}
+
+void PropertyManager::registerProp(Property<std::string> * prop)
+{
+    m_stringProperties.registerProp(prop);
+}
+
+void PropertyManager::unregisterProp(Property<float> * prop)
+{
+    m_floatProperties.unregisterProp(prop);
+}
+
+void PropertyManager::unregisterProp(Property<int> * prop)
+{
+    m_intProperties.unregisterProp(prop);
+}
+
+void PropertyManager::unregisterProp(Property<bool> * prop)
+{
+    m_boolProperties.unregisterProp(prop);
+}
+
+void PropertyManager::unregisterProp(Property<char> * prop)
+{
+    m_charProperties.unregisterProp(prop);
+}
+
+void PropertyManager::unregisterProp(Property<std::string> * prop)
+{
+    m_stringProperties.unregisterProp(prop);
+}
+
 
 PropertyManager::PropertyManager() :
-    m_floatProps(),
-    m_floatValues()
+    m_floatProperties(),
+    m_intProperties(),
+    m_charProperties(),
+    m_boolProperties(),
+    m_stringProperties()
 {
     
 }

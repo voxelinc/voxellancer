@@ -127,6 +127,7 @@ set(SHADER_GROUP "Shader Files")
 
 file(GLOB_RECURSE SRC_FILES
     "source/*.h"
+    "source/*.hpp"
     "source/*.cpp"
 )
 
