@@ -42,13 +42,13 @@ Game::~Game(){
 }
 
 void Game::reloadConfig(){
-	PropertyManager::getInstance()->load("data/config.ini");
+//	PropertyManager::getInstance()->load("data/config.ini");
 }
 
 void Game::initialize()
 {
     glow::AutoTimer t("Initialize Game");
-    
+
 	glow::debug("Game::testFMOD()");
     testFMOD();
 
@@ -84,7 +84,7 @@ void Game::draw()
 	m_skybox.draw(&m_camera);
 
     m_cube->drawtest(m_camera.projection() * m_camera.view());
-   
+
 	/* Added as hd7000 fix
 	* @xchrdw: why? where to put?
 	m_shaderProgram->use();

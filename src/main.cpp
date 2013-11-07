@@ -78,7 +78,7 @@ void setCallbacks(GLFWwindow* window)
 int main(void)
 {
 	GLFWwindow* window;
-    PropertyManager::getInstance()->load("data/global.ini");
+   // PropertyManager::getInstance()->load("data/global.ini");
 
 	if (!glfwInit()) {
 		glow::fatal("could not init glfw");
@@ -98,7 +98,7 @@ int main(void)
 	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
 #endif
 
-    window = glfwCreateWindow(Property<int>("window.width"), Property<int>("window.height"), "Voxellancer", NULL, NULL);
+    window = glfwCreateWindow(800, 480, "Voxellancer", NULL, NULL);
 	if (!window) {
 		glfwTerminate();
 		glow::fatal("could not create window");

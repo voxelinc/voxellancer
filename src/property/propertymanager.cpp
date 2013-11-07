@@ -11,19 +11,19 @@
 
 
 // some string, some spaces, equals, some spaces, some string, maybe a comment
-static std::regex line_regex(R"(^([\w\.]*) *= *(.+?)( *#.*)?$)");
-static std::regex title_regex(R"(^\[(\w+)\])");
+static std::regex line_regex() { return std::regex(R"(^([\w\.]*) *= *(.+?)( *#.*)?$)"); }
+static std::regex title_regex() { return std::regex(R"(^\[(\w+)\])"); }
 
-static std::regex float_regex(R"(^[-+]?\d*\.?\d*$)");
-static std::regex int_regex(R"(^[-+]?\d+$)");
-static std::regex bool_regex(R"(^(true|false)$)");
-static std::regex char_regex(R"(^\w$)");
-static std::regex string_regex(R"(^.*$)");
-static std::regex vec3_regex(R"(^([-+]?\d*\.?\d*), ?([-+]?\d*\.?\d*), ?([-+]?\d*\.?\d*)$)");
+static std::regex float_regex() { return std::regex(R"(^[-+]?\d*\.?\d*$)"); }
+static std::regex int_regex() { return std::regex(R"(^[-+]?\d+$)"); }
+static std::regex bool_regex() { return std::regex(R"(^(true|false)$)"); }
+static std::regex char_regex() { return std::regex(R"(^\w$)"); }
+static std::regex string_regex() { return std::regex(R"(^.*$)"); }
+static std::regex vec3_regex() { return std::regex(R"(^([-+]?\d*\.?\d*), ?([-+]?\d*\.?\d*), ?([-+]?\d*\.?\d*)$)"); }
 
 static glm::vec3 vec3converter(const std::string &s) {
     std::smatch matches;
-    std::regex_match(s, matches, vec3_regex);
+    std::regex_match(s, matches, vec3_regex());
 
     float x = std::stof(matches[1]);
     float y = std::stof(matches[2]);
@@ -33,12 +33,12 @@ static glm::vec3 vec3converter(const std::string &s) {
 }
 
 PropertyManager::PropertyManager():
-    m_floatProperties(new PropertyCollection<float>(float_regex, [](std::string s) { return std::stof(s); })),
-    m_intProperties(new PropertyCollection<int>(int_regex, [](std::string s) { return std::stoi(s); })),
-    m_charProperties(new PropertyCollection<char>(char_regex, [](std::string s) { return s[0]; })),
-    m_boolProperties(new PropertyCollection<bool>(bool_regex, [](std::string s) { return s == "true" ? true : false; })),
-    m_stringProperties(new PropertyCollection<std::string>(string_regex, [](std::string s) { return s; })),
-    m_vec3Properties(new PropertyCollection<glm::vec3>(vec3_regex, vec3converter))
+    m_floatProperties(new PropertyCollection<float>(float_regex(), [](std::string s) { return std::stof(s); })),
+    m_intProperties(new PropertyCollection<int>(int_regex(), [](std::string s) { return std::stoi(s); })),
+    m_charProperties(new PropertyCollection<char>(char_regex(), [](std::string s) { return s[0]; })),
+    m_boolProperties(new PropertyCollection<bool>(bool_regex(), [](std::string s) { return s == "true" ? true : false; })),
+    m_stringProperties(new PropertyCollection<std::string>(string_regex(), [](std::string s) { return s; })),
+    m_vec3Properties(new PropertyCollection<glm::vec3>(vec3_regex(), vec3converter))
 {
 
 }
@@ -67,12 +67,12 @@ void PropertyManager::load(std::string file)
     {
         std::smatch matches;
 
-        std::regex_match(line, matches, title_regex);
+        std::regex_match(line, matches, title_regex());
         if (matches.size() > 0) {
             title = matches[1];
             continue;
         }
-        std::regex_match(line, matches, line_regex);
+        std::regex_match(line, matches, line_regex());
         if (matches.size() > 0) {
             std::string key, key_temp, value;
             key_temp = matches[1];

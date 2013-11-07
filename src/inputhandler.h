@@ -24,6 +24,8 @@ protected:
 	int m_cursorMaxDistance;
 	int m_fpsControls;
 
-	Property<float> m_angle_translate;
-	Property<float> m_move_translate;
+//	Property<float> m_angle_translate;
+//	Property<float> m_move_translate;
+	float m_angle_translate;
+	float m_move_translate;
 };
