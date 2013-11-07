@@ -1,5 +1,3 @@
-message("${SRC_FILES_EXCEPT_MAIN}")
-
 add_executable(test_worldtreenode
 	testworldtreenode.cpp
 	${SRC_FILES_EXCEPT_MAIN}
