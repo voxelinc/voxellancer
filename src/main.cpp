@@ -123,7 +123,7 @@ int main(void)
 
 #ifdef WIN32
 	wglSwapIntervalEXT(1); // glfw doesn't work!?
-#else 
+#else
 	glfwSwapInterval(1);
 #endif
 	try {
@@ -151,7 +151,7 @@ int main(void)
 		glfwTerminate();
 
 	}
-	catch (exception e){
+	catch (std::exception &e){
 		glfwDestroyWindow(window);
 		glfwTerminate();
         glow::fatal("Termination after Exception: %;", e.what());

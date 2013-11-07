@@ -1,4 +1,4 @@
-#include "InputHandler.h"
+#include "inputhandler.h"
 
 #include <glm/glm.hpp>
 

@@ -170,8 +170,11 @@ set(LIBS_TO_LINK
     glowutils
 )
 
+
+
+
 if(UNIX)
-	target_link_libraries(${target} X11 Xrandr Xi Xxf86vm)
+	set(LIBS_TO_LINK ${LIBS_TO_LINK} Xxf86vm X11 Xrandr Xi )	
 endif()
 
 target_link_libraries(${target} 
