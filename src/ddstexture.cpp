@@ -49,7 +49,7 @@ bool DdsTexture::loadImage2d(glow::Texture * texture, std::string path, GLenum t
     
     if (strncmp(filecode, "DDS ", 4) != 0) {
         file.close();
-        std::cout << "DdsTexture: not a dds file:" << path << endl;
+        glow::critical("DdsTexture: not a dds file: %;", path);
         return false;
     }
 
@@ -84,7 +84,7 @@ bool DdsTexture::loadImage2d(glow::Texture * texture, std::string path, GLenum t
         break;
     default:
         delete[] buffer;
-        std::cout << "DdsTexture: not a supported dds format:" << path;
+		glow::critical("DdsTexture: not a supported dds format: %", path);
         return false;
     }
     

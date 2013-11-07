@@ -7,9 +7,6 @@
 
 #include "propertycollection.hpp"
 
-template <class T>
-class Property;
-
 /**
 * Keeps track of properties and loads ini files.
 * Properties will be updated when a new ini file is loaded.

@@ -22,7 +22,7 @@ option(OPTION_ERRORS_AS_EXCEPTION "Throw exceptions" OFF)
 # CMAKE CONFIGURATION
 set(CMAKE_VERBOSE_MAKEFILE 1)
 set(LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib)
-set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/source)
+set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 # Include cmake modules from ./cmake
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
@@ -99,6 +99,11 @@ find_package(FMOD REQUIRED)
 find_package(BOOST REQUIRED)
 
 
+
+
+
+
+
 set(GLOW_DIRECTORY glow)
 include_directories(${LIB_DIR}/${GLOW_DIRECTORY}/include)
 add_subdirectory(${LIB_DIR}/${GLOW_DIRECTORY})
@@ -113,6 +118,8 @@ include_directories(
     ${FMOD_INCLUDE_DIR}
 )
 
+
+
 set(target voxellancer)
 
 message(STATUS "${target}")
@@ -121,16 +128,16 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/source)
+set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 set(HEADER_GROUP "Header Files")
 set(SOURCE_GROUP "Source Files")
 set(SHADER_GROUP "Shader Files")
 
 file(GLOB_RECURSE SRC_FILES
-    "source/*.h"
-    "source/*.hpp"
-    "source/*.cpp"
+    "src/*.h"
+    "src/*.hpp"
+    "src/*.cpp"
 )
 
 set(SRC_FILES_EXCEPT_MAIN ${SRC_FILES})
@@ -143,9 +150,10 @@ file(GLOB_RECURSE SHADER_FILES
 
 source_group(${SHADER_GROUP} FILES ${SHADER_FILES})
 
-source_group_by_path(${SOURCE_DIR} "\\\\.h$|\\\\.hpp$" 
+
+source_group_by_path(${SOURCE_DIR} "\\\\.h$|\\\\.hpp$"
     ${HEADER_GROUP} ${SRC_FILES})
-source_group_by_path(${SOURCE_DIR} "\\\\.cpp$|\\\\.c$|\\\\.inl$" 
+source_group_by_path(${SOURCE_DIR} "\\\\.cpp$|\\\\.c$|\\\\.inl$"
     ${SOURCE_GROUP} ${SRC_FILES})
 
 add_executable(${target} 

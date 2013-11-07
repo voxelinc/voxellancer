@@ -1,6 +1,6 @@
 
 include_directories(
-    ${BOOST_TEST_INCLUDE_DIR}
+    ${BOOST_INCLUDE_DIR}
 )
 
 add_subdirectory(property)

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "property/propertymanager.h"
+#include "propertymanager.h"
 
 template <class T> 
 class Property {
