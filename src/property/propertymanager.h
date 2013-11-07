@@ -3,9 +3,13 @@
 #include <string>
 
 #include <glm/glm.hpp>
+
 #include <glow/Changeable.h>
 
-#include "propertycollection.hpp"
+#include "propertycollection.h"
+
+template <class T>
+class Property;
 
 /**
 * Keeps track of properties and loads ini files.
