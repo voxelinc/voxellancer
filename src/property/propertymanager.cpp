@@ -55,6 +55,11 @@ PropertyManager::~PropertyManager() {
 
 void PropertyManager::load(std::string file)
 {
+// TODO: REMOVE DEFAULT VALUE WHEN LINUX IS WORKING
+#ifdef __linux__
+    return;
+#endif
+
     std::ifstream input(file);
     std::string line;
     std::string title = "";

@@ -42,7 +42,7 @@ Game::~Game(){
 }
 
 void Game::reloadConfig(){
-//	PropertyManager::getInstance()->load("data/config.ini");
+	PropertyManager::getInstance()->load("data/config.ini");
 }
 
 void Game::initialize()
