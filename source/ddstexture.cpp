@@ -37,7 +37,7 @@ bool DdsTexture::loadImage2d(glow::Texture * texture, std::string path, GLenum t
     std::ifstream file(path, std::ios::in | std::ios::binary);
 
     if (!file.is_open()) {
-        glow::fatal("DdsTexture: could not read: %s", path);
+        glow::fatal("DdsTexture: could not read: %;", path);
         return false;
     }
 

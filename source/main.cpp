@@ -14,6 +14,8 @@
 #include <iostream>
 
 #include "game.h"
+#include "property/propertymanager.h"
+#include "property/property.hpp"
 
 static GLint MajorVersionRequire = 3;
 static GLint MinorVersionRequire = 1;
@@ -23,16 +25,13 @@ static Game * game;
 using namespace std;
 
 static void checkVersion() {
-    GLint MajorVersionContext = glow::query::majorVersion();
-    GLint MinorVersionContext = glow::query::minorVersion();
-    printf("OpenGL Version Needed %i.%i (%i.%i Found)\n",
+    glow::info("OpenGL Version Needed %;.%; (%;.%; Found)",
         MajorVersionRequire, MinorVersionRequire,
-        MajorVersionContext, MinorVersionContext);
-    glow::info("version %s", glow::query::version().toString());
-    glow::info("vendor: %s", glow::query::vendor());
-    glow::info("renderer %s", glow::query::renderer());
-    glow::info("core profile: %s", glow::query::isCoreProfile() ? "true" : "false");
-    glow::info("GLSL version: %s", glow::query::getString(GL_SHADING_LANGUAGE_VERSION));
+        glow::query::majorVersion(), glow::query::minorVersion());
+    glow::info("vendor: %;", glow::query::vendor());
+    glow::info("renderer %;", glow::query::renderer());
+    glow::info("core profile: %;", glow::query::isCoreProfile() ? "true" : "false");
+    glow::info("GLSL version: %;\n", glow::query::getString(GL_SHADING_LANGUAGE_VERSION));
 }
 
 static void errorCallback(int error, const char* description)

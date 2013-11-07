@@ -161,6 +161,10 @@ void Game::draw()
 	m_cube->drawtest(m_cam->viewProjection());
 	//m_cube->draw();
 
+    m_shaderProgram->use();
+    m_vertexArrayObject->drawArrays(GL_POINTS, 0, 1);
+    m_shaderProgram->release();
+
 
 }
 

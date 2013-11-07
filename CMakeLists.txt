@@ -22,6 +22,7 @@ option(OPTION_ERRORS_AS_EXCEPTION "Throw exceptions" OFF)
 # CMAKE CONFIGURATION
 set(CMAKE_VERBOSE_MAKEFILE 1)
 set(LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib)
+set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/source)
 
 # Include cmake modules from ./cmake
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
@@ -95,6 +96,7 @@ find_package(GLM REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(GLFW REQUIRED)
 find_package(FMOD REQUIRED)
+find_package(BOOST REQUIRED)
 
 
 set(GLOW_DIRECTORY glow)
@@ -119,25 +121,40 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-file(GLOB SRC_FILES
+set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/source)
+
+set(HEADER_GROUP "Header Files")
+set(SOURCE_GROUP "Source Files")
+set(SHADER_GROUP "Shader Files")
+
+file(GLOB_RECURSE SRC_FILES
     "source/*.h"
+    "source/*.hpp"
     "source/*.cpp"
 )
 
-file(GLOB SHADER_FILES
+set(SRC_FILES_EXCEPT_MAIN ${SRC_FILES})
+list(REMOVE_ITEM SRC_FILES_EXCEPT_MAIN ${SRC_DIR}/main.cpp)
+
+file(GLOB_RECURSE SHADER_FILES
     "data/*.vert"
     "data/*.frag"
 )
 
-source_group("Shader Files" FILES ${SHADER_FILES})
+source_group(${SHADER_GROUP} FILES ${SHADER_FILES})
+
+source_group_by_path(${SOURCE_DIR} "\\\\.h$|\\\\.hpp$" 
+    ${HEADER_GROUP} ${SRC_FILES})
+source_group_by_path(${SOURCE_DIR} "\\\\.cpp$|\\\\.c$|\\\\.inl$" 
+    ${SOURCE_GROUP} ${SRC_FILES})
 
 add_executable(${target} 
     ${SRC_FILES}
     ${SHADER_FILES}
 )
 
-target_link_libraries(${target} 
-    ${OPENGL_LIBRARIES}
+set(LIBS_TO_LINK
+	${OPENGL_LIBRARIES}
     ${GLEW_LIBRARY}
     ${GLFW_LIBRARY}
     ${FMOD_LIBRARY}
@@ -149,6 +166,9 @@ if(UNIX)
 	target_link_libraries(${target} X11 Xrandr Xi Xxf86vm)
 endif()
 
+target_link_libraries(${target} 
+    ${LIBS_TO_LINK}
+)
 
 set_target_properties(${target}
     PROPERTIES
@@ -167,7 +187,7 @@ if(WIN32)
     foreach( binary ${BINARIES})
     add_custom_command(TARGET ${target} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different ${binary} $<TARGET_FILE_DIR:${target}>)
-    endforeach( file_i )   
+    endforeach( binary )   
 endif()
 
 install(TARGETS ${target} 
@@ -180,3 +200,12 @@ install(FILES ${BINARIES} DESTINATION .)
  set(CPACK_NSIS_CREATE_ICONS "CreateShortCut '\$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\${PROJECT_NAME}.lnk' '\$INSTDIR\\\\${PROJECT_NAME}.exe'") 
  
 include(CPack)
+
+include_directories(${SRC_DIR})
+
+if(BOOST_INCLUDE_DIR)
+    message(STATUS "boost found, adding tests")
+    add_subdirectory(test)
+else()
+    message(STATUS "boost not found, can't add tests")
+endif()
