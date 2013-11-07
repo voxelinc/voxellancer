@@ -22,6 +22,7 @@ option(OPTION_ERRORS_AS_EXCEPTION "Throw exceptions" OFF)
 # CMAKE CONFIGURATION
 set(CMAKE_VERBOSE_MAKEFILE 1)
 set(LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib)
+set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/source)
 
 # Include cmake modules from ./cmake
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
@@ -95,6 +96,7 @@ find_package(GLM REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(GLFW REQUIRED)
 find_package(FMOD REQUIRED)
+find_package(BOOST REQUIRED)
 
 
 
@@ -138,6 +140,9 @@ file(GLOB_RECURSE SRC_FILES
     "src/*.cpp"
 )
 
+set(SRC_FILES_EXCEPT_MAIN ${SRC_FILES})
+list(REMOVE_ITEM SRC_FILES_EXCEPT_MAIN ${SRC_DIR}/main.cpp)
+
 file(GLOB_RECURSE SHADER_FILES
     "data/*.vert"
     "data/*.frag"
@@ -156,8 +161,8 @@ add_executable(${target}
     ${SHADER_FILES}
 )
 
-target_link_libraries(${target} 
-    ${OPENGL_LIBRARIES}
+set(LIBS_TO_LINK
+	${OPENGL_LIBRARIES}
     ${GLEW_LIBRARY}
     ${GLFW_LIBRARY}
     ${FMOD_LIBRARY}
@@ -169,6 +174,9 @@ if(UNIX)
 	target_link_libraries(${target} X11 Xrandr Xi Xxf86vm)
 endif()
 
+target_link_libraries(${target} 
+    ${LIBS_TO_LINK}
+)
 
 set_target_properties(${target}
     PROPERTIES
@@ -198,3 +206,12 @@ install(FILES ${GLEW_BINARY} {GLFW_BINARY} ${FMOD_BINARY} DESTINATION .)
  set(CPACK_NSIS_CREATE_ICONS "CreateShortCut '\$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\${PROJECT_NAME}.lnk' '\$INSTDIR\\\\${PROJECT_NAME}.exe'") 
  
 include(CPack)
+
+include_directories(${SRC_DIR})
+
+if(BOOST_INCLUDE_DIR)
+    message(STATUS "boost found, adding tests")
+    add_subdirectory(test)
+else()
+    message(STATUS "boost not found, can't add tests")
+endif()

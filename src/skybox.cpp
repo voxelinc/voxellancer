@@ -1,3 +1,6 @@
+#include <glow/Shader.h>
+#include <glow/VertexAttributeBinding.h>
+
 #include "skybox.h"
 
 #include "ddstexture.h"

@@ -2,10 +2,10 @@
 
 #include <string>
 
+#include <glm/glm.hpp>
 #include <glow/Changeable.h>
-#include "property.hpp"
-#include "propertycollection.hpp"
 
+#include "propertycollection.hpp"
 
 /**
 * Keeps track of properties and loads ini files.
@@ -17,33 +17,42 @@
 class PropertyManager : public glow::Changeable {
 
 public:
+    PropertyManager();
     virtual ~PropertyManager();
     
     void load(std::string file);
 
-    void registerProp(Property<float> * prop);
-    void registerProp(Property<int> * prop);
-    void registerProp(Property<char> * prop);
-    void registerProp(Property<bool> * prop);
-    void registerProp(Property<std::string> * prop);
+    template <class T>
+    void registerProperty(Property<T> * prop);
+    template <class T>
+    void unregisterProperty(Property<T> * prop);
     
-    void unregisterProp(Property<float> * prop);
-    void unregisterProp(Property<int> * prop);
-    void unregisterProp(Property<char> * prop);
-    void unregisterProp(Property<bool> * prop);
-    void unregisterProp(Property<std::string> * prop);
-
     static PropertyManager * getInstance();
+    static void reset();
 
 private:
-    PropertyManager();
+    template <class T>
+    PropertyCollection<T> * getPropertyCollection(Property<T> * prop);
 
     PropertyCollection<float> m_floatProperties;
     PropertyCollection<int> m_intProperties;
     PropertyCollection<char> m_charProperties;
     PropertyCollection<bool> m_boolProperties;
     PropertyCollection<std::string> m_stringProperties;
+    PropertyCollection<glm::vec3> m_vec3Properties;
         
     static PropertyManager * s_instance;
 };
+
+template <class T>
+void PropertyManager::registerProperty(Property<T> * prop)
+{
+    getPropertyCollection(prop)->registerProperty(prop);
+}
+
+template <class T>
+void PropertyManager::unregisterProperty(Property<T> * prop)
+{
+    getPropertyCollection(prop)->unregisterProperty(prop);
+}
 

@@ -11,11 +11,11 @@
 
 #include <glow/logging.h>
 #include <glow/global.h>
+#include <glow/ShaderFile.h>
+
+#include "property/propertymanager.h"
 
 #include "game.h"
-// TODO: move to test!
-#include "property/propertymanager.h"
-#include "property/property.hpp"
 
 static GLint MajorVersionRequire = 3;
 static GLint MinorVersionRequire = 1;
@@ -25,16 +25,14 @@ static Game * game;
 using namespace std;
 
 static void checkVersion() {
-    GLint MajorVersionContext = glow::query::majorVersion();
-    GLint MinorVersionContext = glow::query::minorVersion();
-    printf("OpenGL Version Needed %d.%d (%d.%d Found)\n",
+    glow::info("OpenGL Version Needed %;.%; (%;.%; Found)",
         MajorVersionRequire, MinorVersionRequire,
-        MajorVersionContext, MinorVersionContext);
-	glow::info("version %s", glow::query::version().toString());
-	glow::info("vendor: %s", glow::query::vendor());
-	glow::info("renderer %s", glow::query::renderer());
-	glow::info("core profile: %s", glow::query::isCoreProfile() ? "true" : "false");
-	glow::info("GLSL version: %s", glow::query::getString(GL_SHADING_LANGUAGE_VERSION));
+        glow::query::majorVersion(), glow::query::minorVersion());
+    glow::info("version %;", glow::query::version().toString());
+    glow::info("vendor: %;", glow::query::vendor());
+    glow::info("renderer %;", glow::query::renderer());
+    glow::info("core profile: %;", glow::query::isCoreProfile() ? "true" : "false");
+    glow::info("GLSL version: %;\n", glow::query::getString(GL_SHADING_LANGUAGE_VERSION));
 }
 
 static void errorCallback(int error, const char* description)
@@ -52,12 +50,12 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
 {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, GL_TRUE);
+	if (key == GLFW_KEY_F1 && action == GLFW_PRESS)
+		game->m_inputHandler->toggleControls();
 	if (key == GLFW_KEY_F5 && action == GLFW_PRESS)
 		glow::ShaderFile::reloadAll();
 	if (key == GLFW_KEY_F6 && action == GLFW_PRESS)
 		game->reloadConfig();
-	if (key == GLFW_KEY_F1 && action == GLFW_PRESS)
-		game->m_inputHandler->toggleControls();
 }
 
 static void mouseButtonCallback(GLFWwindow* window, int Button, int Action, int mods) {
@@ -79,26 +77,8 @@ void setCallbacks(GLFWwindow* window)
 
 int main(void)
 {
-	// TODO: move to test!
-	Property<float> iProp("player.size");
-	Property<int> fProp("player.size");
-	PropertyManager::getInstance()->load("test/test.ini");
-	Property<float> fProp2("player.height");
-	Property<std::string> sProp1("player.name");
-	Property<std::string> sProp2("section.name");
-	Property<char> cProp("section.forward");
-	Property<bool> bProp2("player.is_true");
-	float x = fProp.get() + fProp2.get();
-	assert(iProp == 1);
-	assert(sProp1.get() == "hans");
-	assert(sProp2.get() == "peter");
-	assert(cProp == 'w');
-	assert(bProp2 == true);
-	PropertyManager::getInstance()->load("test/test2.ini");
-	assert(sProp1.get() == "hans meier");
-
-
 	GLFWwindow* window;
+    PropertyManager::getInstance()->load("data/global.ini");
 
 	if (!glfwInit()) {
 		glow::fatal("could not init glfw");
@@ -118,7 +98,7 @@ int main(void)
 	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
 #endif
 
-	window = glfwCreateWindow(1280, 720, "Voxellancer", NULL, NULL);
+    window = glfwCreateWindow(Property<int>("window.width"), Property<int>("window.height"), "Voxellancer", NULL, NULL);
 	if (!window) {
 		glfwTerminate();
 		glow::fatal("could not create window");
@@ -132,11 +112,9 @@ int main(void)
 	checkVersion();
 
 	glewExperimental = GL_TRUE;
-	cout << "glewInit()..." << endl;
 	if (glewInit() != GLEW_OK) {
 		glow::fatal("glewInit() failed");
 	}
-	cout << "-> done" << endl;
 	glGetError();
 
 #ifdef WIN32 // TODO: find a way to correctly detect debug extension in linux
@@ -156,7 +134,7 @@ int main(void)
 		glfwGetFramebufferSize(window, &width, &height);
 		game->m_inputHandler->resizeEvent(width, height);
 
-		cout << "Entering mainloop" << endl;
+		glow::debug("Entering mainloop");
 		double time = glfwGetTime();
 		while (!glfwWindowShouldClose(window))
 		{
@@ -176,7 +154,7 @@ int main(void)
 	catch (exception e){
 		glfwDestroyWindow(window);
 		glfwTerminate();
-		glow::fatal("Termination after Exception: %", e.what());
+        glow::fatal("Termination after Exception: %;", e.what());
 		cout << "Hit enter to quit" << endl;
 		cin.ignore(1, '\n');
 	}
