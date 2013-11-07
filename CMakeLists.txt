@@ -22,7 +22,7 @@ option(OPTION_ERRORS_AS_EXCEPTION "Throw exceptions" OFF)
 # CMAKE CONFIGURATION
 set(CMAKE_VERBOSE_MAKEFILE 1)
 set(LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib)
-set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/source)
+set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 # Include cmake modules from ./cmake
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
@@ -189,19 +189,21 @@ set_target_properties(${target}
     DEBUG_POSTFIX               "d${DEBUG_POSTFIX}"
 )
 
+set(BINARIES ${GLEW_BINARY} ${GLFW_BINARY} ${FMOD_BINARY})
+
 if(WIN32)
+    foreach( binary ${BINARIES})
     add_custom_command(TARGET ${target} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy ${GLEW_BINARY} $<TARGET_FILE_DIR:${target}>)
-    add_custom_command(TARGET ${target} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy ${GLFW_BINARY} $<TARGET_FILE_DIR:${target}>)
-    add_custom_command(TARGET ${target} POST_BUILD
-       COMMAND ${CMAKE_COMMAND} -E copy ${FMOD_BINARY} $<TARGET_FILE_DIR:${target}>)    
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${binary} $<TARGET_FILE_DIR:${target}>)
+    endforeach( binary )   
 endif()
 
 install(TARGETS ${target} 
         RUNTIME DESTINATION .)
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/data DESTINATION .)
-install(FILES ${GLEW_BINARY} {GLFW_BINARY} ${FMOD_BINARY} DESTINATION .)
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/data 
+        DESTINATION . 
+        PATTERN "*.png" EXCLUDE)
+install(FILES ${BINARIES} DESTINATION .)
 
  set(CPACK_NSIS_CREATE_ICONS "CreateShortCut '\$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\${PROJECT_NAME}.lnk' '\$INSTDIR\\\\${PROJECT_NAME}.exe'") 
  
