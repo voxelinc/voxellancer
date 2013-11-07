@@ -13,7 +13,4 @@
 *.a
 
 /build
-/lib/fmod
-/lib/glew-1.10.0
-/lib/glm-0.9.4.6
-/lib/glfw-3.0.3
+/CMakeFiles
