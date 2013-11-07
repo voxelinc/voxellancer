@@ -17,6 +17,7 @@
 #include <glow/ShaderFile.h>
 #include <glow/Program.h>
 #include <glow/VertexArrayObject.h>
+#include <glow/VertexAttributeBinding.h>
 #include <glow/AutoTimer.h>
 #include <glow/logging.h>
 
@@ -78,7 +79,7 @@ void Game::initialize()
 	getWindowCenter(&x, &y);
 	glfwSetCursorPos(m_window, x, y);
 	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-	
+
 
     glClearColor(0.2f, 0.3f, 0.4f, 1.f);
     cout << "Done" << endl;
@@ -102,13 +103,13 @@ void Game::update(float delta_sec)
 		// position "eye"
 		if (glfwGetKey(m_window, GLFW_KEY_W) == GLFW_PRESS){
 			m_cam->setEye(m_cam->eye() + lookVec*s_move_translate);
-		} 
+		}
 		if (glfwGetKey(m_window, GLFW_KEY_A) == GLFW_PRESS){
 			m_cam->setEye(m_cam->eye() - glm::cross(lookVec, m_cam->up())*s_move_translate);
-		} 
+		}
 		if (glfwGetKey(m_window, GLFW_KEY_S) == GLFW_PRESS){
 			m_cam->setEye(m_cam->eye() - lookVec*s_move_translate);
-		} 
+		}
 		if (glfwGetKey(m_window, GLFW_KEY_D) == GLFW_PRESS){
 			m_cam->setEye(m_cam->eye() + glm::cross(lookVec, m_cam->up())*s_move_translate);
 		}

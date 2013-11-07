@@ -9,6 +9,7 @@
 
 #include <glow/logging.h>
 #include <glow/global.h>
+#include <glow/ShaderFile.h>
 
 #include "game.h"
 #include <iostream>
@@ -72,7 +73,7 @@ void setCallbacks(GLFWwindow* window)
 int main(void)
 {
     GLFWwindow* window;
-    
+
     if (!glfwInit()) {
         glow::fatal("could not init glfw");
         return -1;
@@ -97,7 +98,7 @@ int main(void)
         glow::fatal("could not create window");
         return -1;
     }
-    
+
     glfwMakeContextCurrent(window);
 
     setCallbacks(window);
@@ -109,17 +110,17 @@ int main(void)
         return -1;
     }
     cout << "-> done" << endl;
-    
+
 #ifdef WIN32 // TODO: find a way to correctly detect debug extension in linux
-    glow::DebugMessageOutput::enable();  
+    glow::DebugMessageOutput::enable();
 #endif
-    
+
 #ifdef WIN32
     wglSwapIntervalEXT(1); // glfw doesn't work!?
-#else 
+#else
     glfwSwapInterval(1);
 #endif
-    
+
     game = new Game(window);
 
     game->initialize();
@@ -127,7 +128,7 @@ int main(void)
     int width, height;
     glfwGetFramebufferSize(window, &width, &height);
     game->resizeEvent(width, height);
-    
+
     cout << "Entering mainloop" << endl;
     double time = glfwGetTime();
     while (!glfwWindowShouldClose(window))
@@ -143,7 +144,7 @@ int main(void)
     delete game;
     glfwDestroyWindow(window);
     glfwTerminate();
-    
+
     return 0;
 }
 
