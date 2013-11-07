@@ -4,8 +4,8 @@
 
 #include "camera.h"
 // TODO: the first of these should not be necessary
-#include "property\propertymanager.h"
-#include "property\property.hpp"
+#include "property/propertymanager.h"
+#include "property/property.hpp"
 
 class InputHandler {
 public:
