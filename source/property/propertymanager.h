@@ -24,24 +24,17 @@ public:
     
     void load(std::string file);
 
-    void registerProp(Property<float> * prop);
-    void registerProp(Property<int> * prop);
-    void registerProp(Property<char> * prop);
-    void registerProp(Property<bool> * prop);
-    void registerProp(Property<std::string> * prop);
-    void registerProp(Property<glm::vec3> * prop);
+    template <class T>
+    void registerProp(Property<T> * prop);
+    template <class T>
+    void unregisterProp(Property<T> * prop);
     
-    void unregisterProp(Property<float> * prop);
-    void unregisterProp(Property<int> * prop);
-    void unregisterProp(Property<char> * prop);
-    void unregisterProp(Property<bool> * prop);
-    void unregisterProp(Property<std::string> * prop);
-    void unregisterProp(Property<glm::vec3> * prop);
-
     static PropertyManager * getInstance();
     static void clear();
 
 private:
+    template <class T>
+    PropertyCollection<T> * getPropertyCollection(Property<T> * prop);
 
     PropertyCollection<float> m_floatProperties;
     PropertyCollection<int> m_intProperties;
@@ -52,4 +45,16 @@ private:
         
     static PropertyManager * s_instance;
 };
+
+template <class T>
+void PropertyManager::registerProp(Property<T> * prop)
+{
+    getPropertyCollection(prop)->registerProp(prop);
+}
+
+template <class T>
+void PropertyManager::unregisterProp(Property<T> * prop)
+{
+    getPropertyCollection(prop)->unregisterProp(prop);
+}
 

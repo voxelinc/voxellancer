@@ -96,66 +96,6 @@ PropertyManager * PropertyManager::getInstance()
     return s_instance;
 }
 
-void PropertyManager::registerProp(Property<float> * prop)
-{
-    m_floatProperties.registerProp(prop);
-}
-
-void PropertyManager::registerProp(Property<int> * prop)
-{
-    m_intProperties.registerProp(prop);
-}
-
-void PropertyManager::registerProp(Property<bool> * prop)
-{
-    m_boolProperties.registerProp(prop);
-}
-
-void PropertyManager::registerProp(Property<char> * prop)
-{
-    m_charProperties.registerProp(prop);
-}
-
-void PropertyManager::registerProp(Property<std::string> * prop)
-{
-    m_stringProperties.registerProp(prop);
-}
-
-void PropertyManager::registerProp(Property<glm::vec3> * prop)
-{
-    m_vec3Properties.registerProp(prop);
-}
-
-
-void PropertyManager::unregisterProp(Property<float> * prop)
-{
-    m_floatProperties.unregisterProp(prop);
-}
-
-void PropertyManager::unregisterProp(Property<int> * prop)
-{
-    m_intProperties.unregisterProp(prop);
-}
-
-void PropertyManager::unregisterProp(Property<bool> * prop)
-{
-    m_boolProperties.unregisterProp(prop);
-}
-
-void PropertyManager::unregisterProp(Property<char> * prop)
-{
-    m_charProperties.unregisterProp(prop);
-}
-
-void PropertyManager::unregisterProp(Property<std::string> * prop)
-{
-    m_stringProperties.unregisterProp(prop);
-}
-
-void PropertyManager::unregisterProp(Property<glm::vec3> * prop)
-{
-    m_vec3Properties.unregisterProp(prop);
-}
 
 void PropertyManager::clear()
 {
@@ -167,3 +107,39 @@ void PropertyManager::clear()
 
 PropertyManager * PropertyManager::s_instance;
 
+// any better idea or maybe generate these with macros?
+template <>
+PropertyCollection<int> * PropertyManager::getPropertyCollection(Property<int> * prop)
+{
+    return &m_intProperties;
+}
+
+template <>
+PropertyCollection<char> * PropertyManager::getPropertyCollection(Property<char> * prop)
+{
+    return &m_charProperties;
+}
+
+template <>
+PropertyCollection<float> * PropertyManager::getPropertyCollection(Property<float> * prop)
+{
+    return &m_floatProperties;
+}
+
+template <>
+PropertyCollection<bool> * PropertyManager::getPropertyCollection(Property<bool> * prop)
+{
+    return &m_boolProperties;
+}
+
+template <>
+PropertyCollection<std::string> * PropertyManager::getPropertyCollection(Property<std::string> * prop)
+{
+    return &m_stringProperties;
+}
+
+template <>
+PropertyCollection<glm::vec3> * PropertyManager::getPropertyCollection(Property<glm::vec3> * prop)
+{
+    return &m_vec3Properties;
+}
