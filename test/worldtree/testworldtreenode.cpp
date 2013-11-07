@@ -35,6 +35,8 @@ BOOST_AUTO_TEST_CASE(simpleInsert) {
     BOOST_CHECK_EQUAL(node->subnodes().size(), 8);
     BOOST_CHECK_EQUAL(c->containingNode(), node);
     BOOST_CHECK_CLOSE(node->aabb().extent(XAxis), oldWidth*4, 5);
+
+    delete a, b, c;
 }
 
 BOOST_AUTO_TEST_CASE(inAABB) {
@@ -71,6 +73,8 @@ BOOST_AUTO_TEST_CASE(inAABB) {
 
     std::set<WorldtreeGeode*> q3 = node->geodesInAABB(AABB(glm::vec3(-45, 2, 4), glm::vec3(55, 25, 40)));
     BOOST_CHECK_EQUAL(q3.size(), 3);
+
+    delete e1, e2, a, b, c;
 }
 
 
@@ -106,6 +110,8 @@ BOOST_AUTO_TEST_CASE(movement) {
     std::set<WorldtreeGeode*> q3 = node->geodesInAABB(AABB(glm::vec3(55, 25, 29), glm::vec3(56, 26, 36)));
     BOOST_CHECK_EQUAL(q3.size(), 0);
     BOOST_CHECK(q3.find(a) == q3.end());
+
+    delete e1, e2, a;
 }
 
 BOOST_AUTO_TEST_SUITE_END()

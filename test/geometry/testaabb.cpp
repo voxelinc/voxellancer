@@ -33,7 +33,7 @@ BOOST_AUTO_TEST_CASE(intersection) {
     a.move(XAxis, 1);
     BOOST_CHECK(!(a.intersects(b) && b.intersects(a)));
 
-    b.move(XAxis, 0.2);
+    b.move(XAxis, 0.2f);
     BOOST_CHECK(a.intersects(b) && b.intersects(a));
 
     a.move(glm::vec3(-1.5, -0.8, -0.8));
@@ -53,16 +53,16 @@ BOOST_AUTO_TEST_CASE(containing) {
     BOOST_CHECK(!a.contains(e));
     BOOST_CHECK(a.contains(d));
 
-    a.move(XAxis, 0.1);
+    a.move(XAxis, 0.1f);
     BOOST_CHECK(!(a.contains(b) && b.contains(a)));
 
     d.move(glm::vec3(0.2, 0.4, 0.1));
     BOOST_CHECK(a.contains(d));
 
-    d.move(XAxis, 0.7);
+    d.move(XAxis, 0.7f);
     BOOST_CHECK(!a.contains(d));
 
-    a.move(XAxis, 0.3);
+    a.move(XAxis, 0.3f);
     BOOST_CHECK(a.contains(d));
 }
 
