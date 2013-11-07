@@ -174,7 +174,7 @@ set(LIBS_TO_LINK
 
 
 if(UNIX)
-	set(LIBS_TO_LINK ${LIBS_TO_LINK} Xxf86vm X11 Xrandr Xi )	
+	set(LIBS_TO_LINK ${LIBS_TO_LINK} pthread Xxf86vm X11 Xrandr Xi )	
 endif()
 
 target_link_libraries(${target} 
