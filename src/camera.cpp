@@ -3,7 +3,7 @@
 #include <glm/gtx/transform.hpp>
 
 
-Camera::Camera(): 
+Camera::Camera():
 	m_fovy(40.f),
 	m_aspect(1.f),
 	m_zNear(0.1f),
@@ -60,7 +60,7 @@ const glm::mat4 & Camera::view(){
 	return m_view;
 }
 
-const glm::mat4 & Camera::viewInverted(){
+glm::mat4 Camera::viewInverted(){
 	return glm::inverse(m_view);
 }
 

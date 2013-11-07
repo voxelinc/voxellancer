@@ -22,7 +22,7 @@ public:
 	void rotateTo(glm::quat quat);
 
 	const glm::mat4 & view();
-	const glm::mat4 & viewInverted();
+	glm::mat4 viewInverted();
 	const glm::quat & orientation();
 
 	/* Projection from glow::Camera */

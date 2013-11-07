@@ -3,19 +3,19 @@ cmake_minimum_required(VERSION 2.8.9 FATAL_ERROR)
 
 # PROJECT DESCRIPTION
 
-set(META_PROJECT_NAME        "voxellancer")
-set(META_VERSION_MAJOR       "0")
-set(META_VERSION_MINOR       "1")
-set(META_VERSION_PATCH       "0")
-set(META_VERSION             "${META_VERSION_MAJOR}.${META_VERSION_MINOR}.${META_VERSION_PATCH}")
+set(META_PROJECT_NAME "voxellancer")
+set(META_VERSION_MAJOR "0")
+set(META_VERSION_MINOR "1")
+set(META_VERSION_PATCH "0")
+set(META_VERSION "${META_VERSION_MAJOR}.${META_VERSION_MINOR}.${META_VERSION_PATCH}")
 set(META_AUTHOR_ORGANIZATION "voxelinc")
-set(META_AUTHOR_DOMAIN       "https://github.com/voxelinc/voxellancer/")
+set(META_AUTHOR_DOMAIN "https://github.com/voxelinc/voxellancer/")
 
 
 # OPTIONS
 
-option(OPTION_LIMIT_CONFIGS  "Generate limited configs (Release; Debug)" ON)
-option(OPTION_LOCAL_INSTALL  "Install to a local directory instead of the system" OFF)
+option(OPTION_LIMIT_CONFIGS "Generate limited configs (Release; Debug)" ON)
+option(OPTION_LOCAL_INSTALL "Install to a local directory instead of the system" OFF)
 option(OPTION_ERRORS_AS_EXCEPTION "Throw exceptions" OFF)
 
 
@@ -39,7 +39,6 @@ endif()
 
 # Project
 project(${META_PROJECT_NAME} C CXX)
-
 
 # Generate folders
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
@@ -129,7 +128,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-file(GLOB_RECURSE SRC_FILES
+set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 set(HEADER_GROUP "Header Files")
 set(SOURCE_GROUP "Source Files")
@@ -157,13 +156,13 @@ source_group_by_path(${SOURCE_DIR} "\\\\.h$|\\\\.hpp$"
 source_group_by_path(${SOURCE_DIR} "\\\\.cpp$|\\\\.c$|\\\\.inl$"
     ${SOURCE_GROUP} ${SRC_FILES})
 
-add_executable(${target} 
+add_executable(${target}
     ${SRC_FILES}
     ${SHADER_FILES}
 )
 
 set(LIBS_TO_LINK
-	${OPENGL_LIBRARIES}
+    ${OPENGL_LIBRARIES}
     ${GLEW_LIBRARY}
     ${GLFW_LIBRARY}
     ${FMOD_LIBRARY}
@@ -172,27 +171,23 @@ set(LIBS_TO_LINK
 )
 
 
-
-
 if(UNIX)
-	set(LIBS_TO_LINK ${LIBS_TO_LINK} pthread Xxf86vm X11 Xrandr Xi )	
+       set(LIBS_TO_LINK ${LIBS_TO_LINK} pthread Xxf86vm X11 Xrandr Xi )        
 endif()
 
-target_link_libraries(${target} 
+target_link_libraries(${target}
     ${LIBS_TO_LINK}
 )
-
-
 
 set_target_properties(${target}
     PROPERTIES
     LINKER_LANGUAGE CXX
-    COMPILE_DEFINITIONS_DEBUG   "${DEFAULT_COMPILE_DEFS_DEBUG}"
+    COMPILE_DEFINITIONS_DEBUG "${DEFAULT_COMPILE_DEFS_DEBUG}"
     COMPILE_DEFINITIONS_RELEASE "${DEFAULT_COMPILE_DEFS_RELEASE}"
-    COMPILE_FLAGS               "${DEFAULT_COMPILE_FLAGS}"
-    LINK_FLAGS_DEBUG            "${DEFAULT_LINKER_FLAGS_DEBUG}"
-    LINK_FLAGS_RELEASE          "${DEFAULT_LINKER_FLAGS_RELEASE}"
-    DEBUG_POSTFIX               "d${DEBUG_POSTFIX}"
+    COMPILE_FLAGS "${DEFAULT_COMPILE_FLAGS}"
+    LINK_FLAGS_DEBUG "${DEFAULT_LINKER_FLAGS_DEBUG}"
+    LINK_FLAGS_RELEASE "${DEFAULT_LINKER_FLAGS_RELEASE}"
+    DEBUG_POSTFIX "d${DEBUG_POSTFIX}"
 )
 
 set(BINARIES ${GLEW_BINARY} ${GLFW_BINARY} ${FMOD_BINARY})
@@ -201,23 +196,22 @@ if(WIN32)
     foreach( binary ${BINARIES})
     add_custom_command(TARGET ${target} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different ${binary} $<TARGET_FILE_DIR:${target}>)
-    endforeach( binary )   
+    endforeach( binary )
 endif()
 
-install(TARGETS ${target} 
+install(TARGETS ${target}
         RUNTIME DESTINATION .)
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/data 
-        DESTINATION . 
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/data
+        DESTINATION .
         PATTERN "*.png" EXCLUDE)
 install(FILES ${BINARIES} DESTINATION .)
 
- set(CPACK_NSIS_CREATE_ICONS "CreateShortCut '\$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\${PROJECT_NAME}.lnk' '\$INSTDIR\\\\${PROJECT_NAME}.exe'") 
+ set(CPACK_NSIS_CREATE_ICONS "CreateShortCut '\$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\${PROJECT_NAME}.lnk' '\$INSTDIR\\\\${PROJECT_NAME}.exe'")
  
 include(CPack)
 
-include_directories(${SRC_DIR})
+include_directories(${SOURCE_DIR})
 
-add_subdirectory(test)
 if(BOOST_INCLUDE_DIR)
     message(STATUS "boost found, adding tests")
     add_subdirectory(test)
