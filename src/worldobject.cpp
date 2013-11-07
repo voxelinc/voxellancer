@@ -44,12 +44,12 @@ void WorldObject::rotateTo(glm::quat quat){
 	m_orientation = quat;
 }
 
-const glm::mat4 & WorldObject::matrix()
+const glm::mat4 WorldObject::matrix()
 {
     return glm::mat4_cast(m_orientation) * glm::translate(m_position);
 }
 
-const glm::quat & WorldObject::orientation()
+const glm::quat WorldObject::orientation()
 {
     return m_orientation;
 }

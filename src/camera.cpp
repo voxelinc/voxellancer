@@ -56,15 +56,15 @@ void Camera::rotateTo(glm::quat quat){
 	viewDirty();
 }
 
-const glm::mat4 & Camera::view(){
+const glm::mat4 Camera::view(){
 	return m_view;
 }
 
-const glm::mat4 & Camera::viewInverted(){
+const glm::mat4 Camera::viewInverted(){
 	return glm::inverse(m_view);
 }
 
-const glm::quat & Camera::orientation(){
+const glm::quat Camera::orientation(){
 	return WorldObject::orientation();
 }
 
@@ -117,7 +117,7 @@ void Camera::setFovy(const float fovy)
 
 }
 
-const glm::ivec2 & Camera::viewport() const
+const glm::ivec2 Camera::viewport() const
 {
 	return m_viewport;
 }
@@ -138,12 +138,12 @@ float Camera::aspectRatio() const
 	return m_aspect;
 }
 
-const glm::mat4 & Camera::projection()
+const glm::mat4 Camera::projection()
 {
 	return m_projection;
 }
 
-const glm::mat4 & Camera::viewProjection()
+const glm::mat4 Camera::viewProjection()
 {
 	return m_viewProjection;
 }
