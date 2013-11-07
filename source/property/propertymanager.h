@@ -5,9 +5,10 @@
 #include <glm/glm.hpp>
 #include <glow/Changeable.h>
 
-#include "property.hpp"
 #include "propertycollection.hpp"
 
+template <class T>
+class Property;
 
 /**
 * Keeps track of properties and loads ini files.
@@ -25,12 +26,12 @@ public:
     void load(std::string file);
 
     template <class T>
-    void registerProp(Property<T> * prop);
+    void registerProperty(Property<T> * prop);
     template <class T>
-    void unregisterProp(Property<T> * prop);
+    void unregisterProperty(Property<T> * prop);
     
     static PropertyManager * getInstance();
-    static void clear();
+    static void reset();
 
 private:
     template <class T>
@@ -47,14 +48,14 @@ private:
 };
 
 template <class T>
-void PropertyManager::registerProp(Property<T> * prop)
+void PropertyManager::registerProperty(Property<T> * prop)
 {
-    getPropertyCollection(prop)->registerProp(prop);
+    getPropertyCollection(prop)->registerProperty(prop);
 }
 
 template <class T>
-void PropertyManager::unregisterProp(Property<T> * prop)
+void PropertyManager::unregisterProperty(Property<T> * prop)
 {
-    getPropertyCollection(prop)->unregisterProp(prop);
+    getPropertyCollection(prop)->unregisterProperty(prop);
 }
 

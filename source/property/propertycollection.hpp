@@ -14,8 +14,8 @@ public:
     PropertyCollection(std::regex regex, std::function<T(const std::string&)> converter);
     virtual ~PropertyCollection();
 
-    void registerProp(Property<T> * prop);
-    void unregisterProp(Property<T> * prop);
+    void registerProperty(Property<T> * prop);
+    void unregisterProperty(Property<T> * prop);
     bool update(const std::string & key, const std::string & svalue);
 
 private:
@@ -62,7 +62,7 @@ bool PropertyCollection<T>::update(const std::string & key, const std::string & 
 
 
 template <class T>
-void PropertyCollection<T>::registerProp(Property<T> * prop)
+void PropertyCollection<T>::registerProperty(Property<T> * prop)
 {
     m_properties.insert(std::pair<std::string, Property<T> *>(prop->name(), prop));
     auto iter = m_values.find(prop->name());
@@ -76,7 +76,7 @@ void PropertyCollection<T>::registerProp(Property<T> * prop)
 
 
 template <class T>
-void PropertyCollection<T>::unregisterProp(Property<T> * prop)
+void PropertyCollection<T>::unregisterProperty(Property<T> * prop)
 {
     auto iter = m_properties.find(prop->name());
     for (; iter != m_properties.end(); ++iter) {

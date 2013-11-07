@@ -19,7 +19,7 @@ static std::regex char_regex(R"(^\w$)");
 static std::regex string_regex(R"(^.*$)");
 static std::regex vec3_regex(R"(^([-+]?\d*\.?\d*), ?([-+]?\d*\.?\d*), ?([-+]?\d*\.?\d*)$)");
 
-glm::vec3 vec3converter(std::string s) {
+glm::vec3 vec3converter(const std::string &s) {
     std::smatch matches;
     std::regex_match(s, matches, vec3_regex);
     
@@ -97,7 +97,7 @@ PropertyManager * PropertyManager::getInstance()
 }
 
 
-void PropertyManager::clear()
+void PropertyManager::reset()
 {
     if (s_instance != nullptr) {
         delete s_instance;

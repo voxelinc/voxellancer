@@ -1,5 +1,6 @@
 #pragma once
 
+#include "property/propertymanager.h"
 
 template <class T> 
 class Property {
@@ -13,9 +14,9 @@ public:
     char * name();
     T get();
     void set(T value);
-    char * m_name;
 
 private:
+    char * m_name;
     T m_value;
 };
 
@@ -24,13 +25,13 @@ Property<T>::Property(char * name) :
     m_name(name),
     m_value()
 {
-    PropertyManager::getInstance()->registerProp(this);
+    PropertyManager::getInstance()->registerProperty(this);
 }
 
 template <class T>
 Property<T>::~Property()
 {
-    PropertyManager::getInstance()->unregisterProp(this);
+    PropertyManager::getInstance()->unregisterProperty(this);
 }
 
 template <class T>

@@ -24,7 +24,7 @@ public:
 BOOST_AUTO_TEST_SUITE(test_property)
 
 BOOST_AUTO_TEST_CASE(test_prop_after_load) {
-    PropertyManager::clear();
+    PropertyManager::reset();
     PropertyManager::getInstance()->load("test/property/test.ini");
     
     Property<int> iSize("player.size");
@@ -47,12 +47,12 @@ BOOST_AUTO_TEST_CASE(test_prop_after_load) {
     BOOST_CHECK_EQUAL(v3Prop.get().y, 0);
     BOOST_CHECK_EQUAL(v3Prop.get().z, .5);
 
-    PropertyManager::clear();
+    PropertyManager::reset();
 }
 
 BOOST_AUTO_TEST_CASE(test_prop_before_load) {
     glow::setVerbosityLevel(glow::LogMessage::Warning);
-    PropertyManager::clear();
+    PropertyManager::reset();
 
     Property<int> iSize("player.size");
     BOOST_CHECK_EQUAL(iSize.get(), 0);
@@ -73,12 +73,12 @@ BOOST_AUTO_TEST_CASE(test_prop_before_load) {
     BOOST_CHECK_EQUAL(cProp.get(), 'w');
     BOOST_CHECK_EQUAL(bProp2.get(), true);
 
-    PropertyManager::clear();
+    PropertyManager::reset();
     glow::setVerbosityLevel(glow::LogMessage::Debug);
 }
 
 BOOST_AUTO_TEST_CASE(test_prop_reload) {
-    PropertyManager::clear();
+    PropertyManager::reset();
 
     PropertyManager::getInstance()->load("test/property/test.ini");
     Property<std::string> sProp("player.name");
@@ -91,7 +91,7 @@ BOOST_AUTO_TEST_CASE(test_prop_reload) {
     BOOST_CHECK_EQUAL(sProp.get(), "hans meier");
     BOOST_CHECK_EQUAL(cProp.get(), 'x');
 
-    PropertyManager::clear();
+    PropertyManager::reset();
 }
 
 BOOST_AUTO_TEST_CASE(test_prop_callback) {
@@ -107,7 +107,7 @@ BOOST_AUTO_TEST_CASE(test_prop_callback) {
 
     BOOST_CHECK_EQUAL(listener.success, true);
 
-    PropertyManager::clear();
+    PropertyManager::reset();
 }
 
 

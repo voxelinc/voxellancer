@@ -96,7 +96,7 @@ find_package(GLM REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(GLFW REQUIRED)
 find_package(FMOD REQUIRED)
-find_package(BOOST_TEST REQUIRED)
+find_package(BOOST REQUIRED)
 
 
 set(GLOW_DIRECTORY glow)
@@ -203,7 +203,7 @@ include(CPack)
 
 include_directories(${SRC_DIR})
 
-if(BOOST_TEST_FOUND)
+if(BOOST_INCLUDE_DIR)
     message(STATUS "boost found, adding tests")
     add_subdirectory(test)
 else()
