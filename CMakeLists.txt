@@ -157,6 +157,7 @@ set(LIBS_TO_LINK
     ${FMOD_LIBRARY}
     glow
     glowutils
+	${LIBS_TO_LINK}
 )
 
 target_link_libraries(${target} 
