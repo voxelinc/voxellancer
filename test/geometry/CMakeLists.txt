@@ -4,6 +4,7 @@ add_executable(test_aabb
 	${SRC_FILES_EXCEPT_MAIN}
 )
 
+
 target_link_libraries(test_aabb
-    ${LIBS_TO_LINK}
+	${LIBS_TO_LINK}
 )

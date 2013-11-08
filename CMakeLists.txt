@@ -96,7 +96,7 @@ find_package(GLM REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(GLFW REQUIRED)
 find_package(FMOD REQUIRED)
-find_package(BOOST REQUIRED)
+find_package(BANDIT)
 
 
 
@@ -116,6 +116,7 @@ include_directories(
     ${GLFW_INCLUDE_DIR}
     ${GLM_INCLUDE_DIR}
     ${FMOD_INCLUDE_DIR}
+    ${BANDIT_INCLUDE_DIR}
 )
 
 
@@ -212,9 +213,9 @@ include(CPack)
 
 include_directories(${SOURCE_DIR})
 
-if(BOOST_INCLUDE_DIR)
-    message(STATUS "boost found, adding tests")
+if(BANDIT_INCLUDE_DIR)
+    message(STATUS "Bandit found, adding tests")
     add_subdirectory(test)
 else()
-    message(STATUS "boost not found, can't add tests")
+    message(STATUS "Bandit not found, can't add tests")
 endif()
