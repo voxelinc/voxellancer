@@ -12,7 +12,7 @@ using namespace bandit;
 go_bandit([](){
     describe("Voxelcluster", [](){
         before_each([&](){
-            
+
         });
 
         it("can add/remove voxel", [&]() {
@@ -25,8 +25,8 @@ go_bandit([](){
             AssertThat(cluster.voxelCount(), Equals(0));
         });
         it("can hash cvec3", [&]() {
-            std::hash<cvec3> hash;
-            
+            VoxelHash hash;
+
             AssertThat(hash(cvec3(1, 0, 0)), Equals(hash(cvec3(1, 0, 0))));
             AssertThat(hash(cvec3(1, 0, 0)), !Equals(hash(cvec3(2, 0, 0))));
             AssertThat(hash(cvec3(1, 0, 0)), !Equals(hash(cvec3(-1, 0, 0))));
@@ -43,7 +43,7 @@ go_bandit([](){
             cluster.addVoxel(Voxel(cvec3('a', 'b', 'c'), ucvec3(255, 128, 0)));
             cluster.addVoxel(Voxel(cvec3(3, 4, 5), ucvec3(128, 128, 0)));
             cluster.addVoxel(Voxel(cvec3(1, 5, 3), ucvec3(255, 128, 0)));
-            
+
             GLuint id1 = cluster.positionTexture()->id();
             GLuint id2 = cluster.colorTexture()->id();
 

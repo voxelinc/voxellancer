@@ -48,7 +48,9 @@ Game::~Game(){
 }
 
 void Game::reloadConfig(){
+#ifdef WIN32
 	PropertyManager::getInstance()->load("data/config.ini");
+#endif
 }
 
 void Game::initialize()
