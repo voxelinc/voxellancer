@@ -12,6 +12,7 @@
 #include "camera.h"
 #include "skybox.h"
 #include "cube.h"
+#include "clusterloader.h"
 
 class Game {
 

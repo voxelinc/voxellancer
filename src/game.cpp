@@ -67,6 +67,10 @@ void Game::initialize()
 
     glClearColor(0.2f, 0.3f, 0.4f, 1.f);
 	glow::debug("Game::initialize Done");
+
+
+	ClusterLoader *cl = new ClusterLoader();
+	cl->loadClusterFromFile("data/voxelcluster/frontleft2.csv", NULL);
 }
 
 void Game::update(float delta_sec)
