@@ -4,10 +4,8 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
-#include "cube.h"
 
-#include "glow/Array.h"
-#include "glow/VertexAttributeBinding.h"
+#include "cube.h"
 
 
 Cube::Cube() :
