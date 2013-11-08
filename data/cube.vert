@@ -19,7 +19,9 @@ void main()
 {
 	v_uv = a_vertex.xy;
 
-    vec3 offset = texelFetch(positionSampler, gl_InstanceID, 0).xyz * 256 - 128;
+    // map [0:1] to [-128:127]
+    vec3 offset = texelFetch(positionSampler, gl_InstanceID, 0).xyz * 255 - 128;
+    
     color = texelFetch(colorSampler, gl_InstanceID, 0).xyz;
         
 	gl_Position = viewProjection * model * (vec4(a_vertex + offset, 1.0));

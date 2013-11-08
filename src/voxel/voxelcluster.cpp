@@ -58,7 +58,7 @@ glow::Texture * Voxelcluster::colorTexture()
 void Voxelcluster::updateTextures()
 {
     int size = nextPowerOf2(m_voxel.size());
-    signed char * positionData = new signed char[size*3];
+    unsigned char * positionData = new unsigned char[size*3];
     unsigned char * colorData = new unsigned char[size*3];
 
     int i = 0;

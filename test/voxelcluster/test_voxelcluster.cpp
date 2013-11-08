@@ -26,7 +26,11 @@ go_bandit([](){
         });
         it("can hash cvec3", [&]() {
             VoxelHash hash;
-
+            AssertThat(hash(cvec3(0, 0, 0)), Equals(0));
+            AssertThat(hash(cvec3(1, 0, 0)), Equals(1));
+            AssertThat(hash(cvec3(0, 1, 0)), Equals(256));
+            AssertThat(hash(cvec3(0, 0, 1)), Equals(1 << 16));
+            AssertThat(hash(cvec3(127, 1, 1)), Equals((1 << 16) + 256 + 127));
             AssertThat(hash(cvec3(1, 0, 0)), Equals(hash(cvec3(1, 0, 0))));
             AssertThat(hash(cvec3(1, 0, 0)), !Equals(hash(cvec3(2, 0, 0))));
             AssertThat(hash(cvec3(1, 0, 0)), !Equals(hash(cvec3(-1, 0, 0))));

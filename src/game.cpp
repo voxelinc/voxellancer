@@ -40,6 +40,7 @@ Game::Game(GLFWwindow *window) :
     m_testCluster.addVoxel(Voxel(cvec3(1, 0, 0), ucvec3(255, 255, 0)));
     m_testCluster.addVoxel(Voxel(cvec3(0, 1, 0), ucvec3(0, 0, 255)));
     m_testCluster.addVoxel(Voxel(cvec3(0, 0, 1), ucvec3(255, 0, 0)));
+    m_testCluster.addVoxel(Voxel(cvec3(-1, 0, 0), ucvec3(255, 0, 128)));
 }
 
 Game::~Game(){
