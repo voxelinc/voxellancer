@@ -57,16 +57,16 @@ go_bandit([](){
             AssertThat(!a.contains(e), Equals(true));
             AssertThat(a.contains(d), Equals(true));
 
-            a.move(XAxis, 0.1);
+    a.move(XAxis, 0.1f);
             AssertThat(!(a.contains(b) && b.contains(a)), Equals(true));
 
             d.move(glm::vec3(0.2, 0.4, 0.1));
             AssertThat(a.contains(d), Equals(true));
 
-            d.move(XAxis, 0.7);
+    d.move(XAxis, 0.7f);
             AssertThat(!a.contains(d), Equals(true));
 
-            a.move(XAxis, 0.3);
+    a.move(XAxis, 0.3f);
             AssertThat(a.contains(d), Equals(true));
         });
 

@@ -36,6 +36,8 @@ go_bandit([]() {
             AssertThat(node->subnodes().size(), Equals(8));
             AssertThat(c->containingNode(), Equals(node));
             AssertThat(node->aabb().extent(XAxis), EqualsWithDelta(oldWidth*4, 0.5f));
+
+            delete a, b, c;
         });
 
         it("can detect geodes in an AABB", [&]() {
@@ -72,6 +74,8 @@ go_bandit([]() {
 
             std::set<WorldtreeGeode*> q3 = node->geodesInAABB(AABB(glm::vec3(-45, 2, 4), glm::vec3(55, 25, 40)));
             AssertThat(q3.size(), Equals(3));
+
+            delete e1, e2, a, b, c;
         });
 
         it("moves geodes correctly within the tree on aabb change", [&]() {
@@ -106,6 +110,8 @@ go_bandit([]() {
             std::set<WorldtreeGeode*> q3 = node->geodesInAABB(AABB(glm::vec3(55, 25, 29), glm::vec3(56, 26, 36)));
             AssertThat(q3.size(), Equals(0));
             AssertThat(q3.find(a) == q3.end(), Equals(true));
+
+            delete e1, e2, a;
         });
     });
 });
@@ -114,3 +120,5 @@ go_bandit([]() {
 int main(int argc, char *argv[]) {
   return bandit::run(argc, argv);
 }
+
+
