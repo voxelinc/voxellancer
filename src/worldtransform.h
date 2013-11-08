@@ -6,11 +6,11 @@
 
 /* General Object in our 3D world with position and orientation
 */
-class WorldObject {
+class WorldTransform {
 
 public:
-	WorldObject();
-	virtual ~WorldObject();
+	WorldTransform();
+	virtual ~WorldTransform();
 
 	void move(glm::vec3 dist);
 	void moveTo(glm::vec3 pos);

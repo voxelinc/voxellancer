@@ -5,45 +5,50 @@
 
 #include "axis.h"
 
-class AABB
+template<typename T>
+class TAABB
 {
 public:
-    AABB();
-    AABB(const glm::vec3 &llf, const glm::vec3 &rub);
-    virtual ~AABB();
+    TAABB();
+    TAABB(const glm::detail::tvec3<T> &llf, const glm::detail::tvec3<T> &rub);
+    virtual ~TAABB();
 
-    const glm::vec3 &llf() const;
-    void setLlf(const glm::vec3 &llf);
+    const glm::detail::tvec3<T> &llf() const;
+    void setLlf(const glm::detail::tvec3<T> &llf);
 
-    const glm::vec3 &rub() const;
-    void setRub(const glm::vec3 &rub);
+    const glm::detail::tvec3<T> &rub() const;
+    void setRub(const glm::detail::tvec3<T> &rub);
 
-    float axisMin(Axis axis) const;
-    float axisMax(Axis axis) const;
+    T axisMin(Axis axis) const;
+    T axisMax(Axis axis) const;
 
-    float extent(Axis axis) const;
+    T extent(Axis axis) const;
 
-    AABB moved(Axis axis, float delta) const;
-    AABB moved(const glm::vec3 &delta) const;
+    TAABB<T> moved(Axis axis, T delta) const;
+    TAABB<T> moved(const glm::detail::tvec3<T> &delta) const;
 
-    void move(Axis axis, float delta);
-    void move(const glm::vec3 &delta);
+    void move(Axis axis, T delta);
+    void move(const glm::detail::tvec3<T> &delta);
 
-    void expand(Axis axis, float delta);
-    AABB expanded(Axis axis, float delta) const;
+    void expand(Axis axis, T delta);
+    TAABB<T> expanded(Axis axis, T delta) const;
 
-    bool intersects(const AABB &other) const;
-    bool contains(const AABB &other) const;
+    bool intersects(const TAABB<T> &other) const;
+    bool contains(const TAABB<T> &other) const;
 
-    AABB united(const AABB &other) const ;
-    void unite(const AABB &other);
+    TAABB<T> united(const TAABB<T> &other) const ;
+    void unite(const TAABB<T> &other);
 
-    std::list<AABB> split(Axis axis) const;
-    void split(AABB &a, AABB &b, Axis axis) const;
-    std::list<AABB> recursiveSplit(int recursions, Axis axis) const;
+    std::list<TAABB<T>> split(Axis axis) const;
+    void split(TAABB<T> &a, TAABB<T> &b, Axis axis) const;
+    std::list<TAABB<T>> recursiveSplit(int recursions, Axis axis) const;
 
 
 protected:
-    glm::vec3 m_llf, m_rub;
+    glm::detail::tvec3<T> m_llf, m_rub;
 };
 
+typedef TAABB<glm::mediump_float> AABB;
+typedef TAABB<int> IAABB;
+
+#include "aabb.inc"
