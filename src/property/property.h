@@ -5,6 +5,7 @@ class Property {
 
 public:
     Property(char * name);
+    Property(char * name, T defaultValue);
     virtual ~Property();
 
     operator T();

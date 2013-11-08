@@ -1,8 +1,6 @@
 cmake_minimum_required(VERSION 2.8.9 FATAL_ERROR)
 
-
 # PROJECT DESCRIPTION
-
 set(META_PROJECT_NAME "voxellancer")
 set(META_VERSION_MAJOR "0")
 set(META_VERSION_MINOR "1")
@@ -13,7 +11,6 @@ set(META_AUTHOR_DOMAIN "https://github.com/voxelinc/voxellancer/")
 
 
 # OPTIONS
-
 option(OPTION_LIMIT_CONFIGS "Generate limited configs (Release; Debug)" ON)
 option(OPTION_LOCAL_INSTALL "Install to a local directory instead of the system" OFF)
 option(OPTION_ERRORS_AS_EXCEPTION "Throw exceptions" OFF)
@@ -79,7 +76,6 @@ else()
 endif()
 
 # GET REPOSITORY VERSION
-
 # Add a revision file containing the git-head tag for cpack and install
 include(GetGitRevisionDescription)
 get_git_head_revision(GIT_REFSPEC GIT_SHA1)
@@ -88,8 +84,8 @@ get_git_head_revision(GIT_REFSPEC GIT_SHA1)
 string(SUBSTRING ${GIT_SHA1} 0 12 GIT_REV)
 file(WRITE ${CMAKE_BINARY_DIR}/revision ${GIT_REV})
 
-# DEPENDENCIES
 
+# DEPENDENCIES
 # Find externals
 find_package(OpenGL REQUIRED)
 find_package(GLM REQUIRED)
@@ -97,12 +93,6 @@ find_package(GLEW REQUIRED)
 find_package(GLFW REQUIRED)
 find_package(FMOD REQUIRED)
 find_package(BANDIT)
-
-
-
-
-
-
 
 set(GLOW_DIRECTORY glow)
 include_directories(${LIB_DIR}/${GLOW_DIRECTORY}/include)
@@ -120,11 +110,10 @@ include_directories(
 )
 
 
-
+# Compile voxellancer
 set(target voxellancer)
 
 message(STATUS "${target}")
-
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
@@ -169,12 +158,8 @@ set(LIBS_TO_LINK
     ${FMOD_LIBRARY}
     glow
     glowutils
+	${LIBS_TO_LINK}
 )
-
-
-if(UNIX)
-       set(LIBS_TO_LINK ${LIBS_TO_LINK} pthread Xxf86vm X11 Xrandr Xi )        
-endif()
 
 target_link_libraries(${target}
     ${LIBS_TO_LINK}

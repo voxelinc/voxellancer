@@ -15,12 +15,13 @@ std::set<WorldtreeGeode*> Worldtree::geodesInAABB(const AABB &aabb) const {
 }
 
 std::set<WorldtreeGeode*> Worldtree::geodesInAABB(const AABB &aabb, WorldtreeNode *nodeHint) const {
-    if(nodeHint == nullptr || nodeHint->aabb().contains(aabb)) {
+    if(nodeHint == nullptr ) {
         return geodesInAABB(aabb);
     }
-    else {
-        return geodesInAABB(aabb, nodeHint->parent());
+    if (nodeHint->aabb().contains(aabb)) {
+        return nodeHint->geodesInAABB(aabb);
     }
+    return geodesInAABB(aabb, nodeHint->parent());
 }
 
 void Worldtree::aabbChanged(WorldtreeGeode *geode) {

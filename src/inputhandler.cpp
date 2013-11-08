@@ -7,9 +7,8 @@
 InputHandler::InputHandler(GLFWwindow *window, Camera *camera) :
 	m_window(window),
 	m_camera(camera),
-	// Config-File currently managed by game
-	m_angle_translate(0.2f /*"input.angle_translate"*/),
-	m_move_translate(0.5f /*"input.move_translate"*/)
+	m_angle_translate("input.angle_translate", 0.15f),
+	m_move_translate("input.move_translate", 0.5f)
 {
 
 	glfwGetWindowSize(m_window, &m_windowWidth, &m_windowHeight);

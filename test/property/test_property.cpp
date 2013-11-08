@@ -26,6 +26,7 @@ go_bandit([](){
         before_each([&](){
             PropertyManager::reset();
         });
+
         it("should load", [&]() {
             PropertyManager::getInstance()->load("test/property/test.ini");
     
