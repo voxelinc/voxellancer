@@ -37,7 +37,7 @@ go_bandit([](){
             a.move(XAxis, 1);
             AssertThat(!(a.intersects(b) && b.intersects(a)), Equals(true));
 
-            b.move(XAxis, 0.2);
+            b.move(XAxis, 0.2f);
             AssertThat(a.intersects(b) && b.intersects(a), Equals(true));
 
             a.move(glm::vec3(-1.5, -0.8, -0.8));
@@ -57,16 +57,16 @@ go_bandit([](){
             AssertThat(!a.contains(e), Equals(true));
             AssertThat(a.contains(d), Equals(true));
 
-    a.move(XAxis, 0.1f);
+            a.move(XAxis, 0.1f);
             AssertThat(!(a.contains(b) && b.contains(a)), Equals(true));
 
             d.move(glm::vec3(0.2, 0.4, 0.1));
             AssertThat(a.contains(d), Equals(true));
 
-    d.move(XAxis, 0.7f);
+            d.move(XAxis, 0.7f);
             AssertThat(!a.contains(d), Equals(true));
 
-    a.move(XAxis, 0.3f);
+            a.move(XAxis, 0.3f);
             AssertThat(a.contains(d), Equals(true));
         });
 
@@ -92,7 +92,7 @@ go_bandit([](){
 
         });
 
-        it("recusriveSplits", [&]() {
+        it("recursiveSplits", [&]() {
             AABB a(glm::vec3(2, 3, 5), glm::vec3(10, 67, 37));
 
             std::list<AABB> splitted = a.recursiveSplit(2, XAxis);

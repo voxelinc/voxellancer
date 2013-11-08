@@ -1,12 +1,13 @@
-#define BOOST_TEST_MODULE test_property
+#include <bandit/bandit.h>
 
-#include <boost/test/included/unit_test.hpp>
 
 #include <glm/glm.hpp>
 #include <glow/ChangeListener.h>
 #include <glow/logging.h>
 
 #include "property/propertymanager.h"
+
+using namespace bandit;
 
 
 class Listener : public glow::ChangeListener {
@@ -17,100 +18,91 @@ public:
     virtual void notifyChanged() {
         success = true;
     }
-
 };
 
 
-BOOST_AUTO_TEST_SUITE(test_property)
-
-BOOST_AUTO_TEST_CASE(test_prop_after_load) {
-    PropertyManager::reset();
-    PropertyManager::getInstance()->load("test/property/test.ini");
+go_bandit([](){
+    describe("Property", [](){
+        before_each([&](){
+            PropertyManager::reset();
+        });
+        it("should load", [&]() {
+            PropertyManager::getInstance()->load("test/property/test.ini");
     
-    Property<int> iSize("player.size");
-    Property<float> fProp("player.size");
-    Property<float> fProp2("player.height");
-    Property<std::string> sProp1("player.name");
-    Property<std::string> sProp2("section.name");
-    Property<char> cProp("section.forward");
-    Property<bool> bProp2("player.is_true");
-    Property<glm::vec3> v3Prop("player.pos");
+            Property<int> iSize("player.size");
+            Property<float> fProp("player.size");
+            Property<float> fProp2("player.height");
+            Property<std::string> sProp1("player.name");
+            Property<std::string> sProp2("section.name");
+            Property<char> cProp("section.forward");
+            Property<bool> bProp2("player.is_true");
+            Property<glm::vec3> v3Prop("player.pos");
     
-    BOOST_CHECK_EQUAL(iSize.get(), 1);
-    BOOST_CHECK_EQUAL(fProp.get(), 1);
-    BOOST_CHECK_CLOSE_FRACTION(fProp2.get(), 4.51, 0.01);
-    BOOST_CHECK_EQUAL(sProp1.get(), "hans");
-    BOOST_CHECK_EQUAL(sProp2.get(), "peter");
-    BOOST_CHECK_EQUAL(cProp.get(), 'w');
-    BOOST_CHECK_EQUAL(bProp2.get(), true);
-    BOOST_CHECK_EQUAL(v3Prop.get().x, 1.0);
-    BOOST_CHECK_EQUAL(v3Prop.get().y, 0);
-    BOOST_CHECK_EQUAL(v3Prop.get().z, .5);
+            AssertThat(iSize.get(), Equals(1));
+            AssertThat(fProp.get(), Equals(1));
+            AssertThat(fProp2.get(), EqualsWithDelta(4.51, 0.01));
+            AssertThat(sProp1.get(), Equals("hans"));
+            AssertThat(sProp2.get(), Equals("peter"));
+            AssertThat(cProp.get(), Equals('w'));
+            AssertThat(bProp2.get(), Equals(true));
+            AssertThat(v3Prop.get().x, Equals(1.0));
+            AssertThat(v3Prop.get().y, Equals(0));
+            AssertThat(v3Prop.get().z, Equals(.5));
+        });
 
-    PropertyManager::reset();
+        it("should work before load", [&]() {
+            // suppress property not found debug info
+            glow::setVerbosityLevel(glow::LogMessage::Warning);
+
+            Property<int> iSize("player.size");
+            AssertThat(iSize.get(), Equals(0));
+            Property<float> fProp("player.size");
+            Property<float> fProp2("player.height");
+            Property<std::string> sProp1("player.name");
+            Property<std::string> sProp2("section.name");
+            Property<char> cProp("section.forward");
+            Property<bool> bProp2("player.is_true");
+
+            PropertyManager::getInstance()->load("test/property/test.ini");
+
+            AssertThat(iSize.get(), Equals(1));
+            AssertThat(fProp.get(), Equals(1));
+            AssertThat(fProp2.get(), EqualsWithDelta(4.51, 0.01));
+            AssertThat(sProp1.get(), Equals("hans"));
+            AssertThat(sProp2.get(), Equals("peter"));
+            AssertThat(cProp.get(), Equals('w'));
+            AssertThat(bProp2.get(), Equals(true));
+
+            glow::setVerbosityLevel(glow::LogMessage::Debug);
+        });
+
+        it("should reload", [&]() {
+            PropertyManager::getInstance()->load("test/property/test.ini");
+            Property<std::string> sProp("player.name");
+            Property<char> cProp("section.forward");
+
+            AssertThat(sProp.get(), Equals("hans"));
+            AssertThat(cProp.get(), Equals('w'));
+
+            PropertyManager::getInstance()->load("test/property/test2.ini");
+            AssertThat(sProp.get(), Equals("hans meier"));
+            AssertThat(cProp.get(), Equals('x'));
+        });
+
+        it("should call a callback", [&]() {
+            PropertyManager::getInstance()->load("test/property/test.ini");
+
+            Listener listener;
+            PropertyManager::getInstance()->registerListener(&listener);
+            AssertThat(listener.success, Equals(false));
+            PropertyManager::getInstance()->load("test/property/test.ini");
+            AssertThat(listener.success, Equals(true));
+
+        });
+    });
+});
+
+int main(int argc, char *argv[]) {
+    return bandit::run(argc, argv);
 }
 
-BOOST_AUTO_TEST_CASE(test_prop_before_load) {
-    glow::setVerbosityLevel(glow::LogMessage::Warning);
-    PropertyManager::reset();
-
-    Property<int> iSize("player.size");
-    BOOST_CHECK_EQUAL(iSize.get(), 0);
-    Property<float> fProp("player.size");
-    Property<float> fProp2("player.height");
-    Property<std::string> sProp1("player.name");
-    Property<std::string> sProp2("section.name");
-    Property<char> cProp("section.forward");
-    Property<bool> bProp2("player.is_true");
-
-    PropertyManager::getInstance()->load("test/property/test.ini");
-
-    BOOST_CHECK_EQUAL(iSize.get(), 1);
-    BOOST_CHECK_EQUAL(fProp.get(), 1);
-    BOOST_CHECK_CLOSE_FRACTION(fProp2.get(), 4.51, 0.01);
-    BOOST_CHECK_EQUAL(sProp1.get(), "hans");
-    BOOST_CHECK_EQUAL(sProp2.get(), "peter");
-    BOOST_CHECK_EQUAL(cProp.get(), 'w');
-    BOOST_CHECK_EQUAL(bProp2.get(), true);
-
-    PropertyManager::reset();
-    glow::setVerbosityLevel(glow::LogMessage::Debug);
-}
-
-BOOST_AUTO_TEST_CASE(test_prop_reload) {
-    PropertyManager::reset();
-
-    PropertyManager::getInstance()->load("test/property/test.ini");
-    Property<std::string> sProp("player.name");
-    Property<char> cProp("section.forward");
-
-    BOOST_CHECK_EQUAL(sProp.get(), "hans");
-    BOOST_CHECK_EQUAL(cProp.get(), 'w');
-
-    PropertyManager::getInstance()->load("test/property/test2.ini");
-    BOOST_CHECK_EQUAL(sProp.get(), "hans meier");
-    BOOST_CHECK_EQUAL(cProp.get(), 'x');
-
-    PropertyManager::reset();
-}
-
-BOOST_AUTO_TEST_CASE(test_prop_callback) {
-    
-    PropertyManager::getInstance()->load("test/property/test.ini");
-
-    Listener listener;
-    PropertyManager::getInstance()->registerListener(&listener);
-    
-    BOOST_CHECK_EQUAL(listener.success, false);
-
-    PropertyManager::getInstance()->load("test/property/test.ini");
-
-    BOOST_CHECK_EQUAL(listener.success, true);
-
-    PropertyManager::reset();
-}
-
-
-
-
-BOOST_AUTO_TEST_SUITE_END()
