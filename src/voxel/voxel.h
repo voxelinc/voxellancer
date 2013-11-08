@@ -5,15 +5,12 @@
 typedef glm::detail::tvec3<signed char> cvec3;
 typedef glm::detail::tvec3<unsigned char> ucvec3;
 
-namespace std {
-    template <>
-    struct hash<cvec3>
-    {
-        std::size_t operator()(const cvec3& v) {
-            return v.x + (v.y << 8) + (v.z << 16);
-        }
-    };
-}
+struct VoxelHash
+{
+    std::size_t operator()(const cvec3& v) const {
+        return v.x + (v.y << 8) + (v.z << 16);
+    }
+};
 
 class Voxel
 {

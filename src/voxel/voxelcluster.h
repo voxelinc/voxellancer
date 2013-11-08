@@ -27,7 +27,7 @@ protected:
     void updateTextures();
 
     AABB m_aabb;
-    std::unordered_map<cvec3, Voxel> m_voxel;
+    std::unordered_map<cvec3, Voxel, VoxelHash> m_voxel;
     bool m_texturesDirty;
 
     glow::ref_ptr<glow::Texture> m_positionTexture;

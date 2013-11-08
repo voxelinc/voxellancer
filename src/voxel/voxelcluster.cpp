@@ -1,7 +1,7 @@
 #include "voxelcluster.h"
 
-#include "glowutils\MathMacros.h"
-#include "glow\DebugMessageOutput.h"
+#include "glowutils/MathMacros.h"
+#include "glow/DebugMessageOutput.h"
 
 Voxelcluster::Voxelcluster():
     WorldObject(),
@@ -60,7 +60,7 @@ void Voxelcluster::updateTextures()
     int size = nextPowerOf2(m_voxel.size());
     signed char * positionData = new signed char[size*3];
     unsigned char * colorData = new unsigned char[size*3];
-    
+
     int i = 0;
     for (auto pair: m_voxel)
     {
@@ -79,7 +79,7 @@ void Voxelcluster::updateTextures()
     CheckGLError();
 
     delete[] colorData;
-    delete[] positionData; 
+    delete[] positionData;
 
     m_texturesDirty = false;
 }
