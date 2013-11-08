@@ -4,10 +4,13 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
-#include "cube.h"
 
 #include "glow/Array.h"
 #include "glow/VertexAttributeBinding.h"
+
+#include "cube.h"
+#include "voxelcluster.h"
+#include "camera.h"
 
 
 Cube::Cube() :
@@ -16,40 +19,38 @@ m_shaderProgram(0),
 m_vertexArrayObject(0),
 m_vertexBuffer(0)
 {
-	m_model_matrix = glm::translate(glm::vec3(0.0, 0.0, 0.0f)) * glm::scale(glm::vec3(0.08f));
 	createAndSetupShaders();
 	createAndSetupGeometry();
 
 }
 
-const glm::vec4 Cube::center()
+
+void Cube::prepareDraw(Camera * camera)
 {
-	return m_model_matrix * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+    m_shaderProgram->setUniform("projection", camera->projection());
+    m_shaderProgram->setUniform("view", camera->view());
+    m_shaderProgram->setUniform("viewProjection", camera->viewProjection());
+
+    m_shaderProgram->use();
 }
 
-void Cube::update(float delta_sec)
-{
-    glm::vec3 c = glm::vec3(center());
-    m_model_matrix = glm::translate(c) * glm::rotate(delta_sec * 90, glm::vec3(0.0f,1.0f,1.0f)) * glm::translate(-c) * m_model_matrix;
 
-    m_shaderProgram->setUniform("modelView", m_model_matrix);
+void Cube::draw(Voxelcluster * cluster)
+{
+    m_shaderProgram->setUniform("model", cluster->matrix());
+    glActiveTexture(GL_TEXTURE0);
+    cluster->positionTexture()->bind();
+    glActiveTexture(GL_TEXTURE1);
+    cluster->colorTexture()->bind();
+    
+	m_vertexArrayObject->drawArraysInstanced(GL_TRIANGLES, 0, 36, cluster->voxelCount());
 }
 
-void Cube::draw()
+
+void Cube::afterDraw()
 {
-	m_shaderProgram->use();
-	m_vertexArrayObject->drawArraysInstanced(GL_TRIANGLES, 0, 36, 1000);
-	m_shaderProgram->release();
-
-}
-
-void Cube::drawtest(glm::mat4 projection)
-{
-	m_shaderProgram->setUniform("projection", projection);
-	m_shaderProgram->use();
-	m_vertexArrayObject->drawArraysInstanced(GL_TRIANGLES, 0, 36, 1000);
-	m_shaderProgram->release();
-
+    glActiveTexture(GL_TEXTURE0);
+    m_shaderProgram->release();
 }
 
 
@@ -62,8 +63,9 @@ void Cube::createAndSetupShaders()
     m_shaderProgram->attach(vertexShader, fragmentShader);
     m_shaderProgram->bindFragDataLocation(0, "fragColor");
 
-    m_shaderProgram->setUniform("modelView", m_model_matrix);
-    m_shaderProgram->setUniform("projection", glm::perspective(60.f, 16.f/9.f, 0.1f, 1000.0f)); // move to camera
+    m_shaderProgram->getUniform<GLint>("positionSampler")->set(0);
+    m_shaderProgram->getUniform<GLint>("colorSampler")->set(1);
+
 }
 
 glow::Array<glm::vec3> strip()

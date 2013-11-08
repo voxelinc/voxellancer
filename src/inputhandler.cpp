@@ -28,9 +28,10 @@ void InputHandler::resizeEvent(
 	, const unsigned int height)
 {
 	//glfwGetWindowSize(m_window, &m_windowWidth, &m_windowHeight);
-	m_windowWidth = width;
-	m_windowHeight = height;
-	m_camera->setViewport(glm::ivec2(m_windowWidth, m_windowHeight));
+    m_windowWidth = width;
+    m_windowHeight = height;
+    m_camera->setViewport(glm::ivec2(m_windowWidth, m_windowHeight));
+    
 }
 
 void InputHandler::update(float delta_sec){

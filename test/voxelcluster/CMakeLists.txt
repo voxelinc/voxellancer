@@ -1,19 +1,6 @@
-include_directories(
-    ${BANDIT_INCLUDE_DIR}
-)
 
-add_subdirectory(geometry)
-add_subdirectory(worldtree)
-add_subdirectory(property)
-add_subdirectory(voxelcluster)
-
-
-set(TEST_TARGET test_all)
-file(GLOB_RECURSE TEST_FILES
-    "*.cpp"
-)
-
-add_definitions(-DTEST_ALL)
+set(TEST_TARGET test_voxelcluster)
+set(TEST_FILES test_voxelcluster.cpp)
 
 source_group("Tests" FILES ${TEST_FILES})
 
@@ -23,7 +10,7 @@ add_executable(${TEST_TARGET}
 )
 
 target_link_libraries(${TEST_TARGET}
-	${LIBS_TO_LINK}
+    ${LIBS_TO_LINK}
 )
 
 set_target_properties(${TEST_TARGET}

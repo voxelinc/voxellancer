@@ -1,6 +1,6 @@
 #pragma once
 
-#include "voxelcluster.h"
+#include "voxel/voxelcluster.h"
 #include "geometry/aabb.h"
 
 class WorldtreeNode;
