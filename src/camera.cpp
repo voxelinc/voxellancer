@@ -3,7 +3,7 @@
 #include <glm/gtx/transform.hpp>
 
 
-Camera::Camera(): 
+Camera::Camera():
 	m_fovy(40.f),
 	m_aspect(1.f),
 	m_zNear(0.1f),

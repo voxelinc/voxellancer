@@ -4,8 +4,10 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
-
 #include "cube.h"
+
+#include "glow/Array.h"
+#include "glow/VertexAttributeBinding.h"
 
 
 Cube::Cube() :
@@ -55,7 +57,7 @@ void Cube::createAndSetupShaders()
 {
     glow::Shader * vertexShader = glow::Shader::fromFile(GL_VERTEX_SHADER, "data/cube.vert");
     glow::Shader * fragmentShader = glow::Shader::fromFile(GL_FRAGMENT_SHADER, "data/cube.frag");
-    
+
     m_shaderProgram = new glow::Program();
     m_shaderProgram->attach(vertexShader, fragmentShader);
     m_shaderProgram->bindFragDataLocation(0, "fragColor");
@@ -77,7 +79,7 @@ glow::Array<glm::vec3> strip()
         glm::vec3( .5f, .5f,-.5f),
         glm::vec3(-.5f, .5f,-.5f)
     };
-     
+
     glm::vec3 normals[6]
     {
         glm::vec3(-1, 0, 0),
@@ -95,7 +97,7 @@ glow::Array<glm::vec3> strip()
         , vertices[1], normals[5]
         , vertices[2], normals[5]
         , vertices[0], normals[5]
-        , vertices[2], normals[5] 
+        , vertices[2], normals[5]
         , vertices[3], normals[5]
 
         , vertices[4], normals[4] //back
@@ -141,7 +143,7 @@ void Cube::createAndSetupGeometry()
 
     m_vertexBuffer = new glow::Buffer(GL_ARRAY_BUFFER);
     m_vertexBuffer->setData(strip());
-    
+
     auto binding0 = m_vertexArrayObject->binding(0);
     auto a_vertex = m_shaderProgram->getAttributeLocation("a_vertex");
 
@@ -156,5 +158,5 @@ void Cube::createAndSetupGeometry()
     binding1->setBuffer(m_vertexBuffer, 0, sizeof(glm::vec3) * 2);
     binding1->setFormat(3, GL_FLOAT, GL_TRUE, sizeof(glm::vec3));
     m_vertexArrayObject->enable(a_normal);
-    
+
 }
