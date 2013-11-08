@@ -42,8 +42,10 @@ static void errorCallback(int error, const char* description)
 
 static void resizeCallback(GLFWwindow* window, int width, int height)
 {
-    glViewport(0, 0, width, height);
-    game->m_inputHandler->resizeEvent(width, height);
+    if (width > 0 && height > 0) {
+        glViewport(0, 0, width, height);
+        game->m_inputHandler->resizeEvent(width, height);
+    }
 }
 
 static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)

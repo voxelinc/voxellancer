@@ -8,10 +8,10 @@
 
 #include <GLFW/glfw3.h>
 
+#include "voxel/cube.h"
 #include "inputhandler.h"
 #include "camera.h"
 #include "skybox.h"
-#include "cube.h"
 #include "clusterloader.h"
 
 class Game {
@@ -37,5 +37,6 @@ private:
 	Camera m_camera;
 	Skybox m_skybox;
     Cube *m_cube;
+    Voxelcluster m_testCluster;
 
 };

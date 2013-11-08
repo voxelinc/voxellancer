@@ -26,14 +26,16 @@ using namespace std;
 
 
 
-Game::Game(GLFWwindow *window):
-	m_window(window),
-	m_camera(),
-	m_inputHandler(0),
-    m_cube(0)
+Game::Game(GLFWwindow *window) :
+    m_window(window),
+    m_camera(),
+    m_inputHandler(0),
+    m_cube(0),
+    m_testCluster()
 {
 	reloadConfig();
 	m_inputHandler = new InputHandler(window, &m_camera);
+    m_testCluster.moveTo(glm::vec3(-3, -3, -15));
 }
 
 Game::~Game(){
@@ -60,23 +62,19 @@ void Game::initialize()
 	glow::debug("Setup Camera");
 	//viewport set in resize
 	m_camera.moveTo(glm::vec3(0, 0, 1));
-	m_camera.rotateTo(glm::angleAxis(180.0f, glm::vec3(0, 1, 0)));
 	m_camera.setZNear(0.1f);
 	m_camera.setZFar(99999);
 
 
     glClearColor(0.2f, 0.3f, 0.4f, 1.f);
 	glow::debug("Game::initialize Done");
-
-
 	ClusterLoader *cl = new ClusterLoader();
-	cl->loadClusterFromFile("data/voxelcluster/frontleft2.csv", NULL);
+	cl->loadClusterFromFile("data/voxelcluster/basicship.csv", &m_testCluster);
 }
 
 void Game::update(float delta_sec)
 {
 	m_inputHandler->update(delta_sec);
-	m_cube->update(delta_sec);
 
 }
 
@@ -89,7 +87,9 @@ void Game::draw()
 
 	m_skybox.draw(&m_camera);
 
-    m_cube->drawtest(m_camera.projection() * m_camera.view());
+    m_cube->prepareDraw(&m_camera);
+    m_cube->draw(&m_testCluster);
+    m_cube->afterDraw();
 
 	/* Added as hd7000 fix
 	* @xchrdw: why? where to put?
