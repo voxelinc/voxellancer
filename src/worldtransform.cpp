@@ -1,6 +1,4 @@
-
-
-#include "worldobject.h"
+#include "worldtransform.h"
 
 WorldTransform::WorldTransform() :
     m_position(0,0,0),

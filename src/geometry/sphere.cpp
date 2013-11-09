@@ -2,7 +2,7 @@
 
 Sphere::Sphere():
     m_position(0.0f, 0.0f, 0.0f),
-    m_radius(0)
+    m_radius(0.0f)
 {
 
 }
@@ -22,7 +22,7 @@ float Sphere::radius() const {
     return m_radius;
 }
 
-void Sphere::setRadius(float radius) const {
+void Sphere::setRadius(float radius) {
     m_radius = radius;
 }
 
@@ -30,7 +30,7 @@ const glm::vec3 &Sphere::position() const {
     return m_position;
 }
 
-void Sphere::setPosition(const glm::vec3 &position) const {
+void Sphere::setPosition(const glm::vec3 &position) {
     m_position = position;
 }
 

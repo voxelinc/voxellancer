@@ -11,16 +11,17 @@ public:
     virtual ~Sphere();
 
     float radius() const;
-    void setRadius(float radius) const;
+    void setRadius(float radius);
 
     const glm::vec3 &position() const;
-    void setPosition(const glm::vec3 &position) const;
+    void setPosition(const glm::vec3 &position);
 
     bool intersects(const Sphere &other) const;
     bool contains(const Sphere &other) const;
 
 
 protected:
-    const glm::vec3 &m_position;
+    glm::vec3 m_position;
     float m_radius;
-}
+};
+

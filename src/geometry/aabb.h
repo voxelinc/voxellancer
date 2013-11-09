@@ -35,6 +35,7 @@ public:
 
     bool intersects(const TAABB<T> &other) const;
     bool contains(const TAABB<T> &other) const;
+    bool contains(const glm::detail::tvec3<T> &vec) const;
 
     TAABB<T> united(const TAABB<T> &other) const ;
     void unite(const TAABB<T> &other);

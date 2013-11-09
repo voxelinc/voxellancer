@@ -1,9 +1,15 @@
 #pragma once
 
+#include <vector>
+
 #include <glm/glm.hpp>
 
 #include <geometry/commontransform.h>
 #include <geometry/sphere.h>
+
+#include <voxel/voxel.h>
+#include <voxel/voxelcluster.h>
+
 
 class VoxeltreeNode
 {
@@ -11,18 +17,19 @@ public:
     VoxeltreeNode(Voxelcluster &voxelcluster, const IAABB &gridAABB);
     virtual ~VoxeltreeNode();
 
-    bool isAtomic();
+    bool isAtomic() const;
+    bool isLeaf() const;
 
-    std::list<VoxeltreeNode*> &subnodes();
-    const std::list<VoxeltreeNode*> &subnodes() const;
+    std::vector<VoxeltreeNode*> &subnodes();
+    const std::vector<VoxeltreeNode*> &subnodes() const;
 
     Voxel *voxel();
     const Voxel *voxel() const;
 
+    const IAABB &gridAABB() const;
+
     void insert(Voxel *voxel);
     void remove(const glm::ivec3 &cell);
-
-
 
 
 protected:
