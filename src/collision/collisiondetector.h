@@ -2,17 +2,27 @@
 
 #include <list>
 
+#include "collision.h"
+
+#include "voxel/voxelcluster.h"
+
+#include "worldtree/worldtree.h"
+
 
 class CollisionDetector
 {
 public:
-    CollisionDetector(Worldtree &worldtree);
+    CollisionDetector(Worldtree &worldtree, Voxelcluster &voxelcluster);
     virtual ~CollisionDetector();
 
-    std::list<Collision> checkCollisions(Voxelcluster *voxelcluster);
+    const std::list<Collision> &checkCollisions();
 
 
 protected:
-    Worldtree &m_worldtree
+    Worldtree &m_worldtree;
+    Voxelcluster &m_voxelcluster;
+    std::list<Collision> m_collisions;
+
+    void checkCollisions(VoxeltreeNode* nodeA, VoxeltreeNode* nodeB);
 };
 

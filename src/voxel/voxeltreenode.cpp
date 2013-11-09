@@ -1,7 +1,12 @@
 #include "voxeltreenode.h"
+
 #include <cassert>
 
-VoxeltreeNode::VoxeltreeNode(Voxelcluster &voxelcluster, const IAABB &gridAABB):
+#include "voxel/voxelcluster.h"
+
+
+VoxeltreeNode::VoxeltreeNode(VoxeltreeNode *parent, Voxelcluster &voxelcluster, const IAABB &gridAABB):
+    m_parent(parent),
     m_voxelcluster(voxelcluster),
     m_gridAABB(gridAABB),
     m_voxel(nullptr)
@@ -44,7 +49,21 @@ const IAABB &VoxeltreeNode::gridAABB() const {
     return m_gridAABB;
 }
 
+const Sphere &VoxeltreeNode::boundingSphere() {
+    if(m_parent != nullptr) {
+        m_parent->applyTransformCache();
+    }
+
+    return m_boundingSphere;
+}
+
 void VoxeltreeNode::insert(Voxel *voxel) {
+    if(!m_gridAABB.contains(voxel->gridCell())) {
+        octuple();
+        insert(voxel);
+        return;
+    }
+
     if(isAtomic()) {
         assert(m_voxel == nullptr);
         m_voxel = voxel;
@@ -88,7 +107,7 @@ void VoxeltreeNode::split() {
     std::list<IAABB> subnodeAABBs = m_gridAABB.recursiveSplit(2, XAxis);
 
     for(IAABB &subAABB : subnodeAABBs) {
-        m_subnodes.push_back(new VoxeltreeNode(m_voxelcluster, subAABB));
+        m_subnodes.push_back(new VoxeltreeNode(this, m_voxelcluster, subAABB));
     }
 }
 
@@ -101,7 +120,7 @@ void VoxeltreeNode::unsplit() {
 }
 
 void VoxeltreeNode::octuple() {
-    VoxeltreeNode *thisCopy = new VoxeltreeNode(m_voxelcluster, m_gridAABB);
+    VoxeltreeNode *thisCopy = new VoxeltreeNode(this, m_voxelcluster, m_gridAABB);
 
     thisCopy->m_subnodes = m_subnodes;
     thisCopy->m_voxel = m_voxel;
@@ -117,9 +136,19 @@ void VoxeltreeNode::octuple() {
         aabb.move(YAxis, sn % 4 >= 2 ? aabb.extent(YAxis) : 0);
         aabb.move(ZAxis, sn % 8 >= 4 ? aabb.extent(ZAxis) : 0);
 
-        m_subnodes.push_back(new VoxeltreeNode(m_voxelcluster, aabb));
+        m_subnodes.push_back(new VoxeltreeNode(this, m_voxelcluster, aabb));
     }
 
     m_gridAABB = IAABB(glm::ivec3(0, 0, 0), m_gridAABB.rub() * 2);
 }
 
+void VoxeltreeNode::transform(const CommonTransform &transform) {
+
+}
+
+void VoxeltreeNode::applyTransformCache() {
+    for(VoxeltreeNode *subnode : m_subnodes) {
+        subnode->transform(m_transformCache)
+    }
+    m_transformCache.clear();
+}
