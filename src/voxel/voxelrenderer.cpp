@@ -5,14 +5,13 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
 
-#include "cube.h"
 
-#include "cube.h"
+#include "voxelrenderer.h"
 #include "voxelcluster.h"
 #include "camera.h"
 
 
-Cube::Cube() :
+VoxelRenderer::VoxelRenderer() :
 m_texture(0),
 m_shaderProgram(0),
 m_vertexArrayObject(0),
@@ -24,7 +23,7 @@ m_vertexBuffer(0)
 }
 
 
-void Cube::prepareDraw(Camera * camera)
+void VoxelRenderer::prepareDraw(Camera * camera)
 {
     m_shaderProgram->setUniform("projection", camera->projection());
     m_shaderProgram->setUniform("view", camera->view());
@@ -34,7 +33,7 @@ void Cube::prepareDraw(Camera * camera)
 }
 
 
-void Cube::draw(Voxelcluster * cluster)
+void VoxelRenderer::draw(VoxelCluster * cluster)
 {
     m_shaderProgram->setUniform("model", cluster->matrix());
     glActiveTexture(GL_TEXTURE0);
@@ -46,14 +45,14 @@ void Cube::draw(Voxelcluster * cluster)
 }
 
 
-void Cube::afterDraw()
+void VoxelRenderer::afterDraw()
 {
     glActiveTexture(GL_TEXTURE0);
     m_shaderProgram->release();
 }
 
 
-void Cube::createAndSetupShaders()
+void VoxelRenderer::createAndSetupShaders()
 {
     glow::Shader * vertexShader = glow::Shader::fromFile(GL_VERTEX_SHADER, "data/cube.vert");
     glow::Shader * fragmentShader = glow::Shader::fromFile(GL_FRAGMENT_SHADER, "data/cube.frag");
@@ -138,7 +137,7 @@ glow::Array<glm::vec3> strip()
     };
 }
 
-void Cube::createAndSetupGeometry()
+void VoxelRenderer::createAndSetupGeometry()
 {
     m_vertexArrayObject = new glow::VertexArrayObject();
 

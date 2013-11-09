@@ -8,11 +8,11 @@
 #include "worldobject.h"
 #include "voxel.h"
 
-class Voxelcluster : public WorldObject
+class VoxelCluster : public WorldObject
 {
 public:
-    Voxelcluster();
-    virtual ~Voxelcluster();
+    VoxelCluster();
+    virtual ~VoxelCluster();
 
     const AABB &aabb();
 

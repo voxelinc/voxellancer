@@ -22,6 +22,10 @@
 
 #include "property/propertymanager.h"
 
+#include "voxel/voxelcluster.h"
+#include "voxel/voxelrenderer.h"
+#include "inputhandler.h"
+
 using namespace std;
 
 
@@ -30,23 +34,25 @@ Game::Game(GLFWwindow *window):
 	m_window(window),
 	m_camera(),
 	m_inputHandler(0),
-    m_cube(0)
-    m_testCluster()
+    m_voxelRenderer(0),
+    m_testCluster(0),
     m_hd3000dummy()
 {
 	reloadConfig();
 	m_inputHandler = new InputHandler(window, &m_camera);
-    m_testCluster.moveTo(glm::vec3(0, 0, -10));
-    m_testCluster.addVoxel(Voxel(cvec3(0, 0, 0), ucvec3(0, 255, 0)));
-    m_testCluster.addVoxel(Voxel(cvec3(1, 0, 0), ucvec3(255, 255, 0)));
-    m_testCluster.addVoxel(Voxel(cvec3(0, 1, 0), ucvec3(0, 0, 255)));
-    m_testCluster.addVoxel(Voxel(cvec3(0, 0, 1), ucvec3(255, 0, 0)));
-    m_testCluster.addVoxel(Voxel(cvec3(-1, 0, 0), ucvec3(255, 0, 128)));
+    m_testCluster = new VoxelCluster();
+    m_testCluster->moveTo(glm::vec3(0, 0, -10));
+    m_testCluster->addVoxel(Voxel(cvec3(0, 0, 0), ucvec3(0, 255, 0)));
+    m_testCluster->addVoxel(Voxel(cvec3(1, 0, 0), ucvec3(255, 255, 0)));
+    m_testCluster->addVoxel(Voxel(cvec3(0, 1, 0), ucvec3(0, 0, 255)));
+    m_testCluster->addVoxel(Voxel(cvec3(0, 0, 1), ucvec3(255, 0, 0)));
+    m_testCluster->addVoxel(Voxel(cvec3(-1, 0, 0), ucvec3(255, 0, 128)));
 }
 
 Game::~Game(){
 	if (m_inputHandler) delete m_inputHandler;
-	if (m_cube) delete m_cube;
+    if (m_voxelRenderer) delete m_voxelRenderer;
+    if (m_testCluster) delete m_testCluster;
 }
 
 void Game::reloadConfig(){
@@ -63,7 +69,7 @@ void Game::initialize()
     testFMOD();
 
 	glow::debug("Create Cube");
-    m_cube = new Cube();
+    m_voxelRenderer = new VoxelRenderer();
 
 	glow::debug("Setup Camera");
 	//viewport set in resize
@@ -79,7 +85,6 @@ void Game::initialize()
 void Game::update(float delta_sec)
 {
 	m_inputHandler->update(delta_sec);
-
 }
 
 void Game::draw()
@@ -91,11 +96,12 @@ void Game::draw()
 
 	m_skybox.draw(&m_camera);
 
-    m_cube->prepareDraw(&m_camera);
-    m_cube->draw(&m_testCluster);
-    m_cube->afterDraw();
+    m_voxelRenderer->prepareDraw(&m_camera);
+    m_voxelRenderer->draw(m_testCluster);
+    // draw all other voxelcluster...
+    m_voxelRenderer->afterDraw();
 
-    m_hd3000dummy.draw();
+    m_hd3000dummy.drawIfActive();
 }
 
 void ERRCHECK(FMOD_RESULT result)

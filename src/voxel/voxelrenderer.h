@@ -9,12 +9,12 @@
 
 class Camera;
 
-class Cube {
+class VoxelRenderer {
 public:
-    Cube();
+    VoxelRenderer();
 
     void prepareDraw(Camera * camera);
-    void draw(Voxelcluster * cluster);
+    void draw(VoxelCluster * cluster);
     void afterDraw();
   
 private:

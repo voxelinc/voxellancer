@@ -14,6 +14,7 @@
 #include <glow/ShaderFile.h>
 
 #include "game.h"
+#include "inputhandler.h"
 
 static GLint MajorVersionRequire = 3;
 static GLint MinorVersionRequire = 1;
@@ -157,7 +158,6 @@ int main(void)
 		cout << "Hit enter to quit" << endl;
 		cin.ignore(1, '\n');
 	}
-
 
     return 0;
 }
