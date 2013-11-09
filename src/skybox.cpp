@@ -5,7 +5,7 @@
 #include <glow/VertexAttributeBinding.h>
 
 
-#include "ddstexture.h"
+#include "utils/ddstexture.h"
 
 Skybox::Skybox() :
 	m_texture(0),
@@ -40,7 +40,7 @@ Skybox::Skybox() :
 	m_shaderProgram->attach(vertexShader, fragmentShader);
 	m_shaderProgram->bindFragDataLocation(0, "fragColor");
 
-	m_shaderProgram->getUniform<GLint>("texture")->set(0);
+	m_shaderProgram->getUniform<GLint>("texCube")->set(0);
 
 
 	/* Geometry */

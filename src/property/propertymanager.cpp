@@ -55,8 +55,8 @@ PropertyManager::~PropertyManager() {
 
 void PropertyManager::load(std::string file)
 {
-// TODO: REMOVE DEFAULT VALUE WHEN LINUX IS WORKING
-#ifdef __linux__
+// TODO: REMOVE WHEN LINUX IS WORKING
+#ifndef WIN32
     return;
 #endif
 

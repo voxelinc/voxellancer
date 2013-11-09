@@ -14,6 +14,7 @@
 #include <glow/ShaderFile.h>
 
 #include "game.h"
+#include "inputhandler.h"
 
 static GLint MajorVersionRequire = 3;
 static GLint MinorVersionRequire = 1;
@@ -40,8 +41,10 @@ static void errorCallback(int error, const char* description)
 
 static void resizeCallback(GLFWwindow* window, int width, int height)
 {
-    glViewport(0, 0, width, height);
-    game->m_inputHandler->resizeEvent(width, height);
+    if (width > 0 && height > 0) {
+        glViewport(0, 0, width, height);
+        game->m_inputHandler->resizeEvent(width, height);
+    }
 }
 
 static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -155,7 +158,6 @@ int main(void)
 		cout << "Hit enter to quit" << endl;
 		cin.ignore(1, '\n');
 	}
-
 
     return 0;
 }

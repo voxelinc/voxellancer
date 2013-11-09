@@ -18,7 +18,7 @@ public:
     HD3000Dummy();
     ~HD3000Dummy();
 
-    void draw();
+    void drawIfActive();
 
 private:
     Property<bool> m_usedummy;

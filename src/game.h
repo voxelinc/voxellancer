@@ -9,10 +9,12 @@
 #include <GLFW/glfw3.h>
 
 #include "utils/hd3000dummy.h"
-#include "inputhandler.h"
 #include "camera.h"
 #include "skybox.h"
-#include "cube.h"
+
+class InputHandler;
+class VoxelCluster;
+class VoxelRenderer;
 
 class Game {
 
@@ -34,7 +36,8 @@ private:
 	GLFWwindow *m_window;
 	Camera m_camera;
 	Skybox m_skybox;
-    Cube *m_cube;
+    VoxelRenderer *m_voxelRenderer;
+    VoxelCluster *m_testCluster;
     HD3000Dummy m_hd3000dummy;
 
 };
