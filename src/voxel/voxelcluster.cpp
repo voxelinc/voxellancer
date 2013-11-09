@@ -17,6 +17,22 @@ const AABB &Voxelcluster::aabb() {
     return m_aabb;
 }
 
+const glm::vec3 &Voxelcluster::center() const {
+    return m_center;
+}
+
+void Voxelcluster::setCenter(const glm::vec3 &center) {
+    m_center = center;
+}
+
+const WorldTransform &Voxelcluster::worldTransform() const {
+    return m_worldTransform;
+}
+
+void Voxelcluster::setWorldTransform(const WorldTransform &transform) {
+    m_worldTransform = transform;
+}
+
 VoxeltreeNode &Voxelcluster::voxeltree() {
     return m_voxeltree;
 }

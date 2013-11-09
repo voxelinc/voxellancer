@@ -42,14 +42,14 @@ protected:
     Sphere m_boundingSphere;
     IAABB m_gridAABB;
 
-    CommonTransform m_transformCache;
+    WorldTransform m_transformCache;
     std::vector<VoxeltreeNode*> m_subnodes;
     Voxel *m_voxel;
 
     void split();
     void unsplit();
     void octuple();
-    void transform(const CommonTransform &transform);
+    void transform(const WorldTransform &transform);
     void applyTransformCache();
 };
 

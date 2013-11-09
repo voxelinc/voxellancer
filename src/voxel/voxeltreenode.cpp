@@ -142,7 +142,7 @@ void VoxeltreeNode::octuple() {
     m_gridAABB = IAABB(glm::ivec3(0, 0, 0), m_gridAABB.rub() * 2);
 }
 
-void VoxeltreeNode::transform(const CommonTransform &transform) {
+void VoxeltreeNode::transform(const WorldTransform &transform) {
 
 }
 
