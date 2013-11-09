@@ -9,6 +9,7 @@
 #include <GLFW/glfw3.h>
 
 #include "voxel/cube.h"
+#include "utils/hd3000dummy.h"
 #include "inputhandler.h"
 #include "camera.h"
 #include "skybox.h"
@@ -21,10 +22,8 @@ public:
 	void initialize();
 	void reloadConfig();
 
-
     void update(float delta_sec);
 	void draw();
-
 
 	InputHandler *m_inputHandler;
 
@@ -37,5 +36,6 @@ private:
 	Skybox m_skybox;
     Cube *m_cube;
     Voxelcluster m_testCluster;
+    HD3000Dummy m_hd3000dummy;
 
 };

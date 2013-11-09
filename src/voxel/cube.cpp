@@ -5,8 +5,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
 
-#include "glow/Array.h"
-#include "glow/VertexAttributeBinding.h"
+#include "cube.h"
 
 #include "cube.h"
 #include "voxelcluster.h"

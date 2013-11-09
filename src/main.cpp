@@ -13,8 +13,6 @@
 #include <glow/global.h>
 #include <glow/ShaderFile.h>
 
-#include "property/propertymanager.h"
-
 #include "game.h"
 
 static GLint MajorVersionRequire = 3;
@@ -80,7 +78,6 @@ void setCallbacks(GLFWwindow* window)
 int main(void)
 {
 	GLFWwindow* window = nullptr;
-   // PropertyManager::getInstance()->load("data/global.ini");
 
 	if (!glfwInit()) {
 		glow::fatal("could not init glfw");

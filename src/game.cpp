@@ -26,12 +26,13 @@ using namespace std;
 
 
 
-Game::Game(GLFWwindow *window) :
-    m_window(window),
-    m_camera(),
-    m_inputHandler(0),
-    m_cube(0),
+Game::Game(GLFWwindow *window):
+	m_window(window),
+	m_camera(),
+	m_inputHandler(0),
+    m_cube(0)
     m_testCluster()
+    m_hd3000dummy()
 {
 	reloadConfig();
 	m_inputHandler = new InputHandler(window, &m_camera);
@@ -94,13 +95,7 @@ void Game::draw()
     m_cube->draw(&m_testCluster);
     m_cube->afterDraw();
 
-	/* Added as hd7000 fix
-	* @xchrdw: why? where to put?
-	m_shaderProgram->use();
-	m_vertexArrayObject->drawArrays(GL_POINTS, 0, 1);
-	m_shaderProgram->release();
-	*/
-
+    m_hd3000dummy.draw();
 }
 
 void ERRCHECK(FMOD_RESULT result)
