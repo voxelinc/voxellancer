@@ -1,20 +1,23 @@
 #pragma once
+#include <memory>
 
-#include "glow/ref_ptr.h"
-#include "glow/Texture.h"
-#include "glow/Program.h"
-#include "glow/VertexArrayObject.h"
-#include "glow/Buffer.h"
+#include <glow/ref_ptr.h>
+#include <glow/Texture.h>
+#include <glow/Program.h>
+#include <glow/VertexArrayObject.h>
+#include <glow/Buffer.h>
 
 #include <GLFW/glfw3.h>
 
-#include "utils/hd3000dummy.h"
 #include "camera.h"
 #include "skybox.h"
 
 class InputHandler;
 class VoxelCluster;
 class VoxelRenderer;
+class HD3000Dummy;
+
+using std::unique_ptr;
 
 class Game {
 
@@ -27,17 +30,18 @@ public:
     void update(float delta_sec);
 	void draw();
 
-	InputHandler *m_inputHandler;
+    InputHandler * inputHandler();
 
 private:
     void testFMOD();
 
 private:
 	GLFWwindow *m_window;
+	InputHandler *m_inputHandler;
 	Camera m_camera;
 	Skybox m_skybox;
-    VoxelRenderer *m_voxelRenderer;
     VoxelCluster *m_testCluster;
-    HD3000Dummy m_hd3000dummy;
+    unique_ptr<VoxelRenderer> m_voxelRenderer;
+    unique_ptr<HD3000Dummy> m_hd3000dummy;
 
 };

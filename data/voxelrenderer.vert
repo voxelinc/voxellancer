@@ -12,7 +12,7 @@ in vec3 a_vertex;
 in vec3 a_normal;
 
 out vec2 v_uv;
-out vec3 normal;
+flat out vec3 normal;
 out vec3 color;
 
 void main()
