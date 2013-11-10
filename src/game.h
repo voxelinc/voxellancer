@@ -17,7 +17,6 @@ class VoxelCluster;
 class VoxelRenderer;
 class HD3000Dummy;
 
-using std::unique_ptr;
 
 class Game {
 
@@ -41,7 +40,7 @@ private:
 	Camera m_camera;
 	Skybox m_skybox;
     VoxelCluster *m_testCluster;
-    unique_ptr<VoxelRenderer> m_voxelRenderer;
-    unique_ptr<HD3000Dummy> m_hd3000dummy;
-
+    std::unique_ptr<VoxelRenderer> m_voxelRenderer;
+    std::unique_ptr<HD3000Dummy> m_hd3000dummy;
 };
+

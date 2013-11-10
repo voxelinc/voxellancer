@@ -7,6 +7,7 @@
 #include <memory>
 #include <iostream>
 #include <fstream>
+#include <memory>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -59,7 +60,7 @@ void Game::initialize()
     testFMOD();
 
 	glow::debug("Create Voxel");
-    m_voxelRenderer = make_unique<VoxelRenderer>();
+    m_voxelRenderer = std::unique_ptr<VoxelRenderer>(new VoxelRenderer);
 
     m_testCluster = new VoxelCluster();
     m_testCluster->moveTo(glm::vec3(0, 0, -10));
@@ -77,7 +78,7 @@ void Game::initialize()
 	m_camera.setZNear(0.1f);
 	m_camera.setZFar(99999);
 
-    m_hd3000dummy = std::make_unique<HD3000Dummy>();
+    m_hd3000dummy = std::unique_ptr<HD3000Dummy>(new HD3000Dummy);
 
     glClearColor(0.2f, 0.3f, 0.4f, 1.f);
 	glow::debug("Game::initialize Done");
