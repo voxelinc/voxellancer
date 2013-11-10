@@ -8,11 +8,26 @@ ClusterLoader::ClusterLoader(){
 
 void ClusterLoader::loadClusterFromFile(char* filename, Voxelcluster* voxelcluster){
 	inputStream = new ifstream(filename);
-	readDimensions();
-	readCluster(voxelcluster);
+	vector<string> filenameParts;
+	splitStr(filename, '.', filenameParts);
+	string extension = filenameParts[1];
+	if (extension.compare("csv") == 0)
+		loadCsv(voxelcluster);
+	else if (extension.compare("zox") == 0)
+		loadZox(voxelcluster);
+
 }
 
-void ClusterLoader::readDimensions(){
+void ClusterLoader::loadCsv(Voxelcluster* cluster){
+	readDimensionsCsv();
+	readClusterCsv(cluster);
+}
+
+void ClusterLoader::loadZox(Voxelcluster* cluster){
+	//TODO implement zox parser
+}
+
+void ClusterLoader::readDimensionsCsv(){
 	string line;
 	getline(*inputStream, line);
 
@@ -24,7 +39,7 @@ void ClusterLoader::readDimensions(){
 	z = stoi(subStrings[2]);
 }
 
-void ClusterLoader::readCluster(Voxelcluster *cluster){
+void ClusterLoader::readClusterCsv(Voxelcluster *cluster){
 	int alpha, red, green, blue, currentX, currentZ, currentY;
 	string line;
 	currentY = y;

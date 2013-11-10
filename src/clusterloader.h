@@ -17,9 +17,11 @@ public:
 	void loadClusterFromFile(char* filename, Voxelcluster* voxelcluster);
 
 private:
-	void readDimensions();
-	void readCluster(Voxelcluster* cluster);
+	void readDimensionsCsv();
+	void readClusterCsv(Voxelcluster* cluster);
 	void splitStr(const string &s, char delim, vector<string> &elems);
+	void loadCsv(Voxelcluster* cluster);
+	void loadZox(Voxelcluster* cluster);
 
 private:
 	std::ifstream* inputStream;
