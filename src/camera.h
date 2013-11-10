@@ -11,7 +11,7 @@ public:
 
 	/* Overwrite WorldObject functions for performance:
 	*	WorldObject recalculates the matrix on every read access,
-	*	Camera should recalculate on every write acces, as reads are more common */
+	*	Camera should recalculate on every write access, as reads are more common */
 
 	void move(glm::vec3 dist);
 	void moveTo(glm::vec3 pos);
@@ -23,7 +23,8 @@ public:
 
 	const glm::mat4 view();
 	const glm::mat4 viewInverted();
-	const glm::quat orientation();
+    const glm::quat orientation();
+    const glm::vec3 position();
 
 	/* Projection from glow::Camera */
 

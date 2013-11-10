@@ -5,7 +5,7 @@
 #include <glow/VertexAttributeBinding.h>
 
 
-#include "ddstexture.h"
+#include "utils/ddstexture.h"
 
 Skybox::Skybox() :
 	m_texture(0),
@@ -40,7 +40,7 @@ Skybox::Skybox() :
 	m_shaderProgram->attach(vertexShader, fragmentShader);
 	m_shaderProgram->bindFragDataLocation(0, "fragColor");
 
-	m_shaderProgram->getUniform<GLint>("texture")->set(0);
+	m_shaderProgram->getUniform<GLint>("texCube")->set(0);
 
 
 	/* Geometry */
@@ -72,7 +72,7 @@ void Skybox::draw(Camera *camera){
 	glDisable(GL_DEPTH_TEST);
 
 	m_texture->bind();
-	// we don't use viewInverted because the skybbox does not travel with the camera
+	// we don't use viewInverted because the skybox does not travel with the camera
 	m_shaderProgram->setUniform("viewInverted", glm::mat4_cast(glm::inverse(camera->orientation())));
 	m_shaderProgram->setUniform("projection", camera->projection());
 	m_shaderProgram->use();

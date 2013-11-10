@@ -1,6 +1,5 @@
 #include <bandit/bandit.h>
 
-
 #include <glm/glm.hpp>
 #include <glow/ChangeListener.h>
 #include <glow/logging.h>
@@ -107,8 +106,3 @@ go_bandit([](){
     });
 });
 
-#ifndef TEST_ALL
-int main(int argc, char *argv[]) {
-    return bandit::run(argc, argv);
-}
-#endif
