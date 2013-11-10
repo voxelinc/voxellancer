@@ -12,6 +12,8 @@ public:
 	WorldTransform();
 	virtual ~WorldTransform();
 
+	void clear();
+
 	void move(glm::vec3 dist);
 	void moveTo(glm::vec3 pos);
 
@@ -20,11 +22,15 @@ public:
 	void rotateZ(float rot);
 	void rotateTo(glm::quat quat);
 
-	const glm::mat4 matrix();
-	const glm::quat orientation();
+	void add(const WorldTransform &other);
+
+	const glm::vec3 &position() const;
+
+	const glm::mat4 matrix() const;
+	const glm::quat orientation() const;
 
 protected:
 	glm::vec3 m_position;
     glm::quat m_orientation;
-
 };
+

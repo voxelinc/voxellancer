@@ -5,13 +5,14 @@
 #include "voxel/voxelcluster.h"
 
 
-VoxeltreeNode::VoxeltreeNode(VoxeltreeNode *parent, Voxelcluster &voxelcluster, const IAABB &gridAABB):
+VoxeltreeNode::VoxeltreeNode(VoxeltreeNode *parent, VoxelCluster &voxelcluster, const IAABB &gridAABB):
     m_parent(parent),
     m_voxelcluster(voxelcluster),
     m_gridAABB(gridAABB),
     m_voxel(nullptr)
 {
-
+    m_centerRelPosition = static_cast<glm::vec3>(m_gridAABB.llf()) + static_cast<glm::vec3>(m_gridAABB.rub() - m_gridAABB.llf()) / 2.0f;
+    m_centerRelPosition -= m_voxelcluster.center();
 }
 
 VoxeltreeNode::~VoxeltreeNode() {
@@ -143,12 +144,15 @@ void VoxeltreeNode::octuple() {
 }
 
 void VoxeltreeNode::transform(const WorldTransform &transform) {
+    m_transformCache.add(transform);
 
+    glm::vec4 rotatedCenter = glm::vec4(m_centerRelPosition, 1.0f) * glm::mat4_cast(transform.orientation());
+    m_boundingSphere.setPosition(glm::vec3(rotatedCenter) + m_voxelcluster.position());
 }
 
 void VoxeltreeNode::applyTransformCache() {
     for(VoxeltreeNode *subnode : m_subnodes) {
-        subnode->transform(m_transformCache)
+        subnode->transform(m_transformCache);
     }
     m_transformCache.clear();
 }

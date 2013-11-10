@@ -8,10 +8,13 @@
 
 #include <GLFW/glfw3.h>
 
-#include "inputhandler.h"
+#include "utils/hd3000dummy.h"
 #include "camera.h"
 #include "skybox.h"
-#include "cube.h"
+
+class InputHandler;
+class VoxelCluster;
+class VoxelRenderer;
 
 class Game {
 
@@ -21,10 +24,8 @@ public:
 	void initialize();
 	void reloadConfig();
 
-
     void update(float delta_sec);
 	void draw();
-
 
 	InputHandler *m_inputHandler;
 
@@ -35,6 +36,8 @@ private:
 	GLFWwindow *m_window;
 	Camera m_camera;
 	Skybox m_skybox;
-    Cube *m_cube;
+    VoxelRenderer *m_voxelRenderer;
+    VoxelCluster *m_testCluster;
+    HD3000Dummy m_hd3000dummy;
 
 };

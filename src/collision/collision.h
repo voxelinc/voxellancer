@@ -1,8 +1,7 @@
 #pragma once
 
-class Collision
-{
 
-protected:
+class Collision 
+{
 
 };

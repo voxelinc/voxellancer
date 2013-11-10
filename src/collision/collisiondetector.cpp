@@ -4,8 +4,10 @@
 #include <list>
 #include <iostream>
 
+#include "voxel/voxelcluster.h"
 
-CollisionDetector::CollisionDetector(Worldtree &worldtree, Voxelcluster &voxelcluster):
+
+CollisionDetector::CollisionDetector(Worldtree &worldtree, VoxelCluster &voxelcluster):
     m_worldtree(worldtree),
     m_voxelcluster(voxelcluster)
 {

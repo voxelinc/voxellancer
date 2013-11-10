@@ -11,15 +11,15 @@ WorldtreeGeode::~WorldtreeGeode() {
 
 }
 
-Voxelcluster *WorldtreeGeode::voxelcluster() {
+VoxelCluster *WorldtreeGeode::voxelcluster() {
     return m_voxelcluster;
 }
 
-const Voxelcluster *WorldtreeGeode::voxelcluster() const {
+const VoxelCluster *WorldtreeGeode::voxelcluster() const {
     return m_voxelcluster;
 }
 
-void WorldtreeGeode::setVoxelcluster(Voxelcluster *voxelcluster) {
+void WorldtreeGeode::setVoxelCluster(VoxelCluster *voxelcluster) {
     m_voxelcluster = voxelcluster;
 }
 

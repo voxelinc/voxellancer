@@ -24,7 +24,11 @@ public:
 go_bandit([](){
     describe("Property", [](){
         before_each([&](){
+            glow::setVerbosityLevel(glow::LogMessage::Fatal);
             PropertyManager::reset();
+        });
+        after_each([&](){
+            glow::setVerbosityLevel(glow::LogMessage::Info);
         });
 
         it("should load", [&]() {
@@ -53,7 +57,7 @@ go_bandit([](){
 
         it("should work before load", [&]() {
             // suppress property not found debug info
-            glow::setVerbosityLevel(glow::LogMessage::Warning);
+            glow::setVerbosityLevel(glow::LogMessage::Fatal);
 
             Property<int> iSize("player.size");
             AssertThat(iSize.get(), Equals(0));
@@ -103,7 +107,8 @@ go_bandit([](){
     });
 });
 
+#ifndef TEST_ALL
 int main(int argc, char *argv[]) {
     return bandit::run(argc, argv);
 }
-
+#endif

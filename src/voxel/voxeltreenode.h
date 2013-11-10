@@ -4,19 +4,20 @@
 
 #include <glm/glm.hpp>
 
-#include "geometry/commontransform.h"
 #include "geometry/sphere.h"
 #include "geometry/aabb.h"
 
 #include "voxel/voxel.h"
 
+#include "worldtransform.h"
 
-class Voxelcluster;
+
+class VoxelCluster;
 
 class VoxeltreeNode
 {
 public:
-    VoxeltreeNode(VoxeltreeNode *parent, Voxelcluster &voxelcluster, const IAABB &gridAABB);
+    VoxeltreeNode(VoxeltreeNode *parent, VoxelCluster &voxelcluster, const IAABB &gridAABB);
     virtual ~VoxeltreeNode();
 
     bool isAtomic() const;
@@ -38,9 +39,10 @@ public:
 
 protected:
     VoxeltreeNode *m_parent;
-    Voxelcluster &m_voxelcluster;
+    VoxelCluster &m_voxelcluster;
     Sphere m_boundingSphere;
     IAABB m_gridAABB;
+    glm::vec3 m_centerRelPosition;
 
     WorldTransform m_transformCache;
     std::vector<VoxeltreeNode*> m_subnodes;
