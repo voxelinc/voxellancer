@@ -72,7 +72,7 @@ void Skybox::draw(Camera *camera){
 	glDisable(GL_DEPTH_TEST);
 
 	m_texture->bind();
-	// we don't use viewInverted because the skybbox does not travel with the camera
+	// we don't use viewInverted because the skybox does not travel with the camera
 	m_shaderProgram->setUniform("viewInverted", glm::mat4_cast(glm::inverse(camera->orientation())));
 	m_shaderProgram->setUniform("projection", camera->projection());
 	m_shaderProgram->use();

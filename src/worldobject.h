@@ -21,7 +21,8 @@ public:
 	void rotateTo(glm::quat quat);
 
 	const glm::mat4 matrix();
-	const glm::quat orientation();
+    const glm::quat orientation();
+    const glm::vec3 position();
 
 protected:
 	glm::vec3 m_position;
