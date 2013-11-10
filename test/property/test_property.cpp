@@ -103,6 +103,9 @@ go_bandit([](){
             AssertThat(listener.success, Equals(true));
 
         });
+        it("should fail", [&]() {
+            AssertThat(true, Equals(false));
+        });
     });
 });
 
