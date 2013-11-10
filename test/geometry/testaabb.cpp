@@ -110,8 +110,3 @@ go_bandit([](){
     });
 });
 
-#ifndef TEST_ALL
-int main(int argc, char* argv[]) {
-  return bandit::run(argc, argv);
-}
-#endif
