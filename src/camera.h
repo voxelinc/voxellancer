@@ -23,7 +23,8 @@ public:
 
 	const glm::mat4 view();
 	const glm::mat4 viewInverted();
-	const glm::quat orientation();
+    const glm::quat orientation();
+    const glm::vec3 position();
 
 	/* Projection from glow::Camera */
 

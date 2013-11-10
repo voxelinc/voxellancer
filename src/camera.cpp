@@ -17,7 +17,7 @@ Camera::~Camera(){
 }
 
 void Camera::viewDirty(){
-	m_view = glm::mat4_cast(m_orientation) * glm::translate(m_position);
+	m_view = glm::mat4_cast(m_orientation) * glm::translate(-m_position);
 	m_viewProjection = m_projection * m_view;
 }
 
@@ -66,6 +66,10 @@ const glm::mat4 Camera::viewInverted(){
 
 const glm::quat Camera::orientation(){
 	return WorldObject::orientation();
+}
+
+const glm::vec3 Camera::position() {
+    return m_position;
 }
 
 float Camera::zNear() const

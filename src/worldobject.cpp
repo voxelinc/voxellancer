@@ -53,3 +53,8 @@ const glm::quat WorldObject::orientation()
 {
     return m_orientation;
 }
+
+const glm::vec3 WorldObject::position()
+{
+    return m_position;
+}
