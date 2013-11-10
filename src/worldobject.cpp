@@ -46,10 +46,15 @@ void WorldObject::rotateTo(glm::quat quat){
 
 const glm::mat4 WorldObject::matrix()
 {
-    return glm::mat4_cast(m_orientation) * glm::translate(m_position);
+    return glm::translate(m_position) * glm::mat4_cast(m_orientation);
 }
 
 const glm::quat WorldObject::orientation()
 {
     return m_orientation;
+}
+
+const glm::vec3 WorldObject::position()
+{
+    return m_position;
 }

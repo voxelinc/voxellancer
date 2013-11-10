@@ -22,7 +22,7 @@ HD3000Dummy::~HD3000Dummy()
 
 }
 
-void HD3000Dummy::draw()
+void HD3000Dummy::drawIfActive()
 {
     if (m_usedummy)
         m_vertexArrayObject->drawArrays(GL_TRIANGLE_STRIP, 0, 1);

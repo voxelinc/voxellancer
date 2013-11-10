@@ -5,23 +5,22 @@
 #include <glow/VertexArrayObject.h>
 #include <glow/Buffer.h>
 
+#include "voxelcluster.h"
 
-class Cube {
+class Camera;
+
+class VoxelRenderer {
 public:
-    Cube();
+    VoxelRenderer();
 
-	const glm::vec4 center();
-	virtual void draw();
-	virtual void drawtest(glm::mat4 projection);
-    virtual void update(float delta_sec);
+    void prepareDraw(Camera * camera);
+    void draw(VoxelCluster * cluster);
+    void afterDraw();
   
 private:
     void createAndSetupShaders();
     void createAndSetupGeometry();
-
-	glm::mat4 m_model_matrix;
-
-	glow::ref_ptr<glow::Texture> m_texture;
+    glow::ref_ptr<glow::Texture> m_texture;
 	glow::ref_ptr<glow::Program> m_shaderProgram;
 	glow::ref_ptr<glow::VertexArrayObject> m_vertexArrayObject;
 	glow::ref_ptr<glow::Buffer> m_vertexBuffer;

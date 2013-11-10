@@ -1,0 +1,2 @@
+
+make_test(test_voxelcluster test_voxelcluster.cpp)

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "voxelcluster.h"
+#include "voxel/voxelcluster.h"
 #include "geometry/aabb.h"
 
 class WorldtreeNode;
@@ -11,9 +11,9 @@ public:
     WorldtreeGeode();
     virtual ~WorldtreeGeode();
 
-    Voxelcluster *voxelcluster();
-    const Voxelcluster *voxelcluster() const;
-    void setVoxelcluster(Voxelcluster *voxelcluster);
+    VoxelCluster *voxelcluster();
+    const VoxelCluster *voxelcluster() const;
+    void setVoxelcluster(VoxelCluster *voxelcluster);
 
     WorldtreeNode *containingNode();
     const WorldtreeNode *containingNode() const;
@@ -23,7 +23,7 @@ public:
     void setAABB(const AABB &aabb);
 
 protected:
-    Voxelcluster *m_voxelcluster;
+    VoxelCluster *m_voxelcluster;
     WorldtreeNode *m_containingNode;
     AABB m_aabb;
 };

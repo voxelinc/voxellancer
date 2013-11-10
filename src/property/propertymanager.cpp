@@ -55,8 +55,8 @@ PropertyManager::~PropertyManager() {
 
 void PropertyManager::load(std::string file)
 {
-// TODO: REMOVE DEFAULT VALUE WHEN LINUX IS WORKING
-#ifdef __linux__
+// TODO: REMOVE WHEN LINUX IS WORKING
+#ifndef WIN32
     return;
 #endif
 
@@ -65,7 +65,7 @@ void PropertyManager::load(std::string file)
     std::string title = "";
 
     if (!input.is_open()) {
-        glow::warning("PropertyManager: could not open %;", file);
+        glow::fatal("PropertyManager: could not open %;", file);
     }
 
     while (std::getline(input, line))

@@ -14,6 +14,7 @@
 #include <glow/ShaderFile.h>
 
 #include "game.h"
+#include "inputhandler.h"
 
 static GLint MajorVersionRequire = 3;
 static GLint MinorVersionRequire = 1;
@@ -40,8 +41,10 @@ static void errorCallback(int error, const char* description)
 
 static void resizeCallback(GLFWwindow* window, int width, int height)
 {
-    glViewport(0, 0, width, height);
-    game->m_inputHandler->resizeEvent(width, height);
+    if (width > 0 && height > 0) {
+        glViewport(0, 0, width, height);
+        game->inputHandler()->resizeEvent(width, height);
+    }
 }
 
 static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -49,7 +52,7 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, GL_TRUE);
 	if (key == GLFW_KEY_F1 && action == GLFW_PRESS)
-		game->m_inputHandler->toggleControls();
+		game->inputHandler()->toggleControls();
 	if (key == GLFW_KEY_F5 && action == GLFW_PRESS)
 		glow::ShaderFile::reloadAll();
 	if (key == GLFW_KEY_F6 && action == GLFW_PRESS)
@@ -129,7 +132,7 @@ int main(void)
 
 		int width, height;
 		glfwGetFramebufferSize(window, &width, &height);
-		game->m_inputHandler->resizeEvent(width, height);
+        game->inputHandler()->resizeEvent(width, height);
 
 		glow::debug("Entering mainloop");
 		double time = glfwGetTime();
@@ -155,7 +158,6 @@ int main(void)
 		cout << "Hit enter to quit" << endl;
 		cin.ignore(1, '\n');
 	}
-
 
     return 0;
 }
