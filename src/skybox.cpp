@@ -45,10 +45,10 @@ Skybox::Skybox() :
 
 	/* Geometry */
 	auto vertices = glow::Array<glm::vec3>()
-		<< glm::vec3(-1, -1, -1)
-		<< glm::vec3(1, -1, -1)
-		<< glm::vec3(1, 1, -1)
-		<< glm::vec3(-1, 1, -1);
+		<< glm::vec3(-1, -1, 0)
+		<< glm::vec3(1, -1, 0)
+		<< glm::vec3(1, 1, 0)
+		<< glm::vec3(-1, 1, 0);
 
 	m_vertexArrayObject = new glow::VertexArrayObject();
 
@@ -72,9 +72,8 @@ void Skybox::draw(Camera *camera){
 	glDisable(GL_DEPTH_TEST);
 
 	m_texture->bind();
-	// we don't use viewInverted because the skybox does not travel with the camera
-	m_shaderProgram->setUniform("viewInverted", glm::mat4_cast(glm::inverse(camera->orientation())));
-	m_shaderProgram->setUniform("projection", camera->projection());
+	// we don't use camera->viewInverted() because the skybox does not travel with the camera
+	m_shaderProgram->setUniform("viewProjectionInverted", glm::mat4_cast(glm::inverse(camera->orientation()))*glm::inverse(camera->projection()));
 	m_shaderProgram->use();
 
 	m_vertexArrayObject->drawArrays(GL_TRIANGLE_FAN, 0, 4);
