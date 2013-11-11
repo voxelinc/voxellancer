@@ -107,6 +107,9 @@ go_bandit([](){
                 AssertThat(splittedv[b].extent(ZAxis), Equals(16));
             }
         });
+        it("should really fail", [&]() {
+            AssertThat(true, Equals(false));
+        });
     });
 });
 
