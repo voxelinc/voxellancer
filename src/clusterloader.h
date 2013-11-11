@@ -22,6 +22,7 @@ private:
 	void splitStr(const string &s, char delim, vector<string> &elems);
 	void loadCsv(Voxelcluster* cluster);
 	void loadZox(Voxelcluster* cluster);
+	void readClusterZox(string content, Voxelcluster* cluster);
 
 private:
 	std::ifstream* inputStream;

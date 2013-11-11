@@ -7,7 +7,7 @@ ClusterLoader::ClusterLoader(){
 }
 
 void ClusterLoader::loadClusterFromFile(char* filename, Voxelcluster* voxelcluster){
-	inputStream = new ifstream(filename);
+	inputStream = new ifstream(filename, std::ios::in | std::ios::binary);
 	vector<string> filenameParts;
 	splitStr(filename, '.', filenameParts);
 	string extension = filenameParts[1];
@@ -24,7 +24,47 @@ void ClusterLoader::loadCsv(Voxelcluster* cluster){
 }
 
 void ClusterLoader::loadZox(Voxelcluster* cluster){
-	//TODO implement zox parser
+	
+	string content;
+	inputStream->seekg(0, inputStream->end);
+	content.resize(inputStream->tellg());
+	inputStream->seekg(0, std::ios::beg);
+	inputStream->read(&content[0], content.size());
+	inputStream->close();
+
+	readClusterZox(content, cluster);
+	return;
+}
+
+void ClusterLoader::readClusterZox(string content, Voxelcluster* cluster){
+	int begin = content.find("{\"frames\": ");
+	int end = content.find(",");
+	int frameCount = stoi(content.substr(begin + 11, end - (begin + 11)));
+	int currentFrame = 0;
+	int position = 0;
+	string frame, voxelString;
+	vector<string> voxelStrings;
+	unsigned int color, r, g, b, a;
+	while (currentFrame < frameCount){
+		frame = "\"frame" + to_string(currentFrame + 1) + "\": [" ;
+		position = content.find(frame) + frame.size();
+		while (content.at(position) == '['){
+			end = content.find_first_of("]", position + 1);
+			voxelString = content.substr(position + 1, end - (position + 1));
+			position = end + 3;
+			voxelStrings.clear();
+			splitStr(voxelString, ',', voxelStrings);
+			string str = &(voxelStrings[3])[1];
+			color = stoul(str);
+			r = (color & 0xFF000000) >> 24;
+			g = (color & 0x00FF0000) >> 16;
+			b = (color & 0x0000FF00) >> 8;
+			a = (color & 0x000000FF);
+			cluster->addVoxel(Voxel(cvec3(stoi(voxelStrings[0]), stoi(&(voxelStrings[1])[1]), stoi(&(voxelStrings[2])[1])), ucvec3(r, g, b)));
+		}
+		currentFrame++;
+	}
+
 }
 
 void ClusterLoader::readDimensionsCsv(){
@@ -40,25 +80,26 @@ void ClusterLoader::readDimensionsCsv(){
 }
 
 void ClusterLoader::readClusterCsv(Voxelcluster *cluster){
-	int alpha, red, green, blue, currentX, currentZ, currentY;
+	int alpha, red, green, blue, currentZ, currentX, currentY;
 	string line;
+	vector<string> voxelStrings;
 	currentY = y;
 	while (currentY > -1){
-		currentX = 0;
-		while (currentX < x){
-			currentZ = 0;
+		currentZ = 0;
+		while (currentZ < z){
+			currentX = 0;
 			getline(*inputStream, line);
-			vector<string> voxelStrings;
+			voxelStrings.clear();
 			splitStr(line, ',', voxelStrings);
-			while (currentZ < z){
-				red = stoi(voxelStrings[currentZ].substr(3, 2), NULL, 16);
-				green = stoi(voxelStrings[currentZ].substr(5, 2), NULL, 16);
-				blue = stoi(voxelStrings[currentZ].substr(7, 2), NULL, 16);
+			while (currentX < x){
+				red = stoi(voxelStrings[currentX].substr(1, 2), NULL, 16);
+				green = stoi(voxelStrings[currentX].substr(3, 2), NULL, 16);
+				blue = stoi(voxelStrings[currentX].substr(5, 2), NULL, 16);
 				if (red+green+blue>0)
 					cluster->addVoxel(Voxel(cvec3(currentX, currentY, currentZ), ucvec3(red, green, blue)));
-				currentZ++;
+				currentX++;
 			}
-			currentX++;
+			currentZ++;
 		}
 		getline(*inputStream, line);
 		currentY--;
