@@ -87,7 +87,6 @@ int main(void)
 	
 	//if (linuxvmworkaround){
 		putenv("LIBGL_ALWAYS_SOFTWARE=1");
-		std::cout << "putenv" << std::endl;
 		MajorVersionRequire = 2;
 		MinorVersionRequire = 1;
 	//}
