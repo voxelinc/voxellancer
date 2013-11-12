@@ -10,7 +10,7 @@ void ClusterLoader::loadClusterFromFile(char* filename, VoxelCluster* voxelclust
 	inputStream = new ifstream(filename, std::ios::in | std::ios::binary);
 
 	if (inputStream->fail())
-		throw "file " + string(filename) + " not found";
+		throw runtime_error("file " + string(filename) + " not found");
 
 	vector<string> filenameParts;
 	splitStr(filename, '.', filenameParts);
