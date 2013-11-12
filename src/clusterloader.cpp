@@ -1,5 +1,8 @@
 #include "clusterloader.h"
 
+#include "voxel/voxelcluster.h"
+#include "voxel/voxel.h"
+
 using namespace std;
 
 ClusterLoader::ClusterLoader(){

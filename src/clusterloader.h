@@ -5,8 +5,8 @@
 #include <string>
 #include <sstream>
 #include <vector>
-#include "voxel/voxelcluster.h"
-#include "voxel/Voxel.h"
+
+class VoxelCluster;
 
 using namespace std;
 
