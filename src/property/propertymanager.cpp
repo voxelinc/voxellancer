@@ -65,7 +65,7 @@ void PropertyManager::load(std::string file)
     std::string title = "";
 
     if (!input.is_open()) {
-        glow::warning("PropertyManager: could not open %;", file);
+        glow::fatal("PropertyManager: could not open %;", file);
     }
 
     while (std::getline(input, line))

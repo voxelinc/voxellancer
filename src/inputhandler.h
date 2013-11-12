@@ -21,6 +21,7 @@ protected:
 	Camera* m_camera;
 
 	int m_windowWidth, m_windowHeight;
+	int m_lastfocus;
 
 	int m_cursorMaxDistance;
 	int m_fpsControls;

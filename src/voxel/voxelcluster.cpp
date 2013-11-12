@@ -3,7 +3,7 @@
 #include "glowutils/MathMacros.h"
 #include "glow/DebugMessageOutput.h"
 
-Voxelcluster::Voxelcluster():
+VoxelCluster::VoxelCluster():
     WorldObject(),
     m_texturesDirty(true),
     m_voxel(),
@@ -19,15 +19,15 @@ Voxelcluster::Voxelcluster():
 
 }
 
-Voxelcluster::~Voxelcluster() {
+VoxelCluster::~VoxelCluster() {
 
 }
 
-const AABB &Voxelcluster::aabb() {
+const AABB &VoxelCluster::aabb() {
     return m_aabb;
 }
 
-void Voxelcluster::addVoxel(const Voxel & voxel)
+void VoxelCluster::addVoxel(const Voxel & voxel)
 {
     // TODO aabb extent(vec3)
     m_voxel[voxel.position()] = voxel;
@@ -35,27 +35,27 @@ void Voxelcluster::addVoxel(const Voxel & voxel)
     m_texturesDirty = true;
 }
 
-void Voxelcluster::removeVoxel(const cvec3 & position)
+void VoxelCluster::removeVoxel(const cvec3 & position)
 {
     m_voxel.erase(position);
     m_texturesDirty = true;
 }
 
-glow::Texture * Voxelcluster::positionTexture()
+glow::Texture * VoxelCluster::positionTexture()
 {
     if (m_texturesDirty)
         updateTextures();
     return m_positionTexture;
 }
 
-glow::Texture * Voxelcluster::colorTexture()
+glow::Texture * VoxelCluster::colorTexture()
 {
     if (m_texturesDirty)
         updateTextures();
     return m_colorTexture;
 }
 
-void Voxelcluster::updateTextures()
+void VoxelCluster::updateTextures()
 {
     int size = nextPowerOf2(m_voxel.size());
     unsigned char * positionData = new unsigned char[size*3];
@@ -84,7 +84,7 @@ void Voxelcluster::updateTextures()
     m_texturesDirty = false;
 }
 
-int Voxelcluster::voxelCount()
+int VoxelCluster::voxelCount()
 {
     return m_voxel.size();
 }
