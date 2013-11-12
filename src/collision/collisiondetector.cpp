@@ -30,7 +30,7 @@ const std::list<Collision> &CollisionDetector::checkCollisions() {
     std::cout << "Possible colliders: " << possibleColliders.size() << std::endl;
 
     for(WorldtreeGeode *possibleCollider : possibleColliders) {
-        assert(possibleCollider->voxelcluster());
+        assert(possibleCollider->voxelcluster() != nullptr);
         checkCollisions(&m_voxelcluster.voxeltree(), &possibleCollider->voxelcluster()->voxeltree());
     }
 
@@ -56,19 +56,17 @@ void CollisionDetector::checkCollisions(VoxeltreeNode* nodeA, VoxeltreeNode* nod
         else {
             std::vector<VoxeltreeNode*> nodesA, nodesB;
 
-            if(nodeA->isLeaf()) {
-                nodesA.push_back(nodeA);
-            }
-            else {
-                nodesA = nodeA->subnodes();
-            }
+            auto assignList = [] (VoxeltreeNode *node, std::vector<VoxeltreeNode*> &list) {
+                if(node->isLeaf()) {
+                    list.push_back(node);
+                }
+                else {
+                    list = node->subnodes();
+                }
+            };
 
-            if(nodeB->isLeaf()) {
-                nodesB.push_back(nodeB);
-            }
-            else {
-                nodesB = nodeB->subnodes();
-            }
+            assignList(nodeA, nodesA);
+            assignList(nodeB, nodesB);
 
             for(VoxeltreeNode *nodeA : nodesA) {
                 for(VoxeltreeNode *nodeB : nodesB) {
