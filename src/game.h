@@ -40,7 +40,7 @@ private:
 	InputHandler *m_inputHandler;
 	Camera m_camera;
 	Skybox m_skybox;
-    VoxelCluster *m_testCluster;
+	VoxelCluster *m_testClusterA, *m_testClusterB;
     std::unique_ptr<VoxelRenderer> m_voxelRenderer;
     std::unique_ptr<HD3000Dummy> m_hd3000dummy;
 };
