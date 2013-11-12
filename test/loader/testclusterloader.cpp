@@ -6,28 +6,27 @@ using namespace bandit;
 
 go_bandit([]() {
 	describe("ClusterLoader", []() {
-		it("loads simple basicship", [&]() {
+		it("loads simple csv basicship", [&]() {
 
 			VoxelCluster *vcsv = new VoxelCluster();
-			VoxelCluster *vzox = new VoxelCluster();
 			ClusterLoader *l = new ClusterLoader();
 			l->loadClusterFromFile("data/voxelcluster/loadertest.csv", vcsv);
-			l->loadClusterFromFile("data/voxelcluster/loadertest.zox", vzox);
 			AssertThat(vcsv->voxelCount(), Equals(1));
-			AssertThat(vzox->voxelCount(), Equals(1));
 
 			vcsv->removeVoxel(cvec3(0, 0, 0));
-			vzox->removeVoxel(cvec3(0, 0, 0));
 			AssertThat(vcsv->voxelCount(), Equals(0));
-			AssertThat(vzox->voxelCount(), Equals(0));
 		});
+        it("loads simple zox basicship", [&]() {
+
+            VoxelCluster *vzox = new VoxelCluster();
+            ClusterLoader *l = new ClusterLoader();
+            l->loadClusterFromFile("data/voxelcluster/loadertest.zox", vzox);
+            AssertThat(vzox->voxelCount(), Equals(1));
+
+            vzox->removeVoxel(cvec3(0, 0, 0));
+            AssertThat(vzox->voxelCount(), Equals(0));
+        });
 	});
 });
 
 
-
-#ifndef TEST_ALL
-int main(int argc, char *argv[]) {
-	return bandit::run(argc, argv);
-}
-#endif
