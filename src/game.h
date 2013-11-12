@@ -38,7 +38,7 @@ private:
 	GLFWwindow *m_window;
 	InputHandler *m_inputHandler;
 	Camera m_camera;
-	Skybox m_skybox;
+	Skybox m_skyboxdummy,m_skybox;
     VoxelCluster *m_testCluster;
     std::unique_ptr<VoxelRenderer> m_voxelRenderer;
     std::unique_ptr<HD3000Dummy> m_hd3000dummy;

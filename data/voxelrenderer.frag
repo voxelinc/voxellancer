@@ -1,4 +1,4 @@
-#version 400
+#version 130
 
 
 uniform sampler1D positionSampler;
@@ -7,7 +7,8 @@ in vec2 v_uv;
 flat in vec3 normal;
 in vec3 color;
 
-layout (location = 0) out vec4 fragColor;
+//layout (location = 0) 
+out vec4 fragColor;
 
 void main()
 {
