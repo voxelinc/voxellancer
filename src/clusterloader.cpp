@@ -8,6 +8,10 @@ ClusterLoader::ClusterLoader(){
 
 void ClusterLoader::loadClusterFromFile(char* filename, Voxelcluster* voxelcluster){
 	inputStream = new ifstream(filename, std::ios::in | std::ios::binary);
+
+	if (inputStream->fail())
+		throw "file " + string(filename) + " not found";
+
 	vector<string> filenameParts;
 	splitStr(filename, '.', filenameParts);
 	string extension = filenameParts[1];
@@ -80,7 +84,7 @@ void ClusterLoader::readDimensionsCsv(){
 }
 
 void ClusterLoader::readClusterCsv(Voxelcluster *cluster){
-	int alpha, red, green, blue, currentZ, currentX, currentY;
+	int red, green, blue, currentZ, currentX, currentY;
 	string line;
 	vector<string> voxelStrings;
 	currentY = y;

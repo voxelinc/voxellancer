@@ -1,20 +1,5 @@
-include_directories(
-    ${BANDIT_INCLUDE_DIR}
-)
-
-add_subdirectory(geometry)
-
-add_subdirectory(loader)
-add_subdirectory(worldtree)
-add_subdirectory(property)
-
-
-set(TEST_TARGET test_all)
-file(GLOB_RECURSE TEST_FILES
-    "*.cpp"
-)
-
-add_definitions(-DTEST_ALL)
+set(TEST_TARGET test_clusterloader)
+set(TEST_FILES testclusterloader.cpp)
 
 source_group("Tests" FILES ${TEST_FILES})
 
@@ -24,7 +9,7 @@ add_executable(${TEST_TARGET}
 )
 
 target_link_libraries(${TEST_TARGET}
-	${LIBS_TO_LINK}
+    ${LIBS_TO_LINK}
 )
 
 set_target_properties(${TEST_TARGET}
