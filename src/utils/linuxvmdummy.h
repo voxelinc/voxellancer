@@ -13,7 +13,6 @@ public:
 	virtual ~LinuxVMDummy();
 	
 protected:
-	Property<bool> m_usedummy;
 
 	glow::ref_ptr<glow::Program> m_shaderProgram;
 	glow::ref_ptr<glow::VertexArrayObject> m_vertexArrayObject;

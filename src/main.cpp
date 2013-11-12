@@ -80,18 +80,6 @@ int main(void)
 {
 	GLFWwindow* window = nullptr;
 
-#ifndef WIN32
-	// Bad news is, on linux properties dont work yet -.-
-	//PropertyManager::getInstance()->load("data/config.ini");
-	//Property<bool> linuxvmworkaround = Property<bool>("general.linuxvmworkaround", false);
-	
-	//if (linuxvmworkaround){
-		putenv("LIBGL_ALWAYS_SOFTWARE=1");
-		MajorVersionRequire = 2;
-		MinorVersionRequire = 1;
-	//}
-#endif
-
 	if (!glfwInit()) {
 		glow::fatal("could not init glfw");
 		exit(-1);
@@ -110,7 +98,21 @@ int main(void)
 	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
 #endif
 
-    window = glfwCreateWindow(1280, 720, "Voxellancer", NULL, NULL);
+	window = glfwCreateWindow(1280, 720, "Voxellancer", NULL, NULL);
+#ifndef WIN32
+	if (!window){
+		// If 3.1 is not available and this is linux, assume we want mesa software rendering and try again
+		putenv("LIBGL_ALWAYS_SOFTWARE=1");
+
+		glfwTerminate();
+		if (!glfwInit()) {
+			glow::fatal("could not init glfw");
+			exit(-1);
+		}
+
+		window = glfwCreateWindow(1280, 720, "Voxellancer", NULL, NULL);
+	}
+#endif
 	if (!window) {
 		glfwTerminate();
 		glow::fatal("could not create window");
