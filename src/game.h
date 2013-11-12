@@ -11,6 +11,7 @@
 
 #include "camera.h"
 #include "skybox.h"
+#include "clusterloader.h"
 
 class InputHandler;
 class VoxelCluster;

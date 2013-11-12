@@ -64,13 +64,9 @@ void Game::initialize()
 
     m_testCluster = new VoxelCluster();
     m_testCluster->moveTo(glm::vec3(0, 0, -10));
-    m_testCluster->rotateY(20);
-    m_testCluster->rotateX(10);
-    m_testCluster->addVoxel(Voxel(cvec3(0, 0, 0), ucvec3(0, 255, 0)));
-    m_testCluster->addVoxel(Voxel(cvec3(1, 0, 0), ucvec3(255, 255, 0)));
-    m_testCluster->addVoxel(Voxel(cvec3(0, 1, 0), ucvec3(0, 0, 255)));
-    m_testCluster->addVoxel(Voxel(cvec3(0, 0, 1), ucvec3(255, 0, 0)));
-    m_testCluster->addVoxel(Voxel(cvec3(-1, 0, 0), ucvec3(255, 0, 128)));
+
+	ClusterLoader *cl = new ClusterLoader();
+	cl->loadClusterFromFile("data/voxelcluster/basicship.csv", m_testCluster);
 
 	glow::debug("Setup Camera");
 	//viewport set in resize
