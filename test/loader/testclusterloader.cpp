@@ -11,7 +11,7 @@ go_bandit([]() {
 
 			VoxelCluster *vcsv = new VoxelCluster();
 			ClusterLoader *l = new ClusterLoader();
-			l->loadClusterFromFile("data/voxelcluster/loadertest.csv", vcsv);
+			l->loadClusterFromFile("test/loader/loadertest.csv", vcsv);
 			AssertThat(vcsv->voxelCount(), Equals(1));
 
 			vcsv->removeVoxel(cvec3(0, 0, 0));
@@ -21,7 +21,7 @@ go_bandit([]() {
 
             VoxelCluster *vzox = new VoxelCluster();
             ClusterLoader *l = new ClusterLoader();
-            l->loadClusterFromFile("data/voxelcluster/loadertest.zox", vzox);
+            l->loadClusterFromFile("test/loader/loadertest.zox", vzox);
             AssertThat(vzox->voxelCount(), Equals(1));
 
             vzox->removeVoxel(cvec3(0, 0, 0));
