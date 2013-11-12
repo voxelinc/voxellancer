@@ -8,7 +8,7 @@ InputHandler::InputHandler(GLFWwindow *window, Camera *camera) :
 	m_window(window),
 	m_camera(camera),
 	m_angle_translate("input.angle_translate", 0.15f),
-	m_move_translate("input.move_translate", 0.5f)
+	m_move_translate("input.move_translate", 3.0f)
 {
 
 	glfwGetWindowSize(m_window, &m_windowWidth, &m_windowHeight);

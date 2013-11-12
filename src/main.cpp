@@ -16,7 +16,7 @@
 #include "game.h"
 #include "inputhandler.h"
 
-static GLint MajorVersionRequire = 2;
+static GLint MajorVersionRequire = 3;
 static GLint MinorVersionRequire = 1;
 
 static Game * game;
@@ -79,6 +79,19 @@ void setCallbacks(GLFWwindow* window)
 int main(void)
 {
 	GLFWwindow* window = nullptr;
+
+#ifndef WIN32
+	// Bad news is, on linux properties dont work yet -.-
+	//PropertyManager::getInstance()->load("data/config.ini");
+	//Property<bool> linuxvmworkaround = Property<bool>("general.linuxvmworkaround", false);
+	
+	//if (linuxvmworkaround){
+		putenv("LIBGL_ALWAYS_SOFTWARE=1");
+		std::cout << "putenv" << std::endl;
+		MajorVersionRequire = 2;
+		MinorVersionRequire = 1;
+	//}
+#endif
 
 	if (!glfwInit()) {
 		glow::fatal("could not init glfw");
