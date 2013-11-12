@@ -35,7 +35,7 @@ void Cube::prepareDraw(Camera * camera)
 }
 
 
-void Cube::draw(Voxelcluster * cluster)
+void Cube::draw(VoxelCluster * cluster)
 {
     m_shaderProgram->setUniform("model", cluster->matrix());
     glActiveTexture(GL_TEXTURE0);

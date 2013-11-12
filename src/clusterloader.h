@@ -14,15 +14,15 @@ class ClusterLoader {
 
 public:
 	ClusterLoader();
-	void loadClusterFromFile(char* filename, Voxelcluster* voxelcluster);
+	void loadClusterFromFile(char* filename, VoxelCluster* voxelcluster);
 
 private:
 	void readDimensionsCsv();
-	void readClusterCsv(Voxelcluster* cluster);
+	void readClusterCsv(VoxelCluster* cluster);
 	void splitStr(const string &s, char delim, vector<string> &elems);
-	void loadCsv(Voxelcluster* cluster);
-	void loadZox(Voxelcluster* cluster);
-	void readClusterZox(string content, Voxelcluster* cluster);
+	void loadCsv(VoxelCluster* cluster);
+	void loadZox(VoxelCluster* cluster);
+	void readClusterZox(string content, VoxelCluster* cluster);
 
 private:
 	std::ifstream* inputStream;

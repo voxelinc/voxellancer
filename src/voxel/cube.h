@@ -14,7 +14,7 @@ public:
     Cube();
 
     void prepareDraw(Camera * camera);
-    void draw(Voxelcluster * cluster);
+    void draw(VoxelCluster * cluster);
     void afterDraw();
   
 private:

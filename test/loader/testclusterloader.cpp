@@ -8,8 +8,8 @@ go_bandit([]() {
 	describe("ClusterLoader", []() {
 		it("loads simple basicship", [&]() {
 
-			Voxelcluster *vcsv = new Voxelcluster();
-			Voxelcluster *vzox = new Voxelcluster();
+			VoxelCluster *vcsv = new VoxelCluster();
+			VoxelCluster *vzox = new VoxelCluster();
 			ClusterLoader *l = new ClusterLoader();
 			l->loadClusterFromFile("data/voxelcluster/loadertest.csv", vcsv);
 			l->loadClusterFromFile("data/voxelcluster/loadertest.zox", vzox);

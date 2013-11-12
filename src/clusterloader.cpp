@@ -6,7 +6,7 @@ ClusterLoader::ClusterLoader(){
 
 }
 
-void ClusterLoader::loadClusterFromFile(char* filename, Voxelcluster* voxelcluster){
+void ClusterLoader::loadClusterFromFile(char* filename, VoxelCluster* voxelcluster){
 	inputStream = new ifstream(filename, std::ios::in | std::ios::binary);
 
 	if (inputStream->fail())
@@ -22,12 +22,12 @@ void ClusterLoader::loadClusterFromFile(char* filename, Voxelcluster* voxelclust
 
 }
 
-void ClusterLoader::loadCsv(Voxelcluster* cluster){
+void ClusterLoader::loadCsv(VoxelCluster* cluster){
 	readDimensionsCsv();
 	readClusterCsv(cluster);
 }
 
-void ClusterLoader::loadZox(Voxelcluster* cluster){
+void ClusterLoader::loadZox(VoxelCluster* cluster){
 	
 	string content;
 	inputStream->seekg(0, inputStream->end);
@@ -40,7 +40,7 @@ void ClusterLoader::loadZox(Voxelcluster* cluster){
 	return;
 }
 
-void ClusterLoader::readClusterZox(string content, Voxelcluster* cluster){
+void ClusterLoader::readClusterZox(string content, VoxelCluster* cluster){
 	int begin = content.find("{\"frames\": ");
 	int end = content.find(",");
 	int frameCount = stoi(content.substr(begin + 11, end - (begin + 11)));
@@ -83,7 +83,7 @@ void ClusterLoader::readDimensionsCsv(){
 	z = stoi(subStrings[2]);
 }
 
-void ClusterLoader::readClusterCsv(Voxelcluster *cluster){
+void ClusterLoader::readClusterCsv(VoxelCluster *cluster){
 	int red, green, blue, currentZ, currentX, currentY;
 	string line;
 	vector<string> voxelStrings;
