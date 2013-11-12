@@ -7,6 +7,16 @@ WorldTransform::WorldTransform() :
 
 }
 
+WorldTransform::WorldTransform(const glm::vec3 &position):
+    m_position(position)
+{
+}
+
+WorldTransform::WorldTransform(const glm::quat &orientation):
+    m_orientation(orientation)
+{
+}
+
 WorldTransform::~WorldTransform(){
 
 }
@@ -44,11 +54,12 @@ void WorldTransform::rotateZ(float rot)
     m_orientation = qrot * m_orientation;
 }
 
+// TODO: This is meant to be called "setOrientation()"
 void WorldTransform::rotateTo(glm::quat quat){
 	m_orientation = quat;
 }
 
-void WorldTransform::add(const WorldTransform &other) {
+void WorldTransform::transform(const WorldTransform &other) {
     m_position += other.position();
     m_orientation = m_orientation * other.orientation();
 }
@@ -64,3 +75,9 @@ const glm::mat4 WorldTransform::matrix() const {
 const glm::quat WorldTransform::orientation() const {
     return m_orientation;
 }
+
+void WorldTransform::applyTo(glm::vec3 &vertex) const {
+    vertex = glm::vec3(glm::vec4(vertex, 1.0) * glm::mat4_cast(m_orientation));
+    vertex += m_position;
+}
+

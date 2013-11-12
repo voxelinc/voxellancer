@@ -7,6 +7,7 @@
 #include <memory>
 #include <iostream>
 #include <fstream>
+#include <memory>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -21,38 +22,24 @@
 #include <fmod_errors.h>
 
 #include "property/propertymanager.h"
-
+#include "utils/hd3000dummy.h"
 #include "voxel/voxelcluster.h"
 #include "voxel/voxelrenderer.h"
 #include "inputhandler.h"
 
+
 using namespace std;
-
-
 
 Game::Game(GLFWwindow *window):
 	m_window(window),
 	m_camera(),
-	m_inputHandler(0),
-    m_voxelRenderer(0),
-    m_testCluster(0),
-    m_hd3000dummy()
+	m_inputHandler(window, &m_camera, &m_testClusterMoveable),
+	m_collisionDetector(m_worldtree, m_testClusterMoveable)
 {
 	reloadConfig();
-	m_inputHandler = new InputHandler(window, &m_camera);
-    m_testCluster = new VoxelCluster();
-    m_testCluster->moveTo(glm::vec3(0, 0, -10));
-    m_testCluster->addVoxel(Voxel(cvec3(0, 0, 0), ucvec3(0, 255, 0)));
-    m_testCluster->addVoxel(Voxel(cvec3(1, 0, 0), ucvec3(255, 255, 0)));
-    m_testCluster->addVoxel(Voxel(cvec3(0, 1, 0), ucvec3(0, 0, 255)));
-    m_testCluster->addVoxel(Voxel(cvec3(0, 0, 1), ucvec3(255, 0, 0)));
-    m_testCluster->addVoxel(Voxel(cvec3(-1, 0, 0), ucvec3(255, 0, 128)));
 }
 
 Game::~Game(){
-	if (m_inputHandler) delete m_inputHandler;
-    if (m_voxelRenderer) delete m_voxelRenderer;
-    if (m_testCluster) delete m_testCluster;
 }
 
 void Game::reloadConfig(){
@@ -68,8 +55,24 @@ void Game::initialize()
 	glow::debug("Game::testFMOD()");
     testFMOD();
 
-	glow::debug("Create Cube");
-    m_voxelRenderer = new VoxelRenderer();
+	glow::debug("Create Voxel");
+    m_voxelRenderer = std::unique_ptr<VoxelRenderer>(new VoxelRenderer);
+
+    m_testCluster.move(glm::vec3(0, 0, 0));
+    m_testCluster.addVoxel(Voxel(cvec3(1, 0, 0), ucvec3(0, 255, 0)));
+    m_testCluster.addVoxel(Voxel(cvec3(2, 0, 0), ucvec3(255, 255, 0)));
+    m_testCluster.addVoxel(Voxel(cvec3(1, 1, 0), ucvec3(0, 0, 255)));
+    m_testCluster.addVoxel(Voxel(cvec3(1, 0, 1), ucvec3(255, 0, 0)));
+    m_testCluster.addVoxel(Voxel(cvec3(0, 0, 0), ucvec3(255, 0, 128)));
+    m_worldtree.insert(&m_testCluster);
+
+    m_testClusterMoveable.move(glm::vec3(-20, 0, 0));
+    m_testClusterMoveable.addVoxel(Voxel(cvec3(1, 0, 0), ucvec3(0, 255, 0)));
+    m_testClusterMoveable.addVoxel(Voxel(cvec3(2, 0, 0), ucvec3(255, 255, 0)));
+    m_testClusterMoveable.addVoxel(Voxel(cvec3(1, 1, 0), ucvec3(0, 0, 255)));
+    m_testClusterMoveable.addVoxel(Voxel(cvec3(1, 0, 1), ucvec3(255, 0, 0)));
+    m_testClusterMoveable.addVoxel(Voxel(cvec3(0, 0, 0), ucvec3(255, 0, 128)));
+    m_worldtree.insert(&m_testClusterMoveable);
 
 	glow::debug("Setup Camera");
 	//viewport set in resize
@@ -77,6 +80,7 @@ void Game::initialize()
 	m_camera.setZNear(0.1f);
 	m_camera.setZFar(99999);
 
+    m_hd3000dummy = std::unique_ptr<HD3000Dummy>(new HD3000Dummy);
 
     glClearColor(0.2f, 0.3f, 0.4f, 1.f);
 	glow::debug("Game::initialize Done");
@@ -84,7 +88,10 @@ void Game::initialize()
 
 void Game::update(float delta_sec)
 {
-	m_inputHandler->update(delta_sec);
+    std::cout << "Performing collision test: " << std::endl;
+    m_collisionDetector.checkCollisions();
+
+	m_inputHandler.update(delta_sec);
 }
 
 void Game::draw()
@@ -97,11 +104,12 @@ void Game::draw()
 	m_skybox.draw(&m_camera);
 
     m_voxelRenderer->prepareDraw(&m_camera);
-    m_voxelRenderer->draw(m_testCluster);
-    // draw all other voxelcluster...
+    m_voxelRenderer->draw(&m_testCluster);
+    m_voxelRenderer->draw(&m_testClusterMoveable);
+    // draw all other voxelclusters...
     m_voxelRenderer->afterDraw();
 
-    m_hd3000dummy.drawIfActive();
+    m_hd3000dummy->drawIfActive();
 }
 
 void ERRCHECK(FMOD_RESULT result)
@@ -130,6 +138,11 @@ void Game::testFMOD()
 
     result = system->playSound(FMOD_CHANNEL_FREE, sound, false, &channel);
     ERRCHECK(result);
+}
+
+InputHandler * Game::inputHandler()
+{
+    return &m_inputHandler;
 }
 
 

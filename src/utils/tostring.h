@@ -6,6 +6,11 @@
 
 #include "geometry/aabb.h"
 
-std::string toString(const glm::vec3 &v);
-std::string toString(const AABB &aabb);
+template<typename T>
+std::string toString(const glm::detail::tvec3<T> &v);
 
+template<typename T>
+std::string toString(const TAABB<T> &aabb);
+
+
+#include "tostring.inc"

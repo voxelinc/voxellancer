@@ -9,6 +9,7 @@
 #include "voxelrenderer.h"
 #include "voxelcluster.h"
 #include "camera.h"
+#include "glowutils/UnitCube.h"
 
 
 VoxelRenderer::VoxelRenderer() :
@@ -30,18 +31,19 @@ void VoxelRenderer::prepareDraw(Camera * camera)
     m_shaderProgram->setUniform("viewProjection", camera->viewProjection());
 
     m_shaderProgram->use();
+    glProvokingVertex(GL_LAST_VERTEX_CONVENTION);
 }
 
 
 void VoxelRenderer::draw(VoxelCluster * cluster)
 {
-    m_shaderProgram->setUniform("model", cluster->matrix());
+    m_shaderProgram->setUniform("model", cluster->worldTransform().matrix());
     glActiveTexture(GL_TEXTURE0);
     cluster->positionTexture()->bind();
     glActiveTexture(GL_TEXTURE1);
     cluster->colorTexture()->bind();
-    
-	m_vertexArrayObject->drawArraysInstanced(GL_TRIANGLES, 0, 36, cluster->voxelCount());
+
+	m_vertexArrayObject->drawArraysInstanced(GL_TRIANGLE_STRIP, 0, 14, cluster->voxelCount());
 }
 
 
@@ -54,8 +56,8 @@ void VoxelRenderer::afterDraw()
 
 void VoxelRenderer::createAndSetupShaders()
 {
-    glow::Shader * vertexShader = glow::Shader::fromFile(GL_VERTEX_SHADER, "data/cube.vert");
-    glow::Shader * fragmentShader = glow::Shader::fromFile(GL_FRAGMENT_SHADER, "data/cube.frag");
+    glow::Shader * vertexShader = glow::Shader::fromFile(GL_VERTEX_SHADER, "data/voxelrenderer.vert");
+    glow::Shader * fragmentShader = glow::Shader::fromFile(GL_FRAGMENT_SHADER, "data/voxelrenderer.frag");
 
     m_shaderProgram = new glow::Program();
     m_shaderProgram->attach(vertexShader, fragmentShader);
@@ -66,74 +68,48 @@ void VoxelRenderer::createAndSetupShaders()
 
 }
 
-glow::Array<glm::vec3> strip()
+const glow::Array<glm::vec3> strip()
 {
     glm::vec3 vertices[8]
     {
-        glm::vec3(-.5f,-.5f, .5f),
-        glm::vec3( .5f,-.5f, .5f),
-        glm::vec3( .5f, .5f, .5f),
-        glm::vec3(-.5f, .5f, .5f),
-        glm::vec3(-.5f,-.5f,-.5f),
-        glm::vec3( .5f,-.5f,-.5f),
-        glm::vec3( .5f, .5f,-.5f),
-        glm::vec3(-.5f, .5f,-.5f)
+        glm::vec3(-.5f, -.5f, -.5f)
+            , glm::vec3(-.5f, -.5f, .5f)
+            , glm::vec3(-.5f, .5f, -.5f)
+            , glm::vec3(-.5f, .5f, .5f)
+            , glm::vec3(.5f, -.5f, -.5f)
+            , glm::vec3(.5f, -.5f, .5f)
+            , glm::vec3(.5f, .5f, -.5f)
+            , glm::vec3(.5f, .5f, .5f)
     };
 
-    glm::vec3 normals[6]
+    glm::vec3 normals[7]
     {
-        glm::vec3(-1, 0, 0),
-        glm::vec3(1, 0, 0),
-        glm::vec3(0, -1, 0),
-        glm::vec3(0, 1, 0),
-        glm::vec3(0, 0, -1),
-        glm::vec3(0, 0, 1),
+        glm::vec3(-1, 0, 0)
+            , glm::vec3(1, 0, 0)
+            , glm::vec3(0, -1, 0)
+            , glm::vec3(0, 1, 0)
+            , glm::vec3(0, 0, -1)
+            , glm::vec3(0, 0, 1)
+            , glm::vec3(0, 0, 0)  // dummy
     };
 
     // use an interleaved array
     return glow::Array<glm::vec3>
     {
-          vertices[0], normals[5] //front
-        , vertices[1], normals[5]
-        , vertices[2], normals[5]
-        , vertices[0], normals[5]
-        , vertices[2], normals[5]
-        , vertices[3], normals[5]
-
-        , vertices[4], normals[4] //back
-        , vertices[6], normals[4]
-        , vertices[5], normals[4]
-        , vertices[4], normals[4]
-        , vertices[7], normals[4]
-        , vertices[6], normals[4]
-
-        , vertices[0], normals[0] //left
-        , vertices[3], normals[0]
-        , vertices[4], normals[0]
-        , vertices[3], normals[0]
-        , vertices[7], normals[0]
-        , vertices[4], normals[0]
-
-        , vertices[1], normals[1] //right
-        , vertices[5], normals[1]
-        , vertices[6], normals[1]
-        , vertices[1], normals[1]
-        , vertices[6], normals[1]
-        , vertices[2], normals[1]
-
-        , vertices[3], normals[3] //top
-        , vertices[2], normals[3]
-        , vertices[6], normals[3]
-        , vertices[3], normals[3]
-        , vertices[6], normals[3]
-        , vertices[7], normals[3]
-
-        , vertices[0], normals[2] //bottom
-        , vertices[5], normals[2]
-        , vertices[1], normals[2]
-        , vertices[0], normals[2]
-        , vertices[4], normals[2]
-        , vertices[5], normals[2]
+        vertices[7], normals[6]
+            , vertices[3], normals[6]
+            , vertices[5], normals[5]
+            , vertices[1], normals[5]
+            , vertices[0], normals[2]
+            , vertices[3], normals[0]
+            , vertices[2], normals[0]
+            , vertices[7], normals[3]
+            , vertices[6], normals[3]
+            , vertices[5], normals[1]
+            , vertices[4], normals[1]
+            , vertices[0], normals[2]
+            , vertices[6], normals[4]
+            , vertices[2], normals[4]
     };
 }
 

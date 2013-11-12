@@ -3,6 +3,9 @@
 #include <cassert>
 #include <algorithm>
 
+#include "sphere.h"
+
+
 template<typename T>
 TAABB<T>::TAABB():
     m_llf(static_cast<T>(0), static_cast<T>(0), static_cast<T>(0)),
@@ -194,3 +197,14 @@ std::list<TAABB<T>> TAABB<T>::recursiveSplit(int recursions, Axis axis) const {
     return result;
 }
 
+template<typename T>
+bool TAABB<T>::operator==(const TAABB<T> &other) const {
+    return m_llf == other.llf() && m_rub == other.rub();
+}
+
+template<typename T>
+TAABB<float> TAABB<T>::containing(const Sphere &sphere) {
+    return TAABB<float>(
+        sphere.position() - glm::vec3(sphere.radius(), sphere.radius(), sphere.radius()),
+        sphere.position() + glm::vec3(sphere.radius(), sphere.radius(), sphere.radius()));
+}

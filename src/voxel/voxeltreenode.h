@@ -5,7 +5,7 @@
 #include <glm/glm.hpp>
 
 #include "geometry/sphere.h"
-#include "geometry/aabb.h"
+#include "geometry/grid3daabb.h"
 
 #include "voxel/voxel.h"
 
@@ -17,7 +17,7 @@ class VoxelCluster;
 class VoxeltreeNode
 {
 public:
-    VoxeltreeNode(VoxeltreeNode *parent, VoxelCluster &voxelcluster, const IAABB &gridAABB);
+    VoxeltreeNode(VoxeltreeNode *parent, VoxelCluster &voxelcluster, const Grid3dAABB &gridAABB = Grid3dAABB(glm::ivec3(0, 0, 0), glm::ivec3(0, 0, 0)));
     virtual ~VoxeltreeNode();
 
     bool isAtomic() const;
@@ -29,29 +29,24 @@ public:
     Voxel *voxel();
     const Voxel *voxel() const;
 
-    const IAABB &gridAABB() const;
+    const Grid3dAABB &gridAABB() const;
 
-    const Sphere &boundingSphere();
+    Sphere boundingSphere();
 
     void insert(Voxel *voxel);
-    void remove(const glm::ivec3 &cell);
+    void remove(const cvec3 &cell);
 
 
 protected:
     VoxeltreeNode *m_parent;
     VoxelCluster &m_voxelcluster;
-    Sphere m_boundingSphere;
-    IAABB m_gridAABB;
-    glm::vec3 m_centerRelPosition;
+    Grid3dAABB m_gridAABB;
 
-    WorldTransform m_transformCache;
     std::vector<VoxeltreeNode*> m_subnodes;
     Voxel *m_voxel;
 
     void split();
     void unsplit();
     void octuple();
-    void transform(const WorldTransform &transform);
-    void applyTransformCache();
 };
 

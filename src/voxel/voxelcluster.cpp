@@ -1,17 +1,21 @@
 #include "voxelcluster.h"
 
+#include <iostream>
+
 #include "glowutils/MathMacros.h"
 #include "glow/DebugMessageOutput.h"
+
+#include "utils/tostring.h"
 
 #include "worldtree/worldtreegeode.h"
 
 
-VoxelCluster::VoxelCluster():
-    WorldTransform(),
+VoxelCluster::VoxelCluster(float edgeLength):
+    m_voxelEdgeLength(edgeLength),
     m_texturesDirty(true),
     m_voxel(),
-    m_aabb(),
-    m_voxeltree(nullptr, *this, IAABB(glm::ivec3(0, 0, 0), glm::ivec3(1, 1, 1)))
+    m_voxeltree(nullptr, *this, Grid3dAABB(glm::ivec3(0, 0, 0), glm::ivec3(0, 0, 0))),
+    m_geode(nullptr)
 {
     m_positionTexture = new glow::Texture(GL_TEXTURE_1D);
     m_positionTexture->setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -26,25 +30,25 @@ VoxelCluster::~VoxelCluster() {
 
 }
 
-const AABB &VoxelCluster::aabb() {
-    return m_aabb;
+AABB VoxelCluster::aabb() {
+    return AABB::containing(m_voxeltree.boundingSphere());
 }
 
-const glm::vec3 &VoxelCluster::center() const {
-    return m_center;
+const glm::vec3 &VoxelCluster::centerInGrid() const {
+    return m_centerInGrid;
 }
 
-void VoxelCluster::setCenter(const glm::vec3 &center) {
-    m_center = center;
+void VoxelCluster::setCenterInGrid(const glm::vec3 &centerInGrid) {
+    m_centerInGrid = centerInGrid;
 }
 
-//const WorldTransform &VoxelCluster::worldTransform() const {
-//    return m_worldTransform;
-//}
-//
-//void VoxelCluster::setWorldTransform(const WorldTransform &transform) {
-//    m_worldTransform = transform;
-//}
+const WorldTransform &VoxelCluster::worldTransform() const {
+    return m_worldTransform;
+}
+
+void VoxelCluster::setWorldTransform(const WorldTransform &transform) {
+    m_worldTransform = transform;
+}
 
 VoxeltreeNode &VoxelCluster::voxeltree() {
     return m_voxeltree;
@@ -64,13 +68,32 @@ const WorldtreeGeode *VoxelCluster::geode() const {
 
 void VoxelCluster::setGeode(WorldtreeGeode *geode) {
     m_geode = geode;
+    std::cout << this << " setGeode " << geode << std::endl;
+    if(m_geode != nullptr) {
+        m_geode->setAABB(aabb());
+    }
+}
+
+float VoxelCluster::voxelEdgeLength() const {
+    return m_voxelEdgeLength;
+}
+
+void VoxelCluster::setVoxelEdgeLength(float voxelEdgeLength) {
+    m_voxelEdgeLength = voxelEdgeLength;
 }
 
 void VoxelCluster::addVoxel(const Voxel & voxel) {
     // TODO aabb extent(vec3)
-    m_voxel[voxel.position()] = voxel;
+    m_voxel[voxel.gridCell()] = voxel;
+
+    // Memoryleak as of now, voxeltree shouldn't manage the voxel
+    m_voxeltree.insert(new Voxel(voxel));
 
     m_texturesDirty = true;
+
+    if(m_geode != nullptr) {
+        m_geode->setAABB(aabb());
+    }
 }
 
 void VoxelCluster::removeVoxel(const cvec3 & position) {
@@ -78,17 +101,6 @@ void VoxelCluster::removeVoxel(const cvec3 & position) {
     m_texturesDirty = true;
 }
 
-glow::Texture * VoxelCluster::positionTexture() {
-    if (m_texturesDirty)
-        updateTextures();
-    return m_positionTexture;
-}
-
-glow::Texture * VoxelCluster::colorTexture() {
-    if (m_texturesDirty)
-        updateTextures();
-    return m_colorTexture;
-}
 
 void VoxelCluster::updateTextures() {
     int size = nextPowerOf2(m_voxel.size());
@@ -99,9 +111,9 @@ void VoxelCluster::updateTextures() {
     for (auto pair: m_voxel)
     {
         Voxel voxel = pair.second;
-        positionData[i * 3 + 0] = voxel.position().x+128;
-        positionData[i * 3 + 1] = voxel.position().y+128;
-        positionData[i * 3 + 2] = voxel.position().z+128;
+        positionData[i * 3 + 0] = voxel.gridCell().x+128;
+        positionData[i * 3 + 1] = voxel.gridCell().y+128;
+        positionData[i * 3 + 2] = voxel.gridCell().z+128;
         colorData[i * 3 + 0] = voxel.color().x;
         colorData[i * 3 + 1] = voxel.color().y;
         colorData[i * 3 + 2] = voxel.color().z;
@@ -122,4 +134,51 @@ int VoxelCluster::voxelCount() {
     return m_voxel.size();
 }
 
+void VoxelCluster::move(glm::vec3 dist) {
+    transform(WorldTransform(dist));
+}
+
+void VoxelCluster::moveTo(glm::vec3 pos) {
+    assert(0);
+}
+
+void VoxelCluster::rotateX(float rot) {
+    transform(WorldTransform(glm::quat(glm::vec3(rot, 0, 0))));
+}
+
+void VoxelCluster::rotateY(float rot) {
+    transform(WorldTransform(glm::quat(glm::vec3(0, rot, 0))));
+}
+
+void VoxelCluster::rotateZ(float rot) {
+    transform(WorldTransform(glm::quat(glm::vec3(0, 0, rot))));
+}
+
+void VoxelCluster::rotateTo(glm::quat quat) {
+    assert(0);
+}
+
+void VoxelCluster::transform(const WorldTransform &t) {
+    m_worldTransform.transform(t);
+
+    if(m_geode != nullptr) {
+        std::cout << "New aabb: " << toString(aabb()) << std::endl;
+        m_geode->setAABB(aabb());
+    }
+    else {
+        std::cout << (void*)this << "Meee: " << toString(aabb()) << std::endl;
+    }
+}
+
+glow::Texture * VoxelCluster::positionTexture() {
+    if (m_texturesDirty)
+        updateTextures();
+    return m_positionTexture;
+}
+
+glow::Texture * VoxelCluster::colorTexture() {
+    if (m_texturesDirty)
+        updateTextures();
+    return m_colorTexture;
+}
 

@@ -9,6 +9,7 @@ class WorldtreeGeode
 {
 public:
     WorldtreeGeode();
+    WorldtreeGeode(VoxelCluster *voxelcluster);
     virtual ~WorldtreeGeode();
 
     VoxelCluster *voxelcluster();

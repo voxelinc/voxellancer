@@ -5,6 +5,9 @@
 
 #include "axis.h"
 
+class Sphere;
+
+
 template<typename T>
 class TAABB
 {
@@ -22,7 +25,7 @@ public:
     T axisMin(Axis axis) const;
     T axisMax(Axis axis) const;
 
-    T extent(Axis axis) const;
+    virtual T extent(Axis axis) const;
 
     TAABB<T> moved(Axis axis, T delta) const;
     TAABB<T> moved(const glm::detail::tvec3<T> &delta) const;
@@ -44,6 +47,9 @@ public:
     void split(TAABB<T> &a, TAABB<T> &b, Axis axis) const;
     std::list<TAABB<T>> recursiveSplit(int recursions, Axis axis) const;
 
+    bool operator==(const TAABB<T> &other) const;
+
+    static TAABB<float> containing(const Sphere &sphere);
 
 protected:
     glm::detail::tvec3<T> m_llf, m_rub;
@@ -51,5 +57,6 @@ protected:
 
 typedef TAABB<glm::mediump_float> AABB;
 typedef TAABB<int> IAABB;
+typedef TAABB<signed char> CAABB;
 
 #include "aabb.inc"

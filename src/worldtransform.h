@@ -10,6 +10,8 @@ class WorldTransform {
 
 public:
 	WorldTransform();
+	WorldTransform(const glm::vec3 &position);
+	WorldTransform(const glm::quat &orientation);
 	virtual ~WorldTransform();
 
 	void clear();
@@ -22,12 +24,14 @@ public:
 	void rotateZ(float rot);
 	void rotateTo(glm::quat quat);
 
-	void add(const WorldTransform &other);
+	void transform(const WorldTransform &other);
 
 	const glm::vec3 &position() const;
 
 	const glm::mat4 matrix() const;
 	const glm::quat orientation() const;
+
+	void applyTo(glm::vec3 &vertex) const;
 
 protected:
 	glm::vec3 m_position;

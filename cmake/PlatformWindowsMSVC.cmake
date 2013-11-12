@@ -86,7 +86,7 @@ set(WIN32_LINKER_FLAGS
 )
 
 set(DEFAULT_LINKER_FLAGS_DEBUG
-	"${WIN32_LINKER_FLAGS} /DEBUG"
+	"${WIN32_LINKER_FLAGS} /DEBUG /LTCG"
 	# DEBUG        -> create debug info
 )
 

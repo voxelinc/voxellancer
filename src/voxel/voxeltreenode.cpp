@@ -1,18 +1,20 @@
 #include "voxeltreenode.h"
 
 #include <cassert>
+#include <iostream>
 
 #include "voxel/voxelcluster.h"
 
+#include "utils/tostring.h"
 
-VoxeltreeNode::VoxeltreeNode(VoxeltreeNode *parent, VoxelCluster &voxelcluster, const IAABB &gridAABB):
+
+VoxeltreeNode::VoxeltreeNode(VoxeltreeNode *parent, VoxelCluster &voxelcluster, const Grid3dAABB &gridAABB):
     m_parent(parent),
     m_voxelcluster(voxelcluster),
     m_gridAABB(gridAABB),
     m_voxel(nullptr)
 {
-    m_centerRelPosition = static_cast<glm::vec3>(m_gridAABB.llf()) + static_cast<glm::vec3>(m_gridAABB.rub() - m_gridAABB.llf()) / 2.0f;
-    m_centerRelPosition -= m_voxelcluster.center();
+
 }
 
 VoxeltreeNode::~VoxeltreeNode() {
@@ -46,20 +48,27 @@ const Voxel *VoxeltreeNode::voxel() const{
     return m_voxel;
 }
 
-const IAABB &VoxeltreeNode::gridAABB() const {
+const Grid3dAABB &VoxeltreeNode::gridAABB() const {
     return m_gridAABB;
 }
 
-const Sphere &VoxeltreeNode::boundingSphere() {
-    if(m_parent != nullptr) {
-        m_parent->applyTransformCache();
-    }
+Sphere VoxeltreeNode::boundingSphere() {
+    Sphere sphere;
+    glm::vec3 center;
 
-    return m_boundingSphere;
+    center = static_cast<glm::vec3>(m_gridAABB.rub() + m_gridAABB.llf() + glm::ivec3(1, 1, 1)) / 2.0f;
+    center *= m_voxelcluster.voxelEdgeLength();
+    center -= m_voxelcluster.centerInGrid();
+    m_voxelcluster.worldTransform().applyTo(center);
+
+    sphere.setPosition(center);
+    sphere.setRadius(glm::length(glm::vec3(m_gridAABB.rub() - m_gridAABB.llf() + glm::ivec3(1, 1, 1))/2.0f));
+
+    return sphere;
 }
 
 void VoxeltreeNode::insert(Voxel *voxel) {
-    if(!m_gridAABB.contains(voxel->gridCell())) {
+    if(!m_gridAABB.contains(glm::ivec3(voxel->gridCell()))) {
         octuple();
         insert(voxel);
         return;
@@ -70,17 +79,19 @@ void VoxeltreeNode::insert(Voxel *voxel) {
         m_voxel = voxel;
     }
     else {
-        split();
+        if(isLeaf()) {
+            split();
+        }
 
         for(VoxeltreeNode *subnode : m_subnodes) {
-            if(subnode->gridAABB().contains(voxel->gridCell())) {
+            if(subnode->gridAABB().contains(glm::ivec3(voxel->gridCell()))) {
                 subnode->insert(voxel);
             }
         }
     }
 }
 
-void VoxeltreeNode::remove(const glm::ivec3 &cell) {
+void VoxeltreeNode::remove(const cvec3 &cell) {
     if(isAtomic()) {
         assert(m_voxel != nullptr);
         delete m_voxel;
@@ -90,7 +101,7 @@ void VoxeltreeNode::remove(const glm::ivec3 &cell) {
         int numSubLeaves = 0;
 
         for(VoxeltreeNode *subnode : m_subnodes) {
-            if(subnode->gridAABB().contains(cell)) {
+            if(subnode->gridAABB().contains(glm::ivec3(cell))) {
                 subnode->remove(cell);
             }
             if(subnode->isLeaf()) {
@@ -105,9 +116,9 @@ void VoxeltreeNode::remove(const glm::ivec3 &cell) {
 }
 
 void VoxeltreeNode::split() {
-    std::list<IAABB> subnodeAABBs = m_gridAABB.recursiveSplit(2, XAxis);
+    std::list<Grid3dAABB> subnodeAABBs = m_gridAABB.recursiveSplit(2, XAxis);
 
-    for(IAABB &subAABB : subnodeAABBs) {
+    for(Grid3dAABB &subAABB : subnodeAABBs) {
         m_subnodes.push_back(new VoxeltreeNode(this, m_voxelcluster, subAABB));
     }
 }
@@ -132,7 +143,7 @@ void VoxeltreeNode::octuple() {
     m_subnodes.push_back(thisCopy);
 
     for(int sn = 1; sn < 8; sn++) {
-        IAABB aabb = m_gridAABB;
+        Grid3dAABB aabb = m_gridAABB;
         aabb.move(XAxis, sn % 2 >= 1 ? aabb.extent(XAxis) : 0);
         aabb.move(YAxis, sn % 4 >= 2 ? aabb.extent(YAxis) : 0);
         aabb.move(ZAxis, sn % 8 >= 4 ? aabb.extent(ZAxis) : 0);
@@ -140,19 +151,6 @@ void VoxeltreeNode::octuple() {
         m_subnodes.push_back(new VoxeltreeNode(this, m_voxelcluster, aabb));
     }
 
-    m_gridAABB = IAABB(glm::ivec3(0, 0, 0), m_gridAABB.rub() * 2);
+    m_gridAABB = Grid3dAABB(glm::ivec3(0, 0, 0), (m_gridAABB.rub()+glm::ivec3(1,1,1)) * 2 - glm::ivec3(1,1,1));
 }
 
-void VoxeltreeNode::transform(const WorldTransform &transform) {
-    m_transformCache.add(transform);
-
-    glm::vec4 rotatedCenter = glm::vec4(m_centerRelPosition, 1.0f) * glm::mat4_cast(transform.orientation());
-    m_boundingSphere.setPosition(glm::vec3(rotatedCenter) + m_voxelcluster.position());
-}
-
-void VoxeltreeNode::applyTransformCache() {
-    for(VoxeltreeNode *subnode : m_subnodes) {
-        subnode->transform(m_transformCache);
-    }
-    m_transformCache.clear();
-}

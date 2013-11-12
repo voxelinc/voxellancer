@@ -18,18 +18,18 @@ class Voxel
 {
 public:
     Voxel();
-    Voxel(cvec3 position, ucvec3 color);
+    Voxel(cvec3 gridCell, ucvec3 color);
     virtual ~Voxel();
 
-    const cvec3 & position() const;
-    const ucvec3 & color() const;
 
-    const glm::ivec3 &gridCell();
-    void setGridCell(const glm::ivec3 &cell);
+    const cvec3 &gridCell() const;
+    void setGridCell(const cvec3 &cell);
+
+    const ucvec3 &color() const;
+    void setColor(const ucvec3 &color);
 
 protected:
-    glm::ivec3 m_gridCell;
-    cvec3 m_position;
+    cvec3 m_gridCell;
     ucvec3 m_color;
 };
 
