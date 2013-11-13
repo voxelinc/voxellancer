@@ -40,6 +40,10 @@ const glm::vec3 &VoxelCluster::centerInGrid() const {
 
 void VoxelCluster::setCenterInGrid(const glm::vec3 &centerInGrid) {
     m_centerInGrid = centerInGrid;
+
+    if(m_geode != nullptr) {
+        m_geode->setAABB(aabb());
+    }
 }
 
 const WorldTransform &VoxelCluster::worldTransform() const {
@@ -48,6 +52,10 @@ const WorldTransform &VoxelCluster::worldTransform() const {
 
 void VoxelCluster::setWorldTransform(const WorldTransform &transform) {
     m_worldTransform = transform;
+
+    if(m_geode != nullptr) {
+        m_geode->setAABB(aabb());
+    }
 }
 
 VoxeltreeNode &VoxelCluster::voxeltree() {
@@ -68,6 +76,7 @@ const WorldtreeGeode *VoxelCluster::geode() const {
 
 void VoxelCluster::setGeode(WorldtreeGeode *geode) {
     m_geode = geode;
+
     if(m_geode != nullptr) {
         m_geode->setAABB(aabb());
     }
@@ -79,6 +88,10 @@ float VoxelCluster::voxelEdgeLength() const {
 
 void VoxelCluster::setVoxelEdgeLength(float voxelEdgeLength) {
     m_voxelEdgeLength = voxelEdgeLength;
+
+    if(m_geode != nullptr) {
+        m_geode->setAABB(aabb());
+    }
 }
 
 void VoxelCluster::addVoxel(const Voxel & voxel) {
@@ -97,6 +110,7 @@ void VoxelCluster::addVoxel(const Voxel & voxel) {
 
 void VoxelCluster::removeVoxel(const cvec3 & position) {
     m_voxel.erase(position);
+    m_voxeltree.remove(position);
     m_texturesDirty = true;
 }
 
@@ -131,30 +145,6 @@ void VoxelCluster::updateTextures() {
 
 int VoxelCluster::voxelCount() {
     return m_voxel.size();
-}
-
-void VoxelCluster::move(glm::vec3 dist) {
-    transform(WorldTransform(dist));
-}
-
-void VoxelCluster::moveTo(glm::vec3 pos) {
-    assert(0);
-}
-
-void VoxelCluster::rotateX(float rot) {
-    transform(WorldTransform(glm::quat(glm::vec3(rot, 0, 0))));
-}
-
-void VoxelCluster::rotateY(float rot) {
-    transform(WorldTransform(glm::quat(glm::vec3(0, rot, 0))));
-}
-
-void VoxelCluster::rotateZ(float rot) {
-    transform(WorldTransform(glm::quat(glm::vec3(0, 0, rot))));
-}
-
-void VoxelCluster::rotateTo(glm::quat quat) {
-    assert(0);
 }
 
 void VoxelCluster::transform(const WorldTransform &t) {

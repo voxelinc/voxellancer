@@ -67,17 +67,17 @@ void InputHandler::update(float delta_sec) {
 
             // position voxelcluster
 			if (glfwGetKey(m_window, GLFW_KEY_UP) == GLFW_PRESS){
-				m_voxelcluster->move(glm::vec3(0, 0, -m_move_translate * delta_sec));
+				m_voxelcluster->transform(glm::vec3(0, 0, -m_move_translate * delta_sec));
 			}
 			if (glfwGetKey(m_window, GLFW_KEY_LEFT) == GLFW_PRESS){
-				m_voxelcluster->move(-glm::vec3(m_move_translate * delta_sec, 0, 0));
+				m_voxelcluster->transform(-glm::vec3(m_move_translate * delta_sec, 0, 0));
 
 			}
 			if (glfwGetKey(m_window, GLFW_KEY_DOWN) == GLFW_PRESS){
-				m_voxelcluster->move(glm::vec3(0, 0, m_move_translate* delta_sec));
+				m_voxelcluster->transform(glm::vec3(0, 0, m_move_translate* delta_sec));
 			}
 			if (glfwGetKey(m_window, GLFW_KEY_RIGHT) == GLFW_PRESS){
-				m_voxelcluster->move(glm::vec3(m_move_translate* delta_sec, 0, 0));
+				m_voxelcluster->transform(glm::vec3(m_move_translate* delta_sec, 0, 0));
 			}
 
 			// lookAt

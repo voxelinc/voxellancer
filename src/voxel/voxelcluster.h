@@ -60,6 +60,7 @@ public:
 
 
 protected:
+    void updateAABB();
     void updateTextures();
 
     float m_voxelEdgeLength;

@@ -64,11 +64,11 @@ go_bandit([](){
         it("is moved when the cluster moves", [&]() {
             AssertThat(r->boundingSphere().position(), EqualsWithDelta(glm::vec3(0.5, 0.5, 0.5), glm::vec3(0.05, 0.05, 0.05)));
 
-            c->move(glm::vec3(4, 3, 2));
+            c->transform(glm::vec3(4, 3, 2));
             AssertThat(r->boundingSphere().position(), EqualsWithDelta(glm::vec3(4.5, 3.5, 2.5), glm::vec3(0.05, 0.05, 0.05)));
 
-            c->move(glm::vec3(1, 2, 3));
-            c->move(glm::vec3(-1, 2, 2));
+            c->transform(glm::vec3(1, 2, 3));
+            c->transform(glm::vec3(-1, 2, 2));
             AssertThat(r->boundingSphere().position(), EqualsWithDelta(glm::vec3(4.5, 7.5, 7.5), glm::vec3(0.05, 0.05, 0.05)));
         });
 
@@ -107,13 +107,13 @@ go_bandit([](){
 
             AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(0.5, 0.5, 0.5), glm::vec3(0.05, 0.05, 0.05)));
 
-            c->rotateX(-M_PI/2);
+            c->transform(glm::angleAxis((float)-M_PI/2, glm::vec3(1, 0, 0)));
             AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(0.5, 0.5, -0.5), glm::vec3(0.05, 0.05, 0.05)));
 
-            c->rotateY(-M_PI/2);
+            c->transform(glm::angleAxis((float)-M_PI/2, glm::vec3(0, 1, 0)));
             AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(-0.5, 0.5, -0.5), glm::vec3(0.05, 0.05, 0.05)));
 
-            c->rotateY(M_PI/2);
+            c->transform(glm::angleAxis((float)M_PI/2, glm::vec3(0, 0, 1)));
             AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(0.5, 0.5, -0.5), glm::vec3(0.05, 0.05, 0.05)));
         });
     });
