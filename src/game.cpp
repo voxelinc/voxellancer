@@ -86,10 +86,13 @@ void Game::initialize()
 	glow::debug("Game::initialize Done");
 }
 
+static int frame = 0;
+
 void Game::update(float delta_sec)
 {
     std::list<Collision> collisions = m_collisionDetector.checkCollisions();
-    std::cout << "Collisions: " << collisions.size() << std::endl;
+    if (frame++ % 30 == 0)
+        glow::debug("Collisions: %;", collisions.size());
 
 	m_inputHandler.update(delta_sec);
 }
