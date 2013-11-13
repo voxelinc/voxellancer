@@ -71,7 +71,7 @@ void WorldTransform::transform(const WorldTransform &other) {
 }
 
 const glm::mat4 WorldTransform::matrix() const {
-    return glm::mat4_cast(m_orientation) * glm::translate(m_position);
+    return glm::translate(m_position) * glm::mat4_cast(m_orientation);
 }
 
 

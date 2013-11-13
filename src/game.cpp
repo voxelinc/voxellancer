@@ -59,6 +59,7 @@ void Game::initialize()
     m_voxelRenderer = std::unique_ptr<VoxelRenderer>(new VoxelRenderer);
 
     m_testCluster.move(glm::vec3(2, 0, -10));
+    m_testCluster.rotateY(1);
     m_testCluster.addVoxel(Voxel(cvec3(1, 0, 0), ucvec3(0, 255, 0), &m_testCluster));
     m_testCluster.addVoxel(Voxel(cvec3(2, 0, 0), ucvec3(255, 255, 0), &m_testCluster));
     m_testCluster.addVoxel(Voxel(cvec3(1, 1, 0), ucvec3(0, 0, 255), &m_testCluster));
@@ -67,6 +68,8 @@ void Game::initialize()
     m_worldtree.insert(&m_testCluster);
 
     m_testClusterMoveable.move(glm::vec3(-5, 0, -10));
+    /*m_testClusterMoveable.rotateX(30);
+    m_testClusterMoveable.rotateZ(20);*/
     m_testClusterMoveable.addVoxel(Voxel(cvec3(1, 0, 0), ucvec3(0, 255, 0), &m_testClusterMoveable));
     m_testClusterMoveable.addVoxel(Voxel(cvec3(2, 0, 0), ucvec3(255, 255, 0), &m_testClusterMoveable));
     m_testClusterMoveable.addVoxel(Voxel(cvec3(1, 1, 0), ucvec3(0, 0, 255), &m_testClusterMoveable));
