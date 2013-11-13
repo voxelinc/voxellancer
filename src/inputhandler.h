@@ -1,8 +1,7 @@
 #pragma once
 
 #include <GL/glew.h>
-#include <GL/glext.h>
-#include <GL/gl.h>
+
 #include <GLFW/glfw3.h>
 
 #include "camera.h"

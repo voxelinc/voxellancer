@@ -58,7 +58,7 @@ void Game::initialize()
 	glow::debug("Create Voxel");
     m_voxelRenderer = std::unique_ptr<VoxelRenderer>(new VoxelRenderer);
 
-    m_testCluster.move(glm::vec3(0, 0, 0));
+    m_testCluster.move(glm::vec3(2, 0, -10));
     m_testCluster.addVoxel(Voxel(cvec3(1, 0, 0), ucvec3(0, 255, 0), &m_testCluster));
     m_testCluster.addVoxel(Voxel(cvec3(2, 0, 0), ucvec3(255, 255, 0), &m_testCluster));
     m_testCluster.addVoxel(Voxel(cvec3(1, 1, 0), ucvec3(0, 0, 255), &m_testCluster));
@@ -66,7 +66,7 @@ void Game::initialize()
     m_testCluster.addVoxel(Voxel(cvec3(0, 0, 0), ucvec3(255, 0, 128), &m_testCluster));
     m_worldtree.insert(&m_testCluster);
 
-    m_testClusterMoveable.move(glm::vec3(-20, 0, 0));
+    m_testClusterMoveable.move(glm::vec3(-5, 0, -10));
     m_testClusterMoveable.addVoxel(Voxel(cvec3(1, 0, 0), ucvec3(0, 255, 0), &m_testClusterMoveable));
     m_testClusterMoveable.addVoxel(Voxel(cvec3(2, 0, 0), ucvec3(255, 255, 0), &m_testClusterMoveable));
     m_testClusterMoveable.addVoxel(Voxel(cvec3(1, 1, 0), ucvec3(0, 0, 255), &m_testClusterMoveable));
@@ -86,10 +86,13 @@ void Game::initialize()
 	glow::debug("Game::initialize Done");
 }
 
+static int frame = 0;
+
 void Game::update(float delta_sec)
 {
     std::list<Collision> collisions = m_collisionDetector.checkCollisions();
-    std::cout << "Collisions: " << collisions.size() << std::endl;
+    if (frame++ % 30 == 0)
+        glow::debug("Collisions: %;", collisions.size());
 
 	m_inputHandler.update(delta_sec);
 }
