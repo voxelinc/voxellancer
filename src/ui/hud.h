@@ -2,7 +2,8 @@
 #include <memory>
 #include <list>
 
-class Camera;
+#include "camera.h"
+
 class VoxelCluster;
 class VoxelRenderer;
 
@@ -18,7 +19,8 @@ public:
 	void draw();
 
 protected:
-	Camera *m_camera;
+	Camera *m_gamecamera;
+	Camera m_mycamera;
 	std::unique_ptr<VoxelRenderer> m_voxelRenderer;
 	std::list<VoxelCluster> m_elements;
 };

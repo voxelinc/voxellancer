@@ -100,6 +100,7 @@ void Game::initialize()
 void Game::update(float delta_sec)
 {
 	m_inputHandler->update(delta_sec);
+	m_hud->update(delta_sec);
 }
 
 void Game::draw()
@@ -116,6 +117,8 @@ void Game::draw()
 	m_voxelRenderer->draw(m_testClusterB);
     // draw all other voxelclusters...
     m_voxelRenderer->afterDraw();
+
+	m_hud->draw();
 
     m_hd3000dummy->drawIfActive();
 }
