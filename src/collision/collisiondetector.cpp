@@ -27,8 +27,6 @@ const std::list<Collision> &CollisionDetector::checkCollisions() {
     std::set<WorldtreeGeode*> possibleColliders = m_worldtree.geodesInAABB(m_voxelcluster.geode()->aabb(), m_voxelcluster.geode()->containingNode());
     possibleColliders.erase(m_voxelcluster.geode());
 
-    std::cout << "Possible colliders: " << possibleColliders.size() << std::endl;
-
     for(WorldtreeGeode *possibleCollider : possibleColliders) {
         assert(possibleCollider->voxelcluster() != nullptr);
         checkCollisions(&m_voxelcluster.voxeltree(), &possibleCollider->voxelcluster()->voxeltree());
@@ -46,11 +44,9 @@ void CollisionDetector::checkCollisions(VoxeltreeNode* nodeA, VoxeltreeNode* nod
     }
 
     if(nodeA->boundingSphere().intersects(nodeB->boundingSphere())) {
-        std::cout << "  Intersecting nodes" << std::endl;
         if(nodeA->isLeaf() && nodeB->isLeaf()) {
             if(nodeA->voxel() != nullptr && nodeB->voxel() != nullptr) {
-                m_collisions.push_back(Collision());
-                std::cout << "Collision detected between voxel at " << toString(nodeA->gridAABB()) << " and " << toString(nodeB->gridAABB()) << std::endl;
+                m_collisions.push_back(Collision(nodeA->voxel(), nodeB->voxel()));
             }
         }
         else {

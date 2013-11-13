@@ -41,22 +41,22 @@ go_bandit([](){
         });
 
         it("basic insert", [&]() {
-            c->addVoxel(Voxel(cvec3(0, 0, 0), ucvec3(255, 255, 255)));
+            c->addVoxel(Voxel(cvec3(0, 0, 0), ucvec3(255, 255, 255), c));
             AssertThat(r->gridAABB(), Equals(Grid3dAABB(glm::ivec3(0,0,0), glm::ivec3(0, 0, 0))));
         });
 
         it("simple insert", [&]() {
-            Voxel v(cvec3(1, 1, 1), ucvec3(255, 255, 255));
+            Voxel v(cvec3(1, 1, 1), ucvec3(255, 255, 255), c);
 
-            c->addVoxel(Voxel(cvec3(1, 1, 1), ucvec3(255, 255, 255)));
+            c->addVoxel(Voxel(cvec3(1, 1, 1), ucvec3(255, 255, 255), c));
             AssertThat(r->subnodes().size(), Equals(8));
             AssertThat(r->gridAABB(), Equals(Grid3dAABB(glm::ivec3(0,0,0), glm::ivec3(1, 1, 1))));
 
-            c->addVoxel(Voxel(cvec3(5, 1, 1), ucvec3(255, 255, 255)));
+            c->addVoxel(Voxel(cvec3(5, 1, 1), ucvec3(255, 255, 255), c));
             AssertThat(r->subnodes().size(), Equals(8));
             AssertThat(r->gridAABB(), Equals(Grid3dAABB(glm::ivec3(0,0,0), glm::ivec3(7, 7, 7))));
 
-            c->addVoxel(Voxel(cvec3(2, 5, 5), ucvec3(255, 255, 255)));
+            c->addVoxel(Voxel(cvec3(2, 5, 5), ucvec3(255, 255, 255), c));
             AssertThat(r->subnodes().size(), Equals(8));
             AssertThat(r->gridAABB(), Equals(Grid3dAABB(glm::ivec3(0,0,0), glm::ivec3(7, 7, 7))));
         });
@@ -83,7 +83,7 @@ go_bandit([](){
             VoxelCluster *d = new VoxelCluster(6);
             d->setCenterInGrid(glm::vec3(6, 6, 6));
 
-            d->addVoxel(Voxel(cvec3(1, 1, 1), ucvec3(255, 255, 255))); // There are 8 subnodes now
+            d->addVoxel(Voxel(cvec3(1, 1, 1), ucvec3(255, 255, 255), c)); // There are 8 subnodes now
 
             for(VoxeltreeNode *subnode : d->voxeltree().subnodes()) {
                 float distance = glm::length(subnode->boundingSphere().position());
@@ -95,7 +95,7 @@ go_bandit([](){
             glm::vec3 v;
             VoxeltreeNode *n = nullptr;
 
-            c->addVoxel(Voxel(cvec3(1,1,1), ucvec3(255, 255, 255)));
+            c->addVoxel(Voxel(cvec3(1,1,1), ucvec3(255, 255, 255), c));
             c->setCenterInGrid(glm::vec3(1,1,1));
 
             for(VoxeltreeNode *subnode : c->voxeltree().subnodes()) {

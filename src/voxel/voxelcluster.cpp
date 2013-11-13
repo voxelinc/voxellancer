@@ -68,7 +68,6 @@ const WorldtreeGeode *VoxelCluster::geode() const {
 
 void VoxelCluster::setGeode(WorldtreeGeode *geode) {
     m_geode = geode;
-    std::cout << this << " setGeode " << geode << std::endl;
     if(m_geode != nullptr) {
         m_geode->setAABB(aabb());
     }
@@ -162,11 +161,7 @@ void VoxelCluster::transform(const WorldTransform &t) {
     m_worldTransform.transform(t);
 
     if(m_geode != nullptr) {
-        std::cout << "New aabb: " << toString(aabb()) << std::endl;
         m_geode->setAABB(aabb());
-    }
-    else {
-        std::cout << (void*)this << "Meee: " << toString(aabb()) << std::endl;
     }
 }
 

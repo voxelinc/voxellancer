@@ -14,13 +14,18 @@ struct VoxelHash
     }
 };
 
+
+class VoxelCluster;
+
 class Voxel
 {
 public:
-    Voxel();
-    Voxel(cvec3 gridCell, ucvec3 color);
+    Voxel(VoxelCluster *voxelCluster = nullptr);
+    Voxel(cvec3 gridCell, ucvec3 color, VoxelCluster *voxelCluster = nullptr);
     virtual ~Voxel();
 
+    VoxelCluster *voxelCluster();
+    const VoxelCluster *voxelCluster() const;
 
     const cvec3 &gridCell() const;
     void setGridCell(const cvec3 &cell);
@@ -28,7 +33,9 @@ public:
     const ucvec3 &color() const;
     void setColor(const ucvec3 &color);
 
+
 protected:
+    VoxelCluster *m_voxelCluster;
     cvec3 m_gridCell;
     ucvec3 m_color;
 };

@@ -32,8 +32,6 @@ std::set<WorldtreeGeode*> Worldtree::geodesInAABB(const AABB &aabb) const {
 std::set<WorldtreeGeode*> Worldtree::geodesInAABB(const AABB &aabb, WorldtreeNode *nodeHint) const {
     assert(nodeHint != nullptr);
 
-    std::cout << "Searching for geodes in AABB " << toString(aabb) << std::endl;
-
     if (nodeHint->aabb().contains(aabb)) {
         return nodeHint->geodesInAABB(aabb);
     }

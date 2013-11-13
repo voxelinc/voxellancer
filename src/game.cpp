@@ -59,19 +59,19 @@ void Game::initialize()
     m_voxelRenderer = std::unique_ptr<VoxelRenderer>(new VoxelRenderer);
 
     m_testCluster.move(glm::vec3(0, 0, 0));
-    m_testCluster.addVoxel(Voxel(cvec3(1, 0, 0), ucvec3(0, 255, 0)));
-    m_testCluster.addVoxel(Voxel(cvec3(2, 0, 0), ucvec3(255, 255, 0)));
-    m_testCluster.addVoxel(Voxel(cvec3(1, 1, 0), ucvec3(0, 0, 255)));
-    m_testCluster.addVoxel(Voxel(cvec3(1, 0, 1), ucvec3(255, 0, 0)));
-    m_testCluster.addVoxel(Voxel(cvec3(0, 0, 0), ucvec3(255, 0, 128)));
+    m_testCluster.addVoxel(Voxel(cvec3(1, 0, 0), ucvec3(0, 255, 0), &m_testCluster));
+    m_testCluster.addVoxel(Voxel(cvec3(2, 0, 0), ucvec3(255, 255, 0), &m_testCluster));
+    m_testCluster.addVoxel(Voxel(cvec3(1, 1, 0), ucvec3(0, 0, 255), &m_testCluster));
+    m_testCluster.addVoxel(Voxel(cvec3(1, 0, 1), ucvec3(255, 0, 0), &m_testCluster));
+    m_testCluster.addVoxel(Voxel(cvec3(0, 0, 0), ucvec3(255, 0, 128), &m_testCluster));
     m_worldtree.insert(&m_testCluster);
 
     m_testClusterMoveable.move(glm::vec3(-20, 0, 0));
-    m_testClusterMoveable.addVoxel(Voxel(cvec3(1, 0, 0), ucvec3(0, 255, 0)));
-    m_testClusterMoveable.addVoxel(Voxel(cvec3(2, 0, 0), ucvec3(255, 255, 0)));
-    m_testClusterMoveable.addVoxel(Voxel(cvec3(1, 1, 0), ucvec3(0, 0, 255)));
-    m_testClusterMoveable.addVoxel(Voxel(cvec3(1, 0, 1), ucvec3(255, 0, 0)));
-    m_testClusterMoveable.addVoxel(Voxel(cvec3(0, 0, 0), ucvec3(255, 0, 128)));
+    m_testClusterMoveable.addVoxel(Voxel(cvec3(1, 0, 0), ucvec3(0, 255, 0), &m_testClusterMoveable));
+    m_testClusterMoveable.addVoxel(Voxel(cvec3(2, 0, 0), ucvec3(255, 255, 0), &m_testClusterMoveable));
+    m_testClusterMoveable.addVoxel(Voxel(cvec3(1, 1, 0), ucvec3(0, 0, 255), &m_testClusterMoveable));
+    m_testClusterMoveable.addVoxel(Voxel(cvec3(1, 0, 1), ucvec3(255, 0, 0), &m_testClusterMoveable));
+    m_testClusterMoveable.addVoxel(Voxel(cvec3(0, 0, 0), ucvec3(255, 0, 128), &m_testClusterMoveable));
     m_worldtree.insert(&m_testClusterMoveable);
 
 	glow::debug("Setup Camera");
@@ -88,8 +88,8 @@ void Game::initialize()
 
 void Game::update(float delta_sec)
 {
-    std::cout << "Performing collision test: " << std::endl;
-    m_collisionDetector.checkCollisions();
+    std::list<Collision> collisions = m_collisionDetector.checkCollisions();
+    std::cout << "Collisions: " << collisions.size() << std::endl;
 
 	m_inputHandler.update(delta_sec);
 }

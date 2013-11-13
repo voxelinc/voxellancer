@@ -20,7 +20,6 @@ m_vertexBuffer(0)
 {
 	createAndSetupShaders();
 	createAndSetupGeometry();
-
 }
 
 
