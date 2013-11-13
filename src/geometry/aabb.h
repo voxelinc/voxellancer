@@ -59,4 +59,4 @@ typedef TAABB<glm::mediump_float> AABB;
 typedef TAABB<int> IAABB;
 typedef TAABB<signed char> CAABB;
 
-#include "aabb.inc"
+#include "aabb.inl"

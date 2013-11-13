@@ -13,4 +13,4 @@ template<typename T>
 std::string toString(const TAABB<T> &aabb);
 
 
-#include "tostring.inc"
+#include "tostring.inl"

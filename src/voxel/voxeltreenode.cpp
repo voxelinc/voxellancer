@@ -62,7 +62,13 @@ Sphere VoxeltreeNode::boundingSphere() {
     m_voxelcluster.worldTransform().applyTo(center);
 
     sphere.setPosition(center);
-    sphere.setRadius(glm::length(glm::vec3(m_gridAABB.rub() - m_gridAABB.llf() + glm::ivec3(1, 1, 1))/2.0f));
+
+    if(m_voxel != nullptr) {
+        sphere.setRadius(m_voxelcluster.voxelEdgeLength()/2);
+    }
+    else {
+        sphere.setRadius(glm::length(glm::vec3(m_gridAABB.rub() - m_gridAABB.llf() + glm::ivec3(1, 1, 1))/2.0f));
+    }
 
     return sphere;
 }

@@ -1,6 +1,7 @@
 #include <bandit/bandit.h>
 
 #include <iostream>
+#include <math.h>
 
 #include <glm/glm.hpp>
 
@@ -88,6 +89,32 @@ go_bandit([](){
                 float distance = glm::length(subnode->boundingSphere().position());
                 AssertThat(distance, EqualsWithDelta(5.2, 0.1));
             }
+        });
+
+        it("supports basic rotation without translation", [&]() {
+            glm::vec3 v;
+            VoxeltreeNode *n = nullptr;
+
+            c->addVoxel(Voxel(cvec3(1,1,1), ucvec3(255, 255, 255)));
+            c->setCenterInGrid(glm::vec3(1,1,1));
+
+            for(VoxeltreeNode *subnode : c->voxeltree().subnodes()) {
+                if(subnode->voxel() != nullptr) {
+                    n = subnode;
+                }
+            }
+            assert(n != nullptr);
+
+            AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(0.5, 0.5, 0.5), glm::vec3(0.05, 0.05, 0.05)));
+
+            c->rotateX(-M_PI/2);
+            AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(0.5, 0.5, -0.5), glm::vec3(0.05, 0.05, 0.05)));
+
+            c->rotateY(-M_PI/2);
+            AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(-0.5, 0.5, -0.5), glm::vec3(0.05, 0.05, 0.05)));
+
+            c->rotateY(M_PI/2);
+            AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(0.5, 0.5, -0.5), glm::vec3(0.05, 0.05, 0.05)));
         });
     });
 });

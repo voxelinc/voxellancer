@@ -32,7 +32,7 @@ void Camera::move(glm::vec3 dist){
 }
 
 void Camera::moveTo(glm::vec3 pos){
-	WorldTransform::moveTo(pos);
+	WorldTransform::setPosition(pos);
 	viewDirty();
 }
 
@@ -52,7 +52,7 @@ void Camera::rotateZ(float rot){
 }
 
 void Camera::rotateTo(glm::quat quat){
-	WorldTransform::rotateTo(quat);
+	WorldTransform::setOrientation(quat);
 	viewDirty();
 }
 

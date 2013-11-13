@@ -17,7 +17,7 @@ WorldTransform::WorldTransform(const glm::quat &orientation):
 {
 }
 
-WorldTransform::~WorldTransform(){
+WorldTransform::~WorldTransform() {
 
 }
 
@@ -26,14 +26,25 @@ void WorldTransform::clear() {
     m_orientation = glm::quat();
 }
 
+const glm::quat WorldTransform::orientation() const {
+    return m_orientation;
+}
+
+void WorldTransform::setOrientation(glm::quat quat){
+	m_orientation = quat;
+}
+
+const glm::vec3 &WorldTransform::position() const {
+    return m_position;
+}
+
+void WorldTransform::setPosition(glm::vec3 pos){
+	m_position = pos;
+}
+
 void WorldTransform::move(glm::vec3 dist)
 {
     m_position += dist * m_orientation;
-}
-
-// TODO: This is meant to be called "setPosition()"
-void WorldTransform::moveTo(glm::vec3 pos){
-	m_position = pos;
 }
 
 void WorldTransform::rotateX(float rot)
@@ -54,30 +65,17 @@ void WorldTransform::rotateZ(float rot)
     m_orientation = qrot * m_orientation;
 }
 
-// TODO: This is meant to be called "setOrientation()"
-void WorldTransform::rotateTo(glm::quat quat){
-	m_orientation = quat;
-}
-
 void WorldTransform::transform(const WorldTransform &other) {
     m_position += other.position();
     m_orientation = m_orientation * other.orientation();
-}
-
-const glm::vec3 &WorldTransform::position() const {
-    return m_position;
 }
 
 const glm::mat4 WorldTransform::matrix() const {
     return glm::mat4_cast(m_orientation) * glm::translate(m_position);
 }
 
-const glm::quat WorldTransform::orientation() const {
-    return m_orientation;
-}
 
 void WorldTransform::applyTo(glm::vec3 &vertex) const {
-    vertex = glm::vec3(glm::vec4(vertex, 1.0) * glm::mat4_cast(m_orientation));
-    vertex += m_position;
+    vertex = glm::vec3(matrix() * glm::vec4(vertex, 1.0f));
 }
 

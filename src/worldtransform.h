@@ -16,22 +16,25 @@ public:
 
 	void clear();
 
+	const glm::vec3 &position() const;
+	void setPosition(glm::vec3 pos);
+
+	const glm::quat orientation() const;
+	void setOrientation(glm::quat quat);
+
+
 	void move(glm::vec3 dist);
-	void moveTo(glm::vec3 pos);
 
 	void rotateX(float rot);
 	void rotateY(float rot);
 	void rotateZ(float rot);
-	void rotateTo(glm::quat quat);
 
 	void transform(const WorldTransform &other);
 
-	const glm::vec3 &position() const;
-
 	const glm::mat4 matrix() const;
-	const glm::quat orientation() const;
 
 	void applyTo(glm::vec3 &vertex) const;
+
 
 protected:
 	glm::vec3 m_position;
