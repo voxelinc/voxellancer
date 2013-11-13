@@ -12,6 +12,7 @@
 #include "camera.h"
 #include "skybox.h"
 
+class HUD;
 class InputHandler;
 class VoxelCluster;
 class VoxelRenderer;
@@ -41,6 +42,7 @@ private:
 	Camera m_camera;
 	VoxelCluster *m_testCluster;
 	std::unique_ptr<Skybox> m_skybox;
+	std::unique_ptr<HUD> m_hud;
 	std::unique_ptr<VoxelRenderer> m_voxelRenderer;
 	std::unique_ptr<HD3000Dummy> m_hd3000dummy;
 	std::unique_ptr<LinuxVMDummy> m_linuxvmdummy;

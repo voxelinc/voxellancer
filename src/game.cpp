@@ -27,6 +27,7 @@
 #include "voxel/voxelcluster.h"
 #include "voxel/voxelrenderer.h"
 #include "inputhandler.h"
+#include "ui/hud.h"
 
 using namespace std;
 
@@ -84,6 +85,10 @@ void Game::initialize()
 	m_camera.moveTo(glm::vec3(0, 0, 1));
 	m_camera.setZNear(0.1f);
 	m_camera.setZFar(99999);
+
+	glow::debug("Create HUD");
+	m_hud = std::unique_ptr<HUD>(new HUD);
+	m_hud->setCamera(&m_camera);
 
     m_hd3000dummy = std::unique_ptr<HD3000Dummy>(new HD3000Dummy);
 
