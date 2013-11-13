@@ -8,29 +8,12 @@
 #include "utils/ddstexture.h"
 
 LinuxVMDummy::LinuxVMDummy() :
-	m_texture(0),
 	m_shaderProgram(0),
 	m_vertexArrayObject(0),
 	m_vertexBuffer(0)
 {
-	/* Texture *//*
-	m_texture = new glow::Texture(GL_TEXTURE_CUBE_MAP);
-	if(!DdsTexture::loadImageCube(m_texture,
-		"data/skybox/nebula_1024_right1.dds",
-		"data/skybox/nebula_1024_left2.dds",
-		"data/skybox/nebula_1024_top3.dds",
-		"data/skybox/nebula_1024_bottom4.dds",
-		"data/skybox/nebula_1024_front5.dds",
-		"data/skybox/nebula_1024_back6.dds")){
-		throw std::runtime_error("Skybox textures not found. Check working directory?");
-	}
-	m_texture->setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	m_texture->setParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	m_texture->setParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	m_texture->setParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	m_texture->setParameter(GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-	*/
+	/* I can't nail it exactly, but mesa requires some part of this to be executed for the real skybox to be rendered... 
+	* these actions do not affect normal operation on "clean" systems because we just initialize some stuff we never use */
 
 	/* Shaders */
 	glow::Shader * vertexShader = glow::Shader::fromFile(GL_VERTEX_SHADER, "data/skybox.vert");
@@ -41,7 +24,7 @@ LinuxVMDummy::LinuxVMDummy() :
 	m_shaderProgram->bindFragDataLocation(0, "fragColor");
 
 	m_shaderProgram->getUniform<GLint>("texCube")->set(0);
-	
+
 
 	/* Geometry */
 	auto vertices = glow::Array<glm::vec3>()

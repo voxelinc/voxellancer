@@ -5,7 +5,7 @@
 #include "glow/VertexArrayObject.h"
 #include "glow/Buffer.h"
 
-#include "camera.h"
+#include "property/property.h"
 
 class LinuxVMDummy {
 public:
@@ -14,7 +14,6 @@ public:
 	
 protected:
 
-	glow::ref_ptr<glow::Texture> m_texture;
 	glow::ref_ptr<glow::Program> m_shaderProgram;
 	glow::ref_ptr<glow::VertexArrayObject> m_vertexArrayObject;
 	glow::ref_ptr<glow::Buffer> m_vertexBuffer;
