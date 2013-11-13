@@ -4,6 +4,7 @@
 
 #include "camera.h"
 
+class HUDElement;
 class VoxelCluster;
 class VoxelRenderer;
 
@@ -22,5 +23,5 @@ protected:
 	Camera *m_gamecamera;
 	Camera m_mycamera;
 	std::unique_ptr<VoxelRenderer> m_voxelRenderer;
-	std::list<VoxelCluster> m_elements;
+	std::list<std::unique_ptr<HUDElement>> m_elements;
 };
