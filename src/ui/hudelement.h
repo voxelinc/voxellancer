@@ -2,7 +2,7 @@
 
 #include <glm/glm.hpp>
 
-#include "voxel\voxelcluster.h"
+#include "voxel/voxelcluster.h"
 
 enum HUDOffsetOrigin {
 	Center,

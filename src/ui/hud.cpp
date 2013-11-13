@@ -53,6 +53,7 @@ HUD::~HUD(){
 
 void HUD::setCamera(Camera *camera){
 	m_gamecamera = camera;
+	m_hudorientation = camera->orientation();
 }
 
 Camera *HUD::camera(){
@@ -60,22 +61,35 @@ Camera *HUD::camera(){
 }
 
 void HUD::update(float delta_sec){
-
+	m_hudorientation = glm::mix(m_hudorientation, m_gamecamera->orientation(), glm::min(delta_sec*30.f,1.0f));
 }
 
 void HUD::draw(){
 	assert(m_gamecamera != nullptr);
 	glClear(GL_DEPTH_BUFFER_BIT);
+
+	if (m_mycamera.aspectRatio() != m_gamecamera->aspectRatio() || m_mycamera.fovy() != m_gamecamera->fovy()){
+		adjustPositions();
+	}
+
+	m_mycamera.rotateTo((m_gamecamera->orientation()*glm::inverse(m_hudorientation)));
+	m_voxelRenderer->prepareDraw(&m_mycamera);
+
+	for (std::unique_ptr<HUDElement>& element : m_elements)	{
+		m_voxelRenderer->draw(element.get());
+	}
+
+	m_voxelRenderer->afterDraw();
+}
+
+void HUD::adjustPositions(){
 	m_mycamera.setFovy(m_gamecamera->fovy());
 	m_mycamera.setViewport(m_gamecamera->viewport());
-
-	m_voxelRenderer->prepareDraw(&m_mycamera);
 
 	float dy = floor(glm::tan(glm::radians(m_mycamera.fovy() / 2)) * 100);
 	float dx = m_mycamera.aspectRatio()*dy;
 
-	for (std::unique_ptr<HUDElement>& element : m_elements)
-	{
+	for (std::unique_ptr<HUDElement>& element : m_elements)	{
 		//TODO: we don't need to recalculate every frame, find some way to subscribe to resize event
 		switch (element->m_origin){
 		case Center:
@@ -94,9 +108,5 @@ void HUD::draw(){
 			element->moveTo(glm::vec3(dx, -dy, hud_depth) + element->m_offset);
 			break;
 		}
-
-		m_voxelRenderer->draw(element.get());
 	}
-
-	m_voxelRenderer->afterDraw();
 }

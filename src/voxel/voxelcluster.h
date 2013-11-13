@@ -6,7 +6,7 @@
 
 #include "geometry/aabb.h"
 #include "worldobject.h"
-#include "voxel.h"
+#include "voxel/voxel.h"
 
 class VoxelCluster : public WorldObject
 {
