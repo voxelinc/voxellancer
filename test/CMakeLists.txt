@@ -9,6 +9,7 @@ add_subdirectory(geometry)
 add_subdirectory(worldtree)
 add_subdirectory(property)
 add_subdirectory(voxelcluster)
+add_subdirectory(loader)
 
 
 file(GLOB_RECURSE ALL_TEST_FILES
