@@ -4,6 +4,7 @@
 
 #include <glm/gtx/quaternion.hpp>
 
+#include "property/property.h"
 #include "camera.h"
 
 class HUDElement;
@@ -25,8 +26,10 @@ protected:
 	void adjustPositions();
 
 	Camera *m_gamecamera;
-	Camera m_mycamera;
-	glm::quat m_hudorientation;
+	WorldObject m_hudcamera;
+	Camera m_rendercamera;
 	std::unique_ptr<VoxelRenderer> m_voxelRenderer;
 	std::list<std::unique_ptr<HUDElement>> m_elements;
+
+	Property<float> m_inertia_move, m_inertia_rotate, m_move_multiplier, m_distance;
 };
