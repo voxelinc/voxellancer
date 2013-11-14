@@ -7,8 +7,6 @@
 
 #include "ddstexture.h"
 
-using namespace std;
-
 bool DdsTexture::loadImage2d(glow::Texture * texture, std::string path){
     assert(texture->target() != GL_TEXTURE_CUBE_MAP);
     return loadImage2d(texture, path, texture->target());
