@@ -21,8 +21,6 @@ static GLint MinorVersionRequire = 1;
 
 static Game * game;
 
-using namespace std;
-
 static void checkVersion() {
     glow::info("OpenGL Version Needed %;.%; (%;.%; Found)",
         MajorVersionRequire, MinorVersionRequire,
@@ -155,8 +153,8 @@ int main(void)
 		glfwDestroyWindow(window);
 		glfwTerminate();
         glow::fatal("Termination after Exception: %;", e.what());
-		cout << "Hit enter to quit" << endl;
-		cin.ignore(1, '\n');
+		std::cout << "Hit enter to quit" << std::endl;
+		std::cin.ignore(1, '\n');
 	}
 
     return 0;

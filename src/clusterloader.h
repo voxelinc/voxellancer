@@ -8,8 +8,6 @@
 
 class VoxelCluster;
 
-using namespace std;
-
 class ClusterLoader {
 
 public:
@@ -19,10 +17,10 @@ public:
 private:
 	void readDimensionsCsv();
 	void readClusterCsv(VoxelCluster* cluster);
-	void splitStr(const string &s, char delim, vector<string> &elems);
+	void splitStr(const std::string &s, char delim, std::vector<std::string> &elems);
 	void loadCsv(VoxelCluster* cluster);
 	void loadZox(VoxelCluster* cluster);
-	void readClusterZox(string content, VoxelCluster* cluster);
+	void readClusterZox(std::string content, VoxelCluster* cluster);
 
 private:
 	std::ifstream* inputStream;

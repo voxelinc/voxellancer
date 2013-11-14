@@ -27,9 +27,6 @@
 #include "voxel/voxelrenderer.h"
 #include "inputhandler.h"
 
-using namespace std;
-
-
 
 Game::Game(GLFWwindow *window):
 	m_window(window),
