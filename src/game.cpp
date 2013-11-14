@@ -69,6 +69,11 @@ void Game::initialize()
     m_testClusterMoveable.transform(glm::vec3(-20, 0, 0));
     m_testClusterMoveable.addVoxel(Voxel(cvec3(1, 0, 0), ucvec3(0, 255, 0), &m_testClusterMoveable));
     m_testClusterMoveable.addVoxel(Voxel(cvec3(2, 0, 0), ucvec3(255, 255, 0), &m_testClusterMoveable));
+    m_testClusterMoveable.addVoxel(Voxel(cvec3(3, 0, 0), ucvec3(255, 255, 0), &m_testClusterMoveable));
+    m_testClusterMoveable.addVoxel(Voxel(cvec3(4, 0, 0), ucvec3(255, 255, 0), &m_testClusterMoveable));
+    m_testClusterMoveable.addVoxel(Voxel(cvec3(5, 0, 0), ucvec3(255, 255, 0), &m_testClusterMoveable));
+    m_testClusterMoveable.addVoxel(Voxel(cvec3(6, 0, 0), ucvec3(255, 255, 0), &m_testClusterMoveable));
+    m_testClusterMoveable.addVoxel(Voxel(cvec3(7, 0, 0), ucvec3(255, 255, 0), &m_testClusterMoveable));
     m_testClusterMoveable.addVoxel(Voxel(cvec3(1, 1, 0), ucvec3(0, 0, 255), &m_testClusterMoveable));
     m_testClusterMoveable.addVoxel(Voxel(cvec3(1, 0, 1), ucvec3(255, 0, 0), &m_testClusterMoveable));
     m_testClusterMoveable.addVoxel(Voxel(cvec3(0, 0, 0), ucvec3(255, 0, 128), &m_testClusterMoveable));
