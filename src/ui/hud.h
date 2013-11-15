@@ -13,7 +13,7 @@ class VoxelRenderer;
 
 class HUD {
 public:
-	HUD();
+	HUD(std::list<VoxelCluster*> ships);
 	virtual ~HUD();
 
 	void setCamera(Camera *camera);
@@ -30,6 +30,8 @@ protected:
 	Camera m_rendercamera;
 	std::unique_ptr<VoxelRenderer> m_voxelRenderer;
 	std::list<std::unique_ptr<HUDElement>> m_elements;
+	std::unique_ptr<HUDElement> m_shiparrow;
+	std::list<VoxelCluster*> m_ships;
 
-	Property<float> m_inertia_move, m_inertia_rotate, m_move_multiplier, m_distance;
+	Property<float> m_distance, m_move_multiplier, m_inertia_move, m_inertia_rotate, m_arrow_maxdistance, m_arrow_radius;
 };
