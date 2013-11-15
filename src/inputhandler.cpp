@@ -15,10 +15,11 @@ InputHandler::InputHandler(GLFWwindow *window, Camera *camera) :
 	glfwSetCursorPos(m_window, m_windowWidth / 2, m_windowHeight / 2);
 	m_cursorMaxDistance = glm::min(m_windowHeight, m_windowWidth);
 
-	m_fpsControls = true;
+	m_fpsControls = false;
+	m_mouseControl = false;
 	m_lastfocus = glfwGetWindowAttrib(m_window, GLFW_FOCUSED);
 
-	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 }
 
 InputHandler::~InputHandler(){
@@ -36,7 +37,16 @@ void InputHandler::resizeEvent(
 	m_lastfocus = false; // through window resize, everything becomes scrambled
 }
 
+void InputHandler::keyCallback(int key, int scancode, int action, int mods){
+	/* Check here for single-time key-presses, that you do not want fired multiple times, e.g. toggles */
+	if (key == GLFW_KEY_F1 && action == GLFW_PRESS)
+		toggleControls();
+	if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
+		m_mouseControl = !m_mouseControl;
+}
+
 void InputHandler::update(float delta_sec){
+	/* Check here for every-frame events, e.g. view & movement controls */
 
 	if (glfwGetWindowAttrib(m_window, GLFW_FOCUSED)){
 		if (m_lastfocus){
@@ -70,9 +80,14 @@ void InputHandler::update(float delta_sec){
 			float rel = 10;
 			float deadzone = 0.1f;
 			if (!m_fpsControls) {
-				rel = (float)glm::max(1.0, (sqrt(pow(m_windowWidth - (int)floor(x), 2) + pow(m_windowHeight - (int)floor(y), 2))) / m_cursorMaxDistance);
-				rel = glm::max(0.0f, rel - deadzone) / (1 - deadzone);
-				rel = glm::smoothstep(0.f, 1.f, rel);
+				if (m_mouseControl || glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS){
+					rel = (float)glm::max(1.0, (sqrt(pow(m_windowWidth - (int)floor(x), 2) + pow(m_windowHeight - (int)floor(y), 2))) / m_cursorMaxDistance);
+					rel = glm::max(0.0f, rel - deadzone) / (1 - deadzone);
+					rel = glm::smoothstep(0.f, 1.f, rel);
+				}
+				else {
+					rel = 0;
+				}
 			}
 
 			float angX = ((int)floor(x) - m_windowWidth / 2) * m_angle_translate * rel;

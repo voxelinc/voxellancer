@@ -49,12 +49,11 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
 {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, GL_TRUE);
-	if (key == GLFW_KEY_F1 && action == GLFW_PRESS)
-		game->inputHandler()->toggleControls();
 	if (key == GLFW_KEY_F5 && action == GLFW_PRESS)
 		glow::ShaderFile::reloadAll();
 	if (key == GLFW_KEY_F6 && action == GLFW_PRESS)
 		game->reloadConfig();
+	game->inputHandler()->keyCallback(key, scancode, action, mods);
 }
 
 static void mouseButtonCallback(GLFWwindow* window, int Button, int Action, int mods) {
