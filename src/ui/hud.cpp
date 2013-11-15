@@ -44,11 +44,17 @@ m_inertia_move("hud.inertia_move", 25.f)
 	element->m_origin = HUDOffsetOrigin::BottomLeft;
 	element->m_offset = glm::vec3(1, 1, 0);
 	m_elements.push_back(move(element));
-	element.reset(new HUDElement);
 
+	element.reset(new HUDElement);
 	loader.loadClusterFromFile("data/hud/bottomright.csv", element.get());
 	element->m_origin = HUDOffsetOrigin::BottomRight;
 	element->m_offset = glm::vec3(-4, 1, 0);
+	m_elements.push_back(move(element));
+
+	element.reset(new HUDElement);
+	loader.loadClusterFromFile("data/hud/bottom.csv", element.get());
+	element->m_origin = HUDOffsetOrigin::Bottom;
+	element->m_offset = glm::vec3(-27, 1, 0);
 	m_elements.push_back(move(element));
 }
 
@@ -100,20 +106,33 @@ void HUD::adjustPositions(){
 	for (std::unique_ptr<HUDElement>& element : m_elements)	{
 		//TODO: we don't need to recalculate every frame, find some way to subscribe to resize event
 		switch (element->m_origin){
-		case Center:
-			element->moveTo(glm::vec3(0, 0, -m_distance) + element->m_offset);
-			break;
 		case TopLeft:
 			element->moveTo(glm::vec3(-dx, dy, -m_distance) + element->m_offset);
+			break;
+		case Top:
+			element->moveTo(glm::vec3(0, dy, -m_distance) + element->m_offset);
 			break;
 		case TopRight:
 			element->moveTo(glm::vec3(dx, dy, -m_distance) + element->m_offset);
 			break;
-		case BottomLeft:
-			element->moveTo(glm::vec3(-dx, -dy, -m_distance) + element->m_offset);
+		case Right:
+			element->moveTo(glm::vec3(dx, 0, -m_distance) + element->m_offset);
 			break;
 		case BottomRight:
 			element->moveTo(glm::vec3(dx, -dy, -m_distance) + element->m_offset);
+			break;
+		case Bottom:
+			element->moveTo(glm::vec3(0, -dy, -m_distance) + element->m_offset);
+			break;
+		case BottomLeft:
+			element->moveTo(glm::vec3(-dx, -dy, -m_distance) + element->m_offset);
+			break;
+		case Left:
+			element->moveTo(glm::vec3(-dx, 0, -m_distance) + element->m_offset);
+			break;
+		case Center:
+		default:
+			element->moveTo(glm::vec3(0, 0, -m_distance) + element->m_offset);
 			break;
 		}
 	}
