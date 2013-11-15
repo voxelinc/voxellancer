@@ -11,6 +11,7 @@ add_subdirectory(property)
 add_subdirectory(voxelcluster)
 add_subdirectory(voxeltree)
 add_subdirectory(collision)
+add_subdirectory(loader)
 
 
 file(GLOB_RECURSE ALL_TEST_FILES

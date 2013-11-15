@@ -11,6 +11,7 @@
 
 #include "camera.h"
 #include "skybox.h"
+#include "clusterloader.h"
 
 #include "voxel/voxelcluster.h"
 
@@ -52,6 +53,7 @@ private:
     VoxelCluster m_testClusterMoveable;
     Worldtree m_worldtree;
     CollisionDetector m_collisionDetector;
+	VoxelCluster *m_testClusterA, *m_testClusterB;
     std::unique_ptr<VoxelRenderer> m_voxelRenderer;
     std::unique_ptr<HD3000Dummy> m_hd3000dummy;
 };
