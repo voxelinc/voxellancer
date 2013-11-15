@@ -24,7 +24,7 @@ m_inertia_move("hud.inertia_move", 25.f)
 	ClusterLoader loader;
 	loader.loadClusterFromFile("data/hud/crosshair.csv", element.get());
 	element->m_origin = HUDOffsetOrigin::Center;
-	element->m_offset = glm::vec3(-2, -2, 0);
+	element->m_offset = glm::vec3(-4, -4, 0);
 	m_elements.push_back(move(element));
 
 	element.reset(new HUDElement);
