@@ -12,13 +12,13 @@ uniform sampler1D colorSampler;
 in vec3 a_vertex;
 in vec3 a_normal;
 
-out vec2 v_uv;
 flat out vec3 normal;
 out vec3 color;
+out vec3 modelposition;
 
 void main()
 {
-	v_uv = a_vertex.xy;
+	modelposition = a_vertex;
 
     // map [0:1] to [-128:127]
     vec3 offset = texelFetch(positionSampler, gl_InstanceIDARB, 0).xyz * 255 - 128;

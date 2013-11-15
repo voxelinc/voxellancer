@@ -11,6 +11,7 @@
 
 #include "camera.h"
 #include "skybox.h"
+#include "clusterloader.h"
 
 class InputHandler;
 class VoxelCluster;
@@ -39,7 +40,7 @@ private:
 	GLFWwindow *m_window;
 	InputHandler *m_inputHandler;
 	Camera m_camera;
-	VoxelCluster *m_testCluster;
+	VoxelCluster *m_testClusterA, *m_testClusterB;
 	std::unique_ptr<Skybox> m_skybox;
 	std::unique_ptr<VoxelRenderer> m_voxelRenderer;
 	std::unique_ptr<HD3000Dummy> m_hd3000dummy;
