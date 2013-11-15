@@ -94,7 +94,7 @@ void HUD::adjustPositions(){
 	m_rendercamera.setFovy(m_gamecamera->fovy());
 	m_rendercamera.setViewport(m_gamecamera->viewport());
 
-	float dy = floor(glm::tan(glm::radians(m_rendercamera.fovy() / 2)) * 100);
+	float dy = floor(glm::tan(glm::radians(m_rendercamera.fovy() / 2)) * m_distance);
 	float dx = m_rendercamera.aspectRatio()*dy;
 
 	for (std::unique_ptr<HUDElement>& element : m_elements)	{
