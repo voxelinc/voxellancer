@@ -107,13 +107,13 @@ go_bandit([](){
 
             AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(0.5, 0.5, 0.5), glm::vec3(0.05, 0.05, 0.05)));
 
-            c->transform(glm::angleAxis((float)-M_PI/2, glm::vec3(1, 0, 0)));
-            AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(0.5, 0.5, -0.5), glm::vec3(0.05, 0.05, 0.05)));
+            c->transform(glm::angleAxis((float)90.0, glm::vec3(1, 0, 0)));
+            AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(0.5, -0.5, 0.5), glm::vec3(0.05, 0.05, 0.05)));
 
-            c->transform(glm::angleAxis((float)-M_PI/2, glm::vec3(0, 1, 0)));
-            AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(-0.5, 0.5, -0.5), glm::vec3(0.05, 0.05, 0.05)));
+            c->transform(glm::angleAxis((float)90.0f, glm::vec3(0, 1, 0)));
+            AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(0.5, 0.5, 0.5), glm::vec3(0.05, 0.05, 0.05)));
 
-            c->transform(glm::angleAxis((float)M_PI/2, glm::vec3(0, 0, 1)));
+            c->transform(glm::angleAxis((float)90.0, glm::vec3(0, 0, -1)));
             AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(0.5, 0.5, -0.5), glm::vec3(0.05, 0.05, 0.05)));
         });
     });
