@@ -1,6 +1,7 @@
 #include <glow/Array.h>
 #include <glow/Shader.h>
 #include <glow/VertexAttributeBinding.h>
+#include <glowutils/File.h>
 
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
@@ -9,7 +10,6 @@
 #include "voxelrenderer.h"
 #include "voxelcluster.h"
 #include "camera.h"
-#include "glowutils/UnitCube.h"
 
 
 VoxelRenderer::VoxelRenderer() :
@@ -55,8 +55,8 @@ void VoxelRenderer::afterDraw()
 
 void VoxelRenderer::createAndSetupShaders()
 {
-    glow::Shader * vertexShader = glow::Shader::fromFile(GL_VERTEX_SHADER, "data/voxelrenderer.vert");
-    glow::Shader * fragmentShader = glow::Shader::fromFile(GL_FRAGMENT_SHADER, "data/voxelrenderer.frag");
+    glow::Shader * vertexShader = glow::createShaderFromFile(GL_VERTEX_SHADER, "data/voxelrenderer.vert");
+    glow::Shader * fragmentShader = glow::createShaderFromFile(GL_FRAGMENT_SHADER, "data/voxelrenderer.frag");
 
     m_shaderProgram = new glow::Program();
     m_shaderProgram->attach(vertexShader, fragmentShader);

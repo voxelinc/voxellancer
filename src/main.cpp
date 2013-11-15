@@ -11,7 +11,7 @@
 
 #include <glow/logging.h>
 #include <glow/global.h>
-#include <glow/ShaderFile.h>
+#include <glowutils/FileRegistry.h>
 
 #include "game.h"
 #include "inputhandler.h"
@@ -52,7 +52,7 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
 	if (key == GLFW_KEY_F1 && action == GLFW_PRESS)
 		game->inputHandler()->toggleControls();
 	if (key == GLFW_KEY_F5 && action == GLFW_PRESS)
-		glow::ShaderFile::reloadAll();
+		glow::FileRegistry::instance().reloadAll();
 	if (key == GLFW_KEY_F6 && action == GLFW_PRESS)
 		game->reloadConfig();
 }
