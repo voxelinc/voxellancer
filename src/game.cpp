@@ -91,6 +91,8 @@ void Game::initialize()
 	ClusterLoader *cl = new ClusterLoader();
 	cl->loadClusterFromFile("data/voxelcluster/basicship.csv", m_testClusterA);
 	cl->loadClusterFromFile("data/voxelcluster/basicship.zox", m_testClusterB);
+    m_worldtree.insert(m_testClusterA);
+    m_worldtree.insert(m_testClusterB);
 
 	glow::debug("Setup Camera");
 	//viewport set in resize
@@ -104,13 +106,15 @@ void Game::initialize()
 	glow::debug("Game::initialize Done");
 }
 
-static int frame = 0;
+static int last_collisions = 0;
 
 void Game::update(float delta_sec)
 {
     std::list<Collision> collisions = m_collisionDetector.checkCollisions();
-    if (frame++ % 30 == 0)
+    if (collisions.size() != last_collisions) {
         glow::debug("Collisions: %;", collisions.size());
+        last_collisions = collisions.size();
+    }
 
 	m_inputHandler.update(delta_sec);
 }
