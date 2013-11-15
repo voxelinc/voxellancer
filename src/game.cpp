@@ -23,6 +23,7 @@
 
 #include "property/propertymanager.h"
 #include "utils/hd3000dummy.h"
+#include "utils/linuxvmdummy.h"
 #include "voxel/voxelcluster.h"
 #include "voxel/voxelrenderer.h"
 #include "inputhandler.h"
@@ -57,6 +58,12 @@ void Game::initialize()
 
 	glow::debug("Game::testFMOD()");
     testFMOD();
+
+	//Must be created first
+	m_linuxvmdummy = std::unique_ptr<LinuxVMDummy>(new LinuxVMDummy);
+
+	glow::debug("Create Skybox");
+	m_skybox = std::unique_ptr<Skybox>(new Skybox);
 
 	glow::debug("Create Voxel");
     m_voxelRenderer = std::unique_ptr<VoxelRenderer>(new VoxelRenderer);
@@ -94,7 +101,7 @@ void Game::draw()
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 
-	m_skybox.draw(&m_camera);
+	m_skybox->draw(&m_camera);
 
 	m_voxelRenderer->prepareDraw(&m_camera);
 	m_voxelRenderer->draw(m_testClusterA);

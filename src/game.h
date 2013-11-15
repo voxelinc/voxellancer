@@ -17,6 +17,7 @@ class InputHandler;
 class VoxelCluster;
 class VoxelRenderer;
 class HD3000Dummy;
+class LinuxVMDummy;
 
 
 class Game {
@@ -39,9 +40,10 @@ private:
 	GLFWwindow *m_window;
 	InputHandler *m_inputHandler;
 	Camera m_camera;
-	Skybox m_skybox;
 	VoxelCluster *m_testClusterA, *m_testClusterB;
-    std::unique_ptr<VoxelRenderer> m_voxelRenderer;
-    std::unique_ptr<HD3000Dummy> m_hd3000dummy;
+	std::unique_ptr<Skybox> m_skybox;
+	std::unique_ptr<VoxelRenderer> m_voxelRenderer;
+	std::unique_ptr<HD3000Dummy> m_hd3000dummy;
+	std::unique_ptr<LinuxVMDummy> m_linuxvmdummy;
 };
 
