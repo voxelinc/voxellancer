@@ -3,6 +3,7 @@ CMakeCache.txt
 CMakeFiles
 Makefile
 /build
+codeblocks/
 
 # Compiled Object files
 *.slo
@@ -18,8 +19,6 @@ Makefile
 *.la
 *.a
 
-
-codeblocks/
+<<<<<<< Temporary merge branch 1
 **~
 **.orig
-
