@@ -26,7 +26,7 @@ protected:
 	void adjustPositions();
 
 	Camera *m_gamecamera;
-	WorldObject m_hudcamera;
+	WorldTransform m_hudcamera;
 	Camera m_rendercamera;
 	std::unique_ptr<VoxelRenderer> m_voxelRenderer;
 	std::list<std::unique_ptr<HUDElement>> m_elements;

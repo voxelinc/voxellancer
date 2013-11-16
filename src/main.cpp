@@ -11,7 +11,7 @@
 
 #include <glow/logging.h>
 #include <glow/global.h>
-#include <glow/ShaderFile.h>
+#include <glowutils/FileRegistry.h>
 
 #include "game.h"
 #include "inputhandler.h"
@@ -20,8 +20,6 @@ static GLint MajorVersionRequire = 3;
 static GLint MinorVersionRequire = 1;
 
 static Game * game;
-
-using namespace std;
 
 static void checkVersion() {
     glow::info("OpenGL Version Needed %;.%; (%;.%; Found)",
@@ -51,12 +49,11 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
 {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, GL_TRUE);
-	if (key == GLFW_KEY_F1 && action == GLFW_PRESS)
-		game->inputHandler()->toggleControls();
 	if (key == GLFW_KEY_F5 && action == GLFW_PRESS)
-		glow::ShaderFile::reloadAll();
+		glow::FileRegistry::instance().reloadAll();
 	if (key == GLFW_KEY_F6 && action == GLFW_PRESS)
 		game->reloadConfig();
+	game->inputHandler()->keyCallback(key, scancode, action, mods);
 }
 
 static void mouseButtonCallback(GLFWwindow* window, int Button, int Action, int mods) {
@@ -169,8 +166,8 @@ int main(void)
 		glfwDestroyWindow(window);
 		glfwTerminate();
         glow::fatal("Termination after Exception: %;", e.what());
-		cout << "Hit enter to quit" << endl;
-		cin.ignore(1, '\n');
+		std::cout << "Hit enter to quit" << std::endl;
+		std::cin.ignore(1, '\n');
 	}
 
     return 0;

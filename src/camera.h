@@ -1,10 +1,10 @@
 #pragma once
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "worldobject.h"
+#include "worldtransform.h"
 
 /* Represents the camera. matrix thus is the view matrix for all other objects */
-class Camera : protected WorldObject { //protected so we don't have matrix, because we want view
+class Camera : protected WorldTransform { //protected so we don't have matrix, because we want view
 public:
 	Camera();
 	virtual ~Camera();
@@ -14,12 +14,12 @@ public:
 	*	Camera should recalculate on every write access, as reads are more common */
 
 	void move(glm::vec3 dist);
-	void moveTo(glm::vec3 pos);
+	void setPosition(glm::vec3 pos);
 
 	void rotateX(float rot);
 	void rotateY(float rot);
 	void rotateZ(float rot);
-	void rotateTo(glm::quat quat);
+	void setOrientation(glm::quat quat);
 
 	const glm::mat4 view();
 	const glm::mat4 viewInverted();

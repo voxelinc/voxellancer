@@ -3,6 +3,7 @@
 #include <stdexcept>
 #include <glow/Shader.h>
 #include <glow/VertexAttributeBinding.h>
+#include <glowutils/File.h>
 
 
 #include "utils/ddstexture.h"
@@ -16,8 +17,8 @@ LinuxVMDummy::LinuxVMDummy() :
 	* these actions do not affect normal operation on "clean" systems because we just initialize some stuff we never use */
 
 	/* Shaders */
-	glow::Shader * vertexShader = glow::Shader::fromFile(GL_VERTEX_SHADER, "data/skybox.vert");
-	glow::Shader * fragmentShader = glow::Shader::fromFile(GL_FRAGMENT_SHADER, "data/skybox.frag");
+	glow::Shader * vertexShader = glow::createShaderFromFile(GL_VERTEX_SHADER, "data/skybox.vert");
+	glow::Shader * fragmentShader = glow::createShaderFromFile(GL_FRAGMENT_SHADER, "data/skybox.frag");
 
 	m_shaderProgram = new glow::Program();
 	m_shaderProgram->attach(vertexShader, fragmentShader);

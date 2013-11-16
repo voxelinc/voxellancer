@@ -11,30 +11,34 @@ using namespace bandit;
 
 go_bandit([](){
     describe("Voxelcluster", [](){
-        VoxelCluster cluster;
+        VoxelCluster *cluster;
 
         before_each([&](){
+            cluster = new VoxelCluster;
+        });
 
+        after_each([&](){
+            delete cluster;
         });
 
         it("can add/remove voxel", [&]() {
-            cluster.addVoxel(Voxel(cvec3(1, 2, 3), ucvec3(255, 128, 0)));
-            AssertThat(cluster.voxelCount(), Equals(1));
+            cluster->addVoxel(Voxel(cvec3(1, 2, 3), ucvec3(255, 128, 0), cluster));
+            AssertThat(cluster->voxelCount(), Equals(1));
 
-            cluster.removeVoxel(cvec3(1, 2, 3));
-            AssertThat(cluster.voxelCount(), Equals(0));
+            cluster->removeVoxel(cvec3(1, 2, 3));
+            AssertThat(cluster->voxelCount(), Equals(0));
         });
 
         it("test generate texture", [&]() {
-            cluster.addVoxel(Voxel(cvec3('a', 'b', 'c'), ucvec3(255, 128, 0)));
-            cluster.addVoxel(Voxel(cvec3(3, 4, 5), ucvec3(128, 128, 0)));
-            cluster.addVoxel(Voxel(cvec3(1, 5, 3), ucvec3(255, 128, 0)));
+            cluster->addVoxel(Voxel(cvec3('a', 'b', 'c'), ucvec3(255, 128, 0), cluster));
+            cluster->addVoxel(Voxel(cvec3(3, 4, 5), ucvec3(128, 128, 0), cluster));
+            cluster->addVoxel(Voxel(cvec3(1, 5, 3), ucvec3(255, 128, 0), cluster));
 
-            GLuint id1 = cluster.positionTexture()->id();
-            GLuint id2 = cluster.colorTexture()->id();
+            GLuint id1 = cluster->positionTexture()->id();
+            GLuint id2 = cluster->colorTexture()->id();
 
             // cant assert anything usefull just verify that nothing crashes ;)
-            AssertThat(cluster.voxelCount(), Equals(3));
+            AssertThat(cluster->voxelCount(), Equals(3));
         });
     });
     describe("voxel hasher", []() {
