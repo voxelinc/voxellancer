@@ -8,8 +8,8 @@ InputHandler::InputHandler(GLFWwindow *window, Camera *camera, VoxelCluster *vox
 	m_window(window),
 	m_camera(camera),
 	m_voxelcluster(voxelcluster),
-	m_angle_translate("input.angle_translate", 0.65f),
-	m_move_translate("input.move_translate", 14.5f)
+	m_angle_translate("input.angle_translate", 10.65f),
+    m_move_translate("input.move_translate", 14.5f)
 {
 
 	glfwGetWindowSize(m_window, &m_windowWidth, &m_windowHeight);
