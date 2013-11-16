@@ -110,12 +110,12 @@ void HUD::draw(){
 	for (VoxelCluster *ship : m_ships){
 		if (glm::length(ship->position() - m_hudcamera.position()) < m_arrow_maxdistance){
 			glm::vec3 delta = m_hudcamera.orientation() * (ship->position() - m_hudcamera.position());
-			delta.x /= glm::abs(delta.z);
-			delta.y /= glm::abs(delta.z);
 			float deltaz = delta.z;
 			delta.z = 0;
 			// if behind of us or out of "scope"
-			if (deltaz > 0 || glm::length(delta) > m_arrow_radius){
+			float degarr = glm::degrees(glm::atan(glm::length(delta), glm::abs(deltaz)));
+			float degfov = m_rendercamera.fovy() / 2;
+			if (deltaz > 0 || degarr / degfov > m_arrow_radius * 1.15f){
 				delta = glm::normalize(delta);
 				m_shiparrow->rotateTo(glm::angleAxis(glm::degrees(glm::atan(delta.x, delta.y)), glm::vec3(0, 0, -1)));
 				m_shiparrow->moveTo(glm::vec3(0, 0, -m_distance) 
