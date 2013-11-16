@@ -83,8 +83,8 @@ Camera *HUD::camera(){
 }
 
 void HUD::update(float delta_sec){
-	m_hudcamera.rotateTo(glm::mix(m_hudcamera.orientation() , m_gamecamera->orientation(), glm::min(delta_sec * 30.f, 1.0f)));
-	m_hudcamera.moveTo(glm::mix(m_hudcamera.position(), m_gamecamera->position(), glm::min(delta_sec * 20.f, 1.0f)));
+	m_hudcamera.rotateTo(glm::mix(m_hudcamera.orientation() , m_gamecamera->orientation(), glm::min(delta_sec * m_inertia_rotate, 1.0f)));
+	m_hudcamera.moveTo(glm::mix(m_hudcamera.position(), m_gamecamera->position(), glm::min(delta_sec * m_inertia_move, 1.0f)));
 }
 
 void HUD::draw(){
