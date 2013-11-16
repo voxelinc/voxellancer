@@ -9,6 +9,8 @@ add_subdirectory(geometry)
 add_subdirectory(worldtree)
 add_subdirectory(property)
 add_subdirectory(voxelcluster)
+add_subdirectory(voxeltree)
+add_subdirectory(collision)
 add_subdirectory(loader)
 
 

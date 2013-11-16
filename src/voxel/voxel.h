@@ -1,6 +1,8 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include "geometry/sphere.h"
+
 
 typedef glm::detail::tvec3<signed char> cvec3;
 typedef glm::detail::tvec3<unsigned char> ucvec3;
@@ -12,18 +14,29 @@ struct VoxelHash
     }
 };
 
+
+class VoxelCluster;
+
 class Voxel
 {
 public:
-    Voxel();
-    Voxel(cvec3 position, ucvec3 color);
+    Voxel(VoxelCluster *voxelCluster = nullptr);
+    Voxel(cvec3 gridCell, ucvec3 color, VoxelCluster *voxelCluster = nullptr);
     virtual ~Voxel();
 
-    const cvec3 & position() const;
-    const ucvec3 & color() const;
+    VoxelCluster *voxelCluster();
+    const VoxelCluster *voxelCluster() const;
+
+    const cvec3 &gridCell() const;
+    void setGridCell(const cvec3 &cell);
+
+    const ucvec3 &color() const;
+    void setColor(const ucvec3 &color);
+
 
 protected:
-    cvec3 m_position;
+    VoxelCluster *m_voxelCluster;
+    cvec3 m_gridCell;
     ucvec3 m_color;
-
 };
+

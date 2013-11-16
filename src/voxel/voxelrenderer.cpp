@@ -1,6 +1,7 @@
 #include <glow/Array.h>
 #include <glow/Shader.h>
 #include <glow/VertexAttributeBinding.h>
+#include <glowutils/File.h>
 
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
@@ -9,7 +10,6 @@
 #include "voxelrenderer.h"
 #include "voxelcluster.h"
 #include "camera.h"
-#include "glowutils/UnitCube.h"
 
 
 VoxelRenderer::VoxelRenderer() :
@@ -20,7 +20,6 @@ m_vertexBuffer(0)
 {
 	createAndSetupShaders();
 	createAndSetupGeometry();
-
 }
 
 
@@ -37,12 +36,12 @@ void VoxelRenderer::prepareDraw(Camera * camera)
 
 void VoxelRenderer::draw(VoxelCluster * cluster)
 {
-    m_shaderProgram->setUniform("model", cluster->matrix());
+    m_shaderProgram->setUniform("model", cluster->worldTransform().matrix());
     glActiveTexture(GL_TEXTURE0);
     cluster->positionTexture()->bind();
     glActiveTexture(GL_TEXTURE1);
     cluster->colorTexture()->bind();
-    
+
 	m_vertexArrayObject->drawArraysInstanced(GL_TRIANGLE_STRIP, 0, 14, cluster->voxelCount());
 }
 
@@ -56,8 +55,8 @@ void VoxelRenderer::afterDraw()
 
 void VoxelRenderer::createAndSetupShaders()
 {
-    glow::Shader * vertexShader = glow::Shader::fromFile(GL_VERTEX_SHADER, "data/voxelrenderer.vert");
-    glow::Shader * fragmentShader = glow::Shader::fromFile(GL_FRAGMENT_SHADER, "data/voxelrenderer.frag");
+    glow::Shader * vertexShader = glow::createShaderFromFile(GL_VERTEX_SHADER, "data/voxelrenderer.vert");
+    glow::Shader * fragmentShader = glow::createShaderFromFile(GL_FRAGMENT_SHADER, "data/voxelrenderer.frag");
 
     m_shaderProgram = new glow::Program();
     m_shaderProgram->attach(vertexShader, fragmentShader);
