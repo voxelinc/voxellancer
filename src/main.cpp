@@ -11,7 +11,7 @@
 
 #include <glow/logging.h>
 #include <glow/global.h>
-#include <glow/ShaderFile.h>
+#include <glowutils/FileRegistry.h>
 
 #include "game.h"
 #include "inputhandler.h"
@@ -50,7 +50,7 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, GL_TRUE);
 	if (key == GLFW_KEY_F5 && action == GLFW_PRESS)
-		glow::ShaderFile::reloadAll();
+		glow::FileRegistry::instance().reloadAll();
 	if (key == GLFW_KEY_F6 && action == GLFW_PRESS)
 		game->reloadConfig();
 	game->inputHandler()->keyCallback(key, scancode, action, mods);
@@ -95,7 +95,21 @@ int main(void)
 	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
 #endif
 
-    window = glfwCreateWindow(1280, 720, "Voxellancer", NULL, NULL);
+	window = glfwCreateWindow(1280, 720, "Voxellancer", NULL, NULL);
+#ifndef WIN32
+	if (!window){
+		// If 3.1 is not available and this is linux, assume we want mesa software rendering and try again
+		putenv("LIBGL_ALWAYS_SOFTWARE=1");
+
+		glfwTerminate();
+		if (!glfwInit()) {
+			glow::fatal("could not init glfw");
+			exit(-1);
+		}
+
+		window = glfwCreateWindow(1280, 720, "Voxellancer", NULL, NULL);
+	}
+#endif
 	if (!window) {
 		glfwTerminate();
 		glow::fatal("could not create window");

@@ -1,10 +1,21 @@
 #include "worldtreegeode.h"
 
+#include "worldtreenode.h"
+
+
 WorldtreeGeode::WorldtreeGeode():
     m_voxelcluster(nullptr),
     m_containingNode(nullptr)
 {
 
+}
+
+
+WorldtreeGeode::WorldtreeGeode(VoxelCluster *voxelcluster):
+    m_voxelcluster(voxelcluster),
+    m_containingNode(nullptr)
+{
+    m_voxelcluster->setGeode(this);
 }
 
 WorldtreeGeode::~WorldtreeGeode() {
@@ -19,7 +30,7 @@ const VoxelCluster *WorldtreeGeode::voxelcluster() const {
     return m_voxelcluster;
 }
 
-void WorldtreeGeode::setVoxelcluster(VoxelCluster *voxelcluster) {
+void WorldtreeGeode::setVoxelCluster(VoxelCluster *voxelcluster) {
     m_voxelcluster = voxelcluster;
 }
 
@@ -41,5 +52,9 @@ const AABB &WorldtreeGeode::aabb() const {
 
 void WorldtreeGeode::setAABB(const AABB &aabb) {
     m_aabb = aabb;
+
+    if(m_containingNode != nullptr) {
+        m_containingNode->aabbChanged(this);
+    }
 }
 

@@ -9,11 +9,12 @@ class WorldtreeGeode
 {
 public:
     WorldtreeGeode();
+    WorldtreeGeode(VoxelCluster *voxelcluster);
     virtual ~WorldtreeGeode();
 
     VoxelCluster *voxelcluster();
     const VoxelCluster *voxelcluster() const;
-    void setVoxelcluster(VoxelCluster *voxelcluster);
+    void setVoxelCluster(VoxelCluster *voxelcluster);
 
     WorldtreeNode *containingNode();
     const WorldtreeNode *containingNode() const;

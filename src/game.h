@@ -13,10 +13,20 @@
 #include "skybox.h"
 #include "clusterloader.h"
 
+#include "voxel/voxelcluster.h"
+
+#include "worldtree/worldtree.h"
+
+#include "collision/collisiondetector.h"
+
+#include "inputhandler.h"
+
+
 class InputHandler;
 class VoxelCluster;
 class VoxelRenderer;
 class HD3000Dummy;
+class LinuxVMDummy;
 
 
 class Game {
@@ -37,11 +47,16 @@ private:
 
 private:
 	GLFWwindow *m_window;
-	InputHandler *m_inputHandler;
+	InputHandler m_inputHandler;
 	Camera m_camera;
-	Skybox m_skybox;
+    VoxelCluster m_testCluster;
+    VoxelCluster m_testClusterMoveable;
+    Worldtree m_worldtree;
+    CollisionDetector m_collisionDetector;
 	VoxelCluster *m_testClusterA, *m_testClusterB;
-    std::unique_ptr<VoxelRenderer> m_voxelRenderer;
-    std::unique_ptr<HD3000Dummy> m_hd3000dummy;
+	std::unique_ptr<Skybox> m_skybox;
+	std::unique_ptr<VoxelRenderer> m_voxelRenderer;
+	std::unique_ptr<HD3000Dummy> m_hd3000dummy;
+	std::unique_ptr<LinuxVMDummy> m_linuxvmdummy;
 };
 
