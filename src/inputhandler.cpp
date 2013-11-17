@@ -114,9 +114,9 @@ void InputHandler::update(float delta_sec) {
 			}
 
             if (glfwGetKey(m_window, GLFW_KEY_M) == GLFW_PRESS) {
-                m_camera->moveTo(m_voxelcluster->transform().position());
+                m_camera->setPosition(m_voxelcluster->transform().position());
                 m_camera->move(glm::vec3(0, 2, 10));
-                m_camera->rotateTo(m_voxelcluster->transform().orientation());
+                m_camera->setOrientation(m_voxelcluster->transform().orientation());
             }
 
 

@@ -27,6 +27,7 @@
 #include "voxel/voxelcluster.h"
 #include "voxel/voxelrenderer.h"
 #include "inputhandler.h"
+#include "ui/hud.h"
 
 
 using namespace std;
@@ -109,9 +110,13 @@ void Game::initialize()
 
 	glow::debug("Setup Camera");
 	//viewport set in resize
-	m_camera.moveTo(glm::vec3(0, 5, 30));
+	m_camera.setPosition(glm::vec3(0, 5, 30));
 	m_camera.setZNear(1);
 	m_camera.setZFar(9999);
+
+	glow::debug("Create HUD");
+	m_hud = std::unique_ptr<HUD>(new HUD(std::list<VoxelCluster*>{ m_testClusterA, m_testClusterB }));
+	m_hud->setCamera(&m_camera);
 
     m_hd3000dummy = std::unique_ptr<HD3000Dummy>(new HD3000Dummy);
 
@@ -136,6 +141,7 @@ void Game::update(float delta_sec)
     m_testClusterA->applyTransform();
     m_testClusterB->applyTransform();
     m_testClusterMoveable.applyTransform();
+	m_hud->update(delta_sec);
 }
 
 void Game::draw()
@@ -155,6 +161,8 @@ void Game::draw()
 
     // draw all other voxelclusters...
     m_voxelRenderer->afterDraw();
+
+	m_hud->draw();
 
     m_hd3000dummy->drawIfActive();
 }

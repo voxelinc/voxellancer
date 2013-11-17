@@ -4,7 +4,7 @@
 
 
 Camera::Camera():
-	m_fovy(40.f),
+	m_fovy(60.f),
 	m_aspect(1.f),
 	m_zNear(0.1f),
 	m_zFar(64.0f),
@@ -31,7 +31,7 @@ void Camera::move(glm::vec3 dist){
 	viewDirty();
 }
 
-void Camera::moveTo(glm::vec3 pos){
+void Camera::setPosition(glm::vec3 pos){
 	WorldTransform::setPosition(pos);
 	viewDirty();
 }
@@ -51,7 +51,7 @@ void Camera::rotateZ(float rot){
 	viewDirty();
 }
 
-void Camera::rotateTo(glm::quat quat){
+void Camera::setOrientation(glm::quat quat){
 	WorldTransform::setOrientation(quat);
 	viewDirty();
 }

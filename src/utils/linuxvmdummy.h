@@ -5,8 +5,6 @@
 #include "glow/VertexArrayObject.h"
 #include "glow/Buffer.h"
 
-#include "property/property.h"
-
 class LinuxVMDummy {
 public:
 	LinuxVMDummy();
