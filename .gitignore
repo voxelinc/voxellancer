@@ -1,9 +1,12 @@
 # Generated files
 CMakeCache.txt
 CMakeFiles
+CPack*.cmake
+cmake_install.cmake
 Makefile
 /build
 codeblocks/
+/revision
 
 # Compiled Object files
 *.slo
@@ -18,6 +21,11 @@ codeblocks/
 *.lai
 *.la
 *.a
+
+# Binaries (linux)
+/voxellancer
+/test_*
+/all_tests
 
 <<<<<<< Temporary merge branch 1
 **~
