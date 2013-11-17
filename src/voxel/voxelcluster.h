@@ -12,23 +12,26 @@
 #include "voxeltreenode.h"
 #include "worldtransform.h"
 #include "voxel.h"
+#include "voxelrenderdata.h"
 
 
 class WorldtreeGeode;
+class Worldtree;
 
-class VoxelCluster //: public WorldTransform
+class VoxelCluster
 {
 public:
-    VoxelCluster(float voxelEdgeLength = 1.0f);
+    VoxelCluster::VoxelCluster(glm::vec3 center = glm::vec3(0), float scale = 1.0);
     virtual ~VoxelCluster();
 
     AABB aabb();
 
-    const glm::vec3 &centerInGrid() const;
-    void setCenterInGrid(const glm::vec3 &centerInGrid);
+    WorldTransform &transform();
+    const WorldTransform &transform() const;
+    void setTransform(const WorldTransform &transform);
 
-    const WorldTransform &worldTransform() const;
-    void setWorldTransform(const WorldTransform &transform);
+    void applyTransform(bool checkCollision = true);
+
 
     VoxeltreeNode &voxeltree();
     const VoxeltreeNode &voxeltree() const;
@@ -36,42 +39,26 @@ public:
     WorldtreeGeode *geode();
     const WorldtreeGeode *geode() const;
     void setGeode(WorldtreeGeode *geode);
-
-    float voxelEdgeLength() const;
-    void setVoxelEdgeLength(float voxelEdgeLength);
+    void setWorldTree(Worldtree* worldTree);
 
     void addVoxel(const Voxel &voxel);
     void removeVoxel(const cvec3 &position);
 
-    int voxelCount();
-
-    void move(glm::vec3 dist);
-	void moveTo(glm::vec3 pos);
-
-	void rotateX(float rot);
-	void rotateY(float rot);
-	void rotateZ(float rot);
-	void rotateTo(glm::quat quat);
-
-	void transform(const WorldTransform &t);
-
-    glow::Texture *positionTexture();
-    glow::Texture *colorTexture();
-
+    VoxelRenderData *voxelRenderData();
+    const std::unordered_map<cvec3, Voxel, VoxelHash> & voxel() const;
 
 protected:
-    void updateAABB();
     void updateTextures();
+    void updateGeode();
+    void doSteppedTransform();
+    bool isPossibleCollision();
 
-    float m_voxelEdgeLength;
-    glm::vec3 m_centerInGrid;
-    WorldTransform m_worldTransform;
+    WorldTransform m_transform;
+    WorldTransform m_old_transform;
     VoxeltreeNode m_voxeltree;
+    VoxelRenderData m_voxelrenderdata;
     WorldtreeGeode *m_geode;
+    Worldtree *m_worldTree;
     std::unordered_map<cvec3, Voxel, VoxelHash> m_voxel;
-    bool m_texturesDirty;
-
-    glow::ref_ptr<glow::Texture> m_positionTexture;
-    glow::ref_ptr<glow::Texture> m_colorTexture;
 };
 

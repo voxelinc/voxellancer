@@ -36,13 +36,13 @@ void VoxelRenderer::prepareDraw(Camera * camera)
 
 void VoxelRenderer::draw(VoxelCluster * cluster)
 {
-    m_shaderProgram->setUniform("model", cluster->worldTransform().matrix());
+    m_shaderProgram->setUniform("model", cluster->transform().matrix());
     glActiveTexture(GL_TEXTURE0);
-    cluster->positionTexture()->bind();
+    cluster->voxelRenderData()->positionTexture()->bind();
     glActiveTexture(GL_TEXTURE1);
-    cluster->colorTexture()->bind();
+    cluster->voxelRenderData()->colorTexture()->bind();
 
-	m_vertexArrayObject->drawArraysInstanced(GL_TRIANGLE_STRIP, 0, 14, cluster->voxelCount());
+    m_vertexArrayObject->drawArraysInstanced(GL_TRIANGLE_STRIP, 0, 14, cluster->voxelRenderData()->voxelCount());
 }
 
 

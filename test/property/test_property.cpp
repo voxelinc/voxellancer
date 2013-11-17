@@ -9,18 +9,19 @@
 using namespace bandit;
 
 
-class Listener : public glow::ChangeListener {
 
-public:
-    bool success = false;
-
-    virtual void notifyChanged() {
-        success = true;
-    }
-};
 
 
 go_bandit([](){
+    class Listener : public glow::ChangeListener {
+    public:
+        bool success = false;
+
+        virtual void notifyChanged() {
+            success = true;
+        }
+    };
+
     describe("Property", [](){
         before_each([&](){
             glow::setVerbosityLevel(glow::LogMessage::Fatal);

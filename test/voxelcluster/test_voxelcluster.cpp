@@ -22,23 +22,23 @@ go_bandit([](){
         });
 
         it("can add/remove voxel", [&]() {
-            cluster->addVoxel(Voxel(cvec3(1, 2, 3), ucvec3(255, 128, 0), cluster));
-            AssertThat(cluster->voxelCount(), Equals(1));
+            cluster->addVoxel(Voxel(cvec3(1, 2, 3), cvec3(255, 128, 0), cluster));
+            AssertThat(cluster->voxel().size(), Equals(1));
 
             cluster->removeVoxel(cvec3(1, 2, 3));
-            AssertThat(cluster->voxelCount(), Equals(0));
+            AssertThat(cluster->voxel().size(), Equals(0));
         });
 
         it("test generate texture", [&]() {
-            cluster->addVoxel(Voxel(cvec3('a', 'b', 'c'), ucvec3(255, 128, 0), cluster));
-            cluster->addVoxel(Voxel(cvec3(3, 4, 5), ucvec3(128, 128, 0), cluster));
-            cluster->addVoxel(Voxel(cvec3(1, 5, 3), ucvec3(255, 128, 0), cluster));
+            cluster->addVoxel(Voxel(cvec3('a', 'b', 'c'), cvec3(255, 128, 0), cluster));
+            cluster->addVoxel(Voxel(cvec3(3, 4, 5), cvec3(128, 128, 0), cluster));
+            cluster->addVoxel(Voxel(cvec3(1, 5, 3), cvec3(255, 128, 0), cluster));
 
-            GLuint id1 = cluster->positionTexture()->id();
-            GLuint id2 = cluster->colorTexture()->id();
+            GLuint id1 = cluster->voxelRenderData()->positionTexture()->id();
+            GLuint id2 = cluster->voxelRenderData()->colorTexture()->id();
 
             // cant assert anything usefull just verify that nothing crashes ;)
-            AssertThat(cluster->voxelCount(), Equals(3));
+            AssertThat(cluster->voxelRenderData()->voxelCount(), Equals(3));
         });
     });
     describe("voxel hasher", []() {

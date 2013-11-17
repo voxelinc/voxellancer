@@ -4,8 +4,7 @@
 #include "geometry/sphere.h"
 
 
-typedef glm::detail::tvec3<signed char> cvec3;
-typedef glm::detail::tvec3<unsigned char> ucvec3;
+typedef glm::detail::tvec3<unsigned char> cvec3;
 
 struct VoxelHash
 {
@@ -21,7 +20,7 @@ class Voxel
 {
 public:
     Voxel(VoxelCluster *voxelCluster = nullptr);
-    Voxel(cvec3 gridCell, ucvec3 color, VoxelCluster *voxelCluster = nullptr);
+    Voxel(cvec3 gridCell, cvec3 color, VoxelCluster *voxelCluster = nullptr);
     virtual ~Voxel();
 
     VoxelCluster *voxelCluster();
@@ -30,13 +29,13 @@ public:
     const cvec3 &gridCell() const;
     void setGridCell(const cvec3 &cell);
 
-    const ucvec3 &color() const;
-    void setColor(const ucvec3 &color);
+    const cvec3 &color() const;
+    void setColor(const cvec3 &color);
 
 
 protected:
     VoxelCluster *m_voxelCluster;
     cvec3 m_gridCell;
-    ucvec3 m_color;
+    cvec3 m_color;
 };
 

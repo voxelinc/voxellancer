@@ -17,7 +17,7 @@ Camera::~Camera(){
 }
 
 void Camera::viewDirty(){
-	m_view = glm::mat4_cast(m_orientation) * glm::translate(-m_position);
+	m_view = glm::mat4_cast(glm::inverse(m_orientation)) * glm::translate(-m_position);
 	m_viewProjection = m_projection * m_view;
 }
 
@@ -37,17 +37,17 @@ void Camera::moveTo(glm::vec3 pos){
 }
 
 void Camera::rotateX(float rot){
-	WorldTransform::rotateX(rot);
+	WorldTransform::rotate(glm::angleAxis(rot, glm::vec3(1,0,0)));
 	viewDirty();
 }
 
 void Camera::rotateY(float rot){
-	WorldTransform::rotateY(rot);
+    WorldTransform::rotate(glm::angleAxis(rot, glm::vec3(0, 1, 0)));
 	viewDirty();
 }
 
 void Camera::rotateZ(float rot){
-	WorldTransform::rotateZ(rot);
+    WorldTransform::rotate(glm::angleAxis(rot, glm::vec3(0, 0, -1)));
 	viewDirty();
 }
 
@@ -100,8 +100,7 @@ void Camera::setZFar(const float zFar)
 
 	m_zFar = zFar;
 	assert(m_zFar > m_zNear);
-	m_projection = glm::perspective(m_fovy, m_aspect, m_zNear, m_zFar);
-	m_viewProjection = m_projection * m_view;
+    projectionDirty();
 }
 
 float Camera::fovy() const
@@ -116,9 +115,7 @@ void Camera::setFovy(const float fovy)
 
 	m_fovy = fovy;
 	assert(m_fovy > 0.0);
-	m_projection = glm::perspective(m_fovy, m_aspect, m_zNear, m_zFar);
-	m_viewProjection = m_projection * m_view;
-
+    projectionDirty();
 }
 
 const glm::ivec2 Camera::viewport() const
@@ -133,8 +130,7 @@ void Camera::setViewport(const glm::ivec2 & viewport)
 
 	m_aspect = viewport.x / glm::max(static_cast<float>(viewport.y), 1.f);
 	m_viewport = viewport;
-	m_projection = glm::perspective(m_fovy, m_aspect, m_zNear, m_zFar);
-	m_viewProjection = m_projection * m_view;
+    projectionDirty();
 }
 
 float Camera::aspectRatio() const

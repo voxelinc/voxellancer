@@ -74,7 +74,7 @@ void Skybox::draw(Camera *camera){
 
 	m_texture->bind();
 	// we don't use camera->viewInverted() because the skybox does not travel with the camera
-	m_shaderProgram->setUniform("viewProjectionInverted", glm::mat4_cast(glm::inverse(camera->orientation()))*glm::inverse(camera->projection()));
+	m_shaderProgram->setUniform("viewProjectionInverted", glm::mat4_cast(camera->orientation())*glm::inverse(camera->projection()));
 	m_shaderProgram->use();
 
 	m_vertexArrayObject->drawArrays(GL_TRIANGLE_FAN, 0, 4);
