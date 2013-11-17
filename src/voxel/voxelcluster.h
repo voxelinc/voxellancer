@@ -21,14 +21,13 @@ class Worldtree;
 class VoxelCluster
 {
 public:
-    VoxelCluster::VoxelCluster(glm::vec3 center = glm::vec3(0), float scale = 1.0);
+    VoxelCluster(glm::vec3 center = glm::vec3(0), float scale = 1.0);
     virtual ~VoxelCluster();
 
     AABB aabb();
 
     WorldTransform &transform();
     const WorldTransform &transform() const;
-    void setTransform(const WorldTransform &transform);
 
     void applyTransform(bool checkCollision = true);
 

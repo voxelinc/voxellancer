@@ -95,14 +95,14 @@ void Game::initialize()
     m_testClusterMoveable.addVoxel(Voxel(cvec3(0, 0, 8), cvec3(255, 0, 128), &m_testClusterMoveable));
     m_worldtree.insert(&m_testClusterMoveable);
 
-	m_testClusterA = new VoxelCluster();
+    m_testClusterA = new VoxelCluster(glm::vec3(3, 0, 3));
 	m_testClusterA->transform().move(glm::vec3(0, 0, -10));
     m_testClusterA->applyTransform(false);
-	m_testClusterB = new VoxelCluster();
+    m_testClusterB = new VoxelCluster(glm::vec3(3, 0, 3));
 	m_testClusterB->transform().move(glm::vec3(0, 0, 10));
     m_testClusterB->applyTransform(false);
 
-	ClusterLoader *cl = new ClusterLoader();
+    ClusterLoader *cl = new ClusterLoader();
 	cl->loadClusterFromFile("data/voxelcluster/basicship.csv", m_testClusterA);
 	cl->loadClusterFromFile("data/voxelcluster/basicship.zox", m_testClusterB);
     m_worldtree.insert(m_testClusterA);
@@ -136,7 +136,7 @@ void Game::update(float delta_sec)
 
 	m_inputHandler.update(delta_sec);
 
-    // todo use god instead
+    // TODO: use god instead
     m_testCluster.applyTransform();
     m_testClusterA->applyTransform();
     m_testClusterB->applyTransform();

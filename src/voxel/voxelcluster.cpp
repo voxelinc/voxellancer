@@ -42,16 +42,10 @@ const WorldTransform &VoxelCluster::transform() const {
     return m_transform;
 }
 
-// doesnt check for collision!
-void VoxelCluster::setTransform(const WorldTransform &transform) {
-    m_transform = transform;
-    m_old_transform = transform;
-
-    updateGeode();
-}
-
 static float MAX_STEP_SIZE = 0.1f;
 
+// tries to apply the current transform as far as no collision happens.
+// should not be used if the voxelcluster is not part of a worldtree.
 void VoxelCluster::applyTransform(bool checkCollision) {
     if (checkCollision) {
         assert(m_worldTree != nullptr);
@@ -68,9 +62,12 @@ void VoxelCluster::applyTransform(bool checkCollision) {
 }
 
 bool VoxelCluster::isPossibleCollision() {
+    // the geode aabb is still the old one, add it to the final aabb
     AABB full_aabb = m_geode->aabb().united(aabb());
-    return m_worldTree->geodesInAABB(full_aabb).size() > 1; // is there someone else than yourself inside?
+    // is there someone else than yourself inside?
+    return m_worldTree->geodesInAABB(full_aabb).size() > 1; 
 }
+
 void VoxelCluster::doSteppedTransform() {
     float distance = glm::length(m_transform.position() - m_old_transform.position());
 
@@ -84,7 +81,7 @@ void VoxelCluster::doSteppedTransform() {
         updateGeode();
         const std::list<Collision> & collisions = collisionDetector.checkCollisions();
         if (!collisions.empty()) {
-            assert(i > 0);
+            assert(i > 0); // you're stuck, hopefully doesn't happen!
             m_transform.setOrientation(glm::mix(m_old_transform.orientation(), new_transform.orientation(), (i - 1) / steps));
             m_transform.setPosition(glm::mix(m_old_transform.position(), new_transform.position(), (i - 1) / steps));
             break;

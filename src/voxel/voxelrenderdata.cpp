@@ -3,6 +3,7 @@
 
 #include "voxelrenderdata.h"
 #include "voxelcluster.h"
+#include <vector>
 
 VoxelRenderData::VoxelRenderData(VoxelCluster * cluster):
     m_cluster(cluster),
@@ -23,8 +24,8 @@ VoxelRenderData::~VoxelRenderData() {
 
 void VoxelRenderData::updateTextures() {
     int size = nextPowerOf2(m_cluster->voxel().size());
-    unsigned char * positionData = new unsigned char[size * 3];
-    unsigned char * colorData = new unsigned char[size * 3];
+    std::vector<unsigned char> positionData(size * 3);
+    std::vector<unsigned char> colorData(size * 3);
 
     int i = 0;
     for (auto pair : m_cluster->voxel()) {
@@ -39,12 +40,9 @@ void VoxelRenderData::updateTextures() {
     }
     m_voxelCount = i;
 
-    m_positionTexture->image1D(0, GL_RGB, size, 0, GL_RGB, GL_UNSIGNED_BYTE, positionData);
-    m_colorTexture->image1D(0, GL_RGB, size, 0, GL_RGB, GL_UNSIGNED_BYTE, colorData);
+    m_positionTexture->image1D(0, GL_RGB, size, 0, GL_RGB, GL_UNSIGNED_BYTE, &positionData.front());
+    m_colorTexture->image1D(0, GL_RGB, size, 0, GL_RGB, GL_UNSIGNED_BYTE, &colorData.front());
     CheckGLError();
-
-    delete[] colorData;
-    delete[] positionData;
 
     m_texturesDirty = false;
 }
