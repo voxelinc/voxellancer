@@ -4,7 +4,6 @@
 #include "clusterloader.h"
 #include "ui/hudelement.h"
 
-
 HUD::HUD(std::list<VoxelCluster*> ships) :
 m_gamecamera(0),
 m_rendercamera(),
@@ -23,50 +22,27 @@ m_arrow_radius("hud.arrow_radius", .7f)
 	m_rendercamera.setZNear(0.1f);
 	m_rendercamera.setZFar(1000.0f);
 	
-	std::unique_ptr<HUDElement> element;
-	element.reset(new HUDElement);
 	ClusterLoader loader;
-	loader.loadClusterFromFile("data/hud/crosshair.csv", element.get());
-	element->m_origin = HUDOffsetOrigin::Center;
-	element->m_offset = glm::vec3(-4, -4, 0);
-	m_elements.push_back(move(element));
-
-	element.reset(new HUDElement);
-	loader.loadClusterFromFile("data/hud/topleft.csv", element.get());
-	element->m_origin = HUDOffsetOrigin::TopLeft;
-	element->m_offset = glm::vec3(1, -2, 0);
-	m_elements.push_back(move(element));
-
-	element.reset(new HUDElement);
-	loader.loadClusterFromFile("data/hud/topright.csv", element.get());
-	element->m_origin = HUDOffsetOrigin::TopRight;
-	element->m_offset = glm::vec3(-4, -2, 0);
-	m_elements.push_back(move(element));
-
-	element.reset(new HUDElement);
-	loader.loadClusterFromFile("data/hud/bottomleft.csv", element.get());
-	element->m_origin = HUDOffsetOrigin::BottomLeft;
-	element->m_offset = glm::vec3(1, 1, 0);
-	m_elements.push_back(move(element));
-
-	element.reset(new HUDElement);
-	loader.loadClusterFromFile("data/hud/bottomright.csv", element.get());
-	element->m_origin = HUDOffsetOrigin::BottomRight;
-	element->m_offset = glm::vec3(-4, 1, 0);
-	m_elements.push_back(move(element));
-
-	element.reset(new HUDElement);
-	loader.loadClusterFromFile("data/hud/bottom.csv", element.get());
-	element->m_origin = HUDOffsetOrigin::Bottom;
-	element->m_offset = glm::vec3(-27, 1, 0);
-	m_elements.push_back(move(element));
-
+	addElement(&loader, "data/hud/crosshair.csv", HUDOffsetOrigin::Center, glm::vec3(-4, -4, 0));
+	addElement(&loader, "data/hud/topleft.csv", HUDOffsetOrigin::TopLeft, glm::vec3(1, -2, 0));
+	addElement(&loader, "data/hud/topright.csv", HUDOffsetOrigin::TopRight, glm::vec3(-4, -2, 0));
+	addElement(&loader, "data/hud/bottomleft.csv", HUDOffsetOrigin::BottomLeft, glm::vec3(1, 1, 0));
+	addElement(&loader, "data/hud/bottomright.csv", HUDOffsetOrigin::BottomRight, glm::vec3(-4, 1, 0));
+	addElement(&loader, "data/hud/bottom.csv", HUDOffsetOrigin::Bottom, glm::vec3(-27, 1, 0));
 
 	m_shiparrow.reset(new HUDElement);
 	loader.loadClusterFromFile("data/hud/arrow.csv", m_shiparrow.get());
 	m_shiparrow->m_origin = HUDOffsetOrigin::Center;
 	m_shiparrow->m_offset = glm::vec3(-2, -2, 0);
 
+}
+
+void HUD::addElement(ClusterLoader *loader, char* filename, HUDOffsetOrigin origin, glm::vec3 offset){
+	std::unique_ptr<HUDElement> element(new HUDElement);
+	loader->loadClusterFromFile(filename, element.get());
+	element->m_origin = origin;
+	element->m_offset = offset;
+	m_elements.push_back(move(element));
 }
 
 HUD::~HUD(){
@@ -82,6 +58,7 @@ Camera *HUD::camera(){
 	return m_gamecamera;
 }
 
+#undef min
 void HUD::update(float delta_sec){
 	m_hudcamera.setOrientation(glm::mix(m_hudcamera.orientation() , m_gamecamera->orientation(), glm::min(delta_sec * m_inertia_rotate, 1.0f)));
 	m_hudcamera.setPosition(glm::mix(m_hudcamera.position(), m_gamecamera->position(), glm::min(delta_sec * m_inertia_move, 1.0f)));

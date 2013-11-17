@@ -6,10 +6,11 @@
 
 #include "property/property.h"
 #include "camera.h"
+#include "ui/hudelement.h"
 
-class HUDElement;
 class VoxelCluster;
 class VoxelRenderer;
+class ClusterLoader;
 
 class HUD {
 public:
@@ -24,6 +25,7 @@ public:
 
 protected:
 	void adjustPositions();
+	void addElement(ClusterLoader *loader, char *filename, HUDOffsetOrigin origin, glm::vec3 offset);
 
 	Camera *m_gamecamera;
 	WorldTransform m_hudcamera;
