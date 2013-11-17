@@ -13,7 +13,7 @@ class VoxelRenderer {
 public:
     VoxelRenderer();
 
-    void prepareDraw(Camera * camera);
+	void prepareDraw(Camera * camera, bool withBorder = true);
     void draw(VoxelCluster * cluster);
     void afterDraw();
   

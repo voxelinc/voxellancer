@@ -98,7 +98,7 @@ void HUD::draw(){
 	m_rendercamera.setOrientation((m_gamecamera->orientation()*glm::inverse(m_hudcamera.orientation())));
 	m_rendercamera.setPosition(m_hudcamera.orientation() * ((m_gamecamera->position() - m_hudcamera.position()) * m_move_multiplier.get()));
 
-	m_voxelRenderer->prepareDraw(&m_rendercamera);
+	m_voxelRenderer->prepareDraw(&m_rendercamera, false);
 
 	// draw statics
 	for (std::unique_ptr<HUDElement>& element : m_elements)	{

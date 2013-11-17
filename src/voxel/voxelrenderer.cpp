@@ -23,11 +23,12 @@ m_vertexBuffer(0)
 }
 
 
-void VoxelRenderer::prepareDraw(Camera * camera)
+void VoxelRenderer::prepareDraw(Camera * camera, bool withBorder)
 {
     m_shaderProgram->setUniform("projection", camera->projection());
     m_shaderProgram->setUniform("view", camera->view());
     m_shaderProgram->setUniform("viewProjection", camera->viewProjection());
+	m_shaderProgram->setUniform("withBorder", (withBorder ? 1.0f : 0.0f));
 
     m_shaderProgram->use();
     glProvokingVertex(GL_LAST_VERTEX_CONVENTION);

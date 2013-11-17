@@ -1,6 +1,7 @@
 #version 130
 
 uniform sampler1D positionSampler;
+uniform float withBorder;
 
 flat in vec3 normal;
 in vec3 color;
@@ -26,7 +27,7 @@ void main()
     diffuse = max(0, diffuse) + 0.1;
     
     //fragColor = vec4(vec3(border), 1.0);
-    fragColor = vec4(color * diffuse - border, 1.0);
+    fragColor = vec4(color * diffuse - border * withBorder, 1.0);
 
     //fragColor = vec4(n_normal + 1.0f / 2.0f, 1.0f);
 }
