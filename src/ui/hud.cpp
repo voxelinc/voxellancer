@@ -109,20 +109,27 @@ void HUD::draw(){
 	float dy = floor(glm::tan(glm::radians(m_rendercamera.fovy() / 2)) * m_distance);
 	for (VoxelCluster *ship : m_ships){
 		if (glm::length(ship->worldTransform().position() - m_hudcamera.position()) < m_arrow_maxdistance){
+			// delta is the vector from virtual HUD camera to the ship
 			glm::vec3 delta = m_hudcamera.orientation() * (ship->worldTransform().position() - m_hudcamera.position());
+			// strip z = depth value so glm::length will return x/y-length
 			float deltaz = delta.z;
 			delta.z = 0;
-			// if behind of us or out of "scope"
-			float degarr = glm::degrees(glm::atan(glm::length(delta), glm::abs(deltaz)));
+			// calculate angle of ship and fov
+			float degship = glm::degrees(glm::atan(glm::length(delta), glm::abs(deltaz)));
 			float degfov = m_rendercamera.fovy() / 2;
-			if (deltaz > 0 || degarr / degfov > m_arrow_radius * 1.15f){
+			// draw arrow if behind of us or out of "scope"
+			if (deltaz > 0 || degship / degfov > m_arrow_radius * 1.15f){
 				delta = glm::normalize(delta);
-				//m_shiparrow->rotateTo(glm::angleAxis(glm::degrees(glm::atan(delta.x, delta.y)), glm::vec3(0, 0, -1)));
-				//m_shiparrow->moveTo(glm::vec3(0, 0, -m_distance)
-				//	+ m_shiparrow->transform.orientation() * (m_shiparrow->m_offset + glm::vec3(0, dy*m_arrow_radius, 0)));
-				m_shiparrow->transform(WorldTransform(glm::angleAxis(glm::degrees(glm::atan(delta.x, delta.y)), glm::vec3(0, 0, -1)) * glm::inverse(m_shiparrow->worldTransform().orientation())));
-				m_shiparrow->transform(-m_shiparrow->worldTransform().position() + glm::vec3(0, 0, -m_distance)
-					+ m_shiparrow->worldTransform().orientation() * (m_shiparrow->m_offset + glm::vec3(0, dy*m_arrow_radius, 0)));
+				//rotate arrow towards ship (arrow model points upwards)
+				glm::quat absOrientation = glm::angleAxis(glm::degrees(glm::atan(delta.x, delta.y)), glm::vec3(0, 0, -1));
+				m_shiparrow->transform(absOrientation * glm::inverse(m_shiparrow->worldTransform().orientation()));
+				// move arrow out of HUD center
+				glm::vec3 absPosition = glm::vec3(0, 0, -m_distance) /* move back to HUD pane */
+					/* move m_arrow_radius in direction of heading, where 0 is center 1 is full FOV
+					* because orientation is applied before position, add model-internal offset here */
+					+ m_shiparrow->worldTransform().orientation() * (m_shiparrow->m_offset + glm::vec3(0, dy*m_arrow_radius, 0));
+				m_shiparrow->transform(-m_shiparrow->worldTransform().position() + absPosition);
+
 				m_voxelRenderer->draw(m_shiparrow.get());
 			}
 		}
