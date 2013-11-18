@@ -6,8 +6,8 @@
 
 #include <glm/glm.hpp>
 #include <bandit/assertion_frameworks/snowhouse/snowhouse/stringize.h>
+#include "utils/tostring.h"
 
-#include "tostring.h"
 
 // adds vec3 support to bandit
 

@@ -5,7 +5,7 @@
 
 #include <glm/glm.hpp>
 
-#include "utils/vec3helper.h"
+#include "../bandit_extension/vec3helper.h"
 #include "worldtransform.h"
 
 using namespace bandit;
@@ -15,6 +15,23 @@ go_bandit([](){
     describe("WorldTransform", [](){
         
         before_each([&]() {
+
+        });
+
+        it("test angle calculation assumption", [&]() {
+
+            glm::quat q1;
+            glm::quat q2;
+
+            AssertThat(glm::degrees(2 * glm::acos(glm::dot(q1, q2))), EqualsWithDelta(0, 0.01));
+
+            q2 = glm::angleAxis(90.f, glm::vec3(1, 0, 0));
+
+            AssertThat(glm::degrees(2 * glm::acos(glm::dot(q1, q2))), EqualsWithDelta(90, 0.01));
+
+            q1 = glm::angleAxis(90.f, glm::vec3(-1, 0, 0));
+
+            AssertThat(glm::degrees(2 * glm::acos(glm::dot(q1, q2))), EqualsWithDelta(180, 0.01));
 
         });
 

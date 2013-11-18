@@ -9,7 +9,7 @@
 #include "voxel/voxeltreenode.h"
 
 #include "utils/tostring.h"
-#include "utils/vec3helper.h"
+#include "../bandit_extension/vec3helper.h"
 
 using namespace bandit;
 
@@ -81,7 +81,7 @@ go_bandit([](){
         });
 
         it("initially positions all subnodes right", [&]() {
-            VoxelCluster *d = new VoxelCluster(glm::vec3(6, 6, 6), 6);
+            VoxelCluster *d = new VoxelCluster(glm::vec3(1, 1, 1), 6);
 
             d->addVoxel(Voxel(cvec3(1, 1, 1), cvec3(255, 255, 255), c)); // There are 8 subnodes now
 

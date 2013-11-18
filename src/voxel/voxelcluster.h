@@ -50,12 +50,13 @@ protected:
     void updateTextures();
     void updateGeode();
     void doSteppedTransform();
-    bool isPossibleCollision();
+    float calculateStepCount();
+    bool isCollisionPossible();
 
     WorldTransform m_transform;
-    WorldTransform m_old_transform;
-    VoxeltreeNode m_voxeltree;
-    VoxelRenderData m_voxelrenderdata;
+    WorldTransform m_oldTransform;
+    VoxeltreeNode m_voxelTree;
+    VoxelRenderData m_voxelRenderData;
     WorldtreeGeode *m_geode;
     Worldtree *m_worldTree;
     std::unordered_map<cvec3, Voxel, VoxelHash> m_voxel;

@@ -4,7 +4,7 @@
 #include <glow/ChangeListener.h>
 #include <glow/logging.h>
 
-#include "utils/vec3helper.h"
+#include "../bandit_extension/vec3helper.h"
 #include "voxel/voxelcluster.h"
 
 using namespace bandit;
