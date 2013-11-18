@@ -91,10 +91,11 @@ void HUD::draw(){
 			float deltaz = delta.z;
 			delta.z = 0;
 			// calculate angle of ship and fov
-			float degship = glm::degrees(glm::atan(glm::length(delta), glm::abs(deltaz)));
+			float len = glm::length(delta);
+			float degship = glm::degrees(glm::atan(len, glm::abs(deltaz)));
 			float degfov = m_rendercamera.fovy() / 2;
 			// draw arrow if behind of us or out of "scope"
-			if (deltaz > 0 || degship / degfov > m_arrow_radius * 1.15f){
+			if (glm::length(delta) != 0 && (deltaz > 0 || degship / degfov > m_arrow_radius * 1.15f)){
 				delta = glm::normalize(delta);
 				//rotate arrow towards ship (arrow model points upwards)
 				glm::quat absOrientation = glm::angleAxis(glm::degrees(glm::atan(delta.x, delta.y)), glm::vec3(0, 0, -1));
