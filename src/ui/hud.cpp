@@ -58,7 +58,6 @@ Camera *HUD::camera(){
 	return m_gamecamera;
 }
 
-#undef min
 void HUD::update(float delta_sec){
 	m_hudcamera.setOrientation(glm::mix(m_hudcamera.orientation() , m_gamecamera->orientation(), glm::min(delta_sec * m_inertia_rotate, 1.0f)));
 	m_hudcamera.setPosition(glm::mix(m_hudcamera.position(), m_gamecamera->position(), glm::min(delta_sec * m_inertia_move, 1.0f)));

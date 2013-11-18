@@ -1,11 +1,15 @@
 #pragma once
 #include <glow/ref_ptr.h>
-#include <glow/Texture.h>
-#include <glow/Program.h>
-#include <glow/VertexArrayObject.h>
-#include <glow/Buffer.h>
 
 #include "voxelcluster.h"
+
+
+namespace glow {
+	class Texture;
+	class Program;
+	class VertexArrayObject;
+	class Buffer;
+};
 
 class Camera;
 
