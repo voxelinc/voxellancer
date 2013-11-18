@@ -93,8 +93,8 @@ float VoxelCluster::calculateStepCount()
 {
     float distance = glm::length(m_transform.position() - m_oldTransform.position());
     float angle = glm::degrees(2 * glm::acos(glm::dot(m_transform.orientation(), m_oldTransform.orientation())));
-    float steps = floor(distance / MAX_TRANSLATION_STEP_SIZE) + 1; // at least one!
-    steps = glm::max(steps, floor(angle / MAX_ANGLE_STEP_SIZE) + 1);
+    float steps = glm::floor(distance / MAX_TRANSLATION_STEP_SIZE) + 1.f; // at least one!
+    steps = glm::max(steps, glm::floor(angle / MAX_ANGLE_STEP_SIZE) + 1.f);
     return steps;
 }
 
