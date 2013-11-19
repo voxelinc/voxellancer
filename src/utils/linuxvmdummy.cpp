@@ -8,6 +8,23 @@
 
 #include "utils/ddstexture.h"
 
+/* since the last merge glow attempts to use glCompileShaderIncludeARB if not null.
+* while current mesa 9.2.3-2 does not list this extension, this pointer is set -
+* to a function that produces empty compiler error messages.
+* Thus override Shader::compile() to always use glCompileShader */
+bool glow::Shader::compile(){
+	glCompileShader(m_id);
+	CheckGLError();
+
+
+	m_compiled = checkCompileStatus();
+
+	if (m_compiled)
+		changed();
+
+	return isCompiled();
+}
+
 LinuxVMDummy::LinuxVMDummy() :
 	m_shaderProgram(0),
 	m_vertexArrayObject(0),

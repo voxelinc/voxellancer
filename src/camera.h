@@ -14,12 +14,12 @@ public:
 	*	Camera should recalculate on every write access, as reads are more common */
 
 	void move(glm::vec3 dist);
-	void moveTo(glm::vec3 pos);
+	void setPosition(glm::vec3 pos);
 
 	void rotateX(float rot);
 	void rotateY(float rot);
 	void rotateZ(float rot);
-	void rotateTo(glm::quat quat);
+	void setOrientation(glm::quat quat);
 
 	const glm::mat4 view();
 	const glm::mat4 viewInverted();

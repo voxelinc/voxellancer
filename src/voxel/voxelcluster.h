@@ -8,11 +8,9 @@
 #include <glow/ref_ptr.h>
 
 #include "geometry/aabb.h"
-
 #include "voxeltreenode.h"
 #include "worldtransform.h"
 #include "voxel.h"
-
 
 class WorldtreeGeode;
 
@@ -46,12 +44,10 @@ public:
     int voxelCount();
 
     void move(glm::vec3 dist);
-	void moveTo(glm::vec3 pos);
 
 	void rotateX(float rot);
 	void rotateY(float rot);
 	void rotateZ(float rot);
-	void rotateTo(glm::quat quat);
 
 	void transform(const WorldTransform &t);
 
