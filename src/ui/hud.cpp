@@ -1,7 +1,7 @@
 #include "hud.h"
 #include "camera.h"
 #include "voxel/voxelrenderer.h"
-#include "resource/clusterloader.h"
+#include "resource/clusterstore.h"
 #include "ui/hudelement.h"
 
 HUD::HUD(std::list<VoxelCluster*> ships) :
@@ -27,36 +27,33 @@ m_show_framerate("hud.show_framerate", true)
 	m_rendercamera.setZNear(1.f);
 	m_rendercamera.setZFar(500.0f);
 	
-	ClusterLoader loader;
-	addElement(&loader, "data/hud/crosshair.csv", HUDOffsetOrigin::Center, glm::vec3(-4, -4, 0), &m_elements);
-	addElement(&loader, "data/hud/topleft.csv", HUDOffsetOrigin::TopLeft, glm::vec3(1, -2, 0), &m_elements);
-	addElement(&loader, "data/hud/topright.csv", HUDOffsetOrigin::TopRight, glm::vec3(-4, -2, 0), &m_elements);
-	addElement(&loader, "data/hud/bottomleft.csv", HUDOffsetOrigin::BottomLeft, glm::vec3(1, 1, 0), &m_elements);
-	addElement(&loader, "data/hud/bottomright.csv", HUDOffsetOrigin::BottomRight, glm::vec3(-4, 1, 0), &m_elements);
-	addElement(&loader, "data/hud/bottom.csv", HUDOffsetOrigin::Bottom, glm::vec3(-27, 1, 0), &m_elements);
+	addElement("data/hud/crosshair.csv", HUDOffsetOrigin::Center, glm::vec3(-4, -4, 0), &m_elements);
+	addElement("data/hud/topleft.csv", HUDOffsetOrigin::TopLeft, glm::vec3(1, -2, 0), &m_elements);
+	addElement("data/hud/topright.csv", HUDOffsetOrigin::TopRight, glm::vec3(-4, -2, 0), &m_elements);
+	addElement("data/hud/bottomleft.csv", HUDOffsetOrigin::BottomLeft, glm::vec3(1, 1, 0), &m_elements);
+	addElement("data/hud/bottomright.csv", HUDOffsetOrigin::BottomRight, glm::vec3(-4, 1, 0), &m_elements);
+	addElement("data/hud/bottom.csv", HUDOffsetOrigin::Bottom, glm::vec3(-27, 1, 0), &m_elements);
 
-	addElement(&loader, "data/hud/font/0.csv", HUDOffsetOrigin::TopLeft, glm::vec3(0, -4, 0), &m_numbers);
-	addElement(&loader, "data/hud/font/1.csv", HUDOffsetOrigin::TopLeft, glm::vec3(0, -4, 0), &m_numbers);
-	addElement(&loader, "data/hud/font/2.csv", HUDOffsetOrigin::TopLeft, glm::vec3(0, -4, 0), &m_numbers);
-	addElement(&loader, "data/hud/font/3.csv", HUDOffsetOrigin::TopLeft, glm::vec3(0, -4, 0), &m_numbers);
-	addElement(&loader, "data/hud/font/4.csv", HUDOffsetOrigin::TopLeft, glm::vec3(0, -4, 0), &m_numbers);
-	addElement(&loader, "data/hud/font/5.csv", HUDOffsetOrigin::TopLeft, glm::vec3(0, -4, 0), &m_numbers);
-	addElement(&loader, "data/hud/font/6.csv", HUDOffsetOrigin::TopLeft, glm::vec3(0, -4, 0), &m_numbers);
-	addElement(&loader, "data/hud/font/7.csv", HUDOffsetOrigin::TopLeft, glm::vec3(0, -4, 0), &m_numbers);
-	addElement(&loader, "data/hud/font/8.csv", HUDOffsetOrigin::TopLeft, glm::vec3(0, -4, 0), &m_numbers);
-	addElement(&loader, "data/hud/font/9.csv", HUDOffsetOrigin::TopLeft, glm::vec3(0, -4, 0), &m_numbers);
+	addElement("data/hud/font/0.csv", HUDOffsetOrigin::TopLeft, glm::vec3(0, -4, 0), &m_numbers);
+	addElement("data/hud/font/1.csv", HUDOffsetOrigin::TopLeft, glm::vec3(0, -4, 0), &m_numbers);
+	addElement("data/hud/font/2.csv", HUDOffsetOrigin::TopLeft, glm::vec3(0, -4, 0), &m_numbers);
+	addElement("data/hud/font/3.csv", HUDOffsetOrigin::TopLeft, glm::vec3(0, -4, 0), &m_numbers);
+	addElement("data/hud/font/4.csv", HUDOffsetOrigin::TopLeft, glm::vec3(0, -4, 0), &m_numbers);
+	addElement("data/hud/font/5.csv", HUDOffsetOrigin::TopLeft, glm::vec3(0, -4, 0), &m_numbers);
+	addElement("data/hud/font/6.csv", HUDOffsetOrigin::TopLeft, glm::vec3(0, -4, 0), &m_numbers);
+	addElement("data/hud/font/7.csv", HUDOffsetOrigin::TopLeft, glm::vec3(0, -4, 0), &m_numbers);
+	addElement("data/hud/font/8.csv", HUDOffsetOrigin::TopLeft, glm::vec3(0, -4, 0), &m_numbers);
+	addElement("data/hud/font/9.csv", HUDOffsetOrigin::TopLeft, glm::vec3(0, -4, 0), &m_numbers);
 
-	m_shiparrow.reset(new HUDElement);
-	loader.loadClusterFromFile("data/hud/arrow.csv", m_shiparrow.get());
+	m_shiparrow.reset(ClusterStore::getInstance()->getItem<HUDElement>("data/hud/arrow.csv"));
 	m_shiparrow->m_origin = HUDOffsetOrigin::Center;
 	m_shiparrow->m_offset = glm::vec3(-2, -2, 0);
 
 }
 
 
-void HUD::addElement(ClusterLoader *loader, char* filename, HUDOffsetOrigin origin, glm::vec3 offset, std::vector<std::unique_ptr<HUDElement>> *list){
-	std::unique_ptr<HUDElement> element(new HUDElement);
-	loader->loadClusterFromFile(filename, element.get());
+void HUD::addElement(const std::string& filename, HUDOffsetOrigin origin, glm::vec3 offset, std::vector<std::unique_ptr<HUDElement>> *list){
+	std::unique_ptr<HUDElement> element(ClusterStore::getInstance()->getItem<HUDElement>(filename));
 	element->m_origin = origin;
 	element->m_offset = offset;
 	list->push_back(move(element));

@@ -91,11 +91,11 @@ void Game::initialize()
     m_worldtree.insert(&m_testClusterMoveable);
 
 	m_testClusterA = new VoxelCluster();
-	m_testClusterA = ClusterStore::getInstance()->getItem("data/voxelcluster/basicship.csv").release();
+	m_testClusterA = ClusterStore::getInstance()->getItem("data/voxelcluster/basicship.csv");
 	m_testClusterA->transform(glm::vec3(0, 0, -10));
 	m_testClusterA->removeVoxel(cvec3(3, 2, 3)); // this verifies the objects are different
 
-	m_testClusterB = ClusterStore::getInstance()->getItem("data/voxelcluster/basicship.csv").release();
+	m_testClusterB = ClusterStore::getInstance()->getItem("data/voxelcluster/basicship.csv");
 	m_testClusterB->transform(glm::vec3(0, 0, 10));
 
 	m_worldtree.insert(m_testClusterA);

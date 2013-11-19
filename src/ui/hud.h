@@ -10,7 +10,6 @@
 
 class VoxelCluster;
 class VoxelRenderer;
-class ClusterLoader;
 
 class HUD {
 public:
@@ -25,7 +24,7 @@ public:
 
 protected:
 	void adjustPositions();
-	void addElement(ClusterLoader *loader, char *filename, HUDOffsetOrigin origin, glm::vec3 offset, std::vector<std::unique_ptr<HUDElement>> *list);
+	void addElement(const std::string& filename, HUDOffsetOrigin origin, glm::vec3 offset, std::vector<std::unique_ptr<HUDElement>> *list);
 	void stepAnim(glm::vec3 targetpos, glm::quat targetor);
 
 	Camera *m_gamecamera;

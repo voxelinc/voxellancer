@@ -12,7 +12,11 @@ class ClusterStore {
 public:
 	ClusterStore();
 	virtual ~ClusterStore();
-	std::unique_ptr<VoxelCluster> getItem(const std::string& name);
+
+	VoxelCluster *getItem(const std::string& name);
+
+	template <class T>
+	T *getItem(const std::string& name);
 
 	static ClusterStore *getInstance();
 
@@ -21,4 +25,7 @@ private:
 	ClusterLoader m_loader;
 
 	static ClusterStore *s_instance;
+
 };
+
+#include "clusterstore.inl"
