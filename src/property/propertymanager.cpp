@@ -1,11 +1,11 @@
+#include "propertymanager.h"
+
 #include <regex>
 #include <string>
 #include <fstream>
 #include <iostream>
 
 #include <glow/logging.h>
-
-#include "propertymanager.h"
 
 #include "propertycollection.h"
 
