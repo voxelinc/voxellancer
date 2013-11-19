@@ -22,11 +22,13 @@
 #include <fmod_errors.h>
 
 #include "property/propertymanager.h"
+#include "resource/clusterloader.h"
 #include "utils/hd3000dummy.h"
 #include "utils/linuxvmdummy.h"
 #include "voxel/voxelrenderer.h"
 #include "ui/inputhandler.h"
 #include "ui/hud.h"
+#include "skybox.h"
 
 
 using namespace std;
