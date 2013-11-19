@@ -24,8 +24,8 @@ m_show_framerate("hud.show_framerate", true)
 	m_voxelRenderer = std::unique_ptr<VoxelRenderer>(new VoxelRenderer());
 
 	m_rendercamera.setPosition(glm::vec3(0, 0, 0));
-	m_rendercamera.setZNear(0.1f);
-	m_rendercamera.setZFar(1000.0f);
+	m_rendercamera.setZNear(1.f);
+	m_rendercamera.setZFar(500.0f);
 	
 	ClusterLoader loader;
 	addElement(&loader, "data/hud/crosshair.csv", HUDOffsetOrigin::Center, glm::vec3(-4, -4, 0), &m_elements);
@@ -81,14 +81,14 @@ void HUD::stepAnim(glm::vec3 targetpos, glm::quat targetor){
 }
 
 void HUD::update(float delta_sec){
-	delta_sec += m_delta_sec_remain;
+	float total = delta_sec + m_delta_sec_remain;
 	float progress = 0;
-	while (delta_sec - progress > m_inertia_rate){ 
-		stepAnim(glm::mix(m_lastgamecamera.position(), m_gamecamera->position(), progress / delta_sec),
-			glm::mix(m_lastgamecamera.orientation(), m_gamecamera->orientation(), progress / delta_sec));
+	while (total - progress > m_inertia_rate){
+		stepAnim(glm::mix(m_lastgamecamera.position(), m_gamecamera->position(), progress / total),
+			glm::mix(m_lastgamecamera.orientation(), m_gamecamera->orientation(), progress / total));
 		progress += m_inertia_rate; 
 	}
-	m_delta_sec_remain = delta_sec - progress;
+	m_delta_sec_remain = total - progress;
 	m_lastgamecamera.setOrientation(m_gamecamera->orientation());
 	m_lastgamecamera.setPosition(m_gamecamera->position());
 
