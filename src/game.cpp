@@ -24,7 +24,6 @@
 #include "property/propertymanager.h"
 #include "utils/hd3000dummy.h"
 #include "utils/linuxvmdummy.h"
-#include "voxel/voxelcluster.h"
 #include "voxel/voxelrenderer.h"
 #include "inputhandler.h"
 #include "ui/hud.h"

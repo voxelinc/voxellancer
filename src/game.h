@@ -9,12 +9,11 @@
 
 #include <GLFW/glfw3.h>
 
-#include "voxel/voxelcluster.h"
 #include "worldtree/worldtree.h"
 #include "collision/collisiondetector.h"
+#include "resource/clusterloader.h"
 #include "camera.h"
 #include "skybox.h"
-#include "clusterloader.h"
 #include "inputhandler.h"
 
 

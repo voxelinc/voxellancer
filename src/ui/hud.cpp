@@ -1,7 +1,7 @@
 #include "hud.h"
 #include "camera.h"
 #include "voxel/voxelrenderer.h"
-#include "clusterloader.h"
+#include "resource/clusterloader.h"
 #include "ui/hudelement.h"
 
 HUD::HUD(std::list<VoxelCluster*> ships) :
