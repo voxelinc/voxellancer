@@ -7,12 +7,15 @@
 HUD::HUD(std::list<VoxelCluster*> ships) :
 m_gamecamera(0),
 m_rendercamera(),
+m_lastgamecamera(),
 m_ships(ships),
 m_shiparrow(),
+m_delta_sec_remain(0),
 m_distance("hud.distance", 100.f),
 m_move_multiplier("hud.move_multiplier", 5.f),
 m_inertia_rotate("hud.inertia_rotate", 30.f),
 m_inertia_move("hud.inertia_move", 25.f),
+m_inertia_rate("hud.inertia_rate", .0005f),
 m_arrow_maxdistance("hud.arrow_maxdistance", 1000.f),
 m_arrow_radius("hud.arrow_radius", .7f)
 {
@@ -58,9 +61,24 @@ Camera *HUD::camera(){
 	return m_gamecamera;
 }
 
+void HUD::stepAnim(glm::vec3 targetpos, glm::quat targetor){
+	m_hudcamera.setOrientation(glm::mix(m_hudcamera.orientation(), targetor, glm::min(m_inertia_rate * m_inertia_rotate, 1.0f)));
+	m_hudcamera.setPosition(glm::mix(m_hudcamera.position(), targetpos, glm::min(m_inertia_rate * m_inertia_move, 1.0f)));
+}
+
 void HUD::update(float delta_sec){
-	m_hudcamera.setOrientation(glm::mix(m_hudcamera.orientation() , m_gamecamera->orientation(), glm::min(delta_sec * m_inertia_rotate, 1.0f)));
-	m_hudcamera.setPosition(glm::mix(m_hudcamera.position(), m_gamecamera->position(), glm::min(delta_sec * m_inertia_move, 1.0f)));
+	delta_sec += m_delta_sec_remain;
+	float progress = 0;
+	while (delta_sec - progress > m_inertia_rate){ 
+		stepAnim(glm::mix(m_lastgamecamera.position(), m_gamecamera->position(), progress / delta_sec),
+			glm::mix(m_lastgamecamera.orientation(), m_gamecamera->orientation(), progress / delta_sec));
+		progress += m_inertia_rate; 
+	}
+	m_delta_sec_remain = delta_sec - progress;
+	m_lastgamecamera.setOrientation(m_gamecamera->orientation());
+	m_lastgamecamera.setPosition(m_gamecamera->position());
+	//m_hudcamera.setOrientation(glm::mix(m_hudcamera.orientation() , m_gamecamera->orientation(), glm::min(delta_sec * m_inertia_rotate, 1.0f)));
+	//m_hudcamera.setPosition(glm::mix(m_hudcamera.position(), m_gamecamera->position(), glm::min(delta_sec * m_inertia_move, 1.0f)));
 }
 
 void HUD::draw(){

@@ -26,14 +26,16 @@ public:
 protected:
 	void adjustPositions();
 	void addElement(ClusterLoader *loader, char *filename, HUDOffsetOrigin origin, glm::vec3 offset);
+	void stepAnim(glm::vec3 targetpos, glm::quat targetor);
 
 	Camera *m_gamecamera;
-	WorldTransform m_hudcamera;
+	WorldTransform m_hudcamera, m_lastgamecamera;
 	Camera m_rendercamera;
 	std::unique_ptr<VoxelRenderer> m_voxelRenderer;
 	std::list<std::unique_ptr<HUDElement>> m_elements;
 	std::unique_ptr<HUDElement> m_shiparrow;
 	std::list<VoxelCluster*> m_ships;
+	float m_delta_sec_remain;
 
-	Property<float> m_distance, m_move_multiplier, m_inertia_move, m_inertia_rotate, m_arrow_maxdistance, m_arrow_radius;
+	Property<float> m_distance, m_move_multiplier, m_inertia_move, m_inertia_rotate, m_inertia_rate, m_arrow_maxdistance, m_arrow_radius;
 };
