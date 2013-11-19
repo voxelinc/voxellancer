@@ -157,10 +157,10 @@ void HUD::draw(){
 			i2 = (int) m_framerate % 10;
 		}
 		HUDElement *num = m_numbers[i1].get();
-		num->transform(-num->worldTransform().position() + glm::vec3(-dx + 3, dy - 3, -m_distance) + num->m_offset);
+		num->transform().setPosition(glm::vec3(-dx + 3, dy - 3, -m_distance) + num->m_offset);
 		m_voxelRenderer->draw(num);
 		num = m_numbers[i2].get();
-		num->transform(-num->worldTransform().position() + glm::vec3(-dx + 8, dy - 3, -m_distance) + num->m_offset);
+        num->transform().setPosition(glm::vec3(-dx + 8, dy - 3, -m_distance) + num->m_offset);
 		m_voxelRenderer->draw(num);
 	}
 
