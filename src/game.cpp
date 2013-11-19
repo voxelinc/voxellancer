@@ -22,7 +22,7 @@
 #include <fmod_errors.h>
 
 #include "property/propertymanager.h"
-#include "resource/clusterloader.h"
+#include "resource/clusterstore.h"
 #include "utils/hd3000dummy.h"
 #include "utils/linuxvmdummy.h"
 #include "voxel/voxelrenderer.h"
@@ -30,8 +30,6 @@
 #include "ui/hud.h"
 #include "skybox.h"
 
-
-using namespace std;
 
 Game::Game(GLFWwindow *window):
 	m_window(window),
@@ -93,14 +91,14 @@ void Game::initialize()
     m_worldtree.insert(&m_testClusterMoveable);
 
 	m_testClusterA = new VoxelCluster();
+	m_testClusterA = ClusterStore::getInstance()->getItem("data/voxelcluster/basicship.csv").release();
 	m_testClusterA->transform(glm::vec3(0, 0, -10));
-	m_testClusterB = new VoxelCluster();
+	m_testClusterA->removeVoxel(cvec3(3, 2, 3)); // this verifies the objects are different
+
+	m_testClusterB = ClusterStore::getInstance()->getItem("data/voxelcluster/basicship.csv").release();
 	m_testClusterB->transform(glm::vec3(0, 0, 10));
 
-	ClusterLoader *cl = new ClusterLoader();
-	cl->loadClusterFromFile("data/voxelcluster/basicship.csv", m_testClusterA);
-	cl->loadClusterFromFile("data/voxelcluster/basicship.zox", m_testClusterB);
-    m_worldtree.insert(m_testClusterA);
+	m_worldtree.insert(m_testClusterA);
     m_worldtree.insert(m_testClusterB);
 
 	glow::debug("Setup Camera");

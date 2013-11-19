@@ -18,6 +18,7 @@ class VoxelCluster //: public WorldTransform
 {
 public:
     VoxelCluster(float voxelEdgeLength = 1.0f);
+	VoxelCluster(const VoxelCluster& other);
     virtual ~VoxelCluster();
 
     AABB aabb();

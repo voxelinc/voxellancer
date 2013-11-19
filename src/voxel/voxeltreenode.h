@@ -18,6 +18,8 @@ class VoxeltreeNode
 {
 public:
     VoxeltreeNode(VoxeltreeNode *parent, VoxelCluster &voxelcluster, const Grid3dAABB &gridAABB = Grid3dAABB(glm::ivec3(0, 0, 0), glm::ivec3(0, 0, 0)));
+	VoxeltreeNode(const VoxeltreeNode& other, VoxelCluster *voxelcluster);
+	VoxeltreeNode(const VoxeltreeNode& other) = delete; //no "normal" copy ctor
     virtual ~VoxeltreeNode();
 
     bool isAtomic() const;

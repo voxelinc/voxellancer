@@ -17,6 +17,18 @@ VoxeltreeNode::VoxeltreeNode(VoxeltreeNode *parent, VoxelCluster &voxelcluster, 
 
 }
 
+VoxeltreeNode::VoxeltreeNode(const VoxeltreeNode& other, VoxelCluster *voxelcluster) :
+	m_parent(other.m_parent),
+	m_voxelcluster(*voxelcluster),
+	m_gridAABB(other.m_gridAABB),
+	m_voxel(other.m_voxel),
+	m_subnodes()
+{
+	for (VoxeltreeNode *subnode : other.m_subnodes) {
+		m_subnodes.push_back(new VoxeltreeNode(*subnode, voxelcluster));
+	}
+}
+
 VoxeltreeNode::~VoxeltreeNode() {
     for(VoxeltreeNode *subnode : m_subnodes) {
         delete subnode;

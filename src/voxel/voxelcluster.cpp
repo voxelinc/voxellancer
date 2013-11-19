@@ -26,6 +26,26 @@ VoxelCluster::VoxelCluster(float edgeLength):
     m_colorTexture->setParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 }
 
+VoxelCluster::VoxelCluster(const VoxelCluster& other):
+	m_voxelEdgeLength(other.m_voxelEdgeLength),
+	m_centerInGrid(other.m_centerInGrid),
+	m_worldTransform(other.m_worldTransform),
+	m_voxeltree(other.m_voxeltree, this),
+	m_geode(nullptr),
+	m_voxel(other.m_voxel),
+	m_texturesDirty(true)
+
+{
+	m_positionTexture = new glow::Texture(GL_TEXTURE_1D);
+	m_positionTexture->setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	m_positionTexture->setParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	m_colorTexture = new glow::Texture(GL_TEXTURE_1D);
+	m_colorTexture->setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	m_colorTexture->setParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+}
+
 VoxelCluster::~VoxelCluster() {
 
 }
