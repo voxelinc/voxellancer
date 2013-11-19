@@ -24,3 +24,5 @@ namespace snowhouse {
         }
     };
 }
+
+#include "vec3helper.inl"
