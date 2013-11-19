@@ -14,7 +14,7 @@
 #include "resource/clusterloader.h"
 #include "camera.h"
 #include "skybox.h"
-#include "inputhandler.h"
+#include "ui/inputhandler.h"
 
 
 class HUD;

@@ -25,7 +25,7 @@
 #include "utils/hd3000dummy.h"
 #include "utils/linuxvmdummy.h"
 #include "voxel/voxelrenderer.h"
-#include "inputhandler.h"
+#include "ui/inputhandler.h"
 #include "ui/hud.h"
 
 
