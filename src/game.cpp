@@ -28,6 +28,7 @@
 #include "voxel/voxelrenderer.h"
 #include "inputhandler.h"
 #include "ui/hud.h"
+#include "clusterloader.h"
 
 
 using namespace std;

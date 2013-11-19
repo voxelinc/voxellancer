@@ -14,7 +14,6 @@
 #include "collision/collisiondetector.h"
 #include "camera.h"
 #include "skybox.h"
-#include "clusterloader.h"
 #include "inputhandler.h"
 
 
