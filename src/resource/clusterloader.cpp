@@ -1,7 +1,10 @@
 #include "clusterloader.h"
 
+#include <sstream>
+
 #include "voxel/voxelcluster.h"
 #include "voxel/voxel.h"
+
 
 ClusterLoader::ClusterLoader(){
 
@@ -113,7 +116,7 @@ void ClusterLoader::readClusterCsv(VoxelCluster *cluster){
 }
 
 void ClusterLoader::splitStr(const std::string &s, char delim, std::vector<std::string> &elems) {
-	std::stringstream ss(s);
+	std::istringstream ss(s);
 	std::string item;
 	while (getline(ss, item, delim)) {
 		elems.push_back(item);
