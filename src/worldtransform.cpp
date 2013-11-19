@@ -47,6 +47,13 @@ void WorldTransform::rotate(const glm::quat &qrot) {
     m_orientation = m_orientation * qrot;
 }
 
+void WorldTransform::rotateWorld(const glm::quat &qrot) {
+    m_orientation = qrot * m_orientation;
+
+}
+
+
+
 const glm::mat4 WorldTransform::matrix() const {
     return glm::translate(m_position) * glm::mat4_cast(m_orientation) * glm::scale(m_scale, m_scale, m_scale) * glm::translate(-m_center);
 }

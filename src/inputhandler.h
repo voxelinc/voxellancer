@@ -9,12 +9,12 @@
 #include "property/propertymanager.h"
 #include "property/property.h"
 
-#include "voxel/voxelcluster.h"
+#include "physics/physicalobject.h"
 
 
 class InputHandler {
 public:
-	InputHandler(GLFWwindow *window, Camera *camera, VoxelCluster *voxelcluster);
+    InputHandler(GLFWwindow *window, Camera *camera, PhysicalObject *voxelcluster);
 	virtual ~InputHandler();
 
 	void resizeEvent(const unsigned int width, const unsigned int height);
@@ -24,7 +24,7 @@ public:
 protected:
 	GLFWwindow *m_window;
 	Camera* m_camera;
-	VoxelCluster *m_voxelcluster;
+	PhysicalObject *m_voxelcluster;
 
 	int m_windowWidth, m_windowHeight;
 	int m_lastfocus;

@@ -13,6 +13,7 @@
 #include "worldtransform.h"
 #include "voxel.h"
 #include "voxelrenderdata.h"
+#include <memory>
 
 
 class WorldtreeGeode;
@@ -24,13 +25,12 @@ public:
     VoxelCluster(glm::vec3 center = glm::vec3(0), float scale = 1.0);
     virtual ~VoxelCluster();
 
+    virtual void update(float delta_sec);
+
     AABB aabb();
 
     WorldTransform &transform();
     const WorldTransform &transform() const;
-
-    void applyTransform(bool checkCollision = true);
-
 
     VoxeltreeNode &voxeltree();
     const VoxeltreeNode &voxeltree() const;
@@ -40,7 +40,7 @@ public:
     void setGeode(WorldtreeGeode *geode);
     void setWorldTree(Worldtree* worldTree);
 
-    void addVoxel(const Voxel &voxel);
+    void addVoxel(const Voxel & voxel);
     void removeVoxel(const cvec3 &position);
 
     VoxelRenderData *voxelRenderData();
@@ -49,9 +49,7 @@ public:
 protected:
     void updateTextures();
     void updateGeode();
-    void doSteppedTransform();
-    float calculateStepCount();
-    bool isCollisionPossible();
+    
 
     WorldTransform m_transform;
     WorldTransform m_oldTransform;

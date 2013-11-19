@@ -42,63 +42,6 @@ const WorldTransform &VoxelCluster::transform() const {
     return m_transform;
 }
 
-static float MAX_TRANSLATION_STEP_SIZE = 0.1f;
-static float MAX_ANGLE_STEP_SIZE = 10.0f;
-
-// tries to apply the current transform as far as no collision happens.
-// should not be used if the voxelcluster is not part of a worldtree.
-void VoxelCluster::applyTransform(bool checkCollision) {
-    if (checkCollision) {
-        assert(m_geode != nullptr);
-
-        bool sthChanged = m_transform.position() != m_oldTransform.position();
-        sthChanged |= m_transform.orientation() != m_oldTransform.orientation();
-        if (sthChanged) {
-            if (isCollisionPossible())
-                doSteppedTransform();
-        }
-    }
-    m_oldTransform = m_transform;
-    updateGeode();
-}
-
-bool VoxelCluster::isCollisionPossible() {
-    // the geode aabb is still the old one, add it to the final aabb
-    AABB fullAabb = m_geode->aabb().united(aabb());
-    // is there someone else than yourself inside?
-    return m_worldTree->geodesInAABB(fullAabb).size() > 1; 
-}
-
-void VoxelCluster::doSteppedTransform() {
-    float steps = calculateStepCount();
-
-    WorldTransform new_transform = m_transform;
-    CollisionDetector collisionDetector(*m_worldTree, *this);
-
-    for (int i = 0; i <= steps; i++) {
-        m_transform.setOrientation(glm::mix(m_oldTransform.orientation(), new_transform.orientation(), i / steps));
-        m_transform.setPosition(glm::mix(m_oldTransform.position(), new_transform.position(), i / steps));
-        updateGeode();
-        const std::list<Collision> & collisions = collisionDetector.checkCollisions();
-        if (!collisions.empty()) {
-            assert(i > 0); // you're stuck, hopefully doesn't happen!
-            m_transform.setOrientation(glm::mix(m_oldTransform.orientation(), new_transform.orientation(), (i - 1) / steps));
-            m_transform.setPosition(glm::mix(m_oldTransform.position(), new_transform.position(), (i - 1) / steps));
-            break;
-        }
-    }
-}
-
-float VoxelCluster::calculateStepCount()
-{
-    float distance = glm::length(m_transform.position() - m_oldTransform.position());
-    float angle = glm::degrees(2 * glm::acos(glm::dot(m_transform.orientation(), m_oldTransform.orientation())));
-    float steps = glm::floor(distance / MAX_TRANSLATION_STEP_SIZE) + 1.f; // at least one!
-    steps = glm::max(steps, glm::floor(angle / MAX_ANGLE_STEP_SIZE) + 1.f);
-    return steps;
-}
-
-
 VoxeltreeNode &VoxelCluster::voxeltree() {
     return m_voxelTree;
 }
@@ -122,10 +65,9 @@ void VoxelCluster::setGeode(WorldtreeGeode *geode) {
 }
 
 void VoxelCluster::addVoxel(const Voxel & voxel) {
-    // TODO aabb extent(vec3)
+    
     m_voxel[voxel.gridCell()] = voxel;
 
-    // Memoryleak as of now, voxeltree shouldn't manage the voxel
     m_voxelTree.insert(new Voxel(voxel));
 
     m_voxelRenderData.invalidate();
@@ -155,6 +97,10 @@ void VoxelCluster::updateGeode() {
 
 void VoxelCluster::setWorldTree(Worldtree* worldTree) {
     m_worldTree = worldTree;
+}
+
+void VoxelCluster::update(float delta_sec) {
+
 }
 
 

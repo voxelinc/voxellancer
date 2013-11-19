@@ -20,7 +20,7 @@ class Voxel
 {
 public:
     Voxel(VoxelCluster *voxelCluster = nullptr);
-    Voxel(cvec3 gridCell, cvec3 color, VoxelCluster *voxelCluster = nullptr);
+    Voxel(cvec3 gridCell, cvec3 color, VoxelCluster *voxelCluster);
     virtual ~Voxel();
 
     VoxelCluster *voxelCluster();

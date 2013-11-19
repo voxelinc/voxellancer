@@ -78,9 +78,9 @@ void Game::initialize()
     m_testCluster.addVoxel(Voxel(cvec3(1, 1, 0), cvec3(0, 0, 255), &m_testCluster));
     m_testCluster.addVoxel(Voxel(cvec3(1, 0, 1), cvec3(255, 0, 0), &m_testCluster));
     m_testCluster.addVoxel(Voxel(cvec3(0, 0, 0), cvec3(255, 0, 128), &m_testCluster));
+    m_testCluster.calculateMassAndCenter(),
     m_worldtree.insert(&m_testCluster);
 
-    m_testClusterMoveable.transform().setCenter(glm::vec3(0,0,7));
     m_testClusterMoveable.transform().move(glm::vec3(-20, 0, 0));
     m_testClusterMoveable.transform().rotate(glm::angleAxis(-90.f, glm::vec3(0, 1, 0)));
     m_testClusterMoveable.applyTransform(false);
@@ -94,18 +94,21 @@ void Game::initialize()
     m_testClusterMoveable.addVoxel(Voxel(cvec3(1, 1, 7), cvec3(0, 0, 255), &m_testClusterMoveable));
     m_testClusterMoveable.addVoxel(Voxel(cvec3(1, 0, 7), cvec3(255, 0, 0), &m_testClusterMoveable));
     m_testClusterMoveable.addVoxel(Voxel(cvec3(0, 0, 8), cvec3(255, 0, 128), &m_testClusterMoveable));
+    m_testClusterMoveable.calculateMassAndCenter();
     m_worldtree.insert(&m_testClusterMoveable);
 
-    m_testClusterA = new VoxelCluster(glm::vec3(3, 0, 3));
+    m_testClusterA = new PhysicalObject();
 	m_testClusterA->transform().move(glm::vec3(0, 0, -10));
     m_testClusterA->applyTransform(false);
-    m_testClusterB = new VoxelCluster(glm::vec3(3, 0, 3));
+    m_testClusterB = new PhysicalObject();
 	m_testClusterB->transform().move(glm::vec3(0, 0, 10));
     m_testClusterB->applyTransform(false);
 
     ClusterLoader *cl = new ClusterLoader();
 	cl->loadClusterFromFile("data/voxelcluster/basicship.csv", m_testClusterA);
+    m_testClusterA->calculateMassAndCenter();
 	cl->loadClusterFromFile("data/voxelcluster/basicship.zox", m_testClusterB);
+    m_testClusterB->calculateMassAndCenter();
     m_worldtree.insert(m_testClusterA);
     m_worldtree.insert(m_testClusterB);
 
@@ -138,10 +141,10 @@ void Game::update(float delta_sec)
 	m_inputHandler.update(delta_sec);
 
     // TODO: use god instead
-    m_testCluster.applyTransform();
-    m_testClusterA->applyTransform();
-    m_testClusterB->applyTransform();
-    m_testClusterMoveable.applyTransform();
+    m_testCluster.update(delta_sec);
+    m_testClusterA->update(delta_sec);
+    m_testClusterB->update(delta_sec);
+    m_testClusterMoveable.update(delta_sec);
 	m_hud->update(delta_sec);
 }
 

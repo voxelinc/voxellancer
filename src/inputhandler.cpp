@@ -4,7 +4,7 @@
 
 
 
-InputHandler::InputHandler(GLFWwindow *window, Camera *camera, VoxelCluster *voxelcluster):
+InputHandler::InputHandler(GLFWwindow *window, Camera *camera, PhysicalObject *voxelcluster):
 	m_window(window),
 	m_camera(camera),
 	m_voxelcluster(voxelcluster),
@@ -77,22 +77,22 @@ void InputHandler::update(float delta_sec) {
 
             // position voxelcluster
 			if (glfwGetKey(m_window, GLFW_KEY_UP) == GLFW_PRESS){
-                m_voxelcluster->transform().move(glm::vec3(0, 0, -m_move_speed * delta_sec));
+                m_voxelcluster->accelerate(glm::vec3(0, 0, -m_move_speed.get()));
 			}
 			if (glfwGetKey(m_window, GLFW_KEY_LEFT) == GLFW_PRESS){
-				m_voxelcluster->transform().move(-glm::vec3(m_move_speed * delta_sec, 0, 0));
+                m_voxelcluster->accelerate(-glm::vec3(m_move_speed.get(), 0, 0));
 			}
 			if (glfwGetKey(m_window, GLFW_KEY_DOWN) == GLFW_PRESS){
-                m_voxelcluster->transform().move(glm::vec3(0, 0, m_move_speed* delta_sec));
+                m_voxelcluster->accelerate(glm::vec3(0, 0, m_move_speed.get()));
 			}
 			if (glfwGetKey(m_window, GLFW_KEY_RIGHT) == GLFW_PRESS){
-                m_voxelcluster->transform().move(glm::vec3(m_move_speed* delta_sec, 0, 0));
+                m_voxelcluster->accelerate(glm::vec3(m_move_speed.get(), 0, 0));
 			}
 			if (glfwGetKey(m_window, GLFW_KEY_PAGE_DOWN) == GLFW_PRESS){
-                m_voxelcluster->transform().move(glm::vec3(0, -m_move_speed* delta_sec, 0));
+                m_voxelcluster->accelerate(glm::vec3(0, -m_move_speed.get(), 0));
 			}
 			if (glfwGetKey(m_window, GLFW_KEY_PAGE_UP) == GLFW_PRESS){
-                m_voxelcluster->transform().move(glm::vec3(0, m_move_speed* delta_sec, 0));
+                m_voxelcluster->accelerate(glm::vec3(0, m_move_speed.get(), 0));
 			}
             if (glfwGetKey(m_window, GLFW_KEY_I) == GLFW_PRESS) {
                 m_voxelcluster->transform().rotate(glm::angleAxis(1.0f, glm::vec3(1,0,0)));
