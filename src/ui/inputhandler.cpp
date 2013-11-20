@@ -62,17 +62,15 @@ void InputHandler::update(float delta_sec) {
 			}
 			if (glfwGetKey(m_window, GLFW_KEY_S) == GLFW_PRESS){
 				m_camera->move(glm::vec3(0, 0, m_move_speed* delta_sec));
-
 			}
 			if (glfwGetKey(m_window, GLFW_KEY_D) == GLFW_PRESS){
 				m_camera->move(glm::vec3(m_move_speed* delta_sec, 0, 0));
 			}
 			if (glfwGetKey(m_window, GLFW_KEY_Q) == GLFW_PRESS){
-				m_camera->rotateZ(m_roll_speed * delta_sec);
-
+				m_camera->rotateZ(-m_roll_speed * delta_sec);
 			}
 			if (glfwGetKey(m_window, GLFW_KEY_E) == GLFW_PRESS){
-                m_camera->rotateZ(-m_roll_speed * delta_sec);
+                m_camera->rotateZ(m_roll_speed * delta_sec);
 			}
 
             // position voxelcluster

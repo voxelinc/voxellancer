@@ -102,8 +102,8 @@ void HUD::draw(){
 		adjustPositions();
 	}
 
-	m_rendercamera.setOrientation((m_gamecamera->orientation()*glm::inverse(m_hudcamera.orientation())));
-	m_rendercamera.setPosition(m_hudcamera.orientation() * ((m_gamecamera->position() - m_hudcamera.position()) * m_move_multiplier.get()));
+	m_rendercamera.setOrientation((glm::inverse(m_hudcamera.orientation()) * m_gamecamera->orientation()));
+	m_rendercamera.setPosition(((m_gamecamera->position() - m_hudcamera.position()) * m_move_multiplier.get()) * m_hudcamera.orientation());
 
 	float dy = floor(glm::tan(glm::radians(m_rendercamera.fovy() / 2)) * m_distance);
 	float dx = m_rendercamera.aspectRatio()*dy;
