@@ -1,29 +1,18 @@
 #include "worldtransform.h"
 
-WorldTransform::WorldTransform() :
-    m_position(0,0,0),
-    m_orientation()
+
+
+WorldTransform::WorldTransform(glm::vec3 center, float scale) :
+    m_position(0),
+    m_orientation(),
+    m_center(center),
+    m_scale(scale)
 {
 
-}
-
-WorldTransform::WorldTransform(const glm::vec3 &position):
-    m_position(position)
-{
-}
-
-WorldTransform::WorldTransform(const glm::quat &orientation):
-    m_orientation(orientation)
-{
 }
 
 WorldTransform::~WorldTransform() {
 
-}
-
-void WorldTransform::clear() {
-    m_position = glm::vec3(0,0,0);
-    m_orientation = glm::quat();
 }
 
 const glm::quat WorldTransform::orientation() const {
@@ -38,44 +27,44 @@ const glm::vec3 &WorldTransform::position() const {
     return m_position;
 }
 
-void WorldTransform::setPosition(glm::vec3 pos){
+void WorldTransform::setPosition(const glm::vec3 &pos){
 	m_position = pos;
 }
 
+// move in local axis direction
 void WorldTransform::move(glm::vec3 dist)
 {
-    m_position += dist * m_orientation;
+    m_position += m_orientation * dist;
 }
 
-void WorldTransform::rotateX(float rot)
-{
-    glm::quat qrot = glm::angleAxis(rot, glm::vec3(1, 0, 0));
-    m_orientation = qrot * m_orientation;
+// move in world axis direction
+void WorldTransform::moveWorld(glm::vec3 dist) {
+    m_position += dist;
 }
 
-void WorldTransform::rotateY(float rot)
-{
-    glm::quat qrot = glm::angleAxis(rot, glm::vec3(0, 1, 0));
-    m_orientation = qrot * m_orientation;
-}
-
-void WorldTransform::rotateZ(float rot)
-{
-    glm::quat qrot = glm::angleAxis(rot, glm::vec3(0, 0, 1));
-    m_orientation = qrot * m_orientation;
-}
-
-void WorldTransform::transform(const WorldTransform &other) {
-    m_position += other.position();
-    m_orientation = m_orientation * other.orientation();
+// rotate around local axis
+void WorldTransform::rotate(const glm::quat &qrot) {
+    m_orientation = m_orientation * qrot;
 }
 
 const glm::mat4 WorldTransform::matrix() const {
-    return glm::translate(m_position) * glm::mat4_cast(m_orientation);
+    return glm::translate(m_position) * glm::mat4_cast(m_orientation) * glm::scale(m_scale, m_scale, m_scale) * glm::translate(-m_center);
 }
 
+// should do the same as matrix() * vertex
+glm::vec3 WorldTransform::applyTo(const glm::vec3 &vertex) const {
+    return m_position + (m_orientation * (m_scale * (-m_center + vertex)));
+}
 
-void WorldTransform::applyTo(glm::vec3 &vertex) const {
-    vertex = glm::vec3(matrix() * glm::vec4(vertex, 1.0f));
+float WorldTransform::scale() const {
+    return m_scale;
+}
+
+const glm::vec3 & WorldTransform::center() const {
+    return m_center;
+}
+
+void WorldTransform::setCenter(glm::vec3 center) {
+    m_center = center;
 }
 

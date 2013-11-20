@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "geometry/aabb.h"
+#include "../bandit_extension/vec3helper.h"
 
 
 using namespace bandit;

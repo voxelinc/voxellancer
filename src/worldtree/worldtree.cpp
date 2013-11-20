@@ -22,6 +22,7 @@ void Worldtree::insert(WorldtreeGeode *geode) {
 WorldtreeGeode *Worldtree::insert(VoxelCluster *voxelcluster) {
     WorldtreeGeode *geode = new WorldtreeGeode(voxelcluster);
     WorldtreeNode::insert(geode);
+    voxelcluster->setWorldTree(this);
     return geode;
 }
 

@@ -120,9 +120,9 @@ void HUD::draw(){
 
 	// draw ship arrows
 	for (VoxelCluster *ship : m_ships){
-		if (glm::length(ship->worldTransform().position() - m_hudcamera.position()) < m_arrow_maxdistance){
+		if (glm::length(ship->transform().position() - m_hudcamera.position()) < m_arrow_maxdistance){
 			// delta is the vector from virtual HUD camera to the ship
-			glm::vec3 delta = m_hudcamera.orientation() * (ship->worldTransform().position() - m_hudcamera.position());
+			glm::vec3 delta = glm::inverse(m_hudcamera.orientation()) * (ship->transform().position() - m_hudcamera.position());
 			// strip z = depth value so glm::length will return x/y-length
 			float deltaz = delta.z;
 			delta.z = 0;
@@ -135,13 +135,13 @@ void HUD::draw(){
 				delta = glm::normalize(delta);
 				//rotate arrow towards ship (arrow model points upwards)
 				glm::quat absOrientation = glm::angleAxis(glm::degrees(glm::atan(delta.x, delta.y)), glm::vec3(0, 0, -1));
-				m_shiparrow->transform(absOrientation * glm::inverse(m_shiparrow->worldTransform().orientation()));
+				m_shiparrow->transform().setOrientation(absOrientation);
 				// move arrow out of HUD center
 				glm::vec3 absPosition = glm::vec3(0, 0, -m_distance) /* move back to HUD pane */
 					/* move m_arrow_radius in direction of heading, where 0 is center 1 is full FOV
 					* because orientation is applied before position, add model-internal offset here */
-					+ m_shiparrow->worldTransform().orientation() * (m_shiparrow->m_offset + glm::vec3(0, dy*m_arrow_radius, 0));
-				m_shiparrow->transform(-m_shiparrow->worldTransform().position() + absPosition);
+					+ m_shiparrow->transform().orientation() * (m_shiparrow->m_offset + glm::vec3(0, dy*m_arrow_radius, 0));
+                m_shiparrow->transform().setPosition(absPosition);
 
 				m_voxelRenderer->draw(m_shiparrow.get());
 			}
@@ -157,10 +157,10 @@ void HUD::draw(){
 			i2 = (int) m_framerate % 10;
 		}
 		HUDElement *num = m_numbers[i1].get();
-		num->transform(-num->worldTransform().position() + glm::vec3(-dx + 3, dy - 3, -m_distance) + num->m_offset);
+		num->transform().setPosition(glm::vec3(-dx + 3, dy - 3, -m_distance) + num->m_offset);
 		m_voxelRenderer->draw(num);
 		num = m_numbers[i2].get();
-		num->transform(-num->worldTransform().position() + glm::vec3(-dx + 8, dy - 3, -m_distance) + num->m_offset);
+        num->transform().setPosition(glm::vec3(-dx + 8, dy - 3, -m_distance) + num->m_offset);
 		m_voxelRenderer->draw(num);
 	}
 
@@ -178,32 +178,32 @@ void HUD::adjustPositions(){
 		switch (element->m_origin){
 		case TopLeft:
 			//element->moveTo(glm::vec3(-dx, dy, -m_distance) + element->m_offset);
-			element->transform(-element->worldTransform().position() + glm::vec3(-dx, dy, -m_distance) + element->m_offset);
+			element->transform().setPosition(glm::vec3(-dx, dy, -m_distance) + element->m_offset);
 			break;
 		case Top:
-			element->transform(-element->worldTransform().position() + glm::vec3(0, dy, -m_distance) + element->m_offset);
+            element->transform().setPosition(glm::vec3(0, dy, -m_distance) + element->m_offset);
 			break;
 		case TopRight:
-			element->transform(-element->worldTransform().position() + glm::vec3(dx, dy, -m_distance) + element->m_offset);
+            element->transform().setPosition(glm::vec3(dx, dy, -m_distance) + element->m_offset);
 			break;
 		case Right:
-			element->transform(-element->worldTransform().position() + glm::vec3(dx, 0, -m_distance) + element->m_offset);
+            element->transform().setPosition(glm::vec3(dx, 0, -m_distance) + element->m_offset);
 			break;
 		case BottomRight:
-			element->transform(-element->worldTransform().position() + glm::vec3(dx, -dy, -m_distance) + element->m_offset);
+            element->transform().setPosition(glm::vec3(dx, -dy, -m_distance) + element->m_offset);
 			break;
 		case Bottom:
-			element->transform(-element->worldTransform().position() + glm::vec3(0, -dy, -m_distance) + element->m_offset);
+            element->transform().setPosition(glm::vec3(0, -dy, -m_distance) + element->m_offset);
 			break;
 		case BottomLeft:
-			element->transform(-element->worldTransform().position() + glm::vec3(-dx, -dy, -m_distance) + element->m_offset);
+            element->transform().setPosition(glm::vec3(-dx, -dy, -m_distance) + element->m_offset);
 			break;
 		case Left:
-			element->transform(-element->worldTransform().position() + glm::vec3(-dx, 0, -m_distance) + element->m_offset);
+            element->transform().setPosition(glm::vec3(-dx, 0, -m_distance) + element->m_offset);
 			break;
 		case Center:
 		default:
-			element->transform(-element->worldTransform().position() + glm::vec3(0, 0, -m_distance) + element->m_offset);
+            element->transform().setPosition(glm::vec3(0, 0, -m_distance) + element->m_offset);
 			break;
 		}
 	}

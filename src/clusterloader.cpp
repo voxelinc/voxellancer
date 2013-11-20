@@ -65,7 +65,7 @@ void ClusterLoader::readClusterZox(std::string content, VoxelCluster* cluster){
 			g = (color & 0x00FF0000) >> 16;
 			b = (color & 0x0000FF00) >> 8;
 			a = (color & 0x000000FF);
-			cluster->addVoxel(Voxel(cvec3(stoi(voxelStrings[0]), std::stoi(&(voxelStrings[1])[1]), std::stoi(&(voxelStrings[2])[1])), ucvec3(r, g, b)));
+			cluster->addVoxel(Voxel(cvec3(stoi(voxelStrings[0]), std::stoi(&(voxelStrings[1])[1]), std::stoi(&(voxelStrings[2])[1])), cvec3(r, g, b)));
 		}
 		currentFrame++;
 	}
@@ -101,7 +101,7 @@ void ClusterLoader::readClusterCsv(VoxelCluster *cluster){
 				green = stoi(voxelStrings[currentX].substr(3, 2), NULL, 16);
 				blue = stoi(voxelStrings[currentX].substr(5, 2), NULL, 16);
 				if (red+green+blue>0)
-					cluster->addVoxel(Voxel(cvec3(currentX, currentY, currentZ), ucvec3(red, green, blue)));
+					cluster->addVoxel(Voxel(cvec3(currentX, currentY, currentZ), cvec3(red, green, blue)));
 				currentX++;
 			}
 			currentZ++;

@@ -12,8 +12,8 @@ set(META_AUTHOR_DOMAIN "https://github.com/voxelinc/voxellancer/")
 
 # OPTIONS
 option(OPTION_LIMIT_CONFIGS "Generate limited configs (Release; Debug)" ON)
-option(OPTION_LOCAL_INSTALL "Install to a local directory instead of the system" OFF)
 option(OPTION_ERRORS_AS_EXCEPTION "Throw exceptions" OFF)
+option(OPTION_CREATE_SUB_TEST "Create sub tests" OFF)
 
 
 # CMAKE CONFIGURATION
@@ -92,7 +92,7 @@ find_package(GLM REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(GLFW REQUIRED)
 find_package(FMOD REQUIRED)
-find_package(BANDIT)
+find_package(BANDIT REQUIRED)
 
 set(GLOW_DIRECTORY glow)
 include_directories(${LIB_DIR}/${GLOW_DIRECTORY}/include)
@@ -198,9 +198,5 @@ include(CPack)
 
 include_directories(${SOURCE_DIR})
 
-if(BANDIT_INCLUDE_DIR)
-    message(STATUS "Bandit found, adding tests")
-    add_subdirectory(test)
-else()
-    message(STATUS "Bandit not found, can't add tests")
-endif()
+add_subdirectory(test)
+
