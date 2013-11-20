@@ -12,7 +12,7 @@ Voxel::Voxel(VoxelCluster *voxelCluster):
 {
 }
 
-Voxel::Voxel(cvec3 gridCell, ucvec3 color, VoxelCluster *voxelCluster):
+Voxel::Voxel(cvec3 gridCell, cvec3 color, VoxelCluster *voxelCluster):
     m_voxelCluster(voxelCluster),
     m_gridCell(gridCell),
     m_color(color)
@@ -40,11 +40,11 @@ void Voxel::setGridCell(const cvec3 &cell) {
     m_gridCell = cell;
 }
 
-const ucvec3 &Voxel::color() const {
+const cvec3 &Voxel::color() const {
     return m_color;
 }
 
-void Voxel::setColor(const ucvec3 &color) {
+void Voxel::setColor(const cvec3 &color) {
     m_color = color;
 }
 

@@ -9,35 +9,35 @@
 class WorldTransform {
 
 public:
-	WorldTransform();
-	WorldTransform(const glm::vec3 &position);
-	WorldTransform(const glm::quat &orientation);
+    WorldTransform(glm::vec3 center = glm::vec3(0), float scale = 1.0);
 	virtual ~WorldTransform();
 
-	void clear();
-
 	const glm::vec3 &position() const;
-	void setPosition(glm::vec3 pos);
+	void setPosition(const glm::vec3 &pos);
 
 	const glm::quat orientation() const;
 	void setOrientation(glm::quat quat);
 
+    const glm::vec3 & center() const;
+    void setCenter(glm::vec3 center);
+
+    float scale() const;
 
 	void move(glm::vec3 dist);
+    void moveWorld(glm::vec3 dist);
 
-	void rotateX(float rot);
-	void rotateY(float rot);
-	void rotateZ(float rot);
+    void rotate(const glm::quat &qrot);
 
 	void transform(const WorldTransform &other);
 
 	const glm::mat4 matrix() const;
-
-	void applyTo(glm::vec3 &vertex) const;
-
+	glm::vec3 applyTo(const glm::vec3 &vertex) const;
 
 protected:
 	glm::vec3 m_position;
     glm::quat m_orientation;
+    glm::vec3 m_center;
+    float m_scale;
+
 };
 

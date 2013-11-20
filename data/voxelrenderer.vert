@@ -20,8 +20,8 @@ void main()
 {
 	modelposition = a_vertex;
 
-    // map [0:1] to [-128:127]
-    vec3 offset = texelFetch(positionSampler, gl_InstanceIDARB, 0).xyz * 255 - 128;
+    // map [0:1] to [0:255]
+    vec3 offset = texelFetch(positionSampler, gl_InstanceIDARB, 0).xyz * 255;
     
     color = texelFetch(colorSampler, gl_InstanceIDARB, 0).xyz;
         

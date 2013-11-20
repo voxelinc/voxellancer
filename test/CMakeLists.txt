@@ -1,18 +1,19 @@
 
 include_directories(${BANDIT_INCLUDE_DIR})
 
-set(TEST_MAIN ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp) 
+set(TEST_MAIN ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp 
+              ${CMAKE_CURRENT_SOURCE_DIR}/bandit_extension/vec3helper.cpp) 
 include(maketest.cmake)
 
-
-add_subdirectory(geometry)
-add_subdirectory(worldtree)
-add_subdirectory(property)
-add_subdirectory(voxelcluster)
-add_subdirectory(voxeltree)
-add_subdirectory(collision)
-add_subdirectory(loader)
-
+if(${OPTION_CREATE_SUB_TEST})
+    add_subdirectory(geometry)
+    add_subdirectory(worldtree)
+    add_subdirectory(property)
+    add_subdirectory(voxelcluster)
+    add_subdirectory(voxeltree)
+    add_subdirectory(collision)
+    add_subdirectory(loader)
+endif()
 
 file(GLOB_RECURSE ALL_TEST_FILES
     "*/*.cpp"

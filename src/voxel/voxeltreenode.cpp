@@ -68,18 +68,15 @@ Sphere VoxeltreeNode::boundingSphere() {
     Sphere sphere;
     glm::vec3 center;
 
-    center = static_cast<glm::vec3>(m_gridAABB.rub() + m_gridAABB.llf() + glm::ivec3(1, 1, 1)) / 2.0f;
-    center *= m_voxelcluster.voxelEdgeLength();
-    center -= m_voxelcluster.centerInGrid();
-    m_voxelcluster.worldTransform().applyTo(center);
+    center = static_cast<glm::vec3>(m_gridAABB.rub() + m_gridAABB.llf()) / 2.0f;
 
-    sphere.setPosition(center);
+    sphere.setPosition(m_voxelcluster.transform().applyTo(center));
 
     if(m_voxel != nullptr) {
-        sphere.setRadius(m_voxelcluster.voxelEdgeLength()/2);
+        sphere.setRadius(0.5f * m_voxelcluster.transform().scale());
     }
     else {
-        sphere.setRadius(glm::length(glm::vec3(m_gridAABB.rub() - m_gridAABB.llf() + glm::ivec3(1, 1, 1))/2.0f));
+        sphere.setRadius(glm::length(glm::vec3(m_gridAABB.rub() - m_gridAABB.llf())/2.0f));
     }
 
     return sphere;

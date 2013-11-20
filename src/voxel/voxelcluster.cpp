@@ -1,49 +1,40 @@
 #include "voxelcluster.h"
 
 #include <iostream>
+#include <list>
 
-#include "glowutils/MathMacros.h"
-#include "glow/DebugMessageOutput.h"
+#include <glm/gtc/quaternion.hpp>
+
+#include <glow/DebugMessageOutput.h>
+#include <glow/ChangeListener.h>
+#include <glow/logging.h>
+#include <glowutils/MathMacros.h>
+
 
 #include "utils/tostring.h"
-
 #include "worldtree/worldtreegeode.h"
+#include "collision/collisiondetector.h"
 
 
-VoxelCluster::VoxelCluster(float edgeLength):
-    m_voxelEdgeLength(edgeLength),
-    m_texturesDirty(true),
+VoxelCluster::VoxelCluster(glm::vec3 center, float scale): 
     m_voxel(),
-    m_voxeltree(nullptr, *this, Grid3dAABB(glm::ivec3(0, 0, 0), glm::ivec3(0, 0, 0))),
-    m_geode(nullptr)
+    m_voxelTree(nullptr, *this, Grid3dAABB(glm::ivec3(0, 0, 0), glm::ivec3(0, 0, 0))),
+    m_geode(nullptr),
+    m_voxelRenderData(this),
+    m_transform(center, scale),
+    m_oldTransform(center, scale)
 {
-    m_positionTexture = new glow::Texture(GL_TEXTURE_1D);
-    m_positionTexture->setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    m_positionTexture->setParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    m_colorTexture = new glow::Texture(GL_TEXTURE_1D);
-    m_colorTexture->setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    m_colorTexture->setParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 }
 
 VoxelCluster::VoxelCluster(const VoxelCluster& other):
-	m_voxelEdgeLength(other.m_voxelEdgeLength),
-	m_centerInGrid(other.m_centerInGrid),
-	m_worldTransform(other.m_worldTransform),
-	m_voxeltree(other.m_voxeltree, this),
-	m_geode(nullptr),
 	m_voxel(other.m_voxel),
-	m_texturesDirty(true)
-
+	m_voxelTree(other.m_voxelTree, this),
+	m_geode(nullptr),
+	m_voxelRenderData(this),
+	m_transform(other.m_transform),
+	m_oldTransform(other.m_oldTransform)
 {
-	m_positionTexture = new glow::Texture(GL_TEXTURE_1D);
-	m_positionTexture->setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	m_positionTexture->setParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	m_colorTexture = new glow::Texture(GL_TEXTURE_1D);
-	m_colorTexture->setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	m_colorTexture->setParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
+	
 }
 
 VoxelCluster::~VoxelCluster() {
@@ -51,39 +42,80 @@ VoxelCluster::~VoxelCluster() {
 }
 
 AABB VoxelCluster::aabb() {
-    return AABB::containing(m_voxeltree.boundingSphere());
+    return AABB::containing(m_voxelTree.boundingSphere());
 }
 
-const glm::vec3 &VoxelCluster::centerInGrid() const {
-    return m_centerInGrid;
+WorldTransform &VoxelCluster::transform() {
+    return m_transform;
 }
 
-void VoxelCluster::setCenterInGrid(const glm::vec3 &centerInGrid) {
-    m_centerInGrid = centerInGrid;
+const WorldTransform &VoxelCluster::transform() const {
+    return m_transform;
+}
 
-    if(m_geode != nullptr) {
-        m_geode->setAABB(aabb());
+static float MAX_TRANSLATION_STEP_SIZE = 0.1f;
+static float MAX_ANGLE_STEP_SIZE = 10.0f;
+
+// tries to apply the current transform as far as no collision happens.
+// should not be used if the voxelcluster is not part of a worldtree.
+void VoxelCluster::applyTransform(bool checkCollision) {
+    if (checkCollision) {
+        assert(m_geode != nullptr);
+
+        bool sthChanged = m_transform.position() != m_oldTransform.position();
+        sthChanged |= m_transform.orientation() != m_oldTransform.orientation();
+        if (sthChanged) {
+            if (isCollisionPossible())
+                doSteppedTransform();
+        }
+    }
+    m_oldTransform = m_transform;
+    updateGeode();
+}
+
+bool VoxelCluster::isCollisionPossible() {
+    // the geode aabb is still the old one, add it to the final aabb
+    AABB fullAabb = m_geode->aabb().united(aabb());
+    // is there someone else than yourself inside?
+    return m_worldTree->geodesInAABB(fullAabb).size() > 1; 
+}
+
+void VoxelCluster::doSteppedTransform() {
+    float steps = calculateStepCount();
+
+    WorldTransform new_transform = m_transform;
+    CollisionDetector collisionDetector(*m_worldTree, *this);
+
+    for (int i = 0; i <= steps; i++) {
+        m_transform.setOrientation(glm::mix(m_oldTransform.orientation(), new_transform.orientation(), i / steps));
+        m_transform.setPosition(glm::mix(m_oldTransform.position(), new_transform.position(), i / steps));
+        updateGeode();
+        const std::list<Collision> & collisions = collisionDetector.checkCollisions();
+        if (!collisions.empty()) {
+            assert(i > 0); // you're stuck, hopefully doesn't happen!
+            m_transform.setOrientation(glm::mix(m_oldTransform.orientation(), new_transform.orientation(), (i - 1) / steps));
+            m_transform.setPosition(glm::mix(m_oldTransform.position(), new_transform.position(), (i - 1) / steps));
+            break;
+        }
     }
 }
 
-const WorldTransform &VoxelCluster::worldTransform() const {
-    return m_worldTransform;
+float VoxelCluster::calculateStepCount()
+{
+    float distance = glm::length(m_transform.position() - m_oldTransform.position());
+    float angle = glm::degrees(2 * glm::acos(glm::dot(m_transform.orientation(), m_oldTransform.orientation())));
+    float steps = glm::floor(distance / MAX_TRANSLATION_STEP_SIZE) + 1.f; // at least one!
+    steps = glm::max(steps, glm::floor(angle / MAX_ANGLE_STEP_SIZE) + 1.f);
+    return steps;
 }
 
-void VoxelCluster::setWorldTransform(const WorldTransform &transform) {
-    m_worldTransform = transform;
-
-    if(m_geode != nullptr) {
-        m_geode->setAABB(aabb());
-    }
-}
 
 VoxeltreeNode &VoxelCluster::voxeltree() {
-    return m_voxeltree;
+    return m_voxelTree;
 }
 
 const VoxeltreeNode &VoxelCluster::voxeltree() const {
-    return m_voxeltree;
+    return m_voxelTree;
 }
 
 WorldtreeGeode *VoxelCluster::geode() {
@@ -97,21 +129,7 @@ const WorldtreeGeode *VoxelCluster::geode() const {
 void VoxelCluster::setGeode(WorldtreeGeode *geode) {
     m_geode = geode;
 
-    if(m_geode != nullptr) {
-        m_geode->setAABB(aabb());
-    }
-}
-
-float VoxelCluster::voxelEdgeLength() const {
-    return m_voxelEdgeLength;
-}
-
-void VoxelCluster::setVoxelEdgeLength(float voxelEdgeLength) {
-    m_voxelEdgeLength = voxelEdgeLength;
-
-    if(m_geode != nullptr) {
-        m_geode->setAABB(aabb());
-    }
+    updateGeode();
 }
 
 void VoxelCluster::addVoxel(const Voxel & voxel) {
@@ -119,71 +137,36 @@ void VoxelCluster::addVoxel(const Voxel & voxel) {
     m_voxel[voxel.gridCell()] = voxel;
 
     // Memoryleak as of now, voxeltree shouldn't manage the voxel
-    m_voxeltree.insert(new Voxel(voxel));
+    m_voxelTree.insert(new Voxel(voxel));
 
-    m_texturesDirty = true;
+    m_voxelRenderData.invalidate();
 
-    if(m_geode != nullptr) {
-        m_geode->setAABB(aabb());
-    }
+    updateGeode();
 }
 
 void VoxelCluster::removeVoxel(const cvec3 & position) {
     m_voxel.erase(position);
-    m_voxeltree.remove(position);
-    m_texturesDirty = true;
+    m_voxelTree.remove(position);
+    m_voxelRenderData.invalidate();
 }
 
-
-void VoxelCluster::updateTextures() {
-    int size = nextPowerOf2(m_voxel.size());
-    unsigned char * positionData = new unsigned char[size*3];
-    unsigned char * colorData = new unsigned char[size*3];
-
-    int i = 0;
-    for (auto pair: m_voxel)
-    {
-        Voxel voxel = pair.second;
-        positionData[i * 3 + 0] = voxel.gridCell().x+128;
-        positionData[i * 3 + 1] = voxel.gridCell().y+128;
-        positionData[i * 3 + 2] = voxel.gridCell().z+128;
-        colorData[i * 3 + 0] = voxel.color().x;
-        colorData[i * 3 + 1] = voxel.color().y;
-        colorData[i * 3 + 2] = voxel.color().z;
-        i++;
-    }
-
-    m_positionTexture->image1D(0, GL_RGB, size, 0, GL_RGB, GL_UNSIGNED_BYTE, positionData);
-    m_colorTexture->image1D(0, GL_RGB, size, 0, GL_RGB, GL_UNSIGNED_BYTE, colorData);
-    CheckGLError();
-
-    delete[] colorData;
-    delete[] positionData;
-
-    m_texturesDirty = false;
+const std::unordered_map<cvec3, Voxel, VoxelHash> & VoxelCluster::voxel() const{
+    return m_voxel;
 }
 
-int VoxelCluster::voxelCount() {
-    return m_voxel.size();
+VoxelRenderData * VoxelCluster::voxelRenderData() {
+    return &m_voxelRenderData;
 }
 
-void VoxelCluster::transform(const WorldTransform &t) {
-    m_worldTransform.transform(t);
-
-    if(m_geode != nullptr) {
+void VoxelCluster::updateGeode() {
+    if (m_geode != nullptr) {
         m_geode->setAABB(aabb());
     }
 }
 
-glow::Texture * VoxelCluster::positionTexture() {
-    if (m_texturesDirty)
-        updateTextures();
-    return m_positionTexture;
+void VoxelCluster::setWorldTree(Worldtree* worldTree) {
+    m_worldTree = worldTree;
 }
 
-glow::Texture * VoxelCluster::colorTexture() {
-    if (m_texturesDirty)
-        updateTextures();
-    return m_colorTexture;
-}
+
 

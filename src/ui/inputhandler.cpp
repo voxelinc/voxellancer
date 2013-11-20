@@ -8,8 +8,9 @@ InputHandler::InputHandler(GLFWwindow *window, Camera *camera, VoxelCluster *vox
 	m_window(window),
 	m_camera(camera),
 	m_voxelcluster(voxelcluster),
-	m_angle_translate("input.angle_translate", 0.3f),
-    m_move_translate("input.move_translate", 14.5f)
+	m_rotation_speed("input.rotation_speed", 0.3f),
+    m_move_speed("input.move_speed", 14.5f),
+    m_roll_speed("input.roll_speed", 50.0f)
 {
 
 	glfwGetWindowSize(m_window, &m_windowWidth, &m_windowHeight);
@@ -54,52 +55,70 @@ void InputHandler::update(float delta_sec) {
 
 			// position "eye"
 			if (glfwGetKey(m_window, GLFW_KEY_W) == GLFW_PRESS){
-				m_camera->move(glm::vec3(0, 0, -m_move_translate* delta_sec));
+				m_camera->move(glm::vec3(0, 0, -m_move_speed* delta_sec));
 			}
 			if (glfwGetKey(m_window, GLFW_KEY_A) == GLFW_PRESS){
-				m_camera->move(glm::vec3(-m_move_translate * delta_sec, 0, 0));
+				m_camera->move(glm::vec3(-m_move_speed * delta_sec, 0, 0));
 			}
 			if (glfwGetKey(m_window, GLFW_KEY_S) == GLFW_PRESS){
-				m_camera->move(glm::vec3(0, 0, m_move_translate* delta_sec));
+				m_camera->move(glm::vec3(0, 0, m_move_speed* delta_sec));
 
 			}
 			if (glfwGetKey(m_window, GLFW_KEY_D) == GLFW_PRESS){
-				m_camera->move(glm::vec3(m_move_translate* delta_sec, 0, 0));
+				m_camera->move(glm::vec3(m_move_speed* delta_sec, 0, 0));
 			}
 			if (glfwGetKey(m_window, GLFW_KEY_Q) == GLFW_PRESS){
-				m_camera->rotateZ(-50 * delta_sec);
+				m_camera->rotateZ(m_roll_speed * delta_sec);
 
 			}
 			if (glfwGetKey(m_window, GLFW_KEY_E) == GLFW_PRESS){
-				m_camera->rotateZ(50 * delta_sec);
+                m_camera->rotateZ(-m_roll_speed * delta_sec);
 			}
 
             // position voxelcluster
 			if (glfwGetKey(m_window, GLFW_KEY_UP) == GLFW_PRESS){
-				m_voxelcluster->transform(glm::vec3(0, 0, -m_move_translate * delta_sec));
+                m_voxelcluster->transform().move(glm::vec3(0, 0, -m_move_speed * delta_sec));
 			}
 			if (glfwGetKey(m_window, GLFW_KEY_LEFT) == GLFW_PRESS){
-				m_voxelcluster->transform(-glm::vec3(m_move_translate * delta_sec, 0, 0));
-
+				m_voxelcluster->transform().move(-glm::vec3(m_move_speed * delta_sec, 0, 0));
 			}
 			if (glfwGetKey(m_window, GLFW_KEY_DOWN) == GLFW_PRESS){
-				m_voxelcluster->transform(glm::vec3(0, 0, m_move_translate* delta_sec));
+                m_voxelcluster->transform().move(glm::vec3(0, 0, m_move_speed* delta_sec));
 			}
 			if (glfwGetKey(m_window, GLFW_KEY_RIGHT) == GLFW_PRESS){
-				m_voxelcluster->transform(glm::vec3(m_move_translate* delta_sec, 0, 0));
+                m_voxelcluster->transform().move(glm::vec3(m_move_speed* delta_sec, 0, 0));
 			}
 			if (glfwGetKey(m_window, GLFW_KEY_PAGE_DOWN) == GLFW_PRESS){
-				m_voxelcluster->transform(glm::vec3(0, -m_move_translate* delta_sec, 0));
+                m_voxelcluster->transform().move(glm::vec3(0, -m_move_speed* delta_sec, 0));
 			}
 			if (glfwGetKey(m_window, GLFW_KEY_PAGE_UP) == GLFW_PRESS){
-				m_voxelcluster->transform(glm::vec3(0, m_move_translate* delta_sec, 0));
+                m_voxelcluster->transform().move(glm::vec3(0, m_move_speed* delta_sec, 0));
 			}
+            if (glfwGetKey(m_window, GLFW_KEY_I) == GLFW_PRESS) {
+                m_voxelcluster->transform().rotate(glm::angleAxis(1.0f, glm::vec3(1,0,0)));
+            }
+            if (glfwGetKey(m_window, GLFW_KEY_K) == GLFW_PRESS) {
+                m_voxelcluster->transform().rotate(glm::angleAxis(-1.0f, glm::vec3(1, 0, 0)));
+            }
+            if (glfwGetKey(m_window, GLFW_KEY_J) == GLFW_PRESS) {
+                m_voxelcluster->transform().rotate(glm::angleAxis(1.0f, glm::vec3(0, 1, 0)));
+            }
+            if (glfwGetKey(m_window, GLFW_KEY_L) == GLFW_PRESS) {
+                m_voxelcluster->transform().rotate(glm::angleAxis(-1.0f, glm::vec3(0, 1, 0)));
+            }
             if (glfwGetKey(m_window, GLFW_KEY_INSERT) == GLFW_PRESS){
-				m_voxelcluster->transform(glm::angleAxis(1.0f, glm::vec3(0.1, 0.3, 0.4)));
+                m_voxelcluster->transform().rotate(glm::angleAxis(1.0f, glm::vec3(0.1, 0.3, 0.4)));
 			}
 			if (glfwGetKey(m_window, GLFW_KEY_DELETE) == GLFW_PRESS){
-				m_voxelcluster->transform(glm::angleAxis(-1.0f, glm::vec3(0.1, 0.3, 0.4)));
+                m_voxelcluster->transform().rotate(glm::angleAxis(-1.0f, glm::vec3(0.1, 0.3, 0.4)));
 			}
+
+            if (glfwGetKey(m_window, GLFW_KEY_M) == GLFW_PRESS) {
+                m_camera->setPosition(m_voxelcluster->transform().position());
+                m_camera->move(glm::vec3(0, 2, 10));
+                m_camera->setOrientation(m_voxelcluster->transform().orientation());
+            }
+
 
 			// lookAt
 			double x, y;
@@ -117,11 +136,11 @@ void InputHandler::update(float delta_sec) {
 				}
 			}
 
-			float angX = ((int)floor(x) - m_windowWidth / 2) * m_angle_translate * rel;
-			float angY = ((int)floor(y) - m_windowHeight / 2) * m_angle_translate * rel;
+			float angX = ((int)floor(x) - m_windowWidth / 2) * m_rotation_speed * rel;
+			float angY = ((int)floor(y) - m_windowHeight / 2) * m_rotation_speed * rel;
 
-			m_camera->rotateX(angY*delta_sec);
-			m_camera->rotateY(angX*delta_sec);
+			m_camera->rotateX(-angY*delta_sec);
+			m_camera->rotateY(-angX*delta_sec);
 
 		}
 

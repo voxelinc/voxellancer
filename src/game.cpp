@@ -30,7 +30,6 @@
 #include "ui/hud.h"
 #include "skybox.h"
 
-
 Game::Game(GLFWwindow *window):
 	m_window(window),
 	m_camera(),
@@ -58,7 +57,7 @@ void Game::initialize()
     glow::AutoTimer t("Initialize Game");
 
 	glow::debug("Game::testFMOD()");
-    testFMOD();
+    //testFMOD();
 
 	//Must be created first
 	m_linuxvmdummy = std::unique_ptr<LinuxVMDummy>(new LinuxVMDummy);
@@ -69,34 +68,41 @@ void Game::initialize()
 	glow::debug("Create Voxel");
     m_voxelRenderer = std::unique_ptr<VoxelRenderer>(new VoxelRenderer);
 
-    m_testCluster.transform(glm::vec3(0, 0, 0));
-    m_testCluster.addVoxel(Voxel(cvec3(1, 0, 0), ucvec3(0, 255, 0), &m_testCluster));
-    m_testCluster.addVoxel(Voxel(cvec3(2, 0, 0), ucvec3(255, 255, 0), &m_testCluster));
-    m_testCluster.addVoxel(Voxel(cvec3(1, 1, 0), ucvec3(0, 0, 255), &m_testCluster));
-    m_testCluster.addVoxel(Voxel(cvec3(1, 0, 1), ucvec3(255, 0, 0), &m_testCluster));
-    m_testCluster.addVoxel(Voxel(cvec3(0, 0, 0), ucvec3(255, 0, 128), &m_testCluster));
+    m_testCluster.transform().move(glm::vec3(0, 0, 0));
+    m_testCluster.applyTransform(false);
+    m_testCluster.addVoxel(Voxel(cvec3(1, 0, 0), cvec3(0, 255, 0), &m_testCluster));
+    m_testCluster.addVoxel(Voxel(cvec3(2, 0, 0), cvec3(255, 255, 0), &m_testCluster));
+    m_testCluster.addVoxel(Voxel(cvec3(1, 1, 0), cvec3(0, 0, 255), &m_testCluster));
+    m_testCluster.addVoxel(Voxel(cvec3(1, 0, 1), cvec3(255, 0, 0), &m_testCluster));
+    m_testCluster.addVoxel(Voxel(cvec3(0, 0, 0), cvec3(255, 0, 128), &m_testCluster));
     m_worldtree.insert(&m_testCluster);
 
-    m_testClusterMoveable.transform(glm::vec3(-20, 0, 0));
-    m_testClusterMoveable.addVoxel(Voxel(cvec3(1, 0, 0), ucvec3(0, 255, 0), &m_testClusterMoveable));
-    m_testClusterMoveable.addVoxel(Voxel(cvec3(2, 0, 0), ucvec3(255, 255, 0), &m_testClusterMoveable));
-    m_testClusterMoveable.addVoxel(Voxel(cvec3(3, 0, 0), ucvec3(255, 255, 0), &m_testClusterMoveable));
-    m_testClusterMoveable.addVoxel(Voxel(cvec3(4, 0, 0), ucvec3(255, 255, 0), &m_testClusterMoveable));
-    m_testClusterMoveable.addVoxel(Voxel(cvec3(5, 0, 0), ucvec3(255, 255, 0), &m_testClusterMoveable));
-    m_testClusterMoveable.addVoxel(Voxel(cvec3(6, 0, 0), ucvec3(255, 255, 0), &m_testClusterMoveable));
-    m_testClusterMoveable.addVoxel(Voxel(cvec3(7, 0, 0), ucvec3(255, 255, 0), &m_testClusterMoveable));
-    m_testClusterMoveable.addVoxel(Voxel(cvec3(1, 1, 0), ucvec3(0, 0, 255), &m_testClusterMoveable));
-    m_testClusterMoveable.addVoxel(Voxel(cvec3(1, 0, 1), ucvec3(255, 0, 0), &m_testClusterMoveable));
-    m_testClusterMoveable.addVoxel(Voxel(cvec3(0, 0, 0), ucvec3(255, 0, 128), &m_testClusterMoveable));
+    m_testClusterMoveable.transform().setCenter(glm::vec3(0,0,7));
+    m_testClusterMoveable.transform().move(glm::vec3(-20, 0, 0));
+    m_testClusterMoveable.transform().rotate(glm::angleAxis(-90.f, glm::vec3(0, 1, 0)));
+    m_testClusterMoveable.applyTransform(false);
+    m_testClusterMoveable.addVoxel(Voxel(cvec3(0, 0, 7), cvec3(0, 255, 0), &m_testClusterMoveable));
+    m_testClusterMoveable.addVoxel(Voxel(cvec3(0, 0, 6), cvec3(255, 255, 0), &m_testClusterMoveable));
+    m_testClusterMoveable.addVoxel(Voxel(cvec3(0, 0, 5), cvec3(255, 255, 0), &m_testClusterMoveable));
+    m_testClusterMoveable.addVoxel(Voxel(cvec3(0, 0, 4), cvec3(255, 255, 0), &m_testClusterMoveable));
+    m_testClusterMoveable.addVoxel(Voxel(cvec3(0, 0, 3), cvec3(255, 255, 0), &m_testClusterMoveable));
+    m_testClusterMoveable.addVoxel(Voxel(cvec3(0, 0, 2), cvec3(255, 255, 0), &m_testClusterMoveable));
+    m_testClusterMoveable.addVoxel(Voxel(cvec3(0, 0, 1), cvec3(255, 255, 0), &m_testClusterMoveable));
+    m_testClusterMoveable.addVoxel(Voxel(cvec3(1, 1, 7), cvec3(0, 0, 255), &m_testClusterMoveable));
+    m_testClusterMoveable.addVoxel(Voxel(cvec3(1, 0, 7), cvec3(255, 0, 0), &m_testClusterMoveable));
+    m_testClusterMoveable.addVoxel(Voxel(cvec3(0, 0, 8), cvec3(255, 0, 128), &m_testClusterMoveable));
     m_worldtree.insert(&m_testClusterMoveable);
 
-	m_testClusterA = new VoxelCluster();
 	m_testClusterA = ClusterStore::instance()->create("data/voxelcluster/basicship.csv");
-	m_testClusterA->transform(glm::vec3(0, 0, -10));
+	m_testClusterA->transform().setCenter(glm::vec3(3, 0, 3));
+	m_testClusterA->transform().setPosition(glm::vec3(0, 0, -10));
+	m_testClusterA->applyTransform(false);
 	m_testClusterA->removeVoxel(cvec3(3, 2, 3)); // this verifies the objects are different
 
 	m_testClusterB = ClusterStore::instance()->create("data/voxelcluster/basicship.csv");
-	m_testClusterB->transform(glm::vec3(0, 0, 10));
+	m_testClusterB->transform().setCenter(glm::vec3(3, 0, 3));
+	m_testClusterB->transform().setPosition(glm::vec3(0, 0, 10));
+	m_testClusterB->applyTransform(false);
 
 	m_worldtree.insert(m_testClusterA);
     m_worldtree.insert(m_testClusterB);
@@ -104,8 +110,8 @@ void Game::initialize()
 	glow::debug("Setup Camera");
 	//viewport set in resize
 	m_camera.setPosition(glm::vec3(0, 5, 30));
-	m_camera.setZNear(0.1f);
-	m_camera.setZFar(99999);
+	m_camera.setZNear(1);
+	m_camera.setZFar(9999);
 
 	glow::debug("Create HUD");
 	m_hud = std::unique_ptr<HUD>(new HUD(std::list<VoxelCluster*>{ m_testClusterA, m_testClusterB }));
@@ -128,6 +134,12 @@ void Game::update(float delta_sec)
     }
 
 	m_inputHandler.update(delta_sec);
+
+    // TODO: use god instead
+    m_testCluster.applyTransform();
+    m_testClusterA->applyTransform();
+    m_testClusterB->applyTransform();
+    m_testClusterMoveable.applyTransform();
 	m_hud->update(delta_sec);
 }
 

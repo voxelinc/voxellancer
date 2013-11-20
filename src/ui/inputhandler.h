@@ -34,8 +34,9 @@ protected:
 	int m_mouseControl;
 	int m_mouseControlToggled;
 
-	Property<float> m_angle_translate;
-	Property<float> m_move_translate;
+    Property<float> m_rotation_speed;
+    Property<float> m_roll_speed;
+	Property<float> m_move_speed;
 	
 	void toggleControls();
 };
