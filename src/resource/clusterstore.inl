@@ -1,4 +1,5 @@
 #pragma once
+#include "voxel/voxelcluster.h"
 
 // The ClusterStore only stores VoxelClusters, thus
 // this method is only valid for classes have a copy-constructor from VoxelCluster
@@ -10,8 +11,7 @@ T *ClusterStore::getItem(const std::string& name){
 		cluster = new VoxelCluster();
 		m_loader.loadClusterFromFile((char*)name.c_str(), cluster);
 		m_items[name] = std::unique_ptr<VoxelCluster>(cluster);
-	}
-	else {
+	} else {
 		cluster = item->second.get();
 	}
 	return new T(*cluster);
