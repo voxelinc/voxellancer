@@ -16,11 +16,11 @@ ClusterStore::~ClusterStore(){
 
 }
 
-VoxelCluster *ClusterStore::getItem(const std::string& name){
-	return getItem<VoxelCluster>(name);
+VoxelCluster *ClusterStore::create(const std::string& name){
+	return create<VoxelCluster>(name);
 }
 
-ClusterStore *ClusterStore::getInstance(){
+ClusterStore *ClusterStore::instance(){
 	if (s_instance == nullptr) {
 		s_instance = new ClusterStore();
 	}

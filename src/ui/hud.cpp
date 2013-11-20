@@ -45,7 +45,7 @@ m_show_framerate("hud.show_framerate", true)
 	addElement("data/hud/font/8.csv", HUDOffsetOrigin::TopLeft, glm::vec3(0, -4, 0), &m_numbers);
 	addElement("data/hud/font/9.csv", HUDOffsetOrigin::TopLeft, glm::vec3(0, -4, 0), &m_numbers);
 
-	m_shiparrow.reset(ClusterStore::getInstance()->getItem<HUDElement>("data/hud/arrow.csv"));
+	m_shiparrow.reset(ClusterStore::instance()->create<HUDElement>("data/hud/arrow.csv"));
 	m_shiparrow->m_origin = HUDOffsetOrigin::Center;
 	m_shiparrow->m_offset = glm::vec3(-2, -2, 0);
 
@@ -53,7 +53,7 @@ m_show_framerate("hud.show_framerate", true)
 
 
 void HUD::addElement(const std::string& filename, HUDOffsetOrigin origin, glm::vec3 offset, std::vector<std::unique_ptr<HUDElement>> *list){
-	std::unique_ptr<HUDElement> element(ClusterStore::getInstance()->getItem<HUDElement>(filename));
+	std::unique_ptr<HUDElement> element(ClusterStore::instance()->create<HUDElement>(filename));
 	element->m_origin = origin;
 	element->m_offset = offset;
 	list->push_back(move(element));

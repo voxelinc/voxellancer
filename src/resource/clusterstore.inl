@@ -4,7 +4,7 @@
 // The ClusterStore only stores VoxelClusters, thus
 // this method is only valid for classes have a copy-constructor from VoxelCluster
 template <class T>
-T *ClusterStore::getItem(const std::string& name){
+T *ClusterStore::create(const std::string& name){
 	std::map<std::string, std::unique_ptr<VoxelCluster>>::iterator item = m_items.find(name);
 	VoxelCluster *cluster = nullptr;
 	if (item == m_items.end()){

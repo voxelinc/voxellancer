@@ -101,7 +101,7 @@ void PropertyManager::load(std::string file)
     changed();
 }
 
-PropertyManager * PropertyManager::getInstance()
+PropertyManager * PropertyManager::instance()
 {
     if (s_instance == nullptr) {
         s_instance = new PropertyManager();

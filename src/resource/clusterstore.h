@@ -13,12 +13,12 @@ public:
 	ClusterStore();
 	virtual ~ClusterStore();
 
-	VoxelCluster *getItem(const std::string& name);
+	VoxelCluster *create(const std::string& name);
 
 	template <class T>
-	T *getItem(const std::string& name);
+	T *create(const std::string& name);
 
-	static ClusterStore *getInstance();
+	static ClusterStore *instance();
 
 private:
 	std::map<std::string, std::unique_ptr<VoxelCluster>> m_items;
