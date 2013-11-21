@@ -12,8 +12,8 @@ class VoxelCluster;
 class VoxelRenderer;
 
 enum HUDFontSize {
-    Small,
-    Large
+    s3x5,
+    s5x7
 };
 
 class HUD {
@@ -29,14 +29,14 @@ public:
 
 protected:
     void addElement(const std::string& filename, HUDOffsetOrigin origin, glm::vec3 offset, std::vector<std::unique_ptr<HUDElement>> *list);
-    void addCluster(const std::string& filename, glm::vec3 offset, const char index, std::map<char, std::unique_ptr<VoxelCluster>> *map);
+    void addChar(const std::string& filename, glm::vec3 offset, const char index, std::map<char, std::unique_ptr<VoxelCluster>> *map);
 
     void loadFont(const std::string& identifier, std::map<char, std::unique_ptr<VoxelCluster>> *map);
     void loadFonts();
 
     void stepAnim(glm::vec3 targetpos, glm::quat targetor);
 
-    void drawString(std::string text, HUDOffsetOrigin origin, glm::vec3 offset, HUDFontSize size = HUDFontSize::Small);
+    void drawString(std::string text, HUDOffsetOrigin origin, glm::vec3 offset, HUDFontSize size = HUDFontSize::s3x5, float scale = 1.f);
     void adjustPosition(VoxelCluster *cluster, HUDOffsetOrigin origin, glm::vec3 offset);
     void adjustPositions();
 
@@ -56,7 +56,8 @@ protected:
     float m_framerate;
     float m_dx, m_dy;
 
-    Property<float> m_distance, m_move_multiplier, m_inertia_move, m_inertia_rotate, m_inertia_rate, m_arrow_maxdistance, m_arrow_radius;
+    Property<float> m_distance, m_move_multiplier, m_inertia_move, m_inertia_rotate, m_inertia_rate,
+        m_arrow_maxdistance, m_arrow_radius;
     Property<bool> m_show_framerate;
 
 };
