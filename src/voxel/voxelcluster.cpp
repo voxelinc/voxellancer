@@ -21,8 +21,7 @@ VoxelCluster::VoxelCluster(glm::vec3 center, float scale):
     m_voxelTree(nullptr, *this, Grid3dAABB(glm::ivec3(0, 0, 0), glm::ivec3(0, 0, 0))),
     m_geode(nullptr),
     m_voxelRenderData(this),
-    m_transform(center, scale),
-    m_oldTransform(center, scale)
+    m_transform(center, scale)
 {
 }
 

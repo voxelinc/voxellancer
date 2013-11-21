@@ -15,20 +15,27 @@ public:
     void applyTransform(bool checkCollision = true);
     
     void accelerate(glm::vec3 direction);
+    void accelerate_angular(glm::vec3 axis);
 
     void calculateMassAndCenter();
     
 private:
     void doSteppedTransform();
-    float calculateStepCount();
+    float calculateStepCount(const WorldTransform & oldTransform, const WorldTransform & newTransform);
     bool isCollisionPossible();
     void handleCollision(const Collision & c);
 
     float m_mass;
-    glm::vec3 m_speed;
-    glm::quat m_angular_speed;
+    float m_delta_sec;
 
+    WorldTransform m_oldTransform;
+    WorldTransform m_newTransform;
+
+    glm::vec3 m_speed;
+    glm::vec3 m_angularSpeed;
+    
     glm::vec3 m_acceleration;
-    glm::quat m_angular_acceleration;
+    glm::vec3 m_angularAcceleration;
     Property<float> m_dampening;
+    Property<float> m_angularDampening;
 };

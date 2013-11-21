@@ -59,12 +59,10 @@ go_bandit([](){
             AssertThat(r->boundingSphere().position(), EqualsWithDelta(glm::vec3(0), glm::vec3(0.01, 0.01, 0.01)));
 
             c->transform().move(glm::vec3(4, 3, 2));
-            c->applyTransform(false);
             AssertThat(r->boundingSphere().position(), EqualsWithDelta(glm::vec3(4, 3, 2), glm::vec3(0.01, 0.01, 0.01)));
 
             c->transform().move(glm::vec3(1, 2, 3));
             c->transform().move(glm::vec3(-1, 2, 2));
-            c->applyTransform(false);
             AssertThat(r->boundingSphere().position(), EqualsWithDelta(glm::vec3(4, 7, 7), glm::vec3(0.01, 0.01, 0.01)));
         });
 
@@ -98,7 +96,6 @@ go_bandit([](){
 
             c->addVoxel(Voxel(cvec3(1, 1, 1), cvec3(255, 255, 255), c));
             c->transform().setCenter(glm::vec3(1, 1, 1));
-            c->applyTransform(false);
 
             for (VoxeltreeNode *subnode : c->voxeltree().subnodes()) {
                 if (subnode->voxel() != nullptr) {
@@ -110,7 +107,6 @@ go_bandit([](){
             AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(0,0,0), glm::vec3(0.01, 0.01, 0.01)));
 
             c->transform().rotate(glm::angleAxis((float)90.0, glm::vec3(1, 0, 0)));
-            c->applyTransform(false);
             AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(0, 0, 0), glm::vec3(0.01, 0.01, 0.01)));
 
         });
@@ -121,7 +117,6 @@ go_bandit([](){
 
             c->addVoxel(Voxel(cvec3(1,1,1), cvec3(255, 255, 255), c));
             c->transform().setCenter(glm::vec3(1,1,0));
-            c->applyTransform(false);
 
             for(VoxeltreeNode *subnode : c->voxeltree().subnodes()) {
                 if(subnode->voxel() != nullptr) {
@@ -133,11 +128,9 @@ go_bandit([](){
             AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(0,0,1), glm::vec3(0.01, 0.01, 0.01)));
 
             c->transform().rotate(glm::angleAxis((float)90.0, glm::vec3(1, 0, 0)));
-            c->applyTransform(false);
             AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(0, -1, 0), glm::vec3(0.01, 0.01, 0.01)));
 
             c->transform().rotate(glm::angleAxis((float)90.0f, glm::vec3(0, 1, 0)));
-            c->applyTransform(false);
             AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(1, 0, 0), glm::vec3(0.01, 0.01, 0.01)));
 
         });

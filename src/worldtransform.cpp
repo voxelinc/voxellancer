@@ -52,8 +52,6 @@ void WorldTransform::rotateWorld(const glm::quat &qrot) {
 
 }
 
-
-
 const glm::mat4 WorldTransform::matrix() const {
     return glm::translate(m_position) * glm::mat4_cast(m_orientation) * glm::scale(m_scale, m_scale, m_scale) * glm::translate(-m_center);
 }
@@ -73,5 +71,16 @@ const glm::vec3 & WorldTransform::center() const {
 
 void WorldTransform::setCenter(glm::vec3 center) {
     m_center = center;
+}
+
+bool WorldTransform::operator==(const WorldTransform &other) {
+    return m_position == other.position() && 
+           m_orientation == other.orientation() &&
+           m_center == other.center() &&
+           m_scale == other.scale();
+}
+
+bool WorldTransform::operator!=(const WorldTransform &other) {
+    return !(*this == other);
 }
 

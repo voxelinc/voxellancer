@@ -52,7 +52,6 @@ protected:
     
 
     WorldTransform m_transform;
-    WorldTransform m_oldTransform;
     VoxeltreeNode m_voxelTree;
     VoxelRenderData m_voxelRenderData;
     WorldtreeGeode *m_geode;

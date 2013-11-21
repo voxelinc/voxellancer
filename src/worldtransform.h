@@ -29,7 +29,8 @@ public:
     void rotate(const glm::quat &qrot);
     void rotateWorld(const glm::quat &qrot);
 
-	void transform(const WorldTransform &other);
+    bool operator==(const WorldTransform &other);
+    bool operator!=(const WorldTransform &other);
 
 	const glm::mat4 matrix() const;
     glm::vec3 applyTo(const glm::vec3 &vertex) const;

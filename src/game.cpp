@@ -80,6 +80,7 @@ void Game::initialize()
     m_testCluster.addVoxel(Voxel(cvec3(0, 0, 0), cvec3(255, 0, 128), &m_testCluster));
     m_testCluster.calculateMassAndCenter(),
     m_worldtree.insert(&m_testCluster);
+    m_testCluster.accelerate_angular(glm::vec3(0,10,0)),
 
     m_testClusterMoveable.transform().move(glm::vec3(-20, 0, 0));
     m_testClusterMoveable.transform().rotate(glm::angleAxis(-90.f, glm::vec3(0, 1, 0)));
@@ -132,6 +133,8 @@ static int last_collisions = 0;
 
 void Game::update(float delta_sec)
 {
+    delta_sec = glm::min(1.f, delta_sec);
+
     std::list<Collision> collisions = m_collisionDetector.checkCollisions();
     if (collisions.size() != last_collisions) {
         glow::debug("Collisions: %;", collisions.size());

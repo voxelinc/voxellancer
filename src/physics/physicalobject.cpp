@@ -8,10 +8,11 @@
 PhysicalObject::PhysicalObject(float scale):
     VoxelCluster(glm::vec3(0), scale),
     m_speed(0),
-    m_angular_speed(),
+    m_angularSpeed(),
     m_acceleration(0),
-    m_angular_acceleration(),
-    m_dampening("physics.globaldampening", 0.3f),
+    m_angularAcceleration(),
+    m_dampening("physics.globaldampening", 0.5f),
+    m_angularDampening("physics.globalangulardampening", 0.8f),
     m_mass(0)
 {
 
@@ -33,18 +34,22 @@ void PhysicalObject::calculateMassAndCenter() {
 }
 
 void PhysicalObject::update(float delta_sec) {
+    m_delta_sec = delta_sec;
+    m_oldTransform = m_newTransform = m_transform;
+    
     m_speed *= (1.f - m_dampening * delta_sec);
     m_speed += m_acceleration * delta_sec;
-    m_transform.moveWorld(m_speed * delta_sec);
+    m_newTransform.moveWorld(m_speed * delta_sec);
 
-    m_angular_speed = glm::pow(m_angular_speed, (1.f - m_dampening * delta_sec));
-    m_angular_speed = m_angular_speed * glm::pow(m_angular_acceleration, delta_sec);
-    m_transform.rotateWorld(glm::pow(m_angular_speed, delta_sec));
+    m_angularSpeed *= (1.f - m_angularDampening * delta_sec);
+    m_angularSpeed = m_angularSpeed + (m_angularAcceleration*delta_sec);
+
+    m_newTransform.rotate(glm::quat(m_angularSpeed*delta_sec));
 
     applyTransform();
 
     m_acceleration = glm::vec3(0);
-    m_angular_acceleration = glm::quat();
+    m_angularAcceleration = glm::vec3(0);
 }
 
 void PhysicalObject::handleCollision(const Collision & c) {
@@ -52,11 +57,17 @@ void PhysicalObject::handleCollision(const Collision & c) {
     PhysicalObject * p1 = static_cast<PhysicalObject*>(const_cast<VoxelCluster*>(c.voxelA()->voxelCluster()));
     PhysicalObject * p2 = static_cast<PhysicalObject*>(const_cast<VoxelCluster*>(c.voxelB()->voxelCluster()));
 
-    glm::vec3 v1 = ((p1->m_mass - p2->m_mass) * p1->m_speed + 2 * p2->m_mass*p2->m_speed) / (p1->m_mass + p2->m_mass);
-    glm::vec3 v2 = ((p2->m_mass - p1->m_mass) * p2->m_speed + 2 * p1->m_mass*p1->m_speed) / (p1->m_mass + p2->m_mass);
+    glm::vec3 v1 = (p1->m_newTransform.applyTo(glm::vec3(c.voxelA()->gridCell())) - p1->m_oldTransform.applyTo(glm::vec3(c.voxelA()->gridCell()))) / m_delta_sec;
+    glm::vec3 v2 = (p2->m_newTransform.applyTo(glm::vec3(c.voxelB()->gridCell())) - p2->m_oldTransform.applyTo(glm::vec3(c.voxelB()->gridCell()))) / m_delta_sec;
 
-    p1->m_speed = v1;
-    p2->m_speed = v2;
+    glm::vec3 v1_ = ((p1->m_mass - p2->m_mass) * v1 + 2 * p2->m_mass*v2) / (p1->m_mass + p2->m_mass);
+    glm::vec3 v2_ = ((p2->m_mass - p1->m_mass) * v2 + 2 * p1->m_mass*v1) / (p1->m_mass + p2->m_mass);
+
+    p1->accelerate_angular(3.f* glm::cross(v2, (p1->transform().center() - glm::vec3(c.voxelA()->gridCell()))));
+    p2->accelerate_angular(3.f * glm::cross(v1, (p2->transform().center() - glm::vec3(c.voxelB()->gridCell()))));
+
+    p1->m_speed = v1_;
+    p2->m_speed = v2_;
 }
 
 
@@ -66,14 +77,14 @@ void PhysicalObject::applyTransform(bool checkCollision) {
     if (checkCollision) {
         assert(m_geode != nullptr);
 
-        bool sthChanged = m_transform.position() != m_oldTransform.position();
-        sthChanged |= m_transform.orientation() != m_oldTransform.orientation();
-        if (sthChanged) {
-            if (isCollisionPossible())
+        if (m_newTransform != m_oldTransform) {
+            if (isCollisionPossible()) {
                 doSteppedTransform();
+            } else {
+                m_transform = m_newTransform;
+            }
         }
     }
-    m_oldTransform = m_transform;
     updateGeode();
 }
 
@@ -85,20 +96,19 @@ bool PhysicalObject::isCollisionPossible() {
 }
 
 void PhysicalObject::doSteppedTransform() {
-    float steps = calculateStepCount();
+    float steps = calculateStepCount(m_oldTransform, m_newTransform);
 
-    WorldTransform new_transform = m_transform;
     CollisionDetector collisionDetector(*m_worldTree, *this);
 
     for (int i = 0; i <= steps; i++) {
-        m_transform.setOrientation(glm::mix(m_oldTransform.orientation(), new_transform.orientation(), i / steps));
-        m_transform.setPosition(glm::mix(m_oldTransform.position(), new_transform.position(), i / steps));
+        m_transform.setOrientation(glm::mix(m_oldTransform.orientation(), m_newTransform.orientation(), i / steps));
+        m_transform.setPosition(glm::mix(m_oldTransform.position(), m_newTransform.position(), i / steps));
         updateGeode();
         const std::list<Collision> & collisions = collisionDetector.checkCollisions();
         if (!collisions.empty()) {
             assert(i > 0); // you're stuck, hopefully doesn't happen!
-            m_transform.setOrientation(glm::mix(m_oldTransform.orientation(), new_transform.orientation(), (i - 1) / steps));
-            m_transform.setPosition(glm::mix(m_oldTransform.position(), new_transform.position(), (i - 1) / steps));
+            m_transform.setOrientation(glm::mix(m_oldTransform.orientation(), m_newTransform.orientation(), (i - 1) / steps));
+            m_transform.setPosition(glm::mix(m_oldTransform.position(), m_newTransform.position(), (i - 1) / steps));
             handleCollision(collisions.front());
             break;
         }
@@ -108,9 +118,9 @@ void PhysicalObject::doSteppedTransform() {
 static float MAX_TRANSLATION_STEP_SIZE = 0.1f;
 static float MAX_ANGLE_STEP_SIZE = 10.0f;
 
-float PhysicalObject::calculateStepCount() {
-    float distance = glm::length(m_transform.position() - m_oldTransform.position());
-    float angle = glm::degrees(2 * glm::acos(glm::dot(m_transform.orientation(), m_oldTransform.orientation())));
+float PhysicalObject::calculateStepCount(const WorldTransform & oldTransform, const WorldTransform & newTransform) {
+    float distance = glm::length(newTransform.position() - oldTransform.position());
+    float angle = glm::angle(glm::inverse(newTransform.orientation()) * oldTransform.orientation());
     float steps = glm::floor(distance / MAX_TRANSLATION_STEP_SIZE) + 1.f; // at least one!
     steps = glm::max(steps, glm::floor(angle / MAX_ANGLE_STEP_SIZE) + 1.f);
     return steps;
@@ -119,4 +129,8 @@ float PhysicalObject::calculateStepCount() {
 // accelerate along local axis
 void PhysicalObject::accelerate(glm::vec3 direction) {
     m_acceleration += m_transform.orientation() * direction;
+}
+
+void PhysicalObject::accelerate_angular(glm::vec3 axis) {
+    m_angularAcceleration += axis;
 }
