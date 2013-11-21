@@ -58,28 +58,28 @@ void HUD::addChar(const std::string& filename, glm::vec3 offset, const char inde
     (*map)[index] = move(element);
 }
 
-void HUD::loadFont(const std::string& identifier, std::map<char, std::unique_ptr<VoxelCluster>> *map){
+void HUD::loadFont(const std::string& identifier, glm::vec3 offset, std::map<char, std::unique_ptr<VoxelCluster>> *map){
     const char letters[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     for (int i = 0; i < 36; i++){
         std::string path = "data/hud/font/" + identifier + "/";
         path.append(&letters[i], 1);
         path.append(".csv");
-        addChar(path, glm::vec3(0, 2, 0), letters[i], map);
+        addChar(path, offset, letters[i], map);
     }
     // non-letters the fs might/does not like
-    addChar("data/hud/font/" + identifier + "/_dot.csv", glm::vec3(0, 2, 0), '.', map);
-    addChar("data/hud/font/" + identifier + "/_comma.csv", glm::vec3(0, 2, 0), ',', map);
-    addChar("data/hud/font/" + identifier + "/_colon.csv", glm::vec3(0, 2, 0), ':', map);
-    addChar("data/hud/font/" + identifier + "/_semicolon.csv", glm::vec3(0, 2, 0), ';', map);
-    addChar("data/hud/font/" + identifier + "/_slash.csv", glm::vec3(0, 2, 0), '/', map);
-    addChar("data/hud/font/" + identifier + "/_backslash.csv", glm::vec3(0, 2, 0), '\\', map);
-    addChar("data/hud/font/" + identifier + "/_underscore.csv", glm::vec3(0, 2, 0), '_', map);
-    addChar("data/hud/font/" + identifier + "/_dash.csv", glm::vec3(0, 2, 0), '-', map);
+    addChar("data/hud/font/" + identifier + "/_dot.csv", offset, '.', map);
+    addChar("data/hud/font/" + identifier + "/_comma.csv", offset, ',', map);
+    addChar("data/hud/font/" + identifier + "/_colon.csv", offset, ':', map);
+    addChar("data/hud/font/" + identifier + "/_semicolon.csv", offset, ';', map);
+    addChar("data/hud/font/" + identifier + "/_slash.csv", offset, '/', map);
+    addChar("data/hud/font/" + identifier + "/_backslash.csv", offset, '\\', map);
+    addChar("data/hud/font/" + identifier + "/_underscore.csv", offset, '_', map);
+    addChar("data/hud/font/" + identifier + "/_dash.csv", offset, '-', map);
 }
 
 void HUD::loadFonts(){
-    loadFont("3x5", &m_font3x5);
-    loadFont("5x7", &m_font5x7);
+    loadFont("3x5", glm::vec3(1, 2, 0), &m_font3x5);
+    loadFont("5x7", glm::vec3(2, 3, 0), &m_font5x7);
 }
 
 HUD::~HUD(){
@@ -139,10 +139,17 @@ void HUD::draw(){
     }
 
     // draw ship arrows
+    int i = 0;
     for (VoxelCluster *ship : m_ships){
         if (glm::length(ship->transform().position() - m_hudcamera.position()) < m_arrow_maxdistance){
             // delta is the vector from virtual HUD camera to the ship
             glm::vec3 delta = glm::inverse(m_hudcamera.orientation()) * (ship->transform().position() - m_hudcamera.position());
+
+            std::stringstream s; s.setf(std::ios::fixed, std::ios::floatfield); s.precision(2);
+            s << "Dist " << i << ": " << (float)glm::length(delta);
+            drawString(s.str(), BottomLeft, glm::vec3(4, 5 + 5 * i, 0), s5x7, .5f);
+            i++;
+
             // strip z = depth value so glm::length will return x/y-length
             float deltaz = delta.z;
             delta.z = 0;
@@ -167,24 +174,24 @@ void HUD::draw(){
             }
         }
     }
-
+    
     // draw frame rate
     if (m_show_framerate){
-        drawString(std::to_string((int)glm::round(m_framerate)), HUDOffsetOrigin::TopLeft, glm::vec3(3, -5, 0), HUDFontSize::s3x5, .8f);
+        drawString(std::to_string((int)glm::round(m_framerate)), TopLeft, glm::vec3(4, -5, 0), s3x5, .8f);
     }
 
-    drawString("NO TARGET", HUDOffsetOrigin::Bottom, glm::vec3(-1.f * (strlen("NO TARGET") / 2) * 5.f * .6f, 10, 0), HUDFontSize::s3x5, .6f);
-    drawString("Loaded...", HUDOffsetOrigin::BottomLeft, glm::vec3(3, 5, 0), HUDFontSize::s5x7, .6f);
+    drawString("NO TARGET", Bottom, glm::vec3(0, 8, 0), s3x5, .5f, aCenter);
 
     m_voxelRenderer->afterDraw();
 
 }
 
 // m_voxelRenderer must be prepared to draw
-void HUD::drawString(std::string text, HUDOffsetOrigin origin, glm::vec3 offset, HUDFontSize size, float scale){
+void HUD::drawString(std::string text, HUDOffsetOrigin origin, glm::vec3 offset, HUDFontSize size, float scale, HUDFontAlign align){
     std::transform(text.begin(), text.end(), text.begin(), ::toupper);
     std::map<char, std::unique_ptr<VoxelCluster>> *source;
     float width;
+    float intoffset;
     switch (size){
     case s5x7:
         source = &m_font5x7;
@@ -196,11 +203,23 @@ void HUD::drawString(std::string text, HUDOffsetOrigin origin, glm::vec3 offset,
         width = 5 * scale;
         break;
     }
+    switch (align){
+    case aRight:
+        intoffset = -1.f * (text.length()-1) * width;
+        break;
+    case aCenter:
+        intoffset = -1.f * ((text.length()-1) / 2.f) * width;
+        break;
+    case aLeft:
+    default:
+        intoffset = 0;
+        break;
+    }
 
     for (int i = 0; i < text.length(); i++){
         VoxelCluster *cl = (*source)[text[i]].get();
         if (cl != nullptr){
-            adjustPosition(cl, origin, offset + glm::vec3(width * i, 0, 0));
+            adjustPosition(cl, origin, offset + glm::vec3(intoffset + width * i, 0, 0));
             cl->transform().setScale(scale);
             m_voxelRenderer->draw(cl);
         }
@@ -211,7 +230,6 @@ void HUD::adjustPosition(VoxelCluster *cluster, HUDOffsetOrigin origin, glm::vec
     assert(cluster != nullptr);
     switch (origin){
     case TopLeft:
-        //element->moveTo(glm::vec3(-dx, dy, -m_distance) + element->m_offset);
         cluster->transform().setPosition(glm::vec3(-m_dx, m_dy, -m_distance) + offset);
         break;
     case Top:

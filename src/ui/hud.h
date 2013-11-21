@@ -16,6 +16,12 @@ enum HUDFontSize {
     s5x7
 };
 
+enum HUDFontAlign {
+    aLeft,
+    aCenter,
+    aRight
+};
+
 class HUD {
 public:
     HUD(std::list<VoxelCluster*> ships);
@@ -31,12 +37,12 @@ protected:
     void addElement(const std::string& filename, HUDOffsetOrigin origin, glm::vec3 offset, std::vector<std::unique_ptr<HUDElement>> *list);
     void addChar(const std::string& filename, glm::vec3 offset, const char index, std::map<char, std::unique_ptr<VoxelCluster>> *map);
 
-    void loadFont(const std::string& identifier, std::map<char, std::unique_ptr<VoxelCluster>> *map);
+    void loadFont(const std::string& identifier, glm::vec3 offset, std::map<char, std::unique_ptr<VoxelCluster>> *map);
     void loadFonts();
 
     void stepAnim(glm::vec3 targetpos, glm::quat targetor);
 
-    void drawString(std::string text, HUDOffsetOrigin origin, glm::vec3 offset, HUDFontSize size = HUDFontSize::s3x5, float scale = 1.f);
+    void drawString(std::string text, HUDOffsetOrigin origin, glm::vec3 offset, HUDFontSize size = s3x5, float scale = 1.f, HUDFontAlign align = aLeft);
     void adjustPosition(VoxelCluster *cluster, HUDOffsetOrigin origin, glm::vec3 offset);
     void adjustPositions();
 
