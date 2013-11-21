@@ -22,13 +22,12 @@ public:
     void setCenter(glm::vec3 center);
 
     float scale() const;
+    void setScale(float scale);
 
 	void move(glm::vec3 dist);
     void moveWorld(glm::vec3 dist);
 
     void rotate(const glm::quat &qrot);
-
-	void transform(const WorldTransform &other);
 
 	const glm::mat4 matrix() const;
 	glm::vec3 applyTo(const glm::vec3 &vertex) const;
