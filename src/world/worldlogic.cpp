@@ -1,0 +1,40 @@
+#include "worldlogic.h"
+
+#include "world.h"
+
+
+WorldLogic::WorldLogic(World &world):
+    m_world(world)
+{
+
+}
+
+void WorldLogic::update() {
+    m_mover.moveVoxelClusters();
+
+    m_impactAccumulator.parse(m_mover.collisions());
+
+    m_impactResolver.alterVelocities(m_impactAccumulator.voxelClusterImpacts());
+    m_damager.applyDamage(m_impactAccumulator.voxelClusterImpacts());
+
+    m_impactForwarder.scheduleForwardedImpacts(m_damager.deadlyVoxelImpacts());
+    m_voxelHangman.applyOnDestructionHooks(m_damager.deadlyVoxelImpacts());
+    m_voxelHangman.removeDestroyedVoxels(m_damager.deadlyVoxelImpacts());
+
+    m_splitDetector.searchOrphans(m_damager.modifiedVoxelClusters());
+    m_splitter.split(m_splitDetector.voxelClusterOrphans());
+    m_world.god().scheduleSpawns(m_splitter.splitOffVoxelClusters());
+
+    m_wrecker.detectWreckages(m_damager.modifiedVoxelClusters());
+    m_wrecker.applyOnWreckageHooks();
+    m_god.scheduleRemovals(m_wrecker.wreckages());
+    m_world.god().scheduleSpawns(m_wrecker.recycled());
+
+    m_garbageCollector.check(m_damager.modifiedVoxelClusters());
+    m_garbageCollector.applyOnGarbageHooks();
+    m_world.god().scheduleRemoval(m_garbageCollector.garbageVoxelClusters());
+
+    m_world.god().remove();
+    m_world.god().spawn();
+}
+
