@@ -23,231 +23,232 @@ m_arrow_maxdistance("hud.arrow_maxdistance", 1000.f),
 m_arrow_radius("hud.arrow_radius", .7f),
 m_show_framerate("hud.show_framerate", true)
 {
-	m_voxelRenderer = std::unique_ptr<VoxelRenderer>(new VoxelRenderer());
+    m_voxelRenderer = std::unique_ptr<VoxelRenderer>(new VoxelRenderer());
 
-	m_rendercamera.setPosition(glm::vec3(0, 0, 0));
-	m_rendercamera.setZNear(1.f);
-	m_rendercamera.setZFar(500.0f);
-	
-	addElement("data/hud/crosshair.csv", HUDOffsetOrigin::Center, glm::vec3(-4, -4, 0), &m_elements);
-	addElement("data/hud/topleft.csv", HUDOffsetOrigin::TopLeft, glm::vec3(1, -2, 0), &m_elements);
-	addElement("data/hud/topright.csv", HUDOffsetOrigin::TopRight, glm::vec3(-4, -2, 0), &m_elements);
-	addElement("data/hud/bottomleft.csv", HUDOffsetOrigin::BottomLeft, glm::vec3(1, 1, 0), &m_elements);
-	addElement("data/hud/bottomright.csv", HUDOffsetOrigin::BottomRight, glm::vec3(-4, 1, 0), &m_elements);
-	addElement("data/hud/bottom.csv", HUDOffsetOrigin::Bottom, glm::vec3(-27, 1, 0), &m_elements);
-	
-	m_shiparrow.reset(ClusterStore::instance()->create<HUDElement>("data/hud/arrow.csv"));
-	m_shiparrow->m_origin = HUDOffsetOrigin::Center;
-	m_shiparrow->m_offset = glm::vec3(-2, -2, 0);
+    m_rendercamera.setPosition(glm::vec3(0, 0, 0));
+    m_rendercamera.setZNear(1.f);
+    m_rendercamera.setZFar(500.0f);
+    
+    addElement("data/hud/crosshair.csv", HUDOffsetOrigin::Center, glm::vec3(-4, -4, 0), &m_elements);
+    addElement("data/hud/topleft.csv", HUDOffsetOrigin::TopLeft, glm::vec3(1, -2, 0), &m_elements);
+    addElement("data/hud/topright.csv", HUDOffsetOrigin::TopRight, glm::vec3(-4, -2, 0), &m_elements);
+    addElement("data/hud/bottomleft.csv", HUDOffsetOrigin::BottomLeft, glm::vec3(1, 1, 0), &m_elements);
+    addElement("data/hud/bottomright.csv", HUDOffsetOrigin::BottomRight, glm::vec3(-4, 1, 0), &m_elements);
+    addElement("data/hud/bottom.csv", HUDOffsetOrigin::Bottom, glm::vec3(-27, 1, 0), &m_elements);
 
-	loadFonts();
+    m_shiparrow.reset(ClusterStore::instance()->create<HUDElement>("data/hud/arrow.csv"));
+    m_shiparrow->m_origin = HUDOffsetOrigin::Center;
+    m_shiparrow->m_offset = glm::vec3(-2, -2, 0);
+
+    loadFonts();
 
 }
 
 
 void HUD::addElement(const std::string& filename, HUDOffsetOrigin origin, glm::vec3 offset, std::vector<std::unique_ptr<HUDElement>> *list){
-	std::unique_ptr<HUDElement> element(ClusterStore::instance()->create<HUDElement>(filename));
-	element->m_origin = origin;
-	element->m_offset = offset;
-	list->push_back(move(element));
+    std::unique_ptr<HUDElement> element(ClusterStore::instance()->create<HUDElement>(filename));
+    element->m_origin = origin;
+    element->m_offset = offset;
+    list->push_back(move(element));
 }
 
 void HUD::addCluster(const std::string& filename, glm::vec3 offset, const char index, std::map<char, std::unique_ptr<VoxelCluster>> *map){
-	std::unique_ptr<VoxelCluster> element(ClusterStore::instance()->create<VoxelCluster>(filename));
-	element->transform().setCenter(offset);
-	(*map)[index] = move(element);
+    std::unique_ptr<VoxelCluster> element(ClusterStore::instance()->create<VoxelCluster>(filename));
+    element->transform().setCenter(offset);
+    (*map)[index] = move(element);
 }
 
 void HUD::loadFont(const std::string& identifier, std::map<char, std::unique_ptr<VoxelCluster>> *map){
-	const char letters[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-	for (int i = 0; i < 36; i++){
-		std::string path = "data/hud/font/" + identifier + "/";
-		path.append(&letters[i], 1);
-		path.append(".csv");
-		addCluster(path, glm::vec3(0, 2, 0), letters[i], map);
-	}
-	// non-letters the fs might/does not like
-	addCluster("data/hud/font/" + identifier + "/_dot.csv", glm::vec3(0, 2, 0), '.', map);
-	addCluster("data/hud/font/" + identifier + "/_comma.csv", glm::vec3(0, 2, 0), ',', map);
-	addCluster("data/hud/font/" + identifier + "/_colon.csv", glm::vec3(0, 2, 0), ':', map);
-	addCluster("data/hud/font/" + identifier + "/_semicolon.csv", glm::vec3(0, 2, 0), ';', map);
-	addCluster("data/hud/font/" + identifier + "/_slash.csv", glm::vec3(0, 2, 0), '/', map);
-	addCluster("data/hud/font/" + identifier + "/_backslash.csv", glm::vec3(0, 2, 0), '\\', map);
-	addCluster("data/hud/font/" + identifier + "/_underscore.csv", glm::vec3(0, 2, 0), '_', map);
-	addCluster("data/hud/font/" + identifier + "/_dash.csv", glm::vec3(0, 2, 0), '-', map);
+    const char letters[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    for (int i = 0; i < 36; i++){
+        std::string path = "data/hud/font/" + identifier + "/";
+        path.append(&letters[i], 1);
+        path.append(".csv");
+        addCluster(path, glm::vec3(0, 2, 0), letters[i], map);
+    }
+    // non-letters the fs might/does not like
+    addCluster("data/hud/font/" + identifier + "/_dot.csv", glm::vec3(0, 2, 0), '.', map);
+    addCluster("data/hud/font/" + identifier + "/_comma.csv", glm::vec3(0, 2, 0), ',', map);
+    addCluster("data/hud/font/" + identifier + "/_colon.csv", glm::vec3(0, 2, 0), ':', map);
+    addCluster("data/hud/font/" + identifier + "/_semicolon.csv", glm::vec3(0, 2, 0), ';', map);
+    addCluster("data/hud/font/" + identifier + "/_slash.csv", glm::vec3(0, 2, 0), '/', map);
+    addCluster("data/hud/font/" + identifier + "/_backslash.csv", glm::vec3(0, 2, 0), '\\', map);
+    addCluster("data/hud/font/" + identifier + "/_underscore.csv", glm::vec3(0, 2, 0), '_', map);
+    addCluster("data/hud/font/" + identifier + "/_dash.csv", glm::vec3(0, 2, 0), '-', map);
 }
 
 void HUD::loadFonts(){
-	loadFont("3x5", &m_font3x5);
-	loadFont("5x7", &m_font5x7);
+    loadFont("3x5", &m_font3x5);
+    loadFont("5x7", &m_font5x7);
 }
 
 HUD::~HUD(){
 }
 
 void HUD::setCamera(Camera *camera){
-	m_gamecamera = camera;
-	m_hudcamera.setOrientation(camera->orientation());
-	m_hudcamera.setPosition(camera->position());
+    m_gamecamera = camera;
+    m_hudcamera.setOrientation(camera->orientation());
+    m_hudcamera.setPosition(camera->position());
 }
 
 Camera *HUD::camera(){
-	return m_gamecamera;
+    return m_gamecamera;
 }
 
 void HUD::stepAnim(glm::vec3 targetpos, glm::quat targetor){
-	m_hudcamera.setOrientation(glm::mix(m_hudcamera.orientation(), targetor, glm::min(m_inertia_rate * m_inertia_rotate, 1.0f)));
-	m_hudcamera.setPosition(glm::mix(m_hudcamera.position(), targetpos, glm::min(m_inertia_rate * m_inertia_move, 1.0f)));
+    m_hudcamera.setOrientation(glm::mix(m_hudcamera.orientation(), targetor, glm::min(m_inertia_rate * m_inertia_rotate, 1.0f)));
+    m_hudcamera.setPosition(glm::mix(m_hudcamera.position(), targetpos, glm::min(m_inertia_rate * m_inertia_move, 1.0f)));
 }
 
 void HUD::update(float delta_sec){
-	float total = delta_sec + m_delta_sec_remain;
-	float progress = 0;
-	while (total - progress > m_inertia_rate){
-		stepAnim(glm::mix(m_lastgamecamera.position(), m_gamecamera->position(), progress / total),
-			glm::mix(m_lastgamecamera.orientation(), m_gamecamera->orientation(), progress / total));
-		progress += m_inertia_rate; 
-	}
-	m_delta_sec_remain = total - progress;
-	m_lastgamecamera.setOrientation(m_gamecamera->orientation());
-	m_lastgamecamera.setPosition(m_gamecamera->position());
+    float total = delta_sec + m_delta_sec_remain;
+    float progress = 0;
+    while (total - progress > m_inertia_rate){
+        stepAnim(glm::mix(m_lastgamecamera.position(), m_gamecamera->position(), progress / total),
+            glm::mix(m_lastgamecamera.orientation(), m_gamecamera->orientation(), progress / total));
+        progress += m_inertia_rate; 
+    }
+    m_delta_sec_remain = total - progress;
+    m_lastgamecamera.setOrientation(m_gamecamera->orientation());
+    m_lastgamecamera.setPosition(m_gamecamera->position());
 
-	float thisframe = 1.f / delta_sec;
-	if (thisframe < 1 || thisframe > 9999) m_framerate = 0;
-	else m_framerate = m_framerate * .8f + thisframe * .2f;
+    float thisframe = 1.f / delta_sec;
+    if (thisframe < 1 || thisframe > 9999) m_framerate = 0;
+    else m_framerate = m_framerate * .8f + thisframe * .2f;
 }
 
 void HUD::draw(){
-	assert(m_gamecamera != nullptr);
-	glClear(GL_DEPTH_BUFFER_BIT);
+    assert(m_gamecamera != nullptr);
+    glClear(GL_DEPTH_BUFFER_BIT);
 
-	if (m_rendercamera.aspectRatio() != m_gamecamera->aspectRatio() || m_rendercamera.fovy() != m_gamecamera->fovy()){
-		adjustPositions();
-	}
+    if (m_rendercamera.aspectRatio() != m_gamecamera->aspectRatio() || m_rendercamera.fovy() != m_gamecamera->fovy()){
+        adjustPositions();
+    }
 
-	m_rendercamera.setOrientation((glm::inverse(m_hudcamera.orientation()) * m_gamecamera->orientation()));
-	m_rendercamera.setPosition(((m_gamecamera->position() - m_hudcamera.position()) * m_move_multiplier.get()) * m_hudcamera.orientation());
+    m_rendercamera.setOrientation((glm::inverse(m_hudcamera.orientation()) * m_gamecamera->orientation()));
+    m_rendercamera.setPosition(((m_gamecamera->position() - m_hudcamera.position()) * m_move_multiplier.get()) * m_hudcamera.orientation());
 
-	float dy = floor(glm::tan(glm::radians(m_rendercamera.fovy() / 2)) * m_distance);
-	float dx = m_rendercamera.aspectRatio()*dy;
+    float dy = floor(glm::tan(glm::radians(m_rendercamera.fovy() / 2)) * m_distance);
+    float dx = m_rendercamera.aspectRatio()*dy;
 
-	m_voxelRenderer->prepareDraw(&m_rendercamera, false);
+    m_voxelRenderer->prepareDraw(&m_rendercamera, false);
 
-	// draw statics
-	for (std::unique_ptr<HUDElement>& element : m_elements)	{
-		m_voxelRenderer->draw(element.get());
-	}
+    // draw statics
+    for (std::unique_ptr<HUDElement>& element : m_elements)    {
+        m_voxelRenderer->draw(element.get());
+    }
 
-	// draw ship arrows
-	for (VoxelCluster *ship : m_ships){
-		if (glm::length(ship->transform().position() - m_hudcamera.position()) < m_arrow_maxdistance){
-			// delta is the vector from virtual HUD camera to the ship
-			glm::vec3 delta = glm::inverse(m_hudcamera.orientation()) * (ship->transform().position() - m_hudcamera.position());
-			// strip z = depth value so glm::length will return x/y-length
-			float deltaz = delta.z;
-			delta.z = 0;
-			// calculate angle of ship and fov
-			float len = glm::length(delta);
-			float degship = glm::degrees(glm::atan(len, glm::abs(deltaz)));
-			float degfov = m_rendercamera.fovy() / 2;
-			// draw arrow if behind of us or out of "scope"
-			if (glm::length(delta) != 0 && (deltaz > 0 || degship / degfov > m_arrow_radius * 1.15f)){
-				delta = glm::normalize(delta);
-				//rotate arrow towards ship (arrow model points upwards)
-				glm::quat absOrientation = glm::angleAxis(glm::degrees(glm::atan(delta.x, delta.y)), glm::vec3(0, 0, -1));
-				m_shiparrow->transform().setOrientation(absOrientation);
-				// move arrow out of HUD center
-				glm::vec3 absPosition = glm::vec3(0, 0, -m_distance) /* move back to HUD pane */
-					/* move m_arrow_radius in direction of heading, where 0 is center 1 is full FOV
-					* because orientation is applied before position, add model-internal offset here */
-					+ m_shiparrow->transform().orientation() * (m_shiparrow->m_offset + glm::vec3(0, dy*m_arrow_radius, 0));
+    // draw ship arrows
+    for (VoxelCluster *ship : m_ships){
+        if (glm::length(ship->transform().position() - m_hudcamera.position()) < m_arrow_maxdistance){
+            // delta is the vector from virtual HUD camera to the ship
+            glm::vec3 delta = glm::inverse(m_hudcamera.orientation()) * (ship->transform().position() - m_hudcamera.position());
+            // strip z = depth value so glm::length will return x/y-length
+            float deltaz = delta.z;
+            delta.z = 0;
+            // calculate angle of ship and fov
+            float len = glm::length(delta);
+            float degship = glm::degrees(glm::atan(len, glm::abs(deltaz)));
+            float degfov = m_rendercamera.fovy() / 2;
+            // draw arrow if behind of us or out of "scope"
+            if (glm::length(delta) != 0 && (deltaz > 0 || degship / degfov > m_arrow_radius * 1.15f)){
+                delta = glm::normalize(delta);
+                //rotate arrow towards ship (arrow model points upwards)
+                glm::quat absOrientation = glm::angleAxis(glm::degrees(glm::atan(delta.x, delta.y)), glm::vec3(0, 0, -1));
+                m_shiparrow->transform().setOrientation(absOrientation);
+                // move arrow out of HUD center
+                glm::vec3 absPosition = glm::vec3(0, 0, -m_distance) /* move back to HUD pane */
+                    /* move m_arrow_radius in direction of heading, where 0 is center 1 is full FOV
+                    * because orientation is applied before position, add model-internal offset here */
+                    + m_shiparrow->transform().orientation() * (m_shiparrow->m_offset + glm::vec3(0, dy*m_arrow_radius, 0));
                 m_shiparrow->transform().setPosition(absPosition);
 
-				m_voxelRenderer->draw(m_shiparrow.get());
-			}
-		}
-	}
+                m_voxelRenderer->draw(m_shiparrow.get());
+            }
+        }
+    }
 
-	// draw frame rate
-	if (m_show_framerate){
-		drawString(std::to_string((int)glm::round(m_framerate)), HUDOffsetOrigin::TopLeft, glm::vec3(3, -5, 0));
-	}
+    // draw frame rate
+    if (m_show_framerate){
+        drawString(std::to_string((int)glm::round(m_framerate)), HUDOffsetOrigin::TopLeft, glm::vec3(3, -5, 0));
+    }
 
-	drawString("NO TARGET", HUDOffsetOrigin::Bottom, glm::vec3(-20, 10, 0), HUDFontSize::Small);
-	drawString("NO TARGET", HUDOffsetOrigin::BottomLeft, glm::vec3(3, 5, 0), HUDFontSize::Large);
+    drawString("NO TARGET", HUDOffsetOrigin::Bottom, glm::vec3(-20, 10, 0), HUDFontSize::Small);
+    drawString("NO TARGET", HUDOffsetOrigin::BottomLeft, glm::vec3(3, 5, 0), HUDFontSize::Large);
 
-	m_voxelRenderer->afterDraw();
+    m_voxelRenderer->afterDraw();
+
 }
 
 // m_voxelRenderer must be prepared to draw
 void HUD::drawString(std::string text, HUDOffsetOrigin origin, glm::vec3 offset, HUDFontSize size){
-	std::transform(text.begin(), text.end(), text.begin(), ::toupper);
-	std::map<char, std::unique_ptr<VoxelCluster>> *source;
-	float width;
-	switch (size){
-	case Large:
-		source = &m_font5x7;
-		width = 7;
-		break;
-	case Small:
-	default:
-		source = &m_font3x5;
-		width = 5;
-		break;
-	}
+    std::transform(text.begin(), text.end(), text.begin(), ::toupper);
+    std::map<char, std::unique_ptr<VoxelCluster>> *source;
+    float width;
+    switch (size){
+    case Large:
+        source = &m_font5x7;
+        width = 7;
+        break;
+    case Small:
+    default:
+        source = &m_font3x5;
+        width = 5;
+        break;
+    }
 
-	for (int i = 0; i < text.length(); i++){
-		VoxelCluster *cl = (*source)[text[i]].get();
-		if (cl != nullptr){
-			adjustPosition(cl, origin, offset + glm::vec3(width * i, 0, 0));
-			m_voxelRenderer->draw(cl);
-		}
-	}
+    for (int i = 0; i < text.length(); i++){
+        VoxelCluster *cl = (*source)[text[i]].get();
+        if (cl != nullptr){
+            adjustPosition(cl, origin, offset + glm::vec3(width * i, 0, 0));
+            m_voxelRenderer->draw(cl);
+        }
+    }
 }
 
 void HUD::adjustPosition(VoxelCluster *cluster, HUDOffsetOrigin origin, glm::vec3 offset){
-	assert(cluster != nullptr);
-	switch (origin){
-	case TopLeft:
-		//element->moveTo(glm::vec3(-dx, dy, -m_distance) + element->m_offset);
-		cluster->transform().setPosition(glm::vec3(-m_dx, m_dy, -m_distance) + offset);
-		break;
-	case Top:
-		cluster->transform().setPosition(glm::vec3(0, m_dy, -m_distance) + offset);
-		break;
-	case TopRight:
-		cluster->transform().setPosition(glm::vec3(m_dx, m_dy, -m_distance) + offset);
-		break;
-	case Right:
-		cluster->transform().setPosition(glm::vec3(m_dx, 0, -m_distance) + offset);
-		break;
-	case BottomRight:
-		cluster->transform().setPosition(glm::vec3(m_dx, -m_dy, -m_distance) + offset);
-		break;
-	case Bottom:
-		cluster->transform().setPosition(glm::vec3(0, -m_dy, -m_distance) + offset);
-		break;
-	case BottomLeft:
-		cluster->transform().setPosition(glm::vec3(-m_dx, -m_dy, -m_distance) + offset);
-		break;
-	case Left:
-		cluster->transform().setPosition(glm::vec3(-m_dx, 0, -m_distance) + offset);
-		break;
-	case Center:
-	default:
-		cluster->transform().setPosition(glm::vec3(0, 0, -m_distance) + offset);
-		break;
-	}
+    assert(cluster != nullptr);
+    switch (origin){
+    case TopLeft:
+        //element->moveTo(glm::vec3(-dx, dy, -m_distance) + element->m_offset);
+        cluster->transform().setPosition(glm::vec3(-m_dx, m_dy, -m_distance) + offset);
+        break;
+    case Top:
+        cluster->transform().setPosition(glm::vec3(0, m_dy, -m_distance) + offset);
+        break;
+    case TopRight:
+        cluster->transform().setPosition(glm::vec3(m_dx, m_dy, -m_distance) + offset);
+        break;
+    case Right:
+        cluster->transform().setPosition(glm::vec3(m_dx, 0, -m_distance) + offset);
+        break;
+    case BottomRight:
+        cluster->transform().setPosition(glm::vec3(m_dx, -m_dy, -m_distance) + offset);
+        break;
+    case Bottom:
+        cluster->transform().setPosition(glm::vec3(0, -m_dy, -m_distance) + offset);
+        break;
+    case BottomLeft:
+        cluster->transform().setPosition(glm::vec3(-m_dx, -m_dy, -m_distance) + offset);
+        break;
+    case Left:
+        cluster->transform().setPosition(glm::vec3(-m_dx, 0, -m_distance) + offset);
+        break;
+    case Center:
+    default:
+        cluster->transform().setPosition(glm::vec3(0, 0, -m_distance) + offset);
+        break;
+    }
 }
 
 void HUD::adjustPositions(){
-	m_rendercamera.setFovy(m_gamecamera->fovy());
-	m_rendercamera.setViewport(m_gamecamera->viewport());
+    m_rendercamera.setFovy(m_gamecamera->fovy());
+    m_rendercamera.setViewport(m_gamecamera->viewport());
 
-	m_dy = floor(glm::tan(glm::radians(m_rendercamera.fovy() / 2)) * m_distance);
-	m_dx = m_rendercamera.aspectRatio()*m_dy;
+    m_dy = floor(glm::tan(glm::radians(m_rendercamera.fovy() / 2)) * m_distance);
+    m_dx = m_rendercamera.aspectRatio()*m_dy;
 
-	for (std::unique_ptr<HUDElement>& element : m_elements)	{
-		adjustPosition(element.get(), element->m_origin, element->m_offset);
-	}
+    for (std::unique_ptr<HUDElement>& element : m_elements)    {
+        adjustPosition(element.get(), element->m_origin, element->m_offset);
+    }
 }
