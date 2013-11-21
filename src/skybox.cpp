@@ -5,8 +5,7 @@
 #include <glow/VertexAttributeBinding.h>
 #include <glowutils/File.h>
 
-
-#include "utils/ddstexture.h"
+#include "resource/ddstexture.h"
 
 Skybox::Skybox() :
 	m_texture(0),

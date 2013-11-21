@@ -6,7 +6,7 @@
 #include <glowutils/File.h>
 
 
-#include "utils/ddstexture.h"
+#include "resource/ddstexture.h"
 
 /* since the last merge glow attempts to use glCompileShaderIncludeARB if not null.
 * while current mesa 9.2.3-2 does not list this extension, this pointer is set -

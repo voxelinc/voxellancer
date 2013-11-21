@@ -21,7 +21,8 @@ class Worldtree;
 class VoxelCluster
 {
 public:
-    VoxelCluster(glm::vec3 center = glm::vec3(0), float scale = 1.0);
+	VoxelCluster(glm::vec3 center = glm::vec3(0), float scale = 1.0);
+	VoxelCluster(const VoxelCluster& other);
     virtual ~VoxelCluster();
 
     AABB aabb();

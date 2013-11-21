@@ -26,6 +26,17 @@ VoxelCluster::VoxelCluster(glm::vec3 center, float scale):
 {
 }
 
+VoxelCluster::VoxelCluster(const VoxelCluster& other):
+	m_voxel(other.m_voxel),
+	m_voxelTree(other.m_voxelTree, this),
+	m_geode(nullptr),
+	m_voxelRenderData(this),
+	m_transform(other.m_transform),
+	m_oldTransform(other.m_oldTransform)
+{
+	
+}
+
 VoxelCluster::~VoxelCluster() {
 
 }

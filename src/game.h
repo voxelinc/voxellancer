@@ -9,15 +9,14 @@
 
 #include <GLFW/glfw3.h>
 
-#include "voxel/voxelcluster.h"
 #include "worldtree/worldtree.h"
 #include "collision/collisiondetector.h"
 #include "camera.h"
-#include "skybox.h"
-#include "inputhandler.h"
+#include "ui/inputhandler.h"
 
 
 class HUD;
+class Skybox;
 class InputHandler;
 class VoxelCluster;
 class VoxelRenderer;
