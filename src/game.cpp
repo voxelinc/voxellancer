@@ -22,16 +22,13 @@
 #include <fmod_errors.h>
 
 #include "property/propertymanager.h"
+#include "resource/clusterstore.h"
 #include "utils/hd3000dummy.h"
 #include "utils/linuxvmdummy.h"
-#include "voxel/voxelcluster.h"
 #include "voxel/voxelrenderer.h"
-#include "inputhandler.h"
+#include "ui/inputhandler.h"
 #include "ui/hud.h"
-#include "clusterloader.h"
-
-
-using namespace std;
+#include "skybox.h"
 
 Game::Game(GLFWwindow *window):
 	m_window(window),
@@ -51,7 +48,7 @@ Game::~Game(){
 
 void Game::reloadConfig(){
 #ifdef WIN32
-	PropertyManager::getInstance()->load("data/config.ini");
+	PropertyManager::instance()->load("data/config.ini");
 #endif
 }
 
@@ -96,17 +93,18 @@ void Game::initialize()
     m_testClusterMoveable.addVoxel(Voxel(cvec3(0, 0, 8), cvec3(255, 0, 128), &m_testClusterMoveable));
     m_worldtree.insert(&m_testClusterMoveable);
 
-    m_testClusterA = new VoxelCluster(glm::vec3(3, 0, 3));
-	m_testClusterA->transform().move(glm::vec3(0, 0, -10));
-    m_testClusterA->applyTransform(false);
-    m_testClusterB = new VoxelCluster(glm::vec3(3, 0, 3));
-	m_testClusterB->transform().move(glm::vec3(0, 0, 10));
-    m_testClusterB->applyTransform(false);
+	m_testClusterA = ClusterStore::instance()->create("data/voxelcluster/basicship.csv");
+	m_testClusterA->transform().setCenter(glm::vec3(3, 0, 3));
+	m_testClusterA->transform().setPosition(glm::vec3(0, 0, -10));
+	m_testClusterA->applyTransform(false);
+	m_testClusterA->removeVoxel(cvec3(3, 2, 3)); // this verifies the objects are different
 
-    ClusterLoader *cl = new ClusterLoader();
-	cl->loadClusterFromFile("data/voxelcluster/basicship.csv", m_testClusterA);
-	cl->loadClusterFromFile("data/voxelcluster/basicship.zox", m_testClusterB);
-    m_worldtree.insert(m_testClusterA);
+	m_testClusterB = ClusterStore::instance()->create("data/voxelcluster/basicship.csv");
+	m_testClusterB->transform().setCenter(glm::vec3(3, 0, 3));
+	m_testClusterB->transform().setPosition(glm::vec3(0, 0, 10));
+	m_testClusterB->applyTransform(false);
+
+	m_worldtree.insert(m_testClusterA);
     m_worldtree.insert(m_testClusterB);
 
 	glow::debug("Setup Camera");

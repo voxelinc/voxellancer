@@ -14,7 +14,7 @@
 #include <glowutils/FileRegistry.h>
 
 #include "game.h"
-#include "inputhandler.h"
+#include "ui/inputhandler.h"
 
 static GLint MajorVersionRequire = 3;
 static GLint MinorVersionRequire = 1;

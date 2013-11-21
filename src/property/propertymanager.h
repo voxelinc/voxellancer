@@ -31,7 +31,7 @@ public:
     template <class T>
     void unregisterProperty(Property<T> *prop);
 
-    static PropertyManager * getInstance();
+    static PropertyManager * instance();
     static void reset();
 
 private:
