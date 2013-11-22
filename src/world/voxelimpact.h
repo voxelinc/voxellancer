@@ -9,7 +9,7 @@ class VoxelImpact
 public:
 
 protected:
-    Voxel &m_voxel;
-    Impact &m_impact;
+    Voxel *m_voxel;
+    Impact m_impact;
 };
 

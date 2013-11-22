@@ -8,9 +8,13 @@
 class Damager
 {
 public:
-    void applyDamage(std::list<VoxelClusterImpact*> &voxelClusterImpacts);
+    void applyDamages(std::list<VoxelImpact> &voxelImpacts);
 
-    std::list<VoxelImpact*> &deadlyVoxelImpacts();
+    std::list<VoxelImpact> &deadlyVoxelImpacts();
     std::list<VoxelCluster*> &modifiedVoxelClusters();
+
+protected:
+    std::list<VoxelImpact> m_deadlyVoxelImpacts;
+    std::list<VoxelCluster*> m_modifiedVoxelClusters;
 };
 

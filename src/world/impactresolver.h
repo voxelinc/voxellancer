@@ -8,6 +8,6 @@
 class ImpactResolver
 {
 public:
-    void alterVelocities(std::list<VoxelClusterImpact*> &voxelClusterImpacts);
+    void alterVelocities(std::list<VoxelClusterImpact> &voxelClusterImpacts);
 };
 

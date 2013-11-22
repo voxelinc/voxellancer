@@ -8,7 +8,7 @@
 class VoxelHangman
 {
 public:
-    void applyOnDestructionHooks(std::list<VoxelImpact*> &deadlyVoxelImpacts);
-    void removeDestroyedVoxels(std::list<VoxelImpact*> &deadlyVoxelImpacts);
+    void applyOnDestructionHooks(std::list<VoxelImpact> &deadlyVoxelImpacts);
+    void removeDestroyedVoxels(std::list<VoxelImpact> &deadlyVoxelImpacts);
+};
 
-}

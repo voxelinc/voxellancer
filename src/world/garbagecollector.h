@@ -9,8 +9,12 @@ class GarbageCollector
 {
 public:
     void check(std::list<VoxelCluster*> &modifiedVoxelClusters);
-    void applyOnGarbageHooks();
+   //void applyOnGarbageHooks();
 
     std::list<VoxelCluster*> &garbageVoxelClusters();
+
+
+protected:
+    std::list<VoxelCluster*> m_garbageVoxelClusters;
 };
 

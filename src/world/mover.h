@@ -8,10 +8,12 @@
 class Mover
 {
 public:
-    Mover(God &god);
-
     void moveVoxelClusters();
 
-    const std::list<Collision*> &collisions();
+    const std::list<Collision> &collisions();
+
+
+protected:
+    std::list<Collision> m_collisions;
 };
 
