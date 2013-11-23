@@ -48,6 +48,9 @@ Game::Game(GLFWwindow *window):
 Game::~Game(){
 	delete m_testClusterA;
 	delete m_testClusterB;
+	for (int i = 0; i < m_perf_clusterArmy.size(); i++){
+		m_worldtree.remove(m_perf_clusterArmy[i]->geode());
+	}
 }
 
 void Game::reloadConfig(){
