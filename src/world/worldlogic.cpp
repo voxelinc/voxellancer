@@ -2,8 +2,12 @@
 
 #include "world.h"
 
+#include <iostream>
+
 
 void WorldLogic::update() {
+    std::cout << "WorldLogic::update()" << std::endl;
+
     m_mover.moveVoxelClusters();
 
     m_impactAccumulator.parse(m_mover.collisions());
