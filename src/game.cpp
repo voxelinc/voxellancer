@@ -36,7 +36,11 @@ Game::Game(GLFWwindow *window):
 	m_inputHandler(window, &m_camera, &m_testClusterMoveable),
 	m_collisionDetector(m_worldtree, m_testClusterMoveable),
 	m_testClusterA(0),
-	m_testClusterB(0)
+	m_testClusterB(0),
+	m_perf_clusterArmySize("perftest.army_size", 8),
+	m_perf_draw("perftest.draw", true),
+	m_perf_apply("perftest.apply", true),
+	m_perf_test("perftest.test", true)
 {
 	reloadConfig();
 }
@@ -106,6 +110,26 @@ void Game::initialize()
 	m_worldtree.insert(m_testClusterA);
     m_worldtree.insert(m_testClusterB);
 
+	int count = 0;
+	int edgeLen = 1;
+	while (edgeLen*edgeLen*edgeLen < m_perf_clusterArmySize) edgeLen++;
+	for (int i = 0; i < edgeLen; i++){
+		for (int j = 0; j < edgeLen; j++){
+			for (int k = 0; k < edgeLen; k++){
+				if (count >= m_perf_clusterArmySize)
+					break;
+				count++;
+
+				std::unique_ptr<VoxelCluster> cluster(ClusterStore::instance()->create("data/voxelcluster/basicship.csv"));
+				cluster->transform().setCenter(glm::vec3(3, 0, 3));
+				cluster->transform().setPosition(glm::vec3(-100, 0, 0) + glm::vec3(-i, j, k) * 10.f);
+				cluster->applyTransform(false);
+				m_worldtree.insert(cluster.get());
+				m_perf_clusterArmy.push_back(move(cluster));
+			}
+		}
+	}
+
 	glow::debug("Setup Camera");
 	//viewport set in resize
 	m_camera.setPosition(glm::vec3(0, 5, 30));
@@ -139,6 +163,11 @@ void Game::update(float delta_sec)
     m_testClusterA->applyTransform();
     m_testClusterB->applyTransform();
     m_testClusterMoveable.applyTransform();
+	if (m_perf_apply){
+		for (int i = 0; i < m_perf_clusterArmy.size(); i++){
+			m_perf_clusterArmy[i]->applyTransform(m_perf_test);
+		}
+	}
 	m_hud->update(delta_sec);
 }
 
@@ -156,6 +185,11 @@ void Game::draw()
     m_voxelRenderer->draw(&m_testClusterMoveable);
 	m_voxelRenderer->draw(m_testClusterA);
 	m_voxelRenderer->draw(m_testClusterB);
+	if (m_perf_draw){
+		for (int i = 0; i < m_perf_clusterArmy.size(); i++){
+			m_voxelRenderer->draw(m_perf_clusterArmy[i].get());
+		}
+	}
 
     // draw all other voxelclusters...
     m_voxelRenderer->afterDraw();
