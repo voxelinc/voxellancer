@@ -93,14 +93,15 @@ void Game::initialize()
     m_testClusterMoveable.addVoxel(Voxel(cvec3(0, 0, 8), cvec3(255, 0, 128), &m_testClusterMoveable));
     m_worldtree.insert(&m_testClusterMoveable);
 
-	m_testClusterA = ClusterStore::instance()->create("data/voxelcluster/basicship.csv");
-	m_testClusterA->transform().setCenter(glm::vec3(3, 0, 3));
-	m_testClusterA->transform().setPosition(glm::vec3(0, 0, -10));
-	m_testClusterA->removeVoxel(cvec3(3, 2, 3)); // this verifies the objects are different
+	m_testClusterA = ClusterStore::instance()->create("data/voxelcluster/normandy.csv");
+	m_testClusterA->transform().setCenter(glm::vec3(21, 8, 40));
+	m_testClusterA->transform().setPosition(glm::vec3(0, 0, -100));
+	m_testClusterA->applyTransform(false);
 
 	m_testClusterB = ClusterStore::instance()->create("data/voxelcluster/basicship.csv");
 	m_testClusterB->transform().setCenter(glm::vec3(3, 0, 3));
 	m_testClusterB->transform().setPosition(glm::vec3(0, 0, 10));
+	m_testClusterB->applyTransform(false);
 
 	m_worldtree.insert(m_testClusterA);
     m_worldtree.insert(m_testClusterB);
