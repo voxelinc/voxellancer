@@ -10,6 +10,15 @@ Property<T>::Property(char * name) :
     PropertyManager::instance()->registerProperty(this);
 }
 
+
+template <class T>
+Property<T>::Property(char * name, T defaultValue) :
+    m_name(name),
+    m_value(defaultValue)
+{
+    PropertyManager::instance()->registerProperty(this);
+}
+
 template <class T>
 Property<T>::~Property()
 {

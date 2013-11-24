@@ -14,21 +14,21 @@ m_delta_sec_remain(0),
 m_framerate(0),
 m_dx(1),
 m_dy(1),
-m_distance("hud.distance"),
-m_move_multiplier("hud.move_multiplier"),
-m_inertia_rotate("hud.inertia_rotate"),
-m_inertia_move("hud.inertia_move"),
-m_inertia_rate("hud.inertia_rate"),
-m_arrow_maxdistance("hud.arrow_maxdistance"),
-m_arrow_radius("hud.arrow_radius"),
-m_show_framerate("hud.show_framerate")
+m_distance("hud.distance", 100.f),
+m_move_multiplier("hud.move_multiplier", 5.f),
+m_inertia_rotate("hud.inertia_rotate", 30.f),
+m_inertia_move("hud.inertia_move", 25.f),
+m_inertia_rate("hud.inertia_rate", .0005f),
+m_arrow_maxdistance("hud.arrow_maxdistance", 1000.f),
+m_arrow_radius("hud.arrow_radius", .7f),
+m_show_framerate("hud.show_framerate", true)
 {
     m_voxelRenderer = std::unique_ptr<VoxelRenderer>(new VoxelRenderer());
 
     m_rendercamera.setPosition(glm::vec3(0, 0, 0));
     m_rendercamera.setZNear(1.f);
     m_rendercamera.setZFar(500.0f);
-    
+
     addElement("data/hud/crosshair.csv", HUDOffsetOrigin::Center, glm::vec3(-4, -4, 0), &m_elements);
     addElement("data/hud/topleft.csv", HUDOffsetOrigin::TopLeft, glm::vec3(1, -2, 0), &m_elements);
     addElement("data/hud/topright.csv", HUDOffsetOrigin::TopRight, glm::vec3(-4, -2, 0), &m_elements);
@@ -106,7 +106,7 @@ void HUD::update(float delta_sec){
     while (total - progress > m_inertia_rate){
         stepAnim(glm::mix(m_lastgamecamera.position(), m_gamecamera->position(), progress / total),
             glm::mix(m_lastgamecamera.orientation(), m_gamecamera->orientation(), progress / total));
-        progress += m_inertia_rate; 
+        progress += m_inertia_rate;
     }
     m_delta_sec_remain = total - progress;
     m_lastgamecamera.setOrientation(m_gamecamera->orientation());
@@ -174,7 +174,7 @@ void HUD::draw(){
             }
         }
     }
-    
+
     // draw frame rate
     if (m_show_framerate){
         drawString(std::to_string((int)glm::round(m_framerate)), TopLeft, glm::vec3(4, -5, 0), s3x5, .8f);
