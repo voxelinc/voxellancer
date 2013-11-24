@@ -18,7 +18,7 @@ m_distance("hud.distance", 100.f),
 m_move_multiplier("hud.move_multiplier", 5.f),
 m_inertia_rotate("hud.inertia_rotate", 30.f),
 m_inertia_move("hud.inertia_move", 25.f),
-m_inertia_rate("hud.inertia_rate", .0005f),
+m_inertia_rate("hud.inertia_rate", 2000),
 m_arrow_maxdistance("hud.arrow_maxdistance", 1000.f),
 m_arrow_radius("hud.arrow_radius", .7f),
 m_show_framerate("hud.show_framerate", true)
@@ -96,17 +96,19 @@ Camera *HUD::camera(){
 }
 
 void HUD::stepAnim(glm::vec3 targetpos, glm::quat targetor){
-    m_hudcamera.setOrientation(glm::mix(m_hudcamera.orientation(), targetor, glm::min(m_inertia_rate * m_inertia_rotate, 1.0f)));
-    m_hudcamera.setPosition(glm::mix(m_hudcamera.position(), targetpos, glm::min(m_inertia_rate * m_inertia_move, 1.0f)));
+    m_hudcamera.setOrientation(glm::mix(m_hudcamera.orientation(), targetor, glm::min((1 / m_inertia_rate) * m_inertia_rotate, 1.0f)));
+    m_hudcamera.setPosition(glm::mix(m_hudcamera.position(), targetpos, glm::min((1 / m_inertia_rate) * m_inertia_move, 1.0f)));
 }
 
 void HUD::update(float delta_sec){
-    float total = delta_sec + m_delta_sec_remain;
-    float progress = 0;
-    while (total - progress > m_inertia_rate){
-        stepAnim(glm::mix(m_lastgamecamera.position(), m_gamecamera->position(), progress / total),
-            glm::mix(m_lastgamecamera.orientation(), m_gamecamera->orientation(), progress / total));
-        progress += m_inertia_rate; 
+    double total = delta_sec + m_delta_sec_remain;
+    double progress = 0;
+	double steptime = 1 / m_inertia_rate;
+	while (total - progress > steptime){
+		float rate = (float) (progress / total);
+        stepAnim(glm::mix(m_lastgamecamera.position(), m_gamecamera->position(), rate),
+            glm::mix(m_lastgamecamera.orientation(), m_gamecamera->orientation(), rate));
+		progress += steptime;
     }
     m_delta_sec_remain = total - progress;
     m_lastgamecamera.setOrientation(m_gamecamera->orientation());

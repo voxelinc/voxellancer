@@ -58,7 +58,7 @@ protected:
     std::map<char, std::unique_ptr<VoxelCluster>> m_font5x7;
     std::unique_ptr<HUDElement> m_shiparrow;
     std::list<VoxelCluster*> m_ships;
-    float m_delta_sec_remain;
+    double m_delta_sec_remain;
     float m_framerate;
     float m_dx, m_dy;
 
