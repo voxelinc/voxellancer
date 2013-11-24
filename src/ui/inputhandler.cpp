@@ -8,9 +8,9 @@ InputHandler::InputHandler(GLFWwindow *window, Camera *camera, VoxelCluster *vox
 	m_window(window),
 	m_camera(camera),
 	m_voxelcluster(voxelcluster),
-	m_rotation_speed("input.rotation_speed", 0.3f),
-    m_move_speed("input.move_speed", 14.5f),
-    m_roll_speed("input.roll_speed", 50.0f)
+	m_rotation_speed("input.rotation_speed"),
+    m_move_speed("input.move_speed"),
+    m_roll_speed("input.roll_speed")
 {
 
 	glfwGetWindowSize(m_window, &m_windowWidth, &m_windowHeight);
