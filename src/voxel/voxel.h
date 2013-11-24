@@ -35,7 +35,7 @@ public:
     float hp() const;
     void applyDamage(float deltaHp);
 
-    void onDestruction();
+    virtual void onDestruction();
 
 
 protected:
