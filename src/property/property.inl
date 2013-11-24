@@ -8,7 +8,6 @@ Property<T>::Property(char * name) :
     m_value()
 {
     PropertyManager::instance()->registerProperty(this);
-    glow::warning("Property.inl: dont use default constructor until linux is fixed!");
 }
 
 template <class T>
