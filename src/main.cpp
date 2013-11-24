@@ -138,6 +138,8 @@ int main(void)
 	glfwSwapInterval(1);
 #endif
 	try {
+		PropertyManager::instance()->load("data/config.ini");
+
 		game = new Game(window);
 		game->initialize();
 

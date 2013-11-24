@@ -23,7 +23,7 @@ public:
     PropertyManager();
     virtual ~PropertyManager();
 
-    void load(std::string file);
+    void load(std::string file, bool optional = false);
 
     template <class T>
     void registerProperty(Property<T> *prop);
