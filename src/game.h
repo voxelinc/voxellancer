@@ -47,6 +47,9 @@ private:
     VoxelCluster m_testCluster;
 	VoxelCluster m_testClusterMoveable;
 	VoxelCluster *m_testClusterA, *m_testClusterB;
+	std::vector<std::unique_ptr<VoxelCluster>> m_perf_clusterArmy;
+	Property<int> m_perf_clusterArmySize;
+	Property<bool> m_perf_draw, m_perf_apply, m_perf_test;
     Worldtree m_worldtree;
     CollisionDetector m_collisionDetector;
 	std::unique_ptr<Skybox> m_skybox;

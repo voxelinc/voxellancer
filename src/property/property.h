@@ -1,10 +1,11 @@
 #pragma once
 
-template <class T> 
+template <class T>
 class Property {
 
 public:
     Property(char * name);
+    Property(char * name, T defaultValue);
     virtual ~Property();
 
     operator T();

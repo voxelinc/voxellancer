@@ -75,6 +75,8 @@ void setCallbacks(GLFWwindow* window)
 
 int main(void)
 {
+	PropertyManager::instance()->load("data/config.ini");
+
 	GLFWwindow* window = nullptr;
 
 	if (!glfwInit()) {
