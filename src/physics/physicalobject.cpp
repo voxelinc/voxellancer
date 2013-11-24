@@ -11,9 +11,9 @@ PhysicalObject::PhysicalObject(float scale):
     m_angularSpeed(),
     m_acceleration(0),
     m_angularAcceleration(),
-    m_dampening("physics.globaldampening", 0.5f),
-    m_angularDampening("physics.globalangulardampening", 0.8f),
-    m_rotationFactor("physics.globalrotationfactor", 0.1f),
+    m_dampening("physics.globaldampening"),
+    m_angularDampening("physics.globalangulardampening"),
+    m_rotationFactor("physics.globalrotationfactor"),
     m_mass(0)
 {
 
@@ -58,20 +58,26 @@ void PhysicalObject::handleCollision(const Collision & c) {
     PhysicalObject * p1 = static_cast<PhysicalObject*>(const_cast<VoxelCluster*>(c.voxelA()->voxelCluster()));
     PhysicalObject * p2 = static_cast<PhysicalObject*>(const_cast<VoxelCluster*>(c.voxelB()->voxelCluster()));
 
+    // old speed at collision point
     glm::vec3 v1 = (p1->m_newTransform.applyTo(glm::vec3(c.voxelA()->gridCell())) - p1->m_oldTransform.applyTo(glm::vec3(c.voxelA()->gridCell()))) / m_delta_sec;
     glm::vec3 v2 = (p2->m_newTransform.applyTo(glm::vec3(c.voxelB()->gridCell())) - p2->m_oldTransform.applyTo(glm::vec3(c.voxelB()->gridCell()))) / m_delta_sec;
 
+    // new speed
     glm::vec3 v1_ = ((p1->m_mass - p2->m_mass) * v1 + 2 * p2->m_mass*v2) / (p1->m_mass + p2->m_mass);
     glm::vec3 v2_ = ((p2->m_mass - p1->m_mass) * v2 + 2 * p1->m_mass*v1) / (p1->m_mass + p2->m_mass);
 
-    glm::vec3 r1 =  -p1->transform().applyTo(glm::vec3(c.voxelA()->gridCell())) + p1->transform().position();
-    glm::vec3 r2 = -p2->transform().applyTo(glm::vec3(c.voxelB()->gridCell())) + p2->transform().position();
+    // vector from collision to center
+    glm::vec3 r1 = p1->transform().position() - p1->transform().applyTo(glm::vec3(c.voxelA()->gridCell()));
+    glm::vec3 r2 = p2->transform().position() - p2->transform().applyTo(glm::vec3(c.voxelB()->gridCell()));
 
-    p1->m_angularSpeed = glm::inverse(p1->transform().orientation()) * (m_rotationFactor.get() * glm::cross(v1_, r1));
-    p2->m_angularSpeed = glm::inverse(p2->transform().orientation()) * (m_rotationFactor.get() * glm::cross(v2_, r2));
-
+    // new angular speed
+    glm::vec3 w1_ = glm::inverse((p1->transform().orientation())) * (m_rotationFactor.get() * glm::cross(v1_, r1));
+    glm::vec3 w2_ = glm::inverse((p2->transform().orientation())) * (m_rotationFactor.get() * glm::cross(v2_, r2));
+    
     p1->m_speed = v1_;
     p2->m_speed = v2_;
+    p1->m_angularSpeed = w1_;
+    p2->m_angularSpeed = w2_;
 }
 
 

@@ -30,8 +30,7 @@ VoxelCluster::VoxelCluster(const VoxelCluster& other):
 	m_voxelTree(other.m_voxelTree, this),
 	m_geode(nullptr),
 	m_voxelRenderData(this),
-	m_transform(other.m_transform),
-	m_oldTransform(other.m_oldTransform)
+	m_transform(other.m_transform)
 {
 	
 }
