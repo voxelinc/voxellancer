@@ -5,6 +5,6 @@
 
 class Impact : glm::vec3
 {
-    using glm::vec3::vec3;
+    //using glm::vec3::vec3;
 };
 

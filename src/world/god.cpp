@@ -9,7 +9,7 @@ God::~God() {
 }
 
 std::list<VoxelCluster*> &God::voxelClusters() {
-
+	return m_voxelClusters;
 }
 
 void God::scheduleSpawns(const std::list<VoxelCluster*> &spawns) {
