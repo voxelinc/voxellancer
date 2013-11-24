@@ -12,6 +12,10 @@ else()
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
 endif()
 
+if(GCC_VERSION VERSION_LESS 4.8.2)
+    set(REGEX_USE_BOOST TRUE)
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DREGEX_USE_BOOST")
+endif()
 
 set(LINUX_COMPILE_DEFS
 	LINUX	                  # Linux system
