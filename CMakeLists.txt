@@ -94,6 +94,10 @@ find_package(GLFW REQUIRED)
 find_package(FMOD REQUIRED)
 find_package(BANDIT REQUIRED)
 
+if(REGEX_USE_BOOST)
+find_package(Boost REQUIRED regex)
+endif()
+
 set(GLOW_DIRECTORY glow)
 include_directories(${LIB_DIR}/${GLOW_DIRECTORY}/include)
 add_subdirectory(${LIB_DIR}/${GLOW_DIRECTORY})
@@ -156,6 +160,7 @@ set(LIBS_TO_LINK
     ${GLEW_LIBRARY}
     ${GLFW_LIBRARY}
     ${FMOD_LIBRARY}
+    ${Boost_LIBRARIES}
     glow
     glowutils
 	${LIBS_TO_LINK}

@@ -22,16 +22,13 @@
 #include <fmod_errors.h>
 
 #include "property/propertymanager.h"
+#include "resource/clusterstore.h"
 #include "utils/hd3000dummy.h"
 #include "utils/linuxvmdummy.h"
-#include "voxel/voxelcluster.h"
 #include "voxel/voxelrenderer.h"
-#include "inputhandler.h"
+#include "ui/inputhandler.h"
 #include "ui/hud.h"
-#include "clusterloader.h"
-
-
-using namespace std;
+#include "skybox.h"
 
 Game::Game(GLFWwindow *window):
 	m_window(window),
@@ -51,7 +48,7 @@ Game::~Game(){
 
 void Game::reloadConfig(){
 #ifdef WIN32
-	PropertyManager::getInstance()->load("data/config.ini");
+	PropertyManager::instance()->load("data/config.ini");
 #endif
 }
 
@@ -121,7 +118,7 @@ void Game::initialize()
 	m_camera.setZFar(9999);
 
 	glow::debug("Create HUD");
-	m_hud = std::unique_ptr<HUD>(new HUD(std::list<VoxelCluster*>{ m_testClusterA, m_testClusterB }));
+	m_hud = std::unique_ptr<HUD>(new HUD(std::list<VoxelCluster*>{ m_testClusterA, m_testClusterB, &m_testCluster, &m_testClusterMoveable }));
 	m_hud->setCamera(&m_camera);
 
     m_hd3000dummy = std::unique_ptr<HD3000Dummy>(new HD3000Dummy);
@@ -134,6 +131,7 @@ static int last_collisions = 0;
 
 void Game::update(float delta_sec)
 {
+    // avoid big jumps after debugging ;)
     delta_sec = glm::min(1.f, delta_sec);
 
     std::list<Collision> collisions = m_collisionDetector.checkCollisions();

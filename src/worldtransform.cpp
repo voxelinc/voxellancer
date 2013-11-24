@@ -65,6 +65,10 @@ float WorldTransform::scale() const {
     return m_scale;
 }
 
+void WorldTransform::setScale(float scale) {
+    m_scale = scale;
+}
+
 const glm::vec3 & WorldTransform::center() const {
     return m_center;
 }

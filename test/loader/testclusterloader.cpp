@@ -1,6 +1,6 @@
 #include <bandit/bandit.h>
 
-#include "clusterloader.h"
+#include "resource/clusterloader.h"
 #include "voxel/voxelcluster.h"
 
 using namespace bandit;

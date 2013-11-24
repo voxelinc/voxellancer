@@ -19,6 +19,7 @@ enum HUDOffsetOrigin {
 class HUDElement : public VoxelCluster {
 public:
 	HUDElement();
+	HUDElement(const VoxelCluster& other);
 
 	glm::vec3 m_offset;
 	HUDOffsetOrigin m_origin;

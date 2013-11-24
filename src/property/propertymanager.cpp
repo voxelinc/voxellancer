@@ -1,29 +1,30 @@
-#include <regex>
+#include "propertymanager.h"
+
+#include "def_regex.h"
+
 #include <string>
 #include <fstream>
 #include <iostream>
 
 #include <glow/logging.h>
 
-#include "propertymanager.h"
-
 #include "propertycollection.h"
 
 
 // some string, some spaces, equals, some spaces, some string, maybe a comment
-static std::regex line_regex() { return std::regex(R"(^([\w\.]*) *= *(.+?)( *#.*)?$)"); }
-static std::regex title_regex() { return std::regex(R"(^\[(\w+)\])"); }
+static regexns::regex line_regex() { return regexns::regex(R"(^([\w\.]*) *= *(.+?)( *#.*)?$)"); }
+static regexns::regex title_regex() { return regexns::regex(R"(^\[(\w+)\])"); }
 
-static std::regex float_regex() { return std::regex(R"(^[-+]?\d*\.?\d*$)"); }
-static std::regex int_regex() { return std::regex(R"(^[-+]?\d+$)"); }
-static std::regex bool_regex() { return std::regex(R"(^(true|false)$)"); }
-static std::regex char_regex() { return std::regex(R"(^\w$)"); }
-static std::regex string_regex() { return std::regex(R"(^.*$)"); }
-static std::regex vec3_regex() { return std::regex(R"(^([-+]?\d*\.?\d*), ?([-+]?\d*\.?\d*), ?([-+]?\d*\.?\d*)$)"); }
+static regexns::regex float_regex() { return regexns::regex(R"(^[-+]?\d*\.?\d*$)"); }
+static regexns::regex int_regex() { return regexns::regex(R"(^[-+]?\d+$)"); }
+static regexns::regex bool_regex() { return regexns::regex(R"(^(true|false)$)"); }
+static regexns::regex char_regex() { return regexns::regex(R"(^\w$)"); }
+static regexns::regex string_regex() { return regexns::regex(R"(^.*$)"); }
+static regexns::regex vec3_regex() { return regexns::regex(R"(^([-+]?\d*\.?\d*), ?([-+]?\d*\.?\d*), ?([-+]?\d*\.?\d*)$)"); }
 
 static glm::vec3 vec3converter(const std::string &s) {
-    std::smatch matches;
-    std::regex_match(s, matches, vec3_regex());
+    regexns::smatch matches;
+    regexns::regex_match(s, matches, vec3_regex());
 
     float x = std::stof(matches[1]);
     float y = std::stof(matches[2]);
@@ -55,11 +56,6 @@ PropertyManager::~PropertyManager() {
 
 void PropertyManager::load(std::string file)
 {
-// TODO: REMOVE WHEN LINUX IS WORKING
-#ifndef WIN32
-    return;
-#endif
-
     std::ifstream input(file);
     std::string line;
     std::string title = "";
@@ -70,15 +66,16 @@ void PropertyManager::load(std::string file)
 
     while (std::getline(input, line))
     {
-        std::smatch matches;
+        regexns::smatch matches;
 
-        std::regex_match(line, matches, title_regex());
-        if (matches.size() > 0) {
+        bool isTitle = regexns::regex_match(line, matches, title_regex());
+        if (isTitle) {
             title = matches[1];
             continue;
         }
-        std::regex_match(line, matches, line_regex());
-        if (matches.size() > 0) {
+
+        bool isLine = regexns::regex_match(line, matches, line_regex());
+        if (isLine) {
             std::string key, key_temp, value;
             key_temp = matches[1];
             key = title + '.' + key_temp;
@@ -101,7 +98,7 @@ void PropertyManager::load(std::string file)
     changed();
 }
 
-PropertyManager * PropertyManager::getInstance()
+PropertyManager * PropertyManager::instance()
 {
     if (s_instance == nullptr) {
         s_instance = new PropertyManager();

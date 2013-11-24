@@ -32,7 +32,7 @@ go_bandit([](){
         });
 
         it("should load", [&]() {
-            PropertyManager::getInstance()->load("test/property/test.ini");
+            PropertyManager::instance()->load("test/property/test.ini");
     
             Property<int> iSize("player.size");
             Property<float> fProp("player.size");
@@ -68,7 +68,7 @@ go_bandit([](){
             Property<char> cProp("section.forward");
             Property<bool> bProp2("player.is_true");
 
-            PropertyManager::getInstance()->load("test/property/test.ini");
+            PropertyManager::instance()->load("test/property/test.ini");
 
             AssertThat(iSize.get(), Equals(1));
             AssertThat(fProp.get(), Equals(1));
@@ -82,25 +82,25 @@ go_bandit([](){
         });
 
         it("should reload", [&]() {
-            PropertyManager::getInstance()->load("test/property/test.ini");
+            PropertyManager::instance()->load("test/property/test.ini");
             Property<std::string> sProp("player.name");
             Property<char> cProp("section.forward");
 
             AssertThat(sProp.get(), Equals("hans"));
             AssertThat(cProp.get(), Equals('w'));
 
-            PropertyManager::getInstance()->load("test/property/test2.ini");
+            PropertyManager::instance()->load("test/property/test2.ini");
             AssertThat(sProp.get(), Equals("hans meier"));
             AssertThat(cProp.get(), Equals('x'));
         });
 
         it("should call a callback", [&]() {
-            PropertyManager::getInstance()->load("test/property/test.ini");
+            PropertyManager::instance()->load("test/property/test.ini");
 
             Listener listener;
-            PropertyManager::getInstance()->registerListener(&listener);
+            PropertyManager::instance()->registerListener(&listener);
             AssertThat(listener.success, Equals(false));
-            PropertyManager::getInstance()->load("test/property/test.ini");
+            PropertyManager::instance()->load("test/property/test.ini");
             AssertThat(listener.success, Equals(true));
 
         });

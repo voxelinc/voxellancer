@@ -22,6 +22,7 @@ public:
     void setCenter(glm::vec3 center);
 
     float scale() const;
+    void setScale(float scale);
 
 	void move(glm::vec3 dist);
     void moveWorld(glm::vec3 dist);
