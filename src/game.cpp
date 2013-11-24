@@ -102,13 +102,14 @@ void Game::initialize()
 	m_testClusterA->transform().move(glm::vec3(0, 0, -10));
     m_testClusterA->applyTransform(false);
     m_testClusterB = new PhysicalObject();
-	m_testClusterB->transform().move(glm::vec3(0, 0, 10));
+	m_testClusterB->transform().move(glm::vec3(0, 0, 50));
+	m_testClusterB->transform().rotate(glm::angleAxis(135.0f, glm::vec3(0, 1, 0)));
     m_testClusterB->applyTransform(false);
 
     ClusterLoader *cl = new ClusterLoader();
 	cl->loadClusterFromFile("data/voxelcluster/basicship.csv", m_testClusterA);
     m_testClusterA->calculateMassAndCenter();
-	cl->loadClusterFromFile("data/voxelcluster/basicship.zox", m_testClusterB);
+	cl->loadClusterFromFile("data/voxelcluster/normandy.csv", m_testClusterB);
     m_testClusterB->calculateMassAndCenter();
     m_worldtree.insert(m_testClusterA);
     m_worldtree.insert(m_testClusterB);
