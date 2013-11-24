@@ -62,9 +62,9 @@ void PropertyManager::load(std::string file, bool optional)
 
     if (!input.is_open()) {
         glow::fatal("PropertyManager: could not open %;", file);
-		if (!optional) {
-			throw std::runtime_error("Critical configuration file not readable");
-		}
+        if (!optional) {
+            throw std::runtime_error("Critical configuration file not readable");
+        }
     }
 
     while (std::getline(input, line))
