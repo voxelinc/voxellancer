@@ -8,26 +8,12 @@ Property<T>::Property(char * name) :
     m_value()
 {
     PropertyManager::instance()->registerProperty(this);
-    glow::warning("Property.inl: dont use default constructor until linux is fixed!");
-}
-
-template <class T>
-Property<T>::Property(char * name, T defaultValue) :
-    m_name(name),
-    m_value(defaultValue)
-{
-// TODO: REMOVE WHEN LINUX IS WORKING
-#ifdef WIN32
-    PropertyManager::instance()->registerProperty(this);
-#endif
 }
 
 template <class T>
 Property<T>::~Property()
 {
-#ifdef WIN32
     PropertyManager::instance()->unregisterProperty(this);
-#endif
 }
 
 template <class T>

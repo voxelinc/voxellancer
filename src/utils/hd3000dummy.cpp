@@ -10,7 +10,7 @@
 HD3000Dummy::HD3000Dummy():
     m_vertexArrayObject(0),
     m_vertexBuffer(0),
-    m_usedummy("general.hd3000workaround", false)
+    m_usedummy("general.hd3000workaround")
 {
     m_vertexArrayObject = new glow::VertexArrayObject();
     m_vertexBuffer = new glow::Buffer(GL_ARRAY_BUFFER);

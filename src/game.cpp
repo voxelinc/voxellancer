@@ -30,6 +30,9 @@
 #include "ui/hud.h"
 #include "skybox.h"
 
+#include "world/world.h"
+
+
 Game::Game(GLFWwindow *window):
 	m_window(window),
 	m_camera(),
@@ -46,10 +49,8 @@ Game::~Game(){
 	delete m_testClusterB;
 }
 
-void Game::reloadConfig(){
-#ifdef WIN32
+void Game::reloadConfig() {
 	PropertyManager::instance()->load("data/config.ini");
-#endif
 }
 
 void Game::initialize()
@@ -125,6 +126,8 @@ static int last_collisions = 0;
 
 void Game::update(float delta_sec)
 {
+    World::instance()->update(delta_sec);
+
     std::list<Collision> collisions = m_collisionDetector.checkCollisions();
     if (collisions.size() != last_collisions) {
         glow::debug("Collisions: %;", collisions.size());
