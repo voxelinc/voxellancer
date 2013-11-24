@@ -2,6 +2,8 @@
 
 #include "world.h"
 
+#include <iostream>
+
 
 void WorldLogic::update() {
     m_mover.moveVoxelClusters();
