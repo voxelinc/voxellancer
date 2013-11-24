@@ -13,6 +13,7 @@ PhysicalObject::PhysicalObject(float scale):
     m_angularAcceleration(),
     m_dampening("physics.globaldampening", 0.5f),
     m_angularDampening("physics.globalangulardampening", 0.8f),
+    m_rotationFactor("physics.globalrotationfactor", 0.1f),
     m_mass(0)
 {
 
@@ -63,8 +64,11 @@ void PhysicalObject::handleCollision(const Collision & c) {
     glm::vec3 v1_ = ((p1->m_mass - p2->m_mass) * v1 + 2 * p2->m_mass*v2) / (p1->m_mass + p2->m_mass);
     glm::vec3 v2_ = ((p2->m_mass - p1->m_mass) * v2 + 2 * p1->m_mass*v1) / (p1->m_mass + p2->m_mass);
 
-    p1->accelerate_angular(3.f* glm::cross(v2, (p1->transform().center() - glm::vec3(c.voxelA()->gridCell()))));
-    p2->accelerate_angular(3.f * glm::cross(v1, (p2->transform().center() - glm::vec3(c.voxelB()->gridCell()))));
+    glm::vec3 r1 =  -p1->transform().applyTo(glm::vec3(c.voxelA()->gridCell())) + p1->transform().position();
+    glm::vec3 r2 = -p2->transform().applyTo(glm::vec3(c.voxelB()->gridCell())) + p2->transform().position();
+
+    p1->m_angularSpeed = glm::inverse(p1->transform().orientation()) * (m_rotationFactor.get() * glm::cross(v1_, r1));
+    p2->m_angularSpeed = glm::inverse(p2->transform().orientation()) * (m_rotationFactor.get() * glm::cross(v2_, r2));
 
     p1->m_speed = v1_;
     p2->m_speed = v2_;

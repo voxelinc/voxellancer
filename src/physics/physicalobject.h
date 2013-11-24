@@ -38,4 +38,5 @@ private:
     glm::vec3 m_angularAcceleration;
     Property<float> m_dampening;
     Property<float> m_angularDampening;
+    Property<float> m_rotationFactor;
 };
