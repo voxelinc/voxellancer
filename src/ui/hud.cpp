@@ -14,14 +14,14 @@ m_delta_sec_remain(0),
 m_framerate(0),
 m_dx(1),
 m_dy(1),
-m_distance("hud.distance", 100.f),
-m_move_multiplier("hud.move_multiplier", 5.f),
-m_inertia_rotate("hud.inertia_rotate", 30.f),
-m_inertia_move("hud.inertia_move", 25.f),
-m_inertia_rate("hud.inertia_rate", .0005f),
-m_arrow_maxdistance("hud.arrow_maxdistance", 1000.f),
-m_arrow_radius("hud.arrow_radius", .7f),
-m_show_framerate("hud.show_framerate", true)
+m_distance("hud.distance"),
+m_move_multiplier("hud.move_multiplier"),
+m_inertia_rotate("hud.inertia_rotate"),
+m_inertia_move("hud.inertia_move"),
+m_inertia_rate("hud.inertia_rate"),
+m_arrow_maxdistance("hud.arrow_maxdistance"),
+m_arrow_radius("hud.arrow_radius"),
+m_show_framerate("hud.show_framerate")
 {
     m_voxelRenderer = std::unique_ptr<VoxelRenderer>(new VoxelRenderer());
 

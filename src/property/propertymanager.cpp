@@ -56,11 +56,6 @@ PropertyManager::~PropertyManager() {
 
 void PropertyManager::load(std::string file)
 {
-//// TODO: REMOVE WHEN LINUX IS WORKING
-//#ifndef WIN32
-//    return;
-//#endif
-
     std::ifstream input(file);
     std::string line;
     std::string title = "";

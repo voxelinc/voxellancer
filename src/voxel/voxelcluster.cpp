@@ -136,7 +136,7 @@ void VoxelCluster::addVoxel(const Voxel & voxel) {
     // TODO aabb extent(vec3)
     m_voxel[voxel.gridCell()] = voxel;
 
-    // Memoryleak as of now, voxeltree shouldn't manage the voxel
+    // TODO Memoryleak as of now, voxeltree shouldn't manage the voxel
     m_voxelTree.insert(new Voxel(voxel));
 
     m_voxelRenderData.invalidate();
