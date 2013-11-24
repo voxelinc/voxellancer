@@ -49,10 +49,8 @@ Game::~Game(){
 	delete m_testClusterB;
 }
 
-void Game::reloadConfig(){
-#ifdef WIN32
+void Game::reloadConfig() {
 	PropertyManager::instance()->load("data/config.ini");
-#endif
 }
 
 void Game::initialize()
