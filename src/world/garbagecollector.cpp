@@ -1,6 +1,6 @@
 #include "garbagecollector.h"
 
-void GarbageCollector::check(std::list<VoxelCluster*> &modifiedVoxelClusters) {
+void GarbageCollector::check(std::set<VoxelCluster*> &modifiedVoxelClusters) {
 
 }
 

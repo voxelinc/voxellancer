@@ -41,9 +41,8 @@ public:
     void setGeode(WorldtreeGeode *geode);
     void setWorldTree(Worldtree* worldTree);
 
-    void addVoxel(const Voxel &voxel);
-    void removeVoxel(const cvec3 &position);
-
+    virtual void addVoxel(const Voxel &voxel);
+    virtual void removeVoxel(const cvec3 &position);
     VoxelRenderData *voxelRenderData();
     const std::unordered_map<cvec3, Voxel, VoxelHash> & voxel() const;
 

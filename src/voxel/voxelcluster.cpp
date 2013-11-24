@@ -16,7 +16,7 @@
 #include "collision/collisiondetector.h"
 
 
-VoxelCluster::VoxelCluster(glm::vec3 center, float scale): 
+VoxelCluster::VoxelCluster(glm::vec3 center, float scale):
     m_voxel(),
     m_voxelTree(nullptr, *this, Grid3dAABB(glm::ivec3(0, 0, 0), glm::ivec3(0, 0, 0))),
     m_geode(nullptr),
@@ -34,7 +34,7 @@ VoxelCluster::VoxelCluster(const VoxelCluster& other):
 	m_transform(other.m_transform),
 	m_oldTransform(other.m_oldTransform)
 {
-	
+
 }
 
 VoxelCluster::~VoxelCluster() {
@@ -77,7 +77,7 @@ bool VoxelCluster::isCollisionPossible() {
     // the geode aabb is still the old one, add it to the final aabb
     AABB fullAabb = m_geode->aabb().united(aabb());
     // is there someone else than yourself inside?
-    return m_worldTree->geodesInAABB(fullAabb).size() > 1; 
+    return m_worldTree->geodesInAABB(fullAabb).size() > 1;
 }
 
 void VoxelCluster::doSteppedTransform() {
@@ -144,7 +144,7 @@ void VoxelCluster::addVoxel(const Voxel & voxel) {
     updateGeode();
 }
 
-void VoxelCluster::removeVoxel(const cvec3 & position) {
+void VoxelCluster::removeVoxel(const cvec3 &position) {
     m_voxel.erase(position);
     m_voxelTree.remove(position);
     m_voxelRenderData.invalidate();

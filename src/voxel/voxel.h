@@ -32,10 +32,16 @@ public:
     const cvec3 &color() const;
     void setColor(const cvec3 &color);
 
+    float hp() const;
+    void applyDamage(float deltaHp);
+
+    void onDestruction();
+
 
 protected:
     VoxelCluster *m_voxelCluster;
     cvec3 m_gridCell;
     cvec3 m_color;
+    float m_hp;
 };
 
