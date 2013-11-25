@@ -9,11 +9,11 @@
 
 #include <GLFW/glfw3.h>
 
-#include "physics/physicalobject.h"
 #include "worldtree/worldtree.h"
 #include "collision/collisiondetector.h"
 #include "camera.h"
 #include "ui/inputhandler.h"
+
 
 
 class HUD;

@@ -25,10 +25,10 @@
 #include "resource/clusterstore.h"
 #include "utils/hd3000dummy.h"
 #include "utils/linuxvmdummy.h"
-#include "voxel/voxelrenderer.h"
 #include "ui/inputhandler.h"
 #include "ui/hud.h"
-#include "skybox.h"
+
+#include "world/world.h"
 
 Game::Game(GLFWwindow *window):
 	m_window(window),
@@ -46,10 +46,8 @@ Game::~Game(){
 	delete m_testClusterB;
 }
 
-void Game::reloadConfig(){
-#ifdef WIN32
+void Game::reloadConfig() {
 	PropertyManager::instance()->load("data/config.ini");
-#endif
 }
 
 void Game::initialize()
@@ -95,20 +93,16 @@ void Game::initialize()
     m_testClusterMoveable.calculateMassAndCenter();
     m_worldtree.insert(&m_testClusterMoveable);
 
-    m_testClusterA = new PhysicalObject();
-	m_testClusterA->transform().move(glm::vec3(0, 0, -10));
-    m_testClusterA->applyTransform(false);
-    m_testClusterB = new PhysicalObject();
-	m_testClusterB->transform().move(glm::vec3(0, 0, 50));
-	m_testClusterB->transform().rotate(glm::angleAxis(135.0f, glm::vec3(0, 1, 0)));
-    m_testClusterB->applyTransform(false);
+	m_testClusterA = ClusterStore::instance()->create("data/voxelcluster/basicship.csv");
+	m_testClusterA->transform().setCenter(glm::vec3(3, 0, 3));
+	m_testClusterA->transform().setPosition(glm::vec3(0, 0, -10));
+	m_testClusterA->removeVoxel(cvec3(3, 2, 3)); // this verifies the objects are different
 
-    ClusterLoader *cl = new ClusterLoader();
-	cl->loadClusterFromFile("data/voxelcluster/basicship.csv", m_testClusterA);
-    m_testClusterA->calculateMassAndCenter();
-	cl->loadClusterFromFile("data/voxelcluster/normandy.csv", m_testClusterB);
-    m_testClusterB->calculateMassAndCenter();
-    m_worldtree.insert(m_testClusterA);
+	m_testClusterB = ClusterStore::instance()->create("data/voxelcluster/basicship.csv");
+	m_testClusterB->transform().setCenter(glm::vec3(3, 0, 3));
+	m_testClusterB->transform().setPosition(glm::vec3(0, 0, 10));
+
+	m_worldtree.insert(m_testClusterA);
     m_worldtree.insert(m_testClusterB);
 
 	glow::debug("Setup Camera");
@@ -133,6 +127,8 @@ void Game::update(float delta_sec)
 {
     // avoid big jumps after debugging ;)
     delta_sec = glm::min(1.f, delta_sec);
+
+    World::instance()->update(delta_sec);
 
     std::list<Collision> collisions = m_collisionDetector.checkCollisions();
     if (collisions.size() != last_collisions) {
