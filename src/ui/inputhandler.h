@@ -17,6 +17,8 @@ public:
 	InputHandler(GLFWwindow *window, Camera *camera, VoxelCluster *voxelcluster);
 	virtual ~InputHandler();
 
+    void setVoxelcluster(VoxelCluster *voxelcluster);
+
 	void resizeEvent(const unsigned int width, const unsigned int height);
 	void keyCallback(int key, int scancode, int action, int mods);
 	void update(float delta_sec);
@@ -37,6 +39,6 @@ protected:
     Property<float> m_rotation_speed;
     Property<float> m_roll_speed;
 	Property<float> m_move_speed;
-	
+
 	void toggleControls();
 };

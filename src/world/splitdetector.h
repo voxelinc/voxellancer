@@ -1,5 +1,6 @@
 #pragma once
 
+#include <set>
 #include <list>
 
 #include "voxel/voxelcluster.h"
@@ -10,7 +11,7 @@
 class SplitDetector
 {
 public:
-    void searchOrphans(std::list<VoxelCluster*> &modifiedVoxelClusters);
+    void searchOrphans(std::set<VoxelCluster*> &modifiedVoxelClusters);
     std::list<VoxelClusterOrphan*> &voxelClusterOrphans();
 
 

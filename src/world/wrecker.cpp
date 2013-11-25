@@ -1,6 +1,6 @@
 #include "wrecker.h"
 
-void Wrecker::detectWreckages(std::list<VoxelCluster*> &modifiedVoxelClusters) {
+void Wrecker::detectWreckages(std::set<VoxelCluster*> &modifiedVoxelClusters) {
     m_wreckages.clear();
 }
 

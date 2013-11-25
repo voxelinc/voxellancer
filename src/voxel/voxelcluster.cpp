@@ -16,7 +16,7 @@
 #include "collision/collisiondetector.h"
 
 
-VoxelCluster::VoxelCluster(glm::vec3 center, float scale): 
+VoxelCluster::VoxelCluster(glm::vec3 center, float scale):
     m_voxel(),
     m_voxelTree(nullptr, *this, Grid3dAABB(glm::ivec3(0, 0, 0), glm::ivec3(0, 0, 0))),
     m_geode(nullptr),
@@ -34,7 +34,7 @@ VoxelCluster::VoxelCluster(const VoxelCluster& other):
 	m_transform(other.m_transform),
 	m_oldTransform(other.m_oldTransform)
 {
-	
+
 }
 
 VoxelCluster::~VoxelCluster() {
@@ -77,7 +77,7 @@ bool VoxelCluster::isCollisionPossible() {
     // the geode aabb is still the old one, add it to the final aabb
     AABB fullAabb = m_geode->aabb().united(aabb());
     // is there someone else than yourself inside?
-    return m_worldTree->geodesInAABB(fullAabb).size() > 1; 
+    return m_worldTree->geodesInAABB(fullAabb).size() > 1;
 }
 
 void VoxelCluster::doSteppedTransform() {
@@ -100,8 +100,7 @@ void VoxelCluster::doSteppedTransform() {
     }
 }
 
-float VoxelCluster::calculateStepCount()
-{
+float VoxelCluster::calculateStepCount() {
     float distance = glm::length(m_transform.position() - m_oldTransform.position());
     float angle = glm::degrees(2 * glm::acos(glm::dot(m_transform.orientation(), m_oldTransform.orientation())));
     float steps = glm::floor(distance / MAX_TRANSLATION_STEP_SIZE) + 1.f; // at least one!
@@ -132,6 +131,32 @@ void VoxelCluster::setGeode(WorldtreeGeode *geode) {
     updateGeode();
 }
 
+Voxel *VoxelCluster::voxel(const glm::ivec3 &cell) {
+    cvec3 cvec = static_cast<cvec3>(cell);
+
+    std::unordered_map<cvec3, Voxel, VoxelHash>::iterator i = m_voxel.find(cvec);
+
+    if(i == m_voxel.end()) {
+        return nullptr;
+    }
+    else {
+        return &i->second;
+    }
+}
+
+const Voxel *VoxelCluster::voxel(const glm::ivec3 &cell) const {
+    cvec3 cvec = static_cast<cvec3>(cell);
+
+    std::unordered_map<cvec3, Voxel, VoxelHash>::const_iterator i = m_voxel.find(cvec);
+
+    if(i == m_voxel.end()) {
+        return nullptr;
+    }
+    else {
+        return &i->second;
+    }
+}
+
 void VoxelCluster::addVoxel(const Voxel & voxel) {
     // TODO aabb extent(vec3)
     m_voxel[voxel.gridCell()] = voxel;
@@ -144,17 +169,17 @@ void VoxelCluster::addVoxel(const Voxel & voxel) {
     updateGeode();
 }
 
-void VoxelCluster::removeVoxel(const cvec3 & position) {
+void VoxelCluster::removeVoxel(const cvec3 &position) {
     m_voxel.erase(position);
     m_voxelTree.remove(position);
     m_voxelRenderData.invalidate();
 }
 
-const std::unordered_map<cvec3, Voxel, VoxelHash> & VoxelCluster::voxel() const{
+const std::unordered_map<cvec3, Voxel, VoxelHash> &VoxelCluster::voxelMap() const{
     return m_voxel;
 }
 
-VoxelRenderData * VoxelCluster::voxelRenderData() {
+VoxelRenderData *VoxelCluster::voxelRenderData() {
     return &m_voxelRenderData;
 }
 

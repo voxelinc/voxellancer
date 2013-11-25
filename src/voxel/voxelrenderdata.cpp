@@ -23,12 +23,12 @@ VoxelRenderData::~VoxelRenderData() {
 }
 
 void VoxelRenderData::updateTextures() {
-    int size = nextPowerOf2(m_cluster->voxel().size());
+    int size = nextPowerOf2(m_cluster->voxelMap().size());
     std::vector<unsigned char> positionData(size * 3);
     std::vector<unsigned char> colorData(size * 3);
 
     int i = 0;
-    for (auto pair : m_cluster->voxel()) {
+    for (auto pair : m_cluster->voxelMap()) {
         Voxel voxel = pair.second;
         positionData[i * 3 + 0] = voxel.gridCell().x;
         positionData[i * 3 + 1] = voxel.gridCell().y;

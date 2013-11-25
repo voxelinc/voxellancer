@@ -12,20 +12,20 @@ go_bandit([]() {
 			VoxelCluster *vcsv = new VoxelCluster();
 			ClusterLoader *l = new ClusterLoader();
 			l->loadClusterFromFile("test/loader/loadertest.csv", vcsv);
-            AssertThat(vcsv->voxel().size(), Equals(1));
+            AssertThat(vcsv->voxelMap().size(), Equals(1));
 
 			vcsv->removeVoxel(cvec3(0, 0, 0));
-            AssertThat(vcsv->voxel().size(), Equals(0));
+            AssertThat(vcsv->voxelMap().size(), Equals(0));
 		});
         it("loads simple zox basicship", [&]() {
 
             VoxelCluster *vzox = new VoxelCluster();
             ClusterLoader *l = new ClusterLoader();
             l->loadClusterFromFile("test/loader/loadertest.zox", vzox);
-            AssertThat(vzox->voxel().size(), Equals(1));
+            AssertThat(vzox->voxelMap().size(), Equals(1));
 
             vzox->removeVoxel(cvec3(0, 0, 0));
-            AssertThat(vzox->voxel().size(), Equals(0));
+            AssertThat(vzox->voxelMap().size(), Equals(0));
         });
 	});
 });

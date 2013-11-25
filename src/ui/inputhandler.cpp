@@ -28,6 +28,11 @@ InputHandler::~InputHandler(){
 
 }
 
+
+void InputHandler::setVoxelcluster(VoxelCluster *voxelcluster) {
+    m_voxelcluster = voxelcluster;
+}
+
 void InputHandler::resizeEvent(
 	const unsigned int width
 	, const unsigned int height)
