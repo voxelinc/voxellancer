@@ -2,6 +2,7 @@
 
 #include <iostream>
 
+#include "worldtreecluster.h"
 #include "utils/tostring.h"
 
 
@@ -19,7 +20,7 @@ void Worldtree::insert(WorldtreeGeode *geode) {
     WorldtreeNode::insert(geode);
 }
 
-WorldtreeGeode *Worldtree::insert(VoxelCluster *voxelcluster) {
+WorldtreeGeode *Worldtree::insert(WorldTreeCluster *voxelcluster) {
     WorldtreeGeode *geode = new WorldtreeGeode(voxelcluster);
     WorldtreeNode::insert(geode);
     voxelcluster->setWorldTree(this);

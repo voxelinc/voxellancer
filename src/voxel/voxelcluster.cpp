@@ -3,6 +3,7 @@
 #include <iostream>
 #include <list>
 
+#include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 
 #include <glow/DebugMessageOutput.h>
@@ -10,16 +11,11 @@
 #include <glow/logging.h>
 #include <glowutils/MathMacros.h>
 
-
 #include "utils/tostring.h"
-#include "worldtree/worldtreegeode.h"
-#include "collision/collisiondetector.h"
 
 
 VoxelCluster::VoxelCluster(glm::vec3 center, float scale): 
     m_voxel(),
-    m_voxelTree(nullptr, *this, Grid3dAABB(glm::ivec3(0, 0, 0), glm::ivec3(0, 0, 0))),
-    m_geode(nullptr),
     m_voxelRenderData(this),
     m_transform(center, scale)
 {
@@ -27,8 +23,7 @@ VoxelCluster::VoxelCluster(glm::vec3 center, float scale):
 
 VoxelCluster::VoxelCluster(const VoxelCluster& other):
 	m_voxel(other.m_voxel),
-	m_voxelTree(other.m_voxelTree, this),
-	m_geode(nullptr),
+    m_aabb(other.m_aabb),
 	m_voxelRenderData(this),
 	m_transform(other.m_transform)
 {
@@ -39,10 +34,6 @@ VoxelCluster::~VoxelCluster() {
 
 }
 
-AABB VoxelCluster::aabb() {
-    return AABB::containing(m_voxelTree.boundingSphere());
-}
-
 WorldTransform &VoxelCluster::transform() {
     return m_transform;
 }
@@ -51,45 +42,29 @@ const WorldTransform &VoxelCluster::transform() const {
     return m_transform;
 }
 
-VoxeltreeNode &VoxelCluster::voxeltree() {
-    return m_voxelTree;
-}
-
-const VoxeltreeNode &VoxelCluster::voxeltree() const {
-    return m_voxelTree;
-}
-
-WorldtreeGeode *VoxelCluster::geode() {
-    return m_geode;
-}
-
-const WorldtreeGeode *VoxelCluster::geode() const {
-    return m_geode;
-}
-
-void VoxelCluster::setGeode(WorldtreeGeode *geode) {
-    m_geode = geode;
-
-    updateGeode();
-}
-
 void VoxelCluster::addVoxel(const Voxel & voxel) {
-    
     m_voxel[voxel.gridCell()] = voxel;
-
-    // TODO Memoryleak as of now, voxeltree shouldn't manage the voxel
-    m_voxelTree.insert(new Voxel(voxel));
-
+    m_aabb.extend(voxel.gridCell());
     m_voxelRenderData.invalidate();
-
-    updateGeode();
 }
 
 void VoxelCluster::removeVoxel(const cvec3 & position) {
     m_voxel.erase(position);
-    m_voxelTree.remove(position);
     m_voxelRenderData.invalidate();
 }
+
+AABB VoxelCluster::aabb() {
+    return AABB::containing(sphere());
+}
+
+Sphere VoxelCluster::sphere() {
+    Sphere sphere;
+    sphere.setPosition(m_transform.applyTo(glm::vec3(0)));
+    // m_aabb only contains the center of each voxel so add sqrt(2)
+    sphere.setRadius((glm::length(glm::vec3(m_aabb.rub() - m_aabb.llf())) + glm::root_two<float>()) / 2.f * m_transform.scale());
+    return sphere;
+}
+
 
 const std::unordered_map<cvec3, Voxel, VoxelHash> & VoxelCluster::voxel() const{
     return m_voxel;
@@ -99,19 +74,9 @@ VoxelRenderData * VoxelCluster::voxelRenderData() {
     return &m_voxelRenderData;
 }
 
-void VoxelCluster::updateGeode() {
-    if (m_geode != nullptr) {
-        m_geode->setAABB(aabb());
-    }
-}
-
-void VoxelCluster::setWorldTree(Worldtree* worldTree) {
-    m_worldTree = worldTree;
-}
 
 void VoxelCluster::update(float delta_sec) {
 
 }
-
 
 

@@ -1,16 +1,16 @@
 #include <glm/gtx/quaternion.hpp>
+#include "physicalvoxelcluster.h"
 
-#include "physicalobject.h"
 #include "worldtransform.h"
 #include "collision/collisiondetector.h"
 
 
-PhysicalObject::PhysicalObject(float scale):
-    VoxelCluster(glm::vec3(0), scale),
+PhysicalVoxelCluster::PhysicalVoxelCluster(float scale) :
+    WorldTreeCluster(glm::vec3(0), scale),
     m_speed(0),
-    m_angularSpeed(),
+    m_angularSpeed(0),
     m_acceleration(0),
-    m_angularAcceleration(),
+    m_angularAcceleration(0),
     m_dampening("physics.globaldampening"),
     m_angularDampening("physics.globalangulardampening"),
     m_rotationFactor("physics.globalrotationfactor"),
@@ -19,11 +19,31 @@ PhysicalObject::PhysicalObject(float scale):
 
 }
 
-PhysicalObject::~PhysicalObject() {
+// TODO not really nice, this is not a real copy constructor, discuss changes in next meeting
+PhysicalVoxelCluster::PhysicalVoxelCluster(const PhysicalVoxelCluster& other) :
+    WorldTreeCluster(other),
+    m_speed(0),
+    m_angularSpeed(0),
+    m_acceleration(0),
+    m_angularAcceleration(0),
+    m_dampening("physics.globaldampening"),
+    m_angularDampening("physics.globalangulardampening"),
+    m_rotationFactor("physics.globalrotationfactor"),
+    m_mass(other.m_mass)
+{
 
 }
 
-void PhysicalObject::calculateMassAndCenter() {
+void PhysicalVoxelCluster::finishInitialization() {
+    calculateMassAndCenter();
+    applyTransform(false);
+}
+
+PhysicalVoxelCluster::~PhysicalVoxelCluster() {
+
+}
+
+void PhysicalVoxelCluster::calculateMassAndCenter() {
     glm::vec3 center;
     for (auto pair : m_voxel) {
         Voxel voxel = pair.second;
@@ -34,7 +54,7 @@ void PhysicalObject::calculateMassAndCenter() {
     m_transform.setCenter(center);
 }
 
-void PhysicalObject::update(float delta_sec) {
+void PhysicalVoxelCluster::update(float delta_sec) {
     m_delta_sec = delta_sec;
     m_oldTransform = m_newTransform = m_transform;
     
@@ -53,10 +73,13 @@ void PhysicalObject::update(float delta_sec) {
     m_angularAcceleration = glm::vec3(0);
 }
 
-void PhysicalObject::handleCollision(const Collision & c) {
+void PhysicalVoxelCluster::handleCollision(const Collision & c) {
     // TODO remove consts from collision detector
-    PhysicalObject * p1 = static_cast<PhysicalObject*>(const_cast<VoxelCluster*>(c.voxelA()->voxelCluster()));
-    PhysicalObject * p2 = static_cast<PhysicalObject*>(const_cast<VoxelCluster*>(c.voxelB()->voxelCluster()));
+    PhysicalVoxelCluster * p1 = static_cast<PhysicalVoxelCluster*>(const_cast<VoxelCluster*>(c.voxelA()->voxelCluster()));
+    PhysicalVoxelCluster * p2 = static_cast<PhysicalVoxelCluster*>(const_cast<VoxelCluster*>(c.voxelB()->voxelCluster()));
+    
+    assert(p1->m_mass != 0);
+    assert(p2->m_mass != 0);
 
     // old speed at collision point
     glm::vec3 v1 = (p1->m_newTransform.applyTo(glm::vec3(c.voxelA()->gridCell())) - p1->m_oldTransform.applyTo(glm::vec3(c.voxelA()->gridCell()))) / m_delta_sec;
@@ -83,7 +106,7 @@ void PhysicalObject::handleCollision(const Collision & c) {
 
 // tries to apply the current transform as far as no collision happens.
 // should not be used if the voxelcluster is not part of a worldtree.
-void PhysicalObject::applyTransform(bool checkCollision) {
+void PhysicalVoxelCluster::applyTransform(bool checkCollision) {
     if (checkCollision) {
         assert(m_geode != nullptr);
 
@@ -98,14 +121,14 @@ void PhysicalObject::applyTransform(bool checkCollision) {
     updateGeode();
 }
 
-bool PhysicalObject::isCollisionPossible() {
+bool PhysicalVoxelCluster::isCollisionPossible() {
     // the geode aabb is still the old one, add it to the final aabb
     AABB fullAabb = m_geode->aabb().united(aabb());
     // is there someone else than yourself inside?
     return m_worldTree->geodesInAABB(fullAabb).size() > 1;
 }
 
-void PhysicalObject::doSteppedTransform() {
+void PhysicalVoxelCluster::doSteppedTransform() {
     float steps = calculateStepCount(m_oldTransform, m_newTransform);
 
     CollisionDetector collisionDetector(*m_worldTree, *this);
@@ -128,7 +151,7 @@ void PhysicalObject::doSteppedTransform() {
 static float MAX_TRANSLATION_STEP_SIZE = 0.1f;
 static float MAX_ANGLE_STEP_SIZE = 10.0f;
 
-float PhysicalObject::calculateStepCount(const WorldTransform & oldTransform, const WorldTransform & newTransform) {
+float PhysicalVoxelCluster::calculateStepCount(const WorldTransform & oldTransform, const WorldTransform & newTransform) {
     float distance = glm::length(newTransform.position() - oldTransform.position());
     float angle = glm::angle(glm::inverse(newTransform.orientation()) * oldTransform.orientation());
     float steps = glm::floor(distance / MAX_TRANSLATION_STEP_SIZE) + 1.f; // at least one!
@@ -137,10 +160,10 @@ float PhysicalObject::calculateStepCount(const WorldTransform & oldTransform, co
 }
 
 // accelerate along local axis
-void PhysicalObject::accelerate(glm::vec3 direction) {
+void PhysicalVoxelCluster::accelerate(glm::vec3 direction) {
     m_acceleration += m_transform.orientation() * direction;
 }
 
-void PhysicalObject::accelerate_angular(glm::vec3 axis) {
+void PhysicalVoxelCluster::accelerate_angular(glm::vec3 axis) {
     m_angularAcceleration += axis;
 }

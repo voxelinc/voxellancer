@@ -6,7 +6,7 @@
 #include "worldtree/worldtree.h"
 #include "voxel/voxel.h"
 #include "collision/collisiondetector.h"
-#include "physics/physicalobject.h"
+#include "world/physicalvoxelcluster.h"
 
 
 
@@ -16,13 +16,14 @@ using namespace bandit;
 go_bandit([](){
     describe("CollisionDetector", [](){
         Worldtree *worldtree;
-        PhysicalObject *a, *b;
+        PhysicalVoxelCluster *a, *b;
         CollisionDetector *d;
+
 
         before_each([&](){
             worldtree = new Worldtree;
-            a = new PhysicalObject(); worldtree->insert(a);
-            b = new PhysicalObject(); worldtree->insert(b);
+            a = new PhysicalVoxelCluster(); worldtree->insert(a);
+            b = new PhysicalVoxelCluster(); worldtree->insert(b);
             d = new CollisionDetector(*worldtree, *a);
         });
 

@@ -14,7 +14,7 @@ public:
     virtual ~Worldtree();
 
     void insert(WorldtreeGeode *geode);
-    WorldtreeGeode *insert(VoxelCluster *voxelcluster);
+    WorldtreeGeode *insert(WorldTreeCluster *voxelcluster);
     void remove(WorldtreeGeode *geode);
 
     std::set<WorldtreeGeode*> geodesInAABB(const AABB &aabb) const;

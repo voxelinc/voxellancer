@@ -49,6 +49,8 @@ public:
 
     bool operator==(const TAABB<T> &other) const;
 
+    void extend(const glm::detail::tvec3<T> & point);
+
     static TAABB<float> containing(const Sphere &sphere);
 
 protected:
@@ -57,6 +59,6 @@ protected:
 
 typedef TAABB<glm::mediump_float> AABB;
 typedef TAABB<int> IAABB;
-typedef TAABB<signed char> CAABB;
+typedef TAABB<unsigned char> CAABB;
 
 #include "aabb.inl"

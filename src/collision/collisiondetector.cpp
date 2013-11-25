@@ -4,11 +4,11 @@
 #include <list>
 #include <iostream>
 
+#include "world/physicalvoxelcluster.h"
 #include "utils/tostring.h"
-#include "voxel/voxelcluster.h"
 
 
-CollisionDetector::CollisionDetector(Worldtree &worldtree, VoxelCluster &voxelcluster):
+CollisionDetector::CollisionDetector(Worldtree &worldtree, PhysicalVoxelCluster &voxelcluster) :
     m_worldtree(worldtree),
     m_voxelcluster(voxelcluster)
 {

@@ -29,12 +29,13 @@
 #include "ui/hud.h"
 
 #include "world/world.h"
+#include "skybox.h"
+#include "voxel/voxelrenderer.h"
 
 Game::Game(GLFWwindow *window):
 	m_window(window),
 	m_camera(),
 	m_inputHandler(window, &m_camera, &m_testClusterMoveable),
-	m_collisionDetector(m_worldtree, m_testClusterMoveable),
 	m_testClusterA(0),
 	m_testClusterB(0)
 {
@@ -67,19 +68,17 @@ void Game::initialize()
     m_voxelRenderer = std::unique_ptr<VoxelRenderer>(new VoxelRenderer);
 
     m_testCluster.transform().move(glm::vec3(0, 0, 0));
-    m_testCluster.applyTransform(false);
     m_testCluster.addVoxel(Voxel(cvec3(1, 0, 0), cvec3(0, 255, 0), &m_testCluster));
     m_testCluster.addVoxel(Voxel(cvec3(2, 0, 0), cvec3(255, 255, 0), &m_testCluster));
     m_testCluster.addVoxel(Voxel(cvec3(1, 1, 0), cvec3(0, 0, 255), &m_testCluster));
     m_testCluster.addVoxel(Voxel(cvec3(1, 0, 1), cvec3(255, 0, 0), &m_testCluster));
     m_testCluster.addVoxel(Voxel(cvec3(0, 0, 0), cvec3(255, 0, 128), &m_testCluster));
-    m_testCluster.calculateMassAndCenter(),
+    m_testCluster.finishInitialization();
     m_worldtree.insert(&m_testCluster);
     m_testCluster.accelerate_angular(glm::vec3(0,10,0)),
 
     m_testClusterMoveable.transform().move(glm::vec3(-20, 0, 0));
     m_testClusterMoveable.transform().rotate(glm::angleAxis(-90.f, glm::vec3(0, 1, 0)));
-    m_testClusterMoveable.applyTransform(false);
     m_testClusterMoveable.addVoxel(Voxel(cvec3(0, 0, 7), cvec3(0, 255, 0), &m_testClusterMoveable));
     m_testClusterMoveable.addVoxel(Voxel(cvec3(0, 0, 6), cvec3(255, 255, 0), &m_testClusterMoveable));
     m_testClusterMoveable.addVoxel(Voxel(cvec3(0, 0, 5), cvec3(255, 255, 0), &m_testClusterMoveable));
@@ -90,17 +89,19 @@ void Game::initialize()
     m_testClusterMoveable.addVoxel(Voxel(cvec3(1, 1, 7), cvec3(0, 0, 255), &m_testClusterMoveable));
     m_testClusterMoveable.addVoxel(Voxel(cvec3(1, 0, 7), cvec3(255, 0, 0), &m_testClusterMoveable));
     m_testClusterMoveable.addVoxel(Voxel(cvec3(0, 0, 8), cvec3(255, 0, 128), &m_testClusterMoveable));
-    m_testClusterMoveable.calculateMassAndCenter();
+    m_testClusterMoveable.finishInitialization();
     m_worldtree.insert(&m_testClusterMoveable);
 
-	m_testClusterA = ClusterStore::instance()->create("data/voxelcluster/basicship.csv");
+    m_testClusterA = ClusterStore<PhysicalVoxelCluster>::instance()->create("data/voxelcluster/basicship.csv");
 	m_testClusterA->transform().setCenter(glm::vec3(3, 0, 3));
 	m_testClusterA->transform().setPosition(glm::vec3(0, 0, -10));
 	m_testClusterA->removeVoxel(cvec3(3, 2, 3)); // this verifies the objects are different
+    m_testClusterA->finishInitialization();
 
-	m_testClusterB = ClusterStore::instance()->create("data/voxelcluster/basicship.csv");
+    m_testClusterB = ClusterStore<PhysicalVoxelCluster>::instance()->create("data/voxelcluster/basicship.csv");
 	m_testClusterB->transform().setCenter(glm::vec3(3, 0, 3));
 	m_testClusterB->transform().setPosition(glm::vec3(0, 0, 10));
+    m_testClusterB->finishInitialization();
 
 	m_worldtree.insert(m_testClusterA);
     m_worldtree.insert(m_testClusterB);
@@ -121,7 +122,6 @@ void Game::initialize()
 	glow::debug("Game::initialize Done");
 }
 
-static int last_collisions = 0;
 
 void Game::update(float delta_sec)
 {
@@ -130,12 +130,6 @@ void Game::update(float delta_sec)
 
     World::instance()->update(delta_sec);
 
-    std::list<Collision> collisions = m_collisionDetector.checkCollisions();
-    if (collisions.size() != last_collisions) {
-        glow::debug("Collisions: %;", collisions.size());
-        last_collisions = collisions.size();
-    }
-
 	m_inputHandler.update(delta_sec);
 
     // TODO: use god instead
@@ -143,6 +137,7 @@ void Game::update(float delta_sec)
     m_testClusterA->update(delta_sec);
     m_testClusterB->update(delta_sec);
     m_testClusterMoveable.update(delta_sec);
+
 	m_hud->update(delta_sec);
 }
 

@@ -11,6 +11,7 @@
 
 #include "worldtree/worldtree.h"
 #include "collision/collisiondetector.h"
+#include "world/physicalvoxelcluster.h"
 #include "camera.h"
 #include "ui/inputhandler.h"
 
@@ -44,11 +45,10 @@ private:
 	GLFWwindow *m_window;
 	InputHandler m_inputHandler;
 	Camera m_camera;
-    PhysicalObject m_testCluster;
-    PhysicalObject m_testClusterMoveable;
-    PhysicalObject *m_testClusterA, *m_testClusterB;
+    PhysicalVoxelCluster m_testCluster;
+    PhysicalVoxelCluster m_testClusterMoveable;
+    PhysicalVoxelCluster *m_testClusterA, *m_testClusterB;
     Worldtree m_worldtree;
-    CollisionDetector m_collisionDetector;
 	std::unique_ptr<Skybox> m_skybox;
 	std::unique_ptr<HUD> m_hud;
 	std::unique_ptr<VoxelRenderer> m_voxelRenderer;

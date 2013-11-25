@@ -36,7 +36,7 @@ m_show_framerate("hud.show_framerate")
     addElement("data/hud/bottomright.csv", HUDOffsetOrigin::BottomRight, glm::vec3(-4, 1, 0), &m_elements);
     addElement("data/hud/bottom.csv", HUDOffsetOrigin::Bottom, glm::vec3(-27, 1, 0), &m_elements);
 
-    m_shiparrow.reset(ClusterStore::instance()->create<HUDElement>("data/hud/arrow.csv"));
+    m_shiparrow.reset(ClusterStore<HUDElement>::instance()->create("data/hud/arrow.csv"));
     m_shiparrow->m_origin = HUDOffsetOrigin::Center;
     m_shiparrow->m_offset = glm::vec3(-2, -2, 0);
 
@@ -46,14 +46,14 @@ m_show_framerate("hud.show_framerate")
 
 
 void HUD::addElement(const std::string& filename, HUDOffsetOrigin origin, glm::vec3 offset, std::vector<std::unique_ptr<HUDElement>> *list){
-    std::unique_ptr<HUDElement> element(ClusterStore::instance()->create<HUDElement>(filename));
+    std::unique_ptr<HUDElement> element(ClusterStore<HUDElement>::instance()->create(filename));
     element->m_origin = origin;
     element->m_offset = offset;
     list->push_back(move(element));
 }
 
 void HUD::addChar(const std::string& filename, glm::vec3 offset, const char index, std::map<char, std::unique_ptr<VoxelCluster>> *map){
-    std::unique_ptr<VoxelCluster> element(ClusterStore::instance()->create<VoxelCluster>(filename));
+    std::unique_ptr<VoxelCluster> element(ClusterStore<HUDElement>::instance()->create(filename));
     element->transform().setCenter(offset);
     (*map)[index] = move(element);
 }

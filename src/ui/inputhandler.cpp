@@ -2,9 +2,11 @@
 
 #include <glm/glm.hpp>
 
+#include "world/physicalvoxelcluster.h"
 
 
-InputHandler::InputHandler(GLFWwindow *window, Camera *camera, PhysicalObject *voxelcluster):
+
+InputHandler::InputHandler(GLFWwindow *window, Camera *camera, PhysicalVoxelCluster *voxelcluster):
 	m_window(window),
 	m_camera(camera),
 	m_voxelcluster(voxelcluster),

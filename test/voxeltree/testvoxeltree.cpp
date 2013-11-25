@@ -5,8 +5,8 @@
 
 #include <glm/glm.hpp>
 
-#include "voxel/voxelcluster.h"
 #include "voxel/voxeltreenode.h"
+#include "worldtree/worldtreecluster.h"
 
 #include "utils/tostring.h"
 #include "../bandit_extension/vec3helper.h"
@@ -17,11 +17,11 @@ using namespace bandit;
 
 go_bandit([](){
     describe("Voxeltree", [](){
-        VoxelCluster *c;
+        WorldTreeCluster *c;
         VoxeltreeNode *r;
 
         before_each([&]() {
-            c = new VoxelCluster();
+            c = new WorldTreeCluster();
             r = &c->voxeltree();
         });
 
@@ -67,20 +67,20 @@ go_bandit([](){
         });
 
         it("can adjust its center", [&]() {
-            VoxelCluster *d = new VoxelCluster(glm::vec3(1, 1, 1));
+            WorldTreeCluster *d = new WorldTreeCluster(glm::vec3(1, 1, 1));
 
             AssertThat(d->voxeltree().boundingSphere().position(), EqualsWithDelta(glm::vec3(-1, -1, -1), glm::vec3(0.01, 0.01, 0.01)));
         });
 
         it("can adjust its center and scale", [&]() {
-            VoxelCluster *d = new VoxelCluster(glm::vec3(1, 1, 1), 3);
+            WorldTreeCluster *d = new WorldTreeCluster(glm::vec3(1, 1, 1), 3);
 
             AssertThat(d->voxeltree().boundingSphere().position(), EqualsWithDelta(glm::vec3(-3, -3, -3), glm::vec3(0.01, 0.01, 0.01)));
         });
 
         // skip until is is clear what this test is supposed to test :)
         it_skip("initially positions all subnodes right", [&]() {
-            VoxelCluster *d = new VoxelCluster(glm::vec3(1, 1, 1), 6);
+            WorldTreeCluster *d = new WorldTreeCluster(glm::vec3(1, 1, 1), 6);
 
             d->addVoxel(Voxel(cvec3(1, 1, 1), cvec3(255, 255, 255), c)); // There are 8 subnodes now
 

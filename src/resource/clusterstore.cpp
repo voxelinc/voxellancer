@@ -1,28 +1,18 @@
 #include "clusterstore.h"
 
 #include "voxel/voxelcluster.h"
+#include "world/physicalvoxelcluster.h"
+#include "ui/hudelement.h"
 
-ClusterStore *ClusterStore::s_instance = nullptr;
+// define here which VoxelCluster types can be stored
+
+template<>
+ClusterStore<VoxelCluster> *ClusterStore<VoxelCluster>::s_instance = nullptr;
+
+template<>
+ClusterStore<PhysicalVoxelCluster> *ClusterStore<PhysicalVoxelCluster>::s_instance = nullptr;
+
+template<>
+ClusterStore<HUDElement> *ClusterStore<HUDElement>::s_instance = nullptr;
 
 
-ClusterStore::ClusterStore():
-    m_items(),
-    m_loader()
-{
-
-}
-
-ClusterStore::~ClusterStore(){
-
-}
-
-VoxelCluster *ClusterStore::create(const std::string& name){
-    return create<VoxelCluster>(name);
-}
-
-ClusterStore *ClusterStore::instance(){
-    if (s_instance == nullptr) {
-        s_instance = new ClusterStore();
-    }
-    return s_instance;
-}
