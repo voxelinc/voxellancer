@@ -1,5 +1,7 @@
 #include "voxel/voxelcluster.h"
 
+class CollisionDetector;
+
 // this class contains datastructures for collision detection
 class WorldTreeVoxelCluster : public VoxelCluster {
 
@@ -22,6 +24,7 @@ public:
     virtual void finishInitialization();
     void updateGeode();
 protected:
+    std::unique_ptr<CollisionDetector> m_collisionDetector;
 
     VoxeltreeNode m_voxelTree;
     WorldtreeGeode *m_geode;

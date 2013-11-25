@@ -44,6 +44,9 @@ public:
 
 protected:
     void updateTextures();
+    
+    AABB aabb(const WorldTransform & transform);
+    Sphere sphere(const WorldTransform & transform);
 
     WorldTransform m_transform;
     VoxelRenderData m_voxelRenderData;

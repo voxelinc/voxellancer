@@ -15,7 +15,7 @@
 class WorldLogic
 {
 public:
-    void update();
+    void update(float deltaSecs);
 
 
 protected:

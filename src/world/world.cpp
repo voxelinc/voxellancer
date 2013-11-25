@@ -32,7 +32,7 @@ float World::deltaSecs() const {
 
 void World::update(float deltaSecs) {
     m_deltaSecs = deltaSecs;
-    m_worldLogic.update();
+    m_worldLogic.update(deltaSecs);
 }
 
 World *World::instance() {

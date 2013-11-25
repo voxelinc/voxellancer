@@ -3,6 +3,7 @@
 
 #include "worldtransform.h"
 #include "collision/collisiondetector.h"
+#include <iostream>
 
 
 PhysicalVoxelCluster::PhysicalVoxelCluster(float scale) :
@@ -20,7 +21,6 @@ PhysicalVoxelCluster::PhysicalVoxelCluster(float scale) :
 
 }
 
-// not a real copy constructor!
 PhysicalVoxelCluster::PhysicalVoxelCluster(const PhysicalVoxelCluster& other) :
     WorldTreeVoxelCluster(other),
     m_speed(0),
@@ -36,6 +36,8 @@ PhysicalVoxelCluster::PhysicalVoxelCluster(const PhysicalVoxelCluster& other) :
 
 }
 
+// only neccessary for manually constructed voxelclusters, not if 
+// the cluster is build from clusterstore
 void PhysicalVoxelCluster::finishInitialization() {
     calculateMassAndCenter();
     WorldTreeVoxelCluster::finishInitialization();
@@ -63,20 +65,27 @@ void PhysicalVoxelCluster::calculateMassAndCenter() {
 
 void PhysicalVoxelCluster::update(float delta_sec) {
     m_oldTransform = m_newTransform = m_transform;
-    
+    m_collisionDetector->reset();
+
     m_speed *= (1.f - m_dampening * delta_sec);
     m_speed += m_acceleration * delta_sec;
     m_newTransform.moveWorld(m_speed * delta_sec);
 
     m_angularSpeed *= (1.f - m_angularDampening * delta_sec);
     m_angularSpeed = m_angularSpeed + (m_angularAcceleration*delta_sec);
-
     m_newTransform.rotate(glm::quat(m_angularSpeed*delta_sec));
 
-    applyTransform(delta_sec);
+    applyTransform();
 
     m_acceleration = glm::vec3(0);
     m_angularAcceleration = glm::vec3(0);
+
+    const std::list<Collision> &collisions = m_collisionDetector->lastCollisions();
+    if (!collisions.empty()) {
+        handleCollision(collisions.front(), delta_sec);
+    }
+
+    updateGeode();
 }
 
 void PhysicalVoxelCluster::handleCollision(const Collision & c, float delta_sec) {
@@ -88,6 +97,8 @@ void PhysicalVoxelCluster::handleCollision(const Collision & c, float delta_sec)
     // or you removed Voxels... this case is not handled yet.
     assert(p1->m_mass_valid);
     assert(p2->m_mass_valid);
+
+    glm::vec3 normal = glm::normalize(p1->m_transform.applyTo(glm::vec3(c.voxelA()->gridCell())) - p2->m_transform.applyTo(glm::vec3(c.voxelB()->gridCell())));
 
     // old speed at collision point
     glm::vec3 v1 = (p1->m_newTransform.applyTo(glm::vec3(c.voxelA()->gridCell())) - p1->m_oldTransform.applyTo(glm::vec3(c.voxelA()->gridCell()))) / delta_sec;
@@ -102,8 +113,8 @@ void PhysicalVoxelCluster::handleCollision(const Collision & c, float delta_sec)
     glm::vec3 r2 = p2->transform().position() - p2->transform().applyTo(glm::vec3(c.voxelB()->gridCell()));
 
     // new angular speed
-    glm::vec3 w1_ = glm::inverse((p1->transform().orientation())) * (m_rotationFactor.get() * glm::cross(v1_, r1));
-    glm::vec3 w2_ = glm::inverse((p2->transform().orientation())) * (m_rotationFactor.get() * glm::cross(v2_, r2));
+    glm::vec3 w1_ = glm::inverse((p1->transform().orientation())) * (m_rotationFactor.get() * glm::cross(normal, r1));
+    glm::vec3 w2_ = glm::inverse((p2->transform().orientation())) * (m_rotationFactor.get() * glm::cross(-normal, r2));
     
     p1->m_speed = v1_;
     p2->m_speed = v2_;
@@ -114,41 +125,40 @@ void PhysicalVoxelCluster::handleCollision(const Collision & c, float delta_sec)
 
 // tries to apply the current transform as far as no collision happens.
 // should not be used if the voxelcluster is not part of a worldtree.
-void PhysicalVoxelCluster::applyTransform(float delta_sec) {
+void PhysicalVoxelCluster::applyTransform() {
     assert(m_geode != nullptr);
 
     if (m_newTransform != m_oldTransform) {
         if (isCollisionPossible()) {
-            doSteppedTransform(delta_sec);
+            doSteppedTransform();
         } else {
             m_transform = m_newTransform;
         }
     }
-    updateGeode();
 }
 
 bool PhysicalVoxelCluster::isCollisionPossible() {
     // the geode aabb is still the old one, add it to the final aabb
-    AABB fullAabb = m_geode->aabb().united(aabb());
+    AABB fullAabb = aabb(m_oldTransform).united(aabb(m_newTransform));
     // is there someone else than yourself inside?
-    return m_worldTree->geodesInAABB(fullAabb).size() > 1;
+    auto possibleCollisions = m_worldTree->geodesInAABB(fullAabb);
+    if (possibleCollisions.size()>1)
+        std::cout << possibleCollisions.size() << std::endl;
+    return possibleCollisions.size() > 1;
 }
 
-void PhysicalVoxelCluster::doSteppedTransform(float delta_sec) {
+void PhysicalVoxelCluster::doSteppedTransform() {
     float steps = calculateStepCount(m_oldTransform, m_newTransform);
-
-    CollisionDetector collisionDetector(*m_worldTree, *this);
 
     for (int i = 0; i <= steps; i++) {
         m_transform.setOrientation(glm::mix(m_oldTransform.orientation(), m_newTransform.orientation(), i / steps));
         m_transform.setPosition(glm::mix(m_oldTransform.position(), m_newTransform.position(), i / steps));
         updateGeode();
-        const std::list<Collision> & collisions = collisionDetector.checkCollisions();
+        const std::list<Collision> & collisions = m_collisionDetector->checkCollisions();
         if (!collisions.empty()) {
             assert(i > 0); // you're stuck, hopefully doesn't happen!
             m_transform.setOrientation(glm::mix(m_oldTransform.orientation(), m_newTransform.orientation(), (i - 1) / steps));
             m_transform.setPosition(glm::mix(m_oldTransform.position(), m_newTransform.position(), (i - 1) / steps));
-            handleCollision(collisions.front(), delta_sec);
             break;
         }
     }
@@ -162,7 +172,7 @@ float PhysicalVoxelCluster::calculateStepCount(const WorldTransform & oldTransfo
     float steps = glm::floor(distance / MAX_TRANSLATION_STEP_SIZE) + 1.f; // at least one!
     
     float angle = glm::angle(glm::inverse(newTransform.orientation()) * oldTransform.orientation());
-    if (std::isfinite(angle))
+    if (std::isfinite(angle)) // sometimes glm::angle returns INF for really small angles
         steps = glm::max(steps, glm::floor(angle / MAX_ANGLE_STEP_SIZE) + 1.f);
     
     return steps;
@@ -173,6 +183,7 @@ void PhysicalVoxelCluster::accelerate(glm::vec3 direction) {
     m_acceleration += m_transform.orientation() * direction;
 }
 
+// angular acceleration along local axis
 void PhysicalVoxelCluster::accelerate_angular(glm::vec3 axis) {
     m_angularAcceleration += axis;
 }
@@ -180,11 +191,10 @@ void PhysicalVoxelCluster::accelerate_angular(glm::vec3 axis) {
 void PhysicalVoxelCluster::addVoxel(const Voxel & voxel) {
     WorldTreeVoxelCluster::addVoxel(voxel);
     m_mass_valid = false;
-
 }
 
 void PhysicalVoxelCluster::removeVoxel(const cvec3 &position) {
     WorldTreeVoxelCluster::removeVoxel(position);
-    m_transform.setCenter(m_transform.center() - glm::vec3(position) * 1.0f / m_mass);
-    m_mass -= 1.0f;
+    m_mass_valid = false;
+    // it would be better to calculate mass/center changes here
 }

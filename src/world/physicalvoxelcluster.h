@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <glm/glm.hpp>
 
 #include "collision/collision.h"
@@ -25,15 +26,16 @@ public:
 protected:
     void calculateMassAndCenter();
 
-    void doSteppedTransform(float delta_sec);
+    void handleCollision(const Collision & c, float delta_sec);
+    void applyTransform();
+    void doSteppedTransform();
     float calculateStepCount(const WorldTransform & oldTransform, const WorldTransform & newTransform);
     bool isCollisionPossible();
-    void handleCollision(const Collision & c, float delta_sec);
-    void applyTransform(float delta_sec);
 
 private:
     float m_mass;
     bool m_mass_valid;
+
 
     WorldTransform m_oldTransform;
     WorldTransform m_newTransform;

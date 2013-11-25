@@ -16,7 +16,8 @@ public:
     virtual ~CollisionDetector();
 
     const std::list<Collision> &checkCollisions();
-
+    const std::list<Collision> &lastCollisions() const;
+    void reset();
 
 protected:
     Worldtree &m_worldtree;

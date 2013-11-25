@@ -54,14 +54,20 @@ void VoxelCluster::removeVoxel(const cvec3 & position) {
 }
 
 AABB VoxelCluster::aabb() {
-    return AABB::containing(sphere());
+    return aabb(m_transform);
+}
+AABB VoxelCluster::aabb(const WorldTransform & transform) {
+    return AABB::containing(sphere(transform));
 }
 
 Sphere VoxelCluster::sphere() {
+    return sphere(m_transform);
+}
+Sphere VoxelCluster::sphere(const WorldTransform & transform) {
     Sphere sphere;
-    sphere.setPosition(m_transform.applyTo(glm::vec3(0)));
+    sphere.setPosition(transform.applyTo(glm::vec3(0)));
     // m_aabb only contains the center of each voxel so add sqrt(2)
-    sphere.setRadius((glm::length(glm::vec3(m_aabb.rub() - m_aabb.llf())) + glm::root_two<float>()) / 2.f * m_transform.scale());
+    sphere.setRadius((glm::length(glm::vec3(m_aabb.rub() - m_aabb.llf())) + glm::root_two<float>()) / 2.f * transform.scale());
     return sphere;
 }
 

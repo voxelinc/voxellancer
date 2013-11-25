@@ -75,7 +75,6 @@ void Game::initialize()
     m_testCluster.addVoxel(Voxel(cvec3(0, 0, 0), cvec3(255, 0, 128), &m_testCluster));
     m_testCluster.finishInitialization();
     m_worldtree.insert(&m_testCluster);
-    m_testCluster.accelerate_angular(glm::vec3(0,10,0)),
 
     m_testClusterMoveable.transform().move(glm::vec3(-20, 0, 0));
     m_testClusterMoveable.transform().rotate(glm::angleAxis(-90.f, glm::vec3(0, 1, 0)));
@@ -96,6 +95,7 @@ void Game::initialize()
 	m_testClusterA->transform().setCenter(glm::vec3(3, 0, 3));
 	m_testClusterA->transform().setPosition(glm::vec3(0, 0, -10));
 	m_testClusterA->removeVoxel(cvec3(3, 2, 3)); // this verifies the objects are different
+    m_testClusterA->finishInitialization(); // only called because mass was changed
 
     m_testClusterB = ClusterStore<PhysicalVoxelCluster>::instance()->create("data/voxelcluster/basicship.csv");
 	m_testClusterB->transform().setCenter(glm::vec3(3, 0, 3));

@@ -76,4 +76,12 @@ void CollisionDetector::checkCollisions(VoxeltreeNode* nodeA, VoxeltreeNode* nod
     }
 }
 
+const std::list<Collision> & CollisionDetector::lastCollisions() const {
+    return m_collisions;
+}
+
+void CollisionDetector::reset() {
+    m_collisions.clear();
+}
+
 

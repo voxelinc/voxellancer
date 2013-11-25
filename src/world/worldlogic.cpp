@@ -5,7 +5,7 @@
 #include <iostream>
 
 
-void WorldLogic::update() {
+void WorldLogic::update(float deltaSecs) {
     m_mover.moveVoxelClusters();
 
     m_impactAccumulator.parse(m_mover.collisions());
