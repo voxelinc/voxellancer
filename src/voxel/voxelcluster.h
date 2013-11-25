@@ -40,6 +40,8 @@ public:
     VoxelRenderData *voxelRenderData();
     const std::unordered_map<cvec3, Voxel, VoxelHash> & voxel() const;
 
+    virtual void finishInitialization();
+
 protected:
     void updateTextures();
 

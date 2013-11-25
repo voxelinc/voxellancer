@@ -12,7 +12,7 @@ WorldtreeGeode::WorldtreeGeode():
 }
 
 
-WorldtreeGeode::WorldtreeGeode(WorldTreeCluster *voxelcluster) :
+WorldtreeGeode::WorldtreeGeode(WorldTreeVoxelCluster *voxelcluster) :
     m_voxelcluster(voxelcluster),
     m_containingNode(nullptr)
 {
@@ -23,15 +23,15 @@ WorldtreeGeode::~WorldtreeGeode() {
 
 }
 
-WorldTreeCluster *WorldtreeGeode::voxelcluster() {
+WorldTreeVoxelCluster *WorldtreeGeode::voxelcluster() {
     return m_voxelcluster;
 }
 
-const WorldTreeCluster *WorldtreeGeode::voxelcluster() const {
+const WorldTreeVoxelCluster *WorldtreeGeode::voxelcluster() const {
     return m_voxelcluster;
 }
 
-void WorldtreeGeode::setVoxelCluster(WorldTreeCluster *voxelcluster) {
+void WorldtreeGeode::setVoxelCluster(WorldTreeVoxelCluster *voxelcluster) {
     m_voxelcluster = voxelcluster;
 }
 

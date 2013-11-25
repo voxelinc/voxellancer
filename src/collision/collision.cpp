@@ -1,9 +1,11 @@
 #include "collision.h"
 
 
-Collision::Collision(Voxel *voxelA, Voxel *voxelB):
+Collision::Collision(Voxel *voxelA, Voxel *voxelB, WorldTreeVoxelCluster * voxelClusterA, WorldTreeVoxelCluster * voxelClusterB) :
     m_voxelA(voxelA),
-    m_voxelB(voxelB)
+    m_voxelB(voxelB),
+    m_voxelClusterA(voxelClusterA),
+    m_voxelClusterB(voxelClusterB)
 {
 
 }
@@ -26,4 +28,19 @@ Voxel *Collision::voxelB() {
 
 const Voxel *Collision::voxelB() const {
     return m_voxelB;
+}
+
+const WorldTreeVoxelCluster * Collision::voxelClusterA() const {
+    return m_voxelClusterA;
+}
+
+WorldTreeVoxelCluster * Collision::voxelClusterA() {
+    return m_voxelClusterA;
+}
+
+const WorldTreeVoxelCluster * Collision::voxelClusterB() const {
+    return m_voxelClusterB;
+}
+WorldTreeVoxelCluster * Collision::voxelClusterB() {
+    return m_voxelClusterB;
 }

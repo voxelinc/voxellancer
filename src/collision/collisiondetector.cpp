@@ -4,13 +4,14 @@
 #include <list>
 #include <iostream>
 
-#include "world/physicalvoxelcluster.h"
+#include "worldtree/worldtreecluster.h"
 #include "utils/tostring.h"
 
 
-CollisionDetector::CollisionDetector(Worldtree &worldtree, PhysicalVoxelCluster &voxelcluster) :
-    m_worldtree(worldtree),
-    m_voxelcluster(voxelcluster)
+CollisionDetector::CollisionDetector(Worldtree &worldtree, WorldTreeVoxelCluster &voxelcluster) :
+m_worldtree(worldtree),
+m_voxelcluster(voxelcluster),
+m_otherVoxelCluster(nullptr)
 {
 
 }
@@ -29,8 +30,10 @@ const std::list<Collision> &CollisionDetector::checkCollisions() {
 
     for(WorldtreeGeode *possibleCollider : possibleColliders) {
         assert(possibleCollider->voxelcluster() != nullptr);
+        m_otherVoxelCluster = possibleCollider->voxelcluster();
         checkCollisions(&m_voxelcluster.voxeltree(), &possibleCollider->voxelcluster()->voxeltree());
     }
+    m_otherVoxelCluster = nullptr;
 
     return m_collisions;
 }
@@ -46,7 +49,7 @@ void CollisionDetector::checkCollisions(VoxeltreeNode* nodeA, VoxeltreeNode* nod
     if(nodeA->boundingSphere().intersects(nodeB->boundingSphere())) {
         if(nodeA->isLeaf() && nodeB->isLeaf()) {
             if(nodeA->voxel() != nullptr && nodeB->voxel() != nullptr) {
-                m_collisions.push_back(Collision(nodeA->voxel(), nodeB->voxel()));
+                m_collisions.push_back(Collision(nodeA->voxel(), nodeB->voxel(), &m_voxelcluster, m_otherVoxelCluster));
             }
         }
         else {

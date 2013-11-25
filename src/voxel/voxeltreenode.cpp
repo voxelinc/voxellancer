@@ -7,7 +7,7 @@
 #include "utils/tostring.h"
 
 
-VoxeltreeNode::VoxeltreeNode(VoxeltreeNode *parent, WorldTreeCluster &voxelcluster, const Grid3dAABB &gridAABB) :
+VoxeltreeNode::VoxeltreeNode(VoxeltreeNode *parent, WorldTreeVoxelCluster &voxelcluster, const Grid3dAABB &gridAABB) :
     m_parent(parent),
     m_voxelcluster(voxelcluster),
     m_gridAABB(gridAABB),
@@ -16,7 +16,7 @@ VoxeltreeNode::VoxeltreeNode(VoxeltreeNode *parent, WorldTreeCluster &voxelclust
 
 }
 
-VoxeltreeNode::VoxeltreeNode(const VoxeltreeNode& other, WorldTreeCluster *voxelcluster) :
+VoxeltreeNode::VoxeltreeNode(const VoxeltreeNode& other, WorldTreeVoxelCluster *voxelcluster) :
 	m_parent(other.m_parent),
 	m_voxelcluster(*voxelcluster),
 	m_gridAABB(other.m_gridAABB),

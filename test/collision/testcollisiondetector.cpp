@@ -6,7 +6,7 @@
 #include "worldtree/worldtree.h"
 #include "voxel/voxel.h"
 #include "collision/collisiondetector.h"
-#include "world/physicalvoxelcluster.h"
+#include "worldtree/worldtreecluster.h"
 
 
 
@@ -16,14 +16,14 @@ using namespace bandit;
 go_bandit([](){
     describe("CollisionDetector", [](){
         Worldtree *worldtree;
-        PhysicalVoxelCluster *a, *b;
+        WorldTreeVoxelCluster *a, *b;
         CollisionDetector *d;
 
 
         before_each([&](){
             worldtree = new Worldtree;
-            a = new PhysicalVoxelCluster(); worldtree->insert(a);
-            b = new PhysicalVoxelCluster(); worldtree->insert(b);
+            a = new WorldTreeVoxelCluster(); worldtree->insert(a);
+            b = new WorldTreeVoxelCluster(); worldtree->insert(b);
             d = new CollisionDetector(*worldtree, *a);
         });
 
@@ -54,11 +54,11 @@ go_bandit([](){
             AssertThat(d->checkCollisions().size(), IsGreaterThan(0));
 
             b->transform().move(glm::vec3(2, 0, 0));
-            b->applyTransform(false);
+            b->updateGeode();
             AssertThat(d->checkCollisions().size(), IsGreaterThan(0));
 
             b->transform().move(glm::vec3(0, -2, 0));
-            b->applyTransform(false);
+            b->updateGeode();
             AssertThat(d->checkCollisions().size(), Equals(0));
         });
     });

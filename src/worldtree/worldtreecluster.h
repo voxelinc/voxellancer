@@ -1,12 +1,12 @@
 #include "voxel/voxelcluster.h"
 
 // this class contains datastructures for collision detection
-class WorldTreeCluster : public VoxelCluster {
+class WorldTreeVoxelCluster : public VoxelCluster {
 
 public:
-    WorldTreeCluster(glm::vec3 center = glm::vec3(0), float scale = 1.0);
-    WorldTreeCluster(const WorldTreeCluster& other);
-    virtual ~WorldTreeCluster();
+    WorldTreeVoxelCluster(glm::vec3 center = glm::vec3(0), float scale = 1.0);
+    WorldTreeVoxelCluster(const WorldTreeVoxelCluster& other);
+    virtual ~WorldTreeVoxelCluster();
 
     virtual void addVoxel(const Voxel & voxel);
     virtual void removeVoxel(const cvec3 &position);
@@ -19,8 +19,9 @@ public:
     VoxeltreeNode &voxeltree();
     const VoxeltreeNode &voxeltree() const;
 
-protected:
+    virtual void finishInitialization();
     void updateGeode();
+protected:
 
     VoxeltreeNode m_voxelTree;
     WorldtreeGeode *m_geode;

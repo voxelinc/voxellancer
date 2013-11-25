@@ -24,27 +24,27 @@ Voxel::~Voxel() {
 
 }
 
-VoxelCluster *Voxel::voxelCluster() {
-    return m_voxelCluster;
-}
-
-const VoxelCluster *Voxel::voxelCluster() const {
-    return m_voxelCluster;
-}
+//VoxelCluster *Voxel::voxelCluster() {
+//    return m_voxelCluster;
+//}
+//
+//const VoxelCluster *Voxel::voxelCluster() const {
+//    return m_voxelCluster;
+//}
 
 const cvec3 &Voxel::gridCell() const {
     return m_gridCell;
 }
 
-void Voxel::setGridCell(const cvec3 &cell) {
-    m_gridCell = cell;
-}
+//void Voxel::setGridCell(const cvec3 &cell) {
+//    m_gridCell = cell;
+//}
 
 const cvec3 &Voxel::color() const {
     return m_color;
 }
 
-void Voxel::setColor(const cvec3 &color) {
-    m_color = color;
-}
+//void Voxel::setColor(const cvec3 &color) {
+//    m_color = color;
+//}
 

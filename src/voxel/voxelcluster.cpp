@@ -79,4 +79,8 @@ void VoxelCluster::update(float delta_sec) {
 
 }
 
+void VoxelCluster::finishInitialization() {
+
+}
+
 

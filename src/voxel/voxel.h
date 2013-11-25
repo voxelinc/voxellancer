@@ -23,14 +23,16 @@ public:
     Voxel(cvec3 gridCell, cvec3 color, VoxelCluster *voxelCluster);
     virtual ~Voxel();
 
-    VoxelCluster *voxelCluster();
-    const VoxelCluster *voxelCluster() const;
+    // voxels are currently shared between instances of the same model
+    // if we want to keep this voxels need to be immutable!
+    //VoxelCluster *voxelCluster();
+    //const VoxelCluster *voxelCluster() const;
 
     const cvec3 &gridCell() const;
-    void setGridCell(const cvec3 &cell);
+    //void setGridCell(const cvec3 &cell);
 
     const cvec3 &color() const;
-    void setColor(const cvec3 &color);
+    //void setColor(const cvec3 &color);
 
 
 protected:
