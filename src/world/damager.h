@@ -1,6 +1,8 @@
 #pragma once
 
+#include <set>
 #include <list>
+
 
 #include "voxelclusterimpact.h"
 
@@ -11,10 +13,13 @@ public:
     void applyDamages(std::list<VoxelImpact> &voxelImpacts);
 
     std::list<VoxelImpact> &deadlyVoxelImpacts();
-    std::list<VoxelCluster*> &modifiedVoxelClusters();
+    std::set<VoxelCluster*> &modifiedVoxelClusters();
+
 
 protected:
     std::list<VoxelImpact> m_deadlyVoxelImpacts;
-    std::list<VoxelCluster*> m_modifiedVoxelClusters;
+    std::set<VoxelCluster*> m_modifiedVoxelClusters;
+
+    float damageOfImpact(const Impact &impact) const;
 };
 

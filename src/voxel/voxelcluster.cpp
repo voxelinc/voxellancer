@@ -144,7 +144,7 @@ void VoxelCluster::addVoxel(const Voxel & voxel) {
     updateGeode();
 }
 
-void VoxelCluster::removeVoxel(const cvec3 & position) {
+void VoxelCluster::removeVoxel(const cvec3 &position) {
     m_voxel.erase(position);
     m_voxelTree.remove(position);
     m_voxelRenderData.invalidate();
