@@ -37,6 +37,8 @@ public:
 
     virtual void onDestruction();
 
+    glm::vec3 position() const;
+
 
 protected:
     VoxelCluster *m_voxelCluster;

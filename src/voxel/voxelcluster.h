@@ -32,22 +32,27 @@ public:
 
     void applyTransform(bool checkCollision = true);
 
-
     VoxeltreeNode &voxeltree();
     const VoxeltreeNode &voxeltree() const;
 
     WorldtreeGeode *geode();
     const WorldtreeGeode *geode() const;
     void setGeode(WorldtreeGeode *geode);
+
     void setWorldTree(Worldtree* worldTree);
 
-    void addVoxel(const Voxel &voxel);
-    void removeVoxel(const cvec3 &position);
-
-    const Voxel *crucialVoxel() const;
+    Voxel *voxel(const glm::ivec3 &cell);
+    const Voxel *voxel(const glm::ivec3 &cell) const;
     
+    virtual void addVoxel(const Voxel &voxel);
+    virtual void removeVoxel(const cvec3 &position);
+    
+    const Voxel *crucialVoxel() const;
+
     VoxelRenderData *voxelRenderData();
-    const std::unordered_map<cvec3, Voxel, VoxelHash> & voxel() const;
+
+    const std::unordered_map<cvec3, Voxel, VoxelHash> &voxelMap() const;
+
 
 protected:
     void updateTextures();

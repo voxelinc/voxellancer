@@ -24,10 +24,10 @@ go_bandit([](){
 
         it("can add/remove voxel", [&]() {
             cluster->addVoxel(Voxel(cvec3(1, 2, 3), cvec3(255, 128, 0), cluster));
-            AssertThat(cluster->voxel().size(), Equals(1));
+            AssertThat(cluster->voxelMap().size(), Equals(1));
 
             cluster->removeVoxel(cvec3(1, 2, 3));
-            AssertThat(cluster->voxel().size(), Equals(0));
+            AssertThat(cluster->voxelMap().size(), Equals(0));
         });
 
         it("test generate texture", [&]() {

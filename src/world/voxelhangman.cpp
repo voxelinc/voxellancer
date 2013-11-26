@@ -3,15 +3,14 @@
 #include "voxel/voxelcluster.h"
 
 
-void VoxelHangman::applyOnDestructionHooks(std::list<VoxelImpact> &deadlyVoxelImpacts) {
-    for(VoxelImpact &voxelImpact : deadlyVoxelImpacts) {
-        voxelImpact.voxel()->onDestruction();
+void VoxelHangman::applyOnDestructionHooks(std::list<Voxel*> &deadVoxels) {
+    for(Voxel *voxel : deadVoxels) {
+        voxel->onDestruction();
     }
 }
 
-void VoxelHangman::removeDestroyedVoxels(std::list<VoxelImpact> &deadlyVoxelImpacts) {
-    for(VoxelImpact &voxelImpact : deadlyVoxelImpacts) {
-        Voxel *voxel = voxelImpact.voxel();
+void VoxelHangman::removeDestroyedVoxels(std::list<Voxel*> &deadVoxels) {
+    for(Voxel *voxel : deadVoxels) {
         voxel->voxelCluster()->removeVoxel(voxel->gridCell());
     }
 }

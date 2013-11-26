@@ -46,10 +46,9 @@ private:
 	InputHandler m_inputHandler;
 	Camera m_camera;
     VoxelCluster m_testCluster;
-	VoxelCluster m_testClusterMoveable;
+	VoxelCluster *m_testClusterMoveable;
 	VoxelCluster *m_testClusterA, *m_testClusterB;
     Worldtree m_worldtree;
-    CollisionDetector m_collisionDetector;
 	std::unique_ptr<Skybox> m_skybox;
 	std::unique_ptr<HUD> m_hud;
 	std::unique_ptr<VoxelRenderer> m_voxelRenderer;

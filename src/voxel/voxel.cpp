@@ -64,3 +64,8 @@ void Voxel::applyDamage(float deltaHp) {
 void Voxel::onDestruction() {
     std::cout << "I'm voxel " << this << " and I'm going now. So long and thx 4 all the fish!" << std::endl;
 }
+
+glm::vec3 Voxel::position() const {
+    glm::vec3 cell = static_cast<glm::vec3>(m_gridCell);
+    return glm::vec3(m_voxelCluster->transform().matrix() * glm::vec4(cell, 1.0f));
+}
