@@ -17,5 +17,10 @@ public:
 
 protected:
     std::list<VoxelClusterOrphan*> m_voxelClusterOrphans;
+
+    std::set<Voxel*> m_potentialOrphans;
+
+    void fillPotentialOrphans(VoxelCluster *voxelCluster);
+    void removeNonOrphans(Voxel *voxel);
 };
 
