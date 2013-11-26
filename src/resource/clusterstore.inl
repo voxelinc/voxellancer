@@ -23,7 +23,7 @@ ClusterStore<T> *ClusterStore<T>::instance() {
 
 template <class T>
 T *ClusterStore<T>::create(const std::string& name) {
-    std::map<std::string, std::unique_ptr<T>>::iterator item = m_items.find(name);
+    auto item = m_items.find(name);
     T *cluster = nullptr;
     if (item == m_items.end()){
         cluster = new T();
