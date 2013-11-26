@@ -2,19 +2,18 @@
 
 #include <list>
 
-#include "voxel/voxelcluster.h"
-
+class PhysicalVoxelCluster;
 
 class GarbageCollector
 {
 public:
-    void check(std::list<VoxelCluster*> &modifiedVoxelClusters);
+    void check(std::list<PhysicalVoxelCluster*> &modifiedVoxelClusters);
    //void applyOnGarbageHooks();
 
-    std::list<VoxelCluster*> &garbageVoxelClusters();
+    std::list<PhysicalVoxelCluster*> &garbageVoxelClusters();
 
 
 protected:
-    std::list<VoxelCluster*> m_garbageVoxelClusters;
+    std::list<PhysicalVoxelCluster*> m_garbageVoxelClusters;
 };
 

@@ -2,28 +2,26 @@
 
 #include <list>
 
-#include "voxel/voxelcluster.h"
-
-
+class PhysicalVoxelCluster;
 class World;
 
 class God
 {
 public:
-    God();
+    God(World & world);
     virtual ~God();
 
-    std::list<VoxelCluster*> &voxelClusters();
+    std::list<PhysicalVoxelCluster*> &voxelClusters();
 
-    void scheduleSpawns(const std::list<VoxelCluster*> &spawns);
-    void scheduleRemovals(const std::list<VoxelCluster*> &removals);
+    void scheduleSpawns(const std::list<PhysicalVoxelCluster*> &spawns);
+    void scheduleRemovals(const std::list<PhysicalVoxelCluster*> &removals);
 
     void spawn();
     void remove();
 
-
 protected:
-    std::list<VoxelCluster*> m_voxelClusters;
-    std::list<VoxelCluster*> m_scheduledSpawns;
-    std::list<VoxelCluster*> m_scheduledRemovals;
+    World & m_world;
+    std::list<PhysicalVoxelCluster*> m_voxelClusters;
+    std::list<PhysicalVoxelCluster*> m_scheduledSpawns;
+    std::list<PhysicalVoxelCluster*> m_scheduledRemovals;
 };

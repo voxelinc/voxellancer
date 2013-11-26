@@ -13,7 +13,7 @@ public:
     PhysicalVoxelCluster(const PhysicalVoxelCluster & other);
     virtual ~PhysicalVoxelCluster();
 
-    virtual void update(float delta_sec) override;
+    std::list<Collision> &move(float delta_sec);
     
     void accelerate(glm::vec3 direction);
     void accelerate_angular(glm::vec3 axis);
@@ -26,7 +26,7 @@ public:
 protected:
     void calculateMassAndCenter();
 
-    void handleCollision(const Collision & c, float delta_sec);
+    void handleCollision(Collision & c, float delta_sec);
     void applyTransform();
     void doSteppedTransform();
     float calculateStepCount(const WorldTransform & oldTransform, const WorldTransform & newTransform);
@@ -34,7 +34,7 @@ protected:
 
 private:
     float m_mass;
-    bool m_mass_valid;
+    bool m_massValid;
 
 
     WorldTransform m_oldTransform;

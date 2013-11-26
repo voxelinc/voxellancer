@@ -1,14 +1,14 @@
 #include "wrecker.h"
 
-void Wrecker::detectWreckages(std::list<VoxelCluster*> &modifiedVoxelClusters) {
+void Wrecker::detectWreckages(std::list<PhysicalVoxelCluster*> &modifiedVoxelClusters) {
     m_wreckages.clear();
 }
 
-std::list<VoxelCluster*> &Wrecker::wreckages() {
+std::list<PhysicalVoxelCluster*> &Wrecker::wreckages() {
     return m_wreckages;
 }
 
 
-std::list<VoxelCluster*> &Wrecker::recycled() {
+std::list<PhysicalVoxelCluster*> &Wrecker::recycled() {
     return m_recycled;
 }

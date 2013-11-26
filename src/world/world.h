@@ -1,8 +1,9 @@
 #pragma once
+#include <memory>
 
-#include "worldtree/worldtree.h"
-
-#include "worldlogic.h"
+class WorldLogic;
+class Worldtree;
+class God;
 
 
 class World
@@ -24,9 +25,10 @@ public:
 protected:
     static World *s_instance;
 
-    Worldtree m_worldtree;
-    WorldLogic m_worldLogic;
-    God m_god;
+    std::unique_ptr<Worldtree> m_worldtree;
+    std::unique_ptr<WorldLogic> m_worldLogic;
+    std::unique_ptr<God> m_god;
+
     float m_deltaSecs;
 };
 

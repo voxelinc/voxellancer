@@ -11,14 +11,17 @@
 #include "wrecker.h"
 #include "voxelhangman.h"
 
+class World;
 
 class WorldLogic
 {
 public:
+    WorldLogic(World & world);
     void update(float deltaSecs);
 
 
 protected:
+    World & m_world;
     Mover m_mover;
     Damager m_damager;
     DamageForwarder m_damageForwarder;

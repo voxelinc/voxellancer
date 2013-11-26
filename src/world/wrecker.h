@@ -2,19 +2,19 @@
 
 #include <list>
 
-#include "voxel/voxelcluster.h"
+class PhysicalVoxelCluster;
 
 
 class Wrecker
 {
 public:
-    void detectWreckages(std::list<VoxelCluster*> &modifiedVoxelClusters);
+    void detectWreckages(std::list<PhysicalVoxelCluster*> &modifiedVoxelClusters);
     //void applyOnWreckageHooks();
-    std::list<VoxelCluster*> &wreckages();
-    std::list<VoxelCluster*> &recycled();
+    std::list<PhysicalVoxelCluster*> &wreckages();
+    std::list<PhysicalVoxelCluster*> &recycled();
 
 protected:
-    std::list<VoxelCluster*> m_wreckages;
-    std::list<VoxelCluster*> m_recycled;
+    std::list<PhysicalVoxelCluster*> m_wreckages;
+    std::list<PhysicalVoxelCluster*> m_recycled;
 };
 

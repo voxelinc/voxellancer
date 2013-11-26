@@ -66,7 +66,7 @@ Sphere VoxelCluster::sphere() {
 Sphere VoxelCluster::sphere(const WorldTransform & transform) {
     Sphere sphere;
     sphere.setPosition(transform.applyTo(glm::vec3(0)));
-    // m_aabb only contains the center of each voxel so add sqrt(2)
+    // m_aabb only contains the center of each voxel so add sqrt(2) to add the distance from center to edge
     sphere.setRadius((glm::length(glm::vec3(m_aabb.rub() - m_aabb.llf())) + glm::root_two<float>()) / 2.f * transform.scale());
     return sphere;
 }
@@ -80,13 +80,7 @@ VoxelRenderData * VoxelCluster::voxelRenderData() {
     return &m_voxelRenderData;
 }
 
-
-void VoxelCluster::update(float delta_sec) {
-
-}
-
 void VoxelCluster::finishInitialization() {
 
 }
-
 

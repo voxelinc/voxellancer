@@ -1,16 +1,18 @@
 #pragma once
 
-#include "voxelclusterorphan.h"
+#include <list>
 
+class VoxelClusterOrphan;
+class PhysicalVoxelCluster;
 
 class Splitter
 {
 public:
     void split(std::list<VoxelClusterOrphan*> &voxelClusterOrphans);
-    std::list<VoxelCluster*> &splitOffVoxelClusters();
+    std::list<PhysicalVoxelCluster*> &splitOffVoxelClusters();
 
 
 protected:
-    std::list<VoxelCluster*> m_splitOffVoxelClusters;
+    std::list<PhysicalVoxelCluster*> m_splitOffVoxelClusters;
 };
 

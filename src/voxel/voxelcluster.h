@@ -26,8 +26,6 @@ public:
 	VoxelCluster(const VoxelCluster& other);
     virtual ~VoxelCluster();
 
-    virtual void update(float delta_sec);
-
     AABB aabb();
     Sphere sphere();
 

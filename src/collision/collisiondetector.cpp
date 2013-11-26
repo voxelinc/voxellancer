@@ -20,7 +20,7 @@ CollisionDetector::~CollisionDetector() {
 
 }
 
-const std::list<Collision> &CollisionDetector::checkCollisions() {
+std::list<Collision> &CollisionDetector::checkCollisions() {
     assert(m_voxelcluster.geode() != nullptr);
 
     m_collisions.clear();
@@ -76,7 +76,7 @@ void CollisionDetector::checkCollisions(VoxeltreeNode* nodeA, VoxeltreeNode* nod
     }
 }
 
-const std::list<Collision> & CollisionDetector::lastCollisions() const {
+std::list<Collision> & CollisionDetector::lastCollisions() {
     return m_collisions;
 }
 

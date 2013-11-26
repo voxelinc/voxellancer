@@ -1,11 +1,10 @@
 #pragma once
 
 #include <list>
-
-#include "voxel/voxelcluster.h"
-
 #include "voxelimpact.h"
 
+
+class VoxelCluster;
 
 class VoxelClusterImpact
 {

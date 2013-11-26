@@ -30,17 +30,10 @@ const Voxel *Collision::voxelB() const {
     return m_voxelB;
 }
 
-const WorldTreeVoxelCluster * Collision::voxelClusterA() const {
-    return m_voxelClusterA;
-}
-
 WorldTreeVoxelCluster * Collision::voxelClusterA() {
     return m_voxelClusterA;
 }
 
-const WorldTreeVoxelCluster * Collision::voxelClusterB() const {
-    return m_voxelClusterB;
-}
 WorldTreeVoxelCluster * Collision::voxelClusterB() {
     return m_voxelClusterB;
 }

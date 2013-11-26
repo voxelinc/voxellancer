@@ -15,8 +15,8 @@ public:
     CollisionDetector(Worldtree &worldtree, WorldTreeVoxelCluster &voxelcluster);
     virtual ~CollisionDetector();
 
-    const std::list<Collision> &checkCollisions();
-    const std::list<Collision> &lastCollisions() const;
+    std::list<Collision> &checkCollisions();
+    std::list<Collision> &lastCollisions();
     void reset();
 
 protected:

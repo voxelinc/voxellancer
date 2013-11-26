@@ -10,10 +10,8 @@ public:
     Collision(Voxel *voxelA, Voxel *voxelB, WorldTreeVoxelCluster * voxelClusterA, WorldTreeVoxelCluster * voxelClusterB);
     virtual ~Collision();
 
-    const WorldTreeVoxelCluster * voxelClusterA() const;
     WorldTreeVoxelCluster * voxelClusterA();
     
-    const WorldTreeVoxelCluster * voxelClusterB() const;
     WorldTreeVoxelCluster * voxelClusterB();
 
     Voxel *voxelA();

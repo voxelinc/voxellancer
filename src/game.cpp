@@ -131,10 +131,10 @@ void Game::update(float delta_sec)
 	m_inputHandler.update(delta_sec);
 
     // TODO: use god instead
-    m_testCluster.update(delta_sec);
-    m_testClusterA->update(delta_sec);
-    m_testClusterB->update(delta_sec);
-    m_testClusterMoveable.update(delta_sec);
+    m_testCluster.move(delta_sec);
+    m_testClusterA->move(delta_sec);
+    m_testClusterB->move(delta_sec);
+    m_testClusterMoveable.move(delta_sec);
 
 	m_hud->update(delta_sec);
 }
