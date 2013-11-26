@@ -6,13 +6,13 @@
 
 
 
-InputHandler::InputHandler(GLFWwindow *window, Camera *camera, PhysicalVoxelCluster *voxelcluster):
+InputHandler::InputHandler(GLFWwindow *window, Camera *camera):
 	m_window(window),
 	m_camera(camera),
-	m_voxelcluster(voxelcluster),
 	m_rotation_speed("input.rotation_speed"),
     m_move_speed("input.move_speed"),
-    m_roll_speed("input.roll_speed")
+    m_roll_speed("input.roll_speed"),
+    m_voxelcluster(nullptr)
 {
 
 	glfwGetWindowSize(m_window, &m_windowWidth, &m_windowHeight);
@@ -157,4 +157,8 @@ void InputHandler::toggleControls()
 		glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 	}
 	m_fpsControls = !m_fpsControls;
+}
+
+void InputHandler::setVoxelCluster(PhysicalVoxelCluster *voxelcluster) {
+    m_voxelcluster = voxelcluster;
 }

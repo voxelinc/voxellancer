@@ -5,7 +5,7 @@
 
 
 typedef glm::detail::tvec3<unsigned char> cvec3;
-
+ 
 struct VoxelHash
 {
     std::size_t operator()(const cvec3& v) const {

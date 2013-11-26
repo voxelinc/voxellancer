@@ -14,8 +14,10 @@ class PhysicalVoxelCluster;
 
 class InputHandler {
 public:
-    InputHandler(GLFWwindow *window, Camera *camera, PhysicalVoxelCluster *voxelcluster);
+    InputHandler(GLFWwindow *window, Camera *camera);
 	virtual ~InputHandler();
+
+    void setVoxelCluster(PhysicalVoxelCluster *voxelcluster);
 
 	void resizeEvent(const unsigned int width, const unsigned int height);
 	void keyCallback(int key, int scancode, int action, int mods);

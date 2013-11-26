@@ -3,12 +3,14 @@
 #include "voxel/voxelrenderer.h"
 #include "resource/clusterstore.h"
 #include "ui/hudelement.h"
+#include "world/world.h"
+#include "world/god.h"
+#include "world/physicalvoxelcluster.h"
 
-HUD::HUD(std::list<VoxelCluster*> ships) :
+HUD::HUD() :
 m_gamecamera(0),
 m_rendercamera(),
 m_lastgamecamera(),
-m_ships(ships),
 m_shiparrow(),
 m_delta_sec_remain(0),
 m_framerate(0),
@@ -140,7 +142,7 @@ void HUD::draw(){
 
     // draw ship arrows
     int i = 0;
-    for (VoxelCluster *ship : m_ships){
+    for (VoxelCluster *ship : World::instance()->god().voxelClusters()){
         if (glm::length(ship->transform().position() - m_hudcamera.position()) < m_arrow_maxdistance){
             // delta is the vector from virtual HUD camera to the ship
             glm::vec3 delta = glm::inverse(m_hudcamera.orientation()) * (ship->transform().position() - m_hudcamera.position());

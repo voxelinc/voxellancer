@@ -9,16 +9,13 @@
 
 #include <GLFW/glfw3.h>
 
-#include "worldtree/worldtree.h"
-#include "collision/collisiondetector.h"
-#include "world/physicalvoxelcluster.h"
 #include "camera.h"
 #include "ui/inputhandler.h"
 
 
-
 class HUD;
 class Skybox;
+class World;
 class InputHandler;
 class VoxelRenderer;
 class HD3000Dummy;
@@ -45,10 +42,7 @@ private:
 	GLFWwindow *m_window;
 	InputHandler m_inputHandler;
 	Camera m_camera;
-    PhysicalVoxelCluster m_testCluster;
-    PhysicalVoxelCluster m_testClusterMoveable;
-    PhysicalVoxelCluster *m_testClusterA, *m_testClusterB;
-    Worldtree m_worldtree;
+    World * m_world;
 	std::unique_ptr<Skybox> m_skybox;
 	std::unique_ptr<HUD> m_hud;
 	std::unique_ptr<VoxelRenderer> m_voxelRenderer;
