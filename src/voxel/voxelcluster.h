@@ -44,6 +44,8 @@ public:
     void addVoxel(const Voxel &voxel);
     void removeVoxel(const cvec3 &position);
 
+    const Voxel *crucialVoxel() const;
+
     VoxelRenderData *voxelRenderData();
     const std::unordered_map<cvec3, Voxel, VoxelHash> & voxel() const;
 
