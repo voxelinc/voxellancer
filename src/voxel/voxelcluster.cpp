@@ -22,6 +22,9 @@ VoxelCluster::VoxelCluster(glm::vec3 center, float scale):
 }
 
 VoxelCluster::~VoxelCluster() {
+    for (std::pair<const cvec3, Voxel*> &element : m_voxels){
+        delete element.second;
+    }
     //TODO: all the cleanup?
 }
 

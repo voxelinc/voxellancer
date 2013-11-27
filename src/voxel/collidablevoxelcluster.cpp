@@ -13,7 +13,6 @@ CollidableVoxelCluster::CollidableVoxelCluster(glm::vec3 center, float scale) :
 }
 
 CollidableVoxelCluster::~CollidableVoxelCluster() {
-    //TODO: all the cleanup?
 }
 
 void CollidableVoxelCluster::addVoxel(Voxel *voxel) {
