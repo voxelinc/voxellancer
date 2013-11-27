@@ -6,7 +6,7 @@
 #include <glm/glm.hpp>
 
 #include "voxel/voxeltreenode.h"
-#include "worldtree/worldtreecluster.h"
+#include "voxel/collidablevoxelcluster.h"
 
 #include "utils/tostring.h"
 #include "../bandit_extension/vec3helper.h"

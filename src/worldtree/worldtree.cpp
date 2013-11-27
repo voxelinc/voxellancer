@@ -16,7 +16,7 @@ Worldtree::~Worldtree() {
 
 }
 
-WorldtreeGeode *Worldtree::insert(WorldObject *voxelcluster) {
+WorldtreeGeode *Worldtree::insert(CollidableVoxelCluster *voxelcluster) {
     WorldtreeGeode *geode = new WorldtreeGeode(voxelcluster);
     WorldtreeNode::insert(geode);
     voxelcluster->setWorldTree(this);

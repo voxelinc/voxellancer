@@ -7,7 +7,7 @@
 
 #include "worldtreenode.h"
 
-class WorldObject;
+class CollidableVoxelCluster;
 
 class Worldtree : public WorldtreeNode
 {
@@ -15,7 +15,7 @@ public:
     Worldtree();
     virtual ~Worldtree();
 
-    WorldtreeGeode *insert(WorldObject *voxelcluster);
+    WorldtreeGeode *insert(CollidableVoxelCluster *voxelcluster);
 
     std::set<WorldtreeGeode*> geodesInAABB(const AABB &aabb) const;
     std::set<WorldtreeGeode*> geodesInAABB(const AABB &aabb, WorldtreeNode *nodeHint) const;

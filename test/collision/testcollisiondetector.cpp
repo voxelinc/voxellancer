@@ -5,8 +5,8 @@
 #include "geometry/aabb.h"
 #include "worldtree/worldtree.h"
 #include "voxel/voxel.h"
+#include "voxel/collidablevoxelcluster.h"
 #include "collision/collisiondetector.h"
-#include "worldtree/worldtreecluster.h"
 
 
 

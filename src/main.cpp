@@ -137,9 +137,7 @@ int main(void)
 #else
 	glfwSwapInterval(1);
 #endif
-#ifdef NDEBUG
 	try {
-#endif
 		PropertyManager::instance()->load("data/config.ini");
 
 		game = new Game(window);
@@ -164,7 +162,6 @@ int main(void)
 		delete game;
 		glfwDestroyWindow(window);
 		glfwTerminate();
-#ifdef NDEBUG
 	}
 	catch (std::exception &e){
 		glfwDestroyWindow(window);
@@ -173,7 +170,6 @@ int main(void)
 		std::cout << "Hit enter to quit" << std::endl;
 		std::cin.ignore(1, '\n');
 	}
-#endif
     return 0;
 }
 

@@ -31,11 +31,11 @@ public:
     WorldTransform &transform();
     const WorldTransform &transform() const;
 
+    Voxel * voxel(cvec3 position);
     virtual void addVoxel(Voxel *voxel);
     virtual void removeVoxel(const cvec3 &position);
 
     VoxelRenderData *voxelRenderData();
-    const std::unordered_map<cvec3, Voxel*, VoxelHash> & voxel() const;
 
     virtual void finishInitialization();
 
@@ -44,11 +44,10 @@ protected:
     
     AABB aabb(const WorldTransform & transform);
     Sphere sphere(const WorldTransform & transform);
-
     WorldTransform m_transform;
     VoxelRenderData m_voxelRenderData;
 
-    std::unordered_map<cvec3, Voxel*, VoxelHash> m_voxel;
+    std::unordered_map<cvec3, Voxel*> m_voxel;
     CAABB m_aabb;
 };
 

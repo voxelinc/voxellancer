@@ -16,7 +16,7 @@
 
 VoxelCluster::VoxelCluster(glm::vec3 center, float scale): 
     m_voxel(),
-    m_voxelRenderData(this),
+    m_voxelRenderData(m_voxel),
     m_transform(center, scale)
 {
 }
@@ -63,16 +63,15 @@ Sphere VoxelCluster::sphere(const WorldTransform & transform) {
     return sphere;
 }
 
-
-const std::unordered_map<cvec3, Voxel*, VoxelHash> &VoxelCluster::voxel() const{
-    return m_voxel;
-}
-
 VoxelRenderData * VoxelCluster::voxelRenderData() {
     return &m_voxelRenderData;
 }
 
 void VoxelCluster::finishInitialization() {
 
+}
+
+Voxel * VoxelCluster::voxel(cvec3 position) {
+    return m_voxel[position];
 }
 

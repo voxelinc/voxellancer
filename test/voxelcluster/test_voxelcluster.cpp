@@ -24,10 +24,10 @@ go_bandit([](){
 
         it("can add/remove voxel", [&]() {
             cluster->addVoxel(new Voxel(cvec3(1, 2, 3), cvec3(255, 128, 0)));
-            AssertThat(cluster->voxel().size(), Equals(1));
+            AssertThat(cluster->voxel(cvec3(1, 2, 3)) != nullptr, Equals(true));
 
             cluster->removeVoxel(cvec3(1, 2, 3));
-            AssertThat(cluster->voxel().size(), Equals(0));
+            AssertThat(cluster->voxel(cvec3(1, 2, 3)) == nullptr, Equals(true));
         });
 
         it("test generate texture", [&]() {
@@ -44,7 +44,7 @@ go_bandit([](){
     });
     describe("voxel hasher", []() {
         it("can hash cvec3", [&]() {
-            VoxelHash hash;
+            std::hash<cvec3> hash;
             AssertThat(hash(cvec3(0, 0, 0)), Equals(0));
             AssertThat(hash(cvec3(1, 0, 0)), Equals(1));
             AssertThat(hash(cvec3(0, 1, 0)), Equals(256));
@@ -57,7 +57,6 @@ go_bandit([](){
             AssertThat(hash(cvec3(1, 0, 0)), !Equals(hash(cvec3(0, -1, 0))));
             AssertThat(hash(cvec3(1, 0, 0)), !Equals(hash(cvec3(0, 0, 1))));
             AssertThat(hash(cvec3(0, 1, 0)), !Equals(hash(cvec3(0, 0, 1))));
-
         });
     });
 });
