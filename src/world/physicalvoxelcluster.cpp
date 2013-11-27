@@ -16,7 +16,7 @@ PhysicalVoxelCluster::PhysicalVoxelCluster(float scale) :
     m_angularDampening("physics.globalangulardampening"),
     m_rotationFactor("physics.globalrotationfactor"),
     m_mass(0),
-    m_massValid(1)
+    m_massValid(true)
 {
 
 }
@@ -54,9 +54,9 @@ void PhysicalVoxelCluster::calculateMassAndCenter() {
     glm::vec3 center;
     m_mass = 0;
     for (auto pair : m_voxel) {
-        Voxel voxel = pair.second;
+        Voxel *voxel = pair.second;
         m_mass += 1.0; // voxel.mass?
-        center += glm::vec3(voxel.gridCell()) * 1.0f; // voxel.mass?
+        center += glm::vec3(voxel->gridCell()) * 1.0f; // voxel.mass?
     }
     center /= m_mass;
     m_transform.setCenter(center);
@@ -102,6 +102,9 @@ void PhysicalVoxelCluster::handleCollision(Collision & c, float delta_sec) {
     // or you removed Voxels... this case is not handled yet.
     assert(p1->m_massValid);
     assert(p2->m_massValid);
+    
+    assert(p1->m_mass > 0);
+    assert(p2->m_mass > 0);
 
     glm::vec3 normal = glm::normalize(p1->m_transform.applyTo(glm::vec3(c.voxelA()->gridCell())) - p2->m_transform.applyTo(glm::vec3(c.voxelB()->gridCell())));
 
@@ -191,14 +194,16 @@ void PhysicalVoxelCluster::accelerate_angular(glm::vec3 axis) {
     m_angularAcceleration += axis;
 }
 
-void PhysicalVoxelCluster::addVoxel(const Voxel & voxel) {
+void PhysicalVoxelCluster::addVoxel(Voxel *voxel) {
     WorldTreeVoxelCluster::addVoxel(voxel);
+    voxel->setVoxelCluster(this);
     m_massValid = false;
     // same as remove Voxel
 }
 
 void PhysicalVoxelCluster::removeVoxel(const cvec3 &position) {
     WorldTreeVoxelCluster::removeVoxel(position);
+    //TODO: set the voxel's cluster pointer to null?
     m_massValid = false;
     // it would be better to calculate incremental mass/center changes here
     // something like mass -= 1; center -= 1/mass * pos; center /= (mass-1)/mass; should work

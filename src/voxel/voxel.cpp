@@ -5,15 +5,15 @@
 #include "voxelcluster.h"
 
 
-Voxel::Voxel(VoxelCluster *voxelCluster):
-    m_voxelCluster(voxelCluster),
+Voxel::Voxel():
+    m_voxelCluster(nullptr),
     m_gridCell(0, 0, 0),
     m_color(1, 0, 1)
 {
 }
 
-Voxel::Voxel(cvec3 gridCell, cvec3 color, VoxelCluster *voxelCluster):
-    m_voxelCluster(voxelCluster),
+Voxel::Voxel(cvec3 gridCell, cvec3 color):
+    m_voxelCluster(nullptr),
     m_gridCell(gridCell),
     m_color(color)
 {
@@ -24,13 +24,13 @@ Voxel::~Voxel() {
 
 }
 
-//VoxelCluster *Voxel::voxelCluster() {
-//    return m_voxelCluster;
-//}
-//
-//const VoxelCluster *Voxel::voxelCluster() const {
-//    return m_voxelCluster;
-//}
+VoxelCluster *Voxel::voxelCluster() {
+    return m_voxelCluster;
+}
+
+void Voxel::setVoxelCluster(VoxelCluster *cluster){
+    m_voxelCluster = cluster;
+}
 
 const cvec3 &Voxel::gridCell() const {
     return m_gridCell;

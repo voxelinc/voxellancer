@@ -18,7 +18,7 @@ public:
     void accelerate(glm::vec3 direction);
     void accelerate_angular(glm::vec3 axis);
 
-    virtual void addVoxel(const Voxel & voxel);
+    virtual void addVoxel(Voxel *voxel);
     virtual void removeVoxel(const cvec3 &position);
 
     virtual void finishInitialization();

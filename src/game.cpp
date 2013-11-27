@@ -22,7 +22,7 @@
 #include <fmod_errors.h>
 
 #include "property/propertymanager.h"
-#include "resource/clusterstore.h"
+#include "resource/clustercache.h"
 #include "utils/hd3000dummy.h"
 #include "utils/linuxvmdummy.h"
 #include "ui/inputhandler.h"
@@ -71,42 +71,45 @@ void Game::initialize()
 
     PhysicalVoxelCluster *m_testCluster = new PhysicalVoxelCluster();
     m_testCluster->transform().move(glm::vec3(0, 0, 0));
-    m_testCluster->addVoxel(Voxel(cvec3(1, 0, 0), cvec3(0, 255, 0), m_testCluster));
-    m_testCluster->addVoxel(Voxel(cvec3(2, 0, 0), cvec3(255, 255, 0), m_testCluster));
-    m_testCluster->addVoxel(Voxel(cvec3(1, 1, 0), cvec3(0, 0, 255), m_testCluster));
-    m_testCluster->addVoxel(Voxel(cvec3(1, 0, 1), cvec3(255, 0, 0), m_testCluster));
-    m_testCluster->addVoxel(Voxel(cvec3(0, 0, 0), cvec3(255, 0, 128), m_testCluster));
+    m_testCluster->addVoxel(new Voxel(cvec3(1, 0, 0), cvec3(0, 255, 0)));
+    m_testCluster->addVoxel(new Voxel(cvec3(2, 0, 0), cvec3(255, 255, 0)));
+    m_testCluster->addVoxel(new Voxel(cvec3(1, 1, 0), cvec3(0, 0, 255)));
+    m_testCluster->addVoxel(new Voxel(cvec3(1, 0, 1), cvec3(255, 0, 0)));
+    m_testCluster->addVoxel(new Voxel(cvec3(0, 0, 0), cvec3(255, 0, 128)));
     m_testCluster->finishInitialization();
     m_world->god().scheduleSpawn(m_testCluster);
     
     PhysicalVoxelCluster *m_testClusterMoveable = new PhysicalVoxelCluster();
     m_testClusterMoveable->transform().move(glm::vec3(-20, 0, 0));
     m_testClusterMoveable->transform().rotate(glm::angleAxis(-90.f, glm::vec3(0, 1, 0)));
-    m_testClusterMoveable->addVoxel(Voxel(cvec3(0, 0, 7), cvec3(0, 255, 0), m_testClusterMoveable));
-    m_testClusterMoveable->addVoxel(Voxel(cvec3(0, 0, 6), cvec3(255, 255, 0), m_testClusterMoveable));
-    m_testClusterMoveable->addVoxel(Voxel(cvec3(0, 0, 5), cvec3(255, 255, 0), m_testClusterMoveable));
-    m_testClusterMoveable->addVoxel(Voxel(cvec3(0, 0, 4), cvec3(255, 255, 0), m_testClusterMoveable));
-    m_testClusterMoveable->addVoxel(Voxel(cvec3(0, 0, 3), cvec3(255, 255, 0), m_testClusterMoveable));
-    m_testClusterMoveable->addVoxel(Voxel(cvec3(0, 0, 2), cvec3(255, 255, 0), m_testClusterMoveable));
-    m_testClusterMoveable->addVoxel(Voxel(cvec3(0, 0, 1), cvec3(255, 255, 0), m_testClusterMoveable));
-    m_testClusterMoveable->addVoxel(Voxel(cvec3(1, 1, 7), cvec3(0, 0, 255), m_testClusterMoveable));
-    m_testClusterMoveable->addVoxel(Voxel(cvec3(1, 0, 7), cvec3(255, 0, 0), m_testClusterMoveable));
-    m_testClusterMoveable->addVoxel(Voxel(cvec3(0, 0, 8), cvec3(255, 0, 128), m_testClusterMoveable));
+    m_testClusterMoveable->addVoxel(new Voxel(cvec3(0, 0, 7), cvec3(0, 255, 0)));
+    m_testClusterMoveable->addVoxel(new Voxel(cvec3(0, 0, 6), cvec3(255, 255, 0)));
+    m_testClusterMoveable->addVoxel(new Voxel(cvec3(0, 0, 5), cvec3(255, 255, 0)));
+    m_testClusterMoveable->addVoxel(new Voxel(cvec3(0, 0, 4), cvec3(255, 255, 0)));
+    m_testClusterMoveable->addVoxel(new Voxel(cvec3(0, 0, 3), cvec3(255, 255, 0)));
+    m_testClusterMoveable->addVoxel(new Voxel(cvec3(0, 0, 2), cvec3(255, 255, 0)));
+    m_testClusterMoveable->addVoxel(new Voxel(cvec3(0, 0, 1), cvec3(255, 255, 0)));
+    m_testClusterMoveable->addVoxel(new Voxel(cvec3(1, 1, 7), cvec3(0, 0, 255)));
+    m_testClusterMoveable->addVoxel(new Voxel(cvec3(1, 0, 7), cvec3(255, 0, 0)));
+    m_testClusterMoveable->addVoxel(new Voxel(cvec3(0, 0, 8), cvec3(255, 0, 128)));
     m_testClusterMoveable->finishInitialization();
     m_world->god().scheduleSpawn(m_testClusterMoveable);
 
     m_inputHandler.setVoxelCluster(m_testClusterMoveable);
 
-    PhysicalVoxelCluster *m_testClusterA = ClusterStore<PhysicalVoxelCluster>::instance()->create("data/voxelcluster/basicship.csv");
-	m_testClusterA->transform().setCenter(glm::vec3(3, 0, 3));
+    PhysicalVoxelCluster *m_testClusterA = new PhysicalVoxelCluster();
+    ClusterCache::instance()->fillCluster(m_testClusterA, "data/voxelcluster/basicship.csv");
+	m_testClusterA->transform().setCenter(glm::vec3(3, 0, 3)); // TODO: shouldnt center == centerofmass ?
 	m_testClusterA->transform().setPosition(glm::vec3(0, 0, -10));
 	m_testClusterA->removeVoxel(cvec3(3, 2, 3)); // this verifies the objects are different
-    m_testClusterA->finishInitialization(); // only called because mass was changed
+    m_testClusterA->finishInitialization();
     m_world->god().scheduleSpawn(m_testClusterA);
 
-    PhysicalVoxelCluster *m_testClusterB = ClusterStore<PhysicalVoxelCluster>::instance()->create("data/voxelcluster/basicship.csv");
+    PhysicalVoxelCluster *m_testClusterB = new PhysicalVoxelCluster();
+    ClusterCache::instance()->fillCluster(m_testClusterB, "data/voxelcluster/basicship.csv");
 	m_testClusterB->transform().setCenter(glm::vec3(3, 0, 3));
-	m_testClusterB->transform().setPosition(glm::vec3(0, 0, 10));
+    m_testClusterB->transform().setPosition(glm::vec3(0, 0, 10));
+    m_testClusterB->finishInitialization();
     m_world->god().scheduleSpawn(m_testClusterB);
 
 
