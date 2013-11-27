@@ -2,7 +2,7 @@
 #include "god.h"
 #include "collision/collisiondetector.h"
 #include "world.h"
-#include "worldTree/worldTree.h"
+#include "worldtree/worldtree.h"
 #include "utils/tostring.h"
 #include "worldobject.h"
 

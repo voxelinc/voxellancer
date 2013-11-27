@@ -1,7 +1,7 @@
 #include "world.h"
 
 #include "god.h"
-#include "worldTree/worldtree.h"
+#include "worldtree/worldtree.h"
 #include "worldlogic.h"
 
 World *World::s_instance = nullptr;

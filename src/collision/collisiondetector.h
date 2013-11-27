@@ -2,7 +2,7 @@
 
 #include <list>
 
-#include "worldTree/worldtree.h"
+#include "worldtree/worldtree.h"
 
 #include "collision.h"
 

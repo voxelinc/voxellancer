@@ -5,7 +5,7 @@
 
 #include "../geometry/aabb.h"
 
-#include "worldTreenode.h"
+#include "worldtreenode.h"
 
 class CollidableVoxelCluster;
 

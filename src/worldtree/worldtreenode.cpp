@@ -1,4 +1,4 @@
-#include "worldTreenode.h"
+#include "worldtreenode.h"
 
 #include <assert.h>
 #include <algorithm>

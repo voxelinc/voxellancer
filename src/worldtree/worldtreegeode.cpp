@@ -1,6 +1,6 @@
 #include "worldTreegeode.h"
 
-#include "worldTreenode.h"
+#include "worldtreenode.h"
 #include "voxel/collidablevoxelcluster.h"
 
 
