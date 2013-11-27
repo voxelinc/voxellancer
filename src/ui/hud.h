@@ -40,7 +40,7 @@ protected:
     void loadFont(const std::string& identifier, glm::vec3 offset, std::map<char, std::unique_ptr<VoxelCluster>> *map);
     void loadFonts();
 
-    void stepAnim(glm::vec3 targetpos, glm::quat targetor);
+    void stepAnim(glm::vec3 targetPosition, glm::quat targetOrientation);
 
     void drawString(std::string text, HUDOffsetOrigin origin, glm::vec3 offset, HUDFontSize size = s3x5, float scale = 1.f, HUDFontAlign align = aLeft);
     void adjustPosition(VoxelCluster *cluster, HUDOffsetOrigin origin, glm::vec3 offset);

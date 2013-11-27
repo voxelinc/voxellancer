@@ -95,25 +95,33 @@ Camera *HUD::camera(){
     return m_gamecamera;
 }
 
-void HUD::stepAnim(glm::vec3 targetpos, glm::quat targetor){
-    m_hudcamera.setOrientation(glm::mix(m_hudcamera.orientation(), targetor, glm::min((1.0f / m_inertia_rate) * m_inertia_rotate, 1.0f)));
-    m_hudcamera.setPosition(glm::mix(m_hudcamera.position(), targetpos, glm::min((1.0f / m_inertia_rate) * m_inertia_move, 1.0f)));
+void HUD::stepAnim(glm::vec3 targetPosition, glm::quat targetOrientation){
+    // Interpolate between current and target orientation in steps of inertia_rate with inertia multiplier
+    m_hudcamera.setOrientation(glm::mix(m_hudcamera.orientation(), targetOrientation, glm::min((1.0f / m_inertia_rate) * m_inertia_rotate, 1.0f)));
+    m_hudcamera.setPosition(glm::mix(m_hudcamera.position(), targetPosition, glm::min((1.0f / m_inertia_rate) * m_inertia_move, 1.0f)));
 }
 
 void HUD::update(float delta_sec){
+    // For a smooth movement we need to simulate 1/inertia_rate "hud steps" per second
     double total = delta_sec + m_delta_sec_remain;
     double progress = 0.0;
 	double steptime = 1.0 / m_inertia_rate;
-	while (total - progress > steptime){
-		float rate = (float) (progress / total);
+    // progress steps in steptime from 0 to total, rate is the percentage
+    while (total - progress > steptime){
+        float rate = (float)(progress / total);
+        // interpolate algorithm inputs to simluate "missed frames" or hud steps
+        // to be as independent of framerate and especially regularity of frame times
+        // this assumes the input was constant contious within time from the last frame to now
         stepAnim(glm::mix(m_lastgamecamera.position(), m_gamecamera->position(), rate),
             glm::mix(m_lastgamecamera.orientation(), m_gamecamera->orientation(), rate));
 		progress += steptime;
     }
     m_delta_sec_remain = total - progress;
-    m_lastgamecamera.setOrientation(m_gamecamera->orientation());
-    m_lastgamecamera.setPosition(m_gamecamera->position());
 
+    m_lastgamecamera.setOrientation(glm::mix(m_lastgamecamera.orientation(), m_gamecamera->orientation(), (float)(progress / total)));
+    m_lastgamecamera.setPosition(glm::mix(m_lastgamecamera.position(), m_gamecamera->position(), (float)(progress / total)));
+
+    // framerate measurement
     float thisframe = 1.0f / delta_sec;
     if (thisframe < 1.0f || thisframe > 9999.0f) m_framerate = 0.0f;
     else m_framerate = m_framerate * 0.8f + thisframe * 0.2f;
@@ -123,13 +131,16 @@ void HUD::draw(){
     assert(m_gamecamera != nullptr);
     glClear(GL_DEPTH_BUFFER_BIT);
 
+    // adjust positions of static hud elements if necessary
     if (m_rendercamera.aspectRatio() != m_gamecamera->aspectRatio() || m_rendercamera.fovy() != m_gamecamera->fovy()){
         adjustPositions();
     }
 
+    // the renderCamera reflects the difference between the virtual hudCamera and the real gameCamera in the HUD coordinate system
     m_rendercamera.setOrientation((glm::inverse(m_hudcamera.orientation()) * m_gamecamera->orientation()));
     m_rendercamera.setPosition(((m_gamecamera->position() - m_hudcamera.position()) * m_move_multiplier.get()) * m_hudcamera.orientation());
 
+    // the virtual voxel display resolution
     float dy = floor(glm::tan(glm::radians(m_rendercamera.fovy() / 2.0f)) * m_distance);
     float dx = m_rendercamera.aspectRatio()*dy;
 
