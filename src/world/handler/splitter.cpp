@@ -4,6 +4,6 @@ void Splitter::split(std::list<VoxelClusterOrphan*> &voxelClusterOrphans) {
 
 }
 
-std::list<PhysicalVoxelCluster*> &Splitter::splitOffVoxelClusters() {
+std::list<WorldObject*> &Splitter::splitOffVoxelClusters() {
     return m_splitOffVoxelClusters;
 }

@@ -1,18 +1,18 @@
 #pragma once
 
 
-class WorldTreeVoxelCluster;
+class CollidableVoxelCluster;
 class Voxel;
 
 class Collision
 {
 public:
-    Collision(Voxel *voxelA, Voxel *voxelB, WorldTreeVoxelCluster * voxelClusterA, WorldTreeVoxelCluster * voxelClusterB);
+    Collision(Voxel *voxelA, Voxel *voxelB, CollidableVoxelCluster * voxelClusterA, CollidableVoxelCluster * voxelClusterB);
     virtual ~Collision();
 
-    WorldTreeVoxelCluster * voxelClusterA();
+    CollidableVoxelCluster * voxelClusterA();
     
-    WorldTreeVoxelCluster * voxelClusterB();
+    CollidableVoxelCluster * voxelClusterB();
 
     Voxel *voxelA();
     const Voxel *voxelA() const;
@@ -23,7 +23,7 @@ public:
 protected:
     Voxel *m_voxelA;
     Voxel *m_voxelB;
-    WorldTreeVoxelCluster *m_voxelClusterA;
-    WorldTreeVoxelCluster *m_voxelClusterB;
+    CollidableVoxelCluster *m_voxelClusterA;
+    CollidableVoxelCluster *m_voxelClusterB;
 };
 

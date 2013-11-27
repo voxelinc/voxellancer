@@ -9,7 +9,7 @@
 #include "property/propertymanager.h"
 #include "property/property.h"
 
-class PhysicalVoxelCluster;
+class WorldObject;
 
 
 class InputHandler {
@@ -17,7 +17,7 @@ public:
     InputHandler(GLFWwindow *window, Camera *camera);
 	virtual ~InputHandler();
 
-    void setVoxelCluster(PhysicalVoxelCluster *voxelcluster);
+    void setVoxelCluster(WorldObject *voxelcluster);
 
 	void resizeEvent(const unsigned int width, const unsigned int height);
 	void keyCallback(int key, int scancode, int action, int mods);
@@ -26,7 +26,7 @@ public:
 protected:
 	GLFWwindow *m_window;
 	Camera* m_camera;
-    PhysicalVoxelCluster *m_voxelcluster;
+    WorldObject *m_voxelcluster;
 
 	int m_windowWidth, m_windowHeight;
 	int m_lastfocus;

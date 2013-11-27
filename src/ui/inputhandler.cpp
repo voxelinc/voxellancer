@@ -2,9 +2,7 @@
 
 #include <glm/glm.hpp>
 
-#include "world/physicalvoxelcluster.h"
-
-
+#include "world/worldobject.h"
 
 InputHandler::InputHandler(GLFWwindow *window, Camera *camera):
 	m_window(window),
@@ -159,6 +157,6 @@ void InputHandler::toggleControls()
 	m_fpsControls = !m_fpsControls;
 }
 
-void InputHandler::setVoxelCluster(PhysicalVoxelCluster *voxelcluster) {
+void InputHandler::setVoxelCluster(WorldObject *voxelcluster) {
     m_voxelcluster = voxelcluster;
 }

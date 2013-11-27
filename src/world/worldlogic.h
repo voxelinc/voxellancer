@@ -1,15 +1,15 @@
 #pragma once
 
-#include "mover.h"
-#include "damageforwarder.h"
-#include "damager.h"
-#include "impactaccumulator.h"
-#include "impactresolver.h"
-#include "splitdetector.h"
-#include "splitter.h"
-#include "garbagecollector.h"
-#include "wrecker.h"
-#include "voxelhangman.h"
+#include "handler/mover.h"
+#include "handler/damageforwarder.h"
+#include "handler/damager.h"
+#include "handler/impactaccumulator.h"
+#include "handler/impactresolver.h"
+#include "handler/splitdetector.h"
+#include "handler/splitter.h"
+#include "handler/garbagecollector.h"
+#include "handler/wrecker.h"
+#include "handler/voxelhangman.h"
 
 class World;
 

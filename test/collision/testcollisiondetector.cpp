@@ -16,14 +16,14 @@ using namespace bandit;
 go_bandit([](){
     describe("CollisionDetector", [](){
         Worldtree *worldtree;
-        WorldTreeVoxelCluster *a, *b;
+        CollidableVoxelCluster *a, *b;
         CollisionDetector *d;
 
 
         before_each([&](){
             worldtree = new Worldtree;
-            a = new WorldTreeVoxelCluster(); worldtree->insert(a);
-            b = new WorldTreeVoxelCluster(); worldtree->insert(b);
+            a = new CollidableVoxelCluster(); worldtree->insert(a);
+            b = new CollidableVoxelCluster(); worldtree->insert(b);
             d = new CollisionDetector(*worldtree, *a);
         });
 

@@ -5,7 +5,7 @@
 class WorldLogic;
 class Worldtree;
 class God;
-class PhysicalVoxelCluster;
+class WorldObject;
 
 class World
 {
@@ -16,7 +16,7 @@ public:
     WorldLogic &worldLogic();
     God &god();
     Worldtree &worldtree();
-    std::list<PhysicalVoxelCluster*> &clusters();
+    std::list<WorldObject*> &clusters();
 
     float deltaSecs() const;
 
@@ -30,7 +30,7 @@ protected:
     std::unique_ptr<Worldtree> m_worldtree;
     std::unique_ptr<WorldLogic> m_worldLogic;
     std::unique_ptr<God> m_god;
-    std::list<PhysicalVoxelCluster*> m_clusters;
+    std::list<WorldObject*> m_clusters;
 
     float m_deltaSecs;
 };

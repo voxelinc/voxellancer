@@ -1,10 +1,10 @@
 
 #include "god.h"
-#include "physicalvoxelcluster.h"
 #include "collision/collisiondetector.h"
 #include "world.h"
 #include "worldtree/worldtree.h"
 #include "utils/tostring.h"
+#include "worldobject.h"
 
 
 God::God(World & world): 
@@ -16,13 +16,13 @@ God::~God() {
 
 }
 
-void God::scheduleSpawn(PhysicalVoxelCluster *cluster) {
+void God::scheduleSpawn(WorldObject *cluster) {
     assert(cluster->geode() == nullptr);
     assert(cluster->worldTree() == nullptr);
     m_scheduledSpawns.push_back(cluster);
 }
 
-void God::scheduleSpawns(const std::list<PhysicalVoxelCluster*> &spawns) {
+void God::scheduleSpawns(const std::list<WorldObject*> &spawns) {
 #ifndef NDEBUG // only spawn things that aren't in a worldtree
     for (PhysicalVoxelCluster* cluster : spawns){
         assert(cluster->geode() == nullptr);
@@ -32,15 +32,15 @@ void God::scheduleSpawns(const std::list<PhysicalVoxelCluster*> &spawns) {
     m_scheduledSpawns.insert(m_scheduledSpawns.end(), spawns.begin(), spawns.end());
 }
 
-void God::scheduleRemoval(PhysicalVoxelCluster *cluster) {
+void God::scheduleRemoval(WorldObject *cluster) {
     assert(cluster->geode() != nullptr);
     assert(cluster->worldTree() == &m_world.worldtree());
     m_scheduledRemovals.push_back(cluster);
 }
 
-void God::scheduleRemovals(const std::list<PhysicalVoxelCluster*> &removals) {
+void God::scheduleRemovals(const std::list<WorldObject*> &removals) {
 #ifndef NDEBUG // only remove things that are in our worldtree
-    for (PhysicalVoxelCluster* cluster : removals){
+    for (WorldObject* cluster : removals) {
         assert(cluster->geode() != nullptr);
         assert(cluster->worldTree() == &m_world.worldtree());
     }
@@ -49,7 +49,7 @@ void God::scheduleRemovals(const std::list<PhysicalVoxelCluster*> &removals) {
 }
 
 void God::spawn() {
-    for (PhysicalVoxelCluster* cluster : m_scheduledSpawns){
+    for (WorldObject* cluster : m_scheduledSpawns) {
         m_world.worldtree().insert(cluster);
 
         CollisionDetector detector(World::instance()->worldtree(), *cluster);
@@ -68,7 +68,7 @@ void God::spawn() {
 }
 
 void God::remove() {
-    for (PhysicalVoxelCluster* cluster : m_scheduledRemovals) {
+    for (WorldObject* cluster : m_scheduledRemovals) {
         m_world.worldtree().remove(cluster->geode());
         m_world.clusters().remove(cluster);
         delete cluster;

@@ -2,8 +2,8 @@
 
 #include <iostream>
 
-#include "worldtreecluster.h"
 #include "utils/tostring.h"
+#include "world/worldobject.h"
 
 
 Worldtree::Worldtree():
@@ -16,7 +16,7 @@ Worldtree::~Worldtree() {
 
 }
 
-WorldtreeGeode *Worldtree::insert(WorldTreeVoxelCluster *voxelcluster) {
+WorldtreeGeode *Worldtree::insert(WorldObject *voxelcluster) {
     WorldtreeGeode *geode = new WorldtreeGeode(voxelcluster);
     WorldtreeNode::insert(geode);
     voxelcluster->setWorldTree(this);

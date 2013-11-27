@@ -3,12 +3,12 @@
 #include <list>
 
 class VoxelClusterOrphan;
-class PhysicalVoxelCluster;
+class WorldObject;
 
 class SplitDetector
 {
 public:
-    void searchOrphans(std::list<PhysicalVoxelCluster*> &modifiedVoxelClusters);
+    void searchOrphans(std::list<WorldObject*> &modifiedVoxelClusters);
     std::list<VoxelClusterOrphan*> &voxelClusterOrphans();
 
 

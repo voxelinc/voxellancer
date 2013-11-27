@@ -4,11 +4,10 @@
 #include <list>
 #include <iostream>
 
-#include "worldtree/worldtreecluster.h"
 #include "utils/tostring.h"
+#include "world/worldobject.h"
 
-
-CollisionDetector::CollisionDetector(Worldtree &worldtree, WorldTreeVoxelCluster &voxelcluster) :
+CollisionDetector::CollisionDetector(Worldtree &worldtree, CollidableVoxelCluster &voxelcluster) :
 m_worldtree(worldtree),
 m_voxelcluster(voxelcluster),
 m_otherVoxelCluster(nullptr)

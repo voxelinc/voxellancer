@@ -3,16 +3,16 @@
 #include <list>
 
 class VoxelClusterOrphan;
-class PhysicalVoxelCluster;
+class WorldObject;
 
 class Splitter
 {
 public:
     void split(std::list<VoxelClusterOrphan*> &voxelClusterOrphans);
-    std::list<PhysicalVoxelCluster*> &splitOffVoxelClusters();
+    std::list<WorldObject*> &splitOffVoxelClusters();
 
 
 protected:
-    std::list<PhysicalVoxelCluster*> m_splitOffVoxelClusters;
+    std::list<WorldObject*> m_splitOffVoxelClusters;
 };
 

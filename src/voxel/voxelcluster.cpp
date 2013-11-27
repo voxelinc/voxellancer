@@ -21,15 +21,6 @@ VoxelCluster::VoxelCluster(glm::vec3 center, float scale):
 {
 }
 
-VoxelCluster::VoxelCluster(const VoxelCluster& other):
-	m_voxel(other.m_voxel),
-    m_aabb(other.m_aabb),
-	m_voxelRenderData(this),
-	m_transform(other.m_transform)
-{
-	
-}
-
 VoxelCluster::~VoxelCluster() {
     //TODO: all the cleanup?
 }

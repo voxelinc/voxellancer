@@ -32,7 +32,8 @@
 #include "world/god.h"
 #include "skybox.h"
 #include "voxel/voxelrenderer.h"
-#include "world/physicalvoxelcluster.h"
+#include "world/worldobject.h"
+#include "collision/collisiondetector.h"
 
 Game::Game(GLFWwindow *window):
 	m_window(window),
@@ -69,7 +70,7 @@ void Game::initialize()
 	glow::debug("Create Voxel");
     m_voxelRenderer = std::unique_ptr<VoxelRenderer>(new VoxelRenderer);
 
-    PhysicalVoxelCluster *m_testCluster = new PhysicalVoxelCluster();
+    WorldObject *m_testCluster = new WorldObject();
     m_testCluster->transform().move(glm::vec3(0, 0, 0));
     m_testCluster->addVoxel(new Voxel(cvec3(1, 0, 0), cvec3(0, 255, 0)));
     m_testCluster->addVoxel(new Voxel(cvec3(2, 0, 0), cvec3(255, 255, 0)));
@@ -79,7 +80,7 @@ void Game::initialize()
     m_testCluster->finishInitialization();
     m_world->god().scheduleSpawn(m_testCluster);
     
-    PhysicalVoxelCluster *m_testClusterMoveable = new PhysicalVoxelCluster();
+    WorldObject *m_testClusterMoveable = new WorldObject();
     m_testClusterMoveable->transform().move(glm::vec3(-20, 0, 0));
     m_testClusterMoveable->transform().rotate(glm::angleAxis(-90.f, glm::vec3(0, 1, 0)));
     m_testClusterMoveable->addVoxel(new Voxel(cvec3(0, 0, 7), cvec3(0, 255, 0)));
@@ -97,7 +98,7 @@ void Game::initialize()
 
     m_inputHandler.setVoxelCluster(m_testClusterMoveable);
 
-    PhysicalVoxelCluster *m_testClusterA = new PhysicalVoxelCluster();
+    WorldObject *m_testClusterA = new WorldObject();
     ClusterCache::instance()->fillCluster(m_testClusterA, "data/voxelcluster/basicship.csv");
 	m_testClusterA->transform().setCenter(glm::vec3(3, 0, 3)); // TODO: shouldnt center == centerofmass ?
 	m_testClusterA->transform().setPosition(glm::vec3(0, 0, -10));
@@ -105,7 +106,7 @@ void Game::initialize()
     m_testClusterA->finishInitialization();
     m_world->god().scheduleSpawn(m_testClusterA);
 
-    PhysicalVoxelCluster *m_testClusterB = new PhysicalVoxelCluster();
+    WorldObject *m_testClusterB = new WorldObject();
     ClusterCache::instance()->fillCluster(m_testClusterB, "data/voxelcluster/basicship.csv");
 	m_testClusterB->transform().setCenter(glm::vec3(3, 0, 3));
     m_testClusterB->transform().setPosition(glm::vec3(0, 0, 10));

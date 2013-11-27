@@ -1,7 +1,7 @@
 #include "mover.h"
-#include "god.h"
-#include "world.h"
-#include "physicalvoxelcluster.h"
+#include "../god.h"
+#include "../world.h"
+#include "../worldobject.h"
 
 
 void Mover::moveVoxelClusters(float delta_sec) {
@@ -12,7 +12,7 @@ void Mover::moveVoxelClusters(float delta_sec) {
         and Mover should store them in m_collisions;
     **/
 
-    for (PhysicalVoxelCluster *cluster : World::instance()->clusters()) {
+    for (WorldObject *cluster : World::instance()->clusters()) {
         std::list<Collision> &collisions = cluster->move(delta_sec);
         m_collisions.insert(m_collisions.end(), collisions.begin(), collisions.end());
     }

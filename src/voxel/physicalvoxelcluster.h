@@ -5,12 +5,13 @@
 
 #include "collision/collision.h"
 #include "property/property.h"
-#include "worldtree/worldtreecluster.h"
+#include "collidablevoxelcluster.h"
 
-class PhysicalVoxelCluster : public WorldTreeVoxelCluster {
+class CollisionDetector;
+
+class PhysicalVoxelCluster : public CollidableVoxelCluster {
 public:
     PhysicalVoxelCluster(float scale = 1.0);
-    PhysicalVoxelCluster(const PhysicalVoxelCluster & other);
     virtual ~PhysicalVoxelCluster();
 
     std::list<Collision> &move(float delta_sec);
@@ -35,7 +36,6 @@ protected:
 private:
     float m_mass;
     bool m_massValid;
-
 
     WorldTransform m_oldTransform;
     WorldTransform m_newTransform;

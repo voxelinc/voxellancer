@@ -7,7 +7,7 @@
 
 
 PhysicalVoxelCluster::PhysicalVoxelCluster(float scale) :
-    WorldTreeVoxelCluster(glm::vec3(0), scale),
+    CollidableVoxelCluster(glm::vec3(0), scale),
     m_speed(0),
     m_angularSpeed(0),
     m_acceleration(0),
@@ -21,26 +21,11 @@ PhysicalVoxelCluster::PhysicalVoxelCluster(float scale) :
 
 }
 
-PhysicalVoxelCluster::PhysicalVoxelCluster(const PhysicalVoxelCluster& other) :
-    WorldTreeVoxelCluster(other),
-    m_speed(0),
-    m_angularSpeed(0),
-    m_acceleration(0),
-    m_angularAcceleration(0),
-    m_dampening("physics.globaldampening"),
-    m_angularDampening("physics.globalangulardampening"),
-    m_rotationFactor("physics.globalrotationfactor"),
-    m_mass(other.m_mass),
-    m_massValid(other.m_massValid)
-{
-
-}
-
 // only neccessary for manually constructed voxelclusters, not if 
 // the cluster is build from clusterstore
 void PhysicalVoxelCluster::finishInitialization() {
     calculateMassAndCenter();
-    WorldTreeVoxelCluster::finishInitialization();
+    CollidableVoxelCluster::finishInitialization();
 }
 
 PhysicalVoxelCluster::~PhysicalVoxelCluster() {
@@ -120,9 +105,12 @@ void PhysicalVoxelCluster::handleCollision(Collision & c, float delta_sec) {
     glm::vec3 r1 = p1->transform().position() - p1->transform().applyTo(glm::vec3(c.voxelA()->gridCell()));
     glm::vec3 r2 = p2->transform().position() - p2->transform().applyTo(glm::vec3(c.voxelB()->gridCell()));
 
+    //speed difference
+    float vDiff = glm::abs(glm::length(v1 - v2));
+
     // new angular speed
-    glm::vec3 w1_ = glm::inverse((p1->transform().orientation())) * (m_rotationFactor.get() * glm::cross(normal * (1.f/p1->m_mass), r1));
-    glm::vec3 w2_ = glm::inverse((p2->transform().orientation())) * (m_rotationFactor.get() * glm::cross(-normal * (1.f / p2->m_mass), r2));
+    glm::vec3 w1_ = glm::inverse((p1->transform().orientation())) * (m_rotationFactor.get() * vDiff * (1.f / p1->m_mass) * glm::cross(normal, r1));
+    glm::vec3 w2_ = glm::inverse((p2->transform().orientation())) * (m_rotationFactor.get() * vDiff * (1.f / p2->m_mass) * glm::cross(-normal, r2));
     
     p1->m_speed = v1_;
     p2->m_speed = v2_;
@@ -195,14 +183,14 @@ void PhysicalVoxelCluster::accelerate_angular(glm::vec3 axis) {
 }
 
 void PhysicalVoxelCluster::addVoxel(Voxel *voxel) {
-    WorldTreeVoxelCluster::addVoxel(voxel);
+    CollidableVoxelCluster::addVoxel(voxel);
     voxel->setVoxelCluster(this);
     m_massValid = false;
     // same as remove Voxel
 }
 
 void PhysicalVoxelCluster::removeVoxel(const cvec3 &position) {
-    WorldTreeVoxelCluster::removeVoxel(position);
+    CollidableVoxelCluster::removeVoxel(position);
     //TODO: set the voxel's cluster pointer to null?
     m_massValid = false;
     // it would be better to calculate incremental mass/center changes here

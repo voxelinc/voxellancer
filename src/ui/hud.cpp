@@ -5,7 +5,7 @@
 #include "ui/hudelement.h"
 #include "world/world.h"
 #include "world/god.h"
-#include "world/physicalvoxelcluster.h"
+#include "world/worldobject.h"
 
 HUD::HUD() :
 m_gamecamera(0),
@@ -147,7 +147,8 @@ void HUD::draw(){
 
     // draw ship arrows
     int i = 0;
-    for (VoxelCluster *ship : World::instance()->clusters()){
+    for (WorldObject *ship : World::instance()->clusters()) {
+        // TODO something like "if (ship->hudData->shouldShowOnHud())"
         if (glm::length(ship->transform().position() - m_hudcamera.position()) < m_arrow_maxdistance){
             // delta is the vector from virtual HUD camera to the ship
             glm::vec3 delta = glm::inverse(m_hudcamera.orientation()) * (ship->transform().position() - m_hudcamera.position());

@@ -30,7 +30,7 @@ Worldtree &World::worldtree() {
     return *m_worldtree;
 }
 
-std::list<PhysicalVoxelCluster*> &World::clusters() {
+std::list<WorldObject*> &World::clusters() {
     return m_clusters;
 }
 

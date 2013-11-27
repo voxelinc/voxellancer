@@ -3,11 +3,11 @@
 #include <cassert>
 #include <iostream>
 
-#include "worldtree/worldtreecluster.h"
 #include "utils/tostring.h"
+#include "world/worldobject.h"
 
 
-VoxeltreeNode::VoxeltreeNode(VoxeltreeNode *parent, WorldTreeVoxelCluster &voxelcluster, const Grid3dAABB &gridAABB) :
+VoxeltreeNode::VoxeltreeNode(VoxeltreeNode *parent, CollidableVoxelCluster &voxelcluster, const Grid3dAABB &gridAABB) :
     m_parent(parent),
     m_voxelcluster(voxelcluster),
     m_gridAABB(gridAABB),
@@ -16,7 +16,7 @@ VoxeltreeNode::VoxeltreeNode(VoxeltreeNode *parent, WorldTreeVoxelCluster &voxel
 
 }
 
-VoxeltreeNode::VoxeltreeNode(const VoxeltreeNode& other, WorldTreeVoxelCluster *voxelcluster) :
+VoxeltreeNode::VoxeltreeNode(const VoxeltreeNode& other, CollidableVoxelCluster *voxelcluster) :
 	m_parent(other.m_parent),
 	m_voxelcluster(*voxelcluster),
 	m_gridAABB(other.m_gridAABB),

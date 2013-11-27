@@ -3,12 +3,11 @@
 class CollisionDetector;
 
 // this class contains datastructures for collision detection
-class WorldTreeVoxelCluster : public VoxelCluster {
+class CollidableVoxelCluster : public VoxelCluster {
 
 public:
-    WorldTreeVoxelCluster(glm::vec3 center = glm::vec3(0), float scale = 1.0);
-    WorldTreeVoxelCluster(const WorldTreeVoxelCluster& other);
-    virtual ~WorldTreeVoxelCluster();
+    CollidableVoxelCluster(glm::vec3 center = glm::vec3(0), float scale = 1.0);
+    virtual ~CollidableVoxelCluster();
 
     virtual void addVoxel(Voxel *voxel);
     virtual void removeVoxel(const cvec3 &position);
@@ -25,10 +24,9 @@ public:
     virtual void finishInitialization();
     void updateGeode();
 protected:
-    std::unique_ptr<CollisionDetector> m_collisionDetector;
-
     VoxeltreeNode m_voxelTree;
     WorldtreeGeode *m_geode;
     Worldtree *m_worldTree;
+    std::unique_ptr<CollisionDetector> m_collisionDetector;
 
 };
