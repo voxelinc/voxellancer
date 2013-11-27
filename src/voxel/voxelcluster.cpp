@@ -31,7 +31,7 @@ VoxelCluster::VoxelCluster(const VoxelCluster& other):
 }
 
 VoxelCluster::~VoxelCluster() {
-
+    //TODO: all the cleanup?
 }
 
 WorldTransform &VoxelCluster::transform() {
@@ -42,9 +42,10 @@ const WorldTransform &VoxelCluster::transform() const {
     return m_transform;
 }
 
-void VoxelCluster::addVoxel(const Voxel & voxel) {
-    m_voxel[voxel.gridCell()] = voxel;
-    m_aabb.extend(voxel.gridCell());
+void VoxelCluster::addVoxel(Voxel *voxel) {
+    assert(m_voxel.find(voxel->gridCell()) == m_voxel.end());
+    m_voxel[voxel->gridCell()] = voxel;
+    m_aabb.extend(voxel->gridCell());
     m_voxelRenderData.invalidate();
 }
 
@@ -72,7 +73,7 @@ Sphere VoxelCluster::sphere(const WorldTransform & transform) {
 }
 
 
-const std::unordered_map<cvec3, Voxel, VoxelHash> & VoxelCluster::voxel() const{
+const std::unordered_map<cvec3, Voxel*, VoxelHash> &VoxelCluster::voxel() const{
     return m_voxel;
 }
 

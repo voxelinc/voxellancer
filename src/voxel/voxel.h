@@ -19,14 +19,13 @@ class VoxelCluster;
 class Voxel
 {
 public:
-    Voxel(VoxelCluster *voxelCluster = nullptr);
-    Voxel(cvec3 gridCell, cvec3 color, VoxelCluster *voxelCluster);
+    Voxel();
+    Voxel(cvec3 gridCell, cvec3 color);
     virtual ~Voxel();
 
-    // voxels are currently shared between instances of the same model
-    // if we want to keep this voxels need to be immutable!
-    //VoxelCluster *voxelCluster();
-    //const VoxelCluster *voxelCluster() const;
+    // TODO: extract to PhysicalVoxel
+    VoxelCluster *voxelCluster();
+    void setVoxelCluster(VoxelCluster *cluster);
 
     const cvec3 &gridCell() const;
     //void setGridCell(const cvec3 &cell);

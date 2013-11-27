@@ -10,7 +10,7 @@ public:
     WorldTreeVoxelCluster(const WorldTreeVoxelCluster& other);
     virtual ~WorldTreeVoxelCluster();
 
-    virtual void addVoxel(const Voxel & voxel);
+    virtual void addVoxel(Voxel *voxel);
     virtual void removeVoxel(const cvec3 &position);
 
     WorldtreeGeode *geode();

@@ -23,19 +23,20 @@ m_collisionDetector(nullptr)
 }
 
 WorldTreeVoxelCluster::~WorldTreeVoxelCluster() {
-
+    //TODO: all the cleanup?
 }
 
-void WorldTreeVoxelCluster::addVoxel(const Voxel & voxel) {
+void WorldTreeVoxelCluster::addVoxel(Voxel *voxel) {
     VoxelCluster::addVoxel(voxel);
     // TODO Memoryleak as of now, voxeltree shouldn't manage the voxel
-    m_voxelTree.insert(new Voxel(voxel));
+    m_voxelTree.insert(voxel);
     updateGeode();
 }
 
 void WorldTreeVoxelCluster::removeVoxel(const cvec3 & position) {
     VoxelCluster::removeVoxel(position);
     m_voxelTree.remove(position);
+    // TODO: who deletes the voxel?
 }
 
 VoxeltreeNode &WorldTreeVoxelCluster::voxeltree() {

@@ -29,13 +29,13 @@ void VoxelRenderData::updateTextures() {
 
     int i = 0;
     for (auto pair : m_cluster->voxel()) {
-        Voxel voxel = pair.second;
-        positionData[i * 3 + 0] = voxel.gridCell().x;
-        positionData[i * 3 + 1] = voxel.gridCell().y;
-        positionData[i * 3 + 2] = voxel.gridCell().z;
-        colorData[i * 3 + 0] = voxel.color().x;
-        colorData[i * 3 + 1] = voxel.color().y;
-        colorData[i * 3 + 2] = voxel.color().z;
+        Voxel *voxel = pair.second;
+        positionData[i * 3 + 0] = voxel->gridCell().x;
+        positionData[i * 3 + 1] = voxel->gridCell().y;
+        positionData[i * 3 + 2] = voxel->gridCell().z;
+        colorData[i * 3 + 0] = voxel->color().x;
+        colorData[i * 3 + 1] = voxel->color().y;
+        colorData[i * 3 + 2] = voxel->color().z;
         i++;
     }
     m_voxelCount = i;

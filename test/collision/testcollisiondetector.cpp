@@ -28,8 +28,8 @@ go_bandit([](){
         });
 
         it("works in most basic conditions", [&]() {
-            a->addVoxel(Voxel(cvec3(0, 0, 0), cvec3(255, 255, 255), a));
-            b->addVoxel(Voxel(cvec3(0, 0, 0), cvec3(255, 255, 255), b));
+            a->addVoxel(new Voxel(cvec3(0, 0, 0), cvec3(255, 255, 255)));
+            b->addVoxel(new Voxel(cvec3(0, 0, 0), cvec3(255, 255, 255)));
 
             AssertThat(d->checkCollisions().size(), Equals(1));
 
@@ -39,17 +39,17 @@ go_bandit([](){
         });
 
         it("works in pretty basic conditions", [&]() {
-            a->addVoxel(Voxel(cvec3(0, 0, 0), cvec3(255, 255, 255), a));
-            a->addVoxel(Voxel(cvec3(1, 0, 0), cvec3(255, 255, 255), a));
-            a->addVoxel(Voxel(cvec3(2, 0, 0), cvec3(255, 255, 255), a));
-            a->addVoxel(Voxel(cvec3(3, 0, 0), cvec3(255, 255, 255), a));
-            a->addVoxel(Voxel(cvec3(4, 0, 0), cvec3(255, 255, 255), a));
-            a->addVoxel(Voxel(cvec3(4, 0, 1), cvec3(255, 255, 255), a));
+            a->addVoxel(new Voxel(cvec3(0, 0, 0), cvec3(255, 255, 255)));
+            a->addVoxel(new Voxel(cvec3(1, 0, 0), cvec3(255, 255, 255)));
+            a->addVoxel(new Voxel(cvec3(2, 0, 0), cvec3(255, 255, 255)));
+            a->addVoxel(new Voxel(cvec3(3, 0, 0), cvec3(255, 255, 255)));
+            a->addVoxel(new Voxel(cvec3(4, 0, 0), cvec3(255, 255, 255)));
+            a->addVoxel(new Voxel(cvec3(4, 0, 1), cvec3(255, 255, 255)));
 
-            b->addVoxel(Voxel(cvec3(0, 0, 0), cvec3(255, 255, 255), b));
-            b->addVoxel(Voxel(cvec3(0, 0, 1), cvec3(255, 255, 255), b));
-            b->addVoxel(Voxel(cvec3(1, 0, 1), cvec3(255, 255, 255), b));
-            b->addVoxel(Voxel(cvec3(2, 0, 1), cvec3(255, 255, 255), b));
+            b->addVoxel(new Voxel(cvec3(0, 0, 0), cvec3(255, 255, 255)));
+            b->addVoxel(new Voxel(cvec3(0, 0, 1), cvec3(255, 255, 255)));
+            b->addVoxel(new Voxel(cvec3(1, 0, 1), cvec3(255, 255, 255)));
+            b->addVoxel(new Voxel(cvec3(2, 0, 1), cvec3(255, 255, 255)));
 
             AssertThat(d->checkCollisions().size(), IsGreaterThan(0));
 

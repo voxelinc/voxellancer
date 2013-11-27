@@ -1,7 +1,7 @@
 #include "hud.h"
 #include "camera.h"
 #include "voxel/voxelrenderer.h"
-#include "resource/clusterstore.h"
+#include "resource/clustercache.h"
 #include "ui/hudelement.h"
 #include "world/world.h"
 #include "world/god.h"
@@ -38,7 +38,8 @@ m_show_framerate("hud.show_framerate")
     addElement("data/hud/bottomright.csv", HUDOffsetOrigin::BottomRight, glm::vec3(-4, 1, 0), &m_elements);
     addElement("data/hud/bottom.csv", HUDOffsetOrigin::Bottom, glm::vec3(-27, 1, 0), &m_elements);
 
-    m_shiparrow.reset(ClusterStore<HUDElement>::instance()->create("data/hud/arrow.csv"));
+    m_shiparrow.reset(new HUDElement());
+    ClusterCache::instance()->fillCluster(m_shiparrow.get(), "data/hud/arrow.csv");
     m_shiparrow->m_origin = HUDOffsetOrigin::Center;
     m_shiparrow->m_offset = glm::vec3(-2, -2, 0);
 
@@ -48,14 +49,16 @@ m_show_framerate("hud.show_framerate")
 
 
 void HUD::addElement(const std::string& filename, HUDOffsetOrigin origin, glm::vec3 offset, std::vector<std::unique_ptr<HUDElement>> *list){
-    std::unique_ptr<HUDElement> element(ClusterStore<HUDElement>::instance()->create(filename));
+    std::unique_ptr<HUDElement> element(new HUDElement());
+    ClusterCache::instance()->fillCluster(element.get(), filename);
     element->m_origin = origin;
     element->m_offset = offset;
     list->push_back(move(element));
 }
 
 void HUD::addChar(const std::string& filename, glm::vec3 offset, const char index, std::map<char, std::unique_ptr<VoxelCluster>> *map){
-    std::unique_ptr<VoxelCluster> element(ClusterStore<HUDElement>::instance()->create(filename));
+    std::unique_ptr<VoxelCluster> element(new VoxelCluster());
+    ClusterCache::instance()->fillCluster(element.get(), filename);
     element->transform().setCenter(offset);
     (*map)[index] = move(element);
 }
