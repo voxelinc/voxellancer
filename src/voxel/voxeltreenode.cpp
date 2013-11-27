@@ -108,7 +108,6 @@ void VoxeltreeNode::insert(Voxel *voxel) {
 void VoxeltreeNode::remove(const cvec3 &cell) {
     if(isAtomic()) {
         assert(m_voxel != nullptr);
-        delete m_voxel;
         m_voxel = nullptr;
     }
     else {

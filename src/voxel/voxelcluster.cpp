@@ -45,6 +45,7 @@ void VoxelCluster::addVoxel(Voxel *voxel) {
 
 void VoxelCluster::removeVoxel(const cvec3 & position) {
     Voxel * voxel = m_voxels[position];
+    assert(voxel != nullptr);
     m_voxels.erase(position);
     m_voxelRenderData.invalidate();
     delete voxel;
