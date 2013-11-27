@@ -1,4 +1,4 @@
-#include "worldTreecleaner.h"
+#include "worldtreecleaner.h"
 
 #include <assert.h>
 
