@@ -17,7 +17,7 @@ public:
     std::list<Collision> &move(float delta_sec);
     
     void accelerate(glm::vec3 direction);
-    void accelerate_angular(glm::vec3 axis);
+    void accelerateAngular(glm::vec3 axis);
 
     virtual void addVoxel(Voxel *voxel);
     virtual void removeVoxel(const cvec3 &position);
@@ -27,7 +27,7 @@ public:
 protected:
     void calculateMassAndCenter();
 
-    void handleCollision(Collision & c, float delta_sec);
+    void resolveCollision(Collision & c, float delta_sec);
     void applyTransform();
     void doSteppedTransform();
     float calculateStepCount(const WorldTransform & oldTransform, const WorldTransform & newTransform);

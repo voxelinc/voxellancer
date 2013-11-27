@@ -4,10 +4,10 @@
 
 
 CollidableVoxelCluster::CollidableVoxelCluster(glm::vec3 center, float scale) :
-VoxelCluster(center, scale),
-m_voxelTree(nullptr, *this, Grid3dAABB(glm::ivec3(0, 0, 0), glm::ivec3(0, 0, 0))),
-m_worldTree(nullptr),
-m_geode(nullptr)
+    VoxelCluster(center, scale),
+    m_voxelTree(nullptr, *this, Grid3dAABB(glm::ivec3(0, 0, 0), glm::ivec3(0, 0, 0))),
+    m_worldTree(nullptr),
+    m_geode(nullptr)
 {
 
 }
@@ -18,15 +18,13 @@ CollidableVoxelCluster::~CollidableVoxelCluster() {
 
 void CollidableVoxelCluster::addVoxel(Voxel *voxel) {
     VoxelCluster::addVoxel(voxel);
-    // TODO Memoryleak as of now, voxeltree shouldn't manage the voxel
     m_voxelTree.insert(voxel);
     updateGeode();
 }
 
 void CollidableVoxelCluster::removeVoxel(const cvec3 & position) {
-    VoxelCluster::removeVoxel(position);
     m_voxelTree.remove(position);
-    // TODO: who deletes the voxel?
+    VoxelCluster::removeVoxel(position);
 }
 
 VoxeltreeNode &CollidableVoxelCluster::voxeltree() {

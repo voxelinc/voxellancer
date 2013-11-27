@@ -47,7 +47,7 @@ protected:
     WorldTransform m_transform;
     VoxelRenderData m_voxelRenderData;
 
-    std::unordered_map<cvec3, Voxel*> m_voxel;
+    std::unordered_map<cvec3, Voxel*> m_voxels;
     CAABB m_aabb;
 };
 

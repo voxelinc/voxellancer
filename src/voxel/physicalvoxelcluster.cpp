@@ -29,7 +29,6 @@ void PhysicalVoxelCluster::finishInitialization() {
 }
 
 PhysicalVoxelCluster::~PhysicalVoxelCluster() {
-    glow::debug("aaaaa");
 }
 
 void PhysicalVoxelCluster::calculateMassAndCenter() {
@@ -38,7 +37,7 @@ void PhysicalVoxelCluster::calculateMassAndCenter() {
 
     glm::vec3 center;
     m_mass = 0;
-    for (auto pair : m_voxel) {
+    for (auto pair : m_voxels) {
         Voxel *voxel = pair.second;
         m_mass += 1.0; // voxel.mass?
         center += glm::vec3(voxel->gridCell()) * 1.0f; // voxel.mass?
@@ -70,7 +69,7 @@ std::list<Collision> &PhysicalVoxelCluster::move(float delta_sec) {
     // to resolve multiple collisions
     std::list<Collision> &collisions = m_collisionDetector->lastCollisions();
     if (!collisions.empty()) {
-        handleCollision(collisions.front(), delta_sec);
+        resolveCollision(collisions.front(), delta_sec);
     }
 
     updateGeode();
@@ -78,8 +77,7 @@ std::list<Collision> &PhysicalVoxelCluster::move(float delta_sec) {
     return m_collisionDetector->lastCollisions();
 }
 
-void PhysicalVoxelCluster::handleCollision(Collision & c, float delta_sec) {
-    // TODO remove consts from collision detector
+void PhysicalVoxelCluster::resolveCollision(Collision & c, float delta_sec) {
     PhysicalVoxelCluster * p1 = static_cast<PhysicalVoxelCluster*>(c.voxelClusterA());
     PhysicalVoxelCluster * p2 = static_cast<PhysicalVoxelCluster*>(c.voxelClusterB());
     
@@ -178,7 +176,7 @@ void PhysicalVoxelCluster::accelerate(glm::vec3 direction) {
 }
 
 // angular acceleration around local axis
-void PhysicalVoxelCluster::accelerate_angular(glm::vec3 axis) {
+void PhysicalVoxelCluster::accelerateAngular(glm::vec3 axis) {
     m_angularAcceleration += axis;
 }
 
@@ -186,12 +184,10 @@ void PhysicalVoxelCluster::addVoxel(Voxel *voxel) {
     CollidableVoxelCluster::addVoxel(voxel);
     voxel->setVoxelCluster(this);
     m_massValid = false;
-    // same as remove Voxel
 }
 
 void PhysicalVoxelCluster::removeVoxel(const cvec3 &position) {
     CollidableVoxelCluster::removeVoxel(position);
-    //TODO: set the voxel's cluster pointer to null?
     m_massValid = false;
     // it would be better to calculate incremental mass/center changes here
     // something like mass -= 1; center -= 1/mass * pos; center /= (mass-1)/mass; should work

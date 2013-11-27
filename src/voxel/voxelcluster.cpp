@@ -15,8 +15,8 @@
 
 
 VoxelCluster::VoxelCluster(glm::vec3 center, float scale): 
-    m_voxel(),
-    m_voxelRenderData(m_voxel),
+    m_voxels(),
+    m_voxelRenderData(m_voxels),
     m_transform(center, scale)
 {
 }
@@ -34,15 +34,17 @@ const WorldTransform &VoxelCluster::transform() const {
 }
 
 void VoxelCluster::addVoxel(Voxel *voxel) {
-    assert(m_voxel.find(voxel->gridCell()) == m_voxel.end());
-    m_voxel[voxel->gridCell()] = voxel;
+    assert(m_voxels.find(voxel->gridCell()) == m_voxels.end());
+    m_voxels[voxel->gridCell()] = voxel;
     m_aabb.extend(voxel->gridCell());
     m_voxelRenderData.invalidate();
 }
 
 void VoxelCluster::removeVoxel(const cvec3 & position) {
-    m_voxel.erase(position);
+    Voxel * voxel = m_voxels[position];
+    m_voxels.erase(position);
     m_voxelRenderData.invalidate();
+    delete voxel;
 }
 
 AABB VoxelCluster::aabb() {
@@ -72,6 +74,6 @@ void VoxelCluster::finishInitialization() {
 }
 
 Voxel * VoxelCluster::voxel(cvec3 position) {
-    return m_voxel[position];
+    return m_voxels[position];
 }
 
