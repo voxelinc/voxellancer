@@ -3,7 +3,7 @@
 #include <iostream>
 
 #include "geometry/aabb.h"
-#include "worldtree/worldtree.h"
+#include "worldTree/worldTree.h"
 #include "voxel/voxel.h"
 #include "voxel/collidablevoxelcluster.h"
 #include "collision/collisiondetector.h"
@@ -15,16 +15,16 @@ using namespace bandit;
 
 go_bandit([](){
     describe("CollisionDetector", [](){
-        Worldtree *worldtree;
+        WorldTree *worldTree;
         CollidableVoxelCluster *a, *b;
         CollisionDetector *d;
 
 
         before_each([&](){
-            worldtree = new Worldtree;
-            a = new CollidableVoxelCluster(); worldtree->insert(a);
-            b = new CollidableVoxelCluster(); worldtree->insert(b);
-            d = new CollisionDetector(*worldtree, *a);
+            worldTree = new WorldTree;
+            a = new CollidableVoxelCluster(); worldTree->insert(a);
+            b = new CollidableVoxelCluster(); worldTree->insert(b);
+            d = new CollisionDetector(*worldTree, *a);
         });
 
         it("works in most basic conditions", [&]() {

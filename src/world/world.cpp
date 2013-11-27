@@ -1,7 +1,7 @@
 #include "world.h"
 
 #include "god.h"
-#include "worldtree/worldtree.h"
+#include "worldTree/worldTree.h"
 #include "worldlogic.h"
 
 World *World::s_instance = nullptr;
@@ -9,7 +9,7 @@ World *World::s_instance = nullptr;
 World::World()
 {
     m_worldLogic = std::unique_ptr<WorldLogic>(new WorldLogic(*this));
-    m_worldtree = std::unique_ptr<Worldtree>(new Worldtree());
+    m_worldTree = std::unique_ptr<WorldTree>(new WorldTree());
     m_god = std::unique_ptr<God>(new God(*this));
 
 }
@@ -26,8 +26,8 @@ God &World::god() {
     return *m_god;
 }
 
-Worldtree &World::worldtree() {
-    return *m_worldtree;
+WorldTree &World::worldTree() {
+    return *m_worldTree;
 }
 
 std::list<WorldObject*> &World::clusters() {

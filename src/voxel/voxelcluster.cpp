@@ -22,10 +22,10 @@ VoxelCluster::VoxelCluster(glm::vec3 center, float scale):
 }
 
 VoxelCluster::~VoxelCluster() {
+    // free all clusters
     for (std::pair<const cvec3, Voxel*> &element : m_voxels){
         delete element.second;
     }
-    //TODO: all the cleanup?
 }
 
 WorldTransform &VoxelCluster::transform() {

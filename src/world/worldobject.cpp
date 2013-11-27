@@ -2,7 +2,7 @@
 
 
 
-void WorldObject::setWorldTree(Worldtree* worldTree) {
+void WorldObject::setWorldTree(WorldTree* worldTree) {
     PhysicalVoxelCluster::setWorldTree(worldTree);
 }
 

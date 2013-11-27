@@ -7,7 +7,7 @@
 #include "world/worldobject.h"
 
 
-VoxeltreeNode::VoxeltreeNode(VoxeltreeNode *parent, CollidableVoxelCluster &voxelcluster, const Grid3dAABB &gridAABB) :
+VoxelTreeNode::VoxelTreeNode(VoxelTreeNode *parent, CollidableVoxelCluster &voxelcluster, const Grid3dAABB &gridAABB) :
     m_parent(parent),
     m_voxelcluster(voxelcluster),
     m_gridAABB(gridAABB),
@@ -16,54 +16,54 @@ VoxeltreeNode::VoxeltreeNode(VoxeltreeNode *parent, CollidableVoxelCluster &voxe
 
 }
 
-VoxeltreeNode::VoxeltreeNode(const VoxeltreeNode& other, CollidableVoxelCluster *voxelcluster) :
+VoxelTreeNode::VoxelTreeNode(const VoxelTreeNode& other, CollidableVoxelCluster *voxelcluster) :
 	m_parent(other.m_parent),
 	m_voxelcluster(*voxelcluster),
 	m_gridAABB(other.m_gridAABB),
 	m_voxel(other.m_voxel),
 	m_subnodes()
 {
-	for (VoxeltreeNode *subnode : other.m_subnodes) {
-		m_subnodes.push_back(new VoxeltreeNode(*subnode, voxelcluster));
+	for (VoxelTreeNode *subnode : other.m_subnodes) {
+		m_subnodes.push_back(new VoxelTreeNode(*subnode, voxelcluster));
 	}
 }
 
-VoxeltreeNode::~VoxeltreeNode() {
-    for(VoxeltreeNode *subnode : m_subnodes) {
+VoxelTreeNode::~VoxelTreeNode() {
+    for(VoxelTreeNode *subnode : m_subnodes) {
         delete subnode;
     }
 }
 
-bool VoxeltreeNode::isAtomic() const {
+bool VoxelTreeNode::isAtomic() const {
     assert(m_gridAABB.extent(XAxis) == m_gridAABB.extent(YAxis) && m_gridAABB.extent(YAxis) == m_gridAABB.extent(ZAxis));
     return m_gridAABB.extent(XAxis) == 1;
 }
 
-bool VoxeltreeNode::isLeaf() const{
+bool VoxelTreeNode::isLeaf() const{
     return m_subnodes.size() == 0;
 }
 
-std::vector<VoxeltreeNode*> &VoxeltreeNode::subnodes() {
+std::vector<VoxelTreeNode*> &VoxelTreeNode::subnodes() {
     return m_subnodes;
 }
 
-const std::vector<VoxeltreeNode*> &VoxeltreeNode::subnodes() const {
+const std::vector<VoxelTreeNode*> &VoxelTreeNode::subnodes() const {
     return m_subnodes;
 }
 
-Voxel *VoxeltreeNode::voxel(){
+Voxel *VoxelTreeNode::voxel(){
     return m_voxel;
 }
 
-const Voxel *VoxeltreeNode::voxel() const{
+const Voxel *VoxelTreeNode::voxel() const{
     return m_voxel;
 }
 
-const Grid3dAABB &VoxeltreeNode::gridAABB() const {
+const Grid3dAABB &VoxelTreeNode::gridAABB() const {
     return m_gridAABB;
 }
 
-Sphere VoxeltreeNode::boundingSphere() {
+Sphere VoxelTreeNode::boundingSphere() {
     Sphere sphere;
     glm::vec3 center;
 
@@ -81,7 +81,7 @@ Sphere VoxeltreeNode::boundingSphere() {
     return sphere;
 }
 
-void VoxeltreeNode::insert(Voxel *voxel) {
+void VoxelTreeNode::insert(Voxel *voxel) {
     if(!m_gridAABB.contains(glm::ivec3(voxel->gridCell()))) {
         octuple();
         insert(voxel);
@@ -97,7 +97,7 @@ void VoxeltreeNode::insert(Voxel *voxel) {
             split();
         }
 
-        for(VoxeltreeNode *subnode : m_subnodes) {
+        for(VoxelTreeNode *subnode : m_subnodes) {
             if(subnode->gridAABB().contains(glm::ivec3(voxel->gridCell()))) {
                 subnode->insert(voxel);
             }
@@ -105,7 +105,7 @@ void VoxeltreeNode::insert(Voxel *voxel) {
     }
 }
 
-void VoxeltreeNode::remove(const cvec3 &cell) {
+void VoxelTreeNode::remove(const cvec3 &cell) {
     if(isAtomic()) {
         assert(m_voxel != nullptr);
         m_voxel = nullptr;
@@ -113,7 +113,7 @@ void VoxeltreeNode::remove(const cvec3 &cell) {
     else {
         int numSubLeaves = 0;
 
-        for(VoxeltreeNode *subnode : m_subnodes) {
+        for(VoxelTreeNode *subnode : m_subnodes) {
             if(subnode->gridAABB().contains(glm::ivec3(cell))) {
                 subnode->remove(cell);
             }
@@ -128,24 +128,24 @@ void VoxeltreeNode::remove(const cvec3 &cell) {
     }
 }
 
-void VoxeltreeNode::split() {
+void VoxelTreeNode::split() {
     std::list<Grid3dAABB> subnodeAABBs = m_gridAABB.recursiveSplit(2, XAxis);
 
     for(Grid3dAABB &subAABB : subnodeAABBs) {
-        m_subnodes.push_back(new VoxeltreeNode(this, m_voxelcluster, subAABB));
+        m_subnodes.push_back(new VoxelTreeNode(this, m_voxelcluster, subAABB));
     }
 }
 
-void VoxeltreeNode::unsplit() {
+void VoxelTreeNode::unsplit() {
     assert(m_subnodes.size() == 8);
-    for(VoxeltreeNode *subnode : m_subnodes) {
+    for(VoxelTreeNode *subnode : m_subnodes) {
         delete subnode;
     }
     m_subnodes.clear();
 }
 
-void VoxeltreeNode::octuple() {
-    VoxeltreeNode *thisCopy = new VoxeltreeNode(this, m_voxelcluster, m_gridAABB);
+void VoxelTreeNode::octuple() {
+    VoxelTreeNode *thisCopy = new VoxelTreeNode(this, m_voxelcluster, m_gridAABB);
 
     thisCopy->m_subnodes = m_subnodes;
     thisCopy->m_voxel = m_voxel;
@@ -161,7 +161,7 @@ void VoxeltreeNode::octuple() {
         aabb.move(YAxis, sn % 4 >= 2 ? aabb.extent(YAxis) : 0);
         aabb.move(ZAxis, sn % 8 >= 4 ? aabb.extent(ZAxis) : 0);
 
-        m_subnodes.push_back(new VoxeltreeNode(this, m_voxelcluster, aabb));
+        m_subnodes.push_back(new VoxelTreeNode(this, m_voxelcluster, aabb));
     }
 
     m_gridAABB = Grid3dAABB(glm::ivec3(0, 0, 0), (m_gridAABB.rub()+glm::ivec3(1,1,1)) * 2 - glm::ivec3(1,1,1));

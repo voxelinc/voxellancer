@@ -16,9 +16,9 @@ using namespace bandit;
 
 
 go_bandit([](){
-    describe("Voxeltree", [](){
+    describe("VoxelTree", [](){
         CollidableVoxelCluster *c;
-        VoxeltreeNode *r;
+        VoxelTreeNode *r;
 
         before_each([&]() {
             c = new CollidableVoxelCluster();
@@ -84,7 +84,7 @@ go_bandit([](){
 
             d->addVoxel(new Voxel(cvec3(1, 1, 1), cvec3(255, 255, 255))); // There are 8 subnodes now
 
-            for(VoxeltreeNode *subnode : d->voxeltree().subnodes()) {
+            for(VoxelTreeNode *subnode : d->voxeltree().subnodes()) {
                 float distance = glm::length(subnode->boundingSphere().position());
                 AssertThat(distance, EqualsWithDelta(5.2, 0.01)); // what is supposed to happen here?
             }
@@ -92,12 +92,12 @@ go_bandit([](){
 
         it("supports basic rotation with voxel in center", [&]() {
             glm::vec3 v;
-            VoxeltreeNode *n = nullptr;
+            VoxelTreeNode *n = nullptr;
 
             c->addVoxel(new Voxel(cvec3(1, 1, 1), cvec3(255, 255, 255)));
             c->transform().setCenter(glm::vec3(1, 1, 1));
 
-            for (VoxeltreeNode *subnode : c->voxeltree().subnodes()) {
+            for (VoxelTreeNode *subnode : c->voxeltree().subnodes()) {
                 if (subnode->voxel() != nullptr) {
                     n = subnode;
                 }
@@ -113,12 +113,12 @@ go_bandit([](){
 
         it("supports basic rotation with voxel out of center", [&]() {
             glm::vec3 v;
-            VoxeltreeNode *n = nullptr;
+            VoxelTreeNode *n = nullptr;
 
             c->addVoxel(new Voxel(cvec3(1,1,1), cvec3(255, 255, 255)));
             c->transform().setCenter(glm::vec3(1,1,0));
 
-            for(VoxeltreeNode *subnode : c->voxeltree().subnodes()) {
+            for(VoxelTreeNode *subnode : c->voxeltree().subnodes()) {
                 if(subnode->voxel() != nullptr) {
                     n = subnode;
                 }

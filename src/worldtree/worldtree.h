@@ -5,22 +5,22 @@
 
 #include "../geometry/aabb.h"
 
-#include "worldtreenode.h"
+#include "worldTreenode.h"
 
 class CollidableVoxelCluster;
 
-class Worldtree : public WorldtreeNode
+class WorldTree : public WorldTreeNode
 {
 public:
-    Worldtree();
-    virtual ~Worldtree();
+    WorldTree();
+    virtual ~WorldTree();
 
-    WorldtreeGeode *insert(CollidableVoxelCluster *voxelcluster);
+    WorldTreeGeode *insert(CollidableVoxelCluster *voxelcluster);
 
-    std::set<WorldtreeGeode*> geodesInAABB(const AABB &aabb) const;
-    std::set<WorldtreeGeode*> geodesInAABB(const AABB &aabb, WorldtreeNode *nodeHint) const;
+    std::set<WorldTreeGeode*> geodesInAABB(const AABB &aabb) const;
+    std::set<WorldTreeGeode*> geodesInAABB(const AABB &aabb, WorldTreeNode *nodeHint) const;
 
-    void aabbChanged(WorldtreeGeode *geode);
+    void aabbChanged(WorldTreeGeode *geode);
 
 protected:
 

@@ -6,7 +6,7 @@ class WorldVoxel;
 
 class WorldObject : public PhysicalVoxelCluster {
 public:
-    virtual void setWorldTree(Worldtree* worldTree);
+    virtual void setWorldTree(WorldTree* worldTree);
 
     /* Idea to get around second list
     virtual void addVoxel(Voxel *voxel); // asserts that the voxel is a WorldVoxel, casts it to WorldVoxel and calls WorldVoxel::addToWorldObject(this)

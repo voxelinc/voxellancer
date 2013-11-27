@@ -118,7 +118,7 @@ void PhysicalVoxelCluster::resolveCollision(Collision & c, float delta_sec) {
 
 
 // tries to apply the current transform as far as no collision happens.
-// should not be used if the voxelcluster is not part of a worldtree.
+// should not be used if the voxelcluster is not part of a worldTree.
 void PhysicalVoxelCluster::applyTransform() {
     assert(m_geode != nullptr);
 

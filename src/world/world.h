@@ -3,7 +3,7 @@
 #include <list>
 
 class WorldLogic;
-class Worldtree;
+class WorldTree;
 class God;
 class WorldObject;
 
@@ -15,7 +15,7 @@ public:
 
     WorldLogic &worldLogic();
     God &god();
-    Worldtree &worldtree();
+    WorldTree &worldTree();
     std::list<WorldObject*> &clusters();
 
     float deltaSecs() const;
@@ -27,7 +27,7 @@ public:
 protected:
     static World *s_instance;
 
-    std::unique_ptr<Worldtree> m_worldtree;
+    std::unique_ptr<WorldTree> m_worldTree;
     std::unique_ptr<WorldLogic> m_worldLogic;
     std::unique_ptr<God> m_god;
     std::list<WorldObject*> m_clusters;

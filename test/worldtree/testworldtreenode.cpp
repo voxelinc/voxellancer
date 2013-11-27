@@ -3,17 +3,17 @@
 #include <iostream>
 
 #include "../bandit_extension/vec3helper.h"
-#include "worldtree/worldtreenode.h"
+#include "worldTree/worldTreenode.h"
 
 using namespace bandit;
 
 go_bandit([]() {
-    describe("Worldtree", []() {
+    describe("WorldTree", []() {
         it("simpleInserts", [&]() {
-            WorldtreeNode *node = new WorldtreeNode(0, nullptr, AABB(glm::vec3(-2, -2, -2), glm::vec3(2, 2, 2)));
-            WorldtreeGeode *a = new WorldtreeGeode();
-            WorldtreeGeode *b = new WorldtreeGeode();
-            WorldtreeGeode *c = new WorldtreeGeode();
+            WorldTreeNode *node = new WorldTreeNode(0, nullptr, AABB(glm::vec3(-2, -2, -2), glm::vec3(2, 2, 2)));
+            WorldTreeGeode *a = new WorldTreeGeode();
+            WorldTreeGeode *b = new WorldTreeGeode();
+            WorldTreeGeode *c = new WorldTreeGeode();
 
             a->setAABB(AABB(glm::vec3(0, 0, 0), glm::vec3(5, 5, 5)));
             b->setAABB(AABB(glm::vec3(1, 0, 0), glm::vec3(1.5, 1, 1)));
@@ -42,12 +42,12 @@ go_bandit([]() {
         });
 
         it("can detect geodes in an AABB", [&]() {
-            WorldtreeNode *node = new WorldtreeNode(0, nullptr, AABB(glm::vec3(-2, -2, -2), glm::vec3(2, 2, 2)));
-            WorldtreeGeode *e1, *e2;
-            WorldtreeGeode *a, *b, *c;
+            WorldTreeNode *node = new WorldTreeNode(0, nullptr, AABB(glm::vec3(-2, -2, -2), glm::vec3(2, 2, 2)));
+            WorldTreeGeode *e1, *e2;
+            WorldTreeGeode *a, *b, *c;
 
-            e1 = new WorldtreeGeode();
-            e2 = new WorldtreeGeode();
+            e1 = new WorldTreeGeode();
+            e2 = new WorldTreeGeode();
 
             e1->setAABB(AABB(glm::vec3(-100, -100, -100), glm::vec3(-99, -99, -99)));
             e2->setAABB(AABB(glm::vec3(99, 99, 99), glm::vec3(100, 100, 100)));
@@ -55,9 +55,9 @@ go_bandit([]() {
             node->insert(e1);
             node->insert(e2);
 
-            a = new WorldtreeGeode();
-            b = new WorldtreeGeode();
-            c = new WorldtreeGeode();
+            a = new WorldTreeGeode();
+            b = new WorldTreeGeode();
+            c = new WorldTreeGeode();
 
             a->setAABB(AABB(glm::vec3(50, 20, 30), glm::vec3(60, 30, 35)));
             b->setAABB(AABB(glm::vec3(5, 20, 30), glm::vec3(15, 30, 35)));
@@ -67,25 +67,25 @@ go_bandit([]() {
             node->insert(b);
             node->insert(c);
 
-            std::set<WorldtreeGeode*> q1 = node->geodesInAABB(AABB(glm::vec3(-100, -100, -100), glm::vec3(100, 100, 100)));
+            std::set<WorldTreeGeode*> q1 = node->geodesInAABB(AABB(glm::vec3(-100, -100, -100), glm::vec3(100, 100, 100)));
             AssertThat(q1.size(), Equals(5));
 
-            std::set<WorldtreeGeode*> q2 = node->geodesInAABB(AABB(glm::vec3(-98, -98, -98), glm::vec3(100, 100, 100)));
+            std::set<WorldTreeGeode*> q2 = node->geodesInAABB(AABB(glm::vec3(-98, -98, -98), glm::vec3(100, 100, 100)));
             AssertThat(q2.size(), Equals(4));
 
-            std::set<WorldtreeGeode*> q3 = node->geodesInAABB(AABB(glm::vec3(-45, 2, 4), glm::vec3(55, 25, 40)));
+            std::set<WorldTreeGeode*> q3 = node->geodesInAABB(AABB(glm::vec3(-45, 2, 4), glm::vec3(55, 25, 40)));
             AssertThat(q3.size(), Equals(3));
 
             delete e1, e2, a, b, c;
         });
 
         it("moves geodes correctly within the tree on aabb change", [&]() {
-            WorldtreeNode *node = new WorldtreeNode(0, nullptr, AABB(glm::vec3(-2, -2, -2), glm::vec3(2, 2, 2)));
-            WorldtreeGeode *e1, *e2;
-            WorldtreeGeode *a;
+            WorldTreeNode *node = new WorldTreeNode(0, nullptr, AABB(glm::vec3(-2, -2, -2), glm::vec3(2, 2, 2)));
+            WorldTreeGeode *e1, *e2;
+            WorldTreeGeode *a;
 
-            e1 = new WorldtreeGeode();
-            e2 = new WorldtreeGeode();
+            e1 = new WorldTreeGeode();
+            e2 = new WorldTreeGeode();
 
             e1->setAABB(AABB(glm::vec3(-100, -100, -100), glm::vec3(-99, -99, -99)));
             e2->setAABB(AABB(glm::vec3(99, 99, 99), glm::vec3(100, 100, 100)));
@@ -93,22 +93,22 @@ go_bandit([]() {
             node->insert(e1);
             node->insert(e2);
 
-            a = new WorldtreeGeode();
+            a = new WorldTreeGeode();
             a->setAABB(AABB(glm::vec3(50, 20, 30), glm::vec3(60, 30, 35)));
             node->insert(a);
 
-            std::set<WorldtreeGeode*> q1 = node->geodesInAABB(AABB(glm::vec3(55, 25, 29), glm::vec3(56, 26, 36)));
+            std::set<WorldTreeGeode*> q1 = node->geodesInAABB(AABB(glm::vec3(55, 25, 29), glm::vec3(56, 26, 36)));
             AssertThat(q1.size(), Equals(1));
             AssertThat(q1.find(a) != q1.end(), Equals(true));
 
             a->setAABB(AABB(glm::vec3(-10, 40, 30), glm::vec3(0, 50, 35)));
             node->aabbChanged(a);
 
-            std::set<WorldtreeGeode*> q2 = node->geodesInAABB(AABB(glm::vec3(-9, 41, 31), glm::vec3(-8, 42, 32)));
+            std::set<WorldTreeGeode*> q2 = node->geodesInAABB(AABB(glm::vec3(-9, 41, 31), glm::vec3(-8, 42, 32)));
             AssertThat(q2.size(), Equals(1));
             AssertThat(q2.find(a) != q2.end(), Equals(true));
 
-            std::set<WorldtreeGeode*> q3 = node->geodesInAABB(AABB(glm::vec3(55, 25, 29), glm::vec3(56, 26, 36)));
+            std::set<WorldTreeGeode*> q3 = node->geodesInAABB(AABB(glm::vec3(55, 25, 29), glm::vec3(56, 26, 36)));
             AssertThat(q3.size(), Equals(0));
             AssertThat(q3.find(a) == q3.end(), Equals(true));
 

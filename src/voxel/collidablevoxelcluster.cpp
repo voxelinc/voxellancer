@@ -1,5 +1,5 @@
 #include "collidablevoxelcluster.h"
-#include "worldtree/worldtreegeode.h"
+#include "worldTree/worldTreegeode.h"
 #include "collision/collisiondetector.h"
 
 
@@ -26,23 +26,23 @@ void CollidableVoxelCluster::removeVoxel(const cvec3 & position) {
     VoxelCluster::removeVoxel(position);
 }
 
-VoxeltreeNode &CollidableVoxelCluster::voxeltree() {
+VoxelTreeNode &CollidableVoxelCluster::voxeltree() {
     return m_voxelTree;
 }
 
-const VoxeltreeNode &CollidableVoxelCluster::voxeltree() const {
+const VoxelTreeNode &CollidableVoxelCluster::voxeltree() const {
     return m_voxelTree;
 }
 
-WorldtreeGeode *CollidableVoxelCluster::geode() {
+WorldTreeGeode *CollidableVoxelCluster::geode() {
     return m_geode;
 }
 
-const WorldtreeGeode *CollidableVoxelCluster::geode() const {
+const WorldTreeGeode *CollidableVoxelCluster::geode() const {
     return m_geode;
 }
 
-void CollidableVoxelCluster::setGeode(WorldtreeGeode *geode) {
+void CollidableVoxelCluster::setGeode(WorldTreeGeode *geode) {
     m_geode = geode;
     updateGeode();
 }
@@ -53,12 +53,12 @@ void CollidableVoxelCluster::updateGeode() {
     }
 }
 
-void CollidableVoxelCluster::setWorldTree(Worldtree* worldTree) {
+void CollidableVoxelCluster::setWorldTree(WorldTree* worldTree) {
     m_worldTree = worldTree;
     m_collisionDetector = std::unique_ptr<CollisionDetector>(new CollisionDetector(*worldTree, *this));
 }
 
-Worldtree* CollidableVoxelCluster::worldTree(){
+WorldTree* CollidableVoxelCluster::worldTree(){
     return m_worldTree;
 }
 

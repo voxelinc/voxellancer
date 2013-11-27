@@ -16,8 +16,8 @@
 #include <memory>
 
 
-class WorldtreeGeode;
-class Worldtree;
+class WorldTreeGeode;
+class WorldTree;
 
 class VoxelCluster
 {

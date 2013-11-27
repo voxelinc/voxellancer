@@ -2,30 +2,30 @@
 
 #include "geometry/aabb.h"
 
-class WorldtreeNode;
+class WorldTreeNode;
 class CollidableVoxelCluster;
 
-class WorldtreeGeode
+class WorldTreeGeode
 {
 public:
-    WorldtreeGeode();
-    WorldtreeGeode(CollidableVoxelCluster *voxelcluster);
-    virtual ~WorldtreeGeode();
+    WorldTreeGeode();
+    WorldTreeGeode(CollidableVoxelCluster *voxelcluster);
+    virtual ~WorldTreeGeode();
 
     CollidableVoxelCluster *voxelcluster();
     const CollidableVoxelCluster *voxelcluster() const;
     void setVoxelCluster(CollidableVoxelCluster *voxelcluster);
 
-    WorldtreeNode *containingNode();
-    const WorldtreeNode *containingNode() const;
-    void setContainingNode(WorldtreeNode *node);
+    WorldTreeNode *containingNode();
+    const WorldTreeNode *containingNode() const;
+    void setContainingNode(WorldTreeNode *node);
 
     const AABB &aabb() const;
     void setAABB(const AABB &aabb);
 
 protected:
     CollidableVoxelCluster *m_voxelcluster;
-    WorldtreeNode *m_containingNode;
+    WorldTreeNode *m_containingNode;
     AABB m_aabb;
 };
 

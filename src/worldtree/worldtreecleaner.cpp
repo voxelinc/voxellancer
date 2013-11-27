@@ -1,32 +1,32 @@
-#include "worldtreecleaner.h"
+#include "worldTreecleaner.h"
 
 #include <assert.h>
 
-WorldtreeCleaner::WorldtreeCleaner(Worldtree &worldtree):
-    m_worldtree(worldtree)
+WorldTreeCleaner::WorldTreeCleaner(WorldTree &worldTree):
+    m_worldTree(worldTree)
 {
 
 }
 
-WorldtreeCleaner::~WorldtreeCleaner() {
+WorldTreeCleaner::~WorldTreeCleaner() {
 
 }
 
-void WorldtreeCleaner::invoke() {
-    if(m_worldtree.isLeaf()) {
+void WorldTreeCleaner::invoke() {
+    if(m_worldTree.isLeaf()) {
         return;
     }
 
-    invoke(&m_worldtree);
+    invoke(&m_worldTree);
 }
 
 
-void WorldtreeCleaner::invoke(WorldtreeNode *node) {
+void WorldTreeCleaner::invoke(WorldTreeNode *node) {
     assert(!node->isLeaf());
 
     int geodesInSubnodes = 0;
 
-    for(WorldtreeNode *subnode : node->m_subnodes) {
+    for(WorldTreeNode *subnode : node->m_subnodes) {
         if(!subnode->isLeaf()) {
             invoke(subnode);
             if(!subnode->isLeaf()) {
@@ -36,7 +36,7 @@ void WorldtreeCleaner::invoke(WorldtreeNode *node) {
         geodesInSubnodes += subnode->geodes().size();
     }
 
-    if(geodesInSubnodes <= WorldtreeNode::MAX_GEODES) {
+    if(geodesInSubnodes <= WorldTreeNode::MAX_GEODES) {
         node->unsplit();
     }
 }

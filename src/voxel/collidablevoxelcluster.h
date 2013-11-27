@@ -12,21 +12,21 @@ public:
     virtual void addVoxel(Voxel *voxel);
     virtual void removeVoxel(const cvec3 &position);
 
-    WorldtreeGeode *geode();
-    const WorldtreeGeode *geode() const;
-    void setGeode(WorldtreeGeode *geode);
-    void setWorldTree(Worldtree* worldTree);
-    Worldtree* worldTree();
+    WorldTreeGeode *geode();
+    const WorldTreeGeode *geode() const;
+    void setGeode(WorldTreeGeode *geode);
+    void setWorldTree(WorldTree* worldTree);
+    WorldTree* worldTree();
 
-    VoxeltreeNode &voxeltree();
-    const VoxeltreeNode &voxeltree() const;
+    VoxelTreeNode &voxeltree();
+    const VoxelTreeNode &voxeltree() const;
 
     virtual void finishInitialization();
     void updateGeode();
 protected:
-    VoxeltreeNode m_voxelTree;
-    WorldtreeGeode *m_geode;
-    Worldtree *m_worldTree;
+    VoxelTreeNode m_voxelTree;
+    WorldTreeGeode *m_geode;
+    WorldTree *m_worldTree;
     std::unique_ptr<CollisionDetector> m_collisionDetector;
 
 };

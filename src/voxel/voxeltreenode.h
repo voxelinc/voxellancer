@@ -14,19 +14,19 @@
 
 class CollidableVoxelCluster;
 
-class VoxeltreeNode
+class VoxelTreeNode
 {
 public:
-    VoxeltreeNode(VoxeltreeNode *parent, CollidableVoxelCluster &voxelcluster, const Grid3dAABB &gridAABB = Grid3dAABB(glm::ivec3(0, 0, 0), glm::ivec3(0, 0, 0)));
-    VoxeltreeNode(const VoxeltreeNode& other, CollidableVoxelCluster *voxelcluster);
-	VoxeltreeNode(const VoxeltreeNode& other) = delete; //no "normal" copy ctor
-    virtual ~VoxeltreeNode();
+    VoxelTreeNode(VoxelTreeNode *parent, CollidableVoxelCluster &voxelcluster, const Grid3dAABB &gridAABB = Grid3dAABB(glm::ivec3(0, 0, 0), glm::ivec3(0, 0, 0)));
+    VoxelTreeNode(const VoxelTreeNode& other, CollidableVoxelCluster *voxelcluster);
+	VoxelTreeNode(const VoxelTreeNode& other) = delete; //no "normal" copy ctor
+    virtual ~VoxelTreeNode();
 
     bool isAtomic() const;
     bool isLeaf() const;
 
-    std::vector<VoxeltreeNode*> &subnodes();
-    const std::vector<VoxeltreeNode*> &subnodes() const;
+    std::vector<VoxelTreeNode*> &subnodes();
+    const std::vector<VoxelTreeNode*> &subnodes() const;
 
     Voxel *voxel();
     const Voxel *voxel() const;
@@ -40,11 +40,11 @@ public:
 
 
 protected:
-    VoxeltreeNode *m_parent;
+    VoxelTreeNode *m_parent;
     CollidableVoxelCluster &m_voxelcluster;
     Grid3dAABB m_gridAABB;
 
-    std::vector<VoxeltreeNode*> m_subnodes;
+    std::vector<VoxelTreeNode*> m_subnodes;
     Voxel *m_voxel;
 
     void split();

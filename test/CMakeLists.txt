@@ -7,7 +7,7 @@ include(maketest.cmake)
 
 if(${OPTION_CREATE_SUB_TEST})
     add_subdirectory(geometry)
-    add_subdirectory(worldtree)
+    add_subdirectory(worldTree)
     add_subdirectory(property)
     add_subdirectory(voxelcluster)
     add_subdirectory(voxeltree)
