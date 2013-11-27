@@ -20,7 +20,8 @@ protected:
 
     std::set<Voxel*> m_potentialOrphans;
 
+    void clear();
     void fillPotentialOrphans(VoxelCluster *voxelCluster);
-    void removeNonOrphans(Voxel *voxel);
+    VoxelClusterOrphan *pollContinuousVoxels(Voxel *orphanVoxel);
 };
 

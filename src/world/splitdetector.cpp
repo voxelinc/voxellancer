@@ -4,14 +4,19 @@
 
 
 void SplitDetector::searchOrphans(std::set<VoxelCluster*> &modifiedVoxelClusters) {
-    m_voxelClusterOrphans.clear();
+    clear();
 
     for(VoxelCluster *modifiedVoxelCluster : modifiedVoxelClusters) {
         fillPotentialOrphans(modifiedVoxelCluster);
-        removeNonOrphans(modifiedVoxelCluster->crucialVoxel());
+
+        if(modifiedVoxelCluster->crucialVoxel() != nullptr) {
+            pollContinuousVoxels(modifiedVoxelCluster->crucialVoxel());
+        }
 
         while(!m_potentialOrphans.empty()) {
-            buildOrphan(nullptr, *m_potentialOrphans.begin());
+            VoxelClusterOrphan *orphanCluster = pollContinuousVoxels(*m_potentialOrphans.begin());
+            orphanCluster->setExVoxelCluster(modifiedVoxelCluster);
+            m_voxelClusterOrphans.push_back(orphanCluster);
         }
     }
 }
@@ -20,32 +25,51 @@ std::list<VoxelClusterOrphan*> &SplitDetector::voxelClusterOrphans() {
     return m_voxelClusterOrphans;
 }
 
+void SplitDetector::clear() {
+    for(VoxelClusterOrphan *orphanCluster : m_voxelClusterOrphans) {
+        delete orphanCluster;
+    }
+
+    m_voxelClusterOrphans.clear();
+    m_potentialOrphans.clear();
+}
+
+/**
+* Marks all voxels in the cluster as potential orphans, they are later unmarked by pollContinuousVoxels()
+**/
 void SplitDetector::fillPotentialOrphans(VoxelCluster *voxelCluster) {
     m_potentialOrphans.clear();
 
-    for(std::pair<cvec3, Voxel> &cellVoxelPair : voxelCluster->voxelMap()) {
-        m_potentialOrphans.insert(&cellVoxelPair.second);
+    for(const std::pair<cvec3, Voxel> &cellVoxelPair : voxelCluster->voxelMap()) {
+        m_potentialOrphans.insert(const_cast<Voxel*>(&cellVoxelPair.second));
     }
 }
 
-void SplitDetector::removeNonOrphans(Voxel *voxel) {
+/**
+* Starting from voxel, this function recursivly builds up a set of voxels that are attached to each other with facing sides
+**/
+VoxelClusterOrphan *SplitDetector::pollContinuousVoxels(Voxel *voxel) {
+    VoxelClusterOrphan *continuousCluster;
+
+    continuousCluster = new VoxelClusterOrphan;
+
     std::set<Voxel*>::iterator i = m_potentialOrphans.find(voxel);
 
     if(i == m_potentialOrphans.end()) { // We've been here already, so nothing to do here
-        return;
+        return continuousCluster;
     }
 
+    continuousCluster->addVoxel(*i);
     m_potentialOrphans.erase(i);
 
-    std::list<Voxel*> neightbours = VoxelNeighbourHelper(voxel, false);
+    std::list<Voxel*> neighbours = VoxelNeighbourHelper(voxel, false).neighbours();
 
     for(Voxel *neighbour : neighbours) {
-        removeNonOrphans(neighbour);
+        VoxelClusterOrphan *neighbourOrphan = pollContinuousVoxels(neighbour);
+        continuousCluster->addAllVoxels(neighbourOrphan);
+        delete neighbourOrphan;
     }
-}
 
-void SplitDetector::createOrphan(VoxelClusterOrphan *orphanCluster, Voxel *orphanVoxel) {
-
-
+    return continuousCluster;
 }
 

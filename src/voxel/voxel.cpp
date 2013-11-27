@@ -28,6 +28,13 @@ Voxel::~Voxel() {
 
 }
 
+Voxel *Voxel::clone() {
+    Voxel *voxel = new Voxel(m_voxelCluster);
+    voxel->m_gridCell = m_gridCell;
+    voxel->m_color = m_color;
+    voxel->m_hp = m_hp;
+}
+
 VoxelCluster *Voxel::voxelCluster() {
     return m_voxelCluster;
 }

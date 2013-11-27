@@ -12,5 +12,8 @@ public:
 
 protected:
     std::list<VoxelCluster*> m_splitOffVoxelClusters;
+
+    VoxelCluster *createVoxelClusterFromOrphan(VoxelClusterOrphan *orphanCluster);
+    void removeExtractedVoxelsFromEx(VoxelClusterOrphan *orphanCluster);
 };
 

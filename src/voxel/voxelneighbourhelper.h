@@ -1,5 +1,7 @@
 #pragma once
 
+#include <list>
+
 #include "voxel.h"
 
 
@@ -15,4 +17,6 @@ protected:
     Voxel *m_voxel;
     bool m_includeDiagonals;
     std::list<Voxel*> m_neighbours;
+
+    void considerNeighbour(const glm::ivec3 &relativeCell);
 };

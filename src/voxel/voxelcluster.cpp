@@ -175,8 +175,20 @@ void VoxelCluster::removeVoxel(const cvec3 &position) {
     m_voxelRenderData.invalidate();
 }
 
+Voxel *VoxelCluster::crucialVoxel() {
+    return nullptr;
+}
+
 const Voxel *VoxelCluster::crucialVoxel() const {
     return nullptr;
+}
+
+float VoxelCluster::scale() const {
+    return m_transform.scale();
+}
+
+std::unordered_map<cvec3, Voxel, VoxelHash> &VoxelCluster::voxelMap(){
+    return m_voxel;
 }
 
 const std::unordered_map<cvec3, Voxel, VoxelHash> &VoxelCluster::voxelMap() const{

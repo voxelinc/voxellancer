@@ -43,14 +43,18 @@ public:
 
     Voxel *voxel(const glm::ivec3 &cell);
     const Voxel *voxel(const glm::ivec3 &cell) const;
-    
+
     virtual void addVoxel(const Voxel &voxel);
     virtual void removeVoxel(const cvec3 &position);
-    
+
+    Voxel *crucialVoxel();
     const Voxel *crucialVoxel() const;
+
+    float scale() const;
 
     VoxelRenderData *voxelRenderData();
 
+    std::unordered_map<cvec3, Voxel, VoxelHash> &voxelMap(); // TODO: This is evil, there has to be a better was
     const std::unordered_map<cvec3, Voxel, VoxelHash> &voxelMap() const;
 
 

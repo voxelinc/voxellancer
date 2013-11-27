@@ -23,6 +23,8 @@ public:
     Voxel(cvec3 gridCell, cvec3 color, VoxelCluster *voxelCluster = nullptr);
     virtual ~Voxel();
 
+    virtual Voxel *clone();
+
     VoxelCluster *voxelCluster();
     const VoxelCluster *voxelCluster() const;
 
