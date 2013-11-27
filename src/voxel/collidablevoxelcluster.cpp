@@ -1,5 +1,5 @@
 #include "collidablevoxelcluster.h"
-#include "worldtree/worldTreegeode.h"
+#include "worldtree/worldtreegeode.h"
 #include "collision/collisiondetector.h"
 
 

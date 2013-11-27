@@ -3,7 +3,7 @@
 #include <list>
 #include <set>
 
-#include "worldTreegeode.h"
+#include "worldtreegeode.h"
 #include "../geometry/aabb.h"
 
 /*!
