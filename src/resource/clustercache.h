@@ -20,9 +20,13 @@ public:
     static ClusterCache *instance();
 
 private:
+    template <class T>
+    T* clone(T* other);
+
     std::map<std::string, std::vector<Voxel*>*> m_items;
     ClusterLoader m_loader;
 
     static ClusterCache *s_instance;
 };
 
+#include "clustercache.inl"
