@@ -17,6 +17,7 @@ public:
     const WorldtreeGeode *geode() const;
     void setGeode(WorldtreeGeode *geode);
     void setWorldTree(Worldtree* worldTree);
+    Worldtree* worldTree();
 
     VoxeltreeNode &voxeltree();
     const VoxeltreeNode &voxeltree() const;

@@ -138,13 +138,13 @@ void HUD::draw(){
     m_voxelRenderer->prepareDraw(&m_rendercamera, false);
 
     // draw statics
-    for (std::unique_ptr<HUDElement>& element : m_elements)    {
+    for (std::unique_ptr<HUDElement>& element : m_elements){
         m_voxelRenderer->draw(element.get());
     }
 
     // draw ship arrows
     int i = 0;
-    for (VoxelCluster *ship : World::instance()->god().voxelClusters()){
+    for (VoxelCluster *ship : World::instance()->clusters()){
         if (glm::length(ship->transform().position() - m_hudcamera.position()) < m_arrow_maxdistance){
             // delta is the vector from virtual HUD camera to the ship
             glm::vec3 delta = glm::inverse(m_hudcamera.orientation()) * (ship->transform().position() - m_hudcamera.position());

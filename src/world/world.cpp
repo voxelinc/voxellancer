@@ -27,7 +27,11 @@ God &World::god() {
 }
 
 Worldtree &World::worldtree() {
-    return *m_worldtree; 
+    return *m_worldtree;
+}
+
+std::list<PhysicalVoxelCluster*> &World::clusters() {
+    return m_clusters;
 }
 
 float World::deltaSecs() const {

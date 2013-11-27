@@ -153,7 +153,7 @@ void Game::draw()
 	m_skybox->draw(&m_camera);
 
     m_voxelRenderer->prepareDraw(&m_camera);
-    for (PhysicalVoxelCluster * cluster : m_world->god().voxelClusters()) {
+    for (PhysicalVoxelCluster * cluster : m_world->clusters()) {
         m_voxelRenderer->draw(cluster);
     }
 

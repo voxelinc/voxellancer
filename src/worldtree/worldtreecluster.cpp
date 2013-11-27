@@ -6,6 +6,7 @@
 WorldTreeVoxelCluster::WorldTreeVoxelCluster(glm::vec3 center, float scale) :
 VoxelCluster(center, scale),
 m_voxelTree(nullptr, *this, Grid3dAABB(glm::ivec3(0, 0, 0), glm::ivec3(0, 0, 0))),
+m_worldTree(nullptr),
 m_geode(nullptr),
 m_collisionDetector(nullptr)
 {
@@ -15,6 +16,7 @@ m_collisionDetector(nullptr)
 WorldTreeVoxelCluster::WorldTreeVoxelCluster(const WorldTreeVoxelCluster& other) :
 VoxelCluster(other),
 m_voxelTree(other.m_voxelTree, this),
+m_worldTree(nullptr),
 m_geode(nullptr),
 m_collisionDetector(nullptr) 
 {
@@ -66,6 +68,10 @@ void WorldTreeVoxelCluster::updateGeode() {
 void WorldTreeVoxelCluster::setWorldTree(Worldtree* worldTree) {
     m_worldTree = worldTree;
     m_collisionDetector = std::unique_ptr<CollisionDetector>(new CollisionDetector(*worldTree, *this));
+}
+
+Worldtree* WorldTreeVoxelCluster::worldTree(){
+    return m_worldTree;
 }
 
 void WorldTreeVoxelCluster::finishInitialization() {
