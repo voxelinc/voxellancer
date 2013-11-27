@@ -3,7 +3,7 @@
 #include <iostream>
 
 #include "../bandit_extension/vec3helper.h"
-#include "worldTree/worldTreenode.h"
+#include "worldTree/worldtreenode.h"
 
 using namespace bandit;
 

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "worldTree.h"
-#include "worldTreenode.h"
+#include "worldtree.h"
+#include "worldtreenode.h"
 
 
 class WorldTreeCleaner
