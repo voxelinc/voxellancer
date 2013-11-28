@@ -1,14 +1,12 @@
 #pragma once
 
+#include <list>
 #include "collision/collision.h"
-
-#include "god.h"
-
 
 class Mover
 {
 public:
-    void moveVoxelClusters();
+    void moveVoxelClusters(float delta_sec);
 
     const std::list<Collision> &collisions();
 

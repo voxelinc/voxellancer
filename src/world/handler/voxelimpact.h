@@ -1,8 +1,9 @@
 #pragma once
 
-#include "voxel/voxel.h"
 #include "physics/impact.h"
 
+
+class Voxel;
 
 class VoxelImpact
 {

@@ -1,31 +1,31 @@
 #pragma once
 
-#include "voxel/voxelcluster.h"
 #include "geometry/aabb.h"
 
-class WorldtreeNode;
+class WorldTreeNode;
+class CollidableVoxelCluster;
 
-class WorldtreeGeode
+class WorldTreeGeode
 {
 public:
-    WorldtreeGeode();
-    WorldtreeGeode(VoxelCluster *voxelcluster);
-    virtual ~WorldtreeGeode();
+    WorldTreeGeode();
+    WorldTreeGeode(CollidableVoxelCluster *voxelcluster);
+    virtual ~WorldTreeGeode();
 
-    VoxelCluster *voxelcluster();
-    const VoxelCluster *voxelcluster() const;
-    void setVoxelCluster(VoxelCluster *voxelcluster);
+    CollidableVoxelCluster *voxelcluster();
+    const CollidableVoxelCluster *voxelcluster() const;
+    void setVoxelCluster(CollidableVoxelCluster *voxelcluster);
 
-    WorldtreeNode *containingNode();
-    const WorldtreeNode *containingNode() const;
-    void setContainingNode(WorldtreeNode *node);
+    WorldTreeNode *containingNode();
+    const WorldTreeNode *containingNode() const;
+    void setContainingNode(WorldTreeNode *node);
 
     const AABB &aabb() const;
     void setAABB(const AABB &aabb);
 
 protected:
-    VoxelCluster *m_voxelcluster;
-    WorldtreeNode *m_containingNode;
+    CollidableVoxelCluster *m_voxelcluster;
+    WorldTreeNode *m_containingNode;
     AABB m_aabb;
 };
 

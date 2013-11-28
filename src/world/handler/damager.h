@@ -2,8 +2,9 @@
 
 #include <list>
 
-#include "voxelclusterimpact.h"
+#include "voxelimpact.h"
 
+class WorldObject;
 
 class Damager
 {
@@ -11,10 +12,10 @@ public:
     void applyDamages(std::list<VoxelImpact> &voxelImpacts);
 
     std::list<VoxelImpact> &deadlyVoxelImpacts();
-    std::list<VoxelCluster*> &modifiedVoxelClusters();
+    std::list<WorldObject*> &modifiedVoxelClusters();
 
 protected:
     std::list<VoxelImpact> m_deadlyVoxelImpacts;
-    std::list<VoxelCluster*> m_modifiedVoxelClusters;
+    std::list<WorldObject*> m_modifiedVoxelClusters;
 };
 

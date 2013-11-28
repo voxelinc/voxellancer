@@ -2,8 +2,8 @@
 
 #include <list>
 
-#include "voxel/voxelcluster.h"
-
+class PhysicalVoxelCluster;
+class Voxel;
 
 class VoxelClusterOrphan
 {
@@ -11,7 +11,7 @@ public:
 
 
 protected:
-    VoxelCluster &m_voxelCluster;
+    PhysicalVoxelCluster &m_voxelCluster;
     std::list<Voxel*> m_orphanedVoxels;
 };
 

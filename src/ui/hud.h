@@ -24,7 +24,7 @@ enum HUDFontAlign {
 
 class HUD {
 public:
-    HUD(std::list<VoxelCluster*> ships);
+    HUD();
     virtual ~HUD();
 
     void setCamera(Camera *camera);
@@ -57,7 +57,6 @@ protected:
     std::map<char, std::unique_ptr<VoxelCluster>> m_font3x5;
     std::map<char, std::unique_ptr<VoxelCluster>> m_font5x7;
     std::unique_ptr<HUDElement> m_shiparrow;
-    std::list<VoxelCluster*> m_ships;
     double m_delta_sec_remain;
     float m_framerate;
     float m_dx, m_dy;
