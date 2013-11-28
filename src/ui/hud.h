@@ -48,18 +48,18 @@ protected:
 
     
 
-    Camera *m_gamecamera;
-    WorldTransform m_hudcamera, m_lastgamecamera;
-    Camera m_rendercamera;
+    Camera *m_gameCamera;
+    WorldTransform m_hudCamera, m_lastGameCamera;
+    Camera m_renderCamera;
     std::unique_ptr<VoxelRenderer> m_voxelRenderer;
     std::vector<std::unique_ptr<HUDElement>> m_elements;
     std::vector<std::unique_ptr<HUDElement>> m_numbers;
     std::map<char, std::unique_ptr<VoxelCluster>> m_font3x5;
     std::map<char, std::unique_ptr<VoxelCluster>> m_font5x7;
-    std::unique_ptr<HUDElement> m_shiparrow;
+    std::unique_ptr<HUDElement> m_shipArrow;
     std::list<VoxelCluster*> m_ships;
     double m_delta_sec_remain;
-    float m_framerate;
+    float m_frameRate;
     float m_dx, m_dy;
 
     Property<float> m_distance, m_move_multiplier, m_inertia_move, m_inertia_rotate, m_inertia_rate,
