@@ -13,52 +13,41 @@
 #include "worldtransform.h"
 #include "voxel.h"
 #include "voxelrenderdata.h"
+#include <memory>
 
 
-class WorldtreeGeode;
-class Worldtree;
+class WorldTreeGeode;
+class WorldTree;
 
 class VoxelCluster
 {
 public:
 	VoxelCluster(glm::vec3 center = glm::vec3(0), float scale = 1.0);
-	VoxelCluster(const VoxelCluster& other);
     virtual ~VoxelCluster();
 
     AABB aabb();
+    Sphere sphere();
 
     WorldTransform &transform();
     const WorldTransform &transform() const;
 
-    void applyTransform(bool checkCollision = true);
-
-
-    VoxeltreeNode &voxeltree();
-    const VoxeltreeNode &voxeltree() const;
-
-    WorldtreeGeode *geode();
-    const WorldtreeGeode *geode() const;
-    void setGeode(WorldtreeGeode *geode);
-    void setWorldTree(Worldtree* worldTree);
-
-    virtual void addVoxel(const Voxel &voxel);
+    Voxel * voxel(cvec3 position);
+    virtual void addVoxel(Voxel *voxel);
     virtual void removeVoxel(const cvec3 &position);
+
     VoxelRenderData *voxelRenderData();
-    const std::unordered_map<cvec3, Voxel, VoxelHash> & voxel() const;
+
+    virtual void finishInitialization();
 
 protected:
     void updateTextures();
-    void updateGeode();
-    void doSteppedTransform();
-    float calculateStepCount();
-    bool isCollisionPossible();
-
+    
+    AABB aabb(const WorldTransform & transform);
+    Sphere sphere(const WorldTransform & transform);
     WorldTransform m_transform;
-    WorldTransform m_oldTransform;
-    VoxeltreeNode m_voxelTree;
     VoxelRenderData m_voxelRenderData;
-    WorldtreeGeode *m_geode;
-    Worldtree *m_worldTree;
-    std::unordered_map<cvec3, Voxel, VoxelHash> m_voxel;
+
+    std::unordered_map<cvec3, Voxel*> m_voxels;
+    CAABB m_aabb;
 };
 

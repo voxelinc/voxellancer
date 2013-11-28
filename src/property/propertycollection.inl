@@ -3,7 +3,7 @@
 #include "property.h"
 
 template <class T>
-PropertyCollection<T>::PropertyCollection(std::regex regex, std::function<T (const std::string&)> converter) :
+PropertyCollection<T>::PropertyCollection(regexns::regex regex, std::function<T (const std::string&)> converter) :
     m_values(),
     m_properties(),
     m_regex(regex),
@@ -20,9 +20,9 @@ PropertyCollection<T>::~PropertyCollection()
 
 template <class T>
 bool PropertyCollection<T>::update(const std::string & key, const std::string & svalue) {
-    if (!std::regex_match(svalue, m_regex)) {
+    if (!regexns::regex_match(svalue, m_regex)) {
         return false;
-    } 
+    }
 
     T tvalue = m_converter(svalue);
 

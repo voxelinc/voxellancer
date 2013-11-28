@@ -1,10 +1,10 @@
 #pragma once
 
+#include <list>
 #include "physics/shockwave.h"
 
-#include "god.h"
-
-
+class God;
+class VoxelImpact;
 
 class ShockwaveResolver
 {

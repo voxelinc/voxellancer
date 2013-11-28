@@ -1,12 +1,16 @@
 #include "world.h"
 
-#include "voxel/voxel.h"
-
+#include "god.h"
+#include "worldtree/worldtree.h"
+#include "worldlogic.h"
 
 World *World::s_instance = nullptr;
 
 World::World()
 {
+    m_worldLogic = std::unique_ptr<WorldLogic>(new WorldLogic(*this));
+    m_worldTree = std::unique_ptr<WorldTree>(new WorldTree());
+    m_god = std::unique_ptr<God>(new God(*this));
 
 }
 
@@ -15,15 +19,19 @@ World::~World() {
 }
 
 WorldLogic &World::worldLogic() {
-    return m_worldLogic;
+    return *m_worldLogic;
 }
 
 God &World::god() {
-    return m_god;
+    return *m_god;
 }
 
-Worldtree &World::worldtree() {
-    return m_worldtree;
+WorldTree &World::worldTree() {
+    return *m_worldTree;
+}
+
+std::list<WorldObject*> &World::clusters() {
+    return m_clusters;
 }
 
 float World::deltaSecs() const {
@@ -32,7 +40,7 @@ float World::deltaSecs() const {
 
 void World::update(float deltaSecs) {
     m_deltaSecs = deltaSecs;
-    m_worldLogic.update();
+    m_worldLogic->update(deltaSecs);
 }
 
 World *World::instance() {

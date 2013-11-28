@@ -7,16 +7,16 @@
 #include "voxelcluster.h"
 
 
-Voxel::Voxel(VoxelCluster *voxelCluster):
-    m_voxelCluster(voxelCluster),
+Voxel::Voxel():
+    m_voxelCluster(nullptr),
     m_gridCell(0, 0, 0),
     m_color(1, 0, 1),
     m_hp(1)
 {
 }
 
-Voxel::Voxel(cvec3 gridCell, cvec3 color, VoxelCluster *voxelCluster):
-    m_voxelCluster(voxelCluster),
+Voxel::Voxel(cvec3 gridCell, cvec3 color):
+    m_voxelCluster(nullptr),
     m_gridCell(gridCell),
     m_color(color),
     m_hp(1)
@@ -32,26 +32,26 @@ VoxelCluster *Voxel::voxelCluster() {
     return m_voxelCluster;
 }
 
-const VoxelCluster *Voxel::voxelCluster() const {
-    return m_voxelCluster;
+void Voxel::setVoxelCluster(VoxelCluster *cluster){
+    m_voxelCluster = cluster;
 }
 
 const cvec3 &Voxel::gridCell() const {
     return m_gridCell;
 }
 
-void Voxel::setGridCell(const cvec3 &cell) {
-    m_gridCell = cell;
-}
+//void Voxel::setGridCell(const cvec3 &cell) {
+//    m_gridCell = cell;
+//}
 
 
 const cvec3 &Voxel::color() const {
     return m_color;
 }
 
-void Voxel::setColor(const cvec3 &color) {
-    m_color = color;
-}
+//void Voxel::setColor(const cvec3 &color) {
+//    m_color = color;
+//}
 
 float Voxel::hp() const {
     return m_hp;

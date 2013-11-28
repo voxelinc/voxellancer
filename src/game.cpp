@@ -22,37 +22,33 @@
 #include <fmod_errors.h>
 
 #include "property/propertymanager.h"
-#include "resource/clusterstore.h"
+#include "resource/clustercache.h"
 #include "utils/hd3000dummy.h"
 #include "utils/linuxvmdummy.h"
-#include "voxel/voxelrenderer.h"
 #include "ui/inputhandler.h"
 #include "ui/hud.h"
-#include "skybox.h"
 
 #include "world/world.h"
-
+#include "world/god.h"
+#include "skybox.h"
+#include "voxel/voxelrenderer.h"
+#include "world/worldobject.h"
+#include "collision/collisiondetector.h"
 
 Game::Game(GLFWwindow *window):
 	m_window(window),
 	m_camera(),
-	m_inputHandler(window, &m_camera, &m_testClusterMoveable),
-	m_collisionDetector(m_worldtree, m_testClusterMoveable),
-	m_testClusterA(0),
-	m_testClusterB(0)
+	m_inputHandler(window, &m_camera)
 {
 	reloadConfig();
 }
 
 Game::~Game(){
-	delete m_testClusterA;
-	delete m_testClusterB;
+
 }
 
-void Game::reloadConfig(){
-#ifdef WIN32
+void Game::reloadConfig() {
 	PropertyManager::instance()->load("data/config.ini");
-#endif
 }
 
 void Game::initialize()
@@ -65,48 +61,61 @@ void Game::initialize()
 	//Must be created first
 	m_linuxvmdummy = std::unique_ptr<LinuxVMDummy>(new LinuxVMDummy);
 
-	glow::debug("Create Skybox");
+    glow::debug("create world");
+    m_world = World::instance();
+
+    glow::debug("Create Skybox");
 	m_skybox = std::unique_ptr<Skybox>(new Skybox);
 
 	glow::debug("Create Voxel");
     m_voxelRenderer = std::unique_ptr<VoxelRenderer>(new VoxelRenderer);
 
-    m_testCluster.transform().move(glm::vec3(0, 0, 0));
-    m_testCluster.applyTransform(false);
-    m_testCluster.addVoxel(Voxel(cvec3(1, 0, 0), cvec3(0, 255, 0), &m_testCluster));
-    m_testCluster.addVoxel(Voxel(cvec3(2, 0, 0), cvec3(255, 255, 0), &m_testCluster));
-    m_testCluster.addVoxel(Voxel(cvec3(1, 1, 0), cvec3(0, 0, 255), &m_testCluster));
-    m_testCluster.addVoxel(Voxel(cvec3(1, 0, 1), cvec3(255, 0, 0), &m_testCluster));
-    m_testCluster.addVoxel(Voxel(cvec3(0, 0, 0), cvec3(255, 0, 128), &m_testCluster));
-    m_worldtree.insert(&m_testCluster);
+    WorldObject *m_testCluster = new WorldObject();
+    m_testCluster->transform().move(glm::vec3(0, 0, 0));
+    m_testCluster->addVoxel(new Voxel(cvec3(1, 0, 0), cvec3(0, 255, 0)));
+    m_testCluster->addVoxel(new Voxel(cvec3(2, 0, 0), cvec3(255, 255, 0)));
+    m_testCluster->addVoxel(new Voxel(cvec3(1, 1, 0), cvec3(0, 0, 255)));
+    m_testCluster->addVoxel(new Voxel(cvec3(1, 0, 1), cvec3(255, 0, 0)));
+    m_testCluster->addVoxel(new Voxel(cvec3(0, 0, 0), cvec3(255, 0, 128)));
+    m_testCluster->finishInitialization();
+    m_world->god().scheduleSpawn(m_testCluster);
+    
+    WorldObject *m_testClusterMoveable = new WorldObject();
+    m_testClusterMoveable->transform().move(glm::vec3(-20, 0, 0));
+    m_testClusterMoveable->transform().rotate(glm::angleAxis(-90.f, glm::vec3(0, 1, 0)));
+    m_testClusterMoveable->addVoxel(new Voxel(cvec3(0, 0, 7), cvec3(0, 255, 0)));
+    m_testClusterMoveable->addVoxel(new Voxel(cvec3(0, 0, 6), cvec3(255, 255, 0)));
+    m_testClusterMoveable->addVoxel(new Voxel(cvec3(0, 0, 5), cvec3(255, 255, 0)));
+    m_testClusterMoveable->addVoxel(new Voxel(cvec3(0, 0, 4), cvec3(255, 255, 0)));
+    m_testClusterMoveable->addVoxel(new Voxel(cvec3(0, 0, 3), cvec3(255, 255, 0)));
+    m_testClusterMoveable->addVoxel(new Voxel(cvec3(0, 0, 2), cvec3(255, 255, 0)));
+    m_testClusterMoveable->addVoxel(new Voxel(cvec3(0, 0, 1), cvec3(255, 255, 0)));
+    m_testClusterMoveable->addVoxel(new Voxel(cvec3(1, 1, 7), cvec3(0, 0, 255)));
+    m_testClusterMoveable->addVoxel(new Voxel(cvec3(1, 0, 7), cvec3(255, 0, 0)));
+    m_testClusterMoveable->addVoxel(new Voxel(cvec3(0, 0, 8), cvec3(255, 0, 128)));
+    m_testClusterMoveable->finishInitialization();
+    m_world->god().scheduleSpawn(m_testClusterMoveable);
 
-    m_testClusterMoveable.transform().setCenter(glm::vec3(0,0,7));
-    m_testClusterMoveable.transform().move(glm::vec3(-20, 0, 0));
-    m_testClusterMoveable.transform().rotate(glm::angleAxis(-90.f, glm::vec3(0, 1, 0)));
-    m_testClusterMoveable.applyTransform(false);
-    m_testClusterMoveable.addVoxel(Voxel(cvec3(0, 0, 7), cvec3(0, 255, 0), &m_testClusterMoveable));
-    m_testClusterMoveable.addVoxel(Voxel(cvec3(0, 0, 6), cvec3(255, 255, 0), &m_testClusterMoveable));
-    m_testClusterMoveable.addVoxel(Voxel(cvec3(0, 0, 5), cvec3(255, 255, 0), &m_testClusterMoveable));
-    m_testClusterMoveable.addVoxel(Voxel(cvec3(0, 0, 4), cvec3(255, 255, 0), &m_testClusterMoveable));
-    m_testClusterMoveable.addVoxel(Voxel(cvec3(0, 0, 3), cvec3(255, 255, 0), &m_testClusterMoveable));
-    m_testClusterMoveable.addVoxel(Voxel(cvec3(0, 0, 2), cvec3(255, 255, 0), &m_testClusterMoveable));
-    m_testClusterMoveable.addVoxel(Voxel(cvec3(0, 0, 1), cvec3(255, 255, 0), &m_testClusterMoveable));
-    m_testClusterMoveable.addVoxel(Voxel(cvec3(1, 1, 7), cvec3(0, 0, 255), &m_testClusterMoveable));
-    m_testClusterMoveable.addVoxel(Voxel(cvec3(1, 0, 7), cvec3(255, 0, 0), &m_testClusterMoveable));
-    m_testClusterMoveable.addVoxel(Voxel(cvec3(0, 0, 8), cvec3(255, 0, 128), &m_testClusterMoveable));
-    m_worldtree.insert(&m_testClusterMoveable);
+    m_inputHandler.setVoxelCluster(m_testClusterMoveable);
 
-	m_testClusterA = ClusterStore::instance()->create("data/voxelcluster/basicship.csv");
-	m_testClusterA->transform().setCenter(glm::vec3(3, 0, 3));
+    WorldObject *m_testClusterA = new WorldObject();
+    ClusterCache::instance()->fillCluster(m_testClusterA, "data/voxelcluster/basicship.csv");
+	m_testClusterA->transform().setCenter(glm::vec3(3, 0, 3)); // TODO: shouldnt center == centerofmass ?
 	m_testClusterA->transform().setPosition(glm::vec3(0, 0, -10));
 	m_testClusterA->removeVoxel(cvec3(3, 2, 3)); // this verifies the objects are different
+    m_testClusterA->finishInitialization();
+    m_world->god().scheduleSpawn(m_testClusterA);
 
-	m_testClusterB = ClusterStore::instance()->create("data/voxelcluster/basicship.csv");
+    WorldObject *m_testClusterB = new WorldObject();
+    ClusterCache::instance()->fillCluster(m_testClusterB, "data/voxelcluster/basicship.csv");
 	m_testClusterB->transform().setCenter(glm::vec3(3, 0, 3));
-	m_testClusterB->transform().setPosition(glm::vec3(0, 0, 10));
+    m_testClusterB->transform().setPosition(glm::vec3(0, 0, 10));
+    m_testClusterB->finishInitialization();
+    m_world->god().scheduleSpawn(m_testClusterB);
 
-	m_worldtree.insert(m_testClusterA);
-    m_worldtree.insert(m_testClusterB);
+
+    glow::debug("Initial spawn");
+    m_world->god().spawn();
 
 	glow::debug("Setup Camera");
 	//viewport set in resize
@@ -115,7 +124,7 @@ void Game::initialize()
 	m_camera.setZFar(9999);
 
 	glow::debug("Create HUD");
-	m_hud = std::unique_ptr<HUD>(new HUD(std::list<VoxelCluster*>{ m_testClusterA, m_testClusterB, &m_testCluster, &m_testClusterMoveable }));
+	m_hud = std::unique_ptr<HUD>(new HUD());
 	m_hud->setCamera(&m_camera);
 
     m_hd3000dummy = std::unique_ptr<HD3000Dummy>(new HD3000Dummy);
@@ -124,25 +133,17 @@ void Game::initialize()
 	glow::debug("Game::initialize Done");
 }
 
-static int last_collisions = 0;
 
 void Game::update(float delta_sec)
 {
+    // avoid big jumps after debugging ;)
+    delta_sec = glm::min(1.f, delta_sec);
+	
+    m_inputHandler.update(delta_sec);
+
     World::instance()->update(delta_sec);
 
-    std::list<Collision> collisions = m_collisionDetector.checkCollisions();
-    if (collisions.size() != last_collisions) {
-        glow::debug("Collisions: %;", collisions.size());
-        last_collisions = collisions.size();
-    }
 
-	m_inputHandler.update(delta_sec);
-
-    // TODO: use god instead
-    m_testCluster.applyTransform();
-    m_testClusterA->applyTransform();
-    m_testClusterB->applyTransform();
-    m_testClusterMoveable.applyTransform();
 	m_hud->update(delta_sec);
 }
 
@@ -156,10 +157,9 @@ void Game::draw()
 	m_skybox->draw(&m_camera);
 
     m_voxelRenderer->prepareDraw(&m_camera);
-    m_voxelRenderer->draw(&m_testCluster);
-    m_voxelRenderer->draw(&m_testClusterMoveable);
-	m_voxelRenderer->draw(m_testClusterA);
-	m_voxelRenderer->draw(m_testClusterB);
+    for (PhysicalVoxelCluster * cluster : m_world->clusters()) {
+        m_voxelRenderer->draw(cluster);
+    }
 
     // draw all other voxelclusters...
     m_voxelRenderer->afterDraw();

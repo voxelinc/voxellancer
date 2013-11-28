@@ -20,7 +20,7 @@ std::list<VoxelImpact> &Damager::deadlyVoxelImpacts() {
     return m_deadlyVoxelImpacts;
 }
 
-std::set<VoxelCluster*> &Damager::modifiedVoxelClusters() {
+std::list<WorldObject*> &Damager::modifiedVoxelClusters() {
     return m_modifiedVoxelClusters;
 }
 
