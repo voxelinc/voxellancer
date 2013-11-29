@@ -2,8 +2,6 @@
 
 #include <glm/glm.hpp>
 
-#include "world/worldobject.h"
-
 InputHandler::InputHandler(GLFWwindow *window, Camera *camera):
 	m_window(window),
 	m_camera(camera),
@@ -112,24 +110,48 @@ void InputHandler::update(float delta_sec) {
             }
 
 
+            double x, y;
+            glfwGetCursorPos(m_window, &x, &y);
+
+            // shoot
+            if (glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS){
+                glm::vec4 pointEnd((x * 2 / m_windowWidth - 1), -1 * (y * 2 / m_windowHeight - 1), 1, 1);
+                pointEnd = (glm::inverse(m_camera->viewProjection())*pointEnd);
+                glm::vec3 vec(pointEnd.x, pointEnd.y, pointEnd.z);
+                printf("%f %f %f  ---  %f %f %f\n", m_camera->position().x, m_camera->position().y, m_camera->position().z, vec.x, vec.y, vec.z);
+                vec = glm::normalize(vec);
+                vec *= 200; //aimdistance
+                vec += m_camera->position();
+                //vec += m_camera->position();
+                m_voxelcluster->shoot(vec);
+            }
+
 			// lookAt
-			double x, y;
-			glfwGetCursorPos(m_window, &x, &y);
-			float rel = 10;
-			float deadzone = 0.1f;
+            float rel = 10;
+            float deadzone = 0.05f;
+            double dis = 0;
+            float angX = 0;
+            float angY = 0;
 			if (!m_fpsControls) {
 				if (m_mouseControl || glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS){
-					rel = (float)glm::max(1.0, (sqrt(pow(m_windowWidth - (int)floor(x), 2) + pow(m_windowHeight - (int)floor(y), 2))) / m_cursorMaxDistance);
-					rel = glm::max(0.0f, rel - deadzone) / (1 - deadzone);
-					rel = glm::smoothstep(0.f, 1.f, rel);
+                    x = m_windowWidth / 2 - (int)floor(x);
+                    y = m_windowHeight / 2 - (int)floor(y);
+                    dis = glm::min((sqrt(pow(x, 2) + pow(y, 2))), (double)m_cursorMaxDistance / 2);
+                    rel = (float)(dis / (m_cursorMaxDistance / 2));
+
+                    rel = glm::max(0.0f, rel - deadzone) / (1 - deadzone);
+                    rel = glm::smoothstep(0.f, 1.f, rel);
+                    angX = float(-x * m_rotation_speed * rel);
+                    angY = float(-y * m_rotation_speed * rel);
 				}
-				else {
-					rel = 0;
+                else {
+                    rel = 0;
 				}
 			}
-
-			float angX = ((int)floor(x) - m_windowWidth / 2) * m_rotation_speed * rel;
-			float angY = ((int)floor(y) - m_windowHeight / 2) * m_rotation_speed * rel;
+            else{
+                angX = ((int)floor(x) - m_windowWidth / 2) * m_rotation_speed * rel;
+                angY = ((int)floor(y) - m_windowHeight / 2) * m_rotation_speed * rel;
+            }
 
 			m_camera->rotateX(-angY*delta_sec);
 			m_camera->rotateY(-angX*delta_sec);
@@ -157,6 +179,6 @@ void InputHandler::toggleControls()
 	m_fpsControls = !m_fpsControls;
 }
 
-void InputHandler::setVoxelCluster(WorldObject *voxelcluster) {
+void InputHandler::setVoxelCluster(Ship *voxelcluster) {
     m_voxelcluster = voxelcluster;
 }

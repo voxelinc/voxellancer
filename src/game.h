@@ -20,6 +20,7 @@ class InputHandler;
 class VoxelRenderer;
 class HD3000Dummy;
 class LinuxVMDummy;
+class Ship;
 
 
 class Game {

@@ -4,7 +4,7 @@
 #include "world.h"
 #include "worldtree/worldtree.h"
 #include "utils/tostring.h"
-#include "worldobject.h"
+#include "worldobject/worldobject.h"
 
 
 God::God(World & world): 

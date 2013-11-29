@@ -8,6 +8,7 @@
 
 #include "property/propertymanager.h"
 #include "property/property.h"
+#include "worldobject/ship.h"
 
 class WorldObject;
 
@@ -17,7 +18,7 @@ public:
     InputHandler(GLFWwindow *window, Camera *camera);
 	virtual ~InputHandler();
 
-    void setVoxelCluster(WorldObject *voxelcluster);
+    void setVoxelCluster(Ship *voxelcluster);
 
 	void resizeEvent(const unsigned int width, const unsigned int height);
 	void keyCallback(int key, int scancode, int action, int mods);
@@ -26,7 +27,7 @@ public:
 protected:
 	GLFWwindow *m_window;
 	Camera* m_camera;
-    WorldObject *m_voxelcluster;
+    Ship *m_voxelcluster;
 
 	int m_windowWidth, m_windowHeight;
 	int m_lastfocus;

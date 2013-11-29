@@ -5,7 +5,7 @@
 #include <iostream>
 
 #include "utils/tostring.h"
-#include "world/worldobject.h"
+#include "worldobject/worldobject.h"
 
 CollisionDetector::CollisionDetector(WorldTree &worldTree, CollidableVoxelCluster &voxelcluster) :
 m_worldTree(worldTree),

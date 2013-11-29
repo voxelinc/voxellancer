@@ -32,8 +32,10 @@
 #include "world/god.h"
 #include "skybox.h"
 #include "voxel/voxelrenderer.h"
-#include "world/worldobject.h"
+#include "worldobject/ship.h"
 #include "collision/collisiondetector.h"
+
+class Ship;
 
 Game::Game(GLFWwindow *window):
 	m_window(window),
@@ -96,9 +98,9 @@ void Game::initialize()
     m_testClusterMoveable->finishInitialization();
     m_world->god().scheduleSpawn(m_testClusterMoveable);
 
-    m_inputHandler.setVoxelCluster(m_testClusterMoveable);
+    //m_inputHandler.setVoxelCluster(m_testClusterMoveable);
 
-    WorldObject *m_testClusterA = new WorldObject();
+    Ship *m_testClusterA = new Ship();
     ClusterCache::instance()->fillCluster(m_testClusterA, "data/voxelcluster/basicship.csv");
 	m_testClusterA->transform().setCenter(glm::vec3(3, 0, 3)); // TODO: shouldnt center == centerofmass ?
 	m_testClusterA->transform().setPosition(glm::vec3(0, 0, -10));
@@ -106,13 +108,15 @@ void Game::initialize()
     m_testClusterA->finishInitialization();
     m_world->god().scheduleSpawn(m_testClusterA);
 
-    WorldObject *m_testClusterB = new WorldObject();
+    Ship *m_testClusterB = new Ship();
     ClusterCache::instance()->fillCluster(m_testClusterB, "data/voxelcluster/basicship.csv");
 	m_testClusterB->transform().setCenter(glm::vec3(3, 0, 3));
     m_testClusterB->transform().setPosition(glm::vec3(0, 0, 10));
     m_testClusterB->finishInitialization();
+    m_testClusterB->addHardpoint(new Hardpoint(glm::vec3(0, 5, 0), new Gun(100,200,0.5)));
     m_world->god().scheduleSpawn(m_testClusterB);
 
+    m_inputHandler.setVoxelCluster(m_testClusterB);
 
     glow::debug("Initial spawn");
     m_world->god().spawn();

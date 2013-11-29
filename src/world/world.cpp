@@ -3,6 +3,7 @@
 #include "god.h"
 #include "worldtree/worldtree.h"
 #include "worldlogic.h"
+#include "worldobject/worldobject.h"
 
 World *World::s_instance = nullptr;
 
@@ -39,6 +40,10 @@ float World::deltaSecs() const {
 }
 
 void World::update(float deltaSecs) {
+    // move to a game mechanic specific class?
+    for (WorldObject *cluster : m_clusters) {
+        cluster->update(deltaSecs);
+    }
     m_deltaSecs = deltaSecs;
     m_worldLogic->update(deltaSecs);
 }

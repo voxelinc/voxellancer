@@ -5,7 +5,7 @@
 #include "ui/hudelement.h"
 #include "world/world.h"
 #include "world/god.h"
-#include "world/worldobject.h"
+#include "worldobject/worldobject.h"
 
 HUD::HUD() :
 m_gamecamera(0),

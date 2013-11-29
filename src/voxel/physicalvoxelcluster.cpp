@@ -50,12 +50,9 @@ void PhysicalVoxelCluster::calculateMassAndCenter() {
 std::list<Collision> &PhysicalVoxelCluster::move(float delta_sec) {
     m_oldTransform = m_newTransform = m_transform;
     m_collisionDetector->reset();
-
-    m_speed *= (1.f - m_dampening * delta_sec);
+    updateSpeed(delta_sec);
     m_speed += m_acceleration * delta_sec;
     m_newTransform.moveWorld(m_speed * delta_sec);
-
-    m_angularSpeed *= (1.f - m_angularDampening * delta_sec);
     m_angularSpeed = m_angularSpeed + (m_angularAcceleration*delta_sec);
     m_newTransform.rotate(glm::quat(m_angularSpeed*delta_sec));
 
@@ -75,6 +72,12 @@ std::list<Collision> &PhysicalVoxelCluster::move(float delta_sec) {
     updateGeode();
 
     return m_collisionDetector->lastCollisions();
+}
+
+void PhysicalVoxelCluster::updateSpeed(float delta_sec){
+
+    m_speed *= (1.f - m_dampening * delta_sec);
+    m_angularSpeed *= (1.f - m_angularDampening * delta_sec);
 }
 
 void PhysicalVoxelCluster::resolveCollision(Collision & c, float delta_sec) {

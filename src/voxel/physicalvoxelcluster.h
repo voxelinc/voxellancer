@@ -23,6 +23,7 @@ public:
     virtual void removeVoxel(const cvec3 &position);
 
     virtual void finishInitialization();
+    virtual void updateSpeed(float delta_sec);
 
 protected:
     void calculateMassAndCenter();

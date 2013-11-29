@@ -1,7 +1,7 @@
 #include "mover.h"
 #include "../god.h"
 #include "../world.h"
-#include "../worldobject.h"
+#include "worldobject/worldobject.h"
 
 
 void Mover::moveVoxelClusters(float delta_sec) {
