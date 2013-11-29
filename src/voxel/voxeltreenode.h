@@ -12,13 +12,14 @@
 #include "worldtransform.h"
 
 
-class CollidableVoxelCluster;
+class PhysicalVoxel;
+class PhysicalVoxelCluster;
 
 class VoxelTreeNode
 {
 public:
-    VoxelTreeNode(VoxelTreeNode *parent, CollidableVoxelCluster &voxelcluster, const Grid3dAABB &gridAABB = Grid3dAABB(glm::ivec3(0, 0, 0), glm::ivec3(0, 0, 0)));
-    VoxelTreeNode(const VoxelTreeNode& other, CollidableVoxelCluster *voxelcluster);
+    VoxelTreeNode(VoxelTreeNode *parent, PhysicalVoxelCluster *physicalVoxelCluster, const Grid3dAABB &gridAABB = Grid3dAABB(glm::ivec3(0, 0, 0), glm::ivec3(0, 0, 0)));
+    VoxelTreeNode(const VoxelTreeNode& other, PhysicalVoxelCluster *physicalVoxelCluster);
 	VoxelTreeNode(const VoxelTreeNode& other) = delete; //no "normal" copy ctor
     virtual ~VoxelTreeNode();
 
@@ -28,20 +29,20 @@ public:
     std::vector<VoxelTreeNode*> &subnodes();
     const std::vector<VoxelTreeNode*> &subnodes() const;
 
-    Voxel *voxel();
-    const Voxel *voxel() const;
+    PhysicalVoxel *physicalVoxel();
+    const PhysicalVoxel *physicalVoxel() const;
 
     const Grid3dAABB &gridAABB() const;
 
     Sphere boundingSphere();
 
-    void insert(Voxel *voxel);
+    void insert(PhysicalVoxel *physicalVoxel);
     void remove(const cvec3 &cell);
 
 
 protected:
     VoxelTreeNode *m_parent;
-    CollidableVoxelCluster &m_voxelcluster;
+    PhysicalVoxelCluster *m_physicalVoxelCluster;
     Grid3dAABB m_gridAABB;
 
     std::vector<VoxelTreeNode*> m_subnodes;

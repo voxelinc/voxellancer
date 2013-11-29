@@ -1,39 +1,38 @@
 #include "collision.h"
 
+#include "physics/physicalvoxel.h"
+#include "physics/physicalvoxelcluster.h"
 
-Collision::Collision(Voxel *voxelA, Voxel *voxelB, CollidableVoxelCluster * voxelClusterA, CollidableVoxelCluster * voxelClusterB) :
-    m_voxelA(voxelA),
-    m_voxelB(voxelB),
-    m_voxelClusterA(voxelClusterA),
-    m_voxelClusterB(voxelClusterB)
+
+Collision::Collision(PhysicalVoxel *physicalVoxelA, PhysicalVoxel *physicalVoxelB, PhysicalVoxelCluster* physicalVoxelClusterA, PhysicalVoxelCluster* physicalVoxelClusterB) :
+    m_physicalVoxelA(physicalVoxelA),
+    m_physicalVoxelB(physicalVoxelB),
+    m_physicalVoxelClusterA(physicalVoxelClusterA),
+    m_physicalVoxelClusterB(physicalVoxelClusterB)
 {
 
 }
 
-Collision::~Collision() {
-
+PhysicalVoxel* Collision::physicalVoxelA() {
+    return m_physicalVoxelA;
 }
 
-Voxel *Collision::voxelA() {
-    return m_voxelA;
+const PhysicalVoxel* Collision::physicalVoxelA() const {
+    return m_physicalVoxelA;
 }
 
-const Voxel *Collision::voxelA() const {
-    return m_voxelA;
+PhysicalVoxel* Collision::physicalVoxelB() {
+    return m_physicalVoxelB;
 }
 
-Voxel *Collision::voxelB() {
-    return m_voxelB;
+const PhysicalVoxel* Collision::physicalVoxelB() const {
+    return m_physicalVoxelB;
 }
 
-const Voxel *Collision::voxelB() const {
-    return m_voxelB;
+PhysicalVoxelCluster* Collision::physicalVoxelClusterA() {
+    return m_physicalVoxelClusterA;
 }
 
-CollidableVoxelCluster * Collision::voxelClusterA() {
-    return m_voxelClusterA;
-}
-
-CollidableVoxelCluster * Collision::voxelClusterB() {
-    return m_voxelClusterB;
+PhysicalVoxelCluster* Collision::physicalVoxelClusterB() {
+    return m_physicalVoxelClusterB;
 }

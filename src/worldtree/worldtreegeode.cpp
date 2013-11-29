@@ -1,7 +1,8 @@
 #include "worldtreegeode.h"
 
+#include "physics/physicalvoxelcluster.h"
+
 #include "worldtreenode.h"
-#include "voxel/collidablevoxelcluster.h"
 
 
 WorldTreeGeode::WorldTreeGeode():
@@ -11,7 +12,7 @@ WorldTreeGeode::WorldTreeGeode():
 
 }
 
-WorldTreeGeode::WorldTreeGeode(CollidableVoxelCluster *voxelcluster) :
+WorldTreeGeode::WorldTreeGeode(PhysicalVoxelCluster *voxelcluster) :
     m_voxelcluster(voxelcluster),
     m_containingNode(nullptr)
 {
@@ -22,15 +23,15 @@ WorldTreeGeode::~WorldTreeGeode() {
 
 }
 
-CollidableVoxelCluster *WorldTreeGeode::voxelcluster() {
+PhysicalVoxelCluster *WorldTreeGeode::voxelcluster() {
     return m_voxelcluster;
 }
 
-const CollidableVoxelCluster *WorldTreeGeode::voxelcluster() const {
+const PhysicalVoxelCluster *WorldTreeGeode::voxelcluster() const {
     return m_voxelcluster;
 }
 
-void WorldTreeGeode::setVoxelCluster(CollidableVoxelCluster *voxelcluster) {
+void WorldTreeGeode::setVoxelCluster(PhysicalVoxelCluster *voxelcluster) {
     m_voxelcluster = voxelcluster;
 }
 

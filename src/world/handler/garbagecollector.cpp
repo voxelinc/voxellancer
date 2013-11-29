@@ -4,7 +4,7 @@ void GarbageCollector::check(std::set<WorldObject*> &modifiedVoxelClusters) {
 
 }
 
-std::set<WorldObject*> &GarbageCollector::garbageVoxelClusters() {
+std::list<WorldObject*> &GarbageCollector::garbageVoxelClusters() {
     return m_garbageVoxelClusters;
 }
 

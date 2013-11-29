@@ -5,7 +5,8 @@
 #include "geometry/aabb.h"
 #include "worldtree/worldtree.h"
 #include "voxel/voxel.h"
-#include "voxel/collidablevoxelcluster.h"
+#include "physics/physicalvoxel.h"
+#include "physics/physicalvoxelcluster.h"
 #include "collision/collisiondetector.h"
 
 
@@ -16,20 +17,20 @@ using namespace bandit;
 go_bandit([](){
     describe("CollisionDetector", [](){
         WorldTree *worldTree;
-        CollidableVoxelCluster *a, *b;
+        PhysicalVoxelCluster *a, *b;
         CollisionDetector *d;
 
 
         before_each([&](){
             worldTree = new WorldTree;
-            a = new CollidableVoxelCluster(); worldTree->insert(a);
-            b = new CollidableVoxelCluster(); worldTree->insert(b);
+            a = new c(); worldTree->insert(a);
+            b = new PhysicalVoxelCluster(); worldTree->insert(b);
             d = new CollisionDetector(*worldTree, *a);
         });
 
         it("works in most basic conditions", [&]() {
-            a->addVoxel(new Voxel(cvec3(0, 0, 0), cvec3(255, 255, 255)));
-            b->addVoxel(new Voxel(cvec3(0, 0, 0), cvec3(255, 255, 255)));
+            a->addVoxel(new PhysicalVoxel(cvec3(0, 0, 0), cvec3(255, 255, 255)));
+            b->addVoxel(new PhysicalVoxel(cvec3(0, 0, 0), cvec3(255, 255, 255)));
 
             AssertThat(d->checkCollisions().size(), Equals(1));
 
@@ -39,17 +40,17 @@ go_bandit([](){
         });
 
         it("works in pretty basic conditions", [&]() {
-            a->addVoxel(new Voxel(cvec3(0, 0, 0), cvec3(255, 255, 255)));
-            a->addVoxel(new Voxel(cvec3(1, 0, 0), cvec3(255, 255, 255)));
-            a->addVoxel(new Voxel(cvec3(2, 0, 0), cvec3(255, 255, 255)));
-            a->addVoxel(new Voxel(cvec3(3, 0, 0), cvec3(255, 255, 255)));
-            a->addVoxel(new Voxel(cvec3(4, 0, 0), cvec3(255, 255, 255)));
-            a->addVoxel(new Voxel(cvec3(4, 0, 1), cvec3(255, 255, 255)));
+            a->addVoxel(new PhysicalVoxel(cvec3(0, 0, 0), cvec3(255, 255, 255)));
+            a->addVoxel(new PhysicalVoxel(cvec3(1, 0, 0), cvec3(255, 255, 255)));
+            a->addVoxel(new PhysicalVoxel(cvec3(2, 0, 0), cvec3(255, 255, 255)));
+            a->addVoxel(new PhysicalVoxel(cvec3(3, 0, 0), cvec3(255, 255, 255)));
+            a->addVoxel(new PhysicalVoxel(cvec3(4, 0, 0), cvec3(255, 255, 255)));
+            a->addVoxel(new PhysicalVoxel(cvec3(4, 0, 1), cvec3(255, 255, 255)));
 
-            b->addVoxel(new Voxel(cvec3(0, 0, 0), cvec3(255, 255, 255)));
-            b->addVoxel(new Voxel(cvec3(0, 0, 1), cvec3(255, 255, 255)));
-            b->addVoxel(new Voxel(cvec3(1, 0, 1), cvec3(255, 255, 255)));
-            b->addVoxel(new Voxel(cvec3(2, 0, 1), cvec3(255, 255, 255)));
+            b->addVoxel(new PhysicalVoxel(cvec3(0, 0, 0), cvec3(255, 255, 255)));
+            b->addVoxel(new PhysicalVoxel(cvec3(0, 0, 1), cvec3(255, 255, 255)));
+            b->addVoxel(new PhysicalVoxel(cvec3(1, 0, 1), cvec3(255, 255, 255)));
+            b->addVoxel(new PhysicalVoxel(cvec3(2, 0, 1), cvec3(255, 255, 255)));
 
             AssertThat(d->checkCollisions().size(), IsGreaterThan(0));
 

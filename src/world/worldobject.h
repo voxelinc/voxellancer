@@ -1,6 +1,7 @@
 #include <memory>
 
-#include "voxel/physicalvoxelcluster.h"
+#include "physics/physicalvoxelcluster.h"
+
 
 class WorldVoxel;
 
@@ -16,6 +17,6 @@ public:
 
 protected:
 
-private:    
+private:
 
 };

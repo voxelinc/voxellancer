@@ -9,7 +9,7 @@ class WorldObject;
 class SplitDetector
 {
 public:
-    void searchOrphans(std::set<WorldObject*> &modifiedVoxelClusters);
+    void searchOrphans(std::list<WorldObject*> &modifiedVoxelClusters);
     std::list<VoxelClusterOrphan*> &voxelClusterOrphans();
 
 

@@ -1,5 +1,6 @@
 #include "wrecker.h"
-#include "worldobject.h"
+
+#include "world/worldobject.h"
 
 
 void Wrecker::detectWreckages(std::set<WorldObject*> &modifiedVoxelClusters) {

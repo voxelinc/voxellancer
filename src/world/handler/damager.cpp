@@ -1,5 +1,7 @@
 #include "damager.h"
 
+#include "voxel/voxel.h"
+
 
 void Damager::applyDamages(std::list<VoxelImpact> &voxelImpacts) {
     m_deadlyVoxelImpacts.clear();

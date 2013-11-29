@@ -5,17 +5,18 @@
 #include <iostream>
 
 #include "utils/tostring.h"
+
 #include "world/worldobject.h"
 
-CollisionDetector::CollisionDetector(WorldTree &worldTree, CollidableVoxelCluster &voxelcluster) :
-m_worldTree(worldTree),
-m_voxelcluster(voxelcluster),
-m_otherVoxelCluster(nullptr)
+#include "physics/physicalvoxel.h"
+#include "physics/physicalvoxelcluster.h"
+
+
+CollisionDetector::CollisionDetector(WorldTree &worldTree, PhysicalVoxelCluster &voxelcluster) :
+    m_worldTree(worldTree),
+    m_voxelcluster(voxelcluster),
+    m_otherVoxelCluster(nullptr)
 {
-
-}
-
-CollisionDetector::~CollisionDetector() {
 
 }
 
@@ -38,7 +39,6 @@ std::list<Collision> &CollisionDetector::checkCollisions() {
 }
 
 void CollisionDetector::checkCollisions(VoxelTreeNode* nodeA, VoxelTreeNode* nodeB) {
-    if(nodeA->isLeaf() && nodeA->voxel() == nullptr) {
         return;
     }
     if(nodeB->isLeaf() && nodeB->voxel() == nullptr) {

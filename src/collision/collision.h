@@ -1,29 +1,28 @@
 #pragma once
 
 
-class CollidableVoxelCluster;
-class Voxel;
+class PhysicalVoxelCluster;
+class PhysicalVoxel;
 
 class Collision
 {
 public:
-    Collision(Voxel *voxelA, Voxel *voxelB, CollidableVoxelCluster * voxelClusterA, CollidableVoxelCluster * voxelClusterB);
-    virtual ~Collision();
+    Collision(PhysicalVoxel* physicalVoxelA, PhysicalVoxel* physicalVoxelB, PhysicalVoxelCluster* physicalVoxelClusterA, PhysicalVoxelCluster* physicalVoxelClusterB);
 
-    CollidableVoxelCluster * voxelClusterA();
-    
-    CollidableVoxelCluster * voxelClusterB();
+    PhysicalVoxelCluster* physicalVoxelClusterA();
+    PhysicalVoxelCluster* physicalVoxelClusterB();
 
-    Voxel *voxelA();
-    const Voxel *voxelA() const;
+    PhysicalVoxel* physicalVoxelA();
+    const PhysicalVoxel* physicalVoxelA() const;
 
-    Voxel *voxelB();
-    const Voxel *voxelB() const;
+    PhysicalVoxel* physicalVoxelB();
+    const PhysicalVoxel* physicalVoxelB() const;
+
 
 protected:
-    Voxel *m_voxelA;
-    Voxel *m_voxelB;
-    CollidableVoxelCluster *m_voxelClusterA;
-    CollidableVoxelCluster *m_voxelClusterB;
+    PhysicalVoxel *m_physicalVoxelA;
+    PhysicalVoxel *m_physicalVoxelB;
+    PhysicalVoxelCluster *m_physicalVoxelClusterA;
+    PhysicalVoxelCluster *m_physicalVoxelClusterB;
 };
 

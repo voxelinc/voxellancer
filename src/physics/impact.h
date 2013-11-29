@@ -10,7 +10,6 @@ public:
 
     const glm::vec3 &vec3() const;
 
-    Impact &add(const Impact &impact);
-    
+    Impact &add(const Impact &impact);    
 };
 
