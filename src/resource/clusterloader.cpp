@@ -3,10 +3,11 @@
 #include <sstream>
 
 #include "voxel/voxelcluster.h"
-#include "voxel/voxel.h"
 
 
-ClusterLoader::ClusterLoader(){
+ClusterLoader::ClusterLoader() : 
+    m_colorCoder()
+{
 
 }
 
@@ -68,7 +69,7 @@ void ClusterLoader::readZox(std::string &content, std::vector<Voxel*> *list){
 			g = (color & 0x00FF0000) >> 16;
 			b = (color & 0x0000FF00) >> 8;
 			a = (color & 0x000000FF);
-            list->push_back(new Voxel(cvec3(stoi(voxelStrings[0]), std::stoi(&(voxelStrings[1])[1]), std::stoi(&(voxelStrings[2])[1])), cvec3(r, g, b)));
+            addVoxel(cvec3(stoi(voxelStrings[0]), std::stoi(&(voxelStrings[1])[1]), std::stoi(&(voxelStrings[2])[1])), cvec3(r, g, b), list);
 		}
 		currentFrame++;
 	}
@@ -88,32 +89,38 @@ void ClusterLoader::readDimensionsCsv(){
 }
 
 void ClusterLoader::readCsv(std::vector<Voxel*> *list){
-	int red, green, blue, currentZ, currentX, currentY;
+	int red, green, blue;
+    glm::ivec3 cell(0, 0, 0);
 	std::string line;
 	std::vector<std::string> voxelStrings;
-	currentY = y;
-	while (currentY > -1){
-		currentZ = 0;
-		while (currentZ < z){
-			currentX = 0;
+	cell.y = y;
+	while (cell.y > -1){
+		cell.z = 0;
+		while (cell.z < z){
+			cell.x = 0;
 			getline(*m_inputStream, line);
 			voxelStrings.clear();
 			splitStr(line, ',', voxelStrings);
-			while (currentX < x){
-				red = stoi(voxelStrings[currentX].substr(1, 2), NULL, 16);
-				green = stoi(voxelStrings[currentX].substr(3, 2), NULL, 16);
-				blue = stoi(voxelStrings[currentX].substr(5, 2), NULL, 16);
+			while (cell.x < x){
+				red = stoi(voxelStrings[cell.x].substr(1, 2), NULL, 16);
+				green = stoi(voxelStrings[cell.x].substr(3, 2), NULL, 16);
+				blue = stoi(voxelStrings[cell.x].substr(5, 2), NULL, 16);
 				if (red+green+blue>0)
-                    list->push_back(new Voxel(cvec3(currentX, currentY, currentZ), cvec3(red, green, blue)));
-				currentX++;
+                    addVoxel(cvec3(cell), cvec3(red, green, blue), list);
+				cell.x++;
 			}
-			currentZ++;
+			cell.z++;
 		}
 		getline(*m_inputStream, line);
-		currentY--;
+		cell.y--;
 	}
 
 }
+
+void ClusterLoader::addVoxel(cvec3 gridCell, cvec3 color, std::vector<Voxel*> *list){
+    list->push_back(m_colorCoder.decodeToInstance(gridCell, color));
+}
+
 
 void ClusterLoader::splitStr(const std::string &s, char delim, std::vector<std::string> &elems) {
 	std::istringstream ss(s);

@@ -39,9 +39,7 @@ void ClusterCache::fillCluster(VoxelCluster *cluster, const std::string& filenam
 
 
     for (Voxel *voxel : *source){
-        //voxel->addToCluster(cluster);
-        cluster->addVoxel(clone(voxel));
+        voxel->addCopyToCluster(cluster);
     }
-    // TODO: do this? probably the caller will do some other things on the object right away
     cluster->finishInitialization();    
 }
