@@ -7,6 +7,7 @@
 #include "collision/collision.h"
 #include "property/property.h"
 #include "worldtransform.h"
+#include "world/handler/impact.h"
 
 class WorldObject;
 class WorldTransform;
@@ -16,7 +17,7 @@ public:
     Physics(WorldObject & worldObject);
     virtual ~Physics();
 
-    std::list<Collision> &move(float delta_sec);
+    std::list<Impact> &move(float delta_sec);
     
     void accelerate(glm::vec3 direction);
     void accelerateAngular(glm::vec3 axis);
@@ -53,4 +54,6 @@ protected:
     Property<float> m_dampening;
     Property<float> m_angularDampening;
     Property<float> m_rotationFactor;
+
+    std::list<Impact> m_impacts;
 };

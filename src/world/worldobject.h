@@ -19,7 +19,6 @@ public:
 
     virtual void update(float delta_sec);
     virtual std::list<Collision> & move(float delta_sec);
-    void updateGeode();
 
     void addVoxel(Voxel * voxel);
     void removeVoxel(const glm::ivec3 & position);

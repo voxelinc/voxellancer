@@ -9,15 +9,15 @@ class WorldObject;
 class Impact
 {
 public:
-    Impact(WorldObject* worldObject, Voxel *voxel, const glm::ivec3 &vec);
+    Impact(WorldObject* worldObject, Voxel *voxel, const glm::vec3 &vec);
 
     WorldObject *worldObject();
     Voxel *voxel();
-    const glm::ivec3 &vec() const;
+    const glm::vec3 &vec() const;
 
 protected:
     WorldObject *m_worldObject;
     Voxel *m_voxel;
-    glm::ivec3 m_vec;
+    glm::vec3 m_vec;
 };
 
