@@ -18,8 +18,6 @@ public:
     WorldTree &worldTree();
     std::list<WorldObject*> &worldObjects();
 
-    float deltaSecs() const;
-
     void update(float deltaSecs);
 
     static World *instance();
@@ -32,6 +30,5 @@ protected:
     std::unique_ptr<God> m_god;
     std::list<WorldObject*> m_worldObjects;
 
-    float m_deltaSecs;
 };
 

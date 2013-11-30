@@ -3,6 +3,7 @@
 #include "worldtree/worldtreegeode.h"
 #include "collision/collisiondetector.h"
 #include "world/worldobject.h"
+#include <iostream>
 
 
 CollisionDetector::CollisionDetector(WorldObject & worldObject) :
@@ -67,7 +68,7 @@ void CollisionDetector::updateGeode() {
 }
 
 std::list<Collision> &CollisionDetector::checkCollisions() {
-    //assert(m_voxelcluster.geode() != nullptr);
+    assert(m_geode != nullptr);
 
     m_collisions.clear();
 

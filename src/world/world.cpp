@@ -33,12 +33,7 @@ std::list<WorldObject*> &World::worldObjects() {
     return m_worldObjects;
 }
 
-float World::deltaSecs() const {
-    return m_deltaSecs;
-}
-
 void World::update(float deltaSecs) {
-    m_deltaSecs = deltaSecs;
     m_worldLogic->update(deltaSecs);
 }
 

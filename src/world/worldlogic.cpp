@@ -15,7 +15,7 @@ WorldLogic::WorldLogic(World &world):
 void WorldLogic::update(float deltaSecs) {
     m_mover.moveVoxelClusters(deltaSecs);
 
-    m_impactAccumulator.parse(m_mover.collisions());
+    m_impactAccumulator.parse(m_mover.impacts());
     //m_impactResolver.alterVelocities(m_impactAccumulator.clusterImpacts());
 
     damageForwardLoop(m_impactAccumulator.impacts());

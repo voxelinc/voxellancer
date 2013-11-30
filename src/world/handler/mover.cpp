@@ -6,14 +6,14 @@
 
 
 void Mover::moveVoxelClusters(float deltaSec) {
-    m_collisions.clear();
+    m_impacts.clear();
 
     for (WorldObject *worldObject : World::instance()->worldObjects()) {
         std::list<Impact> &collisions = worldObject->move(deltaSec);
-        m_collisions.insert(m_collisions.end(), collisions.begin(), collisions.end());
+        m_impacts.insert(m_impacts.end(), collisions.begin(), collisions.end());
     }
 }
 
-const std::list<Impact> &Mover::collisions() {
-    return m_collisions;
+const std::list<Impact> &Mover::impacts() {
+    return m_impacts;
 }

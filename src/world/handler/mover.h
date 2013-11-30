@@ -9,10 +9,10 @@ class Mover
 public:
     void moveVoxelClusters(float deltaSec);
 
-    const std::list<Impact> &collisions();
+    const std::list<Impact> &impacts();
 
 
 protected:
-    std::list<Impact> m_collisions;
+    std::list<Impact> m_impacts;
 };
 
