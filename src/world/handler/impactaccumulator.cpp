@@ -6,7 +6,7 @@ void ImpactAccumulator::clear() {
 }
 
 void ImpactAccumulator::parse(const std::list<Impact> &collisions) {
-
+    m_impacts.insert(m_impacts.end(), collisions.begin(), collisions.end());
 }
 
 //void ImpactAccumulator::parse(const std::list<PhysicalVoxelImpact> &physicalVoxelImpact) {
