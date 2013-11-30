@@ -102,7 +102,7 @@ void Game::initialize()
     ClusterCache::instance()->fillCluster(m_testClusterA->voxelCluster(), "data/voxelcluster/basicship.csv");
 	m_testClusterA->transform().setCenter(glm::vec3(3, 0, 3)); // TODO: shouldnt center == centerofmass ?
     m_testClusterA->transform().setPosition(glm::vec3(0, 0, -10));
-	m_testClusterA->removeVoxel(glm::ivec3(3, 2, 3)); // this verifies the objects are different
+	//m_testClusterA->removeVoxel(glm::ivec3(3, 2, 3)); // this verifies the objects are different
     m_testClusterA->finishInitialization();
     m_world->god().scheduleSpawn(m_testClusterA);
 
@@ -119,7 +119,7 @@ void Game::initialize()
     glow::debug("Initial spawn");
     m_world->god().spawn();
 
-	glow::debug("Setup Camera");
+	glow::debug("Setup Camersa");
 	//viewport set in resize
 	m_camera.setPosition(glm::vec3(0, 5, 30));
 	m_camera.setZNear(1);
