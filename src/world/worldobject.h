@@ -23,13 +23,13 @@ public:
 
     void addVoxel(Voxel * voxel);
     void removeVoxel(const glm::ivec3 & position);
+    void finishInitialization();
 
 
     WorldTransform & transform();
 
     void accelerate(glm::vec3 direction);
     void accelerateAngular(glm::vec3 axis);
-
 
 protected:
     CollisionDetector m_collisionDetector;
