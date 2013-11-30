@@ -51,10 +51,7 @@ std::list<Voxel*> DamageForwarder::getNeighbours(Voxel *voxel) {
 }
 
 void DamageForwarder::considerNeighbour(const glm::ivec3 &cellDelta) {
-    VoxeltreeNode &voxeltree = m_currentVoxelCluster->voxeltree();
-    const Grid3dAABB &grid = voxeltree.gridAABB();
-
-    Voxel *neighbour = m_currentVoxelCluster->voxel(cell);
+    Voxel *neighbour = m_currentWorldObject->voxelCluster().voxel(cell);
     if(neighbour == nullptr) {
         return;
     }
