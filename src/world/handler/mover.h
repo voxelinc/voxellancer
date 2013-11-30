@@ -2,16 +2,17 @@
 
 #include <list>
 #include "collision/collision.h"
+#include "world/handler/impact.h"
 
 class Mover
 {
 public:
     void moveVoxelClusters(float deltaSec);
 
-    const std::list<Collision> &collisions();
+    const std::list<Impact> &collisions();
 
 
 protected:
-    std::list<Collision> m_collisions;
+    std::list<Impact> m_collisions;
 };
 

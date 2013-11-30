@@ -12,7 +12,7 @@ class ImpactAccumulator
 public:
     void clear();
 
-    void parse(const std::list<Collision> &collisions);
+    void parse(const std::list<Impact> &collisions);
 //    void parse(const std::list<Impact> &impacts);
 
 //    std::list<Impact> &clusterImpacts();

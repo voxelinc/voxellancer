@@ -25,6 +25,7 @@ glm::ivec3 VoxelClusterOrphan::gridLlf() const {
     for(Voxel *voxel : m_orphanedVoxels) {
         llf = glm::min(llf, voxel->gridCell());
     }
+    return llf;
 }
 
 std::list<Voxel*> VoxelClusterOrphan::orphanedVoxels() {

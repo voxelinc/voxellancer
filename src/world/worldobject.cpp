@@ -38,8 +38,8 @@ void WorldObject::update(float delta_sec) {
 
 }
 
-std::list<Collision>& WorldObject::move(float delta_sec) {
-    m_physics.move(delta_sec);
+std::list<Impact>& WorldObject::move(float delta_sec) {
+    return m_physics.move(delta_sec);
 }
 
 void WorldObject::addVoxel(Voxel * voxel) {

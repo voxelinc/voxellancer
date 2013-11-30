@@ -5,7 +5,7 @@ void ImpactAccumulator::clear() {
     m_impacts.clear();
 }
 
-void ImpactAccumulator::parse(const std::list<Collision> &collisions) {
+void ImpactAccumulator::parse(const std::list<Impact> &collisions) {
 
 }
 
