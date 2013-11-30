@@ -58,7 +58,7 @@ void HUD::addElement(const std::string& filename, HUDOffsetOrigin origin, glm::v
 
 void HUD::addChar(const std::string& filename, glm::vec3 offset, const char index, std::map<char, std::unique_ptr<Letter>> *map) {
     std::unique_ptr<Letter> element(new Letter());
-    ClusterCache::instance()->fillCluster(&element->voxelCluster(), filename);
+    ClusterCache::instance()->fillCluster(element.get(), filename);
     element->transform().setCenter(offset);
     (*map)[index] = move(element);
 }
