@@ -6,7 +6,7 @@
 class Mover
 {
 public:
-    void moveVoxelClusters(float delta_sec);
+    void moveVoxelClusters(float deltaSec);
 
     const std::list<Collision> &collisions();
 

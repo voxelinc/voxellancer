@@ -1,29 +1,36 @@
 #pragma once
 
+#include <glm/glm.hpp>
 
-class CollidableVoxelCluster;
+
+class WorldObject;
 class Voxel;
+
+class CollisionParticipant
+{
+public:
+    CollisionParticipant(WorldObject *worldObject, Voxel *voxel, const glm::vec3 &speed);
+
+    WorldObject *worldObject();
+    Voxel *voxel();
+    glm::vec3 speed() const;
+
+
+protected:
+    WorldObject *m_worldObject;
+    Voxel *m_voxel;
+    glm::vec3 m_speed;
+};
 
 class Collision
 {
 public:
-    Collision(Voxel *voxelA, Voxel *voxelB, CollidableVoxelCluster * voxelClusterA, CollidableVoxelCluster * voxelClusterB);
-    virtual ~Collision();
+    Collision(const CollisionParticipant &a, const CollisionParticipant &b);
 
-    CollidableVoxelCluster * voxelClusterA();
-    
-    CollidableVoxelCluster * voxelClusterB();
-
-    Voxel *voxelA();
-    const Voxel *voxelA() const;
-
-    Voxel *voxelB();
-    const Voxel *voxelB() const;
+    const CollisionParticipant &a() const;
+    const CollisionParticipant &b() const;
 
 protected:
-    Voxel *m_voxelA;
-    Voxel *m_voxelB;
-    CollidableVoxelCluster *m_voxelClusterA;
-    CollidableVoxelCluster *m_voxelClusterB;
+    CollisionParticipant m_a, m_b;
 };
 

@@ -23,6 +23,7 @@ public:
     const AABB &aabb() const;
     void setAABB(const AABB &aabb);
 
+
 protected:
     CollidableVoxelCluster *m_voxelcluster;
     WorldTreeNode *m_containingNode;
