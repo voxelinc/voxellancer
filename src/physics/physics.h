@@ -5,19 +5,19 @@
 
 #include "collision/collision.h"
 #include "property/property.h"
-#include "collidablevoxelcluster.h"
 
-class CollisionDetector;
+class WorldObject;
 
-class PhysicalVoxelCluster : public CollidableVoxelCluster {
+class Physics  {
 public:
-    PhysicalVoxelCluster(float scale = 1.0);
-    virtual ~PhysicalVoxelCluster();
+    Physics(WorldObject & worldObject);
 
     std::list<Collision> &move(float delta_sec);
     
     void accelerate(glm::vec3 direction);
     void accelerateAngular(glm::vec3 axis);
+
+    WorldTransform & transform();
 
     virtual void addVoxel(Voxel *voxel);
     virtual void removeVoxel(const cvec3 &position);
@@ -32,11 +32,14 @@ protected:
     void doSteppedTransform();
     float calculateStepCount(const WorldTransform & oldTransform, const WorldTransform & newTransform);
     bool isCollisionPossible();
-
-private:
+    
+protected:
     float m_mass;
     bool m_massValid;
 
+    WorldObject & m_worldObject;
+
+    WorldTransform m_transform;
     WorldTransform m_oldTransform;
     WorldTransform m_newTransform;
 

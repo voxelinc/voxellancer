@@ -1,36 +1,35 @@
 #include "worldtreegeode.h"
 
 #include "worldtreenode.h"
-#include "voxel/collidablevoxelcluster.h"
-
+#include "world/worldobject.h"
 
 WorldTreeGeode::WorldTreeGeode():
-    m_voxelcluster(nullptr),
+    m_worldobject(nullptr),
     m_containingNode(nullptr)
 {
 
 }
 
-WorldTreeGeode::WorldTreeGeode(CollidableVoxelCluster *voxelcluster) :
-    m_voxelcluster(voxelcluster),
+WorldTreeGeode::WorldTreeGeode(WorldObject *worldobject) :
+    m_worldobject(worldobject),
     m_containingNode(nullptr)
 {
-    m_voxelcluster->setGeode(this);
+    m_worldobject->collisionDetector()->setGeode(this);
 }
 
 WorldTreeGeode::~WorldTreeGeode() {
 
 }
 
-CollidableVoxelCluster *WorldTreeGeode::voxelcluster() {
+CollidableVoxelCluster *WorldTreeGeode::worldobject() {
     return m_voxelcluster;
 }
 
-const CollidableVoxelCluster *WorldTreeGeode::voxelcluster() const {
+const CollidableVoxelCluster *WorldTreeGeode::worldobject() const {
     return m_voxelcluster;
 }
 
-void WorldTreeGeode::setVoxelCluster(CollidableVoxelCluster *voxelcluster) {
+void WorldTreeGeode::setWorldObject(CollidableVoxelCluster *voxelcluster) {
     m_voxelcluster = voxelcluster;
 }
 

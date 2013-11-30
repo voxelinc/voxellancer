@@ -1,13 +1,14 @@
 #include <glm/gtx/quaternion.hpp>
-#include "physicalvoxelcluster.h"
+#include <iostream>
+#include "Physics.h"
 
 #include "worldtransform.h"
 #include "collision/collisiondetector.h"
-#include <iostream>
+#include "world/worldobject.h"
 
 
-PhysicalVoxelCluster::PhysicalVoxelCluster(float scale) :
-    CollidableVoxelCluster(glm::vec3(0), scale),
+Physics::Physics(WorldObject & worldObject) :
+    m_transform(),
     m_speed(0),
     m_angularSpeed(0),
     m_acceleration(0),
@@ -23,21 +24,20 @@ PhysicalVoxelCluster::PhysicalVoxelCluster(float scale) :
 
 // only neccessary for manually constructed voxelclusters, not if 
 // the cluster is build from clusterstore
-void PhysicalVoxelCluster::finishInitialization() {
+void Physics::finishInitialization() {
     calculateMassAndCenter();
-    CollidableVoxelCluster::finishInitialization();
 }
 
-PhysicalVoxelCluster::~PhysicalVoxelCluster() {
+Physics::~Physics() {
 }
 
-void PhysicalVoxelCluster::calculateMassAndCenter() {
+void Physics::calculateMassAndCenter() {
     if (m_massValid)
         return;
 
     glm::vec3 center;
     m_mass = 0;
-    for (auto pair : m_voxels) {
+    for (auto pair : m_worldObject.voxel()) {
         Voxel *voxel = pair.second;
         m_mass += 1.0; // voxel.mass?
         center += glm::vec3(voxel->gridCell()) * 1.0f; // voxel.mass?
@@ -47,9 +47,9 @@ void PhysicalVoxelCluster::calculateMassAndCenter() {
     m_massValid = true;
 }
 
-std::list<Collision> &PhysicalVoxelCluster::move(float delta_sec) {
+std::list<Collision> &Physics::move(float delta_sec) {
     m_oldTransform = m_newTransform = m_transform;
-    m_collisionDetector->reset();
+    m_worldObject.collisionDetector()->reset();
 
     m_speed *= (1.f - m_dampening * delta_sec);
     m_speed += m_acceleration * delta_sec;
@@ -67,20 +67,22 @@ std::list<Collision> &PhysicalVoxelCluster::move(float delta_sec) {
     // currently only one collision is handled and the collision is resolved
     // immediately. this can only be moved somewhere else as soon as there is a way
     // to resolve multiple collisions
-    std::list<Collision> &collisions = m_collisionDetector->lastCollisions();
+    std::list<Collision> &collisions = m_worldObject.collisionDetector()->lastCollisions();
     if (!collisions.empty()) {
         resolveCollision(collisions.front(), delta_sec);
     }
 
-    updateGeode();
-
-    return m_collisionDetector->lastCollisions();
+    m_worldObject.updateGeode();
+    return m_worldObject.collisionDetector()->lastCollisions();
 }
 
-void PhysicalVoxelCluster::resolveCollision(Collision & c, float delta_sec) {
-    PhysicalVoxelCluster * p1 = static_cast<PhysicalVoxelCluster*>(c.voxelClusterA());
-    PhysicalVoxelCluster * p2 = static_cast<PhysicalVoxelCluster*>(c.voxelClusterB());
-    
+void Physics::resolveCollision(Collision & c, float delta_sec) {
+    WorldObject * wo1 = c.worldObjectA();
+    WorldObject * wo2 = c.worldObjectB();
+
+    Physics * p1 = wo1->physics();
+    Physics * p2 = wo2->physics();
+
     // you didn't create the object with the store and forgot to call finishInitialization()!
     // or you removed Voxels... this case is not handled yet.
     assert(p1->m_massValid);
@@ -100,8 +102,8 @@ void PhysicalVoxelCluster::resolveCollision(Collision & c, float delta_sec) {
     glm::vec3 v2_ = ((p2->m_mass - p1->m_mass) * v2 + 2 * p1->m_mass*v1) / (p1->m_mass + p2->m_mass);
 
     // vector from collision to center
-    glm::vec3 r1 = p1->transform().position() - p1->transform().applyTo(glm::vec3(c.voxelA()->gridCell()));
-    glm::vec3 r2 = p2->transform().position() - p2->transform().applyTo(glm::vec3(c.voxelB()->gridCell()));
+    glm::vec3 r1 = p1->m_transform.position() - p1->m_transform.applyTo(glm::vec3(c.voxelA()->gridCell()));
+    glm::vec3 r2 = p2->m_transform.position() - p2->m_transform.applyTo(glm::vec3(c.voxelB()->gridCell()));
 
     //speed difference
     float vDiff = glm::abs(glm::length(v1 - v2));
@@ -119,9 +121,7 @@ void PhysicalVoxelCluster::resolveCollision(Collision & c, float delta_sec) {
 
 // tries to apply the current transform as far as no collision happens.
 // should not be used if the voxelcluster is not part of a worldTree.
-void PhysicalVoxelCluster::applyTransform() {
-    assert(m_geode != nullptr);
-
+void Physics::applyTransform() {
     if (m_newTransform != m_oldTransform) {
         if (isCollisionPossible()) {
             doSteppedTransform();
@@ -131,22 +131,22 @@ void PhysicalVoxelCluster::applyTransform() {
     }
 }
 
-bool PhysicalVoxelCluster::isCollisionPossible() {
+bool Physics::isCollisionPossible() {
     // the geode aabb is still the old one, add it to the final aabb
-    AABB fullAabb = aabb(m_oldTransform).united(aabb(m_newTransform));
+    AABB fullAabb = m_worldObject.voxelCluster()->aabb(m_oldTransform).united(m_worldObject.voxelCluster()->aabb(m_newTransform));
     // is there someone else than yourself inside?
-    auto possibleCollisions = m_worldTree->geodesInAABB(fullAabb);
+    auto possibleCollisions = m_worldObject.collisionDetector().geode()->geodesInAABB(fullAabb);
     return possibleCollisions.size() > 1;
 }
 
-void PhysicalVoxelCluster::doSteppedTransform() {
+void Physics::doSteppedTransform() {
     float steps = calculateStepCount(m_oldTransform, m_newTransform);
 
     for (int i = 0; i <= steps; i++) {
         m_transform.setOrientation(glm::mix(m_oldTransform.orientation(), m_newTransform.orientation(), i / steps));
         m_transform.setPosition(glm::mix(m_oldTransform.position(), m_newTransform.position(), i / steps));
-        updateGeode();
-        const std::list<Collision> & collisions = m_collisionDetector->checkCollisions();
+        m_worldObject.updateGeode();
+        const std::list<Collision> & collisions = m_worldObject.collisionDetector()->checkCollisions();
         if (!collisions.empty()) {
             assert(i > 0); // you're stuck, hopefully doesn't happen!
             m_transform.setOrientation(glm::mix(m_oldTransform.orientation(), m_newTransform.orientation(), (i - 1) / steps));
@@ -159,7 +159,7 @@ void PhysicalVoxelCluster::doSteppedTransform() {
 static float MAX_TRANSLATION_STEP_SIZE = 0.1f;
 static float MAX_ANGLE_STEP_SIZE = 10.0f;
 
-float PhysicalVoxelCluster::calculateStepCount(const WorldTransform & oldTransform, const WorldTransform & newTransform) {
+float Physics::calculateStepCount(const WorldTransform & oldTransform, const WorldTransform & newTransform) {
     float distance = glm::length(newTransform.position() - oldTransform.position());
     float steps = glm::floor(distance / MAX_TRANSLATION_STEP_SIZE) + 1.f; // at least one!
     
@@ -171,23 +171,20 @@ float PhysicalVoxelCluster::calculateStepCount(const WorldTransform & oldTransfo
 }
 
 // accelerate along local axis
-void PhysicalVoxelCluster::accelerate(glm::vec3 direction) {
+void Physics::accelerate(glm::vec3 direction) {
     m_acceleration += m_transform.orientation() * direction;
 }
 
 // angular acceleration around local axis
-void PhysicalVoxelCluster::accelerateAngular(glm::vec3 axis) {
+void Physics::accelerateAngular(glm::vec3 axis) {
     m_angularAcceleration += axis;
 }
 
-void PhysicalVoxelCluster::addVoxel(Voxel *voxel) {
-    CollidableVoxelCluster::addVoxel(voxel);
-    voxel->setVoxelCluster(this);
+void Physics::addVoxel(Voxel *voxel) {
     m_massValid = false;
 }
 
-void PhysicalVoxelCluster::removeVoxel(const cvec3 &position) {
-    CollidableVoxelCluster::removeVoxel(position);
+void Physics::removeVoxel(const cvec3 &position) {
     m_massValid = false;
     // it would be better to calculate incremental mass/center changes here
     // something like mass -= 1; center -= 1/mass * pos; center /= (mass-1)/mass; should work
