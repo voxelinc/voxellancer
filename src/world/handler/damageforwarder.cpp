@@ -16,11 +16,11 @@ void DamageForwarder::forwardDamage(std::list<Impact> &dampedDeadlyImpacts) {
         m_currentWorldObject = dampedDeadlyImpact.worldObject();
         std::list<Voxel*> neighbours = getNeighbours(deadVoxel);
 
-        glm::vec3 impactVec = glm::normalize(dampedDeadlyImpact.vec());
+        glm::vec3 localImpactVec = glm::normalize(glm::inverse(m_currentWorldObject->transform().orientation()) * dampedDeadlyImpact.vec());
 
         for(Voxel *neighbour : neighbours) {
-            glm::vec3 voxelVec = glm::normalize(neighbour->position() - deadVoxel->position());
-            float dotProduct = glm::dot(impactVec, voxelVec);
+            glm::vec3 voxelVec = glm::normalize(neighbour->gridCell() - deadVoxel->gridCell());
+            float dotProduct = glm::dot(localImpactVec, voxelVec);
 
             if(dotProduct >= 0.0f) {
                 Impact forwarded(m_currentWorldObject, neighbour, impactVec * dotProduct);

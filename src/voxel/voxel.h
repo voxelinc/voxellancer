@@ -34,7 +34,7 @@ public:
 
     virtual void onDestruction();
 
-    glm::vec3 position() const;
+    glm::vec3 position(WorldTransform &transform) const;
 
 
 protected:
