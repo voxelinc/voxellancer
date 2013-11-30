@@ -21,13 +21,13 @@ HUD::HUD() :
     m_dx(1),
     m_dy(1),
     prop_distance("hud.distance"),
-    prop_moveMultiplier("hud.move_multiplier"),
-    prop_inertiaRotate("hud.inertia_rotate"),
-    prop_inertiaMove("hud.inertia_move"),
-    prop_inertiaRate("hud.inertia_rate"),
-    prop_arrowMaxdistance("hud.arrow_maxdistance"),
-    prop_arrowRadius("hud.arrow_radius"),
-    prop_showFramerate("hud.show_framerate")
+    prop_moveMultiplier("hud.moveMultiplier"),
+    prop_inertiaRotate("hud.inertiaRotate"),
+    prop_inertiaMove("hud.inertiaMove"),
+    prop_inertiaRate("hud.inertiaRate"),
+    prop_arrowMaxdistance("hud.arrowMaxdistance"),
+    prop_arrowRadius("hud.arrowRadius"),
+    prop_showFramerate("hud.showFramerate")
 
 {
     m_font->setRenderer(m_voxelRenderer.get());
