@@ -8,10 +8,11 @@ public:
     ColorCoder();
     ~ColorCoder();
 
-    Voxel* decodeToInstance(cvec3 gridCell, cvec3 color);
+    Voxel* cloneCoded(Voxel* voxel);
 
 private:
     int colorToInt(cvec3 color);
+    cvec3 intToColor(int color);
 
     Property<int> prop_keyEngine, prop_colorEngine,
                     prop_keyHardpoint, prop_colorHardpoint,

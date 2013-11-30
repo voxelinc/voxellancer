@@ -5,7 +5,6 @@
 #include <vector>
 
 #include "voxel/voxel.h"
-#include "colorcoder.h"
 
 class VoxelCluster;
 
@@ -22,10 +21,8 @@ private:
     void loadCsv(std::vector<Voxel*> *list);
     void loadZox(std::vector<Voxel*> *list);
     void readZox(std::string &content, std::vector<Voxel*> *list);
-    void addVoxel(cvec3 gridCell, cvec3 color, std::vector<Voxel*> *list);
 
 private:
-    ColorCoder m_colorCoder;
 	std::ifstream* m_inputStream;
 	int x, y, z;
 };

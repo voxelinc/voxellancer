@@ -9,8 +9,9 @@ ClusterCache *ClusterCache::s_instance = nullptr;
 
 ClusterCache::ClusterCache() :
 m_items(),
-m_loader() {
-
+m_loader(),
+m_colorCoder()
+{
 }
 
 ClusterCache::~ClusterCache() {
@@ -24,7 +25,7 @@ ClusterCache *ClusterCache::instance() {
     return s_instance;
 }
 
-void ClusterCache::fillCluster(VoxelCluster *cluster, const std::string& filename){
+void ClusterCache::fillCluster(VoxelCluster *cluster, const std::string& filename, bool colorCoded){
     assert(cluster != nullptr);
     std::map<std::string, std::vector<Voxel*>*>::iterator item = m_items.find(filename);
     std::vector<Voxel*> *source;
@@ -38,8 +39,11 @@ void ClusterCache::fillCluster(VoxelCluster *cluster, const std::string& filenam
     }
 
 
-    for (Voxel *voxel : *source){
-        voxel->addCopyToCluster(cluster);
+    for (Voxel* voxel : *source){
+        if (colorCoded)
+            m_colorCoder.cloneCoded(voxel)->addToCluster(cluster);
+        else
+            (new Voxel(voxel->gridCell(), voxel->color()))->addToCluster(cluster);
     }
     cluster->finishInitialization();    
 }

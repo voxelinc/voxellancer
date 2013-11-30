@@ -32,8 +32,8 @@ void Voxel::setVoxelCluster(VoxelCluster *cluster){
     m_voxelCluster = cluster;
 }
 
-void Voxel::addCopyToCluster(VoxelCluster *cluster){
-    cluster->addVoxel(new Voxel(*this));
+void Voxel::addToCluster(VoxelCluster *cluster){
+    cluster->addVoxel(this);
 }
 
 const cvec3 &Voxel::gridCell() const {

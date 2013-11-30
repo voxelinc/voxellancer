@@ -1,5 +1,10 @@
 #include "colorcoder.h"
 
+#include "voxel/specialvoxels/enginevoxel.h"
+#include "voxel/specialvoxels/hardpointvoxel.h"
+#include "voxel/specialvoxels/cockpitvoxel.h"
+
+
 ColorCoder::ColorCoder() :
     prop_keyEngine("colorcode.keyEngine"),
     prop_colorEngine("colorcode.colorEngine"),
@@ -19,17 +24,23 @@ int ColorCoder::colorToInt(cvec3 color){
     return color.r << 16 | color.g << 8 | color.b;
 }
 
-Voxel* ColorCoder::decodeToInstance(cvec3 gridCell, cvec3 color){
-    int colorInt = colorToInt(color);
+cvec3 ColorCoder::intToColor(int color){
+    return cvec3(   (color & 0xFF0000) >> 16, 
+                    (color & 0x00FF00) >> 8, 
+                    color & 0x0000FF);
+}
 
-    /*if (colorInt == prop_keyEngine){
-        return new EngineVoxel(gridCell, prop_colorEngine);
+Voxel* ColorCoder::cloneCoded(Voxel* voxel){
+    int colorInt = colorToInt(voxel->color());
+
+    if (colorInt == prop_keyEngine){
+        return new EngineVoxel(voxel->gridCell(), intToColor(prop_colorEngine));
     } else if (colorInt == prop_keyHardpoint){
-        return new HardpointVoxel(gridCell, prop_colorHardpoint);
+        return new HardpointVoxel(voxel->gridCell(), intToColor(prop_colorHardpoint));
     } else if (colorInt == prop_keyCockpit){
-        return new CockpitVoxel(gridCell, prop_colorCockpit);
-    } else {*/
-        return new Voxel(gridCell, color);
-    //}
+        return new CockpitVoxel(voxel->gridCell(), intToColor(prop_colorCockpit));
+    } else {
+        return new Voxel(voxel->gridCell(), voxel->color());
+    }
 
 }

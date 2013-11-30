@@ -16,7 +16,7 @@ static regexns::regex line_regex() { return regexns::regex(R"(^([\w\.]*) *= *(.+
 static regexns::regex title_regex() { return regexns::regex(R"(^\[(\w+)\])"); }
 
 static regexns::regex float_regex() { return regexns::regex(R"(^[-+]?\d*\.?\d*$)"); }
-static regexns::regex int_regex() { return regexns::regex(R"(^[-+]?\d+$)"); }
+static regexns::regex int_regex() { return regexns::regex(R"(^([-+]?\d+)|(0x([0-9a-fA-F])+)$)"); } // stoi can also parse hex values
 static regexns::regex bool_regex() { return regexns::regex(R"(^(true|false)$)"); }
 static regexns::regex char_regex() { return regexns::regex(R"(^\w$)"); }
 static regexns::regex string_regex() { return regexns::regex(R"(^.*$)"); }
@@ -35,7 +35,7 @@ static glm::vec3 vec3converter(const std::string &s) {
 
 PropertyManager::PropertyManager():
     m_floatProperties(new PropertyCollection<float>(float_regex(), [](std::string s) { return std::stof(s); })),
-    m_intProperties(new PropertyCollection<int>(int_regex(), [](std::string s) { return std::stoi(s); })),
+    m_intProperties(new PropertyCollection<int>(int_regex(), [](std::string s) { return std::stoi(s, 0, 0); })), // base=0 allows adding 0x to parse hex
     m_charProperties(new PropertyCollection<char>(char_regex(), [](std::string s) { return s[0]; })),
     m_boolProperties(new PropertyCollection<bool>(bool_regex(), [](std::string s) { return s == "true" ? true : false; })),
     m_stringProperties(new PropertyCollection<std::string>(string_regex(), [](std::string s) { return s; })),

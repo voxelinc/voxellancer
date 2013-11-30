@@ -30,7 +30,7 @@ public:
     VoxelCluster *voxelCluster();
     void setVoxelCluster(VoxelCluster *cluster);
 
-    virtual void addCopyToCluster(VoxelCluster *cluster);
+    virtual void addToCluster(VoxelCluster *cluster);
 
     const cvec3 &gridCell() const;
     //void setGridCell(const cvec3 &cell);
