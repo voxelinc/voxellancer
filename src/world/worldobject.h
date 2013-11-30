@@ -12,9 +12,9 @@ public:
     WorldObject(float scale = 1.0f);
     virtual ~WorldObject();
 
-    CollisionDetector * collisionDetector();
-    Physics* physics();
-    VoxelCluster* voxelCluster();
+    CollisionDetector& collisionDetector();
+    Physics& physics();
+    VoxelCluster& voxelCluster();
 
     AABB aabb();
     Sphere sphere();

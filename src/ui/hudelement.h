@@ -22,7 +22,7 @@ class HUDElement : public VoxelCluster, public Drawable {
 public:
 	HUDElement();
 
-    virtual VoxelCluster * voxelCluster() override;
+    virtual VoxelCluster& voxelCluster() override;
     virtual WorldTransform& transform() override;
 
     WorldTransform m_transform;

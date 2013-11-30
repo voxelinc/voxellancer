@@ -44,11 +44,11 @@ void VoxelRenderer::draw(Drawable * worldObject)
 {
     m_shaderProgram->setUniform("model", worldObject->transform().matrix());
     glActiveTexture(GL_TEXTURE0);
-    worldObject->voxelCluster()->voxelRenderData()->positionTexture()->bind();
+    worldObject->voxelCluster().voxelRenderData()->positionTexture()->bind();
     glActiveTexture(GL_TEXTURE1);
-    worldObject->voxelCluster()->voxelRenderData()->colorTexture()->bind();
-    
-    m_vertexArrayObject->drawArraysInstanced(GL_TRIANGLE_STRIP, 0, 14, worldObject->voxelCluster()->voxelRenderData()->voxelCount());
+    worldObject->voxelCluster().voxelRenderData()->colorTexture()->bind();
+
+    m_vertexArrayObject->drawArraysInstanced(GL_TRIANGLE_STRIP, 0, 14, worldObject->voxelCluster().voxelRenderData()->voxelCount());
 }
 
 

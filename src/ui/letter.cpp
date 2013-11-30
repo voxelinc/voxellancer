@@ -1,10 +1,10 @@
 #include "ui/letter.h"
 
-Letter::Letter(): 
+Letter::Letter():
 	m_voxelCluster(),
     m_transform()
 {
-	
+
 }
 
 Letter::~Letter() {
@@ -12,8 +12,8 @@ Letter::~Letter() {
 }
 
 
-VoxelCluster * Letter::voxelCluster() {
-    return &m_voxelCluster;
+VoxelCluster& Letter::voxelCluster() {
+    return m_voxelCluster;
 }
 
 WorldTransform& Letter::transform() {

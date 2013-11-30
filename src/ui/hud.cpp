@@ -31,7 +31,7 @@ m_show_framerate("hud.show_framerate")
     m_rendercamera.setPosition(glm::vec3(0, 0, 0));
     m_rendercamera.setZNear(1.0f);
     m_rendercamera.setZFar(500.0f);
-    
+
     addElement("data/hud/crosshair.csv", HUDOffsetOrigin::Center, glm::vec3(-4, -4, 0), &m_elements);
     addElement("data/hud/topleft.csv", HUDOffsetOrigin::TopLeft, glm::vec3(1, -2, 0), &m_elements);
     addElement("data/hud/topright.csv", HUDOffsetOrigin::TopRight, glm::vec3(-4, -2, 0), &m_elements);
@@ -59,7 +59,7 @@ void HUD::addElement(const std::string& filename, HUDOffsetOrigin origin, glm::v
 
 void HUD::addChar(const std::string& filename, glm::vec3 offset, const char index, std::map<char, std::unique_ptr<Letter>> *map) {
     std::unique_ptr<Letter> element(new Letter());
-    ClusterCache::instance()->fillCluster(element->voxelCluster(), filename);
+    ClusterCache::instance()->fillCluster(&element->voxelCluster(), filename);
     element->transform().setCenter(offset);
     (*map)[index] = move(element);
 }
@@ -183,7 +183,7 @@ void HUD::draw(){
             }
         }
     }
-    
+
     // draw frame rate
     if (m_show_framerate){
         drawString(std::to_string((int)glm::round(m_framerate)), TopLeft, glm::vec3(4, -5, 0), s3x5, 0.8f);

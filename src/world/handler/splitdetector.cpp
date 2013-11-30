@@ -20,7 +20,7 @@ void SplitDetector::searchOrphans(std::set<WorldObject*> &modifiedWorldObjects) 
             pollContinuousVoxels(m_currentWorldObject->crucialVoxel());
         }
         else {
-            pollContinuousVoxels(m_currentWorldObject->voxelCluster()->voxelMap().begin()->second);
+            pollContinuousVoxels(m_currentWorldObject->voxelCluster().voxelMap().begin()->second);
         }
 
         while(!m_potentialOrphans.empty()) {
@@ -50,7 +50,7 @@ void SplitDetector::clear() {
 void SplitDetector::fillPotentialOrphans() {
     m_potentialOrphans.clear();
 
-    for(const std::pair<glm::ivec3, Voxel*> &cellVoxelPair : m_currentWorldObject->voxelCluster()->voxelMap()) {
+    for(const std::pair<glm::ivec3, Voxel*> &cellVoxelPair : m_currentWorldObject->voxelCluster().voxelMap()) {
         m_potentialOrphans.insert(cellVoxelPair.second);
     }
 }
@@ -72,7 +72,7 @@ VoxelClusterOrphan *SplitDetector::pollContinuousVoxels(Voxel *voxel) {
     continuousCluster->addVoxel(*i);
     m_potentialOrphans.erase(i);
 
-    std::list<Voxel*> neighbours = VoxelNeighbourHelper(m_currentWorldObject->voxelCluster(), voxel, false).neighbours();
+    std::list<Voxel*> neighbours = VoxelNeighbourHelper(&m_currentWorldObject->voxelCluster(), voxel, false).neighbours();
 
     for(Voxel *neighbour : neighbours) {
         VoxelClusterOrphan *neighbourOrphan = pollContinuousVoxels(neighbour);

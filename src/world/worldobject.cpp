@@ -14,16 +14,16 @@ WorldObject::~WorldObject() {
 
 }
 
-CollisionDetector* WorldObject::collisionDetector(){
-    return &m_collisionDetector;
+CollisionDetector& WorldObject::collisionDetector(){
+    return m_collisionDetector;
 }
 
-Physics* WorldObject::physics() {
-    return &m_physics;
+Physics& WorldObject::physics() {
+    return m_physics;
 }
 
-VoxelCluster* WorldObject::voxelCluster() {
-    return &m_voxelCluster;
+VoxelCluster& WorldObject::voxelCluster() {
+    return m_voxelCluster;
 }
 
 AABB WorldObject::aabb() {

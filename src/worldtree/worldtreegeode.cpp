@@ -15,7 +15,7 @@ WorldTreeGeode::WorldTreeGeode(WorldObject *worldobject) :
     m_worldObject(worldobject),
     m_containingNode(nullptr)
 {
-    m_worldObject->collisionDetector()->setGeode(this);
+    m_worldObject->collisionDetector().setGeode(this);
 }
 
 WorldTreeGeode::~WorldTreeGeode() {

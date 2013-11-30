@@ -12,7 +12,7 @@ public:
     Letter();
     virtual ~Letter();
 
-    virtual VoxelCluster * voxelCluster();
+    virtual VoxelCluster& voxelCluster();
     virtual WorldTransform& transform();
 
     WorldTransform m_transform;
