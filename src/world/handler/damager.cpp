@@ -37,9 +37,9 @@ std::set<WorldObject*> &Damager::modifiedWorldObjects() {
 }
 
 float Damager::damageOfImpact(const Impact &impact) const {
-    return glm::length(impact.vec3());
+    return glm::length(impact.vec());
 }
 
 Impact Damager::dampImpact(Impact &undamped, float factor) {
-    return Impact(undamped.impact().vec3() * factor);
+    return Impact(undamped.worldObject(), undamped.voxel(), undamped.vec() * factor);
 }

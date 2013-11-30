@@ -5,6 +5,7 @@
 
 class VoxelClusterOrphan;
 class WorldObject;
+class Voxel;
 
 class SplitDetector
 {

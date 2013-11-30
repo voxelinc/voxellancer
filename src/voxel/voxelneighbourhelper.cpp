@@ -43,7 +43,7 @@ void VoxelNeighbourHelper::considerNeighbour(const glm::ivec3 &relativeCell) {
 
     absoluteCell = m_voxel->gridCell() + relativeCell;
 
-    neighbour = m_voxelCluster()->voxel(absoluteCell);
+    neighbour = m_voxelCluster->voxel(absoluteCell);
     if(neighbour != nullptr) {
         m_neighbours.push_back(neighbour);
     }

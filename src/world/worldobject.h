@@ -9,22 +9,24 @@
 class WorldObject : public Drawable
 {
 public:
-    WorldObject();
+    WorldObject(float scale = 1.0f);
+    virtual ~WorldObject();
+
     CollisionDetector * collisionDetector();
-    Physics * physics();
-    VoxelCluster * voxelCluster();
+    Physics* physics();
+    VoxelCluster* voxelCluster();
 
     AABB aabb();
     Sphere sphere();
 
     virtual void update(float delta_sec);
-    virtual std::list<Collision> & move(float delta_sec);
-    void updateGeode();
+    virtual std::list<Collision> &move(float delta_sec);
 
     void addVoxel(Voxel * voxel);
     void removeVoxel(const glm::ivec3 & position);
     void finishInitialization();
 
+    Voxel *crucialVoxel();
 
     WorldTransform & transform();
 

@@ -1,34 +1,38 @@
 #include "splitter.h"
 
+#include "voxelclusterorphan.h"
+
+#include "world/worldobject.h"
+#include "voxel/voxel.h"
 
 void Splitter::split(std::list<VoxelClusterOrphan*> &voxelClusterOrphans) {
     m_splitOffWorldObjects.clear();
 
     for(VoxelClusterOrphan *orphanCluster : voxelClusterOrphans) {
-        VoxelCluster *voxelCluster = createVoxelClusterFromOrphan(orphanCluster);
-        m_splitOffWorldObjects.push_back(voxelCluster);
+        WorldObject *worldObject = createWorldObjectFromOrphan(orphanCluster);
+        m_splitOffWorldObjects.push_back(worldObject);
         removeExtractedVoxelsFromEx(orphanCluster);
     }
 }
 
-std::list<WorldObject*> &Splitter::splitOffVoxelClusters() {
+std::list<WorldObject*> &Splitter::splitOffWorldObjects() {
     return m_splitOffWorldObjects;
 }
 
-VoxelCluster *Splitter::createVoxelClusterFromOrphan(VoxelClusterOrphan *orphanCluster) {
+WorldObject *Splitter::createWorldObjectFromOrphan(VoxelClusterOrphan *orphanCluster) {
     glm::ivec3 gridCellShift;
-    VoxelCluster *voxelCluster;
+    WorldObject *worldObject;
 
+    worldObject = new WorldObject(orphanCluster->exWorldObject()->transform().scale());
     gridCellShift = orphanCluster->gridLlf();
-    voxelCluster = new VoxelCluster(glm::vec3(0), orphanCluster->exWorldObject()->scale());
 
     for(Voxel *voxel : orphanCluster->orphanedVoxels()) {
-        Voxel *voxelClone = new Voxel(voxel->gridCell() - static_cast<cvec3>(gridCellShift), voxel->color, voxel->mass());
-        voxelCluster->addVoxel(voxelClone);
+        Voxel *voxelClone = new Voxel(voxel->gridCell() - gridCellShift, voxel->color(), voxel->mass());
+        worldObject->addVoxel(voxelClone);
     }
 
    // voxelCluster->recalculateCenterAndMass(); TODO
-    return voxelCluster;
+    return worldObject;
 }
 
 void Splitter::removeExtractedVoxelsFromEx(VoxelClusterOrphan *orphanCluster) {

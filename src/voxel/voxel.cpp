@@ -24,10 +24,9 @@ Voxel::~Voxel() {
 }
 
 Voxel *Voxel::clone() {
-    Voxel *voxel = new Voxel();
-    voxel->m_gridCell = m_gridCell;
-    voxel->m_color = m_color;
+    Voxel *voxel = new Voxel(m_gridCell, m_color, m_mass);
     voxel->m_hp = m_hp;
+    return voxel;
 }
 
 const glm::ivec3 &Voxel::gridCell() const {

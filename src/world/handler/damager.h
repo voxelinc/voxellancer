@@ -21,7 +21,7 @@ public:
 protected:
     std::list<Impact> m_dampedDeadlyImpacts;
     std::list<Impact> m_deadlyImpacts;
-    std::set<WorldObject*> m_modifiedVoxelClusters;
+    std::set<WorldObject*> m_modifiedWorldObjects;
 
     float damageOfImpact(const Impact &impact) const;
     Impact dampImpact(Impact &undamped, float factor);

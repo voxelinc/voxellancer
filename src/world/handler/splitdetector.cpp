@@ -1,6 +1,10 @@
 #include "splitdetector.h"
 
+#include "voxelclusterorphan.h"
+
+#include "voxel/voxel.h"
 #include "voxel/voxelneighbourhelper.h"
+
 #include "world/worldobject.h"
 
 
@@ -8,20 +12,20 @@ void SplitDetector::searchOrphans(std::set<WorldObject*> &modifiedWorldObjects) 
     clear();
 
     for(WorldObject *modifiedWorldObject : modifiedWorldObjects) {
-        m_currentModifiedWorldObject = modifiedWorldObject;
+        m_currentWorldObject = modifiedWorldObject;
 
         fillPotentialOrphans();
 
-        if(m_currentModifiedWorldObject->crucialVoxel() != nullptr) {
-            pollContinuousVoxels(m_currentModifiedWorldObject->voxelCluster()->crucialVoxel());
+        if(m_currentWorldObject->crucialVoxel() != nullptr) {
+            pollContinuousVoxels(m_currentWorldObject->crucialVoxel());
         }
         else {
-            pollContinuousVoxels(m_currentModifiedWorldObject->voxelCluster()->voxelMap().begin()->first);
+            pollContinuousVoxels(m_currentWorldObject->voxelCluster()->voxelMap().begin()->second);
         }
 
         while(!m_potentialOrphans.empty()) {
             VoxelClusterOrphan *orphanCluster = pollContinuousVoxels(*m_potentialOrphans.begin());
-            orphanCluster->setExVoxelCluster(m_currentModifiedWorldObject);
+            orphanCluster->setExWorldObject(m_currentWorldObject);
             m_voxelClusterOrphans.push_back(orphanCluster);
         }
     }
@@ -46,7 +50,7 @@ void SplitDetector::clear() {
 void SplitDetector::fillPotentialOrphans() {
     m_potentialOrphans.clear();
 
-    for(const std::pair<glm::ivec3, Voxel*> &cellVoxelPair : m_currentModifiedWorldObject()->voxelCluster->voxelMap()) {
+    for(const std::pair<glm::ivec3, Voxel*> &cellVoxelPair : m_currentWorldObject->voxelCluster()->voxelMap()) {
         m_potentialOrphans.insert(cellVoxelPair.second);
     }
 }
@@ -68,7 +72,7 @@ VoxelClusterOrphan *SplitDetector::pollContinuousVoxels(Voxel *voxel) {
     continuousCluster->addVoxel(*i);
     m_potentialOrphans.erase(i);
 
-    std::list<Voxel*> neighbours = VoxelNeighbourHelper(m_currentModifiedWorldObject->voxelCluster(), voxel, false).neighbours();
+    std::list<Voxel*> neighbours = VoxelNeighbourHelper(m_currentWorldObject->voxelCluster(), voxel, false).neighbours();
 
     for(Voxel *neighbour : neighbours) {
         VoxelClusterOrphan *neighbourOrphan = pollContinuousVoxels(neighbour);

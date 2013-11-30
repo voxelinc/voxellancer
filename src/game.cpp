@@ -96,7 +96,7 @@ void Game::initialize()
     m_testClusterMoveable->finishInitialization();
     m_world->god().scheduleSpawn(m_testClusterMoveable);
 
-    m_inputHandler.setVoxelCluster(m_testClusterMoveable);
+    m_inputHandler.setWorldObject(m_testClusterMoveable);
 
     WorldObject *m_testClusterA = new WorldObject();
     ClusterCache::instance()->fillCluster(m_testClusterA->voxelCluster(), "data/voxelcluster/basicship.csv");

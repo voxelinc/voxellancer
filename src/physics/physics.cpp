@@ -1,6 +1,6 @@
 #include <glm/gtx/quaternion.hpp>
 #include <iostream>
-#include "Physics.h"
+#include "physics.h"
 
 #include "worldtransform.h"
 #include "collision/collisiondetector.h"
@@ -24,7 +24,7 @@ Physics::Physics(WorldObject & worldObject) :
 
 }
 
-// only neccessary for manually constructed voxelclusters, not if 
+// only neccessary for manually constructed voxelclusters, not if
 // the cluster is build from clusterstore
 void Physics::finishInitialization() {
     calculateMassAndCenter();
@@ -74,7 +74,7 @@ std::list<Collision> &Physics::move(float delta_sec) {
         resolveCollision(collisions.front(), delta_sec);
     }
 
-    m_worldObject.updateGeode();
+    m_worldObject.collisionDetector()->updateGeode();
     return m_worldObject.collisionDetector()->lastCollisions();
 }
 
@@ -89,7 +89,7 @@ void Physics::resolveCollision(Collision & c, float delta_sec) {
     // or you removed Voxels... this case is not handled yet.
     assert(p1->m_massValid);
     assert(p2->m_massValid);
-    
+
     assert(p1->m_mass > 0);
     assert(p2->m_mass > 0);
 
@@ -113,7 +113,7 @@ void Physics::resolveCollision(Collision & c, float delta_sec) {
     // new angular speed
     glm::vec3 w1_ = glm::inverse((wo1->transform().orientation())) * (m_rotationFactor.get() * vDiff * (1.f / p1->m_mass) * glm::cross(normal, r1));
     glm::vec3 w2_ = glm::inverse((wo2->transform().orientation())) * (m_rotationFactor.get() * vDiff * (1.f / p2->m_mass) * glm::cross(-normal, r2));
-    
+
     p1->m_speed = v1_;
     p2->m_speed = v2_;
     p1->m_angularSpeed = w1_;
@@ -148,7 +148,7 @@ void Physics::doSteppedTransform() {
     for (int i = 0; i <= steps; i++) {
         m_worldObject.transform().setOrientation(glm::mix(m_oldTransform.orientation(), m_newTransform.orientation(), i / steps));
         m_worldObject.transform().setPosition(glm::mix(m_oldTransform.position(), m_newTransform.position(), i / steps));
-        m_worldObject.updateGeode();
+        m_worldObject.collisionDetector()->updateGeode();
         const std::list<Collision> & collisions = m_worldObject.collisionDetector()->checkCollisions();
         if (!collisions.empty()) {
             assert(i > 0); // you're stuck, hopefully doesn't happen!
@@ -165,11 +165,11 @@ static float MAX_ANGLE_STEP_SIZE = 10.0f;
 float Physics::calculateStepCount(const WorldTransform & oldTransform, const WorldTransform & newTransform) {
     float distance = glm::length(newTransform.position() - oldTransform.position());
     float steps = glm::floor(distance / MAX_TRANSLATION_STEP_SIZE) + 1.f; // at least one!
-    
+
     float angle = glm::angle(glm::inverse(newTransform.orientation()) * oldTransform.orientation());
     if (std::isfinite(angle)) // sometimes glm::angle returns INF for really small angles
         steps = glm::max(steps, glm::floor(angle / MAX_ANGLE_STEP_SIZE) + 1.f);
-    
+
     return steps;
 }
 

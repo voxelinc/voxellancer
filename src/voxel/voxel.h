@@ -24,7 +24,6 @@ public:
     virtual ~Voxel();
 
     virtual Voxel *clone();
-    virtual Voxel *clone();
 
     const glm::ivec3 &gridCell() const;
 

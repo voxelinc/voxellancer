@@ -6,6 +6,8 @@
 #include "voxel/voxelcluster.h"
 #include "voxel/voxeltreenode.h"
 
+#include "world/worldobject.h"
+
 
 void DamageForwarder::forwardDamage(std::list<Impact> &dampedDeadlyImpacts) {
     m_forwardedDamageImpacts.clear();
@@ -19,11 +21,11 @@ void DamageForwarder::forwardDamage(std::list<Impact> &dampedDeadlyImpacts) {
         glm::vec3 localImpactVec = glm::normalize(glm::inverse(m_currentWorldObject->transform().orientation()) * dampedDeadlyImpact.vec());
 
         for(Voxel *neighbour : neighbours) {
-            glm::vec3 voxelVec = glm::normalize(neighbour->gridCell() - deadVoxel->gridCell());
+            glm::vec3 voxelVec = glm::normalize(static_cast<glm::vec3>(neighbour->gridCell() - deadVoxel->gridCell()));
             float dotProduct = glm::dot(localImpactVec, voxelVec);
 
             if(dotProduct >= 0.0f) {
-                Impact forwarded(m_currentWorldObject, neighbour, impactVec * dotProduct);
+                Impact forwarded(m_currentWorldObject, neighbour, localImpactVec * dotProduct);
                 m_forwardedDamageImpacts.push_back(forwarded);
             }
         }
@@ -51,7 +53,7 @@ std::list<Voxel*> DamageForwarder::getNeighbours(Voxel *voxel) {
 }
 
 void DamageForwarder::considerNeighbour(const glm::ivec3 &cellDelta) {
-    Voxel *neighbour = m_currentWorldObject->voxelCluster().voxel(cell);
+    Voxel *neighbour = m_currentWorldObject->voxelCluster()->voxel(m_currentGridCell + cellDelta);
     if(neighbour == nullptr) {
         return;
     }

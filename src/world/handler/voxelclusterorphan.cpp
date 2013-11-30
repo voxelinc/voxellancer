@@ -8,22 +8,22 @@ void VoxelClusterOrphan::addAllVoxels(VoxelClusterOrphan *orphanCluster) {
     m_orphanedVoxels.insert(m_orphanedVoxels.end(), orphanCluster->orphanedVoxels().begin(), orphanCluster->orphanedVoxels().end());
 }
 
-VoxelCluster *VoxelClusterOrphan::exVoxelCluster() {
-    return m_exVoxelCluster;
+WorldObject *VoxelClusterOrphan::exWorldObject() {
+    return m_exWorldObject;
 }
 
-void VoxelClusterOrphan::setExVoxelCluster(VoxelCluster *exVoxelCluster) {
-    m_exVoxelCluster = exVoxelCluster;
+void VoxelClusterOrphan::setExWorldObject(WorldObject *exWorldObject) {
+    m_exWorldObject = exWorldObject;
 }
 
 glm::ivec3 VoxelClusterOrphan::gridLlf() const {
-    assert(m_exVoxelCluster != nullptr);
+    assert(m_exWorldObject != nullptr);
     assert(m_orphanedVoxels.size() > 0);
 
-    glm::ivec3 llf = static_cast<glm::ivec3>((*m_orphanedVoxels.begin())->gridCell());
+    glm::ivec3 llf = (*m_orphanedVoxels.begin())->gridCell();
 
     for(Voxel *voxel : m_orphanedVoxels) {
-        llf = glm::min(static_cast<cvec3>(llf), voxel->gridCell());
+        llf = glm::min(llf, voxel->gridCell());
     }
 }
 
