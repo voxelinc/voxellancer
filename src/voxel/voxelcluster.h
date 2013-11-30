@@ -28,9 +28,10 @@ public:
     AABB aabb(const WorldTransform& transform);
     Sphere sphere(const WorldTransform& transform);
 
-    Voxel* voxel(const glm::ivec3& position);
-    virtual void addVoxel(Voxel* voxel);
-    virtual void removeVoxel(const glm::ivec3& position);
+    Voxel * voxel(const glm::ivec3& position);
+    virtual void addVoxel(Voxel *voxel);
+    virtual void removeVoxel(const glm::ivec3 &position);
+    const std::unordered_map<glm::ivec3, Voxel*> & voxelMap();
 
     VoxelRenderData *voxelRenderData();
 

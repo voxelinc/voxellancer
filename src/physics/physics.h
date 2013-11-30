@@ -17,8 +17,6 @@ public:
     void accelerate(glm::vec3 direction);
     void accelerateAngular(glm::vec3 axis);
 
-    WorldTransform & transform();
-
     virtual void addVoxel(Voxel *voxel);
     virtual void removeVoxel(const cvec3 &position);
 
@@ -37,9 +35,8 @@ protected:
     float m_mass;
     bool m_massValid;
 
-    WorldObject & m_worldObject;
+    WorldObject& m_worldObject;
 
-    WorldTransform m_transform;
     WorldTransform m_oldTransform;
     WorldTransform m_newTransform;
 

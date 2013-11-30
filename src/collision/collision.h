@@ -27,8 +27,8 @@ class Collision
 public:
     Collision(const CollisionParticipant &a, const CollisionParticipant &b);
 
-    const CollisionParticipant &a() const;
-    const CollisionParticipant &b() const;
+    CollisionParticipant &a();
+    CollisionParticipant &b();
 
 protected:
     CollisionParticipant m_a, m_b;

@@ -43,7 +43,7 @@ protected:
     void stepAnim(glm::vec3 targetpos, glm::quat targetor);
 
     void drawString(std::string text, HUDOffsetOrigin origin, glm::vec3 offset, HUDFontSize size = s3x5, float scale = 1.f, HUDFontAlign align = aLeft);
-    void adjustPosition(VoxelCluster *cluster, HUDOffsetOrigin origin, glm::vec3 offset);
+    void adjustPosition(HUDElement *cluster, HUDOffsetOrigin origin, glm::vec3 offset);
     void adjustPositions();
 
     

@@ -5,10 +5,10 @@
 #include "worldtransform.h"
 #include "collision/collisiondetector.h"
 #include "world/worldobject.h"
+#include "worldtree/worldtreegeode.h"
 
 
 Physics::Physics(WorldObject & worldObject) :
-    m_transform(),
     m_speed(0),
     m_angularSpeed(0),
     m_acceleration(0),
@@ -17,7 +17,8 @@ Physics::Physics(WorldObject & worldObject) :
     m_angularDampening("physics.globalangulardampening"),
     m_rotationFactor("physics.globalrotationfactor"),
     m_mass(0),
-    m_massValid(true)
+    m_massValid(true),
+    m_worldObject(worldObject)
 {
 
 }
@@ -37,18 +38,18 @@ void Physics::calculateMassAndCenter() {
 
     glm::vec3 center;
     m_mass = 0;
-    for (auto pair : m_worldObject.voxel()) {
+    for (auto pair : m_worldObject.voxelCluster()->voxelMap()) {
         Voxel *voxel = pair.second;
         m_mass += 1.0; // voxel.mass?
         center += glm::vec3(voxel->gridCell()) * 1.0f; // voxel.mass?
     }
     center /= m_mass;
-    m_transform.setCenter(center);
+    m_worldObject.transform().setCenter(center);
     m_massValid = true;
 }
 
 std::list<Collision> &Physics::move(float delta_sec) {
-    m_oldTransform = m_newTransform = m_transform;
+    m_oldTransform = m_newTransform = m_worldObject.transform();
     m_worldObject.collisionDetector()->reset();
 
     m_speed *= (1.f - m_dampening * delta_sec);
@@ -77,8 +78,8 @@ std::list<Collision> &Physics::move(float delta_sec) {
 }
 
 void Physics::resolveCollision(Collision & c, float delta_sec) {
-    WorldObject * wo1 = c.worldObjectA();
-    WorldObject * wo2 = c.worldObjectB();
+    WorldObject * wo1 = c.a().worldObject();
+    WorldObject * wo2 = c.b().worldObject();
 
     Physics * p1 = wo1->physics();
     Physics * p2 = wo2->physics();
@@ -91,26 +92,26 @@ void Physics::resolveCollision(Collision & c, float delta_sec) {
     assert(p1->m_mass > 0);
     assert(p2->m_mass > 0);
 
-    glm::vec3 normal = glm::normalize(p1->m_transform.applyTo(glm::vec3(c.voxelA()->gridCell())) - p2->m_transform.applyTo(glm::vec3(c.voxelB()->gridCell())));
+    glm::vec3 normal = glm::normalize(wo1->transform().applyTo(glm::vec3(c.a().voxel()->gridCell())) - wo2->transform().applyTo(glm::vec3(c.b().voxel()->gridCell())));
 
     // old speed at collision point
-    glm::vec3 v1 = (p1->m_newTransform.applyTo(glm::vec3(c.voxelA()->gridCell())) - p1->m_oldTransform.applyTo(glm::vec3(c.voxelA()->gridCell()))) / delta_sec;
-    glm::vec3 v2 = (p2->m_newTransform.applyTo(glm::vec3(c.voxelB()->gridCell())) - p2->m_oldTransform.applyTo(glm::vec3(c.voxelB()->gridCell()))) / delta_sec;
+    glm::vec3 v1 = (p1->m_newTransform.applyTo(glm::vec3(c.a().voxel()->gridCell())) - p1->m_oldTransform.applyTo(glm::vec3(c.a().voxel()->gridCell()))) / delta_sec;
+    glm::vec3 v2 = (p2->m_newTransform.applyTo(glm::vec3(c.b().voxel()->gridCell())) - p2->m_oldTransform.applyTo(glm::vec3(c.b().voxel()->gridCell()))) / delta_sec;
 
     // new speed
     glm::vec3 v1_ = ((p1->m_mass - p2->m_mass) * v1 + 2 * p2->m_mass*v2) / (p1->m_mass + p2->m_mass);
     glm::vec3 v2_ = ((p2->m_mass - p1->m_mass) * v2 + 2 * p1->m_mass*v1) / (p1->m_mass + p2->m_mass);
 
     // vector from collision to center
-    glm::vec3 r1 = p1->m_transform.position() - p1->m_transform.applyTo(glm::vec3(c.voxelA()->gridCell()));
-    glm::vec3 r2 = p2->m_transform.position() - p2->m_transform.applyTo(glm::vec3(c.voxelB()->gridCell()));
+    glm::vec3 r1 = wo1->transform().position() - wo1->transform().applyTo(glm::vec3(c.a().voxel()->gridCell()));
+    glm::vec3 r2 = wo2->transform().position() - wo2->transform().applyTo(glm::vec3(c.b().voxel()->gridCell()));
 
     //speed difference
     float vDiff = glm::abs(glm::length(v1 - v2));
 
     // new angular speed
-    glm::vec3 w1_ = glm::inverse((p1->transform().orientation())) * (m_rotationFactor.get() * vDiff * (1.f / p1->m_mass) * glm::cross(normal, r1));
-    glm::vec3 w2_ = glm::inverse((p2->transform().orientation())) * (m_rotationFactor.get() * vDiff * (1.f / p2->m_mass) * glm::cross(-normal, r2));
+    glm::vec3 w1_ = glm::inverse((wo1->transform().orientation())) * (m_rotationFactor.get() * vDiff * (1.f / p1->m_mass) * glm::cross(normal, r1));
+    glm::vec3 w2_ = glm::inverse((wo2->transform().orientation())) * (m_rotationFactor.get() * vDiff * (1.f / p2->m_mass) * glm::cross(-normal, r2));
     
     p1->m_speed = v1_;
     p2->m_speed = v2_;
@@ -135,7 +136,7 @@ bool Physics::isCollisionPossible() {
     // the geode aabb is still the old one, add it to the final aabb
     AABB fullAabb = m_worldObject.voxelCluster()->aabb(m_oldTransform).united(m_worldObject.voxelCluster()->aabb(m_newTransform));
     // is there someone else than yourself inside?
-    auto possibleCollisions = m_worldObject.collisionDetector().geode()->geodesInAABB(fullAabb);
+    auto possibleCollisions = m_worldObject.collisionDetector()->geode()->geodesInAABB(fullAabb);
     return possibleCollisions.size() > 1;
 }
 
@@ -143,8 +144,8 @@ void Physics::doSteppedTransform() {
     float steps = calculateStepCount(m_oldTransform, m_newTransform);
 
     for (int i = 0; i <= steps; i++) {
-        m_transform.setOrientation(glm::mix(m_oldTransform.orientation(), m_newTransform.orientation(), i / steps));
-        m_transform.setPosition(glm::mix(m_oldTransform.position(), m_newTransform.position(), i / steps));
+        m_worldObject.transform().setOrientation(glm::mix(m_oldTransform.orientation(), m_newTransform.orientation(), i / steps));
+        m_worldObject.transform().setPosition(glm::mix(m_oldTransform.position(), m_newTransform.position(), i / steps));
         m_worldObject.updateGeode();
         const std::list<Collision> & collisions = m_worldObject.collisionDetector()->checkCollisions();
         if (!collisions.empty()) {
