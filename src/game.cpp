@@ -76,7 +76,6 @@ void Game::initialize()
 	//m_testClusterA->transform().setCenter(glm::vec3(3, 0, 3)); // TODO: shouldnt center == centerofmass ?
     m_testClusterA->transform().setPosition(glm::vec3(0, 0, -10));
 	//m_testClusterA->removeVoxel(glm::ivec3(3, 2, 3)); // this verifies the objects are different
-    m_testClusterA->finishInitialization();
     m_world->god().scheduleSpawn(m_testClusterA);
 
 
@@ -84,7 +83,6 @@ void Game::initialize()
     ClusterCache::instance()->fillCluster(m_testClusterB, "data/voxelcluster/basicship.csv");
 	//m_testClusterB->transform().setCenter(glm::vec3(3, 0, 3));
     m_testClusterB->transform().setPosition(glm::vec3(0, 0, 10));
-    m_testClusterB->finishInitialization();
     m_world->god().scheduleSpawn(m_testClusterB);
 
     WorldObject *m_testCluster = new WorldObject();
