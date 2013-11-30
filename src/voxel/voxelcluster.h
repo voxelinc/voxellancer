@@ -22,24 +22,23 @@ class WorldTree;
 class VoxelCluster
 {
 public:
-	VoxelCluster(glm::vec3 center = glm::vec3(0), float scale = 1.0);
+	VoxelCluster();
     virtual ~VoxelCluster();
 
-    AABB aabb(const WorldTransform & transform);
-    Sphere sphere(const WorldTransform & transform);
+    AABB aabb(const WorldTransform& transform);
+    Sphere sphere(const WorldTransform& transform);
 
-    Voxel * voxel(cvec3 position);
-    virtual void addVoxel(Voxel *voxel);
-    virtual void removeVoxel(const cvec3 &position);
+    Voxel* voxel(const glm::ivec3& position);
+    virtual void addVoxel(Voxel* voxel);
+    virtual void removeVoxel(const glm::ivec3& position);
 
     VoxelRenderData *voxelRenderData();
 
+
 protected:
-    void updateTextures();
-    
     VoxelRenderData m_voxelRenderData;
 
-    std::unordered_map<cvec3, Voxel*> m_voxels;
-    CAABB m_aabb;
+    std::unordered_map<glm::ivec3, Voxel*> m_voxels;
+    IAABB m_aabb;
 };
 

@@ -7,45 +7,38 @@
 
 
 typedef glm::detail::tvec3<unsigned char> cvec3;
- 
+
 namespace std {
-    template<> struct hash<cvec3>
+    template<> struct hash<glm::ivec3>
     {
-        std::size_t operator()(const cvec3 &v) const {
+        std::size_t operator()(const glm::ivec3 &v) const {
             return v.x + (v.y << 8) + (v.z << 16);
         }
     };
 }
 
-class VoxelCluster;
-
 class Voxel
 {
 public:
-    Voxel();
-    Voxel(cvec3 gridCell, cvec3 color);
+    Voxel(const glm::ivec3 &gridCell, const cvec3 &color, float mass = 1.0f);
     virtual ~Voxel();
 
-    // TODO: extract to WorldCluster
-    VoxelCluster *voxelCluster();
-    void setVoxelCluster(VoxelCluster *cluster);
-
-    const cvec3 &gridCell() const;
-    //void setGridCell(const cvec3 &cell);
+    const glm::ivec3 &gridCell() const;
 
     const cvec3 &color() const;
-    //void setColor(const cvec3 &color);
 
     float hp() const;
     void applyDamage(float deltaHp);
+
+    float mass() const;
 
     virtual void onDestruction();
 
 
 protected:
-    VoxelCluster *m_voxelCluster;
-    cvec3 m_gridCell;
+    glm::ivec3 m_gridCell;
     cvec3 m_color;
     float m_hp;
+    float m_mass;
 };
 

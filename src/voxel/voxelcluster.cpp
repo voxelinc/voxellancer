@@ -22,9 +22,13 @@ VoxelCluster::VoxelCluster(glm::vec3 center, float scale):
 
 VoxelCluster::~VoxelCluster() {
     // free all clusters
-    for (std::pair<const cvec3, Voxel*> &element : m_voxels){
+    for (auto& element : m_voxels){
         delete element.second;
     }
+}
+
+Voxel* VoxelCluster::voxel(const glm::ivec3& position) {
+    return m_voxels[position];
 }
 
 void VoxelCluster::addVoxel(Voxel *voxel) {
@@ -35,7 +39,7 @@ void VoxelCluster::addVoxel(Voxel *voxel) {
     m_voxelRenderData.invalidate();
 }
 
-void VoxelCluster::removeVoxel(const cvec3 & position) {
+void VoxelCluster::removeVoxel(const const glm::ivec3& position) {
     Voxel * voxel = m_voxels[position];
     assert(voxel != nullptr);
     m_voxels.erase(position);
@@ -43,11 +47,11 @@ void VoxelCluster::removeVoxel(const cvec3 & position) {
     delete voxel;
 }
 
-AABB VoxelCluster::aabb(const WorldTransform & transform) {
+AABB VoxelCluster::aabb(const WorldTransform& transform) {
     return AABB::containing(sphere(transform));
 }
 
-Sphere VoxelCluster::sphere(const WorldTransform & transform) {
+Sphere VoxelCluster::sphere(const WorldTransform& transform) {
     Sphere sphere;
     sphere.setPosition(transform.applyTo(glm::vec3(0)));
     // m_aabb only contains the center of each voxel so add sqrt(2) to add the distance from center to edge
@@ -58,8 +62,3 @@ Sphere VoxelCluster::sphere(const WorldTransform & transform) {
 VoxelRenderData * VoxelCluster::voxelRenderData() {
     return &m_voxelRenderData;
 }
-
-Voxel * VoxelCluster::voxel(cvec3 position) {
-    return m_voxels[position];
-}
-
