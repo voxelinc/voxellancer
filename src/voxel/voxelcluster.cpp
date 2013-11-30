@@ -59,6 +59,6 @@ Sphere VoxelCluster::sphere(const WorldTransform& transform) {
     return sphere;
 }
 
-VoxelRenderData * VoxelCluster::voxelRenderData() {
+VoxelRenderData *VoxelCluster::voxelRenderData() {
     return &m_voxelRenderData;
 }

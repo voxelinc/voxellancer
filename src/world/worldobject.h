@@ -26,10 +26,12 @@ public:
     virtual glm::mat4 matrix();
     bool transform();
 
+    void accelerate(glm::vec3 direction);
+    void accelerateAngular(glm::vec3 axis);
+
+
 protected:
     CollisionDetector m_collisionDetector;
     Physics m_physics;
     VoxelCluster m_voxelCluster;
-
-
 };

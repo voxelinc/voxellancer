@@ -35,6 +35,7 @@ void VoxelRenderData::updateTextures() {
         colorData[i * 3 + 0] = voxel->color().x;
         colorData[i * 3 + 1] = voxel->color().y;
         colorData[i * 3 + 2] = voxel->color().z;
+
         i++;
     }
     m_voxelCount = i;

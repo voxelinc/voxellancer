@@ -23,17 +23,17 @@ go_bandit([](){
         });
 
         it("can add/remove voxel", [&]() {
-            cluster->addVoxel(new Voxel(cvec3(1, 2, 3), cvec3(255, 128, 0)));
-            AssertThat(cluster->voxel(cvec3(1, 2, 3)) != nullptr, Equals(true));
+            cluster->addVoxel(new Voxel(glm::ivec3(1, 2, 3), cvec3(255, 128, 0)));
+            AssertThat(cluster->voxel(glm::ivec3(1, 2, 3)) != nullptr, Equals(true));
 
-            cluster->removeVoxel(cvec3(1, 2, 3));
-            AssertThat(cluster->voxel(cvec3(1, 2, 3)) == nullptr, Equals(true));
+            cluster->removeVoxel(glm::ivec3(1, 2, 3));
+            AssertThat(cluster->voxel(glm::ivec3(1, 2, 3)) == nullptr, Equals(true));
         });
 
         it("test generate texture", [&]() {
-            cluster->addVoxel(new Voxel(cvec3('a', 'b', 'c'), cvec3(255, 128, 0)));
-            cluster->addVoxel(new Voxel(cvec3(3, 4, 5), cvec3(128, 128, 0)));
-            cluster->addVoxel(new Voxel(cvec3(1, 5, 3), cvec3(255, 128, 0)));
+            cluster->addVoxel(new Voxel(glm::ivec3('a', 'b', 'c'), cvec3(255, 128, 0)));
+            cluster->addVoxel(new Voxel(glm::ivec3(3, 4, 5), cvec3(128, 128, 0)));
+            cluster->addVoxel(new Voxel(glm::ivec3(1, 5, 3), cvec3(255, 128, 0)));
 
             GLuint id1 = cluster->voxelRenderData()->positionTexture()->id();
             GLuint id2 = cluster->voxelRenderData()->colorTexture()->id();
@@ -43,20 +43,20 @@ go_bandit([](){
         });
     });
     describe("voxel hasher", []() {
-        it("can hash cvec3", [&]() {
-            std::hash<cvec3> hash;
-            AssertThat(hash(cvec3(0, 0, 0)), Equals(0));
-            AssertThat(hash(cvec3(1, 0, 0)), Equals(1));
-            AssertThat(hash(cvec3(0, 1, 0)), Equals(256));
-            AssertThat(hash(cvec3(0, 0, 1)), Equals(1 << 16));
-            AssertThat(hash(cvec3(127, 1, 1)), Equals((1 << 16) + 256 + 127));
-            AssertThat(hash(cvec3(1, 0, 0)), Equals(hash(cvec3(1, 0, 0))));
-            AssertThat(hash(cvec3(1, 0, 0)), !Equals(hash(cvec3(2, 0, 0))));
-            AssertThat(hash(cvec3(1, 0, 0)), !Equals(hash(cvec3(-1, 0, 0))));
-            AssertThat(hash(cvec3(1, 0, 0)), !Equals(hash(cvec3(0, 1, 0))));
-            AssertThat(hash(cvec3(1, 0, 0)), !Equals(hash(cvec3(0, -1, 0))));
-            AssertThat(hash(cvec3(1, 0, 0)), !Equals(hash(cvec3(0, 0, 1))));
-            AssertThat(hash(cvec3(0, 1, 0)), !Equals(hash(cvec3(0, 0, 1))));
+        it("can hash glm::ivec3", [&]() {
+            std::hash<glm::ivec3> hash;
+            AssertThat(hash(glm::ivec3(0, 0, 0)), Equals(0));
+            AssertThat(hash(glm::ivec3(1, 0, 0)), Equals(1));
+            AssertThat(hash(glm::ivec3(0, 1, 0)), Equals(256));
+            AssertThat(hash(glm::ivec3(0, 0, 1)), Equals(1 << 16));
+            AssertThat(hash(glm::ivec3(127, 1, 1)), Equals((1 << 16) + 256 + 127));
+            AssertThat(hash(glm::ivec3(1, 0, 0)), Equals(hash(glm::ivec3(1, 0, 0))));
+            AssertThat(hash(glm::ivec3(1, 0, 0)), !Equals(hash(glm::ivec3(2, 0, 0))));
+            AssertThat(hash(glm::ivec3(1, 0, 0)), !Equals(hash(glm::ivec3(-1, 0, 0))));
+            AssertThat(hash(glm::ivec3(1, 0, 0)), !Equals(hash(glm::ivec3(0, 1, 0))));
+            AssertThat(hash(glm::ivec3(1, 0, 0)), !Equals(hash(glm::ivec3(0, -1, 0))));
+            AssertThat(hash(glm::ivec3(1, 0, 0)), !Equals(hash(glm::ivec3(0, 0, 1))));
+            AssertThat(hash(glm::ivec3(0, 1, 0)), !Equals(hash(glm::ivec3(0, 0, 1))));
         });
     });
 });

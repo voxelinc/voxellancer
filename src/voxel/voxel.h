@@ -34,6 +34,8 @@ public:
 
     virtual void onDestruction();
 
+    glm::vec3 position() const;
+
 
 protected:
     glm::ivec3 m_gridCell;

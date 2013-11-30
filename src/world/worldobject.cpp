@@ -47,3 +47,11 @@ bool WorldObject::transform()
 {
     m_physics.transform();
 }
+
+void WorldObject::accelerate(glm::vec3 direction) {
+    m_physics.accelerate(direction);
+}
+
+void WorldObject::accelerateAngular(glm::vec3 axis) {
+    m_physics.accelerateAngular(axis);
+}
