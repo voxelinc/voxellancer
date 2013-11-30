@@ -31,8 +31,7 @@ void ClusterLoader::loadCsv(std::vector<Voxel*> *list){
 	readCsv(list);
 }
 
-void ClusterLoader::loadZox(std::vector<Voxel*> *list){
-
+void ClusterLoader::loadZox(std::vector<Voxel*> *list) {
 	std::string content;
 	m_inputStream->seekg(0, m_inputStream->end);
 	content.resize(m_inputStream->tellg());

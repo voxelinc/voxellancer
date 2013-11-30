@@ -13,7 +13,7 @@ WorldLogic::WorldLogic(World &world):
 }
 
 void WorldLogic::update(float deltaSecs) {
-    m_mover.moveVoxelClusters(deltaSecs);
+    m_mover.moveWorldObjects(deltaSecs);
 
     m_impactAccumulator.parse(m_mover.impacts());
     //m_impactResolver.alterVelocities(m_impactAccumulator.clusterImpacts());
@@ -39,11 +39,17 @@ void WorldLogic::update(float deltaSecs) {
 }
 
 void WorldLogic::damageForwardLoop(std::list<Impact> damageImpacts) {
+    if(damageImpacts.size() == 0)
+        return;
+
+    std::cout << "Damaging: " << damageImpacts.size() << " impacts " << std::endl;
     while(damageImpacts.size() > 0) {
         m_damager.applyDamages(damageImpacts);
         m_damageForwarder.forwardDamage(m_damager.deadlyImpacts());
         m_voxelHangman.applyOnDestructionHooks(m_damager.deadlyImpacts());
         m_voxelHangman.removeDestroyedVoxels(m_damager.deadlyImpacts());
         damageImpacts = m_damageForwarder.forwardedDamageImpacts();
+        if(damageImpacts.size() > 0)
+            std::cout << "  Forwarding: " << damageImpacts.size() << " impacts " << std::endl;
     }
 }

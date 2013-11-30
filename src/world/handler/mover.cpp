@@ -5,15 +5,16 @@
 #include "world/worldobject.h"
 
 
-void Mover::moveVoxelClusters(float deltaSec) {
+void Mover::moveWorldObjects(float deltaSec) {
     m_impacts.clear();
 
     for (WorldObject *worldObject : World::instance()->worldObjects()) {
-        std::list<Impact> &collisions = worldObject->move(deltaSec);
-        m_impacts.insert(m_impacts.end(), collisions.begin(), collisions.end());
+        std::list<Impact> &impacts = worldObject->move(deltaSec);
+        m_impacts.insert(m_impacts.end(), impacts.begin(), impacts.end());
     }
 }
 
 const std::list<Impact> &Mover::impacts() {
     return m_impacts;
 }
+

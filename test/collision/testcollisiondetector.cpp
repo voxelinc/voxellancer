@@ -16,21 +16,22 @@ using namespace bandit;
 
 go_bandit([](){
     describe("CollisionDetector", [](){
-        WorldTree *worldTree;
-        PhysicalVoxelCluster *a, *b;
+        World *world;
+        WorldObject *a, *b;
         CollisionDetector *d;
 
 
         before_each([&](){
-            worldTree = new WorldTree;
-            a = new c(); worldTree->insert(a);
-            b = new PhysicalVoxelCluster(); worldTree->insert(b);
-            d = new CollisionDetector(*worldTree, *a);
+            world = new World();
+            a = new WorldObject(); world->god()->scheduleSpawn(a);
+            b = new WorldObject(); world->god()->scheduleSpawn(b);
+            d = &a->physics().collisionDetector();
+            world->god()->spawn();
         });
 
         it("works in most basic conditions", [&]() {
-            a->addVoxel(new PhysicalVoxel(cvec3(0, 0, 0), cvec3(255, 255, 255)));
-            b->addVoxel(new PhysicalVoxel(cvec3(0, 0, 0), cvec3(255, 255, 255)));
+            a->addVoxel(new Voxel(glm::ivec3(0, 0, 0), cvec3(255, 255, 255)));
+            b->addVoxel(new Voxel(glm::ivec3(0, 0, 0), cvec3(255, 255, 255)));
 
             AssertThat(d->checkCollisions().size(), Equals(1));
 
@@ -40,17 +41,17 @@ go_bandit([](){
         });
 
         it("works in pretty basic conditions", [&]() {
-            a->addVoxel(new PhysicalVoxel(cvec3(0, 0, 0), cvec3(255, 255, 255)));
-            a->addVoxel(new PhysicalVoxel(cvec3(1, 0, 0), cvec3(255, 255, 255)));
-            a->addVoxel(new PhysicalVoxel(cvec3(2, 0, 0), cvec3(255, 255, 255)));
-            a->addVoxel(new PhysicalVoxel(cvec3(3, 0, 0), cvec3(255, 255, 255)));
-            a->addVoxel(new PhysicalVoxel(cvec3(4, 0, 0), cvec3(255, 255, 255)));
-            a->addVoxel(new PhysicalVoxel(cvec3(4, 0, 1), cvec3(255, 255, 255)));
+            a->addVoxel(new Voxel(glm::ivec3(0, 0, 0), cvec3(255, 255, 255)));
+            a->addVoxel(new Voxel(glm::ivec3(1, 0, 0), cvec3(255, 255, 255)));
+            a->addVoxel(new Voxel(glm::ivec3(2, 0, 0), cvec3(255, 255, 255)));
+            a->addVoxel(new Voxel(glm::ivec3(3, 0, 0), cvec3(255, 255, 255)));
+            a->addVoxel(new Voxel(glm::ivec3(4, 0, 0), cvec3(255, 255, 255)));
+            a->addVoxel(new Voxel(glm::ivec3(4, 0, 1), cvec3(255, 255, 255)));
 
-            b->addVoxel(new PhysicalVoxel(cvec3(0, 0, 0), cvec3(255, 255, 255)));
-            b->addVoxel(new PhysicalVoxel(cvec3(0, 0, 1), cvec3(255, 255, 255)));
-            b->addVoxel(new PhysicalVoxel(cvec3(1, 0, 1), cvec3(255, 255, 255)));
-            b->addVoxel(new PhysicalVoxel(cvec3(2, 0, 1), cvec3(255, 255, 255)));
+            b->addVoxel(new Voxel(glm::ivec3(0, 0, 0), cvec3(255, 255, 255)));
+            b->addVoxel(new Voxel(glm::ivec3(0, 0, 1), cvec3(255, 255, 255)));
+            b->addVoxel(new Voxel(glm::ivec3(1, 0, 1), cvec3(255, 255, 255)));
+            b->addVoxel(new Voxel(glm::ivec3(2, 0, 1), cvec3(255, 255, 255)));
 
             AssertThat(d->checkCollisions().size(), IsGreaterThan(0));
 

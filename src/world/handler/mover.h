@@ -7,7 +7,7 @@
 class Mover
 {
 public:
-    void moveVoxelClusters(float deltaSec);
+    void moveWorldObjects(float deltaSec);
 
     const std::list<Impact> &impacts();
 
