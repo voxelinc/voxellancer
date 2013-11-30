@@ -1,9 +1,9 @@
-#pragma once 
+#pragma once
 
 #include <vector>
 #include "hardpoint.h"
-#include "world\world.h"
-#include "world\god.h"
+#include "world/world.h"
+#include "world/god.h"
 
 class World;
 class God;

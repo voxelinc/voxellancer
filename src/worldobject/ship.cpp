@@ -7,7 +7,7 @@ Ship::Ship() {
 
 
 void Ship::shoot(glm::vec3 direction){
-	for each(Hardpoint *hardpoint in m_hardpoints)
+	for(Hardpoint *hardpoint : m_hardpoints)
 	{
 		Bullet *b = hardpoint->shoot(transform().matrix(),direction);
         if (b != NULL)
@@ -22,7 +22,7 @@ void Ship::addHardpoint(Hardpoint *hardpoint){
 }
 
 void Ship::update(float deltasec){
-	for each(Hardpoint *hardpoint in m_hardpoints){
+	for(Hardpoint *hardpoint : m_hardpoints){
 		hardpoint->update(deltasec);
 	}
 }

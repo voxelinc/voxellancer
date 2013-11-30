@@ -1,4 +1,4 @@
-#include "worldobject\worldobject.h"
+#include "worldobject/worldobject.h"
 
 class Bullet : public WorldObject{
 
