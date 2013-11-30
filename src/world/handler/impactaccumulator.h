@@ -6,6 +6,7 @@
 
 #include "impact.h"
 
+class PhysicalVoxelImpact;
 
 class ImpactAccumulator
 {

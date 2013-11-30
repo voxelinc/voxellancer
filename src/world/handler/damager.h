@@ -1,21 +1,26 @@
 #pragma once
 
+#include <set>
 #include <list>
 
-#include "voxelimpact.h"
+#include "physics/physicalvoxelimpact.h"
+
 
 class WorldObject;
 
 class Damager
 {
 public:
-    void applyDamages(std::list<VoxelImpact> &voxelImpacts);
+    void applyDamages(std::list<PhysicalVoxelImpact> &voxelImpacts);
 
-    std::list<VoxelImpact> &deadlyVoxelImpacts();
-    std::list<WorldObject*> &modifiedVoxelClusters();
+    std::list<PhysicalVoxelImpact> &deadlyVoxelImpacts();
+    std::set<WorldObject*> &modifiedVoxelClusters();
+
 
 protected:
-    std::list<VoxelImpact> m_deadlyVoxelImpacts;
-    std::list<WorldObject*> m_modifiedVoxelClusters;
+    std::list<PhysicalVoxelImpact> m_deadlyVoxelImpacts;
+    std::set<WorldObject*> m_modifiedVoxelClusters;
+
+    float damageOfImpact(const Impact &impact) const;
 };
 

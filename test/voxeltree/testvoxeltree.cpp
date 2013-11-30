@@ -5,10 +5,9 @@
 
 #include <glm/glm.hpp>
 
-#include "voxel/voxeltreenode.h"
-#include "voxel/collidablevoxelcluster.h"
 
 #include "utils/tostring.h"
+#include "physics/physicalvoxelcluster.h"
 #include "../bandit_extension/vec3helper.h"
 
 using namespace bandit;
@@ -17,7 +16,7 @@ using namespace bandit;
 
 go_bandit([](){
     describe("VoxelTree", [](){
-        CollidableVoxelCluster *c;
+        PhysicalVoxelCluster *c;
         VoxelTreeNode *r;
 
         before_each([&]() {

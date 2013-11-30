@@ -5,6 +5,8 @@
 #include "utils/tostring.h"
 #include "world/worldobject.h"
 
+#include "physics/physicalvoxelcluster.h"
+
 
 WorldTree::WorldTree():
     WorldTreeNode(0, nullptr, AABB(glm::vec3(-8, -8, -8), glm::vec3(8, 8, 8)))
@@ -16,7 +18,7 @@ WorldTree::~WorldTree() {
 
 }
 
-WorldTreeGeode *WorldTree::insert(CollidableVoxelCluster *voxelcluster) {
+WorldTreeGeode *WorldTree::insert(PhysicalVoxelCluster *voxelcluster) {
     WorldTreeGeode *geode = new WorldTreeGeode(voxelcluster);
     WorldTreeNode::insert(geode);
     voxelcluster->setWorldTree(this);

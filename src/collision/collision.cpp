@@ -3,8 +3,6 @@
 #include "world/worldobject.h"
 #include "voxel/voxel.h"
 
-
-
 CollisionParticipant::CollisionParticipant(WorldObject *worldObject, Voxel *voxel, const glm::vec3 &speed):
     m_worldObject(worldObject),
     m_voxel(voxel),

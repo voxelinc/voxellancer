@@ -7,7 +7,7 @@
 
 
 PhysicalVoxelCluster::PhysicalVoxelCluster(float scale) :
-    CollidableVoxelCluster(glm::vec3(0), scale),
+    VoxelCluster(glm::vec3(0), scale),
     m_speed(0),
     m_angularSpeed(0),
     m_acceleration(0),
@@ -16,16 +16,56 @@ PhysicalVoxelCluster::PhysicalVoxelCluster(float scale) :
     m_angularDampening("physics.globalangulardampening"),
     m_rotationFactor("physics.globalrotationfactor"),
     m_mass(0),
-    m_massValid(true)
+    m_massValid(true),
+    m_voxelTree(nullptr, *this, Grid3dAABB(glm::ivec3(0, 0, 0), glm::ivec3(0, 0, 0))),
+    m_worldTree(nullptr),
+    m_geode(nullptr)
 {
 
 }
 
-// only neccessary for manually constructed voxelclusters, not if 
+VoxelTreeNode &PhysicalVoxelCluster::voxeltree() {
+    return m_voxelTree;
+}
+
+const VoxelTreeNode &PhysicalVoxelCluster::voxeltree() const {
+    return m_voxelTree;
+}
+
+WorldTreeGeode *PhysicalVoxelCluster::geode() {
+    return m_geode;
+}
+
+const WorldTreeGeode *PhysicalVoxelCluster::geode() const {
+    return m_geode;
+}
+
+void PhysicalVoxelCluster::setGeode(WorldTreeGeode *geode) {
+    m_geode = geode;
+    updateGeode();
+}
+
+void PhysicalVoxelCluster::updateGeode() {
+    if (m_geode != nullptr) {
+        m_geode->setAABB(aabb());
+    }
+}
+
+void PhysicalVoxelCluster::setWorldTree(WorldTree* worldTree) {
+    m_worldTree = worldTree;
+}
+
+WorldTree* PhysicalVoxelCluster::worldTree(){
+    return m_worldTree;
+}
+
+
+// only neccessary for manually constructed voxelclusters, not if
 // the cluster is build from clusterstore
 void PhysicalVoxelCluster::finishInitialization() {
+    updateGeode();
     calculateMassAndCenter();
-    CollidableVoxelCluster::finishInitialization();
+    VoxelCluster::finishInitialization();
 }
 
 PhysicalVoxelCluster::~PhysicalVoxelCluster() {
@@ -80,12 +120,12 @@ std::list<Collision> &PhysicalVoxelCluster::move(float delta_sec) {
 void PhysicalVoxelCluster::resolveCollision(Collision & c, float delta_sec) {
     PhysicalVoxelCluster * p1 = static_cast<PhysicalVoxelCluster*>(c.voxelClusterA());
     PhysicalVoxelCluster * p2 = static_cast<PhysicalVoxelCluster*>(c.voxelClusterB());
-    
+
     // you didn't create the object with the store and forgot to call finishInitialization()!
     // or you removed Voxels... this case is not handled yet.
     assert(p1->m_massValid);
     assert(p2->m_massValid);
-    
+
     assert(p1->m_mass > 0);
     assert(p2->m_mass > 0);
 
@@ -109,7 +149,7 @@ void PhysicalVoxelCluster::resolveCollision(Collision & c, float delta_sec) {
     // new angular speed
     glm::vec3 w1_ = glm::inverse((p1->transform().orientation())) * (m_rotationFactor.get() * vDiff * (1.f / p1->m_mass) * glm::cross(normal, r1));
     glm::vec3 w2_ = glm::inverse((p2->transform().orientation())) * (m_rotationFactor.get() * vDiff * (1.f / p2->m_mass) * glm::cross(-normal, r2));
-    
+
     p1->m_speed = v1_;
     p2->m_speed = v2_;
     p1->m_angularSpeed = w1_;
@@ -159,14 +199,14 @@ void PhysicalVoxelCluster::doSteppedTransform() {
 static float MAX_TRANSLATION_STEP_SIZE = 0.1f;
 static float MAX_ANGLE_STEP_SIZE = 10.0f;
 
-float PhysicalVoxelCluster::calculateStepCount(const WorldTransform & oldTransform, const WorldTransform & newTransform) {
+float PhysicalVoxelCluster::calculateStepCount(const WorldTransform& oldTransform, const WorldTransform& newTransform) {
     float distance = glm::length(newTransform.position() - oldTransform.position());
     float steps = glm::floor(distance / MAX_TRANSLATION_STEP_SIZE) + 1.f; // at least one!
-    
+
     float angle = glm::angle(glm::inverse(newTransform.orientation()) * oldTransform.orientation());
     if (std::isfinite(angle)) // sometimes glm::angle returns INF for really small angles
         steps = glm::max(steps, glm::floor(angle / MAX_ANGLE_STEP_SIZE) + 1.f);
-    
+
     return steps;
 }
 
@@ -181,15 +221,37 @@ void PhysicalVoxelCluster::accelerateAngular(glm::vec3 axis) {
 }
 
 void PhysicalVoxelCluster::addVoxel(Voxel *voxel) {
-    CollidableVoxelCluster::addVoxel(voxel);
+    VoxelCluster::addVoxel(voxel);
     voxel->setVoxelCluster(this);
+
+    m_voxelTree.insert(voxel);
+    updateGeode();
+
+    m_physicalVoxels.push_back(throwing_dynamic_cast<PhysicalVoxel*>(voxel));
+
     m_massValid = false;
 }
 
-void PhysicalVoxelCluster::removeVoxel(const cvec3 &position) {
-    CollidableVoxelCluster::removeVoxel(position);
+void PhysicalVoxelCluster::removeVoxel(const cvec3& position) {
+    Voxel *voxel = VoxelCluster::voxel(position);
+    PhysicalVoxel *physicalVoxel = throwing_dynamic_cast<PhysicalVoxel*>(voxel);
+
+    m_physicalVoxels.remove(physicalVoxel);
+
+    m_voxelTree.remove(position);
+
+    VoxelCluster::removeVoxel(position);
     m_massValid = false;
     // it would be better to calculate incremental mass/center changes here
     // something like mass -= 1; center -= 1/mass * pos; center /= (mass-1)/mass; should work
     // but there should be tests to verify this! (1 = mass of voxel)
 }
+
+std::list<PhysicalVoxel*> &PhysicalVoxelCluster::physicalVoxels() {
+    return m_physicalVoxels;
+}
+
+const std::list<PhysicalVoxel*> &PhysicalVoxelCluster::physicalVoxels() const {
+    return m_physicalVoxels;
+}
+
