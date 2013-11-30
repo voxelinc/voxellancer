@@ -8,8 +8,8 @@
 #include "camera.h"
 #include "ui/hudelement.h"
 
-class VoxelCluster;
 class VoxelRenderer;
+class Letter;
 
 enum HUDFontSize {
     s3x5,
@@ -24,7 +24,7 @@ enum HUDFontAlign {
 
 class HUD {
 public:
-    HUD(std::list<VoxelCluster*> ships);
+    HUD();
     virtual ~HUD();
 
     void setCamera(Camera *camera);
@@ -35,15 +35,15 @@ public:
 
 protected:
     void addElement(const std::string& filename, HUDOffsetOrigin origin, glm::vec3 offset, std::vector<std::unique_ptr<HUDElement>> *list);
-    void addChar(const std::string& filename, glm::vec3 offset, const char index, std::map<char, std::unique_ptr<VoxelCluster>> *map);
+    void addChar(const std::string& filename, glm::vec3 offset, const char index, std::map<char, std::unique_ptr<Letter>> *map);
 
-    void loadFont(const std::string& identifier, glm::vec3 offset, std::map<char, std::unique_ptr<VoxelCluster>> *map);
+    void loadFont(const std::string& identifier, glm::vec3 offset, std::map<char, std::unique_ptr<Letter>> *map);
     void loadFonts();
 
     void stepAnim(glm::vec3 targetpos, glm::quat targetor);
 
     void drawString(std::string text, HUDOffsetOrigin origin, glm::vec3 offset, HUDFontSize size = s3x5, float scale = 1.f, HUDFontAlign align = aLeft);
-    void adjustPosition(VoxelCluster *cluster, HUDOffsetOrigin origin, glm::vec3 offset);
+    void adjustPosition(Drawable *cluster, HUDOffsetOrigin origin, glm::vec3 offset);
     void adjustPositions();
 
     
@@ -54,11 +54,10 @@ protected:
     std::unique_ptr<VoxelRenderer> m_voxelRenderer;
     std::vector<std::unique_ptr<HUDElement>> m_elements;
     std::vector<std::unique_ptr<HUDElement>> m_numbers;
-    std::map<char, std::unique_ptr<VoxelCluster>> m_font3x5;
-    std::map<char, std::unique_ptr<VoxelCluster>> m_font5x7;
+    std::map<char, std::unique_ptr<Letter>> m_font3x5;
+    std::map<char, std::unique_ptr<Letter>> m_font5x7;
     std::unique_ptr<HUDElement> m_shiparrow;
-    std::list<VoxelCluster*> m_ships;
-    float m_delta_sec_remain;
+    double m_delta_sec_remain;
     float m_framerate;
     float m_dx, m_dy;
 

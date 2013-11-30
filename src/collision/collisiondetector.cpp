@@ -1,59 +1,103 @@
-#include "collisiondetector.h"
 
-#include <set>
-#include <list>
-#include <iostream>
-
-#include "utils/tostring.h"
-#include "voxel/voxelcluster.h"
+#include "worldtree/worldtree.h"
+#include "worldtree/worldtreegeode.h"
+#include "collision/collisiondetector.h"
+#include "world/worldobject.h"
 
 
-CollisionDetector::CollisionDetector(Worldtree &worldtree, VoxelCluster &voxelcluster):
-    m_worldtree(worldtree),
-    m_voxelcluster(voxelcluster)
+CollisionDetector::CollisionDetector(WorldObject & worldObject) :
+    m_voxelTree(nullptr, worldObject, Grid3dAABB(glm::ivec3(0, 0, 0), glm::ivec3(0, 0, 0))),
+    m_worldTree(nullptr),
+    m_geode(nullptr),
+    m_worldObject(worldObject)
 {
-
 }
 
 CollisionDetector::~CollisionDetector() {
-
 }
 
-const std::list<Collision> &CollisionDetector::checkCollisions() {
-    assert(m_voxelcluster.geode() != nullptr);
+void CollisionDetector::addVoxel(Voxel *voxel) {
+    m_voxelTree.insert(voxel);
+}
+
+void CollisionDetector::removeVoxel(const glm::ivec3 & position) {
+    m_voxelTree.remove(position);
+}
+
+VoxelTreeNode &CollisionDetector::voxeltree() {
+    return m_voxelTree;
+}
+
+const VoxelTreeNode &CollisionDetector::voxeltree() const {
+    return m_voxelTree;
+}
+
+WorldTreeGeode *CollisionDetector::geode() {
+    return m_geode;
+}
+
+const WorldTreeGeode *CollisionDetector::geode() const {
+    return m_geode;
+}
+
+void CollisionDetector::setGeode(WorldTreeGeode *geode) {
+    m_geode = geode;
+    updateGeode();
+}
+
+void CollisionDetector::setWorldTree(WorldTree* worldTree) {
+    m_worldTree = worldTree;
+}
+
+WorldTree* CollisionDetector::worldTree(){
+    return m_worldTree;
+}
+
+void CollisionDetector::finishInitialization() {
+    updateGeode();
+}
+
+void CollisionDetector::updateGeode()
+{
+    m_geode->setAABB(m_worldObject.aabb());
+}
+
+std::list<Collision> &CollisionDetector::checkCollisions() {
+    //assert(m_voxelcluster.geode() != nullptr);
 
     m_collisions.clear();
 
-    std::set<WorldtreeGeode*> possibleColliders = m_worldtree.geodesInAABB(m_voxelcluster.geode()->aabb(), m_voxelcluster.geode()->containingNode());
-    possibleColliders.erase(m_voxelcluster.geode());
+    std::set<WorldTreeGeode*> possibleColliders = m_worldTree->geodesInAABB(m_worldObject.aabb(), m_geode->containingNode());
+    possibleColliders.erase(m_geode);
 
-    for(WorldtreeGeode *possibleCollider : possibleColliders) {
-        assert(possibleCollider->voxelcluster() != nullptr);
-        checkCollisions(&m_voxelcluster.voxeltree(), &possibleCollider->voxelcluster()->voxeltree());
+    for (WorldTreeGeode *possibleCollider : possibleColliders) {
+        assert(possibleCollider->worldObject() != nullptr);
+        WorldObject * other = possibleCollider->worldObject();
+        checkCollisions(&m_voxelTree, &other->collisionDetector()->voxeltree(), other);
     }
 
     return m_collisions;
 }
 
-void CollisionDetector::checkCollisions(VoxeltreeNode* nodeA, VoxeltreeNode* nodeB) {
-    if(nodeA->isLeaf() && nodeA->voxel() == nullptr) {
+void CollisionDetector::checkCollisions(VoxelTreeNode* nodeA, VoxelTreeNode* nodeB, WorldObject *  other) {
+    if (nodeA->isLeaf() && nodeA->voxel() == nullptr) {
         return;
     }
-    if(nodeB->isLeaf() && nodeB->voxel() == nullptr) {
+    if (nodeB->isLeaf() && nodeB->voxel() == nullptr) {
         return;
     }
 
-    if(nodeA->boundingSphere().intersects(nodeB->boundingSphere())) {
-        if(nodeA->isLeaf() && nodeB->isLeaf()) {
-            if(nodeA->voxel() != nullptr && nodeB->voxel() != nullptr) {
-                m_collisions.push_back(Collision(nodeA->voxel(), nodeB->voxel()));
+    if (nodeA->boundingSphere().intersects(nodeB->boundingSphere())) {
+        if (nodeA->isLeaf() && nodeB->isLeaf()) {
+            if (nodeA->voxel() != nullptr && nodeB->voxel() != nullptr) {
+                m_collisions.push_back(Collision(CollisionParticipant(&m_worldObject, nodeA->voxel(), glm::vec3(0)), CollisionParticipant(other, nodeB->voxel(), glm::vec3(0))));
             }
         }
         else {
-            std::vector<VoxeltreeNode*> nodesA, nodesB;
+            std::vector<VoxelTreeNode*> nodesA, nodesB;
 
-            auto assignList = [] (VoxeltreeNode *node, std::vector<VoxeltreeNode*> &list) {
-                if(node->isLeaf()) {
+            auto assignList = [](VoxelTreeNode *node, std::vector<VoxelTreeNode*> &list) {
+                if (node->isLeaf()) {
                     list.push_back(node);
                 }
                 else {
@@ -64,13 +108,21 @@ void CollisionDetector::checkCollisions(VoxeltreeNode* nodeA, VoxeltreeNode* nod
             assignList(nodeA, nodesA);
             assignList(nodeB, nodesB);
 
-            for(VoxeltreeNode *nodeA : nodesA) {
-                for(VoxeltreeNode *nodeB : nodesB) {
-                    checkCollisions(nodeA, nodeB);
+            for (VoxelTreeNode *nodeA : nodesA) {
+                for (VoxelTreeNode *nodeB : nodesB) {
+                    checkCollisions(nodeA, nodeB, other);
                 }
             }
         }
     }
+}
+
+std::list<Collision> & CollisionDetector::lastCollisions() {
+    return m_collisions;
+}
+
+void CollisionDetector::reset() {
+    m_collisions.clear();
 }
 
 

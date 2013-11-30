@@ -1,15 +1,17 @@
 #pragma once
+#include <map>
 
 #include <glow/Texture.h>
 #include <glow/ref_ptr.h>
 
-class VoxelCluster;
+#include "voxel.h"
+
 
 // this class contains texture with color and position information about voxel
 class VoxelRenderData
 {
 public:
-    VoxelRenderData(VoxelCluster * cluster);
+    VoxelRenderData(std::unordered_map<glm::ivec3, Voxel*> &voxel);
     ~VoxelRenderData();
 
     void invalidate();
@@ -18,10 +20,11 @@ public:
     glow::Texture *colorTexture();
     int voxelCount();
 
+
 private:
     void updateTextures();
-   
-    VoxelCluster * m_cluster;
+
+    std::unordered_map<glm::ivec3, Voxel*> &m_voxel;
     int m_voxelCount;
     bool m_texturesDirty;
     glow::ref_ptr<glow::Texture> m_positionTexture;

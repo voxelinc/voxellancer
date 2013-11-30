@@ -1,9 +1,11 @@
 #pragma once
+#include <memory>
+#include <list>
 
-#include "worldtree/worldtree.h"
-
-#include "worldlogic.h"
-
+class WorldLogic;
+class WorldTree;
+class God;
+class WorldObject;
 
 class World
 {
@@ -13,7 +15,8 @@ public:
 
     WorldLogic &worldLogic();
     God &god();
-    Worldtree &worldtree();
+    WorldTree &worldTree();
+    std::list<WorldObject*> &worldObjects();
 
     float deltaSecs() const;
 
@@ -24,9 +27,11 @@ public:
 protected:
     static World *s_instance;
 
-    Worldtree m_worldtree;
-    WorldLogic m_worldLogic;
-    God m_god;
+    std::unique_ptr<WorldTree> m_worldTree;
+    std::unique_ptr<WorldLogic> m_worldLogic;
+    std::unique_ptr<God> m_god;
+    std::list<WorldObject*> m_worldObjects;
+
     float m_deltaSecs;
 };
 

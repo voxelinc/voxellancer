@@ -7,25 +7,28 @@ using namespace bandit;
 
 go_bandit([]() {
 	describe("ClusterLoader", []() {
-		it("loads simple csv basicship", [&]() {
+		it("loads simple csv", [&]() {
 
-			VoxelCluster *vcsv = new VoxelCluster();
+            std::vector<Voxel*> *vcsv = new std::vector<Voxel*>();
 			ClusterLoader *l = new ClusterLoader();
-			l->loadClusterFromFile("test/loader/loadertest.csv", vcsv);
+
+			l->load("test/loader/loadertest.csv", vcsv);
             AssertThat(vcsv->voxelMap().size(), Equals(1));
 
-			vcsv->removeVoxel(cvec3(0, 0, 0));
-            AssertThat(vcsv->voxelMap().size(), Equals(0));
+//			vcsv->removeVoxel(cvec3(0, 0, 0));
+//            AssertThat(vcsv->voxelMap().size(), Equals(0));
 		});
-        it("loads simple zox basicship", [&]() {
+        it("loads simple zox", [&]() {
 
-            VoxelCluster *vzox = new VoxelCluster();
+            std::vector<Voxel*> *vzox = new std::vector<Voxel*>();
             ClusterLoader *l = new ClusterLoader();
-            l->loadClusterFromFile("test/loader/loadertest.zox", vzox);
-            AssertThat(vzox->voxelMap().size(), Equals(1));
 
-            vzox->removeVoxel(cvec3(0, 0, 0));
-            AssertThat(vzox->voxelMap().size(), Equals(0));
+            l->load("test/loader/loadertest.zox", vzox);
+            AssertThat(vzox->size(), Equals(1));
+
+
+//            vzox->removeVoxel(cvec3(0, 0, 0));
+//            AssertThat(vzox->voxelMap().size(), Equals(0));
         });
 	});
 });

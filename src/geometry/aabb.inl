@@ -208,3 +208,9 @@ TAABB<float> TAABB<T>::containing(const Sphere &sphere) {
         sphere.position() - glm::vec3(sphere.radius(), sphere.radius(), sphere.radius()),
         sphere.position() + glm::vec3(sphere.radius(), sphere.radius(), sphere.radius()));
 }
+
+template<typename T>
+void TAABB<T>::extend(const glm::detail::tvec3<T> &point) {
+    m_rub = glm::max(m_rub, point);
+    m_llf = glm::min(m_llf, point);
+}

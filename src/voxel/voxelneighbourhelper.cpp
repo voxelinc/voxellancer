@@ -5,7 +5,8 @@
 #include "voxel/voxelcluster.h"
 
 
-VoxelNeighbourHelper::VoxelNeighbourHelper(Voxel *voxel, bool includeDiagonals):
+VoxelNeighbourHelper::VoxelNeighbourHelper(VoxelCluster *voxelCluster, Voxel *voxel, bool includeDiagonals):
+    m_voxelCluster(voxelCluster),
     m_voxel(voxel),
     m_includeDiagonals(includeDiagonals)
 {
@@ -38,17 +39,11 @@ std::list<Voxel*> VoxelNeighbourHelper::neighbours() {
 
 void VoxelNeighbourHelper::considerNeighbour(const glm::ivec3 &relativeCell) {
     glm::ivec3 absoluteCell;
-    Grid3dAABB grid;
     Voxel *neighbour;
 
-    absoluteCell = static_cast<glm::ivec3>(m_voxel->gridCell()) + relativeCell;
-    grid = m_voxel->voxelCluster()->voxeltree().gridAABB();
+    absoluteCell = m_voxel->gridCell() + relativeCell;
 
-    if(!grid.contains(absoluteCell)) {
-        return;
-    }
-
-    neighbour = m_voxel->voxelCluster()->voxel(absoluteCell);
+    neighbour = m_voxelCluster()->voxel(absoluteCell);
     if(neighbour != nullptr) {
         m_neighbours.push_back(neighbour);
     }

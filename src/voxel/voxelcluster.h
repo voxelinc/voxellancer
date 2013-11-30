@@ -13,39 +13,26 @@
 #include "worldtransform.h"
 #include "voxel.h"
 #include "voxelrenderdata.h"
+#include <memory>
 
 
-class WorldtreeGeode;
-class Worldtree;
+class WorldTreeGeode;
+class WorldTree;
 
 class VoxelCluster
 {
 public:
-	VoxelCluster(glm::vec3 center = glm::vec3(0), float scale = 1.0);
-	VoxelCluster(const VoxelCluster& other);
+	VoxelCluster();
     virtual ~VoxelCluster();
 
-    AABB aabb();
+    AABB aabb(const WorldTransform& transform);
+    Sphere sphere(const WorldTransform& transform);
 
-    WorldTransform &transform();
-    const WorldTransform &transform() const;
+    Voxel * voxel(const glm::ivec3& position);
+    virtual void addVoxel(Voxel *voxel);
+    virtual void removeVoxel(const glm::ivec3 &position);
+    const std::unordered_map<glm::ivec3, Voxel*> & voxelMap();
 
-    void applyTransform(bool checkCollision = true);
-
-    VoxeltreeNode &voxeltree();
-    const VoxeltreeNode &voxeltree() const;
-
-    WorldtreeGeode *geode();
-    const WorldtreeGeode *geode() const;
-    void setGeode(WorldtreeGeode *geode);
-
-    void setWorldTree(Worldtree* worldTree);
-
-    Voxel *voxel(const glm::ivec3 &cell);
-    const Voxel *voxel(const glm::ivec3 &cell) const;
-
-    virtual void addVoxel(const Voxel &voxel);
-    virtual void removeVoxel(const cvec3 &position);
 
     Voxel *crucialVoxel();
     const Voxel *crucialVoxel() const;
@@ -54,23 +41,11 @@ public:
 
     VoxelRenderData *voxelRenderData();
 
-    std::unordered_map<cvec3, Voxel, VoxelHash> &voxelMap(); // TODO: This is evil, there has to be a better was
-    const std::unordered_map<cvec3, Voxel, VoxelHash> &voxelMap() const;
-
 
 protected:
-    void updateTextures();
-    void updateGeode();
-    void doSteppedTransform();
-    float calculateStepCount();
-    bool isCollisionPossible();
-
-    WorldTransform m_transform;
-    WorldTransform m_oldTransform;
-    VoxeltreeNode m_voxelTree;
     VoxelRenderData m_voxelRenderData;
-    WorldtreeGeode *m_geode;
-    Worldtree *m_worldTree;
-    std::unordered_map<cvec3, Voxel, VoxelHash> m_voxel;
+
+    std::unordered_map<glm::ivec3, Voxel*> m_voxels;
+    IAABB m_aabb;
 };
 

@@ -12,21 +12,19 @@
 #include "worldtransform.h"
 
 
-class VoxelCluster;
+class WorldObject;
 
-class VoxeltreeNode
+class VoxelTreeNode
 {
 public:
-    VoxeltreeNode(VoxeltreeNode *parent, VoxelCluster &voxelcluster, const Grid3dAABB &gridAABB = Grid3dAABB(glm::ivec3(0, 0, 0), glm::ivec3(0, 0, 0)));
-	VoxeltreeNode(const VoxeltreeNode& other, VoxelCluster *voxelcluster);
-	VoxeltreeNode(const VoxeltreeNode& other) = delete; //no "normal" copy ctor
-    virtual ~VoxeltreeNode();
+    VoxelTreeNode(VoxelTreeNode *parent, WorldObject &worldobject, const Grid3dAABB &gridAABB = Grid3dAABB(glm::ivec3(0, 0, 0), glm::ivec3(0, 0, 0)));
+    virtual ~VoxelTreeNode();
 
     bool isAtomic() const;
     bool isLeaf() const;
 
-    std::vector<VoxeltreeNode*> &subnodes();
-    const std::vector<VoxeltreeNode*> &subnodes() const;
+    std::vector<VoxelTreeNode*> &subnodes();
+    const std::vector<VoxelTreeNode*> &subnodes() const;
 
     Voxel *voxel();
     const Voxel *voxel() const;
@@ -35,16 +33,17 @@ public:
 
     Sphere boundingSphere();
 
-    void insert(Voxel *voxel);
-    void remove(const cvec3 &cell);
+    void insert(Voxel *physicalVoxel);
+    void remove(const glm::ivec3 &cell);
 
 
 protected:
-    VoxeltreeNode *m_parent;
-    VoxelCluster &m_voxelcluster;
+    VoxelTreeNode *m_parent;
+    WorldObject &m_worldObject;
+
     Grid3dAABB m_gridAABB;
 
-    std::vector<VoxeltreeNode*> m_subnodes;
+    std::vector<VoxelTreeNode*> m_subnodes;
     Voxel *m_voxel;
 
     void split();

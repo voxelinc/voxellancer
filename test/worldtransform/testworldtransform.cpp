@@ -22,16 +22,32 @@ go_bandit([](){
 
             glm::quat q1;
             glm::quat q2;
+                /*x	0.324251682	float
+                y - 0.124075770	float
+                z	0.936692774	float
+                w - 0.0455596969	float
 
-            AssertThat(glm::degrees(2 * glm::acos(glm::dot(q1, q2))), EqualsWithDelta(0, 0.01));
+                x	0.324240237	float
+                y - 0.124073826	float
+                z	0.936697066	float
+                w - 0.0455590598	float
+*/
+
+            AssertThat(glm::angle(glm::inverse(q1)*q2), EqualsWithDelta(0, 0.01));
 
             q2 = glm::angleAxis(90.f, glm::vec3(1, 0, 0));
 
-            AssertThat(glm::degrees(2 * glm::acos(glm::dot(q1, q2))), EqualsWithDelta(90, 0.01));
+            AssertThat(glm::angle(glm::inverse(q1)*q2), EqualsWithDelta(90, 0.01));
 
             q1 = glm::angleAxis(90.f, glm::vec3(-1, 0, 0));
 
-            AssertThat(glm::degrees(2 * glm::acos(glm::dot(q1, q2))), EqualsWithDelta(180, 0.01));
+            AssertThat(glm::angle(glm::inverse(q1)*q2), EqualsWithDelta(180, 0.01));
+
+
+            q1 = glm::quat(0.324251682f, -0.124075770f, 0.936692774f, -0.0455596969f);
+            q2 = glm::quat(0.324240237f, -0.124073826f, 0.936697066f, -0.0455590598f);
+
+            AssertThat(glm::angle(glm::inverse(q1)*q2), EqualsWithDelta(0, 0.01));
 
         });
 

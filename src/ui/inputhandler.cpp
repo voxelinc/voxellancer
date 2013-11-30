@@ -2,15 +2,15 @@
 
 #include <glm/glm.hpp>
 
+#include "world/worldobject.h"
 
-
-InputHandler::InputHandler(GLFWwindow *window, Camera *camera, VoxelCluster *voxelcluster):
+InputHandler::InputHandler(GLFWwindow *window, Camera *camera):
 	m_window(window),
 	m_camera(camera),
-	m_voxelcluster(voxelcluster),
 	m_rotation_speed("input.rotation_speed"),
     m_move_speed("input.move_speed"),
-    m_roll_speed("input.roll_speed")
+    m_roll_speed("input.roll_speed"),
+    m_worldObject(nullptr)
 {
 
 	glfwGetWindowSize(m_window, &m_windowWidth, &m_windowHeight);
@@ -28,10 +28,6 @@ InputHandler::~InputHandler(){
 
 }
 
-
-void InputHandler::setVoxelcluster(VoxelCluster *voxelcluster) {
-    m_voxelcluster = voxelcluster;
-}
 
 void InputHandler::resizeEvent(
 	const unsigned int width
@@ -80,46 +76,40 @@ void InputHandler::update(float delta_sec) {
 
             // position voxelcluster
 			if (glfwGetKey(m_window, GLFW_KEY_UP) == GLFW_PRESS){
-                m_voxelcluster->transform().move(glm::vec3(0, 0, -m_move_speed * delta_sec));
+                m_worldObject->accelerate(glm::vec3(0, 0, -m_move_speed.get()));
 			}
 			if (glfwGetKey(m_window, GLFW_KEY_LEFT) == GLFW_PRESS){
-				m_voxelcluster->transform().move(-glm::vec3(m_move_speed * delta_sec, 0, 0));
+                m_worldObject->accelerate(-glm::vec3(m_move_speed.get(), 0, 0));
 			}
 			if (glfwGetKey(m_window, GLFW_KEY_DOWN) == GLFW_PRESS){
-                m_voxelcluster->transform().move(glm::vec3(0, 0, m_move_speed* delta_sec));
+                m_worldObject->accelerate(glm::vec3(0, 0, m_move_speed.get()));
 			}
 			if (glfwGetKey(m_window, GLFW_KEY_RIGHT) == GLFW_PRESS){
-                m_voxelcluster->transform().move(glm::vec3(m_move_speed* delta_sec, 0, 0));
+                m_worldObject->accelerate(glm::vec3(m_move_speed.get(), 0, 0));
 			}
 			if (glfwGetKey(m_window, GLFW_KEY_PAGE_DOWN) == GLFW_PRESS){
-                m_voxelcluster->transform().move(glm::vec3(0, -m_move_speed* delta_sec, 0));
+                m_worldObject->accelerate(glm::vec3(0, -m_move_speed.get(), 0));
 			}
 			if (glfwGetKey(m_window, GLFW_KEY_PAGE_UP) == GLFW_PRESS){
-                m_voxelcluster->transform().move(glm::vec3(0, m_move_speed* delta_sec, 0));
+                m_worldObject->accelerate(glm::vec3(0, m_move_speed.get(), 0));
 			}
             if (glfwGetKey(m_window, GLFW_KEY_I) == GLFW_PRESS) {
-                m_voxelcluster->transform().rotate(glm::angleAxis(1.0f, glm::vec3(1,0,0)));
+                m_worldObject->accelerateAngular(glm::vec3(1, 0, 0));
             }
             if (glfwGetKey(m_window, GLFW_KEY_K) == GLFW_PRESS) {
-                m_voxelcluster->transform().rotate(glm::angleAxis(-1.0f, glm::vec3(1, 0, 0)));
+                m_worldObject->accelerateAngular(glm::vec3(-1, 0, 0));
             }
             if (glfwGetKey(m_window, GLFW_KEY_J) == GLFW_PRESS) {
-                m_voxelcluster->transform().rotate(glm::angleAxis(1.0f, glm::vec3(0, 1, 0)));
+                m_worldObject->accelerateAngular(glm::vec3(0, 1, 0));
             }
             if (glfwGetKey(m_window, GLFW_KEY_L) == GLFW_PRESS) {
-                m_voxelcluster->transform().rotate(glm::angleAxis(-1.0f, glm::vec3(0, 1, 0)));
+                m_worldObject->accelerateAngular(glm::vec3(0, -1, 0));
             }
-            if (glfwGetKey(m_window, GLFW_KEY_INSERT) == GLFW_PRESS){
-                m_voxelcluster->transform().rotate(glm::angleAxis(1.0f, glm::vec3(0.1, 0.3, 0.4)));
-			}
-			if (glfwGetKey(m_window, GLFW_KEY_DELETE) == GLFW_PRESS){
-                m_voxelcluster->transform().rotate(glm::angleAxis(-1.0f, glm::vec3(0.1, 0.3, 0.4)));
-			}
 
             if (glfwGetKey(m_window, GLFW_KEY_M) == GLFW_PRESS) {
-                m_camera->setPosition(m_voxelcluster->transform().position());
+                m_camera->setPosition(m_worldObject->transform().position());
                 m_camera->move(glm::vec3(0, 2, 10));
-                m_camera->setOrientation(m_voxelcluster->transform().orientation());
+                m_camera->setOrientation(m_worldObject->transform().orientation());
             }
 
 
@@ -166,4 +156,8 @@ void InputHandler::toggleControls()
 		glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 	}
 	m_fpsControls = !m_fpsControls;
+}
+
+void InputHandler::setWorldObject(WorldObject *worldObject) {
+    m_worldObject = worldObject;
 }

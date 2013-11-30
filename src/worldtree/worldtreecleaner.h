@@ -4,17 +4,17 @@
 #include "worldtreenode.h"
 
 
-class WorldtreeCleaner
+class WorldTreeCleaner
 {
 public:
-    WorldtreeCleaner(Worldtree &worldtree);
-    virtual ~WorldtreeCleaner();
+    WorldTreeCleaner(WorldTree &worldTree);
+    virtual ~WorldTreeCleaner();
 
     void invoke();
 
 
 protected:
-    Worldtree &m_worldtree;
+    WorldTree &m_worldTree;
 
-    void invoke(WorldtreeNode *node);
+    void invoke(WorldTreeNode *node);
 };

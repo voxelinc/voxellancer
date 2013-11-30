@@ -3,15 +3,18 @@
 HUDElement::HUDElement(): 
 	VoxelCluster(),
 	m_offset(0,0,0),
-	m_origin(Center)
+	m_origin(Center),
+    m_transform()
 {
 	
 }
 
-HUDElement::HUDElement(const VoxelCluster& other) :
-	VoxelCluster(other),
-	m_offset(0, 0, 0),
-	m_origin(Center)
-{
 
+VoxelCluster * HUDElement::voxelCluster() {
+    return this;
+}
+
+
+WorldTransform& HUDElement::transform() {
+    return m_transform;
 }

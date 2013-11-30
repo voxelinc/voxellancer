@@ -1,28 +1,52 @@
-#pragma once
+#pragma once 
 
-#include <list>
+#include <memory>
 
-#include "voxel/voxelcluster.h"
+#include <glm/glm.hpp>
 
-#include "worldtree/worldtree.h"
+#include "voxel/voxel.h"
+#include "voxel/voxeltreenode.h"
+#include "collision/collision.h"
 
-#include "collision.h"
+class WorldTree;
+class WorldTreeGeode;
+class WorldObject;
 
 
+// this class contains datastructures for collision detection
 class CollisionDetector
 {
 public:
-    CollisionDetector(Worldtree &worldtree, VoxelCluster &voxelcluster);
-    virtual ~CollisionDetector();
+    CollisionDetector(WorldObject & worldObject);
+    ~CollisionDetector();
 
-    const std::list<Collision> &checkCollisions();
+    void addVoxel(Voxel *voxel);
+    void removeVoxel(const glm::ivec3 &position);
+
+    std::list<Collision> &checkCollisions();
+    std::list<Collision> &lastCollisions();
+    void reset();
+
+    WorldTreeGeode *geode();
+    const WorldTreeGeode *geode() const;
+    void setGeode(WorldTreeGeode *geode);
+    void setWorldTree(WorldTree* worldTree);
+    WorldTree* worldTree();
+
+    VoxelTreeNode &voxeltree();
+    const VoxelTreeNode &voxeltree() const;
+
+    void updateGeode();
+        
+    void finishInitialization();
 
 
 protected:
-    Worldtree &m_worldtree;
-    VoxelCluster &m_voxelcluster;
+    void checkCollisions(VoxelTreeNode* nodeA, VoxelTreeNode* nodeB, WorldObject *  other);
+
+    WorldObject & m_worldObject;
+    VoxelTreeNode m_voxelTree;
+    WorldTreeGeode *m_geode;
+    WorldTree *m_worldTree;
     std::list<Collision> m_collisions;
-
-    void checkCollisions(VoxeltreeNode* nodeA, VoxeltreeNode* nodeB);
 };
-

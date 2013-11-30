@@ -2,55 +2,55 @@
 
 #include "worldtreenode.h"
 
+#include "world/worldObject.h"
 
-WorldtreeGeode::WorldtreeGeode():
-    m_voxelcluster(nullptr),
+WorldTreeGeode::WorldTreeGeode():
+    m_worldObject(nullptr),
     m_containingNode(nullptr)
 {
 
 }
 
-
-WorldtreeGeode::WorldtreeGeode(VoxelCluster *voxelcluster):
-    m_voxelcluster(voxelcluster),
+WorldTreeGeode::WorldTreeGeode(WorldObject *worldobject) :
+    m_worldObject(worldobject),
     m_containingNode(nullptr)
 {
-    m_voxelcluster->setGeode(this);
+    m_worldObject->collisionDetector()->setGeode(this);
 }
 
-WorldtreeGeode::~WorldtreeGeode() {
+WorldTreeGeode::~WorldTreeGeode() {
 
 }
 
-VoxelCluster *WorldtreeGeode::voxelcluster() {
-    return m_voxelcluster;
+WorldObject *WorldTreeGeode::worldObject() {
+    return m_worldObject;
 }
 
-const VoxelCluster *WorldtreeGeode::voxelcluster() const {
-    return m_voxelcluster;
+const WorldObject *WorldTreeGeode::worldObject() const {
+    return m_worldObject;
 }
 
-void WorldtreeGeode::setVoxelCluster(VoxelCluster *voxelcluster) {
-    m_voxelcluster = voxelcluster;
+void WorldTreeGeode::setWorldObject(WorldObject *worldObject) {
+    m_worldObject = worldObject;
 }
 
-WorldtreeNode *WorldtreeGeode::containingNode() {
+WorldTreeNode *WorldTreeGeode::containingNode() {
     return m_containingNode;
 }
 
-const WorldtreeNode *WorldtreeGeode::containingNode() const {
+const WorldTreeNode *WorldTreeGeode::containingNode() const {
     return m_containingNode;
 }
 
-void WorldtreeGeode::setContainingNode(WorldtreeNode *node) {
+void WorldTreeGeode::setContainingNode(WorldTreeNode *node) {
     m_containingNode = node;
 }
 
-const AABB &WorldtreeGeode::aabb() const {
+const AABB &WorldTreeGeode::aabb() const {
     return m_aabb;
 }
 
-void WorldtreeGeode::setAABB(const AABB &aabb) {
+void WorldTreeGeode::setAABB(const AABB &aabb) {
     m_aabb = aabb;
 
     if(m_containingNode != nullptr) {

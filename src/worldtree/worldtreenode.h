@@ -13,45 +13,45 @@
     unsplitting should happen regulary by a different entity, maybe using tokens, that
     mark changed nodes
 */
-class WorldtreeNode
+class WorldTreeNode
 {
 public:
-    WorldtreeNode(int level, WorldtreeNode *parent, const AABB &aabb);
-    WorldtreeNode(const WorldtreeNode &other);
-    virtual ~WorldtreeNode();
+    WorldTreeNode(int level, WorldTreeNode *parent, const AABB &aabb);
+    WorldTreeNode(const WorldTreeNode &other);
+    virtual ~WorldTreeNode();
 
     const AABB &aabb() const;
 
     int level() const;
 
-    const std::list<WorldtreeGeode*> &geodes() const;
-    const std::list<WorldtreeNode*> &subnodes() const;
+    const std::list<WorldTreeGeode*> &geodes() const;
+    const std::list<WorldTreeNode*> &subnodes() const;
 
-    WorldtreeNode *parent();
-    const WorldtreeNode *parent() const;
+    WorldTreeNode *parent();
+    const WorldTreeNode *parent() const;
 
     bool isLeaf() const;
     bool isRootnode() const;
 
-    void insert(WorldtreeGeode *geode);
-    void remove(WorldtreeGeode *geode);
+    void insert(WorldTreeGeode *geode);
+    void remove(WorldTreeGeode *geode);
 
-    std::set<WorldtreeGeode*> geodesInAABB(const AABB &aabb) const;
+    std::set<WorldTreeGeode*> geodesInAABB(const AABB &aabb) const;
 
-    void aabbChanged(WorldtreeGeode *geode);
+    void aabbChanged(WorldTreeGeode *geode);
 
 
 protected:
     static const int MAX_DEPTH = 8;
     static const int MAX_GEODES = 8;
 
-    friend class WorldtreeCleaner;
+    friend class WorldTreeCleaner;
 
-    WorldtreeNode *m_parent;
+    WorldTreeNode *m_parent;
     AABB m_aabb;
     int m_level;
-    std::list<WorldtreeGeode*> m_geodes;
-    std::list<WorldtreeNode*> m_subnodes;
+    std::list<WorldTreeGeode*> m_geodes;
+    std::list<WorldTreeNode*> m_subnodes;
 
     void split();
     void unsplit();
