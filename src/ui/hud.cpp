@@ -6,6 +6,7 @@
 #include "world/world.h"
 #include "world/god.h"
 #include "world/worldobject.h"
+#include "letter.h"
 
 HUD::HUD() :
 m_gamecamera(0),
@@ -56,14 +57,14 @@ void HUD::addElement(const std::string& filename, HUDOffsetOrigin origin, glm::v
     list->push_back(move(element));
 }
 
-void HUD::addChar(const std::string& filename, glm::vec3 offset, const char index, std::map<char, std::unique_ptr<VoxelCluster>> *map){
-    std::unique_ptr<VoxelCluster> element(new VoxelCluster());
-    ClusterCache::instance()->fillCluster(element.get(), filename);
+void HUD::addChar(const std::string& filename, glm::vec3 offset, const char index, std::map<char, std::unique_ptr<Letter>> *map) {
+    std::unique_ptr<Letter> element(new Letter());
+    ClusterCache::instance()->fillCluster(element->voxelCluster(), filename);
     element->transform().setCenter(offset);
     (*map)[index] = move(element);
 }
 
-void HUD::loadFont(const std::string& identifier, glm::vec3 offset, std::map<char, std::unique_ptr<VoxelCluster>> *map){
+void HUD::loadFont(const std::string& identifier, glm::vec3 offset, std::map<char, std::unique_ptr<Letter>> *map) {
     const char letters[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     for (int i = 0; i < 36; i++){
         std::string path = "data/hud/font/" + identifier + "/";
@@ -197,7 +198,7 @@ void HUD::draw(){
 // m_voxelRenderer must be prepared to draw
 void HUD::drawString(std::string text, HUDOffsetOrigin origin, glm::vec3 offset, HUDFontSize size, float scale, HUDFontAlign align){
     std::transform(text.begin(), text.end(), text.begin(), ::toupper);
-    std::map<char, std::unique_ptr<VoxelCluster>> *source;
+    std::map<char, std::unique_ptr<Letter>> *source;
     float width;
     float intoffset;
     switch (size){
@@ -225,7 +226,7 @@ void HUD::drawString(std::string text, HUDOffsetOrigin origin, glm::vec3 offset,
     }
 
     for (int i = 0; i < text.length(); i++){
-        VoxelCluster *cl = (*source)[text[i]].get();
+        Letter *cl = (*source)[text[i]].get();
         if (cl != nullptr){
             adjustPosition(cl, origin, offset + glm::vec3(intoffset + width * i, 0, 0));
             cl->transform().setScale(scale);
@@ -234,7 +235,7 @@ void HUD::drawString(std::string text, HUDOffsetOrigin origin, glm::vec3 offset,
     }
 }
 
-void HUD::adjustPosition(HUDElement *cluster, HUDOffsetOrigin origin, glm::vec3 offset){
+void HUD::adjustPosition(Drawable *cluster, HUDOffsetOrigin origin, glm::vec3 offset){
     assert(cluster != nullptr);
     switch (origin){
     case TopLeft:

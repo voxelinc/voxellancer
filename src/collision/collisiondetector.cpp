@@ -6,7 +6,7 @@
 
 
 CollisionDetector::CollisionDetector(WorldObject & worldObject) :
-    m_voxelTree(nullptr, &worldObject, Grid3dAABB(glm::ivec3(0, 0, 0), glm::ivec3(0, 0, 0))),
+    m_voxelTree(nullptr, worldObject, Grid3dAABB(glm::ivec3(0, 0, 0), glm::ivec3(0, 0, 0))),
     m_worldTree(nullptr),
     m_geode(nullptr),
     m_worldObject(worldObject)
@@ -20,7 +20,7 @@ void CollisionDetector::addVoxel(Voxel *voxel) {
     m_voxelTree.insert(voxel);
 }
 
-void CollisionDetector::removeVoxel(const cvec3 & position) {
+void CollisionDetector::removeVoxel(const glm::ivec3 & position) {
     m_voxelTree.remove(position);
 }
 
@@ -71,8 +71,8 @@ std::list<Collision> &CollisionDetector::checkCollisions() {
     possibleColliders.erase(m_geode);
 
     for (WorldTreeGeode *possibleCollider : possibleColliders) {
-        assert(possibleCollider->worldobject() != nullptr);
-        WorldObject * other = possibleCollider->worldobject();
+        assert(possibleCollider->worldObject() != nullptr);
+        WorldObject * other = possibleCollider->worldObject();
         checkCollisions(&m_voxelTree, &other->collisionDetector()->voxeltree(), other);
     }
 

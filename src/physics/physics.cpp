@@ -6,6 +6,7 @@
 #include "collision/collisiondetector.h"
 #include "world/worldobject.h"
 #include "worldtree/worldtreegeode.h"
+#include "worldtree/worldtree.h"
 
 
 Physics::Physics(WorldObject & worldObject) :
@@ -127,7 +128,8 @@ void Physics::applyTransform() {
         if (isCollisionPossible()) {
             doSteppedTransform();
         } else {
-            m_transform = m_newTransform;
+            m_worldObject.transform().setPosition(m_newTransform.position());
+            m_worldObject.transform().setOrientation(m_newTransform.orientation());
         }
     }
 }
@@ -136,7 +138,7 @@ bool Physics::isCollisionPossible() {
     // the geode aabb is still the old one, add it to the final aabb
     AABB fullAabb = m_worldObject.voxelCluster()->aabb(m_oldTransform).united(m_worldObject.voxelCluster()->aabb(m_newTransform));
     // is there someone else than yourself inside?
-    auto possibleCollisions = m_worldObject.collisionDetector()->geode()->geodesInAABB(fullAabb);
+    auto possibleCollisions = m_worldObject.collisionDetector()->worldTree()->geodesInAABB(fullAabb);
     return possibleCollisions.size() > 1;
 }
 
@@ -150,8 +152,8 @@ void Physics::doSteppedTransform() {
         const std::list<Collision> & collisions = m_worldObject.collisionDetector()->checkCollisions();
         if (!collisions.empty()) {
             assert(i > 0); // you're stuck, hopefully doesn't happen!
-            m_transform.setOrientation(glm::mix(m_oldTransform.orientation(), m_newTransform.orientation(), (i - 1) / steps));
-            m_transform.setPosition(glm::mix(m_oldTransform.position(), m_newTransform.position(), (i - 1) / steps));
+            m_worldObject.transform().setOrientation(glm::mix(m_oldTransform.orientation(), m_newTransform.orientation(), (i - 1) / steps));
+            m_worldObject.transform().setPosition(glm::mix(m_oldTransform.position(), m_newTransform.position(), (i - 1) / steps));
             break;
         }
     }
@@ -173,7 +175,7 @@ float Physics::calculateStepCount(const WorldTransform & oldTransform, const Wor
 
 // accelerate along local axis
 void Physics::accelerate(glm::vec3 direction) {
-    m_acceleration += m_transform.orientation() * direction;
+    m_acceleration += m_worldObject.transform().orientation() * direction;
 }
 
 // angular acceleration around local axis
@@ -185,7 +187,7 @@ void Physics::addVoxel(Voxel *voxel) {
     m_massValid = false;
 }
 
-void Physics::removeVoxel(const cvec3 &position) {
+void Physics::removeVoxel(const glm::ivec3 &position) {
     m_massValid = false;
     // it would be better to calculate incremental mass/center changes here
     // something like mass -= 1; center -= 1/mass * pos; center /= (mass-1)/mass; should work

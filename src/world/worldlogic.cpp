@@ -18,12 +18,12 @@ void WorldLogic::update(float deltaSecs) {
     m_impactAccumulator.parse(m_mover.collisions());
     //m_impactResolver.alterVelocities(m_impactAccumulator.clusterImpacts());
 
-    damageForwardLoop(m_impactAccumulator.voxelImpacts());
+    damageForwardLoop(m_impactAccumulator.impacts());
     m_impactAccumulator.clear();
 
-    m_splitDetector.searchOrphans(m_damager.modifiedWorldObjects());
-    m_splitter.split(m_splitDetector.worldObjectOrphans());
-    m_world.god().scheduleSpawns(m_splitter.splitOffWorldObjects());
+    //m_splitDetector.searchOrphans(m_damager.modifiedWorldObjects());
+    //m_splitter.split(m_splitDetector.voxelClusterOrphans());
+    m_world.god().scheduleSpawns(m_splitter.splitOffVoxelClusters());
 
 //    m_wrecker.detectWreckages(m_damager.modifiedVoxelClusters());
 //    //m_wrecker.applyOnWreckageHooks();
@@ -38,12 +38,12 @@ void WorldLogic::update(float deltaSecs) {
     m_world.god().spawn();
 }
 
-void WorldLogic::damageForwardLoop(std::list<VoxelImpact> damageImpacts) {
+void WorldLogic::damageForwardLoop(std::list<Impact> damageImpacts) {
     while(damageImpacts.size() > 0) {
         m_damager.applyDamages(damageImpacts);
-        m_damageForwarder.forwardDamage(m_damager.deadlyImpacts());
-        m_voxelHangman.applyOnDestructionHooks(m_damager.deadlyImpacts());
-        m_voxelHangman.removeDestroyedVoxels(m_damager.deadlyImpacts());
+        m_damageForwarder.forwardDamage(m_damager.deadlyImpact());
+        m_voxelHangman.applyOnDestructionHooks(m_damager.deadlyImpact());
+        m_voxelHangman.removeDestroyedVoxels(m_damager.deadlyImpact());
         damageImpacts = m_damageForwarder.forwardedDamageImpacts();
     }
 }

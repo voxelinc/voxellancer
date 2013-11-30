@@ -52,11 +52,11 @@ void God::spawn() {
     for (WorldObject* worldObject : m_scheduledSpawns) {
         m_world.worldTree().insert(worldObject);
 
-        std::list<Collision> collisions = worldObject->collisionDetector().checkCollisions();
+        std::list<Collision> collisions = worldObject->collisionDetector()->checkCollisions();
 
         assert(collisions.size() == 0); // this is, by definition, an error condition
         if (collisions.size() > 0){ // clean up anyway (if assertion ignored)
-            World::instance()->worldTree().remove(worldObject->collisionDetector.geode());
+            World::instance()->worldTree().remove(worldObject->collisionDetector()->geode());
             glow::warning("Failed to spawn object %; at AABB %;", worldObject, toString(worldObject->aabb()));
             continue;
         }
@@ -68,7 +68,7 @@ void God::spawn() {
 
 void God::remove() {
     for (WorldObject* worldObject : m_scheduledRemovals) {
-        m_world.worldTree().remove(worldObject->collisionDetector.geode());
+        m_world.worldTree().remove(worldObject->collisionDetector()->geode());
         m_world.worldObjects().remove(worldObject);
         delete worldObject;
     }

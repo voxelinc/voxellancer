@@ -1,7 +1,5 @@
 #include "impactaccumulator.h"
 
-#include "physics/physicalvoxelimpact.h"
-
 
 void ImpactAccumulator::clear() {
     m_clusterImpacts.clear();

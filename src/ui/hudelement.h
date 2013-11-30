@@ -21,10 +21,9 @@ enum HUDOffsetOrigin {
 class HUDElement : public VoxelCluster, public Drawable {
 public:
 	HUDElement();
-    HUDElement(const HUDElement& other);
 
     virtual VoxelCluster * voxelCluster() override;
-    virtual glm::mat4 matrix() override;
+    virtual WorldTransform& transform() override;
 
     WorldTransform m_transform;
 	glm::vec3 m_offset;

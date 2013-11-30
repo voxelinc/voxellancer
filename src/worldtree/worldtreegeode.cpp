@@ -1,7 +1,5 @@
 #include "worldtreegeode.h"
 
-#include "physics/physicalvoxelcluster.h"
-
 #include "worldtreenode.h"
 
 #include "world/worldObject.h"

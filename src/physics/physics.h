@@ -1,26 +1,30 @@
 #pragma once
 
+#include <list>
 #include <memory>
 #include <glm/glm.hpp>
 
 #include "collision/collision.h"
 #include "property/property.h"
+#include "worldtransform.h"
 
 class WorldObject;
+class WorldTransform;
 
 class Physics  {
 public:
     Physics(WorldObject & worldObject);
+    virtual ~Physics();
 
     std::list<Collision> &move(float delta_sec);
     
     void accelerate(glm::vec3 direction);
     void accelerateAngular(glm::vec3 axis);
 
-    virtual void addVoxel(Voxel *voxel);
-    virtual void removeVoxel(const cvec3 &position);
+    void addVoxel(Voxel *voxel);
+    void removeVoxel(const glm::ivec3 &position);
 
-    virtual void finishInitialization();
+    void finishInitialization();
 
 protected:
     void calculateMassAndCenter();
@@ -30,7 +34,7 @@ protected:
     void doSteppedTransform();
     float calculateStepCount(const WorldTransform & oldTransform, const WorldTransform & newTransform);
     bool isCollisionPossible();
-    
+
 protected:
     float m_mass;
     bool m_massValid;

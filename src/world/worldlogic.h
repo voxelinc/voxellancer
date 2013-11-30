@@ -28,13 +28,13 @@ protected:
     Damager m_damager;
     DamageForwarder m_damageForwarder;
     ImpactAccumulator m_impactAccumulator;
-    ImpactResolver m_impactResolver;
+    //ImpactResolver m_impactResolver;
     SplitDetector m_splitDetector;
     Splitter m_splitter;
-    Wrecker m_wrecker;
-    GarbageCollector m_garbageCollector;
+    //Wrecker m_wrecker;
+    //GarbageCollector m_garbageCollector;
     VoxelHangman m_voxelHangman;
 
-    void damageForwardLoop(std::list<VoxelImpact> damageImpacts)
+    void damageForwardLoop(std::list<Impact> damageImpacts);
 };
 
