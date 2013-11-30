@@ -25,6 +25,8 @@ public:
     virtual void finishInitialization();
     virtual void updateSpeed(float delta_sec);
 
+    void speed(glm::vec3 speed);
+
 protected:
     void calculateMassAndCenter();
 

@@ -196,3 +196,7 @@ void PhysicalVoxelCluster::removeVoxel(const cvec3 &position) {
     // something like mass -= 1; center -= 1/mass * pos; center /= (mass-1)/mass; should work
     // but there should be tests to verify this! (1 = mass of voxel)
 }
+
+void PhysicalVoxelCluster::speed(glm::vec3 speed){
+    m_speed = speed;
+}

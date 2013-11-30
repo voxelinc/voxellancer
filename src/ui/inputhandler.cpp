@@ -119,6 +119,7 @@ void InputHandler::update(float delta_sec) {
                 pointEnd = (glm::inverse(m_camera->viewProjection())*pointEnd);
                 glm::vec3 vec(pointEnd.x, pointEnd.y, pointEnd.z);
                 //printf("%f %f %f  ---  %f %f %f\n", m_camera->position().x, m_camera->position().y, m_camera->position().z, vec.x, vec.y, vec.z);
+                //vec += m_camera->position();
                 vec = glm::normalize(vec);
                 vec *= 200; //aimdistance
                 vec += m_camera->position();
