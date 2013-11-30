@@ -34,11 +34,13 @@ public:
     VoxelTreeNode &voxeltree();
     const VoxelTreeNode &voxeltree() const;
 
+    void updateGeode();
+        
     virtual void finishInitialization();
 
 
 protected:
-    void checkCollisions(VoxelTreeNode* nodeA, VoxelTreeNode* nodeB);
+    void checkCollisions(VoxelTreeNode* nodeA, VoxelTreeNode* nodeB, WorldObject *  other);
 
     WorldObject & m_worldObject;
     VoxelTreeNode m_voxelTree;

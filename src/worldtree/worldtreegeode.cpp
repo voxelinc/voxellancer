@@ -13,8 +13,8 @@ WorldTreeGeode::WorldTreeGeode():
 
 }
 
-WorldTreeGeode::WorldTreeGeode(WorldObject *worldObject) :
-    m_worldObject(worldObject),
+WorldTreeGeode::WorldTreeGeode(WorldObject *worldobject) :
+    m_worldObject(worldobject),
     m_containingNode(nullptr)
 {
     m_worldObject->collisionDetector()->setGeode(this);
@@ -25,11 +25,11 @@ WorldTreeGeode::~WorldTreeGeode() {
 }
 
 WorldObject *WorldTreeGeode::worldObject() {
-    return m_voxelcluster;
+    return m_worldObject;
 }
 
 const WorldObject *WorldTreeGeode::worldObject() const {
-    return m_voxelcluster;
+    return m_worldObject;
 }
 
 void WorldTreeGeode::setWorldObject(WorldObject *worldObject) {

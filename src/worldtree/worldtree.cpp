@@ -18,10 +18,10 @@ WorldTree::~WorldTree() {
 
 }
 
-WorldTreeGeode *WorldTree::insert(PhysicalVoxelCluster *voxelcluster) {
-    WorldTreeGeode *geode = new WorldTreeGeode(voxelcluster);
+WorldTreeGeode *WorldTree::insert(WorldObject *worldObject) {
+    WorldTreeGeode *geode = new WorldTreeGeode(worldObject);
     WorldTreeNode::insert(geode);
-    voxelcluster->setWorldTree(this);
+    worldObject->collisionDetector()->setWorldTree(this);
     return geode;
 }
 

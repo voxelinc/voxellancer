@@ -7,12 +7,7 @@
 
 #include "worldtreenode.h"
 
-<<<<<<< HEAD
-
-class PhysicalVoxelCluster;
-=======
 class WorldObject;
->>>>>>> cff859ff88300583de775e3bd815405838a78cdf
 
 class WorldTree : public WorldTreeNode
 {
