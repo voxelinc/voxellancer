@@ -3,18 +3,18 @@
 #include "geometry/aabb.h"
 
 class WorldTreeNode;
-class PhysicalVoxelCluster;
+class WorldObject;
 
 class WorldTreeGeode
 {
 public:
     WorldTreeGeode();
-    WorldTreeGeode(PhysicalVoxelCluster *voxelcluster);
+    WorldTreeGeode(WorldObject *voxelcluster);
     virtual ~WorldTreeGeode();
 
-    PhysicalVoxelCluster *voxelcluster();
-    const PhysicalVoxelCluster *voxelcluster() const;
-    void setVoxelCluster(PhysicalVoxelCluster *voxelcluster);
+    WorldObject *worldObject();
+    const WorldObject *worldObject() const;
+    void setWorldObject(WorldObject *worldObject);
 
     WorldTreeNode *containingNode();
     const WorldTreeNode *containingNode() const;
@@ -25,7 +25,7 @@ public:
 
 
 protected:
-    PhysicalVoxelCluster *m_voxelcluster;
+    WorldObject *m_worldobject;
     WorldTreeNode *m_containingNode;
     AABB m_aabb;
 };

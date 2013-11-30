@@ -1,22 +1,32 @@
-#include <memory>
+#include <list>
 
-#include "physics/physicalvoxelcluster.h"
+#include "collision/collisiondetector.h"
+#include "physics/physics.h"
+#include "world/drawable.h"
+#include "voxel/voxelcluster.h"
 
 
-class WorldVoxel;
-
-class WorldObject : public PhysicalVoxelCluster {
+class WorldObject : public Drawable
+{
 public:
-    virtual void setWorldTree(WorldTree* worldTree);
+    CollisionDetector * collisionDetector();
+    Physics * physics();
+    VoxelCluster * voxelCluster();
 
-    /* Idea to get around second list
-    virtual void addVoxel(Voxel *voxel); // asserts that the voxel is a WorldVoxel, casts it to WorldVoxel and calls WorldVoxel::addToWorldObject(this)
-    virtual void addVoxel(WorldVoxel *voxel); // adds the voxel
-    WorldVoxel * voxel(cvec3 position); // does a static_cast to WorldVoxel, which is safe because addVoxel only accepts WorldVoxels
-    */
+    AABB aabb();
+    Sphere sphere();
+
+    virtual void update(float delta_sec);
+    virtual void move(float delta_sec);
+    void updateGeode();
+
 
 protected:
+    CollisionDetector m_collisionDetector;
+    Physics m_physics;
+    VoxelCluster m_voxelCluster;
 
 private:
 
 };
+

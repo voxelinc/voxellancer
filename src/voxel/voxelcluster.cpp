@@ -14,10 +14,9 @@
 #include "utils/tostring.h"
 
 
-VoxelCluster::VoxelCluster(glm::vec3 center, float scale): 
+VoxelCluster::VoxelCluster(glm::vec3 center, float scale):
     m_voxels(),
     m_voxelRenderData(m_voxels),
-    m_transform(center, scale)
 {
 }
 
@@ -28,17 +27,9 @@ VoxelCluster::~VoxelCluster() {
     }
 }
 
-WorldTransform &VoxelCluster::transform() {
-    return m_transform;
-}
-
-const WorldTransform &VoxelCluster::transform() const {
-    return m_transform;
-}
-
 void VoxelCluster::addVoxel(Voxel *voxel) {
     assert(m_voxels.find(voxel->gridCell()) == m_voxels.end());
-    
+
     m_voxels[voxel->gridCell()] = voxel;
     m_aabb.extend(voxel->gridCell());
     m_voxelRenderData.invalidate();
@@ -52,16 +43,8 @@ void VoxelCluster::removeVoxel(const cvec3 & position) {
     delete voxel;
 }
 
-AABB VoxelCluster::aabb() {
-    return aabb(m_transform);
-}
-
 AABB VoxelCluster::aabb(const WorldTransform & transform) {
     return AABB::containing(sphere(transform));
-}
-
-Sphere VoxelCluster::sphere() {
-    return sphere(m_transform);
 }
 
 Sphere VoxelCluster::sphere(const WorldTransform & transform) {
@@ -74,10 +57,6 @@ Sphere VoxelCluster::sphere(const WorldTransform & transform) {
 
 VoxelRenderData * VoxelCluster::voxelRenderData() {
     return &m_voxelRenderData;
-}
-
-void VoxelCluster::finishInitialization() {
-
 }
 
 Voxel * VoxelCluster::voxel(cvec3 position) {

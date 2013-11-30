@@ -25,11 +25,8 @@ public:
 	VoxelCluster(glm::vec3 center = glm::vec3(0), float scale = 1.0);
     virtual ~VoxelCluster();
 
-    AABB aabb();
-    Sphere sphere();
-
-    WorldTransform &transform();
-    const WorldTransform &transform() const;
+    AABB aabb(const WorldTransform & transform);
+    Sphere sphere(const WorldTransform & transform);
 
     Voxel * voxel(cvec3 position);
     virtual void addVoxel(Voxel *voxel);
@@ -37,14 +34,9 @@ public:
 
     VoxelRenderData *voxelRenderData();
 
-    virtual void finishInitialization();
-
 protected:
     void updateTextures();
     
-    AABB aabb(const WorldTransform & transform);
-    Sphere sphere(const WorldTransform & transform);
-    WorldTransform m_transform;
     VoxelRenderData m_voxelRenderData;
 
     std::unordered_map<cvec3, Voxel*> m_voxels;
