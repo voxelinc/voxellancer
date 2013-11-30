@@ -5,8 +5,6 @@
 #include "utils/tostring.h"
 #include "world/worldobject.h"
 
-#include "physics/physicalvoxelcluster.h"
-
 
 WorldTree::WorldTree():
     WorldTreeNode(0, nullptr, AABB(glm::vec3(-8, -8, -8), glm::vec3(8, 8, 8)))

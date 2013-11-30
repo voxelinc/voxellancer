@@ -42,7 +42,7 @@ void VoxelRenderer::prepareDraw(Camera * camera, bool withBorder)
 
 void VoxelRenderer::draw(Drawable * worldObject)
 {
-    m_shaderProgram->setUniform("model", worldObject->matrix());
+    m_shaderProgram->setUniform("model", worldObject->transform().matrix());
     glActiveTexture(GL_TEXTURE0);
     worldObject->voxelCluster()->voxelRenderData()->positionTexture()->bind();
     glActiveTexture(GL_TEXTURE1);

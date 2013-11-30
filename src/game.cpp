@@ -99,7 +99,7 @@ void Game::initialize()
     m_inputHandler.setVoxelCluster(m_testClusterMoveable);
 
     WorldObject *m_testClusterA = new WorldObject();
-    ClusterCache::instance()->fillCluster(m_testClusterA, "data/voxelcluster/basicship.csv");
+    ClusterCache::instance()->fillCluster(m_testClusterA->voxelCluster(), "data/voxelcluster/basicship.csv");
 	m_testClusterA->transform().setCenter(glm::vec3(3, 0, 3)); // TODO: shouldnt center == centerofmass ?
     m_testClusterA->transform().setPosition(glm::vec3(0, 0, -10));
 	m_testClusterA->removeVoxel(glm::ivec3(3, 2, 3)); // this verifies the objects are different
@@ -108,7 +108,7 @@ void Game::initialize()
 
 
     WorldObject *m_testClusterB = new WorldObject();
-    ClusterCache::instance()->fillCluster(m_testClusterB, "data/voxelcluster/basicship.csv");
+    ClusterCache::instance()->fillCluster(m_testClusterB->voxelCluster(), "data/voxelcluster/basicship.csv");
 	m_testClusterB->transform().setCenter(glm::vec3(3, 0, 3));
     m_testClusterB->transform().setPosition(glm::vec3(0, 0, 10));
     m_testClusterB->finishInitialization();
@@ -156,9 +156,8 @@ void Game::draw()
 	m_skybox->draw(&m_camera);
 
     m_voxelRenderer->prepareDraw(&m_camera);
-
-    for (PhysicalVoxelCluster * cluster : m_world->worldObjects()) {
-        m_voxelRenderer->draw(cluster);
+    for (WorldObject * worldObject : m_world->worldObjects()) {
+        m_voxelRenderer->draw(worldObject);
     }
 
     // draw all other voxelclusters...

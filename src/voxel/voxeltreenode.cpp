@@ -93,7 +93,7 @@ void VoxelTreeNode::insert(Voxel *voxel) {
     }
 }
 
-void VoxelTreeNode::remove(const cvec3 &cell) {
+void VoxelTreeNode::remove(const glm::ivec3 &cell) {
     if(isAtomic()) {
         assert(m_voxel != nullptr);
         m_voxel = nullptr;
@@ -102,7 +102,7 @@ void VoxelTreeNode::remove(const cvec3 &cell) {
         int numSubLeaves = 0;
 
         for(VoxelTreeNode *subnode : m_subnodes) {
-            if(subnode->gridAABB().contains(glm::ivec3(cell))) {
+            if(subnode->gridAABB().contains(cell)) {
                 subnode->remove(cell);
             }
             if(subnode->isLeaf()) {

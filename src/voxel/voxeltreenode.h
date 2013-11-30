@@ -26,15 +26,15 @@ public:
     std::vector<VoxelTreeNode*> &subnodes();
     const std::vector<VoxelTreeNode*> &subnodes() const;
 
-    PhysicalVoxel *physicalVoxel();
-    const PhysicalVoxel *physicalVoxel() const;
+    Voxel *voxel();
+    const Voxel *voxel() const;
 
     const Grid3dAABB &gridAABB() const;
 
     Sphere boundingSphere();
 
-    void insert(PhysicalVoxel *physicalVoxel);
-    void remove(const cvec3 &cell);
+    void insert(Voxel *physicalVoxel);
+    void remove(const glm::ivec3 &cell);
 
 
 protected:

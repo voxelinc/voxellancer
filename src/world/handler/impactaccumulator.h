@@ -16,12 +16,12 @@ public:
     void parse(const std::list<Collision> &collisions);
 //    void parse(const std::list<Impact> &impacts);
 
-//    std::list<VoxelClusterImpact> &clusterImpacts();
+    std::list<PhysicalVoxelImpact> &clusterImpacts();
     std::list<Impact> &impacts();
 
 
 protected:
-//    std::list<VoxelClusterImpact> m_clusterImpacts;
+    std::list<PhysicalVoxelImpact> m_clusterImpacts;
     std::list<Impact> m_impacts;
 };
 

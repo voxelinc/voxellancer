@@ -12,7 +12,7 @@ Voxel::Voxel(const glm::ivec3& gridCell, const cvec3& color, float mass):
     m_gridCell(gridCell),
     m_color(color),
     m_hp(1),
-    m_mass(mass);
+    m_mass(mass)
 {
     assert( gridCell.x >= 0 && gridCell.x < 256 &&
             gridCell.y >= 0 && gridCell.y < 256 &&

@@ -1,6 +1,7 @@
 #include "damager.h"
 
 #include "impact.h"
+#include "voxel/voxel.h"
 
 
 void Damager::applyDamages(std::list<Impact> &impacts) {
@@ -18,7 +19,7 @@ void Damager::applyDamages(std::list<Impact> &impacts) {
         if(voxel->hp() <= 0) {
             m_dampedDeadlyImpacts.push_back(dampImpact(impact, hpBeforeDamage / damage));
             m_deadlyImpacts.push_back(impact);
-            m_modifiedWorldObjects.insert(voxel->voxelCluster());
+            m_modifiedWorldObjects.insert(impact.worldObject());
         }
     }
 }

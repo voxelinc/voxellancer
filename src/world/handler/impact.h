@@ -16,7 +16,7 @@ public:
     const glm::ivec3 &vec() const;
 
 protected:
-    WorldObject *m_worldObject
+    WorldObject *m_worldObject;
     Voxel *m_voxel;
     glm::ivec3 m_vec;
 };

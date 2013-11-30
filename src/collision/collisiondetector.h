@@ -1,3 +1,5 @@
+#pragma once 
+
 #include <memory>
 
 #include <glm/glm.hpp>
@@ -16,10 +18,10 @@ class CollisionDetector
 {
 public:
     CollisionDetector(WorldObject & worldObject);
-    virtual ~CollisionDetector();
+    ~CollisionDetector();
 
-    virtual void addVoxel(Voxel *voxel);
-    virtual void removeVoxel(const cvec3 &position);
+    void addVoxel(Voxel *voxel);
+    void removeVoxel(const glm::ivec3 &position);
 
     std::list<Collision> &checkCollisions();
     std::list<Collision> &lastCollisions();
@@ -36,7 +38,7 @@ public:
 
     void updateGeode();
         
-    virtual void finishInitialization();
+    void finishInitialization();
 
 
 protected:
