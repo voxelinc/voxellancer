@@ -9,22 +9,22 @@
 #include "letter.h"
 
 HUD::HUD() :
-m_gamecamera(0),
-m_rendercamera(),
-m_lastgamecamera(),
-m_shiparrow(),
-m_delta_sec_remain(0),
-m_framerate(0),
-m_dx(1),
-m_dy(1),
-m_distance("hud.distance"),
-m_move_multiplier("hud.move_multiplier"),
-m_inertia_rotate("hud.inertia_rotate"),
-m_inertia_move("hud.inertia_move"),
-m_inertia_rate("hud.inertia_rate"),
-m_arrow_maxdistance("hud.arrow_maxdistance"),
-m_arrow_radius("hud.arrow_radius"),
-m_show_framerate("hud.show_framerate")
+    m_gamecamera(0),
+    m_rendercamera(),
+    m_lastgamecamera(),
+    m_shiparrow(),
+    m_delta_sec_remain(0),
+    m_framerate(0),
+    m_dx(1),
+    m_dy(1),
+    m_distance("hud.distance"),
+    m_move_multiplier("hud.move_multiplier"),
+    m_inertia_rotate("hud.inertia_rotate"),
+    m_inertia_move("hud.inertia_move"),
+    m_inertia_rate("hud.inertia_rate"),
+    m_arrow_maxdistance("hud.arrow_maxdistance"),
+    m_arrow_radius("hud.arrow_radius"),
+    m_show_framerate("hud.show_framerate")
 {
     m_voxelRenderer = std::unique_ptr<VoxelRenderer>(new VoxelRenderer());
 
@@ -45,7 +45,6 @@ m_show_framerate("hud.show_framerate")
     m_shiparrow->m_offset = glm::vec3(-2, -2, 0);
 
     loadFonts();
-
 }
 
 

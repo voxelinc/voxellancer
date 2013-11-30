@@ -70,6 +70,23 @@ void Game::initialize()
 	glow::debug("Create Voxel");
     m_voxelRenderer = std::unique_ptr<VoxelRenderer>(new VoxelRenderer);
 
+
+    WorldObject *m_testClusterA = new WorldObject();
+    ClusterCache::instance()->fillCluster(&m_testClusterA->voxelCluster(), "data/voxelcluster/basicship.csv");
+	//m_testClusterA->transform().setCenter(glm::vec3(3, 0, 3)); // TODO: shouldnt center == centerofmass ?
+    m_testClusterA->transform().setPosition(glm::vec3(0, 0, -10));
+	//m_testClusterA->removeVoxel(glm::ivec3(3, 2, 3)); // this verifies the objects are different
+    m_testClusterA->finishInitialization();
+    m_world->god().scheduleSpawn(m_testClusterA);
+
+
+    WorldObject *m_testClusterB = new WorldObject();
+    ClusterCache::instance()->fillCluster(&m_testClusterB->voxelCluster(), "data/voxelcluster/basicship.csv");
+	//m_testClusterB->transform().setCenter(glm::vec3(3, 0, 3));
+    m_testClusterB->transform().setPosition(glm::vec3(0, 0, 10));
+    m_testClusterB->finishInitialization();
+    m_world->god().scheduleSpawn(m_testClusterB);
+
     WorldObject *m_testCluster = new WorldObject();
     m_testCluster->transform().move(glm::vec3(0, 0, 0));
     m_testCluster->addVoxel(new Voxel(glm::ivec3(1, 0, 0), cvec3(0, 255, 0)));
@@ -98,21 +115,6 @@ void Game::initialize()
 
     m_inputHandler.setWorldObject(m_testClusterMoveable);
 
-    WorldObject *m_testClusterA = new WorldObject();
-    ClusterCache::instance()->fillCluster(&m_testClusterA->voxelCluster(), "data/voxelcluster/basicship.csv");
-	m_testClusterA->transform().setCenter(glm::vec3(3, 0, 3)); // TODO: shouldnt center == centerofmass ?
-    m_testClusterA->transform().setPosition(glm::vec3(0, 0, -10));
-	//m_testClusterA->removeVoxel(glm::ivec3(3, 2, 3)); // this verifies the objects are different
-    m_testClusterA->finishInitialization();
-    m_world->god().scheduleSpawn(m_testClusterA);
-
-
-    WorldObject *m_testClusterB = new WorldObject();
-    ClusterCache::instance()->fillCluster(&m_testClusterB->voxelCluster(), "data/voxelcluster/basicship.csv");
-	m_testClusterB->transform().setCenter(glm::vec3(3, 0, 3));
-    m_testClusterB->transform().setPosition(glm::vec3(0, 0, 10));
-    m_testClusterB->finishInitialization();
-    m_world->god().scheduleSpawn(m_testClusterB);
 
 
 
