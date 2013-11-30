@@ -17,7 +17,7 @@ public:
     VoxelRenderer();
 
 	void prepareDraw(Camera * camera, bool withBorder = true);
-    void draw(Drawable * cluster);
+    void draw(Drawable * drawable);
     void afterDraw();
   
 private:

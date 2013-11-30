@@ -1,17 +1,26 @@
 #include "worldobject.h"
 
 
+WorldObject::WorldObject():
+    m_transform(),
+    m_voxelCluster(),
+    m_physics(*this),
+    m_collisionDetector(*this)
+{
+
+}
+
 CollisionDetector * WorldObject::collisionDetector()
 {
     return &m_collisionDetector;
 }
 
 AABB WorldObject::aabb() {
-    return m_voxelCluster.aabb(m_physics.transform());
+    return m_voxelCluster.aabb(m_transform);
 }
 
 Sphere WorldObject::sphere() {
-    return m_voxelCluster.sphere(m_physics.transform());
+    return m_voxelCluster.sphere(m_transform);
 }
 
 void WorldObject::update(float delta_sec)
@@ -22,11 +31,6 @@ void WorldObject::update(float delta_sec)
 void WorldObject::move(float delta_sec)
 {
     m_physics.move(delta_sec);
-}
-
-glm::mat4 WorldObject::matrix()
-{
-    return m_physics.transform().matrix();
 }
 
 void WorldObject::addVoxel(Voxel * voxel)
@@ -43,7 +47,12 @@ void WorldObject::removeVoxel(const cvec3 & position)
     m_collisionDetector.removeVoxel(position);
 }
 
-bool WorldObject::transform()
+glm::mat4 WorldObject::matrix()
 {
-    m_physics.transform();
+    return m_transform.matrix();
+}
+
+WorldTransform& WorldObject::transform()
+{
+    return m_transform;
 }

@@ -30,11 +30,11 @@ Collision::Collision(const CollisionParticipant &a, const CollisionParticipant &
 
 }
 
-const CollisionParticipant &Collision::a() const {
+CollisionParticipant &Collision::a() {
     return m_a;
 }
 
-const CollisionParticipant &Collision::b() const {
+CollisionParticipant &Collision::b() {
     return m_b;
 }
 

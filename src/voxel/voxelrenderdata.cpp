@@ -12,11 +12,11 @@ VoxelRenderData::VoxelRenderData(std::unordered_map<glm::ivec3, Voxel*> &voxel) 
     m_positionTexture = new glow::Texture(GL_TEXTURE_1D);
     m_positionTexture->setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     m_positionTexture->setParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
     m_colorTexture = new glow::Texture(GL_TEXTURE_1D);
     m_colorTexture->setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     m_colorTexture->setParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 }
+
 
 VoxelRenderData::~VoxelRenderData() {
 }

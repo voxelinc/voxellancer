@@ -147,7 +147,7 @@ void HUD::draw(){
 
     // draw ship arrows
     int i = 0;
-    for (WorldObject *ship : World::instance()->clusters()) {
+    for (WorldObject *ship : World::instance()->worldObjects()) {
         // TODO something like "if (ship->hudData->shouldShowOnHud())"
         if (glm::length(ship->transform().position() - m_hudcamera.position()) < m_arrow_maxdistance){
             // delta is the vector from virtual HUD camera to the ship
@@ -234,7 +234,7 @@ void HUD::drawString(std::string text, HUDOffsetOrigin origin, glm::vec3 offset,
     }
 }
 
-void HUD::adjustPosition(VoxelCluster *cluster, HUDOffsetOrigin origin, glm::vec3 offset){
+void HUD::adjustPosition(HUDElement *cluster, HUDOffsetOrigin origin, glm::vec3 offset){
     assert(cluster != nullptr);
     switch (origin){
     case TopLeft:

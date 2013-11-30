@@ -14,7 +14,7 @@
 #include "utils/tostring.h"
 
 
-VoxelCluster::VoxelCluster(glm::vec3 center, float scale):
+VoxelCluster::VoxelCluster(glm::vec3 center, float scale): 
     m_voxels(),
     m_voxelRenderData(m_voxels)
 {
@@ -62,3 +62,9 @@ Sphere VoxelCluster::sphere(const WorldTransform& transform) {
 VoxelRenderData * VoxelCluster::voxelRenderData() {
     return &m_voxelRenderData;
 }
+const std::unordered_map<glm::ivec3, Voxel*> & VoxelCluster::voxelMap()
+{
+    return m_voxels;
+}
+
+
