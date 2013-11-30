@@ -35,17 +35,14 @@ public:
     const VoxelTreeNode &voxeltree() const;
 
     virtual void finishInitialization();
-    void updateGeode();
 
 
 protected:
     void checkCollisions(VoxelTreeNode* nodeA, VoxelTreeNode* nodeB);
 
+    WorldObject & m_worldObject;
     VoxelTreeNode m_voxelTree;
     WorldTreeGeode *m_geode;
     WorldTree *m_worldTree;
     std::list<Collision> m_collisions;
-
-
-
 };
