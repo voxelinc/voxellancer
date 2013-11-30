@@ -1,8 +1,6 @@
 #pragma once
 #include <glow/ref_ptr.h>
 
-#include "voxelcluster.h"
-
 
 namespace glow {
 	class Texture;
@@ -12,13 +10,14 @@ namespace glow {
 };
 
 class Camera;
+class Drawable;
 
 class VoxelRenderer {
 public:
     VoxelRenderer();
 
 	void prepareDraw(Camera * camera, bool withBorder = true);
-    void draw(VoxelCluster * cluster);
+    void draw(Drawable * cluster);
     void afterDraw();
   
 private:

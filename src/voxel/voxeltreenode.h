@@ -12,13 +12,13 @@
 #include "worldtransform.h"
 
 
-class CollidableVoxelCluster;
+class WorldObject;
 
 class VoxelTreeNode
 {
 public:
-    VoxelTreeNode(VoxelTreeNode *parent, CollidableVoxelCluster &voxelcluster, const Grid3dAABB &gridAABB = Grid3dAABB(glm::ivec3(0, 0, 0), glm::ivec3(0, 0, 0)));
-    VoxelTreeNode(const VoxelTreeNode& other, CollidableVoxelCluster *voxelcluster);
+    VoxelTreeNode(VoxelTreeNode *parent, WorldObject &worldobject, const Grid3dAABB &gridAABB = Grid3dAABB(glm::ivec3(0, 0, 0), glm::ivec3(0, 0, 0)));
+    VoxelTreeNode(const VoxelTreeNode& other, WorldObject *worldobject);
 	VoxelTreeNode(const VoxelTreeNode& other) = delete; //no "normal" copy ctor
     virtual ~VoxelTreeNode();
 
@@ -41,7 +41,7 @@ public:
 
 protected:
     VoxelTreeNode *m_parent;
-    CollidableVoxelCluster &m_voxelcluster;
+    WorldObject &m_worldObject;
     Grid3dAABB m_gridAABB;
 
     std::vector<VoxelTreeNode*> m_subnodes;

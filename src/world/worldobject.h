@@ -17,11 +17,15 @@ public:
     virtual void update(float delta_sec);
     virtual void move(float delta_sec);
     void updateGeode();
+
+    void addVoxel(Voxel * voxel);
+    void removeVoxel(const cvec3 & position);
+
+    virtual glm::mat4 matrix();
+    bool transform();
 protected:
     CollisionDetector m_collisionDetector;
     Physics m_physics;
     VoxelCluster m_voxelCluster;
-
-private:    
 
 };

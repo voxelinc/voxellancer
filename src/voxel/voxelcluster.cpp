@@ -16,7 +16,7 @@
 
 VoxelCluster::VoxelCluster(glm::vec3 center, float scale): 
     m_voxels(),
-    m_voxelRenderData(m_voxels),
+    m_voxelRenderData(m_voxels)
 {
 }
 
