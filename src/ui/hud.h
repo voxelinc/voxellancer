@@ -10,17 +10,7 @@
 
 class VoxelCluster;
 class VoxelRenderer;
-
-enum HUDFontSize {
-    s3x5,
-    s5x7
-};
-
-enum HUDFontAlign {
-    aLeft,
-    aCenter,
-    aRight
-};
+class VoxelFont;
 
 class HUD {
 public:
@@ -35,15 +25,10 @@ public:
 
 protected:
     void addElement(const std::string& filename, HUDOffsetOrigin origin, glm::vec3 offset, std::vector<std::unique_ptr<HUDElement>> *list);
-    void addChar(const std::string& filename, glm::vec3 offset, const char index, std::map<char, std::unique_ptr<VoxelCluster>> *map);
-
-    void loadFont(const std::string& identifier, glm::vec3 offset, std::map<char, std::unique_ptr<VoxelCluster>> *map);
-    void loadFonts();
 
     void stepAnim(glm::vec3 targetPosition, glm::quat targetOrientation);
 
-    void drawString(std::string text, HUDOffsetOrigin origin, glm::vec3 offset, HUDFontSize size = s3x5, float scale = 1.f, HUDFontAlign align = aLeft);
-    void adjustPosition(VoxelCluster *cluster, HUDOffsetOrigin origin, glm::vec3 offset);
+    glm::vec3 calculatePosition(HUDOffsetOrigin origin, glm::vec3 offset);
     void adjustPositions();
 
     
@@ -52,18 +37,17 @@ protected:
     WorldTransform m_hudCamera, m_lastGameCamera;
     Camera m_renderCamera;
     std::unique_ptr<VoxelRenderer> m_voxelRenderer;
+    std::unique_ptr<VoxelFont> m_font;
     std::vector<std::unique_ptr<HUDElement>> m_elements;
     std::vector<std::unique_ptr<HUDElement>> m_numbers;
-    std::map<char, std::unique_ptr<VoxelCluster>> m_font3x5;
-    std::map<char, std::unique_ptr<VoxelCluster>> m_font5x7;
     std::unique_ptr<HUDElement> m_shipArrow;
     std::list<VoxelCluster*> m_ships;
     double m_delta_sec_remain;
     float m_frameRate;
     float m_dx, m_dy;
 
-    Property<float> m_distance, m_move_multiplier, m_inertia_move, m_inertia_rotate, m_inertia_rate,
-        m_arrow_maxdistance, m_arrow_radius;
-    Property<bool> m_show_framerate;
+    Property<float> prop_distance, prop_moveMultiplier, prop_inertiaMove, prop_inertiaRotate, prop_inertiaRate,
+        prop_arrowMaxdistance, prop_arrowRadius;
+    Property<bool> prop_showFramerate;
 
 };

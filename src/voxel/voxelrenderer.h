@@ -20,6 +20,8 @@ public:
 	void prepareDraw(Camera * camera, bool withBorder = true);
     void draw(VoxelCluster * cluster);
     void afterDraw();
+
+    bool prepared();
   
 private:
     void createAndSetupShaders();
@@ -29,4 +31,5 @@ private:
 	glow::ref_ptr<glow::Program> m_shaderProgram;
 	glow::ref_ptr<glow::VertexArrayObject> m_vertexArrayObject;
 	glow::ref_ptr<glow::Buffer> m_vertexBuffer;
+    bool m_prepared;
 };
