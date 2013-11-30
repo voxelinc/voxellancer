@@ -5,7 +5,7 @@
 #include "voxelcluster.h"
 #include <vector>
 
-VoxelRenderData::VoxelRenderData(std::unordered_map<cvec3, Voxel*> &voxel) :
+VoxelRenderData::VoxelRenderData(std::unordered_map<glm::ivec3, Voxel*> &voxel) :
     m_voxel(voxel),
     m_texturesDirty(true)
 {
@@ -18,7 +18,6 @@ VoxelRenderData::VoxelRenderData(std::unordered_map<cvec3, Voxel*> &voxel) :
     m_colorTexture->setParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 }
 
-
 VoxelRenderData::~VoxelRenderData() {
 }
 
@@ -30,9 +29,9 @@ void VoxelRenderData::updateTextures() {
     int i = 0;
     for (auto pair : m_voxel) {
         Voxel *voxel = pair.second;
-        positionData[i * 3 + 0] = voxel->gridCell().x;
-        positionData[i * 3 + 1] = voxel->gridCell().y;
-        positionData[i * 3 + 2] = voxel->gridCell().z;
+        positionData[i * 3 + 0] = static_cast<unsigned char>(voxel->gridCell().x);
+        positionData[i * 3 + 1] = static_cast<unsigned char>(voxel->gridCell().y);
+        positionData[i * 3 + 2] = static_cast<unsigned char>(voxel->gridCell().z);
         colorData[i * 3 + 0] = voxel->color().x;
         colorData[i * 3 + 1] = voxel->color().y;
         colorData[i * 3 + 2] = voxel->color().z;

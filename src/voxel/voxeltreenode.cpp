@@ -7,9 +7,9 @@
 #include "world/worldobject.h"
 
 
-VoxelTreeNode::VoxelTreeNode(VoxelTreeNode *parent, WorldObject &voxelcluster, const Grid3dAABB &gridAABB) :
+VoxelTreeNode::VoxelTreeNode(VoxelTreeNode *parent, WorldObject &worldObject, const Grid3dAABB &gridAABB) :
     m_parent(parent),
-    m_worldObject(voxelcluster),
+    m_worldObject(worldObject),
     m_gridAABB(gridAABB),
     m_voxel(nullptr)
 {
