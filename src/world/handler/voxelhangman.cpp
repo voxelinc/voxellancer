@@ -1,18 +1,15 @@
 #include "voxelhangman.h"
 
-#include "voxel/voxelcluster.h"
 
-
-void VoxelHangman::applyOnDestructionHooks(std::list<VoxelImpact> &deadlyVoxelImpacts) {
-    for(VoxelImpact &voxelImpact : deadlyVoxelImpacts) {
-        voxelImpact.voxel()->onDestruction();
+void VoxelHangman::applyOnDestructionHooks(std::list<Impact> &deadlyImpacts) {
+    for(Impact &impact : deadlyImpacts) {
+        impact.voxel()->onDestruction();
     }
 }
 
-void VoxelHangman::removeDestroyedVoxels(std::list<VoxelImpact> &deadlyVoxelImpacts) {
-    for(VoxelImpact &voxelImpact : deadlyVoxelImpacts) {
-        Voxel *voxel = voxelImpact.voxel();
-        voxel->voxelCluster()->removeVoxel(voxel->gridCell());
+void VoxelHangman::removeDestroyedVoxels(std::list<Impact> &deadlyImpacts) {
+    for(Impact &impact : deadlyImpacts) {
+        impact.worldObject()->removeVoxel(impact.voxel()->gridCell());
     }
 }
 

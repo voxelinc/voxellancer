@@ -3,7 +3,7 @@
 #include <set>
 #include <list>
 
-#include "physics/physicalvoxelimpact.h"
+#include "impact.h"
 
 
 class WorldObject;
@@ -11,15 +11,15 @@ class WorldObject;
 class Damager
 {
 public:
-    void applyDamages(std::list<PhysicalVoxelImpact> &voxelImpacts);
+    void applyDamages(std::list<Impact> &impacts);
 
-    std::list<PhysicalVoxelImpact> &deadlyVoxelImpacts();
-    std::set<WorldObject*> &modifiedVoxelClusters();
+    std::list<Impact> &deadlyImpact();
+    std::set<WorldObject*> &modifiedWorldObjects();
 
 
 protected:
-    std::list<PhysicalVoxelImpact> m_deadlyVoxelImpacts;
-    std::set<WorldObject*> m_modifiedVoxelClusters;
+    std::list<Impact> m_deadlyImpacts;
+    std::set<WorldObject*> m_modifiedWorldObjects;
 
     float damageOfImpact(const Impact &impact) const;
 };

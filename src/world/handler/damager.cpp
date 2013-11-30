@@ -1,32 +1,32 @@
 #include "damager.h"
 
-#include "voxel/voxel.h"
+#include "impact.h"
 
 
-void Damager::applyDamages(std::list<VoxelImpact> &voxelImpacts) {
-    m_deadlyVoxelImpacts.clear();
-    m_modifiedVoxelClusters.clear();
+void Damager::applyDamages(std::list<Impact> &impacts) {
+    m_deadlyImpacts.clear();
+    m_modifiedWorldObjects.clear();
 
-    for(VoxelImpact &voxelImpact : voxelImpacts) {
-        Voxel *voxel = voxelImpact.voxel();
+    for(Impact &impact : impacts) {
+        Voxel *voxel = impact.voxel();
 
-        voxel->applyDamage(damageOfImpact(voxelImpact.impact()));
+        voxel->applyDamage(damageOfImpact(impact));
         if(voxel->hp() <= 0) {
-            m_deadlyVoxelImpacts.push_back(voxelImpact);
-            m_modifiedVoxelClusters.insert(voxel->voxelCluster());
+            m_deadlyImpacts.push_back(impact);
+            m_modifiedWorldObjects.insert(voxel->voxelCluster());
         }
     }
 }
 
-std::list<VoxelImpact> &Damager::deadlyVoxelImpacts() {
-    return m_deadlyVoxelImpacts;
+std::list<Impact> &Damager::deadlyVoxelImpacts() {
+    return m_deadlyImpacts;
 }
 
 std::list<WorldObject*> &Damager::modifiedVoxelClusters() {
-    return m_modifiedVoxelClusters;
+    return m_modifiedWorldObjects;
 }
 
 float Damager::damageOfImpact(const Impact &impact) const {
-    return glm::length(impact.vec3());
+    return glm::length(impact.vec());
 }
 
