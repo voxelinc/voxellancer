@@ -2,15 +2,13 @@
 
 #include <list>
 
-#include "voxel/voxelcluster.h"
-
-#include "voxelclusterorphan.h"
-
+class VoxelClusterOrphan;
+class WorldObject;
 
 class SplitDetector
 {
 public:
-    void searchOrphans(std::list<VoxelCluster*> &modifiedVoxelClusters);
+    void searchOrphans(std::list<WorldObject*> &modifiedVoxelClusters);
     std::list<VoxelClusterOrphan*> &voxelClusterOrphans();
 
 

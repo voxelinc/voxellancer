@@ -1,6 +1,6 @@
 #include "splitdetector.h"
 
-void SplitDetector::searchOrphans(std::list<VoxelCluster*> &modifiedVoxelClusters) {
+void SplitDetector::searchOrphans(std::list<WorldObject*> &modifiedVoxelClusters) {
 
 }
 

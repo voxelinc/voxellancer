@@ -1,36 +1,40 @@
 #pragma once
 
+#include <functional>
+
 #include <glm/glm.hpp>
 #include "geometry/sphere.h"
 
 
 typedef glm::detail::tvec3<unsigned char> cvec3;
-
-struct VoxelHash
-{
-    std::size_t operator()(const cvec3& v) const {
-        return v.x + (v.y << 8) + (v.z << 16);
-    }
-};
-
+ 
+namespace std {
+    template<> struct hash<cvec3>
+    {
+        std::size_t operator()(const cvec3 &v) const {
+            return v.x + (v.y << 8) + (v.z << 16);
+        }
+    };
+}
 
 class VoxelCluster;
 
 class Voxel
 {
 public:
-    Voxel(VoxelCluster *voxelCluster = nullptr);
-    Voxel(cvec3 gridCell, cvec3 color, VoxelCluster *voxelCluster = nullptr);
+    Voxel();
+    Voxel(cvec3 gridCell, cvec3 color);
     virtual ~Voxel();
 
+    // TODO: extract to WorldCluster
     VoxelCluster *voxelCluster();
-    const VoxelCluster *voxelCluster() const;
+    void setVoxelCluster(VoxelCluster *cluster);
 
     const cvec3 &gridCell() const;
-    void setGridCell(const cvec3 &cell);
+    //void setGridCell(const cvec3 &cell);
 
     const cvec3 &color() const;
-    void setColor(const cvec3 &color);
+    //void setColor(const cvec3 &color);
 
 
 protected:

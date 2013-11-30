@@ -14,7 +14,7 @@ class VoxelFont;
 
 class HUD {
 public:
-    HUD(std::list<VoxelCluster*> ships);
+    HUD();
     virtual ~HUD();
 
     void setCamera(Camera *camera);
@@ -41,7 +41,6 @@ protected:
     std::vector<std::unique_ptr<HUDElement>> m_elements;
     std::vector<std::unique_ptr<HUDElement>> m_numbers;
     std::unique_ptr<HUDElement> m_shipArrow;
-    std::list<VoxelCluster*> m_ships;
     double m_delta_sec_remain;
     float m_frameRate;
     float m_dx, m_dy;

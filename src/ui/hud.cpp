@@ -1,17 +1,20 @@
 #include "hud.h"
 #include "camera.h"
 #include "voxel/voxelrenderer.h"
-#include "resource/clusterstore.h"
+#include "resource/clustercache.h"
 #include "ui/voxelfont.h"
 #include "ui/hudelement.h"
+#include "world/world.h"
+#include "world/god.h"
+#include "world/worldobject.h"
 
-HUD::HUD(std::list<VoxelCluster*> ships) :
+
+HUD::HUD() :
     m_voxelRenderer(new VoxelRenderer()),
     m_font(new VoxelFont()),
     m_gameCamera(0),
     m_renderCamera(),
     m_lastGameCamera(),
-    m_ships(ships),
     m_shipArrow(),
     m_delta_sec_remain(0),
     m_frameRate(0),
@@ -25,6 +28,7 @@ HUD::HUD(std::list<VoxelCluster*> ships) :
     prop_arrowMaxdistance("hud.arrow_maxdistance"),
     prop_arrowRadius("hud.arrow_radius"),
     prop_showFramerate("hud.show_framerate")
+
 {
     m_font->setRenderer(m_voxelRenderer.get());
 
@@ -39,14 +43,16 @@ HUD::HUD(std::list<VoxelCluster*> ships) :
     addElement("data/hud/bottomright.csv", HUDOffsetOrigin::BottomRight, glm::vec3(-4, 1, 0), &m_elements);
     addElement("data/hud/bottom.csv", HUDOffsetOrigin::Bottom, glm::vec3(-27, 1, 0), &m_elements);
 
-    m_shipArrow.reset(ClusterStore::instance()->create<HUDElement>("data/hud/arrow.csv"));
+    m_shipArrow.reset(new HUDElement());
+    ClusterCache::instance()->fillCluster(m_shipArrow.get(), "data/hud/arrow.csv");
     m_shipArrow->m_origin = HUDOffsetOrigin::Center;
     m_shipArrow->m_offset = glm::vec3(-2, -2, 0);
-
+    
 }
 
 void HUD::addElement(const std::string& filename, HUDOffsetOrigin origin, glm::vec3 offset, std::vector<std::unique_ptr<HUDElement>> *list){
-    std::unique_ptr<HUDElement> element(ClusterStore::instance()->create<HUDElement>(filename));
+    std::unique_ptr<HUDElement> element(new HUDElement());
+    ClusterCache::instance()->fillCluster(element.get(), filename);
     element->m_origin = origin;
     element->m_offset = offset;
     list->push_back(move(element));
@@ -118,13 +124,14 @@ void HUD::draw(){
     m_voxelRenderer->prepareDraw(&m_renderCamera, false);
 
     // draw statics
-    for (std::unique_ptr<HUDElement>& element : m_elements)    {
+    for (std::unique_ptr<HUDElement>& element : m_elements){
         m_voxelRenderer->draw(element.get());
     }
 
     // draw ship arrows
     int i = 0;
-    for (VoxelCluster *ship : m_ships){
+    for (WorldObject *ship : World::instance()->clusters()) {
+        // TODO something like "if (ship->hudData->shouldShowOnHud())"
         if (glm::length(ship->transform().position() - m_hudCamera.position()) < prop_arrowMaxdistance){
             // delta is the vector from virtual HUD camera to the ship
             glm::vec3 delta = glm::inverse(m_hudCamera.orientation()) * (ship->transform().position() - m_hudCamera.position());

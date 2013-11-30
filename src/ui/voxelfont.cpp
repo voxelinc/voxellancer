@@ -1,6 +1,6 @@
 #include "voxelfont.h"
 
-#include "resource/clusterstore.h"
+#include "resource/clustercache.h"
 #include "voxel/voxelcluster.h"
 #include "voxel/voxelrenderer.h"
 
@@ -36,7 +36,8 @@ void VoxelFont::loadFont(const std::string& identifier, glm::vec3 offset, std::m
 }
 
 void VoxelFont::loadChar(const std::string& filename, glm::vec3 offset, const char index, std::map<char, std::unique_ptr<VoxelCluster>> *map){
-    std::unique_ptr<VoxelCluster> element(ClusterStore::instance()->create<VoxelCluster>(filename));
+    std::unique_ptr<VoxelCluster> element(new VoxelCluster());
+    ClusterCache::instance()->fillCluster(element.get(), filename);
     element->transform().setCenter(offset);
     (*map)[index] = move(element);
 }
