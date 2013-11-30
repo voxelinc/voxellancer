@@ -1,9 +1,11 @@
-#include <glm/gtx/quaternion.hpp>
 #include "physicalvoxelcluster.h"
+
+#include <iostream>
+
+#include <glm/gtx/quaternion.hpp>
 
 #include "worldtransform.h"
 #include "collision/collisiondetector.h"
-#include <iostream>
 
 
 PhysicalVoxelCluster::PhysicalVoxelCluster(float scale) :
