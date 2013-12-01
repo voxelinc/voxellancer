@@ -31,6 +31,10 @@ bool VoxelTreeNode::isLeaf() const{
     return m_subnodes.size() == 0;
 }
 
+bool VoxelTreeNode::isEmpty() const{
+    return m_subnodes.size() == 0 && m_voxel == nullptr;
+}
+
 std::vector<VoxelTreeNode*> &VoxelTreeNode::subnodes() {
     return m_subnodes;
 }
@@ -99,18 +103,18 @@ void VoxelTreeNode::remove(const glm::ivec3 &cell) {
         m_voxel = nullptr;
     }
     else {
-        int numSubLeaves = 0;
+        int numSubNodesEmpty = 0;
 
         for(VoxelTreeNode *subnode : m_subnodes) {
             if(subnode->gridAABB().contains(cell)) {
                 subnode->remove(cell);
             }
-            if(subnode->isLeaf()) {
-                numSubLeaves++;
+            if(subnode->isEmpty()) {
+                numSubNodesEmpty++;
             }
         }
 
-        if(numSubLeaves == 8) {
+        if(numSubNodesEmpty == 8) {
             unsplit();
         }
     }

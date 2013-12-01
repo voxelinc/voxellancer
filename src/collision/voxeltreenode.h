@@ -22,6 +22,7 @@ public:
 
     bool isAtomic() const;
     bool isLeaf() const;
+    bool isEmpty() const;
 
     std::vector<VoxelTreeNode*> &subnodes();
     const std::vector<VoxelTreeNode*> &subnodes() const;
