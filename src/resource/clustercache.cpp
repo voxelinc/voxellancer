@@ -28,17 +28,17 @@ ClusterCache *ClusterCache::instance() {
 
 
 
-void ClusterCache::fillCluster(WorldObject *worldObject, const std::string& filename) {
+void ClusterCache::fill(WorldObject *worldObject, const std::string& filename) {
     std::vector<Voxel*> *source = getOrCreate(filename);
 
     for (Voxel *voxel : *source) {
-        worldObject->addVoxel(voxel->clone()); // addVoxel(colorcodeAndClone(voxel));
+        worldObject->addVoxel(voxel->clone()); // colorcodeAndClone(voxel).addTo(worldObject);
     }
     worldObject->finishInitialization();
 }
 
 
-void ClusterCache::fillCluster(Drawable *cluster, const std::string& filename){
+void ClusterCache::fill(Drawable *cluster, const std::string& filename){
     assert(cluster != nullptr);
     std::vector<Voxel*> *source = getOrCreate(filename);
     
