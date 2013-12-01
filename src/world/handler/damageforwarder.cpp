@@ -1,6 +1,5 @@
 #include "damageforwarder.h"
 
-#include <iostream>
 #include <algorithm>
 #include <glm/glm.hpp>
 
@@ -9,7 +8,6 @@
 
 #include "world/worldobject.h"
 
-#include "utils/tostring.h"
 
 
 void DamageForwarder::forwardDamage(std::list<Impact> &dampedDeadlyImpacts) {

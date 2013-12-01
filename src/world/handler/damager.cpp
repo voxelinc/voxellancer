@@ -1,11 +1,10 @@
 #include "damager.h"
-
-#include <iostream>
+#include <glow/logging.h>
 
 #include "world/helper/impact.h"
 #include "voxel/voxel.h"
-
 #include "utils/tostring.h"
+
 
 void Damager::applyDamages(std::list<Impact> &impacts) {
     m_dampedDeadlyImpacts.clear();
@@ -18,11 +17,11 @@ void Damager::applyDamages(std::list<Impact> &impacts) {
         float hpBeforeDamage = voxel->hp();
         float damage = damageOfImpact(impact);
 
-        std::cout << "Damager: Dealing " << damage << " damage to " << voxel << std::endl;
+        glow::debug("Damager: Dealing %; damage to %;", damage, voxel);
 
         voxel->applyDamage(damage);
         if(voxel->hp() <= 0) {
-            std::cout << "  Damager: Voxel killed, damped Impact=" << toString(glm::normalize(impact.vec()) * (damage - hpBeforeDamage)) << std::endl;
+            glow::debug("  Damager: Voxel killed, damped Impact= %;", toString(glm::normalize(impact.vec()) * (damage - hpBeforeDamage)));
             m_dampedDeadlyImpacts.push_back(dampImpact(impact, damage - hpBeforeDamage));
             m_deadlyImpacts.push_back(impact);
             m_modifiedWorldObjects.insert(impact.worldObject());
