@@ -27,7 +27,7 @@ go_bandit([](){
             a = new WorldObject(); world->god().scheduleSpawn(a);
             b = new WorldObject(); world->god().scheduleSpawn(b);
             d = &a->collisionDetector();
-            world->god()->spawn();
+            world->god().spawn();
         });
 
         it("works in most basic conditions", [&]() {
