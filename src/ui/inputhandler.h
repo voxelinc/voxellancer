@@ -42,4 +42,6 @@ protected:
 	Property<float> m_move_speed;
 	
 	void toggleControls();
+
+    void shoot(double x, double y);
 };
