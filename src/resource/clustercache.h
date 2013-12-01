@@ -18,8 +18,8 @@ public:
     ClusterCache();
     virtual ~ClusterCache();
     
-    void fillCluster(WorldObject *worldObject, const std::string& filename);
-    void fillCluster(Drawable *cluster, const std::string& filename);
+    void fill(WorldObject *worldObject, const std::string& filename);
+    void fill(Drawable *cluster, const std::string& filename);
 
     std::vector<Voxel*> * getOrCreate(const std::string& filename);
 
