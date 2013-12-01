@@ -1,9 +1,11 @@
-#include <glm/gtx/quaternion.hpp>
 #include "physicalvoxelcluster.h"
+
+#include <iostream>
+
+#include <glm/gtx/quaternion.hpp>
 
 #include "worldtransform.h"
 #include "collision/collisiondetector.h"
-#include <iostream>
 
 
 PhysicalVoxelCluster::PhysicalVoxelCluster(float scale) :
@@ -12,9 +14,9 @@ PhysicalVoxelCluster::PhysicalVoxelCluster(float scale) :
     m_angularSpeed(0),
     m_acceleration(0),
     m_angularAcceleration(0),
-    m_dampening("physics.globaldampening"),
-    m_angularDampening("physics.globalangulardampening"),
-    m_rotationFactor("physics.globalrotationfactor"),
+    m_dampening("physics.globalDampening"),
+    m_angularDampening("physics.globalAngularDampening"),
+    m_rotationFactor("physics.globalRotationFactor"),
     m_mass(0),
     m_massValid(true)
 {
