@@ -20,7 +20,8 @@ go_bandit([](){
         World *world;
         WorldObject *a, *b;
         CollisionDetector *d;
-
+        PropertyManager::instance()->reset();
+        PropertyManager::instance()->load("data/config.ini");
 
         before_each([&](){
             world = new World();

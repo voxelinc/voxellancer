@@ -21,6 +21,8 @@ go_bandit([](){
         World *world;
         WorldObject *obj;
         VoxelTreeNode *vt;
+        PropertyManager::instance()->reset();
+        PropertyManager::instance()->load("data/config.ini");
 
         before_each([&]() {
             world = new World();

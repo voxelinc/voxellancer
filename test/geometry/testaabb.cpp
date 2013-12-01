@@ -11,6 +11,7 @@ using namespace bandit;
 
 go_bandit([](){
     describe("AABB", [](){
+
         before_each([&](){
         });
 
