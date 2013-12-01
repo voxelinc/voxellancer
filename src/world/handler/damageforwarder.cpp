@@ -1,5 +1,6 @@
 #include "damageforwarder.h"
 
+#include <iostream>
 #include <algorithm>
 #include <glm/glm.hpp>
 
@@ -7,6 +8,8 @@
 #include "voxel/voxeltreenode.h"
 
 #include "world/worldobject.h"
+
+#include "utils/tostring.h"
 
 
 void DamageForwarder::forwardDamage(std::list<Impact> &dampedDeadlyImpacts) {
@@ -18,11 +21,11 @@ void DamageForwarder::forwardDamage(std::list<Impact> &dampedDeadlyImpacts) {
         m_currentWorldObject = dampedDeadlyImpact.worldObject();
         std::list<Voxel*> neighbours = getNeighbours(deadVoxel);
 
-        glm::vec3 localImpactVec = glm::normalize(glm::inverse(m_currentWorldObject->transform().orientation()) * dampedDeadlyImpact.vec());
+        glm::vec3 localImpactVec = glm::inverse(m_currentWorldObject->transform().orientation()) * dampedDeadlyImpact.vec();
 
         for(Voxel *neighbour : neighbours) {
-            glm::vec3 voxelVec = glm::normalize(static_cast<glm::vec3>(neighbour->gridCell() - deadVoxel->gridCell()));
-            float dotProduct = glm::dot(localImpactVec, voxelVec);
+            glm::vec3 voxelVec = static_cast<glm::vec3>(neighbour->gridCell() - deadVoxel->gridCell());
+            float dotProduct = glm::dot(glm::normalize(localImpactVec), glm::normalize(voxelVec));
 
             if(dotProduct >= 0.0f) {
                 Impact forwarded(m_currentWorldObject, neighbour, localImpactVec * dotProduct);

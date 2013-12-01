@@ -1,5 +1,7 @@
 #include "worldobject.h"
 
+#include "utils/tostring.h"
+
 
 WorldObject::WorldObject(float scale):
     m_transform(glm::vec3(0), scale),

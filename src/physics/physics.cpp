@@ -192,6 +192,7 @@ void Physics::addVoxel(Voxel *voxel) {
 
 void Physics::removeVoxel(const glm::ivec3 &position) {
     m_massValid = false;
+    calculateMassAndCenter();
     // it would be better to calculate incremental mass/center changes here
     // something like mass -= 1; center -= 1/mass * pos; center /= (mass-1)/mass; should work
     // but there should be tests to verify this! (1 = mass of voxel)

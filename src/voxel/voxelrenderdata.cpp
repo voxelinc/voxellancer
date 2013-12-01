@@ -1,9 +1,16 @@
+#include "voxelrenderdata.h"
+
+#include <iostream>
+#include <vector>
+
 #include <glowutils/MathMacros.h>
 #include <glow/DebugMessageOutput.h>
 
-#include "voxelrenderdata.h"
+#include "utils/tostring.h"
+
 #include "voxelcluster.h"
-#include <vector>
+
+
 
 VoxelRenderData::VoxelRenderData(std::unordered_map<glm::ivec3, Voxel*> &voxel) :
     m_voxel(voxel),
@@ -29,6 +36,8 @@ void VoxelRenderData::updateTextures() {
     int i = 0;
     for (auto pair : m_voxel) {
         Voxel *voxel = pair.second;
+        assert(voxel != nullptr);
+
         positionData[i * 3 + 0] = static_cast<unsigned char>(voxel->gridCell().x);
         positionData[i * 3 + 1] = static_cast<unsigned char>(voxel->gridCell().y);
         positionData[i * 3 + 2] = static_cast<unsigned char>(voxel->gridCell().z);

@@ -1,11 +1,11 @@
-#include "voxelclusterorphan.h"
+#include "worldobjectsplit.h"
 
 void WorldObjectSplit::addVoxel(Voxel *voxel) {
     m_splitOffVoxels.push_back(voxel);
 }
 
 void WorldObjectSplit::addAllVoxels(WorldObjectSplit *split) {
-    m_splitOffVoxels.insert(m_splitOffVoxels.end(), split->orphanedVoxels().begin(), split->orphanedVoxels().end());
+    m_splitOffVoxels.insert(m_splitOffVoxels.end(), split->splitOffVoxels().begin(), split->splitOffVoxels().end());
 }
 
 WorldObject *WorldObjectSplit::exWorldObject() {

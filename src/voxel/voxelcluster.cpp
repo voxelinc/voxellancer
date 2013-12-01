@@ -28,11 +28,13 @@ VoxelCluster::~VoxelCluster() {
 }
 
 Voxel* VoxelCluster::voxel(const glm::ivec3& position) {
-    return m_voxels[position];
+    std::unordered_map<glm::ivec3, Voxel*>::iterator i = m_voxels.find(position);
+    return i == m_voxels.end() ? nullptr : i->second;
 }
 
 void VoxelCluster::addVoxel(Voxel *voxel) {
     assert(m_voxels.find(voxel->gridCell()) == m_voxels.end());
+
 
     m_voxels[voxel->gridCell()] = voxel;
     m_aabb.extend(voxel->gridCell());
@@ -41,6 +43,7 @@ void VoxelCluster::addVoxel(Voxel *voxel) {
 
 void VoxelCluster::removeVoxel(const glm::ivec3& position) {
     Voxel * voxel = m_voxels[position];
+
     assert(voxel != nullptr);
     m_voxels.erase(position);
     m_voxelRenderData.invalidate();

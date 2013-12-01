@@ -1,8 +1,11 @@
 #include "damager.h"
 
-#include "impact.h"
+#include <iostream>
+
+#include "world/helper/impact.h"
 #include "voxel/voxel.h"
 
+#include "utils/tostring.h"
 
 void Damager::applyDamages(std::list<Impact> &impacts) {
     m_dampedDeadlyImpacts.clear();
@@ -15,9 +18,12 @@ void Damager::applyDamages(std::list<Impact> &impacts) {
         float hpBeforeDamage = voxel->hp();
         float damage = damageOfImpact(impact);
 
+        std::cout << "Damager: Dealing " << damage << " damage to " << voxel << std::endl;
+
         voxel->applyDamage(damage);
         if(voxel->hp() <= 0) {
-            m_dampedDeadlyImpacts.push_back(dampImpact(impact, hpBeforeDamage / damage));
+            std::cout << "  Damager: Voxel killed, damped Impact=" << toString(glm::normalize(impact.vec()) * (damage - hpBeforeDamage)) << std::endl;
+            m_dampedDeadlyImpacts.push_back(dampImpact(impact, damage - hpBeforeDamage));
             m_deadlyImpacts.push_back(impact);
             m_modifiedWorldObjects.insert(impact.worldObject());
         }
@@ -41,5 +47,5 @@ float Damager::damageOfImpact(const Impact &impact) const {
 }
 
 Impact Damager::dampImpact(Impact &undamped, float factor) {
-    return Impact(undamped.worldObject(), undamped.voxel(), undamped.vec() * factor);
+    return Impact(undamped.worldObject(), undamped.voxel(), glm::normalize(undamped.vec()) * factor);
 }
