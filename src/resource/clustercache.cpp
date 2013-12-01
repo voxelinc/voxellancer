@@ -38,12 +38,12 @@ void ClusterCache::fill(WorldObject *worldObject, const std::string& filename) {
 }
 
 
-void ClusterCache::fill(Drawable *cluster, const std::string& filename){
+void ClusterCache::fill(VoxelCluster *cluster, const std::string& filename){
     assert(cluster != nullptr);
     std::vector<Voxel*> *source = getOrCreate(filename);
     
     for (Voxel *voxel : *source){
-        cluster->voxelCluster().addVoxel(voxel->clone());
+        cluster->addVoxel(voxel->clone());
     }
 }
 

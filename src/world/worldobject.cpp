@@ -4,8 +4,7 @@
 
 
 WorldObject::WorldObject(float scale):
-    m_transform(glm::vec3(0), scale),
-    m_voxelCluster(),
+    VoxelCluster(),
     m_physics(*this),
     m_collisionDetector(*this)
 {
@@ -24,16 +23,12 @@ Physics& WorldObject::physics() {
     return m_physics;
 }
 
-VoxelCluster& WorldObject::voxelCluster() {
-    return m_voxelCluster;
-}
-
 AABB WorldObject::aabb() {
-    return m_voxelCluster.aabb(m_transform);
+    return m_collisionDetector.aabb(m_transform);
 }
 
 Sphere WorldObject::sphere() {
-    return m_voxelCluster.sphere(m_transform);
+    return m_collisionDetector.sphere(m_transform);
 }
 
 void WorldObject::update(float delta_sec) {
@@ -45,19 +40,15 @@ std::list<Impact>& WorldObject::move(float delta_sec) {
 }
 
 void WorldObject::addVoxel(Voxel * voxel) {
-    m_voxelCluster.addVoxel(voxel);
+    VoxelCluster::addVoxel(voxel);
     m_physics.addVoxel(voxel);
     m_collisionDetector.addVoxel(voxel);
 }
 
 void WorldObject::removeVoxel(const glm::ivec3 & position) {
-    m_voxelCluster.removeVoxel(position);
-    m_physics.removeVoxel(position);
     m_collisionDetector.removeVoxel(position);
-}
-
-WorldTransform& WorldObject::transform() {
-    return m_transform;
+    m_physics.removeVoxel(position);
+    VoxelCluster::removeVoxel(position);
 }
 
 void WorldObject::finishInitialization() {

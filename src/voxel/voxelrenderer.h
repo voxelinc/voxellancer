@@ -10,14 +10,14 @@ namespace glow {
 };
 
 class Camera;
-class Drawable;
+class VoxelCluster;
 
 class VoxelRenderer {
 public:
     VoxelRenderer();
 
-	void prepareDraw(Camera * camera, bool withBorder = true);
-    void draw(Drawable * drawable);
+    void prepareDraw(Camera * camera, bool withBorder = true);
+    void draw(VoxelCluster * cluster);
     void afterDraw();
   
 private:

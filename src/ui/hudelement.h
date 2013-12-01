@@ -3,7 +3,6 @@
 #include <glm/glm.hpp>
 
 #include "voxel/voxelcluster.h"
-#include "world/drawable.h"
 #include "worldtransform.h"
 
 enum HUDOffsetOrigin {
@@ -18,14 +17,10 @@ enum HUDOffsetOrigin {
 	Left
 };
 
-class HUDElement : public VoxelCluster, public Drawable {
+class HUDElement : public VoxelCluster {
 public:
 	HUDElement();
 
-    virtual VoxelCluster& voxelCluster() override;
-    virtual WorldTransform& transform() override;
-
-    WorldTransform m_transform;
 	glm::vec3 m_offset;
 	HUDOffsetOrigin m_origin;
 };

@@ -2,9 +2,9 @@
 
 #include <algorithm>
 #include <cassert>
-#include <iostream>
 
 #include "voxelcluster.h"
+#include "glow/logging.hpp"
 
 
 
@@ -50,6 +50,6 @@ float Voxel::mass() const {
 }
 
 void Voxel::onDestruction() {
-    std::cout << "I'm voxel " << this << " and I'm going now. So long and thx 4 all the fish!" << std::endl;
+    glow::debug("I'm voxel %; and I'm going now. So long and thx 4 all the fish!", this);
 }
 

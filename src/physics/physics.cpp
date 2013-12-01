@@ -39,7 +39,7 @@ void Physics::calculateMassAndCenter() {
 
     glm::vec3 center;
     m_mass = 0;
-    for (auto pair : m_worldObject.voxelCluster().voxelMap()) {
+    for (auto pair : m_worldObject.voxelMap()) {
         Voxel *voxel = pair.second;
         m_mass += 1.0; // voxel.mass?
         center += glm::vec3(voxel->gridCell()) * 1.0f; // voxel.mass?
@@ -139,7 +139,7 @@ void Physics::applyTransform() {
 
 bool Physics::isCollisionPossible() {
     // the geode aabb is still the old one, add it to the final aabb
-    AABB fullAabb = m_worldObject.voxelCluster().aabb(m_oldTransform).united(m_worldObject.voxelCluster().aabb(m_newTransform));
+    AABB fullAabb = m_worldObject.collisionDetector().aabb(m_oldTransform).united(m_worldObject.collisionDetector().aabb(m_newTransform));
     // is there someone else than yourself inside?
     auto possibleCollisions = m_worldObject.collisionDetector().worldTree()->geodesInAABB(fullAabb);
     return possibleCollisions.size() > 1;

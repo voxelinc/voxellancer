@@ -13,7 +13,7 @@ go_bandit([]() {
 			ClusterLoader *l = new ClusterLoader();
 
 			l->load("test/loader/loadertest.csv", vcsv);
-            AssertThat(vcsv->voxelMap().size(), Equals(1));
+            AssertThat(vcsv->size(), Equals(1));
 
 //			vcsv->removeVoxel(cvec3(0, 0, 0));
 //            AssertThat(vcsv->voxelMap().size(), Equals(0));

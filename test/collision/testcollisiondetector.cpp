@@ -5,9 +5,10 @@
 #include "geometry/aabb.h"
 #include "worldtree/worldtree.h"
 #include "voxel/voxel.h"
-#include "physics/physicalvoxel.h"
-#include "physics/physicalvoxelcluster.h"
 #include "collision/collisiondetector.h"
+#include "world/worldobject.h"
+#include "world/world.h"
+#include "world/god.h"
 
 
 
@@ -23,9 +24,9 @@ go_bandit([](){
 
         before_each([&](){
             world = new World();
-            a = new WorldObject(); world->god()->scheduleSpawn(a);
-            b = new WorldObject(); world->god()->scheduleSpawn(b);
-            d = &a->physics().collisionDetector();
+            a = new WorldObject(); world->god().scheduleSpawn(a);
+            b = new WorldObject(); world->god().scheduleSpawn(b);
+            d = &a->collisionDetector();
             world->god()->spawn();
         });
 
@@ -56,11 +57,11 @@ go_bandit([](){
             AssertThat(d->checkCollisions().size(), IsGreaterThan(0));
 
             b->transform().move(glm::vec3(2, 0, 0));
-            b->updateGeode();
+            b->collisionDetector().updateGeode();
             AssertThat(d->checkCollisions().size(), IsGreaterThan(0));
 
             b->transform().move(glm::vec3(0, -2, 0));
-            b->updateGeode();
+            b->collisionDetector().updateGeode();
             AssertThat(d->checkCollisions().size(), Equals(0));
         });
     });

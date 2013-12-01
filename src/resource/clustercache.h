@@ -9,7 +9,6 @@
 #include "clusterloader.h"
 
 class Voxel;
-class Drawable;
 class WorldObject;
 
 class ClusterCache {
@@ -19,7 +18,7 @@ public:
     virtual ~ClusterCache();
     
     void fill(WorldObject *worldObject, const std::string& filename);
-    void fill(Drawable *cluster, const std::string& filename);
+    void fill(VoxelCluster *cluster, const std::string& filename);
 
     std::vector<Voxel*> * getOrCreate(const std::string& filename);
 

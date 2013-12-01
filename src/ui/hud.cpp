@@ -234,7 +234,7 @@ void HUD::drawString(std::string text, HUDOffsetOrigin origin, glm::vec3 offset,
     }
 }
 
-void HUD::adjustPosition(Drawable *cluster, HUDOffsetOrigin origin, glm::vec3 offset){
+void HUD::adjustPosition(VoxelCluster *cluster, HUDOffsetOrigin origin, glm::vec3 offset){
     assert(cluster != nullptr);
     switch (origin){
     case TopLeft:

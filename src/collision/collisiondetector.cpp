@@ -10,14 +10,28 @@ CollisionDetector::CollisionDetector(WorldObject & worldObject) :
     m_voxelTree(nullptr, worldObject, Grid3dAABB(glm::ivec3(0, 0, 0), glm::ivec3(0, 0, 0))),
     m_worldTree(nullptr),
     m_geode(nullptr),
-    m_worldObject(worldObject)
+    m_worldObject(worldObject),
+    m_aabb()
 {
 }
 
 CollisionDetector::~CollisionDetector() {
 }
 
+AABB CollisionDetector::aabb(const WorldTransform& transform) {
+    return AABB::containing(sphere(transform));
+}
+
+Sphere CollisionDetector::sphere(const WorldTransform& transform) {
+    Sphere sphere;
+    sphere.setPosition(transform.applyTo(glm::vec3(0)));
+    // m_aabb only contains the center of each voxel so add sqrt(2) to add the distance from center to edge
+    sphere.setRadius((glm::length(glm::vec3(m_aabb.rub() - m_aabb.llf())) + glm::root_two<float>()) / 2.f * transform.scale());
+    return sphere;
+}
+
 void CollisionDetector::addVoxel(Voxel *voxel) {
+    m_aabb.extend(voxel->gridCell());
     m_voxelTree.insert(voxel);
 }
 
