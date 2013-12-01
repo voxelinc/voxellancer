@@ -16,12 +16,19 @@ void Gun::update(float delta_sec){
     }
 }
 
-Bullet *Gun::shoot(glm::vec3 position, glm::vec3 direction){
+
+Bullet *Gun::shoot(glm::vec3 position, glm::vec3 direction, glm::quat orientation){
     if (m_cooldown <= 0){
         Bullet *b = new Bullet(position, direction, m_speed, m_range);
+        b->transform().setOrientation(orientation); //set orientation to ship orientation
+        b->angularSpeed(glm::vec3(10000, 10000, 10000)); //set spinning
         ClusterCache::instance()->fillCluster(b, "data/voxelcluster/bullet.csv");
         m_cooldown = m_cooldownTime;
         return b;
     }
     return NULL;
+}
+
+float Gun::range(){
+    return m_range;
 }

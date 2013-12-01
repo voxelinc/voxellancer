@@ -115,16 +115,7 @@ void InputHandler::update(float delta_sec) {
 
             // shoot
             if (glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS){
-                glm::vec4 pointEnd((x * 2 / m_windowWidth - 1), -1 * (y * 2 / m_windowHeight - 1), 1, 1);
-                pointEnd = (glm::inverse(m_camera->viewProjection())*pointEnd);
-                glm::vec3 vec(pointEnd.x, pointEnd.y, pointEnd.z);
-                //printf("%f %f %f  ---  %f %f %f\n", m_camera->position().x, m_camera->position().y, m_camera->position().z, vec.x, vec.y, vec.z);
-                //vec += m_camera->position();
-                vec = glm::normalize(vec);
-                vec *= 200; //aimdistance
-                vec += m_camera->position();
-                //vec += m_voxelcluster->transform().position();
-                m_voxelcluster->shoot(vec);
+                shoot(x, y);
             }
 
 			// lookAt
@@ -182,4 +173,14 @@ void InputHandler::toggleControls()
 
 void InputHandler::setVoxelCluster(Ship *voxelcluster) {
     m_voxelcluster = voxelcluster;
+}
+
+void InputHandler::shoot(double x, double y){
+    glm::vec4 pointEnd((x * 2 / m_windowWidth - 1), -1 * (y * 2 / m_windowHeight - 1), 1, 1); //get normalized screen coords
+    pointEnd = (glm::inverse(m_camera->viewProjection())*pointEnd); //find point on zfar
+    glm::vec3 vec = (glm::vec3) pointEnd; // no need for w component
+    vec = glm::normalize(vec); // normalize
+    vec *= m_voxelcluster->minAimDistance(); // set aimdistance
+    vec += m_camera->position(); //adjust for camera translation
+    m_voxelcluster->shoot(vec);
 }

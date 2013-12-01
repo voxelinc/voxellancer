@@ -15,6 +15,7 @@ public:
 	void shoot(glm::vec3 direction);
 	virtual void update(float deltasec);
 	void addHardpoint(Hardpoint* hardpooint);
+    float minAimDistance();
 
 private:
     World * m_world;
