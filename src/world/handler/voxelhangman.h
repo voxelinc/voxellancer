@@ -2,7 +2,7 @@
 
 #include <list>
 
-#include "impact.h"
+#include "world/helper/impact.h"
 
 
 class VoxelHangman

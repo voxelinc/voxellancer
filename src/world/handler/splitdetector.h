@@ -3,25 +3,25 @@
 #include <set>
 #include <list>
 
-class VoxelClusterOrphan;
+class WorldObjectSplit;
 class WorldObject;
 class Voxel;
 
 class SplitDetector
 {
 public:
-    void searchOrphans(std::set<WorldObject*> &modifiedWorldObject);
-    std::list<VoxelClusterOrphan*> &voxelClusterOrphans();
+    void searchSplitOffs(std::set<WorldObject*> &modifiedWorldObject);
+    std::list<WorldObjectSplit*> &worldObjectSplits();
 
 
 protected:
-    std::list<VoxelClusterOrphan*> m_voxelClusterOrphans;
+    std::list<WorldObjectSplit*> m_worldObjectSplits;
     WorldObject *m_currentWorldObject;
 
     std::set<Voxel*> m_potentialOrphans;
 
     void clear();
     void fillPotentialOrphans();
-    VoxelClusterOrphan *pollContinuousVoxels(Voxel *orphanVoxel);
+    WorldObjectSplit *unmarkContinuousVoxels(Voxel *orphanVoxel);
 };
 

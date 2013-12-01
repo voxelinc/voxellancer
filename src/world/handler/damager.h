@@ -3,7 +3,7 @@
 #include <set>
 #include <list>
 
-#include "impact.h"
+#include "world/helper/impact.h"
 
 
 class WorldObject;

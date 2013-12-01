@@ -1,17 +1,17 @@
 #include "splitter.h"
 
-#include "voxelclusterorphan.h"
+#include "world/helper/worldobjectsplit.h"
 
 #include "world/worldobject.h"
 #include "voxel/voxel.h"
 
-void Splitter::split(std::list<VoxelClusterOrphan*> &voxelClusterOrphans) {
+void Splitter::split(std::list<WorldObjectSplit*> &splits) {
     m_splitOffWorldObjects.clear();
 
-    for(VoxelClusterOrphan *orphanCluster : voxelClusterOrphans) {
-        WorldObject *worldObject = createWorldObjectFromOrphan(orphanCluster);
+    for(WorldObjectSplit *split : splits) {
+        WorldObject *worldObject = createWorldObjectFromOrphan(split);
         m_splitOffWorldObjects.push_back(worldObject);
-        removeExtractedVoxelsFromEx(orphanCluster);
+        removeExtractedVoxelsFromEx(split);
     }
 }
 
@@ -19,14 +19,14 @@ std::list<WorldObject*> &Splitter::splitOffWorldObjects() {
     return m_splitOffWorldObjects;
 }
 
-WorldObject *Splitter::createWorldObjectFromOrphan(VoxelClusterOrphan *orphanCluster) {
+WorldObject *Splitter::createWorldObjectFromOrphan(WorldObjectSplit *split) {
     glm::ivec3 gridCellShift;
     WorldObject *worldObject;
 
-    worldObject = new WorldObject(orphanCluster->exWorldObject()->transform().scale());
-    gridCellShift = orphanCluster->gridLlf();
+    worldObject = new WorldObject(split->exWorldObject()->transform().scale());
+    gridCellShift = split->gridLlf();
 
-    for(Voxel *voxel : orphanCluster->orphanedVoxels()) {
+    for(Voxel *voxel : split->splitOffVoxels()) {
         Voxel *voxelClone = new Voxel(voxel->gridCell() - gridCellShift, voxel->color(), voxel->mass());
         worldObject->addVoxel(voxelClone);
     }
@@ -35,9 +35,9 @@ WorldObject *Splitter::createWorldObjectFromOrphan(VoxelClusterOrphan *orphanClu
     return worldObject;
 }
 
-void Splitter::removeExtractedVoxelsFromEx(VoxelClusterOrphan *orphanCluster) {
-    for(Voxel *voxel : orphanCluster->orphanedVoxels()) {
-        orphanCluster->exWorldObject()->removeVoxel(voxel->gridCell());
+void Splitter::removeExtractedVoxelsFromEx(WorldObjectSplit *split) {
+    for(Voxel *voxel : split->splitOffVoxels()) {
+        split->exWorldObject()->removeVoxel(voxel->gridCell());
     }
 }
 

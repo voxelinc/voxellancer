@@ -1,6 +1,6 @@
 #include "splitdetector.h"
 
-#include "voxelclusterorphan.h"
+#include "world/helper/worldobjectsplit.h"
 
 #include "voxel/voxel.h"
 #include "voxel/voxelneighbourhelper.h"
@@ -8,7 +8,7 @@
 #include "world/worldobject.h"
 
 
-void SplitDetector::searchOrphans(std::set<WorldObject*> &modifiedWorldObjects) {
+void SplitDetector::searchSplitOffs(std::set<WorldObject*> &modifiedWorldObjects) {
     clear();
 
     for(WorldObject *modifiedWorldObject : modifiedWorldObjects) {
@@ -17,35 +17,35 @@ void SplitDetector::searchOrphans(std::set<WorldObject*> &modifiedWorldObjects) 
         fillPotentialOrphans();
 
         if(m_currentWorldObject->crucialVoxel() != nullptr) {
-            pollContinuousVoxels(m_currentWorldObject->crucialVoxel());
+            unmarkContinuousVoxels(m_currentWorldObject->crucialVoxel());
         }
         else {
-            pollContinuousVoxels(m_currentWorldObject->voxelCluster().voxelMap().begin()->second);
+            unmarkContinuousVoxels(m_currentWorldObject->voxelCluster().voxelMap().begin()->second);
         }
 
         while(!m_potentialOrphans.empty()) {
-            VoxelClusterOrphan *orphanCluster = pollContinuousVoxels(*m_potentialOrphans.begin());
-            orphanCluster->setExWorldObject(m_currentWorldObject);
-            m_voxelClusterOrphans.push_back(orphanCluster);
+            WorldObjectSplit *split = unmarkContinuousVoxels(*m_potentialOrphans.begin());
+            split->setExWorldObject(m_currentWorldObject);
+            m_worldObjectSplits.push_back(split);
         }
     }
 }
 
-std::list<VoxelClusterOrphan*> &SplitDetector::voxelClusterOrphans() {
-    return m_voxelClusterOrphans;
+std::list<WorldObjectSplit*> &SplitDetector::worldObjectSplits() {
+    return m_worldObjectSplits;
 }
 
 void SplitDetector::clear() {
-    for(VoxelClusterOrphan *orphanCluster : m_voxelClusterOrphans) {
-        delete orphanCluster;
+    for(WorldObjectSplit *split : m_worldObjectSplits) {
+        delete split;
     }
 
-    m_voxelClusterOrphans.clear();
+    m_worldObjectSplits.clear();
     m_potentialOrphans.clear();
 }
 
 /**
-* Marks all voxels in the cluster as potential orphans, they are later unmarked by pollContinuousVoxels()
+* Marks all voxels in the cluster as potential orphans, they are later unmarked by unmarkContinuousVoxels()
 **/
 void SplitDetector::fillPotentialOrphans() {
     m_potentialOrphans.clear();
@@ -58,10 +58,10 @@ void SplitDetector::fillPotentialOrphans() {
 /**
 * Starting from voxel, this function recursivly builds up a set of voxels that are attached to each other with facing sides
 **/
-VoxelClusterOrphan *SplitDetector::pollContinuousVoxels(Voxel *voxel) {
-    VoxelClusterOrphan *continuousCluster;
+WorldObjectSplit *SplitDetector::unmarkContinuousVoxels(Voxel *voxel) {
+    WorldObjectSplit *continuousCluster;
 
-    continuousCluster = new VoxelClusterOrphan;
+    continuousCluster = new WorldObjectSplit;
 
     std::set<Voxel*>::iterator i = m_potentialOrphans.find(voxel);
 
@@ -75,7 +75,7 @@ VoxelClusterOrphan *SplitDetector::pollContinuousVoxels(Voxel *voxel) {
     std::list<Voxel*> neighbours = VoxelNeighbourHelper(&m_currentWorldObject->voxelCluster(), voxel, false).neighbours();
 
     for(Voxel *neighbour : neighbours) {
-        VoxelClusterOrphan *neighbourOrphan = pollContinuousVoxels(neighbour);
+        WorldObjectSplit *neighbourOrphan = unmarkContinuousVoxels(neighbour);
         continuousCluster->addAllVoxels(neighbourOrphan);
         delete neighbourOrphan;
     }

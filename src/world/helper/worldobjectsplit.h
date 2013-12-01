@@ -8,22 +8,22 @@
 
 class WorldObject;
 
-class VoxelClusterOrphan
+class WorldObjectSplit
 {
 public:
     void addVoxel(Voxel *voxel);
-    void addAllVoxels(VoxelClusterOrphan *orphanCluster);
+    void addAllVoxels(WorldObjectSplit *orphanCluster);
 
     WorldObject *exWorldObject();
     void setExWorldObject(WorldObject *exWorldObject);
 
     glm::ivec3 gridLlf() const;
 
-    std::list<Voxel*> orphanedVoxels();
+    std::list<Voxel*> splitOffVoxels();
 
 
 protected:
     WorldObject* m_exWorldObject;
-    std::list<Voxel*> m_orphanedVoxels;
+    std::list<Voxel*> m_splitOffVoxels;
 };
 

@@ -4,7 +4,7 @@
 
 #include "collision/collision.h"
 
-#include "impact.h"
+#include "world/helper/impact.h"
 
 
 class ImpactAccumulator

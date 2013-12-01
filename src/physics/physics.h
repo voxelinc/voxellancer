@@ -7,7 +7,7 @@
 #include "collision/collision.h"
 #include "property/property.h"
 #include "worldtransform.h"
-#include "world/handler/impact.h"
+#include "world/helper/impact.h"
 
 class WorldObject;
 class WorldTransform;
@@ -18,7 +18,7 @@ public:
     virtual ~Physics();
 
     std::list<Impact> &move(float delta_sec);
-    
+
     void accelerate(glm::vec3 direction);
     void accelerateAngular(glm::vec3 axis);
 
@@ -47,7 +47,7 @@ protected:
 
     glm::vec3 m_speed;
     glm::vec3 m_angularSpeed;
-    
+
     glm::vec3 m_acceleration;
     glm::vec3 m_angularAcceleration;
 
