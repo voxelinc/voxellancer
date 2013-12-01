@@ -63,7 +63,7 @@ Sphere VoxelTreeNode::boundingSphere() {
         sphere.setRadius(0.5f * m_worldObject.transform().scale());
     }
     else {
-        sphere.setRadius(glm::length(glm::vec3(m_gridAABB.rub() - m_gridAABB.llf())/2.0f));
+        sphere.setRadius((glm::length(glm::vec3(m_gridAABB.rub() - m_gridAABB.llf() + glm::ivec3(1, 1, 1))/2.0f)) * m_worldObject.transform().scale()) ;
     }
 
     return sphere;

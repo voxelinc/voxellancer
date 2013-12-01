@@ -9,7 +9,6 @@
 
 #include "geometry/aabb.h"
 
-#include "voxeltreenode.h"
 #include "worldtransform.h"
 #include "voxel.h"
 #include "voxelrenderdata.h"
@@ -22,7 +21,7 @@ class WorldTree;
 class VoxelCluster
 {
 public:
-	VoxelCluster();
+	VoxelCluster(float scale);
     virtual ~VoxelCluster();
 
     WorldTransform& transform();

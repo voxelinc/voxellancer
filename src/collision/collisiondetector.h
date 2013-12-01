@@ -1,11 +1,11 @@
-#pragma once 
+#pragma once
 
 #include <memory>
 
 #include <glm/glm.hpp>
 
 #include "voxel/voxel.h"
-#include "voxel/voxeltreenode.h"
+#include "collision/voxeltreenode.h"
 #include "collision/collision.h"
 
 class WorldTree;
@@ -40,7 +40,7 @@ public:
     const VoxelTreeNode &voxeltree() const;
 
     void updateGeode();
-        
+
     void finishInitialization();
 
 

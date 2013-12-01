@@ -1,1 +1,8 @@
-#include "ui/letter.h"
+#include "letter.h"
+
+
+Letter::Letter():
+    VoxelCluster(1.0f)
+{
+
+}

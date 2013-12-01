@@ -14,10 +14,10 @@
 #include "utils/tostring.h"
 
 
-VoxelCluster::VoxelCluster():
+VoxelCluster::VoxelCluster(float scale):
     m_voxels(),
     m_voxelRenderData(m_voxels),
-    m_transform()
+    m_transform(glm::vec3(0), scale)
 {
 }
 

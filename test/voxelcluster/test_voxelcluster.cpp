@@ -15,7 +15,7 @@ go_bandit([](){
         VoxelCluster *cluster;
 
         before_each([&](){
-            cluster = new VoxelCluster;
+            cluster = new VoxelCluster(1.0f);
         });
 
         after_each([&](){

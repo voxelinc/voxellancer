@@ -4,6 +4,8 @@
 
 #include "voxel/voxelcluster.h"
 
-class Letter : public VoxelCluster {
-
+class Letter : public VoxelCluster
+{
+public:
+    Letter();
 };

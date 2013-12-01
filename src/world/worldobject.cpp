@@ -4,7 +4,7 @@
 
 
 WorldObject::WorldObject(float scale):
-    VoxelCluster(),
+    VoxelCluster(scale),
     m_physics(*this),
     m_collisionDetector(*this)
 {

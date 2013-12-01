@@ -8,7 +8,7 @@
 
 #include "utils/tostring.h"
 #include "world/world.h"
-#include "voxel/voxeltreenode.h"
+#include "collision/voxeltreenode.h"
 #include "world/worldobject.h"
 #include "../bandit_extension/vec3helper.h"
 
@@ -83,6 +83,7 @@ go_bandit([](){
 
             d->transform().setCenter(glm::vec3(1, 1, 1));
 
+            AssertThat(d->collisionDetector().voxeltree().boundingSphere().radius(), EqualsWithDelta(2.5f, 0.1f));
             AssertThat(d->collisionDetector().voxeltree().boundingSphere().position(), EqualsWithDelta(glm::vec3(-3, -3, -3), glm::vec3(0.01, 0.01, 0.01)));
         });
 

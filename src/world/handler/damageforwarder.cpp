@@ -4,7 +4,7 @@
 #include <glm/glm.hpp>
 
 #include "voxel/voxelcluster.h"
-#include "voxel/voxeltreenode.h"
+#include "collision/voxeltreenode.h"
 
 #include "world/worldobject.h"
 
