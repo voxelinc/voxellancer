@@ -80,9 +80,9 @@ void Game::initialize()
 
 
     WorldObject *m_testClusterB = new WorldObject();
-    ClusterCache::instance()->fill(m_testClusterB, "data/voxelcluster/basicship.csv");
+    ClusterCache::instance()->fill(m_testClusterB, "data/voxelcluster/normandy.csv");
 	//m_testClusterB->transform().setCenter(glm::vec3(3, 0, 3));
-    m_testClusterB->transform().setPosition(glm::vec3(0, 0, 10));
+    m_testClusterB->transform().setPosition(glm::vec3(40, 50, -80));
     m_world->god().scheduleSpawn(m_testClusterB);
 
     WorldObject *m_testCluster = new WorldObject();
