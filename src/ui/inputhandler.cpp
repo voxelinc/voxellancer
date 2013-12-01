@@ -182,5 +182,5 @@ void InputHandler::shoot(double x, double y){
     vec = glm::normalize(vec); // normalize
     vec *= m_voxelcluster->minAimDistance(); // set aimdistance
     vec += m_camera->position(); //adjust for camera translation
-    m_voxelcluster->shoot(vec);
+    m_voxelcluster->shootAt(vec);
 }

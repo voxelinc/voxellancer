@@ -12,7 +12,7 @@ class Ship : public WorldObject{
 public:
     Ship(const WorldObject& other);
 	Ship();
-	void shoot(glm::vec3 direction);
+	void shootAt(glm::vec3 point);
 	virtual void update(float deltasec);
 	void addHardpoint(Hardpoint* hardpooint);
     float minAimDistance();

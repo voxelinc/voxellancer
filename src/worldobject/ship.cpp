@@ -6,10 +6,9 @@ Ship::Ship() {
 
 
 
-void Ship::shoot(glm::vec3 direction){
+void Ship::shootAt(glm::vec3 point){
     for (Hardpoint *hardpoint : m_hardpoints){
-        //Bullet *b = hardpoint->shoot(transform().matrix(),direction);
-		Bullet *b = hardpoint->shoot(transform().matrix(),direction,transform().orientation());
+        Bullet *b = hardpoint->shootAt(point);
         if (b != NULL)
             m_world->god().scheduleSpawn(b);
 	}

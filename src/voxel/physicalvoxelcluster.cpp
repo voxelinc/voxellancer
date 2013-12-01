@@ -197,10 +197,10 @@ void PhysicalVoxelCluster::removeVoxel(const cvec3 &position) {
     // but there should be tests to verify this! (1 = mass of voxel)
 }
 
-void PhysicalVoxelCluster::speed(glm::vec3 speed){
+void PhysicalVoxelCluster::setSpeed(glm::vec3 speed){
     m_speed = speed;
 }
 
-void PhysicalVoxelCluster::angularSpeed(glm::vec3 speed){
+void PhysicalVoxelCluster::setAngularSpeed(glm::vec3 speed){
     m_angularSpeed = speed;
 }
