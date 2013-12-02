@@ -139,27 +139,27 @@ void InputHandler::update(float delta_sec) {
                 m_camera->rotateY(-angX*delta_sec);
             }
 
-//			// lookAt
-//			double x, y;
-//			glfwGetCursorPos(m_window, &x, &y);
-//			float rel = 10;
-//			float deadzone = 0.1f;
-//			if (!m_fpsControls) {
-//				if (m_mouseControl || glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS){
-//					rel = (float)glm::max(1.0, (sqrt(pow(m_windowWidth - (int)floor(x), 2) + pow(m_windowHeight - (int)floor(y), 2))) / m_cursorMaxDistance);
-//					rel = glm::max(0.0f, rel - deadzone) / (1 - deadzone);
-//					rel = glm::smoothstep(0.f, 1.f, rel);
-//				}
-//				else {
-//					rel = 0;
-//				}
-//			}
-//
-//			float angX = ((int)floor(x) - m_windowWidth / 2) * prop_rotationSpeed * rel;
-//			float angY = ((int)floor(y) - m_windowHeight / 2) * prop_rotationSpeed * rel;
-//
-//			m_camera->rotateX(-angY*delta_sec);
-//			m_camera->rotateY(-angX*delta_sec);
+			// lookAt
+			double x, y;
+			glfwGetCursorPos(m_window, &x, &y);
+			float rel = 10;
+			float deadzone = 0.1f;
+			if (!m_fpsControls) {
+				if (m_mouseControl || glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS){
+					rel = (float)glm::max(1.0, (sqrt(pow(m_windowWidth - (int)floor(x), 2) + pow(m_windowHeight - (int)floor(y), 2))) / m_cursorMaxDistance);
+					rel = glm::max(0.0f, rel - deadzone) / (1 - deadzone);
+					rel = glm::smoothstep(0.f, 1.f, rel);
+				}
+				else {
+					rel = 0;
+				}
+			}
+
+			float angX = ((int)floor(x) - m_windowWidth / 2) * prop_rotationSpeed * rel;
+			float angY = ((int)floor(y) - m_windowHeight / 2) * prop_rotationSpeed * rel;
+
+			m_camera->rotateX(-angY*delta_sec);
+			m_camera->rotateY(-angX*delta_sec);
 
 		}
 
