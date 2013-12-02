@@ -33,6 +33,30 @@ void Physics::finishInitialization() {
 Physics::~Physics() {
 }
 
+const glm::vec3& Physics::speed() const {
+    return m_speed;
+}
+
+void Physics::setSpeed(const glm::vec3& speed) {
+    m_speed = speed;
+}
+
+const glm::vec3& Physics::angularSpeed() const {
+    return m_angularSpeed;
+}
+
+void Physics::setAngularSpeed(const glm::vec3& angularSpeed) {
+    m_angularSpeed = angularSpeed;
+}
+
+const glm::vec3& Physics::acceleration() const {
+    return m_acceleration;
+}
+
+const glm::vec3& Physics::angularAcceleration() const {
+    return m_angularAcceleration;
+}
+
 void Physics::calculateMassAndCenter() {
     if (m_massValid)
         return;

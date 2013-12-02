@@ -35,11 +35,9 @@ std::list<WorldObject*> &World::worldObjects() {
 }
 
 void World::update(float deltaSecs) {
-    // move to a game mechanic specific class?
-    for (WorldObject *cluster : m_clusters) {
-        cluster->update(deltaSecs);
+    for (WorldObject *worldObject : m_worldObjects) {
+        worldObject->update(deltaSecs);
     }
-    m_deltaSecs = deltaSecs;
 
     m_worldLogic->update(deltaSecs);
 }

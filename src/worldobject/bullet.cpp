@@ -3,6 +3,8 @@
 #include "world/god.h"
 #include "world/world.h"
 
+#include "utils/tostring.h"
+
 
 Bullet::Bullet(glm::vec3 position, glm::quat orientation, glm::vec3 direction, float speed, float range){
     m_range = range / speed;
@@ -14,10 +16,9 @@ Bullet::Bullet(glm::vec3 position, glm::quat orientation, glm::vec3 direction, f
     m_transform.setPosition(position);
     m_transform.setOrientation(orientation); //set orientation to ship orientation
     m_transform.rotateWorld(glm::angleAxis(-glm::degrees(angle), rotationAxis));
-    accelerate(dir*speed);
 
-    accelerateAngular(glm::vec3(0, 0, 10000)); //set spinning
-
+    physics().setSpeed(dir * speed); std::cout << "Accelerate " << toString(dir * speed) << std::endl;
+    physics().setAngularSpeed(glm::vec3(0, 0, 500)); //set spinning
 
     ClusterCache::instance()->fill(this, "data/voxelcluster/bullet.csv");
 }
