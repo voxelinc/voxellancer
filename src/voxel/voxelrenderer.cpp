@@ -17,10 +17,11 @@
 
 
 VoxelRenderer::VoxelRenderer() :
-m_texture(0),
-m_shaderProgram(0),
-m_vertexArrayObject(0),
-m_vertexBuffer(0)
+    m_texture(0),
+    m_shaderProgram(0),
+    m_vertexArrayObject(0),
+    m_vertexBuffer(0),
+    m_prepared(false)
 {
 	createAndSetupShaders();
 	createAndSetupGeometry();
@@ -36,12 +37,14 @@ void VoxelRenderer::prepareDraw(Camera * camera, bool withBorder)
 
     m_shaderProgram->use();
     glProvokingVertex(GL_LAST_VERTEX_CONVENTION);
+    m_prepared = true;
 }
 
 
 void VoxelRenderer::draw(VoxelCluster * worldObject)
 {
     m_shaderProgram->setUniform("model", worldObject->transform().matrix());
+
     glActiveTexture(GL_TEXTURE0);
     worldObject->voxelRenderData()->positionTexture()->bind();
     glActiveTexture(GL_TEXTURE1);
@@ -55,6 +58,11 @@ void VoxelRenderer::afterDraw()
 {
     glActiveTexture(GL_TEXTURE0);
     m_shaderProgram->release();
+    m_prepared = false;
+}
+
+bool VoxelRenderer::prepared(){
+    return m_prepared;
 }
 
 

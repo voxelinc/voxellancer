@@ -37,9 +37,11 @@ protected:
 	int m_mouseControlToggled;
     int m_followCam;
 
-    Property<float> m_rotation_speed;
-    Property<float> m_roll_speed;
-	Property<float> m_move_speed;
+
+    Property<float> prop_rotationSpeed;
+    Property<float> prop_rollSpeed;
+    Property<float> prop_moveSpeed;
+
 
 	void toggleControls();
 };
