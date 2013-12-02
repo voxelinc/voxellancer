@@ -111,6 +111,19 @@ void Game::initialize()
     m_testClusterMoveable->finishInitialization();
     m_world->god().scheduleSpawn(m_testClusterMoveable);
 
+    WorldObject *wall = new WorldObject(1);
+    wall->transform().move(glm::vec3(-20, 0, -50));
+    wall->transform().rotate(glm::angleAxis(-90.f, glm::vec3(0, 1, 0)));
+    for(int x = 0; x < 50; x++) {
+        for(int y = 0; y < 30; y++) {
+            for(int z = 0; z < 3; z++) {
+                wall->addVoxel(new Voxel(glm::ivec3(z, x, y), cvec3(180, 120, 120)));
+            }
+        }
+    }
+    wall->finishInitialization();
+    m_world->god().scheduleSpawn(wall);
+
     m_inputHandler.setWorldObject(m_testClusterMoveable);
 
 

@@ -4,16 +4,19 @@
 
 #include "world/helper/impact.h"
 
+#include "impactaccumulator.h"
 
-class DamageForwarder
+
+class DamageForwarder: protected ImpactAccumulator
 {
 public:
     void forwardDamage(std::list<Impact> &dampedDeadlyImpacts);
-    std::list<Impact> &forwardedDamageImpacts();
+    void dontForwardTo(std::list<Voxel*> &deadVoxels);
+
+    std::list<Impact> forwardedDamageImpacts();
 
 
 protected:
-    std::list<Impact> m_forwardedDamageImpacts;
 
     WorldObject *m_currentWorldObject;
     std::list<Voxel*> *m_currentNeighbours;

@@ -10,6 +10,7 @@ void Damager::applyDamages(std::list<Impact> &impacts) {
     m_dampedDeadlyImpacts.clear();
     m_deadlyImpacts.clear();
     m_modifiedWorldObjects.clear();
+    m_deadVoxels.clear();
 
     for(Impact &impact : impacts) {
         Voxel *voxel = impact.voxel();
@@ -17,13 +18,11 @@ void Damager::applyDamages(std::list<Impact> &impacts) {
         float hpBeforeDamage = voxel->hp();
         float damage = damageOfImpact(impact);
 
-        glow::debug("Damager: Dealing %; damage to %;", damage, voxel);
-
         voxel->applyDamage(damage);
         if(voxel->hp() <= 0) {
-            glow::debug("  Damager: Voxel killed, damped Impact= %;", toString(glm::normalize(impact.vec()) * (damage - hpBeforeDamage)));
             m_dampedDeadlyImpacts.push_back(dampImpact(impact, damage - hpBeforeDamage));
             m_deadlyImpacts.push_back(impact);
+            m_deadVoxels.push_back(voxel);
             m_modifiedWorldObjects.insert(impact.worldObject());
         }
     }
@@ -35,6 +34,10 @@ std::list<Impact> &Damager::dampedDeadlyImpacts() {
 
 std::list<Impact> &Damager::deadlyImpacts() {
     return m_deadlyImpacts;
+}
+
+std::list<Voxel*> &Damager::deadVoxels() {
+    return m_deadVoxels;
 }
 
 std::set<WorldObject*> &Damager::modifiedWorldObjects() {

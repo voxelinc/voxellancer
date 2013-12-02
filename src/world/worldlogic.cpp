@@ -44,9 +44,16 @@ void WorldLogic::damageForwardLoop(std::list<Impact> damageImpacts) {
 
     while(damageImpacts.size() > 0) {
         m_damager.applyDamages(damageImpacts);
+
         m_damageForwarder.forwardDamage(m_damager.deadlyImpacts());
+        m_damageForwarder.dontForwardTo(m_damager.deadVoxels());
+
         m_voxelHangman.applyOnDestructionHooks(m_damager.deadlyImpacts());
         m_voxelHangman.removeDestroyedVoxels(m_damager.deadlyImpacts());
+
         damageImpacts = m_damageForwarder.forwardedDamageImpacts();
+        if(damageImpacts.size() > 0) {
+            std::cout << "Forwaring damage " << damageImpacts.size() << std::endl;
+        }
     }
 }

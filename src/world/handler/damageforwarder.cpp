@@ -11,7 +11,9 @@
 
 
 void DamageForwarder::forwardDamage(std::list<Impact> &dampedDeadlyImpacts) {
-    m_forwardedDamageImpacts.clear();
+    std::list<Impact> forwardedDamageImpacts;
+
+    ImpactAccumulator::clear();
 
     for(Impact &dampedDeadlyImpact : dampedDeadlyImpacts) {
         Voxel *deadVoxel = dampedDeadlyImpact.voxel();
@@ -27,14 +29,20 @@ void DamageForwarder::forwardDamage(std::list<Impact> &dampedDeadlyImpacts) {
 
             if(dotProduct >= 0.0f) {
                 Impact forwarded(m_currentWorldObject, neighbour, localImpactVec * dotProduct);
-                m_forwardedDamageImpacts.push_back(forwarded);
+                forwardedDamageImpacts.push_back(forwarded);
             }
         }
     }
+
+    ImpactAccumulator::parse(forwardedDamageImpacts);
 }
 
-std::list<Impact> &DamageForwarder::forwardedDamageImpacts() {
-    return m_forwardedDamageImpacts;
+void DamageForwarder::dontForwardTo(std::list<Voxel*> &deadVoxels) {
+    ImpactAccumulator::dontImpact(deadVoxels);
+}
+
+std::list<Impact> DamageForwarder::forwardedDamageImpacts() {
+    return ImpactAccumulator::impacts();
 }
 
 std::list<Voxel*> DamageForwarder::getNeighbours(Voxel *voxel) {
