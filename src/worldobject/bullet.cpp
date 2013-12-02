@@ -11,6 +11,11 @@ Bullet::Bullet(glm::vec3 position, glm::quat orientation, glm::vec3 direction, f
     m_transform.setOrientation(orientation); //set orientation to ship orientation
     m_transform.rotateWorld(glm::angleAxis(-glm::degrees(angle), rotationAxis));
     setSpeed(dir*speed);
+
+    setAngularSpeed(glm::vec3(0, 0, 10000)); //set spinning
+
+
+    ClusterCache::instance()->fillCluster(this, "data/voxelcluster/bullet.csv");
 }
 
 
