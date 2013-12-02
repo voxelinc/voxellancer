@@ -2,7 +2,6 @@
 #include "worldtree/worldtree.h"
 #include "worldtree/worldtreegeode.h"
 #include "collision/collisiondetector.h"
-#include "worldobject/worldobject.h"
 #include <iostream>
 
 #include "utils/tostring.h"
