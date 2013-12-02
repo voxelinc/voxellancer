@@ -35,6 +35,7 @@ protected:
 	int m_fpsControls;
 	int m_mouseControl;
 	int m_mouseControlToggled;
+    int m_followCam;
 
     Property<float> m_rotation_speed;
     Property<float> m_roll_speed;
