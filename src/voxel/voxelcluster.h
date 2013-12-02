@@ -9,7 +9,6 @@
 
 #include "geometry/aabb.h"
 
-#include "voxeltreenode.h"
 #include "worldtransform.h"
 #include "voxel.h"
 #include "voxelrenderdata.h"
@@ -22,32 +21,22 @@ class WorldTree;
 class VoxelCluster
 {
 public:
-	VoxelCluster(glm::vec3 center = glm::vec3(0), float scale = 1.0);
+	VoxelCluster(float scale);
     virtual ~VoxelCluster();
 
-    AABB aabb();
-    Sphere sphere();
-
-    WorldTransform &transform();
-    const WorldTransform &transform() const;
-
-    Voxel * voxel(cvec3 position);
-    virtual void addVoxel(Voxel *voxel);
-    virtual void removeVoxel(const cvec3 &position);
+    WorldTransform& transform();
+    Voxel* voxel(const glm::ivec3& position);
+    virtual void addVoxel(Voxel* voxel);
+    virtual void removeVoxel(const glm::ivec3& position);
+    const std::unordered_map<glm::ivec3, Voxel*>& voxelMap();
 
     VoxelRenderData *voxelRenderData();
 
-    virtual void finishInitialization();
 
 protected:
-    void updateTextures();
-    
-    AABB aabb(const WorldTransform & transform);
-    Sphere sphere(const WorldTransform & transform);
-    WorldTransform m_transform;
     VoxelRenderData m_voxelRenderData;
+    WorldTransform m_transform;
 
-    std::unordered_map<cvec3, Voxel*> m_voxels;
-    CAABB m_aabb;
+    std::unordered_map<glm::ivec3, Voxel*> m_voxels;
 };
 

@@ -43,7 +43,9 @@ private:
 	GLFWwindow *m_window;
 	InputHandler m_inputHandler;
 	Camera m_camera;
+
     World * m_world;
+
 	std::unique_ptr<Skybox> m_skybox;
 	std::unique_ptr<HUD> m_hud;
 	std::unique_ptr<VoxelRenderer> m_voxelRenderer;

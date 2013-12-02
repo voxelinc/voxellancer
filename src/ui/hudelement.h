@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 
 #include "voxel/voxelcluster.h"
+#include "worldtransform.h"
 
 enum HUDOffsetOrigin {
 	Center,
@@ -19,7 +20,6 @@ enum HUDOffsetOrigin {
 class HUDElement : public VoxelCluster {
 public:
 	HUDElement();
-    HUDElement(const HUDElement& other);
 
 	glm::vec3 m_offset;
 	HUDOffsetOrigin m_origin;

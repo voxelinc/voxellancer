@@ -2,14 +2,16 @@
 
 #include "voxel/voxel.h"
 #include "voxel/voxelcluster.h"
+#include "worldobject/worldobject.h"
 
 
 ClusterCache *ClusterCache::s_instance = nullptr;
 
 
 ClusterCache::ClusterCache() :
-m_items(),
-m_loader() {
+    m_items(),
+    m_loader()
+{
 
 }
 
@@ -24,24 +26,35 @@ ClusterCache *ClusterCache::instance() {
     return s_instance;
 }
 
-void ClusterCache::fillCluster(VoxelCluster *cluster, const std::string& filename){
-    assert(cluster != nullptr);
-    std::map<std::string, std::vector<Voxel*>*>::iterator item = m_items.find(filename);
-    std::vector<Voxel*> *source;
 
-    if (item == m_items.end()){ //load if not loaded yet
-        source = new std::vector<Voxel*>();
-        m_loader.load(filename, source);
-        m_items[filename] = source;
-    } else {
-        source = item->second;
+
+void ClusterCache::fill(WorldObject *worldObject, const std::string& filename) {
+    std::vector<Voxel*> *source = getOrCreate(filename);
+
+    for (Voxel *voxel : *source) {
+        worldObject->addVoxel(voxel->clone()); // colorcodeAndClone(voxel).addTo(worldObject);
     }
+    worldObject->finishInitialization();
+}
 
+
+void ClusterCache::fill(VoxelCluster *cluster, const std::string& filename){
+    assert(cluster != nullptr);
+    std::vector<Voxel*> *source = getOrCreate(filename);
 
     for (Voxel *voxel : *source){
-        //voxel->addToCluster(cluster);
-        cluster->addVoxel(clone(voxel));
+        cluster->addVoxel(voxel->clone());
     }
-    // TODO: do this? probably the caller will do some other things on the object right away
-    cluster->finishInitialization();    
+}
+
+std::vector<Voxel*> * ClusterCache::getOrCreate(const std::string& filename) {
+    std::map<std::string, std::vector<Voxel*>*>::iterator item = m_items.find(filename);
+
+    if (item == m_items.end()) { //load if not loaded yet
+        auto source = new std::vector<Voxel*>();
+        m_loader.load(filename, source);
+        m_items[filename] = source;
+        return source;
+    }
+    return item->second;
 }

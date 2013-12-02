@@ -35,6 +35,8 @@ public:
 
 	const glm::mat4 matrix() const;
     glm::vec3 applyTo(const glm::vec3 &vertex) const;
+
+
 protected:
 	glm::vec3 m_position;
     glm::quat m_orientation;

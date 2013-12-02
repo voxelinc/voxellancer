@@ -14,70 +14,52 @@
 #include "utils/tostring.h"
 
 
-VoxelCluster::VoxelCluster(glm::vec3 center, float scale): 
+VoxelCluster::VoxelCluster(float scale):
     m_voxels(),
     m_voxelRenderData(m_voxels),
-    m_transform(center, scale)
+    m_transform(glm::vec3(0), scale)
 {
 }
 
 VoxelCluster::~VoxelCluster() {
     // free all clusters
-    for (std::pair<const cvec3, Voxel*> &element : m_voxels){
+    for (auto& element : m_voxels){
         delete element.second;
     }
 }
 
-WorldTransform &VoxelCluster::transform() {
-    return m_transform;
-}
-
-const WorldTransform &VoxelCluster::transform() const {
-    return m_transform;
+Voxel* VoxelCluster::voxel(const glm::ivec3& position) {
+    std::unordered_map<glm::ivec3, Voxel*>::iterator i = m_voxels.find(position);
+    return i == m_voxels.end() ? nullptr : i->second;
 }
 
 void VoxelCluster::addVoxel(Voxel *voxel) {
-    assert(m_voxels.find(voxel->gridCell()) == m_voxels.end());
+    assert(m_voxels[voxel->gridCell()] == nullptr);
+
+
     m_voxels[voxel->gridCell()] = voxel;
-    m_aabb.extend(voxel->gridCell());
     m_voxelRenderData.invalidate();
 }
 
-void VoxelCluster::removeVoxel(const cvec3 & position) {
+void VoxelCluster::removeVoxel(const glm::ivec3& position) {
     Voxel * voxel = m_voxels[position];
+
     assert(voxel != nullptr);
     m_voxels.erase(position);
     m_voxelRenderData.invalidate();
     delete voxel;
 }
 
-AABB VoxelCluster::aabb() {
-    return aabb(m_transform);
-}
-AABB VoxelCluster::aabb(const WorldTransform & transform) {
-    return AABB::containing(sphere(transform));
-}
-
-Sphere VoxelCluster::sphere() {
-    return sphere(m_transform);
-}
-Sphere VoxelCluster::sphere(const WorldTransform & transform) {
-    Sphere sphere;
-    sphere.setPosition(transform.applyTo(glm::vec3(m_aabb.rub() + m_aabb.llf()) / 2.0f));
-    // m_aabb only contains the center of each voxel so add sqrt(2) to add the distance from center to edge
-    sphere.setRadius((glm::length(glm::vec3(m_aabb.rub() - m_aabb.llf())) + glm::root_two<float>()) / 2.f * transform.scale());
-    return sphere;
-}
-
-VoxelRenderData * VoxelCluster::voxelRenderData() {
+VoxelRenderData *VoxelCluster::voxelRenderData() {
     return &m_voxelRenderData;
 }
 
-void VoxelCluster::finishInitialization() {
-
+const std::unordered_map<glm::ivec3, Voxel*> & VoxelCluster::voxelMap() {
+    return m_voxels;
 }
 
-Voxel * VoxelCluster::voxel(cvec3 position) {
-    return m_voxels[position];
+WorldTransform& VoxelCluster::transform() {
+    return m_transform;
 }
+
 

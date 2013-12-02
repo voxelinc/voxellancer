@@ -1,50 +1,55 @@
 #include "voxel.h"
 
+#include <algorithm>
 #include <cassert>
 
 #include "voxelcluster.h"
+#include "glow/logging.hpp"
 
 
-Voxel::Voxel():
-    m_voxelCluster(nullptr),
-    m_gridCell(0, 0, 0),
-    m_color(1, 0, 1)
-{
-}
 
-Voxel::Voxel(cvec3 gridCell, cvec3 color):
-    m_voxelCluster(nullptr),
+Voxel::Voxel(const glm::ivec3& gridCell, const cvec3& color, float mass):
     m_gridCell(gridCell),
-    m_color(color)
+    m_color(color),
+    m_hp(1),
+    m_mass(mass)
 {
-    assert(gridCell.x >= 0 && gridCell.y >= 0 && gridCell.z >= 0);
+    assert( gridCell.x >= 0 && gridCell.x < 256 &&
+            gridCell.y >= 0 && gridCell.y < 256 &&
+            gridCell.z >= 0 && gridCell.z < 256);
 }
 
 Voxel::~Voxel() {
 
 }
 
-VoxelCluster *Voxel::voxelCluster() {
-    return m_voxelCluster;
+Voxel *Voxel::clone() {
+    Voxel *voxel = new Voxel(m_gridCell, m_color, m_mass);
+    voxel->m_hp = m_hp;
+    return voxel;
 }
 
-void Voxel::setVoxelCluster(VoxelCluster *cluster){
-    m_voxelCluster = cluster;
-}
-
-const cvec3 &Voxel::gridCell() const {
+const glm::ivec3 &Voxel::gridCell() const {
     return m_gridCell;
 }
-
-//void Voxel::setGridCell(const cvec3 &cell) {
-//    m_gridCell = cell;
-//}
 
 const cvec3 &Voxel::color() const {
     return m_color;
 }
 
-//void Voxel::setColor(const cvec3 &color) {
-//    m_color = color;
-//}
+float Voxel::hp() const {
+    return m_hp;
+}
+
+void Voxel::applyDamage(float deltaHp) {
+    m_hp = std::max(m_hp - deltaHp, 0.0f);
+}
+
+float Voxel::mass() const {
+    return m_mass;
+}
+
+void Voxel::onDestruction() {
+    glow::debug("I'm voxel %; and I'm going now. So long and thx 4 all the fish!", this);
+}
 

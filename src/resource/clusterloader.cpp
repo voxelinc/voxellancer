@@ -31,8 +31,7 @@ void ClusterLoader::loadCsv(std::vector<Voxel*> *list){
 	readCsv(list);
 }
 
-void ClusterLoader::loadZox(std::vector<Voxel*> *list){
-	
+void ClusterLoader::loadZox(std::vector<Voxel*> *list) {
 	std::string content;
 	m_inputStream->seekg(0, m_inputStream->end);
 	content.resize(m_inputStream->tellg());
@@ -68,7 +67,7 @@ void ClusterLoader::readZox(std::string &content, std::vector<Voxel*> *list){
 			g = (color & 0x00FF0000) >> 16;
 			b = (color & 0x0000FF00) >> 8;
 			a = (color & 0x000000FF);
-            list->push_back(new Voxel(cvec3(stoi(voxelStrings[0]), std::stoi(&(voxelStrings[1])[1]), std::stoi(&(voxelStrings[2])[1])), cvec3(r, g, b)));
+            list->push_back(new Voxel(glm::ivec3(stoi(voxelStrings[0]), std::stoi(&(voxelStrings[1])[1]), std::stoi(&(voxelStrings[2])[1])), cvec3(r, g, b)));
 		}
 		currentFrame++;
 	}
@@ -104,7 +103,7 @@ void ClusterLoader::readCsv(std::vector<Voxel*> *list){
 				green = stoi(voxelStrings[currentX].substr(3, 2), NULL, 16);
 				blue = stoi(voxelStrings[currentX].substr(5, 2), NULL, 16);
 				if (red+green+blue>0)
-                    list->push_back(new Voxel(cvec3(currentX, currentY, currentZ), cvec3(red, green, blue)));
+                    list->push_back(new Voxel(glm::ivec3(currentX, currentY, currentZ), cvec3(red, green, blue)));
 				currentX++;
 			}
 			currentZ++;

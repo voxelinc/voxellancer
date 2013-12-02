@@ -8,16 +8,19 @@ class World;
 class God
 {
 public:
-    God(World & world);
+    God(World& world);
     virtual ~God();
 
-    void scheduleSpawn(WorldObject *cluster);
+    void scheduleSpawn(WorldObject *worldObject);
     void scheduleSpawns(const std::list<WorldObject*> &spawns);
-    void scheduleRemoval(WorldObject *cluster);
+
+    void scheduleRemoval(WorldObject *worldObject);
     void scheduleRemovals(const std::list<WorldObject*> &removals);
 
     void spawn();
     void remove();
+
+
 protected:
     World & m_world;
     std::list<WorldObject*> m_scheduledSpawns;

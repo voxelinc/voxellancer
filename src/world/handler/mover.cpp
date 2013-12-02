@@ -1,18 +1,20 @@
 #include "mover.h"
-#include "../god.h"
-#include "../world.h"
+
+#include "world/god.h"
+#include "world/world.h"
 #include "worldobject/worldobject.h"
 
 
-void Mover::moveVoxelClusters(float delta_sec) {
-    m_collisions.clear();
+void Mover::moveWorldObjects(float deltaSec) {
+    m_impacts.clear();
 
-    for (WorldObject *cluster : World::instance()->clusters()) {
-        std::list<Collision> &collisions = cluster->move(delta_sec);
-        m_collisions.insert(m_collisions.end(), collisions.begin(), collisions.end());
+    for (WorldObject *worldObject : World::instance()->worldObjects()) {
+        std::list<Impact> &impacts = worldObject->move(deltaSec);
+        m_impacts.insert(m_impacts.end(), impacts.begin(), impacts.end());
     }
 }
 
-const std::list<Collision> &Mover::collisions() {
-    return m_collisions;
+const std::list<Impact> &Mover::impacts() {
+    return m_impacts;
 }
+

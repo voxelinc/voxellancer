@@ -18,7 +18,8 @@ public:
     InputHandler(GLFWwindow *window, Camera *camera);
 	virtual ~InputHandler();
 
-    void setVoxelCluster(Ship *voxelcluster);
+    void setPlayerShip(Ship *ship);
+
 
 	void resizeEvent(const unsigned int width, const unsigned int height);
 	void keyCallback(int key, int scancode, int action, int mods);
@@ -27,7 +28,9 @@ public:
 protected:
 	GLFWwindow *m_window;
 	Camera* m_camera;
-    Ship *m_voxelcluster;
+
+    Ship *m_playerShip;
+
 
 	int m_windowWidth, m_windowHeight;
 	int m_lastfocus;
@@ -36,11 +39,14 @@ protected:
 	int m_fpsControls;
 	int m_mouseControl;
 	int m_mouseControlToggled;
+    int m_followCam;
 
-    Property<float> m_rotation_speed;
-    Property<float> m_roll_speed;
-	Property<float> m_move_speed;
-	
+
+    Property<float> prop_rotationSpeed;
+    Property<float> prop_rollSpeed;
+    Property<float> prop_moveSpeed;
+
+
 	void toggleControls();
 
     void shoot(double x, double y);

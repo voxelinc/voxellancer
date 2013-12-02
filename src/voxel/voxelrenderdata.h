@@ -1,5 +1,6 @@
 #pragma once
-#include <map>
+
+#include <unordered_map>
 
 #include <glow/Texture.h>
 #include <glow/ref_ptr.h>
@@ -11,7 +12,7 @@
 class VoxelRenderData
 {
 public:
-    VoxelRenderData(std::unordered_map<cvec3, Voxel*> &voxel);
+    VoxelRenderData(std::unordered_map<glm::ivec3, Voxel*> &voxel);
     ~VoxelRenderData();
 
     void invalidate();
@@ -20,10 +21,11 @@ public:
     glow::Texture *colorTexture();
     int voxelCount();
 
+
 private:
     void updateTextures();
-   
-    std::unordered_map<cvec3, Voxel*> &m_voxel;
+
+    std::unordered_map<glm::ivec3, Voxel*> &m_voxel;
     int m_voxelCount;
     bool m_texturesDirty;
     glow::ref_ptr<glow::Texture> m_positionTexture;

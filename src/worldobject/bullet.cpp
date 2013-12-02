@@ -1,5 +1,9 @@
 #include "bullet.h"
 
+#include "world/god.h"
+#include "world/world.h"
+
+
 Bullet::Bullet(glm::vec3 position, glm::quat orientation, glm::vec3 direction, float speed, float range){
     m_range = range / speed;
     glm::vec3 dir = glm::normalize(direction);
@@ -10,12 +14,12 @@ Bullet::Bullet(glm::vec3 position, glm::quat orientation, glm::vec3 direction, f
     m_transform.setPosition(position);
     m_transform.setOrientation(orientation); //set orientation to ship orientation
     m_transform.rotateWorld(glm::angleAxis(-glm::degrees(angle), rotationAxis));
-    setSpeed(dir*speed);
+    accelerate(dir*speed);
 
-    setAngularSpeed(glm::vec3(0, 0, 10000)); //set spinning
+    accelerateAngular(glm::vec3(0, 0, 10000)); //set spinning
 
 
-    ClusterCache::instance()->fillCluster(this, "data/voxelcluster/bullet.csv");
+    ClusterCache::instance()->fill(this, "data/voxelcluster/bullet.csv");
 }
 
 

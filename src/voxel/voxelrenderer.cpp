@@ -11,16 +11,17 @@
 #include <glm/gtx/transform.hpp>
 
 
-#include "voxelrenderer.h"
-#include "voxelcluster.h"
+#include "voxel/voxelrenderer.h"
+#include "voxel/voxelcluster.h"
 #include "camera.h"
 
 
 VoxelRenderer::VoxelRenderer() :
-m_texture(0),
-m_shaderProgram(0),
-m_vertexArrayObject(0),
-m_vertexBuffer(0)
+    m_texture(0),
+    m_shaderProgram(0),
+    m_vertexArrayObject(0),
+    m_vertexBuffer(0),
+    m_prepared(false)
 {
 	createAndSetupShaders();
 	createAndSetupGeometry();
@@ -36,18 +37,20 @@ void VoxelRenderer::prepareDraw(Camera * camera, bool withBorder)
 
     m_shaderProgram->use();
     glProvokingVertex(GL_LAST_VERTEX_CONVENTION);
+    m_prepared = true;
 }
 
 
-void VoxelRenderer::draw(VoxelCluster * cluster)
+void VoxelRenderer::draw(VoxelCluster * worldObject)
 {
-    m_shaderProgram->setUniform("model", cluster->transform().matrix());
-    glActiveTexture(GL_TEXTURE0);
-    cluster->voxelRenderData()->positionTexture()->bind();
-    glActiveTexture(GL_TEXTURE1);
-    cluster->voxelRenderData()->colorTexture()->bind();
+    m_shaderProgram->setUniform("model", worldObject->transform().matrix());
 
-    m_vertexArrayObject->drawArraysInstanced(GL_TRIANGLE_STRIP, 0, 14, cluster->voxelRenderData()->voxelCount());
+    glActiveTexture(GL_TEXTURE0);
+    worldObject->voxelRenderData()->positionTexture()->bind();
+    glActiveTexture(GL_TEXTURE1);
+    worldObject->voxelRenderData()->colorTexture()->bind();
+
+    m_vertexArrayObject->drawArraysInstanced(GL_TRIANGLE_STRIP, 0, 14, worldObject->voxelRenderData()->voxelCount());
 }
 
 
@@ -55,6 +58,11 @@ void VoxelRenderer::afterDraw()
 {
     glActiveTexture(GL_TEXTURE0);
     m_shaderProgram->release();
+    m_prepared = false;
+}
+
+bool VoxelRenderer::prepared(){
+    return m_prepared;
 }
 
 
