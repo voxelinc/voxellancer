@@ -17,7 +17,7 @@ public:
     InputHandler(GLFWwindow *window, Camera *camera);
 	virtual ~InputHandler();
 
-    void setVoxelCluster(WorldObject *voxelcluster);
+    void setWorldObject(WorldObject *worldObject);
 
 	void resizeEvent(const unsigned int width, const unsigned int height);
 	void keyCallback(int key, int scancode, int action, int mods);
@@ -26,7 +26,7 @@ public:
 protected:
 	GLFWwindow *m_window;
 	Camera* m_camera;
-    WorldObject *m_voxelcluster;
+    WorldObject *m_worldObject;
 
 	int m_windowWidth, m_windowHeight;
 	int m_lastfocus;
@@ -35,10 +35,13 @@ protected:
 	int m_fpsControls;
 	int m_mouseControl;
 	int m_mouseControlToggled;
+    int m_followCam;
+
 
     Property<float> prop_rotationSpeed;
     Property<float> prop_rollSpeed;
     Property<float> prop_moveSpeed;
-	
+
+
 	void toggleControls();
 };

@@ -1,39 +1,40 @@
 #include "collision.h"
 
+#include "world/worldobject.h"
+#include "voxel/voxel.h"
 
-Collision::Collision(Voxel *voxelA, Voxel *voxelB, CollidableVoxelCluster * voxelClusterA, CollidableVoxelCluster * voxelClusterB) :
-    m_voxelA(voxelA),
-    m_voxelB(voxelB),
-    m_voxelClusterA(voxelClusterA),
-    m_voxelClusterB(voxelClusterB)
+CollisionParticipant::CollisionParticipant(WorldObject *worldObject, Voxel *voxel, const glm::vec3 &speed):
+    m_worldObject(worldObject),
+    m_voxel(voxel),
+    m_speed(speed)
 {
 
 }
 
-Collision::~Collision() {
+WorldObject *CollisionParticipant::worldObject() {
+    return m_worldObject;
+}
+
+Voxel *CollisionParticipant::voxel() {
+    return m_voxel;
+}
+
+glm::vec3 CollisionParticipant::speed() const {
+    return m_speed;
+}
+
+Collision::Collision(const CollisionParticipant &a, const CollisionParticipant &b):
+    m_a(a),
+    m_b(b)
+{
 
 }
 
-Voxel *Collision::voxelA() {
-    return m_voxelA;
+CollisionParticipant &Collision::a() {
+    return m_a;
 }
 
-const Voxel *Collision::voxelA() const {
-    return m_voxelA;
+CollisionParticipant &Collision::b() {
+    return m_b;
 }
 
-Voxel *Collision::voxelB() {
-    return m_voxelB;
-}
-
-const Voxel *Collision::voxelB() const {
-    return m_voxelB;
-}
-
-CollidableVoxelCluster * Collision::voxelClusterA() {
-    return m_voxelClusterA;
-}
-
-CollidableVoxelCluster * Collision::voxelClusterB() {
-    return m_voxelClusterB;
-}

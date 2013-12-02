@@ -11,7 +11,6 @@ World::World()
     m_worldLogic = std::unique_ptr<WorldLogic>(new WorldLogic(*this));
     m_worldTree = std::unique_ptr<WorldTree>(new WorldTree());
     m_god = std::unique_ptr<God>(new God(*this));
-
 }
 
 World::~World() {
@@ -30,16 +29,11 @@ WorldTree &World::worldTree() {
     return *m_worldTree;
 }
 
-std::list<WorldObject*> &World::clusters() {
-    return m_clusters;
-}
-
-float World::deltaSecs() const {
-    return m_deltaSecs;
+std::list<WorldObject*> &World::worldObjects() {
+    return m_worldObjects;
 }
 
 void World::update(float deltaSecs) {
-    m_deltaSecs = deltaSecs;
     m_worldLogic->update(deltaSecs);
 }
 

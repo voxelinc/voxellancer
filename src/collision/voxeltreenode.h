@@ -12,18 +12,17 @@
 #include "worldtransform.h"
 
 
-class CollidableVoxelCluster;
+class WorldObject;
 
 class VoxelTreeNode
 {
 public:
-    VoxelTreeNode(VoxelTreeNode *parent, CollidableVoxelCluster &voxelcluster, const Grid3dAABB &gridAABB = Grid3dAABB(glm::ivec3(0, 0, 0), glm::ivec3(0, 0, 0)));
-    VoxelTreeNode(const VoxelTreeNode& other, CollidableVoxelCluster *voxelcluster);
-	VoxelTreeNode(const VoxelTreeNode& other) = delete; //no "normal" copy ctor
+    VoxelTreeNode(VoxelTreeNode *parent, WorldObject &worldobject, const Grid3dAABB &gridAABB = Grid3dAABB(glm::ivec3(0, 0, 0), glm::ivec3(0, 0, 0)));
     virtual ~VoxelTreeNode();
 
     bool isAtomic() const;
     bool isLeaf() const;
+    bool isEmpty() const;
 
     std::vector<VoxelTreeNode*> &subnodes();
     const std::vector<VoxelTreeNode*> &subnodes() const;
@@ -35,13 +34,14 @@ public:
 
     Sphere boundingSphere();
 
-    void insert(Voxel *voxel);
-    void remove(const cvec3 &cell);
+    void insert(Voxel *physicalVoxel);
+    void remove(const glm::ivec3 &cell);
 
 
 protected:
     VoxelTreeNode *m_parent;
-    CollidableVoxelCluster &m_voxelcluster;
+    WorldObject &m_worldObject;
+
     Grid3dAABB m_gridAABB;
 
     std::vector<VoxelTreeNode*> m_subnodes;

@@ -2,17 +2,20 @@
 
 #include <list>
 
-class VoxelClusterOrphan;
+class WorldObjectSplit;
 class WorldObject;
 
 class Splitter
 {
 public:
-    void split(std::list<VoxelClusterOrphan*> &voxelClusterOrphans);
-    std::list<WorldObject*> &splitOffVoxelClusters();
+    void split(std::list<WorldObjectSplit*> &splits);
+    std::list<WorldObject*> &splitOffWorldObjects();
 
 
 protected:
-    std::list<WorldObject*> m_splitOffVoxelClusters;
+    std::list<WorldObject*> m_splitOffWorldObjects;
+
+    WorldObject *createWorldObjectFromOrphan(WorldObjectSplit *split);
+    void removeExtractedVoxelsFromEx(WorldObjectSplit *split);
 };
 

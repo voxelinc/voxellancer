@@ -2,13 +2,13 @@
 
 #include <list>
 
-#include "voxelimpact.h"
+#include "world/helper/impact.h"
 
 
 class VoxelHangman
 {
 public:
-    void applyOnDestructionHooks(std::list<VoxelImpact> &deadlyVoxelImpacts);
-    void removeDestroyedVoxels(std::list<VoxelImpact> &deadlyVoxelImpacts);
+    void applyOnDestructionHooks(std::list<Impact> &deadlyImpacts);
+    void removeDestroyedVoxels(std::list<Impact> &deadlyImpacts);
 };
 

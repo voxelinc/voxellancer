@@ -7,6 +7,7 @@
 #include "world/world.h"
 #include "world/god.h"
 #include "world/worldobject.h"
+#include "letter.h"
 
 
 HUD::HUD() :
@@ -28,14 +29,14 @@ HUD::HUD() :
     prop_arrowMaxdistance("hud.arrowMaxdistance"),
     prop_arrowRadius("hud.arrowRadius"),
     prop_showFramerate("hud.showFramerate")
-
 {
     m_font->setRenderer(m_voxelRenderer.get());
 
     m_renderCamera.setPosition(glm::vec3(0, 0, 0));
     m_renderCamera.setZNear(1.0f);
     m_renderCamera.setZFar(500.0f);
-    
+
+
     addElement("data/hud/crosshair.csv", HUDOffsetOrigin::Center, glm::vec3(-4, -4, 0), &m_elements);
     addElement("data/hud/topleft.csv", HUDOffsetOrigin::TopLeft, glm::vec3(1, -2, 0), &m_elements);
     addElement("data/hud/topright.csv", HUDOffsetOrigin::TopRight, glm::vec3(-4, -2, 0), &m_elements);
@@ -44,18 +45,50 @@ HUD::HUD() :
     addElement("data/hud/bottom.csv", HUDOffsetOrigin::Bottom, glm::vec3(-27, 1, 0), &m_elements);
 
     m_shipArrow.reset(new HUDElement());
-    ClusterCache::instance()->fillCluster(m_shipArrow.get(), "data/hud/arrow.csv");
+    ClusterCache::instance()->fill(m_shipArrow.get(), "data/hud/arrow.csv");
     m_shipArrow->m_origin = HUDOffsetOrigin::Center;
     m_shipArrow->m_offset = glm::vec3(-2, -2, 0);
-    
+
+    loadFonts();
 }
 
 void HUD::addElement(const std::string& filename, HUDOffsetOrigin origin, glm::vec3 offset, std::vector<std::unique_ptr<HUDElement>> *list){
     std::unique_ptr<HUDElement> element(new HUDElement());
-    ClusterCache::instance()->fillCluster(element.get(), filename);
+    ClusterCache::instance()->fill(element.get(), filename);
     element->m_origin = origin;
     element->m_offset = offset;
     list->push_back(move(element));
+}
+
+void HUD::addChar(const std::string& filename, glm::vec3 offset, const char index, std::map<char, std::unique_ptr<Letter>> *map) {
+    std::unique_ptr<Letter> element(new Letter());
+    ClusterCache::instance()->fill(element.get(), filename);
+    element->transform().setCenter(offset);
+    (*map)[index] = move(element);
+}
+
+void HUD::loadFont(const std::string& identifier, glm::vec3 offset, std::map<char, std::unique_ptr<Letter>> *map) {
+    const char letters[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    for (int i = 0; i < 36; i++){
+        std::string path = "data/hud/font/" + identifier + "/";
+        path.append(&letters[i], 1);
+        path.append(".csv");
+        addChar(path, offset, letters[i], map);
+    }
+    // non-letters the fs might/does not like
+    addChar("data/hud/font/" + identifier + "/_dot.csv", offset, '.', map);
+    addChar("data/hud/font/" + identifier + "/_comma.csv", offset, ',', map);
+    addChar("data/hud/font/" + identifier + "/_colon.csv", offset, ':', map);
+    addChar("data/hud/font/" + identifier + "/_semicolon.csv", offset, ';', map);
+    addChar("data/hud/font/" + identifier + "/_slash.csv", offset, '/', map);
+    addChar("data/hud/font/" + identifier + "/_backslash.csv", offset, '\\', map);
+    addChar("data/hud/font/" + identifier + "/_underscore.csv", offset, '_', map);
+    addChar("data/hud/font/" + identifier + "/_dash.csv", offset, '-', map);
+}
+
+void HUD::loadFonts(){
+    loadFont("3x5", glm::vec3(1, 2, 0), &m_font3x5);
+    loadFont("5x7", glm::vec3(2, 3, 0), &m_font5x7);
 }
 
 HUD::~HUD(){
@@ -130,7 +163,7 @@ void HUD::draw(){
 
     // draw ship arrows
     int i = 0;
-    for (WorldObject *ship : World::instance()->clusters()) {
+    for (WorldObject *ship : World::instance()->worldObjects()) {
         // TODO something like "if (ship->hudData->shouldShowOnHud())"
         if (glm::length(ship->transform().position() - m_hudCamera.position()) < prop_arrowMaxdistance){
             // delta is the vector from virtual HUD camera to the ship
@@ -165,7 +198,7 @@ void HUD::draw(){
             }
         }
     }
-    
+
     // draw frame rate
     if (prop_showFramerate){
         m_font->drawString(std::to_string((int)glm::round(m_frameRate)), calculatePosition(TopLeft, glm::vec3(4, -5, 0)), s3x5, 0.8f);
@@ -209,6 +242,8 @@ glm::vec3 HUD::calculatePosition(HUDOffsetOrigin origin, glm::vec3 offset){
         break;
     }
 }
+
+
 
 void HUD::adjustPositions(){
     m_renderCamera.setFovy(m_gameCamera->fovy());

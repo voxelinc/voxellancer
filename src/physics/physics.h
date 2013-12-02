@@ -1,28 +1,31 @@
 #pragma once
 
+#include <list>
 #include <memory>
 #include <glm/glm.hpp>
 
 #include "collision/collision.h"
 #include "property/property.h"
-#include "collidablevoxelcluster.h"
+#include "worldtransform.h"
+#include "world/helper/impact.h"
 
-class CollisionDetector;
+class WorldObject;
+class WorldTransform;
 
-class PhysicalVoxelCluster : public CollidableVoxelCluster {
+class Physics  {
 public:
-    PhysicalVoxelCluster(float scale = 1.0);
-    virtual ~PhysicalVoxelCluster();
+    Physics(WorldObject & worldObject);
+    virtual ~Physics();
 
-    std::list<Collision> &move(float delta_sec);
-    
+    std::list<Impact> &move(float delta_sec);
+
     void accelerate(glm::vec3 direction);
     void accelerateAngular(glm::vec3 axis);
 
-    virtual void addVoxel(Voxel *voxel);
-    virtual void removeVoxel(const cvec3 &position);
+    void addVoxel(Voxel *voxel);
+    void removeVoxel(const glm::ivec3 &position);
 
-    virtual void finishInitialization();
+    void finishInitialization();
 
 protected:
     void calculateMassAndCenter();
@@ -33,20 +36,24 @@ protected:
     float calculateStepCount(const WorldTransform & oldTransform, const WorldTransform & newTransform);
     bool isCollisionPossible();
 
-private:
+protected:
     float m_mass;
     bool m_massValid;
+
+    WorldObject& m_worldObject;
 
     WorldTransform m_oldTransform;
     WorldTransform m_newTransform;
 
     glm::vec3 m_speed;
     glm::vec3 m_angularSpeed;
-    
+
     glm::vec3 m_acceleration;
     glm::vec3 m_angularAcceleration;
 
     Property<float> m_dampening;
     Property<float> m_angularDampening;
     Property<float> m_rotationFactor;
+
+    std::list<Impact> m_impacts;
 };

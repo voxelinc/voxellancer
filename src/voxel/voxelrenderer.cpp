@@ -11,8 +11,8 @@
 #include <glm/gtx/transform.hpp>
 
 
-#include "voxelrenderer.h"
-#include "voxelcluster.h"
+#include "voxel/voxelrenderer.h"
+#include "voxel/voxelcluster.h"
 #include "camera.h"
 
 
@@ -41,16 +41,16 @@ void VoxelRenderer::prepareDraw(Camera * camera, bool withBorder)
 }
 
 
-void VoxelRenderer::draw(VoxelCluster * cluster)
+void VoxelRenderer::draw(VoxelCluster * worldObject)
 {
-    assert(m_prepared);
-    m_shaderProgram->setUniform("model", cluster->transform().matrix());
-    glActiveTexture(GL_TEXTURE0);
-    cluster->voxelRenderData()->positionTexture()->bind();
-    glActiveTexture(GL_TEXTURE1);
-    cluster->voxelRenderData()->colorTexture()->bind();
+    m_shaderProgram->setUniform("model", worldObject->transform().matrix());
 
-    m_vertexArrayObject->drawArraysInstanced(GL_TRIANGLE_STRIP, 0, 14, cluster->voxelRenderData()->voxelCount());
+    glActiveTexture(GL_TEXTURE0);
+    worldObject->voxelRenderData()->positionTexture()->bind();
+    glActiveTexture(GL_TEXTURE1);
+    worldObject->voxelRenderData()->colorTexture()->bind();
+
+    m_vertexArrayObject->drawArraysInstanced(GL_TRIANGLE_STRIP, 0, 14, worldObject->voxelRenderData()->voxelCount());
 }
 
 
