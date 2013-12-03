@@ -15,7 +15,7 @@ Bullet::Bullet(glm::vec3 position, glm::quat orientation, glm::vec3 direction, f
     glm::vec3 rotationAxis = glm::normalize(glm::cross(dir, myOrientation));
     float angle = glm::acos(glm::dot(dir, myOrientation));
 
-    ClusterCache::instance()->fill(this, "data/voxelcluster/bullet.csv");
+    ClusterCache::instance()->fillObject(this, "data/voxelcluster/bullet.csv");
 
     m_transform.setOrientation(orientation); //set orientation to ship orientation
     m_transform.rotateWorld(glm::angleAxis(-glm::degrees(angle), rotationAxis)); //then rotate towards target

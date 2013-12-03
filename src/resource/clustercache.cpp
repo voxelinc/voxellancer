@@ -10,13 +10,12 @@ ClusterCache *ClusterCache::s_instance = nullptr;
 
 ClusterCache::ClusterCache() :
     m_items(),
-    m_loader()
+    m_loader(),
+    m_colorCoder()
 {
-
 }
 
 ClusterCache::~ClusterCache() {
-
 }
 
 ClusterCache *ClusterCache::instance() {
@@ -26,26 +25,25 @@ ClusterCache *ClusterCache::instance() {
     return s_instance;
 }
 
-
-
-void ClusterCache::fill(WorldObject *worldObject, const std::string& filename) {
-    std::vector<Voxel*> *source = getOrCreate(filename);
-
-    for (Voxel *voxel : *source) {
-        worldObject->addVoxel(voxel->clone()); // colorcodeAndClone(voxel).addTo(worldObject);
-    }
-    worldObject->finishInitialization();
-}
-
-
-void ClusterCache::fill(VoxelCluster *cluster, const std::string& filename){
+void ClusterCache::fillCluster(VoxelCluster *cluster, const std::string& filename){
     assert(cluster != nullptr);
     std::vector<Voxel*> *source = getOrCreate(filename);
 
     for (Voxel *voxel : *source){
-        cluster->addVoxel(voxel->clone());
+        (new Voxel(*voxel))->addToCluster(cluster);
     }
 }
+
+void ClusterCache::fillObject(WorldObject *worldObject, const std::string& filename) {
+    assert(worldObject != nullptr);
+    std::vector<Voxel*> *source = getOrCreate(filename);
+
+    for (Voxel *voxel : *source) {
+        m_colorCoder.newCodedVoxel(*voxel)->addToObject(worldObject);
+    }
+    worldObject->finishInitialization();
+}
+
 
 std::vector<Voxel*> * ClusterCache::getOrCreate(const std::string& filename) {
     std::map<std::string, std::vector<Voxel*>*>::iterator item = m_items.find(filename);

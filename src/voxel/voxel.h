@@ -5,8 +5,8 @@
 #include <glm/glm.hpp>
 #include "geometry/sphere.h"
 
-
-typedef glm::detail::tvec3<unsigned char> cvec3;
+class VoxelCluster;
+class WorldObject;
 
 namespace std {
     template<> struct hash<glm::ivec3>
@@ -20,14 +20,15 @@ namespace std {
 class Voxel
 {
 public:
-    Voxel(const glm::ivec3 &gridCell, const cvec3 &color, float mass = 1.0f);
+    Voxel(const glm::ivec3& gridCell, const int color, float mass = 1.0f, float hp = 1.0f);
     virtual ~Voxel();
-
-    virtual Voxel *clone();
-
+    
     const glm::ivec3 &gridCell() const;
 
-    const cvec3 &color() const;
+    virtual void addToCluster(VoxelCluster *cluster);
+    virtual void addToObject(WorldObject *object);
+
+    int color() const;
 
     float hp() const;
     void applyDamage(float deltaHp);
@@ -40,7 +41,7 @@ public:
 
 protected:
     glm::ivec3 m_gridCell;
-    cvec3 m_color;
+    int m_color;
     float m_hp;
     float m_mass;
 };

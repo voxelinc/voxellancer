@@ -45,14 +45,14 @@ HUD::HUD() :
     addElement("data/hud/bottom.csv", HUDOffsetOrigin::Bottom, glm::vec3(-27, 1, 0), &m_elements);
 
     m_shipArrow.reset(new HUDElement());
-    ClusterCache::instance()->fill(m_shipArrow.get(), "data/hud/arrow.csv");
+    ClusterCache::instance()->fillCluster(m_shipArrow.get(), "data/hud/arrow.csv");
     m_shipArrow->m_origin = HUDOffsetOrigin::Center;
     m_shipArrow->m_offset = glm::vec3(-2, -2, 0);
 }
 
 void HUD::addElement(const std::string& filename, HUDOffsetOrigin origin, glm::vec3 offset, std::vector<std::unique_ptr<HUDElement>> *list){
     std::unique_ptr<HUDElement> element(new HUDElement());
-    ClusterCache::instance()->fill(element.get(), filename);
+    ClusterCache::instance()->fillCluster(element.get(), filename);
     element->m_origin = origin;
     element->m_offset = offset;
     list->push_back(move(element));
