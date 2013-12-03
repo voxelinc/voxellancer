@@ -55,10 +55,10 @@ go_bandit([](){
             glm::quat q1(0.153906465f, -0.0734307691f, -0.699099243f, -0.694394350f);
             glm::quat q2(-0.153925106f, 0.0733917207f, 0.698923051f, 0.694571733f);
 
-            AssertThat(std::isfinite(glm::lerp(q1, q2, 0.0f).w), Equals(true));
-            AssertThat(std::isfinite(glm::lerp(q1, q2, 0.001f).w), Equals(true));
-            AssertThat(std::isfinite(glm::lerp(q1, q2, 0.5f).w), Equals(true));
-            AssertThat(std::isfinite(glm::lerp(q1, q2, 1.0f).w), Equals(true));
+            AssertThat(std::isfinite(glm::slerp(q1, q2, 0.0f).w), Equals(true));
+            AssertThat(std::isfinite(glm::slerp(q1, q2, 0.001f).w), Equals(true));
+            AssertThat(std::isfinite(glm::slerp(q1, q2, 0.5f).w), Equals(true));
+            AssertThat(std::isfinite(glm::slerp(q1, q2, 1.0f).w), Equals(true));
 
 
         });

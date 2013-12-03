@@ -73,7 +73,7 @@ Camera *HUD::camera(){
 
 void HUD::stepAnim(glm::vec3 targetPosition, glm::quat targetOrientation){
     // Interpolate between current and target orientation in steps of inertia_rate with inertia multiplier
-    m_hudCamera.setOrientation(glm::mix(m_hudCamera.orientation(), targetOrientation, glm::min((1.0f / prop_inertiaRate) * prop_inertiaRotate, 1.0f)));
+    m_hudCamera.setOrientation(glm::slerp(m_hudCamera.orientation(), targetOrientation, glm::min((1.0f / prop_inertiaRate) * prop_inertiaRotate, 1.0f)));
     m_hudCamera.setPosition(glm::mix(m_hudCamera.position(), targetPosition, glm::min((1.0f / prop_inertiaRate) * prop_inertiaMove, 1.0f)));
 }
 
@@ -89,7 +89,7 @@ void HUD::update(float delta_sec){
         // to be as independent of framerate and especially regularity of frame times
         // this assumes the input was constant contious within time from the last frame to now
         stepAnim(glm::mix(m_lastGameCamera.position(), m_gameCamera->position(), rate),
-            glm::mix(m_lastGameCamera.orientation(), m_gameCamera->orientation(), rate));
+            glm::slerp(m_lastGameCamera.orientation(), m_gameCamera->orientation(), rate));
 		progress += steptime;
     }
     m_delta_sec_remain = total - progress;
