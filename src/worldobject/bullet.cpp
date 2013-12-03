@@ -21,7 +21,6 @@ Bullet::Bullet(glm::vec3 position, glm::quat orientation, glm::vec3 direction, f
     physics().setAngularSpeed(glm::vec3(0, 0, 500)); //set spinning
 
     ClusterCache::instance()->fill(this, "data/voxelcluster/bullet.csv");
-    std::cout << "Bullet " << this << " " << toString(physics().speed()) << std::endl;
 }
 
 

@@ -29,7 +29,7 @@ void DamageForwarder::forwardDamageImpacts(std::list<Impact> &dampedDeadlyImpact
         for(Voxel *neighbour : neighbours) {
             glm::vec3 voxelVec = static_cast<glm::vec3>(neighbour->gridCell() - deadVoxel->gridCell());
             float dotProduct = glm::dot(glm::normalize(localImpactVec), glm::normalize(voxelVec));
-            std::cout << m_currentWorldObject << ": " << dotProduct << std::endl;
+
             if(dotProduct >= 0.0f) {
                 Impact forwarded(m_currentWorldObject, neighbour, localImpactVec * forwardFactor(dotProduct));
                 forwardedDamageImpacts.push_back(forwarded);

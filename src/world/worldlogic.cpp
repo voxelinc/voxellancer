@@ -45,13 +45,6 @@ void WorldLogic::update(float deltaSecs) {
  }
 
 void WorldLogic::damageForwardLoop(std::list<Impact> damageImpacts) {
-    if(damageImpacts.size() > 0) {
-        std::cout << "Original impacts: " << std::endl;
-        for(Impact& i : damageImpacts) {
-            std::cout << "  " << i.worldObject() << " " << toString(i.vec()) << std::endl;
-        }
-    }
-
     while(damageImpacts.size() > 0) {
         m_damager.applyDamages(damageImpacts);
 
