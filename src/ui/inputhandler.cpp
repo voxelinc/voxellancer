@@ -210,9 +210,9 @@ void InputHandler::setPlayerShip(Ship* ship) {
 }
 
 void InputHandler::shoot(double x, double y){
-    glm::vec4 pointEnd((x * 2 / m_windowWidth - 1), -1 * (y * 2 / m_windowHeight - 1), 1, 1); //get normalized screen coords
-    pointEnd = (glm::inverse(m_camera->viewProjection())*pointEnd); //find point on zfar
-    glm::vec3 vec = (glm::vec3) pointEnd; // no need for w component
+    glm::vec4 pointEnd((x * 2 / m_windowWidth - 1), -1 * (y * 2 / m_windowHeight - 1), 1, 1); //get normalized device coords
+    pointEnd = glm::inverse(m_camera->viewProjection())*pointEnd; //find point on zfar
+    glm::vec3 vec = glm::vec3(pointEnd); // no need for w component
     vec = glm::normalize(vec); // normalize
     vec *= m_playerShip->minAimDistance(); // set aimdistance
     vec += m_camera->position(); //adjust for camera translation

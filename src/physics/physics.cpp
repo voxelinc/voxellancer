@@ -182,7 +182,7 @@ void Physics::doSteppedTransform() {
             assert(i > 0); // you're stuck, hopefully doesn't happen!
             m_worldObject.transform().setOrientation(glm::lerp(m_oldTransform.orientation(), m_newTransform.orientation(), (i - 1) / steps));
             m_worldObject.transform().setPosition(glm::mix(m_oldTransform.position(), m_newTransform.position(), (i - 1) / steps));
-            assert(isfinite(m_worldObject.transform().orientation().x));
+            assert(std::isfinite(m_worldObject.transform().orientation().x));
             break;
         }
     }
