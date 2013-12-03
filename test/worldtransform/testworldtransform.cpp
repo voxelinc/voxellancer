@@ -51,6 +51,18 @@ go_bandit([](){
 
         });
 
+        it("is finite", [&]() {
+            glm::quat q1(0.153906465f, -0.0734307691f, -0.699099243f, -0.694394350f);
+            glm::quat q2(-0.153925106f, 0.0733917207f, 0.698923051f, 0.694571733f);
+
+            AssertThat(isfinite(glm::lerp(q1, q2, 0.0f).w), Equals(true));
+            AssertThat(isfinite(glm::lerp(q1, q2, 0.001f).w), Equals(true));
+            AssertThat(isfinite(glm::lerp(q1, q2, 0.5f).w), Equals(true));
+            AssertThat(isfinite(glm::lerp(q1, q2, 1.0f).w), Equals(true));
+
+
+        });
+
         it("applyTo(vec3) equals matrix()*vec3", [&]() {
             glm::vec3 vtest(1.0, 2.0, 3.0);
             WorldTransform w(glm::vec3(0), 2.0);            
