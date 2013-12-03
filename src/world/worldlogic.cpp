@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include "utils/tostring.h"
+
 #include "world.h"
 #include "god.h"
 
@@ -21,7 +23,7 @@ void WorldLogic::update(float deltaSecs) {
     damageForwardLoop(m_impactAccumulator.impacts());
     m_impactAccumulator.clear();
 
-//    m_splitDetector.searchSplitOffs(m_damager.modifiedWorldObjects());
+//    m_splitDetector.searchSplitOffs(m_damager.worldObjectModifications());
 //    m_splitter.split(m_splitDetector.worldObjectSplits());
 //    m_world.god().scheduleSpawns(m_splitter.splitOffWorldObjects());
 
@@ -39,8 +41,12 @@ void WorldLogic::update(float deltaSecs) {
 }
 
 void WorldLogic::damageForwardLoop(std::list<Impact> damageImpacts) {
-    if(damageImpacts.size() == 0)
-        return;
+    if(damageImpacts.size() > 0) {
+        std::cout << "Original impacts: " << std::endl;
+        for(Impact& i : damageImpacts) {
+            std::cout << "  " << i.worldObject() << " " << toString(i.vec()) << std::endl;
+        }
+    }
 
     while(damageImpacts.size() > 0) {
         m_damager.applyDamages(damageImpacts);
@@ -52,8 +58,5 @@ void WorldLogic::damageForwardLoop(std::list<Impact> damageImpacts) {
         m_voxelHangman.removeDestroyedVoxels(m_damager.deadlyImpacts());
 
         damageImpacts = m_damageForwarder.forwardedDamageImpacts();
-        if(damageImpacts.size() > 0) {
-            std::cout << "Forwaring damage " << damageImpacts.size() << std::endl;
-        }
     }
 }

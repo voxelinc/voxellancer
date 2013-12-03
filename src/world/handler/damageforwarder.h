@@ -17,7 +17,6 @@ public:
 
 
 protected:
-
     WorldObject *m_currentWorldObject;
     std::list<Voxel*> *m_currentNeighbours;
     glm::ivec3 m_currentGridCell;

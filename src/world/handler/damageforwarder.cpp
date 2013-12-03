@@ -6,6 +6,9 @@
 #include "voxel/voxelcluster.h"
 #include "collision/voxeltreenode.h"
 
+#include "voxel/voxelneighbourhelper.h"
+#include "utils/tostring.h"
+
 #include "worldobject/worldobject.h"
 
 
@@ -16,17 +19,22 @@ void DamageForwarder::forwardDamage(std::list<Impact> &dampedDeadlyImpacts) {
     ImpactAccumulator::clear();
 
     for(Impact &dampedDeadlyImpact : dampedDeadlyImpacts) {
+        std::cout << "Forwarding impact on " << dampedDeadlyImpact.worldObject() << std::endl;
         Voxel *deadVoxel = dampedDeadlyImpact.voxel();
 
         m_currentWorldObject = dampedDeadlyImpact.worldObject();
-        std::list<Voxel*> neighbours = getNeighbours(deadVoxel);
+        std::list<Voxel*> neighbours = VoxelNeighbourHelper(m_currentWorldObject, deadVoxel).neighbours();
+            std::cout << "  has " << neighbours.size() << " possibly affected neighbours" << std::endl;
 
+        std::cout << "Vec " << toString(dampedDeadlyImpact.vec()) << " => ";
         glm::vec3 localImpactVec = glm::inverse(m_currentWorldObject->transform().orientation()) * dampedDeadlyImpact.vec();
+        std::cout << toString(localImpactVec) << std::endl;
+
 
         for(Voxel *neighbour : neighbours) {
             glm::vec3 voxelVec = static_cast<glm::vec3>(neighbour->gridCell() - deadVoxel->gridCell());
             float dotProduct = glm::dot(glm::normalize(localImpactVec), glm::normalize(voxelVec));
-
+            std::cout << "Dot product is " << toString(glm::normalize(localImpactVec)) << " * " << toString(glm::normalize(voxelVec)) << "=>"<< dotProduct << std::endl;
             if(dotProduct >= 0.0f) {
                 Impact forwarded(m_currentWorldObject, neighbour, localImpactVec * dotProduct);
                 forwardedDamageImpacts.push_back(forwarded);

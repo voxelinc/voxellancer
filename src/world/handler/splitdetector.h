@@ -3,6 +3,9 @@
 #include <set>
 #include <list>
 
+#include "world/helper/worldobjectmodification.h"
+
+
 class WorldObjectSplit;
 class WorldObject;
 class Voxel;
@@ -10,7 +13,7 @@ class Voxel;
 class SplitDetector
 {
 public:
-    void searchSplitOffs(std::set<WorldObject*> &modifiedWorldObject);
+    void searchSplitOffs(std::list<WorldObjectModification> worldObjectModifications);
     std::list<WorldObjectSplit*> &worldObjectSplits();
 
 
