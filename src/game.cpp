@@ -104,7 +104,6 @@ void Game::initialize()
 
     Ship *m_testClusterA = new Ship();
     ClusterCache::instance()->fill(m_testClusterA, "data/voxelcluster/normandy.csv");
-	m_testClusterA->transform().setCenter(glm::vec3(3, 0, 3)); // TODO: shouldnt center == centerofmass ?
 	m_testClusterA->transform().setPosition(glm::vec3(0, 0, -100));
 	//m_testClusterA->removeVoxel(cvec3(3, 2, 3)); // this verifies the objects are different
     m_testClusterA->finishInitialization();
@@ -115,8 +114,8 @@ void Game::initialize()
 	m_testClusterB->transform().setCenter(glm::vec3(3, 0, 3));
     m_testClusterB->transform().setPosition(glm::vec3(0, 0, 10));
     m_testClusterB->finishInitialization();
-    m_testClusterB->addHardpoint(new Hardpoint(m_testClusterB, glm::vec3(0, 5, 0), new Gun(100, 200, 0.2f)));
-    m_testClusterB->addHardpoint(new Hardpoint(m_testClusterB, glm::vec3(5, 5, 0), new Gun(100, 200, 0.2f)));
+    m_testClusterB->addHardpoint(new Hardpoint(m_testClusterB, glm::vec3(0, 5, 0), new Gun(500, 2000, 0.005f)));
+    m_testClusterB->addHardpoint(new Hardpoint(m_testClusterB, glm::vec3(5, 5, 0), new Gun(500, 2000, 0.005f)));
     m_world->god().scheduleSpawn(m_testClusterB);
 
     WorldObject *wall = new WorldObject(1);
