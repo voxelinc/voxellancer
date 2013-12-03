@@ -78,9 +78,6 @@ void CollisionDetector::updateGeode() {
     if(m_geode != nullptr) {
         m_geode->setAABB(m_worldObject.aabb());
     }
-    else {
-        std::cout << "no geode set" << std::endl;
-    }
 }
 
 std::list<Collision> &CollisionDetector::checkCollisions() {

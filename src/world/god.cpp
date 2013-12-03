@@ -37,17 +37,17 @@ void God::scheduleSpawns(const std::list<WorldObject*> &spawns) {
 void God::scheduleRemoval(WorldObject *worldObject) {
     assert(worldObject->collisionDetector().geode() != nullptr);
     assert(worldObject->collisionDetector().worldTree() == &m_world.worldTree());
+    for (WorldObject* scheduled : m_scheduledRemovals){
+        if (scheduled == worldObject)
+            return;
+    }
     m_scheduledRemovals.push_back(worldObject);
 }
 
 void God::scheduleRemovals(const std::list<WorldObject*> &removals) {
-#ifndef NDEBUG // only remove things that are in our worldTree
     for (WorldObject* worldObject : removals) {
-        assert(worldObject->collisionDetector().geode() != nullptr);
-        assert(worldObject->collisionDetector().worldTree() == &m_world.worldTree());
+        scheduleRemoval(worldObject);
     }
-#endif
-    m_scheduledRemovals.insert(m_scheduledRemovals.end(), removals.begin(), removals.end());
 }
 
 void God::spawn() {

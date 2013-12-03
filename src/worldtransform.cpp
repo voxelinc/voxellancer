@@ -1,6 +1,6 @@
 #include "worldtransform.h"
 
-
+#include <glow/logging.h>
 
 WorldTransform::WorldTransform(glm::vec3 center, float scale) :
     m_position(0),
@@ -21,6 +21,7 @@ const glm::quat WorldTransform::orientation() const {
 
 void WorldTransform::setOrientation(glm::quat quat){
 	m_orientation = quat;
+    //glow::debug("%;", quat.x);
 }
 
 const glm::vec3 &WorldTransform::position() const {
