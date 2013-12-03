@@ -6,7 +6,9 @@
 #include "utils/tostring.h"
 
 
-Bullet::Bullet(glm::vec3 position, glm::quat orientation, glm::vec3 direction, float speed, float range) {
+Bullet::Bullet(glm::vec3 position, glm::quat orientation, glm::vec3 direction, float speed, float range) :
+    WorldObject(0.8f)
+{
     m_range = range / speed;
     glm::vec3 dir = glm::normalize(direction);
     glm::vec3 myOrientation = orientation * glm::vec3(0, 0, -1);
@@ -15,10 +17,13 @@ Bullet::Bullet(glm::vec3 position, glm::quat orientation, glm::vec3 direction, f
 
     m_transform.setPosition(position);
     m_transform.setOrientation(orientation); //set orientation to ship orientation
-    m_transform.rotateWorld(glm::angleAxis(-glm::degrees(angle), rotationAxis));
+    m_transform.rotateWorld(glm::angleAxis(-glm::degrees(angle), rotationAxis)); //then rotate towards target
 
-    physics().setSpeed(dir * speed);
-    physics().setAngularSpeed(glm::vec3(0, 0, 500)); //set spinning
+    m_physics.setSpeed(dir * speed);
+    m_physics.setAngularSpeed(glm::vec3(0, 0, 500)); //set spinning
+
+    m_hudInfo.setName("Bullet");
+    m_hudInfo.setShowOnHud(false);
 
     ClusterCache::instance()->fill(this, "data/voxelcluster/bullet.csv");
 }

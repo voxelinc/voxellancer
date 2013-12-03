@@ -137,31 +137,33 @@ void HUD::draw(){
             glm::vec3 delta = glm::inverse(m_hudCamera.orientation()) * (ship->transform().position() - m_hudCamera.position());
 
             std::stringstream s; s.setf(std::ios::fixed, std::ios::floatfield); s.precision(2);
-            s << "Dist " << i << ": " << (float)glm::length(delta);
-            m_font->drawString(s.str(), calculatePosition(BottomLeft, glm::vec3(4, 5 + 5 * i, 0)), s5x7, 0.5f);
+            s << ship->hudInfo().name() << ": " << ship->voxelMap().size() << "/" << (float)glm::length(delta);
+            m_font->drawString(s.str(), calculatePosition(BottomLeft, glm::vec3(4, 5 + 4 * i, 0)), s5x7, 0.4f);
             i++;
 
-            // strip z = depth value so glm::length will return x/y-length
-            float deltaz = delta.z;
-            delta.z = 0;
-            // calculate angle of ship and fov
-            float len = glm::length(delta);
-            float degship = glm::degrees(glm::atan(len, glm::abs(deltaz)));
-            float degfov = m_renderCamera.fovy() / 2;
-            // draw arrow if behind of us or out of "scope"
-            if (glm::length(delta) != 0 && (deltaz > 0 || degship / degfov > prop_arrowRadius * 1.15f)){
-                delta = glm::normalize(delta);
-                //rotate arrow towards ship (arrow model points upwards)
-                glm::quat absOrientation = glm::angleAxis(glm::degrees(glm::atan(delta.x, delta.y)), glm::vec3(0, 0, -1));
-                m_shipArrow->transform().setOrientation(absOrientation);
-                // move arrow out of HUD center
-                glm::vec3 absPosition = glm::vec3(0, 0, -prop_distance) /* move back to HUD pane */
-                    /* move m_arrow_radius in direction of heading, where 0 is center 1 is full FOV
-                    * because orientation is applied before position, add model-internal offset here */
-                    + m_shipArrow->transform().orientation() * (m_shipArrow->m_offset + glm::vec3(0, dy * prop_arrowRadius, 0));
-                m_shipArrow->transform().setPosition(absPosition);
+            if (ship->hudInfo().showOnHud()){
+                // strip z = depth value so glm::length will return x/y-length
+                float deltaz = delta.z;
+                delta.z = 0;
+                // calculate angle of ship and fov
+                float len = glm::length(delta);
+                float degship = glm::degrees(glm::atan(len, glm::abs(deltaz)));
+                float degfov = m_renderCamera.fovy() / 2;
+                // draw arrow if behind of us or out of "scope"
+                if (glm::length(delta) != 0 && (deltaz > 0 || degship / degfov > prop_arrowRadius * 1.15f)){
+                    delta = glm::normalize(delta);
+                    //rotate arrow towards ship (arrow model points upwards)
+                    glm::quat absOrientation = glm::angleAxis(glm::degrees(glm::atan(delta.x, delta.y)), glm::vec3(0, 0, -1));
+                    m_shipArrow->transform().setOrientation(absOrientation);
+                    // move arrow out of HUD center
+                    glm::vec3 absPosition = glm::vec3(0, 0, -prop_distance) /* move back to HUD pane */
+                        /* move m_arrow_radius in direction of heading, where 0 is center 1 is full FOV
+                        * because orientation is applied before position, add model-internal offset here */
+                        + m_shipArrow->transform().orientation() * (m_shipArrow->m_offset + glm::vec3(0, dy * prop_arrowRadius, 0));
+                    m_shipArrow->transform().setPosition(absPosition);
 
-                m_voxelRenderer->draw(m_shipArrow.get());
+                    m_voxelRenderer->draw(m_shipArrow.get());
+                }
             }
         }
     }

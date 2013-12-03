@@ -5,6 +5,7 @@
 #include "collision/collisiondetector.h"
 #include "physics/physics.h"
 #include "voxel/voxelcluster.h"
+#include "ui/hudinfo.h"
 
 class WorldObject : public VoxelCluster
 {
@@ -14,6 +15,7 @@ public:
 
     CollisionDetector& collisionDetector();
     Physics& physics();
+    HUDInfo& hudInfo();
 
     AABB aabb();
     Sphere sphere();
@@ -31,7 +33,9 @@ public:
     void accelerate(glm::vec3 direction);
     void accelerateAngular(glm::vec3 axis);
 
+
 protected:
     CollisionDetector m_collisionDetector;
     Physics m_physics;
+    HUDInfo m_hudInfo;
 };

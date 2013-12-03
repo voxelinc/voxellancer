@@ -20,8 +20,11 @@ const glm::quat WorldTransform::orientation() const {
 }
 
 void WorldTransform::setOrientation(glm::quat quat){
+    assert(std::isfinite(quat.x));
+    assert(std::isfinite(quat.y));
+    assert(std::isfinite(quat.z));
+    assert(std::isfinite(quat.w));
 	m_orientation = quat;
-    //glow::debug("%;", quat.x);
 }
 
 const glm::vec3 &WorldTransform::position() const {
