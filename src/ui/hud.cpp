@@ -95,7 +95,7 @@ void HUD::update(float delta_sec){
     m_delta_sec_remain = total - progress;
 
     // Set the lastCamera from which interpolation starts next frame to where we interpolated this time
-    m_lastGameCamera.setOrientation(glm::mix(m_lastGameCamera.orientation(), m_gameCamera->orientation(), (float)(progress / total)));
+    m_lastGameCamera.setOrientation(glm::slerp(m_lastGameCamera.orientation(), m_gameCamera->orientation(), (float)(progress / total)));
     m_lastGameCamera.setPosition(glm::mix(m_lastGameCamera.position(), m_gameCamera->position(), (float)(progress / total)));
 
     // framerate measurement (not the best algorithm but the most compact)
