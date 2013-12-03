@@ -15,9 +15,12 @@ Bullet::Bullet(glm::vec3 position, glm::quat orientation, glm::vec3 direction, f
     glm::vec3 rotationAxis = glm::normalize(glm::cross(dir, myOrientation));
     float angle = glm::acos(glm::dot(dir, myOrientation));
 
-    m_transform.setPosition(position);
+    ClusterCache::instance()->fill(this, "data/voxelcluster/bullet.csv");
+
     m_transform.setOrientation(orientation); //set orientation to ship orientation
     m_transform.rotateWorld(glm::angleAxis(-glm::degrees(angle), rotationAxis)); //then rotate towards target
+
+    m_transform.setPosition(position + dir * (m_collisionDetector.voxeltree().gridAABB().axisMax(Axis::ZAxis) + 0.5f));
 
     m_physics.setSpeed(dir * speed);
     m_physics.setAngularSpeed(glm::vec3(0, 0, 500)); //set spinning
@@ -25,7 +28,7 @@ Bullet::Bullet(glm::vec3 position, glm::quat orientation, glm::vec3 direction, f
     m_hudInfo.setName("Bullet");
     m_hudInfo.setShowOnHud(false);
 
-    ClusterCache::instance()->fill(this, "data/voxelcluster/bullet.csv");
+    finishInitialization();
 }
 
 
