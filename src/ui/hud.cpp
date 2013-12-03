@@ -117,10 +117,6 @@ void HUD::draw(){
     m_renderCamera.setOrientation((glm::inverse(m_hudCamera.orientation()) * m_gameCamera->orientation()));
     m_renderCamera.setPosition(((m_gameCamera->position() - m_hudCamera.position()) * prop_moveMultiplier.get()) * m_hudCamera.orientation());
 
-    // the virtual voxel display resolution
-    float dy = floor(glm::tan(glm::radians(m_renderCamera.fovy() / 2.0f)) * prop_distance);
-    float dx = m_renderCamera.aspectRatio()*dy;
-
     m_voxelRenderer->prepareDraw(&m_renderCamera, false);
 
     // draw statics
@@ -136,10 +132,14 @@ void HUD::draw(){
             // delta is the vector from virtual HUD camera to the ship
             glm::vec3 delta = glm::inverse(m_hudCamera.orientation()) * (ship->transform().position() - m_hudCamera.position());
 
-            std::stringstream s; s.setf(std::ios::fixed, std::ios::floatfield); s.precision(2);
-            s << ship->hudInfo().name() << ": " << ship->voxelMap().size() << "/" << (float)glm::length(delta);
-            m_font->drawString(s.str(), calculatePosition(BottomLeft, glm::vec3(4, 5 + 4 * i, 0)), s5x7, 0.4f);
-            i++;
+            if (i < 11){
+                std::stringstream s; s.setf(std::ios::fixed, std::ios::floatfield); s.precision(2);
+                s << ship->hudInfo().name() << ": " << ship->voxelMap().size() << "/" << (float)glm::length(delta);
+                m_font->drawString(s.str(), calculatePosition(BottomLeft, glm::vec3(4, 5 + 4 * i, 0)), s5x7, 0.4f);
+                i++;
+            } else if (i == 11){
+                m_font->drawString("-more-", calculatePosition(BottomLeft, glm::vec3(4, 5 + 4 * i, 0)), s5x7, 0.4f);
+            }
 
             if (ship->hudInfo().showOnHud()){
                 // strip z = depth value so glm::length will return x/y-length
@@ -159,7 +159,7 @@ void HUD::draw(){
                     glm::vec3 absPosition = glm::vec3(0, 0, -prop_distance) /* move back to HUD pane */
                         /* move m_arrow_radius in direction of heading, where 0 is center 1 is full FOV
                         * because orientation is applied before position, add model-internal offset here */
-                        + m_shipArrow->transform().orientation() * (m_shipArrow->m_offset + glm::vec3(0, dy * prop_arrowRadius, 0));
+                        + m_shipArrow->transform().orientation() * (m_shipArrow->m_offset + glm::vec3(0, m_dy * prop_arrowRadius, 0));
                     m_shipArrow->transform().setPosition(absPosition);
 
                     m_voxelRenderer->draw(m_shipArrow.get());

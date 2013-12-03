@@ -174,13 +174,13 @@ void Physics::doSteppedTransform() {
     float steps = calculateStepCount(m_oldTransform, m_newTransform);
 
     for (int i = 0; i <= steps; i++) {
-        m_worldObject.transform().setOrientation(glm::lerp(m_oldTransform.orientation(), m_newTransform.orientation(), i / steps));
+        m_worldObject.transform().setOrientation(glm::mix(m_oldTransform.orientation(), m_newTransform.orientation(), i / steps));
         m_worldObject.transform().setPosition(glm::mix(m_oldTransform.position(), m_newTransform.position(), i / steps));
         m_worldObject.collisionDetector().updateGeode();
         const std::list<Collision> & collisions = m_worldObject.collisionDetector().checkCollisions();
         if (!collisions.empty()) {
             assert(i > 0); // you're stuck, hopefully doesn't happen!
-            m_worldObject.transform().setOrientation(glm::lerp(m_oldTransform.orientation(), m_newTransform.orientation(), (i - 1) / steps));
+            m_worldObject.transform().setOrientation(glm::mix(m_oldTransform.orientation(), m_newTransform.orientation(), (i - 1) / steps));
             m_worldObject.transform().setPosition(glm::mix(m_oldTransform.position(), m_newTransform.position(), (i - 1) / steps));
             assert(std::isfinite(m_worldObject.transform().orientation().x));
             break;
