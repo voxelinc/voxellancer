@@ -73,16 +73,6 @@ void Game::initialize()
     m_voxelRenderer = std::unique_ptr<VoxelRenderer>(new VoxelRenderer);
 
 
-    WorldObject *m_testCluster = new WorldObject();
-    m_testCluster->transform().move(glm::vec3(0, 0, 0));
-    m_testCluster->addVoxel(new Voxel(glm::ivec3(1, 0, 0), cvec3(0, 255, 0)));
-    m_testCluster->addVoxel(new Voxel(glm::ivec3(2, 0, 0), cvec3(255, 255, 0)));
-    m_testCluster->addVoxel(new Voxel(glm::ivec3(1, 1, 0), cvec3(0, 0, 255)));
-    m_testCluster->addVoxel(new Voxel(glm::ivec3(1, 0, 1), cvec3(255, 0, 0)));
-    m_testCluster->addVoxel(new Voxel(glm::ivec3(0, 0, 0), cvec3(255, 0, 128)));
-    m_testCluster->finishInitialization();
-    m_world->god().scheduleSpawn(m_testCluster);
-
     WorldObject *m_testClusterMoveable = new WorldObject();
     m_testClusterMoveable->transform().move(glm::vec3(-20, 0, 0));
     m_testClusterMoveable->transform().rotate(glm::angleAxis(-90.f, glm::vec3(0, 1, 0)));
