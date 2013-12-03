@@ -22,7 +22,6 @@ void Damager::applyDamages(std::list<Impact> &impacts) {
         float damage = damageOfImpact(impact);
         voxel->applyDamage(damage);
         if(voxel->hp() <= 0) {
-        std::cout << impact.worldObject() << " " << toString(impact.vec()) << " => " << toString(dampImpact(impact, damage - hpBeforeDamage).vec()) << std::endl;
             m_dampedDeadlyImpacts.push_back(dampImpact(impact, damage - hpBeforeDamage));
             m_deadlyImpacts.push_back(impact);
             m_deadVoxels.push_back(voxel);

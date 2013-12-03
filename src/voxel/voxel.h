@@ -20,7 +20,7 @@ namespace std {
 class Voxel
 {
 public:
-    Voxel(const glm::ivec3 &gridCell, const cvec3 &color, float mass = 1.0f);
+    Voxel(const glm::ivec3 &gridCell, const cvec3 &color = cvec3(255, 128, 0), float mass = 1.0f);
     virtual ~Voxel();
 
     virtual Voxel *clone();

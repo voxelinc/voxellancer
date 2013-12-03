@@ -40,6 +40,10 @@ void WorldLogic::update(float deltaSecs) {
     m_world.god().spawn();
 }
 
+ DamageForwarder &WorldLogic::damageForwarder() {
+    return m_damageForwarder;
+ }
+
 void WorldLogic::damageForwardLoop(std::list<Impact> damageImpacts) {
     if(damageImpacts.size() > 0) {
         std::cout << "Original impacts: " << std::endl;
@@ -51,7 +55,7 @@ void WorldLogic::damageForwardLoop(std::list<Impact> damageImpacts) {
     while(damageImpacts.size() > 0) {
         m_damager.applyDamages(damageImpacts);
 
-        m_damageForwarder.forwardDamage(m_damager.deadlyImpacts());
+        m_damageForwarder.forwardDamageImpacts(m_damager.deadlyImpacts());
         m_damageForwarder.dontForwardTo(m_damager.deadVoxels());
 
         m_voxelHangman.applyOnDestructionHooks(m_damager.deadlyImpacts());
