@@ -75,50 +75,42 @@ void Game::initialize()
     m_voxelRenderer = std::unique_ptr<VoxelRenderer>(new VoxelRenderer);
 
 
-    WorldObject *m_testCluster = new WorldObject();
-    m_testCluster->transform().move(glm::vec3(0, 0, 0));
-    m_testCluster->addVoxel(new Voxel(glm::ivec3(1, 0, 0), cvec3(0, 255, 0)));
-    m_testCluster->addVoxel(new Voxel(glm::ivec3(2, 0, 0), cvec3(255, 255, 0)));
-    m_testCluster->addVoxel(new Voxel(glm::ivec3(1, 1, 0), cvec3(0, 0, 255)));
-    m_testCluster->addVoxel(new Voxel(glm::ivec3(1, 0, 1), cvec3(255, 0, 0)));
-    m_testCluster->addVoxel(new Voxel(glm::ivec3(0, 0, 0), cvec3(255, 0, 128)));
-    m_testCluster->finishInitialization();
-    m_world->god().scheduleSpawn(m_testCluster);
-
     WorldObject *m_testClusterMoveable = new WorldObject();
     m_testClusterMoveable->transform().move(glm::vec3(-20, 0, 0));
     m_testClusterMoveable->transform().rotate(glm::angleAxis(-90.f, glm::vec3(0, 1, 0)));
-    m_testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 7), cvec3(0, 255, 0)));
-    m_testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 6), cvec3(255, 255, 0)));
-    m_testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 5), cvec3(255, 255, 0)));
-    m_testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 4), cvec3(255, 255, 0)));
-    m_testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 3), cvec3(255, 255, 0)));
-    m_testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 2), cvec3(255, 255, 0)));
-    m_testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 1), cvec3(255, 255, 0)));
-    m_testClusterMoveable->addVoxel(new Voxel(glm::ivec3(1, 1, 7), cvec3(0, 0, 255)));
-    m_testClusterMoveable->addVoxel(new Voxel(glm::ivec3(1, 0, 7), cvec3(255, 0, 0)));
-    m_testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 8), cvec3(255, 0, 128)));
+    m_testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 7), 0x00FF00));
+    m_testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 6), 0xFFFF00));
+    m_testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 5), 0xFFFF00));
+    m_testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 4), 0xFFFF00));
+    m_testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 3), 0xFFFF00));
+    m_testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 2), 0xFFFF00));
+    m_testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 1), 0xFFFF00));
+    m_testClusterMoveable->addVoxel(new Voxel(glm::ivec3(1, 1, 7), 0x0000FF));
+    m_testClusterMoveable->addVoxel(new Voxel(glm::ivec3(1, 0, 7), 0xFF0000));
+    m_testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 8), 0xFF0080));
     m_testClusterMoveable->finishInitialization();
+    m_testClusterMoveable->hudInfo().setName("movable");
     m_world->god().scheduleSpawn(m_testClusterMoveable);
-
 
     //m_inputHandler.setVoxelCluster(m_testClusterMoveable);
 
     Ship *m_testClusterA = new Ship();
-    ClusterCache::instance()->fill(m_testClusterA, "data/voxelcluster/normandy.csv");
-	m_testClusterA->transform().setCenter(glm::vec3(3, 0, 3)); // TODO: shouldnt center == centerofmass ?
+    ClusterCache::instance()->fillObject(m_testClusterA, "data/voxelcluster/normandy.csv");
 	m_testClusterA->transform().setPosition(glm::vec3(0, 0, -100));
-	//m_testClusterA->removeVoxel(cvec3(3, 2, 3)); // this verifies the objects are different
     m_testClusterA->finishInitialization();
+    m_testClusterA->hudInfo().setName("Normandy");
     m_world->god().scheduleSpawn(m_testClusterA);
 
     Ship *m_testClusterB = new Ship();
-    ClusterCache::instance()->fill(m_testClusterB, "data/voxelcluster/basicship.csv");
+    ClusterCache::instance()->fillObject(m_testClusterB, "data/voxelcluster/basicship.csv");
 	m_testClusterB->transform().setCenter(glm::vec3(3, 0, 3));
     m_testClusterB->transform().setPosition(glm::vec3(0, 0, 10));
     m_testClusterB->finishInitialization();
     m_testClusterB->addHardpoint(new Hardpoint(m_testClusterB, glm::vec3(0, 5, 0), new Gun(400, 200, 0.05f)));
     m_testClusterB->addHardpoint(new Hardpoint(m_testClusterB, glm::vec3(5, 5, 0), new Gun(400, 200, 0.05f)));
+    m_testClusterB->hudInfo().setName("Ship");
+    m_testClusterB->hudInfo().setShowOnHud(false);
+
     m_world->god().scheduleSpawn(m_testClusterB);
 
     WorldObject *wall = new WorldObject(1);
@@ -127,11 +119,12 @@ void Game::initialize()
     for(int x = 0; x < 50; x++) {
         for(int y = 0; y < 30; y++) {
             for(int z = 0; z < 3; z++) {
-                wall->addVoxel(new Voxel(glm::ivec3(z, x, y), cvec3(180, 120, 120)));
+                wall->addVoxel(new Voxel(glm::ivec3(z, x, y), 0xB47878));
             }
         }
     }
     wall->finishInitialization();
+    wall->hudInfo().setName("Wall");
     m_world->god().scheduleSpawn(wall);
 
     m_inputHandler.setPlayerShip(m_testClusterB);
@@ -158,6 +151,8 @@ void Game::initialize()
 
 void Game::update(float delta_sec)
 {
+    // skip non-updates
+    if (delta_sec == 0) return;
     // avoid big jumps after debugging ;)
     delta_sec = glm::min(1.f, delta_sec);
 

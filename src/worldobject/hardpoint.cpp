@@ -11,7 +11,7 @@ Hardpoint::Hardpoint(Ship* ship, glm::vec3 position, Gun *gun){
 }
 
 Bullet* Hardpoint::shootAt(glm::vec3 point){
-    return m_gun->shootAt((glm::vec3)(m_ship->transform().matrix() * glm::vec4(m_position, 1.0)), m_ship->transform().orientation(), point);
+    return m_gun->shootAt((glm::vec3)(m_ship->transform().applyTo(m_position)), m_ship->transform().orientation(), point);
 }
 
 void Hardpoint::update(float deltasec){

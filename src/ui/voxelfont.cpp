@@ -37,7 +37,7 @@ void VoxelFont::loadFont(const std::string& identifier, glm::vec3 offset, std::m
 
 void VoxelFont::loadChar(const std::string& filename, glm::vec3 offset, const char index, std::map<char, std::unique_ptr<VoxelCluster>> *map){
     std::unique_ptr<VoxelCluster> element(new VoxelCluster(1.0));
-    ClusterCache::instance()->fill(element.get(), filename);
+    ClusterCache::instance()->fillCluster(element.get(), filename);
     element->transform().setCenter(offset);
     (*map)[index] = move(element);
 }

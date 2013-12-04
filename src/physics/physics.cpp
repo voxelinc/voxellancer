@@ -169,18 +169,20 @@ bool Physics::isCollisionPossible() {
     return possibleCollisions.size() > 1;
 }
 
+
 void Physics::doSteppedTransform() {
     float steps = calculateStepCount(m_oldTransform, m_newTransform);
 
     for (int i = 0; i <= steps; i++) {
-        m_worldObject.transform().setOrientation(glm::mix(m_oldTransform.orientation(), m_newTransform.orientation(), i / steps));
+        m_worldObject.transform().setOrientation(glm::slerp(m_oldTransform.orientation(), m_newTransform.orientation(), i / steps));
         m_worldObject.transform().setPosition(glm::mix(m_oldTransform.position(), m_newTransform.position(), i / steps));
         m_worldObject.collisionDetector().updateGeode();
         const std::list<Collision> & collisions = m_worldObject.collisionDetector().checkCollisions();
         if (!collisions.empty()) {
             assert(i > 0); // you're stuck, hopefully doesn't happen!
-            m_worldObject.transform().setOrientation(glm::mix(m_oldTransform.orientation(), m_newTransform.orientation(), (i - 1) / steps));
+            m_worldObject.transform().setOrientation(glm::slerp(m_oldTransform.orientation(), m_newTransform.orientation(), (i - 1) / steps));
             m_worldObject.transform().setPosition(glm::mix(m_oldTransform.position(), m_newTransform.position(), (i - 1) / steps));
+            assert(std::isfinite(m_worldObject.transform().orientation().x));
             break;
         }
     }
@@ -218,6 +220,7 @@ void Physics::addVoxel(Voxel *voxel) {
 void Physics::removeVoxel(const glm::ivec3 &position) {
     m_massValid = false;
     calculateMassAndCenter();
+    //m_worldObject.transform().setPosition(-oldCenter + m_worldObject.transform().center());
     // it would be better to calculate incremental mass/center changes here
     // something like mass -= 1; center -= 1/mass * pos; center /= (mass-1)/mass; should work
     // but there should be tests to verify this! (1 = mass of voxel)
