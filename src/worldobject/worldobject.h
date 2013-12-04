@@ -1,6 +1,7 @@
 #pragma once
 
 #include <list>
+#include <memory>
 
 #include "collision/collisiondetector.h"
 #include "physics/physics.h"
@@ -35,7 +36,9 @@ public:
 
 
 protected:
-    CollisionDetector m_collisionDetector;
-    Physics m_physics;
+    WorldObject(Physics* physics, CollisionDetector* detector, float scale = 1.0f);
+
+    std::unique_ptr<CollisionDetector> m_collisionDetector;
+    std::unique_ptr<Physics> m_physics;
     HUDInfo m_hudInfo;
 };

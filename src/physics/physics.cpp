@@ -77,12 +77,9 @@ std::list<Impact> &Physics::move(float delta_sec) {
     m_oldTransform = m_newTransform = m_worldObject.transform();
     m_worldObject.collisionDetector().reset();
 
-    m_speed *= (1.f - m_dampening * delta_sec);
-    m_speed += m_acceleration * delta_sec;
-    m_newTransform.moveWorld(m_speed * delta_sec);
+    updateSpeed(delta_sec);
 
-    m_angularSpeed *= (1.f - m_angularDampening * delta_sec);
-    m_angularSpeed = m_angularSpeed + (m_angularAcceleration*delta_sec);
+    m_newTransform.moveWorld(m_speed * delta_sec);
     m_newTransform.rotate(glm::quat(m_angularSpeed*delta_sec));
 
     applyTransform();
@@ -102,6 +99,14 @@ std::list<Impact> &Physics::move(float delta_sec) {
     m_worldObject.collisionDetector().updateGeode();
 
     return m_impacts;
+}
+
+void Physics::updateSpeed(float delta_sec){
+    m_speed *= (1.f - m_dampening * delta_sec);
+    m_speed += m_acceleration * delta_sec;
+
+    m_angularSpeed *= (1.f - m_angularDampening * delta_sec);
+    m_angularSpeed = m_angularSpeed + (m_angularAcceleration*delta_sec);
 }
 
 void Physics::resolveCollision(Collision & c, float delta_sec) {
