@@ -4,11 +4,11 @@
 
 #include <GLFW/glfw3.h>
 
-#include "camera.h"
 
 #include "property/propertymanager.h"
 #include "property/property.h"
 #include "worldobject/ship.h"
+#include "player.h"
 
 class WorldObject;
 
@@ -16,6 +16,7 @@ class WorldObject;
 class InputHandler {
 public:
     InputHandler(GLFWwindow *window, Camera *camera);
+    InputHandler(GLFWwindow *window, Player *player, Camera *camera);
 	virtual ~InputHandler();
 
     void setPlayerShip(Ship *ship);
@@ -28,8 +29,7 @@ public:
 protected:
 	GLFWwindow *m_window;
 	Camera* m_camera;
-
-    Ship *m_playerShip;
+    Player* m_player;
 
 
 	int m_windowWidth, m_windowHeight;

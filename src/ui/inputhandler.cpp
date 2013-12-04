@@ -2,25 +2,45 @@
 
 #include <glm/glm.hpp>
 
-InputHandler::InputHandler(GLFWwindow *window, Camera *camera):
-	m_window(window),
-	m_camera(camera),
-	prop_rotationSpeed("input.rotationSpeed"),
-    prop_moveSpeed("input.moveSpeed"),
-    prop_rollSpeed("input.rollSpeed"),
-    m_playerShip(nullptr),
-    m_followCam(true)
+InputHandler::InputHandler(GLFWwindow *window, Camera *camera) :
+m_window(window),
+m_camera(camera),
+prop_rotationSpeed("input.rotationSpeed"),
+prop_moveSpeed("input.moveSpeed"),
+prop_rollSpeed("input.rollSpeed"),
+m_followCam(true)
 {
 
-	glfwGetWindowSize(m_window, &m_windowWidth, &m_windowHeight);
-	glfwSetCursorPos(m_window, m_windowWidth / 2, m_windowHeight / 2);
-	m_cursorMaxDistance = glm::min(m_windowHeight, m_windowWidth);
+    glfwGetWindowSize(m_window, &m_windowWidth, &m_windowHeight);
+    glfwSetCursorPos(m_window, m_windowWidth / 2, m_windowHeight / 2);
+    m_cursorMaxDistance = glm::min(m_windowHeight, m_windowWidth);
 
-	m_fpsControls = false;
-	m_mouseControl = false;
-	m_lastfocus = glfwGetWindowAttrib(m_window, GLFW_FOCUSED);
+    m_fpsControls = false;
+    m_mouseControl = false;
+    m_lastfocus = glfwGetWindowAttrib(m_window, GLFW_FOCUSED);
 
-	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+}
+
+InputHandler::InputHandler(GLFWwindow *window, Player* player, Camera *camera) :
+m_window(window),
+m_player(player),
+m_camera(camera),
+prop_rotationSpeed("input.rotationSpeed"),
+prop_moveSpeed("input.moveSpeed"),
+prop_rollSpeed("input.rollSpeed"),
+m_followCam(true)
+{
+
+    glfwGetWindowSize(m_window, &m_windowWidth, &m_windowHeight);
+    glfwSetCursorPos(m_window, m_windowWidth / 2, m_windowHeight / 2);
+    m_cursorMaxDistance = glm::min(m_windowHeight, m_windowWidth);
+
+    m_fpsControls = false;
+    m_mouseControl = false;
+    m_lastfocus = glfwGetWindowAttrib(m_window, GLFW_FOCUSED);
+
+    glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 }
 
 InputHandler::~InputHandler(){
@@ -56,41 +76,41 @@ void InputHandler::update(float delta_sec) {
             // position voxelcluster
 
 			if (glfwGetKey(m_window, GLFW_KEY_UP) == GLFW_PRESS){
-                m_playerShip->accelerate(glm::vec3(0, 0, -prop_moveSpeed.get()));
+                m_player->accelerateShip(glm::vec3(0, 0, -prop_moveSpeed.get()));
 			}
 			if (glfwGetKey(m_window, GLFW_KEY_LEFT) == GLFW_PRESS){
-                m_playerShip->accelerate(-glm::vec3(prop_moveSpeed.get(), 0, 0));
+                m_player->accelerateShip(-glm::vec3(prop_moveSpeed.get(), 0, 0));
 			}
 			if (glfwGetKey(m_window, GLFW_KEY_DOWN) == GLFW_PRESS){
-                m_playerShip->accelerate(glm::vec3(0, 0, prop_moveSpeed.get()));
+                m_player->accelerateShip(glm::vec3(0, 0, prop_moveSpeed.get()));
 			}
 			if (glfwGetKey(m_window, GLFW_KEY_RIGHT) == GLFW_PRESS){
-                m_playerShip->accelerate(glm::vec3(prop_moveSpeed.get(), 0, 0));
+                m_player->accelerateShip(glm::vec3(prop_moveSpeed.get(), 0, 0));
 			}
 			if (glfwGetKey(m_window, GLFW_KEY_PAGE_DOWN) == GLFW_PRESS){
-                m_playerShip->accelerate(glm::vec3(0, -prop_moveSpeed.get(), 0));
+                m_player->accelerateShip(glm::vec3(0, -prop_moveSpeed.get(), 0));
 			}
 			if (glfwGetKey(m_window, GLFW_KEY_PAGE_UP) == GLFW_PRESS){
-                m_playerShip->accelerate(glm::vec3(0, prop_moveSpeed.get(), 0));
+                m_player->accelerateShip(glm::vec3(0, prop_moveSpeed.get(), 0));
 			}
 
             if (glfwGetKey(m_window, GLFW_KEY_I) == GLFW_PRESS) {
-                m_playerShip->accelerateAngular(glm::vec3(1, 0, 0));
+                m_player->accelerateAngularShip(glm::vec3(1, 0, 0));
             }
             if (glfwGetKey(m_window, GLFW_KEY_K) == GLFW_PRESS) {
-                m_playerShip->accelerateAngular(glm::vec3(-1, 0, 0));
+                m_player->accelerateAngularShip(glm::vec3(-1, 0, 0));
             }
             if (glfwGetKey(m_window, GLFW_KEY_J) == GLFW_PRESS) {
-                m_playerShip->accelerateAngular(glm::vec3(0, 1, 0));
+                m_player->accelerateAngularShip(glm::vec3(0, 1, 0));
             }
             if (glfwGetKey(m_window, GLFW_KEY_L) == GLFW_PRESS) {
-                m_playerShip->accelerateAngular(glm::vec3(0, -1, 0));
+                m_player->accelerateAngularShip(glm::vec3(0, -1, 0));
             }
             if (glfwGetKey(m_window, GLFW_KEY_U) == GLFW_PRESS) {
-                m_playerShip->accelerateAngular(glm::vec3(0, 0, 1));
+                m_player->accelerateAngularShip(glm::vec3(0, 0, 1));
             }
             if (glfwGetKey(m_window, GLFW_KEY_O) == GLFW_PRESS) {
-                m_playerShip->accelerateAngular(glm::vec3(0, 0, -1));
+                m_player->accelerateAngularShip(glm::vec3(0, 0, -1));
             }
 
             if (!m_followCam){ //disable view controls when cam is following
@@ -185,9 +205,8 @@ void InputHandler::update(float delta_sec) {
 	}
 
     if (m_followCam){
-        m_camera->setPosition(m_playerShip->transform().position());
-        m_camera->move(glm::vec3(0, 5, 10));
-        m_camera->setOrientation(m_playerShip->transform().orientation());
+        m_player->setShipToCam();
+        //m_player->setFollowCam();
     }
 
 	m_lastfocus = glfwGetWindowAttrib(m_window, GLFW_FOCUSED);
@@ -205,16 +224,12 @@ void InputHandler::toggleControls()
 }
 
 
-void InputHandler::setPlayerShip(Ship* ship) {
-    m_playerShip = ship;
-}
-
 void InputHandler::shoot(double x, double y){
     glm::vec4 pointEnd((x * 2 / m_windowWidth - 1), -1 * (y * 2 / m_windowHeight - 1), 1, 1); //get normalized device coords
     pointEnd = glm::inverse(m_camera->viewProjection())*pointEnd; //find point on zfar
     glm::vec3 vec = glm::vec3(pointEnd); // no need for w component
     vec = glm::normalize(vec); // normalize
-    vec *= m_playerShip->minAimDistance(); // set aimdistance
+    vec *= m_player->playerShip()->minAimDistance(); // set aimdistance
     vec += m_camera->position(); //adjust for camera translation
-    m_playerShip->shootAt(vec);
+    m_player->playerShip()->shootAt(vec);
 }

@@ -37,10 +37,11 @@
 
 class Ship;
 
-Game::Game(GLFWwindow *window):
-	m_window(window),
-	m_camera(),
-	m_inputHandler(window, &m_camera)
+Game::Game(GLFWwindow *window) :
+m_window(window),
+m_camera(),
+m_player(&m_camera),
+m_inputHandler(window, &m_player, &m_camera)
 {
 	reloadConfig();
 }
@@ -124,14 +125,14 @@ void Game::initialize()
     wall->hudInfo().setName("Wall");
     m_world->god().scheduleSpawn(wall);
 
-    m_inputHandler.setPlayerShip(m_testClusterB);
+    m_player.setShip(m_testClusterB);
 
     glow::debug("Initial spawn");
     m_world->god().spawn();
 
 	glow::debug("Setup Camersa");
 	//viewport set in resize
-	m_camera.setPosition(glm::vec3(0, 5, 30));
+	//m_camera.setPosition(glm::vec3(0, 5, 30));
 	m_camera.setZNear(1);
 	m_camera.setZFar(9999);
 
