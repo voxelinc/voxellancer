@@ -45,7 +45,7 @@ void WorldTree::aabbChanged(WorldTreeGeode *geode) {
     geode->containingNode()->aabbChanged(geode);
 }
 
-int WorldTree::poll(int& nodes, int &empty, int& geodes, int& depth) {
+void WorldTree::poll(int& nodes, int &empty, int& geodes, int& depth) {
     nodes = empty = geodes = depth = 0;
     WorldTreeNode::poll(nodes, empty, geodes, depth);
 }

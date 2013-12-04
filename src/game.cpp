@@ -238,6 +238,7 @@ void TreeStateReporter::exec() {
     int nodes, empty, geodes, depth;
     m_worldTree->poll(nodes, empty, geodes, depth);
     std::cout << "WorldTree: " << nodes << " nodes; " << empty << " empty; " << geodes << " geodes; " << depth << " maxdepth" << std::endl;
+    m_worldTree->print();
 }
 
 

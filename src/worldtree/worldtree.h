@@ -22,7 +22,7 @@ public:
 
     void aabbChanged(WorldTreeGeode *geode);
 
-    int poll(int& nodes, int &empty, int& geodes, int& depth);
+    void poll(int& nodes, int &empty, int& geodes, int& depth);
 
 protected:
 

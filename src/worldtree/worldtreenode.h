@@ -40,7 +40,8 @@ public:
 
     void aabbChanged(WorldTreeGeode *geode);
 
-    int poll(int& nodes, int &empty, int& geodes, int& depth);
+    void poll(int& nodes, int &empty, int& geodes, int& depth);
+    void print();
 
 
 protected:
@@ -58,5 +59,6 @@ protected:
     void split();
     void unsplit();
     void octuple(const AABB &aabb);
+    void setLevel(int level);
 };
 

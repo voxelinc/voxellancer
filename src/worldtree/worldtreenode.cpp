@@ -135,7 +135,7 @@ void WorldTreeNode::aabbChanged(WorldTreeGeode *geode) {
     }
 }
 
-int WorldTreeNode::poll(int& nodes, int &empty, int& geodes, int& depth) {
+void WorldTreeNode::poll(int& nodes, int &empty, int& geodes, int& depth) {
     if(isLeaf() && m_geodes.size() == 0) {
         empty++;
     }
@@ -146,6 +146,24 @@ int WorldTreeNode::poll(int& nodes, int &empty, int& geodes, int& depth) {
 
     for(auto subnode : m_subnodes) {
         subnode->poll(nodes, empty, geodes, depth);
+    }
+}
+
+void WorldTreeNode::print() {
+    auto indent = [&] {
+        for(int i = 0; i < m_level; i++) {
+            std::cout << "  ";
+        }
+    };
+
+    indent(); std::cout << m_level << ": " << toString(m_aabb) << std::endl;
+
+    for(WorldTreeGeode* geode : m_geodes) {
+        indent(); std::cout << "  Geode " << toString(geode->aabb()) << std::endl;
+    }
+
+    for(WorldTreeNode* subnode : m_subnodes) {
+        subnode->print();
     }
 }
 
@@ -186,6 +204,8 @@ void WorldTreeNode::unsplit() {
 }
 
 void WorldTreeNode::octuple(const AABB &aabb) {
+    assert(m_level == 0);
+
     WorldTreeNode *oldThis = new WorldTreeNode(m_level+1, this, m_aabb);
     oldThis->m_geodes.splice(oldThis->m_geodes.end(), m_geodes);
     oldThis->m_subnodes.splice(oldThis->m_subnodes.end(), m_subnodes);
@@ -213,6 +233,17 @@ void WorldTreeNode::octuple(const AABB &aabb) {
         m_subnodes.splice(m_subnodes.end(), mirroredSubnodes);
 
         m_aabb.expand(axis, extentDir * m_aabb.extent(axis));
+    }
+
+    for(WorldTreeNode* subnode : m_subnodes) {
+        subnode->setLevel(1);
+    }
+}
+
+void WorldTreeNode::setLevel(int level) {
+    m_level = level;
+    for(WorldTreeNode* subnode : m_subnodes) {
+        subnode->setLevel(level + 1);
     }
 }
 
