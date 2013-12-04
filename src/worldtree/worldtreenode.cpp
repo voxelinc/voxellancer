@@ -4,6 +4,8 @@
 #include <algorithm>
 #include <iostream>
 
+#include "worldobject/worldobject.h"
+
 #include "utils/tostring.h"
 
 
@@ -159,7 +161,7 @@ void WorldTreeNode::print() {
     indent(); std::cout << m_level << ": " << toString(m_aabb) << std::endl;
 
     for(WorldTreeGeode* geode : m_geodes) {
-        indent(); std::cout << "  Geode " << toString(geode->aabb()) << std::endl;
+        indent(); std::cout << "  Geode " << geode->worldObject()->hudInfo().name() << " " << toString(geode->aabb()) << std::endl;
     }
 
     for(WorldTreeNode* subnode : m_subnodes) {
