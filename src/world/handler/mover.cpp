@@ -2,7 +2,7 @@
 
 #include "world/god.h"
 #include "world/world.h"
-#include "world/worldobject.h"
+#include "worldobject/worldobject.h"
 
 
 void Mover::moveWorldObjects(float deltaSec) {

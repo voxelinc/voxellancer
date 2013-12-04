@@ -2,8 +2,10 @@
 #include "worldtree/worldtree.h"
 #include "worldtree/worldtreegeode.h"
 #include "collision/collisiondetector.h"
-#include "world/worldobject.h"
 #include <iostream>
+
+#include "utils/tostring.h"
+#include "worldobject/worldobject.h"
 
 
 CollisionDetector::CollisionDetector(WorldObject & worldObject) :
@@ -75,9 +77,6 @@ void CollisionDetector::finishInitialization() {
 void CollisionDetector::updateGeode() {
     if(m_geode != nullptr) {
         m_geode->setAABB(m_worldObject.aabb());
-    }
-    else {
-        std::cout << "no geode set" << std::endl;
     }
 }
 

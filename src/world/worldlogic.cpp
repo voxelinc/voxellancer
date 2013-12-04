@@ -30,9 +30,9 @@ void WorldLogic::update(float deltaSecs) {
 //    m_world.god().scheduleRemovals(m_wrecker.wreckages());
 //    m_world.god().scheduleSpawns(m_wrecker.recycled());
 
-//    m_garbageCollector.check(m_damager.modifiedVoxelClusters());
+    m_garbageCollector.check(m_world.worldObjects()/*m_damager.modifiedVoxelClusters()*/);
     //m_garbageCollector.applyOnGarbageHooks();
-//    m_world.god().scheduleRemovals(m_garbageCollector.garbageVoxelClusters());
+    m_world.god().scheduleRemovals(m_garbageCollector.garbageVoxelClusters());
 
     m_world.god().remove();
     m_world.god().spawn();
@@ -52,8 +52,8 @@ void WorldLogic::damageForwardLoop(std::list<Impact> damageImpacts) {
         m_voxelHangman.removeDestroyedVoxels(m_damager.deadlyImpacts());
 
         damageImpacts = m_damageForwarder.forwardedDamageImpacts();
-        if(damageImpacts.size() > 0) {
-            std::cout << "Forwaring damage " << damageImpacts.size() << std::endl;
-        }
+        //if(damageImpacts.size() > 0) {
+        //    std::cout << "Forwaring damage " << damageImpacts.size() << std::endl;
+        //}
     }
 }

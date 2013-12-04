@@ -6,7 +6,7 @@
 #include "voxel/voxelcluster.h"
 #include "collision/voxeltreenode.h"
 
-#include "world/worldobject.h"
+#include "worldobject/worldobject.h"
 
 
 

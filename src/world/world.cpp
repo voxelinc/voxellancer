@@ -3,6 +3,7 @@
 #include "god.h"
 #include "worldtree/worldtree.h"
 #include "worldlogic.h"
+#include "worldobject/worldobject.h"
 
 World *World::s_instance = nullptr;
 
@@ -34,6 +35,10 @@ std::list<WorldObject*> &World::worldObjects() {
 }
 
 void World::update(float deltaSecs) {
+    for (WorldObject *worldObject : m_worldObjects) {
+        worldObject->update(deltaSecs);
+    }
+
     m_worldLogic->update(deltaSecs);
 }
 

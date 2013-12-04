@@ -3,16 +3,18 @@
 #include <algorithm>
 #include <cassert>
 
-#include "voxelcluster.h"
 #include "glow/logging.hpp"
 
+#include "voxelcluster.h"
+#include "worldobject/worldobject.h"
 
 
-Voxel::Voxel(const glm::ivec3& gridCell, const cvec3& color, float mass):
+
+Voxel::Voxel(const glm::ivec3& gridCell, int color, float mass, float hp):
     m_gridCell(gridCell),
     m_color(color),
-    m_hp(1),
-    m_mass(mass)
+    m_mass(mass),
+    m_hp(hp)
 {
     assert( gridCell.x >= 0 && gridCell.x < 256 &&
             gridCell.y >= 0 && gridCell.y < 256 &&
@@ -20,20 +22,22 @@ Voxel::Voxel(const glm::ivec3& gridCell, const cvec3& color, float mass):
 }
 
 Voxel::~Voxel() {
-
 }
 
-Voxel *Voxel::clone() {
-    Voxel *voxel = new Voxel(m_gridCell, m_color, m_mass);
-    voxel->m_hp = m_hp;
-    return voxel;
+
+void Voxel::addToCluster(VoxelCluster *cluster){
+    cluster->addVoxel(this);
+}
+
+void Voxel::addToObject(WorldObject *object){
+    object->addVoxel(this);
 }
 
 const glm::ivec3 &Voxel::gridCell() const {
     return m_gridCell;
 }
 
-const cvec3 &Voxel::color() const {
+int Voxel::color() const {
     return m_color;
 }
 
@@ -50,6 +54,6 @@ float Voxel::mass() const {
 }
 
 void Voxel::onDestruction() {
-    glow::debug("I'm voxel %; and I'm going now. So long and thx 4 all the fish!", this);
+    //glow::debug("I'm voxel %; and I'm going now. So long and thx 4 all the fish!", this);
 }
 

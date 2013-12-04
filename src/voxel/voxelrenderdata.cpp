@@ -41,9 +41,9 @@ void VoxelRenderData::updateTextures() {
         positionData[i * 3 + 0] = static_cast<unsigned char>(voxel->gridCell().x);
         positionData[i * 3 + 1] = static_cast<unsigned char>(voxel->gridCell().y);
         positionData[i * 3 + 2] = static_cast<unsigned char>(voxel->gridCell().z);
-        colorData[i * 3 + 0] = voxel->color().x;
-        colorData[i * 3 + 1] = voxel->color().y;
-        colorData[i * 3 + 2] = voxel->color().z;
+        colorData[i * 3 + 0] = voxel->color() >> 16;
+        colorData[i * 3 + 1] = (voxel->color() & 0xFF00) >> 8;
+        colorData[i * 3 + 2] = voxel->color() & 0xFF;
 
         i++;
     }

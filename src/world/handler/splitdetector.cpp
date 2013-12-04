@@ -5,7 +5,7 @@
 #include "voxel/voxel.h"
 #include "voxel/voxelneighbourhelper.h"
 
-#include "world/worldobject.h"
+#include "worldobject/worldobject.h"
 
 
 void SplitDetector::searchSplitOffs(std::set<WorldObject*> &modifiedWorldObjects) {

@@ -6,7 +6,7 @@
 #include "worldtree/worldtree.h"
 #include "voxel/voxel.h"
 #include "collision/collisiondetector.h"
-#include "world/worldobject.h"
+#include "worldobject/worldobject.h"
 #include "world/world.h"
 #include "world/god.h"
 
@@ -32,8 +32,8 @@ go_bandit([](){
         });
 
         it("works in most basic conditions", [&]() {
-            a->addVoxel(new Voxel(glm::ivec3(0, 0, 0), cvec3(255, 255, 255)));
-            b->addVoxel(new Voxel(glm::ivec3(0, 0, 0), cvec3(255, 255, 255)));
+            a->addVoxel(new Voxel(glm::ivec3(0, 0, 0), 0xFFFFFF));
+            b->addVoxel(new Voxel(glm::ivec3(0, 0, 0), 0xFFFFFF));
 
             AssertThat(d->checkCollisions().size(), Equals(1));
 
@@ -43,17 +43,17 @@ go_bandit([](){
         });
 
         it("works in pretty basic conditions", [&]() {
-            a->addVoxel(new Voxel(glm::ivec3(0, 0, 0), cvec3(255, 255, 255)));
-            a->addVoxel(new Voxel(glm::ivec3(1, 0, 0), cvec3(255, 255, 255)));
-            a->addVoxel(new Voxel(glm::ivec3(2, 0, 0), cvec3(255, 255, 255)));
-            a->addVoxel(new Voxel(glm::ivec3(3, 0, 0), cvec3(255, 255, 255)));
-            a->addVoxel(new Voxel(glm::ivec3(4, 0, 0), cvec3(255, 255, 255)));
-            a->addVoxel(new Voxel(glm::ivec3(4, 0, 1), cvec3(255, 255, 255)));
+            a->addVoxel(new Voxel(glm::ivec3(0, 0, 0), 0xFFFFFF));
+            a->addVoxel(new Voxel(glm::ivec3(1, 0, 0), 0xFFFFFF));
+            a->addVoxel(new Voxel(glm::ivec3(2, 0, 0), 0xFFFFFF));
+            a->addVoxel(new Voxel(glm::ivec3(3, 0, 0), 0xFFFFFF));
+            a->addVoxel(new Voxel(glm::ivec3(4, 0, 0), 0xFFFFFF));
+            a->addVoxel(new Voxel(glm::ivec3(4, 0, 1), 0xFFFFFF));
 
-            b->addVoxel(new Voxel(glm::ivec3(0, 0, 0), cvec3(255, 255, 255)));
-            b->addVoxel(new Voxel(glm::ivec3(0, 0, 1), cvec3(255, 255, 255)));
-            b->addVoxel(new Voxel(glm::ivec3(1, 0, 1), cvec3(255, 255, 255)));
-            b->addVoxel(new Voxel(glm::ivec3(2, 0, 1), cvec3(255, 255, 255)));
+            b->addVoxel(new Voxel(glm::ivec3(0, 0, 0), 0xFFFFFF));
+            b->addVoxel(new Voxel(glm::ivec3(0, 0, 1), 0xFFFFFF));
+            b->addVoxel(new Voxel(glm::ivec3(1, 0, 1), 0xFFFFFF));
+            b->addVoxel(new Voxel(glm::ivec3(2, 0, 1), 0xFFFFFF));
 
             AssertThat(d->checkCollisions().size(), IsGreaterThan(0));
 

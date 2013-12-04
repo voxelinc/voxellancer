@@ -50,7 +50,6 @@ void VoxelCluster::removeVoxel(const glm::ivec3& position) {
     delete voxel;
 }
 
-
 VoxelRenderData *VoxelCluster::voxelRenderData() {
     return &m_voxelRenderData;
 }

@@ -1,6 +1,6 @@
 #include "collision.h"
 
-#include "world/worldobject.h"
+#include "worldobject/worldobject.h"
 #include "voxel/voxel.h"
 
 CollisionParticipant::CollisionParticipant(WorldObject *worldObject, Voxel *voxel, const glm::vec3 &speed):

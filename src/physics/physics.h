@@ -17,6 +17,15 @@ public:
     Physics(WorldObject & worldObject);
     virtual ~Physics();
 
+    const glm::vec3& speed() const;
+    void setSpeed(const glm::vec3& speed);
+
+    const glm::vec3& angularSpeed() const;
+    void setAngularSpeed(const glm::vec3& angularSpeed);
+
+    const glm::vec3& acceleration() const;
+    const glm::vec3& angularAcceleration() const;
+
     std::list<Impact> &move(float delta_sec);
 
     void accelerate(glm::vec3 direction);

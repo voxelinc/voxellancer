@@ -1,5 +1,8 @@
 #include "sphere.h"
 
+#include <cassert>
+
+
 Sphere::Sphere():
     m_position(0.0f, 0.0f, 0.0f),
     m_radius(0.0f)
@@ -23,6 +26,7 @@ float Sphere::radius() const {
 }
 
 void Sphere::setRadius(float radius) {
+    assert(radius >= 0);
     m_radius = radius;
 }
 

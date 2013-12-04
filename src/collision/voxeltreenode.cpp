@@ -4,7 +4,7 @@
 #include <iostream>
 
 #include "utils/tostring.h"
-#include "world/worldobject.h"
+#include "worldobject/worldobject.h"
 
 
 VoxelTreeNode::VoxelTreeNode(VoxelTreeNode *parent, WorldObject &worldObject, const Grid3dAABB &gridAABB) :

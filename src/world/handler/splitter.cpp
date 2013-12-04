@@ -2,7 +2,7 @@
 
 #include "world/helper/worldobjectsplit.h"
 
-#include "world/worldobject.h"
+#include "worldobject/worldobject.h"
 #include "voxel/voxel.h"
 
 void Splitter::split(std::list<WorldObjectSplit*> &splits) {

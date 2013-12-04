@@ -4,7 +4,7 @@
 
 #include "worldtransform.h"
 #include "collision/collisiondetector.h"
-#include "world/worldobject.h"
+#include "worldobject/worldobject.h"
 #include "worldtree/worldtreegeode.h"
 #include "worldtree/worldtree.h"
 
@@ -31,6 +31,30 @@ void Physics::finishInitialization() {
 }
 
 Physics::~Physics() {
+}
+
+const glm::vec3& Physics::speed() const {
+    return m_speed;
+}
+
+void Physics::setSpeed(const glm::vec3& speed) {
+    m_speed = speed;
+}
+
+const glm::vec3& Physics::angularSpeed() const {
+    return m_angularSpeed;
+}
+
+void Physics::setAngularSpeed(const glm::vec3& angularSpeed) {
+    m_angularSpeed = angularSpeed;
+}
+
+const glm::vec3& Physics::acceleration() const {
+    return m_acceleration;
+}
+
+const glm::vec3& Physics::angularAcceleration() const {
+    return m_angularAcceleration;
 }
 
 void Physics::calculateMassAndCenter() {
@@ -145,18 +169,20 @@ bool Physics::isCollisionPossible() {
     return possibleCollisions.size() > 1;
 }
 
+
 void Physics::doSteppedTransform() {
     float steps = calculateStepCount(m_oldTransform, m_newTransform);
 
     for (int i = 0; i <= steps; i++) {
-        m_worldObject.transform().setOrientation(glm::mix(m_oldTransform.orientation(), m_newTransform.orientation(), i / steps));
+        m_worldObject.transform().setOrientation(glm::slerp(m_oldTransform.orientation(), m_newTransform.orientation(), i / steps));
         m_worldObject.transform().setPosition(glm::mix(m_oldTransform.position(), m_newTransform.position(), i / steps));
         m_worldObject.collisionDetector().updateGeode();
         const std::list<Collision> & collisions = m_worldObject.collisionDetector().checkCollisions();
         if (!collisions.empty()) {
             assert(i > 0); // you're stuck, hopefully doesn't happen!
-            m_worldObject.transform().setOrientation(glm::mix(m_oldTransform.orientation(), m_newTransform.orientation(), (i - 1) / steps));
+            m_worldObject.transform().setOrientation(glm::slerp(m_oldTransform.orientation(), m_newTransform.orientation(), (i - 1) / steps));
             m_worldObject.transform().setPosition(glm::mix(m_oldTransform.position(), m_newTransform.position(), (i - 1) / steps));
+            assert(std::isfinite(m_worldObject.transform().orientation().x));
             break;
         }
     }
@@ -193,6 +219,7 @@ void Physics::addVoxel(Voxel *voxel) {
 void Physics::removeVoxel(const glm::ivec3 &position) {
     m_massValid = false;
     calculateMassAndCenter();
+    //m_worldObject.transform().setPosition(-oldCenter + m_worldObject.transform().center());
     // it would be better to calculate incremental mass/center changes here
     // something like mass -= 1; center -= 1/mass * pos; center /= (mass-1)/mass; should work
     // but there should be tests to verify this! (1 = mass of voxel)

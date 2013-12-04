@@ -2,7 +2,7 @@
 
 #include "worldtreenode.h"
 
-#include "world/worldobject.h"
+#include "worldobject/worldobject.h"
 
 WorldTreeGeode::WorldTreeGeode():
     m_worldObject(nullptr),
