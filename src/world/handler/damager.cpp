@@ -16,7 +16,6 @@ void Damager::applyDamages(std::list<Impact> &impacts) {
     m_deadVoxels.clear();
 
     for(Impact &impact : impacts) {
-        std::cout << impact.worldObject() << " damage " << toString(impact.vec()) << std::endl;
         Voxel *voxel = impact.voxel();
 
         float hpBeforeDamage = voxel->hp();

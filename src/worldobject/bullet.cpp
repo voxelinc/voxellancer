@@ -29,8 +29,6 @@ Bullet::Bullet(glm::vec3 position, glm::quat orientation, glm::vec3 direction, f
     m_hudInfo.setShowOnHud(false);
 
     finishInitialization();
-
-    std::cout << "Bullet " << this << std::endl;
 }
 
 

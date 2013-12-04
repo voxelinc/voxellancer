@@ -58,11 +58,5 @@ void WorldLogic::damageForwardLoop(std::list<Impact> damageImpacts) {
         m_voxelHangman.removeDestroyedVoxels(m_damager.deadlyImpacts());
 
         damageImpacts = m_damageForwarder.forwardedDamageImpacts();
-
-        for(auto& impact : damageImpacts) {
-            std::cout << impact.worldObject() << " forward " << toString(impact.vec()) << std::endl;
-        }
-        std::cout << "--------------------------" << std::endl;
     }
-    std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << std::endl;
 }
