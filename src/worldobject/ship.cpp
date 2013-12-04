@@ -26,6 +26,7 @@ void Ship::removeHardpoint(Hardpoint *hardpoint){
             m_hardpoints.erase(iterator);
             break;
         }
+        ++iterator;
     }
 }
 
