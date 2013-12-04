@@ -191,7 +191,8 @@ static float MAX_ANGLE_STEP_SIZE = 10.0f;
 
 float Physics::calculateStepCount(const WorldTransform & oldTransform, const WorldTransform & newTransform) {
     float distance = glm::length(newTransform.position() - oldTransform.position());
-    float steps = glm::floor(distance / MAX_TRANSLATION_STEP_SIZE) + 1.f; // at least one!
+    float steps = std::max(glm::floor(distance / MAX_TRANSLATION_STEP_SIZE), 1.f); // at least one!
+
 
     float angle = glm::angle(glm::inverse(newTransform.orientation()) * oldTransform.orientation());
     if (std::isfinite(angle)) // sometimes glm::angle returns INF for really small angles

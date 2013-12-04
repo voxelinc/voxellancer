@@ -135,6 +135,20 @@ void WorldTreeNode::aabbChanged(WorldTreeGeode *geode) {
     }
 }
 
+int WorldTreeNode::poll(int& nodes, int &empty, int& geodes, int& depth) {
+    if(isLeaf() && m_geodes.size() == 0) {
+        empty++;
+    }
+
+    nodes++;
+    geodes += m_geodes.size();
+    depth = std::max(depth, m_level);
+
+    for(auto subnode : m_subnodes) {
+        subnode->poll(nodes, empty, geodes, depth);
+    }
+}
+
 void WorldTreeNode::split() {
     assert(isLeaf());
 

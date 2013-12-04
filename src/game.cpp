@@ -40,7 +40,8 @@ class Ship;
 Game::Game(GLFWwindow *window):
 	m_window(window),
 	m_camera(),
-	m_inputHandler(window, &m_camera)
+	m_inputHandler(window, &m_camera),
+	m_treeStateReporter()
 {
 	reloadConfig();
 }
@@ -65,6 +66,7 @@ void Game::initialize()
 
     glow::debug("create world");
     m_world = World::instance();
+    m_treeStateReporter.setWorldTree(&m_world->worldTree());
 
     glow::debug("Create Skybox");
 	m_skybox = std::unique_ptr<Skybox>(new Skybox);
@@ -115,8 +117,8 @@ void Game::initialize()
 	m_testClusterB->transform().setCenter(glm::vec3(3, 0, 3));
     m_testClusterB->transform().setPosition(glm::vec3(0, 0, 10));
     m_testClusterB->finishInitialization();
-    m_testClusterB->addHardpoint(new Hardpoint(m_testClusterB, glm::vec3(0, 5, 0), new Gun(100, 200, 0.5f)));
-    m_testClusterB->addHardpoint(new Hardpoint(m_testClusterB, glm::vec3(5, 5, 0), new Gun(100, 200, 0.5f)));
+    m_testClusterB->addHardpoint(new Hardpoint(m_testClusterB, glm::vec3(0, 5, 0), new Gun(400, 200, 0.05f)));
+    m_testClusterB->addHardpoint(new Hardpoint(m_testClusterB, glm::vec3(5, 5, 0), new Gun(400, 200, 0.05f)));
     m_world->god().scheduleSpawn(m_testClusterB);
 
     WorldObject *wall = new WorldObject(1);
@@ -158,6 +160,8 @@ void Game::update(float delta_sec)
 {
     // avoid big jumps after debugging ;)
     delta_sec = glm::min(1.f, delta_sec);
+
+    m_treeStateReporter.nudge();
 
     m_inputHandler.update(delta_sec);
     World::instance()->update(delta_sec);
@@ -219,5 +223,21 @@ InputHandler * Game::inputHandler()
     return &m_inputHandler;
 }
 
+TreeStateReporter::TreeStateReporter():
+    TimedTask(std::chrono::duration<float>(1.5f)),
+    m_worldTree(nullptr)
+{
+
+}
+
+void TreeStateReporter::setWorldTree(WorldTree *worldTree) {
+    m_worldTree = worldTree;
+}
+
+void TreeStateReporter::exec() {
+    int nodes, empty, geodes, depth;
+    m_worldTree->poll(nodes, empty, geodes, depth);
+    std::cout << "WorldTree: " << nodes << " nodes; " << empty << " empty; " << geodes << " geodes; " << depth << " maxdepth" << std::endl;
+}
 
 
