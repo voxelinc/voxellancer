@@ -24,7 +24,7 @@ void DamageForwarder::forwardDamageImpacts(std::list<Impact> &dampedDeadlyImpact
 
         m_currentWorldObject = dampedDeadlyImpact.worldObject();
         std::list<Voxel*> neighbours = VoxelNeighbourHelper(m_currentWorldObject, deadVoxel).neighbours();
-        glm::vec3 localImpactVec = glm::inverse(m_currentWorldObject->transform().orientation()) * dampedDeadlyImpact.vec();
+        glm::vec3 localImpactVec = /*glm::inverse(m_currentWorldObject->transform().orientation()) * */dampedDeadlyImpact.vec();
 
         for(Voxel *neighbour : neighbours) {
             glm::vec3 voxelVec = static_cast<glm::vec3>(neighbour->gridCell() - deadVoxel->gridCell());
