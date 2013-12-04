@@ -14,9 +14,13 @@ HardpointVoxel::~HardpointVoxel() {
 
 void HardpointVoxel::addToObject(WorldObject *object){
     m_object = object;
-    object->addVoxel(this);
+    object->addHardpointVoxel(this);
+}
+
+void HardpointVoxel::onRemoval(){
+    //TODO: Tell my hardpoint I'm gone
 }
 
 void HardpointVoxel::onDestruction(){
-    //TODO: Tell my hardpoint I'm gone
+    //Drop Ammo?
 }

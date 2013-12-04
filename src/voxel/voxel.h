@@ -35,9 +35,9 @@ public:
 
     float mass() const;
 
+    // These hooks apply only for WorldObjects and do not need to be called by pure VoxelClusters
+    virtual void onRemoval();
     virtual void onDestruction();
-
-
 
 protected:
     glm::ivec3 m_gridCell;

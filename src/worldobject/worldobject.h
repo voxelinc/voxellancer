@@ -8,6 +8,11 @@
 #include "voxel/voxelcluster.h"
 #include "ui/hudinfo.h"
 
+class EngineVoxel;
+class HardpointVoxel;
+class CockpitVoxel;
+class FuelVoxel;
+
 class WorldObject : public VoxelCluster
 {
 public:
@@ -25,8 +30,13 @@ public:
 
     std::list<Impact>& move(float delta_sec);
 
-    void addVoxel(Voxel * voxel);
+    void addVoxel(Voxel* voxel);
+    void addEngineVoxel(EngineVoxel* voxel);
+    void addHardpointVoxel(HardpointVoxel* voxel);
+    void addCockpitVoxel(CockpitVoxel* voxel);
+    void addFuelVoxel(FuelVoxel* voxel);
     void removeVoxel(const glm::ivec3 & position);
+    
     void finishInitialization();
 
     Voxel *crucialVoxel();
@@ -36,7 +46,7 @@ public:
 
 
 protected:
-    WorldObject(Physics* physics, CollisionDetector* detector, float scale = 1.0f);
+    WorldObject(Physics* physics, CollisionDetector* detector, float scale = 1.0f);    
 
     std::unique_ptr<CollisionDetector> m_collisionDetector;
     std::unique_ptr<Physics> m_physics;
