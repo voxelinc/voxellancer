@@ -38,6 +38,7 @@ public:
 
 protected:
     void calculateMassAndCenter();
+    virtual void updateSpeed(float delta_sec);
 
     void resolveCollision(Collision & c, float delta_sec);
     void applyTransform();
