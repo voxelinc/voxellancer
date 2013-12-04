@@ -45,14 +45,14 @@ HUD::HUD() :
     addElement("data/hud/bottom.csv", HUDOffsetOrigin::Bottom, glm::vec3(-27, 1, 0), &m_elements);
 
     m_shipArrow.reset(new HUDElement());
-    ClusterCache::instance()->fill(m_shipArrow.get(), "data/hud/arrow.csv");
+    ClusterCache::instance()->fillCluster(m_shipArrow.get(), "data/hud/arrow.csv");
     m_shipArrow->m_origin = HUDOffsetOrigin::Center;
     m_shipArrow->m_offset = glm::vec3(-2, -2, 0);
 }
 
 void HUD::addElement(const std::string& filename, HUDOffsetOrigin origin, glm::vec3 offset, std::vector<std::unique_ptr<HUDElement>> *list){
     std::unique_ptr<HUDElement> element(new HUDElement());
-    ClusterCache::instance()->fill(element.get(), filename);
+    ClusterCache::instance()->fillCluster(element.get(), filename);
     element->m_origin = origin;
     element->m_offset = offset;
     list->push_back(move(element));
@@ -73,7 +73,7 @@ Camera *HUD::camera(){
 
 void HUD::stepAnim(glm::vec3 targetPosition, glm::quat targetOrientation){
     // Interpolate between current and target orientation in steps of inertia_rate with inertia multiplier
-    m_hudCamera.setOrientation(glm::mix(m_hudCamera.orientation(), targetOrientation, glm::min((1.0f / prop_inertiaRate) * prop_inertiaRotate, 1.0f)));
+    m_hudCamera.setOrientation(glm::slerp(m_hudCamera.orientation(), targetOrientation, glm::min((1.0f / prop_inertiaRate) * prop_inertiaRotate, 1.0f)));
     m_hudCamera.setPosition(glm::mix(m_hudCamera.position(), targetPosition, glm::min((1.0f / prop_inertiaRate) * prop_inertiaMove, 1.0f)));
 }
 
@@ -89,13 +89,13 @@ void HUD::update(float delta_sec){
         // to be as independent of framerate and especially regularity of frame times
         // this assumes the input was constant contious within time from the last frame to now
         stepAnim(glm::mix(m_lastGameCamera.position(), m_gameCamera->position(), rate),
-            glm::mix(m_lastGameCamera.orientation(), m_gameCamera->orientation(), rate));
+            glm::slerp(m_lastGameCamera.orientation(), m_gameCamera->orientation(), rate));
 		progress += steptime;
     }
     m_delta_sec_remain = total - progress;
 
     // Set the lastCamera from which interpolation starts next frame to where we interpolated this time
-    m_lastGameCamera.setOrientation(glm::mix(m_lastGameCamera.orientation(), m_gameCamera->orientation(), (float)(progress / total)));
+    m_lastGameCamera.setOrientation(glm::slerp(m_lastGameCamera.orientation(), m_gameCamera->orientation(), (float)(progress / total)));
     m_lastGameCamera.setPosition(glm::mix(m_lastGameCamera.position(), m_gameCamera->position(), (float)(progress / total)));
 
     // framerate measurement (not the best algorithm but the most compact)
@@ -117,10 +117,6 @@ void HUD::draw(){
     m_renderCamera.setOrientation((glm::inverse(m_hudCamera.orientation()) * m_gameCamera->orientation()));
     m_renderCamera.setPosition(((m_gameCamera->position() - m_hudCamera.position()) * prop_moveMultiplier.get()) * m_hudCamera.orientation());
 
-    // the virtual voxel display resolution
-    float dy = floor(glm::tan(glm::radians(m_renderCamera.fovy() / 2.0f)) * prop_distance);
-    float dx = m_renderCamera.aspectRatio()*dy;
-
     m_voxelRenderer->prepareDraw(&m_renderCamera, false);
 
     // draw statics
@@ -136,32 +132,38 @@ void HUD::draw(){
             // delta is the vector from virtual HUD camera to the ship
             glm::vec3 delta = glm::inverse(m_hudCamera.orientation()) * (ship->transform().position() - m_hudCamera.position());
 
-            std::stringstream s; s.setf(std::ios::fixed, std::ios::floatfield); s.precision(2);
-            s << "Dist " << i << ": " << (float)glm::length(delta);
-            m_font->drawString(s.str(), calculatePosition(BottomLeft, glm::vec3(4, 5 + 5 * i, 0)), s5x7, 0.5f);
-            i++;
+            if (i < 11){
+                std::stringstream s; s.setf(std::ios::fixed, std::ios::floatfield); s.precision(2);
+                s << ship->hudInfo().name() << ": " << ship->voxelMap().size() << "/" << (float)glm::length(delta);
+                m_font->drawString(s.str(), calculatePosition(BottomLeft, glm::vec3(4, 5 + 4 * i, 0)), s5x7, 0.4f);
+                i++;
+            } else if (i == 11){
+                m_font->drawString("-more-", calculatePosition(BottomLeft, glm::vec3(4, 5 + 4 * i, 0)), s5x7, 0.4f);
+            }
 
-            // strip z = depth value so glm::length will return x/y-length
-            float deltaz = delta.z;
-            delta.z = 0;
-            // calculate angle of ship and fov
-            float len = glm::length(delta);
-            float degship = glm::degrees(glm::atan(len, glm::abs(deltaz)));
-            float degfov = m_renderCamera.fovy() / 2;
-            // draw arrow if behind of us or out of "scope"
-            if (glm::length(delta) != 0 && (deltaz > 0 || degship / degfov > prop_arrowRadius * 1.15f)){
-                delta = glm::normalize(delta);
-                //rotate arrow towards ship (arrow model points upwards)
-                glm::quat absOrientation = glm::angleAxis(glm::degrees(glm::atan(delta.x, delta.y)), glm::vec3(0, 0, -1));
-                m_shipArrow->transform().setOrientation(absOrientation);
-                // move arrow out of HUD center
-                glm::vec3 absPosition = glm::vec3(0, 0, -prop_distance) /* move back to HUD pane */
-                    /* move m_arrow_radius in direction of heading, where 0 is center 1 is full FOV
-                    * because orientation is applied before position, add model-internal offset here */
-                    + m_shipArrow->transform().orientation() * (m_shipArrow->m_offset + glm::vec3(0, dy * prop_arrowRadius, 0));
-                m_shipArrow->transform().setPosition(absPosition);
+            if (ship->hudInfo().showOnHud()){
+                // strip z = depth value so glm::length will return x/y-length
+                float deltaz = delta.z;
+                delta.z = 0;
+                // calculate angle of ship and fov
+                float len = glm::length(delta);
+                float degship = glm::degrees(glm::atan(len, glm::abs(deltaz)));
+                float degfov = m_renderCamera.fovy() / 2;
+                // draw arrow if behind of us or out of "scope"
+                if (glm::length(delta) != 0 && (deltaz > 0 || degship / degfov > prop_arrowRadius * 1.15f)){
+                    delta = glm::normalize(delta);
+                    //rotate arrow towards ship (arrow model points upwards)
+                    glm::quat absOrientation = glm::angleAxis(glm::degrees(glm::atan(delta.x, delta.y)), glm::vec3(0, 0, -1));
+                    m_shipArrow->transform().setOrientation(absOrientation);
+                    // move arrow out of HUD center
+                    glm::vec3 absPosition = glm::vec3(0, 0, -prop_distance) /* move back to HUD pane */
+                        /* move m_arrow_radius in direction of heading, where 0 is center 1 is full FOV
+                        * because orientation is applied before position, add model-internal offset here */
+                        + m_shipArrow->transform().orientation() * (m_shipArrow->m_offset + glm::vec3(0, m_dy * prop_arrowRadius, 0));
+                    m_shipArrow->transform().setPosition(absPosition);
 
-                m_voxelRenderer->draw(m_shipArrow.get());
+                    m_voxelRenderer->draw(m_shipArrow.get());
+                }
             }
         }
     }

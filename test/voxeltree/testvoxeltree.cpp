@@ -41,22 +41,22 @@ go_bandit([](){
         });
 
         it("basic insert", [&]() {
-            obj->addVoxel(new Voxel(glm::ivec3(0, 0, 0), cvec3(255, 255, 255)));
+            obj->addVoxel(new Voxel(glm::ivec3(0, 0, 0)));
             AssertThat(vt->gridAABB(), Equals(Grid3dAABB(glm::ivec3(0,0,0), glm::ivec3(0, 0, 0))));
         });
 
         it("simple insert", [&]() {
-            Voxel *v = new Voxel(glm::ivec3(1, 1, 1), cvec3(255, 255, 255));
+            Voxel *v = new Voxel(glm::ivec3(1, 1, 1));
 
-            obj->addVoxel(new Voxel(glm::ivec3(1, 1, 1), cvec3(255, 255, 255)));
+            obj->addVoxel(new Voxel(glm::ivec3(1, 1, 1)));
             AssertThat(vt->subnodes().size(), Equals(8));
             AssertThat(vt->gridAABB(), Equals(Grid3dAABB(glm::ivec3(0,0,0), glm::ivec3(1, 1, 1))));
 
-            obj->addVoxel(new Voxel(glm::ivec3(5, 1, 1), cvec3(255, 255, 255)));
+            obj->addVoxel(new Voxel(glm::ivec3(5, 1, 1)));
             AssertThat(vt->subnodes().size(), Equals(8));
             AssertThat(vt->gridAABB(), Equals(Grid3dAABB(glm::ivec3(0,0,0), glm::ivec3(7, 7, 7))));
 
-            obj->addVoxel(new Voxel(glm::ivec3(2, 5, 5), cvec3(255, 255, 255)));
+            obj->addVoxel(new Voxel(glm::ivec3(2, 5, 5)));
             AssertThat(vt->subnodes().size(), Equals(8));
             AssertThat(vt->gridAABB(), Equals(Grid3dAABB(glm::ivec3(0,0,0), glm::ivec3(7, 7, 7))));
         });
@@ -93,7 +93,7 @@ go_bandit([](){
         it_skip("initially positions all subnodes right", [&]() {
             WorldObject *d = new WorldObject(6);
 
-            d->addVoxel(new Voxel(glm::ivec3(1, 1, 1), cvec3(255, 255, 255))); // There are 8 subnodes now
+            d->addVoxel(new Voxel(glm::ivec3(1, 1, 1))); // There are 8 subnodes now
 
             for(VoxelTreeNode *subnode : d->collisionDetector().voxeltree().subnodes()) {
                 float distance = glm::length(subnode->boundingSphere().position());
@@ -105,7 +105,7 @@ go_bandit([](){
             glm::vec3 v;
             VoxelTreeNode *n = nullptr;
 
-            obj->addVoxel(new Voxel(glm::ivec3(1, 1, 1), cvec3(255, 255, 255)));
+            obj->addVoxel(new Voxel(glm::ivec3(1, 1, 1)));
             obj->transform().setCenter(glm::vec3(1, 1, 1));
 
             for (VoxelTreeNode *subnode : obj->collisionDetector().voxeltree().subnodes()) {
@@ -126,7 +126,7 @@ go_bandit([](){
             glm::vec3 v;
             VoxelTreeNode *n = nullptr;
 
-            obj->addVoxel(new Voxel(glm::ivec3(1,1,1), cvec3(255, 255, 255)));
+            obj->addVoxel(new Voxel(glm::ivec3(1,1,1)));
             obj->transform().setCenter(glm::vec3(1,1,0));
 
             for(VoxelTreeNode *subnode : obj->collisionDetector().voxeltree().subnodes()) {

@@ -37,17 +37,17 @@ void God::scheduleSpawns(const std::list<WorldObject*> &spawns) {
 void God::scheduleRemoval(WorldObject *worldObject) {
     assert(worldObject->collisionDetector().geode() != nullptr);
     assert(worldObject->collisionDetector().worldTree() == &m_world.worldTree());
+    for (WorldObject* scheduled : m_scheduledRemovals){
+        if (scheduled == worldObject)
+            return;
+    }
     m_scheduledRemovals.push_back(worldObject);
 }
 
 void God::scheduleRemovals(const std::list<WorldObject*> &removals) {
-#ifndef NDEBUG // only remove things that are in our worldTree
     for (WorldObject* worldObject : removals) {
-        assert(worldObject->collisionDetector().geode() != nullptr);
-        assert(worldObject->collisionDetector().worldTree() == &m_world.worldTree());
+        scheduleRemoval(worldObject);
     }
-#endif
-    m_scheduledRemovals.insert(m_scheduledRemovals.end(), removals.begin(), removals.end());
 }
 
 void God::spawn() {
@@ -56,7 +56,7 @@ void God::spawn() {
 
         std::list<Collision> collisions = worldObject->collisionDetector().checkCollisions();
 
-        assert(collisions.size() == 0); // this is, by definition, an error condition
+        //assert(collisions.size() == 0); // this is, by definition, an error condition
         if (collisions.size() > 0){ // clean up anyway (if assertion ignored)
             World::instance()->worldTree().remove(worldObject->collisionDetector().geode());
             glow::warning("Failed to spawn object %; at AABB %;", worldObject, toString(worldObject->aabb()));

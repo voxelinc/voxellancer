@@ -35,7 +35,7 @@ protected:
     SplitDetector m_splitDetector;
     Splitter m_splitter;
     //Wrecker m_wrecker;
-    //GarbageCollector m_garbageCollector;
+    GarbageCollector m_garbageCollector;
     VoxelHangman m_voxelHangman;
 
     void damageForwardLoop(std::list<Impact> damageImpacts);

@@ -21,11 +21,11 @@ go_bandit([](){
 
         it("works in worldobject", [&]() {
             WorldObject a;
-            a.addVoxel(new Voxel(glm::ivec3(0, 0, 0), cvec3()));
-            a.addVoxel(new Voxel(glm::ivec3(1, 0, 0), cvec3()));
-            a.addVoxel(new Voxel(glm::ivec3(2, 0, 0), cvec3()));
-            a.addVoxel(new Voxel(glm::ivec3(3, 0, 0), cvec3()));
-            a.addVoxel(new Voxel(glm::ivec3(4, 0, 0), cvec3()));
+            a.addVoxel(new Voxel(glm::ivec3(0, 0, 0), 0xFFFFFF));
+            a.addVoxel(new Voxel(glm::ivec3(1, 0, 0), 0xFFFFFF));
+            a.addVoxel(new Voxel(glm::ivec3(2, 0, 0), 0xFFFFFF));
+            a.addVoxel(new Voxel(glm::ivec3(3, 0, 0), 0xFFFFFF));
+            a.addVoxel(new Voxel(glm::ivec3(4, 0, 0), 0xFFFFFF));
             AssertThat(a.aabb().contains(glm::vec3(4.49, 0, 0)), Equals(true));
 
             a.transform().moveWorld(glm::vec3(5, 0, 0));
@@ -34,11 +34,11 @@ go_bandit([](){
 
         it("works in rotated  worldobject", [&]() {
             WorldObject a;
-            a.addVoxel(new Voxel(glm::ivec3(0, 0, 0), cvec3()));
-            a.addVoxel(new Voxel(glm::ivec3(1, 0, 0), cvec3()));
-            a.addVoxel(new Voxel(glm::ivec3(2, 0, 0), cvec3()));
-            a.addVoxel(new Voxel(glm::ivec3(3, 0, 0), cvec3()));
-            a.addVoxel(new Voxel(glm::ivec3(4, 0, 0), cvec3()));
+            a.addVoxel(new Voxel(glm::ivec3(0, 0, 0), 0xFFFFFF));
+            a.addVoxel(new Voxel(glm::ivec3(1, 0, 0), 0xFFFFFF));
+            a.addVoxel(new Voxel(glm::ivec3(2, 0, 0), 0xFFFFFF));
+            a.addVoxel(new Voxel(glm::ivec3(3, 0, 0), 0xFFFFFF));
+            a.addVoxel(new Voxel(glm::ivec3(4, 0, 0), 0xFFFFFF));
 
             a.transform().rotate(glm::angleAxis(90.f, glm::vec3(0, 1, 0)));
 
