@@ -23,7 +23,7 @@ go_bandit([](){
         });
 
         it("can add/remove voxel", [&]() {
-            cluster->addVoxel(new Voxel(glm::ivec3(1, 2, 3), cvec3(255, 128, 0)));
+            cluster->addVoxel(new Voxel(glm::ivec3(1, 2, 3), 0xFF8000));
             AssertThat(cluster->voxel(glm::ivec3(1, 2, 3)) != nullptr, Equals(true));
 
             cluster->removeVoxel(glm::ivec3(1, 2, 3));
@@ -31,9 +31,9 @@ go_bandit([](){
         });
 
         it("test generate texture", [&]() {
-            cluster->addVoxel(new Voxel(glm::ivec3('a', 'b', 'c'), cvec3(255, 128, 0)));
-            cluster->addVoxel(new Voxel(glm::ivec3(3, 4, 5), cvec3(128, 128, 0)));
-            cluster->addVoxel(new Voxel(glm::ivec3(1, 5, 3), cvec3(255, 128, 0)));
+            cluster->addVoxel(new Voxel(glm::ivec3('a', 'b', 'c'), 0xFF8000));
+            cluster->addVoxel(new Voxel(glm::ivec3(3, 4, 5), 0x808000));
+            cluster->addVoxel(new Voxel(glm::ivec3(1, 5, 3), 0xFF8000));
 
             GLuint id1 = cluster->voxelRenderData()->positionTexture()->id();
             GLuint id2 = cluster->voxelRenderData()->colorTexture()->id();
