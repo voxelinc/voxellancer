@@ -48,6 +48,6 @@ std::list<Impact> DamageForwarder::forwardedDamageImpacts() {
 }
 
 float DamageForwarder::forwardFactor(float dotProduct) {
-    return (M_PI/2 - std::acos(dotProduct)) / (M_PI/2);
+    return (glm::half_pi<float>() - std::acos(dotProduct)) / glm::half_pi<float>();
 }
 

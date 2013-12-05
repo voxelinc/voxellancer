@@ -1,7 +1,6 @@
 #include "damager.h"
 
 #include <set>
-#include <iostream>
 #include <glow/logging.h>
 
 #include "world/helper/impact.h"
