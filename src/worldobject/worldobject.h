@@ -35,7 +35,7 @@ public:
     virtual void addHardpointVoxel(HardpointVoxel* voxel);
     virtual void addCockpitVoxel(CockpitVoxel* voxel);
     virtual void addFuelVoxel(FuelVoxel* voxel);
-    void removeVoxel(const glm::ivec3 & position);
+    void removeVoxel(const glm::ivec3& position);
     
     void finishInitialization();
 

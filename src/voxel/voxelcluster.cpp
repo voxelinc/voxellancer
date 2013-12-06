@@ -41,10 +41,9 @@ void VoxelCluster::addVoxel(Voxel *voxel) {
 }
 
 void VoxelCluster::removeVoxel(const glm::ivec3& position) {
-#ifndef NDEBUG
     Voxel * voxel = m_voxels[position];
     assert(voxel != nullptr);
-#endif
+
     m_voxels.erase(position);
     m_voxelRenderData.invalidate();
     delete voxel;
