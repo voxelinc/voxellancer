@@ -9,10 +9,10 @@ class Mover
 public:
     void moveWorldObjects(float deltaSec);
 
-    const std::list<Impact> &impacts();
+    const std::list<Collision>& collisions();
 
 
 protected:
-    std::list<Impact> m_impacts;
+    std::list<Collision> m_collisions;
 };
 

@@ -47,6 +47,9 @@ protected:
     std::vector<VoxelTreeNode*> m_subnodes;
     Voxel *m_voxel;
 
+    Sphere m_boundingSphere;
+    bool m_boundingSphereRadiusValid;
+
     void split();
     void unsplit();
     void octuple();

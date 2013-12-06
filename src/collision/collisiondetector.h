@@ -23,8 +23,8 @@ public:
     void addVoxel(Voxel *voxel);
     void removeVoxel(const glm::ivec3 &position);
 
-    AABB aabb(const WorldTransform& transform);
-    Sphere sphere(const WorldTransform& transform);
+    AABB aabb(const WorldTransform& transform) const;
+    Sphere sphere(const WorldTransform& transform) const;
 
     std::list<Collision> &checkCollisions();
     std::list<Collision> &lastCollisions();
@@ -35,6 +35,7 @@ public:
     void setGeode(WorldTreeGeode *geode);
     void setWorldTree(WorldTree* worldTree);
     WorldTree* worldTree();
+    const WorldTree* worldTree() const;
 
     VoxelTreeNode &voxeltree();
     const VoxelTreeNode &voxeltree() const;

@@ -45,8 +45,8 @@ public:
 
 
 protected:
-    static const int MAX_DEPTH = 8;
-    static const int MAX_GEODES = 8;
+    static const int MAX_DEPTH = 32;
+    static const int MAX_GEODES = 3;
 
     friend class WorldTreeCleaner;
 

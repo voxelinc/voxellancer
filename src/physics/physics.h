@@ -9,12 +9,16 @@
 #include "worldtransform.h"
 #include "world/helper/impact.h"
 
+#include "movement.h"
+#include "movephase.h"
+
+
 class WorldObject;
 class WorldTransform;
 
-class Physics  {
+class Physics {
 public:
-    Physics(WorldObject & worldObject);
+    Physics(WorldObject& worldObject);
     virtual ~Physics();
 
     const glm::vec3& speed() const;
@@ -26,25 +30,25 @@ public:
     const glm::vec3& acceleration() const;
     const glm::vec3& angularAcceleration() const;
 
-    std::list<Impact> &move(float delta_sec);
+    std::list<Collision>& move(float deltaSec);
 
-    void accelerate(glm::vec3 direction);
-    void accelerateAngular(glm::vec3 axis);
+    void accelerate(const glm::vec3& direction);
+    void accelerateAngular(const glm::vec3& axis);
 
-    void addVoxel(Voxel *voxel);
-    void removeVoxel(const glm::ivec3 &position);
+    void addVoxel(Voxel* voxel);
+    void removeVoxel(const glm::ivec3& position);
 
     void finishInitialization();
 
+
 protected:
     void calculateMassAndCenter();
-    virtual void updateSpeed(float delta_sec);
+    virtual void updateSpeed(float deltaSec);
 
-    void resolveCollision(Collision & c, float delta_sec);
     void applyTransform();
-    void doSteppedTransform();
-    float calculateStepCount(const WorldTransform & oldTransform, const WorldTransform & newTransform);
-    bool isCollisionPossible();
+    void doSteppedTransform(const MovePhase& movePhase);
+    void doWarpTransform(const MovePhase& movePhase);
+
 
 protected:
     float m_mass;
@@ -52,18 +56,21 @@ protected:
 
     WorldObject& m_worldObject;
 
-    WorldTransform m_oldTransform;
-    WorldTransform m_newTransform;
-
     glm::vec3 m_speed;
     glm::vec3 m_angularSpeed;
 
     glm::vec3 m_acceleration;
     glm::vec3 m_angularAcceleration;
 
+    Movement m_movement;
+
+    int m_steps;
+
     Property<float> m_dampening;
     Property<float> m_angularDampening;
     Property<float> m_rotationFactor;
 
-    std::list<Impact> m_impacts;
+   // std::list<Impact> m_impacts;
+    std::list<Collision> m_collisions;
 };
+

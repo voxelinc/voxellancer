@@ -106,8 +106,8 @@ void Game::initialize()
 	m_testClusterB->transform().setCenter(glm::vec3(3, 0, 3));
     m_testClusterB->transform().setPosition(glm::vec3(0, 0, 10));
     m_testClusterB->finishInitialization();
-    m_testClusterB->addHardpoint(new Hardpoint(m_testClusterB, glm::vec3(0, 5, 0), new Gun(400, 200, 0.05f)));
-    m_testClusterB->addHardpoint(new Hardpoint(m_testClusterB, glm::vec3(5, 5, 0), new Gun(400, 200, 0.05f)));
+    m_testClusterB->addHardpoint(new Hardpoint(m_testClusterB, glm::vec3(0, 5, 0), new Gun(200, 500, 0.0005f)));
+    m_testClusterB->addHardpoint(new Hardpoint(m_testClusterB, glm::vec3(5, 5, 0), new Gun(200, 500, 0.0005f)));
     m_testClusterB->hudInfo().setName("Ship");
     m_testClusterB->hudInfo().setShowOnHud(false);
 
@@ -156,7 +156,7 @@ void Game::update(float delta_sec)
     // avoid big jumps after debugging ;)
     delta_sec = glm::min(1.f, delta_sec);
 
-    m_treeStateReporter.nudge();
+    //m_treeStateReporter.nudge();
 
     m_inputHandler.update(delta_sec);
     World::instance()->update(delta_sec);

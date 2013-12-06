@@ -6,15 +6,15 @@
 
 
 void Mover::moveWorldObjects(float deltaSec) {
-    m_impacts.clear();
+    m_collisions.clear();
 
     for (WorldObject *worldObject : World::instance()->worldObjects()) {
-        std::list<Impact> &impacts = worldObject->move(deltaSec);
-        m_impacts.insert(m_impacts.end(), impacts.begin(), impacts.end());
+        std::list<Collision> &collisions = worldObject->move(deltaSec);
+        m_collisions.splice(m_collisions.end(), collisions);
     }
 }
 
-const std::list<Impact> &Mover::impacts() {
-    return m_impacts;
+const std::list<Collision> &Mover::collisions() {
+    return m_collisions;
 }
 

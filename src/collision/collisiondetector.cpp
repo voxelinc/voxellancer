@@ -19,11 +19,11 @@ CollisionDetector::CollisionDetector(WorldObject & worldObject) :
 CollisionDetector::~CollisionDetector() {
 }
 
-AABB CollisionDetector::aabb(const WorldTransform& transform) {
+AABB CollisionDetector::aabb(const WorldTransform& transform) const {
     return AABB::containing(sphere(transform));
 }
 
-Sphere CollisionDetector::sphere(const WorldTransform& transform) {
+Sphere CollisionDetector::sphere(const WorldTransform& transform) const {
     Sphere sphere;
     sphere.setPosition(transform.applyTo(glm::vec3(m_aabb.rub() + m_aabb.llf()) / 2.0f));
     // m_aabb only contains the center of each voxel so add sqrt(2) to add the distance from center to edge
@@ -65,7 +65,11 @@ void CollisionDetector::setWorldTree(WorldTree* worldTree) {
     m_worldTree = worldTree;
 }
 
-WorldTree* CollisionDetector::worldTree(){
+WorldTree* CollisionDetector::worldTree() {
+    return m_worldTree;
+}
+
+const WorldTree* CollisionDetector::worldTree() const {
     return m_worldTree;
 }
 
