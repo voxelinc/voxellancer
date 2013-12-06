@@ -8,6 +8,7 @@ Impact::Impact(WorldObject* worldObject, Voxel *voxel, const glm::vec3 &vec):
     m_voxel(voxel),
     m_vec(vec)
 {
+    assert(m_voxel);
 }
 
 WorldObject *Impact::worldObject() {

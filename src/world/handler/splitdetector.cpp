@@ -8,11 +8,11 @@
 #include "worldobject/worldobject.h"
 
 
-void SplitDetector::searchSplitOffs(std::set<WorldObject*> &modifiedWorldObjects) {
+void SplitDetector::searchSplitOffs(std::list<WorldObjectModification> worldObjectModifications) {
     clear();
 
-    for(WorldObject *modifiedWorldObject : modifiedWorldObjects) {
-        m_currentWorldObject = modifiedWorldObject;
+    for(WorldObjectModification& worldObjectModification : worldObjectModifications) {
+        m_currentWorldObject = worldObjectModification.worldObject();
 
         fillPotentialOrphans();
 
@@ -20,14 +20,16 @@ void SplitDetector::searchSplitOffs(std::set<WorldObject*> &modifiedWorldObjects
             unmarkContinuousVoxels(m_currentWorldObject->crucialVoxel());
         }
         else {
+            glow::debug("1");
             unmarkContinuousVoxels(m_currentWorldObject->voxelMap().begin()->second);
+            glow::debug("2");
         }
 
-        while(!m_potentialOrphans.empty()) {
-            WorldObjectSplit *split = unmarkContinuousVoxels(*m_potentialOrphans.begin());
-            split->setExWorldObject(m_currentWorldObject);
-            m_worldObjectSplits.push_back(split);
-        }
+//        while(!m_potentialOrphans.empty()) {
+//            WorldObjectSplit *split = unmarkContinuousVoxels(*m_potentialOrphans.begin());
+//            split->setExWorldObject(m_currentWorldObject);
+//            m_worldObjectSplits.push_back(split);
+//        }
     }
 }
 
@@ -59,6 +61,7 @@ void SplitDetector::fillPotentialOrphans() {
 * Starting from voxel, this function recursivly builds up a set of voxels that are attached to each other with facing sides
 **/
 WorldObjectSplit *SplitDetector::unmarkContinuousVoxels(Voxel *voxel) {
+    glow::debug("a");
     WorldObjectSplit *continuousCluster;
 
     continuousCluster = new WorldObjectSplit;
@@ -76,7 +79,9 @@ WorldObjectSplit *SplitDetector::unmarkContinuousVoxels(Voxel *voxel) {
 
     for(Voxel *neighbour : neighbours) {
         WorldObjectSplit *neighbourOrphan = unmarkContinuousVoxels(neighbour);
-        continuousCluster->addAllVoxels(neighbourOrphan);
+    glow::debug("v");
+    //    continuousCluster->addAllVoxels(neighbourOrphan);
+    glow::debug("w");
         delete neighbourOrphan;
     }
 
