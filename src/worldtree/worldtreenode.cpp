@@ -14,7 +14,8 @@ WorldTreeNode::WorldTreeNode(int level, WorldTreeNode *parent, const AABB &aabb)
     m_parent(parent),
     m_aabb(aabb)
 {
-
+    assert(m_aabb.extent(XAxis) == m_aabb.extent(YAxis) && m_aabb.extent(XAxis) == m_aabb.extent(ZAxis));
+    m_extent = m_aabb.extent(ZAxis);
 }
 
 WorldTreeNode::~WorldTreeNode() {
@@ -70,7 +71,7 @@ void WorldTreeNode::insert(WorldTreeGeode *geode) {
 
     if(isLeaf()) {
         m_geodes.push_back(geode);
-        if(m_geodes.size() > MAX_GEODES && m_level < MAX_DEPTH) {
+        if(m_geodes.size() > MAX_GEODES && m_extent > MIN_EXTENT) {
             split();
         }
     }
@@ -236,6 +237,8 @@ void WorldTreeNode::octuple(const AABB &aabb) {
 
         m_aabb.expand(axis, extentDir * m_aabb.extent(axis));
     }
+
+    m_extent *= 2;
 
     for(WorldTreeNode* subnode : m_subnodes) {
         subnode->setLevel(1);

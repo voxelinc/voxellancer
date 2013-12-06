@@ -23,11 +23,6 @@ TAABB<T>::TAABB(const glm::detail::tvec3<T> &llf, const glm::detail::tvec3<T> &r
 }
 
 template<typename T>
-TAABB<T>::~TAABB() {
-
-}
-
-template<typename T>
 const glm::detail::tvec3<T> &TAABB<T>::llf() const {
     return m_llf;
 }

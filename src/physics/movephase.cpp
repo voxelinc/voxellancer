@@ -116,7 +116,7 @@ int MovePhase::calculateStepCount() {
     int steps = std::max(static_cast<int>(glm::ceil(m_distance / ATOMIC_DIRECTIONAL_STEP)) - 1, 1); // at least one!
     float angularDiff = glm::angle(glm::inverse(m_targetTransform.orientation()) * m_originalTransform.orientation());
 
-    if (!std::isfinite(angularDiff)) { // sometimes glm::angle returns INF for really small angles
+    if (std::isfinite(angularDiff)) { // sometimes glm::angle returns INF for really small angles
         steps = std::max(steps, static_cast<int>(glm::ceil(angularDiff / ATOMIC_ANGULAR_STEP)) - 1);
     }
 
@@ -125,7 +125,7 @@ int MovePhase::calculateStepCount() {
 }
 
 //        m_worldObject.collisionDetector().updateGeode();
-//        const std::list<Collision> & collisions = m_worldObject.collisionDetector().checkCollisions();
+//        const std::list<Collision> & collisions = m_worldObject.collisionDetector().checkCollisions();ŝ
 //        if (!collisions.empty()) {
 //            assert(i > 0); // you're stuck, hopefully doesn't happen!
 //            m_worldObject.transform().setOrientation(glm::slerp(m_oldTransform.orientation(), m_newTransform.orientation(), (i - 1) / steps));

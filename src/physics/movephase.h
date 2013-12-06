@@ -8,9 +8,9 @@
 
 
 class MovePhase {
-static constexpr float ATOMIC_DIRECTIONAL_STEP = 0.5f;
+static constexpr float ATOMIC_DIRECTIONAL_STEP = 3.0f;
 static constexpr float ATOMIC_ANGULAR_STEP = 30.0f;
-static constexpr float MAX_STEPPED_DISTANCE = 1.5f;
+static constexpr float MAX_STEPPED_DISTANCE = 6.0f;
 
 public:
     MovePhase(const WorldTransform& originalTransform, const WorldTransform& targetTransform);

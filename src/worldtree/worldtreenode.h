@@ -45,14 +45,15 @@ public:
 
 
 protected:
-    static const int MAX_DEPTH = 32;
-    static const int MAX_GEODES = 3;
+    static const int MIN_EXTENT = 16;
+    static const int MAX_GEODES = 4;
 
     friend class WorldTreeCleaner;
 
     WorldTreeNode *m_parent;
     AABB m_aabb;
     int m_level;
+    int m_extent;
     std::list<WorldTreeGeode*> m_geodes;
     std::list<WorldTreeNode*> m_subnodes;
 
