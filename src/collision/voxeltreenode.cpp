@@ -1,7 +1,6 @@
 #include "voxeltreenode.h"
 
 #include <cassert>
-#include <iostream>
 
 #include "utils/tostring.h"
 #include "worldobject/worldobject.h"
