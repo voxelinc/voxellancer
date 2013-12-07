@@ -28,7 +28,7 @@ public:
     Voxel* voxel(const glm::ivec3& position);
     virtual void addVoxel(Voxel* voxel);
     virtual void removeVoxel(const glm::ivec3& position);
-    const std::unordered_map<glm::ivec3, Voxel*>& voxelMap();
+    const std::unordered_map<glm::ivec3, Voxel*>& voxelMap() const;
 
     VoxelRenderData *voxelRenderData();
 
