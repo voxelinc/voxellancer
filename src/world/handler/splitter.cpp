@@ -1,5 +1,7 @@
 #include "splitter.h"
 
+#include <glow/AutoTimer.h>
+
 #include "world/helper/worldobjectsplit.h"
 
 #include "worldobject/worldobject.h"
@@ -9,6 +11,7 @@ void Splitter::split(std::list<WorldObjectSplit*> &splits) {
     m_splitOffWorldObjects.clear();
 
     for(WorldObjectSplit *split : splits) {
+        glow::AutoTimer t("Splitter: " + split->exWorldObject()->hudInfo().name());
         WorldObject *worldObject = createWorldObjectFromOrphan(split);
         m_splitOffWorldObjects.push_back(worldObject);
         removeExtractedVoxelsFromEx(split);
