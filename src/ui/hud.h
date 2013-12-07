@@ -10,10 +10,11 @@
 
 class VoxelRenderer;
 class VoxelFont;
+class InputHandler;
 
 class HUD {
 public:
-    HUD();
+    HUD(InputHandler *inputHandler);
     virtual ~HUD();
 
     void setCamera(Camera *camera);
@@ -31,15 +32,14 @@ protected:
     void adjustPositions();
 
 
-
-    Camera *m_gameCamera;
+    InputHandler* m_inputHandler;
+    Camera* m_gameCamera;
     WorldTransform m_hudCamera, m_lastGameCamera;
     Camera m_renderCamera;
     std::unique_ptr<VoxelRenderer> m_voxelRenderer;
     std::unique_ptr<VoxelFont> m_font;
     std::vector<std::unique_ptr<HUDElement>> m_elements;
     std::vector<std::unique_ptr<HUDElement>> m_numbers;
-
 
     std::unique_ptr<HUDElement> m_shipArrow;
     double m_delta_sec_remain;

@@ -5,13 +5,13 @@
 #include <GLFW/glfw3.h>
 
 #include "camera.h"
-
 #include "property/propertymanager.h"
 #include "property/property.h"
 #include "worldobject/ship.h"
 
 class WorldObject;
 
+// TODO: extract a Player from the inputhandler
 
 class InputHandler {
 public:
@@ -19,7 +19,7 @@ public:
 	virtual ~InputHandler();
 
     void setPlayerShip(Ship *ship);
-
+    std::string playerTarget();
 
 	void resizeEvent(const unsigned int width, const unsigned int height);
 	void keyCallback(int key, int scancode, int action, int mods);
@@ -36,7 +36,6 @@ protected:
 
     Ship *m_playerShip;
 
-
 	int m_windowWidth, m_windowHeight;
 	int m_lastfocus;
 
@@ -45,7 +44,7 @@ protected:
 	int m_mouseControl;
 	int m_mouseControlToggled;
     int m_followCam;
-
+    
 
     Property<float> prop_rotationSpeed;
     Property<float> prop_rollSpeed;

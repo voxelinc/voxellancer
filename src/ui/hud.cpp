@@ -2,6 +2,7 @@
 #include "camera.h"
 #include "voxel/voxelrenderer.h"
 #include "resource/clustercache.h"
+#include "ui/inputhandler.h"
 #include "ui/voxelfont.h"
 #include "ui/hudelement.h"
 #include "world/world.h"
@@ -10,7 +11,8 @@
 #include "worldobject/worldobject.h"
 
 
-HUD::HUD() :
+HUD::HUD(InputHandler* inputHandler) :
+    m_inputHandler(inputHandler),
     m_voxelRenderer(new VoxelRenderer()),
     m_font(new VoxelFont()),
     m_gameCamera(0),
@@ -30,6 +32,7 @@ HUD::HUD() :
     prop_arrowRadius("hud.arrowRadius"),
     prop_showFramerate("hud.showFramerate")
 {
+    assert(inputHandler != nullptr);
     m_font->setRenderer(m_voxelRenderer.get());
 
     m_renderCamera.setPosition(glm::vec3(0, 0, 0));
@@ -173,7 +176,7 @@ void HUD::draw(){
         m_font->drawString(std::to_string((int)glm::round(m_frameRate)), calculatePosition(TopLeft, glm::vec3(4, -5, 0)), s3x5, 0.8f);
     }
 
-    m_font->drawString("NO TARGET", calculatePosition(Bottom, glm::vec3(0, 8, 0)), s3x5, 0.5f, aCenter);
+    m_font->drawString(m_inputHandler->playerTarget(), calculatePosition(Bottom, glm::vec3(0, 8, 0)), s3x5, 0.5f, aCenter);
 
     m_voxelRenderer->afterDraw();
 

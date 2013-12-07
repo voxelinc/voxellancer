@@ -2,10 +2,10 @@
 
 #include <glm/glm.hpp>
 
-InputHandler::InputHandler(GLFWwindow *window, Camera *camera):
-	m_window(window),
-	m_camera(camera),
-	prop_rotationSpeed("input.rotationSpeed"),
+InputHandler::InputHandler(GLFWwindow *window, Camera *camera) :
+    m_window(window),
+    m_camera(camera),
+    prop_rotationSpeed("input.rotationSpeed"),
     prop_moveSpeed("input.moveSpeed"),
     prop_rollSpeed("input.rollSpeed"),
     m_playerShip(nullptr),
@@ -249,6 +249,17 @@ void InputHandler::selectNextTarget(){
         // reach here if no lockable target left, then switch back to Point-Aiming
         m_playerShip->setAimMode(Point);
     }
+}
+
+std::string InputHandler::playerTarget(){
+    if (m_playerShip->aimMode() == Point)
+        return "Guns";
+    if (m_playerShip->aimMode() == Object)
+        if (m_playerShip->targetObject())
+            return "Locked: " + m_playerShip->targetObject()->objectInfo().name();
+        else
+            return "Invalid Lock";
+    return "-";
 }
 
 void InputHandler::adjustAim(double x, double y){

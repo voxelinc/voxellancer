@@ -136,7 +136,7 @@ void Game::initialize()
 	m_camera.setZFar(9999);
 
 	glow::debug("Create HUD");
-	m_hud = std::unique_ptr<HUD>(new HUD());
+	m_hud = std::unique_ptr<HUD>(new HUD(&m_inputHandler));
 	m_hud->setCamera(&m_camera);
 
     m_hd3000dummy = std::unique_ptr<HD3000Dummy>(new HD3000Dummy);
