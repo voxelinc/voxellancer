@@ -30,6 +30,7 @@ public:
     void finishInitialization();
 
     Voxel *crucialVoxel();
+    void setCrucialVoxel(glm::ivec3 pos);
 
     void accelerate(glm::vec3 direction);
     void accelerateAngular(glm::vec3 axis);
@@ -37,8 +38,8 @@ public:
 
 protected:
     WorldObject(Physics* physics, CollisionDetector* detector, float scale = 1.0f);
-
     std::unique_ptr<CollisionDetector> m_collisionDetector;
     std::unique_ptr<Physics> m_physics;
     HUDInfo m_hudInfo;
+    Voxel * m_crucialVoxel;
 };

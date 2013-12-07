@@ -28,11 +28,11 @@ void Damager::applyDamages(std::list<Impact> &impacts) {
             auto i = m_worldObjectModificationMap.find(impact.worldObject());
             if(i == m_worldObjectModificationMap.end()) {
                 WorldObjectModification modification(impact.worldObject());
-                modification.cellCleared(voxel->gridCell());
+                modification.removedVoxel(voxel->gridCell());
                 m_worldObjectModificationMap.insert(std::pair<WorldObject*, WorldObjectModification>(impact.worldObject(), modification));
             }
             else {
-                i->second.cellCleared(voxel->gridCell());
+                i->second.removedVoxel(voxel->gridCell());
             }
         }
     }

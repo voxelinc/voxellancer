@@ -60,6 +60,10 @@ void WorldObject::addVoxel(Voxel * voxel) {
 void WorldObject::removeVoxel(const glm::ivec3 & position) {
     m_collisionDetector->removeVoxel(position);
     m_physics->removeVoxel(position);
+    if (position == m_crucialVoxel->gridCell()) {
+        // do spectacular stuff like an explosion
+        m_crucialVoxel = nullptr;
+    }
     VoxelCluster::removeVoxel(position);
 }
 
@@ -68,14 +72,17 @@ void WorldObject::finishInitialization() {
     m_collisionDetector->finishInitialization();
 }
 
-Voxel *WorldObject::crucialVoxel() {
-    return nullptr;
-}
-
 void WorldObject::accelerate(glm::vec3 direction) {
     m_physics->accelerate(direction);
 }
 
 void WorldObject::accelerateAngular(glm::vec3 axis) {
     m_physics->accelerateAngular(axis);
+}
+
+Voxel *WorldObject::crucialVoxel() {
+    return m_crucialVoxel;
+}
+void WorldObject::setCrucialVoxel(glm::ivec3 pos) {
+    m_crucialVoxel = voxel(pos);
 }
