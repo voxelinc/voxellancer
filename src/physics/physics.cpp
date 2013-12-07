@@ -145,8 +145,8 @@ void Physics::resolveCollision(Collision & c, float delta_sec) {
     float vDiff = glm::abs(glm::length(v1 - v2));
 
     // new angular speed
-    glm::vec3 w1_ = glm::inverse((wo1->transform().orientation())) * (m_rotationFactor.get() * vDiff * (1.f / p1.m_mass) * glm::cross(normal, r1));
-    glm::vec3 w2_ = glm::inverse((wo2->transform().orientation())) * (m_rotationFactor.get() * vDiff * (1.f / p2.m_mass) * glm::cross(-normal, r2));
+    glm::vec3 w1_ = glm::inverse((wo1->transform().orientation())) * (m_rotationFactor.get() * vDiff * (p2.m_mass / (p1.m_mass + p2.m_mass)) * glm::cross(normal, r1));
+    glm::vec3 w2_ = glm::inverse((wo2->transform().orientation())) * (m_rotationFactor.get() * vDiff * (p1.m_mass / (p1.m_mass + p2.m_mass)) * glm::cross(-normal, r2));
 
     p1.m_speed = v1_;
     p2.m_speed = v2_;

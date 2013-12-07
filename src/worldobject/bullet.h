@@ -8,7 +8,6 @@ public:
     virtual void update(float delta_sec);
 
 private:
-	float m_speed;
 	float m_lifetime;
 	float m_distance;
 };
