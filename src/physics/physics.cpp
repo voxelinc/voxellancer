@@ -128,25 +128,19 @@ void Physics::updateSpeed(float deltaSec){
 // should not be used if the voxelcluster is not part of a worldTree.
 void Physics::applyTransform() {
     m_worldObject.collisionDetector().reset();
-    m_steps = 0;
-  //  std::cout << this << " Phases: " << m_movement.movePhases().size() << ": ";
+
     for (MovePhase* movePhase : m_movement.movePhases()) {
-     //   std::cout << "  stepped: " << movePhase->isStepped() << std::endl;
         if (movePhase->isStepped()) {
-        //    std::cout << "Stepped " << movePhase->distance() << " | ";
             doSteppedTransform(*movePhase);
         }
         else {
-           // std::cout << "Warp "<< movePhase->distance() << " | ";
             doWarpTransform(*movePhase);
-        //    assert(m_worldObject.collisionDetector().checkCollisions().size() == 0);
         }
 
         if (m_worldObject.collisionDetector().lastCollisions().size() > 0) { // There's something in front of you, makes no sense to go further
             break;
         }
     }
-    //std::cout << "total steps: " << ((float)m_steps/World::instance()->deltaSec()) << std::endl;
 }
 
 void Physics::doWarpTransform(const MovePhase& movePhase) {
@@ -156,7 +150,7 @@ void Physics::doWarpTransform(const MovePhase& movePhase) {
 }
 
 void Physics::doSteppedTransform(const MovePhase& movePhase) {
-    for (int s = 0; s < movePhase.stepCount(); s++) { m_steps++;
+    for (int s = 0; s < movePhase.stepCount(); s++) {
         WorldTransform newTransform(movePhase.step(s));
         WorldTransform oldTransform = m_worldObject.transform();
 

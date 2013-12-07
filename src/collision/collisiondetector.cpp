@@ -83,7 +83,7 @@ void CollisionDetector::updateGeode() {
     }
 }
 
-std::list<Collision> &CollisionDetector::checkCollisions() {
+std::list<Collision>& CollisionDetector::checkCollisions() {
     assert(m_geode != nullptr);
 
     m_collisions.clear();
@@ -91,9 +91,9 @@ std::list<Collision> &CollisionDetector::checkCollisions() {
     std::set<WorldTreeGeode*> possibleColliders = m_worldTree->geodesInAABB(m_worldObject.aabb(), m_geode->containingNode());
     possibleColliders.erase(m_geode);
 
-    for (WorldTreeGeode *possibleCollider : possibleColliders) {
+    for (WorldTreeGeode* possibleCollider : possibleColliders) {
         assert(possibleCollider->worldObject() != nullptr);
-        WorldObject * other = possibleCollider->worldObject();
+        WorldObject* other = possibleCollider->worldObject();
         checkCollisions(&m_voxelTree, &other->collisionDetector().voxeltree(), other);
     }
 
@@ -118,11 +118,13 @@ void CollisionDetector::checkCollisions(VoxelTreeNode* nodeA, VoxelTreeNode* nod
             std::vector<VoxelTreeNode*> nodesA, nodesB;
 
             auto assignList = [](VoxelTreeNode *node, std::vector<VoxelTreeNode*> &list) {
-                if (node->isLeaf()) {
-                    list.push_back(node);
-                }
-                else {
-                    list = node->subnodes();
+                if(!node->isEmpty()) {
+                    if (node->isLeaf()) {
+                        list.push_back(node);
+                    }
+                    else {
+                        list = node->subnodes();
+                    }
                 }
             };
 

@@ -1,13 +1,34 @@
-////#include "impactresolver.h"
-////
-////
-////void ImpactResolver::alterVelocities(std::list<VoxelClusterImpact> &voxelClusterImpacts) {
-////
-////}
+#include "impactresolver.h"
+
+#include <cassert>
+
+#include "worldobject/worldobject.h"
+
+#include "world/helper/impact.h"
+
+
+void ImpactResolver::alterVelocities(std::list<Impact> &allImpacts) {
+    calculateImpactsPerWorldObject(allImpacts);
+
+    for(auto p : m_impactsPerWordObject) {
+        assert(p.first != nullptr && !p.second.empty());
+
+        alterVelocity(p.first, p.second.front());
+    }
+}
 //
 //    // currently only one collision is handled and the collision is resolved
 //    // immediately. this can only be moved somewhere else as soon as there is a way
-//    // to resolve multiple collisions
+    // to resolve multiple collisions
+
+void ImpactResolver::calculateImpactsPerWorldObject(const std::list<Impact> &allImpacts) {
+
+}
+
+void ImpactResolver::alterVelocity(WorldObject* worldObject, const Impact& impact) {
+
+}
+
 //void Physics::resolveCollision(Collision & c, float delta_sec) {
 //    WorldObject * wo1 = c.a().worldObject();
 //    WorldObject * wo2 = c.b().worldObject();
@@ -49,7 +70,7 @@
 //    m_impacts.push_back(Impact(wo1, c.a().voxel(), glm::inverse(wo1->transform().orientation()) * (v2 - v1)));
 //    m_impacts.push_back(Impact(wo2, c.b().voxel(), glm::inverse(wo2->transform().orientation()) * (v1 - v2)));
 //}
-//
+
 //
 //    std::list<Collision> &collisions = m_worldObject.collisionDetector().lastCollisions();
 //    if (!collisions.empty()) {

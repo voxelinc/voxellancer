@@ -37,6 +37,7 @@ public:
     void remove(WorldTreeGeode *geode);
 
     std::set<WorldTreeGeode*> geodesInAABB(const AABB &aabb) const;
+    bool areGeodesInAABB(const AABB &aabb) const;
 
     void aabbChanged(WorldTreeGeode *geode);
 

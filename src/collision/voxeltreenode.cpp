@@ -56,7 +56,6 @@ const Grid3dAABB &VoxelTreeNode::gridAABB() const {
 }
 
 Sphere VoxelTreeNode::boundingSphere() {
-//    if(m_boundingSphereInvalid) {
     glm::vec3 center;
 
     center = static_cast<glm::vec3>(m_gridAABB.rub() + m_gridAABB.llf()) / 2.0f;
@@ -72,7 +71,6 @@ Sphere VoxelTreeNode::boundingSphere() {
         }
         m_boundingSphereRadiusValid = true;
     }
-//    }
 
     return m_boundingSphere;
 }

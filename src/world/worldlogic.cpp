@@ -17,8 +17,8 @@ WorldLogic::WorldLogic(World &world):
 void WorldLogic::update(float deltaSecs) {
     m_mover.moveWorldObjects(deltaSecs);
 
-//    m_impactAccumulator.parse(m_mover.collisions());
-//    m_impactResolver.alterVelocities(m_impactAccumulator.impacts());
+    m_impactAccumulator.parse(m_mover.collisions());
+    m_impactResolver.alterVelocities(m_impactAccumulator.impacts());
 
     damageForwardLoop(m_impactAccumulator.impacts());
     m_impactAccumulator.clear();

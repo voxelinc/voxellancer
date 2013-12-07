@@ -41,6 +41,24 @@ std::set<WorldTreeGeode*> WorldTree::geodesInAABB(const AABB &aabb, WorldTreeNod
     }
 }
 
+bool WorldTree::areGeodesInAABB(const AABB &aabb) const {
+    return WorldTreeNode::areGeodesInAABB(aabb);
+}
+
+bool WorldTree::areGeodesInAABB(const AABB &aabb, WorldTreeNode *nodeHint) const {
+    assert(nodeHint != nullptr);
+
+    if (nodeHint->aabb().contains(aabb)) {
+        return nodeHint->areGeodesInAABB(aabb);
+    }
+    else if(nodeHint->parent() != nullptr) {
+        return areGeodesInAABB(aabb, nodeHint->parent());
+    }
+    else {
+        return WorldTreeNode::areGeodesInAABB(aabb);
+    }
+}
+
 void WorldTree::aabbChanged(WorldTreeGeode *geode) {
     geode->containingNode()->aabbChanged(geode);
 }

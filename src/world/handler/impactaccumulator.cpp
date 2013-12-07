@@ -7,6 +7,11 @@
 
 void ImpactAccumulator::clear() {
     m_voxelImpactMap.clear();
+    m_impacts.clear();
+}
+
+void ImpactAccumulator::parse(const std::list<Collision> &collisions) {
+
 }
 
 /* Makes sure every voxel only receives one impact */
@@ -22,10 +27,6 @@ void ImpactAccumulator::parse(const std::list<Impact> &impacts) {
     }
 }
 
-//void ImpactAccumulator::parse(const std::list<PhysicalVoxelImpact> &physicalVoxelImpact) {
-//
-//}
-
 void ImpactAccumulator::dontImpact(const std::list<Voxel*> voxels) {
     std::set<const Voxel*> dontImpactSet(voxels.begin(), voxels.end());
 
@@ -39,16 +40,12 @@ void ImpactAccumulator::dontImpact(const std::list<Voxel*> voxels) {
     }
 }
 
-//std::list<PhysicalVoxelClusterImpact> &ImpactAccumulator::clusterImpacts() {
-//    return m_clusterImpacts;
-//}
-
-std::list<Impact> ImpactAccumulator::impacts() {
-    std::list<Impact> impacts;
+std::list<Impact>& ImpactAccumulator::impacts() {
+    m_impacts.clear();
 
     for(auto& pair : m_voxelImpactMap) {
-        impacts.push_back(pair.second);
+        m_impacts.push_back(pair.second);
     }
 
-    return impacts;
+    return m_impacts;
 }

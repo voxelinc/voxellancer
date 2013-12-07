@@ -20,6 +20,9 @@ public:
     std::set<WorldTreeGeode*> geodesInAABB(const AABB &aabb) const;
     std::set<WorldTreeGeode*> geodesInAABB(const AABB &aabb, WorldTreeNode *nodeHint) const;
 
+    bool areGeodesInAABB(const AABB &aabb) const;
+    bool areGeodesInAABB(const AABB &aabb, WorldTreeNode *nodeHint) const;
+
     void aabbChanged(WorldTreeGeode *geode);
 
     void poll(int& nodes, int &empty, int& geodes, int& depth);

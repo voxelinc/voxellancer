@@ -64,8 +64,6 @@ protected:
 
     Movement m_movement;
 
-    int m_steps;
-
     Property<float> m_dampening;
     Property<float> m_angularDampening;
     Property<float> m_rotationFactor;

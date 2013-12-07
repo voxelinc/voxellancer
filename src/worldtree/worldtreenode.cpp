@@ -120,6 +120,24 @@ std::set<WorldTreeGeode*> WorldTreeNode::geodesInAABB(const AABB &aabb) const {
     return result;
 }
 
+bool WorldTreeNode::areGeodesInAABB(const AABB& aabb) const {
+    if(isLeaf()) {
+        for(WorldTreeGeode* geode : m_geodes) {
+            if(aabb.intersects(geode->aabb())) {
+                return true;
+            }
+        }
+    }
+    else {
+        for(WorldTreeNode* subnode : m_subnodes) {
+            if(aabb.intersects(subnode->aabb())) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
 
 void WorldTreeNode::aabbChanged(WorldTreeGeode *geode) {
     if(m_aabb.contains(geode->aabb())) {

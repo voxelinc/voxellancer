@@ -57,9 +57,7 @@ float MovePhase::distance() const {
 void MovePhase::calculateSubphases(const CollisionDetector& collisionDetector) {
     AABB phaseAABB = collisionDetector.aabb(m_originalTransform).united(collisionDetector.aabb(m_targetTransform));
 
-    std::set<WorldTreeGeode*> possibleCollisions = collisionDetector.worldTree()->geodesInAABB(phaseAABB);
-
-    if(!possibleCollisions.empty()) {
+    if(collisionDetector.worldTree()->areGeodesInAABB(phaseAABB)) {
         glm::vec3 directionalStep = m_targetTransform.position() - m_originalTransform.position();
         m_distance = glm::length(directionalStep);
 
