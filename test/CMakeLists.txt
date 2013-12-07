@@ -15,7 +15,7 @@ if(${OPTION_CREATE_SUB_TEST})
     add_subdirectory(collision)
     add_subdirectory(loader)
     add_subdirectory(worldobject)
-    add_subdirectory(splitter)
+    add_subdirectory(splitting)
 endif()
 
 file(GLOB_RECURSE ALL_TEST_FILES

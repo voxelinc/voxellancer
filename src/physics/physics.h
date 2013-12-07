@@ -34,8 +34,6 @@ public:
     void addVoxel(Voxel *voxel);
     void removeVoxel(const glm::ivec3 &position);
 
-    void finishInitialization();
-
     glm::vec3 calculateMassAndCenter();
 protected:
     virtual void updateSpeed(float delta_sec);

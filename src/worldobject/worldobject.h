@@ -12,6 +12,7 @@ class WorldObject : public VoxelCluster
 {
 public:
     WorldObject(float scale = 1.0f);
+    WorldObject(const WorldTransform& transform);
     virtual ~WorldObject();
 
     CollisionDetector& collisionDetector();
@@ -28,6 +29,7 @@ public:
     void addVoxel(Voxel * voxel);
     void removeVoxel(const glm::ivec3 & position);
     void finishInitialization();
+    void recalculateCenterAndMass();
 
     Voxel *crucialVoxel();
     void setCrucialVoxel(glm::ivec3 pos);

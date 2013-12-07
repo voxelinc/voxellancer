@@ -14,7 +14,7 @@
 using namespace bandit;
 
 go_bandit([]() {
-    describe("Splitdetector", []() {
+    describe("Splitter", []() {
         PropertyManager::instance()->reset();
         PropertyManager::instance()->load("data/config.ini");
 
@@ -49,47 +49,39 @@ go_bandit([]() {
 
         });
 
-        it("detects no split correctly", [&]() {
+        it("splits no split correctly", [&]() {
             WorldObjectModification modification(w);
             
+            w->addVoxel(new Voxel(glm::ivec3(3, 0, 0)));
+            w->addVoxel(new Voxel(glm::ivec3(3, 1, 0)));
             w->removeVoxel(glm::ivec3(2, 0, 0));
             modification.removedVoxel(glm::ivec3(2, 0, 0));
             
             detector.searchSplitOffs(std::list<WorldObjectModification>{ modification });
+            splitter.split(detector.worldObjectSplits());
 
-            AssertThat(detector.worldObjectSplits(), IsEmpty());
+            AssertThat(splitter.splitOffWorldObjects().size(), Equals(0));
         });
 
 
-        it("detects one split correctly", [&]() {
+        it("splits one split correctly", [&]() {
             WorldObjectModification modification(w);
 
             w->removeVoxel(glm::ivec3(2, 2, 0));
             modification.removedVoxel(glm::ivec3(2, 2, 0));
 
             detector.searchSplitOffs(std::list<WorldObjectModification>{ modification });
+            splitter.split(detector.worldObjectSplits());
 
-            AssertThat(detector.worldObjectSplits().size(), Equals(1));
+            AssertThat(splitter.splitOffWorldObjects().size(), Equals(1));
+            
+            WorldObject* splitOff = splitter.splitOffWorldObjects().front();
+            AssertThat(splitOff->voxel(glm::ivec3(2, 3, 0)) == nullptr, IsFalse());
+            AssertThat(splitOff->voxel(glm::ivec3(2, 0, 0)) == nullptr, IsTrue());
 
-            // check if the split is the upper part of the voxel without the crucial voxel
-            WorldObjectSplit* splitOff = detector.worldObjectSplits().front();
-            AssertThat(splitOff->splitOffVoxels().size(), Equals(6));
+            AssertThat(w->voxel(glm::ivec3(2, 3, 0)) == nullptr, IsTrue());
+            AssertThat(w->voxel(glm::ivec3(2, 0, 0)) == nullptr, IsFalse());
 
-
-            Voxel* oneSplittOffVoxel = splitOff->splitOffVoxels().front();
-            AssertThat(oneSplittOffVoxel->gridCell().y, IsGreaterThan(2));
-        });
-
-
-        it("works with destroyed crucial voxel", [&]() {
-            WorldObjectModification modification(w);
-
-            w->removeVoxel(glm::ivec3(2, 1, 0));
-            modification.removedVoxel(glm::ivec3(2, 1, 0));
-
-            detector.searchSplitOffs(std::list<WorldObjectModification>{ modification });
-
-            AssertThat(detector.worldObjectSplits().size(), Equals(1));
         });
 
 
@@ -100,10 +92,10 @@ go_bandit([]() {
             modification.removedVoxel(glm::ivec3(2, 3, 0));
 
             detector.searchSplitOffs(std::list<WorldObjectModification>{ modification });
+            splitter.split(detector.worldObjectSplits());
 
-            AssertThat(detector.worldObjectSplits().size(), Equals(2));
+            AssertThat(splitter.splitOffWorldObjects().size(), Equals(2));
         });
 
-
-    });
+     });
 });

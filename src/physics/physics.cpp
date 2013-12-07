@@ -26,12 +26,6 @@ Physics::Physics(WorldObject & worldObject) :
 
 }
 
-// only neccessary for manually constructed voxelclusters, not if
-// the cluster is build from clusterstore
-void Physics::finishInitialization() {
-
-}
-
 Physics::~Physics() {
 }
 

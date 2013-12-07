@@ -20,18 +20,17 @@ std::list<WorldObject*> &Splitter::splitOffWorldObjects() {
 }
 
 WorldObject *Splitter::createWorldObjectFromOrphan(WorldObjectSplit *split) {
-    glm::ivec3 gridCellShift;
     WorldObject *worldObject;
 
-    worldObject = new WorldObject(split->exWorldObject()->transform().scale());
-    gridCellShift = split->gridLlf();
+    worldObject = new WorldObject(split->exWorldObject()->transform());
+    worldObject->hudInfo().setName(split->exWorldObject()->hudInfo().name() + " - splitoff");
 
     for(Voxel *voxel : split->splitOffVoxels()) {
-        Voxel *voxelClone = new Voxel(voxel->gridCell() - gridCellShift, voxel->color(), voxel->mass());
+        Voxel *voxelClone = new Voxel(*voxel);
         worldObject->addVoxel(voxelClone);
     }
 
-   // voxelCluster->recalculateCenterAndMass(); TODO
+    worldObject->recalculateCenterAndMass();
     return worldObject;
 }
 
