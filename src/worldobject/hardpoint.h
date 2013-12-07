@@ -1,12 +1,12 @@
 #pragma once
 
 #include "voxel/voxelcluster.h"
-#include "gun.h"
+#include "worldobject/weapons/launcher.h"
 #include "resource/clustercache.h"
 
 class Ship;
 
-class Hardpoint{
+class Hardpoint {
 public:
     Hardpoint(Ship* ship, const glm::vec3& position, Launcher *launcher);
     ~Hardpoint();
@@ -18,7 +18,7 @@ public:
     AimType aimType();
     void shootAtPoint(glm::vec3 target);
     void shootAtObject(WorldObject* target);
-    float range();
+    float aimRange();
 
     void voxelRemoved();
 

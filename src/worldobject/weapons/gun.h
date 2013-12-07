@@ -5,15 +5,14 @@
 
 class Gun : public Launcher {
 public:
-    Gun(float speed, float range, float cooldown);
+    Gun();
     virtual AimType aimType();
     virtual void shootAtPoint(glm::vec3 position, glm::quat orientation, glm::vec3 target);
     virtual void update(float delta_sec);
-    virtual float range();
+    virtual float aimRange();
 
 private:
-    float m_speed;
-    float m_range;
-    float m_cooldownTime;
+    Property<float> prop_aimRange, prop_cooldownTime, prop_bulletSpeed;
+
     float m_cooldown;
 };

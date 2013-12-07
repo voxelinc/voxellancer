@@ -1,3 +1,4 @@
+#pragma once
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 
@@ -16,6 +17,6 @@ public:
     virtual void shootAtPoint(glm::vec3 position, glm::quat orientation, glm::vec3 target);
     virtual void shootAtObject(glm::vec3 position, glm::quat orientation, WorldObject* target);
     virtual void update(float delta_sec) = 0;
-    virtual float range() = 0;
+    virtual float aimRange() = 0;
 
 };

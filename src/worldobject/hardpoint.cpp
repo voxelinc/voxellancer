@@ -41,9 +41,9 @@ void Hardpoint::shootAtObject(WorldObject* target){
         m_launcher->shootAtObject((glm::vec3)(m_ship->transform().applyTo(m_position)), m_ship->transform().orientation(), target);
 }
 
-float Hardpoint::range(){
+float Hardpoint::aimRange(){
     if (m_launcher)
-        return m_launcher->range();
+        return m_launcher->aimRange();
     else
         return -1;
 }

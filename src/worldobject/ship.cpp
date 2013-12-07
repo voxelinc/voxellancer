@@ -1,11 +1,13 @@
 #include "ship.h"
 
 #include "voxel/specialvoxels/hardpointvoxel.h"
+#include "worldobject/weapons/launcher.h"
+#include "worldobject/weapons/gun.h"
 
 Ship::Ship() :
     m_world(World::instance()),
     m_hardpoints(),
-    m_aimMode(AimType::Point),
+    m_aimMode(Point),
     m_targetPoint(0),
     m_targetObject(nullptr)
 {
@@ -18,7 +20,13 @@ void Ship::update(float deltasec){
 }
 
 void Ship::addHardpointVoxel(HardpointVoxel* voxel){
-    Hardpoint* point = new Hardpoint(this, glm::vec3(voxel->gridCell()), new Gun(100, 400, 0.2f));
+    Hardpoint* point;
+    //TODO: Adding the actual Launcher here is wrong, this is test code
+    point = new Hardpoint(this, glm::vec3(voxel->gridCell()), new Gun());
+    /*if (m_hardpoints.size() % 2 == 0)
+        point = new Hardpoint(this, glm::vec3(voxel->gridCell()), new Gun(100, 400, 0.2f));
+    else
+        point = new Hardpoint(this, glm::vec3(voxel->gridCell()), new Gun(100, 400, 0.2f));*/
     voxel->setHardpoint(point);
     m_hardpoints.push_back(point);
     addVoxel(voxel);
@@ -78,8 +86,8 @@ void Ship::fire(){
 float Ship::minAimDistance(){ // is this needed ?!
     float range = 1000;
     for (Hardpoint *hardpoint : m_hardpoints){
-        if (hardpoint->range() != -1)
-            range = glm::min(hardpoint->range(), range);
+        if (hardpoint->aimRange() != -1)
+            range = glm::min(hardpoint->aimRange(), range);
     }
     return range;
 }

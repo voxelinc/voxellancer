@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include "worldobject.h"
 #include "hardpoint.h"
 #include "world/world.h"
 #include "world/god.h"
