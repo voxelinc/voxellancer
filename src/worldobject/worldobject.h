@@ -11,7 +11,7 @@
 class WorldObject : public VoxelCluster
 {
 public:
-    WorldObject(float scale = 1.0f);
+    WorldObject(float scale = 1.0f, glm::vec3 center = glm::vec3(0));
     WorldObject(const WorldTransform& transform);
     virtual ~WorldObject();
 

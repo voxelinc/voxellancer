@@ -3,9 +3,10 @@
 #include "utils/tostring.h"
 
 
-WorldObject::WorldObject(float scale) :
+WorldObject::WorldObject(float scale, glm::vec3 center) :
     WorldObject(new Physics(*this), new CollisionDetector(*this), scale)
 {
+    m_transform.setCenter(center);
 }
 
 WorldObject::WorldObject(Physics* physics, CollisionDetector* detector, float scale) :

@@ -73,18 +73,13 @@ go_bandit([](){
         });
 
         it("can adjust its center", [&]() {
-            WorldObject *d = new WorldObject(1.0);
-            d->addVoxel(new Voxel(glm::ivec3(1, 1, 1)));
-            d->finishInitialization();
-
+            WorldObject *d = new WorldObject(1.0, glm::vec3(1,1,1));
+            
             AssertThat(d->collisionDetector().voxeltree().boundingSphere().position(), EqualsWithDelta(glm::vec3(-1, -1, -1), glm::vec3(0.01, 0.01, 0.01)));
         });
 
         it("can adjust its center and scale", [&]() {
-            WorldObject *d = new WorldObject(3.0f);
-
-            d->addVoxel(new Voxel(glm::ivec3(1, 1, 1)));
-            d->finishInitialization();
+            WorldObject *d = new WorldObject(3.0f, glm::vec3(1, 1, 1));
 
             AssertThat(d->collisionDetector().voxeltree().boundingSphere().radius(), EqualsWithDelta(2.5f, 0.1f));
             AssertThat(d->collisionDetector().voxeltree().boundingSphere().position(), EqualsWithDelta(glm::vec3(-3, -3, -3), glm::vec3(0.01, 0.01, 0.01)));
