@@ -3,35 +3,35 @@
 #include <list>
 #include <glm/glm.hpp>
 
-#include "collision/collisiondetector.h"
-
 #include "worldtransform.h"
 
-#include "movephase.h"
 
+class WorldObject;
+class CollisionDetector;
 
 class Movement {
-static constexpr float MAX_STEP_DISTANCE = 5.0f;
+static constexpr float ATOMIC_DIRECTIONAL_STEP = 0.4f;
+static constexpr float ATOMIC_ANGULAR_STEP = 30.0f;
+static constexpr float MAX_STEPPED_DISTANCE = 1.2f;
+
 
 public:
-    Movement();
+    Movement(WorldObject& worldObject, const WorldTransform& originalTransform, const WorldTransform& targetTransform);
     virtual ~Movement();
 
-    void clear();
-    void setOriginalTransform(const WorldTransform& originalTransform);
-    void setDelta(float deltaSec, const glm::vec3& speed, const glm::vec3& angularSpeed);
-    void calculatePhases(const CollisionDetector& collisionDetector);
-
-    const WorldTransform& targetTransform() const;
-
-    const std::list<MovePhase*>& movePhases();
+    bool perform();
 
 
 protected:
+    WorldObject& m_worldObject;
+    CollisionDetector& m_collisionDetector;
     WorldTransform m_originalTransform;
     WorldTransform m_targetTransform;
-    MovePhase* m_rootMovePhase;
-    std::list<MovePhase*> m_movePhases;
-    bool m_movePhasesValid;
+    float m_distance;
+
+    bool performSplitted();
+    bool performStepped();
+    int calculateStepCount();
+    WorldTransform calculateStep(int s, int stepCount) const;
 };
 

@@ -10,7 +10,6 @@
 #include "world/helper/impact.h"
 
 #include "movement.h"
-#include "movephase.h"
 
 
 class WorldObject;
@@ -45,11 +44,6 @@ protected:
     void calculateMassAndCenter();
     virtual void updateSpeed(float deltaSec);
 
-    void applyTransform();
-    void doSteppedTransform(const MovePhase& movePhase);
-    void doWarpTransform(const MovePhase& movePhase);
-
-
 protected:
     float m_mass;
     bool m_massValid;
@@ -61,8 +55,6 @@ protected:
 
     glm::vec3 m_acceleration;
     glm::vec3 m_angularAcceleration;
-
-    Movement m_movement;
 
     Property<float> m_dampening;
     Property<float> m_angularDampening;

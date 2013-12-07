@@ -106,8 +106,8 @@ void Game::initialize()
 	m_testClusterB->transform().setCenter(glm::vec3(3, 0, 3));
     m_testClusterB->transform().setPosition(glm::vec3(0, 0, 10));
     m_testClusterB->finishInitialization();
-    m_testClusterB->addHardpoint(new Hardpoint(m_testClusterB, glm::vec3(0, 5, 0), new Gun(600, 400, 0.05f)));
-    m_testClusterB->addHardpoint(new Hardpoint(m_testClusterB, glm::vec3(5, 5, 0), new Gun(600, 400, 0.05f)));
+    m_testClusterB->addHardpoint(new Hardpoint(m_testClusterB, glm::vec3(0, 5, 0), new Gun(500, 400, 0.05f)));
+    m_testClusterB->addHardpoint(new Hardpoint(m_testClusterB, glm::vec3(5, 5, 0), new Gun(500, 400, 0.05f)));
     m_testClusterB->hudInfo().setName("Ship");
     m_testClusterB->hudInfo().setShowOnHud(false);
 

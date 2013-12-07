@@ -10,7 +10,7 @@
 #include "worldtree/worldtree.h"
 
 
-Physics::Physics(WorldObject & worldObject) :
+Physics::Physics(WorldObject& worldObject) :
     m_speed(0),
     m_angularSpeed(0),
     m_acceleration(0),
@@ -80,14 +80,14 @@ void Physics::calculateMassAndCenter() {
 std::list<Collision> &Physics::move(float deltaSec) {
     updateSpeed(deltaSec);
 
-    m_movement.clear();
-    m_movement.setOriginalTransform(m_worldObject.transform());
-    m_movement.setDelta(deltaSec, m_speed, m_angularSpeed);
-    m_movement.calculatePhases(m_worldObject.collisionDetector());
+    WorldTransform targetTransform(m_worldObject.transform());
+    targetTransform.moveWorld(m_speed * deltaSec);
+    targetTransform.rotate(glm::quat(m_angularSpeed * deltaSec));
 
-    applyTransform();
+    Movement movement(m_worldObject, m_worldObject.transform(), targetTransform);
+    movement.perform();
 
-    return m_collisions;
+    return m_worldObject.collisionDetector().lastCollisions();
 }
 
 // accelerate along local axis
@@ -124,50 +124,6 @@ void Physics::updateSpeed(float deltaSec){
     m_angularAcceleration = glm::vec3(0);
 }
 
-// tries to apply the current transform as far as no collision happens.
-// should not be used if the voxelcluster is not part of a worldTree.
-void Physics::applyTransform() {
-    m_worldObject.collisionDetector().reset();
-
-    for (MovePhase* movePhase : m_movement.movePhases()) {
-        if (movePhase->isStepped()) {
-            doSteppedTransform(*movePhase);
-        }
-        else {
-            doWarpTransform(*movePhase);
-        }
-
-        if (m_worldObject.collisionDetector().lastCollisions().size() > 0) { // There's something in front of you, makes no sense to go further
-            break;
-        }
-    }
-}
-
-void Physics::doWarpTransform(const MovePhase& movePhase) {
-    m_worldObject.transform().setPosition(movePhase.targetTransform().position());
-    m_worldObject.transform().setOrientation(movePhase.targetTransform().orientation());
-    m_worldObject.collisionDetector().updateGeode();
-}
-
-void Physics::doSteppedTransform(const MovePhase& movePhase) {
-    for (int s = 0; s < movePhase.stepCount(); s++) {
-        WorldTransform newTransform(movePhase.step(s));
-        WorldTransform oldTransform = m_worldObject.transform();
-
-        m_worldObject.transform().setOrientation(newTransform.orientation());
-        m_worldObject.transform().setPosition(newTransform.position());
-        m_worldObject.collisionDetector().updateGeode();
-
-        const std::list<Collision>& collisions = m_worldObject.collisionDetector().checkCollisions();
-
-        if(!collisions.empty()) {
-            m_worldObject.transform().setOrientation(oldTransform.orientation());
-            m_worldObject.transform().setPosition(oldTransform.position());
-            m_worldObject.collisionDetector().updateGeode();
-            break;
-        }
-    }
-}
 
 
 

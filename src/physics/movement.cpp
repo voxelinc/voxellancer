@@ -1,48 +1,102 @@
 #include "movement.h"
 
+#include "collision/collisiondetector.h"
 
-Movement::Movement():
-    m_rootMovePhase(nullptr),
-    m_movePhasesValid(false)
+#include "worldobject/worldobject.h"
+
+#include "worldtree/worldtree.h"
+
+
+Movement::Movement(WorldObject& worldObject, const WorldTransform& originalTransform, const WorldTransform& targetTransform):
+    m_worldObject(worldObject),
+    m_collisionDetector(m_worldObject.collisionDetector()),
+    m_originalTransform(originalTransform),
+    m_targetTransform(targetTransform),
+    m_distance(0.0f)
 {
 }
 
 Movement::~Movement() {
-    delete m_rootMovePhase;
-}
-
-void Movement::clear() {
 
 }
 
-void Movement::setOriginalTransform(const WorldTransform& originalTransform) {
-    m_originalTransform = originalTransform;
-    m_movePhasesValid = false;
-}
+bool Movement::perform() {
+    AABB phaseAABB = m_collisionDetector.aabb(m_originalTransform).united(m_collisionDetector.aabb(m_targetTransform));
 
-void Movement::setDelta(float deltaSec, const glm::vec3& speed, const glm::vec3& angularSpeed) {
-    m_targetTransform = m_originalTransform;
+    if(m_collisionDetector.worldTree()->areGeodesInAABB(phaseAABB)) {
+        glm::vec3 directionalStep = m_targetTransform.position() - m_originalTransform.position();
+        m_distance = glm::length(directionalStep);
 
-    m_targetTransform.moveWorld(speed * deltaSec);
-    m_targetTransform.rotate(glm::quat(angularSpeed * deltaSec));
-
-    m_movePhasesValid = false;
-}
-
-void Movement::calculatePhases(const CollisionDetector& collisionDetector) {
-    delete m_rootMovePhase;
-    m_rootMovePhase = new MovePhase(m_originalTransform, m_targetTransform);
-    m_rootMovePhase->calculateSubphases(collisionDetector);
-}
-
-const WorldTransform& Movement::targetTransform() const {
-    return m_targetTransform;
-}
-
-const std::list<MovePhase*>& Movement::movePhases() {
-    if (!m_movePhasesValid) {
-        m_movePhases = m_rootMovePhase->linearisedSubphases();
-        m_movePhasesValid = true;
+        if(m_distance > MAX_STEPPED_DISTANCE) {
+            return performSplitted();
+        }
+        else {
+            return performStepped();
+        }
     }
-    return m_movePhases;
+    else {
+        m_worldObject.updateTransformAndGeode(m_targetTransform.position(), m_targetTransform.orientation());
+
+        return true;
+    }
+}
+
+bool Movement::performSplitted() {
+    WorldTransform pivotTransform;
+
+    pivotTransform.setOrientation(glm::slerp(m_originalTransform.orientation(), m_targetTransform.orientation(), 0.5f));
+    pivotTransform.setPosition(glm::mix(m_originalTransform.position(), m_targetTransform.position(), 0.5f));
+
+    Movement left(m_worldObject, m_originalTransform, pivotTransform);
+    Movement right(m_worldObject, pivotTransform, m_targetTransform);
+
+    if(left.perform()) {
+        return right.perform();
+    }
+    else {
+        return false;
+    }
+}
+
+bool Movement::performStepped() {
+    int stepCount = calculateStepCount();
+
+    for (int s = 0; s < stepCount; s++) {
+        WorldTransform newTransform(calculateStep(s, stepCount));
+        WorldTransform oldTransform = m_worldObject.transform();
+
+        m_worldObject.updateTransformAndGeode(newTransform.position(), newTransform.orientation());
+
+        const std::list<Collision>& collisions = m_collisionDetector.checkCollisions();
+
+        if(!collisions.empty()) {
+            m_worldObject.updateTransformAndGeode(oldTransform.position(), oldTransform.orientation());
+            return false;
+        }
+    }
+
+    return true;
+}
+
+int Movement::calculateStepCount() {
+    int steps = std::max(static_cast<int>(glm::ceil(m_distance / ATOMIC_DIRECTIONAL_STEP)) - 1, 1); // at least one!
+    float angularDiff = glm::angle(glm::inverse(m_targetTransform.orientation()) * m_originalTransform.orientation());
+
+    if (std::isfinite(angularDiff)) { // sometimes glm::angle returns INF for really small angles
+        steps = std::max(steps, static_cast<int>(glm::ceil(angularDiff / ATOMIC_ANGULAR_STEP)) - 1);
+    }
+
+    assert(steps > 0);
+    return steps;
+}
+
+WorldTransform Movement::calculateStep(int s, int stepCount) const {
+    WorldTransform transform;
+
+    float rel = static_cast<float>(s + 1) / static_cast<float>(stepCount);
+
+    transform.setOrientation(glm::slerp(m_originalTransform.orientation(), m_targetTransform.orientation(), rel));
+    transform.setPosition(glm::mix(m_originalTransform.position(), m_targetTransform.position(), rel));
+
+    return transform;
 }

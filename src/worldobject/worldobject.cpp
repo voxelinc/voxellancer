@@ -79,3 +79,9 @@ void WorldObject::accelerate(glm::vec3 direction) {
 void WorldObject::accelerateAngular(glm::vec3 axis) {
     m_physics->accelerateAngular(axis);
 }
+
+void WorldObject::updateTransformAndGeode(const glm::vec3& position, const glm::quat& orientation) {
+    transform().setOrientation(orientation);
+    transform().setPosition(position);
+    m_collisionDetector->updateGeode();
+}

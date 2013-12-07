@@ -34,6 +34,8 @@ public:
     void accelerate(glm::vec3 direction);
     void accelerateAngular(glm::vec3 axis);
 
+    void updateTransformAndGeode(const glm::vec3& position, const glm::quat& orientation);
+
 
 protected:
     WorldObject(Physics* physics, CollisionDetector* detector, float scale = 1.0f);
