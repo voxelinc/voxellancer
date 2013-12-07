@@ -1,6 +1,7 @@
+#include "physics.h"
+
 #include <glm/gtx/quaternion.hpp>
 #include <iostream>
-#include "physics.h"
 
 #include "worldtransform.h"
 #include "collision/collisiondetector.h"
@@ -66,10 +67,11 @@ glm::vec3 Physics::calculateMassAndCenter() {
     m_mass = 0;
     for (auto pair : m_worldObject.voxelMap()) {
         Voxel *voxel = pair.second;
-        m_mass += 1.0; // voxel.mass?
-        center += glm::vec3(voxel->gridCell()) * 1.0f; // voxel.mass?
+        m_mass += voxel->mass();
+        center += glm::vec3(voxel->gridCell()) * voxel->mass();
     }
     center /= m_mass;
+    m_mass *= glm::pow(m_worldObject.transform().scale(), 3.f);
     m_massValid = true;
     m_center = center;
 

@@ -34,8 +34,8 @@ LinuxVMDummy::LinuxVMDummy() :
 	* these actions do not affect normal operation on "clean" systems because we just initialize some stuff we never use */
 
 	/* Shaders */
-	glow::Shader * vertexShader = glow::createShaderFromFile(GL_VERTEX_SHADER, "data/skybox.vert");
-	glow::Shader * fragmentShader = glow::createShaderFromFile(GL_FRAGMENT_SHADER, "data/skybox.frag");
+    glow::Shader * vertexShader = glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/skybox.vert");
+    glow::Shader * fragmentShader = glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/skybox.frag");
 
 	m_shaderProgram = new glow::Program();
 	m_shaderProgram->attach(vertexShader, fragmentShader);
