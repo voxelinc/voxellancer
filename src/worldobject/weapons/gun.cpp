@@ -1,11 +1,13 @@
 #include "gun.h"
 #include "world/world.h"
 #include "world/god.h"
+#include "worldobject/hardpoint.h"
+#include "worldobject/ship.h"
 
 Gun::Gun() :
     prop_aimRange("weapons.GunAimRange"),
     prop_cooldownTime("weapons.GunCooldownTime"),
-    prop_bulletSpeed("weapons.GunBulletSpeed"),
+    prop_speed("weapons.GunSpeed"),
     m_cooldown(0)
 {
 }
@@ -22,9 +24,9 @@ void Gun::update(float delta_sec){
 }
 
 
-void Gun::shootAtPoint(glm::vec3 position, glm::quat orientation, glm::vec3 target){
+void Gun::shootAtPoint(Hardpoint* source, glm::vec3 target){
     if (m_cooldown <= 0){
-        Bullet *b = new Bullet(position, orientation, target - position, prop_bulletSpeed, prop_aimRange);
+        Bullet *b = new Bullet(source->position(), source->ship()->transform().orientation(), target - source->position(), prop_speed, prop_aimRange);
         m_cooldown = prop_cooldownTime;
         World::instance()->god().scheduleSpawn(b);
     }

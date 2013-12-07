@@ -2,10 +2,10 @@
 
 #include "ship.h"
 
-Hardpoint::Hardpoint(Ship* ship, const glm::vec3& position, Launcher *launcher){
+Hardpoint::Hardpoint(Ship* ship, const glm::vec3& positionInGrid, Launcher *launcher){
     assert(ship != nullptr);
     m_ship = ship;
-	m_position = position;
+    m_positionInGrid = positionInGrid;
     m_launcher = launcher;
 }
 
@@ -21,6 +21,13 @@ Launcher* Hardpoint::launcher(){
     return m_launcher;
 }
 
+glm::vec3 Hardpoint::position(){
+    return m_ship->transform().applyTo(m_positionInGrid);
+}
+Ship* Hardpoint::ship(){
+    return m_ship;
+}
+
 void Hardpoint::update(float delta_sec){
     if (m_launcher)
         m_launcher->update(delta_sec);
@@ -34,11 +41,11 @@ AimType Hardpoint::aimType(){
 }
 void Hardpoint::shootAtPoint(glm::vec3 target){
     if (m_launcher)
-        m_launcher->shootAtPoint((glm::vec3)(m_ship->transform().applyTo(m_position)), m_ship->transform().orientation(), target);
+        m_launcher->shootAtPoint(this, target);
 }
 void Hardpoint::shootAtObject(WorldObject* target){
     if (m_launcher)
-        m_launcher->shootAtObject((glm::vec3)(m_ship->transform().applyTo(m_position)), m_ship->transform().orientation(), target);
+        m_launcher->shootAtObject(this, target);
 }
 
 float Hardpoint::aimRange(){

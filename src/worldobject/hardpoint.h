@@ -8,11 +8,13 @@ class Ship;
 
 class Hardpoint {
 public:
-    Hardpoint(Ship* ship, const glm::vec3& position, Launcher *launcher);
+    Hardpoint(Ship* ship, const glm::vec3& positionInGrid, Launcher *launcher);
     ~Hardpoint();
     void setLauncher(Launcher *launcher);
     //void removeGun();
     Launcher *launcher();
+    glm::vec3 position(); // in world coordinates
+    Ship* ship();
 
     void update(float delta_sec);
     AimType aimType();
@@ -24,6 +26,6 @@ public:
 
 private:
     Ship* m_ship;
-    glm::vec3 m_position;
+    glm::vec3 m_positionInGrid;
     Launcher *m_launcher;
 };

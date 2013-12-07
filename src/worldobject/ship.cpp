@@ -3,6 +3,7 @@
 #include "voxel/specialvoxels/hardpointvoxel.h"
 #include "worldobject/weapons/launcher.h"
 #include "worldobject/weapons/gun.h"
+#include "worldobject/weapons/rocketlauncher.h"
 
 Ship::Ship() :
     m_world(World::instance()),
@@ -22,11 +23,11 @@ void Ship::update(float deltasec){
 void Ship::addHardpointVoxel(HardpointVoxel* voxel){
     Hardpoint* point;
     //TODO: Adding the actual Launcher here is wrong, this is test code
-    point = new Hardpoint(this, glm::vec3(voxel->gridCell()), new Gun());
-    /*if (m_hardpoints.size() % 2 == 0)
-        point = new Hardpoint(this, glm::vec3(voxel->gridCell()), new Gun(100, 400, 0.2f));
+    //point = new Hardpoint(this, glm::vec3(voxel->gridCell()), new Gun());
+    if (m_hardpoints.size() % 3 == 0)
+        point = new Hardpoint(this, glm::vec3(voxel->gridCell()), new RocketLauncher());
     else
-        point = new Hardpoint(this, glm::vec3(voxel->gridCell()), new Gun(100, 400, 0.2f));*/
+        point = new Hardpoint(this, glm::vec3(voxel->gridCell()), new Gun());
     voxel->setHardpoint(point);
     m_hardpoints.push_back(point);
     addVoxel(voxel);
@@ -77,7 +78,7 @@ void Ship::fire(){
     } else if (m_aimMode == Object){
         for (Hardpoint* hardpoint : m_hardpoints){
             if (hardpoint->aimType() == Object){
-                hardpoint->shootAtPoint(m_targetPoint);
+                hardpoint->shootAtObject(m_targetObject);
             }
         }
     }
