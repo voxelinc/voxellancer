@@ -16,11 +16,16 @@ public:
     virtual void addHardpointVoxel(HardpointVoxel* voxel);
     void removeHardpoint(Hardpoint *hardpoint);
 
-    void shootAt(glm::vec3 point);
+    void setTargetPoint(glm::vec3 target);
+    void setTargetObject(WorldObject* target);
+    void fire();
     float minAimDistance();
 
 protected:
 
-    World * m_world;
-	std::vector<Hardpoint*> m_hardpoints = std::vector<Hardpoint*>();
+    World* m_world;
+	std::vector<Hardpoint*> m_hardpoints;
+    AimType m_aimMode;
+    WorldObject* m_targetObject;
+    glm::vec3 m_targetPoint;
 };

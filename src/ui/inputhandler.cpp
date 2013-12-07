@@ -142,7 +142,7 @@ void InputHandler::update(float delta_sec) {
 
             // shoot
             if (glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS){
-                shoot(x, y);
+                fireGuns(x, y);
             }
 
 			// lookAt
@@ -209,12 +209,13 @@ void InputHandler::setPlayerShip(Ship* ship) {
     m_playerShip = ship;
 }
 
-void InputHandler::shoot(double x, double y){
+void InputHandler::fireGuns(double x, double y){
     glm::vec4 pointEnd((x * 2 / m_windowWidth - 1), -1 * (y * 2 / m_windowHeight - 1), 1, 1); //get normalized device coords
     pointEnd = glm::inverse(m_camera->viewProjection())*pointEnd; //find point on zfar
     glm::vec3 vec = glm::vec3(pointEnd); // no need for w component
     vec = glm::normalize(vec); // normalize
     vec *= m_playerShip->minAimDistance(); // set aimdistance
     vec += m_camera->position(); //adjust for camera translation
-    m_playerShip->shootAt(vec);
+    m_playerShip->setTargetPoint(vec);
+    m_playerShip->fire();
 }

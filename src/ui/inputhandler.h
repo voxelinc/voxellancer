@@ -26,6 +26,10 @@ public:
 	void update(float delta_sec);
 
 protected:
+
+    void toggleControls();
+    void fireGuns(double x, double y);
+
 	GLFWwindow *m_window;
 	Camera* m_camera;
 
@@ -45,9 +49,4 @@ protected:
     Property<float> prop_rotationSpeed;
     Property<float> prop_rollSpeed;
     Property<float> prop_moveSpeed;
-
-
-	void toggleControls();
-
-    void shoot(double x, double y);
 };

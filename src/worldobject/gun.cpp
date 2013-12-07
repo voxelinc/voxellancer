@@ -10,7 +10,7 @@ Gun::Gun(float speed, float range, float cooldown){
 }
 
 AimType Gun::aimType(){
-    return AimType::Point;
+    return Point;
 }
 
 void Gun::update(float delta_sec){

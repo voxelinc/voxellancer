@@ -2,8 +2,13 @@
 
 #include "voxel/specialvoxels/hardpointvoxel.h"
 
-Ship::Ship() {
-    m_world = World::instance();
+Ship::Ship() :
+    m_world(World::instance()),
+    m_hardpoints(),
+    m_aimMode(AimType::Point),
+    m_targetPoint(0),
+    m_targetObject(nullptr)
+{
 }
 
 void Ship::update(float deltasec){
@@ -31,10 +36,28 @@ void Ship::removeHardpoint(Hardpoint *hardpoint){
     }
 }
 
-void Ship::shootAt(glm::vec3 point){
-    for (Hardpoint* hardpoint : m_hardpoints){
-        if (hardpoint->aimType() == AimType::Point){
-            hardpoint->shootAtPoint(point);
+void Ship::setTargetPoint(glm::vec3 target){
+    m_aimMode = Point;
+    m_targetPoint = target;
+}
+
+void Ship::setTargetObject(WorldObject* target){
+    m_aimMode = Object;
+    m_targetObject = target;
+}
+
+void Ship::fire(){
+    if (m_aimMode == Point){
+        for (Hardpoint* hardpoint : m_hardpoints){
+            if (hardpoint->aimType() == Point){
+                hardpoint->shootAtPoint(m_targetPoint);
+            }
+        }
+    } else if (m_aimMode == Object){
+        for (Hardpoint* hardpoint : m_hardpoints){
+            if (hardpoint->aimType() == Object){
+                hardpoint->shootAtPoint(m_targetPoint);
+            }
         }
     }
 }
