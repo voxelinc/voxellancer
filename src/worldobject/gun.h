@@ -1,13 +1,15 @@
 #include <glm/glm.hpp>
+#include "launcher.h"
 #include "bullet.h"
 #include "resource/clustercache.h"
 
-class Gun{
+class Gun : public Launcher {
 public:
     Gun(float speed, float range, float cooldown);
-    Bullet* shootAt(glm::vec3 position, glm::quat orientation, glm::vec3 direction);
-    void update(float delta_sec);
-    float range();
+    virtual AimType aimType();
+    virtual void shootAtPoint(glm::vec3 position, glm::quat orientation, glm::vec3 target);
+    virtual void update(float delta_sec);
+    virtual float range();
 
 private:
     float m_speed;

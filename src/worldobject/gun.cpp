@@ -1,10 +1,16 @@
 #include "gun.h"
+#include "world/world.h"
+#include "world/god.h"
 
 Gun::Gun(float speed, float range, float cooldown){
     m_speed = speed;
     m_range = range;
     m_cooldownTime = cooldown;
     m_cooldown = 0;
+}
+
+AimType Gun::aimType(){
+    return AimType::Point;
 }
 
 void Gun::update(float delta_sec){
@@ -17,13 +23,12 @@ void Gun::update(float delta_sec){
 }
 
 
-Bullet *Gun::shootAt(glm::vec3 position, glm::quat orientation, glm::vec3 point){
+void Gun::shootAtPoint(glm::vec3 position, glm::quat orientation, glm::vec3 target){
     if (m_cooldown <= 0){
-        Bullet *b = new Bullet(position, orientation, point - position, m_speed, m_range);
+        Bullet *b = new Bullet(position, orientation, target - position, m_speed, m_range);
         m_cooldown = m_cooldownTime;
-        return b;
+        World::instance()->god().scheduleSpawn(b);
     }
-    return NULL;
 }
 
 float Gun::range(){

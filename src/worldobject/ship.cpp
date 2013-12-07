@@ -23,6 +23,7 @@ void Ship::removeHardpoint(Hardpoint *hardpoint){
     std::vector<Hardpoint*>::iterator iterator = m_hardpoints.begin();
     while (iterator != m_hardpoints.end()){
         if (*iterator == hardpoint){
+            delete *iterator;
             m_hardpoints.erase(iterator);
             break;
         }
@@ -31,18 +32,18 @@ void Ship::removeHardpoint(Hardpoint *hardpoint){
 }
 
 void Ship::shootAt(glm::vec3 point){
-    for (Hardpoint *hardpoint : m_hardpoints){
-        Bullet *b = hardpoint->shootAt(point);
-        if (b != NULL)
-            m_world->god().scheduleSpawn(b);
+    for (Hardpoint* hardpoint : m_hardpoints){
+        if (hardpoint->aimType() == AimType::Point){
+            hardpoint->shootAtPoint(point);
+        }
     }
 }
 
-float Ship::minAimDistance(){
+float Ship::minAimDistance(){ // is this needed ?!
     float range = 1000;
     for (Hardpoint *hardpoint : m_hardpoints){
-        if (hardpoint->gun() != NULL)
-            range = glm::min(hardpoint->gun()->range(), range);
+        if (hardpoint->range() != -1)
+            range = glm::min(hardpoint->range(), range);
     }
     return range;
 }

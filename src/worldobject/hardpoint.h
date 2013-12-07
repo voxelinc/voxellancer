@@ -8,17 +8,22 @@ class Ship;
 
 class Hardpoint{
 public:
-    Hardpoint(Ship* ship, const glm::vec3& position, Gun *gun);
-    Bullet* shootAt(glm::vec3 point);
-	void update(float deltasec);
-    //void setGun(Gun *gun);
+    Hardpoint(Ship* ship, const glm::vec3& position, Launcher *launcher);
+    ~Hardpoint();
+    void setLauncher(Launcher *launcher);
     //void removeGun();
-    Gun *gun();
+    Launcher *launcher();
+
+    void update(float delta_sec);
+    AimType aimType();
+    void shootAtPoint(glm::vec3 target);
+    void shootAtObject(WorldObject* target);
+    float range();
 
     void voxelRemoved();
 
 private:
     Ship* m_ship;
     glm::vec3 m_position;
-    Gun* m_gun;
+    Launcher *m_launcher;
 };
