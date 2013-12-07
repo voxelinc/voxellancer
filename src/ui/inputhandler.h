@@ -28,7 +28,8 @@ public:
 protected:
 
     void toggleControls();
-    void fireGuns(double x, double y);
+    void selectNextTarget();
+    void adjustAim(double x, double y);
 
 	GLFWwindow *m_window;
 	Camera* m_camera;

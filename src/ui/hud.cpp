@@ -37,16 +37,16 @@ HUD::HUD() :
     m_renderCamera.setZFar(500.0f);
 
 
-    addElement("data/hud/crosshair.csv", HUDOffsetOrigin::Center, glm::vec3(-4, -4, 0), &m_elements);
-    addElement("data/hud/topleft.csv", HUDOffsetOrigin::TopLeft, glm::vec3(1, -2, 0), &m_elements);
-    addElement("data/hud/topright.csv", HUDOffsetOrigin::TopRight, glm::vec3(-4, -2, 0), &m_elements);
-    addElement("data/hud/bottomleft.csv", HUDOffsetOrigin::BottomLeft, glm::vec3(1, 1, 0), &m_elements);
-    addElement("data/hud/bottomright.csv", HUDOffsetOrigin::BottomRight, glm::vec3(-4, 1, 0), &m_elements);
-    addElement("data/hud/bottom.csv", HUDOffsetOrigin::Bottom, glm::vec3(-27, 1, 0), &m_elements);
+    addElement("data/hud/crosshair.csv", Center, glm::vec3(-4, -4, 0), &m_elements);
+    addElement("data/hud/topleft.csv", TopLeft, glm::vec3(1, -2, 0), &m_elements);
+    addElement("data/hud/topright.csv", TopRight, glm::vec3(-4, -2, 0), &m_elements);
+    addElement("data/hud/bottomleft.csv", BottomLeft, glm::vec3(1, 1, 0), &m_elements);
+    addElement("data/hud/bottomright.csv", BottomRight, glm::vec3(-4, 1, 0), &m_elements);
+    addElement("data/hud/bottom.csv", Bottom, glm::vec3(-27, 1, 0), &m_elements);
 
     m_shipArrow.reset(new HUDElement());
     ClusterCache::instance()->fillCluster(m_shipArrow.get(), "data/hud/arrow.csv");
-    m_shipArrow->m_origin = HUDOffsetOrigin::Center;
+    m_shipArrow->m_origin = Center;
     m_shipArrow->m_offset = glm::vec3(-2, -2, 0);
 }
 
@@ -134,14 +134,14 @@ void HUD::draw(){
 
             if (i < 11){
                 std::stringstream s; s.setf(std::ios::fixed, std::ios::floatfield); s.precision(2);
-                s << ship->hudInfo().name() << ": " << ship->voxelMap().size() << "/" << (float)glm::length(delta);
+                s << ship->objectInfo().name() << ": " << ship->voxelMap().size() << "/" << (float)glm::length(delta);
                 m_font->drawString(s.str(), calculatePosition(BottomLeft, glm::vec3(4, 5 + 4 * i, 0)), s5x7, 0.4f);
                 i++;
             } else if (i == 11){
                 m_font->drawString("-more-", calculatePosition(BottomLeft, glm::vec3(4, 5 + 4 * i, 0)), s5x7, 0.4f);
             }
 
-            if (ship->hudInfo().showOnHud()){
+            if (ship->objectInfo().showOnHud()){
                 // strip z = depth value so glm::length will return x/y-length
                 float deltaz = delta.z;
                 delta.z = 0;

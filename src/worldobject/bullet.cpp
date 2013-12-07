@@ -29,8 +29,9 @@ Bullet::Bullet(glm::vec3 position, glm::quat orientation, glm::vec3 direction, f
     m_physics->setSpeed(dir * speed);
     m_physics->setAngularSpeed(glm::vec3(0, 0, 500)); //set spinning
 
-    m_hudInfo.setName("Bullet");
-    m_hudInfo.setShowOnHud(false);
+    m_objectInfo.setName("Bullet");
+    m_objectInfo.setShowOnHud(false);
+    m_objectInfo.setCanLockOn(false);
 
     finishInitialization();
 }

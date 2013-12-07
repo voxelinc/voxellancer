@@ -47,6 +47,8 @@ void InputHandler::keyCallback(int key, int scancode, int action, int mods){
 		m_mouseControl = !m_mouseControl;
     if (key == GLFW_KEY_M && action == GLFW_PRESS)
         m_followCam = !m_followCam;
+    if (key == GLFW_KEY_TAB && action == GLFW_PRESS)
+        selectNextTarget();
 }
 
 void InputHandler::update(float delta_sec) {
@@ -142,7 +144,10 @@ void InputHandler::update(float delta_sec) {
 
             // shoot
             if (glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS){
-                fireGuns(x, y);
+                if (m_playerShip->aimMode() == Point){
+                    adjustAim(x, y);
+                }
+                m_playerShip->fire();
             }
 
 			// lookAt
@@ -207,9 +212,46 @@ void InputHandler::toggleControls()
 
 void InputHandler::setPlayerShip(Ship* ship) {
     m_playerShip = ship;
+    m_playerShip->setAimMode(Point);
 }
 
-void InputHandler::fireGuns(double x, double y){
+void InputHandler::selectNextTarget(){
+    std::list<WorldObject*>& worldObjects = World::instance()->worldObjects();
+    std::list<WorldObject*>::iterator newTarget = worldObjects.end();
+
+    if (m_playerShip->aimMode() == Point){
+        m_playerShip->setAimMode(Object);
+        newTarget = worldObjects.begin();
+    } else if (m_playerShip->aimMode() == Object){
+        std::list<WorldObject*>::iterator iterator = worldObjects.begin();
+        while (iterator != worldObjects.end()){
+            if (*iterator == m_playerShip->targetObject()){
+                newTarget = ++iterator;
+                break;
+            }
+            ++iterator;
+        }
+    }
+    if (newTarget == worldObjects.end()){
+        m_playerShip->setAimMode(Point);
+    } else {
+        // newTarget points to next target, which might not be lockable
+        // find first lockable target
+        std::list<WorldObject*>::iterator iterator = newTarget;
+        while (iterator != worldObjects.end()){
+            if ((*iterator)->objectInfo().canLockOn()){
+                m_playerShip->setAimMode(Object);
+                m_playerShip->setTargetObject(*newTarget);
+                return;
+            }
+            ++iterator;
+        }
+        // reach here if no lockable target left, then switch back to Point-Aiming
+        m_playerShip->setAimMode(Point);
+    }
+}
+
+void InputHandler::adjustAim(double x, double y){
     glm::vec4 pointEnd((x * 2 / m_windowWidth - 1), -1 * (y * 2 / m_windowHeight - 1), 1, 1); //get normalized device coords
     pointEnd = glm::inverse(m_camera->viewProjection())*pointEnd; //find point on zfar
     glm::vec3 vec = glm::vec3(pointEnd); // no need for w component
@@ -217,5 +259,4 @@ void InputHandler::fireGuns(double x, double y){
     vec *= m_playerShip->minAimDistance(); // set aimdistance
     vec += m_camera->position(); //adjust for camera translation
     m_playerShip->setTargetPoint(vec);
-    m_playerShip->fire();
 }

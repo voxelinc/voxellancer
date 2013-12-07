@@ -16,8 +16,12 @@ public:
     virtual void addHardpointVoxel(HardpointVoxel* voxel);
     void removeHardpoint(Hardpoint *hardpoint);
 
+    void setAimMode(AimType mode);
+    AimType aimMode();
     void setTargetPoint(glm::vec3 target);
+    glm::vec3 targetPoint();
     void setTargetObject(WorldObject* target);
+    WorldObject* targetObject();
     void fire();
     float minAimDistance();
 

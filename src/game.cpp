@@ -87,7 +87,7 @@ void Game::initialize()
     m_testClusterMoveable->addVoxel(new Voxel(glm::ivec3(1, 0, 7), 0xFF0000));
     m_testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 8), 0xFF0080));
     m_testClusterMoveable->finishInitialization();
-    m_testClusterMoveable->hudInfo().setName("movable");
+    m_testClusterMoveable->objectInfo().setName("movable");
     m_world->god().scheduleSpawn(m_testClusterMoveable);
 
     //m_inputHandler.setVoxelCluster(m_testClusterMoveable);
@@ -96,7 +96,7 @@ void Game::initialize()
     ClusterCache::instance()->fillObject(m_testClusterA, "data/voxelcluster/normandy.csv");
 	m_testClusterA->transform().setPosition(glm::vec3(0, 0, -100));
     m_testClusterA->finishInitialization();
-    m_testClusterA->hudInfo().setName("Normandy");
+    m_testClusterA->objectInfo().setName("Normandy");
     m_world->god().scheduleSpawn(m_testClusterA);
 
     Ship *m_testClusterB = new Ship();
@@ -106,8 +106,8 @@ void Game::initialize()
     m_testClusterB->finishInitialization();
     //m_testClusterB->addHardpoint(new Hardpoint(m_testClusterB, glm::vec3(0, 0, 4), new Gun(100, 400, 0.2f)));
     //m_testClusterB->addHardpoint(new Hardpoint(m_testClusterB, glm::vec3(6, 0, 4), new Gun(100, 400, 0.2f)));
-    m_testClusterB->hudInfo().setName("Ship");
-    m_testClusterB->hudInfo().setShowOnHud(false);
+    m_testClusterB->objectInfo().setName("Ship");
+    m_testClusterB->objectInfo().setShowOnHud(false);
     m_world->god().scheduleSpawn(m_testClusterB);
 
     WorldObject *wall = new WorldObject(1);
@@ -121,7 +121,7 @@ void Game::initialize()
         }
     }
     wall->finishInitialization();
-    wall->hudInfo().setName("Wall");
+    wall->objectInfo().setName("Wall");
     m_world->god().scheduleSpawn(wall);
 
     m_inputHandler.setPlayerShip(m_testClusterB);

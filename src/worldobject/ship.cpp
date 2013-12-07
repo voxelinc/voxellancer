@@ -36,14 +36,27 @@ void Ship::removeHardpoint(Hardpoint *hardpoint){
     }
 }
 
+void Ship::setAimMode(AimType mode){
+    m_aimMode = mode;
+}
+
+AimType Ship::aimMode(){
+    return m_aimMode;
+}
+
 void Ship::setTargetPoint(glm::vec3 target){
-    m_aimMode = Point;
     m_targetPoint = target;
 }
 
+glm::vec3 Ship::targetPoint(){
+    return m_targetPoint;
+}
+
 void Ship::setTargetObject(WorldObject* target){
-    m_aimMode = Object;
     m_targetObject = target;
+}
+WorldObject* Ship::targetObject(){
+    return m_targetObject;
 }
 
 void Ship::fire(){
