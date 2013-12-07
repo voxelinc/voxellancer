@@ -9,7 +9,9 @@
 
 
 void Damager::applyDamages(std::list<Impact> &impacts) {
-    reset();
+    m_dampedDeadlyImpacts.clear();
+    m_deadlyImpacts.clear();
+    m_deadVoxels.clear();
 
     for(Impact &impact : impacts) {
         Voxel *voxel = impact.voxel();
@@ -65,8 +67,5 @@ Impact Damager::dampImpact(Impact &undamped, float factor) {
 }
 
 void Damager::reset() {
-    m_dampedDeadlyImpacts.clear();
-    m_deadlyImpacts.clear();
     m_worldObjectModificationMap.clear();
-    m_deadVoxels.clear();
 }

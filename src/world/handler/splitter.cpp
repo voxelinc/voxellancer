@@ -24,6 +24,8 @@ WorldObject *Splitter::createWorldObjectFromOrphan(WorldObjectSplit *split) {
 
     worldObject = new WorldObject(split->exWorldObject()->transform());
     worldObject->hudInfo().setName(split->exWorldObject()->hudInfo().name() + " - splitoff");
+    worldObject->physics().setSpeed(worldObject->physics().speed());
+    worldObject->physics().setAngularSpeed(worldObject->physics().angularSpeed());
 
     for(Voxel *voxel : split->splitOffVoxels()) {
         Voxel *voxelClone = new Voxel(*voxel);
@@ -31,6 +33,7 @@ WorldObject *Splitter::createWorldObjectFromOrphan(WorldObjectSplit *split) {
     }
 
     worldObject->recalculateCenterAndMass();
+
     return worldObject;
 }
 

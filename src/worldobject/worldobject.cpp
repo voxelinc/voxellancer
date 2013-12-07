@@ -80,6 +80,7 @@ void WorldObject::finishInitialization() {
 
 void WorldObject::recalculateCenterAndMass() {
     //m_transform.setCenter(m_physics->calculateMassAndCenter()); TODO!!!
+    m_physics->calculateMassAndCenter();
     m_collisionDetector->updateGeode();
 }
 

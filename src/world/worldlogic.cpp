@@ -24,8 +24,8 @@ void WorldLogic::update(float deltaSecs) {
     m_impactAccumulator.clear();
 
     m_splitDetector.searchSplitOffs(m_damager.worldObjectModifications());
-//    m_splitter.split(m_splitDetector.worldObjectSplits());
-//    m_world.god().scheduleSpawns(m_splitter.splitOffWorldObjects());
+    m_splitter.split(m_splitDetector.worldObjectSplits());
+    m_world.god().scheduleSpawns(m_splitter.splitOffWorldObjects());
 
 //    m_wrecker.detectWreckages(m_damager.modifiedVoxelClusters());
 //    //m_wrecker.applyOnWreckageHooks();
@@ -45,10 +45,7 @@ void WorldLogic::update(float deltaSecs) {
  }
 
 void WorldLogic::damageForwardLoop(std::list<Impact> damageImpacts) {
-    
-    if (damageImpacts.size() == 0) {
-        m_damager.reset();
-    }
+    m_damager.reset();
 
     while(damageImpacts.size() > 0) {
         m_damager.applyDamages(damageImpacts);
