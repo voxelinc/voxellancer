@@ -34,6 +34,7 @@
 #include "voxel/voxelrenderer.h"
 #include "worldobject/ship.h"
 #include "collision/collisiondetector.h"
+#include "worldobject/worldobject.h"
 
 class Ship;
 
@@ -74,8 +75,8 @@ void Game::initialize()
 
 
     WorldObject *m_testClusterMoveable = new WorldObject();
-    m_testClusterMoveable->transform().move(glm::vec3(-20, 0, 0));
-    m_testClusterMoveable->transform().rotate(glm::angleAxis(-90.f, glm::vec3(0, 1, 0)));
+    m_testClusterMoveable->move(glm::vec3(-20, 0, 0));
+    m_testClusterMoveable->rotate(glm::angleAxis(-90.f, glm::vec3(0, 1, 0)));
     m_testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 7), 0x00FF00));
     m_testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 6), 0xFFFF00));
     m_testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 5), 0xFFFF00));
@@ -94,27 +95,26 @@ void Game::initialize()
 
     Ship *m_testClusterA = new Ship();
     ClusterCache::instance()->fillObject(m_testClusterA, "data/voxelcluster/normandy.csv");
-	m_testClusterA->transform().setPosition(glm::vec3(0, 0, -100));
+	m_testClusterA->setPosition(glm::vec3(0, 0, -100));
     m_testClusterA->finishInitialization();
     m_testClusterA->hudInfo().setName("Normandy");
     m_world->god().scheduleSpawn(m_testClusterA);
 
     Ship *m_testClusterB = new Ship();
     ClusterCache::instance()->fillObject(m_testClusterB, "data/voxelcluster/basicship.csv");
-	m_testClusterB->transform().setCenter(glm::vec3(3, 0, 3));
-    m_testClusterB->transform().setPosition(glm::vec3(0, 0, 10));
+    m_testClusterB->setPosition(glm::vec3(0, 0, 10));
     m_testClusterB->finishInitialization();
     m_testClusterB->addHardpoint(new Hardpoint(m_testClusterB, glm::vec3(0, 0, 4), new Gun(100, 400, 0.2f)));
     m_testClusterB->addHardpoint(new Hardpoint(m_testClusterB, glm::vec3(6, 0, 4), new Gun(100, 400, 0.2f)));
-    m_testClusterB->hudInfo().setName("Ship");
+    m_testClusterB->hudInfo().setName("basicship");
     m_testClusterB->hudInfo().setShowOnHud(false);
     m_world->god().scheduleSpawn(m_testClusterB);
 
     WorldObject *wall = new WorldObject(1);
-    wall->transform().move(glm::vec3(-20, 0, -50));
-    wall->transform().rotate(glm::angleAxis(-90.f, glm::vec3(0, 1, 0)));
-    for(int x = 0; x < 50; x++) {
-        for(int y = 0; y < 30; y++) {
+    wall->move(glm::vec3(-20, 0, -50));
+    wall->rotate(glm::angleAxis(-90.f, glm::vec3(0, 1, 0)));
+    for(int x = 0; x < 20; x++) {
+        for(int y = 0; y < 15; y++) {
             for(int z = 0; z < 3; z++) {
                 wall->addVoxel(new Voxel(glm::ivec3(z, x, y), 0xB47878));
             }

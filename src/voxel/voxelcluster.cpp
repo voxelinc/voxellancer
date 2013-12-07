@@ -58,8 +58,22 @@ const std::unordered_map<glm::ivec3, Voxel*> & VoxelCluster::voxelMap() const {
     return m_voxels;
 }
 
-WorldTransform& VoxelCluster::transform() {
+const WorldTransform& VoxelCluster::transform() {
     return m_transform;
 }
 
+void VoxelCluster::rotate(glm::quat rotation) {
+    m_transform.rotate(rotation);
+}
 
+void VoxelCluster::move(glm::vec3 vec3) {
+    m_transform.move(vec3);
+}
+
+void VoxelCluster::setOrientation(glm::quat orientation) {
+    m_transform.setOrientation(orientation);
+}
+
+void VoxelCluster::setPosition(glm::vec3 pos) {
+    m_transform.setPosition(pos);
+}

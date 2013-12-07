@@ -1,6 +1,7 @@
 #include "splitdetector.h"
 
 #include <unordered_set>
+#include <queue>
 
 #include "world/helper/worldobjectsplit.h"
 
@@ -8,14 +9,14 @@
 #include "voxel/voxelneighbourhelper.h"
 
 #include "worldobject/worldobject.h"
-#include <queue>
+#include "glow/AutoTimer.h"
 
 
 void SplitDetector::searchSplitOffs(std::list<WorldObjectModification> worldObjectModifications) {
     clear();
-
     for(WorldObjectModification& worldObjectModification : worldObjectModifications) {
         WorldObject* currentWorldObject = worldObjectModification.worldObject();
+        glow::AutoTimer t(currentWorldObject->hudInfo().name());
         VoxelNeighbourHelper nHelper(currentWorldObject);
         std::unordered_set<Voxel*> borderVoxels;
         for (glm::ivec3 removedPos : worldObjectModification.removedVoxels())
@@ -26,6 +27,8 @@ void SplitDetector::searchSplitOffs(std::list<WorldObjectModification> worldObje
         }
         findSplits(currentWorldObject, borderVoxels);
     }
+    if (m_worldObjectSplits.size() > 0)
+        glow::debug("Splitdetector: foundSplits!!");
 }
 
 
@@ -42,15 +45,17 @@ void SplitDetector::clear() {
 }
 
 void SplitDetector::findSplits(WorldObject* currentWorldObject, std::unordered_set<Voxel*>& borderVoxel, bool addLastSplit) {
-    assert(borderVoxel.size() > 0);
+    if (borderVoxel.size() <= 1)
+        return;
+
     VoxelNeighbourHelper nHelper(currentWorldObject);
-    std::unordered_set<Voxel *> seen;
+    std::unordered_set<Voxel *> visited;
     std::queue<Voxel *> toVisit;
 
     // add one voxel from the border
     Voxel* start = *borderVoxel.begin();
     borderVoxel.erase(start);
-    seen.insert(start);
+    visited.insert(start);
     toVisit.push(start);
     
     // breadth first search for other border voxels
@@ -59,17 +64,17 @@ void SplitDetector::findSplits(WorldObject* currentWorldObject, std::unordered_s
         toVisit.pop();
 
         for (Voxel * voxel : nHelper.neighbours(current)) {
-            if (!seen.count(voxel)) {
+            if (!visited.count(voxel)) {
                 borderVoxel.erase(voxel);
-                seen.insert(voxel);
+                visited.insert(voxel);
                 toVisit.push(voxel);
             }
         }
     }
     
     if (borderVoxel.size() > 0 || addLastSplit) {
-        if (currentWorldObject->crucialVoxel() == nullptr || seen.count(currentWorldObject->crucialVoxel()) == 0) {
-            createSplit(currentWorldObject, seen);
+        if (currentWorldObject->crucialVoxel() == nullptr || visited.count(currentWorldObject->crucialVoxel()) == 0) {
+            createSplit(currentWorldObject, visited);
         }
     }
     if (borderVoxel.size() > 1 || currentWorldObject->crucialVoxel() != nullptr && borderVoxel.size() > 0) {

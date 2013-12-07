@@ -4,10 +4,7 @@
 
 
 WorldObject::WorldObject(float scale) :
-    VoxelCluster(scale),
-    m_physics(new Physics(*this)),
-    m_collisionDetector(new CollisionDetector(*this)),
-    m_hudInfo()
+    WorldObject(new Physics(*this), new CollisionDetector(*this), scale)
 {
 }
 
@@ -15,7 +12,8 @@ WorldObject::WorldObject(Physics* physics, CollisionDetector* detector, float sc
     VoxelCluster(scale),
     m_physics(physics),
     m_collisionDetector(detector),
-    m_hudInfo()
+    m_hudInfo(),
+    m_crucialVoxel(nullptr)
 {
 }
 
@@ -47,7 +45,7 @@ void WorldObject::update(float delta_sec) {
 
 }
 
-std::list<Impact>& WorldObject::move(float delta_sec) {
+std::list<Impact>& WorldObject::updatePosition(float delta_sec) {
     return m_physics->move(delta_sec);
 }
 
@@ -60,7 +58,7 @@ void WorldObject::addVoxel(Voxel * voxel) {
 void WorldObject::removeVoxel(const glm::ivec3 & position) {
     m_collisionDetector->removeVoxel(position);
     m_physics->removeVoxel(position);
-    if (position == m_crucialVoxel->gridCell()) {
+    if (m_crucialVoxel != nullptr && position == m_crucialVoxel->gridCell()) {
         // do spectacular stuff like an explosion
         m_crucialVoxel = nullptr;
     }
@@ -69,6 +67,7 @@ void WorldObject::removeVoxel(const glm::ivec3 & position) {
 
 void WorldObject::finishInitialization() {
     m_physics->finishInitialization();
+    m_transform.setCenter(m_physics->calculateMassAndCenter());
     m_collisionDetector->finishInitialization();
 }
 
@@ -86,3 +85,5 @@ Voxel *WorldObject::crucialVoxel() {
 void WorldObject::setCrucialVoxel(glm::ivec3 pos) {
     m_crucialVoxel = voxel(pos);
 }
+
+

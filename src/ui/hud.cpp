@@ -154,13 +154,13 @@ void HUD::draw(){
                     delta = glm::normalize(delta);
                     //rotate arrow towards ship (arrow model points upwards)
                     glm::quat absOrientation = glm::angleAxis(glm::degrees(glm::atan(delta.x, delta.y)), glm::vec3(0, 0, -1));
-                    m_shipArrow->transform().setOrientation(absOrientation);
+                    m_shipArrow->setOrientation(absOrientation);
                     // move arrow out of HUD center
                     glm::vec3 absPosition = glm::vec3(0, 0, -prop_distance) /* move back to HUD pane */
                         /* move m_arrow_radius in direction of heading, where 0 is center 1 is full FOV
                         * because orientation is applied before position, add model-internal offset here */
                         + m_shipArrow->transform().orientation() * (m_shipArrow->m_offset + glm::vec3(0, m_dy * prop_arrowRadius, 0));
-                    m_shipArrow->transform().setPosition(absPosition);
+                    m_shipArrow->setPosition(absPosition);
 
                     m_voxelRenderer->draw(m_shipArrow.get());
                 }
@@ -222,6 +222,6 @@ void HUD::adjustPositions(){
     m_dx = m_renderCamera.aspectRatio()*m_dy;
 
     for (std::unique_ptr<HUDElement>& element : m_elements)    {
-        element->transform().setPosition(calculatePosition(element->m_origin, element->m_offset));
+        element->setPosition(calculatePosition(element->m_origin, element->m_offset));
     }
 }

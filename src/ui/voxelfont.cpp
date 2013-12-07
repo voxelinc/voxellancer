@@ -1,8 +1,8 @@
 #include "voxelfont.h"
 
 #include "resource/clustercache.h"
-#include "voxel/voxelcluster.h"
 #include "voxel/voxelrenderer.h"
+#include "letter.h"
 
 VoxelFont::VoxelFont() :
     m_renderer(nullptr),
@@ -16,7 +16,7 @@ VoxelFont::VoxelFont() :
 VoxelFont::~VoxelFont(){
 }
 
-void VoxelFont::loadFont(const std::string& identifier, glm::vec3 offset, std::map<char, std::unique_ptr<VoxelCluster>> *map){
+void VoxelFont::loadFont(const std::string& identifier, glm::vec3 offset, std::map<char, std::unique_ptr<Letter>> *map) {
     const char letters[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     for (int i = 0; i < 36; i++){
         std::string path = "data/hud/font/" + identifier + "/";
@@ -35,10 +35,10 @@ void VoxelFont::loadFont(const std::string& identifier, glm::vec3 offset, std::m
     loadChar("data/hud/font/" + identifier + "/_dash.csv", offset, '-', map);
 }
 
-void VoxelFont::loadChar(const std::string& filename, glm::vec3 offset, const char index, std::map<char, std::unique_ptr<VoxelCluster>> *map){
-    std::unique_ptr<VoxelCluster> element(new VoxelCluster(1.0));
+void VoxelFont::loadChar(const std::string& filename, glm::vec3 offset, const char index, std::map<char, std::unique_ptr<Letter>> *map){
+    std::unique_ptr<Letter> element(new Letter(1.0));
     ClusterCache::instance()->fillCluster(element.get(), filename);
-    element->transform().setCenter(offset);
+    element->setCenter(offset);
     (*map)[index] = move(element);
 }
 
@@ -50,7 +50,7 @@ void VoxelFont::drawString(std::string text, glm::vec3 position, FontSize size, 
     assert(m_renderer);
     assert(m_renderer->prepared());
     std::transform(text.begin(), text.end(), text.begin(), ::toupper);
-    std::map<char, std::unique_ptr<VoxelCluster>> *source;
+    std::map<char, std::unique_ptr<Letter>> *source;
     float width;
     float intoffset;
     switch (size){
@@ -78,10 +78,10 @@ void VoxelFont::drawString(std::string text, glm::vec3 position, FontSize size, 
     }
 
     for (int i = 0; i < text.length(); i++){
-        VoxelCluster *cl = (*source)[text[i]].get();
+        Letter *cl = (*source)[text[i]].get();
         if (cl != nullptr){
-            cl->transform().setPosition(position + glm::vec3(intoffset + width * i, 0, 0));
-            cl->transform().setScale(scale);
+            cl->setPosition(position + glm::vec3(intoffset + width * i, 0, 0));
+            cl->setScale(scale);
             m_renderer->draw(cl);
         }
     }

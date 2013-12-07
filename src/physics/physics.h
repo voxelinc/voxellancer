@@ -36,8 +36,8 @@ public:
 
     void finishInitialization();
 
+    glm::vec3 calculateMassAndCenter();
 protected:
-    void calculateMassAndCenter();
     virtual void updateSpeed(float delta_sec);
 
     void resolveCollision(Collision & c, float delta_sec);
@@ -66,4 +66,5 @@ protected:
     Property<float> m_rotationFactor;
 
     std::list<Impact> m_impacts;
+    glm::vec3 m_center;
 };

@@ -23,7 +23,7 @@ public:
 
     virtual void update(float delta_sec);
 
-    std::list<Impact>& move(float delta_sec);
+    std::list<Impact>& updatePosition(float delta_sec);
 
     void addVoxel(Voxel * voxel);
     void removeVoxel(const glm::ivec3 & position);
@@ -34,7 +34,6 @@ public:
 
     void accelerate(glm::vec3 direction);
     void accelerateAngular(glm::vec3 axis);
-
 
 protected:
     WorldObject(Physics* physics, CollisionDetector* detector, float scale = 1.0f);
