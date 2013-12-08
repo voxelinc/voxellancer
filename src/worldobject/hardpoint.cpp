@@ -2,23 +2,23 @@
 
 #include "ship.h"
 
-Hardpoint::Hardpoint(Ship* ship, const glm::vec3& positionInGrid, Launcher *launcher){
+Hardpoint::Hardpoint(Ship* ship, const glm::vec3& positionInGrid, Weapon *weapon){
     assert(ship != nullptr);
     m_ship = ship;
     m_positionInGrid = positionInGrid;
-    m_launcher = launcher;
+    m_weapon = weapon;
 }
 
 Hardpoint::~Hardpoint(){
-    if (m_launcher) delete m_launcher;
+    if (m_weapon) delete m_weapon;
 }
 
-void Hardpoint::setLauncher(Launcher *launcher){
-    m_launcher = launcher;
+void Hardpoint::setWeapon(Weapon *launcher){
+    m_weapon = launcher;
 }
 
-Launcher* Hardpoint::launcher(){
-    return m_launcher;
+Weapon* Hardpoint::weapon(){
+    return m_weapon;
 }
 
 glm::vec3 Hardpoint::position(){
@@ -29,28 +29,28 @@ Ship* Hardpoint::ship(){
 }
 
 void Hardpoint::update(float delta_sec){
-    if (m_launcher)
-        m_launcher->update(delta_sec);
+    if (m_weapon)
+        m_weapon->update(delta_sec);
 }
 
 AimType Hardpoint::aimType(){
-    if (m_launcher)
-        return m_launcher->aimType();
+    if (m_weapon)
+        return m_weapon->aimType();
     else
         return AimType::None;
 }
 void Hardpoint::shootAtPoint(glm::vec3 target){
-    if (m_launcher)
-        m_launcher->shootAtPoint(this, target);
+    if (m_weapon)
+        m_weapon->shootAtPoint(this, target);
 }
 void Hardpoint::shootAtObject(WorldObject* target){
-    if (m_launcher)
-        m_launcher->shootAtObject(this, target);
+    if (m_weapon)
+        m_weapon->shootAtObject(this, target);
 }
 
 float Hardpoint::aimRange(){
-    if (m_launcher)
-        return m_launcher->aimRange();
+    if (m_weapon)
+        return m_weapon->aimRange();
     else
         return -1;
 }

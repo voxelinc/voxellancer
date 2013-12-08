@@ -1,9 +1,9 @@
 #include <glm/glm.hpp>
-#include "launcher.h"
+#include "weapon.h"
 #include "bullet.h"
 #include "resource/clustercache.h"
 
-class Gun : public Launcher {
+class Gun : public Weapon {
 public:
     Gun();
     virtual AimType aimType();

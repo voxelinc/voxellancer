@@ -1,7 +1,6 @@
 #include "ship.h"
 
 #include "voxel/specialvoxels/hardpointvoxel.h"
-#include "worldobject/weapons/launcher.h"
 #include "worldobject/weapons/gun.h"
 #include "worldobject/weapons/rocketlauncher.h"
 

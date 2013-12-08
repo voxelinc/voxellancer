@@ -12,7 +12,7 @@ enum AimType {
     Object // guided
 };
 
-class Launcher {
+class Weapon {
 public:
     virtual AimType aimType() = 0; // depending on this, the launcher implements either Point or Object
     virtual void shootAtPoint(Hardpoint* source, glm::vec3 target);
