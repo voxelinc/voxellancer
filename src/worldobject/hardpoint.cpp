@@ -2,7 +2,7 @@
 
 #include "ship.h"
 
-Hardpoint::Hardpoint(Ship* ship, glm::vec3 position, Gun *gun) {
+Hardpoint::Hardpoint(Ship* ship, const glm::vec3& position, Gun *gun){
     assert(ship != nullptr);
     assert(gun != nullptr);
     m_ship = ship;
@@ -21,4 +21,8 @@ void Hardpoint::update(float deltasec) {
 
 Gun *Hardpoint::gun() {
     return m_gun;
+}
+
+void Hardpoint::voxelRemoved(){
+    m_ship->removeHardpoint(this);
 }

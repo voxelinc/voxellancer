@@ -8,15 +8,19 @@
 class World;
 class God;
 
-class Ship : public WorldObject{
+class Ship : public WorldObject {
 public:
-	Ship();
-	void shootAt(glm::vec3 point);
-	virtual void update(float deltasec);
-	void addHardpoint(Hardpoint* hardpooint);
+    Ship();
+    virtual void update(float deltasec);
+
+    virtual void addHardpointVoxel(HardpointVoxel* voxel);
+    void removeHardpoint(Hardpoint *hardpoint);
+
+    void shootAt(glm::vec3 point);
     float minAimDistance();
 
-private:
+protected:
+
     World * m_world;
-	std::vector<Hardpoint*> m_hardpoints = std::vector<Hardpoint*>();
+    std::vector<Hardpoint*> m_hardpoints = std::vector<Hardpoint*>();
 };

@@ -1,6 +1,10 @@
 #include "worldobject.h"
 
 #include "utils/tostring.h"
+#include "voxel/specialvoxels/enginevoxel.h"
+#include "voxel/specialvoxels/hardpointvoxel.h"
+#include "voxel/specialvoxels/cockpitvoxel.h"
+#include "voxel/specialvoxels/fuelvoxel.h"
 
 
 WorldObject::WorldObject(float scale) :
@@ -51,13 +55,32 @@ std::list<Impact>& WorldObject::move(float delta_sec) {
     return m_physics->move(delta_sec);
 }
 
-void WorldObject::addVoxel(Voxel * voxel) {
+void WorldObject::addVoxel(Voxel* voxel) {
     VoxelCluster::addVoxel(voxel);
     m_physics->addVoxel(voxel);
     m_collisionDetector->addVoxel(voxel);
 }
 
-void WorldObject::removeVoxel(const glm::ivec3 & position) {
+void WorldObject::addEngineVoxel(EngineVoxel* voxel){
+    addVoxel(voxel);
+}
+
+void WorldObject::addHardpointVoxel(HardpointVoxel* voxel){
+    addVoxel(voxel);
+}
+
+void WorldObject::addCockpitVoxel(CockpitVoxel* voxel){
+    addVoxel(voxel);
+}
+
+void WorldObject::addFuelVoxel(FuelVoxel* voxel){
+    addVoxel(voxel);
+}
+
+void WorldObject::removeVoxel(const glm::ivec3& position) {
+    Voxel* voxel = m_voxels[position];
+    assert(voxel != nullptr);
+    voxel->onRemoval();
     m_collisionDetector->removeVoxel(position);
     m_physics->removeVoxel(position);
     VoxelCluster::removeVoxel(position);

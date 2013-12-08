@@ -14,9 +14,13 @@ EngineVoxel::~EngineVoxel() {
 
 void EngineVoxel::addToObject(WorldObject *object){
     m_object = object;
-    object->addVoxel(this);
+    object->addEngineVoxel(this);
+}
+
+void EngineVoxel::onRemoval(){
+    //TODO: Tell my engine I'm gone
 }
 
 void EngineVoxel::onDestruction(){
-    //TODO: Tell my engine I'm gone
+    //TODO: explode
 }
