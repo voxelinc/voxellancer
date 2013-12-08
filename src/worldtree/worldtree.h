@@ -20,8 +20,8 @@ public:
     std::set<WorldTreeGeode*> geodesInAABB(const AABB &aabb) const;
     std::set<WorldTreeGeode*> geodesInAABB(const AABB &aabb, WorldTreeNode *nodeHint) const;
 
-    bool areGeodesInAABB(const AABB &aabb) const;
-    bool areGeodesInAABB(const AABB &aabb, WorldTreeNode *nodeHint) const;
+    bool areGeodesInAABB(const AABB &aabb, WorldTreeGeode *ignore = nullptr) const;
+    bool areGeodesInAABB(const AABB &aabb, WorldTreeNode *nodeHint, WorldTreeGeode *ignore = nullptr) const;
 
     void aabbChanged(WorldTreeGeode *geode);
 

@@ -1,5 +1,7 @@
 #include "movement.h"
 
+#include <cassert>
+
 #include "collision/collisiondetector.h"
 
 #include "worldobject/worldobject.h"
@@ -21,9 +23,11 @@ Movement::~Movement() {
 }
 
 bool Movement::perform() {
+    assert(m_worldObject.collisionDetector().geode() != nullptr);
+
     AABB phaseAABB = m_collisionDetector.aabb(m_originalTransform).united(m_collisionDetector.aabb(m_targetTransform));
 
-    if(m_collisionDetector.worldTree()->areGeodesInAABB(phaseAABB)) {
+    if(m_collisionDetector.worldTree()->areGeodesInAABB(phaseAABB, m_worldObject.collisionDetector().geode())) {
         glm::vec3 directionalStep = m_targetTransform.position() - m_originalTransform.position();
         m_distance = glm::length(directionalStep);
 

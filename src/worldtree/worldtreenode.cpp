@@ -120,9 +120,13 @@ std::set<WorldTreeGeode*> WorldTreeNode::geodesInAABB(const AABB &aabb) const {
     return result;
 }
 
-bool WorldTreeNode::areGeodesInAABB(const AABB& aabb) const {
+bool WorldTreeNode::areGeodesInAABB(const AABB& aabb, WorldTreeGeode *ignore) const {
     if(isLeaf()) {
         for(WorldTreeGeode* geode : m_geodes) {
+            if(geode == ignore) {
+                continue;
+            }
+
             if(aabb.intersects(geode->aabb())) {
                 return true;
             }
@@ -130,7 +134,7 @@ bool WorldTreeNode::areGeodesInAABB(const AABB& aabb) const {
     }
     else {
         for(WorldTreeNode* subnode : m_subnodes) {
-            if(aabb.intersects(subnode->aabb())) {
+            if(subnode->areGeodesInAABB(aabb, ignore)) {
                 return true;
             }
         }
@@ -156,7 +160,7 @@ void WorldTreeNode::aabbChanged(WorldTreeGeode *geode) {
     }
 }
 
-void WorldTreeNode::poll(int& nodes, int &empty, int& geodes, int& depth) {
+void WorldTreeNode::poll(int& nodes, int& empty, int& geodes, int& depth) {
     if(isLeaf() && m_geodes.size() == 0) {
         empty++;
     }
