@@ -11,8 +11,8 @@ class God;
 
 class Ship : public WorldObject {
 public:
-	Ship();
-	virtual void update(float deltasec);
+    Ship();
+    virtual void update(float deltasec);
 
     virtual void addHardpointVoxel(HardpointVoxel* voxel);
     void removeHardpoint(Hardpoint *hardpoint);
@@ -27,7 +27,6 @@ public:
     float minAimDistance();
 
 protected:
-
     World* m_world;
 	std::vector<Hardpoint*> m_hardpoints;
     AimType m_aimMode;

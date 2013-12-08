@@ -148,8 +148,8 @@ void Physics::resolveCollision(Collision & c, float delta_sec) {
     p1.m_angularSpeed = w1_;
     p2.m_angularSpeed = w2_;
 
-    m_impacts.push_back(Impact(wo1, c.a().voxel(), glm::inverse(wo1->transform().orientation()) * (v1 - v2)));
-    m_impacts.push_back(Impact(wo2, c.b().voxel(), glm::inverse(wo2->transform().orientation()) * (v2 - v1)));
+    m_impacts.push_back(Impact(wo1, c.a().voxel(), glm::inverse(wo1->transform().orientation()) * (v2 - v1)));
+    m_impacts.push_back(Impact(wo2, c.b().voxel(), glm::inverse(wo2->transform().orientation()) * (v1 - v2)));
 }
 
 

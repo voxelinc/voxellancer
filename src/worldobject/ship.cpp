@@ -14,9 +14,9 @@ Ship::Ship() :
 }
 
 void Ship::update(float deltasec){
-	for(Hardpoint *hardpoint : m_hardpoints){
-		hardpoint->update(deltasec);
-	}
+    for(Hardpoint *hardpoint : m_hardpoints){
+        hardpoint->update(deltasec);
+    }
 }
 
 void Ship::addHardpointVoxel(HardpointVoxel* voxel){
