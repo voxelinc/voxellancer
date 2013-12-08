@@ -10,4 +10,5 @@ public:
 private:
 	float m_lifetime;
     float m_travelSpeed;
+    WorldObject* m_target;
 };

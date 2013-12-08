@@ -236,12 +236,12 @@ void InputHandler::selectNextTarget(){
         m_playerShip->setAimMode(Point);
     } else {
         // newTarget points to next target, which might not be lockable
-        // find first lockable target
+        // find first lockable target excluding self
         std::list<WorldObject*>::iterator iterator = newTarget;
         while (iterator != worldObjects.end()){
-            if ((*iterator)->objectInfo().canLockOn()){
+            if ((*iterator)->objectInfo().canLockOn() && (*iterator) != m_playerShip){
                 m_playerShip->setAimMode(Object);
-                m_playerShip->setTargetObject(*newTarget);
+                m_playerShip->setTargetObject(*iterator);
                 return;
             }
             ++iterator;
