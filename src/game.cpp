@@ -161,7 +161,7 @@ void Game::update(float delta_sec)
 
 void Game::draw()
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glFrontFace(GL_CCW);
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
@@ -175,6 +175,15 @@ void Game::draw()
 
     // draw all other voxelclusters...
     m_voxelRenderer->afterDraw();
+
+    /*
+    float z;
+    glReadPixels((int)0, (int)0, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &z);
+    printf("%f orig\n", z);
+    z = 2 * m_camera.zNear()*m_camera.zFar() / (m_camera.zFar() + m_camera.zNear() - (2 * z - 1)* (m_camera.zFar() - m_camera.zNear()));
+    printf("%f\n", z);*/
+   // printf("%f %f %f\n", posX, posY, posZ);
+
 
 	m_hud->draw();
 

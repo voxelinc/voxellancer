@@ -1,6 +1,7 @@
 #include "inputhandler.h"
 
 #include <glm/glm.hpp>
+#include <glow/glow.h>
 
 InputHandler::InputHandler(GLFWwindow *window, Camera *camera) :
 m_window(window),
@@ -202,12 +203,19 @@ void InputHandler::update(float delta_sec) {
         if (m_fpsControls)
             glfwSetCursorPos(m_window, m_windowWidth / 2, m_windowHeight / 2);
 
-	}
+    }
 
     if (m_followCam){
-        m_player->setShipToCam();
+        m_player->setShipToCam(delta_sec);
         //m_player->setFollowCam();
     }
+
+
+    float z;
+    glReadPixels((int)0, (int)0, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &z);
+    printf("%f orig\n", z);
+    z = 2 * m_camera->zNear()*m_camera->zFar() / (m_camera->zFar() + m_camera->zNear() - (2 * z - 1)* (m_camera->zFar() - m_camera->zNear()));
+    printf("%f\n", z);
 
 	m_lastfocus = glfwGetWindowAttrib(m_window, GLFW_FOCUSED);
 }

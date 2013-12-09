@@ -13,7 +13,7 @@ public:
     void accelerateAngularShip(glm::vec3 direction);
     void setFollowCam();
     Ship* playerShip();
-    void setShipToCam();
+    void setShipToCam(float delta_sec);
 
 
 private:
