@@ -53,7 +53,11 @@ float Voxel::mass() const {
     return m_mass;
 }
 
+void Voxel::onRemoval() {
+
+}
+
 void Voxel::onDestruction() {
-    //glow::debug("I'm voxel %; and I'm going now. So long and thx 4 all the fish!", this);
+
 }
 

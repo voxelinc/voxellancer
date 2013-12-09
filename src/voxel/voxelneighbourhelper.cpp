@@ -10,7 +10,8 @@ VoxelNeighbourHelper::VoxelNeighbourHelper(VoxelCluster *voxelCluster, Voxel *vo
     m_voxel(voxel),
     m_includeDiagonals(includeDiagonals)
 {
-
+    assert(voxelCluster != nullptr);
+    assert(voxel != nullptr);
 }
 
 std::list<Voxel*> VoxelNeighbourHelper::neighbours() {

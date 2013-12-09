@@ -1,9 +1,10 @@
 #pragma once
 
-#include <set>
+#include <map>
 #include <list>
 
 #include "world/helper/impact.h"
+#include "world/helper/worldobjectmodification.h"
 
 
 class WorldObject;
@@ -16,15 +17,16 @@ public:
     std::list<Impact> &dampedDeadlyImpacts();
     std::list<Impact> &deadlyImpacts();
     std::list<Voxel*> &deadVoxels();
-    std::set<WorldObject*> &modifiedWorldObjects();
+    std::list<WorldObjectModification> worldObjectModifications();
 
 
 protected:
     std::list<Impact> m_dampedDeadlyImpacts;
     std::list<Impact> m_deadlyImpacts;
     std::list<Voxel*> m_deadVoxels;
-    std::set<WorldObject*> m_modifiedWorldObjects;
+    std::map<WorldObject*, WorldObjectModification> m_worldObjectModificationMap;
 
     float damageOfImpact(const Impact &impact) const;
     Impact dampImpact(Impact &undamped, float factor);
 };
+

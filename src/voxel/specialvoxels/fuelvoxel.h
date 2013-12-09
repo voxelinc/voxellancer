@@ -9,6 +9,7 @@ public:
 
     virtual void addToObject(WorldObject* object);
 
+    virtual void onRemoval(); 
     virtual void onDestruction();
 
 protected:

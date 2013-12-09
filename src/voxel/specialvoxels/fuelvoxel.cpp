@@ -14,9 +14,12 @@ FuelVoxel::~FuelVoxel() {
 
 void FuelVoxel::addToObject(WorldObject *object){
     m_object = object;
-    object->addVoxel(this);
+    object->addFuelVoxel(this);
 }
 
+void FuelVoxel::onRemoval(){
+
+}
 void FuelVoxel::onDestruction(){
     //TODO: Explode
 }

@@ -1,11 +1,17 @@
 #pragma once
 
 #include <list>
+#include <memory>
 
 #include "collision/collisiondetector.h"
 #include "physics/physics.h"
 #include "voxel/voxelcluster.h"
 #include "ui/hudinfo.h"
+
+class EngineVoxel;
+class HardpointVoxel;
+class CockpitVoxel;
+class FuelVoxel;
 
 class WorldObject : public VoxelCluster
 {
@@ -24,8 +30,13 @@ public:
 
     std::list<Impact>& move(float delta_sec);
 
-    void addVoxel(Voxel * voxel);
-    void removeVoxel(const glm::ivec3 & position);
+    void addVoxel(Voxel* voxel);
+    virtual void addEngineVoxel(EngineVoxel* voxel);
+    virtual void addHardpointVoxel(HardpointVoxel* voxel);
+    virtual void addCockpitVoxel(CockpitVoxel* voxel);
+    virtual void addFuelVoxel(FuelVoxel* voxel);
+    void removeVoxel(const glm::ivec3& position);
+    
     void finishInitialization();
 
     Voxel *crucialVoxel();
@@ -35,7 +46,9 @@ public:
 
 
 protected:
-    CollisionDetector m_collisionDetector;
-    Physics m_physics;
+    WorldObject(Physics* physics, CollisionDetector* detector, float scale = 1.0f);    
+
+    std::unique_ptr<CollisionDetector> m_collisionDetector;
+    std::unique_ptr<Physics> m_physics;
     HUDInfo m_hudInfo;
 };

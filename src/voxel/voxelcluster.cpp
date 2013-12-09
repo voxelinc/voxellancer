@@ -35,16 +35,15 @@ Voxel* VoxelCluster::voxel(const glm::ivec3& position) {
 
 void VoxelCluster::addVoxel(Voxel *voxel) {
     assert(m_voxels[voxel->gridCell()] == nullptr);
-
-
+    
     m_voxels[voxel->gridCell()] = voxel;
     m_voxelRenderData.invalidate();
 }
 
 void VoxelCluster::removeVoxel(const glm::ivec3& position) {
     Voxel * voxel = m_voxels[position];
-
     assert(voxel != nullptr);
+
     m_voxels.erase(position);
     m_voxelRenderData.invalidate();
     delete voxel;
@@ -54,7 +53,7 @@ VoxelRenderData *VoxelCluster::voxelRenderData() {
     return &m_voxelRenderData;
 }
 
-const std::unordered_map<glm::ivec3, Voxel*> & VoxelCluster::voxelMap() {
+const std::unordered_map<glm::ivec3, Voxel*> & VoxelCluster::voxelMap() const {
     return m_voxels;
 }
 

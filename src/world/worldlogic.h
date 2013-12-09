@@ -18,7 +18,10 @@ class WorldLogic
 {
 public:
     WorldLogic(World &world);
+
     void update(float deltaSecs);
+
+    DamageForwarder &damageForwarder();
 
 
 protected:
