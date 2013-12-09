@@ -151,6 +151,7 @@ void Game::update(float delta_sec)
 {
     // skip non-updates
     if (delta_sec == 0) return;
+    //if (delta_sec < 1 / 60) delta_sec = 1 / 60;
     // avoid big jumps after debugging ;)
     delta_sec = glm::min(1.f, delta_sec);
 

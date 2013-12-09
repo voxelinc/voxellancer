@@ -14,7 +14,7 @@ m_followCam(true)
 
     glfwGetWindowSize(m_window, &m_windowWidth, &m_windowHeight);
     glfwSetCursorPos(m_window, m_windowWidth / 2, m_windowHeight / 2);
-    m_cursorMaxDistance = glm::min(m_windowHeight, m_windowWidth);
+    m_cursorMaxDistance = glm::min(m_windowHeight, m_windowWidth)/2;
 
     m_fpsControls = false;
     m_mouseControl = false;
@@ -35,7 +35,7 @@ m_followCam(true)
 
     glfwGetWindowSize(m_window, &m_windowWidth, &m_windowHeight);
     glfwSetCursorPos(m_window, m_windowWidth / 2, m_windowHeight / 2);
-    m_cursorMaxDistance = glm::min(m_windowHeight, m_windowWidth);
+    m_cursorMaxDistance = glm::min(m_windowHeight, m_windowWidth)/2;
 
     m_fpsControls = false;
     m_mouseControl = false;
@@ -74,90 +74,35 @@ void InputHandler::update(float delta_sec) {
 	/* Check here for every-frame events, e.g. view & movement controls */
     if (glfwGetWindowAttrib(m_window, GLFW_FOCUSED)){
         if (m_lastfocus){
-            // position voxelcluster
-
-			if (glfwGetKey(m_window, GLFW_KEY_UP) == GLFW_PRESS){
-                m_player->accelerateShip(glm::vec3(0, 0, -prop_moveSpeed.get()));
-			}
-			if (glfwGetKey(m_window, GLFW_KEY_LEFT) == GLFW_PRESS){
-                m_player->accelerateShip(-glm::vec3(prop_moveSpeed.get(), 0, 0));
-			}
-			if (glfwGetKey(m_window, GLFW_KEY_DOWN) == GLFW_PRESS){
-                m_player->accelerateShip(glm::vec3(0, 0, prop_moveSpeed.get()));
-			}
-			if (glfwGetKey(m_window, GLFW_KEY_RIGHT) == GLFW_PRESS){
-                m_player->accelerateShip(glm::vec3(prop_moveSpeed.get(), 0, 0));
-			}
 			if (glfwGetKey(m_window, GLFW_KEY_PAGE_DOWN) == GLFW_PRESS){
-                m_player->accelerateShip(glm::vec3(0, -prop_moveSpeed.get(), 0));
+                m_player->move(glm::vec3(0, -1, 0));
 			}
 			if (glfwGetKey(m_window, GLFW_KEY_PAGE_UP) == GLFW_PRESS){
-                m_player->accelerateShip(glm::vec3(0, prop_moveSpeed.get(), 0));
+                m_player->move(glm::vec3(0, 1, 0));
 			}
-
-            if (glfwGetKey(m_window, GLFW_KEY_I) == GLFW_PRESS) {
-                m_player->accelerateAngularShip(glm::vec3(1, 0, 0));
+            if (glfwGetKey(m_window, GLFW_KEY_W) == GLFW_PRESS){
+                m_player->move(glm::vec3(0, 0, -1));
             }
-            if (glfwGetKey(m_window, GLFW_KEY_K) == GLFW_PRESS) {
-                m_player->accelerateAngularShip(glm::vec3(-1, 0, 0));
+            if (glfwGetKey(m_window, GLFW_KEY_A) == GLFW_PRESS){
+                m_player->move(-glm::vec3(1, 0, 0));
             }
-            if (glfwGetKey(m_window, GLFW_KEY_J) == GLFW_PRESS) {
-                m_player->accelerateAngularShip(glm::vec3(0, 1, 0));
+            if (glfwGetKey(m_window, GLFW_KEY_S) == GLFW_PRESS){
+                m_player->move(glm::vec3(0, 0, 1));
             }
-            if (glfwGetKey(m_window, GLFW_KEY_L) == GLFW_PRESS) {
-                m_player->accelerateAngularShip(glm::vec3(0, -1, 0));
+            if (glfwGetKey(m_window, GLFW_KEY_D) == GLFW_PRESS){
+                m_player->move(glm::vec3(1, 0, 0));
             }
-            if (glfwGetKey(m_window, GLFW_KEY_U) == GLFW_PRESS) {
-                m_player->accelerateAngularShip(glm::vec3(0, 0, 1));
+            if (glfwGetKey(m_window, GLFW_KEY_Q) == GLFW_PRESS){
+                m_player->rotate(glm::vec3(0, 0, 1));
             }
-            if (glfwGetKey(m_window, GLFW_KEY_O) == GLFW_PRESS) {
-                m_player->accelerateAngularShip(glm::vec3(0, 0, -1));
+            if (glfwGetKey(m_window, GLFW_KEY_E) == GLFW_PRESS){
+                m_player->rotate(glm::vec3(0, 0, -1));
             }
-
-            if (!m_followCam){ //disable view controls when cam is following
-
-                // position "eye"
-                if (glfwGetKey(m_window, GLFW_KEY_W) == GLFW_PRESS){
-                    m_camera->move(glm::vec3(0, 0, -prop_moveSpeed* delta_sec));
-                }
-                if (glfwGetKey(m_window, GLFW_KEY_A) == GLFW_PRESS){
-                    m_camera->move(glm::vec3(-prop_moveSpeed * delta_sec, 0, 0));
-                }
-                if (glfwGetKey(m_window, GLFW_KEY_S) == GLFW_PRESS){
-                    m_camera->move(glm::vec3(0, 0, prop_moveSpeed* delta_sec));
-                }
-                if (glfwGetKey(m_window, GLFW_KEY_D) == GLFW_PRESS){
-                    m_camera->move(glm::vec3(prop_moveSpeed* delta_sec, 0, 0));
-                }
-                if (glfwGetKey(m_window, GLFW_KEY_Q) == GLFW_PRESS){
-                    m_camera->rotateZ(-prop_rollSpeed * delta_sec);
-                }
-                if (glfwGetKey(m_window, GLFW_KEY_E) == GLFW_PRESS){
-                    m_camera->rotateZ(prop_rollSpeed * delta_sec);
-                }
-
-                // lookAt
-                double x, y;
-                glfwGetCursorPos(m_window, &x, &y);
-                float rel = 10;
-                float deadzone = 0.1f;
-                if (!m_fpsControls) {
-                    if (m_mouseControl || glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS){
-                        rel = (float)glm::max(1.0, (sqrt(pow(m_windowWidth - (int)floor(x), 2) + pow(m_windowHeight - (int)floor(y), 2))) / m_cursorMaxDistance);
-                        rel = glm::max(0.0f, rel - deadzone) / (1 - deadzone);
-                        rel = glm::smoothstep(0.f, 1.f, rel);
-                    } else {
-                        rel = 0;
-                    }
-                }
-
-                float angX = ((int)floor(x) - m_windowWidth / 2) * prop_rotationSpeed * rel;
-                float angY = ((int)floor(y) - m_windowHeight / 2) * prop_rotationSpeed * rel;
-
-                m_camera->rotateX(-angY*delta_sec);
-                m_camera->rotateY(-angX*delta_sec);
+            if (glfwGetKey(m_window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS){
+                m_player->boost();
             }
 
+            // mouse handling
             double x, y;
             glfwGetCursorPos(m_window, &x, &y);
 
@@ -167,35 +112,37 @@ void InputHandler::update(float delta_sec) {
             }
 
 			// lookAt
-            float rel = 10;
-            float deadzone = 0.05f;
+            float rel = 20;
+            float deadzone = 0.1f;
             double dis = 0;
             float angX = 0;
             float angY = 0;
 
 			if (!m_fpsControls) {
 				if (m_mouseControl || glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS){
+                    glm::vec3 rot;
                     x = m_windowWidth / 2 - (int)floor(x);
                     y = m_windowHeight / 2 - (int)floor(y);
-                    dis = glm::min((sqrt(pow(x, 2) + pow(y, 2))), (double)m_cursorMaxDistance / 2);
-                    rel = (float)(dis / (m_cursorMaxDistance / 2));
-
-                    rel = glm::max(0.0f, rel - deadzone) / (1 - deadzone);
-                    rel = glm::smoothstep(0.f, 1.f, rel);
-                    angX = float(-x * prop_rotationSpeed * rel);
-                    angY = float(-y * prop_rotationSpeed * rel);
+                    x = glm::min((double)m_cursorMaxDistance, x);
+                    y = glm::min((double)m_cursorMaxDistance, y);
+                    rot = glm::vec3(y,x, 0);
+                    rot /= m_cursorMaxDistance;
+                    printf("%f %f\n", rot.y, rot.x);
+                    if (glm::length(rot) < deadzone)
+                        rot = glm::vec3(0);
+                    if (glm::length(rot) > 1){
+                        rot = glm::normalize(rot);
+                    }
+                    m_player->rotate(rot);
 				}
                 else {
                     rel = 0;
-				}
+                }
 			}
             else {
-                angX = ((int)floor(x) - m_windowWidth / 2) * prop_rotationSpeed * rel;
-                angY = ((int)floor(y) - m_windowHeight / 2) * prop_rotationSpeed * rel;
-			}
-
-			m_camera->rotateX(-angY*delta_sec);
-			m_camera->rotateY(-angX*delta_sec);
+                angX = ((int)floor(x) - m_windowWidth / 2) * rel;
+                angY = ((int)floor(y) - m_windowHeight / 2) * rel;
+            }
 
 		}
 
@@ -206,17 +153,19 @@ void InputHandler::update(float delta_sec) {
     }
 
     if (m_followCam){
+        m_player->setFollowCam();
+    }
+    else{
         m_player->setShipToCam(delta_sec);
-        //m_player->setFollowCam();
     }
 
-
+    /*
     float z;
     glReadPixels((int)0, (int)0, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &z);
     printf("%f orig\n", z);
     z = 2 * m_camera->zNear()*m_camera->zFar() / (m_camera->zFar() + m_camera->zNear() - (2 * z - 1)* (m_camera->zFar() - m_camera->zNear()));
     printf("%f\n", z);
-
+    */
 	m_lastfocus = glfwGetWindowAttrib(m_window, GLFW_FOCUSED);
 }
 

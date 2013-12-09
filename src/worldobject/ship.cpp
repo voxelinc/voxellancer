@@ -2,7 +2,10 @@
 
 #include "voxel/specialvoxels/hardpointvoxel.h"
 
-Ship::Ship() {
+Ship::Ship() :
+prop_maxSpeed("ship.maxSpeed"),
+prop_maxRotSpeed("ship.maxRotSpeed")
+{
     m_world = World::instance();
 }
 
@@ -45,4 +48,14 @@ float Ship::minAimDistance(){
             range = glm::min(hardpoint->gun()->range(), range);
     }
     return range;
+}
+
+void Ship::accelerate(glm::vec3 direction) {
+    direction *= prop_maxSpeed;
+    m_physics->accelerate(direction);
+}
+
+void Ship::accelerateAngular(glm::vec3 axis) {
+    axis *= prop_maxRotSpeed;
+    m_physics->accelerateAngular(axis);
 }
