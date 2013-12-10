@@ -21,6 +21,8 @@ void WorldLogic::update(float deltaSecs) {
     //m_impactResolver.alterVelocities(m_impactAccumulator.clusterImpacts());
 
     damageForwardLoop(m_impactAccumulator.impacts());
+
+    m_impactAccumulator.applyOnImpactHooks();
     m_impactAccumulator.clear();
 
 //    m_splitDetector.searchSplitOffs(m_damager.worldObjectModifications());

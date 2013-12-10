@@ -102,3 +102,11 @@ void WorldObject::accelerate(glm::vec3 direction) {
 void WorldObject::accelerateAngular(glm::vec3 axis) {
     m_physics->accelerateAngular(axis);
 }
+
+void WorldObject::onImpact(){
+
+}
+
+void WorldObject::onSpawnFail(){
+
+}

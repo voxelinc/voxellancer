@@ -56,10 +56,10 @@ void God::spawn() {
 
         std::list<Collision> collisions = worldObject->collisionDetector().checkCollisions();
 
-        //assert(collisions.size() == 0); // this is, by definition, an error condition
-        if (collisions.size() > 0){ // clean up anyway (if assertion ignored)
+        if (collisions.size() > 0){
             World::instance()->worldTree().remove(worldObject->collisionDetector().geode());
             glow::warning("Failed to spawn object %; at AABB %;", worldObject, toString(worldObject->aabb()));
+            worldObject->onSpawnFail();
             continue;
         }
 

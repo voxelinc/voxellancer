@@ -44,6 +44,8 @@ public:
     void accelerate(glm::vec3 direction);
     void accelerateAngular(glm::vec3 axis);
 
+    virtual void onImpact();
+    virtual void onSpawnFail();
 
 protected:
     WorldObject(Physics* physics, CollisionDetector* detector, float scale = 1.0f);    

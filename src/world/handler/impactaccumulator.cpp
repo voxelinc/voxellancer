@@ -4,6 +4,7 @@
 #include <set>
 #include <iostream>
 
+#include "worldobject/worldobject.h"
 
 void ImpactAccumulator::clear() {
     m_voxelImpactMap.clear();
@@ -51,4 +52,14 @@ std::list<Impact> ImpactAccumulator::impacts() {
     }
 
     return impacts;
+}
+
+void ImpactAccumulator::applyOnImpactHooks(){
+    std::set<WorldObject*> objects;
+    for (auto& pair : m_voxelImpactMap) {
+        objects.insert(pair.second.worldObject());
+    }
+    for (WorldObject* object : objects) {
+        object->onImpact();
+    }
 }
