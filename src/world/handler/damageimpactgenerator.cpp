@@ -2,6 +2,8 @@
 
 #include "worldobject/worldobject.h"
 
+#include "utils/tostring.h"
+
 
 void DamageImpactGenerator::parse(std::list<WorldObjectCollision>& worldObjectCollisions) {
     std::list<Impact> damageImpacts;

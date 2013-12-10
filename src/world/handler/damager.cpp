@@ -1,5 +1,6 @@
 #include "damager.h"
 
+#include <iostream>
 #include <set>
 #include <glow/logging.h>
 
@@ -19,7 +20,9 @@ void Damager::applyDamages(std::list<Impact> &impacts) {
 
         float hpBeforeDamage = voxel->hp();
         float damage = damageOfImpact(impact);
+
         voxel->applyDamage(damage);
+
         if(voxel->hp() <= 0) {
             m_dampedDeadlyImpacts.push_back(dampImpact(impact, damage - hpBeforeDamage));
             m_deadlyImpacts.push_back(impact);

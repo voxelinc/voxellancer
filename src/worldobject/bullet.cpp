@@ -30,6 +30,8 @@ Bullet::Bullet(glm::vec3 position, glm::quat orientation, glm::vec3 direction, f
     m_hudInfo.setShowOnHud(false);
 
     finishInitialization();
+
+    std::cout << "bullet " << this << std::endl;
 }
 
 void Bullet::update(float delta_sec){
