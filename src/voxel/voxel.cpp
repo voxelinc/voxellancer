@@ -59,6 +59,10 @@ float Voxel::mass() const {
     return m_mass;
 }
 
+void Voxel::onRemoval() {
+
+}
+
 void Voxel::onDestruction() {
 
 }

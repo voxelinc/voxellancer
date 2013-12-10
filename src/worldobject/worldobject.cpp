@@ -1,6 +1,10 @@
 #include "worldobject.h"
 
 #include "utils/tostring.h"
+#include "voxel/specialvoxels/enginevoxel.h"
+#include "voxel/specialvoxels/hardpointvoxel.h"
+#include "voxel/specialvoxels/cockpitvoxel.h"
+#include "voxel/specialvoxels/fuelvoxel.h"
 
 
 WorldObject::WorldObject(float scale, glm::vec3 center) :
@@ -13,7 +17,7 @@ WorldObject::WorldObject(Physics* physics, CollisionDetector* detector, float sc
     VoxelCluster(scale),
     m_physics(physics),
     m_collisionDetector(detector),
-    m_hudInfo(),
+    m_objectInfo(),
     m_crucialVoxel(nullptr)
 {
 }
@@ -38,8 +42,8 @@ Physics& WorldObject::physics() {
     return *m_physics;
 }
 
-HUDInfo& WorldObject::hudInfo(){
-    return m_hudInfo;
+ObjectInfo& WorldObject::objectInfo(){
+    return m_objectInfo;
 }
 
 AABB WorldObject::aabb() {
@@ -58,13 +62,32 @@ std::list<Impact>& WorldObject::updatePosition(float delta_sec) {
     return m_physics->move(delta_sec);
 }
 
-void WorldObject::addVoxel(Voxel * voxel) {
+void WorldObject::addVoxel(Voxel* voxel) {
     VoxelCluster::addVoxel(voxel);
     m_physics->addVoxel(voxel);
     m_collisionDetector->addVoxel(voxel);
 }
 
-void WorldObject::removeVoxel(const glm::ivec3 & position) {
+void WorldObject::addEngineVoxel(EngineVoxel* voxel){
+    addVoxel(voxel);
+}
+
+void WorldObject::addHardpointVoxel(HardpointVoxel* voxel){
+    addVoxel(voxel);
+}
+
+void WorldObject::addCockpitVoxel(CockpitVoxel* voxel){
+    addVoxel(voxel);
+}
+
+void WorldObject::addFuelVoxel(FuelVoxel* voxel){
+    addVoxel(voxel);
+}
+
+void WorldObject::removeVoxel(const glm::ivec3& position) {
+    Voxel* voxel = m_voxels[position];
+    assert(voxel != nullptr);
+    voxel->onRemoval();
     m_collisionDetector->removeVoxel(position);
     m_physics->removeVoxel(position);
     if (m_crucialVoxel != nullptr && position == m_crucialVoxel->gridCell()) {

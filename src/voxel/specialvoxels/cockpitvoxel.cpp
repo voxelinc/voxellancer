@@ -14,9 +14,13 @@ CockpitVoxel::~CockpitVoxel() {
 
 void CockpitVoxel::addToObject(WorldObject *object){
     m_object = object;
-    object->addVoxel(this);
+    object->addCockpitVoxel(this);
+}
+
+void CockpitVoxel::onRemoval(){
+    //TODO: Tell my cockpit I'm gone
 }
 
 void CockpitVoxel::onDestruction(){
-    //TODO: Tell my cockpit I'm gone
+    // Spawn dead pilot
 }

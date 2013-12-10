@@ -88,7 +88,7 @@ void Game::initialize()
     testClusterMoveable->addVoxel(new Voxel(glm::ivec3(1, 0, 7), 0xFF0000));
     testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 8), 0xFF0080));
     testClusterMoveable->finishInitialization();
-    testClusterMoveable->hudInfo().setName("movable");
+    testClusterMoveable->objectInfo().setName("movable");
     m_world->god().scheduleSpawn(testClusterMoveable);
 
     //m_inputHandler.setVoxelCluster(m_testClusterMoveable);
@@ -97,17 +97,15 @@ void Game::initialize()
     ClusterCache::instance()->fillObject(normandy, "data/voxelcluster/normandy.csv");
 	normandy->setPosition(glm::vec3(0, 0, -100));
     normandy->finishInitialization();
-    normandy->hudInfo().setName("Normandy");
+    normandy->objectInfo().setName("Normandy");
     m_world->god().scheduleSpawn(normandy);
 
     Ship *testCluster = new Ship();
     ClusterCache::instance()->fillObject(testCluster, "data/voxelcluster/basicship.csv");
     testCluster->setPosition(glm::vec3(0, 0, 10));
     testCluster->finishInitialization();
-    testCluster->addHardpoint(new Hardpoint(testCluster, glm::vec3(0, 0, 4), new Gun(100, 400, 0.2f)));
-    testCluster->addHardpoint(new Hardpoint(testCluster, glm::vec3(6, 0, 4), new Gun(100, 400, 0.2f)));
-    testCluster->hudInfo().setName("basicship");
-    testCluster->hudInfo().setShowOnHud(false);
+    testCluster->objectInfo().setName("basicship");
+    testCluster->objectInfo().setShowOnHud(false);
     m_world->god().scheduleSpawn(testCluster);
 
     WorldObject *wall = new WorldObject(1);
@@ -121,7 +119,7 @@ void Game::initialize()
         }
     }
     wall->finishInitialization();
-    wall->hudInfo().setName("Wall");
+    wall->objectInfo().setName("Wall");
     m_world->god().scheduleSpawn(wall);
 
     m_inputHandler.setPlayerShip(testCluster);
@@ -136,7 +134,7 @@ void Game::initialize()
 	m_camera.setZFar(9999);
 
 	glow::debug("Create HUD");
-	m_hud = std::unique_ptr<HUD>(new HUD());
+	m_hud = std::unique_ptr<HUD>(new HUD(&m_inputHandler));
 	m_hud->setCamera(&m_camera);
 
     m_hd3000dummy = std::unique_ptr<HD3000Dummy>(new HD3000Dummy);

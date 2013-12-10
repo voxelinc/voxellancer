@@ -1,7 +1,7 @@
 #include "worldobject/worldobject.h"
 #include "resource/clustercache.h"
 
-class Bullet : public WorldObject{
+class Bullet : public WorldObject {
 
 public:
     Bullet(glm::vec3 position, glm::quat orientation, glm::vec3 direction, float speed, float range);
@@ -9,5 +9,4 @@ public:
 
 private:
 	float m_lifetime;
-	float m_distance;
 };

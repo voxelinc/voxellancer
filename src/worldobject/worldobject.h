@@ -6,7 +6,12 @@
 #include "collision/collisiondetector.h"
 #include "physics/physics.h"
 #include "voxel/voxelcluster.h"
-#include "ui/hudinfo.h"
+#include "ui/objectinfo.h"
+
+class EngineVoxel;
+class HardpointVoxel;
+class CockpitVoxel;
+class FuelVoxel;
 
 class WorldObject : public VoxelCluster
 {
@@ -17,7 +22,7 @@ public:
 
     CollisionDetector& collisionDetector();
     Physics& physics();
-    HUDInfo& hudInfo();
+    ObjectInfo& objectInfo();
 
     AABB aabb();
     Sphere sphere();
@@ -26,8 +31,13 @@ public:
 
     std::list<Impact>& updatePosition(float delta_sec);
 
-    void addVoxel(Voxel * voxel);
-    void removeVoxel(const glm::ivec3 & position);
+    void addVoxel(Voxel* voxel);
+    virtual void addEngineVoxel(EngineVoxel* voxel);
+    virtual void addHardpointVoxel(HardpointVoxel* voxel);
+    virtual void addCockpitVoxel(CockpitVoxel* voxel);
+    virtual void addFuelVoxel(FuelVoxel* voxel);
+    void removeVoxel(const glm::ivec3& position);
+    
     void finishInitialization();
     void recalculateCenterAndMass();
 
@@ -41,6 +51,6 @@ protected:
     WorldObject(Physics* physics, CollisionDetector* detector, float scale = 1.0f);
     std::unique_ptr<CollisionDetector> m_collisionDetector;
     std::unique_ptr<Physics> m_physics;
-    HUDInfo m_hudInfo;
     Voxel * m_crucialVoxel;
+    ObjectInfo m_objectInfo;
 };
