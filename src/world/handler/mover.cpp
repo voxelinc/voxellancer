@@ -9,7 +9,7 @@ void Mover::moveWorldObjects(float deltaSec) {
     m_impacts.clear();
 
     for (WorldObject *worldObject : World::instance()->worldObjects()) {
-        std::list<Impact> &impacts = worldObject->move(deltaSec);
+        std::list<Impact> &impacts = worldObject->updatePosition(deltaSec);
         m_impacts.insert(m_impacts.end(), impacts.begin(), impacts.end());
     }
 }

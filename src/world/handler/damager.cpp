@@ -11,7 +11,6 @@
 void Damager::applyDamages(std::list<Impact> &impacts) {
     m_dampedDeadlyImpacts.clear();
     m_deadlyImpacts.clear();
-    m_worldObjectModificationMap.clear();
     m_deadVoxels.clear();
 
     for(Impact &impact : impacts) {
@@ -28,11 +27,11 @@ void Damager::applyDamages(std::list<Impact> &impacts) {
             auto i = m_worldObjectModificationMap.find(impact.worldObject());
             if(i == m_worldObjectModificationMap.end()) {
                 WorldObjectModification modification(impact.worldObject());
-                modification.cellCleared(voxel->gridCell());
+                modification.removedVoxel(voxel->gridCell());
                 m_worldObjectModificationMap.insert(std::pair<WorldObject*, WorldObjectModification>(impact.worldObject(), modification));
             }
             else {
-                i->second.cellCleared(voxel->gridCell());
+                i->second.removedVoxel(voxel->gridCell());
             }
         }
     }
@@ -65,4 +64,8 @@ float Damager::damageOfImpact(const Impact &impact) const {
 
 Impact Damager::dampImpact(Impact &undamped, float factor) {
     return Impact(undamped.worldObject(), undamped.voxel(), glm::normalize(undamped.vec()) * factor);
+}
+
+void Damager::reset() {
+    m_worldObjectModificationMap.clear();
 }

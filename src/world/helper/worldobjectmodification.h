@@ -1,6 +1,6 @@
 #pragma once
 
-#include <list>
+#include <vector>
 
 #include <glm/glm.hpp>
 
@@ -14,11 +14,11 @@ public:
 
     WorldObject *worldObject();
 
-    void cellCleared(const glm::ivec3 &cell);
-    const std::list<glm::ivec3> &clearedCells();
+    void removedVoxel(const glm::ivec3 &pos);
+    const std::vector<glm::ivec3> &removedVoxels();
 
 
 protected:
     WorldObject *m_worldObject;
-    std::list<glm::ivec3> m_clearedCells;
+    std::vector<glm::ivec3> m_removedVoxels;
 };

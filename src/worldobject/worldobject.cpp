@@ -7,20 +7,27 @@
 #include "voxel/specialvoxels/fuelvoxel.h"
 
 
-WorldObject::WorldObject(float scale) :
-    VoxelCluster(scale),
-    m_physics(new Physics(*this)),
-    m_collisionDetector(new CollisionDetector(*this)),
-    m_objectInfo()
+WorldObject::WorldObject(float scale, glm::vec3 center) :
+    WorldObject(new Physics(*this), new CollisionDetector(*this), scale)
 {
+    m_transform.setCenter(center);
 }
 
 WorldObject::WorldObject(Physics* physics, CollisionDetector* detector, float scale) :
     VoxelCluster(scale),
     m_physics(physics),
     m_collisionDetector(detector),
-    m_objectInfo()
+    m_objectInfo(),
+    m_crucialVoxel(nullptr)
 {
+}
+
+WorldObject::WorldObject(const WorldTransform& transform):
+    WorldObject(transform.scale())
+{
+    m_transform.setPosition(transform.position());
+    m_transform.setOrientation(transform.orientation());
+    m_transform.setCenter(transform.center());
 }
 
 WorldObject::~WorldObject() {
@@ -51,7 +58,7 @@ void WorldObject::update(float delta_sec) {
 
 }
 
-std::list<Impact>& WorldObject::move(float delta_sec) {
+std::list<Impact>& WorldObject::updatePosition(float delta_sec) {
     return m_physics->move(delta_sec);
 }
 
@@ -83,17 +90,26 @@ void WorldObject::removeVoxel(const glm::ivec3& position) {
     voxel->onRemoval();
     m_collisionDetector->removeVoxel(position);
     m_physics->removeVoxel(position);
+    if (m_crucialVoxel != nullptr && position == m_crucialVoxel->gridCell()) {
+        // do spectacular stuff like an explosion
+        m_crucialVoxel = nullptr;
+    }
     VoxelCluster::removeVoxel(position);
 }
 
 void WorldObject::finishInitialization() {
-    m_physics->finishInitialization();
+    m_transform.setCenter(m_physics->calculateMassAndCenter());
     m_collisionDetector->finishInitialization();
 }
 
-Voxel *WorldObject::crucialVoxel() {
-    return nullptr;
+void WorldObject::recalculateCenterAndMass() {
+    //m_transform.setCenter(m_physics->calculateMassAndCenter()); TODO!!!
+    m_physics->calculateMassAndCenter();
+    m_collisionDetector->updateGeode();
 }
+
+
+
 
 void WorldObject::accelerate(glm::vec3 direction) {
     m_physics->accelerate(direction);
@@ -102,3 +118,11 @@ void WorldObject::accelerate(glm::vec3 direction) {
 void WorldObject::accelerateAngular(glm::vec3 axis) {
     m_physics->accelerateAngular(axis);
 }
+
+Voxel *WorldObject::crucialVoxel() {
+    return m_crucialVoxel;
+}
+void WorldObject::setCrucialVoxel(glm::ivec3 pos) {
+    m_crucialVoxel = voxel(pos);
+}
+

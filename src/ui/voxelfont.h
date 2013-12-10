@@ -5,7 +5,7 @@
 
 #include <glm/glm.hpp>
 
-class VoxelCluster;
+class Letter;
 class VoxelRenderer;
 
 enum FontSize {
@@ -29,10 +29,10 @@ public:
     void drawString(std::string text, glm::vec3 position, FontSize size = s3x5, float scale = 1.f, FontAlign align = aLeft);
 
 private:
-    void loadFont(const std::string& identifier, glm::vec3 offset, std::map<char, std::unique_ptr<VoxelCluster>> *map);
-    void loadChar(const std::string& filename, glm::vec3 offset, const char index, std::map<char, std::unique_ptr<VoxelCluster>> *map);
+    void loadFont(const std::string& identifier, glm::vec3 offset, std::map<char, std::unique_ptr<Letter>> *map);
+    void loadChar(const std::string& filename, glm::vec3 offset, const char index, std::map<char, std::unique_ptr<Letter>> *map);
 
     VoxelRenderer* m_renderer;
-    std::map<char, std::unique_ptr<VoxelCluster>> m_font3x5;
-    std::map<char, std::unique_ptr<VoxelCluster>> m_font5x7;
+    std::map<char, std::unique_ptr<Letter>> m_font3x5;
+    std::map<char, std::unique_ptr<Letter>> m_font5x7;
 };
