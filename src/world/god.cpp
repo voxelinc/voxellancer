@@ -34,6 +34,10 @@ void God::scheduleSpawns(const std::list<WorldObject*> &spawns) {
     m_scheduledSpawns.insert(m_scheduledSpawns.end(), spawns.begin(), spawns.end());
 }
 
+const std::list<WorldObject*>& God::scheduledSpawns(){
+    return m_scheduledSpawns;
+}
+
 void God::scheduleRemoval(WorldObject *worldObject) {
     assert(worldObject->collisionDetector().geode() != nullptr);
     assert(worldObject->collisionDetector().worldTree() == &m_world.worldTree());
@@ -48,6 +52,10 @@ void God::scheduleRemovals(const std::list<WorldObject*> &removals) {
     for (WorldObject* worldObject : removals) {
         scheduleRemoval(worldObject);
     }
+}
+
+const std::list<WorldObject*>& God::scheduledRemovals(){
+    return m_scheduledRemovals;
 }
 
 void God::spawn() {

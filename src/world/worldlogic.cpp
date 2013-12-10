@@ -53,10 +53,16 @@ void WorldLogic::damageForwardLoop(std::list<Impact> damageImpacts) {
 
     while(damageImpacts.size() > 0) {
         // only treat clusters that aren't scheduled for removal anyway
-        /*for (Impact& impact : damageImpacts){
-            //if (m_world.god().scheduled)
-            if (impact.worldObject())
-        }*/
+        for (WorldObject* object : m_world.god().scheduledRemovals()){
+            std::list<Impact>::iterator iter = damageImpacts.begin();
+            while (iter != damageImpacts.end()){
+                if (iter->worldObject() == object){
+                    damageImpacts.erase(iter++);
+                } else {
+                    ++iter;
+                }
+            }
+        }
 
         m_damager.applyDamages(damageImpacts);
 
