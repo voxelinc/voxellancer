@@ -2,25 +2,57 @@
 
 #include "ship.h"
 
-Hardpoint::Hardpoint(Ship* ship, const glm::vec3& position, Gun *gun){
+Hardpoint::Hardpoint(Ship* ship, const glm::vec3& positionInGrid, Weapon *weapon){
     assert(ship != nullptr);
-    assert(gun != nullptr);
     m_ship = ship;
-	m_position = position;
-    m_gun = gun;
+    m_positionInGrid = positionInGrid;
+    m_weapon = weapon;
 }
 
-
-Bullet* Hardpoint::shootAt(glm::vec3 point){
-    return m_gun->shootAt((glm::vec3)(m_ship->transform().applyTo(m_position)), m_ship->transform().orientation(), point);
+Hardpoint::~Hardpoint(){
+    if (m_weapon) delete m_weapon;
 }
 
-void Hardpoint::update(float deltasec) {
-    m_gun->update(deltasec);
+void Hardpoint::setWeapon(Weapon *launcher){
+    m_weapon = launcher;
 }
 
-Gun *Hardpoint::gun() {
-    return m_gun;
+Weapon* Hardpoint::weapon(){
+    return m_weapon;
+}
+
+glm::vec3 Hardpoint::position(){
+    return m_ship->transform().applyTo(m_positionInGrid);
+}
+Ship* Hardpoint::ship(){
+    return m_ship;
+}
+
+void Hardpoint::update(float delta_sec){
+    if (m_weapon)
+        m_weapon->update(delta_sec);
+}
+
+AimType Hardpoint::aimType(){
+    if (m_weapon)
+        return m_weapon->aimType();
+    else
+        return AimType::None;
+}
+void Hardpoint::shootAtPoint(glm::vec3 target){
+    if (m_weapon)
+        m_weapon->shootAtPoint(this, target);
+}
+void Hardpoint::shootAtObject(WorldObject* target){
+    if (m_weapon)
+        m_weapon->shootAtObject(this, target);
+}
+
+float Hardpoint::aimRange(){
+    if (m_weapon)
+        return m_weapon->aimRange();
+    else
+        return -1;
 }
 
 void Hardpoint::voxelRemoved(){

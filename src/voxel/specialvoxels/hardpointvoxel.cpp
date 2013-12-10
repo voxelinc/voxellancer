@@ -22,8 +22,10 @@ void HardpointVoxel::setHardpoint(Hardpoint* hardpoint){
 }
 
 void HardpointVoxel::onRemoval(){
-    if (m_hardpoint)
+    if (m_hardpoint){
         m_hardpoint->voxelRemoved();
+        m_hardpoint = nullptr;
+    }
 }
 
 void HardpointVoxel::onDestruction(){

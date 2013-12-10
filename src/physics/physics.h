@@ -12,7 +12,7 @@
 class WorldObject;
 class WorldTransform;
 
-class Physics  {
+class Physics {
 public:
     Physics(WorldObject & worldObject);
     virtual ~Physics();
@@ -34,10 +34,8 @@ public:
     void addVoxel(Voxel *voxel);
     void removeVoxel(const glm::ivec3 &position);
 
-    void finishInitialization();
-
+    glm::vec3 calculateMassAndCenter();
 protected:
-    void calculateMassAndCenter();
     virtual void updateSpeed(float delta_sec);
 
     void resolveCollision(Collision & c, float delta_sec);
@@ -66,4 +64,5 @@ protected:
     Property<float> m_rotationFactor;
 
     std::list<Impact> m_impacts;
+    glm::vec3 m_center;
 };
