@@ -44,8 +44,8 @@ public:
     Voxel *crucialVoxel();
     void setCrucialVoxel(glm::ivec3 pos);
 
-    void accelerate(glm::vec3 direction);
-    void accelerateAngular(glm::vec3 axis);
+    virtual void accelerate(glm::vec3 direction);
+    virtual void accelerateAngular(glm::vec3 axis);
 
 protected:
     WorldObject(Physics* physics, CollisionDetector* detector, float scale = 1.0f);

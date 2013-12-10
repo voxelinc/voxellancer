@@ -9,6 +9,8 @@ Ship::Ship() :
     m_hardpoints(),
     m_aimMode(Point),
     m_targetPoint(0),
+	prop_maxSpeed("ship.maxSpeed"),
+	prop_maxRotSpeed("ship.maxRotSpeed"),
     m_targetObject(nullptr)
 {
 }
@@ -90,4 +92,14 @@ float Ship::minAimDistance(){ // is this needed ?!
             range = glm::min(hardpoint->aimRange(), range);
     }
     return range;
+}
+
+void Ship::accelerate(glm::vec3 direction) {
+    direction *= prop_maxSpeed;
+    m_physics->accelerate(direction);
+}
+
+void Ship::accelerateAngular(glm::vec3 axis) {
+    axis *= prop_maxRotSpeed;
+    m_physics->accelerateAngular(axis);
 }

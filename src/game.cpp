@@ -38,10 +38,11 @@
 
 class Ship;
 
-Game::Game(GLFWwindow *window):
-	m_window(window),
-	m_camera(),
-	m_inputHandler(window, &m_camera)
+Game::Game(GLFWwindow *window) :
+m_window(window),
+m_camera(),
+m_player(&m_camera),
+m_inputHandler(window, &m_player, &m_camera)
 {
 	reloadConfig();
 }
@@ -108,6 +109,8 @@ void Game::initialize()
     testCluster->objectInfo().setShowOnHud(false);
     m_world->god().scheduleSpawn(testCluster);
 
+    m_player.setShip(testCluster);
+
     WorldObject *wall = new WorldObject(1);
     wall->move(glm::vec3(-20, 0, -50));
     wall->rotate(glm::angleAxis(-90.f, glm::vec3(0, 1, 0)));
@@ -122,14 +125,13 @@ void Game::initialize()
     wall->objectInfo().setName("Wall");
     m_world->god().scheduleSpawn(wall);
 
-    m_inputHandler.setPlayerShip(testCluster);
 
     glow::debug("Initial spawn");
     m_world->god().spawn();
 
 	glow::debug("Setup Camersa");
 	//viewport set in resize
-	m_camera.setPosition(glm::vec3(0, 5, 30));
+	//m_camera.setPosition(glm::vec3(0, 5, 30));
 	m_camera.setZNear(1);
 	m_camera.setZFar(9999);
 
@@ -148,17 +150,19 @@ void Game::update(float delta_sec)
 {
     // skip non-updates
     if (delta_sec == 0) return;
+    //if (delta_sec < 1 / 60) delta_sec = 1 / 60;
     // avoid big jumps after debugging ;)
     delta_sec = glm::min(1.f, delta_sec);
 
     m_inputHandler.update(delta_sec);
     World::instance()->update(delta_sec);
+    m_player.setFollowCam();
 	m_hud->update(delta_sec);
 }
 
 void Game::draw()
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glFrontFace(GL_CCW);
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
@@ -172,6 +176,7 @@ void Game::draw()
 
     // draw all other voxelclusters...
     m_voxelRenderer->afterDraw();
+
 
 	m_hud->draw();
 

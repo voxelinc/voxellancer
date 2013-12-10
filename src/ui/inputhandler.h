@@ -4,10 +4,10 @@
 
 #include <GLFW/glfw3.h>
 
-#include "camera.h"
 #include "property/propertymanager.h"
 #include "property/property.h"
 #include "worldobject/ship.h"
+#include "player.h"
 
 class WorldObject;
 
@@ -16,6 +16,7 @@ class WorldObject;
 class InputHandler {
 public:
     InputHandler(GLFWwindow *window, Camera *camera);
+    InputHandler(GLFWwindow *window, Player *player, Camera *camera);
 	virtual ~InputHandler();
 
     void setPlayerShip(Ship *ship);
@@ -33,8 +34,8 @@ protected:
 
 	GLFWwindow *m_window;
 	Camera* m_camera;
+    Player* m_player;
 
-    Ship *m_playerShip;
 
 	int m_windowWidth, m_windowHeight;
 	int m_lastfocus;
@@ -46,7 +47,6 @@ protected:
     int m_followCam;
     
 
-    Property<float> prop_rotationSpeed;
-    Property<float> prop_rollSpeed;
-    Property<float> prop_moveSpeed;
+    Property<float> prop_deadzone;
+
 };
