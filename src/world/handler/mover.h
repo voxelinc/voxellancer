@@ -1,7 +1,7 @@
 #pragma once
 
 #include <list>
-#include "collision/collision.h"
+#include "collision/voxelcollision.h"
 #include "world/helper/impact.h"
 
 class Mover
@@ -9,10 +9,10 @@ class Mover
 public:
     void moveWorldObjects(float deltaSec);
 
-    const std::list<Collision>& collisions();
+    std::list<VoxelCollision>& voxelCollisions();
 
 
 protected:
-    std::list<Collision> m_collisions;
+    std::list<VoxelCollision> m_voxelCollisions;
 };
 

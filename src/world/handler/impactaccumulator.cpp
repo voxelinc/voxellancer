@@ -4,14 +4,12 @@
 #include <set>
 #include <iostream>
 
+#include "worldobject/worldobject.h"
+
 
 void ImpactAccumulator::clear() {
     m_voxelImpactMap.clear();
     m_impacts.clear();
-}
-
-void ImpactAccumulator::parse(const std::list<Collision> &collisions) {
-
 }
 
 /* Makes sure every voxel only receives one impact */

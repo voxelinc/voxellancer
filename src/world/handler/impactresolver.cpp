@@ -29,7 +29,7 @@ void ImpactResolver::alterVelocity(WorldObject* worldObject, const Impact& impac
 
 }
 
-//void Physics::resolveCollision(Collision & c, float delta_sec) {
+//void Physics::resolveCollision(VoxelCollision & c, float delta_sec) {
 //    WorldObject * wo1 = c.a().worldObject();
 //    WorldObject * wo2 = c.b().worldObject();
 //
@@ -72,7 +72,7 @@ void ImpactResolver::alterVelocity(WorldObject* worldObject, const Impact& impac
 //}
 
 //
-//    std::list<Collision> &collisions = m_worldObject.collisionDetector().lastCollisions();
+//    std::list<VoxelCollision> &collisions = m_worldObject.collisionDetector().lastCollisions();
 //    if (!collisions.empty()) {
 //        resolveCollision(collisions.front(), delta_sec);
 //    }

@@ -1,9 +1,11 @@
 #pragma once
 
+#include <set>
 #include <list>
 #include <map>
 
-#include "collision/collision.h"
+#include "collision/voxelcollision.h"
+#include "collision/worldobjectcollision.h"
 
 #include "world/helper/impact.h"
 
@@ -15,7 +17,6 @@ class ImpactAccumulator
 public:
     void clear();
 
-    void parse(const std::list<Collision> &collisions);
     void parse(const std::list<Impact> &impacts);
 
     void dontImpact(const std::list<Voxel*> voxels);
@@ -25,10 +26,8 @@ public:
 
 protected:
     std::map<const Voxel*, Impact> m_voxelImpactMap;
-    std::map<WorldObject*, std::list<Collision>> m_worldObjectCollisions;
-
     std::list<Impact> m_impacts;
 
-    void parseCollision(WorldObject *worldObject, const Collision& collision);
+    void parseCollision(WorldObject *worldObject, const VoxelCollision& collision);
 };
 

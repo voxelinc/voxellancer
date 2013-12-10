@@ -6,7 +6,7 @@
 
 #include "voxel/voxel.h"
 #include "collision/voxeltreenode.h"
-#include "collision/collision.h"
+#include "collision/voxelcollision.h"
 
 class WorldTree;
 class WorldTreeGeode;
@@ -26,8 +26,8 @@ public:
     AABB aabb(const WorldTransform& transform) const;
     Sphere sphere(const WorldTransform& transform) const;
 
-    std::list<Collision> &checkCollisions();
-    std::list<Collision> &lastCollisions();
+    std::list<VoxelCollision> &checkCollisions();
+    std::list<VoxelCollision> &lastCollisions();
     void reset();
 
     WorldTreeGeode *geode();
@@ -48,11 +48,11 @@ public:
 protected:
     void checkCollisions(VoxelTreeNode* nodeA, VoxelTreeNode* nodeB, WorldObject *  other);
 
-    WorldObject & m_worldObject;
+    WorldObject& m_worldObject;
     VoxelTreeNode m_voxelTree;
     WorldTreeGeode *m_geode;
     WorldTree *m_worldTree;
-    std::list<Collision> m_collisions;
+    std::list<VoxelCollision> m_collisions;
     IAABB m_aabb;
 
 };

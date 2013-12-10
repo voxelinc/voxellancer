@@ -47,7 +47,7 @@ void WorldObject::update(float delta_sec) {
 
 }
 
-std::list<Collision>& WorldObject::move(float delta_sec) {
+std::list<VoxelCollision>& WorldObject::move(float delta_sec) {
     return m_physics->move(delta_sec);
 }
 

@@ -60,9 +60,9 @@ std::list<WorldObjectModification> Damager::worldObjectModifications() {
 }
 
 float Damager::damageOfImpact(const Impact &impact) const {
-    return glm::length(impact.vec());
+    return glm::length(impact.speed());
 }
 
 Impact Damager::dampImpact(Impact &undamped, float factor) {
-    return Impact(undamped.worldObject(), undamped.voxel(), glm::normalize(undamped.vec()) * factor);
+    return Impact(undamped.worldObject(), undamped.voxel(), glm::normalize(undamped.speed()) * factor, 1.0);
 }

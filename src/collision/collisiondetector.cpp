@@ -83,7 +83,7 @@ void CollisionDetector::updateGeode() {
     }
 }
 
-std::list<Collision>& CollisionDetector::checkCollisions() {
+std::list<VoxelCollision>& CollisionDetector::checkCollisions() {
     assert(m_geode != nullptr);
 
     m_collisions.clear();
@@ -100,7 +100,7 @@ std::list<Collision>& CollisionDetector::checkCollisions() {
     return m_collisions;
 }
 
-void CollisionDetector::checkCollisions(VoxelTreeNode* nodeA, VoxelTreeNode* nodeB, WorldObject *  other) {
+void CollisionDetector::checkCollisions(VoxelTreeNode* nodeA, VoxelTreeNode* nodeB, WorldObject* other) {
     if (nodeA->isLeaf() && nodeA->voxel() == nullptr) {
         return;
     }
@@ -111,7 +111,18 @@ void CollisionDetector::checkCollisions(VoxelTreeNode* nodeA, VoxelTreeNode* nod
     if (nodeA->boundingSphere().intersects(nodeB->boundingSphere())) {
         if (nodeA->isLeaf() && nodeB->isLeaf()) {
             if (nodeA->voxel() != nullptr && nodeB->voxel() != nullptr) {
-                m_collisions.push_back(Collision(CollisionParticipant(&m_worldObject, nodeA->voxel(), glm::vec3(0)), CollisionParticipant(other, nodeB->voxel(), glm::vec3(0))));
+                WorldTransform targetTransform(m_worldObject.transform());
+                targetTransform.moveWorld(m_worldObject.physics().speed());
+                targetTransform.rotate(glm::quat(m_worldObject.physics().angularSpeed()));
+
+                WorldTransform otherTargetTransform(other->transform());
+                otherTargetTransform.moveWorld(other->physics().speed());
+                otherTargetTransform.rotate(glm::quat(other->physics().angularSpeed()));
+
+                glm::vec3 v1 = targetTransform.applyTo(glm::vec3(nodeA->voxel()->gridCell())) - m_worldObject.transform().applyTo(glm::vec3(nodeA->voxel()->gridCell()));
+                glm::vec3 v2 = otherTargetTransform.applyTo(glm::vec3(nodeB->voxel()->gridCell())) - other->transform().applyTo(glm::vec3(nodeB->voxel()->gridCell()));
+
+                m_collisions.push_back(VoxelCollision(VoxelCollisionParticipant(&m_worldObject, nodeA->voxel(), v1), VoxelCollisionParticipant(other, nodeB->voxel(), v2)));
             }
         }
         else {
@@ -140,7 +151,7 @@ void CollisionDetector::checkCollisions(VoxelTreeNode* nodeA, VoxelTreeNode* nod
     }
 }
 
-std::list<Collision> & CollisionDetector::lastCollisions() {
+std::list<VoxelCollision> & CollisionDetector::lastCollisions() {
     return m_collisions;
 }
 

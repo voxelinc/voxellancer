@@ -58,6 +58,14 @@ const glm::vec3& Physics::angularAcceleration() const {
     return m_angularAcceleration;
 }
 
+float Physics::mass() const {
+    return m_mass;
+}
+
+bool Physics::massValid() const {
+    return m_massValid;
+}
+
 void Physics::calculateMassAndCenter() {
     glm::vec3 center;
 
@@ -77,7 +85,7 @@ void Physics::calculateMassAndCenter() {
     m_massValid = true;
 }
 
-std::list<Collision> &Physics::move(float deltaSec) {
+std::list<VoxelCollision> &Physics::move(float deltaSec) {
     updateSpeed(deltaSec);
 
     WorldTransform targetTransform(m_worldObject.transform());

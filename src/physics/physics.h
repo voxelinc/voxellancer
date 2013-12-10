@@ -4,7 +4,7 @@
 #include <memory>
 #include <glm/glm.hpp>
 
-#include "collision/collision.h"
+#include "collision/voxelcollision.h"
 #include "property/property.h"
 #include "worldtransform.h"
 #include "world/helper/impact.h"
@@ -29,7 +29,10 @@ public:
     const glm::vec3& acceleration() const;
     const glm::vec3& angularAcceleration() const;
 
-    std::list<Collision>& move(float deltaSec);
+    float mass() const;
+    bool massValid() const;
+
+    std::list<VoxelCollision>& move(float deltaSec);
 
     void accelerate(const glm::vec3& direction);
     void accelerateAngular(const glm::vec3& axis);
@@ -61,6 +64,6 @@ protected:
     Property<float> m_rotationFactor;
 
    // std::list<Impact> m_impacts;
-    std::list<Collision> m_collisions;
+    std::list<VoxelCollision> m_collisions;
 };
 

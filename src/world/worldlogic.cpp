@@ -17,11 +17,15 @@ WorldLogic::WorldLogic(World &world):
 void WorldLogic::update(float deltaSecs) {
     m_mover.moveWorldObjects(deltaSecs);
 
-    m_impactAccumulator.parse(m_mover.collisions());
-    m_impactResolver.alterVelocities(m_impactAccumulator.impacts());
+    m_voxelCollisionAccumulator.parse(m_mover.voxelCollisions());
 
-    damageForwardLoop(m_impactAccumulator.impacts());
-    m_impactAccumulator.clear();
+    m_damageImpactGenerator.parse(m_voxelCollisionAccumulator.worldObjectCollisions());
+    m_elasticImpactGenerator.parse(m_voxelCollisionAccumulator.worldObjectCollisions());
+
+    m_elasticImpactor.parse(m_elasticImpactGenerator.worldObjectImpacts());
+    damageForwardLoop(m_damageImpactGenerator.damageImpacts());
+
+//    m_impactAccumulator.clear();
 
 //    m_splitDetector.searchSplitOffs(m_damager.worldObjectModifications());
 //    m_splitter.split(m_splitDetector.worldObjectSplits());
@@ -45,9 +49,6 @@ void WorldLogic::update(float deltaSecs) {
  }
 
 void WorldLogic::damageForwardLoop(std::list<Impact> damageImpacts) {
-    if(damageImpacts.size() == 0)
-        return;
-
     while(damageImpacts.size() > 0) {
         m_damager.applyDamages(damageImpacts);
 

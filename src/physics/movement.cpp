@@ -71,7 +71,7 @@ bool Movement::performStepped() {
 
         m_worldObject.updateTransformAndGeode(newTransform.position(), newTransform.orientation());
 
-        const std::list<Collision>& collisions = m_collisionDetector.checkCollisions();
+        const std::list<VoxelCollision>& collisions = m_collisionDetector.checkCollisions();
 
         if(!collisions.empty()) {
             m_worldObject.updateTransformAndGeode(oldTransform.position(), oldTransform.orientation());
