@@ -11,7 +11,7 @@ void Splitter::split(std::list<WorldObjectSplit*> &splits) {
     m_splitOffWorldObjects.clear();
 
     for(WorldObjectSplit *split : splits) {
-        glow::AutoTimer t("Splitter: " + split->exWorldObject()->hudInfo().name());
+        glow::AutoTimer t("Splitter: " + split->exWorldObject()->objectInfo().name());
         WorldObject *worldObject = createWorldObjectFromOrphan(split);
         m_splitOffWorldObjects.push_back(worldObject);
         removeExtractedVoxelsFromEx(split);
@@ -26,7 +26,7 @@ WorldObject *Splitter::createWorldObjectFromOrphan(WorldObjectSplit *split) {
     WorldObject *worldObject;
 
     worldObject = new WorldObject(split->exWorldObject()->transform());
-    worldObject->hudInfo().setName(split->exWorldObject()->hudInfo().name() + " - splitoff");
+    worldObject->objectInfo().setName(split->exWorldObject()->objectInfo().name() + " - splitoff");
     worldObject->physics().setSpeed(worldObject->physics().speed());
     worldObject->physics().setAngularSpeed(worldObject->physics().angularSpeed());
 
