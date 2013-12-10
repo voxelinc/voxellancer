@@ -37,7 +37,7 @@ go_bandit([](){
 
             AssertThat(d->checkCollisions().size(), Equals(1));
 
-            b->transform().move(glm::vec3(2, 0, 0));
+            b->move(glm::vec3(2, 0, 0));
 
             AssertThat(d->checkCollisions().size(), Equals(0));
         });
@@ -57,11 +57,11 @@ go_bandit([](){
 
             AssertThat(d->checkCollisions().size(), IsGreaterThan(0));
 
-            b->transform().move(glm::vec3(2, 0, 0));
+            b->move(glm::vec3(2, 0, 0));
             b->collisionDetector().updateGeode();
             AssertThat(d->checkCollisions().size(), IsGreaterThan(0));
 
-            b->transform().move(glm::vec3(0, -2, 0));
+            b->move(glm::vec3(0, -2, 0));
             b->collisionDetector().updateGeode();
             AssertThat(d->checkCollisions().size(), Equals(0));
         });

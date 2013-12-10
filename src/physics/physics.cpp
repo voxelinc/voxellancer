@@ -1,6 +1,7 @@
+#include "physics.h"
+
 #include <glm/gtx/quaternion.hpp>
 #include <iostream>
-#include "physics.h"
 
 #include "worldtransform.h"
 #include "collision/collisiondetector.h"
@@ -18,16 +19,11 @@ Physics::Physics(WorldObject & worldObject) :
     m_angularDampening("physics.globalAngularDampening"),
     m_rotationFactor("physics.globalRotationFactor"),
     m_mass(0),
+    m_center(0),
     m_massValid(true),
     m_worldObject(worldObject)
 {
 
-}
-
-// only neccessary for manually constructed voxelclusters, not if
-// the cluster is build from clusterstore
-void Physics::finishInitialization() {
-    calculateMassAndCenter();
 }
 
 Physics::~Physics() {
@@ -57,20 +53,23 @@ const glm::vec3& Physics::angularAcceleration() const {
     return m_angularAcceleration;
 }
 
-void Physics::calculateMassAndCenter() {
+glm::vec3 Physics::calculateMassAndCenter() {
     if (m_massValid)
-        return;
+        m_center;
 
     glm::vec3 center;
     m_mass = 0;
     for (auto pair : m_worldObject.voxelMap()) {
         Voxel *voxel = pair.second;
-        m_mass += 1.0; // voxel.mass?
-        center += glm::vec3(voxel->gridCell()) * 1.0f; // voxel.mass?
+        m_mass += voxel->mass();
+        center += glm::vec3(voxel->gridCell()) * voxel->mass();
     }
     center /= m_mass;
-    m_worldObject.transform().setCenter(center);
+    m_mass *= glm::pow(m_worldObject.transform().scale(), 3.f);
     m_massValid = true;
+    m_center = center;
+
+    return m_center;
 }
 
 std::list<Impact> &Physics::move(float delta_sec) {
@@ -140,8 +139,8 @@ void Physics::resolveCollision(Collision & c, float delta_sec) {
     float vDiff = glm::abs(glm::length(v1 - v2));
 
     // new angular speed
-    glm::vec3 w1_ = glm::inverse((wo1->transform().orientation())) * (m_rotationFactor.get() * vDiff * (1.f / p1.m_mass) * glm::cross(normal, r1));
-    glm::vec3 w2_ = glm::inverse((wo2->transform().orientation())) * (m_rotationFactor.get() * vDiff * (1.f / p2.m_mass) * glm::cross(-normal, r2));
+    glm::vec3 w1_ = glm::inverse((wo1->transform().orientation())) * (m_rotationFactor.get() * vDiff * (p2.m_mass / (p1.m_mass + p2.m_mass)) * glm::cross(normal, r1));
+    glm::vec3 w2_ = glm::inverse((wo2->transform().orientation())) * (m_rotationFactor.get() * vDiff * (p1.m_mass / (p1.m_mass + p2.m_mass)) * glm::cross(-normal, r2));
 
     p1.m_speed = v1_;
     p2.m_speed = v2_;
@@ -160,8 +159,8 @@ void Physics::applyTransform() {
         if (isCollisionPossible()) {
             doSteppedTransform();
         } else {
-            m_worldObject.transform().setPosition(m_newTransform.position());
-            m_worldObject.transform().setOrientation(m_newTransform.orientation());
+            m_worldObject.setPosition(m_newTransform.position());
+            m_worldObject.setOrientation(m_newTransform.orientation());
         }
     }
 }
@@ -179,22 +178,22 @@ void Physics::doSteppedTransform() {
     float steps = calculateStepCount(m_oldTransform, m_newTransform);
 
     for (int i = 0; i <= steps; i++) {
-        m_worldObject.transform().setOrientation(glm::slerp(m_oldTransform.orientation(), m_newTransform.orientation(), i / steps));
-        m_worldObject.transform().setPosition(glm::mix(m_oldTransform.position(), m_newTransform.position(), i / steps));
+        m_worldObject.setOrientation(glm::slerp(m_oldTransform.orientation(), m_newTransform.orientation(), i / steps));
+        m_worldObject.setPosition(glm::mix(m_oldTransform.position(), m_newTransform.position(), i / steps));
         m_worldObject.collisionDetector().updateGeode();
         const std::list<Collision> & collisions = m_worldObject.collisionDetector().checkCollisions();
         if (!collisions.empty()) {
             assert(i > 0); // you're stuck, hopefully doesn't happen!
-            m_worldObject.transform().setOrientation(glm::slerp(m_oldTransform.orientation(), m_newTransform.orientation(), (i - 1) / steps));
-            m_worldObject.transform().setPosition(glm::mix(m_oldTransform.position(), m_newTransform.position(), (i - 1) / steps));
+            m_worldObject.setOrientation(glm::slerp(m_oldTransform.orientation(), m_newTransform.orientation(), (i - 1) / steps));
+            m_worldObject.setPosition(glm::mix(m_oldTransform.position(), m_newTransform.position(), (i - 1) / steps));
             assert(std::isfinite(m_worldObject.transform().orientation().x));
             break;
         }
     }
 }
 
-static float MAX_TRANSLATION_STEP_SIZE = 0.1f;
-static float MAX_ANGLE_STEP_SIZE = 10.0f;
+static float MAX_TRANSLATION_STEP_SIZE = 1.0f;
+static float MAX_ANGLE_STEP_SIZE = 30.0f;
 
 float Physics::calculateStepCount(const WorldTransform & oldTransform, const WorldTransform & newTransform) {
     float distance = glm::length(newTransform.position() - oldTransform.position());

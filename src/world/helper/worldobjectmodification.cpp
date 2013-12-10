@@ -10,10 +10,10 @@ WorldObject *WorldObjectModification::worldObject() {
     return m_worldObject;
 }
 
-void WorldObjectModification::cellCleared(const glm::ivec3 &cell) {
-    m_clearedCells.push_back(cell);
+void WorldObjectModification::removedVoxel(const glm::ivec3 &pos) {
+    m_removedVoxels.push_back(pos);
 }
 
-const std::list<glm::ivec3> &WorldObjectModification::clearedCells() {
-    return m_clearedCells;
+const std::vector<glm::ivec3> &WorldObjectModification::removedVoxels() {
+    return m_removedVoxels;
 }

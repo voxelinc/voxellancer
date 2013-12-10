@@ -17,8 +17,6 @@ public:
     WorldObject *exWorldObject();
     void setExWorldObject(WorldObject *exWorldObject);
 
-    glm::ivec3 gridLlf() const;
-
     std::list<Voxel*> splitOffVoxels();
 
 

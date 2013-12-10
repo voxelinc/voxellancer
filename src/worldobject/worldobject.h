@@ -16,7 +16,8 @@ class FuelVoxel;
 class WorldObject : public VoxelCluster
 {
 public:
-    WorldObject(float scale = 1.0f);
+    WorldObject(float scale = 1.0f, glm::vec3 center = glm::vec3(0));
+    WorldObject(const WorldTransform& transform);
     virtual ~WorldObject();
 
     CollisionDetector& collisionDetector();
@@ -28,7 +29,7 @@ public:
 
     virtual void update(float delta_sec);
 
-    std::list<Impact>& move(float delta_sec);
+    std::list<Impact>& updatePosition(float delta_sec);
 
     void addVoxel(Voxel* voxel);
     virtual void addEngineVoxel(EngineVoxel* voxel);
@@ -38,8 +39,10 @@ public:
     void removeVoxel(const glm::ivec3& position);
     
     void finishInitialization();
+    void recalculateCenterAndMass();
 
     Voxel *crucialVoxel();
+    void setCrucialVoxel(glm::ivec3 pos);
 
     void accelerate(glm::vec3 direction);
     void accelerateAngular(glm::vec3 axis);
@@ -48,9 +51,9 @@ public:
     virtual void onSpawnFail();
 
 protected:
-    WorldObject(Physics* physics, CollisionDetector* detector, float scale = 1.0f);    
-
+    WorldObject(Physics* physics, CollisionDetector* detector, float scale = 1.0f);
     std::unique_ptr<CollisionDetector> m_collisionDetector;
     std::unique_ptr<Physics> m_physics;
+    Voxel * m_crucialVoxel;
     ObjectInfo m_objectInfo;
 };

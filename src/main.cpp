@@ -50,7 +50,7 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, GL_TRUE);
 	if (key == GLFW_KEY_F5 && action == GLFW_PRESS)
-		glow::FileRegistry::instance().reloadAll();
+		glowutils::FileRegistry::instance().reloadAll();
 	if (key == GLFW_KEY_F6 && action == GLFW_PRESS)
 		game->reloadConfig();
 	game->inputHandler()->keyCallback(key, scancode, action, mods);

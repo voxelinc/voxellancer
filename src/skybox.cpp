@@ -33,8 +33,8 @@ Skybox::Skybox() :
 
 
 	/* Shaders */
-	glow::Shader * vertexShader = glow::createShaderFromFile(GL_VERTEX_SHADER, "data/skybox.vert");
-    glow::Shader * fragmentShader = glow::createShaderFromFile(GL_FRAGMENT_SHADER, "data/skybox.frag");
+    glow::Shader * vertexShader = glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/skybox.vert");
+    glow::Shader * fragmentShader = glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/skybox.frag");
 
 	m_shaderProgram = new glow::Program();
 	m_shaderProgram->attach(vertexShader, fragmentShader);

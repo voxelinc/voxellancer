@@ -21,6 +21,7 @@ class Voxel
 {
 public:
     Voxel(const glm::ivec3& gridCell, const int color = 0xFFFFFF, float mass = 1.0f, float hp = 1.0f);
+    Voxel(const Voxel& other);
     virtual ~Voxel();
 
     const glm::ivec3 &gridCell() const;

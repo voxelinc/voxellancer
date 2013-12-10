@@ -13,6 +13,7 @@ class Damager
 {
 public:
     void applyDamages(std::list<Impact> &impacts);
+    void reset();
 
     std::list<Impact> &dampedDeadlyImpacts();
     std::list<Impact> &deadlyImpacts();

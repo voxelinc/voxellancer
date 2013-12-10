@@ -20,14 +20,15 @@ void WorldLogic::update(float deltaSecs) {
     m_impactAccumulator.parse(m_mover.impacts());
     //m_impactResolver.alterVelocities(m_impactAccumulator.clusterImpacts());
 
+    m_impactAccumulator.applyOnImpactHooks();
+
     damageForwardLoop(m_impactAccumulator.impacts());
 
-    m_impactAccumulator.applyOnImpactHooks();
     m_impactAccumulator.clear();
 
-//    m_splitDetector.searchSplitOffs(m_damager.worldObjectModifications());
-//    m_splitter.split(m_splitDetector.worldObjectSplits());
-//    m_world.god().scheduleSpawns(m_splitter.splitOffWorldObjects());
+    m_splitDetector.searchSplitOffs(m_damager.worldObjectModifications());
+    m_splitter.split(m_splitDetector.worldObjectSplits());
+    m_world.god().scheduleSpawns(m_splitter.splitOffWorldObjects());
 
 //    m_wrecker.detectWreckages(m_damager.modifiedVoxelClusters());
 //    //m_wrecker.applyOnWreckageHooks();
@@ -47,10 +48,16 @@ void WorldLogic::update(float deltaSecs) {
  }
 
 void WorldLogic::damageForwardLoop(std::list<Impact> damageImpacts) {
-    if(damageImpacts.size() == 0)
-        return;
+    m_damager.reset();
+
 
     while(damageImpacts.size() > 0) {
+        // only treat clusters that aren't scheduled for removal anyway
+        /*for (Impact& impact : damageImpacts){
+            //if (m_world.god().scheduled)
+            if (impact.worldObject())
+        }*/
+
         m_damager.applyDamages(damageImpacts);
 
         m_damageForwarder.forwardDamageImpacts(m_damager.deadlyImpacts());
