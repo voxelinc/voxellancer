@@ -11,6 +11,7 @@ public:
     void setShip(Ship *ship);
     void move(glm::vec3 direction);
     void rotate(glm::vec3 direction);
+    void applyAcceleration();
     void setFollowCam();
     Ship* playerShip();
     void setShipToCam(float delta_sec);

@@ -6,9 +6,7 @@
 InputHandler::InputHandler(GLFWwindow *window, Camera *camera) :
 m_window(window),
 m_camera(camera),
-prop_rotationSpeed("input.rotationSpeed"),
-prop_moveSpeed("input.moveSpeed"),
-prop_rollSpeed("input.rollSpeed"),
+prop_deadzone("input.deadzone"),
 m_followCam(true)
 {
 
@@ -27,9 +25,7 @@ InputHandler::InputHandler(GLFWwindow *window, Player* player, Camera *camera) :
 m_window(window),
 m_player(player),
 m_camera(camera),
-prop_rotationSpeed("input.rotationSpeed"),
-prop_moveSpeed("input.moveSpeed"),
-prop_rollSpeed("input.rollSpeed"),
+prop_deadzone("input.deadzone"),
 m_followCam(true)
 {
 
@@ -113,7 +109,6 @@ void InputHandler::update(float delta_sec) {
 
 			// lookAt
             float rel = 20;
-            float deadzone = 0.1f;
             double dis = 0;
             float angX = 0;
             float angY = 0;
@@ -127,8 +122,7 @@ void InputHandler::update(float delta_sec) {
                     y = glm::min((double)m_cursorMaxDistance, y);
                     rot = glm::vec3(y,x, 0);
                     rot /= m_cursorMaxDistance;
-                    printf("%f %f\n", rot.y, rot.x);
-                    if (glm::length(rot) < deadzone)
+                    if (glm::length(rot) < prop_deadzone)
                         rot = glm::vec3(0);
                     if (glm::length(rot) > 1){
                         rot = glm::normalize(rot);
@@ -153,19 +147,12 @@ void InputHandler::update(float delta_sec) {
     }
 
     if (m_followCam){
-        m_player->setFollowCam();
+        m_player->applyAcceleration();
     }
     else{
         m_player->setShipToCam(delta_sec);
     }
 
-    /*
-    float z;
-    glReadPixels((int)0, (int)0, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &z);
-    printf("%f orig\n", z);
-    z = 2 * m_camera->zNear()*m_camera->zFar() / (m_camera->zFar() + m_camera->zNear() - (2 * z - 1)* (m_camera->zFar() - m_camera->zNear()));
-    printf("%f\n", z);
-    */
 	m_lastfocus = glfwGetWindowAttrib(m_window, GLFW_FOCUSED);
 }
 

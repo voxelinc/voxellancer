@@ -23,14 +23,20 @@ void Player::setShip(Ship* ship){
     setFollowCam();
 }
 
-void Player::setFollowCam(){
+void Player::applyAcceleration(){
     if (acc != glm::vec3(0))
         acc = glm::normalize(acc);
     m_playerShip->accelerate(acc);
+    if (accAng == glm::vec3(0)){
+        accAng = m_playerShip->physics().angularSpeed();
+        accAng *= -1.5f;
+    }
     m_playerShip->accelerateAngular(accAng);
     acc = glm::vec3(0);
     accAng = glm::vec3(0);
+}
 
+void Player::setFollowCam(){
     m_camera->setPosition(m_playerShip->transform().position());
     m_camera->move(glm::vec3(0, 5, 10));
     m_camera->setOrientation(m_playerShip->transform().orientation());
