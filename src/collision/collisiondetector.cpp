@@ -122,7 +122,7 @@ void CollisionDetector::checkCollisions(VoxelTreeNode* nodeA, VoxelTreeNode* nod
                 glm::vec3 v1 = targetTransform.applyTo(glm::vec3(nodeA->voxel()->gridCell())) - m_worldObject.transform().applyTo(glm::vec3(nodeA->voxel()->gridCell()));
                 glm::vec3 v2 = otherTargetTransform.applyTo(glm::vec3(nodeB->voxel()->gridCell())) - other->transform().applyTo(glm::vec3(nodeB->voxel()->gridCell()));
 
-                std::cout << toString(v1) << " " << toString(v2) << " " << other << std::endl;
+                glow::debug("%; %; %;", toString(v1), toString(v2), other);
 
                 m_collisions.push_back(VoxelCollision(VoxelCollisionParticipant(&m_worldObject, nodeA->voxel(), v1), VoxelCollisionParticipant(other, nodeB->voxel(), v2)));
             }

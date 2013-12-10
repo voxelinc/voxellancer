@@ -54,7 +54,7 @@ protected:
     WorldTreeNode *m_parent;
     AABB m_aabb;
     int m_level;
-    int m_extent;
+    float m_extent;
     std::list<WorldTreeGeode*> m_geodes;
     std::list<WorldTreeNode*> m_subnodes;
 

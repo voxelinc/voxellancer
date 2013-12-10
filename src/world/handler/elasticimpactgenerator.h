@@ -2,7 +2,7 @@
 
 #include <list>
 
-#include "collision/worldobjectcollision.h""
+#include "collision/worldobjectcollision.h"
 
 #include "world/helper/impact.h"
 

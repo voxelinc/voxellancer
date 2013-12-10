@@ -8,6 +8,9 @@
 
 #include "worldtree/worldtree.h"
 
+static const float ATOMIC_DIRECTIONAL_STEP = 0.4f;
+static const float ATOMIC_ANGULAR_STEP = 30.0f;
+static const float MAX_STEPPED_DISTANCE = 1.2f;
 
 Movement::Movement(WorldObject& worldObject, const WorldTransform& originalTransform, const WorldTransform& targetTransform):
     m_worldObject(worldObject),

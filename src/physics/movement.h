@@ -10,9 +10,6 @@ class WorldObject;
 class CollisionDetector;
 
 class Movement {
-static constexpr float ATOMIC_DIRECTIONAL_STEP = 0.4f;
-static constexpr float ATOMIC_ANGULAR_STEP = 30.0f;
-static constexpr float MAX_STEPPED_DISTANCE = 1.2f;
 
 
 public:

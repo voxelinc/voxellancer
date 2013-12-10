@@ -31,7 +31,7 @@ Bullet::Bullet(glm::vec3 position, glm::quat orientation, glm::vec3 direction, f
 
     finishInitialization();
 
-    std::cout << "bullet " << this << std::endl;
+    glow::debug("bullet %;", this);
 }
 
 void Bullet::update(float delta_sec){

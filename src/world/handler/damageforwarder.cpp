@@ -29,7 +29,7 @@ void DamageForwarder::forwardDamageImpacts(std::list<Impact> &dampedDeadlyImpact
             glm::vec3 voxelVec = static_cast<glm::vec3>(neighbour->gridCell() - deadVoxel->gridCell());
             glm::vec3 impactVec = glm::inverse(m_currentWorldObject->transform().orientation()) * dampedDeadlyImpact.speed();
 
-            std::cout << m_currentWorldObject << " forwarding to " << toString(neighbour->gridCell()) << ": " << toString(voxelVec) << " " << toString(impactVec) << std::endl;
+            glow::debug("%; forwarding to %;: %; %;", m_currentWorldObject, toString(neighbour->gridCell()), toString(voxelVec), toString(impactVec));
 
             float dotProduct = glm::dot(glm::normalize(impactVec * dampedDeadlyImpact.mass()), glm::normalize(voxelVec));
 
