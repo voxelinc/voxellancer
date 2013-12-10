@@ -6,7 +6,7 @@
 #include "collision/collisiondetector.h"
 #include "physics/physics.h"
 #include "voxel/voxelcluster.h"
-#include "ui/hudinfo.h"
+#include "ui/objectinfo.h"
 
 class EngineVoxel;
 class HardpointVoxel;
@@ -21,7 +21,7 @@ public:
 
     CollisionDetector& collisionDetector();
     Physics& physics();
-    HUDInfo& hudInfo();
+    ObjectInfo& objectInfo();
 
     AABB aabb();
     Sphere sphere();
@@ -50,5 +50,5 @@ protected:
 
     std::unique_ptr<CollisionDetector> m_collisionDetector;
     std::unique_ptr<Physics> m_physics;
-    HUDInfo m_hudInfo;
+    ObjectInfo m_objectInfo;
 };

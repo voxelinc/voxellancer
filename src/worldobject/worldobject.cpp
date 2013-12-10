@@ -11,7 +11,7 @@ WorldObject::WorldObject(float scale) :
     VoxelCluster(scale),
     m_physics(new Physics(*this)),
     m_collisionDetector(new CollisionDetector(*this)),
-    m_hudInfo()
+    m_objectInfo()
 {
 }
 
@@ -19,7 +19,7 @@ WorldObject::WorldObject(Physics* physics, CollisionDetector* detector, float sc
     VoxelCluster(scale),
     m_physics(physics),
     m_collisionDetector(detector),
-    m_hudInfo()
+    m_objectInfo()
 {
 }
 
@@ -35,8 +35,8 @@ Physics& WorldObject::physics() {
     return *m_physics;
 }
 
-HUDInfo& WorldObject::hudInfo(){
-    return m_hudInfo;
+ObjectInfo& WorldObject::objectInfo(){
+    return m_objectInfo;
 }
 
 AABB WorldObject::aabb() {

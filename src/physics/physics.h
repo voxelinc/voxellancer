@@ -12,7 +12,7 @@
 class WorldObject;
 class WorldTransform;
 
-class Physics  {
+class Physics {
 public:
     Physics(WorldObject & worldObject);
     virtual ~Physics();
