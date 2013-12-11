@@ -78,11 +78,11 @@ float Ship::minAimDistance(){ // is this needed ?!
 }
 
 void Ship::accelerate(glm::vec3 direction) {
-    direction *= prop_maxSpeed;
+    direction *= prop_maxSpeed.get();
     m_physics->accelerate(direction);
 }
 
 void Ship::accelerateAngular(glm::vec3 axis) {
-    axis *= prop_maxRotSpeed;
+    axis *= prop_maxRotSpeed.get();
     m_physics->accelerateAngular(axis);
 }
