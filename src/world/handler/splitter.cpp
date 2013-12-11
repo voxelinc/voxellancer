@@ -1,5 +1,7 @@
 #include "splitter.h"
 
+#include <glow/AutoTimer.h>
+
 #include "world/helper/worldobjectsplit.h"
 
 #include "worldobject/worldobject.h"
@@ -9,6 +11,7 @@ void Splitter::split(std::list<WorldObjectSplit*> &splits) {
     m_splitOffWorldObjects.clear();
 
     for(WorldObjectSplit *split : splits) {
+        glow::AutoTimer t("Splitter: " + split->exWorldObject()->objectInfo().name());
         WorldObject *worldObject = createWorldObjectFromOrphan(split);
         m_splitOffWorldObjects.push_back(worldObject);
         removeExtractedVoxelsFromEx(split);
@@ -20,18 +23,20 @@ std::list<WorldObject*> &Splitter::splitOffWorldObjects() {
 }
 
 WorldObject *Splitter::createWorldObjectFromOrphan(WorldObjectSplit *split) {
-    glm::ivec3 gridCellShift;
     WorldObject *worldObject;
 
-    worldObject = new WorldObject(split->exWorldObject()->transform().scale());
-    gridCellShift = split->gridLlf();
+    worldObject = new WorldObject(split->exWorldObject()->transform());
+    worldObject->objectInfo().setName(split->exWorldObject()->objectInfo().name() + " - splitoff");
+    worldObject->physics().setSpeed(worldObject->physics().speed());
+    worldObject->physics().setAngularSpeed(worldObject->physics().angularSpeed());
 
     for(Voxel *voxel : split->splitOffVoxels()) {
-        Voxel *voxelClone = new Voxel(voxel->gridCell() - gridCellShift, voxel->color(), voxel->mass());
+        Voxel *voxelClone = new Voxel(*voxel);
         worldObject->addVoxel(voxelClone);
     }
 
-   // voxelCluster->recalculateCenterAndMass(); TODO
+    worldObject->recalculateCenterAndMass();
+
     return worldObject;
 }
 

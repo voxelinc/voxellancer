@@ -5,6 +5,7 @@
 #include <glow/VertexAttributeBinding.h>
 #include <glow/Program.h>
 #include <glow/Buffer.h>
+#include <glow/Shader.h>
 #include <glowutils/File.h>
 
 #include <glm/glm.hpp>
@@ -68,8 +69,8 @@ bool VoxelRenderer::prepared(){
 
 void VoxelRenderer::createAndSetupShaders()
 {
-    glow::Shader * vertexShader = glow::createShaderFromFile(GL_VERTEX_SHADER, "data/voxelrenderer.vert");
-    glow::Shader * fragmentShader = glow::createShaderFromFile(GL_FRAGMENT_SHADER, "data/voxelrenderer.frag");
+    glow::Shader * vertexShader = glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/voxelrenderer.vert");
+    glow::Shader * fragmentShader = glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/voxelrenderer.frag");
 
     m_shaderProgram = new glow::Program();
     m_shaderProgram->attach(vertexShader, fragmentShader);

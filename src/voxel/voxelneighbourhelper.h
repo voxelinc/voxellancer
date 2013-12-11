@@ -9,16 +9,15 @@ class VoxelCluster;
 class VoxelNeighbourHelper
 {
 public:
-    VoxelNeighbourHelper(VoxelCluster *voxelCluster, Voxel *voxel, bool includeDiagonals = false);
+    VoxelNeighbourHelper(VoxelCluster *voxelCluster, bool includeDiagonals = true);
 
-    std::list<Voxel*> neighbours();
-
+    const std::list<Voxel*>& neighbours(const glm::ivec3& pos);
+    const std::list<Voxel*>& neighbours(const Voxel* voxel);
 
 protected:
-    Voxel *m_voxel;
     VoxelCluster *m_voxelCluster;
-    bool m_includeDiagonals;
     std::list<Voxel*> m_neighbours;
+    bool m_includeDiagonals;
 
-    void considerNeighbour(const glm::ivec3 &relativeCell);
+    void considerNeighbour(const glm::ivec3& pos, const glm::ivec3& offset);
 };

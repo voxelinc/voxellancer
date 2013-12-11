@@ -30,11 +30,11 @@ void Damager::applyDamages(std::list<DamageImpact> &damageImpacts) {
             auto i = m_worldObjectModificationMap.find(damageImpact.worldObject());
             if(i == m_worldObjectModificationMap.end()) {
                 WorldObjectModification modification(damageImpact.worldObject());
-                modification.cellCleared(voxel->gridCell());
+                modification.removedVoxel(voxel->gridCell());
                 m_worldObjectModificationMap.insert(std::pair<WorldObject*, WorldObjectModification>(damageImpact.worldObject(), modification));
             }
             else {
-                i->second.cellCleared(voxel->gridCell());
+                i->second.removedVoxel(voxel->gridCell());
             }
         }
     }
@@ -63,4 +63,8 @@ std::list<WorldObjectModification> Damager::worldObjectModifications() {
 
 DamageImpact Damager::dampDamageImpact(DamageImpact &undamped, float factor) {
     return DamageImpact(undamped.worldObject(), undamped.voxel(), undamped.damageVec() * factor);
+}
+
+void Damager::reset() {
+    m_worldObjectModificationMap.clear();
 }

@@ -41,11 +41,12 @@ public:
     void removeVoxel(const glm::ivec3& position);
 
     void finishInitialization();
+    glm::vec3 calculateMassAndCenter();
 
 
 protected:
-    glm::vec3 calculateMassAndCenter();
-    virtual void updateSpeed(float deltaSec);
+    virtual void updateSpeed(float delta_sec);
+
 
 protected:
     float m_mass;
@@ -62,7 +63,7 @@ protected:
     Property<float> m_dampening;
     Property<float> m_angularDampening;
 
-   // std::list<Impulse> m_impulses;
     std::list<VoxelCollision> m_collisions;
+    glm::vec3 m_center;
 };
 

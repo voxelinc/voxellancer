@@ -22,6 +22,12 @@ Voxel::Voxel(const glm::ivec3& gridCell, int color, float mass, float hp):
             gridCell.z >= 0 && gridCell.z < 256);
 }
 
+Voxel::Voxel(const Voxel& other):
+    Voxel(other.gridCell(), other.color(), other.mass(), other.hp())
+{
+
+}
+
 Voxel::~Voxel() {
 }
 
@@ -52,6 +58,10 @@ void Voxel::applyDamage(float deltaHp) {
 
 float Voxel::mass() const {
     return m_mass;
+}
+
+void Voxel::onRemoval() {
+
 }
 
 void Voxel::onDestruction() {

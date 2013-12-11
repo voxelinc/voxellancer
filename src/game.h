@@ -9,7 +9,6 @@
 
 #include <GLFW/glfw3.h>
 
-#include "camera.h"
 #include "ui/inputhandler.h"
 
 #include "utils/timedtask.h"
@@ -57,6 +56,7 @@ private:
 private:
 	GLFWwindow *m_window;
 	InputHandler m_inputHandler;
+    Player m_player;
 	Camera m_camera;
 
     World * m_world;

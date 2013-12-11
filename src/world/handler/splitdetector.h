@@ -1,7 +1,7 @@
 #pragma once
 
-#include <set>
 #include <list>
+#include <unordered_set>
 
 #include "world/helper/worldobjectmodification.h"
 
@@ -14,17 +14,16 @@ class SplitDetector
 {
 public:
     void searchSplitOffs(std::list<WorldObjectModification> worldObjectModifications);
+
     std::list<WorldObjectSplit*> &worldObjectSplits();
 
 
 protected:
     std::list<WorldObjectSplit*> m_worldObjectSplits;
-    WorldObject *m_currentWorldObject;
-
-    std::set<Voxel*> m_potentialOrphans;
 
     void clear();
-    void fillPotentialOrphans();
-    WorldObjectSplit *unmarkContinuousVoxels(Voxel *orphanVoxel);
+    void findSplits(WorldObject* currentWorldObject, std::unordered_set<Voxel*>& borderVoxel, bool foundSplit = false);
+    void createSplit(WorldObject* currentWorldObject, std::unordered_set<Voxel *>& splitVoxels);
+
 };
 

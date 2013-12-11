@@ -1,6 +1,7 @@
+#include "physics.h"
+
 #include <glm/gtx/quaternion.hpp>
 #include <iostream>
-#include "physics.h"
 
 #include "worldtransform.h"
 #include "collision/collisiondetector.h"
@@ -18,16 +19,11 @@ Physics::Physics(WorldObject& worldObject) :
     m_dampening("physics.globalDampening"),
     m_angularDampening("physics.globalAngularDampening"),
     m_mass(0),
+    m_center(0),
     m_massValid(true),
     m_worldObject(worldObject)
 {
 
-}
-
-// only neccessary for manually constructed voxelclusters, not if
-// the cluster is build from clusterstore
-void Physics::finishInitialization() {
-    calculateMassAndCenter();
 }
 
 Physics::~Physics() {
@@ -86,7 +82,6 @@ glm::vec3 Physics::calculateMassAndCenter() {
 
 std::list<VoxelCollision> &Physics::move(float deltaSec) {
     updateSpeed(deltaSec);
-
     WorldTransform targetTransform(m_worldObject.transform());
     targetTransform.moveWorld(m_speed * deltaSec);
     targetTransform.rotate(glm::quat(m_angularSpeed * deltaSec));

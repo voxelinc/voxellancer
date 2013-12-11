@@ -4,32 +4,37 @@
 
 #include <GLFW/glfw3.h>
 
-#include "camera.h"
-
 #include "property/propertymanager.h"
 #include "property/property.h"
 #include "worldobject/ship.h"
+#include "player.h"
 
 class WorldObject;
 
+// TODO: extract a Player from the inputhandler
 
 class InputHandler {
 public:
     InputHandler(GLFWwindow *window, Camera *camera);
+    InputHandler(GLFWwindow *window, Player *player, Camera *camera);
 	virtual ~InputHandler();
 
     void setPlayerShip(Ship *ship);
-
+    std::string playerTarget();
 
 	void resizeEvent(const unsigned int width, const unsigned int height);
 	void keyCallback(int key, int scancode, int action, int mods);
 	void update(float delta_sec);
 
 protected:
+
+    void toggleControls();
+    void selectNextTarget();
+    void adjustAim(double x, double y);
+
 	GLFWwindow *m_window;
 	Camera* m_camera;
-
-    Ship *m_playerShip;
+    Player* m_player;
 
 
 	int m_windowWidth, m_windowHeight;
@@ -40,14 +45,8 @@ protected:
 	int m_mouseControl;
 	int m_mouseControlToggled;
     int m_followCam;
+    
 
+    Property<float> prop_deadzone;
 
-    Property<float> prop_rotationSpeed;
-    Property<float> prop_rollSpeed;
-    Property<float> prop_moveSpeed;
-
-
-	void toggleControls();
-
-    void shoot(double x, double y);
 };

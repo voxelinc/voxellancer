@@ -6,41 +6,53 @@
 #include "collision/collisiondetector.h"
 #include "physics/physics.h"
 #include "voxel/voxelcluster.h"
-#include "ui/hudinfo.h"
+#include "ui/objectinfo.h"
+
+class EngineVoxel;
+class HardpointVoxel;
+class CockpitVoxel;
+class FuelVoxel;
 
 class WorldObject : public VoxelCluster
 {
 public:
-    WorldObject(float scale = 1.0f);
+    WorldObject(float scale = 1.0f, glm::vec3 center = glm::vec3(0));
+    WorldObject(const WorldTransform& transform);
     virtual ~WorldObject();
 
     CollisionDetector& collisionDetector();
     Physics& physics();
-    HUDInfo& hudInfo();
+    ObjectInfo& objectInfo();
 
     AABB aabb();
     Sphere sphere();
 
     virtual void update(float delta_sec);
 
-    std::list<VoxelCollision>& move(float delta_sec);
+    std::list<VoxelCollision>& performMovement(float delta_sec);
 
-    void addVoxel(Voxel * voxel);
-    void removeVoxel(const glm::ivec3 & position);
+    void addVoxel(Voxel* voxel);
+    virtual void addEngineVoxel(EngineVoxel* voxel);
+    virtual void addHardpointVoxel(HardpointVoxel* voxel);
+    virtual void addCockpitVoxel(CockpitVoxel* voxel);
+    virtual void addFuelVoxel(FuelVoxel* voxel);
+    void removeVoxel(const glm::ivec3& position);
+
     void finishInitialization();
+    void recalculateCenterAndMass();
 
     Voxel *crucialVoxel();
+    void setCrucialVoxel(const glm::ivec3& cell);
 
-    void accelerate(glm::vec3 direction);
-    void accelerateAngular(glm::vec3 axis);
+    virtual void accelerate(const glm::vec3& direction);
+    virtual void accelerateAngular(const glm::vec3& axis);
 
     void updateTransformAndGeode(const glm::vec3& position, const glm::quat& orientation);
 
-
 protected:
     WorldObject(Physics* physics, CollisionDetector* detector, float scale = 1.0f);
-
     std::unique_ptr<CollisionDetector> m_collisionDetector;
     std::unique_ptr<Physics> m_physics;
-    HUDInfo m_hudInfo;
+    Voxel * m_crucialVoxel;
+    ObjectInfo m_objectInfo;
 };

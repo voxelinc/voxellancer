@@ -9,7 +9,7 @@ void Mover::moveWorldObjects(float deltaSec) {
     m_voxelCollisions.clear();
 
     for (WorldObject *worldObject : World::instance()->worldObjects()) {
-        std::list<VoxelCollision> &collisions = worldObject->move(deltaSec);
+        std::list<VoxelCollision> &collisions = worldObject->performMovement(deltaSec);
         m_voxelCollisions.splice(m_voxelCollisions.end(), collisions);
     }
 }

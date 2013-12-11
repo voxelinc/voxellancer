@@ -24,7 +24,7 @@ public:
 	VoxelCluster(float scale);
     virtual ~VoxelCluster();
 
-    WorldTransform& transform();
+    const WorldTransform& transform();
     Voxel* voxel(const glm::ivec3& position);
     virtual void addVoxel(Voxel* voxel);
     virtual void removeVoxel(const glm::ivec3& position);
@@ -32,6 +32,10 @@ public:
 
     VoxelRenderData *voxelRenderData();
 
+    void setOrientation(const glm::quat& orientation);
+    void setPosition(const glm::vec3& pos);
+    void rotate(const glm::quat& param1);
+    void move(const glm::vec3& vec3);
 
 protected:
     VoxelRenderData m_voxelRenderData;
