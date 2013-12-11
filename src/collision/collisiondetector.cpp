@@ -23,6 +23,23 @@ AABB CollisionDetector::aabb(const WorldTransform& transform) const {
     return AABB::containing(sphere(transform));
 }
 
+void CollisionDetector::recalculateAABB() {
+    m_aabb = IAABB(glm::ivec3(0, 0, 0), glm::ivec3(0, 0, 0));
+    bool aabbInitialized = false;
+
+    for(const std::pair<const glm::ivec3, Voxel*>& p : m_worldObject.voxelMap()) {
+        assert(p.second != nullptr);
+
+        if(!aabbInitialized) {
+            m_aabb = IAABB(p.second->gridCell(), p.second->gridCell());
+            aabbInitialized = true;
+        }
+        else {
+            m_aabb.extend(p.second->gridCell());
+        }
+    }
+}
+
 Sphere CollisionDetector::sphere(const WorldTransform& transform) const {
     Sphere sphere;
     sphere.setPosition(transform.applyTo(glm::vec3(m_aabb.rub() + m_aabb.llf()) / 2.0f));

@@ -51,13 +51,13 @@ std::list<Voxel*> &Damager::deadVoxels() {
     return m_deadVoxels;
 }
 
-std::list<WorldObjectModification> Damager::worldObjectModifications() {
-    std::list<WorldObjectModification> result;
+std::list<WorldObjectModification>& Damager::worldObjectModifications() {
+    m_worldObjectModifications.clear();
 
     for(auto& pair : m_worldObjectModificationMap) {
-        result.push_back(pair.second);
+        m_worldObjectModifications.push_back(pair.second);
     }
-    return result;
+    return m_worldObjectModifications;
 }
 
 DamageImpact Damager::dampDamageImpact(DamageImpact &undamped, float factor) {

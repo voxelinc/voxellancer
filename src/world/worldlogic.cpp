@@ -28,6 +28,8 @@ void WorldLogic::update(float deltaSecs) {
     m_splitDetector.searchSplitOffs(m_damager.worldObjectModifications());
     m_splitter.split(m_splitDetector.worldObjectSplits());
 
+    m_boundsShrinker.shrink(m_damager.worldObjectModifications());
+
     m_world.god().scheduleSpawns(m_splitter.splitOffWorldObjects());
 
 //    m_wrecker.detectWreckages(m_damager.modifiedVoxelClusters());

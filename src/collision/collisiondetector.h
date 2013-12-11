@@ -24,6 +24,8 @@ public:
     void removeVoxel(const glm::ivec3 &position);
 
     AABB aabb(const WorldTransform& transform) const;
+    void recalculateAABB();
+
     Sphere sphere(const WorldTransform& transform) const;
 
     std::list<VoxelCollision> &checkCollisions();

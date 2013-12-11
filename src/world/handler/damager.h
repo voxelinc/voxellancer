@@ -18,7 +18,7 @@ public:
     std::list<DamageImpact> &dampedDeadlyDamageImpacts();
     std::list<DamageImpact> &deadlyDamageImpacts();
     std::list<Voxel*> &deadVoxels();
-    std::list<WorldObjectModification> worldObjectModifications();
+    std::list<WorldObjectModification>& worldObjectModifications();
 
 
 protected:
@@ -26,6 +26,7 @@ protected:
     std::list<DamageImpact> m_deadlyDamageImpacts;
     std::list<Voxel*> m_deadVoxels;
     std::map<WorldObject*, WorldObjectModification> m_worldObjectModificationMap;
+    std::list<WorldObjectModification> m_worldObjectModifications;
 
     DamageImpact dampDamageImpact(DamageImpact &undamped, float factor);
 };
