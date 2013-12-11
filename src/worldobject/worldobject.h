@@ -29,7 +29,7 @@ public:
 
     virtual void update(float delta_sec);
 
-    std::list<Impact>& updatePosition(float delta_sec);
+    std::list<VoxelCollision>& performMovement(float delta_sec);
 
     void addVoxel(Voxel* voxel);
     virtual void addEngineVoxel(EngineVoxel* voxel);
@@ -37,15 +37,18 @@ public:
     virtual void addCockpitVoxel(CockpitVoxel* voxel);
     virtual void addFuelVoxel(FuelVoxel* voxel);
     void removeVoxel(const glm::ivec3& position);
-    
+
     void finishInitialization();
     void recalculateCenterAndMass();
 
     Voxel *crucialVoxel();
-    void setCrucialVoxel(glm::ivec3 pos);
+    void setCrucialVoxel(const glm::ivec3& cell);
 
-    virtual void accelerate(glm::vec3 direction);
-    virtual void accelerateAngular(glm::vec3 axis);
+    virtual void accelerate(const glm::vec3& direction);
+    virtual void accelerateAngular(const glm::vec3& axis);
+
+    void updateTransformAndGeode(const glm::vec3& position, const glm::quat& orientation);
+
 
 protected:
     WorldObject(Physics* physics, CollisionDetector* detector, float scale = 1.0f);

@@ -54,7 +54,7 @@ void God::spawn() {
     for (WorldObject* worldObject : m_scheduledSpawns) {
         m_world.worldTree().insert(worldObject);
 
-        std::list<Collision> collisions = worldObject->collisionDetector().checkCollisions();
+        std::list<VoxelCollision> collisions = worldObject->collisionDetector().checkCollisions();
 
         //assert(collisions.size() == 0); // this is, by definition, an error condition
         if (collisions.size() > 0){ // clean up anyway (if assertion ignored)

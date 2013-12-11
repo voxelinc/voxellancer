@@ -11,15 +11,22 @@ WorldTransform::WorldTransform(glm::vec3 center, float scale) :
 
 }
 
+WorldTransform::WorldTransform(const WorldTransform& worldTransform, const glm::vec3& positionDelta, const glm::quat& orientationDelta):
+    WorldTransform(worldTransform)
+{
+    moveWorld(positionDelta);
+    rotate(orientationDelta);
+}
+
 WorldTransform::~WorldTransform() {
 
 }
 
-const glm::quat WorldTransform::orientation() const {
+const glm::quat& WorldTransform::orientation() const {
     return m_orientation;
 }
 
-void WorldTransform::setOrientation(glm::quat quat){
+void WorldTransform::setOrientation(const glm::quat& quat){
     assert(std::isfinite(quat.x));
     assert(std::isfinite(quat.y));
     assert(std::isfinite(quat.z));
@@ -31,18 +38,17 @@ const glm::vec3 &WorldTransform::position() const {
     return m_position;
 }
 
-void WorldTransform::setPosition(const glm::vec3 &pos){
+void WorldTransform::setPosition(const glm::vec3& pos){
 	m_position = pos;
 }
 
 // move in local axis direction
-void WorldTransform::move(glm::vec3 dist)
-{
+void WorldTransform::move(const glm::vec3& dist) {
     m_position += m_orientation * dist;
 }
 
 // move in world axis direction
-void WorldTransform::moveWorld(glm::vec3 dist) {
+void WorldTransform::moveWorld(const glm::vec3& dist) {
     m_position += dist;
 }
 
@@ -53,7 +59,6 @@ void WorldTransform::rotate(const glm::quat &qrot) {
 
 void WorldTransform::rotateWorld(const glm::quat &qrot) {
     m_orientation = qrot * m_orientation;
-
 }
 
 const glm::mat4 WorldTransform::matrix() const {
@@ -77,12 +82,12 @@ const glm::vec3 & WorldTransform::center() const {
     return m_center;
 }
 
-void WorldTransform::setCenter(glm::vec3 center) {
+void WorldTransform::setCenter(const glm::vec3& center) {
     m_center = center;
 }
 
 bool WorldTransform::operator==(const WorldTransform &other) {
-    return m_position == other.position() && 
+    return m_position == other.position() &&
            m_orientation == other.orientation() &&
            m_center == other.center() &&
            m_scale == other.scale();

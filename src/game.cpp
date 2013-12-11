@@ -38,11 +38,12 @@
 
 class Ship;
 
+
 Game::Game(GLFWwindow *window) :
-m_window(window),
-m_camera(),
-m_player(&m_camera),
-m_inputHandler(window, &m_player, &m_camera)
+    m_window(window),
+    m_camera(),
+    m_player(&m_camera),
+    m_inputHandler(window, &m_player, &m_camera)
 {
 	reloadConfig();
 }
@@ -67,6 +68,7 @@ void Game::initialize()
 
     glow::debug("create world");
     m_world = World::instance();
+    m_treeStateReporter.setWorldTree(&m_world->worldTree());
 
     glow::debug("Create Skybox");
 	m_skybox = std::unique_ptr<Skybox>(new Skybox);
@@ -94,6 +96,7 @@ void Game::initialize()
 
     //m_inputHandler.setVoxelCluster(m_testClusterMoveable);
 
+
     Ship *normandy = new Ship();
     ClusterCache::instance()->fillObject(normandy, "data/voxelcluster/normandy.csv");
 	normandy->setPosition(glm::vec3(0, 0, -100));
@@ -102,7 +105,7 @@ void Game::initialize()
     m_world->god().scheduleSpawn(normandy);
 
     Ship *testCluster = new Ship();
-    ClusterCache::instance()->fillObject(testCluster, "data/voxelcluster/basicship.csv");
+    ClusterCache::instance()->fillObject(testCluster, "data/voxelcluster/unogunner.csv");
     testCluster->setPosition(glm::vec3(0, 0, 10));
     testCluster->finishInitialization();
     testCluster->objectInfo().setName("basicship");
@@ -129,7 +132,7 @@ void Game::initialize()
     glow::debug("Initial spawn");
     m_world->god().spawn();
 
-	glow::debug("Setup Camersa");
+	glow::debug("Setup Camera");
 	//viewport set in resize
 	//m_camera.setPosition(glm::vec3(0, 5, 30));
 	m_camera.setZNear(1);
@@ -150,9 +153,12 @@ void Game::update(float delta_sec)
 {
     // skip non-updates
     if (delta_sec == 0) return;
+
     //if (delta_sec < 1 / 60) delta_sec = 1 / 60;
     // avoid big jumps after debugging ;)
     delta_sec = glm::min(1.f, delta_sec);
+
+    //m_treeStateReporter.nudge();
 
     m_inputHandler.update(delta_sec);
     World::instance()->update(delta_sec);
@@ -216,5 +222,22 @@ InputHandler * Game::inputHandler()
     return &m_inputHandler;
 }
 
+TreeStateReporter::TreeStateReporter():
+    TimedTask(std::chrono::duration<float>(1.5f)),
+    m_worldTree(nullptr)
+{
+
+}
+
+void TreeStateReporter::setWorldTree(WorldTree *worldTree) {
+    m_worldTree = worldTree;
+}
+
+void TreeStateReporter::exec() {
+    int nodes, empty, geodes, depth;
+    m_worldTree->poll(nodes, empty, geodes, depth);
+    std::cout << "WorldTree: " << nodes << " nodes; " << empty << " empty; " << geodes << " geodes; " << depth << " maxdepth" << std::endl;
+    m_worldTree->print();
+}
 
 
