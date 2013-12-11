@@ -44,7 +44,7 @@ public:
 
 
 protected:
-    void calculateMassAndCenter();
+    glm::vec3 calculateMassAndCenter();
     virtual void updateSpeed(float deltaSec);
 
 protected:

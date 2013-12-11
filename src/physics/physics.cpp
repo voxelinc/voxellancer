@@ -65,23 +65,23 @@ bool Physics::massValid() const {
     return m_massValid;
 }
 
-void Physics::calculateMassAndCenter() {
+glm::vec3 Physics::calculateMassAndCenter() {
+    if (m_massValid)
+        m_center;
+
     glm::vec3 center;
-
-    if (m_massValid) {
-        return;
-    }
-
     m_mass = 0;
     for (auto pair : m_worldObject.voxelMap()) {
         Voxel *voxel = pair.second;
-        m_mass += 1.0; // voxel.mass?
-        center += glm::vec3(voxel->gridCell()) * 1.0f; // voxel.mass?
+        m_mass += voxel->mass();
+        center += glm::vec3(voxel->gridCell()) * voxel->mass();
     }
-
     center /= m_mass;
-    m_worldObject.transform().setCenter(center);
+    m_mass *= glm::pow(m_worldObject.transform().scale(), 3.f);
     m_massValid = true;
+    m_center = center;
+
+    return m_center;
 }
 
 std::list<VoxelCollision> &Physics::move(float deltaSec) {
