@@ -32,7 +32,12 @@ Sphere CollisionDetector::sphere(const WorldTransform& transform) const {
 }
 
 void CollisionDetector::addVoxel(Voxel *voxel) {
-    m_aabb.extend(voxel->gridCell());
+    if(m_worldObject.voxelCount() == 0) {
+        m_aabb = IAABB(voxel->gridCell(), voxel->gridCell());
+    }
+    else {
+        m_aabb.extend(voxel->gridCell());
+    }
     m_voxelTree.insert(voxel);
 }
 

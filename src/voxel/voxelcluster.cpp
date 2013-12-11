@@ -53,8 +53,12 @@ VoxelRenderData *VoxelCluster::voxelRenderData() {
     return &m_voxelRenderData;
 }
 
-const std::unordered_map<glm::ivec3, Voxel*> & VoxelCluster::voxelMap() const {
+const std::unordered_map<glm::ivec3, Voxel*>& VoxelCluster::voxelMap() const {
     return m_voxels;
+}
+
+int VoxelCluster::voxelCount() const {
+    return m_voxels.size();
 }
 
 const WorldTransform& VoxelCluster::transform() {
