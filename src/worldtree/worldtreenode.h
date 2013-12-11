@@ -46,7 +46,7 @@ public:
 
 
 protected:
-    static const int MIN_EXTENT = 4;
+    static const int MIN_EXTENT = 16;
     static const int MAX_GEODES = 4;
 
     friend class WorldTreeCleaner;

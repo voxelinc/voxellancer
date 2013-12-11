@@ -21,6 +21,7 @@ public:
     virtual ~VoxelTreeNode();
 
     bool isAtomic() const;
+    bool isVoxel() const;
     bool isLeaf() const;
     bool isEmpty() const;
 
@@ -29,6 +30,8 @@ public:
 
     Voxel *voxel();
     const Voxel *voxel() const;
+
+    WorldObject* worldObject();
 
     const Grid3dAABB &gridAABB() const;
 

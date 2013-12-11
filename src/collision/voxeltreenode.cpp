@@ -27,12 +27,17 @@ bool VoxelTreeNode::isAtomic() const {
     return m_gridAABB.extent(XAxis) == 1;
 }
 
+bool VoxelTreeNode::isVoxel() const {
+    assert((m_voxel != nullptr) ? m_subnodes.size() == 0 : 1);
+    return m_voxel != nullptr;
+}
+
 bool VoxelTreeNode::isLeaf() const{
     return m_subnodes.size() == 0;
 }
 
 bool VoxelTreeNode::isEmpty() const{
-    return m_subnodes.size() == 0 && m_voxel == nullptr;
+    return isLeaf() && m_voxel == nullptr;
 }
 
 std::vector<VoxelTreeNode*> &VoxelTreeNode::subnodes() {
@@ -49,6 +54,10 @@ Voxel *VoxelTreeNode::voxel(){
 
 const Voxel *VoxelTreeNode::voxel() const{
     return m_voxel;
+}
+
+WorldObject* VoxelTreeNode::worldObject() {
+    return &m_worldObject;
 }
 
 const Grid3dAABB &VoxelTreeNode::gridAABB() const {

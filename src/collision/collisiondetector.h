@@ -48,7 +48,7 @@ public:
 
 
 protected:
-    void checkCollisions(VoxelTreeNode* nodeA, VoxelTreeNode* nodeB, WorldObject *  other);
+    void checkCollisions(VoxelTreeNode* nodeA, VoxelTreeNode* nodeB);
 
     WorldObject& m_worldObject;
     VoxelTreeNode m_voxelTree;
