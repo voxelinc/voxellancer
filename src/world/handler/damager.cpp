@@ -12,7 +12,6 @@
 void Damager::applyDamages(std::list<DamageImpact> &damageImpacts) {
     m_dampedDeadlyDamageImpacts.clear();
     m_deadlyDamageImpacts.clear();
-    m_worldObjectModificationMap.clear();
     m_deadVoxels.clear();
 
     for(DamageImpact &damageImpact : damageImpacts) {

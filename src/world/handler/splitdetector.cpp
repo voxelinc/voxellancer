@@ -14,7 +14,9 @@
 
 void SplitDetector::searchSplitOffs(std::list<WorldObjectModification> worldObjectModifications) {
     clear();
+
     for(WorldObjectModification& worldObjectModification : worldObjectModifications) {
+
         WorldObject* currentWorldObject = worldObjectModification.worldObject();
         if (currentWorldObject->voxelMap().size() > 1) {
             glow::AutoTimer t("Splitdetection: " + currentWorldObject->objectInfo().name());
