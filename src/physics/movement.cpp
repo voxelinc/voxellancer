@@ -86,7 +86,8 @@ bool Movement::performStepped() {
 }
 
 int Movement::calculateStepCount() {
-    int steps = std::max(static_cast<int>(glm::ceil(m_distance / ATOMIC_DIRECTIONAL_STEP)) - 1, 1); // at least one!
+    int steps = std::max(static_cast<int>(glm::ceil(m_distance / ATOMIC_DIRECTIONAL_STEP)) - 1, 1); // at least one
+
     float angularDiff = glm::angle(glm::inverse(m_targetTransform.orientation()) * m_originalTransform.orientation());
 
     if (std::isfinite(angularDiff)) { // sometimes glm::angle returns INF for really small angles

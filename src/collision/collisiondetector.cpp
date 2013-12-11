@@ -38,6 +38,8 @@ void CollisionDetector::recalculateAABB() {
             m_aabb.extend(p.second->gridCell());
         }
     }
+
+    m_worldTree->aabbChanged(m_geode);
 }
 
 Sphere CollisionDetector::sphere(const WorldTransform& transform) const {

@@ -69,6 +69,8 @@ void WorldTreeNode::insert(WorldTreeGeode *geode) {
         }
     }
 
+    assert(geode->aabb().intersects(m_aabb));
+
     if(isLeaf()) {
         m_geodes.push_back(geode);
         if(m_geodes.size() > MAX_GEODES && m_extent > MIN_EXTENT) {
@@ -103,6 +105,8 @@ std::set<WorldTreeGeode*> WorldTreeNode::geodesInAABB(const AABB &aabb) const {
 
     if(isLeaf()) {
         for(WorldTreeGeode *geode : m_geodes) {
+            assert(geode->aabb().intersects(m_aabb));
+
             if(aabb.intersects(geode->aabb())) {
                 result.insert(geode);
             }
@@ -123,6 +127,8 @@ std::set<WorldTreeGeode*> WorldTreeNode::geodesInAABB(const AABB &aabb) const {
 bool WorldTreeNode::areGeodesInAABB(const AABB& aabb, WorldTreeGeode *ignore) const {
     if(isLeaf()) {
         for(WorldTreeGeode* geode : m_geodes) {
+            assert(geode->aabb().intersects(m_aabb));
+
             if(geode == ignore) {
                 continue;
             }
@@ -184,7 +190,7 @@ void WorldTreeNode::print() {
     indent(); std::cout << m_level << ": " << toString(m_aabb) << std::endl;
 
     for(WorldTreeGeode* geode : m_geodes) {
-        indent(); std::cout << "  Geode " << geode->worldObject()->objectInfo().name() << "(" << geode->worldObject() << ") " << toString(geode->aabb()) << std::endl;
+        indent(); std::cout << "  Geode " << /*geode->worldObject()->objectInfo().name() <<*/ "(" << geode->worldObject() << ") " << toString(geode->aabb()) << std::endl;
     }
 
     for(WorldTreeNode* subnode : m_subnodes) {
@@ -208,6 +214,7 @@ void WorldTreeNode::split() {
             }
         }
     }
+    m_geodes.clear();
 }
 
 void WorldTreeNode::unsplit() {

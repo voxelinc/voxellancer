@@ -49,6 +49,7 @@ public:
 
     void updateTransformAndGeode(const glm::vec3& position, const glm::quat& orientation);
 
+
 protected:
     WorldObject(Physics* physics, CollisionDetector* detector, float scale = 1.0f);
     std::unique_ptr<CollisionDetector> m_collisionDetector;

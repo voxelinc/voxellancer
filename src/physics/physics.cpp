@@ -1,14 +1,21 @@
 #include "physics.h"
 
-#include <glm/gtx/quaternion.hpp>
 #include <iostream>
 
+#include <glm/gtx/quaternion.hpp>
+
 #include "worldtransform.h"
+
 #include "collision/collisiondetector.h"
+
 #include "worldobject/worldobject.h"
-#include "worldtree/worldtreegeode.h"
-#include "world/world.h"
 #include "worldtree/worldtree.h"
+
+#include "worldtree/worldtreegeode.h"
+
+#include "world/world.h"
+
+#include "utils/tostring.h"
 
 
 Physics::Physics(WorldObject& worldObject) :
@@ -82,6 +89,7 @@ glm::vec3 Physics::calculateMassAndCenter() {
 
 std::list<VoxelCollision> &Physics::move(float deltaSec) {
     updateSpeed(deltaSec);
+
     WorldTransform targetTransform(m_worldObject.transform());
     targetTransform.moveWorld(m_speed * deltaSec);
     targetTransform.rotate(glm::quat(m_angularSpeed * deltaSec));

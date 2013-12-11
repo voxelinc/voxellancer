@@ -6,6 +6,7 @@
 
 #include "world.h"
 #include "god.h"
+#include "glow/AutoTimer.h"
 
 
 WorldLogic::WorldLogic(World &world):
@@ -52,6 +53,12 @@ void WorldLogic::update(float deltaSecs) {
 void WorldLogic::damageForwardLoop(std::list<DamageImpact> damageImpacts) {
     m_damager.reset();
 
+    if(damageImpacts.empty()) {
+        return;
+    }
+
+
+
     while(damageImpacts.size() > 0) {
         m_damager.applyDamages(damageImpacts);
 
@@ -64,3 +71,4 @@ void WorldLogic::damageForwardLoop(std::list<DamageImpact> damageImpacts) {
         damageImpacts = m_damageForwarder.forwardedDamageImpacts();
     }
 }
+

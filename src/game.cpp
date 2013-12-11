@@ -105,7 +105,7 @@ void Game::initialize()
     m_world->god().scheduleSpawn(normandy);
 
     Ship *testCluster = new Ship();
-    ClusterCache::instance()->fillObject(testCluster, "data/voxelcluster/basicship.csv");
+    ClusterCache::instance()->fillObject(testCluster, "data/voxelcluster/unogunner.csv");
     testCluster->setPosition(glm::vec3(0, 0, 10));
     testCluster->finishInitialization();
     testCluster->objectInfo().setName("basicship");
@@ -132,7 +132,7 @@ void Game::initialize()
     glow::debug("Initial spawn");
     m_world->god().spawn();
 
-	glow::debug("Setup Camersa");
+	glow::debug("Setup Camera");
 	//viewport set in resize
 	//m_camera.setPosition(glm::vec3(0, 5, 30));
 	m_camera.setZNear(1);
@@ -153,6 +153,7 @@ void Game::update(float delta_sec)
 {
     // skip non-updates
     if (delta_sec == 0) return;
+
     //if (delta_sec < 1 / 60) delta_sec = 1 / 60;
     // avoid big jumps after debugging ;)
     delta_sec = glm::min(1.f, delta_sec);
