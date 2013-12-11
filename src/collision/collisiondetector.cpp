@@ -111,7 +111,7 @@ void CollisionDetector::updateGeode() {
 
 std::list<VoxelCollision>& CollisionDetector::checkCollisions() {
     assert(m_geode != nullptr);
-    assert(m_worldObject.voxelCount() > 0);
+
 
     m_collisions.clear();
 
@@ -121,7 +121,6 @@ std::list<VoxelCollision>& CollisionDetector::checkCollisions() {
     for (WorldTreeGeode* possibleCollider : possibleColliders) {
         assert(possibleCollider->worldObject() != nullptr);
         WorldObject* other = possibleCollider->worldObject();
-        assert(other->voxelCount() > 0);
 
         checkCollisions(&m_voxelTree, &other->collisionDetector().voxeltree());
     }
