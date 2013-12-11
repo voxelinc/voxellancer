@@ -48,61 +48,61 @@ go_bandit([]() {
         });
 
         it("Most basic test", [&] {
-            Impulse i(a, a->voxel(glm::ivec3(0, 0, 0)), glm::vec3(1, 0, 0), 1.0);
+            DamageImpact i(a, a->voxel(glm::ivec3(0, 0, 0)), glm::vec3(1, 0, 0));
 
-            std::list<Impulse> impulses{i};
+            std::list<DamageImpact> impulses{i};
 
-            df->forwardDamageImpulses(impulses);
+            df->forwardDamageImpacts(impulses);
 
-            AssertThat(df->forwardedDamageImpulses().size(), Equals(1));
+            AssertThat(df->forwardedDamageImpacts().size(), Equals(1));
 
-            Impulse f = df->forwardedDamageImpulses().front();
-            AssertThat(f.speed(), EqualsWithDelta(glm::vec3(1.0, 0.0, 0.0), glm::vec3(0.1, 0.1, 0.1)));
+            DamageImpact f = df->forwardedDamageImpacts().front();
+            AssertThat(f.damageVec(), EqualsWithDelta(glm::vec3(1.0, 0.0, 0.0), glm::vec3(0.1, 0.1, 0.1)));
         });
 
         it("Negative direction test", [&] {
-            Impulse i(a, a->voxel(glm::ivec3(2, 0, 0)), glm::vec3(-2, 0, 0), 1.0);
+            DamageImpact i(a, a->voxel(glm::ivec3(2, 0, 0)), glm::vec3(-2, 0, 0));
 
-            std::list<Impulse> impulses{i};
+            std::list<DamageImpact> impulses{i};
 
-            df->forwardDamageImpulses(impulses);
+            df->forwardDamageImpacts(impulses);
 
-            AssertThat(df->forwardedDamageImpulses().size(), Equals(1));
+            AssertThat(df->forwardedDamageImpacts().size(), Equals(1));
 
-            Impulse f = df->forwardedDamageImpulses().front();
-            AssertThat(f.speed(), EqualsWithDelta(glm::vec3(-2.0, 0.0, 0.0), glm::vec3(0.1, 0.1, 0.1)));
+            DamageImpact f = df->forwardedDamageImpacts().front();
+            AssertThat(f.damageVec(), EqualsWithDelta(glm::vec3(-2.0, 0.0, 0.0), glm::vec3(0.1, 0.1, 0.1)));
             AssertThat(f.voxel(), Equals(a->voxel(glm::ivec3(1, 0, 0))));
         });
 
         it("Z Axis Test", [&] {
 
-            Impulse i1(b, b->voxel(glm::ivec3(0, 0, 0)), glm::vec3(0, 0, 5), 1.0);
-            Impulse i2(b, b->voxel(glm::ivec3(0, 0, 3)), glm::vec3(0, 0, -3), 1.0);
+            DamageImpact i1(b, b->voxel(glm::ivec3(0, 0, 0)), glm::vec3(0, 0, 5));
+            DamageImpact i2(b, b->voxel(glm::ivec3(0, 0, 3)), glm::vec3(0, 0, -3));
 
-            std::list<Impulse> impulses{i1, i2};
+            std::list<DamageImpact> impulses{i1, i2};
 
-            df->forwardDamageImpulses(impulses);
+            df->forwardDamageImpacts(impulses);
 
-            AssertThat(df->forwardedDamageImpulses().size(), Equals(2));
+            AssertThat(df->forwardedDamageImpacts().size(), Equals(2));
 
-            Impulse f1 = df->forwardedDamageImpulses().front();
-            Impulse f2 = df->forwardedDamageImpulses().back();
-            AssertThat(f1.speed(), EqualsWithDelta(glm::vec3(0.0, 0.0, 5.0), glm::vec3(0.1, 0.1, 0.1)));
-            AssertThat(f2.speed(), EqualsWithDelta(glm::vec3(0.0, 0.0, -3.0), glm::vec3(0.1, 0.1, 0.1)));
+            DamageImpact f1 = df->forwardedDamageImpacts().front();
+            DamageImpact f2 = df->forwardedDamageImpacts().back();
+            AssertThat(f1.damageVec(), EqualsWithDelta(glm::vec3(0.0, 0.0, 5.0), glm::vec3(0.1, 0.1, 0.1)));
+            AssertThat(f2.damageVec(), EqualsWithDelta(glm::vec3(0.0, 0.0, -3.0), glm::vec3(0.1, 0.1, 0.1)));
         });
 
         it("Forwarding from angle != perpendicular", [&] {
-            Impulse i(a, a->voxel(glm::ivec3(0, 0, 0)), glm::vec3(1, 1, 0), 1.0);
+            DamageImpact i(a, a->voxel(glm::ivec3(0, 0, 0)), glm::vec3(1, 1, 0));
 
-            std::list<Impulse> impulses{i};
+            std::list<DamageImpact> impulses{i};
 
-            df->forwardDamageImpulses(impulses);
+            df->forwardDamageImpacts(impulses);
 
 
-            Impulse f = df->forwardedDamageImpulses().front();
+            DamageImpact f = df->forwardedDamageImpacts().front();
 
-            AssertThat(glm::length(f.speed()), EqualsWithDelta(glm::length(i.speed()) / 2.0, 0.05));
-            AssertThat(glm::normalize(f.speed()), EqualsWithDelta(glm::normalize(i.speed()), glm::vec3(0.1, 0.1, 0.1)));
+            AssertThat(glm::length(f.damageVec()), EqualsWithDelta(glm::length(i.damageVec()) / 2.0, 0.05));
+            AssertThat(glm::normalize(f.damageVec()), EqualsWithDelta(glm::normalize(i.damageVec()), glm::vec3(0.1, 0.1, 0.1)));
         });
     });
 });

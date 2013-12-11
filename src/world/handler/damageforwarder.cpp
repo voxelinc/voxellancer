@@ -21,7 +21,7 @@ void DamageForwarder::forwardDamageImpacts(std::list<DamageImpact> &dampedDeadly
         Voxel *deadVoxel = dampedDeadlyDamageImpact.voxel();
 
         m_currentWorldObject = dampedDeadlyDamageImpact.worldObject();
-        VoxelNeighbourHelper nHelper(m_currentWorldObject);
+        VoxelNeighbourHelper nHelper(m_currentWorldObject, false);
         const std::list<Voxel*>& neighbours = nHelper.neighbours(deadVoxel);
 
         for(Voxel *neighbour : neighbours) {
