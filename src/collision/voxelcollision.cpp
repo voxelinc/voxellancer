@@ -4,10 +4,9 @@
 #include "voxel/voxel.h"
 
 
-VoxelCollisionParticipant::VoxelCollisionParticipant(WorldObject* worldObject, Voxel* voxel, const glm::vec3& speed):
+VoxelCollisionParticipant::VoxelCollisionParticipant(WorldObject* worldObject, Voxel* voxel):
     m_worldObject(worldObject),
-    m_voxel(voxel),
-    m_speed(speed)
+    m_voxel(voxel)
 {
 
 }
@@ -18,10 +17,6 @@ WorldObject* VoxelCollisionParticipant::worldObject() {
 
 Voxel* VoxelCollisionParticipant::voxel() {
     return m_voxel;
-}
-
-const glm::vec3 &VoxelCollisionParticipant::speed() const {
-    return m_speed;
 }
 
 VoxelCollision::VoxelCollision(const VoxelCollisionParticipant& a, const VoxelCollisionParticipant& b):

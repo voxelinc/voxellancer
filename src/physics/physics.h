@@ -7,7 +7,7 @@
 #include "collision/voxelcollision.h"
 #include "property/property.h"
 #include "worldtransform.h"
-#include "world/helper/impact.h"
+#include "physics/impulse.h"
 
 #include "movement.h"
 
@@ -61,9 +61,8 @@ protected:
 
     Property<float> m_dampening;
     Property<float> m_angularDampening;
-    Property<float> m_rotationFactor;
 
-   // std::list<Impact> m_impacts;
+   // std::list<Impulse> m_impulses;
     std::list<VoxelCollision> m_collisions;
 };
 

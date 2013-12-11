@@ -4,18 +4,18 @@
 
 #include "collision/worldobjectcollision.h"
 
-#include "world/helper/impact.h"
+#include "world/helper/damageimpact.h"
 
-#include "impactaccumulator.h"
+#include "world/helper/voxelaccumulator.h"
 
 
 class DamageImpactGenerator {
 public:
     void parse(std::list<WorldObjectCollision>& worldObjectCollisions);
 
-    std::list<Impact>& damageImpacts();
+    std::list<DamageImpact>& damageImpacts();
 
 
 protected:
-    ImpactAccumulator m_impactAccumulator;
+    VoxelAccumulator<DamageImpact> m_damageImpactAccumulator;
 };

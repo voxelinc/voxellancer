@@ -6,10 +6,10 @@
 class Voxel;
 class WorldObject;
 
-class Impact
+class Impulse
 {
 public:
-    Impact(WorldObject* worldObject, Voxel* voxel, const glm::vec3& speed, float mass);
+    Impulse(WorldObject* worldObject, Voxel* voxel, const glm::vec3& speed, float mass, const glm::vec3& normal);
 
     WorldObject* worldObject();
     const WorldObject* worldObject() const;
@@ -21,7 +21,10 @@ public:
 
     float mass() const;
 
-    void add(const Impact& impact);
+    const glm::vec3& normal() const;
+
+
+    void add(const Impulse& impulse);
 
 
 protected:
@@ -29,5 +32,6 @@ protected:
     Voxel* m_voxel;
     glm::vec3 m_speed;
     float m_mass;
+    glm::vec3 m_normal;
 };
 

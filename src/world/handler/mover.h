@@ -2,7 +2,7 @@
 
 #include <list>
 #include "collision/voxelcollision.h"
-#include "world/helper/impact.h"
+#include "physics/impulse.h"
 
 class Mover
 {

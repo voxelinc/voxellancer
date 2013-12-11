@@ -10,6 +10,7 @@ class WorldTransform {
 
 public:
     WorldTransform(glm::vec3 center = glm::vec3(0), float scale = 1.0);
+    WorldTransform(const WorldTransform& worldTransform, const glm::vec3& positionDelta, const glm::quat& orientationDelta);
 	virtual ~WorldTransform();
 
 	const glm::vec3 &position() const;

@@ -111,20 +111,7 @@ void CollisionDetector::checkCollisions(VoxelTreeNode* nodeA, VoxelTreeNode* nod
     if (nodeA->boundingSphere().intersects(nodeB->boundingSphere())) {
         if (nodeA->isLeaf() && nodeB->isLeaf()) {
             if (nodeA->voxel() != nullptr && nodeB->voxel() != nullptr) {
-                WorldTransform targetTransform(m_worldObject.transform());
-                targetTransform.moveWorld(m_worldObject.physics().speed());
-                targetTransform.rotate(glm::quat(m_worldObject.physics().angularSpeed()));
-
-                WorldTransform otherTargetTransform(other->transform());
-                otherTargetTransform.moveWorld(other->physics().speed());
-                otherTargetTransform.rotate(glm::quat(other->physics().angularSpeed()));
-
-                glm::vec3 v1 = targetTransform.applyTo(glm::vec3(nodeA->voxel()->gridCell())) - m_worldObject.transform().applyTo(glm::vec3(nodeA->voxel()->gridCell()));
-                glm::vec3 v2 = otherTargetTransform.applyTo(glm::vec3(nodeB->voxel()->gridCell())) - other->transform().applyTo(glm::vec3(nodeB->voxel()->gridCell()));
-
-                glow::debug("%; %; %;", toString(v1), toString(v2), other);
-
-                m_collisions.push_back(VoxelCollision(VoxelCollisionParticipant(&m_worldObject, nodeA->voxel(), v1), VoxelCollisionParticipant(other, nodeB->voxel(), v2)));
+                m_collisions.push_back(VoxelCollision(VoxelCollisionParticipant(&m_worldObject, nodeA->voxel()), VoxelCollisionParticipant(other, nodeB->voxel())));
             }
         }
         else {

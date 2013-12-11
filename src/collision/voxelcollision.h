@@ -9,17 +9,14 @@ class Voxel;
 class VoxelCollisionParticipant
 {
 public:
-    VoxelCollisionParticipant(WorldObject* worldObject, Voxel* voxel, const glm::vec3& speed);
+    VoxelCollisionParticipant(WorldObject* worldObject, Voxel* voxel);
 
     WorldObject* worldObject();
     Voxel* voxel();
-    const glm::vec3& speed() const;
-
 
 protected:
     WorldObject* m_worldObject;
     Voxel* m_voxel;
-    glm::vec3 m_speed;
 };
 
 class VoxelCollision

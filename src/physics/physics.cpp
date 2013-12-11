@@ -17,7 +17,6 @@ Physics::Physics(WorldObject& worldObject) :
     m_angularAcceleration(0),
     m_dampening("physics.globalDampening"),
     m_angularDampening("physics.globalAngularDampening"),
-    m_rotationFactor("physics.globalRotationFactor"),
     m_mass(0),
     m_massValid(true),
     m_worldObject(worldObject)

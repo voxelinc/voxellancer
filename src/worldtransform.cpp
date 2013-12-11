@@ -11,6 +11,13 @@ WorldTransform::WorldTransform(glm::vec3 center, float scale) :
 
 }
 
+WorldTransform::WorldTransform(const WorldTransform& worldTransform, const glm::vec3& positionDelta, const glm::quat& orientationDelta):
+    WorldTransform(worldTransform)
+{
+    moveWorld(positionDelta);
+    rotate(orientationDelta);
+}
+
 WorldTransform::~WorldTransform() {
 
 }
@@ -82,7 +89,7 @@ void WorldTransform::setCenter(glm::vec3 center) {
 }
 
 bool WorldTransform::operator==(const WorldTransform &other) {
-    return m_position == other.position() && 
+    return m_position == other.position() &&
            m_orientation == other.orientation() &&
            m_center == other.center() &&
            m_scale == other.scale();
