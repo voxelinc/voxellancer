@@ -105,7 +105,7 @@ void Game::initialize()
     m_world->god().scheduleSpawn(normandy);
 
     Ship *testCluster = new Ship();
-    ClusterCache::instance()->fillObject(testCluster, "data/voxelcluster/unogunner.csv");
+    ClusterCache::instance()->fillObject(testCluster, "data/voxelcluster/basicship.csv");
     testCluster->setPosition(glm::vec3(0, 0, 10));
     testCluster->finishInitialization();
     testCluster->objectInfo().setName("basicship");

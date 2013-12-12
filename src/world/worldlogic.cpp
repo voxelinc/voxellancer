@@ -57,6 +57,7 @@ void WorldLogic::damageForwardLoop(std::list<DamageImpact> damageImpacts) {
         return;
     }
 
+            glow::AutoTimer t("damageForwardLoop");
 
 
     while(damageImpacts.size() > 0) {

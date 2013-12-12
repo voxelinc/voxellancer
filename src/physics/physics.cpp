@@ -90,12 +90,14 @@ glm::vec3 Physics::calculateMassAndCenter() {
 std::list<VoxelCollision> &Physics::move(float deltaSec) {
     updateSpeed(deltaSec);
 
-    WorldTransform targetTransform(m_worldObject.transform());
-    targetTransform.moveWorld(m_speed * deltaSec);
-    targetTransform.rotate(glm::quat(m_angularSpeed * deltaSec));
+    if(m_speed != glm::vec3(0.0f) || m_angularSpeed != glm::vec3(0.0f)) {
+        WorldTransform targetTransform(m_worldObject.transform());
+        targetTransform.moveWorld(m_speed * deltaSec);
+        targetTransform.rotate(glm::quat(m_angularSpeed * deltaSec));
 
-    Movement movement(m_worldObject, m_worldObject.transform(), targetTransform);
-    movement.perform();
+        Movement movement(m_worldObject, m_worldObject.transform(), targetTransform);
+        movement.perform();
+    }
 
     return m_worldObject.collisionDetector().lastCollisions();
 }
@@ -123,7 +125,7 @@ void Physics::removeVoxel(const glm::ivec3& position) {
     // but there should be tests to verify this! (1 = mass of voxel)
 }
 
-void Physics::updateSpeed(float deltaSec){
+void Physics::updateSpeed(float deltaSec) {
     m_speed *= (1.f - m_dampening * deltaSec);
     m_speed += m_acceleration * deltaSec;
 
