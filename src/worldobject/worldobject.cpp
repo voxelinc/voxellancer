@@ -108,9 +108,6 @@ void WorldObject::recalculateCenterAndMass() {
     m_collisionDetector->updateGeode();
 }
 
-
-
-
 void WorldObject::accelerate(glm::vec3 direction) {
     m_physics->accelerate(direction);
 }
@@ -122,7 +119,15 @@ void WorldObject::accelerateAngular(glm::vec3 axis) {
 Voxel *WorldObject::crucialVoxel() {
     return m_crucialVoxel;
 }
+
 void WorldObject::setCrucialVoxel(glm::ivec3 pos) {
     m_crucialVoxel = voxel(pos);
 }
 
+void WorldObject::onImpact(){
+
+}
+
+void WorldObject::onSpawnFail(){
+
+}

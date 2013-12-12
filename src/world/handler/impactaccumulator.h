@@ -22,6 +22,8 @@ public:
 //    std::list<Impact> &clusterImpacts();
     std::list<Impact> impacts();
 
+    void applyOnImpactHooks();   
+
 
 protected:
  //   std::list<Impact> m_clusterImpacts;
