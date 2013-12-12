@@ -57,6 +57,40 @@ void Game::reloadConfig() {
 
 void Game::initialize()
 {
+    int width, height;
+    glfwGetWindowSize(m_window, &width, &height);
+
+    m_framebuffer = 0;
+    m_color = 1;
+    m_depth = 2;
+
+    glGenFramebuffers(1, &m_framebuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, m_framebuffer);
+
+    glGenTextures(1, &m_color);
+
+    // "Bind" the newly created texture : all future texture functions will modify this texture
+    glBindTexture(GL_TEXTURE_2D, m_color);
+
+    // Give an empty image to OpenGL ( the last "0" )
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1024, 768, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+
+    // Poor filtering. Needed !
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+    glGenRenderbuffers(1, &m_depth);
+    glBindRenderbuffer(GL_RENDERBUFFER, m_depth);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_depth);
+
+    // Set "renderedTexture" as our colour attachement #0
+    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, m_color, 0);
+
+    // Set the list of draw buffers.
+    GLenum DrawBuffers[1] = { GL_COLOR_ATTACHMENT0 };
+    glDrawBuffers(1, DrawBuffers); // "1" is the size of DrawBuffers
+
     glow::AutoTimer t("Initialize Game");
 
 	glow::debug("Game::testFMOD()");
@@ -129,7 +163,7 @@ void Game::initialize()
     glow::debug("Initial spawn");
     m_world->god().spawn();
 
-	glow::debug("Setup Camersa");
+	glow::debug("Setup Camera");
 	//viewport set in resize
 	//m_camera.setPosition(glm::vec3(0, 5, 30));
 	m_camera.setZNear(1);
@@ -162,12 +196,15 @@ void Game::update(float delta_sec)
 
 void Game::draw()
 {
+
+    glBindFramebuffer(GL_FRAMEBUFFER, m_framebuffer);
+
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glFrontFace(GL_CCW);
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 
-	m_skybox->draw(&m_camera);
+    m_skybox->draw(&m_camera);
 
     m_voxelRenderer->prepareDraw(&m_camera);
     for (WorldObject * worldObject : m_world->worldObjects()) {
@@ -177,8 +214,12 @@ void Game::draw()
     // draw all other voxelclusters...
     m_voxelRenderer->afterDraw();
 
-
-	m_hud->draw();
+    /*
+    float z;
+    glReadPixels(0, 0, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &z);
+    printf("%f\n", z);
+    */
+    m_hud->draw();
 
     m_hd3000dummy->drawIfActive();
 }

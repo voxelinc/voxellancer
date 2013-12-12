@@ -46,6 +46,10 @@ private:
 
     World * m_world;
 
+    GLuint m_framebuffer;
+    GLuint m_depth;
+    GLuint m_color;
+
 	std::unique_ptr<Skybox> m_skybox;
 	std::unique_ptr<HUD> m_hud;
 	std::unique_ptr<VoxelRenderer> m_voxelRenderer;
