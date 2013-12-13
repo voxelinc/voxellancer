@@ -35,8 +35,6 @@ bool Movement::perform() {
 
     AABB phaseAABB = m_collisionDetector.aabb(m_originalTransform).united(m_collisionDetector.aabb(m_targetTransform));
 
-    std::cout << "Containing node of " << m_worldObject.objectInfo().name() << ": " << toString(m_worldObject.collisionDetector().geode()->containingNode()->aabb()) << " querying for " << toString(phaseAABB) << std::endl;
-
     if(m_collisionDetector.worldTree()->areGeodesInAABB(phaseAABB, m_worldObject.collisionDetector().geode()->containingNode(), &m_worldObject)) {
         glm::vec3 directionalStep = m_targetTransform.position() - m_originalTransform.position();
         m_distance = glm::length(directionalStep);

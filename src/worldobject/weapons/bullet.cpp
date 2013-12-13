@@ -7,8 +7,9 @@
 #include "physics/bulletphysics.h"
 
 
-Bullet::Bullet(glm::vec3 position, glm::quat orientation, glm::vec3 direction, float speed, float range) :
-    WorldObject(CollisionFilterClass::Bullet, new BulletPhysics(*this), new CollisionDetector(*this), 0.5f)
+Bullet::Bullet(WorldObject* creator, glm::vec3 position, glm::quat orientation, glm::vec3 direction, float speed, float range) :
+    WorldObject(CollisionFilterClass::Bullet, new BulletPhysics(*this), new CollisionDetector(*this), 0.5f),
+    m_creator(creator)
 {
     m_lifetime = range / speed;
     glm::vec3 dir = glm::normalize(direction);
@@ -33,9 +34,21 @@ Bullet::Bullet(glm::vec3 position, glm::quat orientation, glm::vec3 direction, f
     m_objectInfo.setShowOnHud(false);
     m_objectInfo.setCanLockOn(false);
 
-    CollisionFilterable::setCollidableWith(CollisionFilterClass::Bullet, false);
+    CollisionFilterable::setCollideableWith(CollisionFilterClass::Bullet, false);
 
     finishInitialization();
+}
+
+WorldObject* Bullet::creator() const {
+    return m_creator;
+}
+
+bool Bullet::isCollideableWith(const CollisionFilterable *other) const {
+    if(m_creator == other) {
+        return false;
+    }
+
+    return WorldObject::isCollideableWith(other);
 }
 
 void Bullet::update(float delta_sec){

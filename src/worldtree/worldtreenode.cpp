@@ -112,7 +112,7 @@ std::set<WorldTreeGeode*> WorldTreeNode::geodesInAABB(const AABB &aabb, WorldObj
             assert(geode->aabb().intersects(m_aabb));
             assert(geode->worldObject() != nullptr);
 
-            if(collideableWith == nullptr || collideableWith->collideableWith(geode->worldObject())) {
+            if(collideableWith == nullptr || collideableWith->isCollideableWith(geode->worldObject())) {
                 if(aabb.intersects(geode->aabb())) {
                     result.insert(geode);
                 }
@@ -137,14 +137,14 @@ bool WorldTreeNode::areGeodesInAABB(const AABB& aabb, WorldObject* collideableWi
             assert(geode->aabb().intersects(m_aabb));
             assert(geode->worldObject() != nullptr);
 
-            if(collideableWith == nullptr || collideableWith->collideableWith(geode->worldObject())) {
+            if(collideableWith == nullptr || collideableWith->isCollideableWith(geode->worldObject())) {
                 if(aabb.intersects(geode->aabb())) {
                     return true;
                 }
             }
         }
     }
-    else { std::cout << "To children level << " << m_level << "!" << std::endl;
+    else {
         for(WorldTreeNode* subnode : m_subnodes) {
             if(subnode->areGeodesInAABB(aabb, collideableWith)) {
                 return true;
