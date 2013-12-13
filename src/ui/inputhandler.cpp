@@ -3,6 +3,8 @@
 #include <glm/glm.hpp>
 #include <glow/glow.h>
 
+#include "worldobject/voxelexplosiongenerator.h"
+
 InputHandler::InputHandler(GLFWwindow *window, Camera *camera) :
 m_window(window),
 m_camera(camera),
@@ -66,6 +68,15 @@ void InputHandler::keyCallback(int key, int scancode, int action, int mods){
         m_followCam = !m_followCam;
     if (key == GLFW_KEY_TAB && action == GLFW_PRESS)
         selectNextTarget();
+    if (key == GLFW_KEY_B && action == GLFW_PRESS){
+        VoxelExplosionGenerator g;
+        g.spawnVoxelExplosion(m_player->playerShip()->transform().position() + m_player->playerShip()->transform().orientation() * glm::vec3(0, 0, -10),
+            0xFFFFFF,
+            (float) (rand() % 3),
+            (float) (rand() % 3),
+            glm::vec3(2,0,0));
+    }
+
 }
 
 void InputHandler::update(float delta_sec) {
