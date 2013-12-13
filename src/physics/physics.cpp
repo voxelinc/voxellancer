@@ -18,7 +18,7 @@
 #include "utils/tostring.h"
 
 
-Physics::Physics(WorldObject& worldObject) :
+Physics::Physics(WorldObject& worldObject, float scale) :
     m_speed(0),
     m_angularSpeed(0),
     m_acceleration(0),
@@ -30,7 +30,7 @@ Physics::Physics(WorldObject& worldObject) :
     m_massValid(true),
     m_worldObject(worldObject)
 {
-
+    m_mass_scale_factor = glm::pow(scale, 3.f);
 }
 
 Physics::~Physics() {
@@ -80,7 +80,7 @@ glm::vec3 Physics::calculateMassAndCenter() {
         center += glm::vec3(voxel->gridCell()) * voxel->mass();
     }
     center /= m_mass;
-    m_mass *= glm::pow(m_worldObject.transform().scale(), 3.f);
+    m_mass *= m_mass_scale_factor;
     m_massValid = true;
     m_center = center;
 
@@ -117,12 +117,18 @@ void Physics::addVoxel(Voxel* voxel) {
 }
 
 void Physics::removeVoxel(const glm::ivec3& position) {
-    m_massValid = false;
-    calculateMassAndCenter();
+    Voxel * voxel = m_worldObject.voxel(position);
+
+    float old_unscaled_mass = m_mass / m_mass_scale_factor;
+    float new_unscaled_mass = old_unscaled_mass - voxel->mass();
+    
+    m_center -= glm::vec3(voxel->gridCell()) * voxel->mass() / old_unscaled_mass;
+    m_center *= old_unscaled_mass / new_unscaled_mass;
+
+    m_mass -= voxel->mass() * m_mass_scale_factor;
+
     //m_worldObject.transform().setPosition(-oldCenter + m_worldObject.transform().center());
     // it would be better to calculate incremental mass/center changes here
-    // something like mass -= 1; center -= 1/mass * pos; center /= (mass-1)/mass; should work
-    // but there should be tests to verify this! (1 = mass of voxel)
 }
 
 void Physics::updateSpeed(float deltaSec) {
@@ -134,6 +140,10 @@ void Physics::updateSpeed(float deltaSec) {
 
     m_acceleration = glm::vec3(0);
     m_angularAcceleration = glm::vec3(0);
+}
+
+glm::vec3 Physics::phyical_center() {
+    return m_center;
 }
 
 
