@@ -67,9 +67,6 @@ void Game::initialize()
     m_color->image2D(0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
     m_color->setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     m_color->setParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    //m_color->setParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    //m_color->setParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    //m_color->setParameter(GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
     m_depth = new glow::RenderBufferObject();
     m_depth->storage(GL_DEPTH_COMPONENT, width, height);
@@ -79,6 +76,40 @@ void Game::initialize()
     m_fbo->attachRenderBuffer(GL_DEPTH_ATTACHMENT, m_depth);
    
     m_fbo->setDrawBuffers({ GL_COLOR_ATTACHMENT0 });
+
+    /* Shaders */
+    glow::Shader * vertexShader = glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/skybox.vert");
+    glow::Shader * fragmentShader = glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/skybox.frag");
+
+    m_program = new glow::Program();
+    m_program->attach(vertexShader, fragmentShader);
+    m_program->bindFragDataLocation(0, "color");
+
+    m_program->getUniform<GLint>("texture")->set(0);
+
+    auto vertex = m_program->getAttributeLocation("vertex");
+
+    m_buffer = new glow::Buffer(GL_ARRAY_BUFFER);
+    m_vertex = new glow::VertexArrayObject();
+
+    auto vertices = glow::Array<glm::vec3>()
+        << glm::vec3(-1, -1, 0)
+        << glm::vec3(1, -1, 0)
+        << glm::vec3(-1, 1, 0)
+        << glm::vec3(-1, 1, 0)
+        << glm::vec3(1, -1, 0)
+        << glm::vec3(1, 1, 0);
+
+    m_buffer->setData(vertices);
+
+    auto binding = m_vertex->binding(0);
+
+    binding->setAttribute(vertex);
+    binding->setBuffer(m_buffer, 0, sizeof(glm::vec3));
+    binding->setFormat(3, GL_FLOAT, GL_FALSE, 0);
+
+
+    m_vertex->enable(vertex);
 
     glow::AutoTimer t("Initialize Game");
 
@@ -191,9 +222,16 @@ void Game::draw()
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glFrontFace(GL_CCW);
 	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
+    glCullFace(GL_BACK);
+   
+    //m_fbo->attachTexture2D(GL_COLOR_ATTACHMENT0, m_skybox->m_texture);
+
+    //m_fbo->setDrawBuffers({ GL_COLOR_ATTACHMENT0 });
 
     m_skybox->draw(&m_camera);
+
+
+
 
     m_voxelRenderer->prepareDraw(&m_camera);
     for (WorldObject * worldObject : m_world->worldObjects()) {
@@ -211,6 +249,8 @@ void Game::draw()
     m_hud->draw();
 
     m_hd3000dummy->drawIfActive();
+
+    draw();
 
 }
 

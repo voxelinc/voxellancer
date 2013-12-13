@@ -7,8 +7,11 @@
 #include <glow/VertexArrayObject.h>
 #include <glow/FrameBufferObject.h>
 #include <glow/RenderBufferObject.h>
+#include <glow/VertexAttributeBinding.h>
 #include <glow/Buffer.h>
 #include <glow/glow.h>
+#include <glowutils/glowutils.h>
+#include <glowutils/File.h>
 
 #include <GLFW/glfw3.h>
 
@@ -52,6 +55,9 @@ private:
     glow::ref_ptr<glow::FrameBufferObject> m_fbo;
     glow::ref_ptr<glow::Texture> m_color;
     glow::ref_ptr<glow::RenderBufferObject> m_depth;
+    glow::ref_ptr<glow::Buffer> m_buffer;
+    glow::ref_ptr<glow::VertexArrayObject> m_vertex;
+    glow::ref_ptr<glow::Program> m_program;
 
     //GLuint m_framebuffer;
     //GLuint m_depth;
