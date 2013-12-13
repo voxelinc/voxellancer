@@ -42,3 +42,11 @@ void Bullet::update(float delta_sec){
         World::instance()->god().scheduleRemoval(this);
 }
 
+void Bullet::onImpact(){
+    //TODO: spawn explosion
+    World::instance()->god().scheduleRemoval(this);
+}
+
+void Bullet::onSpawnFail(){
+    //TODO: spawn explosion
+}
