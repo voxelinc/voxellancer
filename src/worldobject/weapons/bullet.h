@@ -11,7 +11,7 @@ public:
 
     WorldObject* creator() const;
 
-    virtual bool isCollideableWith(const CollisionFilterable* other) const override;
+    virtual bool specialIsCollideableWith(const CollisionFilterable* other) const override;
 
     virtual void update(float delta_sec) override;
 

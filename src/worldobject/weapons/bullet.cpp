@@ -43,12 +43,8 @@ WorldObject* Bullet::creator() const {
     return m_creator;
 }
 
-bool Bullet::isCollideableWith(const CollisionFilterable *other) const {
-    if(m_creator == other) {
-        return false;
-    }
-
-    return WorldObject::isCollideableWith(other);
+bool Bullet::specialIsCollideableWith(const CollisionFilterable *other) const {
+    return m_creator != other;
 }
 
 void Bullet::update(float delta_sec){
