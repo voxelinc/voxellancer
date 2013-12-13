@@ -5,7 +5,10 @@
 #include <glow/Texture.h>
 #include <glow/Program.h>
 #include <glow/VertexArrayObject.h>
+#include <glow/FrameBufferObject.h>
+#include <glow/RenderBufferObject.h>
 #include <glow/Buffer.h>
+#include <glow/glow.h>
 
 #include <GLFW/glfw3.h>
 
@@ -46,9 +49,13 @@ private:
 
     World * m_world;
 
-    GLuint m_framebuffer;
-    GLuint m_depth;
-    GLuint m_color;
+    glow::ref_ptr<glow::FrameBufferObject> m_fbo;
+    glow::ref_ptr<glow::Texture> m_color;
+    glow::ref_ptr<glow::RenderBufferObject> m_depth;
+
+    //GLuint m_framebuffer;
+    //GLuint m_depth;
+    //GLuint m_color;
 
 	std::unique_ptr<Skybox> m_skybox;
 	std::unique_ptr<HUD> m_hud;

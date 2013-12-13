@@ -60,36 +60,26 @@ void Game::initialize()
     int width, height;
     glfwGetWindowSize(m_window, &width, &height);
 
-    m_framebuffer = 0;
-    m_color = 1;
-    m_depth = 2;
+    m_fbo = new glow::FrameBufferObject();
+    m_fbo->bind();
 
-    glGenFramebuffers(1, &m_framebuffer);
-    glBindFramebuffer(GL_FRAMEBUFFER, m_framebuffer);
+    m_color = new glow::Texture(GL_TEXTURE_2D);
+    m_color->image2D(0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+    //m_color->bindImageTexture(GL_TEXTURE_2D, 0, false, 0, GL_RGB, GL_UNSIGNED_BYTE);
+    m_color->setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    m_color->setParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    //m_color->setParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    //m_color->setParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    //m_color->setParameter(GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
-    glGenTextures(1, &m_color);
+    m_depth = new glow::RenderBufferObject();
+    m_depth->storage(GL_DEPTH_COMPONENT, width, height);
 
-    // "Bind" the newly created texture : all future texture functions will modify this texture
-    glBindTexture(GL_TEXTURE_2D, m_color);
 
-    // Give an empty image to OpenGL ( the last "0" )
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1024, 768, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
-
-    // Poor filtering. Needed !
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-    glGenRenderbuffers(1, &m_depth);
-    glBindRenderbuffer(GL_RENDERBUFFER, m_depth);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_depth);
-
-    // Set "renderedTexture" as our colour attachement #0
-    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, m_color, 0);
-
-    // Set the list of draw buffers.
-    GLenum DrawBuffers[1] = { GL_COLOR_ATTACHMENT0 };
-    glDrawBuffers(1, DrawBuffers); // "1" is the size of DrawBuffers
+    m_fbo->attachTexture2D(GL_COLOR_ATTACHMENT0, m_color);
+    m_fbo->attachRenderBuffer(GL_DEPTH_ATTACHMENT, m_depth);
+   
+    m_fbo->setDrawBuffers({ GL_COLOR_ATTACHMENT0 });
 
     glow::AutoTimer t("Initialize Game");
 
@@ -197,7 +187,7 @@ void Game::update(float delta_sec)
 void Game::draw()
 {
 
-    glBindFramebuffer(GL_FRAMEBUFFER, m_framebuffer);
+    m_fbo->bind();
 
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glFrontFace(GL_CCW);
@@ -222,6 +212,7 @@ void Game::draw()
     m_hud->draw();
 
     m_hd3000dummy->drawIfActive();
+
 }
 
 void ERRCHECK(FMOD_RESULT result)
@@ -259,3 +250,38 @@ InputHandler * Game::inputHandler()
 
 
 
+
+/*
+
+remove later: 
+
+m_framebuffer = 0;
+m_color = 1;
+m_depth = 2;
+glGenFramebuffers(1, &m_framebuffer);
+glBindFramebuffer(GL_FRAMEBUFFER, m_framebuffer);
+
+glGenTextures(1, &m_color);
+
+// "Bind" the newly created texture : all future texture functions will modify this texture
+glBindTexture(GL_TEXTURE_2D, m_color);
+
+// Give an empty image to OpenGL ( the last "0" )
+glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1024, 768, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+
+// Poor filtering. Needed !
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+glGenRenderbuffers(1, &m_depth);
+glBindRenderbuffer(GL_RENDERBUFFER, m_depth);
+glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
+glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_depth);
+
+// Set "renderedTexture" as our colour attachement #0
+glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, m_color, 0);
+
+// Set the list of draw buffers.
+GLenum DrawBuffers[1] = { GL_COLOR_ATTACHMENT0 };
+glDrawBuffers(1, DrawBuffers); // "1" is the size of DrawBuffers
+*/
