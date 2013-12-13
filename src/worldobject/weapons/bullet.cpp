@@ -8,7 +8,7 @@
 
 
 Bullet::Bullet(glm::vec3 position, glm::quat orientation, glm::vec3 direction, float speed, float range) :
-    WorldObject(new BulletPhysics(*this), new CollisionDetector(*this), 0.5f)
+    WorldObject(CollisionFilterClass::Bullet, new BulletPhysics(*this), new CollisionDetector(*this), 0.5f)
 {
     m_lifetime = range / speed;
     glm::vec3 dir = glm::normalize(direction);
@@ -32,6 +32,8 @@ Bullet::Bullet(glm::vec3 position, glm::quat orientation, glm::vec3 direction, f
     m_objectInfo.setName("Bullet");
     m_objectInfo.setShowOnHud(false);
     m_objectInfo.setCanLockOn(false);
+
+    CollisionFilterable::setCollidableWith(CollisionFilterClass::Bullet, false);
 
     finishInitialization();
 }

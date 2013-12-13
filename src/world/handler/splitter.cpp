@@ -25,7 +25,7 @@ std::list<WorldObject*> &Splitter::splitOffWorldObjects() {
 WorldObject *Splitter::createWorldObjectFromOrphan(WorldObjectSplit *split) {
     WorldObject *worldObject;
 
-    worldObject = new WorldObject(split->exWorldObject()->transform());
+    worldObject = new WorldObject(split->exWorldObject()->collisionFilterClass(), split->exWorldObject()->transform());
     worldObject->objectInfo().setName(split->exWorldObject()->objectInfo().name() + " - splitoff");
     worldObject->physics().setSpeed(worldObject->physics().speed());
     worldObject->physics().setAngularSpeed(worldObject->physics().angularSpeed());

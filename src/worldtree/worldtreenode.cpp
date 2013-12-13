@@ -100,22 +100,25 @@ void WorldTreeNode::remove(WorldTreeGeode *geode) {
     }
 }
 
-std::set<WorldTreeGeode*> WorldTreeNode::geodesInAABB(const AABB &aabb) const {
+std::set<WorldTreeGeode*> WorldTreeNode::geodesInAABB(const AABB &aabb, WorldObject* collideableWith) const {
     std::set<WorldTreeGeode*> result;
 
     if(isLeaf()) {
         for(WorldTreeGeode *geode : m_geodes) {
             assert(geode->aabb().intersects(m_aabb));
+            assert(geode->worldObject() != nullptr);
 
-            if(aabb.intersects(geode->aabb())) {
-                result.insert(geode);
+            if(collideableWith == nullptr || collideableWith->collideableWith(geode->worldObject())) {
+                if(aabb.intersects(geode->aabb())) {
+                    result.insert(geode);
+                }
             }
         }
     }
     else {
         for(WorldTreeNode *subnode : m_subnodes) {
             if(aabb.intersects(subnode->aabb())) {
-                std::set<WorldTreeGeode*> subresult = subnode->geodesInAABB(aabb);
+                std::set<WorldTreeGeode*> subresult = subnode->geodesInAABB(aabb, collideableWith);
                 result.insert(subresult.begin(), subresult.end());
             }
         }
@@ -124,23 +127,22 @@ std::set<WorldTreeGeode*> WorldTreeNode::geodesInAABB(const AABB &aabb) const {
     return result;
 }
 
-bool WorldTreeNode::areGeodesInAABB(const AABB& aabb, WorldTreeGeode *ignore) const {
+bool WorldTreeNode::areGeodesInAABB(const AABB& aabb, WorldObject* collideableWith) const {
     if(isLeaf()) {
         for(WorldTreeGeode* geode : m_geodes) {
             assert(geode->aabb().intersects(m_aabb));
+            assert(geode->worldObject() != nullptr);
 
-            if(geode == ignore) {
-                continue;
-            }
-
-            if(aabb.intersects(geode->aabb())) {
-                return true;
+            if(collideableWith == nullptr || collideableWith->collideableWith(geode->worldObject())) {
+                if(aabb.intersects(geode->aabb())) {
+                    return true;
+                }
             }
         }
     }
     else {
         for(WorldTreeNode* subnode : m_subnodes) {
-            if(subnode->areGeodesInAABB(aabb, ignore)) {
+            if(subnode->areGeodesInAABB(aabb, collideableWith)) {
                 return true;
             }
         }

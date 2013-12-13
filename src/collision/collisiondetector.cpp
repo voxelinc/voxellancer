@@ -122,7 +122,9 @@ std::list<VoxelCollision>& CollisionDetector::checkCollisions() {
         assert(possibleCollider->worldObject() != nullptr);
         WorldObject* other = possibleCollider->worldObject();
 
-        checkCollisions(&m_voxelTree, &other->collisionDetector().voxeltree());
+        if(m_worldObject.collideableWith(other)) {
+            checkCollisions(&m_voxelTree, &other->collisionDetector().voxeltree());
+        }
     }
 
     return m_collisions;
