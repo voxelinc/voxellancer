@@ -78,8 +78,8 @@ void Game::initialize()
     m_fbo->setDrawBuffers({ GL_COLOR_ATTACHMENT0 });
 
     /* Shaders */
-    glow::Shader * vertexShader = glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/skybox.vert");
-    glow::Shader * fragmentShader = glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/skybox.frag");
+    glow::Shader * vertexShader = glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/fbo.vert");
+    glow::Shader * fragmentShader = glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/fbo.frag");
 
     m_program = new glow::Program();
     m_program->attach(vertexShader, fragmentShader);
@@ -91,6 +91,13 @@ void Game::initialize()
 
     m_buffer = new glow::Buffer(GL_ARRAY_BUFFER);
     m_vertex = new glow::VertexArrayObject();
+
+
+   /* auto vertices = glow::Array<glm::vec3>()
+        << glm::vec3(-1, -1, 0)
+        << glm::vec3(1, -1, 0)
+        << glm::vec3(1, 1, 0)
+        << glm::vec3(-1, 1, 0);*/
 
     auto vertices = glow::Array<glm::vec3>()
         << glm::vec3(-1, -1, 0)
@@ -250,7 +257,10 @@ void Game::draw()
 
     m_hd3000dummy->drawIfActive();
 
-    draw();
+    m_fbo->unbind();
+    m_program->use();
+
+    //draw();
 
 }
 
