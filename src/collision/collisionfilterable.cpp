@@ -1,5 +1,8 @@
 #include "collisionfilterable.h"
 
+#include <iostream>
+
+
 CollisionFilterable::CollisionFilterable(CollisionFilterClass collisionFilterClass, uint32_t collisionMask):
     m_collisionFilterClass(collisionFilterClass),
     m_collisionMask(collisionMask)
@@ -25,12 +28,11 @@ void CollisionFilterable::setCollideableWith(CollisionFilterClass collisionFilte
 
 bool CollisionFilterable::isCollideableWith(const CollisionFilterable *other) const {
     return  (this != other) && areMasksCollidable(other) && specialIsCollideableWith(other) && other->specialIsCollideableWith(this);
-
 }
 
 bool CollisionFilterable::areMasksCollidable(const CollisionFilterable *other) const {
-    return (static_cast<uint32_t>(m_collisionFilterClass) | other->collisionMask()) &&
-           (static_cast<uint32_t>(other->collisionFilterClass()) | m_collisionMask);
+    return (static_cast<uint32_t>(m_collisionFilterClass) & other->collisionMask()) &&
+           (static_cast<uint32_t>(other->collisionFilterClass()) & m_collisionMask);
 }
 
 bool CollisionFilterable::specialIsCollideableWith(const CollisionFilterable *other) const {
