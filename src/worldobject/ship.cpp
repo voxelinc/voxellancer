@@ -5,7 +5,6 @@
 #include "worldobject/weapons/rocketlauncher.h"
 
 Ship::Ship() :
-    m_world(World::instance()),
     m_hardpoints(),
     m_aimMode(Point),
     m_targetPoint(0),

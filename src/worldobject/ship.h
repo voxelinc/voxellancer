@@ -35,8 +35,7 @@ protected:
 
     Property<float> prop_maxSpeed;
     Property<float> prop_maxRotSpeed;
-
-    World* m_world;
+    
 	std::vector<Hardpoint*> m_hardpoints;
     AimType m_aimMode;
     WorldObject* m_targetObject;
