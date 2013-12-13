@@ -42,7 +42,7 @@ public:
 
     void finishInitialization();
     glm::vec3 calculateMassAndCenter();
-    glm::vec3 phyical_center();
+    glm::vec3 phyicalCenter();
 
 
 protected:
@@ -65,6 +65,6 @@ protected:
 
     std::list<VoxelCollision> m_collisions;
     glm::vec3 m_center;
-    float m_mass_scale_factor;
+    float m_massScaleFactor;
 };
 

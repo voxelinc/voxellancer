@@ -64,7 +64,7 @@ go_bandit([](){
             b.finishInitialization();
 
             AssertThat(a.physics().mass(), Equals(b.physics().mass()));
-            AssertThat(a.physics().phyical_center(), EqualsWithDelta(b.physics().phyical_center(), glm::vec3(0.01)));
+            AssertThat(a.physics().phyicalCenter(), EqualsWithDelta(b.physics().phyicalCenter(), glm::vec3(0.01)));
         });
     });
 });
