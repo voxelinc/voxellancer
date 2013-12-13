@@ -40,13 +40,12 @@ public:
     const VoxelTreeNode &voxeltree() const;
 
     void updateGeode();
-
+    
+    void rebuildVoxelTree();
     void finishInitialization();
-
 
 protected:
     void checkCollisions(VoxelTreeNode* nodeA, VoxelTreeNode* nodeB, WorldObject *  other);
-
     WorldObject & m_worldObject;
     VoxelTreeNode m_voxelTree;
     WorldTreeGeode *m_geode;
