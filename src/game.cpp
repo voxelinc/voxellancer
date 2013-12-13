@@ -65,7 +65,6 @@ void Game::initialize()
 
     m_color = new glow::Texture(GL_TEXTURE_2D);
     m_color->image2D(0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
-    //m_color->bindImageTexture(GL_TEXTURE_2D, 0, false, 0, GL_RGB, GL_UNSIGNED_BYTE);
     m_color->setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     m_color->setParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     //m_color->setParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
