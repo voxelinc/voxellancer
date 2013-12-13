@@ -7,6 +7,8 @@
 #include "world.h"
 #include "god.h"
 
+#include <glow/AutoTimer.h>
+
 
 WorldLogic::WorldLogic(World &world):
     m_world(world)
@@ -50,6 +52,11 @@ void WorldLogic::update(float deltaSecs) {
 void WorldLogic::damageForwardLoop(std::list<Impact> damageImpacts) {
     m_damager.reset();
 
+    if(damageImpacts.size() == 0) {
+        return;
+    }
+
+    glow::AutoTimer t("damageForwardLoop");
 
     while(damageImpacts.size() > 0) {
         // only treat clusters that aren't scheduled for removal anyway
