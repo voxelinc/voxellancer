@@ -8,6 +8,11 @@
 
 #include "worldtree/worldtree.h"
 
+#include "utils/tostring.h"
+
+
+
+
 static const float ATOMIC_DIRECTIONAL_STEP = 0.4f;
 static const float ATOMIC_ANGULAR_STEP = 30.0f;
 static const float MAX_STEPPED_DISTANCE = 1.2f;
@@ -29,6 +34,8 @@ bool Movement::perform() {
     assert(m_worldObject.collisionDetector().geode() != nullptr);
 
     AABB phaseAABB = m_collisionDetector.aabb(m_originalTransform).united(m_collisionDetector.aabb(m_targetTransform));
+
+    std::cout << "Containing node of " << m_worldObject.objectInfo().name() << ": " << toString(m_worldObject.collisionDetector().geode()->containingNode()->aabb()) << " querying for " << toString(phaseAABB) << std::endl;
 
     if(m_collisionDetector.worldTree()->areGeodesInAABB(phaseAABB, m_worldObject.collisionDetector().geode()->containingNode(), &m_worldObject)) {
         glm::vec3 directionalStep = m_targetTransform.position() - m_originalTransform.position();

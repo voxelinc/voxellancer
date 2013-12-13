@@ -52,6 +52,10 @@ bool WorldTreeNode::isLeaf() const {
     return m_subnodes.size() == 0;
 }
 
+bool WorldTreeNode::isEmpty() const {
+    return m_subnodes.empty() && m_geodes.empty();
+}
+
 bool WorldTreeNode::isRootnode() const {
     return m_parent == nullptr;
 }
@@ -140,7 +144,7 @@ bool WorldTreeNode::areGeodesInAABB(const AABB& aabb, WorldObject* collideableWi
             }
         }
     }
-    else {
+    else { std::cout << "To children level << " << m_level << "!" << std::endl;
         for(WorldTreeNode* subnode : m_subnodes) {
             if(subnode->areGeodesInAABB(aabb, collideableWith)) {
                 return true;

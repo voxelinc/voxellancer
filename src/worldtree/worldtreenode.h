@@ -31,6 +31,7 @@ public:
     const WorldTreeNode *parent() const;
 
     bool isLeaf() const;
+    bool isEmpty() const;
     bool isRootnode() const;
 
     void insert(WorldTreeGeode *geode);
