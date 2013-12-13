@@ -62,7 +62,7 @@ void God::spawn() {
     for (WorldObject* worldObject : m_scheduledSpawns) {
         m_world.worldTree().insert(worldObject);
 
-        std::list<Collision> collisions = worldObject->collisionDetector().checkCollisions();
+        std::list<VoxelCollision> collisions = worldObject->collisionDetector().checkCollisions();
 
         if (collisions.size() > 0){
             World::instance()->worldTree().remove(worldObject->collisionDetector().geode());

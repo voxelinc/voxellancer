@@ -20,10 +20,15 @@ public:
 
     void update(float deltaSecs);
 
+    float deltaSec() const;
+
     static World *instance();
+
 
 protected:
     static World *s_instance;
+
+    float m_deltaSec;
 
     std::unique_ptr<WorldTree> m_worldTree;
     std::unique_ptr<WorldLogic> m_worldLogic;

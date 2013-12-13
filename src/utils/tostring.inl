@@ -1,4 +1,4 @@
-#pragma once 
+#pragma once
 
 #include <sstream>
 
@@ -17,9 +17,12 @@ template<typename T>
 std::string toString(const TAABB<T> &aabb) {
     std::stringstream result;
 
-    result << "[" << toString(aabb.llf()) << " -> " << toString(aabb.rub()) << "]";
+	glm::detail::tvec3<T> diff = aabb.rub() - aabb.llf();
+
+    result << "[" << toString(aabb.llf()) << " " << diff.x << "x" << diff.y << "x" << diff.z << "]";
 
     return result.str();
 }
+
 
 

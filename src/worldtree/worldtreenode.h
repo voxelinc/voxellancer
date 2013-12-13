@@ -37,24 +37,30 @@ public:
     void remove(WorldTreeGeode *geode);
 
     std::set<WorldTreeGeode*> geodesInAABB(const AABB &aabb) const;
+    bool areGeodesInAABB(const AABB &aabb, WorldTreeGeode *ignore) const;
 
     void aabbChanged(WorldTreeGeode *geode);
 
+    void poll(int& nodes, int &empty, int& geodes, int& depth);
+    void print();
+
 
 protected:
-    static const int MAX_DEPTH = 8;
-    static const int MAX_GEODES = 8;
+    static const int MIN_EXTENT = 16;
+    static const int MAX_GEODES = 4;
 
     friend class WorldTreeCleaner;
 
     WorldTreeNode *m_parent;
     AABB m_aabb;
     int m_level;
+    float m_extent;
     std::list<WorldTreeGeode*> m_geodes;
     std::list<WorldTreeNode*> m_subnodes;
 
     void split();
     void unsplit();
     void octuple(const AABB &aabb);
+    void setLevel(int level);
 };
 

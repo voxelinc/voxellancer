@@ -10,7 +10,8 @@ VoxelTreeNode::VoxelTreeNode(VoxelTreeNode *parent, WorldObject &worldObject, co
     m_parent(parent),
     m_worldObject(worldObject),
     m_gridAABB(gridAABB),
-    m_voxel(nullptr)
+    m_voxel(nullptr),
+    m_boundingSphereRadiusValid(false)
 {
 
 }
@@ -26,12 +27,17 @@ bool VoxelTreeNode::isAtomic() const {
     return m_gridAABB.extent(XAxis) == 1;
 }
 
+bool VoxelTreeNode::isVoxel() const {
+    assert((m_voxel != nullptr) ? m_subnodes.size() == 0 : 1);
+    return m_voxel != nullptr;
+}
+
 bool VoxelTreeNode::isLeaf() const{
     return m_subnodes.size() == 0;
 }
 
 bool VoxelTreeNode::isEmpty() const{
-    return m_subnodes.size() == 0 && m_voxel == nullptr;
+    return isLeaf() && m_voxel == nullptr;
 }
 
 std::vector<VoxelTreeNode*> &VoxelTreeNode::subnodes() {
@@ -50,26 +56,32 @@ const Voxel *VoxelTreeNode::voxel() const{
     return m_voxel;
 }
 
+WorldObject* VoxelTreeNode::worldObject() {
+    return &m_worldObject;
+}
+
 const Grid3dAABB &VoxelTreeNode::gridAABB() const {
     return m_gridAABB;
 }
 
 Sphere VoxelTreeNode::boundingSphere() {
-    Sphere sphere;
     glm::vec3 center;
 
     center = static_cast<glm::vec3>(m_gridAABB.rub() + m_gridAABB.llf()) / 2.0f;
 
-    sphere.setPosition(m_worldObject.transform().applyTo(center));
+    m_boundingSphere.setPosition(m_worldObject.transform().applyTo(center));
 
-    if(m_voxel != nullptr) {
-        sphere.setRadius(0.5f * m_worldObject.transform().scale());
-    }
-    else {
-        sphere.setRadius((glm::length(glm::vec3(m_gridAABB.rub() - m_gridAABB.llf() + glm::ivec3(1, 1, 1))/2.0f)) * m_worldObject.transform().scale()) ;
+    if (!m_boundingSphereRadiusValid) {
+        if(m_voxel != nullptr) {
+            m_boundingSphere.setRadius(0.5f * m_worldObject.transform().scale());
+        }
+        else {
+            m_boundingSphere.setRadius((glm::length(glm::vec3(m_gridAABB.rub() - m_gridAABB.llf() + glm::ivec3(1, 1, 1))/2.0f)) * m_worldObject.transform().scale()) ;
+        }
+        m_boundingSphereRadiusValid = true;
     }
 
-    return sphere;
+    return m_boundingSphere;
 }
 
 void VoxelTreeNode::insert(Voxel *voxel) {
@@ -82,6 +94,7 @@ void VoxelTreeNode::insert(Voxel *voxel) {
     if(isAtomic()) {
         assert(m_voxel == nullptr);
         m_voxel = voxel;
+        m_boundingSphereRadiusValid = false;
     }
     else {
         if(isLeaf()) {
@@ -100,6 +113,7 @@ void VoxelTreeNode::remove(const glm::ivec3 &cell) {
     if(isAtomic()) {
         assert(m_voxel != nullptr);
         m_voxel = nullptr;
+        m_boundingSphereRadiusValid = false;
     }
     else {
         int numSubNodesEmpty = 0;
@@ -156,5 +170,6 @@ void VoxelTreeNode::octuple() {
     }
 
     m_gridAABB = Grid3dAABB(glm::ivec3(0, 0, 0), (m_gridAABB.rub()+glm::ivec3(1,1,1)) * 2 - glm::ivec3(1,1,1));
+    m_boundingSphereRadiusValid = false;
 }
 
