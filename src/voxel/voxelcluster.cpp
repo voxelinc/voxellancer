@@ -35,7 +35,7 @@ Voxel* VoxelCluster::voxel(const glm::ivec3& position) {
 
 void VoxelCluster::addVoxel(Voxel *voxel) {
     assert(m_voxels[voxel->gridCell()] == nullptr);
-    
+
     m_voxels[voxel->gridCell()] = voxel;
     m_voxelRenderData.invalidate();
 }
@@ -53,26 +53,30 @@ VoxelRenderData *VoxelCluster::voxelRenderData() {
     return &m_voxelRenderData;
 }
 
-const std::unordered_map<glm::ivec3, Voxel*> & VoxelCluster::voxelMap() const {
+const std::unordered_map<glm::ivec3, Voxel*>& VoxelCluster::voxelMap() const {
     return m_voxels;
+}
+
+int VoxelCluster::voxelCount() const {
+    return m_voxels.size();
 }
 
 const WorldTransform& VoxelCluster::transform() {
     return m_transform;
 }
 
-void VoxelCluster::rotate(glm::quat rotation) {
+void VoxelCluster::rotate(const glm::quat& rotation) {
     m_transform.rotate(rotation);
 }
 
-void VoxelCluster::move(glm::vec3 vec3) {
+void VoxelCluster::move(const glm::vec3& vec3) {
     m_transform.move(vec3);
 }
 
-void VoxelCluster::setOrientation(glm::quat orientation) {
+void VoxelCluster::setOrientation(const glm::quat& orientation) {
     m_transform.setOrientation(orientation);
 }
 
-void VoxelCluster::setPosition(glm::vec3 pos) {
+void VoxelCluster::setPosition(const glm::vec3& pos) {
     m_transform.setPosition(pos);
 }

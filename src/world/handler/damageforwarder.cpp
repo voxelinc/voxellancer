@@ -14,38 +14,36 @@
 
 
 
-void DamageForwarder::forwardDamageImpacts(std::list<Impact> &dampedDeadlyImpacts) {
-    std::list<Impact> forwardedDamageImpacts;
+void DamageForwarder::forwardDamageImpacts(std::list<DamageImpact> &dampedDeadlyDamageImpacts) {
+    m_damageImpactAccumulator.clear();
 
-    ImpactAccumulator::clear();
+    for(DamageImpact &dampedDeadlyDamageImpact : dampedDeadlyDamageImpacts) {
+        Voxel *deadVoxel = dampedDeadlyDamageImpact.voxel();
 
-    for(Impact &dampedDeadlyImpact : dampedDeadlyImpacts) {
-        Voxel *deadVoxel = dampedDeadlyImpact.voxel();
-
-        m_currentWorldObject = dampedDeadlyImpact.worldObject();
-        VoxelNeighbourHelper nHelper(m_currentWorldObject);
+        m_currentWorldObject = dampedDeadlyDamageImpact.worldObject();
+        VoxelNeighbourHelper nHelper(m_currentWorldObject, false);
         const std::list<Voxel*>& neighbours = nHelper.neighbours(deadVoxel);
 
         for(Voxel *neighbour : neighbours) {
             glm::vec3 voxelVec = static_cast<glm::vec3>(neighbour->gridCell() - deadVoxel->gridCell());
-            float dotProduct = glm::dot(glm::normalize(dampedDeadlyImpact.vec()), glm::normalize(voxelVec));
+            glm::vec3 damageImpactVec = glm::inverse(m_currentWorldObject->transform().orientation()) * dampedDeadlyDamageImpact.damageVec();
+
+            float dotProduct = glm::dot(glm::normalize(damageImpactVec), glm::normalize(voxelVec));
 
             if(dotProduct >= 0.0f) {
-                Impact forwarded(m_currentWorldObject, neighbour, dampedDeadlyImpact.vec() * forwardFactor(dotProduct));
-                forwardedDamageImpacts.push_back(forwarded);
+                DamageImpact forwarded(m_currentWorldObject, neighbour, dampedDeadlyDamageImpact.damageVec() * forwardFactor(dotProduct));
+                m_damageImpactAccumulator.parse(forwarded);
             }
         }
     }
-
-    ImpactAccumulator::parse(forwardedDamageImpacts);
 }
 
 void DamageForwarder::dontForwardTo(std::list<Voxel*> &deadVoxels) {
-    ImpactAccumulator::dontImpact(deadVoxels);
+    m_damageImpactAccumulator.dontAffect(deadVoxels);
 }
 
-std::list<Impact> DamageForwarder::forwardedDamageImpacts() {
-    return ImpactAccumulator::impacts();
+std::list<DamageImpact> DamageForwarder::forwardedDamageImpacts() {
+    return m_damageImpactAccumulator.accumulatables();
 }
 
 float DamageForwarder::forwardFactor(float dotProduct) {

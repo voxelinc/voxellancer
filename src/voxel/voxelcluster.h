@@ -25,18 +25,20 @@ public:
     virtual ~VoxelCluster();
 
     const WorldTransform& transform();
+
     Voxel* voxel(const glm::ivec3& position);
     virtual void addVoxel(Voxel* voxel);
     virtual void removeVoxel(const glm::ivec3& position);
     const std::unordered_map<glm::ivec3, Voxel*>& voxelMap() const;
+    int voxelCount() const;
 
     VoxelRenderData *voxelRenderData();
 
-    void setOrientation(glm::quat orientation);
-    void setPosition(glm::vec3 pos);
-    void rotate(glm::quat param1);
-    void move(glm::vec3 vec3);
-    
+    void setOrientation(const glm::quat& orientation);
+    void setPosition(const glm::vec3& pos);
+    void rotate(const glm::quat& param1);
+    void move(const glm::vec3& vec3);
+
 protected:
     VoxelRenderData m_voxelRenderData;
     WorldTransform m_transform;

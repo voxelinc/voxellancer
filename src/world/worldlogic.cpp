@@ -6,6 +6,7 @@
 
 #include "world.h"
 #include "god.h"
+#include "glow/AutoTimer.h"
 
 #include <glow/AutoTimer.h>
 
@@ -19,17 +20,19 @@ WorldLogic::WorldLogic(World &world):
 void WorldLogic::update(float deltaSecs) {
     m_mover.moveWorldObjects(deltaSecs);
 
-    m_impactAccumulator.parse(m_mover.impacts());
-    //m_impactResolver.alterVelocities(m_impactAccumulator.clusterImpacts());
+    m_voxelCollisionAccumulator.parse(m_mover.voxelCollisions());
 
-    m_impactAccumulator.applyOnImpactHooks();
+    m_damageImpactGenerator.parse(m_voxelCollisionAccumulator.worldObjectCollisions());
+    m_elasticImpulseGenerator.parse(m_voxelCollisionAccumulator.worldObjectCollisions());
 
-    damageForwardLoop(m_impactAccumulator.impacts());
-
-    m_impactAccumulator.clear();
+    m_elasticImpulsor.parse(m_elasticImpulseGenerator.worldObjectImpulses());
+    damageForwardLoop(m_damageImpactGenerator.damageImpacts());
 
     m_splitDetector.searchSplitOffs(m_damager.worldObjectModifications());
     m_splitter.split(m_splitDetector.worldObjectSplits());
+
+    m_boundsShrinker.shrink(m_damager.worldObjectModifications());
+
     m_world.god().scheduleSpawns(m_splitter.splitOffWorldObjects());
 
 //    m_wrecker.detectWreckages(m_damager.modifiedVoxelClusters());
@@ -49,10 +52,10 @@ void WorldLogic::update(float deltaSecs) {
     return m_damageForwarder;
  }
 
-void WorldLogic::damageForwardLoop(std::list<Impact> damageImpacts) {
+void WorldLogic::damageForwardLoop(std::list<DamageImpact> damageImpacts) {
     m_damager.reset();
 
-    if(damageImpacts.size() == 0) {
+    if(damageImpacts.empty()) {
         return;
     }
 
@@ -61,7 +64,7 @@ void WorldLogic::damageForwardLoop(std::list<Impact> damageImpacts) {
     while(damageImpacts.size() > 0) {
         // only treat clusters that aren't scheduled for removal anyway
         for (WorldObject* object : m_world.god().scheduledRemovals()){
-            std::list<Impact>::iterator iter = damageImpacts.begin();
+            std::list<DamageImpact>::iterator iter = damageImpacts.begin();
             while (iter != damageImpacts.end()){
                 if (iter->worldObject() == object){
                     damageImpacts.erase(iter++);
@@ -73,12 +76,13 @@ void WorldLogic::damageForwardLoop(std::list<Impact> damageImpacts) {
 
         m_damager.applyDamages(damageImpacts);
 
-        m_damageForwarder.forwardDamageImpacts(m_damager.deadlyImpacts());
+        m_damageForwarder.forwardDamageImpacts(m_damager.deadlyDamageImpacts());
         m_damageForwarder.dontForwardTo(m_damager.deadVoxels());
 
-        m_voxelHangman.applyOnDestructionHooks(m_damager.deadlyImpacts());
-        m_voxelHangman.removeDestroyedVoxels(m_damager.deadlyImpacts());
+        m_voxelHangman.applyOnDestructionHooks(m_damager.deadlyDamageImpacts());
+        m_voxelHangman.removeDestroyedVoxels(m_damager.deadlyDamageImpacts());
 
         damageImpacts = m_damageForwarder.forwardedDamageImpacts();
     }
 }
+
