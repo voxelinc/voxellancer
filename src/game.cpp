@@ -85,19 +85,13 @@ void Game::initialize()
     m_program->attach(vertexShader, fragmentShader);
     m_program->bindFragDataLocation(0, "color");
 
-    m_program->getUniform<GLint>("texture")->set(0);
+    m_program->setUniform("texture", 0);
 
     auto vertex = m_program->getAttributeLocation("vertex");
 
-    m_buffer = new glow::Buffer(GL_ARRAY_BUFFER);
+    /*m_buffer = new glow::Buffer(GL_ARRAY_BUFFER);
     m_vertex = new glow::VertexArrayObject();
 
-
-   /* auto vertices = glow::Array<glm::vec3>()
-        << glm::vec3(-1, -1, 0)
-        << glm::vec3(1, -1, 0)
-        << glm::vec3(1, 1, 0)
-        << glm::vec3(-1, 1, 0);*/
 
     auto vertices = glow::Array<glm::vec3>()
         << glm::vec3(-1, -1, 0)
@@ -117,6 +111,11 @@ void Game::initialize()
 
 
     m_vertex->enable(vertex);
+
+    */
+
+    m_quad = new glowutils::ScreenAlignedQuad(m_program);
+
 
     glow::AutoTimer t("Initialize Game");
 
@@ -230,13 +229,14 @@ void Game::draw()
 	glFrontFace(GL_CCW);
 	glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
+    glEnable(GL_DEPTH_TEST);
+    glDepthMask(GL_TRUE);
    
     //m_fbo->attachTexture2D(GL_COLOR_ATTACHMENT0, m_skybox->m_texture);
 
     //m_fbo->setDrawBuffers({ GL_COLOR_ATTACHMENT0 });
 
     m_skybox->draw(&m_camera);
-
 
 
 
@@ -256,10 +256,20 @@ void Game::draw()
     m_hud->draw();
 
     m_hd3000dummy->drawIfActive();
-
+    
     m_fbo->unbind();
+
+    glDisable(GL_DEPTH_TEST);
+    glDepthMask(GL_FALSE);
+
+    m_color->bindActive(GL_TEXTURE0);
     m_program->use();
 
+    m_vertex->drawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+    m_color->unbind();
+    m_program->release();
+    
     //draw();
 
 }

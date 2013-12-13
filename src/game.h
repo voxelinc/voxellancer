@@ -8,6 +8,7 @@
 #include <glow/FrameBufferObject.h>
 #include <glow/RenderBufferObject.h>
 #include <glow/VertexAttributeBinding.h>
+#include <glowutils/ScreenAlignedQuad.h>
 #include <glow/Buffer.h>
 #include <glow/glow.h>
 #include <glowutils/glowutils.h>
@@ -58,6 +59,7 @@ private:
     glow::ref_ptr<glow::Buffer> m_buffer;
     glow::ref_ptr<glow::VertexArrayObject> m_vertex;
     glow::ref_ptr<glow::Program> m_program;
+    glow::ref_ptr<glowutils::ScreenAlignedQuad> m_quad;
 
     //GLuint m_framebuffer;
     //GLuint m_depth;
