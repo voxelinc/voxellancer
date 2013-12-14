@@ -21,6 +21,7 @@ public:
 
 protected:
     Property<int> prop_spawnCount;
+    Property<float> prop_lifetime;
 
 };
 

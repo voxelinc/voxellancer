@@ -8,7 +8,8 @@
 
 
 VoxelExplosionGenerator::VoxelExplosionGenerator() :
-    prop_spawnCount("vfx.explosionSpawnCount")
+    prop_spawnCount("vfx.explosionSpawnCount"),
+    prop_lifetime("vfx.explosionLifetime")
 {
     std::srand((unsigned int)time(NULL));
 }
@@ -23,7 +24,7 @@ void VoxelExplosionGenerator::spawnVoxelExplosion(const glm::vec3& position, int
     for (int i = 0; i < prop_spawnCount; i++){
         for (int j = 0; j < prop_spawnCount; j++){
             for (int k = 0; k < prop_spawnCount; k++){
-                VoxelExplosionCluster* newObject = new VoxelExplosionCluster(0.95f * scale, 10.0f); //multiply 0.95 to certainly be below the collision threshold
+                VoxelExplosionCluster* newObject = new VoxelExplosionCluster(0.95f * scale, prop_lifetime); //multiply 0.95 to certainly be below the collision threshold
                 Voxel* voxel = new Voxel(glm::ivec3(0, 0, 0), color);
                 voxel->addToObject(newObject);
                 newObject->setCrucialVoxel(glm::ivec3(0, 0, 0));
