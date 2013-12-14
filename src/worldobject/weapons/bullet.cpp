@@ -8,7 +8,7 @@
 
 
 Bullet::Bullet(WorldObject* creator, glm::vec3 position, glm::quat orientation, glm::vec3 direction, float speed, float range) :
-    WorldObject(new BulletPhysics(*this), new CollisionDetector(*this), 0.5f, CollisionFilterClass::Bullet),
+    WorldObject(new BulletPhysics(*this, 0.5), new CollisionDetector(*this), 0.5f, CollisionFilterClass::Bullet),
     m_creator(creator)
 {
     m_lifetime = range / speed;

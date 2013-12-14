@@ -3,8 +3,8 @@
 #include <glm/gtx/quaternion.hpp>
 
 
-BulletPhysics::BulletPhysics(WorldObject& worldObject) :
-    Physics(worldObject)
+BulletPhysics::BulletPhysics(WorldObject& worldObject, float scale) :
+    Physics(worldObject, scale)
 {
 }
 

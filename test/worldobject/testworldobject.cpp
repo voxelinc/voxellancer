@@ -44,6 +44,28 @@ go_bandit([](){
 
             AssertThat(a.aabb().contains(glm::vec3(0, 0, -4.49)), Equals(true));
         });
+
+        it("incremental mass and center calculation works", [&]() {
+            WorldObject a(0.8f);
+            WorldObject b(0.8f);
+           
+            a.addVoxel(new Voxel(glm::ivec3(1, 0, 0), 0xFFFFFF));
+            a.addVoxel(new Voxel(glm::ivec3(2, 0, 0), 0xFFFFFF));
+            a.addVoxel(new Voxel(glm::ivec3(3, 0, 0), 0xFFFFFF));
+            a.addVoxel(new Voxel(glm::ivec3(3, 1, 0), 0xFFFFFF));
+            a.addVoxel(new Voxel(glm::ivec3(3, 2, 0), 0xFFFFFF));
+            a.finishInitialization();
+            a.removeVoxel(glm::ivec3(3, 2, 0));
+
+            b.addVoxel(new Voxel(glm::ivec3(1, 0, 0), 0xFFFFFF));
+            b.addVoxel(new Voxel(glm::ivec3(2, 0, 0), 0xFFFFFF));
+            b.addVoxel(new Voxel(glm::ivec3(3, 0, 0), 0xFFFFFF));
+            b.addVoxel(new Voxel(glm::ivec3(3, 1, 0), 0xFFFFFF));
+            b.finishInitialization();
+
+            AssertThat(a.physics().mass(), Equals(b.physics().mass()));
+            AssertThat(a.physics().phyicalCenter(), EqualsWithDelta(b.physics().phyicalCenter(), glm::vec3(0.01)));
+        });
     });
 });
 

@@ -7,7 +7,6 @@
 #include "voxel/specialvoxels/fuelvoxel.h"
 
 
-
 WorldObject::WorldObject(CollisionFilterClass collisionFilterClass):
     WorldObject(1.0f, glm::vec3(0), collisionFilterClass)
 {
@@ -15,7 +14,7 @@ WorldObject::WorldObject(CollisionFilterClass collisionFilterClass):
 }
 
 WorldObject::WorldObject(float scale, glm::vec3 center, CollisionFilterClass collisionFilterClass) :
-    WorldObject(new Physics(*this), new CollisionDetector(*this), scale, collisionFilterClass)
+    WorldObject(new Physics(*this, scale), new CollisionDetector(*this), scale, collisionFilterClass)
 {
     m_transform.setCenter(center);
 }
