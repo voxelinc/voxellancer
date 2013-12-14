@@ -8,7 +8,7 @@
 
 
 WorldObject::WorldObject(float scale, glm::vec3 center) :
-    WorldObject(new Physics(*this), new CollisionDetector(*this), scale)
+    WorldObject(new Physics(*this, scale), new CollisionDetector(*this), scale)
 {
     m_transform.setCenter(center);
 }
@@ -58,7 +58,7 @@ void WorldObject::update(float delta_sec) {
 
 }
 
-std::list<Impact>& WorldObject::updatePosition(float delta_sec) {
+std::list<VoxelCollision>& WorldObject::performMovement(float delta_sec) {
     return m_physics->move(delta_sec);
 }
 
@@ -108,20 +108,26 @@ void WorldObject::recalculateCenterAndMass() {
     m_collisionDetector->updateGeode();
 }
 
-void WorldObject::accelerate(glm::vec3 direction) {
+void WorldObject::accelerate(const glm::vec3& direction) {
     m_physics->accelerate(direction);
 }
 
-void WorldObject::accelerateAngular(glm::vec3 axis) {
+void WorldObject::accelerateAngular(const glm::vec3& axis) {
     m_physics->accelerateAngular(axis);
+}
+
+void WorldObject::updateTransformAndGeode(const glm::vec3& position, const glm::quat& orientation) {
+    setOrientation(orientation);
+    setPosition(position);
+    m_collisionDetector->updateGeode();
 }
 
 Voxel *WorldObject::crucialVoxel() {
     return m_crucialVoxel;
 }
 
-void WorldObject::setCrucialVoxel(glm::ivec3 pos) {
-    m_crucialVoxel = voxel(pos);
+void WorldObject::setCrucialVoxel(const glm::ivec3& cell) {
+    m_crucialVoxel = voxel(cell);
 }
 
 void WorldObject::onImpact(){

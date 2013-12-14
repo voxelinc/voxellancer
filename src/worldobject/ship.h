@@ -28,8 +28,8 @@ public:
     void fire();
     float minAimDistance();
 
-    virtual void accelerate(glm::vec3 direction);
-    virtual void accelerateAngular(glm::vec3 axis);
+    virtual void accelerate(const glm::vec3& direction) override;
+    virtual void accelerateAngular(const glm::vec3& axis) override;
 
 protected:
 

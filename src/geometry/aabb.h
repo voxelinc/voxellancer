@@ -14,7 +14,6 @@ class TAABB
 public:
     TAABB();
     TAABB(const glm::detail::tvec3<T> &llf, const glm::detail::tvec3<T> &rub);
-    virtual ~TAABB();
 
     const glm::detail::tvec3<T> &llf() const;
     void setLlf(const glm::detail::tvec3<T> &llf);
@@ -52,6 +51,7 @@ public:
     void extend(const glm::detail::tvec3<T> & point);
 
     static TAABB<float> containing(const Sphere &sphere);
+
 
 protected:
     glm::detail::tvec3<T> m_llf, m_rub;
