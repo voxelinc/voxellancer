@@ -1,6 +1,6 @@
 #include "voxelexplosiongenerator.h"
 
-#include <list>
+#include <ctime>
 
 #include "world/god.h"
 #include "world/world.h"
@@ -10,6 +10,7 @@
 VoxelExplosionGenerator::VoxelExplosionGenerator() :
     prop_spawnCount("vfx.explosionSpawnCount")
 {
+    std::srand((unsigned int)time(NULL));
 }
 
 VoxelExplosionGenerator::~VoxelExplosionGenerator() {
@@ -26,20 +27,20 @@ void VoxelExplosionGenerator::spawnVoxelExplosion(const glm::vec3& position, int
                 Voxel* voxel = new Voxel(glm::ivec3(0, 0, 0), color);
                 voxel->addToObject(newObject);
                 newObject->setCrucialVoxel(glm::ivec3(0, 0, 0));
-
-                // TODO: position correctly within radius
+                
+                // Position voxels in a cube
                 newObject->setPosition( position +
                     ((spawnRadius / 1.4143f) * glm::vec3(-1, -1, -1)) +  // lower corner
                     scale * (0.5f + glm::vec3(i, j, k))
                     ); 
 
                 newObject->physics().setSpeed( force * glm::vec3(    
-                    (i < prop_spawnCount / 2 ? -1 : 1) * ((rand() % 100)) / 10.0f, 
-                    (j < prop_spawnCount / 2 ? -1 : 1) * ((rand() % 100)) / 10.0f,
-                    (k < prop_spawnCount / 2 ? -1 : 1) * ((rand() % 100)) / 10.0f)
+                    (i < prop_spawnCount / 2 ? -1 : 1) * ((std::rand() % 100)) / 10.0f, 
+                    (j < prop_spawnCount / 2 ? -1 : 1) * ((std::rand() % 100)) / 10.0f,
+                    (k < prop_spawnCount / 2 ? -1 : 1) * ((std::rand() % 100)) / 10.0f)
                     + impactVector);
                 
-                newObject->physics().setAngularSpeed(glm::vec3(((rand() % 100) - 50) / 100.0f, ((rand() % 100) - 50) / 100.0f, ((rand() % 100) - 50) / 100.0f));
+                newObject->physics().setAngularSpeed(glm::vec3(((std::rand() % 100) - 50) / 100.0f, ((std::rand() % 100) - 50) / 100.0f, ((std::rand() % 100) - 50) / 100.0f));
 
                 newObject->finishInitialization();
 
