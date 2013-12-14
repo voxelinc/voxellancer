@@ -5,6 +5,7 @@
 
 #include "utils/tostring.h"
 #include "physics/physics.h"
+#include "worldobject/voxelexplosiongenerator.h"
 
 
 Rocket::Rocket(glm::vec3 position, glm::quat orientation, const glm::vec3& initialSpeed, float travelSpeed, float lifetime, WorldObject* target) :
@@ -66,10 +67,12 @@ void Rocket::update(float delta_sec){
 }
 
 void Rocket::onCollision(){
-    //TODO: spawn explosion
     World::instance()->god().scheduleRemoval(this);
+    VoxelExplosionGenerator generator;
+    generator.spawnVoxelExplosion(m_transform.position(), 0xFF0000, m_transform.scale());
 }
 
 void Rocket::onSpawnFail(){
-    //TODO: spawn explosion
+    VoxelExplosionGenerator generator;
+    generator.spawnVoxelExplosion(m_transform.position(), 0xFF0000, m_transform.scale());
 }

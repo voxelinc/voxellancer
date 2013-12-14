@@ -12,6 +12,7 @@ VoxelExplosionCluster::VoxelExplosionCluster(float scale, float lifetime) :
     m_objectInfo.setCanLockOn(false);
     m_objectInfo.setName("Particle");
     setCollideableWith(CollisionFilterClass::ExplosionParticle, false);
+    setCollideableWith(CollisionFilterClass::Bullet, false);
 }
 
 void VoxelExplosionCluster::update(float deltasec){
