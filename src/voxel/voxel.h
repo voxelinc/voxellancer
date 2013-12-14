@@ -20,7 +20,7 @@ namespace std {
 class Voxel
 {
 public:
-    Voxel(const glm::ivec3& gridCell, const int color = 0xFFFFFF, float mass = 1.0f, float hp = 20.0f);
+    Voxel(const glm::ivec3& gridCell, const int color = 0xFFFFFF, float mass = 1.0f, float hp = 50.0f);
     Voxel(const Voxel& other);
     virtual ~Voxel();
 
