@@ -57,10 +57,10 @@ void Bullet::update(float delta_sec){
 void Bullet::onCollision(){
     World::instance()->god().scheduleRemoval(this);
     VoxelExplosionGenerator generator;
-    generator.spawnVoxelExplosion(m_transform.position(), 0xFF0000, m_transform.scale(), 0.1f);
+    generator.spawnVoxelExplosion(m_transform.position(), 0xFF0000, m_transform.scale(), 0.2f);
 }
 
 void Bullet::onSpawnFail(){
     VoxelExplosionGenerator generator;
-    generator.spawnVoxelExplosion(m_transform.position(), 0xFF0000, m_transform.scale(), 0.1f);
+    generator.spawnVoxelExplosion(m_transform.position(), 0xFF0000, m_transform.scale(), 0.2f);
 }

@@ -22,6 +22,5 @@ void VoxelExplosionCluster::update(float deltasec){
 }
 
 void VoxelExplosionCluster::onCollision(){
-    glow::debug("collision");
     World::instance()->god().scheduleRemoval(this);
 }

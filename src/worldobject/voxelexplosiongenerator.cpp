@@ -26,7 +26,7 @@ void VoxelExplosionGenerator::spawnVoxelExplosion(const glm::vec3& position, int
     for (int i = lowestIndex; i < highestIndex; i++){
         for (int j = lowestIndex; j < highestIndex; j++){
             for (int k = lowestIndex; k < highestIndex; k++){
-                VoxelExplosionCluster* newObject = new VoxelExplosionCluster(0.95f * scale, prop_lifetime); //multiply 0.95 to certainly be below the collision threshold
+                VoxelExplosionCluster* newObject = new VoxelExplosionCluster(0.95f * scale, prop_lifetime * force); //multiply 0.95 to certainly be below the collision threshold
                 Voxel* voxel = new Voxel(glm::ivec3(0, 0, 0), color, 0.000001f, 0.1f);
                 voxel->addToObject(newObject);
                 newObject->setCrucialVoxel(glm::ivec3(0, 0, 0));
