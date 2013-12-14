@@ -49,7 +49,7 @@ public:
 
     void updateTransformAndGeode(const glm::vec3& position, const glm::quat& orientation);
 
-    virtual void onImpact();
+    virtual void onCollision();
     virtual void onSpawnFail();
 
 

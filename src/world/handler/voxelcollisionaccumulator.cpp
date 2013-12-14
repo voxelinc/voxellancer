@@ -29,8 +29,10 @@ struct WorldObjectPair {
 
 void VoxelCollisionAccumulator::parse(std::list<VoxelCollision>& voxelCollisions) {
     std::map<WorldObjectPair, WorldObjectCollision*> worldObjectCollisionMap;
+    std::set<WorldObject*> worldObjectSet;
 
     m_worldObjectCollisions.clear();
+    m_worldObjects.clear();
 
     for(VoxelCollision& voxelCollision : voxelCollisions) {
         WorldObjectCollision* worldObjectCollision;
@@ -46,6 +48,9 @@ void VoxelCollisionAccumulator::parse(std::list<VoxelCollision>& voxelCollisions
         }
 
         worldObjectCollision->addVoxelCollision(voxelCollision);
+
+        worldObjectSet.insert(voxelCollision.a().worldObject());
+        worldObjectSet.insert(voxelCollision.b().worldObject());
     }
 
     for(std::pair<const WorldObjectPair, WorldObjectCollision*>& p : worldObjectCollisionMap) {
@@ -53,8 +58,19 @@ void VoxelCollisionAccumulator::parse(std::list<VoxelCollision>& voxelCollisions
         m_worldObjectCollisions.push_back(*p.second);
         delete p.second;
     }
+
+    m_worldObjects.assign(worldObjectSet.begin(), worldObjectSet.end());
+}
+
+void VoxelCollisionAccumulator::applyOnCollsionHooks(){
+    for (WorldObject* o : m_worldObjects){
+        o->onCollision();
+    }
 }
 
 std::list<WorldObjectCollision>& VoxelCollisionAccumulator::worldObjectCollisions() {
     return m_worldObjectCollisions;
+}
+std::list<WorldObject*>& VoxelCollisionAccumulator::worldObjects() {
+    return m_worldObjects;
 }
