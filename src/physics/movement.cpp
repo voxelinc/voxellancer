@@ -30,7 +30,7 @@ bool Movement::perform() {
 
     AABB phaseAABB = m_collisionDetector.aabb(m_originalTransform).united(m_collisionDetector.aabb(m_targetTransform));
 
-    if(m_collisionDetector.worldTree()->areGeodesInAABB(phaseAABB, m_worldObject.collisionDetector().geode())) {
+    if(m_collisionDetector.worldTree()->areGeodesInAABB(phaseAABB, m_worldObject.collisionDetector().geode()->containingNode(), m_worldObject.collisionDetector().geode())) {
         glm::vec3 directionalStep = m_targetTransform.position() - m_originalTransform.position();
         m_distance = glm::length(directionalStep);
 
