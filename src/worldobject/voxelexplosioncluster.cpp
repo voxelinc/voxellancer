@@ -18,3 +18,7 @@ void VoxelExplosionCluster::update(float deltasec){
     if (m_lifetime < 0)
         World::instance()->god().scheduleRemoval(this);
 }
+
+void VoxelExplosionCluster::onCollision(){
+    World::instance()->god().scheduleRemoval(this);
+}

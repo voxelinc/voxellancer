@@ -14,6 +14,8 @@ public:
     VoxelExplosionCluster(float scale, float lifetime);
     virtual void update(float deltasec);
 
+    virtual void onCollision() override;
+
 protected:
     float m_lifetime;
 };

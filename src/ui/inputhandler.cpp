@@ -72,7 +72,7 @@ void InputHandler::keyCallback(int key, int scancode, int action, int mods){
         VoxelExplosionGenerator g;
         g.spawnVoxelExplosion(m_player->playerShip()->transform().position() + m_player->playerShip()->transform().orientation() * glm::vec3(0, 0, -30),
             0xFFFFFF,
-            (float) (rand() % 3) + 1,
+            (float)(rand() % 3) + 1,
             (float) (rand() % 2) + 1,
             glm::vec3(0,0,0));
     }
