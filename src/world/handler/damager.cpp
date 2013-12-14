@@ -18,7 +18,6 @@ void Damager::applyDamages(std::list<DamageImpact> &damageImpacts) {
         Voxel *voxel = damageImpact.voxel();
 
         float hpBeforeDamage = voxel->hp();
-        //std::cout << hpBeforeDamage << " reduced by " << damageImpact.damage() << std::endl;
         voxel->applyDamage(damageImpact.damage());
 
         if(voxel->hp() <= 0) {
