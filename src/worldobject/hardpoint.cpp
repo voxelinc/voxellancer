@@ -39,8 +39,7 @@ void Hardpoint::update(float delta_sec) {
 AimType Hardpoint::aimType() {
     if (m_weapon != nullptr) {
         return m_weapon->aimType();
-    }
-    else {
+    } else {
         return AimType::None;
     }
 }
@@ -59,8 +58,7 @@ void Hardpoint::shootAtObject(WorldObject* target){
 float Hardpoint::aimRange(){
     if (m_weapon) {
         return m_weapon->aimRange();
-    }
-    else {
+    } else {
         return -1;
     }
 }

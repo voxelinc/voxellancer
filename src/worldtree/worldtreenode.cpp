@@ -145,6 +145,7 @@ bool WorldTreeNode::areGeodesInAABB(const AABB& aabb, WorldObject* collideableWi
         }
     }
     else {
+
         for(WorldTreeNode* subnode : m_subnodes) {
             if(subnode->areGeodesInAABB(aabb, collideableWith)) {
                 return true;

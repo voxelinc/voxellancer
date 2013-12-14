@@ -17,8 +17,9 @@ class FuelVoxel;
 class WorldObject : public VoxelCluster, public CollisionFilterable
 {
 public:
-    WorldObject(CollisionFilterClass collisionFilterClass, float scale = 1.0f, glm::vec3 center = glm::vec3(0));
-    WorldObject(CollisionFilterClass collisionFilterClass, const WorldTransform& transform);
+    WorldObject(CollisionFilterClass collisionFilterClass = CollisionFilterClass::Other);
+    WorldObject(float scale, glm::vec3 center = glm::vec3(0), CollisionFilterClass collisionFilterClass = CollisionFilterClass::Other);
+    WorldObject(const WorldTransform& transform, CollisionFilterClass collisionFilterClass = CollisionFilterClass::Other);
     virtual ~WorldObject();
 
     CollisionDetector& collisionDetector();
@@ -55,7 +56,7 @@ public:
 
 
 protected:
-    WorldObject(CollisionFilterClass collisionFilterClass, Physics* physics, CollisionDetector* detector, float scale = 1.0f);
+    WorldObject(Physics* physics, CollisionDetector* detector, float scale = 1.0f, CollisionFilterClass collisionFilterClass = CollisionFilterClass::Other);
     std::unique_ptr<CollisionDetector> m_collisionDetector;
     std::unique_ptr<Physics> m_physics;
     Voxel* m_crucialVoxel;

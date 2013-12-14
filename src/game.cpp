@@ -77,7 +77,7 @@ void Game::initialize()
     m_voxelRenderer = std::unique_ptr<VoxelRenderer>(new VoxelRenderer);
 
 
-    WorldObject *testClusterMoveable = new WorldObject(CollisionFilterClass::Other);
+    WorldObject *testClusterMoveable = new WorldObject();
     testClusterMoveable->move(glm::vec3(-20, 0, 0));
     testClusterMoveable->rotate(glm::angleAxis(-90.f, glm::vec3(0, 1, 0)));
     testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 7), 0x00FF00));
@@ -114,7 +114,7 @@ void Game::initialize()
 
     m_player.setShip(testCluster);
 
-    WorldObject *wall = new WorldObject(CollisionFilterClass::Other, 1);
+    WorldObject *wall = new WorldObject(1);
     wall->move(glm::vec3(-20, 0, -50));
     wall->rotate(glm::angleAxis(-90.f, glm::vec3(0, 1, 0)));
     for(int x = 0; x < 20; x++) {
