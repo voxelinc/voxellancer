@@ -31,16 +31,16 @@ void VoxelExplosionGenerator::spawnVoxelExplosion(const glm::vec3& position, int
                 voxel->addToObject(newObject);
                 newObject->setCrucialVoxel(glm::ivec3(0, 0, 0));
                 
-                // Position voxels in a cube
+                // Position voxels in a cube within the save spawn radius
                 newObject->setPosition( position +
                     scale * (0.5f + glm::vec3(i, j, k))
                     ); 
 
                 // the further out, the faster the speed
                 newObject->physics().setSpeed( force * glm::vec3(    
-                    i * ((std::rand() % 100)) / 10.0f, 
-                    j * ((std::rand() % 100)) / 10.0f,
-                    k * ((std::rand() % 100)) / 10.0f)
+                    i * (std::rand() % 100) / 10.0f, 
+                    j * (std::rand() % 100) / 10.0f,
+                    k * (std::rand() % 100) / 10.0f)
                     + impactVector);
                 
                 newObject->physics().setAngularSpeed(glm::vec3(((std::rand() % 100) - 50) / 100.0f, ((std::rand() % 100) - 50) / 100.0f, ((std::rand() % 100) - 50) / 100.0f));
