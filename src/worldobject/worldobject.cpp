@@ -8,7 +8,7 @@
 
 
 WorldObject::WorldObject(float scale, glm::vec3 center) :
-    WorldObject(new Physics(*this), new CollisionDetector(*this), scale)
+    WorldObject(new Physics(*this, scale), new CollisionDetector(*this), scale)
 {
     m_transform.setCenter(center);
 }

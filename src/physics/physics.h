@@ -17,7 +17,7 @@ class WorldTransform;
 
 class Physics {
 public:
-    Physics(WorldObject& worldObject);
+    Physics(WorldObject& worldObject, float scale);
     virtual ~Physics();
 
     const glm::vec3& speed() const;
@@ -42,11 +42,11 @@ public:
 
     void finishInitialization();
     glm::vec3 calculateMassAndCenter();
+    glm::vec3 phyicalCenter();
 
 
 protected:
     virtual void updateSpeed(float delta_sec);
-
 
 protected:
     float m_mass;
@@ -65,5 +65,6 @@ protected:
 
     std::list<VoxelCollision> m_collisions;
     glm::vec3 m_center;
+    float m_massScaleFactor;
 };
 
