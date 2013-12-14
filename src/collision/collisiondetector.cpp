@@ -112,16 +112,16 @@ void CollisionDetector::updateGeode() {
 std::list<VoxelCollision>& CollisionDetector::checkCollisions() {
     assert(m_geode != nullptr);
 
-
     m_collisions.clear();
 
-    std::set<WorldTreeGeode*> possibleColliders = m_worldTree->geodesInAABB(m_worldObject.aabb(), m_geode->containingNode());
+    std::set<WorldTreeGeode*> possibleColliders = m_worldTree->geodesInAABB(m_worldObject.aabb(), m_geode->containingNode(), &m_worldObject);
     possibleColliders.erase(m_geode);
 
     for (WorldTreeGeode* possibleCollider : possibleColliders) {
         assert(possibleCollider->worldObject() != nullptr);
         WorldObject* other = possibleCollider->worldObject();
 
+        assert(m_worldObject.isCollideableWith(other));
         checkCollisions(&m_voxelTree, &other->collisionDetector().voxeltree());
     }
 

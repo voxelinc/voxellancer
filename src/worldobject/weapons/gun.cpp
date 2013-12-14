@@ -23,10 +23,9 @@ void Gun::update(float delta_sec){
     }
 }
 
-
 void Gun::shootAtPoint(Hardpoint* source, glm::vec3 target){
     if (m_cooldown <= 0){
-        Bullet *b = new Bullet(source->position(), source->ship()->transform().orientation(), target - source->position(), prop_speed, prop_aimRange);
+        Bullet *b = new Bullet(Weapon::worldObject(), source->position(), source->ship()->transform().orientation(), target - source->position(), prop_speed, prop_aimRange);
         m_cooldown = prop_cooldownTime;
         World::instance()->god().scheduleSpawn(b);
     }
