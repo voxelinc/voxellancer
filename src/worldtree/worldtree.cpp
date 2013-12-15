@@ -23,39 +23,38 @@ WorldTreeGeode *WorldTree::insert(WorldObject *worldObject) {
     return geode;
 }
 
-std::set<WorldTreeGeode*> WorldTree::geodesInAABB(const AABB &aabb) const {
-    return WorldTreeNode::geodesInAABB(aabb);
-}
 
-std::set<WorldTreeGeode*> WorldTree::geodesInAABB(const AABB &aabb, WorldTreeNode *nodeHint) const {
-    assert(nodeHint != nullptr);
-
-    if (nodeHint->aabb().contains(aabb)) {
-        return nodeHint->geodesInAABB(aabb);
-    }
-    else if(nodeHint->parent() != nullptr) {
-        return geodesInAABB(aabb, nodeHint->parent());
+std::set<WorldTreeGeode*> WorldTree::geodesInAABB(const AABB& aabb, WorldTreeNode* nodeHint, WorldObject* collideableWith) const {
+    if (nodeHint == nullptr) {
+        return WorldTreeNode::geodesInAABB(aabb, collideableWith);
     }
     else {
-        return WorldTreeNode::geodesInAABB(aabb);
+        if (nodeHint->aabb().contains(aabb)) {
+            return nodeHint->geodesInAABB(aabb, collideableWith);
+        }
+        else if(nodeHint->parent() != nullptr) {
+            return geodesInAABB(aabb, nodeHint->parent(), collideableWith);
+        }
+        else {
+            return WorldTreeNode::geodesInAABB(aabb, collideableWith);
+        }
     }
 }
 
-bool WorldTree::areGeodesInAABB(const AABB &aabb, WorldTreeGeode *ignore) const {
-    return WorldTreeNode::areGeodesInAABB(aabb, ignore);
-}
-
-bool WorldTree::areGeodesInAABB(const AABB &aabb, WorldTreeNode *nodeHint, WorldTreeGeode *ignore) const {
-    assert(nodeHint != nullptr);
-
-    if (nodeHint->aabb().contains(aabb)) {
-        return nodeHint->areGeodesInAABB(aabb, ignore);
-    }
-    else if(nodeHint->parent() != nullptr) {
-        return areGeodesInAABB(aabb, nodeHint->parent(), ignore);
+bool WorldTree::areGeodesInAABB(const AABB& aabb, WorldTreeNode* nodeHint, WorldObject* collideableWith) const {
+    if (nodeHint == nullptr) {
+        return WorldTreeNode::areGeodesInAABB(aabb, collideableWith);
     }
     else {
-        return WorldTreeNode::areGeodesInAABB(aabb, ignore);
+        if (nodeHint->aabb().contains(aabb)) {
+            return nodeHint->areGeodesInAABB(aabb, collideableWith);
+        }
+        else if(nodeHint->parent() != nullptr) {
+            return areGeodesInAABB(aabb, nodeHint->parent(), collideableWith);
+        }
+        else {
+            return WorldTreeNode::areGeodesInAABB(aabb, collideableWith);
+        }
     }
 }
 

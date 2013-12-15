@@ -67,19 +67,37 @@ go_bandit([](){
             glm::vec3 vtest(1.0, 2.0, 3.0);
             WorldTransform w(glm::vec3(0), 2.0);            
             
-            AssertThat(w.applyTo(vtest), EqualsWithDelta(glm::vec3(w.matrix() * glm::vec4(vtest, 1.0)), glm::vec3(0.01, 0.01, 0.01)));
+            AssertThat(w.applyTo(vtest), EqualsWithDelta(glm::vec3(w.matrix() * glm::vec4(vtest, 1.0)), glm::vec3(0.01)));
 
             w.setPosition(glm::vec3(1, 2, 0));
-            AssertThat(w.applyTo(vtest), EqualsWithDelta(glm::vec3(w.matrix() * glm::vec4(vtest, 1.0)), glm::vec3(0.01, 0.01, 0.01)));
+            AssertThat(w.applyTo(vtest), EqualsWithDelta(glm::vec3(w.matrix() * glm::vec4(vtest, 1.0)), glm::vec3(0.01)));
 
             w.setOrientation(glm::angleAxis(20.f, glm::vec3(6.0, 3.0, 1.0)));
-            AssertThat(w.applyTo(vtest), EqualsWithDelta(glm::vec3(w.matrix() * glm::vec4(vtest, 1.0)), glm::vec3(0.01, 0.01, 0.01)));
+            AssertThat(w.applyTo(vtest), EqualsWithDelta(glm::vec3(w.matrix() * glm::vec4(vtest, 1.0)), glm::vec3(0.01)));
             
             w.setCenter(glm::vec3(6, 7, 0));
-            AssertThat(w.applyTo(vtest), EqualsWithDelta(glm::vec3(w.matrix() * glm::vec4(vtest, 1.0)), glm::vec3(0.01, 0.01, 0.01)));
+            AssertThat(w.applyTo(vtest), EqualsWithDelta(glm::vec3(w.matrix() * glm::vec4(vtest, 1.0)), glm::vec3(0.01)));
 
             w.rotate(glm::angleAxis(123.f, glm::vec3(1.0, 2.0, 3.0)));
-            AssertThat(w.applyTo(vtest), EqualsWithDelta(glm::vec3(w.matrix() * glm::vec4(vtest, 1.0)), glm::vec3(0.01, 0.01, 0.01)));
+            AssertThat(w.applyTo(vtest), EqualsWithDelta(glm::vec3(w.matrix() * glm::vec4(vtest, 1.0)), glm::vec3(0.01)));
+        });
+
+
+        it("test moving center", [&]() {
+            glm::vec3 vtest(5.0, 8.0, 12.0);
+            glm::vec3 vdiff(1.0, 0.0, 2.0);
+            WorldTransform w1(glm::vec3(1, 2, 3), 2.0);
+            WorldTransform w2(glm::vec3(1, 2, 3)-vdiff, 2.0);
+
+            AssertThat(w1.applyTo(vtest), EqualsWithDelta(w2.applyTo(vtest - vdiff), glm::vec3(0.01)));
+
+            /*glm::quat orientation = glm::angleAxis(123.f, glm::vec3(1, 3, 5));
+            w1.setOrientation(orientation);
+            w1.setOrientation(orientation);
+
+            AssertThat(w1.applyTo(vtest), EqualsWithDelta(w2.applyTo(vtest - vdiff), glm::vec3(0.01)));*/
+
+
         });
 
     });

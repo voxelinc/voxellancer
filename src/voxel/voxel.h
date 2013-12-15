@@ -36,7 +36,7 @@ public:
 
     float mass() const;
 
-    // These hooks apply only for WorldObjects and do not need to be called by pure VoxelClusters
+    // These hooks apply only for WorldObjects and do not need to be called by pqure VoxelClusters
     virtual void onRemoval();
     virtual void onDestruction();
 

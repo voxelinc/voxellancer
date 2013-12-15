@@ -6,7 +6,7 @@
 
 class BulletPhysics : public Physics  {
 public:
-    BulletPhysics(WorldObject& worldObject);
+    BulletPhysics(WorldObject& worldObject, float scale);
 
 protected:
     
