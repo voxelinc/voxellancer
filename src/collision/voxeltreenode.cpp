@@ -157,7 +157,11 @@ void VoxelTreeNode::octuple() {
     VoxelTreeNode *thisCopy = new VoxelTreeNode(m_worldObject, this, m_gridAABB);
 
     thisCopy->m_subnodes = m_subnodes;
+
     thisCopy->m_voxel = m_voxel;
+    if(thisCopy->m_voxel != nullptr) {
+        thisCopy->m_voxel->setVoxelTreeNode(thisCopy);
+    }
 
     m_subnodes.clear();
     m_voxel = nullptr;
