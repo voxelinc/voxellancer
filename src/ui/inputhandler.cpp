@@ -98,11 +98,12 @@ void InputHandler::keyCallback(int key, int scancode, int action, int mods){
 
     if (key == GLFW_KEY_B && action == GLFW_PRESS){
         VoxelExplosionGenerator g;
-        g.spawnVoxelExplosion(m_player->playerShip()->transform().position() + m_player->playerShip()->transform().orientation() * glm::vec3(0, 0, -30),
-            0xFFFFFF,
-            (float)(rand() % 3) + 1,
-            (float) (rand() % 2) + 1,
-            glm::vec3(0,0,0));
+        g.setPosition(m_player->playerShip()->transform().position() + m_player->playerShip()->transform().orientation() * glm::vec3(0, 0, -30));
+        g.setOrientation(m_player->playerShip()->transform().orientation());
+        g.setScale((float)(rand() % 3) + 1);
+        g.setForce((float)(rand() % 2) + 1);
+        g.setDensity((rand() % 4) + 2);
+        g.spawn();
     }
 
 }

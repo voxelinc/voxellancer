@@ -1,15 +1,10 @@
 #pragma once
 
-#include <unordered_map>
-
 #include <glm/glm.hpp>
 
-#include <glow/Texture.h>
-#include <glow/ref_ptr.h>
-
-#include "geometry/aabb.h"
-
 #include "property/property.h"
+
+class WorldTransform;
 
 class VoxelExplosionGenerator
 {
@@ -17,11 +12,26 @@ public:
     VoxelExplosionGenerator();
     virtual ~VoxelExplosionGenerator();
 
-    void spawnVoxelExplosion(const glm::vec3& position, int color = 0xFFFFFF, float spawnRadius = 1.0f, float force = 1.0f, const glm::vec3& impactVector = glm::vec3(0));
+    void setPosition(const glm::vec3& position);
+    void setOrientation(const glm::quat& orientation);
+    void setScale(float scale);
+    void setTransform(const WorldTransform& transform);
+    void setForce(float force);
+    void setColor(int color);
+    void setDensity(int density);
+    void setImpactVector(const glm::vec3& impactVector);
+
+    void spawn();
 
 protected:
-    Property<int> prop_spawnCount;
     Property<float> prop_lifetime;
+    glm::vec3 m_position;
+    glm::quat m_orientation;
+    float m_scale;
+    float m_force;
+    int m_color;
+    int m_density;
+    glm::vec3 m_impactVector;
 
 };
 
