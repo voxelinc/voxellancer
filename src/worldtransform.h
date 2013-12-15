@@ -21,7 +21,7 @@ public:
 
     const glm::vec3& center() const;
     void setCenter(const glm::vec3& center);
-    void setCenterAndAdjustPosition(const glm::vec3& center);
+    void setCenterAndAdjustPosition(const glm::vec3& newCenter);
 
     float scale() const;
     void setScale(float scale);
