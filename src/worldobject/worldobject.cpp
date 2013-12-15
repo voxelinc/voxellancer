@@ -37,7 +37,7 @@ WorldObject::WorldObject(const WorldTransform& transform, CollisionFilterClass c
     m_transform.setCenter(transform.center());
 }
 
-WorldObject::~WorldObject() {
+ WorldObject::~WorldObject() {
 
 }
 
@@ -102,17 +102,13 @@ void WorldObject::removeVoxel(const glm::ivec3& position) {
         m_crucialVoxel = nullptr;
     }
     VoxelCluster::removeVoxel(position);
+
+    m_transform.setCenterAndAdjustPosition(m_physics->physicalCenter());
 }
 
 void WorldObject::finishInitialization() {
     m_transform.setCenter(m_physics->calculateMassAndCenter());
     m_collisionDetector->finishInitialization();
-}
-
-void WorldObject::recalculateCenterAndMass() {
-    //m_transform.setCenter(m_physics->calculateMassAndCenter()); TODO!!!
-    m_physics->calculateMassAndCenter();
-    m_collisionDetector->updateGeode();
 }
 
 void WorldObject::accelerate(const glm::vec3& direction) {

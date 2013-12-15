@@ -2,20 +2,20 @@
 
 #include <list>
 
-class WorldObjectSplit;
+class SplitData;
 class WorldObject;
 
 class Splitter
 {
 public:
-    void split(std::list<WorldObjectSplit*> &splits);
+    void split(std::list<SplitData*> &splits);
     std::list<WorldObject*> &splitOffWorldObjects();
 
 
 protected:
     std::list<WorldObject*> m_splitOffWorldObjects;
 
-    WorldObject *createWorldObjectFromSplitOff(WorldObjectSplit *split);
-    void removeExtractedVoxelsFromEx(WorldObjectSplit *split);
+    WorldObject *createWorldObjectFromSplitOff(SplitData *split);
+    void removeExtractedVoxelsFromEx(SplitData *split);
 };
 

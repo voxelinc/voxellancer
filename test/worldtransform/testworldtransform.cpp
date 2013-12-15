@@ -83,19 +83,17 @@ go_bandit([](){
         });
 
 
-        it("test moving center", [&]() {
+        it("test adjust center", [&]() {
             glm::vec3 vtest(5.0, 8.0, 12.0);
             glm::vec3 vdiff(1.0, 0.0, 2.0);
-            WorldTransform w1(glm::vec3(1, 2, 3), 2.0);
-            WorldTransform w2(glm::vec3(1, 2, 3)-vdiff, 2.0);
-
-            AssertThat(w1.applyTo(vtest), EqualsWithDelta(w2.applyTo(vtest - vdiff), glm::vec3(0.01)));
-
-            /*glm::quat orientation = glm::angleAxis(123.f, glm::vec3(1, 3, 5));
+            WorldTransform  w1(glm::vec3(1, 2, 3), 2.0);
+            glm::quat orientation = glm::angleAxis(123.f, glm::vec3(1, 3, 5));
             w1.setOrientation(orientation);
-            w1.setOrientation(orientation);
+            WorldTransform w2(w1);
+            
+            w2.setCenterAndAdjustPosition(w1.center() - vdiff);
 
-            AssertThat(w1.applyTo(vtest), EqualsWithDelta(w2.applyTo(vtest - vdiff), glm::vec3(0.01)));*/
+            AssertThat(w1.applyTo(vtest), EqualsWithDelta(w2.applyTo(vtest), glm::vec3(0.01)));
 
 
         });
