@@ -69,10 +69,10 @@ void Rocket::update(float delta_sec){
 void Rocket::onCollision(){
     World::instance()->god().scheduleRemoval(this);
     VoxelExplosionGenerator generator;
-    generator.spawnVoxelExplosion(m_transform.position(), 0xFF0000, m_transform.scale());
+    generator.spawnVoxelExplosion(m_transform.position(), 0xFF0000, m_transform.scale() / 2.0f);
 }
 
 void Rocket::onSpawnFail(){
     VoxelExplosionGenerator generator;
-    generator.spawnVoxelExplosion(m_transform.position(), 0xFF0000, m_transform.scale());
+    generator.spawnVoxelExplosion(m_transform.position(), 0xFF0000, m_transform.scale() / 2.0f);
 }
