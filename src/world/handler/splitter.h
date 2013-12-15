@@ -15,7 +15,7 @@ public:
 protected:
     std::list<WorldObject*> m_splitOffWorldObjects;
 
-    WorldObject *createWorldObjectFromOrphan(WorldObjectSplit *split);
+    WorldObject *createWorldObjectFromSplitOff(WorldObjectSplit *split);
     void removeExtractedVoxelsFromEx(WorldObjectSplit *split);
 };
 

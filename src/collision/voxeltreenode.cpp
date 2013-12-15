@@ -6,7 +6,7 @@
 #include "worldobject/worldobject.h"
 
 
-VoxelTreeNode::VoxelTreeNode(VoxelTreeNode *parent, WorldObject &worldObject, const Grid3dAABB &gridAABB) :
+VoxelTreeNode::VoxelTreeNode(WorldObject *worldObject, VoxelTreeNode *parent, const Grid3dAABB &gridAABB) :
     m_parent(parent),
     m_worldObject(worldObject),
     m_gridAABB(gridAABB),
@@ -57,7 +57,7 @@ const Voxel *VoxelTreeNode::voxel() const{
 }
 
 WorldObject* VoxelTreeNode::worldObject() {
-    return &m_worldObject;
+    return m_worldObject;
 }
 
 const Grid3dAABB &VoxelTreeNode::gridAABB() const {
@@ -69,14 +69,14 @@ Sphere VoxelTreeNode::boundingSphere() {
 
     center = static_cast<glm::vec3>(m_gridAABB.rub() + m_gridAABB.llf()) / 2.0f;
 
-    m_boundingSphere.setPosition(m_worldObject.transform().applyTo(center));
+    m_boundingSphere.setPosition(m_worldObject->transform().applyTo(center));
 
     if (!m_boundingSphereRadiusValid) {
         if(m_voxel != nullptr) {
-            m_boundingSphere.setRadius(0.5f * m_worldObject.transform().scale());
+            m_boundingSphere.setRadius(0.5f * m_worldObject->transform().scale());
         }
         else {
-            m_boundingSphere.setRadius((glm::length(glm::vec3(m_gridAABB.rub() - m_gridAABB.llf() + glm::ivec3(1, 1, 1))/2.0f)) * m_worldObject.transform().scale()) ;
+            m_boundingSphere.setRadius((glm::length(glm::vec3(m_gridAABB.rub() - m_gridAABB.llf() + glm::ivec3(1, 1, 1))/2.0f)) * m_worldObject->transform().scale()) ;
         }
         m_boundingSphereRadiusValid = true;
     }
@@ -137,7 +137,7 @@ void VoxelTreeNode::split() {
     std::list<Grid3dAABB> subnodeAABBs = m_gridAABB.recursiveSplit(2, XAxis);
 
     for(Grid3dAABB &subAABB : subnodeAABBs) {
-        m_subnodes.push_back(new VoxelTreeNode(this, m_worldObject, subAABB));
+        m_subnodes.push_back(new VoxelTreeNode(m_worldObject, this, subAABB));
     }
 }
 
@@ -150,7 +150,7 @@ void VoxelTreeNode::unsplit() {
 }
 
 void VoxelTreeNode::octuple() {
-    VoxelTreeNode *thisCopy = new VoxelTreeNode(this, m_worldObject, m_gridAABB);
+    VoxelTreeNode *thisCopy = new VoxelTreeNode(m_worldObject, this, m_gridAABB);
 
     thisCopy->m_subnodes = m_subnodes;
     thisCopy->m_voxel = m_voxel;
@@ -166,7 +166,7 @@ void VoxelTreeNode::octuple() {
         aabb.move(YAxis, sn % 4 >= 2 ? aabb.extent(YAxis) : 0);
         aabb.move(ZAxis, sn % 8 >= 4 ? aabb.extent(ZAxis) : 0);
 
-        m_subnodes.push_back(new VoxelTreeNode(this, m_worldObject, aabb));
+        m_subnodes.push_back(new VoxelTreeNode(m_worldObject, this, aabb));
     }
 
     m_gridAABB = Grid3dAABB(glm::ivec3(0, 0, 0), (m_gridAABB.rub()+glm::ivec3(1,1,1)) * 2 - glm::ivec3(1,1,1));

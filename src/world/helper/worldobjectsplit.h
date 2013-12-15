@@ -11,17 +11,19 @@ class WorldObject;
 class WorldObjectSplit
 {
 public:
+    WorldObjectSplit();
+    
     void addVoxel(Voxel *voxel);
-    void addAllVoxels(WorldObjectSplit *orphanCluster);
 
     WorldObject *exWorldObject();
     void setExWorldObject(WorldObject *exWorldObject);
 
     std::list<Voxel*> splitOffVoxels();
-
+    glm::ivec3 llf();
 
 protected:
     WorldObject* m_exWorldObject;
     std::list<Voxel*> m_splitOffVoxels;
+    glm::ivec3 m_llf;
 };
 
