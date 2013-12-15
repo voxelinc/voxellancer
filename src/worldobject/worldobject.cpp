@@ -137,7 +137,7 @@ void WorldObject::setCrucialVoxel(const glm::ivec3& cell) {
     m_crucialVoxel = voxel(cell);
 }
 
-void WorldObject::onImpact(){
+void WorldObject::onCollision(){
 
 }
 

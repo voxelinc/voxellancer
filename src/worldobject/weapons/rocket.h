@@ -7,8 +7,8 @@ public:
     Rocket(glm::vec3 position, glm::quat orientation, const glm::vec3& initialSpeed, float travelSpeed, float lifetime, WorldObject* target);
     virtual void update(float delta_sec);
 
-    virtual void onImpact();
-    virtual void onSpawnFail();
+    virtual void onCollision() override;
+    virtual void onSpawnFail() override;
 
 private:
 	float m_lifetime;

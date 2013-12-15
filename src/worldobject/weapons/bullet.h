@@ -15,7 +15,7 @@ public:
 
     virtual void update(float delta_sec) override;
 
-    virtual void onImpact() override;
+    virtual void onCollision() override;
     virtual void onSpawnFail() override;
 
 

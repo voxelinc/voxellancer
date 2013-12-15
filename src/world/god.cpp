@@ -68,6 +68,7 @@ void God::spawn() {
             World::instance()->worldTree().remove(worldObject->collisionDetector().geode());
             glow::warning("Failed to spawn object %; at AABB %;", worldObject, toString(worldObject->aabb()));
             worldObject->onSpawnFail();
+            delete worldObject;
             continue;
         }
 

@@ -65,7 +65,7 @@ void Rocket::update(float delta_sec){
         World::instance()->god().scheduleRemoval(this);
 }
 
-void Rocket::onImpact(){
+void Rocket::onCollision(){
     //TODO: spawn explosion
     World::instance()->god().scheduleRemoval(this);
 }
