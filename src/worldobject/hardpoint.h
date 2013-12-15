@@ -10,9 +10,10 @@ class Hardpoint {
 public:
     Hardpoint(Ship* ship, const glm::vec3& positionInGrid, Weapon *weapon);
     ~Hardpoint();
-    void setWeapon(Weapon *weapon);
 
+    void installWeapon(Weapon *weapon);
     Weapon* weapon();
+
     glm::vec3 position(); // in world coordinates
     Ship* ship();
 
