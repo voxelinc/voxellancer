@@ -44,12 +44,11 @@ public:
 
     void updateGeode();
 
+    void rebuildVoxelTree();
     void finishInitialization();
 
 
 protected:
-    void checkCollisions(VoxelTreeNode* nodeA, VoxelTreeNode* nodeB);
-
     WorldObject& m_worldObject;
     VoxelTreeNode m_voxelTree;
     WorldTreeGeode *m_geode;
@@ -57,4 +56,6 @@ protected:
     std::list<VoxelCollision> m_collisions;
     IAABB m_aabb;
 
+    void checkCollisions(VoxelTreeNode* nodeA, VoxelTreeNode* nodeB);
 };
+

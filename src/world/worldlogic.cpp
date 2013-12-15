@@ -8,6 +8,8 @@
 #include "god.h"
 #include "glow/AutoTimer.h"
 
+#include <glow/AutoTimer.h>
+
 
 WorldLogic::WorldLogic(World &world):
     m_world(world)

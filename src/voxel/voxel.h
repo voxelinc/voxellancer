@@ -21,7 +21,7 @@ namespace std {
 class Voxel
 {
 public:
-    Voxel(const glm::ivec3& gridCell, const int color = 0xFFFFFF, float mass = 1.0f, float hp = 1.0f);
+    Voxel(const glm::ivec3& gridCell, const int color = 0xFFFFFF, float mass = 1.0f, float hp = 50.0f);
     Voxel(const Voxel& other);
     virtual ~Voxel();
 
@@ -40,7 +40,7 @@ public:
 
     float mass() const;
 
-    // These hooks apply only for WorldObjects and do not need to be called by pure VoxelClusters
+    // These hooks apply only for WorldObjects and do not need to be called by pqure VoxelClusters
     virtual void onRemoval();
     virtual void onDestruction();
 

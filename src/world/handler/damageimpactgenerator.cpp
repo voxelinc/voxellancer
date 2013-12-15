@@ -19,8 +19,8 @@ void DamageImpactGenerator::parse(std::list<WorldObjectCollision>& worldObjectCo
             glm::vec3 speedA = targetTransformA.applyTo(glm::vec3(voxelCollision.a().voxel()->gridCell())) - worldObjectCollision.worldObjectA()->transform().applyTo(glm::vec3(voxelCollision.a().voxel()->gridCell()));
             glm::vec3 speedB = targetTransformB.applyTo(glm::vec3(voxelCollision.b().voxel()->gridCell())) - worldObjectCollision.worldObjectB()->transform().applyTo(glm::vec3(voxelCollision.b().voxel()->gridCell()));
 
-            m_damageImpactAccumulator.parse(DamageImpact(voxelCollision.a().worldObject(), voxelCollision.a().voxel(), (speedB - speedA) * (massPerImpactA + massPerImpactB)));
-            m_damageImpactAccumulator.parse(DamageImpact(voxelCollision.b().worldObject(), voxelCollision.b().voxel(), (speedA - speedB) * (massPerImpactA + massPerImpactB)));
+            m_damageImpactAccumulator.parse(DamageImpact(voxelCollision.a().worldObject(), voxelCollision.a().voxel(), (speedB - speedA) * (massPerImpactB)));
+            m_damageImpactAccumulator.parse(DamageImpact(voxelCollision.b().worldObject(), voxelCollision.b().voxel(), (speedA - speedB) * (massPerImpactA)));
         }
     }
 }
@@ -28,4 +28,3 @@ void DamageImpactGenerator::parse(std::list<WorldObjectCollision>& worldObjectCo
 std::list<DamageImpact>& DamageImpactGenerator::damageImpacts() {
     return m_damageImpactAccumulator.accumulatables();
 }
-

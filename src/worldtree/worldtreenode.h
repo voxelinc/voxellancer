@@ -31,13 +31,14 @@ public:
     const WorldTreeNode *parent() const;
 
     bool isLeaf() const;
+    bool isEmpty() const;
     bool isRootnode() const;
 
     void insert(WorldTreeGeode *geode);
     void remove(WorldTreeGeode *geode);
 
-    std::set<WorldTreeGeode*> geodesInAABB(const AABB &aabb) const;
-    bool areGeodesInAABB(const AABB &aabb, WorldTreeGeode *ignore) const;
+    std::set<WorldTreeGeode*> geodesInAABB(const AABB &aabb, WorldObject* collideableWith = nullptr) const;
+    bool areGeodesInAABB(const AABB &aabb, WorldObject* collideableWith = nullptr) const;
 
     void aabbChanged(WorldTreeGeode *geode);
 
