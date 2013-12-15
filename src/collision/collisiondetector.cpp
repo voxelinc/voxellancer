@@ -10,7 +10,7 @@
 
 
 CollisionDetector::CollisionDetector(WorldObject & worldObject) :
-    m_voxelTree(nullptr, worldObject, Grid3dAABB(glm::ivec3(0, 0, 0), glm::ivec3(0, 0, 0))),
+    m_voxelTree(&worldObject),
     m_worldTree(nullptr),
     m_geode(nullptr),
     m_worldObject(worldObject),
@@ -176,6 +176,17 @@ std::list<VoxelCollision> & CollisionDetector::lastCollisions() {
 
 void CollisionDetector::reset() {
     m_collisions.clear();
+}
+
+void CollisionDetector::rebuildVoxelTree() {
+    m_voxelTree = VoxelTreeNode(&m_worldObject);
+    m_aabb = IAABB();
+    for (auto& pair: m_worldObject.voxelMap())
+    {
+        Voxel* voxel = pair.second;
+        addVoxel(voxel);
+
+    }
 }
 
 

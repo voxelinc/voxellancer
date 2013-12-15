@@ -2,11 +2,11 @@
 
 
 enum class CollisionFilterClass {
-    Bullet              = 0x0001,
-    Rocket              = 0x0002,
-    Ship                = 0x0004,
-    ExplosionParticle   = 0x0008,
-    Other               = 0x0010
-
+    Bullet              = 1 << 0,
+    Rocket              = 1 << 1,
+    Ship                = 1 << 2,
+    ExplosionParticle   = 1 << 3,
+    Other               = 1 << 4
 };
+
 

@@ -18,6 +18,7 @@ public:
     virtual void onCollision() override;
     virtual void onSpawnFail() override;
 
+
 private:
     WorldObject *m_creator;
 	float m_lifetime;
