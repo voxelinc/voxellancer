@@ -25,7 +25,7 @@ go_bandit([]() {
         before_each([&]() {
             if (w != nullptr)
                 delete w;
-            w = new WorldObject();            
+            w = new WorldObject();
             w->addVoxel(new Voxel(glm::ivec3(2, 0, 0))); // 1
             w->addVoxel(new Voxel(glm::ivec3(2, 1, 0))); // 2
             w->addVoxel(new Voxel(glm::ivec3(2, 2, 0))); // 3
@@ -42,7 +42,7 @@ go_bandit([]() {
              3|6 5 4 7 8 9
              2|    3
              1|   (2)
-             0|    1    
+             0|    1
               --------------
                0 1 2 3 4 5 x
             */
@@ -51,12 +51,12 @@ go_bandit([]() {
 
         it("splits no split correctly", [&]() {
             WorldObjectModification modification(w);
-            
+
             w->addVoxel(new Voxel(glm::ivec3(3, 0, 0)));
             w->addVoxel(new Voxel(glm::ivec3(3, 1, 0)));
-            w->removeVoxel(glm::ivec3(2, 0, 0));
+            w->removeVoxel(w->voxel(glm::ivec3(2, 0, 0)));
             modification.removedVoxel(glm::ivec3(2, 0, 0));
-            
+
             detector.searchSplitOffs(std::list<WorldObjectModification>{ modification });
             splitter.split(detector.worldObjectSplits());
 
@@ -67,14 +67,14 @@ go_bandit([]() {
         it("splits one split correctly", [&]() {
             WorldObjectModification modification(w);
 
-            w->removeVoxel(glm::ivec3(2, 2, 0));
+            w->removeVoxel(w->voxel(glm::ivec3(2, 2, 0)));
             modification.removedVoxel(glm::ivec3(2, 2, 0));
 
             detector.searchSplitOffs(std::list<WorldObjectModification>{ modification });
             splitter.split(detector.worldObjectSplits());
 
             AssertThat(splitter.splitOffWorldObjects().size(), Equals(1));
-            
+
             WorldObject* splitOff = splitter.splitOffWorldObjects().front();
             AssertThat(splitOff->voxel(glm::ivec3(2, 3, 0)) == nullptr, IsFalse());
             AssertThat(splitOff->voxel(glm::ivec3(2, 0, 0)) == nullptr, IsTrue());
@@ -88,7 +88,7 @@ go_bandit([]() {
         it("works with multiple splittoffs", [&]() {
             WorldObjectModification modification(w);
 
-            w->removeVoxel(glm::ivec3(2, 3, 0));
+            w->removeVoxel(w->voxel(glm::ivec3(2, 3, 0)));
             modification.removedVoxel(glm::ivec3(2, 3, 0));
 
             detector.searchSplitOffs(std::list<WorldObjectModification>{ modification });
