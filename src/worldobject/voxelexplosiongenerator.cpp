@@ -5,13 +5,13 @@
 #include "world/god.h"
 #include "world/world.h"
 #include "worldobject/voxelexplosioncluster.h"
+#include "utils/randfloat.h"
 
 
 VoxelExplosionGenerator::VoxelExplosionGenerator() :
     prop_spawnCount("vfx.explosionSpawnCount"),
     prop_lifetime("vfx.explosionLifetime")
 {
-    std::srand((unsigned int)time(NULL));
 }
 
 VoxelExplosionGenerator::~VoxelExplosionGenerator() {
@@ -39,12 +39,12 @@ void VoxelExplosionGenerator::spawnVoxelExplosion(const glm::vec3& position, int
 
                 // the further out, the faster the speed
                 newObject->physics().setSpeed( force * glm::vec3(    
-                    i * (std::rand() % 100) / 10.0f, 
-                    j * (std::rand() % 100) / 10.0f,
-                    k * (std::rand() % 100) / 10.0f)
+                    RandFloat::rand(0, 10.0f * (i + 0.5f)), 
+                    RandFloat::rand(0, 10.0f * (j + 0.5f)),
+                    RandFloat::rand(0, 10.0f * (k + 0.5f)))
                     + impactVector);
                 
-                newObject->physics().setAngularSpeed(glm::vec3(((std::rand() % 100) - 50) / 100.0f, ((std::rand() % 100) - 50) / 100.0f, ((std::rand() % 100) - 50) / 100.0f));
+                newObject->physics().setAngularSpeed(glm::vec3(RandFloat::rand(-10, 10), RandFloat::rand(-10, 10), RandFloat::rand(-10, 10)));
 
                 newObject->finishInitialization();
 
