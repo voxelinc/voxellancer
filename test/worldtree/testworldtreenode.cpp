@@ -4,16 +4,19 @@
 
 #include "../bandit_extension/vec3helper.h"
 #include "worldtree/worldtreenode.h"
+#include "worldobject/worldobject.h"
 
 using namespace bandit;
 
 go_bandit([]() {
     describe("WorldTree", []() {
+        WorldObject *dummy = new WorldObject();
+
         it("simpleInserts", [&]() {
             WorldTreeNode *node = new WorldTreeNode(0, nullptr, AABB(glm::vec3(-2, -2, -2), glm::vec3(2, 2, 2)));
-            WorldTreeGeode *a = new WorldTreeGeode();
-            WorldTreeGeode *b = new WorldTreeGeode();
-            WorldTreeGeode *c = new WorldTreeGeode();
+            WorldTreeGeode *a = new WorldTreeGeode(); a->setWorldObject(dummy);
+            WorldTreeGeode *b = new WorldTreeGeode(); b->setWorldObject(dummy);
+            WorldTreeGeode *c = new WorldTreeGeode(); c->setWorldObject(dummy);
 
             a->setAABB(AABB(glm::vec3(0, 0, 0), glm::vec3(5, 5, 5)));
             b->setAABB(AABB(glm::vec3(1, 0, 0), glm::vec3(1.5, 1, 1)));
@@ -46,8 +49,8 @@ go_bandit([]() {
             WorldTreeGeode *e1, *e2;
             WorldTreeGeode *a, *b, *c;
 
-            e1 = new WorldTreeGeode();
-            e2 = new WorldTreeGeode();
+            e1 = new WorldTreeGeode(); e1->setWorldObject(dummy);
+            e2 = new WorldTreeGeode(); e2->setWorldObject(dummy);
 
             e1->setAABB(AABB(glm::vec3(-100, -100, -100), glm::vec3(-99, -99, -99)));
             e2->setAABB(AABB(glm::vec3(99, 99, 99), glm::vec3(100, 100, 100)));
@@ -55,9 +58,9 @@ go_bandit([]() {
             node->insert(e1);
             node->insert(e2);
 
-            a = new WorldTreeGeode();
-            b = new WorldTreeGeode();
-            c = new WorldTreeGeode();
+            a = new WorldTreeGeode(); a->setWorldObject(dummy);
+            b = new WorldTreeGeode(); b->setWorldObject(dummy);
+            c = new WorldTreeGeode(); c->setWorldObject(dummy);
 
             a->setAABB(AABB(glm::vec3(50, 20, 30), glm::vec3(60, 30, 35)));
             b->setAABB(AABB(glm::vec3(5, 20, 30), glm::vec3(15, 30, 35)));
@@ -84,8 +87,8 @@ go_bandit([]() {
             WorldTreeGeode *e1, *e2;
             WorldTreeGeode *a;
 
-            e1 = new WorldTreeGeode();
-            e2 = new WorldTreeGeode();
+            e1 = new WorldTreeGeode();e1->setWorldObject(dummy);
+            e2 = new WorldTreeGeode();e2->setWorldObject(dummy);
 
             e1->setAABB(AABB(glm::vec3(-100, -100, -100), glm::vec3(-99, -99, -99)));
             e2->setAABB(AABB(glm::vec3(99, 99, 99), glm::vec3(100, 100, 100)));
@@ -93,7 +96,7 @@ go_bandit([]() {
             node->insert(e1);
             node->insert(e2);
 
-            a = new WorldTreeGeode();
+            a = new WorldTreeGeode(); a->setWorldObject(dummy);
             a->setAABB(AABB(glm::vec3(50, 20, 30), glm::vec3(60, 30, 35)));
             node->insert(a);
 
