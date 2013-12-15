@@ -30,6 +30,7 @@ set(DEFAULT_COMPILE_DEFS_RELEASE
     ${LINUX_COMPILE_DEFS}
     NDEBUG	                  # Release build
 )
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pg")
 
 set(LINUX_COMPILE_FLAGS "-pthread -pipe -fPIC -Wreturn-type -Wall -w -pedantic -Wextra -Wtrampolines -Wfloat-equal -Wshadow -Wcast-qual -Wcast-align -Wconversion -Werror ${EXCEPTION_FLAG}")
 # pthread       -> use pthread library

@@ -1,18 +1,18 @@
 #pragma once
 
 #include <list>
-#include "collision/collision.h"
-#include "world/helper/impact.h"
+#include "collision/voxelcollision.h"
+#include "physics/impulse.h"
 
 class Mover
 {
 public:
     void moveWorldObjects(float deltaSec);
 
-    const std::list<Impact> &impacts();
+    std::list<VoxelCollision>& voxelCollisions();
 
 
 protected:
-    std::list<Impact> m_impacts;
+    std::list<VoxelCollision> m_voxelCollisions;
 };
 

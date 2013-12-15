@@ -6,6 +6,7 @@
 #include "worldobject/weapons/rocketlauncher.h"
 
 Ship::Ship() :
+    WorldObject(CollisionFilterClass::Ship),
     m_world(World::instance()),
     m_hardpoints(),
 	prop_maxSpeed("ship.maxSpeed"),
@@ -77,12 +78,10 @@ float Ship::minAimDistance(){ // is this needed ?!
     return range;
 }
 
-void Ship::accelerate(glm::vec3 direction) {
-    direction *= prop_maxSpeed.get();
-    m_physics->accelerate(direction);
+void Ship::accelerate(const glm::vec3& direction) {
+    m_physics->accelerate(direction * prop_maxSpeed.get());
 }
 
-void Ship::accelerateAngular(glm::vec3 axis) {
-    axis *= prop_maxRotSpeed.get();
-    m_physics->accelerateAngular(axis);
+void Ship::accelerateAngular(const glm::vec3& axis) {
+    m_physics->accelerateAngular(axis * prop_maxRotSpeed.get());
 }

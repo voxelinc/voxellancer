@@ -9,7 +9,7 @@ class VoxelCluster;
 class VoxelNeighbourHelper
 {
 public:
-    VoxelNeighbourHelper(VoxelCluster *voxelCluster, bool includeDiagonals = false);
+    VoxelNeighbourHelper(VoxelCluster *voxelCluster, bool includeDiagonals = true);
 
     const std::list<Voxel*>& neighbours(const glm::ivec3& pos);
     const std::list<Voxel*>& neighbours(const Voxel* voxel);

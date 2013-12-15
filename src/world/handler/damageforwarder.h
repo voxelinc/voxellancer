@@ -2,24 +2,26 @@
 
 #include <list>
 
-#include "world/helper/impact.h"
 
-#include "impactaccumulator.h"
+#include "world/helper/damageimpact.h"
+#include "world/helper/voxelaccumulator.h"
 
 
-class DamageForwarder: protected ImpactAccumulator
+class DamageForwarder
 {
 public:
-    void forwardDamageImpacts(std::list<Impact> &dampedDeadlyImpacts);
+    void forwardDamageImpacts(std::list<DamageImpact> &dampedDeadlyDamageImpacts);
     void dontForwardTo(std::list<Voxel*> &deadVoxels);
 
-    std::list<Impact> forwardedDamageImpacts();
+    std::list<DamageImpact> forwardedDamageImpacts();
 
 
 protected:
     WorldObject *m_currentWorldObject;
     std::list<Voxel*> *m_currentNeighbours;
     glm::ivec3 m_currentGridCell;
+
+    VoxelAccumulator<DamageImpact> m_damageImpactAccumulator;
 
     float forwardFactor(float dotProduct);
 };
