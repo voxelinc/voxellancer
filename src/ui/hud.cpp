@@ -135,16 +135,17 @@ void HUD::draw(){
             // delta is the vector from virtual HUD camera to the ship
             glm::vec3 delta = glm::inverse(m_hudCamera.orientation()) * (ship->transform().position() - m_hudCamera.position());
 
-            if (i < 11){
-                std::stringstream s; s.setf(std::ios::fixed, std::ios::floatfield); s.precision(2);
-                s << ship->objectInfo().name() << ": " << ship->voxelMap().size() << "/" << (float)glm::length(delta);
-                m_font->drawString(s.str(), calculatePosition(BottomLeft, glm::vec3(4, 5 + 4 * i, 0)), s5x7, 0.4f);
-                i++;
-            } else if (i == 11){
-                m_font->drawString("-more-", calculatePosition(BottomLeft, glm::vec3(4, 5 + 4 * i, 0)), s5x7, 0.4f);
-            }
+            if (ship->objectInfo().showOnHud()) {
 
-            if (ship->objectInfo().showOnHud()){
+                if (i < 11){
+                    std::stringstream s; s.setf(std::ios::fixed, std::ios::floatfield); s.precision(2);
+                    s << ship->objectInfo().name() << ": " << ship->voxelMap().size() << "/" << (float)glm::length(delta);
+                    m_font->drawString(s.str(), calculatePosition(BottomLeft, glm::vec3(4, 5 + 4 * i, 0)), s5x7, 0.4f);
+                    i++;
+                } else if (i == 11){
+                    m_font->drawString("-more-", calculatePosition(BottomLeft, glm::vec3(4, 5 + 4 * i, 0)), s5x7, 0.4f);
+                }
+
                 // strip z = depth value so glm::length will return x/y-length
                 float deltaz = delta.z;
                 delta.z = 0;
