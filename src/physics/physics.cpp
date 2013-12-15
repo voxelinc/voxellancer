@@ -116,12 +116,10 @@ void Physics::addVoxel(Voxel* voxel) {
     m_massValid = false;
 }
 
-void Physics::removeVoxel(const glm::ivec3& position) {
-    Voxel * voxel = m_worldObject.voxel(position);
-
+void Physics::removeVoxel(Voxel* voxel) {
     float oldUnscaledMass = m_mass / m_massScaleFactor;
     float newUnscaledMass = oldUnscaledMass - voxel->mass();
-    
+
     m_center -= glm::vec3(voxel->gridCell()) * voxel->mass() / oldUnscaledMass;
     m_center *= oldUnscaledMass / newUnscaledMass;
 

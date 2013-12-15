@@ -48,6 +48,7 @@ bool WorldTree::areGeodesInAABB(const AABB &aabb, WorldTreeGeode *ignore) const 
 bool WorldTree::areGeodesInAABB(const AABB &aabb, WorldTreeNode *nodeHint, WorldTreeGeode *ignore) const {
     assert(nodeHint != nullptr);
 
+
     if (nodeHint->aabb().contains(aabb)) {
         return nodeHint->areGeodesInAABB(aabb, ignore);
     }

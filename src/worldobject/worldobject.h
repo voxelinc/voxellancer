@@ -31,12 +31,13 @@ public:
 
     std::list<VoxelCollision>& performMovement(float delta_sec);
 
-    void addVoxel(Voxel* voxel);
+    virtual void addVoxel(Voxel* voxel) override;
+    virtual void removeVoxel(Voxel* voxel) override;
+
     virtual void addEngineVoxel(EngineVoxel* voxel);
     virtual void addHardpointVoxel(HardpointVoxel* voxel);
     virtual void addCockpitVoxel(CockpitVoxel* voxel);
     virtual void addFuelVoxel(FuelVoxel* voxel);
-    void removeVoxel(const glm::ivec3& position);
 
     void finishInitialization();
     void recalculateCenterAndMass();

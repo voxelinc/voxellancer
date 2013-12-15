@@ -28,12 +28,12 @@ bool VoxelTreeNode::isAtomic() const {
 }
 
 bool VoxelTreeNode::isVoxel() const {
-    assert((m_voxel != nullptr) ? m_subnodes.size() == 0 : 1);
+    assert((m_voxel != nullptr) ? m_subnodes.empty() : 1);
     return m_voxel != nullptr;
 }
 
 bool VoxelTreeNode::isLeaf() const{
-    return m_subnodes.size() == 0;
+    return m_subnodes.empty();
 }
 
 bool VoxelTreeNode::isEmpty() const{
@@ -84,7 +84,7 @@ Sphere VoxelTreeNode::boundingSphere() {
     return m_boundingSphere;
 }
 
-void VoxelTreeNode::insert(Voxel *voxel) {
+void VoxelTreeNode::insert(Voxel* voxel) {
     if(!m_gridAABB.contains(glm::ivec3(voxel->gridCell()))) {
         octuple();
         insert(voxel);
@@ -93,7 +93,9 @@ void VoxelTreeNode::insert(Voxel *voxel) {
 
     if(isAtomic()) {
         assert(m_voxel == nullptr);
+
         m_voxel = voxel;
+        m_voxel->setVoxelTreeNode(this);
         m_boundingSphereRadiusValid = false;
     }
     else {
@@ -112,6 +114,8 @@ void VoxelTreeNode::insert(Voxel *voxel) {
 void VoxelTreeNode::remove(const glm::ivec3 &cell) {
     if(isAtomic()) {
         assert(m_voxel != nullptr);
+
+        m_voxel->setVoxelTreeNode(nullptr);
         m_voxel = nullptr;
         m_boundingSphereRadiusValid = false;
     }
