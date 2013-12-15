@@ -5,8 +5,8 @@
 
 #include "world/helper/worldobjectsplit.h"
 
-#include "worldobject/worldobject.h"
 #include "voxel/voxel.h"
+#include "worldobject/split.h"
 
 void Splitter::split(std::list<WorldObjectSplit*> &splits) {
     std::unordered_set<WorldObject*> splittedWorldObjects;
@@ -35,7 +35,7 @@ WorldObject *Splitter::createWorldObjectFromSplitOff(WorldObjectSplit *split) {
     WorldTransform transform = split->exWorldObject()->transform();
     transform.setCenter(transform.center()/* - glm::vec3(split->llf())*/);
 
-    worldObject = new WorldObject(transform);
+    worldObject = new Split(transform);
     worldObject->objectInfo().setName(split->exWorldObject()->objectInfo().name() + " - splitoff");
     worldObject->objectInfo().setCanLockOn(false);
     worldObject->objectInfo().setShowOnHud(false);
@@ -48,7 +48,7 @@ WorldObject *Splitter::createWorldObjectFromSplitOff(WorldObjectSplit *split) {
         worldObject->addVoxel(voxelClone);
     }
 
-    worldObject->recalculateCenterAndMass();
+    worldObject->finishInitialization();
 
     return worldObject;
 }

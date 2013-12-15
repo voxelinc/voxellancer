@@ -21,6 +21,7 @@ public:
 
     const glm::vec3& center() const;
     void setCenter(const glm::vec3& center);
+    void setCenterAndAdjustPosition(const glm::vec3& center);
 
     float scale() const;
     void setScale(float scale);
@@ -36,6 +37,7 @@ public:
 
 	const glm::mat4 matrix() const;
     glm::vec3 applyTo(const glm::vec3 &vertex) const;
+
 
 
 protected:

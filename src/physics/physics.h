@@ -42,7 +42,7 @@ public:
 
     void finishInitialization();
     glm::vec3 calculateMassAndCenter();
-    glm::vec3 phyicalCenter();
+    glm::vec3 physicalCenter();
 
 
 protected:
