@@ -57,7 +57,7 @@ WorldObject *Splitter::createWorldObjectFromSplitOff(WorldObjectSplit *split) {
 
 void Splitter::removeExtractedVoxelsFromEx(WorldObjectSplit *split) {
     for(Voxel *voxel : split->splitOffVoxels()) {
-        split->exWorldObject()->removeVoxel(voxel->gridCell());
+        split->exWorldObject()->removeVoxel(voxel);
     }
 }
 

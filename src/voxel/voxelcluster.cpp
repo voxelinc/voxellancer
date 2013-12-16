@@ -40,11 +40,10 @@ void VoxelCluster::addVoxel(Voxel *voxel) {
     m_voxelRenderData.invalidate();
 }
 
-void VoxelCluster::removeVoxel(const glm::ivec3& position) {
-    Voxel * voxel = m_voxels[position];
+void VoxelCluster::removeVoxel(Voxel* voxel) {
     assert(voxel != nullptr);
 
-    m_voxels.erase(position);
+    m_voxels.erase(voxel->gridCell());
     m_voxelRenderData.invalidate();
     delete voxel;
 }

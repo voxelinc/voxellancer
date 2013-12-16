@@ -7,9 +7,9 @@ public:
     EngineVoxel(const glm::ivec3 &gridCell, int color = 0xFFFFFF, float mass = 1.0f, float hp = 1.0f);
     ~EngineVoxel();
 
-    virtual void addToObject(WorldObject* object);
+    virtual void addToObject(WorldObject* object) override;
 
-    virtual void onRemoval(); 
+    virtual void onRemoval();
     virtual void onDestruction();
 
 protected:

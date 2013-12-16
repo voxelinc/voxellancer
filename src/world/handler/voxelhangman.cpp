@@ -15,7 +15,7 @@ void VoxelHangman::applyOnDestructionHooks(std::list<DamageImpact> &deadlyDamage
 
 void VoxelHangman::removeDestroyedVoxels(std::list<DamageImpact> &deadlyDamageImpacts) {
     for(DamageImpact& damageImpact : deadlyDamageImpacts) {
-        damageImpact.worldObject()->removeVoxel(damageImpact.voxel()->gridCell());
+        damageImpact.worldObject()->removeVoxel(damageImpact.voxel());
     }
 }
 
