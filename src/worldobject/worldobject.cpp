@@ -85,7 +85,7 @@ void WorldObject::removeVoxel(Voxel* voxel) {
         // do spectacular stuff like an explosion
         m_crucialVoxel = nullptr;
     }
-    VoxelCluster::removeVoxel(position);
+    VoxelCluster::removeVoxel(voxel);
 
     m_transform.setCenterAndAdjustPosition(m_physics->physicalCenter());
 }

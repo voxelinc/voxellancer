@@ -72,13 +72,9 @@ go_bandit([]() {
 
             AssertThat(detector.splitDataList().size(), Equals(1));
 
-<<<<<<< HEAD
-            // check if the split is the upper part of the voxels without the crucial voxels
-            WorldObjectSplit* splitOff = detector.worldObjectSplits().front();
-=======
+
             // check if the split is the upper part of the voxel without the crucial voxel
             SplitData* splitOff = detector.splitDataList().front();
->>>>>>> 9a155c76225c2fbfeff14d5a6ce83d5518df3bde
             AssertThat(splitOff->splitOffVoxels().size(), Equals(6));
 
 
