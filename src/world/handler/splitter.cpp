@@ -3,17 +3,17 @@
 
 #include <glow/AutoTimer.h>
 
-#include "world/helper/worldobjectsplit.h"
+#include "world/helper/splitdata.h"
 
-#include "worldobject/worldobject.h"
 #include "voxel/voxel.h"
+#include "worldobject/split.h"
 
-void Splitter::split(std::list<WorldObjectSplit*> &splits) {
+void Splitter::split(std::list<SplitData*> &splits) {
     std::unordered_set<WorldObject*> splittedWorldObjects;
 
     m_splitOffWorldObjects.clear();
 
-    for(WorldObjectSplit *split : splits) {
+    for(SplitData *split : splits) {
         glow::AutoTimer t("Splitter: " + split->exWorldObject()->objectInfo().name());
         WorldObject *worldObject = createWorldObjectFromSplitOff(split);
         m_splitOffWorldObjects.push_back(worldObject);
@@ -30,13 +30,13 @@ std::list<WorldObject*> &Splitter::splitOffWorldObjects() {
     return m_splitOffWorldObjects;
 }
 
-WorldObject *Splitter::createWorldObjectFromSplitOff(WorldObjectSplit *split) {
+WorldObject *Splitter::createWorldObjectFromSplitOff(SplitData *split) {
     WorldObject *worldObject;
     WorldTransform transform = split->exWorldObject()->transform();
     transform.setCenter(transform.center()/* - glm::vec3(split->llf())*/);
 
-    worldObject = new WorldObject(transform, split->exWorldObject()->collisionFilterClass());
 
+    worldObject = new Split(transform, split->exWorldObject()->collisionFilterClass());
 
     worldObject->objectInfo().setName(split->exWorldObject()->objectInfo().name() + " - splitoff");
     worldObject->objectInfo().setCanLockOn(false);
@@ -50,12 +50,12 @@ WorldObject *Splitter::createWorldObjectFromSplitOff(WorldObjectSplit *split) {
         worldObject->addVoxel(voxelClone);
     }
 
-    worldObject->recalculateCenterAndMass();
+    worldObject->finishInitialization();
 
     return worldObject;
 }
 
-void Splitter::removeExtractedVoxelsFromEx(WorldObjectSplit *split) {
+void Splitter::removeExtractedVoxelsFromEx(SplitData *split) {
     for(Voxel *voxel : split->splitOffVoxels()) {
         split->exWorldObject()->removeVoxel(voxel->gridCell());
     }

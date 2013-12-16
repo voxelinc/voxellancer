@@ -97,3 +97,12 @@ bool WorldTransform::operator!=(const WorldTransform &other) {
     return !(*this == other);
 }
 
+// calculate offset between old and new center and adjust position accordingly
+void WorldTransform::setCenterAndAdjustPosition(const glm::vec3& newCenter) {
+    glm::vec3 oldOrigin = applyTo(glm::vec3(0));
+    setCenter(newCenter);
+    glm::vec3 newOrigin = applyTo(glm::vec3(0));
+
+    setPosition(position() + (oldOrigin - newOrigin));
+}
+
