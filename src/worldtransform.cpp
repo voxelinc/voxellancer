@@ -86,14 +86,14 @@ void WorldTransform::setCenter(const glm::vec3& center) {
     m_center = center;
 }
 
-bool WorldTransform::operator==(const WorldTransform &other) {
-    return m_position == other.position() &&
-           m_orientation == other.orientation() &&
-           m_center == other.center() &&
-           m_scale == other.scale();
+bool WorldTransform::operator==(const WorldTransform &other) const {
+    return m_position == other.m_position &&
+           m_orientation == other.m_orientation &&
+           m_center == other.m_center &&
+           m_scale == other.m_scale;
 }
 
-bool WorldTransform::operator!=(const WorldTransform &other) {
+bool WorldTransform::operator!=(const WorldTransform &other) const {
     return !(*this == other);
 }
 

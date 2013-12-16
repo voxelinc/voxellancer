@@ -48,14 +48,14 @@ go_bandit([](){
         it("incremental mass and center calculation works", [&]() {
             WorldObject a(0.8f);
             WorldObject b(0.8f);
-           
+
             a.addVoxel(new Voxel(glm::ivec3(1, 0, 0), 0xFFFFFF));
             a.addVoxel(new Voxel(glm::ivec3(2, 0, 0), 0xFFFFFF));
             a.addVoxel(new Voxel(glm::ivec3(3, 0, 0), 0xFFFFFF));
             a.addVoxel(new Voxel(glm::ivec3(3, 1, 0), 0xFFFFFF));
             a.addVoxel(new Voxel(glm::ivec3(3, 2, 0), 0xFFFFFF));
             a.finishInitialization();
-            a.removeVoxel(glm::ivec3(3, 2, 0));
+            a.removeVoxel(a.voxel(glm::ivec3(3, 2, 0)));
 
             b.addVoxel(new Voxel(glm::ivec3(1, 0, 0), 0xFFFFFF));
             b.addVoxel(new Voxel(glm::ivec3(2, 0, 0), 0xFFFFFF));
