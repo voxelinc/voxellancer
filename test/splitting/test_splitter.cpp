@@ -8,7 +8,7 @@
 #include "world/handler/splitdetector.h"
 #include "world/handler/splitter.h"
 #include "property/propertymanager.h"
-#include "world/helper/worldobjectsplit.h"
+#include "world/helper/splitdata.h"
 #include "voxel/voxel.h"
 
 using namespace bandit;
@@ -58,7 +58,7 @@ go_bandit([]() {
             modification.removedVoxel(glm::ivec3(2, 0, 0));
 
             detector.searchSplitOffs(std::list<WorldObjectModification>{ modification });
-            splitter.split(detector.worldObjectSplits());
+            splitter.split(detector.splitDataList());
 
             AssertThat(splitter.splitOffWorldObjects().size(), Equals(0));
         });
@@ -71,7 +71,7 @@ go_bandit([]() {
             modification.removedVoxel(glm::ivec3(2, 2, 0));
 
             detector.searchSplitOffs(std::list<WorldObjectModification>{ modification });
-            splitter.split(detector.worldObjectSplits());
+            splitter.split(detector.splitDataList());
 
             AssertThat(splitter.splitOffWorldObjects().size(), Equals(1));
 
@@ -92,7 +92,7 @@ go_bandit([]() {
             modification.removedVoxel(glm::ivec3(2, 3, 0));
 
             detector.searchSplitOffs(std::list<WorldObjectModification>{ modification });
-            splitter.split(detector.worldObjectSplits());
+            splitter.split(detector.splitDataList());
 
             AssertThat(splitter.splitOffWorldObjects().size(), Equals(2));
         });
