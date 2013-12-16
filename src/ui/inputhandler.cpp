@@ -109,7 +109,7 @@ void InputHandler::update(float delta_sec) {
                 if (m_player->playerShip()->aimMode() == Point){
                     adjustAim(x, y);
                 }
-                m_player->playerShip()->fire();
+                //m_player->playerShip()->fire();
             }
 
 			// lookAt
@@ -226,7 +226,15 @@ void InputHandler::adjustAim(double x, double y){
     pointEnd = glm::inverse(m_camera->viewProjection())*pointEnd; //find point on zfar
     glm::vec3 vec = glm::vec3(pointEnd); // no need for w component
     vec = glm::normalize(vec); // normalize
-    vec *= m_player->playerShip()->minAimDistance(); // set aimdistance
+    float z;
+    glReadPixels((int) x, m_windowHeight-(int) y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &z);
+    float zi = (2 * m_camera->zNear()) / (m_camera->zFar() + m_camera->zNear() - z * (m_camera->zFar() - m_camera->zNear()));
+    float zj = (m_camera->zNear()*z) / ((m_camera->zNear() - m_camera->zFar())*z + m_camera->zFar());
+    //z = (zi + zj)/2;
+    //z *= m_camera->zFar() - m_camera->zNear();
+    //z += m_camera->zNear();
+    printf("%i %i %f\n", (int)x, (int)y, z);
+    vec *= glm::min(m_player->playerShip()->minAimDistance(),z); // set aimdistance
     vec += m_camera->position(); //adjust for camera translation
     m_player->playerShip()->setTargetPoint(vec);
 }

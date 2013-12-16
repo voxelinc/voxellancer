@@ -60,22 +60,39 @@ void Game::initialize()
     int width, height;
     glfwGetWindowSize(m_window, &width, &height);
 
-    m_fbo = new glow::FrameBufferObject();
-    m_fbo->bind();
+    m_fboGame = new glow::FrameBufferObject();
+    m_fboGame->bind();
 
-    m_color = new glow::Texture(GL_TEXTURE_2D);
-    m_color->image2D(0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
-    m_color->setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    m_color->setParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    m_colorGame = new glow::Texture(GL_TEXTURE_2D);
+    m_colorGame->image2D(0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+    m_colorGame->setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    m_colorGame->setParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    m_depth = new glow::RenderBufferObject();
-    m_depth->storage(GL_DEPTH_COMPONENT, width, height);
+    m_depthGame = new glow::RenderBufferObject();
+    m_depthGame->storage(GL_DEPTH_COMPONENT, width, height);
 
 
-    m_fbo->attachTexture2D(GL_COLOR_ATTACHMENT0, m_color);
-    m_fbo->attachRenderBuffer(GL_DEPTH_ATTACHMENT, m_depth);
-   
-    m_fbo->setDrawBuffers({ GL_COLOR_ATTACHMENT0 });
+    m_fboGame->attachTexture2D(GL_COLOR_ATTACHMENT0, m_colorGame);
+    m_fboGame->attachRenderBuffer(GL_DEPTH_ATTACHMENT, m_depthGame);
+
+    m_fboGame->setDrawBuffers({ GL_COLOR_ATTACHMENT0 });
+
+    m_fboHud = new glow::FrameBufferObject();
+    m_fboHud->bind();
+
+    m_colorHud = new glow::Texture(GL_TEXTURE_2D);
+    m_colorHud->image2D(0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+    m_colorHud->setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    m_colorHud->setParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    m_depthHud = new glow::RenderBufferObject();
+    m_depthHud->storage(GL_DEPTH_COMPONENT, width, height);
+
+
+    m_fboHud->attachTexture2D(GL_COLOR_ATTACHMENT0, m_colorHud);
+    m_fboHud->attachRenderBuffer(GL_DEPTH_ATTACHMENT, m_depthHud);
+
+    m_fboHud->setDrawBuffers({ GL_COLOR_ATTACHMENT0 });
 
     /* Shaders */
     glow::Shader * vertexShader = glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/fbo.vert");
@@ -217,24 +234,27 @@ void Game::update(float delta_sec)
     m_inputHandler.update(delta_sec);
     World::instance()->update(delta_sec);
     m_player.setFollowCam();
-	m_hud->update(delta_sec);
+    m_hud->update(delta_sec);
+
 }
 
 void Game::draw()
 {
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+    m_fboGame->bind();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    m_fboGame->unbind();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    m_fbo->bind();
-
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glFrontFace(GL_CCW);
 	glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
     glEnable(GL_DEPTH_TEST);
     glDepthMask(GL_TRUE);
    
-    //m_fbo->attachTexture2D(GL_COLOR_ATTACHMENT0, m_skybox->m_texture);
+    //m_fboGame->attachTexture2D(GL_COLOR_ATTACHMENT0, m_skybox->m_texture);
 
-    //m_fbo->setDrawBuffers({ GL_COLOR_ATTACHMENT0 });
+    //m_fboGame->setDrawBuffers({ GL_COLOR_ATTACHMENT0 });
 
     m_skybox->draw(&m_camera);
 
@@ -248,29 +268,36 @@ void Game::draw()
     // draw all other voxelclusters...
     m_voxelRenderer->afterDraw();
 
-    /*
-    float z;
-    glReadPixels(0, 0, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &z);
-    printf("%f\n", z);
-    */
+
+    //glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_fboGame->id());
+    glBlitFramebuffer(0, 0, m_camera.viewport().x, m_camera.viewport().y, 0, 0, m_camera.viewport().x, m_camera.viewport().y,
+        GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+
+    //m_fboGame->bind();
+
+
+    //m_fboHud->bind();
     m_hud->draw();
+    //m_fboHud->unbind();
+    m_fboGame->unbind();
 
     m_hd3000dummy->drawIfActive();
     
-    m_fbo->unbind();
 
     glDisable(GL_DEPTH_TEST);
     glDepthMask(GL_FALSE);
+    m_colorGame->bind(GL_TEXTURE0);
+    //m_quad->draw();
+    m_colorGame->unbind(GL_TEXTURE0);
 
-    m_color->bindActive(GL_TEXTURE0);
-    m_program->use();
+    glEnable(GL_DEPTH_TEST);
+    glDepthMask(GL_TRUE);
 
-    m_vertex->drawArrays(GL_TRIANGLE_FAN, 0, 4);
 
-    m_color->unbind();
-    m_program->release();
-    
-    //draw();
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, m_fboGame->id());
 
 }
 

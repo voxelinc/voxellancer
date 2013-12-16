@@ -53,9 +53,12 @@ private:
 
     World * m_world;
 
-    glow::ref_ptr<glow::FrameBufferObject> m_fbo;
-    glow::ref_ptr<glow::Texture> m_color;
-    glow::ref_ptr<glow::RenderBufferObject> m_depth;
+    glow::ref_ptr<glow::FrameBufferObject> m_fboGame;
+    glow::ref_ptr<glow::FrameBufferObject> m_fboHud;
+    glow::ref_ptr<glow::Texture> m_colorGame;
+    glow::ref_ptr<glow::RenderBufferObject> m_depthGame;
+    glow::ref_ptr<glow::Texture> m_colorHud;
+    glow::ref_ptr<glow::RenderBufferObject> m_depthHud;
     glow::ref_ptr<glow::Buffer> m_buffer;
     glow::ref_ptr<glow::VertexArrayObject> m_vertex;
     glow::ref_ptr<glow::Program> m_program;
