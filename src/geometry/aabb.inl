@@ -103,32 +103,32 @@ TAABB<T> TAABB<T>::expanded(Axis axis, T delta) const {
 template<typename T>
 bool TAABB<T>::intersects(const TAABB& other) const {
     if(m_llf.x < other.m_llf.x) {
-        if(other.m_llf.x > m_rub.x) {
+        if(other.m_llf.x >= m_rub.x) {
             return false;
         }
     }
     else {
-        if(m_llf.x > other.m_rub.x) {
+        if(m_llf.x >= other.m_rub.x) {
             return false;
         }
     }
     if(m_llf.y < other.m_llf.y) {
-        if(other.m_llf.y > m_rub.y) {
+        if(other.m_llf.y >= m_rub.y) {
             return false;
         }
     }
     else {
-        if(m_llf.y > other.m_rub.y) {
+        if(m_llf.y >= other.m_rub.y) {
             return false;
         }
     }
     if(m_llf.z < other.m_llf.z) {
-        if(other.m_llf.z > m_rub.z) {
+        if(other.m_llf.z >= m_rub.z) {
             return false;
         }
     }
     else {
-        if(m_llf.z > other.m_rub.z) {
+        if(m_llf.z >= other.m_rub.z) {
             return false;
         }
     }
