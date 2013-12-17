@@ -4,8 +4,8 @@
 
 #include "world/god.h"
 #include "world/world.h"
-#include "worldobject/voxelexplosionparticle.h"
 #include "utils/randfloat.h"
+#include "voxelexplosionparticle.h"
 
 
 VoxelExplosionGenerator::VoxelExplosionGenerator() :

@@ -5,7 +5,7 @@
 
 #include "utils/tostring.h"
 #include "physics/bulletphysics.h"
-#include "worldobject/voxelexplosiongenerator.h"
+#include "voxeleffect/voxelexplosiongenerator.h"
 
 
 Bullet::Bullet(WorldObject* creator, glm::vec3 position, glm::quat orientation, glm::vec3 direction, float speed, float range) :
