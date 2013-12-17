@@ -56,3 +56,8 @@ World *World::instance() {
     return s_instance;
 }
 
+void World::reset() {
+    glow::warning("world reset!");
+    s_instance = nullptr;
+}
+

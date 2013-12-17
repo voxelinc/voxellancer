@@ -16,7 +16,9 @@ if(${OPTION_CREATE_SUB_TEST})
     add_subdirectory(loader)
     add_subdirectory(worldobject)
     add_subdirectory(splitting)
+    add_subdirectory(perftest)
 endif()
+
 
 file(GLOB_RECURSE ALL_TEST_FILES
     "*/*.cpp"
