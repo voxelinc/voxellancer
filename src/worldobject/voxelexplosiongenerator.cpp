@@ -15,7 +15,7 @@ VoxelExplosionGenerator::VoxelExplosionGenerator() :
     m_scale(1.0f),
     m_force(1.0f),
     m_color(0xFFFFFF),
-    m_density(4),
+    m_density(2),
     m_impactVector(0,0,0)
 {
 }
@@ -58,7 +58,7 @@ void VoxelExplosionGenerator::setImpactVector(const glm::vec3& impactVector){
 
 
 void VoxelExplosionGenerator::spawn(){
-    // spawn explosionSpawnCount voxels with color at position within a cube with edgeLength scale with a speed of ~force in all directions modified by ~impactVector 
+    // spawn explosionSpawnCount voxels with color at position within a cube with edgeLength scale with a speed of ~force in all directions modified by ~impactVector
     // Maximum voxel edge length is spawnRadius * 2 / sqrt(2) for 1 voxel
     WorldTransform transform;
     transform.setPosition(m_position);
@@ -73,7 +73,7 @@ void VoxelExplosionGenerator::spawn(){
                 Voxel* voxel = new Voxel(glm::ivec3(0, 0, 0), m_color, 0.000001f, 0.1f);
                 voxel->addToObject(newObject);
                 newObject->setCrucialVoxel(glm::ivec3(0, 0, 0));
-                
+
 
                 newObject->setPosition( transform.applyTo( scale * (glm::vec3(i, j, k))));
                 newObject->setOrientation(m_orientation);
@@ -83,11 +83,11 @@ void VoxelExplosionGenerator::spawn(){
                 float angY = glm::degrees(glm::acos(2 * RandFloat::rand(0, 1) - 1));
                 glm::vec3 speedVec = glm::quat(glm::vec3(angX, angY, 0.0f)) * glm::vec3(0, 0, RandFloat::rand(0, 10.0f));
                 newObject->physics().setSpeed( m_orientation * (m_force * 10.0f * glm::normalize(speedVec)) + m_impactVector);
-                
-               
+
+
                 newObject->physics().setAngularSpeed(glm::vec3(
-                    RandFloat::rand(-10, 10), 
-                    RandFloat::rand(-10, 10), 
+                    RandFloat::rand(-10, 10),
+                    RandFloat::rand(-10, 10),
                     RandFloat::rand(-10, 10)));
 
 
