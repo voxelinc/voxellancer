@@ -181,6 +181,15 @@ void InputHandler::update(float delta_sec) {
                 y = glm::min((double)m_cursorMaxDistance, y);
                 rot = glm::vec3(y, x, 0);
                 rot /= m_cursorMaxDistance;
+
+                if (glm::length(rot) < prop_deadzone){
+                    rot = glm::vec3(0);
+                }
+                if (glm::length(rot) > 1){
+                    rot = glm::normalize(rot);
+                }
+                m_player->rotate(rot);
+
             }
         }
     }
