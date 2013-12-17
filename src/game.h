@@ -53,20 +53,10 @@ private:
 
     World * m_world;
 
-    glow::ref_ptr<glow::FrameBufferObject> m_fboGame;
-    glow::ref_ptr<glow::FrameBufferObject> m_fboHud;
-    glow::ref_ptr<glow::Texture> m_colorGame;
-    glow::ref_ptr<glow::RenderBufferObject> m_depthGame;
-    glow::ref_ptr<glow::Texture> m_colorHud;
-    glow::ref_ptr<glow::RenderBufferObject> m_depthHud;
+    glow::ref_ptr<glow::FrameBufferObject> m_fboGameDepth;
+    glow::ref_ptr<glow::RenderBufferObject> m_bufferGameDepth;
     glow::ref_ptr<glow::Buffer> m_buffer;
-    glow::ref_ptr<glow::VertexArrayObject> m_vertex;
-    glow::ref_ptr<glow::Program> m_program;
-    glow::ref_ptr<glowutils::ScreenAlignedQuad> m_quad;
 
-    //GLuint m_framebuffer;
-    //GLuint m_depth;
-    //GLuint m_color;
 
 	std::unique_ptr<Skybox> m_skybox;
 	std::unique_ptr<HUD> m_hud;

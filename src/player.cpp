@@ -38,8 +38,8 @@ void Player::applyAcceleration(){
 
 void Player::setFollowCam(){
     m_camera->setPosition(m_playerShip->transform().position());
-    m_camera->move(glm::vec3(0, 5, 10));
     m_camera->setOrientation(m_playerShip->transform().orientation());
+    m_camera->move(glm::vec3(0, 5, 10));
 }
 
 Ship* Player::playerShip(){

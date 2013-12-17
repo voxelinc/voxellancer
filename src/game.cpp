@@ -60,79 +60,13 @@ void Game::initialize()
     int width, height;
     glfwGetWindowSize(m_window, &width, &height);
 
-    m_fboGame = new glow::FrameBufferObject();
-    m_fboGame->bind();
+    m_fboGameDepth = new glow::FrameBufferObject();
+    m_fboGameDepth->bind();
 
-    m_colorGame = new glow::Texture(GL_TEXTURE_2D);
-    m_colorGame->image2D(0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
-    m_colorGame->setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    m_colorGame->setParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    m_bufferGameDepth = new glow::RenderBufferObject();
+    m_bufferGameDepth->storage(GL_DEPTH_COMPONENT, width, height);
 
-    m_depthGame = new glow::RenderBufferObject();
-    m_depthGame->storage(GL_DEPTH_COMPONENT, width, height);
-
-
-    m_fboGame->attachTexture2D(GL_COLOR_ATTACHMENT0, m_colorGame);
-    m_fboGame->attachRenderBuffer(GL_DEPTH_ATTACHMENT, m_depthGame);
-
-    m_fboGame->setDrawBuffers({ GL_COLOR_ATTACHMENT0 });
-
-    m_fboHud = new glow::FrameBufferObject();
-    m_fboHud->bind();
-
-    m_colorHud = new glow::Texture(GL_TEXTURE_2D);
-    m_colorHud->image2D(0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
-    m_colorHud->setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    m_colorHud->setParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    m_depthHud = new glow::RenderBufferObject();
-    m_depthHud->storage(GL_DEPTH_COMPONENT, width, height);
-
-
-    m_fboHud->attachTexture2D(GL_COLOR_ATTACHMENT0, m_colorHud);
-    m_fboHud->attachRenderBuffer(GL_DEPTH_ATTACHMENT, m_depthHud);
-
-    m_fboHud->setDrawBuffers({ GL_COLOR_ATTACHMENT0 });
-
-    /* Shaders */
-    glow::Shader * vertexShader = glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/fbo.vert");
-    glow::Shader * fragmentShader = glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/fbo.frag");
-
-    m_program = new glow::Program();
-    m_program->attach(vertexShader, fragmentShader);
-    m_program->bindFragDataLocation(0, "color");
-
-    m_program->setUniform("texture", 0);
-
-    auto vertex = m_program->getAttributeLocation("vertex");
-
-    /*m_buffer = new glow::Buffer(GL_ARRAY_BUFFER);
-    m_vertex = new glow::VertexArrayObject();
-
-
-    auto vertices = glow::Array<glm::vec3>()
-        << glm::vec3(-1, -1, 0)
-        << glm::vec3(1, -1, 0)
-        << glm::vec3(-1, 1, 0)
-        << glm::vec3(-1, 1, 0)
-        << glm::vec3(1, -1, 0)
-        << glm::vec3(1, 1, 0);
-
-    m_buffer->setData(vertices);
-
-    auto binding = m_vertex->binding(0);
-
-    binding->setAttribute(vertex);
-    binding->setBuffer(m_buffer, 0, sizeof(glm::vec3));
-    binding->setFormat(3, GL_FLOAT, GL_FALSE, 0);
-
-
-    m_vertex->enable(vertex);
-
-    */
-
-    m_quad = new glowutils::ScreenAlignedQuad(m_program);
-
+    m_fboGameDepth->attachRenderBuffer(GL_DEPTH_ATTACHMENT, m_bufferGameDepth);
 
     glow::AutoTimer t("Initialize Game");
 
@@ -207,8 +141,6 @@ void Game::initialize()
     m_world->god().spawn();
 
 	glow::debug("Setup Camera");
-	//viewport set in resize
-	//m_camera.setPosition(glm::vec3(0, 5, 30));
 	m_camera.setZNear(1);
 	m_camera.setZFar(9999);
 
@@ -240,21 +172,17 @@ void Game::update(float delta_sec)
 
 void Game::draw()
 {
-    glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
-    m_fboGame->bind();
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    m_fboGame->unbind();
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, 0); //default readbuffer
+    m_fboGameDepth->bind();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //clear depth buffer
+    m_fboGameDepth->unbind();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //clear default buffer
 
 	glFrontFace(GL_CCW);
 	glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
     glEnable(GL_DEPTH_TEST);
     glDepthMask(GL_TRUE);
-   
-    //m_fboGame->attachTexture2D(GL_COLOR_ATTACHMENT0, m_skybox->m_texture);
-
-    //m_fboGame->setDrawBuffers({ GL_COLOR_ATTACHMENT0 });
 
     m_skybox->draw(&m_camera);
 
@@ -268,36 +196,19 @@ void Game::draw()
     // draw all other voxelclusters...
     m_voxelRenderer->afterDraw();
 
-
-    //glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
-    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_fboGame->id());
+    // after drawing the game, copy the depthbuffer into the separate buffer
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_fboGameDepth->id());
     glBlitFramebuffer(0, 0, m_camera.viewport().x, m_camera.viewport().y, 0, 0, m_camera.viewport().x, m_camera.viewport().y,
         GL_DEPTH_BUFFER_BIT, GL_NEAREST);
 
+    // draw into the default buffer again
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
-    //m_fboGame->bind();
-
-
-    //m_fboHud->bind();
     m_hud->draw();
-    //m_fboHud->unbind();
-    m_fboGame->unbind();
 
     m_hd3000dummy->drawIfActive();
-    
 
-    glDisable(GL_DEPTH_TEST);
-    glDepthMask(GL_FALSE);
-    m_colorGame->bind(GL_TEXTURE0);
-    //m_quad->draw();
-    m_colorGame->unbind(GL_TEXTURE0);
-
-    glEnable(GL_DEPTH_TEST);
-    glDepthMask(GL_TRUE);
-
-
-    glBindFramebuffer(GL_READ_FRAMEBUFFER, m_fboGame->id());
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, m_fboGameDepth->id());
 
 }
 

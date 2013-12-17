@@ -109,7 +109,7 @@ void InputHandler::update(float delta_sec) {
                 if (m_player->playerShip()->aimMode() == Point){
                     adjustAim(x, y);
                 }
-                //m_player->playerShip()->fire();
+                m_player->playerShip()->fire();
             }
 
 			// lookAt
@@ -223,17 +223,19 @@ std::string InputHandler::playerTarget(){
 
 void InputHandler::adjustAim(double x, double y){
     glm::vec4 pointEnd((x * 2 / m_windowWidth - 1), -1 * (y * 2 / m_windowHeight - 1), 1, 1); //get normalized device coords
+    glm::vec4 pointMiddle(0, -1 * 0, 1, 1);
     pointEnd = glm::inverse(m_camera->viewProjection())*pointEnd; //find point on zfar
+    pointMiddle = glm::inverse(m_camera->viewProjection())*pointMiddle; //find point on zfar
     glm::vec3 vec = glm::vec3(pointEnd); // no need for w component
+    glm::vec3 vecMiddle = glm::vec3(pointMiddle); // no need for w component
     vec = glm::normalize(vec); // normalize
+    vecMiddle = glm::normalize(vecMiddle); // normalize
+    float angle = glm::half_pi<float>() - glm::acos(glm::dot(vec, vecMiddle)); // get angle between target and middle
     float z;
-    glReadPixels((int) x, m_windowHeight-(int) y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &z);
-    float zi = (2 * m_camera->zNear()) / (m_camera->zFar() + m_camera->zNear() - z * (m_camera->zFar() - m_camera->zNear()));
-    float zj = (m_camera->zNear()*z) / ((m_camera->zNear() - m_camera->zFar())*z + m_camera->zFar());
-    //z = (zi + zj)/2;
-    //z *= m_camera->zFar() - m_camera->zNear();
-    //z += m_camera->zNear();
-    printf("%i %i %f\n", (int)x, (int)y, z);
+    glReadPixels((int) x, m_windowHeight-(int) y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &z); // get depth value
+    z = 2 * z - 1; // normalized dev coords
+    z = 2 * m_camera->zNear() * m_camera->zFar() / (m_camera->zFar() + m_camera->zNear() - z * (m_camera->zFar() - m_camera->zNear())); //linearize
+    z = z/glm::sin(angle);
     vec *= glm::min(m_player->playerShip()->minAimDistance(),z); // set aimdistance
     vec += m_camera->position(); //adjust for camera translation
     m_player->playerShip()->setTargetPoint(vec);
