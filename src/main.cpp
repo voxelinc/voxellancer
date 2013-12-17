@@ -39,6 +39,7 @@ static void errorCallback(int error, const char* description)
 
 static void resizeCallback(GLFWwindow* window, int width, int height)
 {
+    glow::info("Resizing viewport to %;x%;", width, height);
     if (width > 0 && height > 0) {
         glViewport(0, 0, width, height);
         game->inputHandler()->resizeEvent(width, height);
@@ -53,6 +54,7 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
 		glowutils::FileRegistry::instance().reloadAll();
 	if (key == GLFW_KEY_F6 && action == GLFW_PRESS)
 		game->reloadConfig();
+
 	game->inputHandler()->keyCallback(key, scancode, action, mods);
 }
 

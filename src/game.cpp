@@ -38,11 +38,12 @@
 
 class Ship;
 
+
 Game::Game(GLFWwindow *window) :
-m_window(window),
-m_camera(),
-m_player(&m_camera),
-m_inputHandler(window, &m_player, &m_camera)
+    m_window(window),
+    m_camera(),
+    m_player(&m_camera),
+    m_inputHandler(window, &m_player, &m_camera)
 {
 	reloadConfig();
 }
@@ -78,6 +79,7 @@ void Game::initialize()
 
     glow::debug("create world");
     m_world = World::instance();
+    m_treeStateReporter.setWorldTree(&m_world->worldTree());
 
     glow::debug("Create Skybox");
 	m_skybox = std::unique_ptr<Skybox>(new Skybox);
@@ -104,6 +106,7 @@ void Game::initialize()
     m_world->god().scheduleSpawn(testClusterMoveable);
 
     //m_inputHandler.setVoxelCluster(m_testClusterMoveable);
+
 
     Ship *normandy = new Ship();
     ClusterCache::instance()->fillObject(normandy, "data/voxelcluster/normandy.csv");
@@ -159,9 +162,12 @@ void Game::update(float delta_sec)
 {
     // skip non-updates
     if (delta_sec == 0) return;
+
     //if (delta_sec < 1 / 60) delta_sec = 1 / 60;
     // avoid big jumps after debugging ;)
     delta_sec = glm::min(1.f, delta_sec);
+
+    //m_treeStateReporter.nudge();
 
     m_inputHandler.update(delta_sec);
     World::instance()->update(delta_sec);
@@ -245,40 +251,20 @@ InputHandler * Game::inputHandler()
     return &m_inputHandler;
 }
 
+TreeStateReporter::TreeStateReporter():
+    TimedTask(std::chrono::duration<float>(1.5f)),
+    m_worldTree(nullptr)
+{
 
+}
 
+void TreeStateReporter::setWorldTree(WorldTree *worldTree) {
+    m_worldTree = worldTree;
+}
 
-/*
-
-remove later: 
-
-m_framebuffer = 0;
-m_color = 1;
-m_depth = 2;
-glGenFramebuffers(1, &m_framebuffer);
-glBindFramebuffer(GL_FRAMEBUFFER, m_framebuffer);
-
-glGenTextures(1, &m_color);
-
-// "Bind" the newly created texture : all future texture functions will modify this texture
-glBindTexture(GL_TEXTURE_2D, m_color);
-
-// Give an empty image to OpenGL ( the last "0" )
-glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1024, 768, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
-
-// Poor filtering. Needed !
-glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-glGenRenderbuffers(1, &m_depth);
-glBindRenderbuffer(GL_RENDERBUFFER, m_depth);
-glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
-glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_depth);
-
-// Set "renderedTexture" as our colour attachement #0
-glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, m_color, 0);
-
-// Set the list of draw buffers.
-GLenum DrawBuffers[1] = { GL_COLOR_ATTACHMENT0 };
-glDrawBuffers(1, DrawBuffers); // "1" is the size of DrawBuffers
-*/
+void TreeStateReporter::exec() {
+    int nodes, empty, geodes, depth;
+    m_worldTree->poll(nodes, empty, geodes, depth);
+    std::cout << "WorldTree: " << nodes << " nodes; " << empty << " empty; " << geodes << " geodes; " << depth << " maxdepth" << std::endl;
+    m_worldTree->print();
+}

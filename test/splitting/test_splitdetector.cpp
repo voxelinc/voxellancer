@@ -8,7 +8,7 @@
 #include "world/handler/splitdetector.h"
 #include "world/handler/splitter.h"
 #include "property/propertymanager.h"
-#include "world/helper/worldobjectsplit.h"
+#include "world/helper/splitdata.h"
 #include "voxel/voxel.h"
 
 using namespace bandit;
@@ -56,7 +56,7 @@ go_bandit([]() {
             
             detector.searchSplitOffs(std::list<WorldObjectModification>{ modification });
 
-            AssertThat(detector.worldObjectSplits(), IsEmpty());
+            AssertThat(detector.splitDataList(), IsEmpty());
         });
 
 
@@ -68,10 +68,10 @@ go_bandit([]() {
 
             detector.searchSplitOffs(std::list<WorldObjectModification>{ modification });
 
-            AssertThat(detector.worldObjectSplits().size(), Equals(1));
+            AssertThat(detector.splitDataList().size(), Equals(1));
 
             // check if the split is the upper part of the voxel without the crucial voxel
-            WorldObjectSplit* splitOff = detector.worldObjectSplits().front();
+            SplitData* splitOff = detector.splitDataList().front();
             AssertThat(splitOff->splitOffVoxels().size(), Equals(6));
 
 
@@ -88,7 +88,7 @@ go_bandit([]() {
 
             detector.searchSplitOffs(std::list<WorldObjectModification>{ modification });
 
-            AssertThat(detector.worldObjectSplits().size(), Equals(1));
+            AssertThat(detector.splitDataList().size(), Equals(1));
         });
 
 
@@ -100,7 +100,7 @@ go_bandit([]() {
 
             detector.searchSplitOffs(std::list<WorldObjectModification>{ modification });
 
-            AssertThat(detector.worldObjectSplits().size(), Equals(2));
+            AssertThat(detector.splitDataList().size(), Equals(2));
         });
 
 
@@ -116,7 +116,7 @@ go_bandit([]() {
 
             detector.searchSplitOffs(std::list<WorldObjectModification>{ modification });
 
-            AssertThat(detector.worldObjectSplits().size(), Equals(2));
+            AssertThat(detector.splitDataList().size(), Equals(2));
         });
 
     });

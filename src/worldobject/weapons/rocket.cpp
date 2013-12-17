@@ -8,7 +8,7 @@
 
 
 Rocket::Rocket(glm::vec3 position, glm::quat orientation, const glm::vec3& initialSpeed, float travelSpeed, float lifetime, WorldObject* target) :
-    WorldObject(0.8f)
+    WorldObject(0.8f, glm::vec3(0), CollisionFilterClass::Rocket)
 {
     m_lifetime = lifetime;
     m_travelSpeed = travelSpeed;
@@ -65,3 +65,11 @@ void Rocket::update(float delta_sec){
         World::instance()->god().scheduleRemoval(this);
 }
 
+void Rocket::onCollision(){
+    //TODO: spawn explosion
+    World::instance()->god().scheduleRemoval(this);
+}
+
+void Rocket::onSpawnFail(){
+    //TODO: spawn explosion
+}

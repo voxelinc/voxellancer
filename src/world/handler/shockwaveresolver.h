@@ -4,7 +4,7 @@
 //#include "physics/shockwave.h"
 //
 //class God;
-//class VoxelImpact;
+//class VoxelImpulse;
 //
 //class ShockwaveResolver
 //{
@@ -14,6 +14,6 @@
 //
 //    void resolve(std::list<Shockwave*> &shockwaves);
 //
-//    std::list<VoxelImpact*> &voxelImpacts();
+//    std::list<VoxelImpulse*> &voxelImpulses();
 //};
 //

@@ -44,7 +44,6 @@ void Player::setFollowCam(){
 
 Ship* Player::playerShip(){
     return m_playerShip;
-    m_playerShip->setAimMode(None);
 }
 
 void Player::setShipToCam(float delta_sec){

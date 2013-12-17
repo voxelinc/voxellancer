@@ -3,6 +3,30 @@
 #include <glm/glm.hpp>
 #include <glow/glow.h>
 
+
+/*
+* 360 gamepad assignment: (direction given for positive values)
+* - A0: left stick right                        move right
+* - A1: left stick up                           move forward
+* - A2: left trigger (right trigger is [-1, 0]  -1 = gun trigger, +1 = rocket trigger
+* - A3: right stick down(!)                     rotate down
+* - A4: right stick right                       rotate up
+*/
+
+/*
+* Button assignment
+* B0: A
+* B1: B
+* B2: X
+* B3: Y
+* B4: left bumper               --previous target
+* B5: right bumper              next target
+* B6: back
+* B7: start
+* B8: left stick
+* B9: right stick
+*/
+
 InputHandler::InputHandler(GLFWwindow *window, Camera *camera) :
 m_window(window),
 m_camera(camera),
@@ -10,6 +34,8 @@ prop_deadzone("input.deadzone"),
 m_followCam(true)
 {
 
+    bumperLeftState = false;
+    bumperRightState = false;
     glfwGetWindowSize(m_window, &m_windowWidth, &m_windowHeight);
     glfwSetCursorPos(m_window, m_windowWidth / 2, m_windowHeight / 2);
     m_cursorMaxDistance = glm::min(m_windowHeight, m_windowWidth)/2;
@@ -28,7 +54,8 @@ m_camera(camera),
 prop_deadzone("input.deadzone"),
 m_followCam(true)
 {
-
+    bumperLeftState = false;
+    bumperRightState = false;
     glfwGetWindowSize(m_window, &m_windowWidth, &m_windowHeight);
     glfwSetCursorPos(m_window, m_windowWidth / 2, m_windowHeight / 2);
     m_cursorMaxDistance = glm::min(m_windowHeight, m_windowWidth)/2;
@@ -65,7 +92,7 @@ void InputHandler::keyCallback(int key, int scancode, int action, int mods){
     if (key == GLFW_KEY_M && action == GLFW_PRESS)
         m_followCam = !m_followCam;
     if (key == GLFW_KEY_TAB && action == GLFW_PRESS)
-        selectNextTarget();
+        selectNextTarget(true);
 }
 
 void InputHandler::update(float delta_sec) {
@@ -99,6 +126,68 @@ void InputHandler::update(float delta_sec) {
             if (glfwGetKey(m_window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS){
                 m_player->boost();
             }
+            if (glfwGetKey(m_window, GLFW_KEY_E) == GLFW_PRESS){
+                m_player->rotate(glm::vec3(0, 0, -1));
+            }
+            if (glfwJoystickPresent(GLFW_JOYSTICK_1)) {
+                // Button mapping
+                int cnt = 0;
+                int cntAxes = 0;
+                const unsigned char *buttons = glfwGetJoystickButtons(GLFW_JOYSTICK_1, &cnt);
+                const float *axes = glfwGetJoystickAxes(GLFW_JOYSTICK_1, &cntAxes);
+
+                for (int i = 0; i < cnt; ++i) {
+                    if (buttons[i] == GLFW_PRESS) {
+                        glow::debug("button: %; pressed", i);
+                    }
+
+                }
+                if (buttons[4] == GLFW_PRESS){
+                    if (!bumperLeftState)
+                        this->selectNextTarget(false);
+                    bumperLeftState = true;
+                }
+                else
+                    bumperLeftState = false;
+                if (buttons[5] == GLFW_PRESS){
+                    if (!bumperRightState)
+                        this->selectNextTarget(true);
+                    bumperRightState = true;
+                }
+                else
+                    bumperRightState = false;
+                if (glm::abs(axes[2]) > prop_deadzone){
+                    if (axes[2] < 0)
+                        m_player->playerShip()->fireAtPoint(findTargetPoint(m_windowWidth / 2, m_windowHeight / 2));
+                    else
+                        m_player->playerShip()->fireAtObject();
+                }
+                if (glm::abs(axes[0]) > prop_deadzone){
+                    m_player->move(glm::vec3(axes[0], 0, 0));
+                }
+                if (glm::abs(axes[1]) > prop_deadzone){
+                    m_player->move(glm::vec3(0, 0, -axes[1]));
+                }
+                glm::vec3 rot = glm::vec3(0);
+                if (glm::abs(axes[3]) > prop_deadzone){
+                    rot.x = -axes[3];
+                }
+                if (glm::abs(axes[4]) > prop_deadzone){
+                    rot.y = -axes[4];
+                }
+                if (glm::length(rot) < prop_deadzone)
+                    rot = glm::vec3(0);
+                if (glm::length(rot) > 1){
+                    rot = glm::normalize(rot);
+                }
+                m_player->rotate(rot);
+                glow::debug("%; \n ", glfwJoystickPresent(GLFW_JOYSTICK_1));
+
+            }
+
+
+
+
 
             // mouse handling
             double x, y;
@@ -106,10 +195,10 @@ void InputHandler::update(float delta_sec) {
 
             // shoot
             if (glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS){
-                if (m_player->playerShip()->aimMode() == Point){
-                    adjustAim(x, y);
-                }
-                m_player->playerShip()->fire();
+                m_player->playerShip()->fireAtPoint(findTargetPoint(x, y));
+            }
+            if (glfwGetKey(m_window, GLFW_KEY_R) == GLFW_PRESS){
+                m_player->playerShip()->fireAtObject();
             }
 
 			// lookAt
@@ -173,70 +262,93 @@ void InputHandler::toggleControls()
 }
 
 
-void InputHandler::selectNextTarget(){
+WorldObject* InputHandler::findNextTarget(bool forward){
     std::list<WorldObject*>& worldObjects = World::instance()->worldObjects();
-    std::list<WorldObject*>::iterator newTarget = worldObjects.end();
 
-    if (m_player->playerShip()->aimMode() == Point){
-        m_player->playerShip()->setAimMode(Object);
-        newTarget = worldObjects.begin();
-    }
-    else if (m_player->playerShip()->aimMode() == Object){
-        std::list<WorldObject*>::iterator iterator = worldObjects.begin();
-        while (iterator != worldObjects.end()){
-            if (*iterator == m_player->playerShip()->targetObject()){
-                newTarget = ++iterator;
-                break;
+    if (forward){
+        if (!m_player->playerShip()->targetObject()){
+            auto iterator = worldObjects.begin();
+            // find next lockable target
+            while (iterator != worldObjects.end() && (!(*iterator)->objectInfo().canLockOn() || *iterator == m_player->playerShip())){
+                ++iterator;
             }
-            ++iterator;
+            if (iterator == worldObjects.end())
+                return nullptr;
+            return *iterator;
         }
-    }
-    if (newTarget == worldObjects.end()){
-        m_player->playerShip()->setAimMode(Point);
+        else {
+            // Find current target
+            for (auto iterator = worldObjects.begin(); iterator != worldObjects.end(); ++iterator){
+                if (*iterator == m_player->playerShip()->targetObject()){
+                    ++iterator;
+                    // find next lockable target
+                    while (iterator != worldObjects.end() && (!(*iterator)->objectInfo().canLockOn() || *iterator == m_player->playerShip())){
+                        ++iterator;
+                    }
+                    if (iterator == worldObjects.end())
+                        return nullptr;
+                    return *iterator;
+                }
+            }
+        }
     } else {
-        // newTarget points to next target, which might not be lockable
-        // find first lockable target excluding self
-        std::list<WorldObject*>::iterator iterator = newTarget;
-        while (iterator != worldObjects.end()){
-            if ((*iterator)->objectInfo().canLockOn() && (*iterator) != m_player->playerShip()){
-                m_player->playerShip()->setAimMode(Object);
-                m_player->playerShip()->setTargetObject(*iterator);
-                return;
+        if (!m_player->playerShip()->targetObject()){
+            auto iterator = worldObjects.rbegin();
+            // find next lockable target
+            while (iterator != worldObjects.rend() && (!(*iterator)->objectInfo().canLockOn() || *iterator == m_player->playerShip())){
+                ++iterator;
             }
-            ++iterator;
+            if (iterator == worldObjects.rend())
+                return nullptr;
+            return *iterator;
         }
-        // reach here if no lockable target left, then switch back to Point-Aiming
-        m_player->playerShip()->setAimMode(Point);
+        else {
+            // Find current target backwards
+            for (auto iterator = worldObjects.rbegin(); iterator != worldObjects.rend(); ++iterator){
+                if (*iterator == m_player->playerShip()->targetObject()){
+                    ++iterator;
+                    // find next lockable target
+                    while (iterator != worldObjects.rend() && (!(*iterator)->objectInfo().canLockOn() || *iterator == m_player->playerShip())){
+                        ++iterator;
+                    }
+                    if (iterator == worldObjects.rend())
+                        return nullptr;
+                    return *iterator;
+                }
+            }
+        }
     }
+    return nullptr;
+}
+
+void InputHandler::selectNextTarget(bool forward){
+    m_player->playerShip()->setTargetObject(findNextTarget(forward));
 }
 
 std::string InputHandler::playerTarget(){
-    if (m_player->playerShip()->aimMode() == Point)
-        return "Guns";
-    if (m_player->playerShip()->aimMode() == Object)
     if (m_player->playerShip()->targetObject())
         return "Locked: " + m_player->playerShip()->targetObject()->objectInfo().name();
-        else
-            return "Invalid Lock";
-    return "-";
+    else
+        return "No Lock";
 }
 
-void InputHandler::adjustAim(double x, double y){
+glm::vec3 InputHandler::findTargetPoint(double x, double y){
+    float z;
     glm::vec4 pointEnd((x * 2 / m_windowWidth - 1), -1 * (y * 2 / m_windowHeight - 1), 1, 1); //get normalized device coords
-    glm::vec4 pointMiddle(0, -1 * 0, 1, 1);
+    glm::vec4 pointMiddle(0, 0, 1, 1);
     pointEnd = glm::inverse(m_camera->viewProjection())*pointEnd; //find point on zfar
     pointMiddle = glm::inverse(m_camera->viewProjection())*pointMiddle; //find point on zfar
     glm::vec3 vec = glm::vec3(pointEnd); // no need for w component
     glm::vec3 vecMiddle = glm::vec3(pointMiddle); // no need for w component
     vec = glm::normalize(vec); // normalize
     vecMiddle = glm::normalize(vecMiddle); // normalize
-    float angle = glm::half_pi<float>() - glm::acos(glm::dot(vec, vecMiddle)); // get angle between target and middle
-    float z;
     glReadPixels((int) x, m_windowHeight-(int) y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &z); // get depth value
     z = 2 * z - 1; // normalized dev coords
     z = 2 * m_camera->zNear() * m_camera->zFar() / (m_camera->zFar() + m_camera->zNear() - z * (m_camera->zFar() - m_camera->zNear())); //linearize
-    z = z/glm::sin(angle);
+    if (vec != vecMiddle){
+        z = z / glm::sin(glm::half_pi<float>() - glm::acos(glm::dot(vec, vecMiddle))); // adjust to angle
+    }
     vec *= glm::min(m_player->playerShip()->minAimDistance(),z); // set aimdistance
     vec += m_camera->position(); //adjust for camera translation
-    m_player->playerShip()->setTargetPoint(vec);
+    return vec;
 }

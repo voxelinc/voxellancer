@@ -6,7 +6,7 @@
 #include "world/helper/worldobjectmodification.h"
 
 
-class WorldObjectSplit;
+class SplitData;
 class WorldObject;
 class Voxel;
 
@@ -15,11 +15,11 @@ class SplitDetector
 public:
     void searchSplitOffs(std::list<WorldObjectModification> worldObjectModifications);
 
-    std::list<WorldObjectSplit*> &worldObjectSplits();
+    std::list<SplitData*> &splitDataList();
 
 
 protected:
-    std::list<WorldObjectSplit*> m_worldObjectSplits;
+    std::list<SplitData*> m_splitDataList;
 
     void clear();
     void findSplits(WorldObject* currentWorldObject, std::unordered_set<Voxel*>& borderVoxel, bool foundSplit = false);

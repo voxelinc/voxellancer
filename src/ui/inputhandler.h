@@ -29,8 +29,11 @@ public:
 protected:
 
     void toggleControls();
-    void selectNextTarget();
-    void adjustAim(double x, double y);
+    WorldObject* findNextTarget(bool forward);
+    void selectNextTarget(bool forward);
+    glm::vec3 findTargetPoint(double x, double y);
+
+    bool bumperLeftState, bumperRightState;
 
 	GLFWwindow *m_window;
 	Camera* m_camera;

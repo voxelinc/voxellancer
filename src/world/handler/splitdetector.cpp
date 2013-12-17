@@ -3,7 +3,7 @@
 #include <unordered_set>
 #include <queue>
 
-#include "world/helper/worldobjectsplit.h"
+#include "world/helper/splitdata.h"
 
 #include "voxel/voxel.h"
 #include "voxel/voxelneighbourhelper.h"
@@ -14,11 +14,13 @@
 
 void SplitDetector::searchSplitOffs(std::list<WorldObjectModification> worldObjectModifications) {
     clear();
+
     for(WorldObjectModification& worldObjectModification : worldObjectModifications) {
+
         WorldObject* currentWorldObject = worldObjectModification.worldObject();
         if (currentWorldObject->voxelMap().size() > 1) {
             glow::AutoTimer t("Splitdetection: " + currentWorldObject->objectInfo().name());
-            VoxelNeighbourHelper nHelper(currentWorldObject);
+            VoxelNeighbourHelper nHelper(currentWorldObject, true);
             std::unordered_set<Voxel*> borderVoxels;
             for (glm::ivec3 removedPos : worldObjectModification.removedVoxels()) {
                 for (Voxel * voxel : nHelper.neighbours(removedPos)) {
@@ -28,29 +30,29 @@ void SplitDetector::searchSplitOffs(std::list<WorldObjectModification> worldObje
             findSplits(currentWorldObject, borderVoxels);
         }
     }
-    if (m_worldObjectSplits.size() > 0) {
+    if (m_splitDataList.size() > 0) {
         glow::debug("Splitdetector: foundSplits!!");
     }
 }
 
 
-std::list<WorldObjectSplit*> &SplitDetector::worldObjectSplits() {
-    return m_worldObjectSplits;
+std::list<SplitData*> &SplitDetector::splitDataList() {
+    return m_splitDataList;
 }
 
 void SplitDetector::clear() {
-    for(WorldObjectSplit *split : m_worldObjectSplits) {
+    for(SplitData *split : m_splitDataList) {
         delete split;
     }
 
-    m_worldObjectSplits.clear();
+    m_splitDataList.clear();
 }
 
 void SplitDetector::findSplits(WorldObject* currentWorldObject, std::unordered_set<Voxel*>& borderVoxel, bool addLastSplit) {
     if (borderVoxel.size() == 0)
         return;
 
-    VoxelNeighbourHelper nHelper(currentWorldObject);
+    VoxelNeighbourHelper nHelper(currentWorldObject, true);
     std::unordered_set<Voxel *> visited;
     std::queue<Voxel *> toVisit;
 
@@ -59,7 +61,7 @@ void SplitDetector::findSplits(WorldObject* currentWorldObject, std::unordered_s
     borderVoxel.erase(start);
     visited.insert(start);
     toVisit.push(start);
-    
+
     // breadth first search for other border voxels
     while ((borderVoxel.size() > 0 || addLastSplit) && toVisit.size() > 0) {
         Voxel * current = toVisit.front();
@@ -73,7 +75,7 @@ void SplitDetector::findSplits(WorldObject* currentWorldObject, std::unordered_s
             }
         }
     }
-    
+
     if (borderVoxel.size() > 0 || addLastSplit) {
         if (currentWorldObject->crucialVoxel() == nullptr || visited.count(currentWorldObject->crucialVoxel()) == 0) {
             createSplit(currentWorldObject, visited);
@@ -85,12 +87,12 @@ void SplitDetector::findSplits(WorldObject* currentWorldObject, std::unordered_s
 }
 
 void SplitDetector::createSplit(WorldObject* currentWorldObject, std::unordered_set<Voxel *>& splitVoxels) {
-    WorldObjectSplit * split = new WorldObjectSplit();
+    SplitData * split = new SplitData();
     split->setExWorldObject(currentWorldObject);
     for (Voxel * voxel : splitVoxels) {
         split->addVoxel(voxel);
     }
-    m_worldObjectSplits.push_back(split);
+    m_splitDataList.push_back(split);
 }
 
 

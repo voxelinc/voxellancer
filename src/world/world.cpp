@@ -35,11 +35,17 @@ std::list<WorldObject*> &World::worldObjects() {
 }
 
 void World::update(float deltaSecs) {
+    m_deltaSec = deltaSecs;
+
     for (WorldObject *worldObject : m_worldObjects) {
         worldObject->update(deltaSecs);
     }
 
     m_worldLogic->update(deltaSecs);
+}
+
+float World::deltaSec() const {
+    return m_deltaSec;
 }
 
 World *World::instance() {

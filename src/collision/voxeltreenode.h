@@ -17,10 +17,11 @@ class WorldObject;
 class VoxelTreeNode
 {
 public:
-    VoxelTreeNode(VoxelTreeNode *parent, WorldObject &worldobject, const Grid3dAABB &gridAABB = Grid3dAABB(glm::ivec3(0, 0, 0), glm::ivec3(0, 0, 0)));
+    VoxelTreeNode(WorldObject *worldobject = nullptr, VoxelTreeNode *parent = nullptr, const Grid3dAABB &gridAABB = Grid3dAABB(glm::ivec3(0, 0, 0), glm::ivec3(0, 0, 0)));
     virtual ~VoxelTreeNode();
 
     bool isAtomic() const;
+    bool isVoxel() const;
     bool isLeaf() const;
     bool isEmpty() const;
 
@@ -29,6 +30,8 @@ public:
 
     Voxel *voxel();
     const Voxel *voxel() const;
+
+    WorldObject* worldObject();
 
     const Grid3dAABB &gridAABB() const;
 
@@ -40,12 +43,15 @@ public:
 
 protected:
     VoxelTreeNode *m_parent;
-    WorldObject &m_worldObject;
+    WorldObject *m_worldObject;
 
     Grid3dAABB m_gridAABB;
 
     std::vector<VoxelTreeNode*> m_subnodes;
     Voxel *m_voxel;
+
+    Sphere m_boundingSphere;
+    bool m_boundingSphereRadiusValid;
 
     void split();
     void unsplit();

@@ -1,14 +1,14 @@
 #include "ship.h"
 
+#include "hardpoint.h"
 #include "voxel/specialvoxels/hardpointvoxel.h"
 #include "worldobject/weapons/gun.h"
 #include "worldobject/weapons/rocketlauncher.h"
 
 Ship::Ship() :
+    WorldObject(CollisionFilterClass::Ship),
     m_world(World::instance()),
     m_hardpoints(),
-    m_aimMode(Point),
-    m_targetPoint(0),
 	prop_maxSpeed("ship.maxSpeed"),
 	prop_maxRotSpeed("ship.maxRotSpeed"),
     m_targetObject(nullptr)
@@ -46,22 +46,6 @@ void Ship::removeHardpoint(Hardpoint *hardpoint){
     }
 }
 
-void Ship::setAimMode(AimType mode){
-    m_aimMode = mode;
-}
-
-AimType Ship::aimMode(){
-    return m_aimMode;
-}
-
-void Ship::setTargetPoint(glm::vec3 target){
-    m_targetPoint = target;
-}
-
-glm::vec3 Ship::targetPoint(){
-    return m_targetPoint;
-}
-
 void Ship::setTargetObject(WorldObject* target){
     m_targetObject = target;
 }
@@ -69,18 +53,18 @@ WorldObject* Ship::targetObject(){
     return m_targetObject;
 }
 
-void Ship::fire(){
-    if (m_aimMode == Point){
-        for (Hardpoint* hardpoint : m_hardpoints){
-            if (hardpoint->aimType() == Point){
-                hardpoint->shootAtPoint(m_targetPoint);
-            }
+void Ship::fireAtPoint(glm::vec3 target){
+    for (Hardpoint* hardpoint : m_hardpoints){
+        if (hardpoint->aimType() == Point){
+            hardpoint->shootAtPoint(target);
         }
-    } else if (m_aimMode == Object){
-        for (Hardpoint* hardpoint : m_hardpoints){
-            if (hardpoint->aimType() == Object){
-                hardpoint->shootAtObject(m_targetObject);
-            }
+    }
+}
+
+void Ship::fireAtObject(){
+    for (Hardpoint* hardpoint : m_hardpoints){
+        if (hardpoint->aimType() == Object){
+            hardpoint->shootAtObject(m_targetObject);
         }
     }
 }
@@ -94,12 +78,10 @@ float Ship::minAimDistance(){ // is this needed ?!
     return range;
 }
 
-void Ship::accelerate(glm::vec3 direction) {
-    direction *= prop_maxSpeed.get();
-    m_physics->accelerate(direction);
+void Ship::accelerate(const glm::vec3& direction) {
+    m_physics->accelerate(direction * prop_maxSpeed.get());
 }
 
-void Ship::accelerateAngular(glm::vec3 axis) {
-    axis *= prop_maxRotSpeed.get();
-    m_physics->accelerateAngular(axis);
+void Ship::accelerateAngular(const glm::vec3& axis) {
+    m_physics->accelerateAngular(axis * prop_maxRotSpeed.get());
 }
