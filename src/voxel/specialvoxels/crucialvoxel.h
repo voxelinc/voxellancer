@@ -2,10 +2,10 @@
 
 #include "voxel/voxel.h"
 
-class EngineVoxel : public Voxel {
+class CrucialVoxel : public Voxel {
 public:
-    EngineVoxel(const glm::ivec3& gridCell, int color = 0xFFFFFF, float mass = 1.0f, float hp = 1.0f);
-    ~EngineVoxel();
+    CrucialVoxel(const glm::ivec3& gridCell, int color = 0xFFFFFF, float mass = 1.0f, float hp = 1.0f);
+    ~CrucialVoxel();
 
     virtual void addToObject(WorldObject* object);
 
