@@ -26,7 +26,7 @@ go_bandit([](){
             cluster->addVoxel(new Voxel(glm::ivec3(1, 2, 3), 0xFF8000));
             AssertThat(cluster->voxel(glm::ivec3(1, 2, 3)) != nullptr, Equals(true));
 
-            cluster->removeVoxel(glm::ivec3(1, 2, 3));
+            cluster->removeVoxel(cluster->voxel(glm::ivec3(1, 2, 3)));
             AssertThat(cluster->voxel(glm::ivec3(1, 2, 3)) == nullptr, Equals(true));
         });
 

@@ -75,7 +75,6 @@ go_bandit([]() {
         });
 
         it("Z Axis Test", [&] {
-
             DamageImpact i1(b, b->voxel(glm::ivec3(0, 0, 0)), glm::vec3(0, 0, 5));
             DamageImpact i2(b, b->voxel(glm::ivec3(0, 0, 3)), glm::vec3(0, 0, -3));
 
@@ -85,8 +84,8 @@ go_bandit([]() {
 
             AssertThat(df->forwardedDamageImpacts().size(), Equals(2));
 
-            DamageImpact f1 = df->forwardedDamageImpacts().front();
-            DamageImpact f2 = df->forwardedDamageImpacts().back();
+            DamageImpact f1 = df->forwardedDamageImpacts().back();
+            DamageImpact f2 = df->forwardedDamageImpacts().front();
             AssertThat(f1.damageVec(), EqualsWithDelta(glm::vec3(0.0, 0.0, 5.0), glm::vec3(0.1, 0.1, 0.1)));
             AssertThat(f2.damageVec(), EqualsWithDelta(glm::vec3(0.0, 0.0, -3.0), glm::vec3(0.1, 0.1, 0.1)));
         });

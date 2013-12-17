@@ -16,11 +16,13 @@ go_bandit([](){
         PropertyManager::instance()->reset();
         PropertyManager::instance()->load("data/config.ini");
 
+
         before_each([&](){
         });
 
         it("works in worldobject", [&]() {
             WorldObject a;
+
             a.addVoxel(new Voxel(glm::ivec3(0, 0, 0), 0xFFFFFF));
             a.addVoxel(new Voxel(glm::ivec3(1, 0, 0), 0xFFFFFF));
             a.addVoxel(new Voxel(glm::ivec3(2, 0, 0), 0xFFFFFF));
@@ -48,14 +50,14 @@ go_bandit([](){
         it("incremental mass and center calculation works", [&]() {
             WorldObject a(0.8f);
             WorldObject b(0.8f);
-           
+
             a.addVoxel(new Voxel(glm::ivec3(1, 0, 0), 0xFFFFFF));
             a.addVoxel(new Voxel(glm::ivec3(2, 0, 0), 0xFFFFFF));
             a.addVoxel(new Voxel(glm::ivec3(3, 0, 0), 0xFFFFFF));
             a.addVoxel(new Voxel(glm::ivec3(3, 1, 0), 0xFFFFFF));
             a.addVoxel(new Voxel(glm::ivec3(3, 2, 0), 0xFFFFFF));
             a.finishInitialization();
-            a.removeVoxel(glm::ivec3(3, 2, 0));
+            a.removeVoxel(a.voxel(glm::ivec3(3, 2, 0)));
 
             b.addVoxel(new Voxel(glm::ivec3(1, 0, 0), 0xFFFFFF));
             b.addVoxel(new Voxel(glm::ivec3(2, 0, 0), 0xFFFFFF));
@@ -64,7 +66,7 @@ go_bandit([](){
             b.finishInitialization();
 
             AssertThat(a.physics().mass(), Equals(b.physics().mass()));
-            AssertThat(a.physics().phyicalCenter(), EqualsWithDelta(b.physics().phyicalCenter(), glm::vec3(0.01)));
+            AssertThat(a.physics().physicalCenter(), EqualsWithDelta(b.physics().physicalCenter(), glm::vec3(0.01)));
         });
     });
 });

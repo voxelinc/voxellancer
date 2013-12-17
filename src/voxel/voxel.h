@@ -6,6 +6,7 @@
 #include "geometry/sphere.h"
 
 class VoxelCluster;
+class VoxelTreeNode;
 class WorldObject;
 
 namespace std {
@@ -20,11 +21,14 @@ namespace std {
 class Voxel
 {
 public:
-    Voxel(const glm::ivec3& gridCell, const int color = 0xFFFFFF, float mass = 1.0f, float hp = 50.0f);
+    Voxel(const glm::ivec3& gridCell, const int color = 0xFFFFFF, float mass = 1.0f, float hp = 20.0f);
     Voxel(const Voxel& other);
     virtual ~Voxel();
 
     const glm::ivec3 &gridCell() const;
+
+    VoxelTreeNode *voxelTreeNode();
+    void setVoxelTreeNode(VoxelTreeNode* voxelTreeNode);
 
     virtual void addToCluster(VoxelCluster *cluster);
     virtual void addToObject(WorldObject *object);
@@ -43,6 +47,7 @@ public:
 
 protected:
     glm::ivec3 m_gridCell;
+    VoxelTreeNode *m_voxelTreeNode;
     int m_color;
     float m_hp;
     float m_mass;

@@ -19,9 +19,6 @@ public:
     InputHandler(GLFWwindow *window, Player *player, Camera *camera);
 	virtual ~InputHandler();
 
-    void setPlayerShip(Ship *ship);
-    std::string playerTarget();
-
 	void resizeEvent(const unsigned int width, const unsigned int height);
 	void keyCallback(int key, int scancode, int action, int mods);
 	void update(float delta_sec);
@@ -44,11 +41,7 @@ protected:
 	int m_lastfocus;
 
 	int m_cursorMaxDistance;
-	int m_fpsControls;
-	int m_mouseControl;
-	int m_mouseControlToggled;
-    int m_followCam;
-    
+	int m_mouseControl;    
 
     Property<float> prop_deadzone;
 

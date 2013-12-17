@@ -38,11 +38,11 @@ public:
     void accelerateAngular(const glm::vec3& axis);
 
     void addVoxel(Voxel* voxel);
-    void removeVoxel(const glm::ivec3& position);
+    void removeVoxel(Voxel* voxel);
 
     void finishInitialization();
     glm::vec3 calculateMassAndCenter();
-    glm::vec3 phyicalCenter();
+    glm::vec3 physicalCenter();
 
 
 protected:

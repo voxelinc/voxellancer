@@ -21,7 +21,7 @@ public:
     ~CollisionDetector();
 
     void addVoxel(Voxel *voxel);
-    void removeVoxel(const glm::ivec3 &position);
+    void removeVoxel(Voxel *voxel);
 
     AABB aabb(const WorldTransform& transform) const;
     void recalculateAABB();

@@ -10,11 +10,11 @@
 
 class VoxelRenderer;
 class VoxelFont;
-class InputHandler;
+class Player;
 
 class HUD {
 public:
-    HUD(InputHandler *inputHandler);
+    HUD(Player *player);
     virtual ~HUD();
 
     void setCamera(Camera *camera);
@@ -32,7 +32,7 @@ protected:
     void adjustPositions();
 
 
-    InputHandler* m_inputHandler;
+    Player* m_player;
     Camera* m_gameCamera;
     WorldTransform m_hudCamera, m_lastGameCamera;
     Camera m_renderCamera;
