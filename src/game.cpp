@@ -143,6 +143,7 @@ void Game::initialize()
             }
         }
     }
+    planet->setCrucialVoxel(glm::ivec3(middle));
     planet->finishInitialization();
     planet->objectInfo().setName("Planet");
     m_world->god().scheduleSpawn(planet);
