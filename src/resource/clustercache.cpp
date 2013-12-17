@@ -39,7 +39,8 @@ void ClusterCache::fillObject(WorldObject *worldObject, const std::string& filen
     std::vector<Voxel*> *source = getOrCreate(filename);
 
     for (Voxel *voxel : *source) {
-        m_colorCoder.newCodedVoxel(*voxel)->addToObject(worldObject);
+        Voxel* clonedVoxel = m_colorCoder.newCodedVoxel(*voxel);
+        clonedVoxel->addToObject(worldObject);
     }
     worldObject->finishInitialization();
 }

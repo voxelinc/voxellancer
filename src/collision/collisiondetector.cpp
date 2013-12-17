@@ -62,8 +62,12 @@ void CollisionDetector::addVoxel(Voxel *voxel) {
     m_voxelTree.insert(voxel);
 }
 
-void CollisionDetector::removeVoxel(const glm::ivec3 & position) {
-    m_voxelTree.remove(position);
+void CollisionDetector::removeVoxel(Voxel* voxel) {
+    assert(voxel->voxelTreeNode() != nullptr);
+    assert(voxel->voxelTreeNode()->voxel() == voxel);
+    assert(voxel->voxelTreeNode()->isAtomic());
+
+    voxel->voxelTreeNode()->remove(voxel->gridCell());
 }
 
 VoxelTreeNode &CollisionDetector::voxeltree() {

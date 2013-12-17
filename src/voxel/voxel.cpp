@@ -13,6 +13,7 @@
 
 Voxel::Voxel(const glm::ivec3& gridCell, int color, float mass, float hp):
     m_gridCell(gridCell),
+    m_voxelTreeNode(nullptr),
     m_color(color),
     m_mass(mass),
     m_hp(hp)
@@ -25,23 +26,30 @@ Voxel::Voxel(const glm::ivec3& gridCell, int color, float mass, float hp):
 Voxel::Voxel(const Voxel& other):
     Voxel(other.gridCell(), other.color(), other.mass(), other.hp())
 {
-
 }
 
 Voxel::~Voxel() {
 }
 
 
-void Voxel::addToCluster(VoxelCluster *cluster){
+void Voxel::addToCluster(VoxelCluster *cluster) {
     cluster->addVoxel(this);
 }
 
-void Voxel::addToObject(WorldObject *object){
+void Voxel::addToObject(WorldObject *object) {
     object->addVoxel(this);
 }
 
 const glm::ivec3 &Voxel::gridCell() const {
     return m_gridCell;
+}
+
+VoxelTreeNode *Voxel::voxelTreeNode() {
+    return m_voxelTreeNode;
+}
+
+void Voxel::setVoxelTreeNode(VoxelTreeNode* voxelTreeNode) {
+    m_voxelTreeNode = voxelTreeNode;
 }
 
 int Voxel::color() const {
