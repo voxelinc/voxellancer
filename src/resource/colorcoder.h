@@ -20,4 +20,6 @@ private:
     Property<float> prop_cockpitMass, prop_cockpitHP;
     Property<int> prop_fuelKey, prop_fuelColor;
     Property<float> prop_fuelMass, prop_fuelHP;
+    Property<int> prop_crucialKey, prop_crucialColor;
+    Property<float> prop_crucialMass, prop_crucialHP;
 };

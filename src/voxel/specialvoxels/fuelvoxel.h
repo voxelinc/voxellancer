@@ -4,7 +4,7 @@
 
 class FuelVoxel : public Voxel {
 public:
-    FuelVoxel(const glm::ivec3 &gridCell, int color = 0xFFFFFF, float mass = 1.0f, float hp = 1.0f);
+    FuelVoxel(const glm::ivec3& gridCell, int color = 0xFFFFFF, float mass = 1.0f, float hp = 1.0f);
     ~FuelVoxel();
 
     virtual void addToObject(WorldObject* object) override;
@@ -13,5 +13,5 @@ public:
     virtual void onDestruction() override;
 
 protected:
-    WorldObject* m_object;
+    WorldObject* m_worldObject;
 };
