@@ -45,11 +45,10 @@ void VoxelRenderer::prepareDraw(Camera * camera, bool withBorder)
 void VoxelRenderer::draw(VoxelCluster * worldObject)
 {
     m_shaderProgram->setUniform("model", worldObject->transform().matrix());
+    m_shaderProgram->setUniform("textureSize", worldObject->voxelRenderData()->textureSize());
 
     glActiveTexture(GL_TEXTURE0);
-    worldObject->voxelRenderData()->positionTexture()->bind();
-    glActiveTexture(GL_TEXTURE1);
-    worldObject->voxelRenderData()->colorTexture()->bind();
+    worldObject->voxelRenderData()->voxelTexture()->bind();
 
     m_vertexArrayObject->drawArraysInstanced(GL_TRIANGLE_STRIP, 0, 14, worldObject->voxelRenderData()->voxelCount());
 }
@@ -76,8 +75,7 @@ void VoxelRenderer::createAndSetupShaders()
     m_shaderProgram->attach(vertexShader, fragmentShader);
     m_shaderProgram->bindFragDataLocation(0, "fragColor");
 
-    m_shaderProgram->getUniform<GLint>("positionSampler")->set(0);
-    m_shaderProgram->getUniform<GLint>("colorSampler")->set(1);
+    m_shaderProgram->getUniform<GLint>("voxelSampler")->set(0);
 
 }
 

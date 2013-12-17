@@ -6,8 +6,9 @@ uniform mat4 view;
 uniform mat4 projection;
 uniform mat4 viewProjection;
 
-uniform sampler1D positionSampler;
-uniform sampler1D colorSampler;
+uniform int textureSize;
+
+uniform sampler2D voxelSampler;
 
 in vec3 a_vertex;
 in vec3 a_normal;
@@ -21,9 +22,9 @@ void main()
 	modelposition = a_vertex;
 
     // map [0:1] to [0:255]
-    vec3 offset = texelFetch(positionSampler, gl_InstanceIDARB, 0).xyz * 255;
+    vec3 offset = texelFetch(voxelSampler, ivec2((gl_InstanceIDARB*2) % textureSize, (gl_InstanceIDARB*2) / textureSize), 0).xyz * 255;
     
-    color = texelFetch(colorSampler, gl_InstanceIDARB, 0).xyz;
+    color = texelFetch(voxelSampler, ivec2((gl_InstanceIDARB*2+1) % textureSize, (gl_InstanceIDARB*2+1) / textureSize), 0).xyz;
         
 	gl_Position = viewProjection * model * (vec4(a_vertex + offset, 1.0));
     

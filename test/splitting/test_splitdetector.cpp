@@ -53,8 +53,8 @@ go_bandit([]() {
         it("detects no split correctly", [&]() {
             WorldObjectModification modification(w);
 
-            w->removeVoxel(voxels[0]);
             modification.removedVoxel(voxels[0]->gridCell());
+            w->removeVoxel(voxels[0]);
 
             detector.searchSplitOffs(std::list<WorldObjectModification>{ modification });
 
@@ -65,8 +65,8 @@ go_bandit([]() {
         it("detects one split correctly", [&]() {
             WorldObjectModification modification(w);
 
-            w->removeVoxel(voxels[2]);
             modification.removedVoxel(voxels[2]->gridCell());
+            w->removeVoxel(voxels[2]);
 
             detector.searchSplitOffs(std::list<WorldObjectModification>{ modification });
 
@@ -86,8 +86,8 @@ go_bandit([]() {
         it("works with destroyed crucial voxels", [&]() {
             WorldObjectModification modification(w);
 
-            w->removeVoxel(voxels[1]);
             modification.removedVoxel(voxels[1]->gridCell());
+            w->removeVoxel(voxels[1]);
 
             detector.searchSplitOffs(std::list<WorldObjectModification>{ modification });
 
@@ -98,8 +98,8 @@ go_bandit([]() {
         it("works with multiple splittoffs", [&]() {
             WorldObjectModification modification(w);
 
-            w->removeVoxel(voxels[3]);
             modification.removedVoxel(voxels[3]->gridCell());
+            w->removeVoxel(voxels[3]);
 
             detector.searchSplitOffs(std::list<WorldObjectModification>{ modification });
 
@@ -110,12 +110,12 @@ go_bandit([]() {
         it("works with multiple removed voxelss", [&]() {
             WorldObjectModification modification(w);
 
-            w->removeVoxel(voxels[3]);
             modification.removedVoxel(voxels[3]->gridCell());
-            w->removeVoxel(voxels[2]);
+            w->removeVoxel(voxels[3]);
             modification.removedVoxel(voxels[2]->gridCell());
-            w->removeVoxel(voxels[1]);
+            w->removeVoxel(voxels[2]);
             modification.removedVoxel(voxels[1]->gridCell());
+            w->removeVoxel(voxels[1]);
 
             detector.searchSplitOffs(std::list<WorldObjectModification>{ modification });
 

@@ -17,18 +17,17 @@ public:
 
     void invalidate();
 
-    glow::Texture *positionTexture();
-    glow::Texture *colorTexture();
+    glow::Texture *voxelTexture();
     int voxelCount();
-
+    int textureSize();
 
 private:
     void updateTextures();
 
     std::unordered_map<glm::ivec3, Voxel*> &m_voxel;
     int m_voxelCount;
+    int m_textureSize;
     bool m_texturesDirty;
-    glow::ref_ptr<glow::Texture> m_positionTexture;
-    glow::ref_ptr<glow::Texture> m_colorTexture;
+    glow::ref_ptr<glow::Texture> m_voxelTexture;
 };
 
