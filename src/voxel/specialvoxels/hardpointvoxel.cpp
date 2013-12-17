@@ -4,7 +4,7 @@
 #include "worldobject/worldobject.h"
 #include "worldobject/hardpoint.h"
 
-HardpointVoxel::HardpointVoxel(const glm::ivec3 &gridCell, int color, float mass, float hp) :
+HardpointVoxel::HardpointVoxel(const glm::ivec3& gridCell, int color, float mass, float hp) :
     Voxel(gridCell, color, mass, hp),
     m_hardpoint(nullptr)
 {
