@@ -128,6 +128,25 @@ void Game::initialize()
     wall->objectInfo().setName("Wall");
     m_world->god().scheduleSpawn(wall);
 
+    WorldObject *planet = new WorldObject();
+    planet->move(glm::vec3(20, 10, -30));
+    int diameter = 28;
+    glm::vec3 middle(diameter/2, diameter/2, diameter/2);
+    for(int x = 0; x < diameter; x++) {
+        for(int y = 0; y < diameter; y++) {
+            for(int z = 0; z < diameter; z++) {
+                glm::vec3 cell(x, y, z);
+
+                if(glm::length(cell - middle) < diameter/2) {
+                    planet->addVoxel(new Voxel(glm::ivec3(x, y, z), 0x0055AA));
+                }
+            }
+        }
+    }
+    planet->setCrucialVoxel(glm::ivec3(middle));
+    planet->finishInitialization();
+    planet->objectInfo().setName("Planet");
+    m_world->god().scheduleSpawn(planet);
 
     glow::debug("Initial spawn");
     m_world->god().spawn();
