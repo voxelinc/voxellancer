@@ -142,8 +142,9 @@ void InputHandler::update(float delta_sec) {
                 if (glm::abs(axes[4]) > prop_deadzone){
                     rot.y = -axes[4];
                 }
-                if (glm::length(rot) < prop_deadzone)
+                if (glm::length(rot) < prop_deadzone){
                     rot = glm::vec3(0);
+                }
                 if (glm::length(rot) > 1){
                     rot = glm::normalize(rot);
                 }
