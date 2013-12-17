@@ -34,11 +34,12 @@ InputHandler::InputHandler(GLFWwindow *window, Player* player, Camera *camera) :
     m_camera(camera),
     prop_deadzone("input.deadzone")
 {
+
     bumperLeftState = false;
     bumperRightState = false;
     glfwGetWindowSize(m_window, &m_windowWidth, &m_windowHeight);
     glfwSetCursorPos(m_window, m_windowWidth / 2, m_windowHeight / 2);
-    m_cursorMaxDistance = glm::min(m_windowHeight, m_windowWidth)/2;
+    m_cursorMaxDistance = glm::min(m_windowHeight, m_windowWidth) / 2;
 
     m_mouseControl = false;
     m_lastfocus = glfwGetWindowAttrib(m_window, GLFW_FOCUSED);
@@ -56,13 +57,13 @@ void InputHandler::resizeEvent(const unsigned int width, const unsigned int heig
 	m_windowWidth = width;
 	m_windowHeight = height;
 	m_camera->setViewport(glm::ivec2(m_windowWidth, m_windowHeight));
-	m_lastfocus = false; // through window resize, everything becomes scrambled
+	m_lastfocus = false; // through window resize everything becomes scrambled
 }
 
 void InputHandler::keyCallback(int key, int scancode, int action, int mods){
 	/* Check here for single-time key-presses, that you do not want fired multiple times, e.g. toggles */
-	if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
-		m_mouseControl = !m_mouseControl;
+    if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
+        m_mouseControl = !m_mouseControl;
     if (key == GLFW_KEY_TAB && action == GLFW_PRESS)
         selectNextTarget(glfwGetKey(m_window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS);
 }
@@ -101,6 +102,7 @@ void InputHandler::update(float delta_sec) {
             if (glfwGetKey(m_window, GLFW_KEY_E) == GLFW_PRESS){
                 m_player->rotate(glm::vec3(0, 0, -1));
             }
+
             if (glfwJoystickPresent(GLFW_JOYSTICK_1)) {
                 // Button mapping
                 int cnt = 0;
@@ -179,12 +181,6 @@ void InputHandler::update(float delta_sec) {
                 y = glm::min((double)m_cursorMaxDistance, y);
                 rot = glm::vec3(y, x, 0);
                 rot /= m_cursorMaxDistance;
-                if (glm::length(rot) < prop_deadzone)
-                    rot = glm::vec3(0);
-                if (glm::length(rot) > 1){
-                    rot = glm::normalize(rot);
-                }
-                m_player->rotate(rot);
             }
         }
     }
