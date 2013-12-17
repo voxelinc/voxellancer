@@ -26,7 +26,7 @@ VoxelRenderData::~VoxelRenderData() {
 }
 
 void VoxelRenderData::updateTextures() {
-    int size = static_cast<int>(glm::ceil(glm::sqrt(m_voxel.size()*2.f)));
+    int size = nextPowerOf2(static_cast<int>(glm::ceil(glm::sqrt(m_voxel.size()*2.f))));
     std::vector<unsigned char> voxelData(size * size * 3);
 
     int i = 0;

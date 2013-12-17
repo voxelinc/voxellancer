@@ -39,7 +39,8 @@ go_bandit([](){
 
             // cant assert anything usefull just verify that nothing crashes ;)
             AssertThat(cluster->voxelRenderData()->voxelCount(), Equals(3));
-            AssertThat(cluster->voxelRenderData()->textureSize(), Equals(3)); // 3 voxel with position and texture = 6 texel -> 3x3 texture
+            // 3 voxel with position and texture = 6 texel, next power of two -> 4x4 texture
+            AssertThat(cluster->voxelRenderData()->textureSize(), Equals(16)); 
         });
     });
     describe("voxel hasher", []() {
