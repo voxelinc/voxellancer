@@ -14,7 +14,9 @@ void Splitter::split(std::list<SplitData*> &splits) {
     m_splitOffWorldObjects.clear();
 
     for(SplitData *split : splits) {
+#ifndef DEACTIVATE_PERFORMANCE_MEASUREMENTS
         glow::AutoTimer t("Splitter: " + split->exWorldObject()->objectInfo().name());
+#endif
         WorldObject *worldObject = createWorldObjectFromSplitOff(split);
         m_splitOffWorldObjects.push_back(worldObject);
         splittedWorldObjects.insert(split->exWorldObject());

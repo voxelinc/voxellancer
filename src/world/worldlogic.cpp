@@ -6,7 +6,6 @@
 
 #include "world.h"
 #include "god.h"
-#include "glow/AutoTimer.h"
 
 #include <glow/AutoTimer.h>
 
@@ -60,8 +59,9 @@ void WorldLogic::damageForwardLoop(std::list<DamageImpact> damageImpacts) {
         return;
     }
 
+#ifndef DEACTIVATE_PERFORMANCE_MEASUREMENTS
     glow::AutoTimer t("damageForwardLoop");
-
+#endif
     while(damageImpacts.size() > 0) {
         // only treat clusters that aren't scheduled for removal anyway
         for (WorldObject* object : m_world.god().scheduledRemovals()){
