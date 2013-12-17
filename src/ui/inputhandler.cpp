@@ -113,16 +113,16 @@ void InputHandler::update(float delta_sec) {
                     if (!bumperLeftState)
                         this->selectNextTarget(false);
                     bumperLeftState = true;
-                }
-                else
+                } else {
                     bumperLeftState = false;
+                }
                 if (buttons[5] == GLFW_PRESS){
                     if (!bumperRightState)
                         this->selectNextTarget(true);
                     bumperRightState = true;
-                }
-                else
+                } else {
                     bumperRightState = false;
+                }
                 if (glm::abs(axes[2]) > prop_deadzone){
                     if (axes[2] < 0)
                         m_player->playerShip()->fireAtPoint(findTargetPoint(m_windowWidth / 2, m_windowHeight / 2));
@@ -185,7 +185,7 @@ void InputHandler::update(float delta_sec) {
                 }
                 m_player->rotate(rot);
             }
-		}
+        }
     }
 
     m_player->applyAcceleration();
@@ -206,8 +206,7 @@ WorldObject* InputHandler::findNextTarget(bool forward){
             if (iterator == worldObjects.end())
                 return nullptr;
             return *iterator;
-        }
-        else {
+        } else {
             // Find current target
             for (auto iterator = worldObjects.begin(); iterator != worldObjects.end(); ++iterator){
                 if (*iterator == m_player->playerShip()->targetObject()){
@@ -232,8 +231,7 @@ WorldObject* InputHandler::findNextTarget(bool forward){
             if (iterator == worldObjects.rend())
                 return nullptr;
             return *iterator;
-        }
-        else {
+        } else {
             // Find current target backwards
             for (auto iterator = worldObjects.rbegin(); iterator != worldObjects.rend(); ++iterator){
                 if (*iterator == m_player->playerShip()->targetObject()){
@@ -255,6 +253,7 @@ WorldObject* InputHandler::findNextTarget(bool forward){
 void InputHandler::selectNextTarget(bool forward){
     m_player->playerShip()->setTargetObject(findNextTarget(forward));
 }
+
 glm::vec3 InputHandler::findTargetPoint(double x, double y){
     glm::vec4 pointEnd((x * 2 / m_windowWidth - 1), -1 * (y * 2 / m_windowHeight - 1), 1, 1); //get normalized device coords
     pointEnd = glm::inverse(m_camera->viewProjection())*pointEnd; //find point on zfar
