@@ -20,6 +20,7 @@ public:
     WorldObject(CollisionFilterClass collisionFilterClass = CollisionFilterClass::Other);
     WorldObject(float scale, glm::vec3 center = glm::vec3(0), CollisionFilterClass collisionFilterClass = CollisionFilterClass::Other);
     WorldObject(const WorldTransform& transform, CollisionFilterClass collisionFilterClass = CollisionFilterClass::Other);
+
     virtual ~WorldObject();
 
     CollisionDetector& collisionDetector();
@@ -41,8 +42,7 @@ public:
     virtual void addCockpitVoxel(CockpitVoxel* voxel);
     virtual void addFuelVoxel(FuelVoxel* voxel);
 
-    void finishInitialization();
-    void recalculateCenterAndMass();
+    virtual void finishInitialization();
 
     Voxel *crucialVoxel();
     void setCrucialVoxel(const glm::ivec3& cell);
@@ -52,7 +52,7 @@ public:
 
     void updateTransformAndGeode(const glm::vec3& position, const glm::quat& orientation);
 
-    virtual void onImpact();
+    virtual void onCollision();
     virtual void onSpawnFail();
 
 

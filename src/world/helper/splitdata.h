@@ -8,10 +8,10 @@
 
 class WorldObject;
 
-class WorldObjectSplit
+class SplitData
 {
 public:
-    WorldObjectSplit();
+    SplitData();
     
     void addVoxel(Voxel *voxel);
 

@@ -124,9 +124,6 @@ void Physics::removeVoxel(Voxel* voxel) {
     m_center *= oldUnscaledMass / newUnscaledMass;
 
     m_mass -= voxel->mass() * m_massScaleFactor;
-
-    //m_worldObject.transform().setPosition(-oldCenter + m_worldObject.transform().center());
-    // it would be better to calculate incremental mass/center changes here
 }
 
 void Physics::updateSpeed(float deltaSec) {
@@ -140,7 +137,7 @@ void Physics::updateSpeed(float deltaSec) {
     m_angularAcceleration = glm::vec3(0);
 }
 
-glm::vec3 Physics::phyicalCenter() {
+glm::vec3 Physics::physicalCenter() {
     return m_center;
 }
 

@@ -53,7 +53,7 @@ void Bullet::update(float delta_sec){
         World::instance()->god().scheduleRemoval(this);
 }
 
-void Bullet::onImpact(){
+void Bullet::onCollision(){
     //TODO: spawn explosion
     World::instance()->god().scheduleRemoval(this);
 }

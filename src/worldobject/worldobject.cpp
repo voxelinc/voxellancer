@@ -37,7 +37,7 @@ WorldObject::WorldObject(const WorldTransform& transform, CollisionFilterClass c
     m_transform.setCenter(transform.center());
 }
 
-WorldObject::~WorldObject() {
+ WorldObject::~WorldObject() {
 
 }
 
@@ -109,12 +109,6 @@ void WorldObject::finishInitialization() {
     m_collisionDetector->finishInitialization();
 }
 
-void WorldObject::recalculateCenterAndMass() {
-    //m_transform.setCenter(m_physics->calculateMassAndCenter()); TODO!!!
-    m_physics->calculateMassAndCenter();
-    m_collisionDetector->updateGeode();
-}
-
 void WorldObject::accelerate(const glm::vec3& direction) {
     m_physics->accelerate(direction);
 }
@@ -137,7 +131,7 @@ void WorldObject::setCrucialVoxel(const glm::ivec3& cell) {
     m_crucialVoxel = voxel(cell);
 }
 
-void WorldObject::onImpact(){
+void WorldObject::onCollision(){
 
 }
 
