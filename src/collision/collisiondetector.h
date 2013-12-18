@@ -1,12 +1,15 @@
 #pragma once
 
 #include <memory>
+#include <unordered_map>
 
 #include <glm/glm.hpp>
 
 #include "voxel/voxel.h"
 #include "collision/voxeltreenode.h"
 #include "collision/voxelcollision.h"
+#include "geometry/sphere.h"
+
 
 class WorldTree;
 class WorldTreeGeode;
@@ -57,5 +60,6 @@ protected:
     IAABB m_aabb;
 
     void checkCollisions(VoxelTreeNode* nodeA, VoxelTreeNode* nodeB);
+    const Sphere& getOrCreateSphere(VoxelTreeNode* node);
 };
 

@@ -142,6 +142,8 @@ int main(void)
 	try {
 		PropertyManager::instance()->load("data/config.ini");
 
+        std::srand((unsigned int)time(NULL));
+
 		game = new Game(window);
 		game->initialize();
 

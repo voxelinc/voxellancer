@@ -72,6 +72,7 @@ go_bandit([]() {
 
             AssertThat(detector.splitDataList().size(), Equals(1));
 
+
             // check if the split is the upper part of the voxel without the crucial voxel
             SplitData* splitOff = detector.splitDataList().front();
             
