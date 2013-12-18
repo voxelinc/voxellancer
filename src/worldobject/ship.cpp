@@ -15,13 +15,13 @@ Ship::Ship() :
 {
 }
 
-void Ship::update(float deltasec){
-    for(Hardpoint *hardpoint : m_hardpoints){
+void Ship::update(float deltasec) {
+    for(Hardpoint *hardpoint : m_hardpoints) {
         hardpoint->update(deltasec);
     }
 }
 
-void Ship::addHardpointVoxel(HardpointVoxel* voxel){
+void Ship::addHardpointVoxel(HardpointVoxel* voxel) {
     Hardpoint* point;
     //TODO: Adding the actual Launcher here is wrong, this is test code
     //point = new Hardpoint(this, glm::vec3(voxel->gridCell()), new Gun());
@@ -34,10 +34,10 @@ void Ship::addHardpointVoxel(HardpointVoxel* voxel){
     addVoxel(voxel);
 }
 
-void Ship::removeHardpoint(Hardpoint *hardpoint){
+void Ship::removeHardpoint(Hardpoint *hardpoint) {
     std::vector<Hardpoint*>::iterator iterator = m_hardpoints.begin();
     while (iterator != m_hardpoints.end()){
-        if (*iterator == hardpoint){
+        if (*iterator == hardpoint) {
             delete *iterator;
             m_hardpoints.erase(iterator);
             break;
@@ -46,36 +46,54 @@ void Ship::removeHardpoint(Hardpoint *hardpoint){
     }
 }
 
-void Ship::setTargetObject(WorldObject* target){
-    m_targetObject = target;
-}
-WorldObject* Ship::targetObject(){
-    return m_targetObject;
+void Ship::setTargetObject(WorldObject* target) {
+    if(target != nullptr) {
+        m_targetObject = target->createHandle(*this);
+    }
+    else {
+        m_targetObject = nullptr;
+    }
 }
 
-void Ship::fireAtPoint(glm::vec3 target){
-    for (Hardpoint* hardpoint : m_hardpoints){
-        if (hardpoint->aimType() == Point){
+WorldObject* Ship::targetObject() {
+    if(m_targetObject != nullptr) {
+        return &m_targetObject->reference();
+    }
+    else {
+        return nullptr;
+    }
+}
+
+void Ship::fireAtPoint(glm::vec3 target) {
+    for (Hardpoint* hardpoint : m_hardpoints) {
+        if (hardpoint->aimType() == Point) {
             hardpoint->shootAtPoint(target);
         }
     }
 }
 
-void Ship::fireAtObject(){
-    for (Hardpoint* hardpoint : m_hardpoints){
-        if (hardpoint->aimType() == Object){
-            hardpoint->shootAtObject(m_targetObject);
+void Ship::fireAtObject() {
+    for (Hardpoint* hardpoint : m_hardpoints) {
+        if (hardpoint->aimType() == Object) {
+            assert(m_targetObject != nullptr);
+            hardpoint->shootAtObject(&m_targetObject->reference());
         }
     }
 }
 
 float Ship::minAimDistance(){ // is this needed ?!
     float range = 1000;
-    for (Hardpoint *hardpoint : m_hardpoints){
+    for (Hardpoint *hardpoint : m_hardpoints) {
         if (hardpoint->aimRange() != -1)
             range = glm::min(hardpoint->aimRange(), range);
     }
     return range;
+}
+
+void Ship::referenceDestroyed(const WorldObject* worldObject) {
+    assert(m_targetObject != nullptr);
+    assert(&m_targetObject->reference() == worldObject);
+    m_targetObject = nullptr;
 }
 
 void Ship::accelerate(const glm::vec3& direction) {
@@ -85,3 +103,4 @@ void Ship::accelerate(const glm::vec3& direction) {
 void Ship::accelerateAngular(const glm::vec3& axis) {
     m_physics->accelerateAngular(axis * prop_maxRotSpeed.get());
 }
+
