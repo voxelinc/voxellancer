@@ -15,7 +15,7 @@ VoxelExplosionGenerator::VoxelExplosionGenerator() :
     m_scale(1.0f),
     m_force(1.0f),
     m_color(0xFFFFFF),
-    m_density(3),
+    m_density(2),
     m_impactVector(0,0,0)
 {
 }

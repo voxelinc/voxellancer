@@ -22,7 +22,6 @@ VoxelCluster::VoxelCluster(float scale):
 }
 
 VoxelCluster::~VoxelCluster() {
-    // free all clusters
     for (auto& element : m_voxels){
         delete element.second;
     }
