@@ -1,14 +1,6 @@
 #version 140
 #extension GL_ARB_explicit_attrib_location : require
 
-struct gl_DepthRangeParameters
-{
-    float near;
-    float far;
-    float diff;
-};
-uniform gl_DepthRangeParameters gl_DepthRange;
-
 uniform sampler1D positionSampler;
 uniform float withBorder;
 

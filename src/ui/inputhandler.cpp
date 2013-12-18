@@ -138,7 +138,7 @@ void InputHandler::update(float delta_sec) {
 
                 for (int i = 0; i < cnt; ++i) {
                     if (buttons[i] == GLFW_PRESS) {
-                        glow::debug("button: %; pressed", i);
+                        //glow::debug("button: %; pressed", i);
                     }
 
                 }
@@ -181,7 +181,7 @@ void InputHandler::update(float delta_sec) {
                     rot = glm::normalize(rot);
                 }
                 m_player->rotate(rot);
-                glow::debug("%; \n ", glfwJoystickPresent(GLFW_JOYSTICK_1));
+                //glow::debug("%; \n ", glfwJoystickPresent(GLFW_JOYSTICK_1));
 
             }
 
@@ -195,7 +195,8 @@ void InputHandler::update(float delta_sec) {
 
             // shoot
             if (glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS){
-                m_player->playerShip()->fireAtPoint(findTargetPoint(x, y));
+                if (x<m_windowWidth && x >= 0 && y >= 0 && y <m_windowHeight )
+                    m_player->playerShip()->fireAtPoint(findTargetPoint(x, y));
             }
             if (glfwGetKey(m_window, GLFW_KEY_R) == GLFW_PRESS){
                 m_player->playerShip()->fireAtObject();
@@ -345,6 +346,10 @@ glm::vec3 InputHandler::findTargetPoint(double x, double y){
     glReadPixels((int) x, m_windowHeight-(int) y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &z); // get depth value
     z = 2 * z - 1; // normalized dev coords
     z = 2 * m_camera->zNear() * m_camera->zFar() / (m_camera->zFar() + m_camera->zNear() - z * (m_camera->zFar() - m_camera->zNear())); //linearize
+    if (z < 15) {
+        vec = vecMiddle;
+        z = m_player->playerShip()->minAimDistance();
+    }
     if (vec != vecMiddle){
         z = z / glm::sin(glm::half_pi<float>() - glm::acos(glm::dot(vec, vecMiddle))); // adjust to angle
     }
