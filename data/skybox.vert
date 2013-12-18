@@ -1,8 +1,8 @@
-#version 130
+#version 330
 
 uniform mat4 viewProjectionInverted;
 
-in vec3 a_vertex;
+layout(location = 0) in vec3 a_vertex;
 out vec3 v_tex;
 
 void main()

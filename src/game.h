@@ -5,7 +5,14 @@
 #include <glow/Texture.h>
 #include <glow/Program.h>
 #include <glow/VertexArrayObject.h>
+#include <glow/FrameBufferObject.h>
+#include <glow/RenderBufferObject.h>
+#include <glow/VertexAttributeBinding.h>
+#include <glowutils/ScreenAlignedQuad.h>
 #include <glow/Buffer.h>
+#include <glow/glow.h>
+#include <glowutils/glowutils.h>
+#include <glowutils/File.h>
 
 #include <GLFW/glfw3.h>
 
@@ -60,6 +67,11 @@ private:
 	Camera m_camera;
 
     World * m_world;
+
+    glow::ref_ptr<glow::FrameBufferObject> m_fboGameDepth;
+    glow::ref_ptr<glow::RenderBufferObject> m_bufferGameDepth;
+    glow::ref_ptr<glow::Buffer> m_buffer;
+
 
 	std::unique_ptr<Skybox> m_skybox;
 	std::unique_ptr<HUD> m_hud;

@@ -63,8 +63,8 @@ void InputHandler::resizeEvent(const unsigned int width, const unsigned int heig
 
 void InputHandler::keyCallback(int key, int scancode, int action, int mods){
 	/* Check here for single-time key-presses, that you do not want fired multiple times, e.g. toggles */
-    if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
-        m_mouseControl = !m_mouseControl;
+	if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
+		m_mouseControl = !m_mouseControl;
     if (key == GLFW_KEY_TAB && action == GLFW_PRESS)
         selectNextTarget(glfwGetKey(m_window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS);
     if (key == GLFW_KEY_B && action == GLFW_PRESS){
@@ -120,6 +120,10 @@ void InputHandler::update(float delta_sec) {
                 const unsigned char *buttons = glfwGetJoystickButtons(GLFW_JOYSTICK_1, &cnt);
                 const float *axes = glfwGetJoystickAxes(GLFW_JOYSTICK_1, &cntAxes);
 
+                for (int i = 0; i < cnt; ++i) {
+                    if (buttons[i] == GLFW_PRESS) {
+                        //glow::debug("button: %; pressed", i);
+                    }
 
                 if (buttons[4] == GLFW_PRESS){
                     if (!bumperLeftState)
@@ -161,6 +165,8 @@ void InputHandler::update(float delta_sec) {
                     rot = glm::normalize(rot);
                 }
                 m_player->rotate(rot);
+                //glow::debug("%; \n ", glfwJoystickPresent(GLFW_JOYSTICK_1));
+
             }
 
             // mouse handling
@@ -169,6 +175,7 @@ void InputHandler::update(float delta_sec) {
 
             // shoot
             if (glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS){
+                if (x<m_windowWidth && x >= 0 && y >= 0 && y <m_windowHeight )
                 m_player->playerShip()->fireAtPoint(findTargetPoint(x, y));
             }
             if (glfwGetKey(m_window, GLFW_KEY_R) == GLFW_PRESS){
@@ -181,28 +188,28 @@ void InputHandler::update(float delta_sec) {
             float angX = 0;
             float angY = 0;
 
-            if (m_mouseControl || glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS){
-                glm::vec3 rot;
-                x = m_windowWidth / 2 - (int)floor(x);
-                y = m_windowHeight / 2 - (int)floor(y);
-                x = glm::min((double)m_cursorMaxDistance, x);
-                y = glm::min((double)m_cursorMaxDistance, y);
+				if (m_mouseControl || glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS){
+                    glm::vec3 rot;
+                    x = m_windowWidth / 2 - (int)floor(x);
+                    y = m_windowHeight / 2 - (int)floor(y);
+                    x = glm::min((double)m_cursorMaxDistance, x);
+                    y = glm::min((double)m_cursorMaxDistance, y);
                 rot = glm::vec3(y, x, 0);
-                rot /= m_cursorMaxDistance;
+                    rot /= m_cursorMaxDistance;
 
                 if (glm::length(rot) < prop_deadzone){
-                    rot = glm::vec3(0);
+                        rot = glm::vec3(0);
                 }
-                if (glm::length(rot) > 1){
-                    rot = glm::normalize(rot);
-                }
-                m_player->rotate(rot);
+                    if (glm::length(rot) > 1){
+                        rot = glm::normalize(rot);
+                    }
+                    m_player->rotate(rot);
 
-            }
-        }
+                }
+			}
     }
 
-    m_player->applyAcceleration();
+        m_player->applyAcceleration();
 
 	m_lastfocus = glfwGetWindowAttrib(m_window, GLFW_FOCUSED);
 }
@@ -269,11 +276,26 @@ void InputHandler::selectNextTarget(bool forward){
 }
 
 glm::vec3 InputHandler::findTargetPoint(double x, double y){
+    float z;
     glm::vec4 pointEnd((x * 2 / m_windowWidth - 1), -1 * (y * 2 / m_windowHeight - 1), 1, 1); //get normalized device coords
+    glm::vec4 pointMiddle(0, 0, 1, 1);
     pointEnd = glm::inverse(m_camera->viewProjection())*pointEnd; //find point on zfar
+    pointMiddle = glm::inverse(m_camera->viewProjection())*pointMiddle; //find point on zfar
     glm::vec3 vec = glm::vec3(pointEnd); // no need for w component
+    glm::vec3 vecMiddle = glm::vec3(pointMiddle); // no need for w component
     vec = glm::normalize(vec); // normalize
-    vec *= m_player->playerShip()->minAimDistance(); // set aimdistance
+    vecMiddle = glm::normalize(vecMiddle); // normalize
+    glReadPixels((int) x, m_windowHeight-(int) y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &z); // get depth value
+    z = 2 * z - 1; // normalized dev coords
+    z = 2 * m_camera->zNear() * m_camera->zFar() / (m_camera->zFar() + m_camera->zNear() - z * (m_camera->zFar() - m_camera->zNear())); //linearize
+    if (z < 15) {
+        vec = vecMiddle;
+        z = m_player->playerShip()->minAimDistance();
+    }
+    if (vec != vecMiddle){
+        z = z / glm::sin(glm::half_pi<float>() - glm::acos(glm::dot(vec, vecMiddle))); // adjust to angle
+    }
+    vec *= glm::min(m_player->playerShip()->minAimDistance(),z); // set aimdistance
     vec += m_camera->position(); //adjust for camera translation
     return vec;
 }
