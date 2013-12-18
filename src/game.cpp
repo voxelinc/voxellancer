@@ -76,30 +76,10 @@ void Game::initialize()
 	glow::debug("Create Voxel");
     m_voxelRenderer = std::unique_ptr<VoxelRenderer>(new VoxelRenderer);
 
-
-    WorldObject *testClusterMoveable = new WorldObject();
-    testClusterMoveable->move(glm::vec3(-20, 0, 0));
-    testClusterMoveable->rotate(glm::angleAxis(-90.f, glm::vec3(0, 1, 0)));
-    testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 7), 0x00FF00));
-    testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 6), 0xFFFF00));
-    testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 5), 0xFFFF00));
-    testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 4), 0xFFFF00));
-    testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 3), 0xFFFF00));
-    testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 2), 0xFFFF00));
-    testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 1), 0xFFFF00));
-    testClusterMoveable->addVoxel(new Voxel(glm::ivec3(1, 1, 7), 0x0000FF));
-    testClusterMoveable->addVoxel(new Voxel(glm::ivec3(1, 0, 7), 0xFF0000));
-    testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 8), 0xFF0080));
-    testClusterMoveable->finishInitialization();
-    testClusterMoveable->objectInfo().setName("movable");
-    m_world->god().scheduleSpawn(testClusterMoveable);
-
-    //m_inputHandler.setVoxelCluster(m_testClusterMoveable);
-
-
     Ship *normandy = new Ship();
     ClusterCache::instance()->fillObject(normandy, "data/voxelcluster/normandy.csv");
 	normandy->setPosition(glm::vec3(0, 0, -100));
+    normandy->setOrientation(glm::angleAxis(30.0f, glm::vec3(0, 1, 0)));
     normandy->finishInitialization();
     normandy->objectInfo().setName("Normandy");
     m_world->god().scheduleSpawn(normandy);
@@ -129,8 +109,8 @@ void Game::initialize()
     m_world->god().scheduleSpawn(wall);
 
     WorldObject *planet = new WorldObject();
-    planet->move(glm::vec3(20, 10, -30));
-    int diameter = 28;
+    planet->move(glm::vec3(20, 10, -150));
+    int diameter = 20;
     glm::vec3 middle(diameter/2, diameter/2, diameter/2);
     for(int x = 0; x < diameter; x++) {
         for(int y = 0; y < diameter; y++) {
@@ -149,7 +129,7 @@ void Game::initialize()
     m_world->god().scheduleSpawn(planet);
 
 
-    for(int e = 0; e < 50; e++) {
+    for(int e = 0; e < 10; e++) {
         WorldObject *enemy = new WorldObject();
         int r = 80;
         enemy->move(glm::vec3(-80 + rand()%r-r/2,rand()%r-r/2,-20 + rand()%r-r/2));
@@ -163,6 +143,8 @@ void Game::initialize()
         }
         enemy->finishInitialization();
         enemy->objectInfo().setName("enemy");
+        enemy->objectInfo().setCanLockOn(false);
+        enemy->objectInfo().setShowOnHud(false);
         m_world->god().scheduleSpawn(enemy);
 
     }
