@@ -56,12 +56,6 @@ void WorldLogic::update(float deltaSecs) {
 void WorldLogic::damageForwardLoop(std::list<DamageImpact> damageImpacts) {
     m_damager.reset();
 
-    if(damageImpacts.empty()) {
-        return;
-    }
-
-    glow::AutoTimer t("damageForwardLoop");
-
     while(damageImpacts.size() > 0) {
         // only treat clusters that aren't scheduled for removal anyway
         for (WorldObject* object : m_world.god().scheduledRemovals()){
