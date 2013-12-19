@@ -76,8 +76,8 @@ glm::vec3 Physics::calculateMassAndCenter() {
     m_mass = 0;
     for (auto pair : m_worldObject.voxelMap()) {
         Voxel *voxel = pair.second;
-        m_mass += voxel->mass();
-        center += glm::vec3(voxel->gridCell()) * voxel->mass();
+        m_mass += voxel->normalizedMass();
+        center += glm::vec3(voxel->gridCell()) * voxel->normalizedMass();
     }
     center /= m_mass;
     m_mass *= m_massScaleFactor;
@@ -118,12 +118,12 @@ void Physics::addVoxel(Voxel* voxel) {
 
 void Physics::removeVoxel(Voxel* voxel) {
     float oldUnscaledMass = m_mass / m_massScaleFactor;
-    float newUnscaledMass = oldUnscaledMass - voxel->mass();
+    float newUnscaledMass = oldUnscaledMass - voxel->normalizedMass();
 
-    m_center -= glm::vec3(voxel->gridCell()) * voxel->mass() / oldUnscaledMass;
+    m_center -= glm::vec3(voxel->gridCell()) * voxel->normalizedMass() / oldUnscaledMass;
     m_center *= oldUnscaledMass / newUnscaledMass;
 
-    m_mass -= voxel->mass() * m_massScaleFactor;
+    m_mass -= voxel->normalizedMass() * m_massScaleFactor;
 }
 
 void Physics::updateSpeed(float deltaSec) {

@@ -46,7 +46,7 @@ WorldObject *Splitter::createWorldObjectFromSplitOff(SplitData *split) {
     worldObject->physics().setAngularSpeed(worldObject->physics().angularSpeed());
 
     for(Voxel *voxel : split->splitOffVoxels()) {
-        Voxel *voxelClone = new Voxel(voxel->gridCell()/*-split->llf()*/, voxel->color(), voxel->mass(), voxel->hp());
+        Voxel *voxelClone = new Voxel(voxel->gridCell()/*-split->llf()*/, voxel->color(), voxel->normalizedMass(), voxel->hp());
         worldObject->addVoxel(voxelClone);
     }
 
