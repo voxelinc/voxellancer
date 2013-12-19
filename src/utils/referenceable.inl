@@ -8,10 +8,7 @@
 
 template<typename Target>
 Referenceable<Target>::~Referenceable() {
-    for(ReferenceHandle<Target>* referenceHandle : m_referenceHandles) {
-        referenceHandle->referencor().handleInvalid(referenceHandle);
-        referenceHandle->referencor().referenceInvalid(&referenceHandle->reference());
-    }
+    invalidateHandles();
 }
 
 template<typename Target>
@@ -29,12 +26,13 @@ ReferenceHandle<Target>* Referenceable<Target>::createHandle(Referencor<Target>&
 template<typename Target>
 void Referenceable<Target>::invalidateHandles() {
     for(ReferenceHandle<Target>* referenceHandle : m_referenceHandles) {
-        referenceHandle->referencor().handleInvalid(referenceHandle);
+        referenceHandle->referencor().referenceableOfHandleInvalid(referenceHandle);
+        referenceHandle->referencor().referenceInvalid(&referenceHandle->reference());
     }
 }
 
 template<typename Target>
-void Referenceable<Target>::referencorInvalid(ReferenceHandle<Target>* referenceHandle) {
+void Referenceable<Target>::referencorOfHandleInvalid(ReferenceHandle<Target>* referenceHandle) {
     m_referenceHandles.remove(referenceHandle);
 }
 

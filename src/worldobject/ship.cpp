@@ -90,7 +90,7 @@ float Ship::minAimDistance(){ // is this needed ?!
     return range;
 }
 
-void Ship::referenceDestroyed(const WorldObject* worldObject) {
+void Ship::referenceInvalid(const WorldObject* worldObject) {
     assert(m_targetObject != nullptr);
     std::cout << &m_targetObject->reference() << " " << worldObject << std::endl;
     assert(&m_targetObject->reference() == worldObject);

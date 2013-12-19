@@ -22,7 +22,8 @@ protected:
 
     friend class Referenceable<Target>;
 
-    void handleInvalid(ReferenceHandle<Target>* referenceHandle);
+    /* To be called by Referenceable */
+    void referenceableOfHandleInvalid(ReferenceHandle<Target>* referenceHandle);
 };
 
 
