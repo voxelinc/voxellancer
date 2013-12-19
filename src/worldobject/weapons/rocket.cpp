@@ -26,8 +26,6 @@ Rocket::Rocket(glm::vec3 position, glm::quat orientation, const glm::vec3& initi
     m_objectInfo.setName("Rocket");
     m_objectInfo.setShowOnHud(false);
     m_objectInfo.setCanLockOn(false);
-
-    finishInitialization();
 }
 
 void Rocket::update(float deltaSec){

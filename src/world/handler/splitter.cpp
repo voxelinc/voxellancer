@@ -50,8 +50,6 @@ WorldObject *Splitter::createWorldObjectFromSplitOff(SplitData *split) {
         worldObject->addVoxel(voxelClone);
     }
 
-    worldObject->finishInitialization();
-
     return worldObject;
 }
 

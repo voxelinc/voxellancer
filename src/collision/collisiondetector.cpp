@@ -103,10 +103,6 @@ const WorldTree* CollisionDetector::worldTree() const {
     return m_worldTree;
 }
 
-void CollisionDetector::finishInitialization() {
-    updateGeode();
-}
-
 void CollisionDetector::updateGeode() {
     if(m_geode != nullptr) {
         m_geode->setAABB(m_worldObject.aabb());

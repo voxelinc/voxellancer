@@ -30,7 +30,6 @@ public:
     const glm::vec3& angularAcceleration() const;
 
     float mass() const;
-    bool massValid() const;
 
     std::list<VoxelCollision>& move(float deltaSec);
 
@@ -41,8 +40,8 @@ public:
     void removeVoxel(Voxel* voxel);
 
     void finishInitialization();
-    glm::vec3 calculateMassAndCenter();
-    glm::vec3 physicalCenter();
+//    glm::vec3 calculateMassAndCenter();
+//    glm::vec3 physicalCenter();
 
 
 protected:
@@ -51,7 +50,6 @@ protected:
 
 protected:
     float m_mass;
-    bool m_massValid;
 
     WorldObject& m_worldObject;
 
@@ -65,7 +63,7 @@ protected:
     Property<float> m_angularDampening;
 
     std::list<VoxelCollision> m_collisions;
-    glm::vec3 m_center;
+    glm::vec3 m_accumulatedMassVec;
     float m_massScaleFactor;
 };
 

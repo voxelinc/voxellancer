@@ -45,7 +45,6 @@ public:
     void updateGeode();
 
     void rebuildVoxelTree();
-    void finishInitialization();
 
 
 protected:

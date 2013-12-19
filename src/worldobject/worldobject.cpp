@@ -80,7 +80,6 @@ void WorldObject::removeVoxel(Voxel* voxel) {
 
     voxel->onRemoval();
 
-
     if (voxel == m_crucialVoxel) {
         m_crucialVoxel = nullptr;  // do spectacular stuff like an explosion
     }
@@ -106,17 +105,16 @@ void WorldObject::addFuelVoxel(FuelVoxel* voxel){
     addVoxel(voxel);
 }
 
-void WorldObject::finishInitialization() {
-    m_transform.setCenter(m_physics->calculateMassAndCenter());
-    m_collisionDetector->finishInitialization();
-}
-
 void WorldObject::accelerate(const glm::vec3& direction) {
     m_physics->accelerate(direction);
 }
 
 void WorldObject::accelerateAngular(const glm::vec3& axis) {
     m_physics->accelerateAngular(axis);
+}
+
+void WorldObject::setCenterAndAdjustPosition(const glm::vec3& newCenter) {
+    m_transform.setCenterAndAdjustPosition(newCenter);
 }
 
 void WorldObject::updateTransformAndGeode(const glm::vec3& position, const glm::quat& orientation) {

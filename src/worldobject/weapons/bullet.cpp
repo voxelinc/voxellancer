@@ -35,8 +35,6 @@ Bullet::Bullet(WorldObject* creator, glm::vec3 position, glm::quat orientation, 
     m_objectInfo.setCanLockOn(false);
 
     CollisionFilterable::setCollideableWith(CollisionFilterClass::Bullet, false);
-
-    finishInitialization();
 }
 
 WorldObject* Bullet::creator() const {
