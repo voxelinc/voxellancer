@@ -74,7 +74,7 @@ go_bandit([](){
 
         it("can adjust its center", [&]() {
             WorldObject *d = new WorldObject(1.0, glm::vec3(1,1,1));
-            
+
             AssertThat(d->collisionDetector().voxeltree().boundingSphere().position(), EqualsWithDelta(glm::vec3(-1, -1, -1), glm::vec3(0.01, 0.01, 0.01)));
         });
 
@@ -102,7 +102,6 @@ go_bandit([](){
             VoxelTreeNode *n = nullptr;
 
             obj->addVoxel(new Voxel(glm::ivec3(1, 1, 1)));
-            obj->finishInitialization();
 
             for (VoxelTreeNode *subnode : obj->collisionDetector().voxeltree().subnodes()) {
                 if (subnode->voxel() != nullptr) {
@@ -124,7 +123,6 @@ go_bandit([](){
 
             obj->addVoxel(new Voxel(glm::ivec3(1, 1, 1)));
             obj->addVoxel(new Voxel(glm::ivec3(1, 1, 0)));
-            obj->finishInitialization();
             //obj->transform().setCenter(glm::vec3(1,1,0));
 
             for(VoxelTreeNode *subnode : obj->collisionDetector().voxeltree().subnodes()) {

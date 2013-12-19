@@ -39,18 +39,12 @@ public:
     void addVoxel(Voxel* voxel);
     void removeVoxel(Voxel* voxel);
 
-    void finishInitialization();
-//    glm::vec3 calculateMassAndCenter();
-//    glm::vec3 physicalCenter();
-
 
 protected:
     virtual void updateSpeed(float deltaSec);
 
 
 protected:
-    float m_mass;
-
     WorldObject& m_worldObject;
 
     glm::vec3 m_speed;
@@ -62,8 +56,11 @@ protected:
     Property<float> m_dampening;
     Property<float> m_angularDampening;
 
+    float m_mass;
     std::list<VoxelCollision> m_collisions;
     glm::vec3 m_accumulatedMassVec;
     float m_massScaleFactor;
+
+    void alterCell(Voxel* voxel, float plusMinus);
 };
 

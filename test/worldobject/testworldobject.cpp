@@ -56,17 +56,15 @@ go_bandit([](){
             a.addVoxel(new Voxel(glm::ivec3(3, 0, 0), 0xFFFFFF));
             a.addVoxel(new Voxel(glm::ivec3(3, 1, 0), 0xFFFFFF));
             a.addVoxel(new Voxel(glm::ivec3(3, 2, 0), 0xFFFFFF));
-            a.finishInitialization();
             a.removeVoxel(a.voxel(glm::ivec3(3, 2, 0)));
 
             b.addVoxel(new Voxel(glm::ivec3(1, 0, 0), 0xFFFFFF));
             b.addVoxel(new Voxel(glm::ivec3(2, 0, 0), 0xFFFFFF));
             b.addVoxel(new Voxel(glm::ivec3(3, 0, 0), 0xFFFFFF));
             b.addVoxel(new Voxel(glm::ivec3(3, 1, 0), 0xFFFFFF));
-            b.finishInitialization();
 
             AssertThat(a.physics().mass(), Equals(b.physics().mass()));
-            AssertThat(a.physics().physicalCenter(), EqualsWithDelta(b.physics().physicalCenter(), glm::vec3(0.01)));
+            AssertThat(a.transform().center(), EqualsWithDelta(b.transform().center(), glm::vec3(0.01)));
         });
     });
 });
