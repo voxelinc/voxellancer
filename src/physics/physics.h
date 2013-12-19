@@ -46,7 +46,8 @@ public:
 
 
 protected:
-    virtual void updateSpeed(float delta_sec);
+    virtual void updateSpeed(float deltaSec);
+
 
 protected:
     float m_mass;

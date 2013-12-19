@@ -68,7 +68,7 @@ void InputHandler::keyCallback(int key, int scancode, int action, int mods){
         selectNextTarget(glfwGetKey(m_window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS);
 }
 
-void InputHandler::update(float delta_sec) {
+void InputHandler::update(float deltaSec) {
 	/* Check here for every-frame events, e.g. view & movement controls */
     if (glfwGetWindowAttrib(m_window, GLFW_FOCUSED)){
         if (m_lastfocus){

@@ -20,7 +20,7 @@ public:
     void setCamera(Camera *camera);
     Camera *camera();
 
-    void update(float delta_sec);
+    void update(float deltaSec);
     void draw();
 
 protected:
@@ -42,7 +42,7 @@ protected:
     std::vector<std::unique_ptr<HUDElement>> m_numbers;
 
     std::unique_ptr<HUDElement> m_shipArrow;
-    double m_delta_sec_remain;
+    double m_deltaSec_remain;
     float m_frameRate;
     float m_dx, m_dy;
 

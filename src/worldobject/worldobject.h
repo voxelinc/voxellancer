@@ -30,9 +30,9 @@ public:
     AABB aabb();
     Sphere sphere();
 
-    virtual void update(float delta_sec);
+    virtual void update(float deltaSec);
 
-    std::list<VoxelCollision>& performMovement(float delta_sec);
+    std::list<VoxelCollision>& performMovement(float deltaSec);
 
     virtual void addVoxel(Voxel* voxel) override;
     virtual void removeVoxel(Voxel* voxel) override;

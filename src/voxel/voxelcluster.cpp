@@ -22,7 +22,6 @@ VoxelCluster::VoxelCluster(float scale):
 }
 
 VoxelCluster::~VoxelCluster() {
-    // free all clusters
     for (auto& element : m_voxels){
         delete element.second;
     }
@@ -33,7 +32,7 @@ Voxel* VoxelCluster::voxel(const glm::ivec3& position) {
     return i == m_voxels.end() ? nullptr : i->second;
 }
 
-void VoxelCluster::addVoxel(Voxel *voxel) {
+void VoxelCluster::addVoxel(Voxel* voxel) {
     assert(m_voxels[voxel->gridCell()] == nullptr);
 
     m_voxels[voxel->gridCell()] = voxel;

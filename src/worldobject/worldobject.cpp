@@ -61,12 +61,12 @@ Sphere WorldObject::sphere() {
     return m_collisionDetector->sphere(m_transform);
 }
 
-void WorldObject::update(float delta_sec) {
+void WorldObject::update(float deltaSec) {
 
 }
 
-std::list<VoxelCollision>& WorldObject::performMovement(float delta_sec) {
-    return m_physics->move(delta_sec);
+std::list<VoxelCollision>& WorldObject::performMovement(float deltaSec) {
+    return m_physics->move(deltaSec);
 }
 
 void WorldObject::addVoxel(Voxel* voxel) {
@@ -79,12 +79,14 @@ void WorldObject::removeVoxel(Voxel* voxel) {
     assert(voxel != nullptr);
 
     voxel->onRemoval();
+
+
+    if (voxel == m_crucialVoxel) {
+        m_crucialVoxel = nullptr;  // do spectacular stuff like an explosion
+    }
+
     m_collisionDetector->removeVoxel(voxel);
     m_physics->removeVoxel(voxel);
-    if (m_crucialVoxel != nullptr && voxel == m_crucialVoxel) {
-        // do spectacular stuff like an explosion
-        m_crucialVoxel = nullptr;
-    }
     VoxelCluster::removeVoxel(voxel);
 }
 

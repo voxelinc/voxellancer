@@ -168,21 +168,21 @@ void Game::initialize()
 }
 
 
-void Game::update(float delta_sec)
+void Game::update(float deltaSec)
 {
     // skip non-updates
-    if (delta_sec == 0) return;
+    if (deltaSec == 0) return;
 
-    //if (delta_sec < 1 / 60) delta_sec = 1 / 60;
+    //if (deltaSec < 1 / 60) deltaSec = 1 / 60;
     // avoid big jumps after debugging ;)
-    delta_sec = glm::min(1.f, delta_sec);
+    deltaSec = glm::min(1.f, deltaSec);
 
     //m_treeStateReporter.nudge();
 
-    m_inputHandler.update(delta_sec);
-    World::instance()->update(delta_sec);
+    m_inputHandler.update(deltaSec);
+    World::instance()->update(deltaSec);
     m_player.setFollowCam();
-	m_hud->update(delta_sec);
+	m_hud->update(deltaSec);
 }
 
 void Game::draw()

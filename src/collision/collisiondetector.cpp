@@ -174,7 +174,7 @@ void CollisionDetector::checkCollisions(VoxelTreeNode* nodeA, VoxelTreeNode* nod
     }
 }
 
-std::list<VoxelCollision> & CollisionDetector::lastCollisions() {
+std::list<VoxelCollision>& CollisionDetector::lastCollisions() {
     return m_collisions;
 }
 

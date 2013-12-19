@@ -47,8 +47,8 @@ bool Bullet::specialIsCollideableWith(const CollisionFilterable *other) const {
     return static_cast<CollisionFilterable*>(m_creator) != other;
 }
 
-void Bullet::update(float delta_sec){
-    m_lifetime -= delta_sec;
+void Bullet::update(float deltaSec){
+    m_lifetime -= deltaSec;
     if (m_lifetime < 0)
         World::instance()->god().scheduleRemoval(this);
 }
