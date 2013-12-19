@@ -14,15 +14,22 @@ void Referencor<Target>::holdReferenceHandle(ReferenceHandle<Target>* referenceH
 }
 
 template<typename Target>
+void Referencor<Target>::discardHandle(ReferenceHandle<Target>* referenceHandle) {
+    m_referenceHandles.remove(referenceHandle);
+    referenceHandle->reference().referencorInvalidatedHandle(referenceHandle);
+    delete referenceHandle;
+}
+
+template<typename Target>
 void Referencor<Target>::invalidateHandles() {
     for(ReferenceHandle<Target>* referenceHandle : m_referenceHandles) {
-        referenceHandle->reference().referencorOfHandleInvalid(referenceHandle);
+        referenceHandle->reference().referencorInvalidatedHandle(referenceHandle);
         delete referenceHandle;
     }
 }
 
 template<typename Target>
-void Referencor<Target>::referenceableOfHandleInvalid(ReferenceHandle<Target>* referenceHandle) {
+void Referencor<Target>::referenceableInvalidatedHandle(ReferenceHandle<Target>* referenceHandle) {
     m_referenceHandles.remove(referenceHandle);
     delete referenceHandle;
 }

@@ -19,7 +19,7 @@ protected:
     friend class Referencor<Target>;
 
     /* To be called by Referencor, and only him */
-    void referencorOfHandleInvalid(ReferenceHandle<Target>* referenceHandle);
+    void referencorInvalidatedHandle(ReferenceHandle<Target>* referenceHandle);
 };
 
 #include "referenceable.inl"

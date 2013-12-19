@@ -47,6 +47,10 @@ void Ship::removeHardpoint(Hardpoint *hardpoint) {
 }
 
 void Ship::setTargetObject(WorldObject* target) {
+    if(m_targetObject != nullptr) {
+        discardHandle(m_targetObject);
+    }
+
     if(target != nullptr) {
         m_targetObject = target->createHandle(*this);
     }

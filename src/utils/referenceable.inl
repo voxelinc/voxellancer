@@ -26,13 +26,13 @@ ReferenceHandle<Target>* Referenceable<Target>::createHandle(Referencor<Target>&
 template<typename Target>
 void Referenceable<Target>::invalidateHandles() {
     for(ReferenceHandle<Target>* referenceHandle : m_referenceHandles) {
-        referenceHandle->referencor().referenceableOfHandleInvalid(referenceHandle);
         referenceHandle->referencor().referenceInvalid(&referenceHandle->reference());
+        referenceHandle->referencor().referenceableInvalidatedHandle(referenceHandle);
     }
 }
 
 template<typename Target>
-void Referenceable<Target>::referencorOfHandleInvalid(ReferenceHandle<Target>* referenceHandle) {
+void Referenceable<Target>::referencorInvalidatedHandle(ReferenceHandle<Target>* referenceHandle) {
     m_referenceHandles.remove(referenceHandle);
 }
 

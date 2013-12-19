@@ -12,6 +12,7 @@ public:
     ~Referencor();
 
     void holdReferenceHandle(ReferenceHandle<Target>* referenceHandle);
+    void discardHandle(ReferenceHandle<Target>* referenceHandle);
     void invalidateHandles();
 
     virtual void referenceInvalid(const Target* target) = 0;
@@ -23,7 +24,7 @@ protected:
     friend class Referenceable<Target>;
 
     /* To be called by Referenceable */
-    void referenceableOfHandleInvalid(ReferenceHandle<Target>* referenceHandle);
+    void referenceableInvalidatedHandle(ReferenceHandle<Target>* referenceHandle);
 };
 
 
