@@ -92,6 +92,7 @@ float Ship::minAimDistance(){ // is this needed ?!
 
 void Ship::referenceDestroyed(const WorldObject* worldObject) {
     assert(m_targetObject != nullptr);
+    std::cout << &m_targetObject->reference() << " " << worldObject << std::endl;
     assert(&m_targetObject->reference() == worldObject);
     m_targetObject = nullptr;
 }

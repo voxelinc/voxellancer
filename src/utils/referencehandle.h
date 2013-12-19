@@ -6,13 +6,13 @@ template<typename Target> class Referencor;
 template<typename Target>
 class ReferenceHandle {
 public:
-    ReferenceHandle(Target& reference, Referencor<Target>& holder);
+    ReferenceHandle(Target& reference, Referencor<Target>& referencor);
 
     Target& reference();
     const Target& reference() const;
 
-    Referencor<Target>& holder();
-    const Referencor<Target>& holder() const;
+    Referencor<Target>& referencor();
+    const Referencor<Target>& referencor() const;
 
     operator Target&();
     operator const Target&() const;

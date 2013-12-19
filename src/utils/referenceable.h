@@ -10,11 +10,15 @@ public:
     virtual ~Referenceable();
 
     ReferenceHandle<Target>* createHandle(Referencor<Target>& referencor);
-    void holderDestroyed(ReferenceHandle<Target>* referenceHandle);
+    void invalidateHandles();
 
 
 protected:
     std::list<ReferenceHandle<Target>*> m_referenceHandles;
+
+    friend class Referencor<Target>;
+
+    void referencorInvalid(ReferenceHandle<Target>* referenceHandle);
 };
 
 #include "referenceable.inl"

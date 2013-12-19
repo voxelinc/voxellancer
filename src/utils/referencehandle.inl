@@ -4,9 +4,9 @@
 
 
 template<typename Target>
-ReferenceHandle<Target>::ReferenceHandle(Target& reference, Referencor<Target>& holder):
+ReferenceHandle<Target>::ReferenceHandle(Target& reference, Referencor<Target>& referencor):
     m_reference(reference),
-    m_holder(holder)
+    m_holder(referencor)
 {
 
 }
@@ -22,12 +22,12 @@ const Target& ReferenceHandle<Target>::reference() const {
 }
 
 template<typename Target>
-Referencor<Target>& ReferenceHandle<Target>::holder() {
+Referencor<Target>& ReferenceHandle<Target>::referencor() {
     return m_holder;
 }
 
 template<typename Target>
-const Referencor<Target>& ReferenceHandle<Target>::holder() const {
+const Referencor<Target>& ReferenceHandle<Target>::referencor() const {
     return m_holder;
 }
 

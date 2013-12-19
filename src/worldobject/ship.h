@@ -30,7 +30,7 @@ public:
 
     float minAimDistance();
 
-    virtual void referenceDestroyed(const WorldObject* worldObject) override;
+    virtual void referenceInvalid(const WorldObject* worldObject) override;
 
     virtual void accelerate(const glm::vec3& direction) override;
     virtual void accelerateAngular(const glm::vec3& axis) override;
