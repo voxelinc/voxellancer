@@ -1,5 +1,6 @@
 #include "physics.h"
 
+#include <functional>
 #include <iostream>
 
 #include <glm/gtx/quaternion.hpp>
@@ -87,11 +88,11 @@ void Physics::accelerateAngular(const glm::vec3& axis) {
 }
 
 void Physics::addVoxel(Voxel* voxel) {
-    alterCell(voxel, 1.0f);
+    alterCell(voxel, std::plus<glm::vec3>(), std::plus<float>());
 }
 
 void Physics::removeVoxel(Voxel* voxel) {
-    alterCell(voxel, -1.0f);
+    alterCell(voxel, std::minus<glm::vec3>(), std::minus<float>());
 }
 
 void Physics::updateSpeed(float deltaSec) {
@@ -105,11 +106,12 @@ void Physics::updateSpeed(float deltaSec) {
     m_angularAcceleration = glm::vec3(0);
 }
 
-void Physics::alterCell(Voxel* voxel, float plusMinus) {
+template<typename VecOp, typename FloatOp>
+void Physics::alterCell(Voxel* voxel, VecOp vecOp, FloatOp floatOp) {
     float scaledVoxelMass = voxel->normalizedMass() * m_massScaleFactor;
 
-    m_mass += scaledVoxelMass * plusMinus;
-    m_accumulatedMassVec += static_cast<glm::vec3>(voxel->gridCell()) * scaledVoxelMass * plusMinus;
+    m_mass = floatOp(m_mass, scaledVoxelMass);
+    m_accumulatedMassVec = vecOp(m_accumulatedMassVec, static_cast<glm::vec3>(voxel->gridCell()) * scaledVoxelMass);
     m_worldObject.setCenterAndAdjustPosition(m_accumulatedMassVec / m_mass);
 }
 

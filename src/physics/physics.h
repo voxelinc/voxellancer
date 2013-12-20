@@ -61,6 +61,6 @@ protected:
     glm::vec3 m_accumulatedMassVec;
     float m_massScaleFactor;
 
-    void alterCell(Voxel* voxel, float plusMinus);
+    template<typename VecOp, typename FloatOp> void alterCell(Voxel* voxel, VecOp vecOp, FloatOp floatOp);
 };
 

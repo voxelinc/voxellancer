@@ -29,8 +29,9 @@ go_bandit([](){
             a.addVoxel(new Voxel(glm::ivec3(3, 0, 0), 0xFFFFFF));
             a.addVoxel(new Voxel(glm::ivec3(4, 0, 0), 0xFFFFFF));
             AssertThat(a.aabb().contains(glm::vec3(4.49, 0, 0)), Equals(true));
+            AssertThat(a.transform().position(), EqualsWithDelta(glm::vec3(2, 0, 0), glm::vec3(0.01, 0.01, 0.01)));
 
-            a.setPosition(glm::vec3(5, 0, 0));
+            a.setPosition(glm::vec3(7, 0, 0));
             AssertThat(a.aabb().contains(glm::vec3(9.49, 0, 0)), Equals(true));
         });
 
@@ -44,7 +45,7 @@ go_bandit([](){
 
             a.rotate(glm::angleAxis(90.f, glm::vec3(0, 1, 0)));
 
-            AssertThat(a.aabb().contains(glm::vec3(0, 0, -4.49)), Equals(true));
+            AssertThat(a.aabb().contains(glm::vec3(0, 0, -2.49)), Equals(true));
         });
 
         it("incremental mass and center calculation works", [&]() {

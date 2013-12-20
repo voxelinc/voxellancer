@@ -110,10 +110,12 @@ go_bandit([](){
             }
             assert(n != nullptr);
 
-            AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(0,0,0), glm::vec3(0.01, 0.01, 0.01)));
+            AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(1, 1, 1), glm::vec3(0.01, 0.01, 0.01)));
+            obj->addVoxel(new Voxel(glm::ivec3(0, 0, 0))); // Center in middle now
+            AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(1, 1, 1), glm::vec3(0.01, 0.01, 0.01)));
 
             obj->rotate(glm::angleAxis((float)90.0, glm::vec3(1, 0, 0)));
-            AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(0, 0, 0), glm::vec3(0.01, 0.01, 0.01)));
+            AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(1, 0, 1), glm::vec3(0.01, 0.01, 0.01)));
 
         });
 
@@ -132,13 +134,13 @@ go_bandit([](){
             }
             assert(n != nullptr);
 
-            AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(0,0,0.5), glm::vec3(0.01, 0.01, 0.01)));
+            AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(1,1,1), glm::vec3(0.01, 0.01, 0.01)));
 
             obj->rotate(glm::angleAxis((float)90.0, glm::vec3(1, 0, 0)));
-            AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(0, -0.5, 0), glm::vec3(0.01, 0.01, 0.01)));
+            AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(1, 0.5, 0.5), glm::vec3(0.01, 0.01, 0.01)));
 
             obj->rotate(glm::angleAxis((float)90.0f, glm::vec3(0, 1, 0)));
-            AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(0.5, 0, 0), glm::vec3(0.01, 0.01, 0.01)));
+            AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(1.5,1,0.5), glm::vec3(0.01, 0.01, 0.01)));
 
         });
     });
