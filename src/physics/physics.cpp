@@ -88,11 +88,11 @@ void Physics::accelerateAngular(const glm::vec3& axis) {
 }
 
 void Physics::addVoxel(Voxel* voxel) {
-    alterCell(voxel, std::plus<glm::vec3>(), std::plus<float>());
+    alterCell<std::plus>(voxel);
 }
 
 void Physics::removeVoxel(Voxel* voxel) {
-    alterCell(voxel, std::minus<glm::vec3>(), std::minus<float>());
+    alterCell<std::minus>(voxel);
 }
 
 void Physics::updateSpeed(float deltaSec) {
@@ -106,12 +106,12 @@ void Physics::updateSpeed(float deltaSec) {
     m_angularAcceleration = glm::vec3(0);
 }
 
-template<typename VecOp, typename FloatOp>
-void Physics::alterCell(Voxel* voxel, VecOp vecOp, FloatOp floatOp) {
+template<template<typename> class Op>
+void Physics::alterCell(Voxel* voxel) {
     float scaledVoxelMass = voxel->normalizedMass() * m_massScaleFactor;
 
-    m_mass = floatOp(m_mass, scaledVoxelMass);
-    m_accumulatedMassVec = vecOp(m_accumulatedMassVec, static_cast<glm::vec3>(voxel->gridCell()) * scaledVoxelMass);
+    m_mass = Op<float>()(m_mass, scaledVoxelMass);
+    m_accumulatedMassVec = Op<glm::vec3>()(m_accumulatedMassVec, static_cast<glm::vec3>(voxel->gridCell()) * scaledVoxelMass);
     m_worldObject.setCenterAndAdjustPosition(m_accumulatedMassVec / m_mass);
 }
 
