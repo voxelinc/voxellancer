@@ -7,7 +7,6 @@
 
 Ship::Ship() :
     WorldObject(CollisionFilterClass::Ship),
-    m_world(World::instance()),
     m_hardpoints(),
 	prop_maxSpeed("ship.maxSpeed"),
 	prop_maxRotSpeed("ship.maxRotSpeed"),
@@ -81,6 +80,7 @@ float Ship::minAimDistance(){ // is this needed ?!
 void Ship::accelerate(const glm::vec3& direction) {
     m_physics->accelerate(direction * prop_maxSpeed.get());
 }
+
 
 void Ship::accelerateAngular(const glm::vec3& axis) {
     m_physics->accelerateAngular(axis * prop_maxRotSpeed.get());
