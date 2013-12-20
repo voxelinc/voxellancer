@@ -24,7 +24,7 @@ public:
     void removeVoxel(Voxel *voxel);
 
     AABB aabb(const WorldTransform& transform) const;
-    void recalculateAABB();
+    const IAABB &gridAABB() const;
 
     Sphere sphere(const WorldTransform& transform) const;
 
@@ -50,11 +50,14 @@ public:
 protected:
     WorldObject& m_worldObject;
     VoxelTreeNode m_voxelTree;
-    WorldTreeGeode *m_geode;
-    WorldTree *m_worldTree;
+    WorldTreeGeode* m_geode;
+    WorldTree* m_worldTree;
     std::list<VoxelCollision> m_collisions;
     IAABB m_aabb;
 
     void checkCollisions(VoxelTreeNode* nodeA, VoxelTreeNode* nodeB);
+
+    void shrinkPlus(int start, int end, const glm::ivec3& plane);
+    void shrinkMinus(int start, int end, const glm::ivec3& plane);
 };
 

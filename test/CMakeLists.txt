@@ -2,7 +2,8 @@
 include_directories(${BANDIT_INCLUDE_DIR})
 
 set(TEST_MAIN ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp 
-              ${CMAKE_CURRENT_SOURCE_DIR}/bandit_extension/vec3helper.cpp) 
+              ${CMAKE_CURRENT_SOURCE_DIR}/bandit_extension/vec3helper.cpp 
+              ${CMAKE_CURRENT_SOURCE_DIR}/bandit_extension/aabbhelper.cpp) 
 include(maketest.cmake)
 
 if(${OPTION_CREATE_SUB_TEST})
