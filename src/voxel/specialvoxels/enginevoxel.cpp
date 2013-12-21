@@ -3,9 +3,9 @@
 #include "voxel/voxelcluster.h"
 #include "worldobject/worldobject.h"
 
-EngineVoxel::EngineVoxel(const glm::ivec3 &gridCell, int color, float mass, float hp) :
+EngineVoxel::EngineVoxel(const glm::ivec3& gridCell, int color, float mass, float hp) :
     Voxel(gridCell, color, mass, hp),
-    m_object(nullptr)
+    m_worldObject(nullptr)
 {
 }
 
@@ -13,7 +13,7 @@ EngineVoxel::~EngineVoxel() {
 }
 
 void EngineVoxel::addToObject(WorldObject *object){
-    m_object = object;
+    m_worldObject = object;
     object->addEngineVoxel(this);
 }
 

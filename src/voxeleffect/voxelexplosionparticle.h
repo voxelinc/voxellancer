@@ -1,17 +1,17 @@
 #pragma once
 
 #include <vector>
-#include "worldobject.h"
-#include "hardpoint.h"
+#include "worldobject/worldobject.h"
+#include "worldobject/hardpoint.h"
 #include "world/world.h"
 #include "world/god.h"
 
 class World;
 class God;
 
-class VoxelExplosionCluster : public WorldObject {
+class VoxelExplosionParticle : public WorldObject {
 public:
-    VoxelExplosionCluster(float scale, float lifetime);
+    VoxelExplosionParticle(float scale, float lifetime);
     virtual void update(float deltasec);
 
     virtual void onCollision() override;

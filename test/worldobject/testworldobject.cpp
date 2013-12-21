@@ -16,11 +16,13 @@ go_bandit([](){
         PropertyManager::instance()->reset();
         PropertyManager::instance()->load("data/config.ini");
 
+
         before_each([&](){
         });
 
         it("works in worldobject", [&]() {
             WorldObject a;
+
             a.addVoxel(new Voxel(glm::ivec3(0, 0, 0), 0xFFFFFF));
             a.addVoxel(new Voxel(glm::ivec3(1, 0, 0), 0xFFFFFF));
             a.addVoxel(new Voxel(glm::ivec3(2, 0, 0), 0xFFFFFF));

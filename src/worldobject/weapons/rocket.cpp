@@ -5,7 +5,7 @@
 
 #include "utils/tostring.h"
 #include "physics/physics.h"
-#include "worldobject/voxelexplosiongenerator.h"
+#include "voxeleffect/voxelexplosiongenerator.h"
 
 
 Rocket::Rocket(glm::vec3 position, glm::quat orientation, const glm::vec3& initialSpeed, float travelSpeed, float lifetime, WorldObject* target) :

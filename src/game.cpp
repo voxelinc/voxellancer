@@ -143,6 +143,7 @@ void Game::initialize()
             }
         }
     }
+    planet->setCrucialVoxel(glm::ivec3(middle));
     planet->finishInitialization();
     planet->objectInfo().setName("Planet");
     m_world->god().scheduleSpawn(planet);
@@ -177,7 +178,7 @@ void Game::initialize()
 	m_camera.setZFar(9999);
 
 	glow::debug("Create HUD");
-	m_hud = std::unique_ptr<HUD>(new HUD(&m_inputHandler));
+	m_hud = std::unique_ptr<HUD>(new HUD(&m_player));
 	m_hud->setCamera(&m_camera);
 
     m_hd3000dummy = std::unique_ptr<HD3000Dummy>(new HD3000Dummy);

@@ -4,8 +4,8 @@
 
 #include "world/god.h"
 #include "world/world.h"
-#include "worldobject/voxelexplosioncluster.h"
 #include "utils/randfloat.h"
+#include "voxelexplosionparticle.h"
 
 
 VoxelExplosionGenerator::VoxelExplosionGenerator() :
@@ -34,6 +34,7 @@ void VoxelExplosionGenerator::setOrientation(const glm::quat& orientation){
 void VoxelExplosionGenerator::setScale(float scale){
     m_scale = scale;
 }
+
 void VoxelExplosionGenerator::setTransform(const WorldTransform& transform){
     m_position = transform.position();
     m_orientation = transform.orientation();
@@ -69,7 +70,7 @@ void VoxelExplosionGenerator::spawn(){
     for (int i = 0; i < m_density; i++){
         for (int j = 0; j < m_density; j++){
             for (int k = 0; k < m_density; k++){
-                VoxelExplosionCluster* newObject = new VoxelExplosionCluster(0.95f * scale, prop_lifetime * m_force); //multiply 0.95 to certainly be below the collision threshold
+                VoxelExplosionParticle* newObject = new VoxelExplosionParticle(0.95f * scale, prop_lifetime * m_force); //multiply 0.95 to certainly be below the collision threshold
                 Voxel* voxel = new Voxel(glm::ivec3(0, 0, 0), m_color, 0.000001f, 0.1f);
                 voxel->addToObject(newObject);
                 newObject->setCrucialVoxel(glm::ivec3(0, 0, 0));

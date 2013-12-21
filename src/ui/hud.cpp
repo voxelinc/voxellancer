@@ -11,8 +11,8 @@
 #include "worldobject/worldobject.h"
 
 
-HUD::HUD(InputHandler* inputHandler) :
-    m_inputHandler(inputHandler),
+HUD::HUD(Player* player) :
+    m_player(player),
     m_voxelRenderer(new VoxelRenderer()),
     m_font(new VoxelFont()),
     m_gameCamera(0),
@@ -32,7 +32,7 @@ HUD::HUD(InputHandler* inputHandler) :
     prop_arrowRadius("hud.arrowRadius"),
     prop_showFramerate("hud.showFramerate")
 {
-    assert(inputHandler != nullptr);
+    assert(player != nullptr);
     m_font->setRenderer(m_voxelRenderer.get());
 
     m_renderCamera.setPosition(glm::vec3(0, 0, 0));
@@ -138,8 +138,9 @@ void HUD::draw(){
             if (ship->objectInfo().showOnHud()) {
 
                 if (i < 11){
+                    glm::vec3 dist = ship->transform().position() - m_player->playerShip()->transform().position();
                     std::stringstream s; s.setf(std::ios::fixed, std::ios::floatfield); s.precision(2);
-                    s << ship->objectInfo().name() << ": " << ship->voxelMap().size() << "/" << (float)glm::length(delta);
+                    s << ship->objectInfo().name() << ": " << ship->voxelMap().size() << "/" << (float)glm::length(dist);
                     m_font->drawString(s.str(), calculatePosition(BottomLeft, glm::vec3(4, 5 + 4 * i, 0)), s5x7, 0.4f);
                     i++;
                 } else if (i == 11){
@@ -177,7 +178,12 @@ void HUD::draw(){
         m_font->drawString(std::to_string((int)glm::round(m_frameRate)), calculatePosition(TopLeft, glm::vec3(4, -5, 0)), s3x5, 0.8f);
     }
 
-    m_font->drawString(m_inputHandler->playerTarget(), calculatePosition(Bottom, glm::vec3(0, 8, 0)), s3x5, 0.5f, aCenter);
+    std::string lockstr;
+    if (m_player->playerShip()->targetObject())
+        lockstr = "Locked: " + m_player->playerShip()->targetObject()->objectInfo().name();
+    else
+        lockstr = "No Lock";
+    m_font->drawString(lockstr, calculatePosition(Bottom, glm::vec3(0, 8, 0)), s3x5, 0.5f, aCenter);
 
     m_voxelRenderer->afterDraw();
 

@@ -1,5 +1,6 @@
 #include "clusterloader.h"
 
+#include <stdexcept>
 #include <sstream>
 
 #include "voxel/voxelcluster.h"
