@@ -41,6 +41,7 @@ std::set<WorldTreeGeode*> WorldTree::geodesInAABB(const AABB& aabb, WorldTreeNod
     }
 }
 
+
 bool WorldTree::areGeodesInAABB(const AABB& aabb, WorldTreeNode* nodeHint, WorldObject* collideableWith) const {
     if (nodeHint == nullptr) {
         return WorldTreeNode::areGeodesInAABB(aabb, collideableWith);

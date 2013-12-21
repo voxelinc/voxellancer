@@ -45,7 +45,7 @@ Game::Game(GLFWwindow *window) :
     m_player(&m_camera),
     m_inputHandler(window, &m_player, &m_camera)
 {
-	reloadConfig();
+    reloadConfig();
 }
 
 Game::~Game(){
@@ -126,7 +126,7 @@ void Game::initialize()
     m_player.setShip(testCluster);
 
     WorldObject *wall = new WorldObject(1);
-    wall->move(glm::vec3(-20, 0, -50));
+    wall->move(glm::vec3(-30, 0, -50));
     wall->rotate(glm::angleAxis(-90.f, glm::vec3(0, 1, 0)));
     for(int x = 0; x < 20; x++) {
         for(int y = 0; y < 15; y++) {
@@ -139,6 +139,25 @@ void Game::initialize()
     wall->objectInfo().setName("Wall");
     m_world->god().scheduleSpawn(wall);
 
+    WorldObject *planet = new WorldObject();
+    planet->move(glm::vec3(20, 10, -30));
+    int diameter = 28;
+    glm::vec3 middle(diameter/2, diameter/2, diameter/2);
+    for(int x = 0; x < diameter; x++) {
+        for(int y = 0; y < diameter; y++) {
+            for(int z = 0; z < diameter; z++) {
+                glm::vec3 cell(x, y, z);
+
+                if(glm::length(cell - middle) < diameter/2) {
+                    planet->addVoxel(new Voxel(glm::ivec3(x, y, z), 0x0055AA));
+                }
+            }
+        }
+    }
+    planet->setCrucialVoxel(glm::ivec3(middle));
+    planet->finishInitialization();
+    planet->objectInfo().setName("Planet");
+    m_world->god().scheduleSpawn(planet);
 
     glow::debug("Initial spawn");
     m_world->god().spawn();
@@ -148,7 +167,7 @@ void Game::initialize()
 	m_camera.setZFar(9999);
 
 	glow::debug("Create HUD");
-	m_hud = std::unique_ptr<HUD>(new HUD(&m_inputHandler));
+	m_hud = std::unique_ptr<HUD>(new HUD(&m_player));
 	m_hud->setCamera(&m_camera);
 
     m_hd3000dummy = std::unique_ptr<HD3000Dummy>(new HD3000Dummy);

@@ -75,6 +75,19 @@ void WorldObject::addVoxel(Voxel* voxel) {
     m_collisionDetector->addVoxel(voxel);
 }
 
+void WorldObject::removeVoxel(Voxel* voxel) {
+    assert(voxel != nullptr);
+
+    voxel->onRemoval();
+    m_collisionDetector->removeVoxel(voxel);
+    m_physics->removeVoxel(voxel);
+    if (m_crucialVoxel != nullptr && voxel == m_crucialVoxel) {
+        // do spectacular stuff like an explosion
+        m_crucialVoxel = nullptr;
+    }
+    VoxelCluster::removeVoxel(voxel);
+}
+
 void WorldObject::addEngineVoxel(EngineVoxel* voxel){
     addVoxel(voxel);
 }
@@ -89,21 +102,6 @@ void WorldObject::addCockpitVoxel(CockpitVoxel* voxel){
 
 void WorldObject::addFuelVoxel(FuelVoxel* voxel){
     addVoxel(voxel);
-}
-
-void WorldObject::removeVoxel(const glm::ivec3& position) {
-    Voxel* voxel = m_voxels[position];
-    assert(voxel != nullptr);
-    voxel->onRemoval();
-    m_collisionDetector->removeVoxel(position);
-    m_physics->removeVoxel(position);
-    if (m_crucialVoxel != nullptr && position == m_crucialVoxel->gridCell()) {
-        // do spectacular stuff like an explosion
-        m_crucialVoxel = nullptr;
-    }
-    VoxelCluster::removeVoxel(position);
-
-    m_transform.setCenterAndAdjustPosition(m_physics->physicalCenter());
 }
 
 void WorldObject::finishInitialization() {

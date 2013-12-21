@@ -4,6 +4,7 @@
 #include "voxel/specialvoxels/hardpointvoxel.h"
 #include "voxel/specialvoxels/cockpitvoxel.h"
 #include "voxel/specialvoxels/fuelvoxel.h"
+#include "voxel/specialvoxels/crucialvoxel.h"
 
 
 ColorCoder::ColorCoder() :
@@ -22,7 +23,11 @@ ColorCoder::ColorCoder() :
     prop_fuelKey("colorcode.FuelKey"),
     prop_fuelColor("colorcode.FuelColor"),
     prop_fuelMass("colorcode.FuelMass"),
-    prop_fuelHP("colorcode.FuelHP")
+    prop_fuelHP("colorcode.FuelHP"),
+    prop_crucialKey("colorcode.CrucialKey"),
+    prop_crucialColor("colorcode.CrucialColor"),
+    prop_crucialMass("colorcode.CrucialMass"),
+    prop_crucialHP("colorcode.CrucialHP")
 {
     
 }
@@ -42,6 +47,8 @@ Voxel* ColorCoder::newCodedVoxel(Voxel& voxel){
         return new CockpitVoxel(voxel.gridCell(), prop_cockpitColor, prop_cockpitMass, prop_cockpitHP);
     } else if (voxel.color() == prop_fuelKey){
         return new FuelVoxel(voxel.gridCell(), prop_fuelColor, prop_fuelMass, prop_fuelHP);
+    } else if (voxel.color() == prop_crucialKey){
+        return new CrucialVoxel(voxel.gridCell(), prop_crucialColor, prop_crucialMass, prop_crucialHP);
     } else {
         return new Voxel(voxel);
     }
