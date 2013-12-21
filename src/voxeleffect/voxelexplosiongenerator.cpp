@@ -82,7 +82,7 @@ void VoxelExplosionGenerator::spawn(){
 
                 float angX = RandFloat::rand(-180, 180);
                 float angY = glm::degrees(glm::acos(2 * RandFloat::rand(0, 1) - 1));
-                glm::vec3 speedVec = glm::quat(glm::vec3(angX, angY, 0.0f)) * glm::vec3(0, 0, RandFloat::rand(0, 10.0f));
+                glm::vec3 speedVec = glm::quat(glm::vec3(angX, angY, 0.0f)) * glm::vec3(0, 0, RandFloat::rand(1, 10));
                 newObject->physics().setSpeed( m_orientation * (m_force * 10.0f * glm::normalize(speedVec)) + m_impactVector);
                 
                
