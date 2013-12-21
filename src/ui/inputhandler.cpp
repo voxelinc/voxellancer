@@ -30,12 +30,13 @@
 
 
 InputHandler::InputHandler(GLFWwindow *window, Player* player, Camera *camera) :
-    m_window(window),
-    m_player(player),
-    m_camera(camera),
-    prop_deadzone("input.deadzone")
+m_window(window),
+m_player(player),
+m_camera(camera),
+prop_deadzoneMouse("input.deadzoneMouse"),
+prop_deadzoneGamepad("input.deadzoneGamepad"),
+m_targeter(new Targeter(player, camera))
 {
-
     bumperLeftState = false;
     bumperRightState = false;
     glfwGetWindowSize(m_window, &m_windowWidth, &m_windowHeight);
@@ -65,8 +66,12 @@ void InputHandler::keyCallback(int key, int scancode, int action, int mods){
 	/* Check here for single-time key-presses, that you do not want fired multiple times, e.g. toggles */
     if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
         m_mouseControl = !m_mouseControl;
-    if (key == GLFW_KEY_TAB && action == GLFW_PRESS)
-        selectNextTarget(glfwGetKey(m_window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS);
+    if (key == GLFW_KEY_TAB && action == GLFW_PRESS){
+        if (glfwGetKey(m_window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+            m_targeter->selectNextTarget();
+        else
+            m_targeter->selectPreviousTarget();
+    }
     if (key == GLFW_KEY_B && action == GLFW_PRESS){
         VoxelExplosionGenerator g;
         g.setPosition(m_player->playerShip()->transform().position() + m_player->playerShip()->transform().orientation() * glm::vec3(0, 0, -30));
@@ -123,38 +128,38 @@ void InputHandler::update(float delta_sec) {
 
                 if (buttons[4] == GLFW_PRESS){
                     if (!bumperLeftState)
-                        this->selectNextTarget(false);
+                        m_targeter->selectPreviousTarget();
                     bumperLeftState = true;
                 } else {
                     bumperLeftState = false;
                 }
                 if (buttons[5] == GLFW_PRESS){
                     if (!bumperRightState)
-                        this->selectNextTarget(true);
+                        m_targeter->selectNextTarget();
                     bumperRightState = true;
                 } else {
                     bumperRightState = false;
                 }
-                if (glm::abs(axes[2]) > prop_deadzone){
+                if (glm::abs(axes[2]) > prop_deadzoneGamepad){
                     if (axes[2] < 0)
                         m_player->playerShip()->fireAtPoint(findTargetPoint(m_windowWidth / 2, m_windowHeight / 2));
                     else
                         m_player->playerShip()->fireAtObject();
                 }
-                if (glm::abs(axes[0]) > prop_deadzone){
+                if (glm::abs(axes[0]) > prop_deadzoneGamepad){
                     m_player->move(glm::vec3(axes[0], 0, 0));
                 }
-                if (glm::abs(axes[1]) > prop_deadzone){
+                if (glm::abs(axes[1]) > prop_deadzoneGamepad){
                     m_player->move(glm::vec3(0, 0, -axes[1]));
                 }
                 glm::vec3 rot = glm::vec3(0);
-                if (glm::abs(axes[3]) > prop_deadzone){
+                if (glm::abs(axes[3]) > prop_deadzoneGamepad){
                     rot.x = -axes[3];
                 }
-                if (glm::abs(axes[4]) > prop_deadzone){
+                if (glm::abs(axes[4]) > prop_deadzoneGamepad){
                     rot.y = -axes[4];
                 }
-                if (glm::length(rot) < prop_deadzone){
+                if (glm::length(rot) < prop_deadzoneGamepad){
                     rot = glm::vec3(0);
                 }
                 if (glm::length(rot) > 1){
@@ -190,7 +195,7 @@ void InputHandler::update(float delta_sec) {
                 rot = glm::vec3(y, x, 0);
                 rot /= m_cursorMaxDistance;
 
-                if (glm::length(rot) < prop_deadzone){
+                if (glm::length(rot) < prop_deadzoneMouse){
                     rot = glm::vec3(0);
                 }
                 if (glm::length(rot) > 1){
@@ -207,66 +212,7 @@ void InputHandler::update(float delta_sec) {
 	m_lastfocus = glfwGetWindowAttrib(m_window, GLFW_FOCUSED);
 }
 
-WorldObject* InputHandler::findNextTarget(bool forward){
-    std::list<WorldObject*>& worldObjects = World::instance()->worldObjects();
 
-    if (forward){
-        if (!m_player->playerShip()->targetObject()){
-            auto iterator = worldObjects.begin();
-            // find next lockable target
-            while (iterator != worldObjects.end() && (!(*iterator)->objectInfo().canLockOn() || *iterator == m_player->playerShip())){
-                ++iterator;
-            }
-            if (iterator == worldObjects.end())
-                return nullptr;
-            return *iterator;
-        } else {
-            // Find current target
-            for (auto iterator = worldObjects.begin(); iterator != worldObjects.end(); ++iterator){
-                if (*iterator == m_player->playerShip()->targetObject()){
-                    ++iterator;
-                    // find next lockable target
-                    while (iterator != worldObjects.end() && (!(*iterator)->objectInfo().canLockOn() || *iterator == m_player->playerShip())){
-                        ++iterator;
-                    }
-                    if (iterator == worldObjects.end())
-                        return nullptr;
-                    return *iterator;
-                }
-            }
-        }
-    } else {
-        if (!m_player->playerShip()->targetObject()){
-            auto iterator = worldObjects.rbegin();
-            // find next lockable target
-            while (iterator != worldObjects.rend() && (!(*iterator)->objectInfo().canLockOn() || *iterator == m_player->playerShip())){
-                ++iterator;
-            }
-            if (iterator == worldObjects.rend())
-                return nullptr;
-            return *iterator;
-        } else {
-            // Find current target backwards
-            for (auto iterator = worldObjects.rbegin(); iterator != worldObjects.rend(); ++iterator){
-                if (*iterator == m_player->playerShip()->targetObject()){
-                    ++iterator;
-                    // find next lockable target
-                    while (iterator != worldObjects.rend() && (!(*iterator)->objectInfo().canLockOn() || *iterator == m_player->playerShip())){
-                        ++iterator;
-                    }
-                    if (iterator == worldObjects.rend())
-                        return nullptr;
-                    return *iterator;
-                }
-            }
-        }
-    }
-    return nullptr;
-}
-
-void InputHandler::selectNextTarget(bool forward){
-    m_player->playerShip()->setTargetObject(findNextTarget(forward));
-}
 
 glm::vec3 InputHandler::findTargetPoint(double x, double y){
     glm::vec4 pointEnd((x * 2 / m_windowWidth - 1), -1 * (y * 2 / m_windowHeight - 1), 1, 1); //get normalized device coords

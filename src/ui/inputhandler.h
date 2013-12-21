@@ -7,7 +7,7 @@
 #include "property/propertymanager.h"
 #include "property/property.h"
 #include "worldobject/ship.h"
-#include "player.h"
+#include "ui/targeter.h"
 
 class WorldObject;
 
@@ -32,6 +32,8 @@ protected:
 
     bool bumperLeftState, bumperRightState;
 
+    Targeter* m_targeter;
+
 	GLFWwindow *m_window;
 	Camera* m_camera;
     Player* m_player;
@@ -43,6 +45,7 @@ protected:
 	int m_cursorMaxDistance;
 	int m_mouseControl;    
 
-    Property<float> prop_deadzone;
+    Property<float> prop_deadzoneMouse;
+    Property<float> prop_deadzoneGamepad;
 
 };

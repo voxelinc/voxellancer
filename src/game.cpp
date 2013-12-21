@@ -78,18 +78,9 @@ void Game::initialize()
 
 
     WorldObject *testClusterMoveable = new WorldObject();
-    testClusterMoveable->move(glm::vec3(-20, 0, 0));
+    testClusterMoveable->move(glm::vec3(-20, 0, -20));
     testClusterMoveable->rotate(glm::angleAxis(-90.f, glm::vec3(0, 1, 0)));
-    testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 7), 0x00FF00));
-    testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 6), 0xFFFF00));
-    testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 5), 0xFFFF00));
-    testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 4), 0xFFFF00));
-    testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 3), 0xFFFF00));
-    testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 2), 0xFFFF00));
-    testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 1), 0xFFFF00));
-    testClusterMoveable->addVoxel(new Voxel(glm::ivec3(1, 1, 7), 0x0000FF));
-    testClusterMoveable->addVoxel(new Voxel(glm::ivec3(1, 0, 7), 0xFF0000));
-    testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 8), 0xFF0080));
+    ClusterCache::instance()->fillObject(testClusterMoveable, "data/voxelcluster/eagle.csv");
     testClusterMoveable->finishInitialization();
     testClusterMoveable->objectInfo().setName("movable");
     m_world->god().scheduleSpawn(testClusterMoveable);
@@ -105,7 +96,7 @@ void Game::initialize()
     m_world->god().scheduleSpawn(normandy);
 
     Ship *testCluster = new Ship();
-    ClusterCache::instance()->fillObject(testCluster, "data/voxelcluster/basicship.csv");
+    ClusterCache::instance()->fillObject(testCluster, "data/voxelcluster/eagle.csv");
     testCluster->setPosition(glm::vec3(0, 0, 10));
     testCluster->finishInitialization();
     testCluster->objectInfo().setName("basicship");
