@@ -46,10 +46,10 @@ void Ship::removeHardpoint(Hardpoint *hardpoint){
 }
 
 void Ship::setTargetObject(WorldObject* target){
-    m_targetObject = target;
+    m_targetObject = target ? target->handle() : nullptr;
 }
 WorldObject* Ship::targetObject(){
-    return m_targetObject;
+    return m_targetObject ? m_targetObject->get() : nullptr;
 }
 
 void Ship::fireAtPoint(glm::vec3 target){
@@ -61,9 +61,11 @@ void Ship::fireAtPoint(glm::vec3 target){
 }
 
 void Ship::fireAtObject(){
-    for (Hardpoint* hardpoint : m_hardpoints){
-        if (hardpoint->aimType() == Object){
-            hardpoint->shootAtObject(m_targetObject);
+    if (targetObject()) {
+        for (Hardpoint* hardpoint : m_hardpoints) {
+            if (hardpoint->aimType() == Object) {
+                hardpoint->shootAtObject(targetObject());
+            }
         }
     }
 }
