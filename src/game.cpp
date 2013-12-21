@@ -97,7 +97,7 @@ void Game::initialize()
 
     Ship *testCluster = new Ship();
     ClusterCache::instance()->fillObject(testCluster, "data/voxelcluster/eagle.csv");
-    testCluster->setPosition(glm::vec3(0, 0, 10));
+    testCluster->setPosition(glm::vec3(0, 0, 100));
     testCluster->finishInitialization();
     testCluster->objectInfo().setName("basicship");
     testCluster->objectInfo().setShowOnHud(false);
