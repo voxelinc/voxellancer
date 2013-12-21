@@ -42,7 +42,7 @@ protected:
     std::vector<std::unique_ptr<HUDElement>> m_numbers;
 
     std::unique_ptr<HUDElement> m_shipArrow;
-    double m_deltaSec_remain;
+    double m_delta_sec_remain;
     float m_frameRate;
     float m_dx, m_dy;
 

@@ -19,7 +19,7 @@ HUD::HUD(Player* player) :
     m_renderCamera(),
     m_lastGameCamera(),
     m_shipArrow(),
-    m_deltaSec_remain(0),
+    m_delta_sec_remain(0),
     m_frameRate(0),
     m_dx(1),
     m_dy(1),
@@ -82,7 +82,7 @@ void HUD::stepAnim(glm::vec3 targetPosition, glm::quat targetOrientation){
 
 void HUD::update(float deltaSec){
     // For a smooth movement we need to simulate 1/inertia_rate "hud steps" per second
-    double total = deltaSec + m_deltaSec_remain;
+    double total = deltaSec + m_delta_sec_remain;
     double progress = 0.0;
 	double steptime = 1.0 / prop_inertiaRate;
     // progress steps in steptime from 0 to total, rate is the percentage
@@ -95,7 +95,7 @@ void HUD::update(float deltaSec){
             glm::slerp(m_lastGameCamera.orientation(), m_gameCamera->orientation(), rate));
 		progress += steptime;
     }
-    m_deltaSec_remain = total - progress;
+    m_delta_sec_remain = total - progress;
 
     // Set the lastCamera from which interpolation starts next frame to where we interpolated this time
     m_lastGameCamera.setOrientation(glm::slerp(m_lastGameCamera.orientation(), m_gameCamera->orientation(), (float)(progress / total)));
@@ -117,6 +117,7 @@ void HUD::draw(){
     }
 
     // the renderCamera reflects the difference between the virtual hudCamera and the real gameCamera in the HUD coordinate system
+
     m_renderCamera.setOrientation((glm::inverse(m_hudCamera.orientation()) * m_gameCamera->orientation()));
     m_renderCamera.setPosition(((m_gameCamera->position() - m_hudCamera.position()) * prop_moveMultiplier.get()) * m_hudCamera.orientation());
 
