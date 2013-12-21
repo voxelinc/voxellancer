@@ -5,6 +5,7 @@
 
 #include "utils/tostring.h"
 #include "physics/physics.h"
+#include "voxeleffect/voxelexplosiongenerator.h"
 
 
 Rocket::Rocket(glm::vec3 position, glm::quat orientation, const glm::vec3& initialSpeed, float travelSpeed, float lifetime, WorldObject* target) :
@@ -64,10 +65,16 @@ void Rocket::update(float deltaSec){
 }
 
 void Rocket::onCollision(){
-    //TODO: spawn explosion
     World::instance()->god().scheduleRemoval(this);
+    VoxelExplosionGenerator generator;
+    generator.setTransform(m_transform);
+    generator.setColor(0xFF0000);
+    generator.spawn();
 }
 
 void Rocket::onSpawnFail(){
-    //TODO: spawn explosion
+    VoxelExplosionGenerator generator;
+    generator.setTransform(m_transform);
+    generator.setColor(0xFF0000);
+    generator.spawn();
 }

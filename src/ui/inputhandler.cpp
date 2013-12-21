@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 #include <glow/glow.h>
 
+#include "voxeleffect/voxelexplosiongenerator.h"
 
 /*
 * 360 gamepad assignment: (direction given for positive values)
@@ -39,6 +40,7 @@ InputHandler::InputHandler(GLFWwindow *window, Player* player, Camera *camera) :
     bumperRightState = false;
     glfwGetWindowSize(m_window, &m_windowWidth, &m_windowHeight);
     glfwSetCursorPos(m_window, m_windowWidth / 2, m_windowHeight / 2);
+
     m_cursorMaxDistance = glm::min(m_windowHeight, m_windowWidth) / 2;
 
     m_mouseControl = false;
@@ -50,7 +52,6 @@ InputHandler::InputHandler(GLFWwindow *window, Player* player, Camera *camera) :
 InputHandler::~InputHandler(){
 
 }
-
 
 void InputHandler::resizeEvent(const unsigned int width, const unsigned int height){
 	//glfwGetWindowSize(m_window, &m_windowWidth, &m_windowHeight);
@@ -66,6 +67,15 @@ void InputHandler::keyCallback(int key, int scancode, int action, int mods){
         m_mouseControl = !m_mouseControl;
     if (key == GLFW_KEY_TAB && action == GLFW_PRESS)
         selectNextTarget(glfwGetKey(m_window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS);
+    if (key == GLFW_KEY_B && action == GLFW_PRESS){
+        VoxelExplosionGenerator g;
+        g.setPosition(m_player->playerShip()->transform().position() + m_player->playerShip()->transform().orientation() * glm::vec3(0, 0, -30));
+        g.setOrientation(m_player->playerShip()->transform().orientation());
+        g.setScale((float)(rand() % 3) + 1);
+        g.setForce((float)(rand() % 2) + 1);
+        g.setDensity((rand() % 4) + 2);
+        g.spawn();
+    }
 }
 
 void InputHandler::update(float deltaSec) {
@@ -151,9 +161,7 @@ void InputHandler::update(float deltaSec) {
                     rot = glm::normalize(rot);
                 }
                 m_player->rotate(rot);
-
             }
-
 
             // mouse handling
             double x, y;
