@@ -18,6 +18,9 @@ public:
 
     bool intersects(const Sphere& sphere);
 
+    TAABB<T> applied(const WorldTransform& transform) const;
+    TAABB<T> inverseApplied(const WorldTransform& transform) const;
+
 
 protected:
     glm::vec3 m_a;

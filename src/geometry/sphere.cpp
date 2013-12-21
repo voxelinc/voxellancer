@@ -61,3 +61,12 @@ Sphere Sphere::containing(const AABB& aabb) {
 
     return result;
 }
+
+Sphere Sphere::applied(const WorldTransform& transform) const {
+    return Sphere(transform.applyTo(m_position), m_radius * transform.scale());
+}
+
+Sphere Sphere::inverseApplied(const WorldTransform& transform) const {
+    return Sphere(transform.inverseApplyTo(m_position), m_radius / transform.scale());
+}
+

@@ -17,6 +17,9 @@ public:
 
     bool intersects(const Sphere& sphere) const;
 
+    Ray applied(const WorldTransform& transform) const;
+    Ray inverseApplied(const WorldTransform& transform) const;
+
 
 protected:
     glm::vec3 m_origin;

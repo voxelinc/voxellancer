@@ -37,3 +37,11 @@ bool Line::intersects(const Sphere& sphere) {
     return r1.intersects(sphere) && r2.intersects(sphere);
 }
 
+Line Line::applied(const WorldTransform& transform) const {
+    return Line(transform.applyTo(m_a), transform.applyTo(m_b));
+}
+
+Line Line::inverseApplied(const WorldTransform& transform) const {
+    return Line(transform.inverseApplyTo(m_a), transform.inverseApplyTo(m_b));
+}
+

@@ -52,8 +52,8 @@ public:
 
     static TAABB<float> containing(const Sphere &sphere);
 
-    void apply(const WorldTransform& transform);
-    void inverseApply(const WorldTransform& transform);
+    TAABB<T> applied(const WorldTransform& transform) const;
+    TAABB<T> inverseApplied(const WorldTransform& transform) const;
 
 
 protected:

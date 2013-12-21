@@ -23,6 +23,9 @@ public:
 
     static Sphere containing(const TAABB<float>& aabb);
 
+    Sphere applied(const WorldTransform& transform) const;
+    Sphere inverseApplied(const WorldTransform& transform) const;
+
 
 protected:
     glm::vec3 m_position;

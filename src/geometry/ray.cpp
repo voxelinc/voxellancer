@@ -42,3 +42,11 @@ bool Ray::intersects(const Sphere& sphere) const {
     return t0 >= 0 || t1 >= 0;
 }
 
+Ray Ray::applied(const WorldTransform& transform) const {
+    return Ray(transform.applyTo(m_origin), transform.applyTo(m_direction));
+}
+
+Ray Ray::inverseApplied(const WorldTransform& transform) const {
+    return Ray(transform.inverseApplyTo(m_origin), transform.inverseApplyTo(m_direction));
+}
+

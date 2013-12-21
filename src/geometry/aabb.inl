@@ -209,3 +209,24 @@ void TAABB<T>::extend(const glm::detail::tvec3<T> &point) {
     m_rub = glm::max(m_rub, point);
     m_llf = glm::min(m_llf, point);
 }
+
+template<typename T>
+TAABB<T> TAABB<T>::applied(const WorldTransform& transform) const {
+    TAABB<T> aabb;
+
+    aabb.setLlf(transform.applyTo(m_llf));
+    aabb.setRub(transform.applyTo(m_rub));
+
+    return aabb;
+}
+
+template<typename T>
+TAABB<T> TAABB<T>::inverseApplied(const WorldTransform& transform) const {
+    TAABB<T> aabb;
+
+    aabb.setLlf(transform.inverseApplyTo(m_llf));
+    aabb.setRub(transform.inverseApplyTo(m_rub));
+
+    return aabb;
+}
+
