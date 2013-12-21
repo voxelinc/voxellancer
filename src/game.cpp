@@ -58,6 +58,17 @@ void Game::reloadConfig() {
 
 void Game::initialize()
 {
+    int width, height;
+    glfwGetWindowSize(m_window, &width, &height);
+
+    m_fboGameDepth = new glow::FrameBufferObject();
+    m_fboGameDepth->bind();
+
+    m_bufferGameDepth = new glow::RenderBufferObject();
+    m_bufferGameDepth->storage(GL_DEPTH_COMPONENT, width, height);
+
+    m_fboGameDepth->attachRenderBuffer(GL_DEPTH_ATTACHMENT, m_bufferGameDepth);
+
     glow::AutoTimer t("Initialize Game");
 
 	glow::debug("Game::testFMOD()");
@@ -152,8 +163,6 @@ void Game::initialize()
     m_world->god().spawn();
 
 	glow::debug("Setup Camera");
-	//viewport set in resize
-	//m_camera.setPosition(glm::vec3(0, 5, 30));
 	m_camera.setZNear(1);
 	m_camera.setZFar(9999);
 
@@ -182,17 +191,27 @@ void Game::update(float delta_sec)
     m_inputHandler.update(delta_sec);
     World::instance()->update(delta_sec);
     m_player.setFollowCam();
-	m_hud->update(delta_sec);
+    m_hud->update(delta_sec);
+
 }
 
 void Game::draw()
 {
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, 0); //default readbuffer
+    m_fboGameDepth->bind();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //clear depth buffer
+    m_fboGameDepth->unbind();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //clear default buffer
+
 	glFrontFace(GL_CCW);
 	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
+    glCullFace(GL_BACK);
+    glEnable(GL_DEPTH_TEST);
+    glDepthMask(GL_TRUE);
 
-	m_skybox->draw(&m_camera);
+    m_skybox->draw(&m_camera);
+
+
 
     m_voxelRenderer->prepareDraw(&m_camera);
     for (WorldObject * worldObject : m_world->worldObjects()) {
@@ -202,10 +221,20 @@ void Game::draw()
     // draw all other voxelclusters...
     m_voxelRenderer->afterDraw();
 
+    // after drawing the game, copy the depthbuffer into the separate buffer
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_fboGameDepth->id());
+    glBlitFramebuffer(0, 0, m_camera.viewport().x, m_camera.viewport().y, 0, 0, m_camera.viewport().x, m_camera.viewport().y,
+        GL_DEPTH_BUFFER_BIT, GL_NEAREST);
 
-	m_hud->draw();
+    // draw into the default buffer again
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+
+    m_hud->draw();
 
     m_hd3000dummy->drawIfActive();
+
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, m_fboGameDepth->id());
+
 }
 
 void ERRCHECK(FMOD_RESULT result)
@@ -258,5 +287,3 @@ void TreeStateReporter::exec() {
     std::cout << "WorldTree: " << nodes << " nodes; " << empty << " empty; " << geodes << " geodes; " << depth << " maxdepth" << std::endl;
     m_worldTree->print();
 }
-
-
