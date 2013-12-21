@@ -6,6 +6,7 @@
 #include <glm/glm.hpp>
 
 #include "geometry/sphere.h"
+#include "geometry/ray.h"
 #include "geometry/grid3daabb.h"
 
 #include "voxel/voxel.h"
@@ -39,6 +40,7 @@ public:
     Sphere boundingSphere();
 
     std::set<Voxel*> voxelsIntersectingSphere(const Sphere& sphere) const;
+    std::set<Voxel*> voxelsIntersectingRay(const Ray& ray) const;
 
     void insert(Voxel *physicalVoxel);
     void remove(const glm::ivec3 &cell);

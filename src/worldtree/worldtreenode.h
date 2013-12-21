@@ -4,7 +4,8 @@
 #include <set>
 
 #include "worldtreegeode.h"
-#include "../geometry/aabb.h"
+#include "geometry/aabb.h"
+#include "geometry/ray.h"
 
 
 class Voxel;
@@ -44,6 +45,7 @@ public:
     bool areGeodesInAABB(const AABB &aabb, WorldObject* collideableWith = nullptr) const;
 
     std::set<Voxel*> voxelsIntersectingSphere(const Sphere& sphere) const;
+    std::set<Voxel*> voxelsIntersectingRay(const Ray& ray) const;
 
     void aabbChanged(WorldTreeGeode *geode);
 

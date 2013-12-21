@@ -179,6 +179,29 @@ std::set<Voxel*> WorldTreeNode::voxelsIntersectingSphere(const Sphere& sphere) c
     return result;
 }
 
+std::set<Voxel*> WorldTreeNode::voxelsIntersectingRay(const Ray& ray) const {
+    std::set<Voxel*> result;
+
+    if(isLeaf()) {
+        for(WorldTreeGeode* geode : m_geodes) {
+            assert(geode->worldObject() != nullptr);
+
+            std::set<Voxel*> subresult = geode->worldObject()->voxelsIntersectingRay(ray);
+            result.insert(subresult.begin(), subresult.end());
+        }
+    }
+    else {
+        for(WorldTreeNode* subnode : m_subnodes) {
+            if(ray.intersects(Sphere::containing(subnode->aabb()))) {
+                std::set<Voxel*> subresult = subnode->voxelsIntersectingRay(ray);
+                result.insert(subresult.begin(), subresult.end());
+            }
+        }
+    }
+
+    return result;
+}
+
 void WorldTreeNode::aabbChanged(WorldTreeGeode *geode) {
     if(m_aabb.contains(geode->aabb())) {
         remove(geode);

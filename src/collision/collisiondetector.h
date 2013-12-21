@@ -44,7 +44,8 @@ public:
     VoxelTreeNode& voxeltree();
     const VoxelTreeNode& voxeltree() const;
 
-    std::set<Voxel*> voxelsIntersectingSphere(const Sphere& sphere) const ;
+    std::set<Voxel*> voxelsIntersectingSphere(const Sphere& sphere) const;
+    std::set<Voxel*> voxelsIntersectingRay(const Ray& ray) const;
 
     void updateGeode();
 
