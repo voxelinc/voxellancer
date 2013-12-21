@@ -106,28 +106,27 @@ bool TAABB<T>::intersects(const TAABB& other) const {
         if(other.m_llf.x >= m_rub.x) {
             return false;
         }
-    }
-    else {
+    } else {
         if(m_llf.x >= other.m_rub.x) {
             return false;
         }
     }
+
     if(m_llf.y < other.m_llf.y) {
         if(other.m_llf.y >= m_rub.y) {
             return false;
         }
-    }
-    else {
+    } else {
         if(m_llf.y >= other.m_rub.y) {
             return false;
         }
     }
+
     if(m_llf.z < other.m_llf.z) {
         if(other.m_llf.z >= m_rub.z) {
             return false;
         }
-    }
-    else {
+    } else {
         if(m_llf.z >= other.m_rub.z) {
             return false;
         }
