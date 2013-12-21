@@ -27,9 +27,6 @@ public:
     Physics& physics();
     ObjectInfo& objectInfo();
 
-    AABB aabb();
-    Sphere sphere();
-
     virtual void update(float deltaSec);
 
     std::list<VoxelCollision>& performMovement(float deltaSec);

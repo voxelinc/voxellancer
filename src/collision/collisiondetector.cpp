@@ -13,39 +13,15 @@ CollisionDetector::CollisionDetector(WorldObject & worldObject) :
     m_voxelTree(&worldObject),
     m_worldTree(nullptr),
     m_geode(nullptr),
-    m_worldObject(worldObject),
-    m_aabb()
+    m_worldObject(worldObject)
 {
 }
 
 CollisionDetector::~CollisionDetector() {
 }
 
-AABB CollisionDetector::aabb(const WorldTransform& transform) const {
-    return AABB::containing(sphere(transform));
-}
-
-const IAABB &CollisionDetector::gridAABB() const {
-    return m_aabb;
-}
-
-Sphere CollisionDetector::sphere(const WorldTransform& transform) const {
-    Sphere sphere;
-    sphere.setPosition(transform.applyTo(glm::vec3(m_aabb.rub() + m_aabb.llf()) / 2.0f));
-    // m_aabb only contains the center of each voxel so add sqrt(2) to add the distance from center to edge
-    sphere.setRadius((glm::length(glm::vec3(m_aabb.rub() - m_aabb.llf())) + glm::root_two<float>()) / 2.f * transform.scale());
-    return sphere;
-}
-
 void CollisionDetector::addVoxel(Voxel* voxel) {
-    if(m_worldObject.voxelCount() == 0) {
-        m_aabb = IAABB(voxel->gridCell(), voxel->gridCell());
-    }
-    else {
-        m_aabb.extend(voxel->gridCell());
-    }
     m_voxelTree.insert(voxel);
-    updateGeode();
 }
 
 void CollisionDetector::removeVoxel(Voxel* voxel) {
@@ -53,16 +29,7 @@ void CollisionDetector::removeVoxel(Voxel* voxel) {
     assert(voxel->voxelTreeNode()->voxel() == voxel);
     assert(voxel->voxelTreeNode()->isAtomic());
 
-    glm::ivec3 gridCell = voxel->gridCell();
-
-    voxel->voxelTreeNode()->remove(gridCell);
-
-    if(gridCell.x == m_aabb.llf().x) {
-        shrinkPlus(m_aabb.llf().x, m_aabb.rub().x, m_aabb.llf());
-    }
-    if(gridCell.x == m_aabb.rub().x) {
-        shrinkMinus(m_aabb.rub().x, m_aabb.llf().x, m_aabb.rub());
-    }
+    voxel->voxelTreeNode()->remove(voxel->gridCell());
 }
 
 VoxelTreeNode &CollisionDetector::voxeltree() {
@@ -175,50 +142,9 @@ void CollisionDetector::reset() {
 
 void CollisionDetector::rebuildVoxelTree() {
     m_voxelTree = VoxelTreeNode(&m_worldObject);
-    m_aabb = IAABB();
-    for (auto& pair: m_worldObject.voxelMap())
-    {
+    for (auto& pair: m_worldObject.voxelMap()) {
         Voxel* voxel = pair.second;
         addVoxel(voxel);
-    }
-}
-
-void CollisionDetector::shrinkPlus(int start, int end, const glm::ivec3& plane) {
-    for(int x = start; x <= end; x++) {
-        for(int z = m_aabb.llf().z; z <= m_aabb.rub().z; z++) {
-            for(int y = m_aabb.llf().y; y <= m_aabb.rub().y; y++) {
-                if(m_worldObject.voxel(glm::ivec3(x,y,z)) != nullptr) {
-                    std::cout << "+voxel at " << x << " " << y << " " << z << std::endl;
-                    return;
-                }
-                else {
-                    std::cout << "+no voxel at " << x << " " << y << " " << z << std::endl;
-                }
-            }
-        }
-        std::cout << "+Found nothing on plane " << x << std::endl;
-        if(m_aabb.rub().x > m_aabb.llf().x) {
-            m_aabb.setLlf(plane + glm::ivec3(1, 0, 0));
-        }
-    }
-}
-
-void CollisionDetector::shrinkMinus(int start, int end, const glm::ivec3& plane) {
-    for(int x = start; x > end; x--) {
-        for(int z = m_aabb.llf().z; z <= m_aabb.rub().z; z++) {
-            for(int y = m_aabb.llf().y; y <= m_aabb.rub().y; y++) {
-                if(m_worldObject.voxel(glm::ivec3(x,y,z)) != nullptr) {
-                    return;
-                }
-                else {
-                    std::cout << "no voxel at " << x << " " << y << " " << z << std::endl;
-                }
-            }
-        }
-        std::cout << "Found nothing on plane " << x << std::endl;
-        if(m_aabb.rub().x > m_aabb.llf().x) {
-            m_aabb.setRub(plane + glm::ivec3(-1, 0, 0));
-        }
     }
 }
 

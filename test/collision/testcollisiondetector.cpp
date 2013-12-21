@@ -71,26 +71,26 @@ go_bandit([](){
         it("aabb shrinkLeft", [&]() {
             a->addVoxel(new Voxel(glm::ivec3(0, 0, 0)));
             a->addVoxel(new Voxel(glm::ivec3(1, 0, 0)));
-            AssertThat(d->gridAABB(), Equals(IAABB(glm::ivec3(0,0,0), glm::ivec3(1,0,0))));
+            AssertThat(a->gridAABB(), Equals(IAABB(glm::ivec3(0,0,0), glm::ivec3(1,0,0))));
 
             a->removeVoxel(a->voxel(glm::ivec3(0, 0, 0)));
-            AssertThat(d->gridAABB(), Equals(IAABB(glm::ivec3(1,0,0), glm::ivec3(1,0,0))));
+            AssertThat(a->gridAABB(), Equals(IAABB(glm::ivec3(1,0,0), glm::ivec3(1,0,0))));
 
             a->removeVoxel(a->voxel(glm::ivec3(1, 0, 0)));
-            AssertThat(d->gridAABB(), Equals(IAABB(glm::ivec3(1,0,0), glm::ivec3(1,0,0))));
+            AssertThat(a->gridAABB(), Equals(IAABB(glm::ivec3(0,0,0), glm::ivec3(0,0,0))));
 
         });
 
         it("aabb resize on voxel add/remove", [&]() {
-            AssertThat(d->gridAABB(), Equals(IAABB(glm::ivec3(0,0,0), glm::ivec3(0,0,0))));
+            AssertThat(a->gridAABB(), Equals(IAABB(glm::ivec3(0,0,0), glm::ivec3(0,0,0))));
 
-            a->addVoxel(new Voxel(glm::ivec3(0, 0, 0))); AssertThat(d->gridAABB(), Equals(IAABB(glm::ivec3(0,0,0), glm::ivec3(0,0,0))));
-            a->addVoxel(new Voxel(glm::ivec3(3, 0, 0))); AssertThat(d->gridAABB(), Equals(IAABB(glm::ivec3(0,0,0), glm::ivec3(3,0,0))));
-            a->addVoxel(new Voxel(glm::ivec3(2, 0, 0))); AssertThat(d->gridAABB(), Equals(IAABB(glm::ivec3(0,0,0), glm::ivec3(3,0,0))));
-            a->addVoxel(new Voxel(glm::ivec3(1, 0, 0))); AssertThat(d->gridAABB(), Equals(IAABB(glm::ivec3(0,0,0), glm::ivec3(3,0,0))));
+            a->addVoxel(new Voxel(glm::ivec3(0, 0, 0))); AssertThat(a->gridAABB(), Equals(IAABB(glm::ivec3(0,0,0), glm::ivec3(0,0,0))));
+            a->addVoxel(new Voxel(glm::ivec3(3, 0, 0))); AssertThat(a->gridAABB(), Equals(IAABB(glm::ivec3(0,0,0), glm::ivec3(3,0,0))));
+            a->addVoxel(new Voxel(glm::ivec3(2, 0, 0))); AssertThat(a->gridAABB(), Equals(IAABB(glm::ivec3(0,0,0), glm::ivec3(3,0,0))));
+            a->addVoxel(new Voxel(glm::ivec3(1, 0, 0))); AssertThat(a->gridAABB(), Equals(IAABB(glm::ivec3(0,0,0), glm::ivec3(3,0,0))));
 
-            a->removeVoxel(a->voxel(glm::ivec3(2, 0, 0))); AssertThat(d->gridAABB(), Equals(IAABB(glm::ivec3(0,0,0), glm::ivec3(3,0,0))));
-            a->removeVoxel(a->voxel(glm::ivec3(3, 0, 0))); AssertThat(d->gridAABB(), Equals(IAABB(glm::ivec3(0,0,0), glm::ivec3(1,0,0))));
+            a->removeVoxel(a->voxel(glm::ivec3(2, 0, 0))); AssertThat(a->gridAABB(), Equals(IAABB(glm::ivec3(0,0,0), glm::ivec3(3,0,0))));
+            a->removeVoxel(a->voxel(glm::ivec3(3, 0, 0))); AssertThat(a->gridAABB(), Equals(IAABB(glm::ivec3(0,0,0), glm::ivec3(1,0,0))));
 
         });
     });

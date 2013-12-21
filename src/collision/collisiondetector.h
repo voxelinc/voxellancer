@@ -1,5 +1,6 @@
 #pragma once
 
+#include <set>
 #include <memory>
 
 #include <glm/glm.hpp>
@@ -22,11 +23,6 @@ public:
 
     void addVoxel(Voxel *voxel);
     void removeVoxel(Voxel *voxel);
-
-    AABB aabb(const WorldTransform& transform) const;
-    const IAABB &gridAABB() const;
-
-    Sphere sphere(const WorldTransform& transform) const;
 
     std::list<VoxelCollision> &checkCollisions();
     std::list<VoxelCollision> &lastCollisions();
@@ -53,11 +49,7 @@ protected:
     WorldTreeGeode* m_geode;
     WorldTree* m_worldTree;
     std::list<VoxelCollision> m_collisions;
-    IAABB m_aabb;
 
     void checkCollisions(VoxelTreeNode* nodeA, VoxelTreeNode* nodeB);
-
-    void shrinkPlus(int start, int end, const glm::ivec3& plane);
-    void shrinkMinus(int start, int end, const glm::ivec3& plane);
 };
 

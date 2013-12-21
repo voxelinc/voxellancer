@@ -61,6 +61,6 @@ protected:
     glm::vec3 m_accumulatedMassVec;
     float m_massScaleFactor;
 
-    void alterCell(Voxel* voxel, bool isAdd)
+    void alterCell(Voxel* voxel, bool isAdd);
 };
 

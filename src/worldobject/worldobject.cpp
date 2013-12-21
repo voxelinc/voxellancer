@@ -1,5 +1,7 @@
 #include "worldobject.h"
 
+#include <glow/AutoTimer.h>
+
 #include "utils/tostring.h"
 #include "voxel/specialvoxels/enginevoxel.h"
 #include "voxel/specialvoxels/hardpointvoxel.h"
@@ -53,14 +55,6 @@ ObjectInfo& WorldObject::objectInfo(){
     return m_objectInfo;
 }
 
-AABB WorldObject::aabb() {
-    return m_collisionDetector->aabb(m_transform);
-}
-
-Sphere WorldObject::sphere() {
-    return m_collisionDetector->sphere(m_transform);
-}
-
 void WorldObject::update(float deltaSec) {
 
 }
@@ -71,8 +65,10 @@ std::list<VoxelCollision>& WorldObject::performMovement(float deltaSec) {
 
 void WorldObject::addVoxel(Voxel* voxel) {
     VoxelCluster::addVoxel(voxel);
+
     m_physics->addVoxel(voxel);
     m_collisionDetector->addVoxel(voxel);
+    m_collisionDetector->updateGeode();
 }
 
 void WorldObject::removeVoxel(Voxel* voxel) {
