@@ -86,6 +86,8 @@ void WorldObject::removeVoxel(Voxel* voxel) {
         m_crucialVoxel = nullptr;
     }
     VoxelCluster::removeVoxel(voxel);
+
+    m_transform.setCenterAndAdjustPosition(m_physics->physicalCenter());
 }
 
 void WorldObject::addEngineVoxel(EngineVoxel* voxel){

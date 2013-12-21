@@ -35,7 +35,7 @@ public:
 
     const Grid3dAABB &gridAABB() const;
 
-    Sphere boundingSphere();
+    Sphere& boundingSphere();
 
     void insert(Voxel *physicalVoxel);
     void remove(const glm::ivec3 &cell);
@@ -52,9 +52,12 @@ protected:
 
     Sphere m_boundingSphere;
     bool m_boundingSphereRadiusValid;
+    WorldTransform m_boundingSphereTransform;
 
     void split();
     void unsplit();
     void octuple();
+    void calculateBoundingSpherePosition();
+    void calculateBoundingSphereRadius();
 };
 

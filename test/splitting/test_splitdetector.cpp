@@ -54,6 +54,7 @@ go_bandit([]() {
         it("detects no split correctly", [&]() {
             WorldObjectModification modification(w);
 
+
             modification.removedVoxel(voxels[0]->gridCell());
             w->removeVoxel(voxels[0]);
 
@@ -66,6 +67,7 @@ go_bandit([]() {
         it("detects one split correctly", [&]() {
             WorldObjectModification modification(w);
 
+
             modification.removedVoxel(voxels[2]->gridCell());
             w->removeVoxel(voxels[2]);
 
@@ -73,9 +75,10 @@ go_bandit([]() {
 
             AssertThat(detector.splitDataList().size(), Equals(1));
 
+
             // check if the split is the upper part of the voxel without the crucial voxel
             SplitData* splitOff = detector.splitDataList().front();
-            
+
             AssertThat(splitOff->splitOffVoxels().size(), Equals(6));
 
 
@@ -86,6 +89,7 @@ go_bandit([]() {
 
         it("works with destroyed crucial voxels", [&]() {
             WorldObjectModification modification(w);
+
 
             modification.removedVoxel(voxels[1]->gridCell());
             w->removeVoxel(voxels[1]);
@@ -99,6 +103,7 @@ go_bandit([]() {
         it("works with multiple splittoffs", [&]() {
             WorldObjectModification modification(w);
 
+
             modification.removedVoxel(voxels[3]->gridCell());
             w->removeVoxel(voxels[3]);
 
@@ -110,6 +115,7 @@ go_bandit([]() {
 
         it("works with multiple removed voxelss", [&]() {
             WorldObjectModification modification(w);
+
 
             modification.removedVoxel(voxels[3]->gridCell());
             w->removeVoxel(voxels[3]);
