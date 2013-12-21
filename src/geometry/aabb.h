@@ -6,7 +6,7 @@
 #include "axis.h"
 
 class Sphere;
-
+class WorldTransform;
 
 template<typename T>
 class TAABB
@@ -51,6 +51,9 @@ public:
     void extend(const glm::detail::tvec3<T> & point);
 
     static TAABB<float> containing(const Sphere &sphere);
+
+    void apply(const WorldTransform& transform);
+    void inverseApply(const WorldTransform& transform);
 
 
 protected:
