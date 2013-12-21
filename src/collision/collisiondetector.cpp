@@ -74,6 +74,16 @@ VoxelTreeNode &CollisionDetector::voxeltree() {
     return m_voxelTree;
 }
 
+std::set<Voxel*> CollisionDetector::voxelsIntersectingSphere(const Sphere& sphere) const {
+    WorldTransform transform = m_worldObject.transform();
+
+    Sphere localSphere;
+    localSphere.setPosition(transform.inverseApplyTo(sphere.position()));
+    localSphere.setRadius(transform.scale() * sphere.radius());
+
+    return m_voxelTree.voxelsIntersectingSphere(localSphere);
+}
+
 const VoxelTreeNode &CollisionDetector::voxeltree() const {
     return m_voxelTree;
 }

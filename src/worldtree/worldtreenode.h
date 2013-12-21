@@ -6,6 +6,9 @@
 #include "worldtreegeode.h"
 #include "../geometry/aabb.h"
 
+
+class Voxel;
+
 /*!
     remove() doesn't unsplit. This could happen recursive upwards the tree,
     which is unclean since subnodes would have to order their parents to delete them.
@@ -39,6 +42,8 @@ public:
 
     std::set<WorldTreeGeode*> geodesInAABB(const AABB &aabb, WorldObject* collideableWith = nullptr) const;
     bool areGeodesInAABB(const AABB &aabb, WorldObject* collideableWith = nullptr) const;
+
+    std::set<Voxel*> voxelsIntersectingSphere(const Sphere& sphere) const;
 
     void aabbChanged(WorldTreeGeode *geode);
 

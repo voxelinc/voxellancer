@@ -1,5 +1,6 @@
 #pragma once
 
+#include <set>
 #include <vector>
 
 #include <glm/glm.hpp>
@@ -36,6 +37,8 @@ public:
     const Grid3dAABB &gridAABB() const;
 
     Sphere boundingSphere();
+
+    std::set<Voxel*> voxelsIntersectingSphere(const Sphere& sphere) const;
 
     void insert(Voxel *physicalVoxel);
     void remove(const glm::ivec3 &cell);

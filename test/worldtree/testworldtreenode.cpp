@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "../bandit_extension/vec3helper.h"
+#include "worldtree/worldtree.h"
 #include "worldtree/worldtreenode.h"
 #include "worldobject/worldobject.h"
 
@@ -116,6 +117,34 @@ go_bandit([]() {
             AssertThat(q3.find(a) == q3.end(), Equals(true));
 
             delete e1, e2, a;
+        });
+
+        it("can be queried for voxels in sphere", [&]() {
+            WorldTree worldTree;
+            WorldObject a;
+            WorldObject b;
+
+            a.addVoxel(new Voxel(glm::ivec3(0,0,0)));
+            a.addVoxel(new Voxel(glm::ivec3(1,0,0)));
+            a.setPosition(glm::vec3(2.5, 0, 0));
+            worldTree.insert(&a);
+
+            b.setPosition(glm::vec3(0,3,0));
+            b.addVoxel(new Voxel(glm::ivec3(0,0,0)));
+            worldTree.insert(&b);
+
+            Sphere s1, s2, s3;
+
+            s1.setRadius(1);
+            s2.setRadius(2);
+            s3.setRadius(3);
+
+            AssertThat(worldTree.voxelsIntersectingSphere(s1).size(), Equals(0));
+            AssertThat(worldTree.voxelsIntersectingSphere(s2).size(), Equals(1));
+            AssertThat(worldTree.voxelsIntersectingSphere(s3).size(), Equals(3));
+
+            Sphere s4(glm::vec3(1, 1.5, 0), 1.5);
+            AssertThat(worldTree.voxelsIntersectingSphere(s4).size(), Equals(2));
         });
     });
 });

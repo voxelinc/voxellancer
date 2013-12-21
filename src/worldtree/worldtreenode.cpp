@@ -4,9 +4,9 @@
 #include <algorithm>
 #include <iostream>
 
-#include "worldobject/worldobject.h"
-
 #include "utils/tostring.h"
+#include "voxel/voxel.h"
+#include "worldobject/worldobject.h"
 
 
 WorldTreeNode::WorldTreeNode(int level, WorldTreeNode *parent, const AABB &aabb):
@@ -154,6 +154,29 @@ bool WorldTreeNode::areGeodesInAABB(const AABB& aabb, WorldObject* collideableWi
     }
 
     return false;
+}
+
+std::set<Voxel*> WorldTreeNode::voxelsIntersectingSphere(const Sphere& sphere) const {
+    std::set<Voxel*> result;
+
+    if(isLeaf()) {
+        for(WorldTreeGeode* geode : m_geodes) {
+            assert(geode->worldObject() != nullptr);
+
+            std::set<Voxel*> subresult = geode->worldObject()->voxelsIntersectingSphere(sphere);
+            result.insert(subresult.begin(), subresult.end());
+        }
+    }
+    else {
+        for(WorldTreeNode* subnode : m_subnodes) {
+            if(sphere.intersects(Sphere::containing(subnode->aabb()))) {
+                std::set<Voxel*> subresult = subnode->voxelsIntersectingSphere(sphere);
+                result.insert(subresult.begin(), subresult.end());
+            }
+        }
+    }
+
+    return result;
 }
 
 void WorldTreeNode::aabbChanged(WorldTreeGeode *geode) {

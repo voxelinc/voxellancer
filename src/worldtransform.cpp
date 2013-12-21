@@ -70,6 +70,10 @@ glm::vec3 WorldTransform::applyTo(const glm::vec3 &vertex) const {
     return m_position + (m_orientation * (m_scale * (-m_center + vertex)));
 }
 
+glm::vec3 WorldTransform::inverseApplyTo(const glm::vec3 &vertex) const {
+    return ((glm::inverse(m_orientation) * (vertex - m_position)) / m_scale) + m_center;
+}
+
 float WorldTransform::scale() const {
     return m_scale;
 }
@@ -78,7 +82,7 @@ void WorldTransform::setScale(float scale) {
     m_scale = scale;
 }
 
-const glm::vec3 & WorldTransform::center() const {
+const glm::vec3& WorldTransform::center() const {
     return m_center;
 }
 

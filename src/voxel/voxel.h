@@ -27,6 +27,8 @@ public:
 
     const glm::ivec3 &gridCell() const;
 
+    Sphere normalizedSphere() const;
+
     VoxelTreeNode *voxelTreeNode();
     void setVoxelTreeNode(VoxelTreeNode* voxelTreeNode);
 

@@ -74,7 +74,7 @@ go_bandit([](){
 
         it("can adjust its center", [&]() {
             WorldObject *d = new WorldObject(1.0, glm::vec3(1,1,1));
-            
+
             AssertThat(d->collisionDetector().voxeltree().boundingSphere().position(), EqualsWithDelta(glm::vec3(-1, -1, -1), glm::vec3(0.01, 0.01, 0.01)));
         });
 
@@ -141,7 +141,20 @@ go_bandit([](){
 
             obj->rotate(glm::angleAxis((float)90.0f, glm::vec3(0, 1, 0)));
             AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(0.5, 0, 0), glm::vec3(0.01, 0.01, 0.01)));
+        });
 
+
+        it("can be queried for voxels in sphere", [&]() {
+            VoxelTreeNode root;
+
+            root.insert(new Voxel(glm::ivec3(1, 1, 0)));
+
+            AssertThat(root.voxelsIntersectingSphere(Sphere(glm::vec3(0,0,0), 0.5f)).size(), Equals(0));
+            AssertThat(root.voxelsIntersectingSphere(Sphere(glm::vec3(0,0,0), 1.0f)).size(), Equals(1));
+
+            root.insert(new Voxel(glm::ivec3(2, 2, 0)));
+
+            AssertThat(root.voxelsIntersectingSphere(Sphere(glm::vec3(1.5,1.5,0), 0.5f)).size(), Equals(2));
         });
     });
 });

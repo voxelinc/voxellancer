@@ -3,6 +3,8 @@
 #include <glm/glm.hpp>
 
 
+template<typename T> class TAABB;
+
 class Sphere
 {
 public:
@@ -18,6 +20,8 @@ public:
 
     bool intersects(const Sphere &other) const;
     bool contains(const Sphere &other) const;
+
+    static Sphere containing(const TAABB<float>& aabb);
 
 
 protected:

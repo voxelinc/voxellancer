@@ -17,11 +17,11 @@ class WorldObject;
 class CollisionDetector
 {
 public:
-    CollisionDetector(WorldObject & worldObject);
+    CollisionDetector(WorldObject& worldObject);
     ~CollisionDetector();
 
-    void addVoxel(Voxel *voxel);
-    void removeVoxel(Voxel *voxel);
+    void addVoxel(Voxel* voxel);
+    void removeVoxel(Voxel* voxel);
 
     AABB aabb(const WorldTransform& transform) const;
     void recalculateAABB();
@@ -30,17 +30,21 @@ public:
 
     std::list<VoxelCollision> &checkCollisions();
     std::list<VoxelCollision> &lastCollisions();
+
     void reset();
 
-    WorldTreeGeode *geode();
-    const WorldTreeGeode *geode() const;
-    void setGeode(WorldTreeGeode *geode);
+    WorldTreeGeode* geode();
+    const WorldTreeGeode* geode() const;
+    void setGeode(WorldTreeGeode* geode);
+
     void setWorldTree(WorldTree* worldTree);
     WorldTree* worldTree();
     const WorldTree* worldTree() const;
 
-    VoxelTreeNode &voxeltree();
-    const VoxelTreeNode &voxeltree() const;
+    VoxelTreeNode& voxeltree();
+    const VoxelTreeNode& voxeltree() const;
+
+    std::set<Voxel*> voxelsIntersectingSphere(const Sphere& sphere) const ;
 
     void updateGeode();
 
@@ -51,8 +55,8 @@ public:
 protected:
     WorldObject& m_worldObject;
     VoxelTreeNode m_voxelTree;
-    WorldTreeGeode *m_geode;
-    WorldTree *m_worldTree;
+    WorldTreeGeode* m_geode;
+    WorldTree* m_worldTree;
     std::list<VoxelCollision> m_collisions;
     IAABB m_aabb;
 

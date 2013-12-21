@@ -31,6 +31,16 @@ Voxel::Voxel(const Voxel& other):
 Voxel::~Voxel() {
 }
 
+const glm::ivec3& Voxel::gridCell() const {
+    return m_gridCell;
+}
+
+Sphere Voxel::normalizedSphere() const {
+    Sphere result;
+    result.setPosition(static_cast<glm::vec3>(m_gridCell));
+    result.setRadius(0.5);
+    return result;
+}
 
 void Voxel::addToCluster(VoxelCluster *cluster) {
     cluster->addVoxel(this);
@@ -38,10 +48,6 @@ void Voxel::addToCluster(VoxelCluster *cluster) {
 
 void Voxel::addToObject(WorldObject *object) {
     object->addVoxel(this);
-}
-
-const glm::ivec3 &Voxel::gridCell() const {
-    return m_gridCell;
 }
 
 VoxelTreeNode *Voxel::voxelTreeNode() {

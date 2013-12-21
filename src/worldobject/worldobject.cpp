@@ -123,6 +123,10 @@ void WorldObject::updateTransformAndGeode(const glm::vec3& position, const glm::
     m_collisionDetector->updateGeode();
 }
 
+std::set<Voxel*> WorldObject::voxelsIntersectingSphere(const Sphere& sphere) const {
+    return m_collisionDetector->voxelsIntersectingSphere(sphere);
+}
+
 Voxel *WorldObject::crucialVoxel() {
     return m_crucialVoxel;
 }

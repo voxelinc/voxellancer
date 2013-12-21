@@ -36,7 +36,9 @@ public:
     bool operator!=(const WorldTransform &other);
 
 	const glm::mat4 matrix() const;
+
     glm::vec3 applyTo(const glm::vec3 &vertex) const;
+    glm::vec3 inverseApplyTo(const glm::vec3 &vertex) const;
 
 
 

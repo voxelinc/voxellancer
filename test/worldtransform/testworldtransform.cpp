@@ -13,7 +13,7 @@ using namespace bandit;
 
 go_bandit([](){
     describe("WorldTransform", [](){
-        
+
         before_each([&]() {
 
         });
@@ -65,8 +65,8 @@ go_bandit([](){
 
         it("applyTo(vec3) equals matrix()*vec3", [&]() {
             glm::vec3 vtest(1.0, 2.0, 3.0);
-            WorldTransform w(glm::vec3(0), 2.0);            
-            
+            WorldTransform w(glm::vec3(0), 2.0);
+
             AssertThat(w.applyTo(vtest), EqualsWithDelta(glm::vec3(w.matrix() * glm::vec4(vtest, 1.0)), glm::vec3(0.01)));
 
             w.setPosition(glm::vec3(1, 2, 0));
@@ -74,7 +74,7 @@ go_bandit([](){
 
             w.setOrientation(glm::angleAxis(20.f, glm::vec3(6.0, 3.0, 1.0)));
             AssertThat(w.applyTo(vtest), EqualsWithDelta(glm::vec3(w.matrix() * glm::vec4(vtest, 1.0)), glm::vec3(0.01)));
-            
+
             w.setCenter(glm::vec3(6, 7, 0));
             AssertThat(w.applyTo(vtest), EqualsWithDelta(glm::vec3(w.matrix() * glm::vec4(vtest, 1.0)), glm::vec3(0.01)));
 
@@ -90,14 +90,28 @@ go_bandit([](){
             glm::quat orientation = glm::angleAxis(123.f, glm::vec3(1, 3, 5));
             w1.setOrientation(orientation);
             WorldTransform w2(w1);
-            
+
             w2.setCenterAndAdjustPosition(w1.center() - vdiff);
 
             AssertThat(w1.applyTo(vtest), EqualsWithDelta(w2.applyTo(vtest), glm::vec3(0.01)));
-
-
         });
 
+
+        it("supports inverseApplyTo", [&]() {
+            WorldTransform t;
+
+            t.setPosition(glm::vec3(12, -5, 3));
+            t.setOrientation(glm::angleAxis(56.0f, glm::normalize(glm::vec3(2, 6, -3))));
+            t.setScale(2.5f);
+            t.setCenter(glm::vec3(1, 0, 0));
+
+            glm::vec3 origVec(-13.4, 90, 5);
+
+            glm::vec3 appliedVec = t.applyTo(origVec);
+            glm::vec3 inverseAppliedVec = t.inverseApplyTo(appliedVec);
+
+            AssertThat(origVec, EqualsWithDelta(inverseAppliedVec, glm::vec3(0.1, 0.1, 0.1)));
+        });
     });
 });
 
