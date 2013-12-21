@@ -3,6 +3,8 @@
 #include <cassert>
 #include <algorithm>
 
+#include "worldtransform.h"
+
 #include "sphere.h"
 
 
