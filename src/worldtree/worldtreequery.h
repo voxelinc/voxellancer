@@ -30,6 +30,8 @@ protected:
     WorldTreeNode* m_nodeHint;
     WorldObject* m_collideableWith;
     Shape m_shape;
+
+    template<typename T, T (*queryFunc)(WorldTreeNode*)> QueryResult query();
 };
 
 

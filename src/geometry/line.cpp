@@ -1,5 +1,7 @@
 #include "line.h"
 
+#include "worldtransform.h"
+
 #include "sphere.h"
 #include "ray.h"
 
@@ -23,7 +25,7 @@ void Line::setA(const glm::vec3& a) {
 }
 
 const glm::vec3& Line::b() const {
-    return m_b
+    return m_b;
 }
 
 void Line::setB(const glm::vec3& b) {

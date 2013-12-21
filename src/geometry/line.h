@@ -4,6 +4,7 @@
 
 
 class Sphere;
+class WorldTransform;
 
 class Line {
 public:
@@ -18,8 +19,8 @@ public:
 
     bool intersects(const Sphere& sphere);
 
-    TAABB<T> applied(const WorldTransform& transform) const;
-    TAABB<T> inverseApplied(const WorldTransform& transform) const;
+    Line applied(const WorldTransform& transform) const;
+    Line inverseApplied(const WorldTransform& transform) const;
 
 
 protected:

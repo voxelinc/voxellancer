@@ -2,6 +2,8 @@
 
 #include <cmath>
 
+#include "worldtransform.h"
+
 #include "sphere.h"
 
 

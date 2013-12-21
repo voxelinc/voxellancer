@@ -30,22 +30,7 @@ void WorldTreeQuery<Shape>::setCollidableWith(WorldObject* worldObject) {
 
 template<typename Shape>
 bool WorldTreeQuery<Shape>::areGeodesIntersecting() const {
-    if (m_nodeHint == nullptr) {
-        return areGeodesIntersecting(m_worldTree);
-    }
-    else {
-        if (m_nodeHint->aabb().contains(m_shape)) {
-            return areGeodesIntersecting(m_nodeHint);
-        }Ŕ
-        else if(m_nodeHint->parent() != nullptr) {
-            m_nodeHint = m_nodeHint->parent()
-            return areGeodesIntersecting();
-        }
-        else {
-            assert(m_worldTree == m_nodeHint);
-            return areGeodesIntersecting(m_worldTree);
-        }
-    }
+
 }
 
 template<typename Shape>
@@ -73,3 +58,23 @@ std::set<Voxel*> WorldTreeQuery<Shape>::intersectingVoxels() const {
 
 }
 
+template<typename Shape>
+template<typename QueryResult, QueryResult (*queryFunc)(WorldTreeNode*)>
+QueryResult WorldTreeQuery<Shape>::query() {
+    if (m_nodeHint == nullptr) {
+        return queryFunc(m_worldTree);
+    }
+    else {
+        if (m_nodeHint->aabb().contains(m_shape)) {
+            return queryFunc(m_nodeHint);
+        }
+        else if(m_nodeHint->parent() != nullptr) {
+            m_nodeHint = m_nodeHint->parent()
+            return query<QueryResult, queryFunc>();
+        }
+        else {
+            assert(m_worldTree == m_nodeHint);
+            return queryFunc(m_worldTree);
+        }
+    }
+}

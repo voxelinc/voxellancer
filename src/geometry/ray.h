@@ -4,6 +4,7 @@
 
 
 class Sphere;
+class WorldTransform;
 
 class Ray {
 public:

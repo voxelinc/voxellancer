@@ -4,6 +4,7 @@
 
 
 template<typename T> class TAABB;
+class WorldTransform;
 
 class Sphere
 {
