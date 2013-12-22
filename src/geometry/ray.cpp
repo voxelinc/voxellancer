@@ -1,8 +1,11 @@
 #include "ray.h"
 
 #include <cmath>
+#include <iostream>
 
 #include "worldtransform.h"
+
+#include "utils/tostring.h"
 
 #include "sphere.h"
 
@@ -28,7 +31,7 @@ const glm::vec3& Ray::direction() const {
 
 void Ray::setDirection(const glm::vec3& direction) {
     assert(glm::length(direction) != 0);
-    m_direction;
+    m_direction = direction;
 }
 
 bool Ray::intersects(const Sphere& sphere) const {
@@ -45,10 +48,10 @@ bool Ray::intersects(const Sphere& sphere) const {
 }
 
 Ray Ray::applied(const WorldTransform& transform) const {
-    return Ray(transform.applyTo(m_origin), transform.applyTo(m_direction));
+    return Ray(transform.applyTo(m_origin), transform.orientation() * m_direction);
 }
 
 Ray Ray::inverseApplied(const WorldTransform& transform) const {
-    return Ray(transform.inverseApplyTo(m_origin), transform.inverseApplyTo(m_direction));
+    return Ray(transform.inverseApplyTo(m_origin), glm::inverse(transform.orientation()) * m_direction);
 }
 

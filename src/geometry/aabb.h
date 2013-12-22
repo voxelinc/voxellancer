@@ -5,6 +5,8 @@
 
 #include "axis.h"
 
+class Ray;
+class Line;
 class Sphere;
 class WorldTransform;
 
@@ -38,9 +40,13 @@ public:
     TAABB<T> expanded(Axis axis, T delta) const;
 
     bool intersects(const TAABB<T> &other) const;
+
     bool contains(const TAABB<T> &other) const;
     bool contains(const glm::detail::tvec3<T> &vec) const;
     bool contains(const Sphere& sphere) const;
+    bool contains(const Ray& ray) const;
+    bool contains(const Line& line) const;
+
     bool nearTo(const TAABB<T>& other) const;
 
     TAABB<T> united(const TAABB<T> &other) const ;

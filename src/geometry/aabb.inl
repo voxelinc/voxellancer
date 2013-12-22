@@ -6,6 +6,8 @@
 #include "worldtransform.h"
 
 #include "sphere.h"
+#include "line.h"
+#include "ray.h"
 
 
 template<typename T>
@@ -173,6 +175,16 @@ bool TAABB<T>::contains(const Sphere& sphere) const {
         sphere.position().x + sphere.radius() <= m_rub.x &&
         sphere.position().y + sphere.radius() <= m_rub.y &&
         sphere.position().z + sphere.radius() <= m_rub.z;
+}
+
+template<typename T>
+bool TAABB<T>::contains(const Ray& ray) const {
+    return false;
+}
+
+template<typename T>
+bool TAABB<T>::contains(const Line& line) const {
+    return contains(line.a()) && contains(line.b());
 }
 
 template<typename T>

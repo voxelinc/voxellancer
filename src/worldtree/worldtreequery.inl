@@ -8,7 +8,7 @@
 #include <worldtree/worldtreegeode.h>
 #include <worldobject/worldobject.h>
 
-#include "voxeltreequery.h"
+#include "voxel/voxeltreequery.h"
 
 
 template<typename Shape>

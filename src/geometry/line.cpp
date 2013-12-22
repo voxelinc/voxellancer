@@ -1,6 +1,10 @@
 #include "line.h"
 
+#include <iostream>
+
 #include "worldtransform.h"
+
+#include "utils/tostring.h"
 
 #include "sphere.h"
 #include "ray.h"

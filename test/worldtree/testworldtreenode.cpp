@@ -7,6 +7,7 @@
 #include "worldtree/worldtreenode.h"
 #include "worldtree/worldtreequery.h"
 #include "worldobject/worldobject.h"
+#include "geometry/line.h"
 
 
 using namespace bandit;
@@ -150,6 +151,62 @@ go_bandit([]() {
 
             Sphere s4(glm::vec3(1, 1.5, 0), 1.5);
             AssertThat(WorldTreeQuery<Sphere>(&worldTree, s4).intersectingVoxels().size(), Equals(2));
+        });
+
+        it("can be queried for voxels in ray", [&]() {
+            WorldTree worldTree;
+            WorldObject a;
+
+            a.addVoxel(new Voxel(glm::ivec3(0,0,0)));
+            a.setPosition(glm::vec3(1.5, 1.5, 0));
+            worldTree.insert(&a);
+
+            Ray r1(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 0.0f));
+            Ray r2(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(4.0f, 1.0f, 0.0f));
+
+            AssertThat(WorldTreeQuery<Ray>(&worldTree, r1).intersectingVoxels().size(), Equals(1));
+            AssertThat(WorldTreeQuery<Ray>(&worldTree, r1).areVoxelsIntersecting(), Equals(true));
+            AssertThat(WorldTreeQuery<Ray>(&worldTree, r2).intersectingVoxels().size(), Equals(0));
+            AssertThat(WorldTreeQuery<Ray>(&worldTree, r2).areVoxelsIntersecting(), Equals(false));
+
+            WorldObject b;
+
+            b.addVoxel(new Voxel(glm::ivec3(0,0,0)));
+            b.addVoxel(new Voxel(glm::ivec3(1,0,0)));
+            b.setPosition(glm::vec3(3.0f, 3.0f, 0));
+            worldTree.insert(&b);
+
+            Ray r3(glm::vec3(3.0f, 5.0f, 0.0f), glm::vec3(-1.0f, -2.0f, 0.0f));
+            AssertThat(WorldTreeQuery<Ray>(&worldTree, r3).intersectingVoxels().size(), Equals(2));
+            AssertThat(WorldTreeQuery<Ray>(&worldTree, r1).areVoxelsIntersecting(), Equals(true));
+        });
+
+        it("can be queried for voxels on line", [&]() {
+            WorldTree worldTree;
+            WorldObject a;
+
+            a.addVoxel(new Voxel(glm::ivec3(0,0,0)));
+            a.setPosition(glm::vec3(1.5, 1.5, 0));
+            worldTree.insert(&a);
+
+            Line l1(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.3f, 1.3f, 0.0f));
+            Line l2(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(4.0f, 1.0f, 0.0f));
+
+            AssertThat(WorldTreeQuery<Line>(&worldTree, l1).intersectingVoxels().size(), Equals(1));
+            AssertThat(WorldTreeQuery<Line>(&worldTree, l2).intersectingVoxels().size(), Equals(0));
+
+            WorldObject b;
+
+            b.addVoxel(new Voxel(glm::ivec3(0,0,0)));
+            b.addVoxel(new Voxel(glm::ivec3(1,0,0)));
+            b.setPosition(glm::vec3(3.0f, 3.0f, 0));
+            worldTree.insert(&b);
+
+            Line l3(glm::vec3(3.0f, 5.0f, 0.0f), glm::vec3(-1.0f, -2.0f, 0.0f));
+            AssertThat(WorldTreeQuery<Line>(&worldTree, l3).intersectingVoxels().size(), Equals(1));
+
+            Line l4(glm::vec3(3.0f, 5.0f, 0.0f), glm::vec3(-10.0f, -20.0f, 0.0f));
+            AssertThat(WorldTreeQuery<Line>(&worldTree, l4).intersectingVoxels().size(), Equals(2));
         });
     });
 });

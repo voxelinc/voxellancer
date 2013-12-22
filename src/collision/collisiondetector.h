@@ -7,7 +7,7 @@
 #include <glm/glm.hpp>
 
 #include "voxel/voxel.h"
-#include "collision/voxeltreenode.h"
+#include "voxel/voxeltreenode.h"
 #include "collision/voxelcollision.h"
 #include "geometry/sphere.h"
 
