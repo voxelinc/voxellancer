@@ -37,13 +37,6 @@ const glm::ivec3& Voxel::gridCell() const {
     return m_gridCell;
 }
 
-Sphere Voxel::normalizedSphere() const {
-    Sphere result;
-    result.setPosition(static_cast<glm::vec3>(m_gridCell));
-    result.setRadius(0.5);
-    return result;
-}
-
 void Voxel::addToCluster(VoxelCluster *cluster) {
     cluster->addVoxel(this);
 }
