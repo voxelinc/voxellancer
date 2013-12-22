@@ -166,8 +166,10 @@ go_bandit([]() {
 
             AssertThat(WorldTreeQuery<Ray>(&worldTree, r1).intersectingVoxels().size(), Equals(1));
             AssertThat(WorldTreeQuery<Ray>(&worldTree, r1).areVoxelsIntersecting(), Equals(true));
+            AssertThat(WorldTreeQuery<Ray>(&worldTree, r1).intersectingWorldObjects().size(), Equals(1));
             AssertThat(WorldTreeQuery<Ray>(&worldTree, r2).intersectingVoxels().size(), Equals(0));
             AssertThat(WorldTreeQuery<Ray>(&worldTree, r2).areVoxelsIntersecting(), Equals(false));
+            AssertThat(WorldTreeQuery<Ray>(&worldTree, r2).intersectingWorldObjects().size(), Equals(0));
 
             WorldObject b;
 
@@ -178,7 +180,8 @@ go_bandit([]() {
 
             Ray r3(glm::vec3(3.0f, 5.0f, 0.0f), glm::vec3(-1.0f, -2.0f, 0.0f));
             AssertThat(WorldTreeQuery<Ray>(&worldTree, r3).intersectingVoxels().size(), Equals(2));
-            AssertThat(WorldTreeQuery<Ray>(&worldTree, r1).areVoxelsIntersecting(), Equals(true));
+            AssertThat(WorldTreeQuery<Ray>(&worldTree, r3).areVoxelsIntersecting(), Equals(true));
+            AssertThat(WorldTreeQuery<Ray>(&worldTree, r3).intersectingWorldObjects().size(), Equals(2));
         });
 
         it("can be queried for voxels on line", [&]() {
@@ -207,6 +210,7 @@ go_bandit([]() {
 
             Line l4(glm::vec3(3.0f, 5.0f, 0.0f), glm::vec3(-10.0f, -20.0f, 0.0f));
             AssertThat(WorldTreeQuery<Line>(&worldTree, l4).intersectingVoxels().size(), Equals(2));
+            AssertThat(WorldTreeQuery<Line>(&worldTree, l4).intersectingWorldObjects().size(), Equals(2));
         });
     });
 });

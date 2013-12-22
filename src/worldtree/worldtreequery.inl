@@ -87,7 +87,9 @@ std::set<WorldObject*> WorldTreeQuery<Shape>::intersectingWorldObjects() {
         VoxelTreeQuery<Shape> voxelTreeQuery(&geode->worldObject()->collisionDetector().voxeltree(), m_shape);
 
         bool hasIntersectingVoxels = voxelTreeQuery.areVoxelsIntersecting();
-        result.insert(geode->worldObject());
+        if(hasIntersectingVoxels) {
+            result.insert(geode->worldObject());
+        }
     });
 
     return result;
