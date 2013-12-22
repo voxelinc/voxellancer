@@ -1,5 +1,6 @@
 #pragma once
 
+#include <set>
 #include <memory>
 #include <unordered_map>
 
@@ -26,11 +27,6 @@ public:
     void addVoxel(Voxel *voxel);
     void removeVoxel(Voxel *voxel);
 
-    AABB aabb(const WorldTransform& transform) const;
-    void recalculateAABB();
-
-    Sphere sphere(const WorldTransform& transform) const;
-
     std::list<VoxelCollision> &checkCollisions();
     std::list<VoxelCollision> &lastCollisions();
     void reset();
@@ -48,16 +44,14 @@ public:
     void updateGeode();
 
     void rebuildVoxelTree();
-    void finishInitialization();
 
 
 protected:
     WorldObject& m_worldObject;
     VoxelTreeNode m_voxelTree;
-    WorldTreeGeode *m_geode;
-    WorldTree *m_worldTree;
+    WorldTreeGeode* m_geode;
+    WorldTree* m_worldTree;
     std::list<VoxelCollision> m_collisions;
-    IAABB m_aabb;
 
     void checkCollisions(VoxelTreeNode* nodeA, VoxelTreeNode* nodeB);
     const Sphere& getOrCreateSphere(VoxelTreeNode* node);

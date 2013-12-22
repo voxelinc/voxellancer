@@ -27,11 +27,9 @@ Rocket::Rocket(glm::vec3 position, glm::quat orientation, const glm::vec3& initi
     m_objectInfo.setName("Rocket");
     m_objectInfo.setShowOnHud(false);
     m_objectInfo.setCanLockOn(false);
-
-    finishInitialization();
 }
 
-void Rocket::update(float delta_sec){
+void Rocket::update(float deltaSec){
     // orient towards target
     if (m_target){
         glm::vec3 dir = glm::inverse(m_transform.orientation()) * glm::normalize(m_target->transform().position() - m_transform.position());
@@ -61,7 +59,7 @@ void Rocket::update(float delta_sec){
         m_physics->accelerate(glm::vec3(0, 0, -missingSpeed));
     }
 
-    m_lifetime -= delta_sec;
+    m_lifetime -= deltaSec;
     if (m_lifetime < 0)
         World::instance()->god().scheduleRemoval(this);
 }

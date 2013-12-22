@@ -14,7 +14,7 @@ public:
     void applyAcceleration();
     void setFollowCam();
     Ship* playerShip();
-    void setShipToCam(float delta_sec);
+    void setShipToCam(float deltaSec);
     void boost();
 
 

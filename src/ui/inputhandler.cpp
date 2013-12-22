@@ -78,7 +78,7 @@ void InputHandler::keyCallback(int key, int scancode, int action, int mods){
     }
 }
 
-void InputHandler::update(float delta_sec) {
+void InputHandler::update(float deltaSec) {
 	/* Check here for every-frame events, e.g. view & movement controls */
     if (glfwGetWindowAttrib(m_window, GLFW_FOCUSED)){
         if (m_lastfocus){

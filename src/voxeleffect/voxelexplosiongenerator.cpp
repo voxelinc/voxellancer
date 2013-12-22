@@ -57,7 +57,6 @@ void VoxelExplosionGenerator::setImpactVector(const glm::vec3& impactVector) {
     m_impactVector = impactVector;
 }
 
-
 void VoxelExplosionGenerator::spawn() {
     // spawn explosionSpawnCount voxels with color at position within a cube with edgeLength scale with a speed of ~force in all directions modified by ~impactVector
     // Maximum voxel edge length is spawnRadius * 2 / sqrt(2) for 1 voxel
@@ -91,8 +90,6 @@ void VoxelExplosionGenerator::spawn() {
                     RandFloat::rand(-10, 10),
                     RandFloat::rand(-10, 10)));
 
-
-                newObject->finishInitialization();
                 World::instance()->god().scheduleSpawn(newObject);
             }
         }

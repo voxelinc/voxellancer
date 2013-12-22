@@ -9,6 +9,7 @@
 #include "worldobject/worldobject.h"
 #include "world/world.h"
 #include "world/god.h"
+#include "../bandit_extension/aabbhelper.h"
 
 
 
@@ -64,6 +65,33 @@ go_bandit([](){
             b->move(glm::vec3(0, -2, 0));
             b->collisionDetector().updateGeode();
            // AssertThat(d->checkCollisions().size(), Equals(0));
+        });
+
+
+        it("aabb shrinkLeft", [&]() {
+            a->addVoxel(new Voxel(glm::ivec3(0, 0, 0)));
+            a->addVoxel(new Voxel(glm::ivec3(1, 0, 0)));
+            AssertThat(a->gridAABB(), Equals(IAABB(glm::ivec3(0,0,0), glm::ivec3(1,0,0))));
+
+            a->removeVoxel(a->voxel(glm::ivec3(0, 0, 0)));
+            AssertThat(a->gridAABB(), Equals(IAABB(glm::ivec3(1,0,0), glm::ivec3(1,0,0))));
+
+            a->removeVoxel(a->voxel(glm::ivec3(1, 0, 0)));
+            AssertThat(a->gridAABB(), Equals(IAABB(glm::ivec3(0,0,0), glm::ivec3(0,0,0))));
+
+        });
+
+        it("aabb resize on voxel add/remove", [&]() {
+            AssertThat(a->gridAABB(), Equals(IAABB(glm::ivec3(0,0,0), glm::ivec3(0,0,0))));
+
+            a->addVoxel(new Voxel(glm::ivec3(0, 0, 0))); AssertThat(a->gridAABB(), Equals(IAABB(glm::ivec3(0,0,0), glm::ivec3(0,0,0))));
+            a->addVoxel(new Voxel(glm::ivec3(3, 0, 0))); AssertThat(a->gridAABB(), Equals(IAABB(glm::ivec3(0,0,0), glm::ivec3(3,0,0))));
+            a->addVoxel(new Voxel(glm::ivec3(2, 0, 0))); AssertThat(a->gridAABB(), Equals(IAABB(glm::ivec3(0,0,0), glm::ivec3(3,0,0))));
+            a->addVoxel(new Voxel(glm::ivec3(1, 0, 0))); AssertThat(a->gridAABB(), Equals(IAABB(glm::ivec3(0,0,0), glm::ivec3(3,0,0))));
+
+            a->removeVoxel(a->voxel(glm::ivec3(2, 0, 0))); AssertThat(a->gridAABB(), Equals(IAABB(glm::ivec3(0,0,0), glm::ivec3(3,0,0))));
+            a->removeVoxel(a->voxel(glm::ivec3(3, 0, 0))); AssertThat(a->gridAABB(), Equals(IAABB(glm::ivec3(0,0,0), glm::ivec3(1,0,0))));
+
         });
     });
 });

@@ -36,8 +36,6 @@ Bullet::Bullet(WorldObject* creator, glm::vec3 position, glm::quat orientation, 
     m_objectInfo.setCanLockOn(false);
 
     CollisionFilterable::setCollideableWith(CollisionFilterClass::Bullet, false);
-
-    finishInitialization();
 }
 
 WorldObject* Bullet::creator() const {
@@ -48,8 +46,8 @@ bool Bullet::specialIsCollideableWith(const CollisionFilterable *other) const {
     return static_cast<CollisionFilterable*>(m_creator) != other;
 }
 
-void Bullet::update(float delta_sec){
-    m_lifetime -= delta_sec;
+void Bullet::update(float deltaSec){
+    m_lifetime -= deltaSec;
     if (m_lifetime < 0)
         World::instance()->god().scheduleRemoval(this);
 }

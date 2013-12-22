@@ -45,7 +45,7 @@ public:
 	void initialize();
 	void reloadConfig();
 
-    void update(float delta_sec);
+    void update(float deltaSec);
 	void draw();
 
     InputHandler * inputHandler();
