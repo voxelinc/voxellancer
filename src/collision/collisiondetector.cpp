@@ -75,24 +75,6 @@ VoxelTreeNode &CollisionDetector::voxeltree() {
     return m_voxelTree;
 }
 
-std::set<Voxel*> CollisionDetector::voxelsIntersectingSphere(const Sphere& sphere) const {
-    WorldTransform transform = m_worldObject.transform();
-
-    Sphere localSphere;
-    localSphere.setPosition(transform.inverseApplyTo(sphere.position()));
-    localSphere.setRadius(transform.scale() * sphere.radius());
-
-    return m_voxelTree.voxelsIntersectingSphere(localSphere);
-}
-
-std::set<Voxel*> CollisionDetector::voxelsIntersectingRay(const Ray& ray) const {
-    WorldTransform transform = m_worldObject.transform();
-
-    Ray localRay(transform.inverseApplyTo(ray.origin()), transform.inverseApplyTo(ray.direction()));
-
-    return m_voxelTree.voxelsIntersectingRay(localRay);
-}
-
 const VoxelTreeNode &CollisionDetector::voxeltree() const {
     return m_voxelTree;
 }
@@ -137,7 +119,7 @@ std::list<VoxelCollision>& CollisionDetector::checkCollisions() {
 
     m_collisions.clear();
 
-    std::set<WorldTreeGeode*> possibleColliders = WorldTreeQuery<AABB>(m_worldTree, m_worldObject.aabb(), m_geode->containingNode(), &m_worldObject).intersectingGeodes();
+    std::set<WorldTreeGeode*> possibleColliders = WorldTreeQuery<AABB>(m_worldTree, m_worldObject.aabb(), m_geode->containingNode(), &m_worldObject).nearGeodes();
     possibleColliders.erase(m_geode);
 
     for (WorldTreeGeode* possibleCollider : possibleColliders) {

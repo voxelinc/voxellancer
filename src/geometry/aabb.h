@@ -24,6 +24,8 @@ public:
     T axisMin(Axis axis) const;
     T axisMax(Axis axis) const;
 
+    glm::detail::tvec3<T> middle() const;
+
     virtual T extent(Axis axis) const;
 
     TAABB<T> moved(Axis axis, T delta) const;
@@ -38,6 +40,8 @@ public:
     bool intersects(const TAABB<T> &other) const;
     bool contains(const TAABB<T> &other) const;
     bool contains(const glm::detail::tvec3<T> &vec) const;
+    bool contains(const Sphere& sphere) const;
+    bool nearTo(const TAABB<T>& other) const;
 
     TAABB<T> united(const TAABB<T> &other) const ;
     void unite(const TAABB<T> &other);

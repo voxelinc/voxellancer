@@ -57,6 +57,11 @@ T TAABB<T>::axisMax(Axis axis) const {
 }
 
 template<typename T>
+glm::detail::tvec3<T> TAABB<T>::middle() const {
+    return (m_rub + m_llf) / static_cast<T>(2);
+}
+
+template<typename T>
 T TAABB<T>::extent(Axis axis) const {
     return m_rub[(int)axis] - m_llf[(int)axis];
 }
@@ -132,6 +137,22 @@ bool TAABB<T>::contains(const glm::detail::tvec3<T> &vec) const {
         vec.x <= m_rub.x &&
         vec.y <= m_rub.y &&
         vec.z <= m_rub.z;
+}
+
+template<typename T>
+bool TAABB<T>::contains(const Sphere& sphere) const {
+    return
+        sphere.position().x - sphere.radius() >= m_llf.x &&
+        sphere.position().y - sphere.radius() >= m_llf.y &&
+        sphere.position().z - sphere.radius() >= m_llf.z &&
+        sphere.position().x + sphere.radius() <= m_rub.x &&
+        sphere.position().y + sphere.radius() <= m_rub.y &&
+        sphere.position().z + sphere.radius() <= m_rub.z;
+}
+
+template<typename T>
+bool TAABB<T>::nearTo(const TAABB<T>& other) const {
+    return intersects(other);
 }
 
 template<typename T>

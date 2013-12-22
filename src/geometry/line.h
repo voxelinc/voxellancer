@@ -5,6 +5,7 @@
 
 class Sphere;
 class WorldTransform;
+template<typename T> class TAABB;
 
 class Line {
 public:
@@ -19,6 +20,8 @@ public:
 
     bool intersects(const Sphere& sphere);
 
+    template<typename T> bool nearTo(const TAABB<T>& aabb) const;
+
     Line applied(const WorldTransform& transform) const;
     Line inverseApplied(const WorldTransform& transform) const;
 
@@ -27,3 +30,5 @@ protected:
     glm::vec3 m_a;
     glm::vec3 m_b;
 };
+
+#include "line.inl"

@@ -2,11 +2,12 @@
 
 #include <functional>
 
+#include "voxel/voxel.h"
 #include "collision/voxeltreenode.h"
 
 
 template<typename Shape>
-VoxelTreeQuery<Shape>::VoxelTreeQuery(const VoxelTreeNode* voxelTree, const Shape& shape):
+VoxelTreeQuery<Shape>::VoxelTreeQuery(VoxelTreeNode* voxelTree, const Shape& shape):
     m_voxelTree(voxelTree),
     m_shape(shape),
     m_queryInterrupted(false)

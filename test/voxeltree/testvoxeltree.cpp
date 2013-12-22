@@ -8,6 +8,7 @@
 
 #include "utils/tostring.h"
 #include "world/world.h"
+#include "worldtree/voxeltreequery.h"
 #include "collision/voxeltreenode.h"
 #include "worldobject/worldobject.h"
 #include "../bandit_extension/vec3helper.h"
@@ -145,16 +146,14 @@ go_bandit([](){
 
 
         it("can be queried for voxels in sphere", [&]() {
-            VoxelTreeNode root;
+            obj->addVoxel(new Voxel(glm::ivec3(1, 1, 0)));
 
-            root.insert(new Voxel(glm::ivec3(1, 1, 0)));
+            AssertThat(VoxelTreeQuery<Sphere>(vt, Sphere(glm::vec3(0,0,0), 0.5f)).intersectingVoxels().size(), Equals(0));
+            AssertThat(VoxelTreeQuery<Sphere>(vt, Sphere(glm::vec3(0,0,0), 1.0f)).intersectingVoxels().size(), Equals(1));
 
-            AssertThat(root.voxelsIntersectingSphere(Sphere(glm::vec3(0,0,0), 0.5f)).size(), Equals(0));
-            AssertThat(root.voxelsIntersectingSphere(Sphere(glm::vec3(0,0,0), 1.0f)).size(), Equals(1));
+            obj->addVoxel(new Voxel(glm::ivec3(2, 2, 0)));
 
-            root.insert(new Voxel(glm::ivec3(2, 2, 0)));
-
-            AssertThat(root.voxelsIntersectingSphere(Sphere(glm::vec3(1.5,1.5,0), 0.5f)).size(), Equals(2));
+            AssertThat(VoxelTreeQuery<Sphere>(vt, Sphere(glm::vec3(1.5,1.5,0), 0.5f)).intersectingVoxels().size(), Equals(2));
         });
     });
 });

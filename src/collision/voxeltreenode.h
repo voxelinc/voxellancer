@@ -19,7 +19,7 @@ class WorldObject;
 class VoxelTreeNode
 {
 public:
-    VoxelTreeNode(WorldObject *worldobject = nullptr, VoxelTreeNode *parent = nullptr, const Grid3dAABB &gridAABB = Grid3dAABB(glm::ivec3(0, 0, 0), glm::ivec3(0, 0, 0)));
+    VoxelTreeNode(WorldObject *worldobject, VoxelTreeNode *parent = nullptr, const Grid3dAABB &gridAABB = Grid3dAABB(glm::ivec3(0, 0, 0), glm::ivec3(0, 0, 0)));
     virtual ~VoxelTreeNode();
 
     bool isAtomic() const;
@@ -38,9 +38,6 @@ public:
     const Grid3dAABB &gridAABB() const;
 
     Sphere boundingSphere();
-
-    std::set<Voxel*> voxelsIntersectingSphere(const Sphere& sphere) const;
-    std::set<Voxel*> voxelsIntersectingRay(const Ray& ray) const;
 
     void insert(Voxel *physicalVoxel);
     void remove(const glm::ivec3 &cell);

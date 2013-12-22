@@ -12,7 +12,7 @@
 
 
 template<typename Shape>
-WorldTreeQuery<Shape>::WorldTreeQuery(WorldTree* worldTree, const Shape& shape, WorldTreeNode* nodeHint, WorldObject* collidableWith):
+WorldTreeQuery<Shape>::WorldTreeQuery(WorldTreeNode* worldTree, const Shape& shape, WorldTreeNode* nodeHint, WorldObject* collidableWith):
     m_worldTree(worldTree),
     m_nodeHint(nodeHint),
     m_collideableWith(collidableWith),
@@ -22,7 +22,7 @@ WorldTreeQuery<Shape>::WorldTreeQuery(WorldTree* worldTree, const Shape& shape, 
 }
 
 template<typename Shape>
-bool WorldTreeQuery<Shape>::areGeodesIntersecting() {
+bool WorldTreeQuery<Shape>::areGeodesNear() {
     bool result = false;
     m_queryInterrupted = false;
 
@@ -35,7 +35,7 @@ bool WorldTreeQuery<Shape>::areGeodesIntersecting() {
 }
 
 template<typename Shape>
-std::set<WorldTreeGeode*> WorldTreeQuery<Shape>::intersectingGeodes() {
+std::set<WorldTreeGeode*> WorldTreeQuery<Shape>::nearGeodes() {
     std::set<WorldTreeGeode*>  result;
     m_queryInterrupted = false;
 
@@ -52,7 +52,7 @@ bool WorldTreeQuery<Shape>::areVoxelsIntersecting() {
     m_queryInterrupted = false;
 
     query(getQueryRoot(), [&](WorldTreeGeode* geode) {
-        VoxelTreeQuery<Shape> voxelTreeQuery(&geode->worldObject()->collisionDetector().voxeltree(), m_shape.appliedInverse(geode->worldObject()->transform()));
+        VoxelTreeQuery<Shape> voxelTreeQuery(&geode->worldObject()->collisionDetector().voxeltree(), m_shape.inverseApplied(geode->worldObject()->transform()));
 
         if(voxelTreeQuery.areVoxelsIntersecting()) {
             result = true;
@@ -69,9 +69,9 @@ std::set<Voxel*> WorldTreeQuery<Shape>::intersectingVoxels() {
     m_queryInterrupted = false;
 
     query(getQueryRoot(), [&](WorldTreeGeode* geode) {
-        VoxelTreeQuery<Shape> voxelTreeQuery(&geode->worldObject()->collisionDetector().voxeltree(), m_shape.appliedInverse(geode->worldObject()->transform()));
+        VoxelTreeQuery<Shape> voxelTreeQuery(&geode->worldObject()->collisionDetector().voxeltree(), m_shape.inverseApplied(geode->worldObject()->transform()));
 
-        std::set<WorldTreeGeode*> subresult = voxelTreeQuery.intersectingVoxels();
+        std::set<Voxel*> subresult = voxelTreeQuery.intersectingVoxels();
         result.insert(subresult.begin(), subresult.end());
     });
 
@@ -84,7 +84,7 @@ std::set<WorldObject*> WorldTreeQuery<Shape>::intersectingWorldObjects() {
     m_queryInterrupted = false;
 
     query(getQueryRoot(), [&](WorldTreeGeode* geode) {
-        VoxelTreeQuery<Shape> voxelTreeQuery(&geode->worldObject()->collisionDetector().voxeltree(), m_shape.appliedInverse(geode->worldObject()->transform()));
+        VoxelTreeQuery<Shape> voxelTreeQuery(&geode->worldObject()->collisionDetector().voxeltree(), m_shape.inverseApplied(geode->worldObject()->transform()));
 
         bool hasIntersectingVoxels = voxelTreeQuery.areVoxelsIntersecting();
         result.insert(geode->worldObject());
@@ -117,15 +117,15 @@ WorldTreeNode* WorldTreeQuery<Shape>::getQueryRoot(WorldTreeNode* node) const {
 }
 
 template<typename Shape>
-void WorldTreeQuery<Shape>::query(WorldTreeNode* node, std::function<void(WorldTreeGeode*)> onGeodeIntersection) {
+void WorldTreeQuery<Shape>::query(WorldTreeNode* node, std::function<void(WorldTreeGeode*)> onGeodeInteraction) {
     if(node->isLeaf()) {
         for(WorldTreeGeode* geode : node->geodes()) {
             assert(geode->aabb().intersects(node->aabb()));
             assert(geode->worldObject() != nullptr);
 
             if(m_collideableWith == nullptr || m_collideableWith->isCollideableWith(geode->worldObject())) {
-                if(m_shape.intersects(geode->aabb())) {
-                    onGeodeIntersection(geode);
+                if(m_shape.nearTo(geode->aabb())) {
+                    onGeodeInteraction(geode);
 
                     if(m_queryInterrupted) {
                         return;
@@ -136,8 +136,8 @@ void WorldTreeQuery<Shape>::query(WorldTreeNode* node, std::function<void(WorldT
     }
     else {
         for(WorldTreeNode *subnode : node->subnodes()) {
-            if(m_shape.intersects(subnode->aabb())) {
-                query(subnode, onGeodeIntersection);
+            if(m_shape.nearTo(subnode->aabb())) {
+                query(subnode, onGeodeInteraction);
 
                 if(m_queryInterrupted) {
                     return;

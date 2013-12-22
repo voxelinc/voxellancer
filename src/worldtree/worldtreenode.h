@@ -41,12 +41,6 @@ public:
     void insert(WorldTreeGeode *geode);
     void remove(WorldTreeGeode *geode);
 
-    std::set<WorldTreeGeode*> geodesInAABB(const AABB &aabb, WorldObject* collideableWith = nullptr) const;
-    bool areGeodesInAABB(const AABB &aabb, WorldObject* collideableWith = nullptr) const;
-
-    std::set<Voxel*> voxelsIntersectingSphere(const Sphere& sphere) const;
-    std::set<Voxel*> voxelsIntersectingRay(const Ray& ray) const;
-
     void aabbChanged(WorldTreeGeode *geode);
 
     void poll(int& nodes, int &empty, int& geodes, int& depth);

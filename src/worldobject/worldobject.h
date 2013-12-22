@@ -52,9 +52,6 @@ public:
 
     void updateTransformAndGeode(const glm::vec3& position, const glm::quat& orientation);
 
-    std::set<Voxel*> voxelsIntersectingSphere(const Sphere& sphere) const;
-    std::set<Voxel*> voxelsIntersectingRay(const Ray& ray) const;
-
     virtual void onCollision();
     virtual void onSpawnFail();
 

@@ -3,8 +3,8 @@
 #include <glm/glm.hpp>
 
 
-template<typename T> class TAABB;
 class WorldTransform;
+template<typename T> class TAABB;
 
 class Sphere
 {
@@ -22,7 +22,9 @@ public:
     bool intersects(const Sphere &other) const;
     bool contains(const Sphere &other) const;
 
-    static Sphere containing(const TAABB<float>& aabb);
+    template<typename T> bool nearTo(const TAABB<T>& aabb) const;
+
+    template<typename T> static Sphere containing(const TAABB<T>& aabb);
 
     Sphere applied(const WorldTransform& transform) const;
     Sphere inverseApplied(const WorldTransform& transform) const;
@@ -33,3 +35,4 @@ protected:
     float m_radius;
 };
 
+#include "sphere.inl"

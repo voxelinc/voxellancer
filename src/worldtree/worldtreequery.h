@@ -4,7 +4,6 @@
 #include <functional>
 
 
-class WorldTree;
 class WorldTreeNode;
 class WorldTreeGeode;
 class WorldObject;
@@ -12,10 +11,10 @@ class WorldObject;
 template<typename Shape>
 class WorldTreeQuery {
 public:
-    WorldTreeQuery(WorldTree* worldTree, const Shape& shape, WorldTreeNode* nodeHint = nullptr, WorldObject* collidableWith = nullptr);
+    WorldTreeQuery(WorldTreeNode* worldTree, const Shape& shape, WorldTreeNode* nodeHint = nullptr, WorldObject* collidableWith = nullptr);
 
-    bool areGeodesIntersecting();
-    std::set<WorldTreeGeode*> intersectingGeodes();
+    bool areGeodesNear();
+    std::set<WorldTreeGeode*> nearGeodes();
 
     bool areVoxelsIntersecting();
     std::set<Voxel*> intersectingVoxels();
@@ -24,7 +23,7 @@ public:
 
 
 protected:
-    WorldTree* m_worldTree;
+    WorldTreeNode* m_worldTree;
     WorldTreeNode* m_nodeHint;
     WorldTreeNode* m_startNode;
     WorldObject* m_collideableWith;
@@ -32,7 +31,7 @@ protected:
     bool m_queryInterrupted;
 
     WorldTreeNode* getQueryRoot(WorldTreeNode* node = nullptr) const;
-    void query(WorldTreeNode* node, std::function<void(WorldTreeGeode*)> onGeodeIntersection);
+    void query(WorldTreeNode* node, std::function<void(WorldTreeGeode*)> onGeodeInteraction);
 };
 
 

@@ -84,43 +84,6 @@ Sphere VoxelTreeNode::boundingSphere() {
     return m_boundingSphere;
 }
 
-std::set<Voxel*> VoxelTreeNode::voxelsIntersectingSphere(const Sphere& sphere) const {
-    std::set<Voxel*> result;
-    if(isLeaf()) {
-        if(isVoxel() && sphere.intersects(m_voxel->normalizedSphere())) {
-            result.insert(m_voxel);
-        }
-    }
-    else {
-        for(VoxelTreeNode* subnode : m_subnodes) {
-            std::set<Voxel*> subresult;
-            subresult = subnode->voxelsIntersectingSphere(sphere);
-            result.insert(subresult.begin(), subresult.end());
-        }
-    }
-
-    return result;
-}
-
-std::set<Voxel*> VoxelTreeNode::voxelsIntersectingRay(const Ray& ray) const {
-    std::set<Voxel*> result;
-
-    if(isLeaf()) {
-        if(isVoxel() && ray.intersects(m_voxel->normalizedSphere())) {
-            result.insert(m_voxel);
-        }
-    }
-    else {
-        for(VoxelTreeNode* subnode : m_subnodes) {
-            std::set<Voxel*> subresult;
-            subresult = subnode->voxelsIntersectingRay(ray);
-            result.insert(subresult.begin(), subresult.end());
-        }
-    }
-
-    return result;
-}
-
 void VoxelTreeNode::insert(Voxel* voxel) {
     if(!m_gridAABB.contains(glm::ivec3(voxel->gridCell()))) {
         octuple();

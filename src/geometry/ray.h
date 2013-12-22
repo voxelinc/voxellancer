@@ -5,6 +5,7 @@
 
 class Sphere;
 class WorldTransform;
+template<typename T> class TAABB;
 
 class Ray {
 public:
@@ -18,6 +19,8 @@ public:
 
     bool intersects(const Sphere& sphere) const;
 
+    template<typename T> bool nearTo(const TAABB<T>& aabb) const;
+
     Ray applied(const WorldTransform& transform) const;
     Ray inverseApplied(const WorldTransform& transform) const;
 
@@ -26,3 +29,5 @@ protected:
     glm::vec3 m_origin;
     glm::vec3 m_direction;
 };
+
+#include "ray.inl"

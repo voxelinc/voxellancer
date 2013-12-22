@@ -53,15 +53,6 @@ bool Sphere::contains(const Sphere &other) const {
     return glm::length(delta) + other.m_radius < m_radius;
 }
 
-Sphere Sphere::containing(const AABB& aabb) {
-    Sphere result;
-
-    result.setPosition((aabb.llf() + aabb.rub()) / 2.0f);
-    result.setRadius(glm::length((aabb.rub() - aabb.llf()) / 2.0f));
-
-    return result;
-}
-
 Sphere Sphere::applied(const WorldTransform& transform) const {
     return Sphere(transform.applyTo(m_position), m_radius * transform.scale());
 }
