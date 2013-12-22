@@ -1,6 +1,7 @@
 #pragma once
 
 #include <set>
+#include <functional>
 
 
 class WorldTree;
@@ -10,28 +11,28 @@ class WorldObject;
 
 template<typename Shape>
 class WorldTreeQuery {
-    WorldTreeQuery(WorldTree* worldTree, const Shape& shape);
+public:
+    WorldTreeQuery(WorldTree* worldTree, const Shape& shape, WorldTreeNode* nodeHint = nullptr, WorldObject* collidableWith = nullptr);
 
-    void setNodeHint(WorldTreeNode* nodeHint);
-    void setCollideableWith(WorldObject* worldObject)
+    bool areGeodesIntersecting();
+    std::set<WorldTreeGeode*> intersectingGeodes();
 
-    bool areGeodesIntersecting(const Shape& shape) const;
-    std::set<WorldTreeGeode*> intersectingGeodes(const Shape& shape) const;
+    bool areVoxelsIntersecting();
+    std::set<Voxel*> intersectingVoxels();
 
-    bool areVoxelsIntersecting(const Shape& shape) const;
-    std::set<Voxel*> intersectingVoxels(const Shape& shape) const;
-
-    bool areWorldObjectsIntersecting(const Shape& shape) const;
-    std::set<Voxel*> intersectingVoxels(const Shape& shape) const;
+    std::set<WorldObject*> intersectingWorldObjects();
 
 
 protected:
     WorldTree* m_worldTree;
     WorldTreeNode* m_nodeHint;
+    WorldTreeNode* m_startNode;
     WorldObject* m_collideableWith;
     Shape m_shape;
+    bool m_queryInterrupted;
 
-    template<typename T, T (*queryFunc)(WorldTreeNode*)> QueryResult query();
+    WorldTreeNode* getQueryRoot(WorldTreeNode* node = nullptr) const;
+    void query(WorldTreeNode* node, std::function<void(WorldTreeGeode*)> onGeodeIntersection);
 };
 
 

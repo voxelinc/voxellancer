@@ -2,6 +2,7 @@
 
 #include "worldtree/worldtree.h"
 #include "worldtree/worldtreegeode.h"
+#include "worldtree/worldtreequery.h"
 
 #include "utils/tostring.h"
 #include "worldobject/worldobject.h"
@@ -136,7 +137,7 @@ std::list<VoxelCollision>& CollisionDetector::checkCollisions() {
 
     m_collisions.clear();
 
-    std::set<WorldTreeGeode*> possibleColliders = m_worldTree->geodesInAABB(m_worldObject.aabb(), m_geode->containingNode(), &m_worldObject);
+    std::set<WorldTreeGeode*> possibleColliders = WorldTreeQuery<AABB>(m_worldTree, m_worldObject.aabb(), m_geode->containingNode(), &m_worldObject).intersectingGeodes();
     possibleColliders.erase(m_geode);
 
     for (WorldTreeGeode* possibleCollider : possibleColliders) {
