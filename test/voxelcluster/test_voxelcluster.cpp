@@ -14,6 +14,9 @@ go_bandit([](){
     describe("Voxelcluster", [](){
         VoxelCluster *cluster;
 
+        PropertyManager::instance()->reset();
+        PropertyManager::instance()->load("data/config.ini");
+
         before_each([&](){
             cluster = new VoxelCluster(1.0f);
         });

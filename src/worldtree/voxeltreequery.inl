@@ -4,6 +4,7 @@
 
 #include "voxel/voxel.h"
 #include "collision/voxeltreenode.h"
+#include "utils/tostring.h"
 
 
 template<typename Shape>

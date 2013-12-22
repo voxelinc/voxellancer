@@ -35,7 +35,7 @@ public:
 
     WorldObject* worldObject();
 
-    const Grid3dAABB &gridAABB() const;
+    const Grid3dAABB& gridAABB() const;
 
     Sphere& boundingSphere();
 

@@ -17,7 +17,7 @@ Sphere::Sphere(const glm::vec3 &position, float radius):
     m_radius(radius)
 {
     assert(radius >= 0 && std::isfinite(radius));
-    assert(std::isfinite(position.x) && std::isfinite(position.x) && std::isfinite(position.x));
+    assert(std::isfinite(position.x) && std::isfinite(position.y) && std::isfinite(position.z));
 }
 
 Sphere::~Sphere() {

@@ -8,10 +8,14 @@
 #include "worldtree/worldtreequery.h"
 #include "worldobject/worldobject.h"
 
+
 using namespace bandit;
 
 go_bandit([]() {
     describe("WorldTree", []() {
+        PropertyManager::instance()->reset();
+        PropertyManager::instance()->load("data/config.ini");
+
         WorldObject *dummy = new WorldObject();
 
         it("simpleInserts", [&]() {
@@ -137,7 +141,7 @@ go_bandit([]() {
             Sphere s1, s2, s3;
 
             s1.setRadius(1);
-            s2.setRadius(2);
+            s2.setRadius(1.7);
             s3.setRadius(3);
 
             AssertThat(WorldTreeQuery<Sphere>(&worldTree, s1).intersectingVoxels().size(), Equals(0));

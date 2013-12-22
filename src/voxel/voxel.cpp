@@ -18,6 +18,8 @@ Voxel::Voxel(const glm::ivec3& gridCell, int color, float normalizedMass, float 
     m_normalizedMass(normalizedMass),
     m_hp(hp)
 {
+    assert(m_normalizedMass > 0.0f);
+
     assert( gridCell.x >= 0 && gridCell.x < 256 &&
             gridCell.y >= 0 && gridCell.y < 256 &&
             gridCell.z >= 0 && gridCell.z < 256);

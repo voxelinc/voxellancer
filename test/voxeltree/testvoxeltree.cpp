@@ -22,6 +22,7 @@ go_bandit([](){
         World *world;
         WorldObject *obj;
         VoxelTreeNode *vt;
+
         PropertyManager::instance()->reset();
         PropertyManager::instance()->load("data/config.ini");
 
@@ -125,7 +126,6 @@ go_bandit([](){
             VoxelTreeNode *n = nullptr;
 
             obj->addVoxel(new Voxel(glm::ivec3(1, 1, 1)));
-            obj->addVoxel(new Voxel(glm::ivec3(1, 1, 0)));
             //obj->transform().setCenter(glm::vec3(1,1,0));
 
             for(VoxelTreeNode *subnode : obj->collisionDetector().voxeltree().subnodes()) {
@@ -133,15 +133,18 @@ go_bandit([](){
                     n = subnode;
                 }
             }
+
+            obj->addVoxel(new Voxel(glm::ivec3(0, 0, 0)));
             assert(n != nullptr);
 
             AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(1,1,1), glm::vec3(0.01, 0.01, 0.01)));
+            AssertThat(vt->boundingSphere().position(), EqualsWithDelta(glm::vec3(0.5, 0.5, 0.5), glm::vec3(0.01, 0.01, 0.01)));
 
             obj->rotate(glm::angleAxis((float)90.0, glm::vec3(1, 0, 0)));
-            AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(1, 0.5, 0.5), glm::vec3(0.01, 0.01, 0.01)));
+            AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(1, 0, 1), glm::vec3(0.01, 0.01, 0.01)));
 
             obj->rotate(glm::angleAxis((float)90.0f, glm::vec3(0, 1, 0)));
-            AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(0.5, 0, 0), glm::vec3(0.01, 0.01, 0.01)));
+            AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(1, 1, 1), glm::vec3(0.01, 0.01, 0.01)));
         });
 
 

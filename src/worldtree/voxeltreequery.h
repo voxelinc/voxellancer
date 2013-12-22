@@ -23,5 +23,6 @@ protected:
     void query(VoxelTreeNode* node, std::function<void(Voxel*)> onVoxelIntersection);
 };
 
+
 #include "voxeltreequery.inl"
 

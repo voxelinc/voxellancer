@@ -13,6 +13,8 @@ using namespace bandit;
 
 go_bandit([](){
     describe("WorldTransform", [](){
+        PropertyManager::instance()->reset();
+        PropertyManager::instance()->load("data/config.ini");
 
         before_each([&]() {
 

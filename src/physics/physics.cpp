@@ -108,11 +108,18 @@ void Physics::updateSpeed(float deltaSec) {
 
 void Physics::alterCell(Voxel* voxel, bool isAdd) {
     float scaledVoxelMass = voxel->normalizedMass() * m_massScaleFactor;
-    if (!isAdd)
+    if (!isAdd) {
         scaledVoxelMass *= -1;
+    }
 
     m_mass = m_mass + scaledVoxelMass;
     m_accumulatedMassVec = m_accumulatedMassVec + glm::vec3(voxel->gridCell()) * scaledVoxelMass;
-    m_worldObject.setCenterAndAdjustPosition(m_accumulatedMassVec / m_mass);
+
+    if(m_mass > 0.0f) {
+        m_worldObject.setCenterAndAdjustPosition(m_accumulatedMassVec / m_mass);
+    }
+    else {
+        m_worldObject.setCenterAndAdjustPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+    }
 }
 
