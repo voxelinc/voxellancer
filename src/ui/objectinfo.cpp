@@ -1,9 +1,9 @@
 #include "objectinfo.h"
 
 ObjectInfo::ObjectInfo() :
-    m_name("Cluster"),
-    m_showOnHud(true),
-    m_canLockOn(true)
+    m_name("Object"),
+    m_showOnHud(false),
+    m_canLockOn(false)
 {
 }
 
