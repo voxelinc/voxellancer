@@ -46,19 +46,19 @@ bool VoxelTreeNode::isEmpty() const{
     return isLeaf() && m_voxel == nullptr;
 }
 
-std::vector<VoxelTreeNode*> &VoxelTreeNode::subnodes() {
+std::vector<VoxelTreeNode*>& VoxelTreeNode::subnodes() {
     return m_subnodes;
 }
 
-const std::vector<VoxelTreeNode*> &VoxelTreeNode::subnodes() const {
+const std::vector<VoxelTreeNode*>& VoxelTreeNode::subnodes() const {
     return m_subnodes;
 }
 
-Voxel *VoxelTreeNode::voxel(){
+Voxel* VoxelTreeNode::voxel(){
     return m_voxel;
 }
 
-const Voxel *VoxelTreeNode::voxel() const{
+const Voxel* VoxelTreeNode::voxel() const{
     return m_voxel;
 }
 
@@ -66,7 +66,7 @@ WorldObject* VoxelTreeNode::worldObject() {
     return m_worldObject;
 }
 
-const Grid3dAABB &VoxelTreeNode::gridAABB() const {
+const Grid3dAABB& VoxelTreeNode::gridAABB() const {
     return m_gridAABB;
 }
 
@@ -120,7 +120,7 @@ void VoxelTreeNode::remove(const glm::ivec3 &cell) {
     else {
         int numSubNodesEmpty = 0;
 
-        for(VoxelTreeNode *subnode : m_subnodes) {
+        for(VoxelTreeNode* subnode : m_subnodes) {
             if(subnode->gridAABB().contains(cell)) {
                 subnode->remove(cell);
             }

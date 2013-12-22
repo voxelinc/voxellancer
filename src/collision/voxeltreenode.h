@@ -27,11 +27,11 @@ public:
     bool isLeaf() const;
     bool isEmpty() const;
 
-    std::vector<VoxelTreeNode*> &subnodes();
-    const std::vector<VoxelTreeNode*> &subnodes() const;
+    std::vector<VoxelTreeNode*>& subnodes();
+    const std::vector<VoxelTreeNode*>& subnodes() const;
 
-    Voxel *voxel();
-    const Voxel *voxel() const;
+    Voxel* voxel();
+    const Voxel* voxel() const;
 
     WorldObject* worldObject();
 
@@ -39,18 +39,18 @@ public:
 
     Sphere& boundingSphere();
 
-    void insert(Voxel *physicalVoxel);
-    void remove(const glm::ivec3 &cell);
+    void insert(Voxel* voxel);
+    void remove(const glm::ivec3& cell);
 
 
 protected:
-    VoxelTreeNode *m_parent;
-    WorldObject *m_worldObject;
+    VoxelTreeNode* m_parent;
+    WorldObject* m_worldObject;
 
     Grid3dAABB m_gridAABB;
 
     std::vector<VoxelTreeNode*> m_subnodes;
-    Voxel *m_voxel;
+    Voxel* m_voxel;
 
     Sphere m_boundingSphere;
     bool m_boundingSphereRadiusValid;

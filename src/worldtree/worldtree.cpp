@@ -31,3 +31,4 @@ void WorldTree::poll(int& nodes, int &empty, int& geodes, int& depth) {
     nodes = empty = geodes = depth = 0;
     WorldTreeNode::poll(nodes, empty, geodes, depth);
 }
+
