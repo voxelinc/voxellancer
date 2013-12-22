@@ -106,8 +106,10 @@ void WorldTreeNode::remove(WorldTreeGeode *geode) {
 
 void WorldTreeNode::aabbChanged(WorldTreeGeode *geode) {
     if(m_aabb.contains(geode->aabb())) {
-        remove(geode);
-        insert(geode);
+        if(!isLeaf()) {
+            remove(geode);
+            insert(geode);
+        }
     }
     else {
         if(isRootnode()) {

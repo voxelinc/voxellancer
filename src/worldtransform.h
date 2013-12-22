@@ -32,8 +32,8 @@ public:
     void rotate(const glm::quat &qrot);
     void rotateWorld(const glm::quat &qrot);
 
-    bool operator==(const WorldTransform &other);
-    bool operator!=(const WorldTransform &other);
+    bool operator==(const WorldTransform &other) const;
+    bool operator!=(const WorldTransform &other) const;
 
 	const glm::mat4 matrix() const;
 

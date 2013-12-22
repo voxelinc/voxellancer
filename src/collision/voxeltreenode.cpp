@@ -13,7 +13,13 @@ VoxelTreeNode::VoxelTreeNode(WorldObject *worldObject, VoxelTreeNode *parent, co
     m_voxel(nullptr),
     m_boundingSphereRadiusValid(false)
 {
-
+/*
+    The two function calls below should be made to ensure that there is always the right sphere cached.
+    HOWEVER, it would operate on illegal values, as the VoxelCluster::transform of the passed worldObject
+    is not yet initialized when constructing a WorldObject.
+*/
+//    calculateBoundingSpherePosition();
+//    calculateBoundingSphereRadius();
 }
 
 VoxelTreeNode::~VoxelTreeNode() {
@@ -64,21 +70,13 @@ const Grid3dAABB &VoxelTreeNode::gridAABB() const {
     return m_gridAABB;
 }
 
-Sphere VoxelTreeNode::boundingSphere() {
-    glm::vec3 center;
-
-    center = static_cast<glm::vec3>(m_gridAABB.rub() + m_gridAABB.llf()) / 2.0f;
-
-    m_boundingSphere.setPosition(m_worldObject->transform().applyTo(center));
+Sphere& VoxelTreeNode::boundingSphere() {
+    if(m_worldObject->transform() != m_boundingSphereTransform) {
+        calculateBoundingSpherePosition();
+    }
 
     if (!m_boundingSphereRadiusValid) {
-        if(m_voxel != nullptr) {
-            m_boundingSphere.setRadius(0.5f * m_worldObject->transform().scale());
-        }
-        else {
-            m_boundingSphere.setRadius((glm::length(glm::vec3(m_gridAABB.rub() - m_gridAABB.llf() + glm::ivec3(1, 1, 1))/2.0f)) * m_worldObject->transform().scale()) ;
-        }
-        m_boundingSphereRadiusValid = true;
+        calculateBoundingSphereRadius();
     }
 
     return m_boundingSphere;
@@ -179,5 +177,25 @@ void VoxelTreeNode::octuple() {
 
     m_gridAABB = Grid3dAABB(glm::ivec3(0, 0, 0), (m_gridAABB.rub()+glm::ivec3(1,1,1)) * 2 - glm::ivec3(1,1,1));
     m_boundingSphereRadiusValid = false;
+}
+
+void VoxelTreeNode::calculateBoundingSpherePosition() {
+    assert(m_worldObject != nullptr);
+
+    glm::vec3 center = static_cast<glm::vec3>(m_gridAABB.rub() + m_gridAABB.llf()) / 2.0f;
+    m_boundingSphere.setPosition(m_worldObject->transform().applyTo(center));
+
+    m_boundingSphereTransform = m_worldObject->transform();
+}
+
+void VoxelTreeNode::calculateBoundingSphereRadius() {
+    assert(m_worldObject != nullptr);
+
+    if(m_voxel != nullptr) {
+        m_boundingSphere.setRadius(0.5f * m_worldObject->transform().scale());
+    } else {
+        m_boundingSphere.setRadius((glm::length(glm::vec3(m_gridAABB.rub() - m_gridAABB.llf() + glm::ivec3(1, 1, 1))/2.0f)) * m_worldObject->transform().scale()) ;
+    }
+    m_boundingSphereRadiusValid = true;
 }
 
