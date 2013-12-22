@@ -90,10 +90,25 @@ std::list<VoxelCollision>& CollisionDetector::checkCollisions() {
     return m_collisions;
 }
 
+std::list<VoxelCollision> & CollisionDetector::lastCollisions() {
+    return m_collisions;
+}
+
+void CollisionDetector::reset() {
+    m_collisions.clear();
+}
+
+void CollisionDetector::rebuildVoxelTree() {
+    m_voxelTree = VoxelTreeNode(&m_worldObject);
+    for (auto& pair: m_worldObject.voxelMap()) {
+        Voxel* voxel = pair.second;
+        addVoxel(voxel);
+    }
+}
 
 void CollisionDetector::checkCollisions(VoxelTreeNode* nodeA, VoxelTreeNode* nodeB) {
-    Sphere sphereA = nodeA->boundingSphere();
-    Sphere sphereB = nodeB->boundingSphere();
+    const Sphere& sphereA = nodeA->boundingSphere();
+    const Sphere& sphereB = nodeB->boundingSphere();
 
     if (sphereA.intersects(sphereB)) {
         if (nodeA->isLeaf() && nodeB->isLeaf()) {
@@ -129,22 +144,6 @@ void CollisionDetector::checkCollisions(VoxelTreeNode* nodeA, VoxelTreeNode* nod
                 }
             }
         }
-    }
-}
-
-std::list<VoxelCollision>& CollisionDetector::lastCollisions() {
-    return m_collisions;
-}
-
-void CollisionDetector::reset() {
-    m_collisions.clear();
-}
-
-void CollisionDetector::rebuildVoxelTree() {
-    m_voxelTree = VoxelTreeNode(&m_worldObject);
-    for (auto& pair: m_worldObject.voxelMap()) {
-        Voxel* voxel = pair.second;
-        addVoxel(voxel);
     }
 }
 

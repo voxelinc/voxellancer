@@ -57,7 +57,7 @@ void Bullet::onCollision(){
     VoxelExplosionGenerator generator;
     generator.setTransform(m_transform);
     generator.setColor(0xFF0000);
-    generator.setForce(0.2f);
+    generator.setForce(0.3f);
     generator.spawn();
 }
 
@@ -65,6 +65,6 @@ void Bullet::onSpawnFail(){
     VoxelExplosionGenerator generator;
     generator.setTransform(m_transform);
     generator.setColor(0xFF0000);
-    generator.setForce(0.2f);
+    generator.setForce(0.3f);
     generator.spawn();
 }

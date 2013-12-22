@@ -2,12 +2,15 @@
 
 #include <set>
 #include <memory>
+#include <unordered_map>
 
 #include <glm/glm.hpp>
 
 #include "voxel/voxel.h"
 #include "collision/voxeltreenode.h"
 #include "collision/voxelcollision.h"
+#include "geometry/sphere.h"
+
 
 class WorldTree;
 class WorldTreeGeode;
@@ -51,5 +54,6 @@ protected:
     std::list<VoxelCollision> m_collisions;
 
     void checkCollisions(VoxelTreeNode* nodeA, VoxelTreeNode* nodeB);
+    const Sphere& getOrCreateSphere(VoxelTreeNode* node);
 };
 
