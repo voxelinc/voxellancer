@@ -14,6 +14,7 @@ VoxelExplosionGenerator::VoxelExplosionGenerator() :
     m_orientation(),
     m_scale(1.0f),
     m_force(1.0f),
+    m_lifetimeMultiplier(1.0f),
     m_color(0xFFFFFF),
     m_density(2),
     m_impactVector(0,0,0)
@@ -45,6 +46,11 @@ void VoxelExplosionGenerator::setForce(float force) {
     m_force = force;
 }
 
+void VoxelExplosionGenerator::setLifetime(float lifetimeMultiplier){
+    m_lifetimeMultiplier = lifetimeMultiplier;
+}
+
+
 void VoxelExplosionGenerator::setColor(int color) {
     m_color = color;
 }
@@ -70,7 +76,7 @@ void VoxelExplosionGenerator::spawn() {
     for (int i = 0; i < m_density; i++){
         for (int j = 0; j < m_density; j++){
             for (int k = 0; k < m_density; k++){
-                VoxelExplosionParticle* newObject = new VoxelExplosionParticle(0.95f * scale, prop_lifetime * m_force); //multiply 0.95 to certainly be below the collision threshold
+                VoxelExplosionParticle* newObject = new VoxelExplosionParticle(0.95f * scale, prop_lifetime * m_lifetimeMultiplier); //multiply 0.95 to certainly be below the collision threshold
                 Voxel* voxel = new Voxel(glm::ivec3(0, 0, 0), m_color, 0.000001f, 0.1f);
                 voxel->addToObject(newObject);
                 newObject->setCrucialVoxel(glm::ivec3(0, 0, 0));

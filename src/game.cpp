@@ -149,7 +149,7 @@ void Game::initialize()
     m_world->god().scheduleSpawn(planet);
 
 
-    for(int e = 0; e < 50; e++) {
+    for(int e = 0; e < 15; e++) {
         WorldObject *enemy = new WorldObject();
         int r = 80;
         enemy->move(glm::vec3(-80 + rand()%r-r/2,rand()%r-r/2,-20 + rand()%r-r/2));
@@ -163,6 +163,8 @@ void Game::initialize()
         }
         enemy->finishInitialization();
         enemy->objectInfo().setName("enemy");
+        enemy->objectInfo().setShowOnHud(false);
+        enemy->objectInfo().setCanLockOn(false);
         m_world->god().scheduleSpawn(enemy);
 
     }

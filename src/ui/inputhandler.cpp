@@ -73,6 +73,7 @@ void InputHandler::keyCallback(int key, int scancode, int action, int mods){
         g.setOrientation(m_player->playerShip()->transform().orientation());
         g.setScale((float)(rand() % 3) + 1);
         g.setForce((float)(rand() % 2) + 1);
+        g.setLifetime((float)(rand() % 3) + 1);
         g.setDensity((rand() % 4) + 2);
         g.spawn();
     }

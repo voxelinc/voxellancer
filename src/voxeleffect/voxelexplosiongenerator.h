@@ -17,6 +17,7 @@ public:
     void setScale(float scale);
     void setTransform(const WorldTransform& transform);
     void setForce(float force);
+    void setLifetime(float lifetimeMultiplier);
     void setColor(int color);
     void setDensity(int density);
     void setImpactVector(const glm::vec3& impactVector);
@@ -29,6 +30,7 @@ protected:
     glm::quat m_orientation;
     float m_scale;
     float m_force;
+    float m_lifetimeMultiplier;
     int m_color;
     int m_density;
     glm::vec3 m_impactVector;
