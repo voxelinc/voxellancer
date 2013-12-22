@@ -9,12 +9,12 @@
 
 
 VoxelExplosionGenerator::VoxelExplosionGenerator() :
-    prop_lifetime("vfx.explosionLifetime"),
     m_position(0, 0, 0),
     m_orientation(),
     m_scale(1.0f),
     m_force(1.0f),
-    m_lifetimeMultiplier(1.0f),
+    m_lifetime(1.0f),
+    m_randLifetime(false),
     m_color(0xFFFFFF),
     m_density(2),
     m_impactVector(0,0,0)
@@ -46,8 +46,9 @@ void VoxelExplosionGenerator::setForce(float force) {
     m_force = force;
 }
 
-void VoxelExplosionGenerator::setLifetime(float lifetimeMultiplier){
-    m_lifetimeMultiplier = lifetimeMultiplier;
+void VoxelExplosionGenerator::setLifetime(float lifetime, bool randomize){
+    m_lifetime = lifetime;
+    m_randLifetime = randomize;
 }
 
 
@@ -67,35 +68,38 @@ void VoxelExplosionGenerator::setImpactVector(const glm::vec3& impactVector) {
 void VoxelExplosionGenerator::spawn() {
     // spawn explosionSpawnCount voxels with color at position within a cube with edgeLength scale with a speed of ~force in all directions modified by ~impactVector
     // Maximum voxel edge length is spawnRadius * 2 / sqrt(2) for 1 voxel
+    m_density = 3;
+    
     WorldTransform transform;
     transform.setPosition(m_position);
     transform.setOrientation(m_orientation);
-    transform.setCenter(glm::vec3(m_scale / 2.0f));
+    transform.setCenter(m_scale * (glm::vec3(0.5f - (0.5f / m_density)))); // center compensates that i,j,k start from 0
 
     float scale = m_scale / m_density;
     for (int i = 0; i < m_density; i++){
         for (int j = 0; j < m_density; j++){
             for (int k = 0; k < m_density; k++){
-                VoxelExplosionParticle* newObject = new VoxelExplosionParticle(0.95f * scale, prop_lifetime * m_lifetimeMultiplier); //multiply 0.95 to certainly be below the collision threshold
-                Voxel* voxel = new Voxel(glm::ivec3(0, 0, 0), m_color, 0.000001f, 0.1f);
+                //multiply scale with 0.95 to certainly be below the collision threshold
+                VoxelExplosionParticle* newObject = new VoxelExplosionParticle(0.95f * scale, m_lifetime * (m_randLifetime?RandFloat::rand(0.8f, 1.2f):1));
+                Voxel* voxel = new Voxel(glm::ivec3(0.0f), m_color, 0.000001f, 0.1f);
                 voxel->addToObject(newObject);
-                newObject->setCrucialVoxel(glm::ivec3(0, 0, 0));
+                newObject->setCrucialVoxel(glm::ivec3(0.0f));
 
 
-                newObject->setPosition( transform.applyTo( scale * (glm::vec3(i, j, k))));
+                newObject->setPosition(transform.applyTo(scale * (glm::vec3(i, j, k))));
                 newObject->setOrientation(m_orientation);
 
-
-                float angX = RandFloat::rand(-180, 180);
-                float angY = glm::degrees(glm::acos(2 * RandFloat::rand(0, 1) - 1));
-                glm::vec3 speedVec = glm::quat(glm::vec3(angX, angY, 0.0f)) * glm::vec3(0, 0, RandFloat::rand(1, 10));
-                newObject->physics().setSpeed( m_orientation * (m_force * 10.0f * glm::normalize(speedVec)) + m_impactVector);
+             
+                float angX = RandFloat::rand(-180.0f, 180.0f);
+                float angY = glm::degrees(glm::acos(2 * RandFloat::rand(0.0f, 1.0f) - 1.0f));
+                glm::vec3 speedVec = glm::quat(glm::vec3(angX, angY, 0.0f)) * glm::vec3(0, 0, RandFloat::rand(1.0f, 10.0f));
+                newObject->physics().setSpeed(m_orientation * (m_force * 10.0f * glm::normalize(speedVec)) + m_impactVector);
 
 
                 newObject->physics().setAngularSpeed(glm::vec3(
-                    RandFloat::rand(-10, 10),
-                    RandFloat::rand(-10, 10),
-                    RandFloat::rand(-10, 10)));
+                    m_force * RandFloat::rand(-10.0f, 10.0f),
+                    m_force * RandFloat::rand(-10.0f, 10.0f),
+                    m_force * RandFloat::rand(-10.0f, 10.0f)));
 
 
                 newObject->finishInitialization();
