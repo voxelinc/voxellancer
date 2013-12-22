@@ -90,8 +90,6 @@ void VoxelExplosionGenerator::spawn() {
                     RandFloat::rand(-10, 10),
                     RandFloat::rand(-10, 10)));
 
-
-                newObject->finishInitialization();
                 World::instance()->god().scheduleSpawn(newObject);
             }
         }

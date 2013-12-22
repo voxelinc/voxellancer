@@ -34,7 +34,7 @@ Movement::~Movement() {
 bool Movement::perform() {
     assert(m_worldObject.collisionDetector().geode() != nullptr);
 
-    AABB phaseAABB = m_collisionDetector.aabb(m_originalTransform).united(m_collisionDetector.aabb(m_targetTransform));
+    AABB phaseAABB = m_worldObject.aabb(m_originalTransform).united(m_worldObject.aabb(m_targetTransform));
     WorldTreeNode* nodeHint = m_worldObject.collisionDetector().geode()->containingNode();
 
     if(WorldTreeQuery<AABB>(m_collisionDetector.worldTree(), phaseAABB, nodeHint, &m_worldObject).areGeodesNear()) {

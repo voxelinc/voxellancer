@@ -42,7 +42,7 @@ public:
     float hp() const;
     void applyDamage(float deltaHp);
 
-    float mass() const;
+    float normalizedMass() const;
 
     // These hooks apply only for WorldObjects and do not need to be called by pqure VoxelClusters
     virtual void onRemoval();
@@ -54,6 +54,6 @@ protected:
     VoxelTreeNode *m_voxelTreeNode;
     int m_color;
     float m_hp;
-    float m_mass;
+    float m_normalizedMass;
 };
 
