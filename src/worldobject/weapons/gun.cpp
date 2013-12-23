@@ -16,8 +16,8 @@ AimType Gun::aimType(){
     return Point;
 }
 
-void Gun::update(float delta_sec){
-    m_cooldown -= delta_sec;
+void Gun::update(float deltaSec){
+    m_cooldown -= deltaSec;
     if (m_cooldown <= 0){ //avoid negative overflow
         m_cooldown = 0;
     }

@@ -20,7 +20,7 @@ public:
     void setCamera(Camera *camera);
     Camera *camera();
 
-    void update(float delta_sec);
+    void update(float deltaSec);
     void draw();
 
 protected:

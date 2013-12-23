@@ -57,7 +57,6 @@ void Player::setShipToCam(float delta_sec) {
     m_camera->rotateX(m_angularAcceleration.x);
     m_camera->rotateY(m_angularAcceleration.y);
 
-
     glm::vec3 newShipPosition = m_camera->position() - m_camera->orientation()*m_shipOffset;
     glm::vec3 diff = newShipPosition - m_playerShip->transform().position();
     glm::vec3 m_acceleration;

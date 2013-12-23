@@ -11,11 +11,11 @@
 
 
 
-Voxel::Voxel(const glm::ivec3& gridCell, int color, float mass, float hp):
+Voxel::Voxel(const glm::ivec3& gridCell, int color, float normalizedMass, float hp):
     m_gridCell(gridCell),
     m_voxelTreeNode(nullptr),
     m_color(color),
-    m_mass(mass),
+    m_normalizedMass(normalizedMass),
     m_hp(hp)
 {
     assert( gridCell.x >= 0 && gridCell.x < 256 &&
@@ -24,7 +24,7 @@ Voxel::Voxel(const glm::ivec3& gridCell, int color, float mass, float hp):
 }
 
 Voxel::Voxel(const Voxel& other):
-    Voxel(other.gridCell(), other.color(), other.mass(), other.hp())
+    Voxel(other.gridCell(), other.color(), other.normalizedMass(), other.hp())
 {
 }
 
@@ -64,8 +64,8 @@ void Voxel::applyDamage(float deltaHp) {
     m_hp = std::max(m_hp - deltaHp, 0.0f);
 }
 
-float Voxel::mass() const {
-    return m_mass;
+float Voxel::normalizedMass() const {
+    return m_normalizedMass;
 }
 
 void Voxel::onRemoval() {
