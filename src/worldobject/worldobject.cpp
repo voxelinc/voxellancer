@@ -6,6 +6,7 @@
 #include "voxel/specialvoxels/cockpitvoxel.h"
 #include "voxel/specialvoxels/fuelvoxel.h"
 
+#include "worldobjecthandle.h"
 
 WorldObject::WorldObject(CollisionFilterClass collisionFilterClass):
     WorldObject(1.0f, glm::vec3(0), collisionFilterClass)

@@ -10,6 +10,7 @@
 class World;
 class God;
 class Hardpoint;
+class WorldObjectHandle;
 
 class Ship : public WorldObject {
 public:

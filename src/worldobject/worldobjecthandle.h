@@ -1,6 +1,8 @@
 #pragma once
 
-class WorldObject;
+#include <memory>
+
+#include "worldobject.h"
 
 /* 
  contains a pointer to a worldobject
@@ -9,16 +11,20 @@ class WorldObject;
  the handle is still valid if you access it
 */
 class WorldObjectHandle {
+    // only the WorldObject destructor should invalidate handles
+    friend WorldObject::~WorldObject();
 
 public:   
     WorldObjectHandle(WorldObject* worldObject);
-    void invalidate();
 
     // returns WorldObject* or nullptr
     WorldObject* get();
 
+    static std::shared_ptr<WorldObjectHandle> nullHandle();
+
 protected:
-
-
+    void invalidate();
+    
+    static std::shared_ptr<WorldObjectHandle> s_nullInstance;
     WorldObject* m_worldObject;
 };

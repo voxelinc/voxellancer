@@ -8,13 +8,12 @@
 #include "physics/physics.h"
 #include "voxel/voxelcluster.h"
 #include "ui/objectinfo.h"
-#include "worldobjecthandle.h"
 
 class EngineVoxel;
 class HardpointVoxel;
 class CockpitVoxel;
 class FuelVoxel;
-
+class WorldObjectHandle;
 
 class WorldObject : public VoxelCluster, public CollisionFilterable
 {

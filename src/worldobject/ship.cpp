@@ -2,6 +2,7 @@
 
 #include "hardpoint.h"
 #include "voxel/specialvoxels/hardpointvoxel.h"
+#include "worldobject/worldobjecthandle.h"
 #include "worldobject/weapons/gun.h"
 #include "worldobject/weapons/rocketlauncher.h"
 
@@ -10,7 +11,7 @@ Ship::Ship() :
     m_hardpoints(),
 	prop_maxSpeed("ship.maxSpeed"),
 	prop_maxRotSpeed("ship.maxRotSpeed"),
-    m_targetObject(nullptr)
+    m_targetObject(WorldObjectHandle::nullHandle())
 {
 }
 
@@ -46,10 +47,11 @@ void Ship::removeHardpoint(Hardpoint *hardpoint){
 }
 
 void Ship::setTargetObject(WorldObject* target){
-    m_targetObject = target ? target->handle() : nullptr;
+    m_targetObject = target ? target->handle() : WorldObjectHandle::nullHandle();
 }
+
 WorldObject* Ship::targetObject(){
-    return m_targetObject ? m_targetObject->get() : nullptr;
+    return m_targetObject->get();
 }
 
 void Ship::fireAtPoint(glm::vec3 target){
