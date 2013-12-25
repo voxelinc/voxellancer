@@ -19,7 +19,7 @@ WorldObject* WorldObjectHandle::get() {
 
 std::shared_ptr<WorldObjectHandle> WorldObjectHandle::nullHandle() {
     if (s_nullInstance == nullptr)
-        s_nullInstance = std::shared_ptr<WorldObjectHandle>(new WorldObjectHandle(nullptr));
+        s_nullInstance = std::make_shared<WorldObjectHandle>(nullptr);
     return s_nullInstance;
 }
 
