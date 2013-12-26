@@ -67,15 +67,6 @@ void InputHandler::keyCallback(int key, int scancode, int action, int mods){
         m_mouseControl = !m_mouseControl;
     if (key == GLFW_KEY_TAB && action == GLFW_PRESS)
         selectNextTarget(glfwGetKey(m_window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS);
-    if (key == GLFW_KEY_B && action == GLFW_PRESS){
-        VoxelExplosionGenerator g;
-        g.setPosition(m_player->playerShip()->transform().position() + m_player->playerShip()->transform().orientation() * glm::vec3(0, 0, -30));
-        g.setOrientation(m_player->playerShip()->transform().orientation());
-        g.setScale((float)(rand() % 3) + 1);
-        g.setForce((float)(rand() % 2) + 1);
-        g.setDensity((rand() % 4) + 2);
-        g.spawn();
-    }
 }
 
 void InputHandler::update(float deltaSec) {

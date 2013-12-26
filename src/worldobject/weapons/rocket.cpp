@@ -69,6 +69,8 @@ void Rocket::onCollision(){
     VoxelExplosionGenerator generator;
     generator.setTransform(m_transform);
     generator.setColor(0xFF0000);
+    generator.setDensity(4);
+    generator.setLifetime(1.0f, 0.2f);
     generator.spawn();
 }
 
@@ -76,5 +78,7 @@ void Rocket::onSpawnFail(){
     VoxelExplosionGenerator generator;
     generator.setTransform(m_transform);
     generator.setColor(0xFF0000);
+    generator.setDensity(4);
+    generator.setLifetime(1.0f, 0.2f);
     generator.spawn();
 }
