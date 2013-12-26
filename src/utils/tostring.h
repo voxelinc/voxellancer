@@ -14,7 +14,8 @@ std::string toString(const glm::detail::tvec3<T>& v);
 template<typename T>
 std::string toString(const TAABB<T>& aabb);
 
-//std::string toString(const Sphere& sphere);
+//template<typename T>
+//std::string _toString(const T& val);
 
 
 #include "tostring.inl"

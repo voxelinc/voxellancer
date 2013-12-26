@@ -4,9 +4,9 @@
 #include <algorithm>
 #include <iostream>
 
-#include "worldobject/worldobject.h"
-
 #include "utils/tostring.h"
+#include "voxel/voxel.h"
+#include "worldobject/worldobject.h"
 
 
 WorldTreeNode::WorldTreeNode(int level, WorldTreeNode *parent, const AABB &aabb):
@@ -102,58 +102,6 @@ void WorldTreeNode::remove(WorldTreeGeode *geode) {
             subnode->remove(geode);
         }
     }
-}
-
-std::set<WorldTreeGeode*> WorldTreeNode::geodesInAABB(const AABB &aabb, WorldObject* collideableWith) const {
-    std::set<WorldTreeGeode*> result;
-
-    if(isLeaf()) {
-        for(WorldTreeGeode *geode : m_geodes) {
-            assert(geode->aabb().intersects(m_aabb));
-            assert(geode->worldObject() != nullptr);
-
-            if(collideableWith == nullptr || collideableWith->isCollideableWith(geode->worldObject())) {
-                if(aabb.intersects(geode->aabb())) {
-                    result.insert(geode);
-                }
-            }
-        }
-    }
-    else {
-        for(WorldTreeNode *subnode : m_subnodes) {
-            if(aabb.intersects(subnode->aabb())) {
-                std::set<WorldTreeGeode*> subresult = subnode->geodesInAABB(aabb, collideableWith);
-                result.insert(subresult.begin(), subresult.end());
-            }
-        }
-    }
-
-    return result;
-}
-
-bool WorldTreeNode::areGeodesInAABB(const AABB& aabb, WorldObject* collideableWith) const {
-    if(isLeaf()) {
-        for(WorldTreeGeode* geode : m_geodes) {
-            assert(geode->aabb().intersects(m_aabb));
-            assert(geode->worldObject() != nullptr);
-
-            if(collideableWith == nullptr || collideableWith->isCollideableWith(geode->worldObject())) {
-                if(aabb.intersects(geode->aabb())) {
-                    return true;
-                }
-            }
-        }
-    }
-    else {
-
-        for(WorldTreeNode* subnode : m_subnodes) {
-            if(subnode->areGeodesInAABB(aabb, collideableWith)) {
-                return true;
-            }
-        }
-    }
-
-    return false;
 }
 
 void WorldTreeNode::aabbChanged(WorldTreeGeode *geode) {

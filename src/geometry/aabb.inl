@@ -3,7 +3,11 @@
 #include <cassert>
 #include <algorithm>
 
+#include "worldtransform.h"
+
 #include "sphere.h"
+#include "line.h"
+#include "ray.h"
 
 
 template<typename T>
@@ -55,6 +59,11 @@ T TAABB<T>::axisMax(Axis axis) const {
 }
 
 template<typename T>
+glm::detail::tvec3<T> TAABB<T>::middle() const {
+    return (m_rub + m_llf) / static_cast<T>(2);
+}
+
+template<typename T>
 T TAABB<T>::extent(Axis axis) const {
     return m_rub[(int)axis] - m_llf[(int)axis];
 }
@@ -101,38 +110,56 @@ TAABB<T> TAABB<T>::expanded(Axis axis, T delta) const {
 }
 
 template<typename T>
-bool TAABB<T>::intersects(const TAABB& other) const {
-    if(m_llf.x < other.m_llf.x) {
-        if(other.m_llf.x >= m_rub.x) {
+template<typename OtherT>
+bool TAABB<T>::intersects(const TAABB<OtherT>& other) const {
+    if(m_llf.x < other.llf().x) {
+        if(other.llf().x >= m_rub.x) {
             return false;
         }
     } else {
-        if(m_llf.x >= other.m_rub.x) {
+        if(m_llf.x >= other.rub().x) {
             return false;
         }
     }
 
-    if(m_llf.y < other.m_llf.y) {
-        if(other.m_llf.y >= m_rub.y) {
+    if(m_llf.y < other.llf().y) {
+        if(other.llf().y >= m_rub.y) {
             return false;
         }
     } else {
-        if(m_llf.y >= other.m_rub.y) {
+        if(m_llf.y >= other.rub().y) {
             return false;
         }
     }
 
-    if(m_llf.z < other.m_llf.z) {
-        if(other.m_llf.z >= m_rub.z) {
+    if(m_llf.z < other.llf().z) {
+        if(other.llf().z >= m_rub.z) {
             return false;
         }
     } else {
-        if(m_llf.z >= other.m_rub.z) {
+        if(m_llf.z >= other.rub().z) {
             return false;
         }
     }
 
     return true;
+}
+
+template<typename T>
+bool TAABB<T>::intersects(const Sphere& sphere) const {
+    assert(false); // Not implemented yet
+    return false;
+}
+
+template<typename T>
+bool TAABB<T>::containedBy(const TAABB<float>& other) const {
+    return
+        other.llf().x <= m_llf.x &&
+        other.llf().y <= m_llf.y &&
+        other.llf().z <= m_llf.z &&
+        other.rub().x >= m_rub.x &&
+        other.rub().y >= m_rub.y &&
+        other.rub().z >= m_rub.z;
 }
 
 template<typename T>
@@ -155,6 +182,11 @@ bool TAABB<T>::contains(const glm::detail::tvec3<T> &vec) const {
         vec.x <= m_rub.x &&
         vec.y <= m_rub.y &&
         vec.z <= m_rub.z;
+}
+
+template<typename T>
+bool TAABB<T>::nearTo(const TAABB<float>& other) const {
+    return intersects(other);
 }
 
 template<typename T>

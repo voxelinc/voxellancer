@@ -17,12 +17,10 @@ public:
 
     WorldTreeGeode *insert(WorldObject *worldObject);
 
-    std::set<WorldTreeGeode*> geodesInAABB(const AABB& aabb, WorldTreeNode* nodeHint = nullptr, WorldObject* collideableWith = nullptr) const;
-    bool areGeodesInAABB(const AABB& aabb, WorldTreeNode* nodeHint = nullptr, WorldObject* collideableWith = nullptr) const;
-
     void aabbChanged(WorldTreeGeode* geode);
 
     void poll(int& nodes, int &empty, int& geodes, int& depth);
+
 
 protected:
 

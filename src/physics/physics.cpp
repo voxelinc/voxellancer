@@ -67,7 +67,7 @@ float Physics::mass() const {
 std::list<VoxelCollision> &Physics::move(float deltaSec) {
     updateSpeed(deltaSec);
 
-    if(m_speed != glm::vec3(0.0f) || m_angularSpeed != glm::vec3(0.0f)) {
+    if (m_speed != glm::vec3(0.0f) || m_angularSpeed != glm::vec3(0.0f)) {
         WorldTransform targetTransform(m_worldObject.transform());
         targetTransform.moveWorld(m_speed * deltaSec);
         targetTransform.rotate(glm::quat(m_angularSpeed * deltaSec));
@@ -108,11 +108,17 @@ void Physics::updateSpeed(float deltaSec) {
 
 void Physics::alterCell(Voxel* voxel, bool isAdd) {
     float scaledVoxelMass = voxel->normalizedMass() * m_massScaleFactor;
-    if (!isAdd)
+    if (!isAdd) {
         scaledVoxelMass *= -1;
+    }
 
     m_mass = m_mass + scaledVoxelMass;
     m_accumulatedMassVec = m_accumulatedMassVec + glm::vec3(voxel->gridCell()) * scaledVoxelMass;
-    m_worldObject.setCenterAndAdjustPosition(m_accumulatedMassVec / m_mass);
+
+    if (m_mass > 0.0f) {
+        m_worldObject.setCenterAndAdjustPosition(m_accumulatedMassVec / m_mass);
+    }  else {
+        m_worldObject.setCenterAndAdjustPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+    }
 }
 

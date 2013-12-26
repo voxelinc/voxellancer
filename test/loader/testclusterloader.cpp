@@ -7,6 +7,9 @@ using namespace bandit;
 
 go_bandit([]() {
 	describe("ClusterLoader", []() {
+        PropertyManager::instance()->reset();
+        PropertyManager::instance()->load("data/config.ini");
+
 		it("loads simple csv", [&]() {
 
             std::vector<Voxel*> *vcsv = new std::vector<Voxel*>();

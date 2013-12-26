@@ -5,7 +5,7 @@
 #include <glm/glm.hpp>
 
 #include "voxel/voxelcluster.h"
-#include "collision/voxeltreenode.h"
+#include "voxel/voxeltreenode.h"
 
 #include "voxel/voxelneighbourhelper.h"
 #include "utils/tostring.h"
