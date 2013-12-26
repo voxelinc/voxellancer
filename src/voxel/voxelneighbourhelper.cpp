@@ -28,14 +28,18 @@ const std::list<Voxel*>& VoxelNeighbourHelper::neighbours(const glm::ivec3& pos)
     considerNeighbour(pos, glm::ivec3(0, 0, +1));
 
     if(m_includeDiagonals) {
-        considerNeighbour(pos, glm::ivec3(-1, -1, -1));
-        considerNeighbour(pos, glm::ivec3(-1, +1, -1));
-        considerNeighbour(pos, glm::ivec3(+1, +1, -1));
-        considerNeighbour(pos, glm::ivec3(+1, -1, -1));
-        considerNeighbour(pos, glm::ivec3(-1, -1, +1));
-        considerNeighbour(pos, glm::ivec3(-1, +1, +1));
-        considerNeighbour(pos, glm::ivec3(+1, +1, +1));
-        considerNeighbour(pos, glm::ivec3(+1, -1, +1));
+        considerNeighbour(pos, glm::ivec3(-1, -1, 0));
+        considerNeighbour(pos, glm::ivec3(-1, +1, 0));
+        considerNeighbour(pos, glm::ivec3(+1, +1, 0));
+        considerNeighbour(pos, glm::ivec3(+1, -1, 0));
+        considerNeighbour(pos, glm::ivec3(-1, 0, -1));
+        considerNeighbour(pos, glm::ivec3(-1, 0, +1));
+        considerNeighbour(pos, glm::ivec3(+1, 0, +1));
+        considerNeighbour(pos, glm::ivec3(+1, 0, -1));
+        considerNeighbour(pos, glm::ivec3(0, -1, -1));
+        considerNeighbour(pos, glm::ivec3(0, -1, +1));
+        considerNeighbour(pos, glm::ivec3(0, +1, +1));
+        considerNeighbour(pos, glm::ivec3(0, +1, -1));
     }
 
     return m_neighbours;
