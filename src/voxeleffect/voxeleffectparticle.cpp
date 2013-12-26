@@ -1,10 +1,10 @@
-#include "voxelexplosionparticle.h"
+#include "voxeleffectparticle.h"
 
 #include "voxel/specialvoxels/hardpointvoxel.h"
 #include "worldobject/weapons/gun.h"
 #include "worldobject/weapons/rocketlauncher.h"
 
-VoxelExplosionParticle::VoxelExplosionParticle(float scale, float lifetime) :
+VoxelEffectParticle::VoxelEffectParticle(float scale, float lifetime) :
     WorldObject(scale, glm::vec3(0, 0, 0), CollisionFilterClass::ExplosionParticle),
     m_lifetime(lifetime)
 {
@@ -15,12 +15,12 @@ VoxelExplosionParticle::VoxelExplosionParticle(float scale, float lifetime) :
     setCollideableWith(CollisionFilterClass::Bullet, false);
 }
 
-void VoxelExplosionParticle::update(float deltasec){
+void VoxelEffectParticle::update(float deltasec){
     m_lifetime -= deltasec;
     if (m_lifetime < 0)
         World::instance()->god().scheduleRemoval(this);
 }
 
-void VoxelExplosionParticle::onCollision(){
+void VoxelEffectParticle::onCollision(){
     World::instance()->god().scheduleRemoval(this);
 }

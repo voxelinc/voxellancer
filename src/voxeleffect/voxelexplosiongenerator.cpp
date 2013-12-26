@@ -5,7 +5,7 @@
 #include "world/god.h"
 #include "world/world.h"
 #include "utils/randfloat.h"
-#include "voxelexplosionparticle.h"
+#include "voxeleffectparticle.h"
 
 
 VoxelExplosionGenerator::VoxelExplosionGenerator() :
@@ -80,7 +80,7 @@ void VoxelExplosionGenerator::spawn() {
                 if (m_lifetimeRandomization > 0.0f) lifetime *= RandFloat::rand(1.0f - m_lifetimeRandomization, 1.0f + m_lifetimeRandomization);
 
                 //multiply scale with 0.95 to certainly be below the collision threshold
-                VoxelExplosionParticle* newObject = new VoxelExplosionParticle(0.95f * scale, lifetime);
+                VoxelEffectParticle* newObject = new VoxelEffectParticle(0.95f * scale, lifetime);
                 Voxel* voxel = new Voxel(glm::ivec3(0), m_color, 0.000001f, 0.1f);
                 voxel->addToObject(newObject);
                 newObject->setCrucialVoxel(glm::ivec3(0));

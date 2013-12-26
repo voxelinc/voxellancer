@@ -9,9 +9,9 @@
 class World;
 class God;
 
-class VoxelExplosionParticle : public WorldObject {
+class VoxelEffectParticle : public WorldObject {
 public:
-    VoxelExplosionParticle(float scale, float lifetime);
+    VoxelEffectParticle(float scale, float lifetime);
     virtual void update(float deltasec);
 
     virtual void onCollision() override;
