@@ -72,7 +72,7 @@ void Rocket::onCollision(){
     generator.setTransform(m_transform);
     generator.setColor(0xFF0000);
     generator.setDensity(4);
-    generator.setLifetime(1.0f, false);
+    generator.setLifetime(1.0f, 0.2f);
     generator.spawn();
 }
 
@@ -81,6 +81,6 @@ void Rocket::onSpawnFail(){
     generator.setTransform(m_transform);
     generator.setColor(0xFF0000);
     generator.setDensity(4);
-    generator.setLifetime(1.0f, false);
+    generator.setLifetime(1.0f, 0.2f);
     generator.spawn();
 }

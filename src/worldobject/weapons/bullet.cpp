@@ -60,7 +60,7 @@ void Bullet::onCollision(){
     generator.setTransform(m_transform);
     generator.setColor(0xFF0000);
     generator.setForce(0.5f);
-    generator.setLifetime(0.7f, false);
+    generator.setLifetime(0.7f, 0.2f);
     generator.spawn();
 }
 
@@ -69,6 +69,6 @@ void Bullet::onSpawnFail(){
     generator.setTransform(m_transform);
     generator.setColor(0xFF0000);
     generator.setForce(0.5f);
-    generator.setLifetime(0.7f, false);
+    generator.setLifetime(0.7f, 0.2f);
     generator.spawn();
 }
