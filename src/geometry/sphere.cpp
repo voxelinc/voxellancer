@@ -53,11 +53,19 @@ bool Sphere::contains(const Sphere &other) const {
     return glm::length(delta) + other.m_radius < m_radius;
 }
 
-Sphere Sphere::applied(const WorldTransform& transform) const {
-    return Sphere(transform.applyTo(m_position), m_radius * transform.scale());
+bool Sphere::nearTo(const TAABB<float>& aabb) const {
+    Sphere aabbSphere = Sphere::containing(aabb);
+    return intersects(aabbSphere);
 }
 
-Sphere Sphere::inverseApplied(const WorldTransform& transform) const {
-    return Sphere(transform.inverseApplyTo(m_position), m_radius / transform.scale());
+bool Sphere::containedBy(const TAABB<float>& aabb) const {
+    return
+        m_position.x - m_radius >= aabb.llf().x &&
+        m_position.y - m_radius >= aabb.llf().y &&
+        m_position.z - m_radius >= aabb.llf().z &&
+        m_position.x + m_radius <= aabb.rub().x &&
+        m_position.y + m_radius <= aabb.rub().y &&
+        m_position.z + m_radius <= aabb.rub().z;
 }
+
 

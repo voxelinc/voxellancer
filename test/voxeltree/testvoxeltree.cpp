@@ -149,14 +149,20 @@ go_bandit([](){
 
 
         it("can be queried for voxels in sphere", [&]() {
+            Sphere sphere;
+
             obj->addVoxel(new Voxel(glm::ivec3(1, 1, 0)));
 
-            AssertThat(VoxelTreeQuery<Sphere>(vt, Sphere(glm::vec3(0,0,0), 0.5f)).intersectingVoxels().size(), Equals(0));
-            AssertThat(VoxelTreeQuery<Sphere>(vt, Sphere(glm::vec3(0,0,0), 1.0f)).intersectingVoxels().size(), Equals(1));
+            sphere = Sphere(glm::vec3(0,0,0), 0.5f);
+            AssertThat(VoxelTreeQuery(vt, &sphere).intersectingVoxels().size(), Equals(0));
+
+            sphere =  Sphere(glm::vec3(0,0,0), 1.0f);
+            AssertThat(VoxelTreeQuery(vt, &sphere).intersectingVoxels().size(), Equals(1));
 
             obj->addVoxel(new Voxel(glm::ivec3(2, 2, 0)));
 
-            AssertThat(VoxelTreeQuery<Sphere>(vt, Sphere(glm::vec3(1.5,1.5,0), 0.5f)).intersectingVoxels().size(), Equals(2));
+            sphere = Sphere(glm::vec3(1.5,1.5,0), 0.5f);
+            AssertThat(VoxelTreeQuery(vt, &sphere).intersectingVoxels().size(), Equals(2));
         });
     });
 });

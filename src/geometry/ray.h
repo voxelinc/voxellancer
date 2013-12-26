@@ -2,12 +2,14 @@
 
 #include <glm/glm.hpp>
 
+#include "abstractshape.h"
+
 
 class Sphere;
 class WorldTransform;
 template<typename T> class TAABB;
 
-class Ray {
+class Ray: public AbstractShape {
 public:
     Ray(const glm::vec3& origin, const glm::vec3& direction);
 
@@ -17,17 +19,12 @@ public:
     const glm::vec3& direction() const;
     void setDirection(const glm::vec3& direction);
 
-    bool intersects(const Sphere& sphere) const;
-
-    template<typename T> bool nearTo(const TAABB<T>& aabb) const;
-
-    Ray applied(const WorldTransform& transform) const;
-    Ray inverseApplied(const WorldTransform& transform) const;
+    virtual bool intersects(const Sphere& sphere) const override;
+    virtual bool nearTo(const TAABB<float>& aabb) const override;
+    virtual bool containedBy(const TAABB<float>& aabb) const override;
 
 
 protected:
     glm::vec3 m_origin;
     glm::vec3 m_direction;
 };
-
-#include "ray.inl"

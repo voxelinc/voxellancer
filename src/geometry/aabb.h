@@ -4,6 +4,7 @@
 #include <glm/glm.hpp>
 
 #include "axis.h"
+#include "abstractshape.h"
 
 class Ray;
 class Line;
@@ -11,17 +12,16 @@ class Sphere;
 class WorldTransform;
 
 template<typename T>
-class TAABB
-{
+class TAABB: public AbstractShape {
 public:
     TAABB();
     TAABB(const glm::detail::tvec3<T> &llf, const glm::detail::tvec3<T> &rub);
 
-    const glm::detail::tvec3<T> &llf() const;
-    void setLlf(const glm::detail::tvec3<T> &llf);
+    inline const glm::detail::tvec3<T> &llf() const;
+    inline void setLlf(const glm::detail::tvec3<T> &llf);
 
-    const glm::detail::tvec3<T> &rub() const;
-    void setRub(const glm::detail::tvec3<T> &rub);
+    inline const glm::detail::tvec3<T> &rub() const;
+    inline void setRub(const glm::detail::tvec3<T> &rub);
 
     T axisMin(Axis axis) const;
     T axisMax(Axis axis) const;
@@ -39,17 +39,17 @@ public:
     void expand(Axis axis, T delta);
     TAABB<T> expanded(Axis axis, T delta) const;
 
-    bool intersects(const TAABB<T> &other) const;
+    template<typename OtherT> bool intersects(const TAABB<OtherT> &other) const;
+
 
     bool contains(const TAABB<T> &other) const;
     bool contains(const glm::detail::tvec3<T> &vec) const;
-    bool contains(const Sphere& sphere) const;
-    bool contains(const Ray& ray) const;
-    bool contains(const Line& line) const;
 
-    bool nearTo(const TAABB<T>& other) const;
+    virtual bool intersects(const Sphere& sphere) const override;
+    virtual bool nearTo(const TAABB<float>& other) const override;
+    virtual bool containedBy(const TAABB<float>& other) const override;
 
-    TAABB<T> united(const TAABB<T> &other) const ;
+    TAABB<T> united(const TAABB<T> &other) const;
     void unite(const TAABB<T> &other);
 
     std::list<TAABB<T>> split(Axis axis) const;
@@ -61,9 +61,6 @@ public:
     void extend(const glm::detail::tvec3<T> & point);
 
     static TAABB<float> containing(const Sphere &sphere);
-
-    TAABB<T> applied(const WorldTransform& transform) const;
-    TAABB<T> inverseApplied(const WorldTransform& transform) const;
 
 
 protected:

@@ -36,18 +36,22 @@ void Line::setB(const glm::vec3& b) {
     m_b = b;
 }
 
-bool Line::intersects(const Sphere& sphere) {
+bool Line::intersects(const Sphere& sphere) const {
     Ray r1(m_a, m_b - m_a);
     Ray r2(m_b, m_a - m_b);
 
     return r1.intersects(sphere) && r2.intersects(sphere);
 }
 
-Line Line::applied(const WorldTransform& transform) const {
-    return Line(transform.applyTo(m_a), transform.applyTo(m_b));
+bool Line::nearTo(const TAABB<float>& aabb) const {
+    glm::vec3 llf(std::min(m_a.x, m_b.x), std::min(m_a.y, m_b.y), std::min(m_a.z, m_b.z));
+    glm::vec3 rub(std::max(m_a.x, m_b.x), std::max(m_a.y, m_b.y), std::max(m_a.z, m_b.z));
+
+    TAABB<float> lineAABB(llf, rub);
+    return lineAABB.intersects(aabb);
 }
 
-Line Line::inverseApplied(const WorldTransform& transform) const {
-    return Line(transform.inverseApplyTo(m_a), transform.inverseApplyTo(m_b));
+bool Line::containedBy(const TAABB<float>& aabb) const {
+    return aabb.contains(m_a) && aabb.contains(m_b);
 }
 

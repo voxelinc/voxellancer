@@ -1,18 +1,20 @@
-#pragma once
+#include "worldtreequery.h"
 
 #include <functional>
 #include <cassert>
 
 #include <worldtree/worldtree.h>
+
 #include <worldtree/worldtreenode.h>
 #include <worldtree/worldtreegeode.h>
 #include <worldobject/worldobject.h>
 
+#include "voxel/voxel.h"
 #include "voxel/voxeltreequery.h"
 
 
-template<typename Shape>
-WorldTreeQuery<Shape>::WorldTreeQuery(WorldTreeNode* worldTree, const Shape& shape, WorldTreeNode* nodeHint, WorldObject* collidableWith):
+
+WorldTreeQuery::WorldTreeQuery(WorldTreeNode* worldTree, const AbstractShape* shape, WorldTreeNode* nodeHint, WorldObject* collidableWith):
     m_worldTree(worldTree),
     m_nodeHint(nodeHint),
     m_collideableWith(collidableWith),
@@ -21,8 +23,7 @@ WorldTreeQuery<Shape>::WorldTreeQuery(WorldTreeNode* worldTree, const Shape& sha
 {
 }
 
-template<typename Shape>
-bool WorldTreeQuery<Shape>::areGeodesNear() {
+bool WorldTreeQuery::areGeodesNear() {
     bool result = false;
     m_queryInterrupted = false;
 
@@ -34,8 +35,7 @@ bool WorldTreeQuery<Shape>::areGeodesNear() {
     return result;
 }
 
-template<typename Shape>
-std::set<WorldTreeGeode*> WorldTreeQuery<Shape>::nearGeodes() {
+std::set<WorldTreeGeode*> WorldTreeQuery::nearGeodes() {
     std::set<WorldTreeGeode*>  result;
     m_queryInterrupted = false;
 
@@ -46,13 +46,12 @@ std::set<WorldTreeGeode*> WorldTreeQuery<Shape>::nearGeodes() {
     return result;
 }
 
-template<typename Shape>
-bool WorldTreeQuery<Shape>::areVoxelsIntersecting() {
+bool WorldTreeQuery::areVoxelsIntersecting() {
     bool result = false;
     m_queryInterrupted = false;
 
     query(getQueryRoot(), [&](WorldTreeGeode* geode) {
-        VoxelTreeQuery<Shape> voxelTreeQuery(&geode->worldObject()->collisionDetector().voxeltree(), m_shape);
+        VoxelTreeQuery voxelTreeQuery(&geode->worldObject()->collisionDetector().voxeltree(), m_shape);
 
         if(voxelTreeQuery.areVoxelsIntersecting()) {
             result = true;
@@ -63,13 +62,12 @@ bool WorldTreeQuery<Shape>::areVoxelsIntersecting() {
     return result;
 }
 
-template<typename Shape>
-std::set<Voxel*> WorldTreeQuery<Shape>::intersectingVoxels() {
+std::set<Voxel*> WorldTreeQuery::intersectingVoxels() {
     std::set<Voxel*> result;
     m_queryInterrupted = false;
 
     query(getQueryRoot(), [&](WorldTreeGeode* geode) {
-        VoxelTreeQuery<Shape> voxelTreeQuery(&geode->worldObject()->collisionDetector().voxeltree(), m_shape);
+        VoxelTreeQuery voxelTreeQuery(&geode->worldObject()->collisionDetector().voxeltree(), m_shape);
 
         std::set<Voxel*> subresult = voxelTreeQuery.intersectingVoxels();
         result.insert(subresult.begin(), subresult.end());
@@ -78,13 +76,12 @@ std::set<Voxel*> WorldTreeQuery<Shape>::intersectingVoxels() {
     return result;
 }
 
-template<typename Shape>
-std::set<WorldObject*> WorldTreeQuery<Shape>::intersectingWorldObjects() {
+std::set<WorldObject*> WorldTreeQuery::intersectingWorldObjects() {
     std::set<WorldObject*> result;
     m_queryInterrupted = false;
 
     query(getQueryRoot(), [&](WorldTreeGeode* geode) {
-        VoxelTreeQuery<Shape> voxelTreeQuery(&geode->worldObject()->collisionDetector().voxeltree(), m_shape);
+        VoxelTreeQuery voxelTreeQuery(&geode->worldObject()->collisionDetector().voxeltree(), m_shape);
 
         bool hasIntersectingVoxels = voxelTreeQuery.areVoxelsIntersecting();
         if(hasIntersectingVoxels) {
@@ -95,8 +92,7 @@ std::set<WorldObject*> WorldTreeQuery<Shape>::intersectingWorldObjects() {
     return result;
 }
 
-template<typename Shape>
-WorldTreeNode* WorldTreeQuery<Shape>::getQueryRoot(WorldTreeNode* node) const {
+WorldTreeNode* WorldTreeQuery::getQueryRoot(WorldTreeNode* node) const {
     if(node == nullptr) {
         node = m_nodeHint;
     }
@@ -105,7 +101,7 @@ WorldTreeNode* WorldTreeQuery<Shape>::getQueryRoot(WorldTreeNode* node) const {
         return m_worldTree;
     }
     else {
-        if (node->aabb().contains(m_shape)) {
+        if (m_shape->containedBy(node->aabb())) {
             return node;
         }
         else if (node->parent() != nullptr) {
@@ -118,15 +114,14 @@ WorldTreeNode* WorldTreeQuery<Shape>::getQueryRoot(WorldTreeNode* node) const {
     }
 }
 
-template<typename Shape>
-void WorldTreeQuery<Shape>::query(WorldTreeNode* node, std::function<void(WorldTreeGeode*)> onGeodeInteraction) {
+void WorldTreeQuery::query(WorldTreeNode* node, std::function<void(WorldTreeGeode*)> onGeodeInteraction) {
     if(node->isLeaf()) {
         for(WorldTreeGeode* geode : node->geodes()) {
             assert(geode->aabb().intersects(node->aabb()));
             assert(geode->worldObject() != nullptr);
 
             if(m_collideableWith == nullptr || m_collideableWith->isCollideableWith(geode->worldObject())) {
-                if(m_shape.nearTo(geode->aabb())) {
+                if(m_shape->nearTo(geode->aabb())) {
                     onGeodeInteraction(geode);
 
                     if(m_queryInterrupted) {
@@ -138,7 +133,7 @@ void WorldTreeQuery<Shape>::query(WorldTreeNode* node, std::function<void(WorldT
     }
     else {
         for(WorldTreeNode *subnode : node->subnodes()) {
-            if(m_shape.nearTo(subnode->aabb())) {
+            if(m_shape->nearTo(subnode->aabb())) {
                 query(subnode, onGeodeInteraction);
 
                 if(m_queryInterrupted) {
@@ -148,4 +143,3 @@ void WorldTreeQuery<Shape>::query(WorldTreeNode* node, std::function<void(WorldT
         }
     }
 }
-

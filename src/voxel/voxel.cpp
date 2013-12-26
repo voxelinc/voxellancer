@@ -8,6 +8,7 @@
 
 #include "voxelcluster.h"
 #include "worldobject/worldobject.h"
+#include "voxeleffect/voxelexplosiongenerator.h"
 
 
 
@@ -74,6 +75,16 @@ void Voxel::onRemoval() {
 }
 
 void Voxel::onDestruction() {
-
+    if (m_voxelTreeNode && m_voxelTreeNode->worldObject()){
+        VoxelExplosionGenerator generator;
+        generator.setOrientation(m_voxelTreeNode->worldObject()->transform().orientation());
+        generator.setPosition(m_voxelTreeNode->worldObject()->transform().position()
+            + m_voxelTreeNode->worldObject()->transform().orientation() * (-m_voxelTreeNode->worldObject()->transform().center() + glm::vec3(m_gridCell)));
+        generator.setScale(m_voxelTreeNode->worldObject()->transform().scale());
+        generator.setColor(m_color);
+        generator.setForce(0.2f);
+        generator.setLifetime(Property<float>("vfx.debrisLifetime"), 0.3f);
+        generator.spawn();
+    }
 }
 

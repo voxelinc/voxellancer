@@ -2,12 +2,13 @@
 
 #include <glm/glm.hpp>
 
+#include "abstractshape.h"
+
 
 class WorldTransform;
 template<typename T> class TAABB;
 
-class Sphere
-{
+class Sphere : public AbstractShape {
 public:
     Sphere();
     Sphere(const glm::vec3 &position, float radius);
@@ -19,15 +20,14 @@ public:
     const glm::vec3 &position() const;
     void setPosition(const glm::vec3 &position);
 
-    bool intersects(const Sphere &other) const;
     bool contains(const Sphere &other) const;
 
-    template<typename T> bool nearTo(const TAABB<T>& aabb) const;
+    virtual bool intersects(const Sphere &other) const override;
+    virtual bool nearTo(const TAABB<float>& aabb) const override;
+    virtual bool containedBy(const TAABB<float>& aabb) const override;
 
     template<typename T> static Sphere containing(const TAABB<T>& aabb);
 
-    Sphere applied(const WorldTransform& transform) const;
-    Sphere inverseApplied(const WorldTransform& transform) const;
 
 
 protected:

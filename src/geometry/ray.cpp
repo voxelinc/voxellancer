@@ -47,11 +47,12 @@ bool Ray::intersects(const Sphere& sphere) const {
     return t0 >= 0 || t1 >= 0;
 }
 
-Ray Ray::applied(const WorldTransform& transform) const {
-    return Ray(transform.applyTo(m_origin), transform.orientation() * m_direction);
+bool Ray::nearTo(const TAABB<float>& aabb) const {
+    Sphere aabbSphere = Sphere::containing(aabb);
+    return intersects(aabbSphere);
 }
 
-Ray Ray::inverseApplied(const WorldTransform& transform) const {
-    return Ray(transform.inverseApplyTo(m_origin), glm::inverse(transform.orientation()) * m_direction);
+bool Ray::containedBy(const TAABB<float>& aabb) const {
+    return false;
 }
 

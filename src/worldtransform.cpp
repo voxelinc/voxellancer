@@ -39,7 +39,7 @@ const glm::vec3 &WorldTransform::position() const {
 
 void WorldTransform::setPosition(const glm::vec3& pos){
     assert(std::isfinite(pos.x) && std::isfinite(pos.y) && std::isfinite(pos.z));
-	m_position = pos;
+    m_position = pos;
 }
 
 // move in local axis direction

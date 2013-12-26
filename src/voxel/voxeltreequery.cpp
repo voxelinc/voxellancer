@@ -1,4 +1,4 @@
-#pragma once
+#include "voxeltreequery.h"
 
 #include <functional>
 
@@ -7,8 +7,7 @@
 #include "utils/tostring.h"
 
 
-template<typename Shape>
-VoxelTreeQuery<Shape>::VoxelTreeQuery(VoxelTreeNode* voxelTree, const Shape& shape):
+VoxelTreeQuery::VoxelTreeQuery(VoxelTreeNode* voxelTree, const AbstractShape* shape):
     m_voxelTree(voxelTree),
     m_shape(shape),
     m_queryInterrupted(false)
@@ -16,8 +15,7 @@ VoxelTreeQuery<Shape>::VoxelTreeQuery(VoxelTreeNode* voxelTree, const Shape& sha
 
 }
 
-template<typename Shape>
-bool VoxelTreeQuery<Shape>::areVoxelsIntersecting() {
+bool VoxelTreeQuery::areVoxelsIntersecting() {
     bool result = false;
     m_queryInterrupted = false;
 
@@ -29,8 +27,7 @@ bool VoxelTreeQuery<Shape>::areVoxelsIntersecting() {
     return result;
 }
 
-template<typename Shape>
-std::set<Voxel*> VoxelTreeQuery<Shape>::intersectingVoxels() {
+std::set<Voxel*> VoxelTreeQuery::intersectingVoxels() {
     std::set<Voxel*> result;
     m_queryInterrupted = false;
 
@@ -41,20 +38,18 @@ std::set<Voxel*> VoxelTreeQuery<Shape>::intersectingVoxels() {
     return result;
 }
 
-template<typename Shape>
-void VoxelTreeQuery<Shape>::query(VoxelTreeNode* node, std::function<void(Voxel*)> onVoxelIntersection) {
-    if(node->isLeaf()) {
-        if(node->isVoxel() && m_shape.intersects(node->boundingSphere())) {
+void VoxelTreeQuery::query(VoxelTreeNode* node, std::function<void(Voxel*)> onVoxelIntersection) {
+    if (node->isLeaf()) {
+        if(node->isVoxel() && m_shape->intersects(node->boundingSphere())) {
             onVoxelIntersection(node->voxel());
 
             if(m_queryInterrupted) {
                 return;
             }
         }
-    }
-    else {
-        for(VoxelTreeNode* subnode : node->subnodes()) {
-            if(m_shape.intersects(subnode->boundingSphere())) {
+    } else {
+        for (VoxelTreeNode* subnode : node->subnodes()) {
+            if (m_shape->intersects(subnode->boundingSphere())) {
                 query(subnode, onVoxelIntersection);
 
                 if(m_queryInterrupted) {

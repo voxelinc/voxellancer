@@ -22,5 +22,5 @@ void EngineVoxel::onRemoval(){
 }
 
 void EngineVoxel::onDestruction(){
-    //TODO: explode
+    Voxel::onDestruction();
 }

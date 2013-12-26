@@ -22,5 +22,6 @@ void CockpitVoxel::onRemoval(){
 }
 
 void CockpitVoxel::onDestruction(){
+    Voxel::onDestruction();
     // Spawn dead pilot
 }

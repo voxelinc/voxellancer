@@ -2,12 +2,14 @@
 
 #include <glm/glm.hpp>
 
+#include "abstractshape.h"
+
 
 class Sphere;
 class WorldTransform;
 template<typename T> class TAABB;
 
-class Line {
+class Line: public AbstractShape {
 public:
     Line();
     Line(const glm::vec3& a, const glm::vec3& b);
@@ -18,12 +20,9 @@ public:
     const glm::vec3& b() const;
     void setB(const glm::vec3& b);
 
-    bool intersects(const Sphere& sphere);
-
-    template<typename T> bool nearTo(const TAABB<T>& aabb) const;
-
-    Line applied(const WorldTransform& transform) const;
-    Line inverseApplied(const WorldTransform& transform) const;
+    virtual bool intersects(const Sphere& sphere) const override;
+    virtual bool nearTo(const TAABB<float>& aabb) const override;
+    virtual bool containedBy(const TAABB<float>& aabb) const override;
 
 
 protected:
@@ -31,4 +30,3 @@ protected:
     glm::vec3 m_b;
 };
 
-#include "line.inl"
