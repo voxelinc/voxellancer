@@ -13,7 +13,7 @@ public:
 
     virtual bool specialIsCollideableWith(const CollisionFilterable* other) const override;
 
-    virtual void update(float delta_sec) override;
+    virtual void update(float deltaSec) override;
 
     virtual void onCollision() override;
     virtual void onSpawnFail() override;

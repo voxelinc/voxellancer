@@ -8,7 +8,7 @@ public:
     Gun();
     virtual AimType aimType();
     virtual void shootAtPoint(Hardpoint* source, glm::vec3 target);
-    virtual void update(float delta_sec);
+    virtual void update(float deltaSec);
     virtual float aimRange();
 
 private:

@@ -32,8 +32,6 @@ void WorldLogic::update(float deltaSecs) {
     m_splitDetector.searchSplitOffs(m_damager.worldObjectModifications());
     m_splitter.split(m_splitDetector.splitDataList());
 
-    m_boundsShrinker.shrink(m_damager.worldObjectModifications());
-
     m_world.god().scheduleSpawns(m_splitter.splitOffWorldObjects());
 
 //    m_wrecker.detectWreckages(m_damager.modifiedVoxelClusters());
@@ -55,12 +53,6 @@ void WorldLogic::update(float deltaSecs) {
 
 void WorldLogic::damageForwardLoop(std::list<DamageImpact> damageImpacts) {
     m_damager.reset();
-
-    if(damageImpacts.empty()) {
-        return;
-    }
-
-    glow::AutoTimer t("damageForwardLoop");
 
     while(damageImpacts.size() > 0) {
         // only treat clusters that aren't scheduled for removal anyway

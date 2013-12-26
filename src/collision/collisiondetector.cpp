@@ -13,52 +13,14 @@ CollisionDetector::CollisionDetector(WorldObject & worldObject) :
     m_voxelTree(&worldObject),
     m_worldTree(nullptr),
     m_geode(nullptr),
-    m_worldObject(worldObject),
-    m_aabb()
+    m_worldObject(worldObject)
 {
 }
 
 CollisionDetector::~CollisionDetector() {
 }
 
-AABB CollisionDetector::aabb(const WorldTransform& transform) const {
-    return AABB::containing(sphere(transform));
-}
-
-void CollisionDetector::recalculateAABB() {
-    m_aabb = IAABB(glm::ivec3(0, 0, 0), glm::ivec3(0, 0, 0));
-    bool aabbInitialized = false;
-
-    for(const std::pair<const glm::ivec3, Voxel*>& p : m_worldObject.voxelMap()) {
-        assert(p.second != nullptr);
-
-        if(!aabbInitialized) {
-            m_aabb = IAABB(p.second->gridCell(), p.second->gridCell());
-            aabbInitialized = true;
-        }
-        else {
-            m_aabb.extend(p.second->gridCell());
-        }
-    }
-
-    m_worldTree->aabbChanged(m_geode);
-}
-
-Sphere CollisionDetector::sphere(const WorldTransform& transform) const {
-    Sphere sphere;
-    sphere.setPosition(transform.applyTo(glm::vec3(m_aabb.rub() + m_aabb.llf()) / 2.0f));
-    // m_aabb only contains the center of each voxel so add sqrt(2) to add the distance from center to edge
-    sphere.setRadius((glm::length(glm::vec3(m_aabb.rub() - m_aabb.llf())) + glm::root_two<float>()) / 2.f * transform.scale());
-    return sphere;
-}
-
-void CollisionDetector::addVoxel(Voxel *voxel) {
-    if(m_worldObject.voxelCount() == 0) {
-        m_aabb = IAABB(voxel->gridCell(), voxel->gridCell());
-    }
-    else {
-        m_aabb.extend(voxel->gridCell());
-    }
+void CollisionDetector::addVoxel(Voxel* voxel) {
     m_voxelTree.insert(voxel);
 }
 
@@ -103,10 +65,6 @@ const WorldTree* CollisionDetector::worldTree() const {
     return m_worldTree;
 }
 
-void CollisionDetector::finishInitialization() {
-    updateGeode();
-}
-
 void CollisionDetector::updateGeode() {
     if(m_geode != nullptr) {
         m_geode->setAABB(m_worldObject.aabb());
@@ -142,12 +100,9 @@ void CollisionDetector::reset() {
 
 void CollisionDetector::rebuildVoxelTree() {
     m_voxelTree = VoxelTreeNode(&m_worldObject);
-    m_aabb = IAABB();
-    for (auto& pair: m_worldObject.voxelMap())
-    {
+    for (auto& pair: m_worldObject.voxelMap()) {
         Voxel* voxel = pair.second;
         addVoxel(voxel);
-
     }
 }
 
