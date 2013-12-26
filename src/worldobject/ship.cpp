@@ -11,7 +11,7 @@ Ship::Ship() :
     m_hardpoints(),
 	prop_maxSpeed("ship.maxSpeed"),
 	prop_maxRotSpeed("ship.maxRotSpeed"),
-    m_targetObject(WorldObjectHandle::nullHandle())
+    m_targetObjectHandle(WorldObjectHandle::nullHandle())
 {
 }
 
@@ -47,11 +47,11 @@ void Ship::removeHardpoint(Hardpoint *hardpoint){
 }
 
 void Ship::setTargetObject(WorldObject* target){
-    m_targetObject = target ? target->handle() : WorldObjectHandle::nullHandle();
+    m_targetObjectHandle = target ? target->handle() : WorldObjectHandle::nullHandle();
 }
 
 WorldObject* Ship::targetObject(){
-    return m_targetObject->get();
+    return m_targetObjectHandle->get();
 }
 
 void Ship::fireAtPoint(glm::vec3 target){
