@@ -47,7 +47,7 @@ void VoxelExplosionGenerator::setForce(float force) {
 }
 
 void VoxelExplosionGenerator::setLifetime(float lifetime, float lifetimeRandomization){
-    assert(0 <= lifetimeRandomization && lifetimeRandomization <= 1);
+    assert(0.0f <= lifetimeRandomization && lifetimeRandomization <= 1.0f);
     m_lifetime = lifetime;
     m_lifetimeRandomization = lifetimeRandomization;
 }
@@ -79,7 +79,7 @@ void VoxelExplosionGenerator::spawn() {
         for (int j = 0; j < m_density; j++){
             for (int k = 0; k < m_density; k++){
                 float lifetime = m_lifetime;
-                if (m_lifetimeRandomization > 0) lifetime *= RandFloat::rand(1.0f - m_lifetimeRandomization, 1.0f + m_lifetimeRandomization);
+                if (m_lifetimeRandomization > 0.0f) lifetime *= RandFloat::rand(1.0f - m_lifetimeRandomization, 1.0f + m_lifetimeRandomization);
 
                 //multiply scale with 0.95 to certainly be below the collision threshold
                 VoxelExplosionParticle* newObject = new VoxelExplosionParticle(0.95f * scale, lifetime);
