@@ -150,7 +150,7 @@ go_bandit([]() {
             Sphere s1, s2, s3;
 
             s1.setRadius(1);
-            s2.setRadius(1.7);
+            s2.setRadius(1.7f);
             s3.setRadius(3);
 
             AssertThat(WorldTreeQuery(&worldTree, &s1).intersectingVoxels().size(), Equals(0));
