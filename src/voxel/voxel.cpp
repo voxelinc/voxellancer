@@ -32,7 +32,6 @@ Voxel::Voxel(const Voxel& other):
 Voxel::~Voxel() {
 }
 
-
 void Voxel::addToCluster(VoxelCluster *cluster) {
     cluster->addVoxel(this);
 }

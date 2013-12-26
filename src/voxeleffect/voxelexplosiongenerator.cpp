@@ -52,7 +52,6 @@ void VoxelExplosionGenerator::setLifetime(float lifetime, float lifetimeRandomiz
     m_lifetimeRandomization = lifetimeRandomization;
 }
 
-
 void VoxelExplosionGenerator::setColor(int color) {
     m_color = color;
 }
@@ -99,7 +98,6 @@ void VoxelExplosionGenerator::spawn() {
                     m_force * RandFloat::rand(-10.0f, 10.0f),
                     m_force * RandFloat::rand(-10.0f, 10.0f)));
                 
-                newObject->finishInitialization();
                 World::instance()->god().scheduleSpawn(newObject);
             }
         }

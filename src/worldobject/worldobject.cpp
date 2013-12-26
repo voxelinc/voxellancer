@@ -128,6 +128,7 @@ void WorldObject::setCrucialVoxel(const glm::ivec3& cell) {
 }
 
 void WorldObject::onCollision(){
+
 }
 
 void WorldObject::onSpawnFail(){
