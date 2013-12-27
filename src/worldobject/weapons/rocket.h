@@ -1,7 +1,7 @@
-#include "worldobject/worldobject.h"
+#include "worldobject/ship.h"
 #include "resource/clustercache.h"
 
-class Rocket : public WorldObject {
+class Rocket : public Ship {
 
 public:
     Rocket(glm::vec3 position, glm::quat orientation, const glm::vec3& initialSpeed, float travelSpeed, float lifetime, WorldObject* target);

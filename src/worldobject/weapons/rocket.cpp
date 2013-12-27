@@ -8,9 +8,11 @@
 #include "voxeleffect/voxelexplosiongenerator.h"
 
 
-Rocket::Rocket(glm::vec3 position, glm::quat orientation, const glm::vec3& initialSpeed, float travelSpeed, float lifetime, WorldObject* target) :
-    WorldObject(0.8f, glm::vec3(0), CollisionFilterClass::Rocket)
+Rocket::Rocket(glm::vec3 position, glm::quat orientation, const glm::vec3& initialSpeed, float travelSpeed, float lifetime, WorldObject* target)
 {
+    m_collisionFilterClass = CollisionFilterClass::Rocket;
+    m_transform.setScale(0.8f);
+
     m_lifetime = lifetime;
     m_travelSpeed = travelSpeed;
     m_target = target;
@@ -62,6 +64,8 @@ void Rocket::update(float deltaSec){
     m_lifetime -= deltaSec;
     if (m_lifetime < 0)
         World::instance()->god().scheduleRemoval(this);
+
+    Ship::update(deltaSec);
 }
 
 void Rocket::onCollision(){

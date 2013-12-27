@@ -1,13 +1,16 @@
 #include "ship.h"
 
 #include "hardpoint.h"
+#include "engine.h"
 #include "voxel/specialvoxels/hardpointvoxel.h"
+#include "voxel/specialvoxels/enginevoxel.h"
 #include "worldobject/weapons/gun.h"
 #include "worldobject/weapons/rocketlauncher.h"
 
 Ship::Ship() :
     WorldObject(CollisionFilterClass::Ship),
     m_hardpoints(),
+    m_engines(),
 	prop_maxSpeed("ship.maxSpeed"),
 	prop_maxRotSpeed("ship.maxRotSpeed"),
     m_targetObject(nullptr)
@@ -15,8 +18,11 @@ Ship::Ship() :
 }
 
 void Ship::update(float deltasec){
-    for(Hardpoint *hardpoint : m_hardpoints){
+    for (Hardpoint *hardpoint : m_hardpoints){
         hardpoint->update(deltasec);
+    }
+    for (Engine *engine : m_engines){
+        engine->update(deltasec);
     }
 }
 
@@ -25,20 +31,39 @@ void Ship::addHardpointVoxel(HardpointVoxel* voxel){
     //TODO: Adding the actual Launcher here is wrong, this is test code
     //point = new Hardpoint(this, glm::vec3(voxel->gridCell()), new Gun());
     if (m_hardpoints.size() % 3 == 0)
-        point = new Hardpoint(this, glm::vec3(voxel->gridCell()), new RocketLauncher());
+        point = new Hardpoint(this, voxel->gridCell(), new RocketLauncher());
     else
-        point = new Hardpoint(this, glm::vec3(voxel->gridCell()), new Gun());
+        point = new Hardpoint(this, voxel->gridCell(), new Gun());
     voxel->setHardpoint(point);
     m_hardpoints.push_back(point);
     addVoxel(voxel);
 }
 
-void Ship::removeHardpoint(Hardpoint *hardpoint){
+void Ship::removeHardpoint(Hardpoint* hardpoint){
     std::vector<Hardpoint*>::iterator iterator = m_hardpoints.begin();
     while (iterator != m_hardpoints.end()){
         if (*iterator == hardpoint){
             delete *iterator;
             m_hardpoints.erase(iterator);
+            break;
+        }
+        ++iterator;
+    }
+}
+
+void Ship::addEngineVoxel(EngineVoxel* voxel){
+    Engine* engine = new Engine(this, voxel);
+    voxel->setEngine(engine);
+    m_engines.push_back(engine);
+    addVoxel(voxel);
+}
+
+void Ship::removeEngine(Engine* engine){
+    std::vector<Engine*>::iterator iterator = m_engines.begin();
+    while (iterator != m_engines.end()){
+        if (*iterator == engine){
+            delete *iterator;
+            m_engines.erase(iterator);
             break;
         }
         ++iterator;

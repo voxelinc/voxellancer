@@ -98,8 +98,10 @@ void Game::initialize()
 
     Ship *normandy = new Ship();
     ClusterCache::instance()->fillObject(normandy, "data/voxelcluster/normandy.csv");
-	normandy->setPosition(glm::vec3(0, 0, -100));
+    normandy->setPosition(glm::vec3(0, 0, -100));
     normandy->objectInfo().setName("Normandy");
+    normandy->objectInfo().setShowOnHud(true);
+    normandy->objectInfo().setCanLockOn(true);
     m_world->god().scheduleSpawn(normandy);
 
     Ship *testCluster = new Ship();
@@ -122,6 +124,8 @@ void Game::initialize()
         }
     }
     wall->objectInfo().setName("Wall");
+    wall->objectInfo().setShowOnHud(true);
+    wall->objectInfo().setCanLockOn(true);
     m_world->god().scheduleSpawn(wall);
 
     WorldObject *planet = new WorldObject();
@@ -141,6 +145,8 @@ void Game::initialize()
     }
     planet->setCrucialVoxel(glm::ivec3(middle));
     planet->objectInfo().setName("Planet");
+    planet->objectInfo().setShowOnHud(true);
+    planet->objectInfo().setCanLockOn(true);
     m_world->god().scheduleSpawn(planet);
 
 

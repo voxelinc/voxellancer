@@ -2,10 +2,10 @@
 
 #include "ship.h"
 
-Hardpoint::Hardpoint(Ship* ship, const glm::vec3& positionInGrid, Weapon *weapon) {
+Hardpoint::Hardpoint(Ship* ship, const glm::ivec3& positionInGrid, Weapon *weapon) {
     assert(ship != nullptr);
     m_ship = ship;
-    m_positionInGrid = positionInGrid;
+    m_positionInGrid = glm::vec3(positionInGrid);
     installWeapon(weapon);
 }
 

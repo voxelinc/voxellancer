@@ -10,6 +10,7 @@
 class World;
 class God;
 class Hardpoint;
+class Engine;
 
 class Ship : public WorldObject {
 public:
@@ -17,7 +18,9 @@ public:
     virtual void update(float deltasec);
 
     virtual void addHardpointVoxel(HardpointVoxel* voxel);
-    void removeHardpoint(Hardpoint *hardpoint);
+    void removeHardpoint(Hardpoint* hardpoint);
+    virtual void addEngineVoxel(EngineVoxel* voxel);
+    void removeEngine(Engine* engine);
 
     void setTargetObject(WorldObject* target);
     WorldObject* targetObject();
@@ -34,5 +37,6 @@ protected:
     Property<float> prop_maxRotSpeed;
     
 	std::vector<Hardpoint*> m_hardpoints;
+    std::vector<Engine*> m_engines;
     WorldObject* m_targetObject;
 };
