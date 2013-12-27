@@ -11,6 +11,8 @@ using namespace bandit;
 
 go_bandit([](){
     describe("AABB", [](){
+        PropertyManager::instance()->reset();
+        PropertyManager::instance()->load("data/config.ini");
 
         before_each([&](){
         });

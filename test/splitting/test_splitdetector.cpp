@@ -14,12 +14,13 @@
 using namespace bandit;
 
 go_bandit([]() {
-    describe("Splitdetector", []() {
+    describe("Splitdetector and Splitter", []() {
         PropertyManager::instance()->reset();
         PropertyManager::instance()->load("data/config.ini");
 
         WorldObject* w = nullptr;
         SplitDetector detector;
+        Splitter splitter;
 
         Voxel* voxels[9];
 
@@ -53,6 +54,7 @@ go_bandit([]() {
         it("detects no split correctly", [&]() {
             WorldObjectModification modification(w);
 
+
             modification.removedVoxel(voxels[0]->gridCell());
             w->removeVoxel(voxels[0]);
 
@@ -65,12 +67,14 @@ go_bandit([]() {
         it("detects one split correctly", [&]() {
             WorldObjectModification modification(w);
 
+
             modification.removedVoxel(voxels[2]->gridCell());
             w->removeVoxel(voxels[2]);
 
             detector.searchSplitOffs(std::list<WorldObjectModification>{ modification });
 
             AssertThat(detector.splitDataList().size(), Equals(1));
+
 
             // check if the split is the upper part of the voxel without the crucial voxel
             SplitData* splitOff = detector.splitDataList().front();
@@ -86,6 +90,7 @@ go_bandit([]() {
         it("works with destroyed crucial voxels", [&]() {
             WorldObjectModification modification(w);
 
+
             modification.removedVoxel(voxels[1]->gridCell());
             w->removeVoxel(voxels[1]);
 
@@ -97,6 +102,7 @@ go_bandit([]() {
 
         it("works with multiple splittoffs", [&]() {
             WorldObjectModification modification(w);
+
 
             modification.removedVoxel(voxels[3]->gridCell());
             w->removeVoxel(voxels[3]);
@@ -110,6 +116,7 @@ go_bandit([]() {
         it("works with multiple removed voxelss", [&]() {
             WorldObjectModification modification(w);
 
+
             modification.removedVoxel(voxels[3]->gridCell());
             w->removeVoxel(voxels[3]);
             modification.removedVoxel(voxels[2]->gridCell());
@@ -121,6 +128,55 @@ go_bandit([]() {
 
             AssertThat(detector.splitDataList().size(), Equals(2));
         });
+
+        it("splits no split correctly", [&]() {
+            WorldObjectModification modification(w);
+
+            w->addVoxel(new Voxel(glm::ivec3(3, 0, 0)));
+            w->addVoxel(new Voxel(glm::ivec3(3, 1, 0)));
+            modification.removedVoxel(glm::ivec3(2, 0, 0));
+            w->removeVoxel(w->voxel(glm::ivec3(2, 0, 0)));
+
+            detector.searchSplitOffs(std::list<WorldObjectModification>{ modification });
+            splitter.split(detector.splitDataList());
+
+            AssertThat(splitter.splitOffWorldObjects().size(), Equals(0));
+        });
+
+
+        it("splits one split correctly", [&]() {
+            WorldObjectModification modification(w);
+
+            modification.removedVoxel(glm::ivec3(2, 2, 0));
+            w->removeVoxel(w->voxel(glm::ivec3(2, 2, 0)));
+
+            detector.searchSplitOffs(std::list<WorldObjectModification>{ modification });
+            splitter.split(detector.splitDataList());
+
+            AssertThat(splitter.splitOffWorldObjects().size(), Equals(1));
+
+            WorldObject* splitOff = splitter.splitOffWorldObjects().front();
+            AssertThat(splitOff->voxel(glm::ivec3(2, 3, 0)) == nullptr, IsFalse());
+            AssertThat(splitOff->voxel(glm::ivec3(2, 0, 0)) == nullptr, IsTrue());
+
+            AssertThat(w->voxel(glm::ivec3(2, 3, 0)) == nullptr, IsTrue());
+            AssertThat(w->voxel(glm::ivec3(2, 0, 0)) == nullptr, IsFalse());
+
+        });
+
+
+        it("works with multiple splittoffs", [&]() {
+            WorldObjectModification modification(w);
+
+            modification.removedVoxel(glm::ivec3(2, 3, 0));
+            w->removeVoxel(w->voxel(glm::ivec3(2, 3, 0)));
+
+            detector.searchSplitOffs(std::list<WorldObjectModification>{ modification });
+            splitter.split(detector.splitDataList());
+
+            AssertThat(splitter.splitOffWorldObjects().size(), Equals(2));
+        });
+
 
     });
 });

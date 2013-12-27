@@ -1,5 +1,6 @@
 #include "physics.h"
 
+#include <functional>
 #include <iostream>
 
 #include <glm/gtx/quaternion.hpp>
@@ -26,8 +27,7 @@ Physics::Physics(WorldObject& worldObject, float scale) :
     m_dampening("physics.globalDampening"),
     m_angularDampening("physics.globalAngularDampening"),
     m_mass(0),
-    m_center(0),
-    m_massValid(true),
+    m_accumulatedMassVec(0.0f, 0.0f, 0.0f),
     m_worldObject(worldObject)
 {
     m_massScaleFactor = glm::pow(scale, 3.f);
@@ -64,33 +64,10 @@ float Physics::mass() const {
     return m_mass;
 }
 
-bool Physics::massValid() const {
-    return m_massValid;
-}
-
-glm::vec3 Physics::calculateMassAndCenter() {
-    if (m_massValid)
-        m_center;
-
-    glm::vec3 center;
-    m_mass = 0;
-    for (auto pair : m_worldObject.voxelMap()) {
-        Voxel *voxel = pair.second;
-        m_mass += voxel->mass();
-        center += glm::vec3(voxel->gridCell()) * voxel->mass();
-    }
-    center /= m_mass;
-    m_mass *= m_massScaleFactor;
-    m_massValid = true;
-    m_center = center;
-
-    return m_center;
-}
-
 std::list<VoxelCollision> &Physics::move(float deltaSec) {
     updateSpeed(deltaSec);
 
-    if(m_speed != glm::vec3(0.0f) || m_angularSpeed != glm::vec3(0.0f)) {
+    if (m_speed != glm::vec3(0.0f) || m_angularSpeed != glm::vec3(0.0f)) {
         WorldTransform targetTransform(m_worldObject.transform());
         targetTransform.moveWorld(m_speed * deltaSec);
         targetTransform.rotate(glm::quat(m_angularSpeed * deltaSec));
@@ -102,28 +79,20 @@ std::list<VoxelCollision> &Physics::move(float deltaSec) {
     return m_worldObject.collisionDetector().lastCollisions();
 }
 
-// accelerate along local axis
 void Physics::accelerate(const glm::vec3& direction) {
     m_acceleration += m_worldObject.transform().orientation() * direction;
 }
 
-// angular acceleration around local axis
 void Physics::accelerateAngular(const glm::vec3& axis) {
     m_angularAcceleration += axis;
 }
 
 void Physics::addVoxel(Voxel* voxel) {
-    m_massValid = false;
+    alterCell(voxel, true);
 }
 
 void Physics::removeVoxel(Voxel* voxel) {
-    float oldUnscaledMass = m_mass / m_massScaleFactor;
-    float newUnscaledMass = oldUnscaledMass - voxel->mass();
-
-    m_center -= glm::vec3(voxel->gridCell()) * voxel->mass() / oldUnscaledMass;
-    m_center *= oldUnscaledMass / newUnscaledMass;
-
-    m_mass -= voxel->mass() * m_massScaleFactor;
+    alterCell(voxel, false);
 }
 
 void Physics::updateSpeed(float deltaSec) {
@@ -137,10 +106,19 @@ void Physics::updateSpeed(float deltaSec) {
     m_angularAcceleration = glm::vec3(0);
 }
 
-glm::vec3 Physics::physicalCenter() {
-    return m_center;
+void Physics::alterCell(Voxel* voxel, bool isAdd) {
+    float scaledVoxelMass = voxel->normalizedMass() * m_massScaleFactor;
+    if (!isAdd) {
+        scaledVoxelMass *= -1;
+    }
+
+    m_mass = m_mass + scaledVoxelMass;
+    m_accumulatedMassVec = m_accumulatedMassVec + glm::vec3(voxel->gridCell()) * scaledVoxelMass;
+
+    if (m_mass > 0.0f) {
+        m_worldObject.setCenterAndAdjustPosition(m_accumulatedMassVec / m_mass);
+    }  else {
+        m_worldObject.setCenterAndAdjustPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+    }
 }
-
-
-
 

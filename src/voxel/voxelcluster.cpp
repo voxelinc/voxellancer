@@ -22,10 +22,37 @@ VoxelCluster::VoxelCluster(float scale):
 }
 
 VoxelCluster::~VoxelCluster() {
-    // free all clusters
     for (auto& element : m_voxels){
         delete element.second;
     }
+}
+
+const WorldTransform& VoxelCluster::transform() {
+    return m_transform;
+}
+
+const IAABB &VoxelCluster::gridAABB() const {
+    return m_gridAABB;
+}
+
+AABB VoxelCluster::aabb() const {
+    return aabb(m_transform);
+}
+
+AABB VoxelCluster::aabb(const WorldTransform& transform) const {
+    return AABB::containing(sphere(transform));
+}
+
+Sphere VoxelCluster::sphere() const {
+    return sphere(m_transform);
+}
+
+Sphere VoxelCluster::sphere(const WorldTransform& transform) const {
+    Sphere sphere;
+    sphere.setPosition(transform.applyTo(glm::vec3(m_gridAABB.rub() + m_gridAABB.llf()) / 2.0f));
+    // m_gridAABB only contains the center of each voxel so add sqrt(2) to add the distance from center to edge
+    sphere.setRadius((glm::length(glm::vec3(m_gridAABB.rub() - m_gridAABB.llf())) + glm::root_two<float>()) / 2.f * transform.scale());
+    return sphere;
 }
 
 Voxel* VoxelCluster::voxel(const glm::ivec3& position) {
@@ -33,15 +60,19 @@ Voxel* VoxelCluster::voxel(const glm::ivec3& position) {
     return i == m_voxels.end() ? nullptr : i->second;
 }
 
-void VoxelCluster::addVoxel(Voxel *voxel) {
+void VoxelCluster::addVoxel(Voxel* voxel) {
     assert(m_voxels[voxel->gridCell()] == nullptr);
 
     m_voxels[voxel->gridCell()] = voxel;
     m_voxelRenderData.invalidate();
+
+    extendGridAABB(voxel);
 }
 
 void VoxelCluster::removeVoxel(Voxel* voxel) {
     assert(voxel != nullptr);
+
+    shrinkGridAABB(voxel);
 
     m_voxels.erase(voxel->gridCell());
     m_voxelRenderData.invalidate();
@@ -60,10 +91,6 @@ int VoxelCluster::voxelCount() const {
     return m_voxels.size();
 }
 
-const WorldTransform& VoxelCluster::transform() {
-    return m_transform;
-}
-
 void VoxelCluster::rotate(const glm::quat& rotation) {
     m_transform.rotate(rotation);
 }
@@ -78,4 +105,33 @@ void VoxelCluster::setOrientation(const glm::quat& orientation) {
 
 void VoxelCluster::setPosition(const glm::vec3& pos) {
     m_transform.setPosition(pos);
+}
+
+void VoxelCluster::extendGridAABB(Voxel* voxel) {
+    glm::ivec3 cell = voxel->gridCell();
+    if(voxelCount() == 0) {
+        m_gridAABB = IAABB(cell, cell);
+    }
+    else {
+        m_gridAABB.extend(cell);
+    }
+
+    m_voxelsXSorted.insert(voxel);
+    m_voxelsYSorted.insert(voxel);
+    m_voxelsZSorted.insert(voxel);
+}
+
+void VoxelCluster::shrinkGridAABB(Voxel* voxel) {
+    m_voxelsXSorted.erase(voxel);
+    m_voxelsYSorted.erase(voxel);
+    m_voxelsZSorted.erase(voxel);
+
+    if(!m_voxelsXSorted.empty()) {
+        assert(!m_voxelsYSorted.empty() && !m_voxelsZSorted.empty());
+        m_gridAABB.setLlf(glm::ivec3((*m_voxelsXSorted.begin())->gridCell().x, (*m_voxelsYSorted.begin())->gridCell().y, (*m_voxelsZSorted.begin())->gridCell().z));
+        m_gridAABB.setRub(glm::ivec3((*m_voxelsXSorted.rbegin())->gridCell().x, (*m_voxelsYSorted.rbegin())->gridCell().y, (*m_voxelsZSorted.rbegin())->gridCell().z));
+    }
+    else {
+        m_gridAABB = IAABB(glm::ivec3(0, 0, 0), glm::ivec3(0, 0, 0));
+    }
 }

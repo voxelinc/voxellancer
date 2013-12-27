@@ -21,5 +21,6 @@ void FuelVoxel::onRemoval(){
 
 }
 void FuelVoxel::onDestruction(){
-    //TODO: Explode
+    //TODO: explode more than default
+    Voxel::onDestruction();
 }

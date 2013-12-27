@@ -17,11 +17,11 @@ AimType RocketLauncher::aimType(){
     return Object;
 }
 
-void RocketLauncher::update(float delta_sec){
+void RocketLauncher::update(float deltaSec){
     if (m_cooldown <= 0){ //avoid negative overflow
         m_cooldown = 0;
     } else {
-        m_cooldown -= delta_sec;
+        m_cooldown -= deltaSec;
     }
 }
 

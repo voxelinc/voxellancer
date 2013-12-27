@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 #include <glow/glow.h>
 
+#include "voxeleffect/voxelexplosiongenerator.h"
 
 /*
 * 360 gamepad assignment: (direction given for positive values)
@@ -39,6 +40,7 @@ InputHandler::InputHandler(GLFWwindow *window, Player* player, Camera *camera) :
     bumperRightState = false;
     glfwGetWindowSize(m_window, &m_windowWidth, &m_windowHeight);
     glfwSetCursorPos(m_window, m_windowWidth / 2, m_windowHeight / 2);
+
     m_cursorMaxDistance = glm::min(m_windowHeight, m_windowWidth) / 2;
 
     m_mouseControl = false;
@@ -50,7 +52,6 @@ InputHandler::InputHandler(GLFWwindow *window, Player* player, Camera *camera) :
 InputHandler::~InputHandler(){
 
 }
-
 
 void InputHandler::resizeEvent(const unsigned int width, const unsigned int height){
 	//glfwGetWindowSize(m_window, &m_windowWidth, &m_windowHeight);
@@ -68,7 +69,7 @@ void InputHandler::keyCallback(int key, int scancode, int action, int mods){
         selectNextTarget(glfwGetKey(m_window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS);
 }
 
-void InputHandler::update(float delta_sec) {
+void InputHandler::update(float deltaSec) {
 	/* Check here for every-frame events, e.g. view & movement controls */
     if (glfwGetWindowAttrib(m_window, GLFW_FOCUSED)){
         if (m_lastfocus){
@@ -151,9 +152,7 @@ void InputHandler::update(float delta_sec) {
                     rot = glm::normalize(rot);
                 }
                 m_player->rotate(rot);
-
             }
-
 
             // mouse handling
             double x, y;

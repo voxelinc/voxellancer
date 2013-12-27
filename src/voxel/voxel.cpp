@@ -8,29 +8,35 @@
 
 #include "voxelcluster.h"
 #include "worldobject/worldobject.h"
+#include "voxeleffect/voxelexplosiongenerator.h"
 
 
 
-Voxel::Voxel(const glm::ivec3& gridCell, int color, float mass, float hp):
+Voxel::Voxel(const glm::ivec3& gridCell, int color, float normalizedMass, float hp):
     m_gridCell(gridCell),
     m_voxelTreeNode(nullptr),
     m_color(color),
-    m_mass(mass),
+    m_normalizedMass(normalizedMass),
     m_hp(hp)
 {
+    assert(m_normalizedMass > 0.0f);
+
     assert( gridCell.x >= 0 && gridCell.x < 256 &&
             gridCell.y >= 0 && gridCell.y < 256 &&
             gridCell.z >= 0 && gridCell.z < 256);
 }
 
 Voxel::Voxel(const Voxel& other):
-    Voxel(other.gridCell(), other.color(), other.mass(), other.hp())
+    Voxel(other.gridCell(), other.color(), other.normalizedMass(), other.hp())
 {
 }
 
 Voxel::~Voxel() {
 }
 
+const glm::ivec3& Voxel::gridCell() const {
+    return m_gridCell;
+}
 
 void Voxel::addToCluster(VoxelCluster *cluster) {
     cluster->addVoxel(this);
@@ -38,10 +44,6 @@ void Voxel::addToCluster(VoxelCluster *cluster) {
 
 void Voxel::addToObject(WorldObject *object) {
     object->addVoxel(this);
-}
-
-const glm::ivec3 &Voxel::gridCell() const {
-    return m_gridCell;
 }
 
 VoxelTreeNode *Voxel::voxelTreeNode() {
@@ -64,8 +66,8 @@ void Voxel::applyDamage(float deltaHp) {
     m_hp = std::max(m_hp - deltaHp, 0.0f);
 }
 
-float Voxel::mass() const {
-    return m_mass;
+float Voxel::normalizedMass() const {
+    return m_normalizedMass;
 }
 
 void Voxel::onRemoval() {
@@ -73,6 +75,16 @@ void Voxel::onRemoval() {
 }
 
 void Voxel::onDestruction() {
-
+    if (m_voxelTreeNode && m_voxelTreeNode->worldObject()){
+        VoxelExplosionGenerator generator;
+        generator.setOrientation(m_voxelTreeNode->worldObject()->transform().orientation());
+        generator.setPosition(m_voxelTreeNode->worldObject()->transform().position()
+            + m_voxelTreeNode->worldObject()->transform().orientation() * (-m_voxelTreeNode->worldObject()->transform().center() + glm::vec3(m_gridCell)));
+        generator.setScale(m_voxelTreeNode->worldObject()->transform().scale());
+        generator.setColor(m_color);
+        generator.setForce(0.2f);
+        generator.setLifetime(Property<float>("vfx.debrisLifetime"), 0.3f);
+        generator.spawn();
+    }
 }
 

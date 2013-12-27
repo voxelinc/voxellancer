@@ -72,15 +72,14 @@ const glm::vec3 Camera::position() {
     return m_position;
 }
 
-float Camera::zNear() const
-{
+float Camera::zNear() const {
 	return m_zNear;
 }
 
-void Camera::setZNear(const float zNear)
-{
-	if (zNear == m_zNear)
+void Camera::setZNear(const float zNear) {
+	if (zNear == m_zNear) {
 		return;
+    }
 
 	m_zNear = zNear;
 	assert(m_zNear > 0.0);
@@ -88,62 +87,56 @@ void Camera::setZNear(const float zNear)
 	projectionDirty();
 }
 
-float Camera::zFar() const
-{
+float Camera::zFar() const {
 	return m_zFar;
 }
 
-void Camera::setZFar(const float zFar)
-{
-	if (zFar == m_zFar)
+void Camera::setZFar(const float zFar) {
+	if (zFar == m_zFar) {
 		return;
+    }
 
 	m_zFar = zFar;
 	assert(m_zFar > m_zNear);
     projectionDirty();
 }
 
-float Camera::fovy() const
-{
+float Camera::fovy() const {
 	return m_fovy;
 }
 
-void Camera::setFovy(const float fovy)
-{
-	if (fovy == m_fovy)
+void Camera::setFovy(const float fovy) {
+	if (fovy == m_fovy) {
 		return;
+    }
 
 	m_fovy = fovy;
 	assert(m_fovy > 0.0);
     projectionDirty();
 }
 
-const glm::ivec2 Camera::viewport() const
-{
+const glm::ivec2 Camera::viewport() const {
 	return m_viewport;
 }
 
-void Camera::setViewport(const glm::ivec2 & viewport)
-{
-	if (viewport == m_viewport)
+void Camera::setViewport(const glm::ivec2& viewport) {
+	if (viewport == m_viewport) {
 		return;
+    }
 
 	m_aspect = viewport.x / glm::max(static_cast<float>(viewport.y), 1.f);
 	m_viewport = viewport;
     projectionDirty();
 }
 
-float Camera::aspectRatio() const
-{
+float Camera::aspectRatio() const {
 	return m_aspect;
 }
 
-const glm::mat4 Camera::projection()
-{
+const glm::mat4 Camera::projection() {
 	return m_projection;
 }
 
-const glm::mat4 Camera::viewProjection()
-{
+const glm::mat4 Camera::viewProjection() {
 	return m_viewProjection;
 }

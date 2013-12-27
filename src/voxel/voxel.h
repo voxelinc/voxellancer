@@ -4,6 +4,8 @@
 
 #include <glm/glm.hpp>
 #include "geometry/sphere.h"
+#include "property/property.h"
+
 
 class VoxelCluster;
 class VoxelTreeNode;
@@ -21,7 +23,7 @@ namespace std {
 class Voxel
 {
 public:
-    Voxel(const glm::ivec3& gridCell, const int color = 0xFFFFFF, float mass = 1.0f, float hp = 20.0f);
+    Voxel(const glm::ivec3& gridCell, const int color = 0xFFFFFF, float mass = Property<float>("voxel.DefaultMass"), float hp = Property<float>("voxel.DefaultHP"));
     Voxel(const Voxel& other);
     virtual ~Voxel();
 
@@ -38,7 +40,7 @@ public:
     float hp() const;
     void applyDamage(float deltaHp);
 
-    float mass() const;
+    float normalizedMass() const;
 
     // These hooks apply only for WorldObjects and do not need to be called by pqure VoxelClusters
     virtual void onRemoval();
@@ -50,6 +52,6 @@ protected:
     VoxelTreeNode *m_voxelTreeNode;
     int m_color;
     float m_hp;
-    float m_mass;
+    float m_normalizedMass;
 };
 

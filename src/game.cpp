@@ -45,7 +45,7 @@ Game::Game(GLFWwindow *window) :
     m_player(&m_camera),
     m_inputHandler(window, &m_player, &m_camera)
 {
-	reloadConfig();
+    reloadConfig();
 }
 
 Game::~Game(){
@@ -90,7 +90,6 @@ void Game::initialize()
     testClusterMoveable->addVoxel(new Voxel(glm::ivec3(1, 1, 7), 0x0000FF));
     testClusterMoveable->addVoxel(new Voxel(glm::ivec3(1, 0, 7), 0xFF0000));
     testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 8), 0xFF0080));
-    testClusterMoveable->finishInitialization();
     testClusterMoveable->objectInfo().setName("movable");
     m_world->god().scheduleSpawn(testClusterMoveable);
 
@@ -100,14 +99,12 @@ void Game::initialize()
     Ship *normandy = new Ship();
     ClusterCache::instance()->fillObject(normandy, "data/voxelcluster/normandy.csv");
 	normandy->setPosition(glm::vec3(0, 0, -100));
-    normandy->finishInitialization();
     normandy->objectInfo().setName("Normandy");
     m_world->god().scheduleSpawn(normandy);
 
     Ship *testCluster = new Ship();
     ClusterCache::instance()->fillObject(testCluster, "data/voxelcluster/basicship.csv");
     testCluster->setPosition(glm::vec3(0, 0, 10));
-    testCluster->finishInitialization();
     testCluster->objectInfo().setName("basicship");
     testCluster->objectInfo().setShowOnHud(false);
     m_world->god().scheduleSpawn(testCluster);
@@ -115,7 +112,7 @@ void Game::initialize()
     m_player.setShip(testCluster);
 
     WorldObject *wall = new WorldObject(1);
-    wall->move(glm::vec3(-20, 0, -50));
+    wall->move(glm::vec3(-30, 0, -50));
     wall->rotate(glm::angleAxis(-90.f, glm::vec3(0, 1, 0)));
     for(int x = 0; x < 20; x++) {
         for(int y = 0; y < 15; y++) {
@@ -124,7 +121,6 @@ void Game::initialize()
             }
         }
     }
-    wall->finishInitialization();
     wall->objectInfo().setName("Wall");
     m_world->god().scheduleSpawn(wall);
 
@@ -144,9 +140,29 @@ void Game::initialize()
         }
     }
     planet->setCrucialVoxel(glm::ivec3(middle));
-    planet->finishInitialization();
     planet->objectInfo().setName("Planet");
     m_world->god().scheduleSpawn(planet);
+
+
+    for(int e = 0; e < 15; e++) {
+        WorldObject *enemy = new WorldObject();
+        int r = 80;
+        enemy->move(glm::vec3(-80 + rand()%r-r/2,rand()%r-r/2,-20 + rand()%r-r/2));
+
+        for(int x = 0; x < 4; x++) {
+            for(int y = 0; y < 2; y++) {
+                for(int z = 0; z < 8; z++) {
+                    enemy->addVoxel(new Voxel(glm::ivec3(x, y, z), 0xF0FF00));
+                }
+            }
+        }
+        enemy->objectInfo().setName("enemy");
+        enemy->objectInfo().setShowOnHud(false);
+        enemy->objectInfo().setCanLockOn(false);
+        m_world->god().scheduleSpawn(enemy);
+
+    }
+
 
     glow::debug("Initial spawn");
     m_world->god().spawn();
@@ -168,21 +184,21 @@ void Game::initialize()
 }
 
 
-void Game::update(float delta_sec)
+void Game::update(float deltaSec)
 {
     // skip non-updates
-    if (delta_sec == 0) return;
+    if (deltaSec == 0) return;
 
-    //if (delta_sec < 1 / 60) delta_sec = 1 / 60;
+    //if (deltaSec < 1 / 60) deltaSec = 1 / 60;
     // avoid big jumps after debugging ;)
-    delta_sec = glm::min(1.f, delta_sec);
+    deltaSec = glm::min(1.f, deltaSec);
 
     //m_treeStateReporter.nudge();
 
-    m_inputHandler.update(delta_sec);
-    World::instance()->update(delta_sec);
+    m_inputHandler.update(deltaSec);
+    World::instance()->update(deltaSec);
     m_player.setFollowCam();
-	m_hud->update(delta_sec);
+	m_hud->update(deltaSec);
 }
 
 void Game::draw()

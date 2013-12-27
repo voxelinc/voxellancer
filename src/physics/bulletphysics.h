@@ -9,7 +9,7 @@ public:
     BulletPhysics(WorldObject& worldObject, float scale);
 
 protected:
-    
-    virtual void updateSpeed(float delta_sec);
+
+    virtual void updateSpeed(float deltaSec);
 
 };

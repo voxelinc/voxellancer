@@ -25,7 +25,7 @@ public:
     virtual void shootAtPoint(Hardpoint* source, glm::vec3 target);
     virtual void shootAtObject(Hardpoint* source, WorldObject* target);
 
-    virtual void update(float delta_sec) = 0;
+    virtual void update(float deltaSec) = 0;
 
     virtual float aimRange() = 0;
 

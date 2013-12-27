@@ -7,6 +7,7 @@
 #include "worldobject/worldobject.h"
 
 #include "worldtree/worldtree.h"
+#include "worldtree/worldtreequery.h"
 
 #include "utils/tostring.h"
 
@@ -33,9 +34,10 @@ Movement::~Movement() {
 bool Movement::perform() {
     assert(m_worldObject.collisionDetector().geode() != nullptr);
 
-    AABB phaseAABB = m_collisionDetector.aabb(m_originalTransform).united(m_collisionDetector.aabb(m_targetTransform));
+    AABB phaseAABB = m_worldObject.aabb(m_originalTransform).united(m_worldObject.aabb(m_targetTransform));
+    WorldTreeNode* nodeHint = m_worldObject.collisionDetector().geode()->containingNode();
 
-    if(m_collisionDetector.worldTree()->areGeodesInAABB(phaseAABB, m_worldObject.collisionDetector().geode()->containingNode(), &m_worldObject)) {
+    if(WorldTreeQuery(m_collisionDetector.worldTree(), &phaseAABB, nodeHint, &m_worldObject).areGeodesNear()) {
         glm::vec3 directionalStep = m_targetTransform.position() - m_originalTransform.position();
         m_distance = glm::length(directionalStep);
 
