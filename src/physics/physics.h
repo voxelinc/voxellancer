@@ -17,7 +17,10 @@ class WorldTransform;
 
 class Physics {
 public:
-    Physics(WorldObject& worldObject, float scale);
+    Physics(WorldObject& worldObject, 
+        float scale, 
+        float dampening = Property<float>("physics.globalDampening"), 
+        float angularDampening = Property<float>("physics.globalAngularDampening"));
     virtual ~Physics();
 
     const glm::vec3& speed() const;
@@ -53,8 +56,8 @@ protected:
     glm::vec3 m_acceleration;
     glm::vec3 m_angularAcceleration;
 
-    Property<float> m_dampening;
-    Property<float> m_angularDampening;
+    float m_dampening;
+    float m_angularDampening;
 
     float m_mass;
     std::list<VoxelCollision> m_collisions;

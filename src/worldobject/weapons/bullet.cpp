@@ -4,12 +4,11 @@
 #include "world/world.h"
 
 #include "utils/tostring.h"
-#include "physics/bulletphysics.h"
 #include "voxeleffect/voxelexplosiongenerator.h"
 
 
 Bullet::Bullet(WorldObject* creator, glm::vec3 position, glm::quat orientation, glm::vec3 direction, float speed, float range) :
-    WorldObject(new BulletPhysics(*this, 0.5), new CollisionDetector(*this), 0.5f, CollisionFilterClass::Bullet),
+    WorldObject(new Physics(*this, 0.5f, 0.0f, 0.0f), new CollisionDetector(*this), 0.5f, CollisionFilterClass::Bullet),
     m_creator(creator)
 {
     m_lifetime = range / speed;
