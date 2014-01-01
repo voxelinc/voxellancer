@@ -5,7 +5,14 @@
 #include "worldobject/weapons/rocketlauncher.h"
 
 VoxelExplosionParticle::VoxelExplosionParticle(float scale, float lifetime) :
-    WorldObject(scale, glm::vec3(0, 0, 0), CollisionFilterClass::ExplosionParticle),
+    WorldObject(
+        new Physics(*this, 
+            scale, 
+            Property<float>("physics.particleDampening"), 
+            Property<float>("physics.particleAngularDampening")), 
+        new CollisionDetector(*this), 
+        scale, 
+        CollisionFilterClass::ExplosionParticle),
     m_lifetime(lifetime)
 {
     m_objectInfo.setShowOnHud(false);
