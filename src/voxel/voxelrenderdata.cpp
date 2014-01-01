@@ -16,12 +16,9 @@ VoxelRenderData::VoxelRenderData(std::unordered_map<glm::ivec3, Voxel*> &voxel) 
     m_voxel(voxel),
     m_texturesDirty(true)
 {
-    m_positionTexture = new glow::Texture(GL_TEXTURE_1D);
-    m_positionTexture->setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    m_positionTexture->setParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    m_colorTexture = new glow::Texture(GL_TEXTURE_1D);
-    m_colorTexture->setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    m_colorTexture->setParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    m_voxelTexture = new glow::Texture(GL_TEXTURE_2D);
+    m_voxelTexture->setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    m_voxelTexture->setParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 }
 
 
@@ -29,28 +26,28 @@ VoxelRenderData::~VoxelRenderData() {
 }
 
 void VoxelRenderData::updateTextures() {
-    int size = nextPowerOf2(m_voxel.size());
-    std::vector<unsigned char> positionData(size * 3);
-    std::vector<unsigned char> colorData(size * 3);
+    int size = nextPowerOf2(static_cast<int>(glm::ceil(glm::sqrt(m_voxel.size() * 2.0f))));
+    size = std::max(4, size);
+
+    std::vector<unsigned char> voxelData(size * size * 3);
 
     int i = 0;
     for (auto pair : m_voxel) {
         Voxel *voxel = pair.second;
         assert(voxel != nullptr);
 
-        positionData[i * 3 + 0] = static_cast<unsigned char>(voxel->gridCell().x);
-        positionData[i * 3 + 1] = static_cast<unsigned char>(voxel->gridCell().y);
-        positionData[i * 3 + 2] = static_cast<unsigned char>(voxel->gridCell().z);
-        colorData[i * 3 + 0] = voxel->color() >> 16;
-        colorData[i * 3 + 1] = (voxel->color() & 0xFF00) >> 8;
-        colorData[i * 3 + 2] = voxel->color() & 0xFF;
-
+        voxelData[i * 6 + 0] = static_cast<unsigned char>(voxel->gridCell().x);
+        voxelData[i * 6 + 1] = static_cast<unsigned char>(voxel->gridCell().y);
+        voxelData[i * 6 + 2] = static_cast<unsigned char>(voxel->gridCell().z);
+        voxelData[i * 6 + 3] = voxel->color() >> 16;
+        voxelData[i * 6 + 4] = (voxel->color() & 0xFF00) >> 8;
+        voxelData[i * 6 + 5] = voxel->color() & 0xFF;
         i++;
     }
     m_voxelCount = i;
+    m_textureSize = size;
 
-    m_positionTexture->image1D(0, GL_RGB, size, 0, GL_RGB, GL_UNSIGNED_BYTE, &positionData.front());
-    m_colorTexture->image1D(0, GL_RGB, size, 0, GL_RGB, GL_UNSIGNED_BYTE, &colorData.front());
+    m_voxelTexture->image2D(0, GL_RGB, size, size, 0, GL_RGB, GL_UNSIGNED_BYTE, &voxelData.front());
     CheckGLError();
 
     m_texturesDirty = false;
@@ -63,18 +60,16 @@ int VoxelRenderData::voxelCount() {
     return m_voxelCount;
 }
 
-glow::Texture * VoxelRenderData::positionTexture() {
+glow::Texture * VoxelRenderData::voxelTexture() {
     if (m_texturesDirty)
         updateTextures();
-    return m_positionTexture;
-}
-
-glow::Texture * VoxelRenderData::colorTexture() {
-    if (m_texturesDirty)
-        updateTextures();
-    return m_colorTexture;
+    return m_voxelTexture;
 }
 
 void VoxelRenderData::invalidate() {
     m_texturesDirty = true;
+}
+
+int VoxelRenderData::textureSize() {
+    return m_textureSize;
 }
