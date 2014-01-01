@@ -81,7 +81,7 @@ void VoxelExplosionGenerator::spawn() {
 
                 //multiply scale with 0.95 to certainly be below the collision threshold
                 VoxelEffectParticle* newObject = new VoxelEffectParticle(0.95f * scale, lifetime);
-                Voxel* voxel = new Voxel(glm::ivec3(0), m_color, 0.000001f, 0.1f);
+                Voxel* voxel = new Voxel(glm::ivec3(0), m_color, 0.00000001f, 0.01f);
                 voxel->addToObject(newObject);
                 newObject->setCrucialVoxel(glm::ivec3(0));
 
