@@ -4,23 +4,23 @@
 #include "resource/clustercache.h"
 #include "voxeleffect/voxelexplosiongenerator.h"
 
-class Ship;
+class EnginedWorldObject;
 class EngineVoxel;
 
 class Engine {
 public:
-    Engine(Ship* ship, EngineVoxel* voxel);
+    Engine(EnginedWorldObject* worldObject, EngineVoxel* voxel);
     ~Engine();
 
     glm::vec3 position(); // in world coordinates
-    Ship* ship();
+    EnginedWorldObject* worldObject();
 
     void update(float deltaSec);
 
     void voxelRemoved();
 
 private:
-    Ship* m_ship;
+    EnginedWorldObject* m_worldObject;
     glm::vec3 m_positionInGrid;
     VoxelExplosionGenerator m_generator;
     Property<float> prop_cooldownTime;

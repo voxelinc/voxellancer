@@ -1,14 +1,12 @@
 #include "ship.h"
 
 #include "hardpoint.h"
-#include "engine.h"
 #include "voxel/specialvoxels/hardpointvoxel.h"
-#include "voxel/specialvoxels/enginevoxel.h"
 #include "worldobject/weapons/gun.h"
 #include "worldobject/weapons/rocketlauncher.h"
 
 Ship::Ship() :
-    WorldObject(CollisionFilterClass::Ship),
+    EnginedWorldObject(CollisionFilterClass::Ship),
     m_hardpoints(),
     m_engines(),
 	prop_maxSpeed("ship.maxSpeed"),
@@ -21,9 +19,7 @@ void Ship::update(float deltasec){
     for (Hardpoint *hardpoint : m_hardpoints){
         hardpoint->update(deltasec);
     }
-    for (Engine *engine : m_engines){
-        engine->update(deltasec);
-    }
+    EnginedWorldObject::update(deltasec);
 }
 
 void Ship::addHardpointVoxel(HardpointVoxel* voxel){
@@ -45,25 +41,6 @@ void Ship::removeHardpoint(Hardpoint* hardpoint){
         if (*iterator == hardpoint){
             delete *iterator;
             m_hardpoints.erase(iterator);
-            break;
-        }
-        ++iterator;
-    }
-}
-
-void Ship::addEngineVoxel(EngineVoxel* voxel){
-    Engine* engine = new Engine(this, voxel);
-    voxel->setEngine(engine);
-    m_engines.push_back(engine);
-    addVoxel(voxel);
-}
-
-void Ship::removeEngine(Engine* engine){
-    std::vector<Engine*>::iterator iterator = m_engines.begin();
-    while (iterator != m_engines.end()){
-        if (*iterator == engine){
-            delete *iterator;
-            m_engines.erase(iterator);
             break;
         }
         ++iterator;

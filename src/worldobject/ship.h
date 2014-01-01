@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include "worldobject.h"
+#include "enginedworldobject.h"
 #include "world/world.h"
 #include "world/god.h"
 #include "property/propertymanager.h"
@@ -10,17 +10,14 @@
 class World;
 class God;
 class Hardpoint;
-class Engine;
 
-class Ship : public WorldObject {
+class Ship : public EnginedWorldObject {
 public:
     Ship();
     virtual void update(float deltasec);
 
     virtual void addHardpointVoxel(HardpointVoxel* voxel);
     void removeHardpoint(Hardpoint* hardpoint);
-    virtual void addEngineVoxel(EngineVoxel* voxel);
-    void removeEngine(Engine* engine);
 
     void setTargetObject(WorldObject* target);
     WorldObject* targetObject();
