@@ -10,8 +10,10 @@
 class WorldTreeNode
 {
 public:
-    WorldTreeNode(int octIndex, WorldTreeNode* parent, const AABB &aabb, WorldTreeNode* initialSubnode);
+    WorldTreeNode(int octIndex, WorldTreeNode* parent, const AABB &aabb, WorldTreeNode* initialSubnode = nullptr);
     virtual ~WorldTreeNode();
+
+    void clear();
 
     int octIndex() const;
     void setOctIndex(int octIndex);
@@ -21,6 +23,9 @@ public:
     WorldTreeNode *parent();
     const WorldTreeNode *parent() const;
     void setParent(WorldTreeNode *parent);
+
+    bool active() const;
+    void setActive(bool active);
 
     const std::list<WorldTreeGeode*>& geodes() const;
     const std::list<WorldTreeNode*>& subnodes() const;
@@ -42,14 +47,15 @@ protected:
     AABB m_aabb;
     int m_octIndex;
     float m_extent;
+    bool m_active;
 
     std::list<WorldTreeGeode*> m_geodes;
-    std::list<WorldTreeNode*> m_exposedSubnodes;
     std::vector<WorldTreeNode*> m_subnodes;
-    std::vector<bool> m_subnodeExposed;
+    std::list<WorldTreeNode*> m_activeSubnodes;
 
-    void toGroup();
-    void toLeaf();
-    void expose(int octIndex, bool exposed);
+    void toGroup(WorldTreeNode* initialSubnode = nullptr);
+
+    void subnodeActivated(WorldTreeNode* subnode);
+    void subnodeDeactivated(WorldTreeNode* subnode);
 };
 

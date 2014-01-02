@@ -40,7 +40,8 @@ void WorldTree::insert(WorldTreeGeode* geode) {
 }
 
 void WorldTree::remove(WorldTreeGeode* geode) {
-    m_root->remove(geode);
+    geode->containingNode()->remove(geode);
+
 }
 
 void WorldTree::aabbChanged(WorldTreeGeode* geode) {

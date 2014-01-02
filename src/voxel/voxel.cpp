@@ -82,7 +82,7 @@ void Voxel::onDestruction() {
             + m_voxelTreeNode->worldObject()->transform().orientation() * (-m_voxelTreeNode->worldObject()->transform().center() + glm::vec3(m_gridCell)));
         generator.setScale(m_voxelTreeNode->worldObject()->transform().scale());
         generator.setColor(m_color);
-        generator.setForce(0.2f);
+        generator.setForce(0.8f);
         generator.setLifetime(Property<float>("vfx.debrisLifetime"), 0.3f);
         generator.spawn();
     }

@@ -21,6 +21,7 @@ WorldTreeQuery::WorldTreeQuery(WorldTreeNode* worldTree, const AbstractShape* sh
     m_shape(shape),
     m_queryInterrupted(false)
 {
+
 }
 
 bool WorldTreeQuery::areGeodesNear() {
@@ -116,6 +117,7 @@ WorldTreeNode* WorldTreeQuery::getQueryRoot(WorldTreeNode* node) const {
 
 void WorldTreeQuery::query(WorldTreeNode* node, std::function<void(WorldTreeGeode*)> onGeodeInteraction) {
     if(node->isLeaf()) {
+        assert(!node->geodes().empty());
         for(WorldTreeGeode* geode : node->geodes()) {
             assert(geode->aabb().intersects(node->aabb()));
             assert(geode->worldObject() != nullptr);
@@ -143,3 +145,4 @@ void WorldTreeQuery::query(WorldTreeNode* node, std::function<void(WorldTreeGeod
         }
     }
 }
+
