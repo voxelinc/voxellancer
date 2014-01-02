@@ -35,12 +35,16 @@ const IAABB &VoxelCluster::gridAABB() const {
     return m_gridAABB;
 }
 
-AABB VoxelCluster::aabb() const {
+IAABB VoxelCluster::aabb() const {
     return aabb(m_transform);
 }
 
-AABB VoxelCluster::aabb(const WorldTransform& transform) const {
-    return AABB::containing(sphere(transform));
+IAABB VoxelCluster::aabb(const WorldTransform& transform) const {
+    Sphere sphere = this->sphere(transform);
+
+    return TAABB<int>(
+        glm::ivec3(glm::floor(sphere.position() - glm::vec3(sphere.radius(), sphere.radius(), sphere.radius()))),
+        glm::ivec3(glm::ceil(sphere.position() + glm::vec3(sphere.radius(), sphere.radius(), sphere.radius()))));
 }
 
 Sphere VoxelCluster::sphere() const {

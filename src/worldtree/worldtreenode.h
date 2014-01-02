@@ -10,7 +10,7 @@
 class WorldTreeNode
 {
 public:
-    WorldTreeNode(int octIndex, WorldTreeNode* parent, const AABB &aabb, WorldTreeNode* initialSubnode = nullptr);
+    WorldTreeNode(int octIndex, WorldTreeNode* parent, const IAABB &aabb, WorldTreeNode* initialSubnode = nullptr);
     virtual ~WorldTreeNode();
 
     void clear();
@@ -18,7 +18,7 @@ public:
     int octIndex() const;
     void setOctIndex(int octIndex);
 
-    const AABB& aabb() const;
+    const IAABB& aabb() const;
 
     WorldTreeNode *parent();
     const WorldTreeNode *parent() const;
@@ -44,7 +44,7 @@ protected:
     static const int MAX_GEODES = 4;
 
     WorldTreeNode* m_parent;
-    AABB m_aabb;
+    IAABB m_aabb;
     int m_octIndex;
     float m_extent;
     bool m_active;

@@ -11,7 +11,7 @@
 
 static const int SUBNODE_COUNT = 8;
 
-WorldTreeNode::WorldTreeNode(int octIndex, WorldTreeNode* parent, const AABB& aabb, WorldTreeNode* initialSubnode):
+WorldTreeNode::WorldTreeNode(int octIndex, WorldTreeNode* parent, const IAABB& aabb, WorldTreeNode* initialSubnode):
     m_octIndex(octIndex),
     m_parent(parent),
     m_aabb(aabb),
@@ -53,7 +53,7 @@ void WorldTreeNode::setOctIndex(int octIndex) {
     m_octIndex = octIndex;
 }
 
-const AABB &WorldTreeNode::aabb() const {
+const IAABB &WorldTreeNode::aabb() const {
     return m_aabb;
 }
 
@@ -172,13 +172,13 @@ void WorldTreeNode::remove(WorldTreeGeode* geode) {
 void WorldTreeNode::toGroup(WorldTreeNode* initialSubnode) {
     assert(isLeaf());
 
-    float subnodeExtent = m_extent / 2.0f;
+    int subnodeExtent = m_extent / 2.0f;
 
     m_subnodes.resize(SUBNODE_COUNT);
 
     for(int n = 0; n < SUBNODE_COUNT; n++) {
-        glm::vec3 llf = glm::vec3(n % 2, n/2 % 2, n/4) * subnodeExtent + m_aabb.llf();
-        AABB subnodeAABB(llf, llf + glm::vec3(subnodeExtent));
+        glm::ivec3 llf = glm::ivec3(n % 2, n/2 % 2, n/4) * subnodeExtent + m_aabb.llf();
+        IAABB subnodeAABB(llf, llf + glm::ivec3(subnodeExtent));
 
         if (initialSubnode != nullptr && initialSubnode->aabb() == subnodeAABB) {
             m_subnodes[n] = initialSubnode;

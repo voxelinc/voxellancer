@@ -43,11 +43,11 @@ void WorldTreeGeode::setContainingNode(WorldTreeNode* node) {
     m_containingNode = node;
 }
 
-const AABB& WorldTreeGeode::aabb() const {
+const IAABB& WorldTreeGeode::aabb() const {
     return m_aabb;
 }
 
-void WorldTreeGeode::setAABB(const AABB& aabb) {
+void WorldTreeGeode::setAABB(const IAABB& aabb) {
     m_aabb = aabb;
 }
 

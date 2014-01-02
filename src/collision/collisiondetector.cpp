@@ -79,7 +79,7 @@ std::list<VoxelCollision>& CollisionDetector::checkCollisions() {
 
     m_collisions.clear();
 
-    AABB worldObjectAABB = m_worldObject.aabb();
+    IAABB worldObjectAABB = m_worldObject.aabb();
     std::set<WorldTreeGeode*> possibleColliders = WorldTreeQuery(m_worldTree->root(), &worldObjectAABB, m_geode->containingNode(), &m_worldObject).nearGeodes();
     possibleColliders.erase(m_geode);
 

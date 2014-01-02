@@ -22,8 +22,8 @@ public:
     const WorldTreeNode* containingNode() const;
     void setContainingNode(WorldTreeNode* node);
 
-    const AABB& aabb() const;
-    void setAABB(const AABB& aabb);
+    const IAABB& aabb() const;
+    void setAABB(const IAABB& aabb);
 
     std::list<WorldTreeNode*>& intersectingLeafs();
     void addIntersectingLeaf(WorldTreeNode* leaf);
@@ -33,7 +33,7 @@ public:
 protected:
     WorldObject* m_worldObject;
     WorldTreeNode* m_containingNode;
-    AABB m_aabb;
+    IAABB m_aabb;
     std::list<WorldTreeNode*> m_intersectingLeafs;
 };
 

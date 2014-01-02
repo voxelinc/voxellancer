@@ -8,7 +8,7 @@
 
 
 WorldTree::WorldTree():
-    m_root(new WorldTreeNode(0, nullptr, AABB(glm::vec3(-8, -8, -8), glm::vec3(8, 8, 8)), nullptr))
+    m_root(new WorldTreeNode(0, nullptr, IAABB(glm::ivec3(-8, -8, -8), glm::ivec3(8, 8, 8)), nullptr))
 {
 
 }
@@ -63,10 +63,10 @@ void WorldTree::aabbChanged(WorldTreeGeode* geode) {
     geode->setContainingNode(newContainingNode);
 }
 
-void WorldTree::extent(const AABB& aabb) {
+void WorldTree::extent(const IAABB& aabb) {
     assert(!m_root->aabb().contains(aabb));
 
-    AABB newRootAABB(m_root->aabb());
+    IAABB newRootAABB(m_root->aabb());
 
     for(int a = 0; a < 3; a++) {
         Axis axis = (Axis)a;
@@ -78,7 +78,7 @@ void WorldTree::extent(const AABB& aabb) {
     m_root = new WorldTreeNode(0, nullptr, newRootAABB, m_root);
 }
 
-WorldTreeNode* WorldTree::containingNode(const AABB& aabb, WorldTreeNode* node) {
+WorldTreeNode* WorldTree::containingNode(const IAABB& aabb, WorldTreeNode* node) {
     if(node->aabb().contains(aabb)) {
         return node;
     } else {

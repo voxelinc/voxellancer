@@ -28,7 +28,7 @@ public:
 protected:
     WorldTreeNode* m_root;
 
-    void extent(const AABB& aabb);
-    WorldTreeNode* containingNode(const AABB& aabb, WorldTreeNode* node);
+    void extent(const IAABB& aabb);
+    WorldTreeNode* containingNode(const IAABB& aabb, WorldTreeNode* node);
 };
 

@@ -30,8 +30,8 @@ public:
 
     const IAABB &gridAABB() const;
 
-    AABB aabb() const;
-    AABB aabb(const WorldTransform& transform) const;
+    IAABB aabb() const;
+    IAABB aabb(const WorldTransform& transform) const;
     Sphere sphere() const;
     Sphere sphere(const WorldTransform& transform) const;
 

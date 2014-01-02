@@ -53,12 +53,12 @@ bool Sphere::contains(const Sphere &other) const {
     return glm::length(delta) + other.m_radius < m_radius;
 }
 
-bool Sphere::nearTo(const TAABB<float>& aabb) const {
+bool Sphere::nearTo(const TAABB<int>& aabb) const {
     Sphere aabbSphere = Sphere::containing(aabb);
     return intersects(aabbSphere);
 }
 
-bool Sphere::containedBy(const TAABB<float>& aabb) const {
+bool Sphere::containedBy(const TAABB<int>& aabb) const {
     return
         m_position.x - m_radius >= aabb.llf().x &&
         m_position.y - m_radius >= aabb.llf().y &&
