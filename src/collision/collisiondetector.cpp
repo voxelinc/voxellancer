@@ -51,7 +51,6 @@ const WorldTreeGeode *CollisionDetector::geode() const {
 
 void CollisionDetector::setGeode(WorldTreeGeode *geode) {
     m_geode = geode;
-    updateGeode();
 }
 
 void CollisionDetector::setWorldTree(WorldTree* worldTree) {
@@ -68,7 +67,10 @@ const WorldTree* CollisionDetector::worldTree() const {
 
 void CollisionDetector::updateGeode() {
     if(m_geode != nullptr) {
+        assert(m_worldTree);
+
         m_geode->setAABB(m_worldObject.aabb());
+        m_worldTree->aabbChanged(m_geode);
     }
 }
 
@@ -78,7 +80,7 @@ std::list<VoxelCollision>& CollisionDetector::checkCollisions() {
     m_collisions.clear();
 
     AABB worldObjectAABB = m_worldObject.aabb();
-    std::set<WorldTreeGeode*> possibleColliders = WorldTreeQuery(m_worldTree, &worldObjectAABB, m_geode->containingNode(), &m_worldObject).nearGeodes();
+    std::set<WorldTreeGeode*> possibleColliders = WorldTreeQuery(m_worldTree->root(), &worldObjectAABB, m_geode->containingNode(), &m_worldObject).nearGeodes();
     possibleColliders.erase(m_geode);
 
     for (WorldTreeGeode* possibleCollider : possibleColliders) {
@@ -92,7 +94,7 @@ std::list<VoxelCollision>& CollisionDetector::checkCollisions() {
     return m_collisions;
 }
 
-std::list<VoxelCollision> & CollisionDetector::lastCollisions() {
+std::list<VoxelCollision>& CollisionDetector::lastCollisions() {
     return m_collisions;
 }
 

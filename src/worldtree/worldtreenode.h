@@ -5,64 +5,51 @@
 
 #include "worldtreegeode.h"
 #include "geometry/aabb.h"
-#include "geometry/ray.h"
 
 
-class Voxel;
-
-/*!
-    remove() doesn't unsplit. This could happen recursive upwards the tree,
-    which is unclean since subnodes would have to order their parents to delete them.
-
-    unsplitting should happen regulary by a different entity, maybe using tokens, that
-    mark changed nodes
-*/
 class WorldTreeNode
 {
 public:
-    WorldTreeNode(int level, WorldTreeNode *parent, const AABB &aabb);
-    WorldTreeNode(const WorldTreeNode &other);
+    WorldTreeNode(int octIndex, WorldTreeNode* parent, const AABB &aabb, WorldTreeNode* initialSubnode);
     virtual ~WorldTreeNode();
 
-    const AABB &aabb() const;
+    int octIndex() const;
+    void setOctIndex(int octIndex);
 
-    int level() const;
-
-    const std::list<WorldTreeGeode*> &geodes() const;
-    const std::list<WorldTreeNode*> &subnodes() const;
+    const AABB& aabb() const;
 
     WorldTreeNode *parent();
     const WorldTreeNode *parent() const;
+    void setParent(WorldTreeNode *parent);
+
+    const std::list<WorldTreeGeode*>& geodes() const;
+    const std::list<WorldTreeNode*>& subnodes() const;
 
     bool isLeaf() const;
     bool isEmpty() const;
     bool isRootnode() const;
+    bool isAtomic() const;
 
-    void insert(WorldTreeGeode *geode);
-    void remove(WorldTreeGeode *geode);
-
-    void aabbChanged(WorldTreeGeode *geode);
-
-    void poll(int& nodes, int &empty, int& geodes, int& depth);
-    void print();
+    void insert(WorldTreeGeode* geode);
+    void remove(WorldTreeGeode* geode);
 
 
 protected:
     static const int MIN_EXTENT = 16;
     static const int MAX_GEODES = 4;
 
-    friend class WorldTreeCleaner;
-
-    WorldTreeNode *m_parent;
+    WorldTreeNode* m_parent;
     AABB m_aabb;
-    int m_level;
+    int m_octIndex;
     float m_extent;
-    std::list<WorldTreeGeode*> m_geodes;
-    std::list<WorldTreeNode*> m_subnodes;
 
-    void split();
-    void unsplit();
-    void octuple(const AABB &aabb);
-    void setLevel(int level);
+    std::list<WorldTreeGeode*> m_geodes;
+    std::list<WorldTreeNode*> m_exposedSubnodes;
+    std::vector<WorldTreeNode*> m_subnodes;
+    std::vector<bool> m_subnodeExposed;
+
+    void toGroup();
+    void toLeaf();
+    void expose(int octIndex, bool exposed);
 };
 

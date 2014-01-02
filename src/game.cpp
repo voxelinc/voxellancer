@@ -269,10 +269,27 @@ void TreeStateReporter::setWorldTree(WorldTree *worldTree) {
 }
 
 void TreeStateReporter::exec() {
-    int nodes, empty, geodes, depth;
-    m_worldTree->poll(nodes, empty, geodes, depth);
-    std::cout << "WorldTree: " << nodes << " nodes; " << empty << " empty; " << geodes << " geodes; " << depth << " maxdepth" << std::endl;
-    m_worldTree->print();
+//    int nodes, empty, geodes, depth;
+//    m_worldTree->poll(nodes, empty, geodes, depth);
+//    std::cout << "WorldTree: " << nodes << " nodes; " << empty << " empty; " << geodes << " geodes; " << depth << " maxdepth" << std::endl;
+////    m_worldTree->print();
 }
 
 
+//void WorldTreeNode::print() {
+//    auto indent = [&] {
+//        for(int i = 0; i < m_level; i++) {
+//            std::cout << "  ";
+//        }
+//    };
+//
+//    indent(); std::cout << m_level << ": " << toString(m_aabb) << std::endl;
+//
+//    for(WorldTreeGeode* geode : m_geodes) {
+//        indent(); std::cout << "  Geode " << /*geode->worldObject()->objectInfo().name() <<*/ "(" << geode->worldObject() << ") " << toString(geode->aabb()) << std::endl;
+//    }
+//
+//    for(WorldTreeNode* subnode : m_subnodes) {
+//        subnode->print();
+//    }
+//}

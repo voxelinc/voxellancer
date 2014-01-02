@@ -132,7 +132,7 @@ void WorldTreeQuery::query(WorldTreeNode* node, std::function<void(WorldTreeGeod
         }
     }
     else {
-        for(WorldTreeNode *subnode : node->subnodes()) {
+        for(WorldTreeNode* subnode : node->subnodes()) {
             if(m_shape->nearTo(subnode->aabb())) {
                 query(subnode, onGeodeInteraction);
 
