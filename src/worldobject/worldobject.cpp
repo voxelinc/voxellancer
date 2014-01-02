@@ -55,6 +55,14 @@ ObjectInfo& WorldObject::objectInfo(){
     return m_objectInfo;
 }
 
+Sphere WorldObject::sphere() const {
+    return m_collisionDetector->voxelTree().boundingSphere();
+}
+
+Sphere WorldObject::sphere(const WorldTransform& transform) const {
+    return m_collisionDetector->voxelTree().boundingSphere(transform);
+}
+
 void WorldObject::update(float deltaSec) {
 
 }

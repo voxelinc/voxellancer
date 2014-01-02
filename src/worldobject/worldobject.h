@@ -27,6 +27,9 @@ public:
     Physics& physics();
     ObjectInfo& objectInfo();
 
+    Sphere sphere() const;
+    Sphere sphere(const WorldTransform& transform) const;
+
     virtual void update(float deltaSec);
 
     std::list<VoxelCollision>& performMovement(float deltaSec);

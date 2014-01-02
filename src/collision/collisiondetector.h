@@ -40,8 +40,8 @@ public:
     WorldTree* worldTree();
     const WorldTree* worldTree() const;
 
-    VoxelTreeNode& voxeltree();
-    const VoxelTreeNode& voxeltree() const;
+    VoxelTreeNode& voxelTree();
+    const VoxelTreeNode& voxelTree() const;
 
     void updateGeode();
 

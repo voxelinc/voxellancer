@@ -71,7 +71,11 @@ const Grid3dAABB& VoxelTreeNode::gridAABB() const {
 }
 
 Sphere& VoxelTreeNode::boundingSphere() {
-    if(m_worldObject->transform() != m_boundingSphereTransform) {
+    return boundingSphere(m_worldObject->transform());
+}
+
+Sphere& VoxelTreeNode::boundingSphere(const WorldTransform& transform) {
+    if(transform != m_boundingSphereTransform) {
         calculateBoundingSpherePosition();
     }
 

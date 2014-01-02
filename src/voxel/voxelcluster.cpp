@@ -43,8 +43,9 @@ IAABB VoxelCluster::aabb(const WorldTransform& transform) const {
     Sphere sphere = this->sphere(transform);
 
     return TAABB<int>(
-        glm::ivec3(glm::floor(sphere.position() - glm::vec3(sphere.radius(), sphere.radius(), sphere.radius()))),
-        glm::ivec3(glm::ceil(sphere.position() + glm::vec3(sphere.radius(), sphere.radius(), sphere.radius()))));
+        glm::ivec3(sphere.position() - glm::vec3(sphere.radius(), sphere.radius(), sphere.radius())),
+        glm::ivec3(sphere.position() + glm::vec3(sphere.radius(), sphere.radius(), sphere.radius())) + glm::ivec3(1, 1, 1)
+    );
 }
 
 Sphere VoxelCluster::sphere() const {

@@ -38,6 +38,7 @@ public:
     const Grid3dAABB& gridAABB() const;
 
     Sphere& boundingSphere();
+    Sphere& boundingSphere(const WorldTransform& transform);
 
     void insert(Voxel* voxel);
     void remove(const glm::ivec3& cell);

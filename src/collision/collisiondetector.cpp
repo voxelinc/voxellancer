@@ -33,11 +33,11 @@ void CollisionDetector::removeVoxel(Voxel* voxel) {
     voxel->voxelTreeNode()->remove(voxel->gridCell());
 }
 
-VoxelTreeNode &CollisionDetector::voxeltree() {
+VoxelTreeNode &CollisionDetector::voxelTree() {
     return m_voxelTree;
 }
 
-const VoxelTreeNode &CollisionDetector::voxeltree() const {
+const VoxelTreeNode &CollisionDetector::voxelTree() const {
     return m_voxelTree;
 }
 
@@ -88,7 +88,7 @@ std::list<VoxelCollision>& CollisionDetector::checkCollisions() {
         WorldObject* other = possibleCollider->worldObject();
 
         assert(m_worldObject.isCollideableWith(other));
-        checkCollisions(&m_voxelTree, &other->collisionDetector().voxeltree());
+        checkCollisions(&m_voxelTree, &other->collisionDetector().voxelTree());
     }
 
     return m_collisions;
