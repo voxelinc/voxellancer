@@ -87,7 +87,7 @@ void VoxelExplosionGenerator::spawn() {
 
                 newObject->setPosition(transform.applyTo(scale * (glm::vec3(i, j, k))));
                 newObject->setOrientation(m_orientation);
-             
+
                 float angX = RandFloat::rand(-180.0f, 180.0f);
                 float angY = glm::degrees(glm::acos(RandFloat::rand(-1.0f, 1.0f)));
                 glm::vec3 speedVec = glm::quat(glm::vec3(angX, angY, 0.0f)) * glm::vec3(0, 0, RandFloat::rand(1.0f, 10.0f));
@@ -97,7 +97,7 @@ void VoxelExplosionGenerator::spawn() {
                     m_force * RandFloat::rand(-10.0f, 10.0f),
                     m_force * RandFloat::rand(-10.0f, 10.0f),
                     m_force * RandFloat::rand(-10.0f, 10.0f)));
-                
+
                 World::instance()->god().scheduleSpawn(newObject);
             }
         }

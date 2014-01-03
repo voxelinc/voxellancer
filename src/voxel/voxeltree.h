@@ -19,8 +19,7 @@ public:
 
 
 protected:
-    VoxelTreeNode* m_root;
+    VoxelTreeNode* m_shadowRoot;
+    VoxelTreeNode* m_currentRoot;
     WorldObject* m_worldObject;
-
-    void extend();
 };

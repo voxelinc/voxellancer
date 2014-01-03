@@ -10,7 +10,8 @@
 class WorldTreeNode
 {
 public:
-    WorldTreeNode(int octIndex, WorldTreeNode* parent, const IAABB &aabb, WorldTreeNode* initialSubnode = nullptr);
+    WorldTreeNode(int octIndex, WorldTreeNode* parent, const IAABB &aabb);
+    WorldTreeNode(const IAABB &aabb, WorldTreeNode* initialSubnode);
     virtual ~WorldTreeNode();
 
     void clear();

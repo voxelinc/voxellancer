@@ -44,6 +44,7 @@ public:
     const Grid3dAABB& gridAABB() const;
 
     Sphere& sphere();
+    Sphere& sphere(const WorldTransform& transform);
 
     bool active() const;
     void setActive(bool active);
@@ -79,7 +80,7 @@ protected:
 
     VoxelTreeNode* cellSubnode(const glm::ivec3& cell);
 
-    void calculateSpherePosition();
-    void calculateSphereRadius();
+    void calculateSpherePosition(const WorldTransform& transform);
+    void calculateSphereRadius(const WorldTransform& transform);
 };
 

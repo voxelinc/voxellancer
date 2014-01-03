@@ -17,10 +17,11 @@ VoxelTreeNode::VoxelTreeNode(int octIndex, VoxelTree* voxelTree, VoxelTreeNode* 
     m_parent(parent),
     m_gridAABB(gridAABB),
     m_voxel(nullptr),
-    m_sphereRadiusValid(false),
     m_active(false)
 {
-
+    // Find below an ugly hack until #179 is resolved
+    calculateSpherePosition(WorldTransform());
+    calculateSphereRadius(WorldTransform());
 }
 
 VoxelTreeNode::VoxelTreeNode(VoxelTree* voxelTree, const Grid3dAABB &gridAABB, VoxelTreeNode* initialSubnode):
@@ -33,7 +34,7 @@ VoxelTreeNode::VoxelTreeNode(VoxelTree* voxelTree, const Grid3dAABB &gridAABB, V
     initialSubnode->setParent(this);
 
     if(initialSubnode->active()) {
-        m_activeSubnodes.push_back(initialSubnode);
+        subnodeActivated(initialSubnode);
     }
 }
 
@@ -104,12 +105,18 @@ const Grid3dAABB& VoxelTreeNode::gridAABB() const {
 
 Sphere& VoxelTreeNode::sphere() {
     assert(m_voxelTree->worldObject());
-    if (m_voxelTree->worldObject()->transform() != m_cachedSphereTransform) {
-        calculateSpherePosition();
+    return sphere(m_voxelTree->worldObject()->transform());
+}
+
+Sphere& VoxelTreeNode::sphere(const WorldTransform& transform) {
+    if (transform.position() != m_cachedSphereTransform.position() ||
+        transform.orientation() != m_cachedSphereTransform.orientation() ||
+        transform.center() != m_cachedSphereTransform.center() ) {
+        calculateSpherePosition(transform);
     }
 
-    if (!m_sphereRadiusValid) {
-        calculateSphereRadius();
+    if (transform.scale() != m_cachedSphereTransform.scale()) {
+        calculateSphereRadius(transform);
     }
 
     return m_sphere;
@@ -205,23 +212,22 @@ VoxelTreeNode* VoxelTreeNode::cellSubnode(const glm::ivec3& cell) {
     return m_subnodes[index];
 }
 
-void VoxelTreeNode::calculateSpherePosition() {
-    assert(m_voxelTree->worldObject() != nullptr);
-
+void VoxelTreeNode::calculateSpherePosition(const WorldTransform& transform) {
     glm::vec3 center = static_cast<glm::vec3>(m_gridAABB.rub() + m_gridAABB.llf()) / 2.0f;
-    m_sphere.setPosition(m_voxelTree->worldObject()->transform().applyTo(center));
+    m_sphere.setPosition(transform.applyTo(center));
 
-    m_cachedSphereTransform = m_voxelTree->worldObject()->transform();
+    m_cachedSphereTransform.setPosition(transform.position());
+    m_cachedSphereTransform.setCenter(transform.center());
+    m_cachedSphereTransform.setOrientation(transform.orientation());
 }
 
-void VoxelTreeNode::calculateSphereRadius() {
-    assert(m_voxelTree->worldObject() != nullptr);
-
-    if(m_voxel != nullptr) {
-        m_sphere.setRadius(0.5f * m_voxelTree->worldObject()->transform().scale());
+void VoxelTreeNode::calculateSphereRadius(const WorldTransform& transform) {
+    if(isAtomic()) {
+        m_sphere.setRadius(0.5f * transform.scale());
     } else {
-        m_sphere.setRadius((glm::length(glm::vec3(m_gridAABB.rub() - m_gridAABB.llf() + glm::ivec3(1, 1, 1))/2.0f)) * m_voxelTree->worldObject()->transform().scale()) ;
+        m_sphere.setRadius((glm::length(glm::vec3(m_gridAABB.rub() - m_gridAABB.llf() + glm::ivec3(1, 1, 1))/2.0f)) * transform.scale()) ;
     }
-    m_sphereRadiusValid = true;
+
+    m_cachedSphereTransform.setScale(transform.scale());
 }
 

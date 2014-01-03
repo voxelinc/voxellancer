@@ -8,7 +8,7 @@
 
 
 WorldTree::WorldTree():
-    m_root(new WorldTreeNode(0, nullptr, IAABB(glm::ivec3(-8, -8, -8), glm::ivec3(8, 8, 8)), nullptr))
+    m_root(new WorldTreeNode(IAABB(glm::ivec3(-8, -8, -8), glm::ivec3(8, 8, 8)), nullptr))
 {
 
 }
@@ -75,7 +75,7 @@ void WorldTree::extend(const IAABB& aabb) {
         newRootAABB.expand(axis, extentDir * m_root->aabb().extent(axis));
     }
 
-    m_root = new WorldTreeNode(0, nullptr, newRootAABB, m_root);
+    m_root = new WorldTreeNode(newRootAABB, m_root);
 }
 
 WorldTreeNode* WorldTree::containingNode(const IAABB& aabb, WorldTreeNode* node) {

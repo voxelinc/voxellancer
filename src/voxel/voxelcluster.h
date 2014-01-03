@@ -36,6 +36,7 @@ public:
     IAABB aabb(const WorldTransform& transform);
 
     Voxel* voxel(const glm::ivec3& position);
+
     virtual void addVoxel(Voxel* voxel);
     virtual void removeVoxel(Voxel* voxel);
 

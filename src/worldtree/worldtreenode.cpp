@@ -11,7 +11,7 @@
 
 static const int SUBNODE_COUNT = 8;
 
-WorldTreeNode::WorldTreeNode(int octIndex, WorldTreeNode* parent, const IAABB& aabb, WorldTreeNode* initialSubnode):
+WorldTreeNode::WorldTreeNode(int octIndex, WorldTreeNode* parent, const IAABB& aabb):
     m_octIndex(octIndex),
     m_parent(parent),
     m_aabb(aabb),
@@ -19,8 +19,12 @@ WorldTreeNode::WorldTreeNode(int octIndex, WorldTreeNode* parent, const IAABB& a
 {
     assert(m_aabb.extent(XAxis) == m_aabb.extent(YAxis) && m_aabb.extent(XAxis) == m_aabb.extent(ZAxis));
     m_extent = m_aabb.extent(ZAxis);
+}
 
-    if(initialSubnode != nullptr) {
+WorldTreeNode::WorldTreeNode(const IAABB &aabb, WorldTreeNode* initialSubnode):
+    WorldTreeNode(0, nullptr, aabb)
+{
+    if (initialSubnode != nullptr) {
         toGroup(initialSubnode);
         initialSubnode->setParent(this);
     }
@@ -187,7 +191,7 @@ void WorldTreeNode::toGroup(WorldTreeNode* initialSubnode) {
                 subnodeActivated(initialSubnode);
             }
         } else {
-            m_subnodes[n] = new WorldTreeNode(n, this, subnodeAABB, nullptr);
+            m_subnodes[n] = new WorldTreeNode(n, this, subnodeAABB);
         }
 
         for (WorldTreeGeode* geode : m_geodes) {

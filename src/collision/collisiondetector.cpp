@@ -28,11 +28,7 @@ void CollisionDetector::addVoxel(Voxel* voxel) {
 }
 
 void CollisionDetector::removeVoxel(Voxel* voxel) {
-    assert(voxel->voxelTreeNode() != nullptr);
-    assert(voxel->voxelTreeNode()->voxel() == voxel);
-    assert(voxel->voxelTreeNode()->isAtomic());
-
-    voxel->voxelTreeNode()->remove(voxel);
+    m_voxelTree.remove(voxel);
 }
 
 VoxelTree& CollisionDetector::voxelTree() {
@@ -82,7 +78,7 @@ std::list<VoxelCollision>& CollisionDetector::checkCollisions() {
     m_collisions.clear();
 
     IAABB worldObjectAABB = m_worldObject.aabb();
-    std::set<WorldTreeGeode*> possibleColliders = WorldTreeQuery(m_worldTree->root(), &worldObjectAABB, m_geode->containingNode(), &m_worldObject).nearGeodes();
+    std::set<WorldTreeGeode*> possibleColliders = WorldTreeQuery(m_worldTree, &worldObjectAABB, m_geode->containingNode(), &m_worldObject).nearGeodes();
     possibleColliders.erase(m_geode);
 
     for (WorldTreeGeode* possibleCollider : possibleColliders) {
