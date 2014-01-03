@@ -20,15 +20,11 @@ public:
     WorldObject(CollisionFilterClass collisionFilterClass = CollisionFilterClass::Other);
     WorldObject(float scale, glm::vec3 center = glm::vec3(0), CollisionFilterClass collisionFilterClass = CollisionFilterClass::Other);
     WorldObject(const WorldTransform& transform, CollisionFilterClass collisionFilterClass = CollisionFilterClass::Other);
-
     virtual ~WorldObject();
 
     CollisionDetector& collisionDetector();
     Physics& physics();
     ObjectInfo& objectInfo();
-
-    Sphere sphere() const;
-    Sphere sphere(const WorldTransform& transform) const;
 
     virtual void update(float deltaSec);
 
@@ -58,6 +54,7 @@ public:
 
 protected:
     WorldObject(Physics* physics, CollisionDetector* detector, float scale = 1.0f, CollisionFilterClass collisionFilterClass = CollisionFilterClass::Other);
+
     std::unique_ptr<CollisionDetector> m_collisionDetector;
     std::unique_ptr<Physics> m_physics;
     Voxel* m_crucialVoxel;

@@ -68,5 +68,7 @@ private:
 	std::unique_ptr<LinuxVMDummy> m_linuxvmdummy;
 
     TreeStateReporter m_treeStateReporter;
+
+    WorldObject *m_wall;
 };
 

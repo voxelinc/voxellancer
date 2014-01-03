@@ -7,7 +7,7 @@
 #include <glm/glm.hpp>
 
 #include "voxel/voxel.h"
-#include "voxel/voxeltreenode.h"
+#include "voxel/voxeltree.h"
 #include "collision/voxelcollision.h"
 #include "geometry/sphere.h"
 
@@ -40,8 +40,8 @@ public:
     WorldTree* worldTree();
     const WorldTree* worldTree() const;
 
-    VoxelTreeNode& voxelTree();
-    const VoxelTreeNode& voxelTree() const;
+    VoxelTree& voxelTree();
+    const VoxelTree& voxelTree() const;
 
     void updateGeode();
 
@@ -50,7 +50,7 @@ public:
 
 protected:
     WorldObject& m_worldObject;
-    VoxelTreeNode m_voxelTree;
+    VoxelTree m_voxelTree;
     WorldTreeGeode* m_geode;
     WorldTree* m_worldTree;
     std::list<VoxelCollision> m_collisions;

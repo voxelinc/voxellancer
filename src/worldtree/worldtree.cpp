@@ -34,7 +34,7 @@ void WorldTree::insert(WorldTreeGeode* geode) {
     if (m_root->aabb().contains(geode->aabb())) {
         m_root->insert(geode);
     } else {
-        extent(geode->aabb());
+        extend(geode->aabb());
         insert(geode);
     }
 }
@@ -63,7 +63,7 @@ void WorldTree::aabbChanged(WorldTreeGeode* geode) {
     geode->setContainingNode(newContainingNode);
 }
 
-void WorldTree::extent(const IAABB& aabb) {
+void WorldTree::extend(const IAABB& aabb) {
     assert(!m_root->aabb().contains(aabb));
 
     IAABB newRootAABB(m_root->aabb());
@@ -86,7 +86,7 @@ WorldTreeNode* WorldTree::containingNode(const IAABB& aabb, WorldTreeNode* node)
             return containingNode(aabb, node->parent());
         } else {
             assert(node == m_root);
-            extent(aabb);
+            extend(aabb);
             return containingNode(aabb, m_root);
         }
     }

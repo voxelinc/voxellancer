@@ -8,8 +8,8 @@
 
 #include "voxelcluster.h"
 #include "worldobject/worldobject.h"
+#include "voxel/voxeltreenode.h"
 #include "voxeleffect/voxelexplosiongenerator.h"
-
 
 
 Voxel::Voxel(const glm::ivec3& gridCell, int color, float normalizedMass, float hp):
@@ -75,12 +75,14 @@ void Voxel::onRemoval() {
 }
 
 void Voxel::onDestruction() {
-    if (m_voxelTreeNode && m_voxelTreeNode->worldObject()){
+    WorldObject* worldObject = m_voxelTreeNode->voxelTree()->worldObject();
+
+    if (m_voxelTreeNode && worldObject) {
         VoxelExplosionGenerator generator;
-        generator.setOrientation(m_voxelTreeNode->worldObject()->transform().orientation());
-        generator.setPosition(m_voxelTreeNode->worldObject()->transform().position()
-            + m_voxelTreeNode->worldObject()->transform().orientation() * (-m_voxelTreeNode->worldObject()->transform().center() + glm::vec3(m_gridCell)));
-        generator.setScale(m_voxelTreeNode->worldObject()->transform().scale());
+        generator.setOrientation(worldObject->transform().orientation());
+        generator.setPosition(worldObject->transform().position()
+            + worldObject->transform().orientation() * (-worldObject->transform().center() + glm::vec3(m_gridCell)));
+        generator.setScale(worldObject->transform().scale());
         generator.setColor(m_color);
         generator.setForce(0.8f);
         generator.setLifetime(Property<float>("vfx.debrisLifetime"), 0.3f);

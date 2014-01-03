@@ -1,16 +1,20 @@
 #include "collisiondetector.h"
 
+#include "utils/tostring.h"
+
+#include "voxel/voxeltreenode.h"
+
 #include "worldtree/worldtree.h"
 #include "worldtree/worldtreegeode.h"
 #include "worldtree/worldtreequery.h"
 
-#include "utils/tostring.h"
 #include "worldobject/worldobject.h"
 
-#include "utils/tostring.h"
 
 
-CollisionDetector::CollisionDetector(WorldObject & worldObject) :
+
+
+CollisionDetector::CollisionDetector(WorldObject& worldObject) :
     m_voxelTree(&worldObject),
     m_worldTree(nullptr),
     m_geode(nullptr),
@@ -30,14 +34,14 @@ void CollisionDetector::removeVoxel(Voxel* voxel) {
     assert(voxel->voxelTreeNode()->voxel() == voxel);
     assert(voxel->voxelTreeNode()->isAtomic());
 
-    voxel->voxelTreeNode()->remove(voxel->gridCell());
+    voxel->voxelTreeNode()->remove(voxel);
 }
 
-VoxelTreeNode &CollisionDetector::voxelTree() {
+VoxelTree& CollisionDetector::voxelTree() {
     return m_voxelTree;
 }
 
-const VoxelTreeNode &CollisionDetector::voxelTree() const {
+const VoxelTree& CollisionDetector::voxelTree() const {
     return m_voxelTree;
 }
 
@@ -88,7 +92,7 @@ std::list<VoxelCollision>& CollisionDetector::checkCollisions() {
         WorldObject* other = possibleCollider->worldObject();
 
         assert(m_worldObject.isCollideableWith(other));
-        checkCollisions(&m_voxelTree, &other->collisionDetector().voxelTree());
+        checkCollisions(m_voxelTree.root(), other->collisionDetector().voxelTree().root());
     }
 
     return m_collisions;
@@ -103,7 +107,7 @@ void CollisionDetector::reset() {
 }
 
 void CollisionDetector::rebuildVoxelTree() {
-    m_voxelTree = VoxelTreeNode(&m_worldObject);
+    m_voxelTree = VoxelTree(&m_worldObject);
     for (auto& pair: m_worldObject.voxelMap()) {
         Voxel* voxel = pair.second;
         addVoxel(voxel);
@@ -111,13 +115,13 @@ void CollisionDetector::rebuildVoxelTree() {
 }
 
 void CollisionDetector::checkCollisions(VoxelTreeNode* nodeA, VoxelTreeNode* nodeB) {
-    const Sphere& sphereA = nodeA->boundingSphere();
-    const Sphere& sphereB = nodeB->boundingSphere();
+    const Sphere& sphereA = nodeA->sphere();
+    const Sphere& sphereB = nodeB->sphere();
 
     if (sphereA.intersects(sphereB)) {
         if (nodeA->isLeaf() && nodeB->isLeaf()) {
             if(nodeA->isVoxel() && nodeB->isVoxel()) {
-                m_collisions.push_back(VoxelCollision(VoxelCollisionParticipant(nodeA->worldObject(), nodeA->voxel()), VoxelCollisionParticipant(nodeB->worldObject(), nodeB->voxel())));
+                m_collisions.push_back(VoxelCollision(VoxelCollisionParticipant(nodeA->voxelTree()->worldObject(), nodeA->voxel()), VoxelCollisionParticipant(nodeB->voxelTree()->worldObject(), nodeB->voxel())));
             }
         }
         else {

@@ -14,53 +14,72 @@
 #include "worldtransform.h"
 
 
-class WorldObject;
+class VoxelTree;
 
 class VoxelTreeNode
 {
 public:
-    VoxelTreeNode(WorldObject *worldobject, VoxelTreeNode *parent = nullptr, const Grid3dAABB &gridAABB = Grid3dAABB(glm::ivec3(0, 0, 0), glm::ivec3(0, 0, 0)));
-    virtual ~VoxelTreeNode();
+    VoxelTreeNode(int octIndex, VoxelTree* voxelTree, VoxelTreeNode *parent, const Grid3dAABB& gridAABB);
+    VoxelTreeNode(VoxelTree* voxelTree, const Grid3dAABB& gridAABB, VoxelTreeNode* initialSubnode);
+    ~VoxelTreeNode();
+
+    int octIndex() const;
 
     bool isAtomic() const;
     bool isVoxel() const;
     bool isLeaf() const;
     bool isEmpty() const;
 
-    std::vector<VoxelTreeNode*>& subnodes();
-    const std::vector<VoxelTreeNode*>& subnodes() const;
+    std::list<VoxelTreeNode*>& subnodes();
+    const std::list<VoxelTreeNode*>& subnodes() const;
 
     Voxel* voxel();
     const Voxel* voxel() const;
 
-    WorldObject* worldObject();
+    VoxelTree* voxelTree();
+
+    VoxelTreeNode* parent();
+    void setParent(VoxelTreeNode* parent);
 
     const Grid3dAABB& gridAABB() const;
 
-    Sphere& boundingSphere();
-    Sphere& boundingSphere(const WorldTransform& transform);
+    Sphere& sphere();
+
+    bool active() const;
+    void setActive(bool active);
 
     void insert(Voxel* voxel);
-    void remove(const glm::ivec3& cell);
+    void remove(Voxel* voxel);
 
 
 protected:
+    int m_octIndex;
+
     VoxelTreeNode* m_parent;
-    WorldObject* m_worldObject;
+    VoxelTree* m_voxelTree;
 
     Grid3dAABB m_gridAABB;
 
+    Sphere m_sphere;
+    WorldTransform m_cachedSphereTransform;
+    bool m_sphereRadiusValid;
+
+    bool m_active;
+
     std::vector<VoxelTreeNode*> m_subnodes;
+    std::list<VoxelTreeNode*> m_activeSubnodes;
+
     Voxel* m_voxel;
 
-    Sphere m_boundingSphere;
-    bool m_boundingSphereRadiusValid;
-    WorldTransform m_boundingSphereTransform;
 
-    void split();
-    void unsplit();
-    void octuple();
-    void calculateBoundingSpherePosition();
-    void calculateBoundingSphereRadius();
+    void toGroup();
+
+    void subnodeActivated(VoxelTreeNode* subnode);
+    void subnodeDeactivated(VoxelTreeNode* subnode);
+
+    VoxelTreeNode* cellSubnode(const glm::ivec3& cell);
+
+    void calculateSpherePosition();
+    void calculateSphereRadius();
 };
 

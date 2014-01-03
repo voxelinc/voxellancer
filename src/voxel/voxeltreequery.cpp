@@ -40,7 +40,7 @@ std::set<Voxel*> VoxelTreeQuery::intersectingVoxels() {
 
 void VoxelTreeQuery::query(VoxelTreeNode* node, std::function<void(Voxel*)> onVoxelIntersection) {
     if (node->isLeaf()) {
-        if(node->isVoxel() && m_shape->intersects(node->boundingSphere())) {
+        if(node->isVoxel() && m_shape->intersects(node->sphere())) {
             onVoxelIntersection(node->voxel());
 
             if(m_queryInterrupted) {
@@ -49,7 +49,7 @@ void VoxelTreeQuery::query(VoxelTreeNode* node, std::function<void(Voxel*)> onVo
         }
     } else {
         for (VoxelTreeNode* subnode : node->subnodes()) {
-            if (m_shape->intersects(subnode->boundingSphere())) {
+            if (m_shape->intersects(subnode->sphere())) {
                 query(subnode, onVoxelIntersection);
 
                 if(m_queryInterrupted) {
