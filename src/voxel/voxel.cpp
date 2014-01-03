@@ -75,6 +75,8 @@ void Voxel::onRemoval() {
 }
 
 void Voxel::onDestruction() {
+    assert(m_voxelTreeNode);
+
     WorldObject* worldObject = m_voxelTreeNode->voxelTree()->worldObject();
 
     if (m_voxelTreeNode && worldObject) {

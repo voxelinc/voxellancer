@@ -27,15 +27,21 @@ VoxelTreeNode::VoxelTreeNode(VoxelTree* voxelTree, const Grid3dAABB &gridAABB, V
     VoxelTreeNode(0, voxelTree, nullptr, gridAABB)
 {
     toGroup();
+
     delete m_subnodes[0];
     m_subnodes[0] = initialSubnode;
     initialSubnode->setParent(this);
+
     if(initialSubnode->active()) {
         m_activeSubnodes.push_back(initialSubnode);
     }
 }
 
 VoxelTreeNode::~VoxelTreeNode() {
+    if(m_voxel != nullptr) {
+        m_voxel->setVoxelTreeNode(nullptr);
+    }
+
     for(VoxelTreeNode* subnode : m_subnodes) {
         delete subnode;
     }

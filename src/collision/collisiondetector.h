@@ -45,8 +45,6 @@ public:
 
     void updateGeode();
 
-    void rebuildVoxelTree();
-
 
 protected:
     WorldObject& m_worldObject;

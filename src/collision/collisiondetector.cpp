@@ -12,8 +12,6 @@
 
 
 
-
-
 CollisionDetector::CollisionDetector(WorldObject& worldObject) :
     m_voxelTree(&worldObject),
     m_worldTree(nullptr),
@@ -106,14 +104,6 @@ void CollisionDetector::reset() {
     m_collisions.clear();
 }
 
-void CollisionDetector::rebuildVoxelTree() {
-    m_voxelTree = VoxelTree(&m_worldObject);
-    for (auto& pair: m_worldObject.voxelMap()) {
-        Voxel* voxel = pair.second;
-        addVoxel(voxel);
-    }
-}
-
 void CollisionDetector::checkCollisions(VoxelTreeNode* nodeA, VoxelTreeNode* nodeB) {
     const Sphere& sphereA = nodeA->sphere();
     const Sphere& sphereB = nodeB->sphere();
@@ -141,15 +131,11 @@ void CollisionDetector::checkCollisions(VoxelTreeNode* nodeA, VoxelTreeNode* nod
             }
 
             if(nodeToSplit->isLeaf()) {
-                VoxelTreeNode* tmp = nodeToSplit;
-                nodeToSplit = otherNode;
-                otherNode = tmp;
+                std::swap(nodeToSplit, otherNode);
             }
 
             for(VoxelTreeNode* subnode : nodeToSplit->subnodes()) {
-                if(!subnode->isEmpty()) {
-                    checkCollisions(subnode, otherNode);
-                }
+                checkCollisions(subnode, otherNode);
             }
         }
     }
