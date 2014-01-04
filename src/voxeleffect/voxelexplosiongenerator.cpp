@@ -73,21 +73,21 @@ void VoxelExplosionGenerator::spawn() {
     transform.setCenter(m_scale * (glm::vec3(0.5f - (0.5f / m_density))));
 
     float scale = m_scale / m_density;
-    for (int i = 0; i < m_density; i++){
-        for (int j = 0; j < m_density; j++){
-            for (int k = 0; k < m_density; k++){
-                float lifetime = m_lifetime;
-                if (m_lifetimeRandomization > 0.0f) lifetime *= RandFloat::rand(1.0f - m_lifetimeRandomization, 1.0f + m_lifetimeRandomization);
+    for (int z = 0; z < m_density; z++){
+        for (int y = 0; y < m_density; y++){
+            for (int x = 0; x < m_density; x++){
+                float lifetime = m_lifetime * RandFloat::rand(1.0f - m_lifetimeRandomization, 1.0f + m_lifetimeRandomization);
+                float scale = 0.95f * scale;
 
                 //multiply scale with 0.95 to certainly be below the collision threshold
-                VoxelExplosionParticle* newObject = new VoxelExplosionParticle(0.95f * scale, lifetime);
+                VoxelExplosionParticle* newObject = new VoxelExplosionParticle(, lifetime);
                 Voxel* voxel = new Voxel(glm::ivec3(0), m_color, 0.000001f, 0.1f);
                 voxel->addToObject(newObject);
                 newObject->setCrucialVoxel(glm::ivec3(0));
 
-                newObject->setPosition(transform.applyTo(scale * (glm::vec3(i, j, k))));
+                newObject->setPosition(transform.applyTo(scale * (glm::vec3(x, y, z))));
                 newObject->setOrientation(m_orientation);
-             
+
                 float angX = RandFloat::rand(-180.0f, 180.0f);
                 float angY = glm::degrees(glm::acos(RandFloat::rand(-1.0f, 1.0f)));
                 glm::vec3 speedVec = glm::quat(glm::vec3(angX, angY, 0.0f)) * glm::vec3(0, 0, RandFloat::rand(1.0f, 10.0f));
@@ -97,7 +97,7 @@ void VoxelExplosionGenerator::spawn() {
                     m_force * RandFloat::rand(-10.0f, 10.0f),
                     m_force * RandFloat::rand(-10.0f, 10.0f),
                     m_force * RandFloat::rand(-10.0f, 10.0f)));
-                
+
                 World::instance()->god().scheduleSpawn(newObject);
             }
         }

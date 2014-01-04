@@ -218,6 +218,7 @@ void Game::draw()
     // draw all other voxelclusters...
     m_voxelRenderer->afterDraw();
 
+    World::instance()->voxelParticleWorld().draw(m_camera);
 
 	m_hud->draw();
 

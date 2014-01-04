@@ -1,9 +1,13 @@
 #include "world.h"
 
-#include "god.h"
+#include "voxeleffect/voxelparticleworld.h"
+
 #include "worldtree/worldtree.h"
 #include "worldlogic.h"
 #include "worldobject/worldobject.h"
+
+#include "god.h"
+
 
 World *World::s_instance = nullptr;
 
@@ -12,6 +16,7 @@ World::World()
     m_worldLogic = std::unique_ptr<WorldLogic>(new WorldLogic(*this));
     m_worldTree = std::unique_ptr<WorldTree>(new WorldTree());
     m_god = std::unique_ptr<God>(new God(*this));
+    m_voxelParticleWorld = std::unique_ptr<VoxelParticleWorld>(new VoxelParticleWorld());
 }
 
 World::~World() {
@@ -24,6 +29,10 @@ WorldLogic &World::worldLogic() {
 
 God &World::god() {
     return *m_god;
+}
+
+WorldTree &World::worldTree() {
+    return *m_worldTree;
 }
 
 WorldTree &World::worldTree() {
