@@ -39,10 +39,6 @@ VoxelTreeNode::VoxelTreeNode(VoxelTree* voxelTree, const Grid3dAABB &gridAABB, V
 }
 
 VoxelTreeNode::~VoxelTreeNode() {
-    if(m_voxel != nullptr) {
-        m_voxel->setVoxelTreeNode(nullptr);
-    }
-
     for(VoxelTreeNode* subnode : m_subnodes) {
         delete subnode;
     }
