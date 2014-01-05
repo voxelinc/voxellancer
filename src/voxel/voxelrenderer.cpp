@@ -12,7 +12,6 @@
 #include <glm/gtx/transform.hpp>
 
 
-#include "voxel/voxel.h"
 #include "voxel/voxelrenderer.h"
 #include "voxel/voxelcluster.h"
 #include "camera.h"
@@ -30,7 +29,8 @@ VoxelRenderer::VoxelRenderer() :
 }
 
 
-void VoxelRenderer::prepareDraw(Camera* camera, bool withBorder) {
+void VoxelRenderer::prepareDraw(Camera * camera, bool withBorder)
+{
     m_shaderProgram->setUniform("projection", camera->projection());
     m_shaderProgram->setUniform("view", camera->view());
     m_shaderProgram->setUniform("viewProjection", camera->viewProjection());
@@ -41,32 +41,36 @@ void VoxelRenderer::prepareDraw(Camera* camera, bool withBorder) {
     m_prepared = true;
 }
 
-void VoxelRenderer::draw(VoxelCluster* voxelCluster) {
-    m_shaderProgram->setUniform("model", voxelCluster->transform().matrix());
 
+void VoxelRenderer::draw(VoxelCluster * worldObject)
+{
+    m_shaderProgram->setUniform("model", worldObject->transform().matrix());
 
     glActiveTexture(GL_TEXTURE0);
-    voxelCluster->voxelRenderData()->positionTexture()->bind();
+    worldObject->voxelRenderData()->positionTexture()->bind();
     glActiveTexture(GL_TEXTURE1);
-    voxelCluster->voxelRenderData()->colorTexture()->bind();
+    worldObject->voxelRenderData()->colorTexture()->bind();
 
-    drawCubes(voxelCluster->voxelCount());
+    m_vertexArrayObject->drawArraysInstanced(GL_TRIANGLE_STRIP, 0, 14, worldObject->voxelRenderData()->voxelCount());
 }
 
 
-void VoxelRenderer::afterDraw() {
+void VoxelRenderer::afterDraw()
+{
     glActiveTexture(GL_TEXTURE0);
     m_shaderProgram->release();
     m_prepared = false;
 }
 
-bool VoxelRenderer::prepared() {
+bool VoxelRenderer::prepared(){
     return m_prepared;
 }
 
-void VoxelRenderer::createAndSetupShaders() {
-    glow::Shader* vertexShader = glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/voxelrenderer.vert");
-    glow::Shader* fragmentShader = glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/voxelrenderer.frag");
+
+void VoxelRenderer::createAndSetupShaders()
+{
+    glow::Shader * vertexShader = glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/voxelrenderer.vert");
+    glow::Shader * fragmentShader = glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/voxelrenderer.frag");
 
     m_shaderProgram = new glow::Program();
     m_shaderProgram->attach(vertexShader, fragmentShader);
@@ -74,6 +78,7 @@ void VoxelRenderer::createAndSetupShaders() {
 
     m_shaderProgram->getUniform<GLint>("positionSampler")->set(0);
     m_shaderProgram->getUniform<GLint>("colorSampler")->set(1);
+
 }
 
 const glow::Array<glm::vec3> strip()
@@ -121,8 +126,9 @@ const glow::Array<glm::vec3> strip()
     };
 }
 
-void VoxelRenderer::createAndSetupGeometry() {
-/*    m_vertexArrayObject = new glow::VertexArrayObject();
+void VoxelRenderer::createAndSetupGeometry()
+{
+    m_vertexArrayObject = new glow::VertexArrayObject();
 
     m_vertexBuffer = new glow::Buffer(GL_ARRAY_BUFFER);
     m_vertexBuffer->setData(strip());
@@ -141,11 +147,5 @@ void VoxelRenderer::createAndSetupGeometry() {
     binding1->setBuffer(m_vertexBuffer, 0, sizeof(glm::vec3) * 2);
     binding1->setFormat(3, GL_FLOAT, GL_TRUE, sizeof(glm::vec3));
     m_vertexArrayObject->enable(a_normal);
-*/
+
 }
-
-void VoxelRenderer::drawCubes(int count) {
-	
-}
-
-
