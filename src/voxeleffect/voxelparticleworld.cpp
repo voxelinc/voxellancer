@@ -18,10 +18,10 @@
 VoxelParticleWorld::VoxelParticleWorld():
     m_vertexBuffer(GL_ARRAY_BUFFER),
     m_normalBuffer(GL_ARRAY_BUFFER),
-    m_positionBuffer(GL_ARRAY_BUFFER)
+    m_positionBuffer(GL_ARRAY_BUFFER),
+    m_initialized(false)
 {
-    loadProgram();
-    setupVertexAttributes();
+
 }
 
 VoxelParticleWorld::~VoxelParticleWorld() {
@@ -50,6 +50,10 @@ void VoxelParticleWorld::update(float deltaSec) {
 }
 
 void VoxelParticleWorld::draw(Camera& camera) {
+    if(!m_initialized) {
+        initialize();
+    }
+
     updateBuffers();
 
     m_program.setUniform("viewProjection", camera.viewProjection());
@@ -62,6 +66,12 @@ void VoxelParticleWorld::draw(Camera& camera) {
     glVertexAttribDivisor(m_program.getAttributeLocation("v_color"), 1);
     m_vertexArrayObject.drawArraysInstanced(GL_TRIANGLE_STRIP, 0, 14, m_voxelParticles.size());
     m_program.release();
+}
+
+void VoxelParticleWorld::initialize() {
+    loadProgram();
+    setupVertexAttributes();
+    m_initialized = true;
 }
 
 void VoxelParticleWorld::loadProgram() {

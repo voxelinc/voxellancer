@@ -36,7 +36,10 @@ protected:
     glow::Buffer m_colorBuffer;
     glow::Buffer m_scaleBuffer;
 
+    bool m_initialized;
 
+
+    void initialize();
     void loadProgram();
     void setupVertexAttributes();
     void setupVertexAttribute(glow::Buffer& buffer, const std::string& name, int numPerVertex, GLenum type, GLboolean normalised, int binding);
