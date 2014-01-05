@@ -1,5 +1,6 @@
 #include "voxelmesh.h"
 
+
 static const glm::vec3 llf(-.5f, -.5f, -.5f);
 static const glm::vec3 llb(-.5f, -.5f, .5f);
 static const glm::vec3 luf(-.5f, .5f, -.5f);

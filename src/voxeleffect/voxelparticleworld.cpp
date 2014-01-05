@@ -16,9 +16,6 @@
 
 
 VoxelParticleWorld::VoxelParticleWorld():
-    m_vertexBuffer(GL_ARRAY_BUFFER),
-    m_normalBuffer(GL_ARRAY_BUFFER),
-    m_positionBuffer(GL_ARRAY_BUFFER),
     m_initialized(false)
 {
 
@@ -56,21 +53,33 @@ void VoxelParticleWorld::draw(Camera& camera) {
 
     updateBuffers();
 
-    m_program.setUniform("viewProjection", camera.viewProjection());
+    m_program->setUniform("viewProjection", camera.viewProjection());
 
-    m_program.use();
-    m_vertexArrayObject.bind();
-    glVertexAttribDivisor(m_program.getAttributeLocation("v_position"), 1);
-    glVertexAttribDivisor(m_program.getAttributeLocation("v_orientation"), 1);
-    glVertexAttribDivisor(m_program.getAttributeLocation("v_scale"), 1);
-    glVertexAttribDivisor(m_program.getAttributeLocation("v_color"), 1);
-    m_vertexArrayObject.drawArraysInstanced(GL_TRIANGLE_STRIP, 0, 14, m_voxelParticles.size());
-    m_program.release();
+    m_program->use();
+    m_vertexArrayObject->bind();
+    glVertexAttribDivisor(m_program->getAttributeLocation("v_position"), 1);
+    glVertexAttribDivisor(m_program->getAttributeLocation("v_orientation"), 1);
+    glVertexAttribDivisor(m_program->getAttributeLocation("v_scale"), 1);
+    glVertexAttribDivisor(m_program->getAttributeLocation("v_color"), 1);
+    m_vertexArrayObject->drawArraysInstanced(GL_TRIANGLE_STRIP, 0, 14, m_voxelParticles.size());
+    m_program->release();
 }
 
 void VoxelParticleWorld::initialize() {
+    m_program = std::unique_ptr<glow::Program>(new glow::Program);
+    m_vertexArrayObject = std::unique_ptr<glow::VertexArrayObject>(new glow::VertexArrayObject);
+
+    m_vertexBuffer = std::unique_ptr<glow::Buffer>(new glow::Buffer(GL_ARRAY_BUFFER));
+    m_normalBuffer = std::unique_ptr<glow::Buffer>(new glow::Buffer(GL_ARRAY_BUFFER));
+
+    m_positionBuffer = std::unique_ptr<glow::Buffer>(new glow::Buffer(GL_ARRAY_BUFFER));
+    m_orientationBuffer = std::unique_ptr<glow::Buffer>(new glow::Buffer(GL_ARRAY_BUFFER));
+    m_colorBuffer = std::unique_ptr<glow::Buffer>(new glow::Buffer(GL_ARRAY_BUFFER));
+    m_scaleBuffer = std::unique_ptr<glow::Buffer>(new glow::Buffer(GL_ARRAY_BUFFER));
+
     loadProgram();
     setupVertexAttributes();
+
     m_initialized = true;
 }
 
@@ -78,13 +87,13 @@ void VoxelParticleWorld::loadProgram() {
     glow::Shader* vertexShader = glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/voxelparticle.vert");
     glow::Shader* fragmentShader = glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/voxelparticle.frag");
 
-    m_program.attach(vertexShader, fragmentShader);
-    m_program.bindFragDataLocation(0, "fragColor");
+    m_program->attach(vertexShader, fragmentShader);
+    m_program->bindFragDataLocation(0, "fragColor");
 }
 
 void VoxelParticleWorld::setupVertexAttributes() {
-    m_vertexBuffer.setData(VoxelMesh::vertices());
-    m_normalBuffer.setData(VoxelMesh::normals());
+    m_vertexBuffer->setData(VoxelMesh::vertices());
+    m_normalBuffer->setData(VoxelMesh::normals());
 
     setupVertexAttribute(m_vertexBuffer, "v_vertex", 3, GL_FLOAT, GL_TRUE, 0);
     setupVertexAttribute(m_normalBuffer, "v_normal", 3, GL_FLOAT, GL_FALSE, 1);
@@ -94,15 +103,15 @@ void VoxelParticleWorld::setupVertexAttributes() {
     setupVertexAttribute(m_colorBuffer, "v_color", 3, GL_FLOAT, GL_FALSE, 5);
 }
 
-void VoxelParticleWorld::setupVertexAttribute(glow::Buffer& buffer, const std::string& name, int numPerVertex, GLenum type, GLboolean normalised, int bindingNum) {
-    glow::VertexAttributeBinding* binding = m_vertexArrayObject.binding(bindingNum);
-    GLint location = m_program.getAttributeLocation(name);
+void VoxelParticleWorld::setupVertexAttribute(std::unique_ptr<glow::Buffer>& buffer, const std::string& name, int numPerVertex, GLenum type, GLboolean normalised, int bindingNum) {
+    glow::VertexAttributeBinding* binding = m_vertexArrayObject->binding(bindingNum);
+    GLint location = m_program->getAttributeLocation(name);
 
     binding->setAttribute(location);
-    binding->setBuffer(&buffer, 0, 0);
+    binding->setBuffer(buffer.get(), 0, 0);
     binding->setFormat(numPerVertex, type, normalised, 0);
 
-    m_vertexArrayObject.enable(location);
+    m_vertexArrayObject->enable(location);
 }
 
 void VoxelParticleWorld::updateBuffers() {
@@ -123,10 +132,10 @@ void VoxelParticleWorld::updateBuffers() {
         colors.push_back(voxelParticle->colorVec());
     }
 
-    m_positionBuffer.setData(positions);
-    m_orientationBuffer.setData(orientations);
-    m_scaleBuffer.setData(scales);
-    m_colorBuffer.setData(colors);
+    m_positionBuffer->setData(positions);
+    m_orientationBuffer->setData(orientations);
+    m_scaleBuffer->setData(scales);
+    m_colorBuffer->setData(colors);
 }
 
 bool VoxelParticleWorld::intersects(VoxelParticle* voxelParticle) {
