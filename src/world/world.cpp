@@ -35,8 +35,8 @@ WorldTree &World::worldTree() {
     return *m_worldTree;
 }
 
-WorldTree &World::worldTree() {
-    return *m_worldTree;
+VoxelParticleWorld &World::voxelParticleWorld() {
+    return *m_voxelParticleWorld;
 }
 
 std::list<WorldObject*> &World::worldObjects() {
@@ -51,6 +51,7 @@ void World::update(float deltaSecs) {
     }
 
     m_worldLogic->update(deltaSecs);
+    m_voxelParticleWorld->update(deltaSecs);
 }
 
 float World::deltaSec() const {

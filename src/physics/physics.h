@@ -21,10 +21,13 @@ public:
     virtual ~Physics();
 
     const glm::vec3& speed() const;
+    float directionalDampening();
     void setSpeed(const glm::vec3& speed);
 
     const glm::vec3& angularSpeed() const;
+    float angularDampening();
     void setAngularSpeed(const glm::vec3& angularSpeed);
+
 
     const glm::vec3& acceleration() const;
     const glm::vec3& angularAcceleration() const;

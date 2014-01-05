@@ -76,7 +76,6 @@ void VoxelRenderer::createAndSetupShaders() {
 
     m_shaderProgram->getUniform<GLint>("positionSampler")->set(0);
     m_shaderProgram->getUniform<GLint>("colorSampler")->set(1);
-
 }
 
 const glow::Array<glm::vec3> strip()

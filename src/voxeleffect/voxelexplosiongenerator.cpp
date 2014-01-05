@@ -2,11 +2,15 @@
 
 #include <ctime>
 
+
+
 #include "world/god.h"
 #include "world/world.h"
 #include "utils/randfloat.h"
 #include "voxelexplosionparticle.h"
 
+#include "voxelparticle.h"
+#include "voxelparticleworld.h"
 
 VoxelExplosionGenerator::VoxelExplosionGenerator() :
     m_position(0, 0, 0),
@@ -77,10 +81,9 @@ void VoxelExplosionGenerator::spawn() {
         for (int y = 0; y < m_density; y++){
             for (int x = 0; x < m_density; x++){
                 float lifetime = m_lifetime * RandFloat::rand(1.0f - m_lifetimeRandomization, 1.0f + m_lifetimeRandomization);
-                float scale = 0.95f * scale;
 
                 //multiply scale with 0.95 to certainly be below the collision threshold
-                VoxelExplosionParticle* newObject = new VoxelExplosionParticle(, lifetime);
+                VoxelExplosionParticle* newObject = new VoxelExplosionParticle(0.95f * scale, lifetime);
                 Voxel* voxel = new Voxel(glm::ivec3(0), m_color, 0.000001f, 0.1f);
                 voxel->addToObject(newObject);
                 newObject->setCrucialVoxel(glm::ivec3(0));
@@ -98,7 +101,14 @@ void VoxelExplosionGenerator::spawn() {
                     m_force * RandFloat::rand(-10.0f, 10.0f),
                     m_force * RandFloat::rand(-10.0f, 10.0f)));
 
-                World::instance()->god().scheduleSpawn(newObject);
+
+                VoxelParticle* particle = new VoxelParticle(newObject->transform(), m_color, lifetime);
+                particle->setAngularSpeed(newObject->physics().angularSpeed(), newObject->physics().angularDampening());
+                particle->setDirectionalSpeed(newObject->physics().speed(), newObject->physics().directionalDampening());
+
+                World::instance()->voxelParticleWorld().addParticle(particle);
+
+                //World::instance()->god().scheduleSpawn(newObject);
             }
         }
     }

@@ -31,6 +31,7 @@
 #include "world/world.h"
 #include "world/god.h"
 #include "skybox.h"
+#include "voxeleffect/voxelparticleworld.h"
 #include "voxel/voxelrenderer.h"
 #include "worldobject/ship.h"
 #include "collision/collisiondetector.h"
@@ -205,8 +206,8 @@ void Game::draw()
 {
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glFrontFace(GL_CCW);
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
+	glDisable(GL_CULL_FACE);
+	//glCullFace(GL_BACK);
 
 	m_skybox->draw(&m_camera);
 
