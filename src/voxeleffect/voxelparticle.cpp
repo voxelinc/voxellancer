@@ -3,12 +3,15 @@
 #include <algorithm>
 
 
+static const float INTERSECTION_CHECK_PERIOD = 0.3f;
+
 VoxelParticle::VoxelParticle(const WorldTransform& transform, int color, float lifetime):
     m_transform(transform),
     m_color(color),
     m_lifetime(lifetime),
     m_directionalDampening(0.0f),
-    m_angularDampening(0.0f)
+    m_angularDampening(0.0f),
+    m_intersectionCheckCountdown(INTERSECTION_CHECK_PERIOD)
 {
     m_colorVec.x = (m_color >> 16) / 255.0f;
     m_colorVec.y = ((m_color & 0xFF00) >> 8) / 255.0f;
@@ -49,6 +52,14 @@ void VoxelParticle::setAngularSpeed(const glm::vec3& speed, float dampening) {
     m_angularDampening = dampening;
 }
 
+bool VoxelParticle::intersectionCheckDue() const {
+    return m_intersectionCheckCountdown < 0;
+}
+
+void VoxelParticle::intersectionCheckPerformed() {
+    m_intersectionCheckCountdown += INTERSECTION_CHECK_PERIOD;
+}
+
 void VoxelParticle::update(float deltaSec) {
     m_directionalSpeed *= 1.0f - (m_directionalDampening * deltaSec);
     m_angularSpeed *= 1.0f - (m_angularDampening * deltaSec);
@@ -57,5 +68,7 @@ void VoxelParticle::update(float deltaSec) {
     m_transform.rotate(glm::quat(m_angularSpeed * deltaSec));
 
     m_lifetime = std::max(m_lifetime - deltaSec, 0.0f);
+
+    m_intersectionCheckCountdown -= deltaSec;
 }
 

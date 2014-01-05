@@ -23,6 +23,9 @@ public:
     void setDirectionalSpeed(const glm::vec3& speed, float dampening);
     void setAngularSpeed(const glm::vec3& speed, float dampening);
 
+    bool intersectionCheckDue() const;
+    void intersectionCheckPerformed();
+
     void update(float deltaSec);
 
 
@@ -39,4 +42,6 @@ protected:
 
     glm::vec3 m_angularSpeed;
     float m_angularDampening;
+
+    float m_intersectionCheckCountdown;
 };

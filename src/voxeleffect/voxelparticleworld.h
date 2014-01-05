@@ -41,5 +41,6 @@ protected:
     void setupVertexAttributes();
     void setupVertexAttribute(glow::Buffer& buffer, const std::string& name, int numPerVertex, GLenum type, GLboolean normalised, int binding);
     void updateBuffers();
+    bool intersects(VoxelParticle* voxelParticle);
 };
 

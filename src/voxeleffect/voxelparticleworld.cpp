@@ -6,6 +6,11 @@
 #include <glow/VertexAttributeBinding.h>
 #include <glowutils/File.h>
 
+#include "geometry/sphere.h"
+
+#include "world/world.h"
+#include "worldtree/worldtreequery.h"
+
 #include "voxelparticle.h"
 #include "voxelmesh.h"
 
@@ -35,7 +40,7 @@ void VoxelParticleWorld::update(float deltaSec) {
 
         voxelParticle->update(deltaSec);
 
-        if (voxelParticle->isDead()) {
+        if (intersects(voxelParticle) || voxelParticle->isDead()) {
             delete voxelParticle;
             i = m_voxelParticles.erase(i);
         } else {
@@ -114,4 +119,16 @@ void VoxelParticleWorld::updateBuffers() {
     m_colorBuffer.setData(colors);
 }
 
+bool VoxelParticleWorld::intersects(VoxelParticle* voxelParticle) {
+    if(!voxelParticle->intersectionCheckDue()) {
+        return false;
+    }
+    voxelParticle->intersectionCheckPerformed();
+
+    Sphere voxelSphere(voxelParticle->worldTransform().position(), voxelParticle->worldTransform().scale() / 2.0f);
+    WorldTreeQuery worldTreeQuery((WorldTreeNode*)&World::instance()->worldTree(), &voxelSphere);
+
+
+    return worldTreeQuery.areVoxelsIntersecting();
+}
 
