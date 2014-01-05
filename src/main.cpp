@@ -16,7 +16,7 @@
 #include "game.h"
 #include "ui/inputhandler.h"
 
-static GLint MajorVersionRequire = 2;
+static GLint MajorVersionRequire = 3;
 static GLint MinorVersionRequire = 1;
 
 static Game * game;
