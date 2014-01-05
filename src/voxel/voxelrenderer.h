@@ -9,6 +9,7 @@ namespace glow {
 	class Buffer;
 };
 
+class Voxel;
 class Camera;
 class VoxelCluster;
 
@@ -31,4 +32,6 @@ private:
 	glow::ref_ptr<glow::VertexArrayObject> m_vertexArrayObject;
 	glow::ref_ptr<glow::Buffer> m_vertexBuffer;
     bool m_prepared;
+
+    void drawCubes(int count);
 };

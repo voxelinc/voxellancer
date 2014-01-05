@@ -16,11 +16,11 @@
 
 #include <glow/AutoTimer.h>
 #include <glow/logging.h>
-
+/*
 #include <fmod.hpp>
 #include <fmod_dsp.h>
 #include <fmod_errors.h>
-
+*/
 #include "property/propertymanager.h"
 #include "resource/clustercache.h"
 #include "utils/hd3000dummy.h"
@@ -235,6 +235,7 @@ void ERRCHECK(FMOD_RESULT result)
 
 void Game::testFMOD()
 {
+	/*
     FMOD::System * system = 0;
     FMOD::Sound  * sound = 0;
     FMOD::Channel *channel = 0;
@@ -250,6 +251,7 @@ void Game::testFMOD()
 
     result = system->playSound(FMOD_CHANNEL_FREE, sound, false, &channel);
     ERRCHECK(result);
+    */
 }
 
 InputHandler * Game::inputHandler()
