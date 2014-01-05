@@ -223,7 +223,7 @@ void Game::draw()
 
     m_hd3000dummy->drawIfActive();
 }
-
+/*
 void ERRCHECK(FMOD_RESULT result)
 {
     if (result != FMOD_OK)
@@ -232,7 +232,7 @@ void ERRCHECK(FMOD_RESULT result)
         exit(-1);
     }
 }
-
+*/
 void Game::testFMOD()
 {
 	/*

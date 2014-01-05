@@ -18,7 +18,6 @@ cmake .
 make -j8
 cd ..
 
-cd ..
 git clone https://github.com/joakimkarlsson/bandit.git bandit
 
 cd .. 
