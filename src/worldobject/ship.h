@@ -6,12 +6,15 @@
 #include "world/god.h"
 #include "property/propertymanager.h"
 #include "property/property.h"
+#include "utils/referencehandle.h"
+#include "utils/referencor.h"
+
 
 class World;
 class God;
 class Hardpoint;
 
-class Ship : public WorldObject {
+class Ship : public WorldObject, public Referencor<WorldObject> {
 public:
     Ship();
     virtual void update(float deltasec);
@@ -21,18 +24,23 @@ public:
 
     void setTargetObject(WorldObject* target);
     WorldObject* targetObject();
+
     void fireAtPoint(glm::vec3 target);
     void fireAtObject();
+
     float minAimDistance();
+
+    virtual void referenceInvalid(const WorldObject* worldObject) override;
 
     virtual void accelerate(const glm::vec3& direction) override;
     virtual void accelerateAngular(const glm::vec3& axis) override;
 
-protected:
 
+protected:
     Property<float> prop_maxSpeed;
     Property<float> prop_maxRotSpeed;
     
 	std::vector<Hardpoint*> m_hardpoints;
-    WorldObject* m_targetObject;
+    ReferenceHandle<WorldObject> *m_targetObject;
 };
+

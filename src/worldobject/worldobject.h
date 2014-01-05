@@ -8,13 +8,15 @@
 #include "physics/physics.h"
 #include "voxel/voxelcluster.h"
 #include "ui/objectinfo.h"
+#include "utils/referenceable.h"
+
 
 class EngineVoxel;
 class HardpointVoxel;
 class CockpitVoxel;
 class FuelVoxel;
 
-class WorldObject : public VoxelCluster, public CollisionFilterable
+class WorldObject : public VoxelCluster, public CollisionFilterable, public Referenceable<WorldObject>
 {
 public:
     WorldObject(CollisionFilterClass collisionFilterClass = CollisionFilterClass::Other);

@@ -22,7 +22,6 @@ private:
     Camera *m_camera;
     Ship *m_playerShip;
     glm::vec3 m_shipOffset;
-    glm::vec3 acc;
-    glm::vec3 accAng;
-
+    glm::vec3 m_acceleration;
+    glm::vec3 m_angularAcceleration;
 };
