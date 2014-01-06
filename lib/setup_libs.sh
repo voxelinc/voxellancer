@@ -1,8 +1,7 @@
 #!/bin/sh
 
-git clone https://github.com/nigels-com/glew.git glew
+git clone -b glew-1.10.0 git://git.code.sf.net/p/glew/code glew
 cd glew
-git checkout 98e09c1564f799040218b97ad541d6d061ffbb00
 make extensions
 make -j8
 cd ..
