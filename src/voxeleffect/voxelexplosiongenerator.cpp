@@ -103,7 +103,7 @@ void VoxelExplosionGenerator::spawn() {
 
 
                 VoxelParticle* particle = new VoxelParticle(newObject->transform(), m_color, lifetime*0.1);
-                particle->setAngularSpeed(newObject->physics().angularSpeed()*3.0f, 0.2);
+                particle->setAngularSpeed(newObject->physics().angularSpeed(), 0.2);
                 particle->setDirectionalSpeed(newObject->physics().speed()*5.0f, 0.2);
 
                 World::instance()->voxelParticleWorld().addParticle(particle);

@@ -84,8 +84,8 @@ void VoxelParticleWorld::initialize() {
 }
 
 void VoxelParticleWorld::loadProgram() {
-    glow::Shader* vertexShader = glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/voxelparticle.vert");
-    glow::Shader* fragmentShader = glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/voxelparticle.frag");
+    glow::Shader* vertexShader = glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/voxel.vert");
+    glow::Shader* fragmentShader = glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/voxel.frag");
 
     m_program->attach(vertexShader, fragmentShader);
     m_program->bindFragDataLocation(0, "fragColor");
