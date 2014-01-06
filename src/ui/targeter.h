@@ -15,6 +15,7 @@ public:
     void setWindowSize(int width, int height);
     void selectNextTarget();
     void selectPreviousTarget();
+    glm::vec3 findTargetPoint(double x, double y);
 private:
     int m_windowWidth, m_windowHeight, m_cursorMaxDistance;
     World *m_world;

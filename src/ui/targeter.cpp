@@ -82,3 +82,14 @@ WorldObject* Targeter::findPreviousTarget(){
     }
     return nullptr;
 }
+
+
+glm::vec3 Targeter::findTargetPoint(double x, double y){
+    glm::vec4 pointEnd((x * 2 / m_windowWidth - 1), -1 * (y * 2 / m_windowHeight - 1), 1, 1); //get normalized device coords
+    pointEnd = glm::inverse(m_camera->viewProjection())*pointEnd; //find point on zfar
+    glm::vec3 vec = glm::vec3(pointEnd); // no need for w component
+    vec = glm::normalize(vec); // normalize
+    vec *= m_player->playerShip()->minAimDistance(); // set aimdistance
+    vec += m_camera->position(); //adjust for camera translation
+    return vec;
+}

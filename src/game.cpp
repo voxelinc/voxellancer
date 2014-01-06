@@ -171,6 +171,7 @@ void Game::update(float delta_sec)
     //m_treeStateReporter.nudge();
 
     m_inputHandler.update(delta_sec);
+    m_player.applyUpdate();
     World::instance()->update(delta_sec);
     m_player.setFollowCam();
 	m_hud->update(delta_sec);
