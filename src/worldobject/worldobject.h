@@ -19,7 +19,6 @@ class WorldObject : public VoxelCluster, public CollisionFilterable
 public:
     WorldObject(CollisionFilterClass collisionFilterClass = CollisionFilterClass::Other);
     WorldObject(float scale, glm::vec3 center = glm::vec3(0), CollisionFilterClass collisionFilterClass = CollisionFilterClass::Other);
-    WorldObject(const WorldTransform& transform, CollisionFilterClass collisionFilterClass = CollisionFilterClass::Other);
 
     virtual ~WorldObject();
 
@@ -54,7 +53,8 @@ public:
 
 
 protected:
-    WorldObject(Physics* physics, CollisionDetector* detector, float scale = 1.0f, CollisionFilterClass collisionFilterClass = CollisionFilterClass::Other);
+    virtual void initialize();
+
     std::unique_ptr<CollisionDetector> m_collisionDetector;
     std::unique_ptr<Physics> m_physics;
     Voxel* m_crucialVoxel;

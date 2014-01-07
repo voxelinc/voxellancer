@@ -12,31 +12,22 @@
 WorldObject::WorldObject(CollisionFilterClass collisionFilterClass):
     WorldObject(1.0f, glm::vec3(0), collisionFilterClass)
 {
-
+    initialize();
 }
 
 WorldObject::WorldObject(float scale, glm::vec3 center, CollisionFilterClass collisionFilterClass) :
-    WorldObject(new Physics(*this, scale), new CollisionDetector(*this), scale, collisionFilterClass)
-{
-    m_transform.setCenter(center);
-}
-
-WorldObject::WorldObject(Physics* physics, CollisionDetector* detector, float scale, CollisionFilterClass collisionFilterClass) :
     CollisionFilterable(collisionFilterClass),
     VoxelCluster(scale),
-    m_physics(physics),
-    m_collisionDetector(detector),
     m_objectInfo(),
     m_crucialVoxel(nullptr)
 {
+    m_transform.setCenter(center);
+    initialize();
 }
 
-WorldObject::WorldObject(const WorldTransform& transform, CollisionFilterClass collisionFilterClass):
-    WorldObject(transform.scale(), transform.center(), collisionFilterClass)
-{
-    m_transform.setPosition(transform.position());
-    m_transform.setOrientation(transform.orientation());
-    m_transform.setCenter(transform.center());
+void WorldObject::initialize(){
+    m_physics.reset(new Physics(*this, m_transform.scale()));
+    m_collisionDetector.reset(new CollisionDetector(*this));
 }
 
  WorldObject::~WorldObject() {

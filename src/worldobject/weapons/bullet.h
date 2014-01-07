@@ -19,7 +19,9 @@ public:
     virtual void onSpawnFail() override;
 
 
-private:
+protected:
+    virtual void initialize();
+
     WorldObject *m_creator;
 	float m_lifetime;
 };
