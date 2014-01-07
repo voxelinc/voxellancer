@@ -9,7 +9,7 @@
 #include <glow/logging.h>
 
 #include "propertycollection.h"
-#include "input/InputMapping.h"
+#include "input/inputmapping.h"
 
 
 // some string, some spaces, equals, some spaces, some string, maybe a comment

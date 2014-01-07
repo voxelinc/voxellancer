@@ -5,7 +5,7 @@
 #include <glow/logging.h>
 
 #include "property/propertymanager.h"
-#include "input/InputMapping.h"
+#include "input/inputmapping.h"
 
 using namespace bandit;
 
