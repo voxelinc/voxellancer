@@ -9,7 +9,6 @@
 
 #include "utils/tostring.h"
 #include "world/world.h"
-#include "collision/voxeltreenode.h"
 #include "worldobject/worldobject.h"
 #include "../bandit_extension/vec3helper.h"
 #include "worldobject/ship.h"
@@ -32,23 +31,22 @@ go_bandit([](){
         });
         
        
-        it_skip("test performance, unskip for testing", [&]() {
+        it("test performance, unskip for testing", [&]() {
             Ship *ship;
             Ship *normandy;            
+            WorldObject *planet;
             {
                 glow::AutoTimer t("init perftest");
 
                 normandy = new Ship();
                 ClusterCache::instance()->fillObject(normandy, "data/voxelcluster/normandy.csv");
                 normandy->setPosition(glm::vec3(0, 0, -100));
-                normandy->finishInitialization();
                 normandy->objectInfo().setName("Normandy");
                 World::instance()->god().scheduleSpawn(normandy);
 
                 ship = new Ship();
                 ClusterCache::instance()->fillObject(ship, "data/voxelcluster/basicship.csv");
                 ship->setPosition(glm::vec3(0, 0, 10));
-                ship->finishInitialization();
                 ship->objectInfo().setName("basicship");
                 ship->objectInfo().setShowOnHud(false);
                 World::instance()->god().scheduleSpawn(ship);
@@ -63,12 +61,11 @@ go_bandit([](){
                         }
                     }
                 }
-                wall->finishInitialization();
                 wall->objectInfo().setName("Wall");
                 World::instance()->god().scheduleSpawn(wall);
 
-                WorldObject *planet = new WorldObject();
-                planet->move(glm::vec3(20, 10, -30));
+                planet = new WorldObject();
+                planet->move(glm::vec3(20, 10, -130));
                 int diameter = 28;
                 glm::vec3 middle(diameter / 2, diameter / 2, diameter / 2);
                 for (int x = 0; x < diameter; x++) {
@@ -83,23 +80,24 @@ go_bandit([](){
                     }
                 }
                 planet->setCrucialVoxel(glm::ivec3(middle));
-                planet->finishInitialization();
                 planet->objectInfo().setName("Planet");
                 World::instance()->god().scheduleSpawn(planet);
 
                 glow::debug("Initial spawn");
                 World::instance()->god().spawn();
             }
+            normandy->accelerate(glm::vec3(0, 0, 1));
+            ship->accelerate(glm::vec3(0, 0, 1));
             {
-                normandy->accelerate(glm::vec3(0, 0, 1));
-                ship->accelerate(glm::vec3(0, 0, 1));
                 glow::AutoTimer t("simulation");
                 for (int i = 0; i < 10000; i++) {
-                    ship->setTargetObject(normandy);
+                    ship->setTargetObject(planet);
                     ship->fireAtObject();
+                    //ship->fireAtPoint(planet->transform().position());
                     World::instance()->update(0.016f);
                 }
             }
+            glow::debug("simulation done");
         });
     });
 });
