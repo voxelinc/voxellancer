@@ -86,8 +86,16 @@ go_bandit([]() {
 
             DamageImpact f1 = df->forwardedDamageImpacts().back();
             DamageImpact f2 = df->forwardedDamageImpacts().front();
-            AssertThat(f1.damageVec(), EqualsWithDelta(glm::vec3(0.0, 0.0, 5.0), glm::vec3(0.1, 0.1, 0.1)));
-            AssertThat(f2.damageVec(), EqualsWithDelta(glm::vec3(0.0, 0.0, -3.0), glm::vec3(0.1, 0.1, 0.1)));
+
+            // there is no guaranty that f1 and f2 are ordered
+            if (f1.damageVec().z > f2.damageVec().z) {
+                AssertThat(f1.damageVec(), EqualsWithDelta(glm::vec3(0.0, 0.0, 5.0), glm::vec3(0.1, 0.1, 0.1)));
+                AssertThat(f2.damageVec(), EqualsWithDelta(glm::vec3(0.0, 0.0, -3.0), glm::vec3(0.1, 0.1, 0.1)));
+            }
+            else {
+                AssertThat(f2.damageVec(), EqualsWithDelta(glm::vec3(0.0, 0.0, 5.0), glm::vec3(0.1, 0.1, 0.1)));
+                AssertThat(f1.damageVec(), EqualsWithDelta(glm::vec3(0.0, 0.0, -3.0), glm::vec3(0.1, 0.1, 0.1)));
+            }
         });
 
         it("Forwarding from angle != perpendicular", [&] {

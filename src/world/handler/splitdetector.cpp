@@ -19,9 +19,6 @@ void SplitDetector::searchSplitOffs(std::list<WorldObjectModification> worldObje
 
         WorldObject* currentWorldObject = worldObjectModification.worldObject();
         if (currentWorldObject->voxelMap().size() > 1) {
-#ifndef DEACTIVATE_PERFORMANCE_MEASUREMENTS
-            glow::AutoTimer t("Splitdetection: " + currentWorldObject->objectInfo().name());
-#endif
             VoxelNeighbourHelper nHelper(currentWorldObject, true);
             std::unordered_set<Voxel*> borderVoxels;
             for (glm::ivec3 removedPos : worldObjectModification.removedVoxels()) {
@@ -31,9 +28,6 @@ void SplitDetector::searchSplitOffs(std::list<WorldObjectModification> worldObje
             }
             findSplits(currentWorldObject, borderVoxels);
         }
-    }
-    if (m_splitDataList.size() > 0) {
-        glow::debug("Splitdetector: foundSplits!!");
     }
 }
 

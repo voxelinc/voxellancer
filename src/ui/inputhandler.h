@@ -21,7 +21,7 @@ public:
 
 	void resizeEvent(const unsigned int width, const unsigned int height);
 	void keyCallback(int key, int scancode, int action, int mods);
-	void update(float delta_sec);
+	void update(float deltaSec);
 
 protected:
 
@@ -41,7 +41,7 @@ protected:
 	int m_lastfocus;
 
 	int m_cursorMaxDistance;
-	int m_mouseControl;    
+	int m_mouseControl;
 
     Property<float> prop_deadzone;
 

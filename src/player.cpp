@@ -46,7 +46,7 @@ Ship* Player::playerShip(){
     return m_playerShip;
 }
 
-void Player::setShipToCam(float delta_sec){
+void Player::setShipToCam(float deltaSec){
     acc *= 2;
     accAng /= 30;
     m_camera->move(acc);

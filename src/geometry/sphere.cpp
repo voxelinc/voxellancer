@@ -2,6 +2,8 @@
 
 #include <cassert>
 
+#include "geometry/aabb.h"
+
 
 Sphere::Sphere():
     m_position(0.0f, 0.0f, 0.0f),
@@ -15,7 +17,7 @@ Sphere::Sphere(const glm::vec3 &position, float radius):
     m_radius(radius)
 {
     assert(radius >= 0 && std::isfinite(radius));
-    assert(std::isfinite(position.x) && std::isfinite(position.x) && std::isfinite(position.x));
+    assert(std::isfinite(position.x) && std::isfinite(position.y) && std::isfinite(position.z));
 }
 
 Sphere::~Sphere() {
@@ -50,3 +52,20 @@ bool Sphere::contains(const Sphere &other) const {
     glm::vec3 delta = other.m_position - m_position;
     return glm::length(delta) + other.m_radius < m_radius;
 }
+
+bool Sphere::nearTo(const TAABB<float>& aabb) const {
+    Sphere aabbSphere = Sphere::containing(aabb);
+    return intersects(aabbSphere);
+}
+
+bool Sphere::containedBy(const TAABB<float>& aabb) const {
+    return
+        m_position.x - m_radius >= aabb.llf().x &&
+        m_position.y - m_radius >= aabb.llf().y &&
+        m_position.z - m_radius >= aabb.llf().z &&
+        m_position.x + m_radius <= aabb.rub().x &&
+        m_position.y + m_radius <= aabb.rub().y &&
+        m_position.z + m_radius <= aabb.rub().z;
+}
+
+

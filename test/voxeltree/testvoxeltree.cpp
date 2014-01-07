@@ -8,7 +8,8 @@
 
 #include "utils/tostring.h"
 #include "world/world.h"
-#include "collision/voxeltreenode.h"
+#include "voxel/voxeltreequery.h"
+#include "voxel/voxeltreenode.h"
 #include "worldobject/worldobject.h"
 #include "../bandit_extension/vec3helper.h"
 
@@ -21,6 +22,7 @@ go_bandit([](){
         World *world;
         WorldObject *obj;
         VoxelTreeNode *vt;
+
         PropertyManager::instance()->reset();
         PropertyManager::instance()->load("data/config.ini");
 
@@ -74,7 +76,7 @@ go_bandit([](){
 
         it("can adjust its center", [&]() {
             WorldObject *d = new WorldObject(1.0, glm::vec3(1,1,1));
-            
+
             AssertThat(d->collisionDetector().voxeltree().boundingSphere().position(), EqualsWithDelta(glm::vec3(-1, -1, -1), glm::vec3(0.01, 0.01, 0.01)));
         });
 
@@ -102,7 +104,6 @@ go_bandit([](){
             VoxelTreeNode *n = nullptr;
 
             obj->addVoxel(new Voxel(glm::ivec3(1, 1, 1)));
-            obj->finishInitialization();
 
             for (VoxelTreeNode *subnode : obj->collisionDetector().voxeltree().subnodes()) {
                 if (subnode->voxel() != nullptr) {
@@ -111,10 +112,12 @@ go_bandit([](){
             }
             assert(n != nullptr);
 
-            AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(0,0,0), glm::vec3(0.01, 0.01, 0.01)));
+            AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(1, 1, 1), glm::vec3(0.01, 0.01, 0.01)));
+            obj->addVoxel(new Voxel(glm::ivec3(0, 0, 0))); // Center in middle now
+            AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(1, 1, 1), glm::vec3(0.01, 0.01, 0.01)));
 
             obj->rotate(glm::angleAxis((float)90.0, glm::vec3(1, 0, 0)));
-            AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(0, 0, 0), glm::vec3(0.01, 0.01, 0.01)));
+            AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(1, 0, 1), glm::vec3(0.01, 0.01, 0.01)));
 
         });
 
@@ -123,8 +126,6 @@ go_bandit([](){
             VoxelTreeNode *n = nullptr;
 
             obj->addVoxel(new Voxel(glm::ivec3(1, 1, 1)));
-            obj->addVoxel(new Voxel(glm::ivec3(1, 1, 0)));
-            obj->finishInitialization();
             //obj->transform().setCenter(glm::vec3(1,1,0));
 
             for(VoxelTreeNode *subnode : obj->collisionDetector().voxeltree().subnodes()) {
@@ -132,16 +133,36 @@ go_bandit([](){
                     n = subnode;
                 }
             }
+
+            obj->addVoxel(new Voxel(glm::ivec3(0, 0, 0)));
             assert(n != nullptr);
 
-            AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(0,0,0.5), glm::vec3(0.01, 0.01, 0.01)));
+            AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(1,1,1), glm::vec3(0.01, 0.01, 0.01)));
+            AssertThat(vt->boundingSphere().position(), EqualsWithDelta(glm::vec3(0.5, 0.5, 0.5), glm::vec3(0.01, 0.01, 0.01)));
 
             obj->rotate(glm::angleAxis((float)90.0, glm::vec3(1, 0, 0)));
-            AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(0, -0.5, 0), glm::vec3(0.01, 0.01, 0.01)));
+            AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(1, 0, 1), glm::vec3(0.01, 0.01, 0.01)));
 
             obj->rotate(glm::angleAxis((float)90.0f, glm::vec3(0, 1, 0)));
-            AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(0.5, 0, 0), glm::vec3(0.01, 0.01, 0.01)));
+            AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(1, 1, 1), glm::vec3(0.01, 0.01, 0.01)));
+        });
 
+
+        it("can be queried for voxels in sphere", [&]() {
+            Sphere sphere;
+
+            obj->addVoxel(new Voxel(glm::ivec3(1, 1, 0)));
+
+            sphere = Sphere(glm::vec3(0,0,0), 0.5f);
+            AssertThat(VoxelTreeQuery(vt, &sphere).intersectingVoxels().size(), Equals(0));
+
+            sphere =  Sphere(glm::vec3(0,0,0), 1.0f);
+            AssertThat(VoxelTreeQuery(vt, &sphere).intersectingVoxels().size(), Equals(1));
+
+            obj->addVoxel(new Voxel(glm::ivec3(2, 2, 0)));
+
+            sphere = Sphere(glm::vec3(1.5,1.5,0), 0.5f);
+            AssertThat(VoxelTreeQuery(vt, &sphere).intersectingVoxels().size(), Equals(2));
         });
     });
 });

@@ -12,7 +12,6 @@
 #include "handler/wrecker.h"
 #include "handler/elasticimpulsor.h"
 #include "handler/voxelhangman.h"
-#include "handler/boundsshrinker.h"
 
 
 class World;
@@ -39,7 +38,6 @@ protected:
     DamageImpactGenerator m_damageImpactGenerator;
     SplitDetector m_splitDetector;
     Splitter m_splitter;
-    BoundsShrinker m_boundsShrinker;
     //Wrecker m_wrecker;
     GarbageCollector m_garbageCollector;
     VoxelHangman m_voxelHangman;

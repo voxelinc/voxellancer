@@ -30,9 +30,9 @@ Ship* Hardpoint::ship() {
     return m_ship;
 }
 
-void Hardpoint::update(float delta_sec) {
+void Hardpoint::update(float deltaSec) {
     if (m_weapon != nullptr) {
-        m_weapon->update(delta_sec);
+        m_weapon->update(deltaSec);
     }
 }
 

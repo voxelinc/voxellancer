@@ -17,7 +17,6 @@ void ElasticImpulsor::parse(std::list<Impulse>& worldObjectImpulses) {
         WorldObject* worldObject = worldObjectImpulse.worldObject();
         Physics& physics = worldObject->physics();
 
-        assert(physics.massValid());
         assert(physics.mass() > 0);
 
         WorldTransform targetTransform(worldObject->transform(), physics.speed(), glm::quat(physics.angularSpeed()));
