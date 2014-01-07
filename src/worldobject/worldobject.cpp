@@ -10,18 +10,17 @@
 
 
 WorldObject::WorldObject(CollisionFilterClass collisionFilterClass):
-    WorldObject(1.0f, glm::vec3(0), collisionFilterClass)
+    WorldObject(1.0f, collisionFilterClass)
 {
     initialize();
 }
 
-WorldObject::WorldObject(float scale, glm::vec3 center, CollisionFilterClass collisionFilterClass) :
+WorldObject::WorldObject(float scale, CollisionFilterClass collisionFilterClass) :
     CollisionFilterable(collisionFilterClass),
     VoxelCluster(scale),
     m_objectInfo(),
     m_crucialVoxel(nullptr)
 {
-    m_transform.setCenter(center);
     initialize();
 }
 

@@ -18,7 +18,7 @@ class WorldObject : public VoxelCluster, public CollisionFilterable
 {
 public:
     WorldObject(CollisionFilterClass collisionFilterClass = CollisionFilterClass::Other);
-    WorldObject(float scale, glm::vec3 center = glm::vec3(0), CollisionFilterClass collisionFilterClass = CollisionFilterClass::Other);
+    WorldObject(float scale, CollisionFilterClass collisionFilterClass = CollisionFilterClass::Other);
 
     virtual ~WorldObject();
 
