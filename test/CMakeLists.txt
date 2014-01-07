@@ -25,7 +25,7 @@ add_subdirectory(perftest)
 file(GLOB_RECURSE ALL_TEST_FILES
     "*/*.cpp"
 )
-list(REMOVE_ITEM ALL_TEST_FILES ${CMAKE_CURRENT_SOURCE_DIR}/perftest//test_performance.cpp)
+list(REMOVE_ITEM ALL_TEST_FILES ${CMAKE_CURRENT_SOURCE_DIR}/perftest//testperformance.cpp)
 
 
 make_test(all_tests ${ALL_TEST_FILES})

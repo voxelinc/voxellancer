@@ -1,2 +1,2 @@
 
-make_test(test_performance test_performance.cpp)
+make_test(test_performance testperformance.cpp)
