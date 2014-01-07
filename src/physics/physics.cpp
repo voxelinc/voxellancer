@@ -19,13 +19,13 @@
 #include "utils/tostring.h"
 
 
-Physics::Physics(WorldObject& worldObject, float scale) :
+Physics::Physics(WorldObject& worldObject, float scale, float dampening, float angularDampening) :
     m_speed(0),
     m_angularSpeed(0),
     m_acceleration(0),
     m_angularAcceleration(0),
-    m_dampening("physics.globalDampening"),
-    m_angularDampening("physics.globalAngularDampening"),
+    m_dampening(dampening),
+    m_angularDampening(angularDampening),
     m_mass(0),
     m_accumulatedMassVec(0.0f, 0.0f, 0.0f),
     m_worldObject(worldObject)
