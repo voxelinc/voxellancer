@@ -65,6 +65,8 @@ void VoxelExplosionGenerator::setImpactVector(const glm::vec3& impactVector) {
 }
 
 void VoxelExplosionGenerator::spawn() {
+    return; // just for debugging - remove!!
+
     // spawn explosionSpawnCount voxels with color at position within a cube with edgeLength scale with a speed of ~force in all directions modified by ~impactVector
     WorldTransform transform;
     transform.setPosition(m_position);
