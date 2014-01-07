@@ -10,6 +10,7 @@
 #include <GLFW/glfw3.h>
 
 #include "ui/inputhandler.h"
+#include "ui/streamredirect.h"
 
 #include "utils/timedtask.h"
 #include "worldtree/worldtree.h"
@@ -68,5 +69,7 @@ private:
 	std::unique_ptr<LinuxVMDummy> m_linuxvmdummy;
 
     TreeStateReporter m_treeStateReporter;
+
+    StreamRedirect *m_out, *m_err;
 };
 

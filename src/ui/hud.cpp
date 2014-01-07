@@ -51,6 +51,12 @@ HUD::HUD(Player* player) :
     ClusterCache::instance()->fillCluster(m_shipArrow.get(), "data/hud/arrow.csv");
     m_shipArrow->m_origin = Center;
     m_shipArrow->m_offset = glm::vec3(-2, -2, 0);
+
+
+    for (int i = 0; i < lineBacklog; i++){
+        m_lastlineTime[i] = 0;
+        m_lastline[i] = "";
+    }
 }
 
 void HUD::addElement(const std::string& filename, HUDOffsetOrigin origin, glm::vec3 offset, std::vector<std::unique_ptr<HUDElement>> *list){
@@ -105,6 +111,16 @@ void HUD::update(float deltaSec){
     float thisFrame = 1.0f / deltaSec;
     if (thisFrame < 1.0f || thisFrame > 9999.0f) m_frameRate = 0.0f;
     else m_frameRate = m_frameRate * 0.8f + thisFrame * 0.2f;
+
+    // lines backlog
+    if (m_lastlineTime[0] + 3.5f < glfwGetTime()){
+        //line is obsolete, move up
+        for (int i = 0; i < lineBacklog - 1; i++){
+            m_lastline[i] = m_lastline[i + 1];
+            m_lastlineTime[i] = m_lastlineTime[i + 1];
+        }
+        m_lastlineTime[lineBacklog - 1] = 0;
+    }
 }
 
 void HUD::draw(){
@@ -179,6 +195,7 @@ void HUD::draw(){
         m_font->drawString(std::to_string((int)glm::round(m_frameRate)), calculatePosition(TopLeft, glm::vec3(4, -5, 0)), s3x5, 0.8f);
     }
 
+    // draw locked target
     std::string lockstr;
     if (m_player->playerShip()->targetObject())
         lockstr = "Locked: " + m_player->playerShip()->targetObject()->objectInfo().name();
@@ -186,9 +203,34 @@ void HUD::draw(){
         lockstr = "No Lock";
     m_font->drawString(lockstr, calculatePosition(Bottom, glm::vec3(0, 8, 0)), s3x5, 0.5f, aCenter);
 
+    // draw output lines
+    for (int i = 0; i < lineBacklog; i++){
+        if (m_lastlineTime[i] != 0)
+            m_font->drawString(m_lastline[i], calculatePosition(TopLeft, glm::vec3(15, -3 - (4*i), 0)), s5x7, 0.4f);
+    }
+
     m_voxelRenderer->afterDraw();
 
 }
+
+void HUD::streamCallback(std::string line){
+    // Find first free line
+    for (int i = 0; i < lineBacklog; i++){
+        if (m_lastlineTime[i] == 0){
+            m_lastline[i] = line;
+            m_lastlineTime[i] = glfwGetTime();
+            return;
+        }
+    }
+    // No free line, move up
+    for (int i = 0; i < lineBacklog - 1; i++){
+        m_lastline[i] = m_lastline[i + 1];
+        m_lastlineTime[i] = m_lastlineTime[i + 1];
+    }
+    m_lastline[lineBacklog - 1] = line;
+    m_lastlineTime[lineBacklog - 1] = glfwGetTime();
+}
+
 
 glm::vec3 HUD::calculatePosition(HUDOffsetOrigin origin, glm::vec3 offset){
     switch (origin){

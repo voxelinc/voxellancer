@@ -12,6 +12,8 @@ class VoxelRenderer;
 class VoxelFont;
 class Player;
 
+const int lineBacklog = 3;
+
 class HUD {
 public:
     HUD(Player *player);
@@ -22,6 +24,8 @@ public:
 
     void update(float deltaSec);
     void draw();
+
+    void streamCallback(std::string line);
 
 protected:
     void addElement(const std::string& filename, HUDOffsetOrigin origin, glm::vec3 offset, std::vector<std::unique_ptr<HUDElement>> *list);
@@ -45,6 +49,9 @@ protected:
     double m_delta_sec_remain;
     float m_frameRate;
     float m_dx, m_dy;
+
+    std::string m_lastline[lineBacklog];
+    double m_lastlineTime[lineBacklog];
 
     Property<float> prop_distance, prop_moveMultiplier, prop_inertiaMove, prop_inertiaRotate, prop_inertiaRate,
         prop_arrowMaxdistance, prop_arrowRadius;

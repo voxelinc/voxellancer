@@ -179,6 +179,9 @@ void Game::initialize()
 
     m_hd3000dummy = std::unique_ptr<HD3000Dummy>(new HD3000Dummy);
 
+    m_out = new StreamRedirect(std::cout, m_hud.get(), true);
+    m_err = new StreamRedirect(std::cerr, m_hud.get(), true);
+    
     glClearColor(0.2f, 0.3f, 0.4f, 1.f);
 	glow::debug("Game::initialize Done");
 }
