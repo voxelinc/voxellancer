@@ -1,4 +1,6 @@
-#!/bin/sh
+#!/bin/bash
+
+pushd `dirname $0`
 
 git clone -b glew-1.10.0 git://git.code.sf.net/p/glew/code glew
 cd glew
@@ -21,4 +23,4 @@ cd ..
 git submodule init
 git submodule update
 
-
+popd
