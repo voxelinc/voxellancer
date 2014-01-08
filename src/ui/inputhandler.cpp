@@ -391,25 +391,25 @@ void InputHandler::getLastButton(int joystickEnum){
     }
 }
 
-float InputHandler::getGamepadInputValue(int index, float axisValue){
+float InputHandler::getGamepadInputValue(int index, float axisValue) {
     if (index == -1)
         return 0;
     float inputValue = 0;
-    if (axisValue == 0){
+    if (axisValue == 0) {
         if (gamepadButtonValues[index] == GLFW_PRESS)
             return 1;
         else
             return 0;
-    }
-    else{
-        if (glm::abs(gamepadAxisValues[index]) > prop_deadzoneGamepad){
+    } else {
+        if (glm::abs(gamepadAxisValues[index]) > prop_deadzoneGamepad) {
             float relativeValue = gamepadAxisValues[index] / axisValue;
-            if (relativeValue > 0)
-                return glm::min(relativeValue,1.0f);
-            else
+            if (relativeValue > 0) {
+                return glm::min(relativeValue, 1.0f);
+            } else {
                 return 0;
-        }
-        else
+            }
+        } else {
             return 0;
+        }
     }
 }
