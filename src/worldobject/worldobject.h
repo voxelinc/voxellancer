@@ -13,6 +13,7 @@ class EngineVoxel;
 class HardpointVoxel;
 class CockpitVoxel;
 class FuelVoxel;
+class WorldObjectHandle;
 
 class WorldObject : public VoxelCluster, public CollisionFilterable
 {
@@ -52,11 +53,13 @@ public:
     virtual void onCollision();
     virtual void onSpawnFail();
 
+    std::shared_ptr<WorldObjectHandle> handle() const;
 
 protected:
     WorldObject(Physics* physics, CollisionDetector* detector, float scale = 1.0f, CollisionFilterClass collisionFilterClass = CollisionFilterClass::Other);
     std::unique_ptr<CollisionDetector> m_collisionDetector;
     std::unique_ptr<Physics> m_physics;
+    std::shared_ptr<WorldObjectHandle> m_handle;
     Voxel* m_crucialVoxel;
     ObjectInfo m_objectInfo;
 };

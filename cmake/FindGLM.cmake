@@ -5,6 +5,7 @@
 
 FIND_PATH(GLM_INCLUDE_DIR glm/glm.hpp
     ${LIB_DIR}/glm-0.9.4.6
+    ${LIB_DIR}/glm
     $ENV{GLM_HOME}
     $ENV{GLMDIR}
     /usr/include

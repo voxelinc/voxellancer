@@ -15,8 +15,8 @@ public:
     
     void moveTo(glm::vec3 position);
     void rotateTo(glm::quat orientation);
-    void shootBullet(const std::list<WorldObject*>& targets); //TODO: WorldObjectHandle
-    void ShootRockets(WorldObject* target);
+    void shootBullet(const std::list<std::shared_ptr<WorldObjectHandle>>& targets);
+    void ShootRockets(std::shared_ptr<WorldObjectHandle> target);
 
 protected:
     Ship& m_ship;

@@ -12,6 +12,7 @@ class World;
 class God;
 class Hardpoint;
 class Character;
+class WorldObjectHandle;
 
 class Ship : public WorldObject {
 public:
@@ -41,5 +42,5 @@ protected:
     Property<float> prop_maxRotSpeed;
     
 	std::vector<Hardpoint*> m_hardpoints;
-    WorldObject* m_targetObject;
+    std::shared_ptr<WorldObjectHandle> m_targetObjectHandle;
 };
