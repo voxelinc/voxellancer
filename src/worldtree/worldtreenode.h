@@ -4,7 +4,11 @@
 #include <set>
 
 #include "worldtreegeode.h"
-#include "../geometry/aabb.h"
+#include "geometry/aabb.h"
+#include "geometry/ray.h"
+
+
+class Voxel;
 
 /*!
     remove() doesn't unsplit. This could happen recursive upwards the tree,
@@ -36,9 +40,6 @@ public:
 
     void insert(WorldTreeGeode *geode);
     void remove(WorldTreeGeode *geode);
-
-    std::set<WorldTreeGeode*> geodesInAABB(const AABB &aabb, WorldObject* collideableWith = nullptr) const;
-    bool areGeodesInAABB(const AABB &aabb, WorldObject* collideableWith = nullptr) const;
 
     void aabbChanged(WorldTreeGeode *geode);
 

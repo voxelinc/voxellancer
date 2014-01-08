@@ -17,7 +17,7 @@ public:
     glm::vec3 position(); // in world coordinates
     Ship* ship();
 
-    void update(float delta_sec);
+    void update(float deltaSec);
     AimType aimType();
     void shootAtPoint(glm::vec3 target);
     void shootAtObject(WorldObject* target);

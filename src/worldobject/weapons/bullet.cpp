@@ -36,8 +36,6 @@ Bullet::Bullet(WorldObject* creator, glm::vec3 position, glm::quat orientation, 
     m_objectInfo.setCanLockOn(false);
 
     CollisionFilterable::setCollideableWith(CollisionFilterClass::Bullet, false);
-
-    finishInitialization();
 }
 
 WorldObject* Bullet::creator() const {
@@ -48,8 +46,8 @@ bool Bullet::specialIsCollideableWith(const CollisionFilterable *other) const {
     return static_cast<CollisionFilterable*>(m_creator) != other;
 }
 
-void Bullet::update(float delta_sec){
-    m_lifetime -= delta_sec;
+void Bullet::update(float deltaSec){
+    m_lifetime -= deltaSec;
     if (m_lifetime < 0)
         World::instance()->god().scheduleRemoval(this);
 }
@@ -59,7 +57,8 @@ void Bullet::onCollision(){
     VoxelExplosionGenerator generator;
     generator.setTransform(m_transform);
     generator.setColor(0xFF0000);
-    generator.setForce(0.2f);
+    generator.setForce(0.5f);
+    generator.setLifetime(0.7f, 0.2f);
     generator.spawn();
 }
 
@@ -67,6 +66,7 @@ void Bullet::onSpawnFail(){
     VoxelExplosionGenerator generator;
     generator.setTransform(m_transform);
     generator.setColor(0xFF0000);
-    generator.setForce(0.2f);
+    generator.setForce(0.5f);
+    generator.setLifetime(0.7f, 0.2f);
     generator.spawn();
 }

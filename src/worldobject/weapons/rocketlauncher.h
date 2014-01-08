@@ -8,7 +8,7 @@ public:
     RocketLauncher();
     virtual AimType aimType();
     virtual void shootAtObject(Hardpoint* source, WorldObject* target);
-    virtual void update(float delta_sec);
+    virtual void update(float deltaSec);
     virtual float aimRange();
 
 private:

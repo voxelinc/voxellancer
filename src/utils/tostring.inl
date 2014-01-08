@@ -23,6 +23,3 @@ std::string toString(const TAABB<T> &aabb) {
 
     return result.str();
 }
-
-
-

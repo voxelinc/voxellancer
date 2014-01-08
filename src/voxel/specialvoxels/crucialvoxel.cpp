@@ -24,4 +24,5 @@ void CrucialVoxel::onRemoval(){
 }
 
 void CrucialVoxel::onDestruction(){
+    Voxel::onDestruction();
 }

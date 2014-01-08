@@ -142,9 +142,10 @@ void InputHandler::update(float delta_sec) {
     if (glfwGetWindowAttrib(m_window, GLFW_FOCUSED)){
         if (m_lastfocus){
             handleKeyboardUpdate();
-            if (glfwJoystickPresent(GLFW_JOYSTICK_1))
+            if (glfwJoystickPresent(GLFW_JOYSTICK_1)){
                 setupJoystick(GLFW_JOYSTICK_1);
                 handleJoystickUpdate(GLFW_JOYSTICK_1);
+            }
             handleMouseUpdate();
         }
     }

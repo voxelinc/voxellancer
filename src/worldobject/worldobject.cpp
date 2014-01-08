@@ -1,11 +1,14 @@
 #include "worldobject.h"
 
+#include <glow/AutoTimer.h>
+
 #include "utils/tostring.h"
 #include "voxel/specialvoxels/enginevoxel.h"
 #include "voxel/specialvoxels/hardpointvoxel.h"
 #include "voxel/specialvoxels/cockpitvoxel.h"
 #include "voxel/specialvoxels/fuelvoxel.h"
 
+#include "worldobjecthandle.h"
 
 WorldObject::WorldObject(CollisionFilterClass collisionFilterClass):
     WorldObject(1.0f, glm::vec3(0), collisionFilterClass)
@@ -25,7 +28,8 @@ WorldObject::WorldObject(Physics* physics, CollisionDetector* detector, float sc
     m_physics(physics),
     m_collisionDetector(detector),
     m_objectInfo(),
-    m_crucialVoxel(nullptr)
+    m_crucialVoxel(nullptr),
+    m_handle(new WorldObjectHandle(this))
 {
 }
 
@@ -38,7 +42,7 @@ WorldObject::WorldObject(const WorldTransform& transform, CollisionFilterClass c
 }
 
  WorldObject::~WorldObject() {
-
+     m_handle->invalidate();
 }
 
 CollisionDetector& WorldObject::collisionDetector(){
@@ -53,38 +57,33 @@ ObjectInfo& WorldObject::objectInfo(){
     return m_objectInfo;
 }
 
-AABB WorldObject::aabb() {
-    return m_collisionDetector->aabb(m_transform);
-}
-
-Sphere WorldObject::sphere() {
-    return m_collisionDetector->sphere(m_transform);
-}
-
-void WorldObject::update(float delta_sec) {
+void WorldObject::update(float deltaSec) {
 
 }
 
-std::list<VoxelCollision>& WorldObject::performMovement(float delta_sec) {
-    return m_physics->move(delta_sec);
+std::list<VoxelCollision>& WorldObject::performMovement(float deltaSec) {
+    return m_physics->move(deltaSec);
 }
 
 void WorldObject::addVoxel(Voxel* voxel) {
     VoxelCluster::addVoxel(voxel);
+
     m_physics->addVoxel(voxel);
     m_collisionDetector->addVoxel(voxel);
+    m_collisionDetector->updateGeode();
 }
 
 void WorldObject::removeVoxel(Voxel* voxel) {
     assert(voxel != nullptr);
 
     voxel->onRemoval();
+
+    if (voxel == m_crucialVoxel) {
+        m_crucialVoxel = nullptr;  // do spectacular stuff like an explosion
+    }
+
     m_collisionDetector->removeVoxel(voxel);
     m_physics->removeVoxel(voxel);
-    if (m_crucialVoxel != nullptr && voxel == m_crucialVoxel) {
-        // do spectacular stuff like an explosion
-        m_crucialVoxel = nullptr;
-    }
     VoxelCluster::removeVoxel(voxel);
 }
 
@@ -104,17 +103,16 @@ void WorldObject::addFuelVoxel(FuelVoxel* voxel){
     addVoxel(voxel);
 }
 
-void WorldObject::finishInitialization() {
-    m_transform.setCenter(m_physics->calculateMassAndCenter());
-    m_collisionDetector->finishInitialization();
-}
-
 void WorldObject::accelerate(const glm::vec3& direction) {
     m_physics->accelerate(direction);
 }
 
 void WorldObject::accelerateAngular(const glm::vec3& axis) {
     m_physics->accelerateAngular(axis);
+}
+
+void WorldObject::setCenterAndAdjustPosition(const glm::vec3& newCenter) {
+    m_transform.setCenterAndAdjustPosition(newCenter);
 }
 
 void WorldObject::updateTransformAndGeode(const glm::vec3& position, const glm::quat& orientation) {
@@ -137,4 +135,8 @@ void WorldObject::onCollision(){
 
 void WorldObject::onSpawnFail(){
 
+}
+
+std::shared_ptr<WorldObjectHandle> WorldObject::handle() const {
+    return m_handle;
 }

@@ -25,8 +25,8 @@ public:
 
 
 protected:
-    WorldObject *m_worldObject;
-    WorldTreeNode *m_containingNode;
+    WorldObject* m_worldObject;
+    WorldTreeNode* m_containingNode;
     AABB m_aabb;
 };
 

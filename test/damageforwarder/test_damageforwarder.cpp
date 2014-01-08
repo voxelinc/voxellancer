@@ -95,7 +95,6 @@ go_bandit([]() {
             else {
                 AssertThat(f2.damageVec(), EqualsWithDelta(glm::vec3(0.0, 0.0, 5.0), glm::vec3(0.1, 0.1, 0.1)));
                 AssertThat(f1.damageVec(), EqualsWithDelta(glm::vec3(0.0, 0.0, -3.0), glm::vec3(0.1, 0.1, 0.1)));
-
             }
         });
 

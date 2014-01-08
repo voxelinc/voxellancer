@@ -16,11 +16,11 @@
 
 #include <glow/AutoTimer.h>
 #include <glow/logging.h>
-
+/*
 #include <fmod.hpp>
 #include <fmod_dsp.h>
 #include <fmod_errors.h>
-
+*/
 #include "property/propertymanager.h"
 #include "resource/clustercache.h"
 #include "utils/hd3000dummy.h"
@@ -78,10 +78,18 @@ void Game::initialize()
 
 
     WorldObject *testClusterMoveable = new WorldObject();
-    testClusterMoveable->move(glm::vec3(-20, 0, -20));
+    testClusterMoveable->move(glm::vec3(-20, 0, 0));
     testClusterMoveable->rotate(glm::angleAxis(-90.f, glm::vec3(0, 1, 0)));
-    ClusterCache::instance()->fillObject(testClusterMoveable, "data/voxelcluster/eagle.csv");
-    testClusterMoveable->finishInitialization();
+    testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 7), 0x00FF00));
+    testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 6), 0xFFFF00));
+    testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 5), 0xFFFF00));
+    testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 4), 0xFFFF00));
+    testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 3), 0xFFFF00));
+    testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 2), 0xFFFF00));
+    testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 1), 0xFFFF00));
+    testClusterMoveable->addVoxel(new Voxel(glm::ivec3(1, 1, 7), 0x0000FF));
+    testClusterMoveable->addVoxel(new Voxel(glm::ivec3(1, 0, 7), 0xFF0000));
+    testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 8), 0xFF0080));
     testClusterMoveable->objectInfo().setName("movable");
     m_world->god().scheduleSpawn(testClusterMoveable);
 
@@ -91,14 +99,12 @@ void Game::initialize()
     Ship *normandy = new Ship();
     ClusterCache::instance()->fillObject(normandy, "data/voxelcluster/normandy.csv");
 	normandy->setPosition(glm::vec3(0, 0, -100));
-    normandy->finishInitialization();
     normandy->objectInfo().setName("Normandy");
     m_world->god().scheduleSpawn(normandy);
 
     Ship *testCluster = new Ship();
-    ClusterCache::instance()->fillObject(testCluster, "data/voxelcluster/eagle.csv");
-    testCluster->setPosition(glm::vec3(0, 0, 100));
-    testCluster->finishInitialization();
+    ClusterCache::instance()->fillObject(testCluster, "data/voxelcluster/basicship.csv");
+    testCluster->setPosition(glm::vec3(0, 0, 10));
     testCluster->objectInfo().setName("basicship");
     testCluster->objectInfo().setShowOnHud(false);
     m_world->god().scheduleSpawn(testCluster);
@@ -115,7 +121,6 @@ void Game::initialize()
             }
         }
     }
-    wall->finishInitialization();
     wall->objectInfo().setName("Wall");
     m_world->god().scheduleSpawn(wall);
 
@@ -135,9 +140,29 @@ void Game::initialize()
         }
     }
     planet->setCrucialVoxel(glm::ivec3(middle));
-    planet->finishInitialization();
     planet->objectInfo().setName("Planet");
     m_world->god().scheduleSpawn(planet);
+
+
+    for(int e = 0; e < 15; e++) {
+        WorldObject *enemy = new WorldObject();
+        int r = 80;
+        enemy->move(glm::vec3(-80 + rand()%r-r/2,rand()%r-r/2,-20 + rand()%r-r/2));
+
+        for(int x = 0; x < 4; x++) {
+            for(int y = 0; y < 2; y++) {
+                for(int z = 0; z < 8; z++) {
+                    enemy->addVoxel(new Voxel(glm::ivec3(x, y, z), 0xF0FF00));
+                }
+            }
+        }
+        enemy->objectInfo().setName("enemy");
+        enemy->objectInfo().setShowOnHud(false);
+        enemy->objectInfo().setCanLockOn(false);
+        m_world->god().scheduleSpawn(enemy);
+
+    }
+
 
     glow::debug("Initial spawn");
     m_world->god().spawn();
@@ -159,22 +184,21 @@ void Game::initialize()
 }
 
 
-void Game::update(float delta_sec)
+void Game::update(float deltaSec)
 {
     // skip non-updates
-    if (delta_sec == 0) return;
+    if (deltaSec == 0) return;
 
-    //if (delta_sec < 1 / 60) delta_sec = 1 / 60;
+    //if (deltaSec < 1 / 60) deltaSec = 1 / 60;
     // avoid big jumps after debugging ;)
-    delta_sec = glm::min(1.f, delta_sec);
+    deltaSec = glm::min(1.f, deltaSec);
 
     //m_treeStateReporter.nudge();
 
-    m_inputHandler.update(delta_sec);
-    m_player.applyUpdate();
-    World::instance()->update(delta_sec);
+    m_inputHandler.update(deltaSec);
+    World::instance()->update(deltaSec);
     m_player.setFollowCam();
-	m_hud->update(delta_sec);
+	m_hud->update(deltaSec);
 }
 
 void Game::draw()
@@ -199,7 +223,7 @@ void Game::draw()
 
     m_hd3000dummy->drawIfActive();
 }
-
+/*
 void ERRCHECK(FMOD_RESULT result)
 {
     if (result != FMOD_OK)
@@ -208,9 +232,10 @@ void ERRCHECK(FMOD_RESULT result)
         exit(-1);
     }
 }
-
+*/
 void Game::testFMOD()
 {
+	/*
     FMOD::System * system = 0;
     FMOD::Sound  * sound = 0;
     FMOD::Channel *channel = 0;
@@ -226,6 +251,7 @@ void Game::testFMOD()
 
     result = system->playSound(FMOD_CHANNEL_FREE, sound, false, &channel);
     ERRCHECK(result);
+    */
 }
 
 InputHandler * Game::inputHandler()
