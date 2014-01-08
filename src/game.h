@@ -24,18 +24,7 @@ class HD3000Dummy;
 class LinuxVMDummy;
 class Ship;
 
-class TreeStateReporter : public TimedTask
-{
-public:
-    TreeStateReporter();
 
-    void setWorldTree(WorldTree *worldTree);
-
-    virtual void exec();
-
-protected:
-    WorldTree *m_worldTree;
-};
 
 class Game {
 
@@ -66,9 +55,5 @@ private:
 	std::unique_ptr<VoxelRenderer> m_voxelRenderer;
 	std::unique_ptr<HD3000Dummy> m_hd3000dummy;
 	std::unique_ptr<LinuxVMDummy> m_linuxvmdummy;
-
-    TreeStateReporter m_treeStateReporter;
-
-    WorldObject *m_wall;
 };
 

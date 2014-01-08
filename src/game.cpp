@@ -68,7 +68,6 @@ void Game::initialize()
 
     glow::debug("create world");
     m_world = World::instance();
-    m_treeStateReporter.setWorldTree(&m_world->worldTree());
 
     glow::debug("Create Skybox");
 	m_skybox = std::unique_ptr<Skybox>(new Skybox);
@@ -193,8 +192,6 @@ void Game::update(float deltaSec)
     // avoid big jumps after debugging ;)
     deltaSec = glm::min(1.f, deltaSec);
 
-    //m_treeStateReporter.nudge();
-
     m_inputHandler.update(deltaSec);
     World::instance()->update(deltaSec);
     m_player.setFollowCam();
@@ -257,39 +254,3 @@ InputHandler * Game::inputHandler()
     return &m_inputHandler;
 }
 
-TreeStateReporter::TreeStateReporter():
-    TimedTask(std::chrono::duration<float>(1.5f)),
-    m_worldTree(nullptr)
-{
-
-}
-
-void TreeStateReporter::setWorldTree(WorldTree *worldTree) {
-    m_worldTree = worldTree;
-}
-
-void TreeStateReporter::exec() {
-//    int nodes, empty, geodes, depth;
-//    m_worldTree->poll(nodes, empty, geodes, depth);
-//    std::cout << "WorldTree: " << nodes << " nodes; " << empty << " empty; " << geodes << " geodes; " << depth << " maxdepth" << std::endl;
-////    m_worldTree->print();
-}
-
-
-//void WorldTreeNode::print() {
-//    auto indent = [&] {
-//        for(int i = 0; i < m_level; i++) {
-//            std::cout << "  ";
-//        }
-//    };
-//
-//    indent(); std::cout << m_level << ": " << toString(m_aabb) << std::endl;
-//
-//    for(WorldTreeGeode* geode : m_geodes) {
-//        indent(); std::cout << "  Geode " << /*geode->worldObject()->objectInfo().name() <<*/ "(" << geode->worldObject() << ") " << toString(geode->aabb()) << std::endl;
-//    }
-//
-//    for(WorldTreeNode* subnode : m_subnodes) {
-//        subnode->print();
-//    }
-//}
