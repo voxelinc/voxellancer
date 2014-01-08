@@ -104,7 +104,7 @@ glm::vec3 VoxelExplosionGenerator::createDirectionalSpeed() const {
 }
 
 glm::vec3 VoxelExplosionGenerator::createAngularSpeed() const {
-    return RandVec3::rand(-10.0f, 10.0f) * m_force;
+    return RandVec3::rand(-10.0f, 10.0f) * RandFloat::randomize(m_force, m_forceRandomization);
 }
 
 float VoxelExplosionGenerator::createLifetime() const {
