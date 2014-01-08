@@ -55,6 +55,9 @@ public:
 
     std::shared_ptr<WorldObjectHandle> handle() const;
 
+    bool scheduledForDeletion();
+    void markScheduledForDeletion(); //to be called by god only
+
 protected:
     WorldObject(Physics* physics, CollisionDetector* detector, float scale = 1.0f, CollisionFilterClass collisionFilterClass = CollisionFilterClass::Other);
     std::unique_ptr<CollisionDetector> m_collisionDetector;
@@ -62,4 +65,5 @@ protected:
     std::shared_ptr<WorldObjectHandle> m_handle;
     Voxel* m_crucialVoxel;
     ObjectInfo m_objectInfo;
+    bool m_scheduledForDeletion;
 };

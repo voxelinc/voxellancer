@@ -7,6 +7,7 @@
 #include "world/helper/damageimpact.h"
 #include "voxel/voxel.h"
 #include "utils/tostring.h"
+#include "worldobject/worldobject.h"
 
 
 void Damager::applyDamages(std::list<DamageImpact> &damageImpacts) {
@@ -15,6 +16,9 @@ void Damager::applyDamages(std::list<DamageImpact> &damageImpacts) {
     m_deadVoxels.clear();
 
     for(DamageImpact &damageImpact : damageImpacts) {
+        if (damageImpact.worldObject()->scheduledForDeletion())
+            glow::debug("shouldnt be here");
+
         Voxel *voxel = damageImpact.voxel();
 
         float hpBeforeDamage = voxel->hp();
@@ -30,8 +34,7 @@ void Damager::applyDamages(std::list<DamageImpact> &damageImpacts) {
                 WorldObjectModification modification(damageImpact.worldObject());
                 modification.removedVoxel(voxel->gridCell());
                 m_worldObjectModificationMap.insert(std::pair<WorldObject*, WorldObjectModification>(damageImpact.worldObject(), modification));
-            }
-            else {
+            } else {
                 i->second.removedVoxel(voxel->gridCell());
             }
         }

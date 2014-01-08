@@ -16,8 +16,10 @@ void ElasticImpulseGenerator::parse(std::list<WorldObjectCollision>& worldObject
 
         VoxelCollision voxelCollision = worldObjectCollision.voxelCollisions().front();
 
-        generateImpulse(voxelCollision.a(), voxelCollision.b());
-        generateImpulse(voxelCollision.b(), voxelCollision.a());
+        if (!voxelCollision.a().worldObject()->scheduledForDeletion())
+            generateImpulse(voxelCollision.a(), voxelCollision.b());
+        if (!voxelCollision.b().worldObject()->scheduledForDeletion())
+            generateImpulse(voxelCollision.b(), voxelCollision.a());
     }
 }
 
