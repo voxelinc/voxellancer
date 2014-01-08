@@ -27,8 +27,7 @@ void VoxelTree::insert(Voxel* voxel) {
     while(!m_currentRoot->gridAABB().contains(voxel->gridCell())) {
         if(m_currentRoot->parent() != nullptr) {
             m_currentRoot = m_currentRoot->parent();
-        }
-        else {
+        } else {
             assert(m_currentRoot == m_shadowRoot);
 
             m_shadowRoot = new VoxelTreeNode(this, Grid3dAABB(glm::ivec3(0, 0, 0), m_shadowRoot->gridAABB().rub()*2 + glm::ivec3(1, 1, 1)), m_shadowRoot);

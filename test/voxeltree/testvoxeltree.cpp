@@ -82,18 +82,6 @@ go_bandit([](){
             AssertThat(tree->root()->sphere(transform).position(), EqualsWithDelta(glm::vec3(4, 7, 7), glm::vec3(0.01, 0.01, 0.01)));
         });
 
-//        // skip until is is clear what this test is supposed to test :)
-//        it_skip("initially positions all subnodes right", [&]() {
-//            WorldObject *d = new WorldObject(6);
-//
-//            d->addVoxel(new Voxel(glm::ivec3(1, 1, 1))); // There are 8 subnodes now
-//
-//            for(VoxelTreeNode *subnode : d->collisionDetector().voxeltree().subnodes()) {
-//                float distance = glm::length(subnode->boundingSphere().position());
-//                AssertThat(distance, EqualsWithDelta(5.2, 0.01)); // what is supposed to happen here?
-//            }
-//        });
-//
         it("supports basic rotation with voxel in center", [&]() {
             Voxel v1(glm::ivec3(1, 1, 1));
             Voxel v2(glm::ivec3(0, 0, 0));
