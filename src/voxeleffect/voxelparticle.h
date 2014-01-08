@@ -4,6 +4,8 @@
 
 #include <glm/glm.hpp>
 
+#include "property/property.h"
+
 #include "worldtransform.h"
 
 
@@ -44,4 +46,5 @@ protected:
     float m_angularDampening;
 
     float m_intersectionCheckCountdown;
+    Property<float> m_intersectionCheckPeriod;
 };

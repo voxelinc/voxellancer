@@ -3,15 +3,14 @@
 #include <algorithm>
 
 
-static const float INTERSECTION_CHECK_PERIOD = 0.3f;
-
 VoxelParticle::VoxelParticle(const WorldTransform& transform, int color, float lifetime):
     m_transform(transform),
     m_color(color),
     m_lifetime(lifetime),
     m_directionalDampening(0.0f),
     m_angularDampening(0.0f),
-    m_intersectionCheckCountdown(INTERSECTION_CHECK_PERIOD)
+    m_intersectionCheckCountdown(m_intersectionCheckPeriod),
+    m_intersectionCheckPeriod("vfx.debrisIntersectionCheckPeriod")
 {
     m_colorVec.x = (m_color >> 16) / 255.0f;
     m_colorVec.y = ((m_color & 0xFF00) >> 8) / 255.0f;
@@ -57,7 +56,7 @@ bool VoxelParticle::intersectionCheckDue() const {
 }
 
 void VoxelParticle::intersectionCheckPerformed() {
-    m_intersectionCheckCountdown += INTERSECTION_CHECK_PERIOD;
+    m_intersectionCheckCountdown += m_intersectionCheckPeriod;
 }
 
 void VoxelParticle::update(float deltaSec) {
