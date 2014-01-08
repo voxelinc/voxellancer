@@ -16,9 +16,6 @@ void Damager::applyDamages(std::list<DamageImpact> &damageImpacts) {
     m_deadVoxels.clear();
 
     for(DamageImpact &damageImpact : damageImpacts) {
-        if (damageImpact.worldObject()->scheduledForDeletion())
-            glow::debug("shouldnt be here");
-
         Voxel *voxel = damageImpact.voxel();
 
         float hpBeforeDamage = voxel->hp();
