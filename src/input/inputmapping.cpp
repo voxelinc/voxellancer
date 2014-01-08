@@ -1,10 +1,10 @@
 #include "inputmapping.h"
 
 
-InputMapping::InputMapping(InputType type, int index, float max_value):
+InputMapping::InputMapping(InputType type, int index, float maxValue):
     m_type(type),
     m_index(index),
-    m_maxValue(max_value)
+    m_maxValue(maxValue)
 {
 
 }

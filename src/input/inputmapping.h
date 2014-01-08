@@ -4,13 +4,14 @@
 enum InputType {
     None,
     Keyboard,
-    GamePad
+    GamePadKey,
+    GamePadAxis
 };
 
 class InputMapping {
 public:
     InputMapping();
-    InputMapping(InputType type, int index, float max_value);
+    InputMapping(InputType type, int index, float maxValue);
     InputType type();
     int index();
     float maxValue();
