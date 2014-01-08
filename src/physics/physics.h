@@ -17,11 +17,13 @@ class WorldTransform;
 
 class Physics {
 public:
-    Physics(WorldObject& worldObject, 
-        float scale,
-        float dampening = Property<float>("physics.globalDampening"),
-        float angularDampening = Property<float>("physics.globalAngularDampening"));
+    Physics(WorldObject& worldObject, float scale);
     virtual ~Physics();
+
+    float dampening();
+    void setDampening(float dampening);
+    float angularDampening();
+    void setAngularDampening(float angularDampening);
 
     const glm::vec3& speed() const;
     void setSpeed(const glm::vec3& speed);

@@ -53,10 +53,8 @@ public:
 
 
 protected:
-    virtual void initialize();
-
-    std::unique_ptr<CollisionDetector> m_collisionDetector;
-    std::unique_ptr<Physics> m_physics;
-    Voxel* m_crucialVoxel;
+    CollisionDetector m_collisionDetector;
+    Physics m_physics;
     ObjectInfo m_objectInfo;
+    Voxel* m_crucialVoxel;
 };

@@ -19,13 +19,13 @@
 #include "utils/tostring.h"
 
 
-Physics::Physics(WorldObject& worldObject, float scale, float dampening, float angularDampening) :
+Physics::Physics(WorldObject& worldObject, float scale) :
     m_speed(0),
     m_angularSpeed(0),
     m_acceleration(0),
     m_angularAcceleration(0),
-    m_dampening(dampening),
-    m_angularDampening(angularDampening),
+    m_dampening(Property<float>("physics.globalDampening")),
+    m_angularDampening(Property<float>("physics.globalAngularDampening")),
     m_mass(0),
     m_accumulatedMassVec(0.0f, 0.0f, 0.0f),
     m_worldObject(worldObject)
@@ -34,6 +34,22 @@ Physics::Physics(WorldObject& worldObject, float scale, float dampening, float a
 }
 
 Physics::~Physics() {
+}
+
+float Physics::dampening(){
+    return m_dampening;
+}
+
+void Physics::setDampening(float dampening){
+    m_dampening = dampening;
+}
+
+float Physics::angularDampening(){
+    return m_angularDampening;
+}
+
+void Physics::setAngularDampening(float angularDampening){
+    m_angularDampening = angularDampening;
 }
 
 const glm::vec3& Physics::speed() const {

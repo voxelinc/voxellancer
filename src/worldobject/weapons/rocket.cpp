@@ -20,9 +20,9 @@ Rocket::Rocket(glm::vec3 position, glm::quat orientation, const glm::vec3& initi
 
     m_transform.setOrientation(orientation); //set orientation to ship orientation
 
-    m_transform.setPosition(position + myOrientation * (m_collisionDetector->voxeltree().gridAABB().axisMax(Axis::ZAxis) / 2.0f + 1.4f));
+    m_transform.setPosition(position + myOrientation * (m_collisionDetector.voxeltree().gridAABB().axisMax(Axis::ZAxis) / 2.0f + 1.4f));
 
-    m_physics->setSpeed(initialSpeed + myOrientation * (m_travelSpeed * 0.1f)); // rocket is ejected with 10% of its travel speed
+    m_physics.setSpeed(initialSpeed + myOrientation * (m_travelSpeed * 0.1f)); // rocket is ejected with 10% of its travel speed
 
     m_objectInfo.setName("Rocket");
     m_objectInfo.setShowOnHud(false);
@@ -49,14 +49,14 @@ void Rocket::update(float deltaSec){
 
         if (rotation != glm::quat())
             //m_transform.rotate(0.1f * rotation); // directly rotating is easier
-            m_physics->setAngularSpeed(0.1f * glm::eulerAngles(rotation));
+            m_physics.setAngularSpeed(0.1f * glm::eulerAngles(rotation));
 
     }
     // accelerate to travelSpeed
-    if (glm::length(m_physics->speed()) < m_travelSpeed){
-        float missingSpeed = m_travelSpeed - glm::length(m_physics->speed());
+    if (glm::length(m_physics.speed()) < m_travelSpeed){
+        float missingSpeed = m_travelSpeed - glm::length(m_physics.speed());
         // accelerate forward, not towards target
-        m_physics->accelerate(glm::vec3(0, 0, -missingSpeed));
+        m_physics.accelerate(glm::vec3(0, 0, -missingSpeed));
     }
 
     m_lifetime -= deltaSec;

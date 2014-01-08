@@ -20,8 +20,6 @@ public:
 
 
 protected:
-    virtual void initialize();
-
     WorldObject *m_creator;
 	float m_lifetime;
 };
