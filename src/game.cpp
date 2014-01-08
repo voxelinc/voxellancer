@@ -36,6 +36,10 @@
 #include "collision/collisiondetector.h"
 #include "worldobject/worldobject.h"
 
+#include "ai/characters/dummycharacter.h"
+#include "ai/elevatedtasks/dummyelevatedtask.h"
+#include "ai/basictask.h"
+
 class Ship;
 
 
@@ -101,6 +105,11 @@ void Game::initialize()
 	normandy->setPosition(glm::vec3(0, 0, -100));
     normandy->objectInfo().setName("Normandy");
     m_world->god().scheduleSpawn(normandy);
+    // TODO: use these dummies to test BasicTasks
+    normandy->setCharacter(
+        new DummyCharacter(*normandy, 
+        new DummyElevatedTask(*normandy, 
+        new BasicTask(*normandy))));
 
     Ship *testCluster = new Ship();
     ClusterCache::instance()->fillObject(testCluster, "data/voxelcluster/basicship.csv");

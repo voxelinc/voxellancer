@@ -4,19 +4,23 @@
 #include "voxel/specialvoxels/hardpointvoxel.h"
 #include "worldobject/weapons/gun.h"
 #include "worldobject/weapons/rocketlauncher.h"
+#include "ai/character.h"
 
 Ship::Ship() :
     WorldObject(CollisionFilterClass::Ship),
     m_hardpoints(),
 	prop_maxSpeed("ship.maxSpeed"),
 	prop_maxRotSpeed("ship.maxRotSpeed"),
-    m_targetObject(nullptr)
+    m_targetObject(nullptr),
+    m_character(new Character(*this)),
+    m_boardComputer(*this)
 {
 }
 
-void Ship::update(float deltasec){
+void Ship::update(float deltaSec){
+    m_character->update(deltaSec);
     for(Hardpoint *hardpoint : m_hardpoints){
-        hardpoint->update(deltasec);
+        hardpoint->update(deltaSec);
     }
 }
 
@@ -84,4 +88,12 @@ void Ship::accelerate(const glm::vec3& direction) {
 
 void Ship::accelerateAngular(const glm::vec3& axis) {
     m_physics->accelerateAngular(axis * prop_maxRotSpeed.get());
+}
+
+void Ship::setCharacter(Character* character){
+    m_character.reset(character);
+}
+
+Character* Ship::character(){
+    return m_character.get();
 }
