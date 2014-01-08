@@ -6,6 +6,7 @@
 #include "world/world.h"
 #include "utils/randvec.h"
 #include "utils/randfloat.h"
+#include "utils/randbool.h"
 
 #include "voxelparticle.h"
 #include "voxelparticleworld.h"
@@ -15,12 +16,19 @@ VoxelExplosionGenerator::VoxelExplosionGenerator() :
     m_position(0, 0, 0),
     m_orientation(),
     m_scale(1.0f),
+    m_scaleRandomization(0.0f),
     m_force(1.0f),
+    m_forceRandomization(0.0f),
     m_lifetime(1.0f),
     m_lifetimeRandomization(0.0f),
     m_color(0xFFFFFF),
     m_density(2),
-    m_impactVector(0,0,0)
+    m_impactVector(0,0,0),
+    m_spawnProbability(1.0f),
+    m_debrisDampening("physics.debrisDampening"),
+    m_debrisAngularDampening("physics.debrisAngularDampening"),
+    m_debrisBaseForce("physics.debrisBaseForce"),
+    m_debrisAngularBaseForce("physics.debrisAngularBaseForce")
 {
 }
 
@@ -36,6 +44,7 @@ void VoxelExplosionGenerator::setOrientation(const glm::quat& orientation) {
 }
 
 void VoxelExplosionGenerator::setScale(float scale, float randomization) {
+    assert(0.0f <= randomization && randomization <= 1.0f);
     m_scale = scale;
     m_scaleRandomization = randomization;
 }
@@ -47,11 +56,12 @@ void VoxelExplosionGenerator::setTransform(const WorldTransform& transform) {
 }
 
 void VoxelExplosionGenerator::setForce(float force, float randomization) {
+    assert(0.0f <= randomization && randomization <= 1.0f);
     m_force = force;
     m_forceRandomization = randomization;
 }
 
-void VoxelExplosionGenerator::setLifetime(float lifetime, float lifetimeRandomization){
+void VoxelExplosionGenerator::setLifetime(float lifetime, float lifetimeRandomization) {
     assert(0.0f <= lifetimeRandomization && lifetimeRandomization <= 1.0f);
     m_lifetime = lifetime;
     m_lifetimeRandomization = lifetimeRandomization;
@@ -69,6 +79,10 @@ void VoxelExplosionGenerator::setImpactVector(const glm::vec3& impactVector) {
     m_impactVector = impactVector;
 }
 
+void VoxelExplosionGenerator::setSpawnProbability(float spawnProbability) {
+    m_spawnProbability = spawnProbability;
+}
+
 void VoxelExplosionGenerator::spawn() {
     WorldTransform gridTransform;
     WorldTransform particleTransform;
@@ -83,12 +97,16 @@ void VoxelExplosionGenerator::spawn() {
     for (int z = 0; z < m_density; z++) {
         for (int y = 0; y < m_density; y++) {
             for (int x = 0; x < m_density; x++) {
+                if (!RandBool::rand(m_spawnProbability)) {
+                    continue;
+                }
+
                 particleTransform.setScale(createScale());
                 particleTransform.setPosition(gridTransform.applyTo(glm::vec3(x, y, z)));
 
                 VoxelParticle* particle = new VoxelParticle(particleTransform, m_color, createLifetime());
-                particle->setAngularSpeed(createAngularSpeed(), 0.2);
-                particle->setDirectionalSpeed(createDirectionalSpeed(), 0.2);
+                particle->setAngularSpeed(createAngularSpeed(), m_debrisDampening);
+                particle->setDirectionalSpeed(createDirectionalSpeed(), m_debrisAngularDampening);
 
                 World::instance()->voxelParticleWorld().addParticle(particle);
             }
@@ -96,21 +114,22 @@ void VoxelExplosionGenerator::spawn() {
     }
 }
 
-glm::vec3 VoxelExplosionGenerator::createDirectionalSpeed() const {
-    float speedVal = RandFloat::randomize(m_force, m_forceRandomization) * 10;
+glm::vec3 VoxelExplosionGenerator::createDirectionalSpeed() {
+    float speedVal = RandFloat::randomize(m_force, m_forceRandomization) * m_debrisBaseForce.get();
     glm::vec3 speedDir = RandVec3::randNormalized();
 
     return speedVal * speedDir + m_impactVector;
 }
 
-glm::vec3 VoxelExplosionGenerator::createAngularSpeed() const {
-    return RandVec3::rand(-10.0f, 10.0f) * RandFloat::randomize(m_force, m_forceRandomization);
+glm::vec3 VoxelExplosionGenerator::createAngularSpeed() {
+    return RandVec3::rand(-1.0f, 1.0f) * RandFloat::randomize(m_force, m_forceRandomization) * m_debrisAngularBaseForce.get();
 }
 
-float VoxelExplosionGenerator::createLifetime() const {
+float VoxelExplosionGenerator::createLifetime() {
     return RandFloat::randomize(m_lifetime, m_lifetimeRandomization);
 }
 
-float VoxelExplosionGenerator::createScale() const {
+float VoxelExplosionGenerator::createScale() {
     return RandFloat::randomize(m_scale / m_density, m_scaleRandomization);
 }
+

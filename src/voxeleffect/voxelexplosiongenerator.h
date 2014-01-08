@@ -21,6 +21,7 @@ public:
     void setColor(int color);
     void setDensity(int density);
     void setImpactVector(const glm::vec3& impactVector);
+    void setSpawnProbability(float spawnProbability);
 
     void spawn();
 
@@ -36,11 +37,17 @@ protected:
     int m_color;
     int m_density;
     glm::vec3 m_impactVector;
+    float m_spawnProbability;
+
+    Property<float> m_debrisDampening;
+    Property<float> m_debrisAngularDampening;
+    Property<float> m_debrisBaseForce;
+    Property<float> m_debrisAngularBaseForce;
 
 
-    glm::vec3 createDirectionalSpeed() const;
-    glm::vec3 createAngularSpeed() const;
-    float createLifetime() const;
-    float createScale() const;
+    glm::vec3 createDirectionalSpeed();
+    glm::vec3 createAngularSpeed();
+    float createLifetime();
+    float createScale();
 };
 
