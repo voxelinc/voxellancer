@@ -8,6 +8,7 @@
 #include "physics/physics.h"
 #include "voxel/voxelcluster.h"
 #include "ui/objectinfo.h"
+#include "world/god.h"
 
 class EngineVoxel;
 class HardpointVoxel;
@@ -56,9 +57,12 @@ public:
     std::shared_ptr<WorldObjectHandle> handle() const;
 
     bool scheduledForDeletion();
-    void markScheduledForDeletion(); //to be called by god only
 
 protected:
+    // Only god can set this mark. Unfortunately the method will be able to access all our protected members
+    friend void God::scheduleRemoval(WorldObject* worldObject);
+    void markScheduledForDeletion();
+
     WorldObject(Physics* physics, CollisionDetector* detector, float scale = 1.0f, CollisionFilterClass collisionFilterClass = CollisionFilterClass::Other);
     std::unique_ptr<CollisionDetector> m_collisionDetector;
     std::unique_ptr<Physics> m_physics;
