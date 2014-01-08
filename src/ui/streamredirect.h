@@ -66,7 +66,7 @@ protected:
 private:
     std::ostream &m_stream;
     std::ostream *m_old_wrap;
-    std::basic_ios<char, std::char_traits<char>>::_Mysb *m_old_buf;
+    std::streambuf *m_old_buf;
     std::string m_string;
     bool m_copy;
     HUD* m_hud;
