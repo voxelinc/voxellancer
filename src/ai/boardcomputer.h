@@ -1,7 +1,6 @@
 #pragma once
 
 #include <list>
-#include <memory>
 
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
