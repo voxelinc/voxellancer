@@ -1,9 +1,12 @@
 #pragma once
 
 #include <list>
+#include <memory>
 
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
+
+#include "worldobject/worldobjecthandle.h"
 
 class Ship;
 class WorldObject;
