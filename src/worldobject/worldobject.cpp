@@ -8,6 +8,7 @@
 #include "voxel/specialvoxels/cockpitvoxel.h"
 #include "voxel/specialvoxels/fuelvoxel.h"
 
+#include "worldobjecthandle.h"
 
 WorldObject::WorldObject(CollisionFilterClass collisionFilterClass):
     WorldObject(1.0f, glm::vec3(0), collisionFilterClass)
@@ -27,7 +28,8 @@ WorldObject::WorldObject(Physics* physics, CollisionDetector* detector, float sc
     m_physics(physics),
     m_collisionDetector(detector),
     m_objectInfo(),
-    m_crucialVoxel(nullptr)
+    m_crucialVoxel(nullptr),
+    m_handle(new WorldObjectHandle(this))
 {
 }
 
@@ -40,7 +42,7 @@ WorldObject::WorldObject(const WorldTransform& transform, CollisionFilterClass c
 }
 
  WorldObject::~WorldObject() {
-
+     m_handle->invalidate();
 }
 
 CollisionDetector& WorldObject::collisionDetector(){
@@ -133,4 +135,8 @@ void WorldObject::onCollision(){
 
 void WorldObject::onSpawnFail(){
 
+}
+
+std::shared_ptr<WorldObjectHandle> WorldObject::handle() const {
+    return m_handle;
 }
