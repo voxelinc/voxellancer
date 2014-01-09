@@ -13,18 +13,22 @@ namespace glow {
 };
 
 class Camera;
+class Player;
 
 class Starfield {
 public:
-    Starfield();
+    Starfield(Player* player, Camera* camera);
 
-    void draw(Camera* m_camera);
+    void draw();
+    void update(float deltaSec);
 
 private:
     void createAndSetupShaders();
     void createAndSetupGeometry();
 
-    glm::vec3 m_oldPos;
+    Camera* m_camera;
+    Player* m_player;
+
 
     glow::ref_ptr<glow::Program> m_shaderProgram;
     glow::ref_ptr<glow::VertexArrayObject> m_vertexArrayObject;

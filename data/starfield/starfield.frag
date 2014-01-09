@@ -6,5 +6,5 @@ out vec4 fragColor;
 
 void main()
 {
-	fragColor = vec4(length(speed*2));
+	fragColor = vec4(length(speed) / 10);
 }

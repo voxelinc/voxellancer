@@ -10,12 +10,13 @@ in vec4 pos[1];
 
 void main(void) {
 
-    vec4 offset = viewProjection * (speed * 4);
+    vec4 offset = viewProjection * (speed / 10);
 
     gl_Position = pos[0] + offset;
     EmitVertex();
 
-    gl_Position = pos[0]- offset;
+    gl_Position = pos[0] 
+    - offset;
     EmitVertex();
 
     EndPrimitive();

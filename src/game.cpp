@@ -78,7 +78,7 @@ void Game::initialize() {
 	m_skybox = std::unique_ptr<Skybox>(new Skybox());
 
     glow::debug("Create Starfield");
-    m_starfield = std::unique_ptr<Starfield>(new Starfield());
+    m_starfield = std::unique_ptr<Starfield>(new Starfield(&m_player, &m_camera));
 
 
 	glow::debug("Create Voxel");
@@ -198,6 +198,7 @@ void Game::update(float deltaSec) {
     World::instance()->update(deltaSec);
     m_player.setFollowCam();
 	m_hud->update(deltaSec);
+    m_starfield->update(deltaSec);
 }
 
 void Game::draw() {
@@ -216,7 +217,7 @@ void Game::draw() {
     // draw all other voxelclusters...
     m_voxelRenderer->afterDraw();
 
-    m_starfield->draw(&m_camera);
+    m_starfield->draw();
 
 	m_hud->draw();
 

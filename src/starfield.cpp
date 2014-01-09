@@ -11,6 +11,7 @@
 #include <glowutils/File.h>
 
 #include "camera.h"
+#include "player.h"
 
 #include "utils/randfloat.h"
 
@@ -27,19 +28,22 @@ glm::vec3 randVec(float from, float to) {
         );
 }
 
-Starfield::Starfield() {
+Starfield::Starfield(Player* player, Camera* camera):
+    m_camera(camera),
+    m_player(player)
+{
     createAndSetupShaders();
     createAndSetupGeometry();
 }
 
+void Starfield::update(float deltaSec) {
 
-void Starfield::draw(Camera* camera) {
-    
-    glm::vec4 speed = glm::vec4(camera->position() - m_oldPos, 0.0f);
-    m_oldPos = camera->position(); 
-    
-    m_shaderProgram->setUniform("viewProjection", camera->viewProjection());
-    m_shaderProgram->setUniform("speed", speed);
+}
+
+
+void Starfield::draw() {
+    m_shaderProgram->setUniform("viewProjection", m_camera->viewProjection());
+    m_shaderProgram->setUniform("speed", glm::vec4(m_player->playerShip()->physics().speed(), 0));
 
     m_vertexArrayObject->drawArrays(GL_POINTS, (GLint)0, (GLsizei)MAX_STARS);
 
@@ -76,7 +80,7 @@ void Starfield::createAndSetupGeometry() {
     auto a_vertex = m_shaderProgram->getAttributeLocation("a_vertex");
 
     binding0->setAttribute(a_vertex);
-    binding0->setBuffer(m_starBuffer, 0, sizeof(glm::vec3) * 2);
+    binding0->setBuffer(m_starBuffer, 0, sizeof(glm::vec3));
     binding0->setFormat(3, GL_FLOAT, GL_FALSE, 0);
     m_vertexArrayObject->enable(a_vertex);
 
