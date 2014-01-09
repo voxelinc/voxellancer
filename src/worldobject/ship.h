@@ -6,16 +6,18 @@
 #include "world/god.h"
 #include "property/propertymanager.h"
 #include "property/property.h"
+#include "ai/boardcomputer.h"
 
 class World;
 class God;
 class Hardpoint;
+class Character;
 class WorldObjectHandle;
 
 class Ship : public WorldObject {
 public:
     Ship();
-    virtual void update(float deltasec);
+    virtual void update(float deltaSec);
 
     virtual void addHardpointVoxel(HardpointVoxel* voxel);
     void removeHardpoint(Hardpoint *hardpoint);
@@ -29,7 +31,12 @@ public:
     virtual void accelerate(const glm::vec3& direction) override;
     virtual void accelerateAngular(const glm::vec3& axis) override;
 
+    void setCharacter(Character* character);
+    Character* character();
+
 protected:
+    std::unique_ptr<Character> m_character;
+    BoardComputer m_boardComputer;
 
     Property<float> prop_maxSpeed;
     Property<float> prop_maxRotSpeed;
