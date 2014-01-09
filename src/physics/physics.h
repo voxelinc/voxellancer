@@ -22,27 +22,25 @@ public:
 
     float dampening();
     void setDampening(float dampening);
+
     float angularDampening();
     void setAngularDampening(float angularDampening);
 
     const glm::vec3& speed() const;
-    float directionalDampening();
     void setSpeed(const glm::vec3& speed);
 
     const glm::vec3& angularSpeed() const;
-    float angularDampening();
     void setAngularSpeed(const glm::vec3& angularSpeed);
 
-
+    void accelerate(const glm::vec3& direction);
     const glm::vec3& acceleration() const;
+
+    void accelerateAngular(const glm::vec3& axis);
     const glm::vec3& angularAcceleration() const;
 
     float mass() const;
 
     std::list<VoxelCollision>& move(float deltaSec);
-
-    void accelerate(const glm::vec3& direction);
-    void accelerateAngular(const glm::vec3& axis);
 
     void addVoxel(Voxel* voxel);
     void removeVoxel(Voxel* voxel);

@@ -56,20 +56,12 @@ const glm::vec3& Physics::speed() const {
     return m_speed;
 }
 
-float Physics::directionalDampening() {
-    return m_dampening.get();
-}
-
 void Physics::setSpeed(const glm::vec3& speed) {
     m_speed = speed;
 }
 
 const glm::vec3& Physics::angularSpeed() const {
     return m_angularSpeed;
-}
-
-float Physics::angularDampening() {
-    return m_angularDampening.get();
 }
 
 void Physics::setAngularSpeed(const glm::vec3& angularSpeed) {

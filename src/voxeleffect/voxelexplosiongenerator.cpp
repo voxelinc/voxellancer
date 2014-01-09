@@ -116,13 +116,13 @@ void VoxelExplosionGenerator::spawn() {
 
 glm::vec3 VoxelExplosionGenerator::createDirectionalSpeed() {
     float speedVal = RandFloat::randomize(m_force, m_forceRandomization) * m_debrisBaseForce.get();
-    glm::vec3 speedDir = RandVec3::randNormalized();
+    glm::vec3 speedDir = RandVec3::randUnitVec();
 
     return speedVal * speedDir + m_impactVector;
 }
 
 glm::vec3 VoxelExplosionGenerator::createAngularSpeed() {
-    return RandVec3::rand(-1.0f, 1.0f) * RandFloat::randomize(m_force, m_forceRandomization) * m_debrisAngularBaseForce.get();
+    return RandVec3::randUnitVec() * RandFloat::randomize(m_force, m_forceRandomization) * m_debrisAngularBaseForce.get();
 }
 
 float VoxelExplosionGenerator::createLifetime() {
