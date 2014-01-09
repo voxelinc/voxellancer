@@ -8,6 +8,6 @@ DummyCharacter::DummyCharacter(Ship& ship, ElevatedTask* task) :
 {
 }
 
-void DummyCharacter::update(float deltaSec){
+void DummyCharacter::update(float deltaSec) {
     m_task->update(deltaSec);
 }

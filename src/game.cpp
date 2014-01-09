@@ -40,8 +40,8 @@
 #include "ai/elevatedtasks/dummyelevatedtask.h"
 #include "ai/basictask.h"
 
-class Ship;
 
+class Ship;
 
 Game::Game(GLFWwindow *window) :
     m_window(window),
@@ -52,7 +52,7 @@ Game::Game(GLFWwindow *window) :
     reloadConfig();
 }
 
-Game::~Game(){
+Game::~Game() {
 
 }
 
@@ -60,8 +60,7 @@ void Game::reloadConfig() {
 	PropertyManager::instance()->load("data/config.ini");
 }
 
-void Game::initialize()
-{
+void Game::initialize() {
     glow::AutoTimer t("Initialize Game");
 
 	glow::debug("Game::testFMOD()");
@@ -193,8 +192,7 @@ void Game::initialize()
 }
 
 
-void Game::update(float deltaSec)
-{
+void Game::update(float deltaSec) {
     // skip non-updates
     if (deltaSec == 0) return;
 
@@ -210,8 +208,7 @@ void Game::update(float deltaSec)
 	m_hud->update(deltaSec);
 }
 
-void Game::draw()
-{
+void Game::draw() {
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glFrontFace(GL_CCW);
 	glEnable(GL_CULL_FACE);
@@ -233,8 +230,7 @@ void Game::draw()
     m_hd3000dummy->drawIfActive();
 }
 /*
-void ERRCHECK(FMOD_RESULT result)
-{
+void ERRCHECK(FMOD_RESULT result) {
     if (result != FMOD_OK)
     {
         printf("FMOD error! (%d) %s\n", result, FMOD_ErrorString(result));
@@ -242,8 +238,7 @@ void ERRCHECK(FMOD_RESULT result)
     }
 }
 */
-void Game::testFMOD()
-{
+void Game::testFMOD() {
 	/*
     FMOD::System * system = 0;
     FMOD::Sound  * sound = 0;
@@ -263,8 +258,7 @@ void Game::testFMOD()
     */
 }
 
-InputHandler * Game::inputHandler()
-{
+InputHandler * Game::inputHandler() {
     return &m_inputHandler;
 }
 

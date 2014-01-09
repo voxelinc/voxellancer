@@ -2,6 +2,7 @@
 
 #include "ai/elevatedtask.h"
 
+
 class Ship;
 class BasicTask;
 

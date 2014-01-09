@@ -1,5 +1,6 @@
 #pragma once
 
+
 class Ship;
 
 class Character {

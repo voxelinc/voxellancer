@@ -2,6 +2,7 @@
 
 #include "ai/character.h"
 
+
 class Ship;
 class ElevatedTask;
 

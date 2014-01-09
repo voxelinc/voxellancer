@@ -8,6 +8,6 @@ DummyElevatedTask::DummyElevatedTask(Ship& ship, BasicTask* task) :
 {
 }
 
-void DummyElevatedTask::update(float deltaSec){
+void DummyElevatedTask::update(float deltaSec) {
     m_subtask->update(deltaSec);
 }
