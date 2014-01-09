@@ -126,7 +126,7 @@ void Game::initialize()
 
     WorldObject *planet = new WorldObject();
     planet->move(glm::vec3(20, 10, -30));
-    int diameter = 28;
+    int diameter = 24;
     glm::vec3 middle(diameter/2, diameter/2, diameter/2);
     for(int x = 0; x < diameter; x++) {
         for(int y = 0; y < diameter; y++) {

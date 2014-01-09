@@ -12,8 +12,6 @@ class VoxelRenderer;
 class VoxelFont;
 class Player;
 
-const int lineBacklog = 3;
-
 class HUD {
 public:
     HUD(Player *player);
@@ -50,11 +48,12 @@ protected:
     float m_frameRate;
     float m_dx, m_dy;
 
-    std::string m_lastline[lineBacklog];
-    double m_lastlineTime[lineBacklog];
+    std::vector<std::string> m_lastline;
+    std::vector<double> m_lastlineTime;
 
     Property<float> prop_distance, prop_moveMultiplier, prop_inertiaMove, prop_inertiaRotate, prop_inertiaRate,
         prop_arrowMaxdistance, prop_arrowRadius;
     Property<bool> prop_showFramerate;
+    Property<int> prop_lineBacklog;
 
 };

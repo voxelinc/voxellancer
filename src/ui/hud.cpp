@@ -21,6 +21,8 @@ HUD::HUD(Player* player) :
     m_shipArrow(),
     m_delta_sec_remain(0),
     m_frameRate(0),
+    m_lastline(),
+    m_lastlineTime(),
     m_dx(1),
     m_dy(1),
     prop_distance("hud.distance"),
@@ -30,7 +32,8 @@ HUD::HUD(Player* player) :
     prop_inertiaRate("hud.inertiaRate"),
     prop_arrowMaxdistance("hud.arrowMaxdistance"),
     prop_arrowRadius("hud.arrowRadius"),
-    prop_showFramerate("hud.showFramerate")
+    prop_showFramerate("hud.showFramerate"),
+    prop_lineBacklog("hud.lineBacklog")
 {
     assert(player != nullptr);
     m_font->setRenderer(m_voxelRenderer.get());
@@ -53,9 +56,9 @@ HUD::HUD(Player* player) :
     m_shipArrow->m_offset = glm::vec3(-2, -2, 0);
 
 
-    for (int i = 0; i < lineBacklog; i++){
-        m_lastlineTime[i] = 0;
-        m_lastline[i] = "";
+    for (int i = 0; i < prop_lineBacklog; i++){
+        m_lastlineTime.push_back(0);
+        m_lastline.push_back("");
     }
 }
 
@@ -115,11 +118,11 @@ void HUD::update(float deltaSec){
     // lines backlog
     if (m_lastlineTime[0] + 3.5f < glfwGetTime()){
         //line is obsolete, move up
-        for (int i = 0; i < lineBacklog - 1; i++){
+        for (int i = 0; i < prop_lineBacklog - 1; i++){
             m_lastline[i] = m_lastline[i + 1];
             m_lastlineTime[i] = m_lastlineTime[i + 1];
         }
-        m_lastlineTime[lineBacklog - 1] = 0;
+        m_lastlineTime[prop_lineBacklog - 1] = 0;
     }
 }
 
@@ -204,7 +207,7 @@ void HUD::draw(){
     m_font->drawString(lockstr, calculatePosition(Bottom, glm::vec3(0, 8, 0)), s3x5, 0.5f, aCenter);
 
     // draw output lines
-    for (int i = 0; i < lineBacklog; i++){
+    for (int i = 0; i < prop_lineBacklog; i++){
         if (m_lastlineTime[i] != 0)
             m_font->drawString(m_lastline[i], calculatePosition(TopLeft, glm::vec3(15, -3 - (4*i), 0)), s5x7, 0.4f);
     }
@@ -215,7 +218,7 @@ void HUD::draw(){
 
 void HUD::streamCallback(std::string line){
     // Find first free line
-    for (int i = 0; i < lineBacklog; i++){
+    for (int i = 0; i < prop_lineBacklog; i++){
         if (m_lastlineTime[i] == 0){
             m_lastline[i] = line;
             m_lastlineTime[i] = glfwGetTime();
@@ -223,12 +226,12 @@ void HUD::streamCallback(std::string line){
         }
     }
     // No free line, move up
-    for (int i = 0; i < lineBacklog - 1; i++){
+    for (int i = 0; i < prop_lineBacklog - 1; i++){
         m_lastline[i] = m_lastline[i + 1];
         m_lastlineTime[i] = m_lastlineTime[i + 1];
     }
-    m_lastline[lineBacklog - 1] = line;
-    m_lastlineTime[lineBacklog - 1] = glfwGetTime();
+    m_lastline[prop_lineBacklog - 1] = line;
+    m_lastlineTime[prop_lineBacklog - 1] = glfwGetTime();
 }
 
 
