@@ -20,6 +20,11 @@ public:
     Physics(WorldObject& worldObject, float scale);
     virtual ~Physics();
 
+    float dampening();
+    void setDampening(float dampening);
+    float angularDampening();
+    void setAngularDampening(float angularDampening);
+
     const glm::vec3& speed() const;
     float directionalDampening();
     void setSpeed(const glm::vec3& speed);
@@ -56,8 +61,8 @@ protected:
     glm::vec3 m_acceleration;
     glm::vec3 m_angularAcceleration;
 
-    Property<float> m_dampening;
-    Property<float> m_angularDampening;
+    float m_dampening;
+    float m_angularDampening;
 
     float m_mass;
     std::list<VoxelCollision> m_collisions;

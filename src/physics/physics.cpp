@@ -24,8 +24,8 @@ Physics::Physics(WorldObject& worldObject, float scale) :
     m_angularSpeed(0),
     m_acceleration(0),
     m_angularAcceleration(0),
-    m_dampening("physics.globalDampening"),
-    m_angularDampening("physics.globalAngularDampening"),
+    m_dampening(Property<float>("physics.globalDampening")),
+    m_angularDampening(Property<float>("physics.globalAngularDampening")),
     m_mass(0),
     m_accumulatedMassVec(0.0f, 0.0f, 0.0f),
     m_worldObject(worldObject)
@@ -34,6 +34,22 @@ Physics::Physics(WorldObject& worldObject, float scale) :
 }
 
 Physics::~Physics() {
+}
+
+float Physics::dampening() {
+    return m_dampening;
+}
+
+void Physics::setDampening(float dampening) {
+    m_dampening = dampening;
+}
+
+float Physics::angularDampening() {
+    return m_angularDampening;
+}
+
+void Physics::setAngularDampening(float angularDampening) {
+    m_angularDampening = angularDampening;
 }
 
 const glm::vec3& Physics::speed() const {
