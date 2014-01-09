@@ -79,30 +79,13 @@ void Game::initialize() {
 	glow::debug("Create Voxel");
     m_voxelRenderer = std::unique_ptr<VoxelRenderer>(new VoxelRenderer);
 
-
-    WorldObject *testClusterMoveable = new WorldObject();
-    testClusterMoveable->move(glm::vec3(-20, 0, 0));
-    testClusterMoveable->rotate(glm::angleAxis(-90.f, glm::vec3(0, 1, 0)));
-    testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 7), 0x00FF00));
-    testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 6), 0xFFFF00));
-    testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 5), 0xFFFF00));
-    testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 4), 0xFFFF00));
-    testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 3), 0xFFFF00));
-    testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 2), 0xFFFF00));
-    testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 1), 0xFFFF00));
-    testClusterMoveable->addVoxel(new Voxel(glm::ivec3(1, 1, 7), 0x0000FF));
-    testClusterMoveable->addVoxel(new Voxel(glm::ivec3(1, 0, 7), 0xFF0000));
-    testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 8), 0xFF0080));
-    testClusterMoveable->objectInfo().setName("movable");
-    m_world->god().scheduleSpawn(testClusterMoveable);
-
-    //m_inputHandler.setVoxelCluster(m_testClusterMoveable);
-
-
+    
     Ship *normandy = new Ship();
     ClusterCache::instance()->fillObject(normandy, "data/voxelcluster/normandy.csv");
 	normandy->setPosition(glm::vec3(0, 0, -100));
     normandy->objectInfo().setName("Normandy");
+    normandy->objectInfo().setShowOnHud(true);
+    normandy->objectInfo().setCanLockOn(true);
     m_world->god().scheduleSpawn(normandy);
     // TODO: use these dummies to test BasicTasks
     normandy->setCharacter(
@@ -130,6 +113,8 @@ void Game::initialize() {
         }
     }
     wall->objectInfo().setName("Wall");
+    wall->objectInfo().setShowOnHud(true);
+    wall->objectInfo().setCanLockOn(true);
     m_world->god().scheduleSpawn(wall);
 
     WorldObject *planet = new WorldObject();
@@ -149,6 +134,8 @@ void Game::initialize() {
     }
     planet->setCrucialVoxel(glm::ivec3(middle));
     planet->objectInfo().setName("Planet");
+    planet->objectInfo().setShowOnHud(true);
+    planet->objectInfo().setCanLockOn(true);
     m_world->god().scheduleSpawn(planet);
 
 

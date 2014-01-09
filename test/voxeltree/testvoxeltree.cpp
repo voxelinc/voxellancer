@@ -74,19 +74,6 @@ go_bandit([](){
             AssertThat(vt->boundingSphere().position(), EqualsWithDelta(glm::vec3(4, 7, 7), glm::vec3(0.01, 0.01, 0.01)));
         });
 
-        it("can adjust its center", [&]() {
-            WorldObject *d = new WorldObject(1.0, glm::vec3(1,1,1));
-
-            AssertThat(d->collisionDetector().voxeltree().boundingSphere().position(), EqualsWithDelta(glm::vec3(-1, -1, -1), glm::vec3(0.01, 0.01, 0.01)));
-        });
-
-        it("can adjust its center and scale", [&]() {
-            WorldObject *d = new WorldObject(3.0f, glm::vec3(1, 1, 1));
-
-            AssertThat(d->collisionDetector().voxeltree().boundingSphere().radius(), EqualsWithDelta(2.5f, 0.1f));
-            AssertThat(d->collisionDetector().voxeltree().boundingSphere().position(), EqualsWithDelta(glm::vec3(-3, -3, -3), glm::vec3(0.01, 0.01, 0.01)));
-        });
-
         // skip until is is clear what this test is supposed to test :)
         it_skip("initially positions all subnodes right", [&]() {
             WorldObject *d = new WorldObject(6);
@@ -126,7 +113,6 @@ go_bandit([](){
             VoxelTreeNode *n = nullptr;
 
             obj->addVoxel(new Voxel(glm::ivec3(1, 1, 1)));
-            //obj->transform().setCenter(glm::vec3(1,1,0));
 
             for(VoxelTreeNode *subnode : obj->collisionDetector().voxeltree().subnodes()) {
                 if(subnode->voxel() != nullptr) {
@@ -146,7 +132,6 @@ go_bandit([](){
             obj->rotate(glm::angleAxis((float)90.0f, glm::vec3(0, 1, 0)));
             AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(1, 1, 1), glm::vec3(0.01, 0.01, 0.01)));
         });
-
 
         it("can be queried for voxels in sphere", [&]() {
             Sphere sphere;

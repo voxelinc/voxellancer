@@ -67,11 +67,9 @@ void Ship::fireAtPoint(glm::vec3 target){
 }
 
 void Ship::fireAtObject(){
-    if (targetObject()) {
-        for (Hardpoint* hardpoint : m_hardpoints) {
-            if (hardpoint->aimType() == Object) {
-                hardpoint->shootAtObject(targetObject());
-            }
+    for (Hardpoint* hardpoint : m_hardpoints) {
+        if (hardpoint->aimType() == Object) {
+            hardpoint->shootAtObject(targetObject());
         }
     }
 }
@@ -86,12 +84,12 @@ float Ship::minAimDistance(){ // is this needed ?!
 }
 
 void Ship::accelerate(const glm::vec3& direction) {
-    m_physics->accelerate(direction * prop_maxSpeed.get());
+    m_physics.accelerate(direction * prop_maxSpeed.get());
 }
 
 
 void Ship::accelerateAngular(const glm::vec3& axis) {
-    m_physics->accelerateAngular(axis * prop_maxRotSpeed.get());
+    m_physics.accelerateAngular(axis * prop_maxRotSpeed.get());
 }
 
 void Ship::setCharacter(Character* character){
