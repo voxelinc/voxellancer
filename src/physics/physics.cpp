@@ -36,19 +36,19 @@ Physics::Physics(WorldObject& worldObject, float scale) :
 Physics::~Physics() {
 }
 
-float Physics::dampening(){
+float Physics::dampening() {
     return m_dampening;
 }
 
-void Physics::setDampening(float dampening){
+void Physics::setDampening(float dampening) {
     m_dampening = dampening;
 }
 
-float Physics::angularDampening(){
+float Physics::angularDampening() {
     return m_angularDampening;
 }
 
-void Physics::setAngularDampening(float angularDampening){
+void Physics::setAngularDampening(float angularDampening) {
     m_angularDampening = angularDampening;
 }
 
