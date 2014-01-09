@@ -10,6 +10,7 @@
 
 #include "worldobjecthandle.h"
 
+
 WorldObject::WorldObject(CollisionFilterClass collisionFilterClass):
     WorldObject(1.0f, glm::vec3(0), collisionFilterClass)
 {
@@ -130,11 +131,11 @@ void WorldObject::setCrucialVoxel(const glm::ivec3& cell) {
     m_crucialVoxel = voxel(cell);
 }
 
-void WorldObject::onCollision(){
+void WorldObject::onCollision() {
 
 }
 
-void WorldObject::onSpawnFail(){
+void WorldObject::onSpawnFail() {
 
 }
 
@@ -142,9 +143,10 @@ std::shared_ptr<WorldObjectHandle> WorldObject::handle() const {
     return m_handle;
 }
 
-bool WorldObject::scheduledForDeletion(){
+bool WorldObject::scheduledForDeletion() {
     return m_scheduledForDeletion;
 }
-void WorldObject::markScheduledForDeletion(){
+
+void WorldObject::markScheduledForDeletion() {
     m_scheduledForDeletion = true;
 }
