@@ -3,8 +3,7 @@
 
 class Ship;
 
-class BasicTask
-{
+class BasicTask {
 public:
     BasicTask(Ship& ship);
 

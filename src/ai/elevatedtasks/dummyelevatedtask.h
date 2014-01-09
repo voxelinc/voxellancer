@@ -6,8 +6,7 @@
 class Ship;
 class BasicTask;
 
-class DummyElevatedTask : public ElevatedTask
-{
+class DummyElevatedTask : public ElevatedTask {
 public:
     DummyElevatedTask(Ship& ship, BasicTask* task);
 

@@ -3,8 +3,7 @@
 
 class Ship;
 
-class ElevatedTask
-{
+class ElevatedTask {
 public:
     ElevatedTask(Ship& ship);
 
