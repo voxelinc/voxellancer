@@ -13,7 +13,7 @@ Rocket::Rocket(glm::vec3 position, glm::quat orientation, const glm::vec3& initi
 {
     m_lifetime = lifetime;
     m_travelSpeed = travelSpeed;
-    m_target = target;
+    m_target = target->handle();
     glm::vec3 myOrientation = orientation * glm::vec3(0, 0, -1);
 
     ClusterCache::instance()->fillObject(this, "data/voxelcluster/rocket.csv");
@@ -31,8 +31,8 @@ Rocket::Rocket(glm::vec3 position, glm::quat orientation, const glm::vec3& initi
 
 void Rocket::update(float deltaSec){
     // orient towards target
-    if (m_target){
-        glm::vec3 dir = glm::inverse(m_transform.orientation()) * glm::normalize(m_target->transform().position() - m_transform.position());
+    if (m_target->get()){
+        glm::vec3 dir = glm::inverse(m_transform.orientation()) * glm::normalize(m_target->get()->transform().position() - m_transform.position());
         glm::vec3 myOrientation = glm::vec3(0, 0, -1);
         glm::vec3 cross = glm::cross(dir, myOrientation);
         glm::quat rotation;

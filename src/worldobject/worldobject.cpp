@@ -23,7 +23,8 @@ WorldObject::WorldObject(float scale, CollisionFilterClass collisionFilterClass)
     m_collisionDetector(*this),
     m_objectInfo(),
     m_crucialVoxel(nullptr),
-    m_handle(new WorldObjectHandle(this))
+    m_handle(new WorldObjectHandle(this)),
+    m_scheduledForDeletion(false)
 {
 }
 
@@ -115,14 +116,22 @@ void WorldObject::setCrucialVoxel(const glm::ivec3& cell) {
     m_crucialVoxel = voxel(cell);
 }
 
-void WorldObject::onCollision(){
+void WorldObject::onCollision() {
 
 }
 
-void WorldObject::onSpawnFail(){
+void WorldObject::onSpawnFail() {
 
 }
 
 std::shared_ptr<WorldObjectHandle> WorldObject::handle() const {
     return m_handle;
+}
+
+bool WorldObject::scheduledForDeletion() {
+    return m_scheduledForDeletion;
+}
+
+void WorldObject::markScheduledForDeletion() {
+    m_scheduledForDeletion = true;
 }
