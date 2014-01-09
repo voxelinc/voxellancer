@@ -43,12 +43,12 @@ private:
     void testFMOD();
 
 private:
-	GLFWwindow *m_window;
+	GLFWwindow* m_window;
 	InputHandler m_inputHandler;
     Player m_player;
 	Camera m_camera;
 
-    World * m_world;
+    World* m_world;
 
 	std::unique_ptr<Skybox> m_skybox;
 	std::unique_ptr<HUD> m_hud;

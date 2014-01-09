@@ -4,12 +4,11 @@
 #include "world/world.h"
 
 #include "utils/tostring.h"
-#include "physics/bulletphysics.h"
 #include "voxeleffect/voxelexplosiongenerator.h"
 
 
 Bullet::Bullet(WorldObject* creator, glm::vec3 position, glm::quat orientation, glm::vec3 direction, float speed, float range) :
-    WorldObject(new BulletPhysics(*this, 0.5), new CollisionDetector(*this), 0.5f, CollisionFilterClass::Bullet),
+    WorldObject(0.5f, CollisionFilterClass::Bullet),
     m_creator(creator)
 {
     m_lifetime = range / speed;
@@ -26,17 +25,21 @@ Bullet::Bullet(WorldObject* creator, glm::vec3 position, glm::quat orientation, 
         m_transform.rotateWorld(glm::angleAxis(-glm::degrees(angle), rotationAxis)); //then rotate towards target
     }
 
-    m_transform.setPosition(position + dir * (minimalGridAABB().axisMax(Axis::ZAxis) / 2.0f + 1.4f));
+    m_transform.setPosition(position + dir * (minimalGridAABB().axisMax(Axis::ZAxis) / 2.0f + glm::root_two<float>()));
 
-    m_physics->setSpeed(dir * speed);
-    m_physics->setAngularSpeed(glm::vec3(0, 0, 50)); //set spinning
+    m_physics.setSpeed(dir * speed);
+    m_physics.setAngularSpeed(glm::vec3(0, 0, 50)); //set spinning
 
     m_objectInfo.setName("Bullet");
     m_objectInfo.setShowOnHud(false);
     m_objectInfo.setCanLockOn(false);
 
     CollisionFilterable::setCollideableWith(CollisionFilterClass::Bullet, false);
+
+    m_physics.setDampening(0);
+    m_physics.setAngularDampening(0);
 }
+
 
 WorldObject* Bullet::creator() const {
     return m_creator;

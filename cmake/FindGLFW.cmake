@@ -22,6 +22,7 @@ find_library(GLFW_LIBRARY
     PATHS
     ${LIB_DIR}/glfw-3.0.3/lib-msvc110
     ${LIB_DIR}/glfw/lib
+    ${LIB_DIR}/glfw/src
     $ENV{GLFWDIR}/lib
     $ENV{GLFW_HOME}/lib
     $ENV{GLFW_HOME}/lib/Release/x64

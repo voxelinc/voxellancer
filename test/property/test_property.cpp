@@ -5,6 +5,7 @@
 #include <glow/logging.h>
 
 #include "property/propertymanager.h"
+#include "input/inputmapping.h"
 
 using namespace bandit;
 
@@ -50,9 +51,21 @@ go_bandit([](){
             AssertThat(sProp2.get(), Equals("peter"));
             AssertThat(cProp.get(), Equals('w'));
             AssertThat(bProp2.get(), Equals(true));
-            AssertThat(v3Prop.get().x, Equals(1.0));
-            AssertThat(v3Prop.get().y, Equals(0));
-            AssertThat(v3Prop.get().z, Equals(.5));
+            AssertThat(v3Prop->x, Equals(1.0));
+            AssertThat(v3Prop->y, Equals(0));
+            AssertThat(v3Prop->z, Equals(.5));
+        });
+
+        it("understands inputmapping", [&]() {
+            PropertyManager::instance()->load("test/property/test.ini");
+
+            Property<InputMapping> mapping("mapping.fire");
+            int i = mapping->type();
+
+            AssertThat(mapping->type(), Equals(InputType::Keyboard));
+            AssertThat(mapping->index(), Equals(5));
+            AssertThat(mapping->maxValue(), EqualsWithDelta(-10.2, 0.01f));
+
         });
 
         it("should work before load", [&]() {
