@@ -17,7 +17,8 @@
 
 
 
-static int MAX_STARS = 10000;
+static int STAR_COUNT = 2000;
+static float FIELD_SIZE = 1000.0f;
 
 // to be replaced by helper!
 glm::vec3 randVec(float from, float to) {
@@ -37,16 +38,33 @@ Starfield::Starfield(Player* player, Camera* camera):
 }
 
 void Starfield::update(float deltaSec) {
+    glm::vec3* starbuffer = (glm::vec3*) m_starBuffer->map(GL_READ_WRITE);
+    glm::vec3 position = m_player->playerShip()->transform().position();
 
+    for (int i = 0; i < STAR_COUNT; i++) {
+        while (starbuffer[i].x - position.x < -FIELD_SIZE)
+            starbuffer[i].x += 2 * FIELD_SIZE;
+        while (starbuffer[i].x - position.x > FIELD_SIZE)
+            starbuffer[i].x -= 2 * FIELD_SIZE;
+        while (starbuffer[i].y - position.y < -FIELD_SIZE)
+            starbuffer[i].y += 2 * FIELD_SIZE;
+        while (starbuffer[i].y - position.y > FIELD_SIZE)
+            starbuffer[i].y -= 2 * FIELD_SIZE;
+        while (starbuffer[i].z - position.z < -FIELD_SIZE)
+            starbuffer[i].z += 2 * FIELD_SIZE;
+        while (starbuffer[i].z - position.z > FIELD_SIZE)
+            starbuffer[i].z -= 2 * FIELD_SIZE;
+    }
+
+    m_starBuffer->unmap();
 }
 
 
 void Starfield::draw() {
     m_shaderProgram->setUniform("viewProjection", m_camera->viewProjection());
     m_shaderProgram->setUniform("speed", glm::vec4(m_player->playerShip()->physics().speed(), 0));
-
-    m_vertexArrayObject->drawArrays(GL_POINTS, (GLint)0, (GLsizei)MAX_STARS);
-
+    m_shaderProgram->use();
+    m_vertexArrayObject->drawArrays(GL_POINTS, (GLint)0, (GLsizei)STAR_COUNT);
 }
 
 void Starfield::createAndSetupShaders() {
@@ -58,7 +76,6 @@ void Starfield::createAndSetupShaders() {
     m_shaderProgram->attach(vertexShader, geometryShader, fragmentShader);
     m_shaderProgram->bindFragDataLocation(0, "fragColor");
 
-    //m_shaderProgram->getUniform<GLint>("positionSampler")->set(0);
 
 }
 
@@ -70,10 +87,9 @@ void Starfield::createAndSetupGeometry() {
 
     glow::Array<glm::vec3> stars;
 
-    for (int i = 0; i < MAX_STARS; i++) {
-        stars.push_back(randVec(-1000, 1000));
+    for (int i = 0; i < STAR_COUNT; i++) {
+        stars.push_back(randVec(-FIELD_SIZE, FIELD_SIZE));
     }
-
     m_starBuffer->setData(stars);
 
     auto binding0 = m_vertexArrayObject->binding(0);
