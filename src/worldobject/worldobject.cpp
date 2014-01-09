@@ -8,6 +8,8 @@
 #include "voxel/specialvoxels/cockpitvoxel.h"
 #include "voxel/specialvoxels/fuelvoxel.h"
 
+#include "worldobjecthandle.h"
+
 
 WorldObject::WorldObject(CollisionFilterClass collisionFilterClass):
     WorldObject(1.0f, collisionFilterClass)
@@ -20,15 +22,16 @@ WorldObject::WorldObject(float scale, CollisionFilterClass collisionFilterClass)
     m_physics(*this, scale),
     m_collisionDetector(*this),
     m_objectInfo(),
-    m_crucialVoxel(nullptr)
+    m_crucialVoxel(nullptr),
+    m_handle(new WorldObjectHandle(this))
 {
 }
 
  WorldObject::~WorldObject() {
-
+     m_handle->invalidate();
 }
 
-CollisionDetector& WorldObject::collisionDetector(){
+CollisionDetector& WorldObject::collisionDetector() {
     return m_collisionDetector;
 }
 
@@ -36,7 +39,7 @@ Physics& WorldObject::physics() {
     return m_physics;
 }
 
-ObjectInfo& WorldObject::objectInfo(){
+ObjectInfo& WorldObject::objectInfo() {
     return m_objectInfo;
 }
 
@@ -70,19 +73,19 @@ void WorldObject::removeVoxel(Voxel* voxel) {
     VoxelCluster::removeVoxel(voxel);
 }
 
-void WorldObject::addEngineVoxel(EngineVoxel* voxel){
+void WorldObject::addEngineVoxel(EngineVoxel* voxel) {
     addVoxel(voxel);
 }
 
-void WorldObject::addHardpointVoxel(HardpointVoxel* voxel){
+void WorldObject::addHardpointVoxel(HardpointVoxel* voxel) {
     addVoxel(voxel);
 }
 
-void WorldObject::addCockpitVoxel(CockpitVoxel* voxel){
+void WorldObject::addCockpitVoxel(CockpitVoxel* voxel) {
     addVoxel(voxel);
 }
 
-void WorldObject::addFuelVoxel(FuelVoxel* voxel){
+void WorldObject::addFuelVoxel(FuelVoxel* voxel) {
     addVoxel(voxel);
 }
 
@@ -118,4 +121,8 @@ void WorldObject::onCollision(){
 
 void WorldObject::onSpawnFail(){
 
+}
+
+std::shared_ptr<WorldObjectHandle> WorldObject::handle() const {
+    return m_handle;
 }
