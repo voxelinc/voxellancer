@@ -23,6 +23,7 @@ class VoxelRenderer;
 class HD3000Dummy;
 class LinuxVMDummy;
 class Ship;
+class Starfield;
 
 class TreeStateReporter : public TimedTask
 {
@@ -65,7 +66,8 @@ private:
 	std::unique_ptr<HUD> m_hud;
 	std::unique_ptr<VoxelRenderer> m_voxelRenderer;
 	std::unique_ptr<HD3000Dummy> m_hd3000dummy;
-	std::unique_ptr<LinuxVMDummy> m_linuxvmdummy;
+    std::unique_ptr<LinuxVMDummy> m_linuxvmdummy;
+    std::unique_ptr<Starfield> m_starfield;
 
     TreeStateReporter m_treeStateReporter;
 };

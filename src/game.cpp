@@ -39,6 +39,7 @@
 #include "ai/characters/dummycharacter.h"
 #include "ai/elevatedtasks/dummyelevatedtask.h"
 #include "ai/basictask.h"
+#include "starfield.h"
 
 
 class Ship;
@@ -67,14 +68,18 @@ void Game::initialize() {
     //testFMOD();
 
 	//Must be created first
-	m_linuxvmdummy = std::unique_ptr<LinuxVMDummy>(new LinuxVMDummy);
+	m_linuxvmdummy = std::unique_ptr<LinuxVMDummy>(new LinuxVMDummy());
 
     glow::debug("create world");
     m_world = World::instance();
     m_treeStateReporter.setWorldTree(&m_world->worldTree());
 
     glow::debug("Create Skybox");
-	m_skybox = std::unique_ptr<Skybox>(new Skybox);
+	m_skybox = std::unique_ptr<Skybox>(new Skybox());
+
+    glow::debug("Create Starfield");
+    m_starfield = std::unique_ptr<Starfield>(new Starfield());
+
 
 	glow::debug("Create Voxel");
     m_voxelRenderer = std::unique_ptr<VoxelRenderer>(new VoxelRenderer);
@@ -211,6 +216,7 @@ void Game::draw() {
     // draw all other voxelclusters...
     m_voxelRenderer->afterDraw();
 
+    m_starfield->draw(&m_camera);
 
 	m_hud->draw();
 
