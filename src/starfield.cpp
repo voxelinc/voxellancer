@@ -41,6 +41,7 @@ void Starfield::update(float deltaSec) {
     glm::vec3* starbuffer = (glm::vec3*) m_starBuffer->map(GL_READ_WRITE);
     glm::vec3 position = m_player->playerShip()->transform().position();
 
+    // only perform once per second if this is a performance problem
     for (int i = 0; i < STAR_COUNT; i++) {
         while (starbuffer[i].x - position.x < -FIELD_SIZE)
             starbuffer[i].x += 2 * FIELD_SIZE;
