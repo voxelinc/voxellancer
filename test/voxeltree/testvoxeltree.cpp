@@ -120,7 +120,7 @@ go_bandit([](){
             AssertThat(n->sphere(transform).position(), EqualsWithDelta(glm::vec3(1, 0, 1), glm::vec3(0.01, 0.01, 0.01)));
 
             transform.rotate(glm::angleAxis((float)90.0f, glm::vec3(0, 1, 0)));
-            AssertThat(n->sphere(transform).position(), EqualsWithDelta(glm::vec3(1, 1, 1), glm::vec3(0.01, 0.01, 0.01)));g
+            AssertThat(n->sphere(transform).position(), EqualsWithDelta(glm::vec3(1, 1, 1), glm::vec3(0.01, 0.01, 0.01)));
         });
 
         it("can be queried for voxels in sphere", [&]() {
