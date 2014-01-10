@@ -9,6 +9,7 @@
 #include <glow/logging.h>
 
 #include "propertycollection.h"
+#include "input/inputmapping.h"
 
 
 // some string, some spaces, equals, some spaces, some string, maybe a comment
@@ -21,8 +22,9 @@ static regexns::regex bool_regex() { return regexns::regex(R"(^(true|false)$)");
 static regexns::regex char_regex() { return regexns::regex(R"(^\w$)"); }
 static regexns::regex string_regex() { return regexns::regex(R"(^.*$)"); }
 static regexns::regex vec3_regex() { return regexns::regex(R"(^([-+]?\d*\.?\d*), ?([-+]?\d*\.?\d*), ?([-+]?\d*\.?\d*)$)"); }
+static regexns::regex input_mapping_regex() { return regexns::regex(R"(^InputMapping\((\d+), ?(\d+), ?([-+]?\d*\.?\d*)\)$)"); }
 
-static glm::vec3 vec3converter(const std::string &s) {
+static glm::vec3 vec3Converter(const std::string &s) {
     regexns::smatch matches;
     regexns::regex_match(s, matches, vec3_regex());
 
@@ -33,13 +35,25 @@ static glm::vec3 vec3converter(const std::string &s) {
     return glm::vec3(x, y, z);
 }
 
+static InputMapping inputMappingConverter(const std::string &s) {
+    regexns::smatch matches;
+    regexns::regex_match(s, matches, input_mapping_regex());
+
+    InputType type = static_cast<InputType>(std::stoi(matches[1]));
+    int index = std::stoi(matches[2]);
+    float max_value = std::stof(matches[3]);
+
+    return InputMapping(type,index,max_value);
+}
+
 PropertyManager::PropertyManager():
     m_floatProperties(new PropertyCollection<float>(float_regex(), [](std::string s) { return std::stof(s); })),
     m_intProperties(new PropertyCollection<int>(int_regex(), [](std::string s) { return std::stoi(s, 0, 0); })), // base=0 allows adding 0x to parse hex
     m_charProperties(new PropertyCollection<char>(char_regex(), [](std::string s) { return s[0]; })),
     m_boolProperties(new PropertyCollection<bool>(bool_regex(), [](std::string s) { return s == "true" ? true : false; })),
     m_stringProperties(new PropertyCollection<std::string>(string_regex(), [](std::string s) { return s; })),
-    m_vec3Properties(new PropertyCollection<glm::vec3>(vec3_regex(), vec3converter))
+    m_vec3Properties(new PropertyCollection<glm::vec3>(vec3_regex(), vec3Converter)),
+    m_inputMappingProperties(new PropertyCollection<InputMapping>(input_mapping_regex(), inputMappingConverter))
 {
 
 }
@@ -89,6 +103,7 @@ void PropertyManager::load(std::string file)
             if (m_charProperties->update(key, value)) success++;
             if (m_stringProperties->update(key, value)) success++;
             if (m_vec3Properties->update(key, value)) success++;
+            if (m_inputMappingProperties->update(key, value)) success++;
 
             if (success == 0) {
                 glow::warning("PropertyManager: no match %;: %; (line: %;)", key, value, line);
@@ -155,3 +170,7 @@ PropertyCollection<glm::vec3> * PropertyManager::getPropertyCollection(Property<
     return m_vec3Properties;
 }
 
+template <>
+PropertyCollection<InputMapping> * PropertyManager::getPropertyCollection(Property<InputMapping> * prop) {
+    return m_inputMappingProperties;
+}

@@ -6,6 +6,7 @@
 
 #include <glow/Changeable.h>
 
+class InputMapping;
 
 template <class T> class Property;
 template <class T> class PropertyCollection;
@@ -44,6 +45,7 @@ private:
     PropertyCollection<bool> *m_boolProperties;
     PropertyCollection<std::string> *m_stringProperties;
     PropertyCollection<glm::vec3> *m_vec3Properties;
+    PropertyCollection<InputMapping> *m_inputMappingProperties;
 
     static PropertyManager * s_instance;
 };

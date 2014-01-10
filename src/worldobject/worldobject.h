@@ -8,6 +8,8 @@
 #include "physics/physics.h"
 #include "voxel/voxelcluster.h"
 #include "ui/objectinfo.h"
+#include "world/god.h"
+
 
 class EngineVoxel;
 class HardpointVoxel;
@@ -19,8 +21,7 @@ class WorldObject : public VoxelCluster, public CollisionFilterable
 {
 public:
     WorldObject(CollisionFilterClass collisionFilterClass = CollisionFilterClass::Other);
-    WorldObject(float scale, glm::vec3 center = glm::vec3(0), CollisionFilterClass collisionFilterClass = CollisionFilterClass::Other);
-    WorldObject(const WorldTransform& transform, CollisionFilterClass collisionFilterClass = CollisionFilterClass::Other);
+    WorldObject(float scale, CollisionFilterClass collisionFilterClass = CollisionFilterClass::Other);
 
     virtual ~WorldObject();
 
@@ -55,11 +56,18 @@ public:
 
     std::shared_ptr<WorldObjectHandle> handle() const;
 
+    bool scheduledForDeletion();
+
 protected:
-    WorldObject(Physics* physics, CollisionDetector* detector, float scale = 1.0f, CollisionFilterClass collisionFilterClass = CollisionFilterClass::Other);
-    std::unique_ptr<CollisionDetector> m_collisionDetector;
-    std::unique_ptr<Physics> m_physics;
+    // Only god can set this mark. Unfortunately the method will be able to access all our protected members
+    friend void God::scheduleRemoval(WorldObject* worldObject);
+    void markScheduledForDeletion();
+    bool m_scheduledForDeletion;
+
+    CollisionDetector m_collisionDetector;
+    Physics m_physics;
+
     std::shared_ptr<WorldObjectHandle> m_handle;
-    Voxel* m_crucialVoxel;
     ObjectInfo m_objectInfo;
+    Voxel* m_crucialVoxel;
 };

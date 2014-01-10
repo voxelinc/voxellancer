@@ -39,3 +39,10 @@ Property<T>::operator T()
 {
     return m_value;
 }
+
+template <class T>
+T* Property<T>::operator->() {
+    {
+        return &m_value;
+    }
+}
