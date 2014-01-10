@@ -1,8 +1,8 @@
-#version 130
+#version 150
 
 layout(points) in;
 
-layout(triangle_strip) out;
+layout(triangle_strip, max_vertices=4) out;
 
 uniform mat4 viewProjection;
 uniform vec4 speed;
