@@ -15,10 +15,10 @@ public:
 
     CameraDolly* cameraDolly();
 
-    const glm::vec3& relativeOrientation() const;
+    const glm::quat& relativeOrientation() const;
 
     glm::vec3 position() const;
-    glm::vec3 orientation() const;
+    glm::quat orientation() const;
 
     void setupMonoView();
     void setupStereoView();
@@ -30,7 +30,7 @@ public:
 protected:
     CameraDolly* m_cameraDolly;
 
-    glm::vec3 m_relativeOrientation;
+    glm::quat m_relativeOrientation;
 
     std::list<CameraEye*> m_eyes;
 

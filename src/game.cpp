@@ -115,6 +115,9 @@ void Game::initialize() {
     wall->objectInfo().setCanLockOn(true);
     m_world->god().scheduleSpawn(wall);
 
+    m_cameraDolly.setFollowObject(testCluster);
+
+
     WorldObject *planet = new WorldObject();
     planet->move(glm::vec3(20, 10, -30));
     int diameter = 28;
@@ -178,10 +181,9 @@ void Game::update(float deltaSec) {
     // avoid big jumps after debugging ;)
     deltaSec = glm::min(1.f, deltaSec);
 
-    //m_treeStateReporter.nudge();
-
     m_inputHandler.update(deltaSec);
     World::instance()->update(deltaSec);
+    m_cameraDolly.update(deltaSec);
 //	m_hud->update(deltaSec);
 }
 

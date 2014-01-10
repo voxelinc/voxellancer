@@ -9,7 +9,7 @@ class CameraFollowHelper {
 public:
     CameraFollowHelper(WorldObject* worldObject);
 
-    glm::vec3 position();
+    glm::vec3 followPosition();
 
 
 protected:

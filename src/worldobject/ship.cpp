@@ -61,10 +61,12 @@ void Ship::fireAtPoint(glm::vec3 target){
     }
 }
 
-void Ship::fireAtObject(){
-    for (Hardpoint* hardpoint : m_hardpoints) {
-        if (hardpoint->aimType() == Object) {
-            hardpoint->shootAtObject(targetObject());
+void Ship::fireAtObject() {
+    if(targetObject()) {
+        for (Hardpoint* hardpoint : m_hardpoints) {
+            if (hardpoint->aimType() == Object) {
+                hardpoint->shootAtObject(targetObject());
+            }
         }
     }
 }

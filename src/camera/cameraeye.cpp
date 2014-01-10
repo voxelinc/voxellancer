@@ -33,7 +33,8 @@ CameraEye::CameraEye(CameraHead* cameraHead, int viewportWidth, int viewportHeig
 }
 
 void CameraEye::update(float deltaSec) {
-
+    m_camera.setPosition(m_cameraHead->position() + m_cameraHead->orientation() * m_relativePosition);
+    m_camera.setOrientation(m_cameraHead->orientation());
 }
 
 void CameraEye::draw() {

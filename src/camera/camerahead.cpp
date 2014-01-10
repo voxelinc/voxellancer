@@ -15,7 +15,7 @@ CameraDolly* CameraHead::cameraDolly() {
     return m_cameraDolly;
 }
 
-const glm::vec3& CameraHead::relativeOrientation() const {
+const glm::quat& CameraHead::relativeOrientation() const {
     return m_relativeOrientation;
 }
 
@@ -23,7 +23,7 @@ glm::vec3 CameraHead::position() const {
     return m_cameraDolly->position();
 }
 
-glm::vec3 CameraHead::orientation() const {
+glm::quat CameraHead::orientation() const {
     return m_cameraDolly->orientation() + m_relativeOrientation;
 }
 
@@ -64,3 +64,4 @@ void CameraHead::clearEyes() {
 void CameraHead::setViewport() {
     glfwGetWindowSize(glfwGetCurrentContext(), &m_viewportWidth, &m_viewportHeight);
 }
+

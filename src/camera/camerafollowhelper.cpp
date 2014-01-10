@@ -13,20 +13,12 @@ CameraFollowHelper::CameraFollowHelper(WorldObject* worldObject):
 
 }
 
-glm::vec3 CameraFollowHelper::position() {
-//    AABB gridBoundsAABB = m_worldObject->minimalGridAABB();
-//    gridBoundsAABB.setRub(boundsAABB.rub() + glm::ivec3(1, 1, 1));
-//
-//    AABB boundsAABB(
-//        m_worldObject->transform().applyTo(gridBoundsAABB.llf()),
-//        m_worldObject->transform().applyTo(gridBoundsAABB.rub())
-//    );
-//
-//    Sphere sphere = Sphere::containing(boundsAABB);
-//
-//    glm::vec3 relativeOffset(0, sphere.radius() * 0.5f, -sphere.radius() * 2);
-//
-//    return sphere.position() + m_worldObject->transform.orientation() * relativeOffset;
-    return m_worldObject->transform().position();
+glm::vec3 CameraFollowHelper::followPosition() {
+    Sphere sphere;
+
+    sphere.setPosition(m_worldObject->transform().position());
+    sphere.setRadius(m_worldObject->minimalGridAABB().diameter() * m_worldObject->transform().scale());
+
+    return sphere.position() + (m_worldObject->transform().orientation() * glm::vec3(0.0f, 0.5f, 1.5f)) * sphere.radius();
 }
 

@@ -3,7 +3,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 
-#include "utils/follower.h"
+#include "utils/inertiafollower.h"
 
 #include "worldobject/worldobject.h"
 
@@ -12,7 +12,7 @@
 
 class Game;
 
-class CameraDolly: public Follower {
+class CameraDolly: public InertiaFollower {
 public:
     CameraDolly(Game* game);
 

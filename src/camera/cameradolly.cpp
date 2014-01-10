@@ -9,9 +9,10 @@
 
 
 CameraDolly::CameraDolly(Game* game):
-    Follower(10.0f, 360.0f),
+    InertiaFollower(10.0f, 0.5f),
     m_game(game),
-    m_cameraHead(this)
+    m_cameraHead(this),
+    m_followWorldObjectHandle(WorldObjectHandle::nullHandle())
 {
 }
 
@@ -28,7 +29,7 @@ void CameraDolly::update(float deltaSec) {
 
     if(followWorldObject) {
         CameraFollowHelper followHelper(followWorldObject);
-        follow(followHelper.position(), glm::eulerAngles(followWorldObject->transform().orientation()), deltaSec);
+        follow(followHelper.followPosition(), followWorldObject->transform().orientation(), deltaSec);
     }
     m_cameraHead.update(deltaSec);
 }

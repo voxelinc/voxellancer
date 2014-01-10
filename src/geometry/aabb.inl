@@ -27,6 +27,13 @@ TAABB<T>::TAABB(const glm::detail::tvec3<T> &llf, const glm::detail::tvec3<T> &r
 }
 
 template<typename T>
+template<typename OtherT>
+TAABB<T>::TAABB(const TAABB<OtherT>& other) {
+    m_llf = static_cast<glm::detail::tvec3<T>>(other.llf());
+    m_rub = static_cast<glm::detail::tvec3<T>>(other.rub());
+}
+
+template<typename T>
 const glm::detail::tvec3<T> &TAABB<T>::llf() const {
     return m_llf;
 }
@@ -66,6 +73,11 @@ glm::detail::tvec3<T> TAABB<T>::middle() const {
 template<typename T>
 T TAABB<T>::extent(Axis axis) const {
     return m_rub[(int)axis] - m_llf[(int)axis];
+}
+
+template<typename T>
+T TAABB<T>::diameter() const {
+    return glm::length(m_rub - m_llf);
 }
 
 template<typename T>
@@ -152,7 +164,7 @@ bool TAABB<T>::intersects(const Sphere& sphere) const {
 }
 
 template<typename T>
-bool TAABB<T>::containedBy(const TAABB<float>& other) const {
+bool TAABB<T>::containedBy(const TAABB<int>& other) const {
     return
         other.llf().x <= m_llf.x &&
         other.llf().y <= m_llf.y &&
@@ -174,7 +186,8 @@ bool TAABB<T>::contains(const TAABB& other) const {
 }
 
 template<typename T>
-bool TAABB<T>::contains(const glm::detail::tvec3<T> &vec) const {
+template<typename OtherT>
+bool TAABB<T>::contains(const glm::detail::tvec3<OtherT> &vec) const {
     return
         vec.x >= m_llf.x &&
         vec.y >= m_llf.y &&
@@ -185,7 +198,7 @@ bool TAABB<T>::contains(const glm::detail::tvec3<T> &vec) const {
 }
 
 template<typename T>
-bool TAABB<T>::nearTo(const TAABB<float>& other) const {
+bool TAABB<T>::nearTo(const TAABB<int>& other) const {
     return intersects(other);
 }
 
