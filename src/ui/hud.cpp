@@ -1,5 +1,4 @@
 #include "hud.h"
-#include "camera.h"
 #include "voxel/voxelrenderer.h"
 #include "resource/clustercache.h"
 #include "ui/inputhandler.h"

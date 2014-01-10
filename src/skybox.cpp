@@ -65,9 +65,6 @@ Skybox::Skybox() :
 	m_vertexArrayObject->enable(a_vertex);
 }
 
-Skybox::~Skybox(){
-}
-
 void Skybox::draw(Camera *camera){
 	glDisable(GL_DEPTH_TEST);
 

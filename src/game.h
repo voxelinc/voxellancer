@@ -9,9 +9,12 @@
 
 #include <GLFW/glfw3.h>
 
+#include "camera/cameradolly.h"
+
 #include "ui/inputhandler.h"
 
 #include "utils/timedtask.h"
+
 #include "worldtree/worldtree.h"
 
 
@@ -45,21 +48,25 @@ public:
 	void initialize();
 	void reloadConfig();
 
+    Skybox* skybox();
+
     void update(float deltaSec);
 	void draw();
 
     InputHandler * inputHandler();
 
+
 private:
     void testFMOD();
 
+
 private:
 	GLFWwindow* m_window;
+    World* m_world;
 	InputHandler m_inputHandler;
     Player m_player;
-	Camera m_camera;
+	CameraDolly m_cameraDolly;
 
-    World* m_world;
 
 	std::unique_ptr<Skybox> m_skybox;
 	std::unique_ptr<HUD> m_hud;

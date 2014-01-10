@@ -45,7 +45,7 @@ class Ship;
 
 Game::Game(GLFWwindow *window) :
     m_window(window),
-    m_camera(),
+    m_cameraDolly(this),
     m_player(&m_camera),
     m_inputHandler(window, &m_player, &m_camera)
 {
@@ -58,6 +58,10 @@ Game::~Game() {
 
 void Game::reloadConfig() {
 	PropertyManager::instance()->load("data/config.ini");
+}
+
+Skybox* Game::skybox() {
+    return m_skybox;
 }
 
 void Game::initialize() {
@@ -79,7 +83,7 @@ void Game::initialize() {
 	glow::debug("Create Voxel");
     m_voxelRenderer = std::unique_ptr<VoxelRenderer>(new VoxelRenderer);
 
-    
+
     Ship *normandy = new Ship();
     ClusterCache::instance()->fillObject(normandy, "data/voxelcluster/normandy.csv");
 	normandy->setPosition(glm::vec3(0, 0, -100));
@@ -89,8 +93,8 @@ void Game::initialize() {
     m_world->god().scheduleSpawn(normandy);
     // TODO: use these dummies to test BasicTasks
     normandy->setCharacter(
-        new DummyCharacter(*normandy, 
-        new DummyElevatedTask(*normandy, 
+        new DummyCharacter(*normandy,
+        new DummyElevatedTask(*normandy,
         new BasicTask(*normandy))));
 
     Ship *testCluster = new Ship();
@@ -201,18 +205,9 @@ void Game::draw() {
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 
-	m_skybox->draw(&m_camera);
+    m_cameraDolly.draw();
 
-    m_voxelRenderer->prepareDraw(&m_camera);
-    for (WorldObject * worldObject : m_world->worldObjects()) {
-        m_voxelRenderer->draw(worldObject);
-    }
-
-    // draw all other voxelclusters...
-    m_voxelRenderer->afterDraw();
-
-
-	m_hud->draw();
+//	m_hud->draw();
 
     m_hd3000dummy->drawIfActive();
 }

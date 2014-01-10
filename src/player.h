@@ -1,6 +1,5 @@
-
 #include "worldobject/ship.h"
-#include "camera.h"
+#include "camera/camera.h"
 
 class Player
 {

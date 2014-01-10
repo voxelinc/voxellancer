@@ -11,10 +11,10 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
 
+#include "camera/camera.h"
 
 #include "voxel/voxelrenderer.h"
 #include "voxel/voxelcluster.h"
-#include "camera.h"
 
 
 VoxelRenderer::VoxelRenderer() :

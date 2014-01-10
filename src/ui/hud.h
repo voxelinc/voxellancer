@@ -5,8 +5,9 @@
 #include <glm/gtx/quaternion.hpp>
 
 #include "property/property.h"
-#include "camera.h"
+#include "camera/camera.h"
 #include "ui/hudelement.h"
+
 
 class VoxelRenderer;
 class VoxelFont;
