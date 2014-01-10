@@ -19,6 +19,7 @@
 
 static int STAR_COUNT = 1000;
 static float FIELD_SIZE = 200.0f;
+static float STAR_FADE_IN_SEC = 2.0f;
 
 // to be replaced by helper!
 glm::vec3 randVec(float from, float to) {
@@ -50,7 +51,7 @@ void Starfield::update(float deltaSec) {
 
     // only perform once per second if this is a performance problem
     for (int i = 0; i < STAR_COUNT; i++) {
-        starbuffer[i].brightness = glm::min(1.0f, starbuffer[i].brightness + deltaSec * 0.5f);
+        starbuffer[i].brightness = glm::min(1.0f, starbuffer[i].brightness + deltaSec / STAR_FADE_IN_SEC);
         while (starbuffer[i].pos.x - position.x < -FIELD_SIZE) {
             starbuffer[i].pos.x += 2 * FIELD_SIZE;
             starbuffer[i].brightness = 0;
@@ -121,25 +122,26 @@ void Starfield::createAndSetupGeometry() {
     }
     m_starBuffer->setData(stars);
 
-    auto binding0 = m_vertexArrayObject->binding(0);
-    auto a_vertex0 = m_shaderProgram->getAttributeLocation("a_vertex");
-    binding0->setAttribute(a_vertex0);
-    binding0->setBuffer(m_starBuffer, 0, sizeof(Star));
-    binding0->setFormat(3, GL_FLOAT, GL_FALSE, 0);
-    m_vertexArrayObject->enable(a_vertex0);
+    glow::VertexAttributeBinding* binding = m_vertexArrayObject->binding(0);
+    GLint location = m_shaderProgram->getAttributeLocation("a_vertex");
+    binding->setAttribute(location);
+    binding->setBuffer(m_starBuffer, 0, sizeof(Star));
+    binding->setFormat(3, GL_FLOAT, GL_FALSE, offsetof(Star, pos));
+    m_vertexArrayObject->enable(location);
 
-    auto binding1 = m_vertexArrayObject->binding(1);
-    auto a_vertex1 = m_shaderProgram->getAttributeLocation("a_brightness");
-    binding1->setAttribute(a_vertex1);
-    binding1->setBuffer(m_starBuffer, 0, sizeof(Star));
-    binding1->setFormat(1, GL_FLOAT, GL_FALSE, offsetof(Star, Star::brightness));
-    m_vertexArrayObject->enable(a_vertex1);
+    binding = m_vertexArrayObject->binding(1);
+    location = m_shaderProgram->getAttributeLocation("a_brightness");
+    binding->setAttribute(location);
+    binding->setBuffer(m_starBuffer, 0, sizeof(Star));
+    binding->setFormat(1, GL_FLOAT, GL_FALSE, offsetof(Star, brightness));
+    m_vertexArrayObject->enable(location);
 
-    auto binding2 = m_vertexArrayObject->binding(2);
-    auto a_vertex2 = m_shaderProgram->getAttributeLocation("a_size");
-    binding2->setAttribute(a_vertex2);
-    binding2->setBuffer(m_starBuffer, 0, sizeof(Star));
-    binding2->setFormat(1, GL_FLOAT, GL_FALSE, offsetof(Star, Star::size));
-    m_vertexArrayObject->enable(a_vertex2);
+    binding = m_vertexArrayObject->binding(2);
+    location = m_shaderProgram->getAttributeLocation("a_size");
+    binding->setAttribute(location);
+    binding->setBuffer(m_starBuffer, 0, sizeof(Star));
+    binding->setFormat(1, GL_FLOAT, GL_FALSE, offsetof(Star, size));
+    m_vertexArrayObject->enable(location);
 
 }
+
