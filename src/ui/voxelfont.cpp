@@ -4,8 +4,7 @@
 #include "voxel/voxelrenderer.h"
 #include "letter.h"
 
-VoxelFont::VoxelFont() :
-    m_renderer(nullptr),
+VoxelFont::VoxelFont():
     m_font3x5(),
     m_font5x7()
 {
@@ -42,13 +41,10 @@ void VoxelFont::loadChar(const std::string& filename, glm::vec3 offset, const ch
     (*map)[index] = move(element);
 }
 
-void VoxelFont::setRenderer(VoxelRenderer* renderer){
-    m_renderer = renderer;
-}
 
 void VoxelFont::drawString(std::string text, glm::vec3 position, FontSize size, float scale, FontAlign align){
-    assert(m_renderer);
-    assert(m_renderer->prepared());
+    assert(VoxelRenderer::instance()->prepared());
+
     std::transform(text.begin(), text.end(), text.begin(), ::toupper);
     std::map<char, std::unique_ptr<Letter>> *source;
     float width;
@@ -82,7 +78,7 @@ void VoxelFont::drawString(std::string text, glm::vec3 position, FontSize size, 
         if (cl != nullptr){
             cl->setPosition(position + glm::vec3(intoffset + width * i, 0, 0));
             cl->setScale(scale);
-            m_renderer->draw(cl);
+            VoxelRenderer::instance()->draw(cl);
         }
     }
 }

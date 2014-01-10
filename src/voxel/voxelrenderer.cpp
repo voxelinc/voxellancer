@@ -17,17 +17,14 @@
 #include "voxel/voxelcluster.h"
 
 
-VoxelRenderer::VoxelRenderer() :
-    m_texture(0),
-    m_shaderProgram(0),
-    m_vertexArrayObject(0),
-    m_vertexBuffer(0),
-    m_prepared(false)
-{
-	createAndSetupShaders();
-	createAndSetupGeometry();
-}
+VoxelRenderer* VoxelRenderer::s_instance = nullptr;
 
+VoxelRenderer* VoxelRenderer::instance() {
+    if(s_instance == nullptr) {
+        s_instance = new VoxelRenderer();
+    }
+    return s_instance;
+}
 
 void VoxelRenderer::prepareDraw(Camera * camera, bool withBorder)
 {
@@ -37,7 +34,10 @@ void VoxelRenderer::prepareDraw(Camera * camera, bool withBorder)
 	m_shaderProgram->setUniform("withBorder", (withBorder ? 1.0f : 0.0f));
 
     m_shaderProgram->use();
+
     glProvokingVertex(GL_LAST_VERTEX_CONVENTION);
+	glClear(GL_DEPTH_BUFFER_BIT);
+
     m_prepared = true;
 }
 
@@ -124,6 +124,17 @@ const glow::Array<glm::vec3> strip()
             , vertices[6], normals[4]
             , vertices[2], normals[4]
     };
+}
+
+VoxelRenderer::VoxelRenderer() :
+    m_texture(0),
+    m_shaderProgram(0),
+    m_vertexArrayObject(0),
+    m_vertexBuffer(0),
+    m_prepared(false)
+{
+	createAndSetupShaders();
+	createAndSetupGeometry();
 }
 
 void VoxelRenderer::createAndSetupGeometry()

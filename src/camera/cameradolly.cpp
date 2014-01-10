@@ -1,5 +1,8 @@
 #include "cameradolly.h"
 
+#include <glm/glm.hpp>
+#include <glm/gtx/quaternion.hpp>
+
 #include "camerafollowhelper.h"
 
 #include "game.h"
@@ -21,9 +24,11 @@ void CameraDolly::setFollowObject(WorldObject* m_followWorldObject) {
 }
 
 void CameraDolly::update(float deltaSec) {
-    if(m_followWorldObjectHandle->valid()) {
-        CameraFollowHelper followHelper(m_followWorldObjectHandle);
-        follow(followHelper.position(), m_followWorldObjectHandle->transform().orientation(), deltaSec);
+    WorldObject* followWorldObject = m_followWorldObjectHandle->get();
+
+    if(followWorldObject) {
+        CameraFollowHelper followHelper(followWorldObject);
+        follow(followHelper.position(), glm::eulerAngles(followWorldObject->transform().orientation()), deltaSec);
     }
     m_cameraHead.update(deltaSec);
 }

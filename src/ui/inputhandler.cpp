@@ -29,13 +29,11 @@
 */
 
 
-InputHandler::InputHandler(GLFWwindow *window, Player* player, Camera *camera) :
+InputHandler::InputHandler(GLFWwindow *window, Player* player) :
     m_window(window),
     m_player(player),
-    m_camera(camera),
     prop_deadzone("input.deadzone")
 {
-
     bumperLeftState = false;
     bumperRightState = false;
     glfwGetWindowSize(m_window, &m_windowWidth, &m_windowHeight);
@@ -55,9 +53,6 @@ InputHandler::~InputHandler(){
 
 void InputHandler::resizeEvent(const unsigned int width, const unsigned int height){
 	//glfwGetWindowSize(m_window, &m_windowWidth, &m_windowHeight);
-	m_windowWidth = width;
-	m_windowHeight = height;
-	m_camera->setViewport(glm::ivec2(m_windowWidth, m_windowHeight));
 	m_lastfocus = false; // through window resize everything becomes scrambled
 }
 
@@ -96,9 +91,6 @@ void InputHandler::update(float deltaSec) {
             }
             if (glfwGetKey(m_window, GLFW_KEY_E) == GLFW_PRESS){
                 m_player->rotate(glm::vec3(0, 0, -1));
-            }
-            if (glfwGetKey(m_window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS){
-                m_player->boost();
             }
             if (glfwGetKey(m_window, GLFW_KEY_E) == GLFW_PRESS){
                 m_player->rotate(glm::vec3(0, 0, -1));
@@ -261,10 +253,10 @@ void InputHandler::selectNextTarget(bool forward){
 
 glm::vec3 InputHandler::findTargetPoint(double x, double y){
     glm::vec4 pointEnd((x * 2 / m_windowWidth - 1), -1 * (y * 2 / m_windowHeight - 1), 1, 1); //get normalized device coords
-    pointEnd = glm::inverse(m_camera->viewProjection())*pointEnd; //find point on zfar
+    //pointEnd = glm::inverse(m_camera->viewProjection())*pointEnd; //find point on zfar
     glm::vec3 vec = glm::vec3(pointEnd); // no need for w component
     vec = glm::normalize(vec); // normalize
     vec *= m_player->playerShip()->minAimDistance(); // set aimdistance
-    vec += m_camera->position(); //adjust for camera translation
+    //vec += m_camera->position(); //adjust for camera translation
     return vec;
 }

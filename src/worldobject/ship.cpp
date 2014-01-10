@@ -1,11 +1,14 @@
 #include "ship.h"
 
+#include <algorithm>
+
 #include "hardpoint.h"
 #include "voxel/specialvoxels/hardpointvoxel.h"
 #include "worldobject/worldobjecthandle.h"
 #include "worldobject/weapons/gun.h"
 #include "worldobject/weapons/rocketlauncher.h"
 #include "ai/character.h"
+
 
 Ship::Ship() :
     WorldObject(CollisionFilterClass::Ship),
@@ -38,16 +41,8 @@ void Ship::addHardpointVoxel(HardpointVoxel* voxel){
     addVoxel(voxel);
 }
 
-void Ship::removeHardpoint(Hardpoint *hardpoint){
-    std::vector<Hardpoint*>::iterator iterator = m_hardpoints.begin();
-    while (iterator != m_hardpoints.end()){
-        if (*iterator == hardpoint){
-            delete *iterator;
-            m_hardpoints.erase(iterator);
-            break;
-        }
-        ++iterator;
-    }
+void Ship::removeHardpoint(Hardpoint *hardpoint) {
+    std::remove(m_hardpoints.begin(), m_hardpoints.end(), hardpoint);
 }
 
 void Ship::setTargetObject(WorldObject* target){
@@ -92,10 +87,11 @@ void Ship::accelerateAngular(const glm::vec3& axis) {
     m_physics.accelerateAngular(axis * prop_maxRotSpeed.get());
 }
 
-void Ship::setCharacter(Character* character){
+void Ship::setCharacter(Character* character) {
     m_character.reset(character);
 }
 
-Character* Ship::character(){
+Character* Ship::character() {
     return m_character.get();
 }
+

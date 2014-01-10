@@ -11,7 +11,7 @@ public:
     const glm::vec3& position() const;
     const glm::vec3& orientation() const;
 
-    void follow(const glm::vec3& targetPosition, glm::vec3& targetOrientation, float deltaSec);
+    void follow(const glm::vec3& targetPosition, const glm::vec3& targetOrientation, float deltaSec);
 
 
 protected:

@@ -16,7 +16,7 @@ const glm::vec3& Follower::orientation() const {
     return m_orientation;
 }
 
-void Follower::follow(const glm::vec3& targetPosition, glm::vec3& targetOrientation, float deltaSec) {
+void Follower::follow(const glm::vec3& targetPosition, const glm::vec3& targetOrientation, float deltaSec) {
 
 }
 
