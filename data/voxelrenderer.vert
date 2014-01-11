@@ -9,8 +9,8 @@ uniform mat4 viewProjection;
 uniform sampler1D positionSampler;
 uniform sampler1D colorSampler;
 
-layout(location = 0) in vec3 v_vertex;
-layout(location = 1) in vec3 v_normal;
+in vec3 v_vertex;
+in vec3 v_normal;
 
 flat out vec3 normal;
 out vec3 color;

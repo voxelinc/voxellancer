@@ -71,6 +71,8 @@ void VoxelRenderer::createAndSetupShaders() {
     glow::Shader * fragmentShader = glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/voxelrenderer.frag");
 
     m_shaderProgram = new glow::Program();
+    m_shaderProgram->bindAttributeLocation(0, "v_vertex");
+    m_shaderProgram->bindAttributeLocation(1, "v_normal");
     m_shaderProgram->attach(vertexShader, fragmentShader);
     m_shaderProgram->bindFragDataLocation(0, "fragColor");
 
