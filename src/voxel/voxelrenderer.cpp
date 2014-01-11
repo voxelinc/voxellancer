@@ -65,9 +65,7 @@ bool VoxelRenderer::prepared(){
     return m_prepared;
 }
 
-
-void VoxelRenderer::createAndSetupShaders()
-{
+void VoxelRenderer::createAndSetupShaders() {
     glow::Shader * vertexShader = glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/voxelrenderer.vert");
     glow::Shader * fragmentShader = glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/voxelrenderer.frag");
 
@@ -77,7 +75,6 @@ void VoxelRenderer::createAndSetupShaders()
 
     m_shaderProgram->getUniform<GLint>("positionSampler")->set(0);
     m_shaderProgram->getUniform<GLint>("colorSampler")->set(1);
-
 }
 
 const glow::Array<glm::vec3> strip()
@@ -136,8 +133,7 @@ VoxelRenderer::VoxelRenderer() :
 	createAndSetupGeometry();
 }
 
-void VoxelRenderer::createAndSetupGeometry()
-{
+void VoxelRenderer::createAndSetupGeometry() {
     m_vertexArrayObject = new glow::VertexArrayObject();
 
     m_vertexBuffer = new glow::Buffer(GL_ARRAY_BUFFER);
@@ -157,5 +153,5 @@ void VoxelRenderer::createAndSetupGeometry()
     binding1->setBuffer(m_vertexBuffer, 0, sizeof(glm::vec3) * 2);
     binding1->setFormat(3, GL_FLOAT, GL_TRUE, sizeof(glm::vec3));
     m_vertexArrayObject->enable(a_normal);
-
 }
+

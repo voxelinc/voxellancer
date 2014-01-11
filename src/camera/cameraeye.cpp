@@ -6,6 +6,8 @@
 
 #include "voxel/voxelrenderer.h"
 
+#include "voxeleffect/voxelparticleworld.h"
+
 #include "world/world.h"
 
 #include "game.h"
@@ -49,6 +51,7 @@ void CameraEye::draw() {
     }
 
     m_cameraHead->crossHair()->draw();
+    World::instance()->voxelParticleWorld().draw(m_camera);
 
     VoxelRenderer::instance()->afterDraw();
 

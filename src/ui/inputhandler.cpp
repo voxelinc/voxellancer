@@ -283,7 +283,7 @@ glm::vec3 InputHandler::findTargetPoint() {
         targetPoint = worldObject->transform().applyTo(glm::vec3(targetVoxel->gridCell()));
     }
     else {
-        targetPoint = ray.origin() + ray.direction() * 128.0f;
+        targetPoint = ray.origin() + ray.direction() * 512.0f;
     }
 
 

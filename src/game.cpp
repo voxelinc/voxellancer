@@ -31,6 +31,7 @@
 #include "world/world.h"
 #include "world/god.h"
 #include "skybox.h"
+#include "voxeleffect/voxelparticleworld.h"
 #include "voxel/voxelrenderer.h"
 #include "worldobject/ship.h"
 #include "collision/collisiondetector.h"
@@ -194,8 +195,6 @@ void Game::draw() {
 	glClear(GL_DEPTH_BUFFER_BIT);
 
     m_cameraDolly.draw();
-
-//	m_hud->draw();
 
     m_hd3000dummy->drawIfActive();
 }

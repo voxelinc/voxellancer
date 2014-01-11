@@ -10,7 +10,7 @@
 
 class CrossHairElement: public VoxelCluster {
 public:
-    CrossHairElement(): VoxelCluster(0.1f) {};
+    CrossHairElement(): VoxelCluster(0.05f) {};
 
     glm::vec3 relativePosition;
     glm::quat relativeOrientation;
@@ -24,7 +24,6 @@ static CrossHairElement* newStick() {
     stick->addVoxel(new Voxel(glm::ivec3(3, 0, 0), 0xFFAA00));
     stick->addVoxel(new Voxel(glm::ivec3(4, 0, 0), 0xFFAA00));
     stick->addVoxel(new Voxel(glm::ivec3(5, 0, 0), 0xFFAA00));
-    stick->addVoxel(new Voxel(glm::ivec3(6, 0, 0), 0xFFAA00));
     return stick;
 }
 
@@ -37,18 +36,21 @@ static CrossHairElement* newDot() {
 CrossHairVoxels::CrossHairVoxels(CrossHair* crossHair):
     m_crossHair(crossHair)
 {
+    float baseX = 0.5;
+    float baseY = 0.2;
+
     CrossHairElement *lu = newStick();
     lu->relativeOrientation = glm::angleAxis(150.0f, glm::vec3(0.0f, 0.0f, 1.0f));
-    lu->relativePosition = glm::vec3(-2.0f, 0.7f, 0.0f);
+    lu->relativePosition = glm::vec3(-baseX, baseY, 0.0f);
     CrossHairElement *lb = newStick();
     lb->relativeOrientation = glm::angleAxis(210.0f, glm::vec3(0.0f, 0.0f, 1.0f));
-    lb->relativePosition = glm::vec3(-2.0f, -0.7f, 0.0f);
+    lb->relativePosition = glm::vec3(-baseX, -baseY, 0.0f);
     CrossHairElement *ru = newStick();
     ru->relativeOrientation = glm::angleAxis(330.0f, glm::vec3(0.0f, 0.0f, 1.0f));
-    ru->relativePosition = glm::vec3(2.0f, -0.7f, 0.0f);
+    ru->relativePosition = glm::vec3(baseX, -baseY, 0.0f);
     CrossHairElement *rb = newStick();
     rb->relativeOrientation = glm::angleAxis(30.0f, glm::vec3(0.0f, 0.0f, 1.0f));
-    rb->relativePosition = glm::vec3(2.0f, 0.7f, 0.0f);
+    rb->relativePosition = glm::vec3(baseX, baseY, 0.0f);
 
     CrossHairElement *dot = newDot();
     dot->relativePosition = glm::vec3(0.0f, 0.0f, -0.0f);
@@ -68,7 +70,7 @@ CrossHairVoxels::~CrossHairVoxels() {
 
 void CrossHairVoxels::update(float deltaSec) {
     for(CrossHairElement* crossHairElement : m_crossHairElements) {
-        glm::vec3 offset = m_crossHair->orientation() * (glm::vec3(0,0,-24)  + crossHairElement->relativePosition);
+        glm::vec3 offset = m_crossHair->orientation() * (glm::vec3(0,0,-5)  + crossHairElement->relativePosition);
 
         WorldTransform transform(crossHairElement->transform());
         transform.setPosition(m_crossHair->position() + offset);

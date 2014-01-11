@@ -4,7 +4,7 @@
 
 
 CrossHair::CrossHair(CameraHead* cameraHead):
-    InertiaFollower(25.0f, 25.0f),
+    InertiaFollower(45.0f, 45.0f),
     m_cameraHead(cameraHead),
     m_crossHairVoxels(this)
 {
