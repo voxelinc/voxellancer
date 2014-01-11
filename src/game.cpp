@@ -40,6 +40,7 @@
 #include "ai/characters/dummycharacter.h"
 #include "ai/elevatedtasks/dummyelevatedtask.h"
 #include "ai/basictask.h"
+#include "voxeleffect/voxelmesh.h"
 
 
 class Ship;
@@ -54,7 +55,7 @@ Game::Game(GLFWwindow *window) :
 }
 
 Game::~Game() {
-
+    VoxelMesh::tearDown();
 }
 
 void Game::reloadConfig() {

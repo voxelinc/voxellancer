@@ -175,6 +175,7 @@ int main(void)
 		std::cout << "Hit enter to quit" << std::endl;
 		std::cin.ignore(1, '\n');
 	}
+
     return 0;
 }
 

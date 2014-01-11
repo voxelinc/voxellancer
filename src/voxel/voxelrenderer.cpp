@@ -15,13 +15,13 @@
 #include "voxel/voxelrenderer.h"
 #include "voxel/voxelcluster.h"
 #include "camera.h"
+#include "voxeleffect/voxelmesh.h"
 
 
 VoxelRenderer::VoxelRenderer() :
     m_texture(0),
     m_shaderProgram(0),
     m_vertexArrayObject(0),
-    m_vertexBuffer(0),
     m_prepared(false)
 {
 	createAndSetupShaders();
@@ -126,22 +126,6 @@ const glow::Array<glm::vec3> strip()
 void VoxelRenderer::createAndSetupGeometry() {
     m_vertexArrayObject = new glow::VertexArrayObject();
 
-    m_vertexBuffer = new glow::Buffer(GL_ARRAY_BUFFER);
-    m_vertexBuffer->setData(strip());
-
-    auto binding0 = m_vertexArrayObject->binding(0);
-    auto a_vertex = m_shaderProgram->getAttributeLocation("a_vertex");
-
-    binding0->setAttribute(a_vertex);
-    binding0->setBuffer(m_vertexBuffer, 0, sizeof(glm::vec3) * 2);
-    binding0->setFormat(3, GL_FLOAT, GL_FALSE, 0);
-    m_vertexArrayObject->enable(a_vertex);
-
-    auto binding1 = m_vertexArrayObject->binding(1);
-    auto a_normal = m_shaderProgram->getAttributeLocation("a_normal");
-    binding1->setAttribute(a_normal);
-    binding1->setBuffer(m_vertexBuffer, 0, sizeof(glm::vec3) * 2);
-    binding1->setFormat(3, GL_FLOAT, GL_TRUE, sizeof(glm::vec3));
-    m_vertexArrayObject->enable(a_normal);
+    VoxelMesh::bindTo(m_shaderProgram, m_vertexArrayObject);
 }
 

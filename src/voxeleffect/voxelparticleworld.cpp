@@ -66,16 +66,13 @@ void VoxelParticleWorld::draw(Camera& camera) {
 }
 
 void VoxelParticleWorld::initialize() {
-    m_program = std::unique_ptr<glow::Program>(new glow::Program);
-    m_vertexArrayObject = std::unique_ptr<glow::VertexArrayObject>(new glow::VertexArrayObject);
+    m_program = new glow::Program;
+    m_vertexArrayObject = new glow::VertexArrayObject;
 
-    m_vertexBuffer = std::unique_ptr<glow::Buffer>(new glow::Buffer(GL_ARRAY_BUFFER));
-    m_normalBuffer = std::unique_ptr<glow::Buffer>(new glow::Buffer(GL_ARRAY_BUFFER));
-
-    m_positionBuffer = std::unique_ptr<glow::Buffer>(new glow::Buffer(GL_ARRAY_BUFFER));
-    m_orientationBuffer = std::unique_ptr<glow::Buffer>(new glow::Buffer(GL_ARRAY_BUFFER));
-    m_colorBuffer = std::unique_ptr<glow::Buffer>(new glow::Buffer(GL_ARRAY_BUFFER));
-    m_scaleBuffer = std::unique_ptr<glow::Buffer>(new glow::Buffer(GL_ARRAY_BUFFER));
+    m_positionBuffer = new glow::Buffer(GL_ARRAY_BUFFER);
+    m_orientationBuffer = new glow::Buffer(GL_ARRAY_BUFFER);
+    m_colorBuffer = new glow::Buffer(GL_ARRAY_BUFFER);
+    m_scaleBuffer = new glow::Buffer(GL_ARRAY_BUFFER);
 
     loadProgram();
     setupVertexAttributes();
@@ -92,18 +89,14 @@ void VoxelParticleWorld::loadProgram() {
 }
 
 void VoxelParticleWorld::setupVertexAttributes() {
-    m_vertexBuffer->setData(VoxelMesh::vertices());
-    m_normalBuffer->setData(VoxelMesh::normals());
-
-    setupVertexAttribute(m_vertexBuffer, "v_vertex", 3, GL_FLOAT, GL_TRUE, 0);
-    setupVertexAttribute(m_normalBuffer, "v_normal", 3, GL_FLOAT, GL_FALSE, 1);
+    VoxelMesh::bindTo(m_program, m_vertexArrayObject);
     setupVertexAttribute(m_positionBuffer, "v_position", 3, GL_FLOAT, GL_FALSE, 2);
     setupVertexAttribute(m_orientationBuffer, "v_orientation", 4, GL_FLOAT, GL_FALSE, 3);
     setupVertexAttribute(m_scaleBuffer, "v_scale", 1, GL_FLOAT, GL_FALSE, 4);
     setupVertexAttribute(m_colorBuffer, "v_color", 3, GL_FLOAT, GL_FALSE, 5);
 }
 
-void VoxelParticleWorld::setupVertexAttribute(std::unique_ptr<glow::Buffer>& buffer, const std::string& name, int numPerVertex, GLenum type, GLboolean normalised, int bindingNum) {
+void VoxelParticleWorld::setupVertexAttribute(glow::ref_ptr<glow::Buffer>& buffer, const std::string& name, int numPerVertex, GLenum type, GLboolean normalised, int bindingNum) {
     glow::VertexAttributeBinding* binding = m_vertexArrayObject->binding(bindingNum);
     GLint location = m_program->getAttributeLocation(name);
 
