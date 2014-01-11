@@ -83,6 +83,6 @@ void VoxelRenderer::createAndSetupShaders() {
 void VoxelRenderer::createAndSetupGeometry() {
     m_vertexArrayObject = new glow::VertexArrayObject();
 
-    VoxelMesh::bindTo(m_shaderProgram, m_vertexArrayObject);
+    VoxelMesh::bindTo(m_shaderProgram, m_vertexArrayObject, 0);
 }
 

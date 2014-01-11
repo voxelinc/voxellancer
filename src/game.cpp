@@ -32,6 +32,7 @@
 #include "world/god.h"
 #include "skybox.h"
 #include "voxeleffect/voxelparticleworld.h"
+#include "voxeleffect/voxelmesh.h"
 #include "voxel/voxelrenderer.h"
 #include "worldobject/ship.h"
 #include "collision/collisiondetector.h"
@@ -40,7 +41,6 @@
 #include "ai/characters/dummycharacter.h"
 #include "ai/elevatedtasks/dummyelevatedtask.h"
 #include "ai/basictask.h"
-#include "voxeleffect/voxelmesh.h"
 
 
 class Ship;
@@ -81,7 +81,7 @@ void Game::initialize() {
 	glow::debug("Create Voxel");
     m_voxelRenderer = std::unique_ptr<VoxelRenderer>(new VoxelRenderer);
 
-    
+
     Ship *normandy = new Ship();
     ClusterCache::instance()->fillObject(normandy, "data/voxelcluster/normandy.csv");
 	normandy->setPosition(glm::vec3(0, 0, -100));
@@ -91,8 +91,8 @@ void Game::initialize() {
     m_world->god().scheduleSpawn(normandy);
     // TODO: use these dummies to test BasicTasks
     normandy->setCharacter(
-        new DummyCharacter(*normandy, 
-        new DummyElevatedTask(*normandy, 
+        new DummyCharacter(*normandy,
+        new DummyElevatedTask(*normandy,
         new BasicTask(*normandy))));
 
     Ship *testCluster = new Ship();
