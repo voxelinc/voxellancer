@@ -117,7 +117,7 @@ void VoxelParticleWorld::setupVertexAttribute(size_t offset, const std::string& 
 void VoxelParticleWorld::setBufferSize(int size) {
     glow::Array<ParticleData> particleData;
     particleData.reserve(size);
-    m_particleBuffer->setData(size, particleData.rawData());
+    m_particleBuffer->setData(size * sizeof(ParticleData), particleData.rawData());
 }
 
 void VoxelParticleWorld::updateBuffers() {
