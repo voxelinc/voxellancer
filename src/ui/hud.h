@@ -52,7 +52,7 @@ protected:
     std::vector<double> m_lastlineTime;
 
     Property<float> prop_distance, prop_moveMultiplier, prop_inertiaMove, prop_inertiaRotate, prop_inertiaRate,
-        prop_arrowMaxdistance, prop_arrowRadius;
+        prop_arrowMaxdistance, prop_arrowRadius, prop_lineTime;
     Property<bool> prop_showFramerate;
     Property<int> prop_lineBacklog;
 

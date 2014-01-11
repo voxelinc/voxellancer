@@ -33,7 +33,8 @@ HUD::HUD(Player* player) :
     prop_arrowMaxdistance("hud.arrowMaxdistance"),
     prop_arrowRadius("hud.arrowRadius"),
     prop_showFramerate("hud.showFramerate"),
-    prop_lineBacklog("hud.lineBacklog")
+    prop_lineBacklog("hud.lineBacklog"),
+    prop_lineTime("hud.lineTime")
 {
     assert(player != nullptr);
     m_font->setRenderer(m_voxelRenderer.get());
@@ -116,7 +117,7 @@ void HUD::update(float deltaSec){
     else m_frameRate = m_frameRate * 0.8f + thisFrame * 0.2f;
 
     // lines backlog
-    if (m_lastlineTime[0] + 3.5f < glfwGetTime()){
+    if (m_lastlineTime[0] + prop_lineTime < glfwGetTime()){
         //line is obsolete, move up
         for (int i = 0; i < prop_lineBacklog - 1; i++){
             m_lastline[i] = m_lastline[i + 1];
