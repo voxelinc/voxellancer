@@ -22,8 +22,10 @@ protected:
     Engine* m_engine;
     VoxelExplosionGenerator m_generator;
     float m_frequency;
-    float m_cooldown;
+    float m_spawnOffset;
 
+    float m_deltaSecLeft;
+    glm::vec3 m_lastPosition;
 
     Property<float> prop_lifetime;
 };

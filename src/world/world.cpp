@@ -37,11 +37,13 @@ std::list<WorldObject*> &World::worldObjects() {
 void World::update(float deltaSecs) {
     m_deltaSec = deltaSecs;
 
+    m_worldLogic->update(deltaSecs);
+
     for (WorldObject *worldObject : m_worldObjects) {
         worldObject->update(deltaSecs);
     }
 
-    m_worldLogic->update(deltaSecs);
+    m_god->spawn(); //TODO: this is to spawn the particles. remove when particle engine is switched
 }
 
 float World::deltaSec() const {
