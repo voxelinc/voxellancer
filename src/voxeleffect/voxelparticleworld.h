@@ -35,12 +35,13 @@ protected:
 
 
     bool m_initialized;
-
+    int m_bufferSize;
 
     void initialize();
     void loadProgram();
     void setupVertexAttributes();
     void setupVertexAttribute(size_t offset, const std::string& name, int numPerVertex, GLenum type, GLboolean normalised, int binding);
+    void setBufferSize(int size);
     void updateBuffers();
     bool intersects(VoxelParticle* voxelParticle);
 };

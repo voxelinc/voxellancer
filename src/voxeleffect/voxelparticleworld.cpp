@@ -13,6 +13,7 @@
 
 #include "voxelparticle.h"
 #include "voxelmesh.h"
+#include "glowutils/MathMacros.h"
 
 
 struct ParticleData {
@@ -23,7 +24,8 @@ struct ParticleData {
 };
 
 VoxelParticleWorld::VoxelParticleWorld():
-    m_initialized(false)
+    m_initialized(false),
+    m_bufferSize(1024)
 {
 
 }
@@ -98,6 +100,7 @@ void VoxelParticleWorld::setupVertexAttributes() {
     setupVertexAttribute(offsetof(ParticleData, orientation), "v_orientation", 4, GL_FLOAT, GL_FALSE, 3);
     setupVertexAttribute(offsetof(ParticleData, scale), "v_scale", 1, GL_FLOAT, GL_FALSE, 4);
     setupVertexAttribute(offsetof(ParticleData, color), "v_color", 3, GL_FLOAT, GL_FALSE, 5);
+    setBufferSize(m_bufferSize);
 }
 
 void VoxelParticleWorld::setupVertexAttribute(size_t offset, const std::string& name, int numPerVertex, GLenum type, GLboolean normalised, int bindingNum) {
@@ -111,19 +114,29 @@ void VoxelParticleWorld::setupVertexAttribute(size_t offset, const std::string& 
     m_vertexArrayObject->enable(location);
 }
 
-void VoxelParticleWorld::updateBuffers() {
+void VoxelParticleWorld::setBufferSize(int size) {
     glow::Array<ParticleData> particleData;
-    particleData.reserve(m_voxelParticles.size());
+    particleData.reserve(size);
+    m_particleBuffer->setData(size, particleData.rawData());
+}
 
+void VoxelParticleWorld::updateBuffers() {
+    if (m_voxelParticles.size() > m_bufferSize) {
+        m_bufferSize = nextPowerOf2(m_voxelParticles.size());
+        setBufferSize(m_bufferSize);
+    }
+
+    ParticleData* data = (ParticleData*) m_particleBuffer->map(GL_READ_WRITE);
+    int i = 0;
     for (VoxelParticle* voxelParticle : m_voxelParticles) {
-        particleData.push_back(ParticleData { 
+        data[i++] = ParticleData {
             voxelParticle->worldTransform().position(),
             voxelParticle->worldTransform().orientation(),
             voxelParticle->worldTransform().scale(),
             voxelParticle->colorVec()
-        });
+        };
     }
-    m_particleBuffer->setData(particleData);
+    m_particleBuffer->unmap();
 }
 
 bool VoxelParticleWorld::intersects(VoxelParticle* voxelParticle) {
