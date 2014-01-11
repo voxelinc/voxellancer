@@ -21,78 +21,26 @@ static const glm::vec3 front(0, 0, -1);
 static const glm::vec3 back(0, 0, 1);
 static const glm::vec3 dummy(0, 0, 0) ;
 
-glow::Array<glm::vec3> VoxelMesh::s_vertices
-{
-    rub,
-    lub,
-    rlb,
-    llb,
-    llf,
-    lub,
-    luf,
-    rub,
-    ruf,
-    rlb,
-    rlf,
-    llf,
-    ruf,
-    luf
-};
-
-glow::Array<glm::vec3> VoxelMesh::s_normals
-{
-    dummy, dummy,
-    back, back,
-    bottom,
-    left, left,
-    top, top,
-    right, right,
-    bottom,
-    front, front
-};
 
 glow::ref_ptr<glow::Buffer> VoxelMesh::s_vertexBuffer = nullptr;
 
-
 void VoxelMesh::initBuffer() {
-    glm::vec3 vertices[8]
-    {
-        glm::vec3(-.5f, -.5f, -.5f)
-        , glm::vec3(-.5f, -.5f, .5f)
-        , glm::vec3(-.5f, .5f, -.5f)
-        , glm::vec3(-.5f, .5f, .5f)
-        , glm::vec3(.5f, -.5f, -.5f)
-        , glm::vec3(.5f, -.5f, .5f)
-        , glm::vec3(.5f, .5f, -.5f)
-        , glm::vec3(.5f, .5f, .5f)
-    };
-
-    glm::vec3 normals[7]
-    {
-        glm::vec3(-1, 0, 0)
-        , glm::vec3(1, 0, 0)
-        , glm::vec3(0, -1, 0)
-        , glm::vec3(0, 1, 0)
-        , glm::vec3(0, 0, -1)
-        , glm::vec3(0, 0, 1)
-        , glm::vec3(0, 0, 0)  // dummy
-    };
 
     glow::Array<glm::vec3> arr{
-        vertices[7], normals[6]
-        , vertices[3], normals[6]
-        , vertices[5], normals[5]
-        , vertices[1], normals[5]
-        , vertices[0], normals[2]
-        , vertices[3], normals[0]
-        , vertices[2], normals[0]
-        , vertices[7], normals[3]
-        , vertices[6], normals[3]
-        , vertices[5], normals[1]
-        , vertices[4], normals[1]
-        , vertices[0], normals[2]
-        , vertices[6], normals[4]
-        , vertices[2], normals[4]
+          rub, dummy
+        , lub, dummy
+        , rlb, back
+        , llb, back
+        , llf, bottom
+        , lub, left
+        , luf, left
+        , rub, top
+        , ruf, top
+        , rlb, right
+        , rlf, right
+        , llf, bottom
+        , ruf, front
+        , luf, front
     };
 
     s_vertexBuffer = new glow::Buffer(GL_ARRAY_BUFFER);

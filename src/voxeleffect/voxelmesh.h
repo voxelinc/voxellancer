@@ -23,8 +23,6 @@ protected:
     static glow::ref_ptr<glow::Buffer> vertexBuffer();
     static void initBuffer();
 
-    static glow::Array<glm::vec3> s_vertices;
-    static glow::Array<glm::vec3> s_normals;
     static glow::ref_ptr<glow::Buffer> s_vertexBuffer;
 
 };

@@ -12,6 +12,7 @@
 
 
 class VoxelParticle;
+struct ParticleData;
 
 class VoxelParticleWorld {
 public:
@@ -30,10 +31,8 @@ protected:
     glow::ref_ptr<glow::Program> m_program;
     glow::ref_ptr<glow::VertexArrayObject> m_vertexArrayObject;
 
-    glow::ref_ptr<glow::Buffer> m_positionBuffer;
-    glow::ref_ptr<glow::Buffer> m_orientationBuffer;
-    glow::ref_ptr<glow::Buffer> m_colorBuffer;
-    glow::ref_ptr<glow::Buffer> m_scaleBuffer;
+    glow::ref_ptr<glow::Buffer> m_particleBuffer;
+
 
     bool m_initialized;
 
@@ -41,7 +40,7 @@ protected:
     void initialize();
     void loadProgram();
     void setupVertexAttributes();
-    void setupVertexAttribute(glow::ref_ptr<glow::Buffer>& buffer, const std::string& name, int numPerVertex, GLenum type, GLboolean normalised, int binding);
+    void setupVertexAttribute(size_t offset, const std::string& name, int numPerVertex, GLenum type, GLboolean normalised, int binding);
     void updateBuffers();
     bool intersects(VoxelParticle* voxelParticle);
 };
