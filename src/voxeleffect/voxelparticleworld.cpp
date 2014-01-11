@@ -59,6 +59,9 @@ void VoxelParticleWorld::draw(Camera& camera) {
     if(!m_initialized) {
         initialize();
     }
+    if (m_voxelParticles.size() == 0) {
+        return;
+    }
 
     updateBuffers();
 
@@ -124,7 +127,7 @@ void VoxelParticleWorld::updateBuffers() {
         setBufferSize(m_bufferSize);
     }
 
-    ParticleData* data = (ParticleData*) m_particleBuffer->map(GL_READ_WRITE);
+    ParticleData* data = (ParticleData*)m_particleBuffer->mapRange(0, m_voxelParticles.size() * sizeof(ParticleData), GL_MAP_WRITE_BIT);
     int i = 0;
     for (VoxelParticle* voxelParticle : m_voxelParticles) {
         data[i++] = ParticleData {
