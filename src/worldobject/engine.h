@@ -2,27 +2,26 @@
 
 #include "voxel/voxelcluster.h"
 #include "resource/clustercache.h"
-#include "voxeleffect/voxelexplosiongenerator.h"
+#include "voxeleffect/enginetrailgenerator.h"
 
-class EnginedWorldObject;
+class Ship;
 class EngineVoxel;
 
 class Engine {
 public:
-    Engine(EnginedWorldObject* worldObject, EngineVoxel* voxel);
+    Engine(Ship* Ship, EngineVoxel* voxel);
     ~Engine();
 
     glm::vec3 position(); // in world coordinates
-    EnginedWorldObject* worldObject();
+    Ship* ship();
 
     void update(float deltaSec);
 
     void voxelRemoved();
 
 private:
-    EnginedWorldObject* m_worldObject;
+    Ship* m_ship;
     glm::vec3 m_positionInGrid;
-    VoxelExplosionGenerator m_generator;
-    Property<float> prop_cooldownTime;
+    EngineTrailGenerator m_generator;
     float m_cooldown;
 };
