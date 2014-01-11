@@ -78,51 +78,6 @@ void VoxelRenderer::createAndSetupShaders() {
     m_shaderProgram->getUniform<GLint>("colorSampler")->set(1);
 }
 
-const glow::Array<glm::vec3> strip()
-{
-    glm::vec3 vertices[8]
-    {
-        glm::vec3(-.5f, -.5f, -.5f)
-            , glm::vec3(-.5f, -.5f, .5f)
-            , glm::vec3(-.5f, .5f, -.5f)
-            , glm::vec3(-.5f, .5f, .5f)
-            , glm::vec3(.5f, -.5f, -.5f)
-            , glm::vec3(.5f, -.5f, .5f)
-            , glm::vec3(.5f, .5f, -.5f)
-            , glm::vec3(.5f, .5f, .5f)
-    };
-
-    glm::vec3 normals[7]
-    {
-        glm::vec3(-1, 0, 0)
-            , glm::vec3(1, 0, 0)
-            , glm::vec3(0, -1, 0)
-            , glm::vec3(0, 1, 0)
-            , glm::vec3(0, 0, -1)
-            , glm::vec3(0, 0, 1)
-            , glm::vec3(0, 0, 0)  // dummy
-    };
-
-    // use an interleaved array
-    return glow::Array<glm::vec3>
-    {
-        vertices[7], normals[6]
-            , vertices[3], normals[6]
-            , vertices[5], normals[5]
-            , vertices[1], normals[5]
-            , vertices[0], normals[2]
-            , vertices[3], normals[0]
-            , vertices[2], normals[0]
-            , vertices[7], normals[3]
-            , vertices[6], normals[3]
-            , vertices[5], normals[1]
-            , vertices[4], normals[1]
-            , vertices[0], normals[2]
-            , vertices[6], normals[4]
-            , vertices[2], normals[4]
-    };
-}
-
 void VoxelRenderer::createAndSetupGeometry() {
     m_vertexArrayObject = new glow::VertexArrayObject();
 
