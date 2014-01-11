@@ -27,20 +27,20 @@ glow::ref_ptr<glow::Buffer> VoxelMesh::s_vertexBuffer = nullptr;
 void VoxelMesh::initBuffer() {
 
     glow::Array<glm::vec3> array{
-          rub, dummy,
-          lub, dummy,
-          rlb, back,
-          llb, back,
-          llf, bottom,
-          lub, left,
-          luf, left,
-          rub, top,
-          ruf, top,
-          rlb, right,
-          rlf, right,
-          llf, bottom,
-          ruf, front,
-          luf, front
+        rub, dummy,
+        lub, dummy,
+        rlb, back,
+        llb, back,
+        llf, bottom,
+        lub, left,
+        luf, left,
+        rub, top,
+        ruf, top,
+        rlb, right,
+        rlf, right,
+        llf, bottom,
+        ruf, front,
+        luf, front
     };
 
     s_vertexBuffer = new glow::Buffer(GL_ARRAY_BUFFER);

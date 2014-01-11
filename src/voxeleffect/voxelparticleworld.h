@@ -26,6 +26,8 @@ public:
 protected:
     std::list<VoxelParticle*> m_voxelParticles;
 
+    int m_bufferSize;
+
     glow::ref_ptr<glow::Program> m_program;
     glow::ref_ptr<glow::VertexArrayObject> m_vertexArrayObject;
 
@@ -38,6 +40,7 @@ protected:
     void loadProgram();
     void setupVertexAttributes();
     void setupVertexAttribute(GLint offset, const std::string& name, int numPerVertex, GLenum type, GLboolean normalised, int bindingNum);
+    void setBufferSize(int size);
     void updateBuffers();
     bool intersects(VoxelParticle* voxelParticle);
 };
