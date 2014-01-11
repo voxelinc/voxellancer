@@ -25,9 +25,15 @@ public:
     virtual void shootAtPoint(Hardpoint* source, glm::vec3 target);
     virtual void shootAtObject(Hardpoint* source, WorldObject* target);
 
-    virtual void update(float deltaSec) = 0;
+    virtual void update(float deltaSec);
 
-    virtual float aimRange() = 0;
+    bool canFire();
+    void fired();
+
+    float coolDownTime() const;
+    void setCoolDownTime(float coolDownTime);
+
+    virtual float bulletRange() = 0;
 
     WorldObject *worldObject();
     void setWorldObject(WorldObject* worldObject);
@@ -35,4 +41,7 @@ public:
 
 protected:
     WorldObject* m_worldObject;
+
+    float m_coolDown;
+    float m_coolDownTime;
 };

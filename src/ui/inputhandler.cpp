@@ -179,7 +179,7 @@ void InputHandler::update(float deltaSec) {
             float angX = 0;
             float angY = 0;
 
-            if (m_mouseControl || glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS){
+            if (1 || m_mouseControl || glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS){
                 glm::vec3 rot;
                 x = m_windowWidth / 2 - (int)floor(x);
                 y = m_windowHeight / 2 - (int)floor(y);
@@ -267,7 +267,7 @@ void InputHandler::selectNextTarget(bool forward){
 }
 
 glm::vec3 InputHandler::findTargetPoint() {
-    Ray ray (
+    Ray ray(
         m_crossHair.position(),
         m_crossHair.orientation() * glm::vec3(0, 0, -1)
     );
