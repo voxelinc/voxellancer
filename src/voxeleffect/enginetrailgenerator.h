@@ -19,14 +19,16 @@ public:
     void update(float deltaSec);
 
 protected:
+    glm::vec3 calculateSpawnPosition();
+
     Engine* m_engine;
     VoxelExplosionGenerator m_generator;
-    float m_frequency;
     float m_spawnOffset;
 
-    float m_deltaSecLeft;
     glm::vec3 m_lastPosition;
+    bool m_lastValid;
+    double m_lastSpawn;
 
-    Property<float> prop_lifetime;
+    Property<float> prop_lifetime, prop_stepDistance, prop_idleTime;
 };
 

@@ -12,7 +12,6 @@ Engine::Engine(Ship* ship, EngineVoxel* voxel) :
     m_positionInGrid = glm::vec3(voxel->gridCell());
 
     m_generator.setEngine(this);
-    m_generator.setFrequency(Property<float>("vfx.engineTrailFrequency"));
 }
 
 Engine::~Engine() {
