@@ -43,6 +43,7 @@ void Ship::addHardpointVoxel(HardpointVoxel* voxel){
 
 void Ship::removeHardpoint(Hardpoint *hardpoint) {
     std::remove(m_hardpoints.begin(), m_hardpoints.end(), hardpoint);
+    delete hardpoint;
 }
 
 void Ship::setTargetObject(WorldObject* target){
