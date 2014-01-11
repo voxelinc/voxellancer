@@ -36,7 +36,6 @@ void VoxelRenderer::prepareDraw(Camera * camera, bool withBorder)
     m_shaderProgram->use();
 
     glProvokingVertex(GL_LAST_VERTEX_CONVENTION);
-	glClear(GL_DEPTH_BUFFER_BIT);
 
     m_prepared = true;
 }

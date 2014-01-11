@@ -17,16 +17,16 @@
 #include "voxelgridcmp.h"
 
 
-class WorldTreeGeode;
-class WorldTree;
-
 class VoxelCluster
 {
 public:
 	VoxelCluster(float scale);
     virtual ~VoxelCluster();
 
-    const WorldTransform& transform();
+    WorldTransform& transform();
+    const WorldTransform& transform() const;
+    void setTransform(const WorldTransform& transform);
+
 
     const IAABB& minimalGridAABB();
 

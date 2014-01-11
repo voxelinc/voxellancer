@@ -9,7 +9,7 @@
 
 
 CameraDolly::CameraDolly(Game* game):
-    InertiaFollower(10.0f, 0.5f),
+    InertiaFollower(10.0f, 10.0f),
     m_game(game),
     m_cameraHead(this),
     m_followWorldObjectHandle(WorldObjectHandle::nullHandle())
@@ -18,6 +18,10 @@ CameraDolly::CameraDolly(Game* game):
 
 Game* CameraDolly::game() {
     return m_game;
+}
+
+CameraHead& CameraDolly::cameraHead() {
+    return m_cameraHead;
 }
 
 void CameraDolly::setFollowObject(WorldObject* m_followWorldObject) {

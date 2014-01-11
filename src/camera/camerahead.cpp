@@ -15,6 +15,14 @@ CameraDolly* CameraHead::cameraDolly() {
     return m_cameraDolly;
 }
 
+CrossHair* CameraHead::crossHair() {
+    return m_crossHair;
+}
+
+void CameraHead::setCrossHair(CrossHair* crossHair) {
+    m_crossHair = crossHair;
+}
+
 const glm::quat& CameraHead::relativeOrientation() const {
     return m_relativeOrientation;
 }
@@ -24,7 +32,7 @@ glm::vec3 CameraHead::position() const {
 }
 
 glm::quat CameraHead::orientation() const {
-    return m_cameraDolly->orientation() + m_relativeOrientation;
+    return m_cameraDolly->orientation() * m_relativeOrientation;
 }
 
 void CameraHead::setupMonoView() {

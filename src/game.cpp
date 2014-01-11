@@ -46,7 +46,7 @@ class Ship;
 Game::Game(GLFWwindow *window) :
     m_window(window),
     m_cameraDolly(this),
-    m_inputHandler(window, &m_player)
+    m_inputHandler(window, &m_player, &m_cameraDolly)
 {
     reloadConfig();
 }
@@ -191,6 +191,7 @@ void Game::draw() {
 	glFrontFace(GL_CCW);
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
+	glClear(GL_DEPTH_BUFFER_BIT);
 
     m_cameraDolly.draw();
 

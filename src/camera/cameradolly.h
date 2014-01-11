@@ -18,6 +18,8 @@ public:
 
     Game* game();
 
+    CameraHead& cameraHead();
+
     void setFollowObject(WorldObject* m_followWorldObject);
 
     void update(float deltaSec);

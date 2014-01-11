@@ -48,6 +48,8 @@ void CameraEye::draw() {
         VoxelRenderer::instance()->draw(worldObject);
     }
 
+    m_cameraHead->crossHair()->draw();
+
     VoxelRenderer::instance()->afterDraw();
 
  //   m_fbo.unbind();

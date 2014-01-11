@@ -17,7 +17,7 @@ Camera::~Camera(){
 }
 
 void Camera::viewDirty(){
-	m_view = glm::mat4_cast(-m_orientation) * glm::translate(-m_position);
+	m_view = glm::mat4_cast(glm::inverse(m_orientation)) * glm::translate(-m_position);
 	m_viewProjection = m_projection * m_view;
 }
 

@@ -8,12 +8,16 @@
 
 
 class CameraDolly;
+class CrossHair;
 
 class CameraHead {
 public:
     CameraHead(CameraDolly* cameraDolly);
 
     CameraDolly* cameraDolly();
+
+    CrossHair* crossHair();
+    void setCrossHair(CrossHair* crossHair);
 
     const glm::quat& relativeOrientation() const;
 
@@ -29,6 +33,8 @@ public:
 
 protected:
     CameraDolly* m_cameraDolly;
+
+    CrossHair* m_crossHair;
 
     glm::quat m_relativeOrientation;
 
