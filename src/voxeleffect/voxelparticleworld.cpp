@@ -108,7 +108,7 @@ void VoxelParticleWorld::setupVertexAttribute(std::unique_ptr<glow::Buffer>& buf
     GLint location = m_program->getAttributeLocation(name);
 
     binding->setAttribute(location);
-    binding->setBuffer(buffer.get(), 0, 0);
+    binding->setBuffer(buffer.get(), 0, sizeof(GLfloat) * numPerVertex);
     binding->setFormat(numPerVertex, type, normalised, 0);
 
     m_vertexArrayObject->enable(location);
