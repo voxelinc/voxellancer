@@ -36,8 +36,8 @@ static CrossHairElement* newDot() {
 CrossHairVoxels::CrossHairVoxels(CrossHair* crossHair):
     m_crossHair(crossHair)
 {
-    float baseX = 0.5;
-    float baseY = 0.2;
+    float baseX = 0.5f;
+    float baseY = 0.2f;
 
     CrossHairElement *lu = newStick();
     lu->relativeOrientation = glm::angleAxis(150.0f, glm::vec3(0.0f, 0.0f, 1.0f));

@@ -77,7 +77,7 @@ T TAABB<T>::extent(Axis axis) const {
 
 template<typename T>
 T TAABB<T>::diameter() const {
-    return glm::length(m_rub - m_llf);
+    return static_cast<T>(glm::length(glm::vec3(m_rub - m_llf)));
 }
 
 template<typename T>

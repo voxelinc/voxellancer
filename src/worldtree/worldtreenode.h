@@ -2,6 +2,7 @@
 
 #include <list>
 #include <set>
+#include <vector>
 
 #include "worldtreegeode.h"
 #include "geometry/aabb.h"

@@ -18,7 +18,7 @@ WorldTreeNode::WorldTreeNode(int octIndex, WorldTreeNode* parent, const IAABB& a
     m_active(false)
 {
     assert(m_aabb.extent(XAxis) == m_aabb.extent(YAxis) && m_aabb.extent(XAxis) == m_aabb.extent(ZAxis));
-    m_extent = m_aabb.extent(ZAxis);
+    m_extent = static_cast<float>(m_aabb.extent(ZAxis));
 }
 
 WorldTreeNode::WorldTreeNode(const IAABB &aabb, WorldTreeNode* initialSubnode):
@@ -176,7 +176,7 @@ void WorldTreeNode::remove(WorldTreeGeode* geode) {
 void WorldTreeNode::toGroup(WorldTreeNode* initialSubnode) {
     assert(isLeaf());
 
-    int subnodeExtent = m_extent / 2.0f;
+    int subnodeExtent = static_cast<int>(m_extent / 2.0f);
 
     m_subnodes.resize(SUBNODE_COUNT);
 
