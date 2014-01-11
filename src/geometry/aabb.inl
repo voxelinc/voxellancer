@@ -152,7 +152,7 @@ bool TAABB<T>::intersects(const Sphere& sphere) const {
 }
 
 template<typename T>
-bool TAABB<T>::containedBy(const TAABB<float>& other) const {
+bool TAABB<T>::containedBy(const TAABB<int>& other) const {
     return
         other.llf().x <= m_llf.x &&
         other.llf().y <= m_llf.y &&
@@ -174,7 +174,8 @@ bool TAABB<T>::contains(const TAABB& other) const {
 }
 
 template<typename T>
-bool TAABB<T>::contains(const glm::detail::tvec3<T> &vec) const {
+template<typename OtherT>
+bool TAABB<T>::contains(const glm::detail::tvec3<OtherT> &vec) const {
     return
         vec.x >= m_llf.x &&
         vec.y >= m_llf.y &&
@@ -185,7 +186,7 @@ bool TAABB<T>::contains(const glm::detail::tvec3<T> &vec) const {
 }
 
 template<typename T>
-bool TAABB<T>::nearTo(const TAABB<float>& other) const {
+bool TAABB<T>::nearTo(const TAABB<int>& other) const {
     return intersects(other);
 }
 
