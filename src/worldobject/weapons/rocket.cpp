@@ -5,7 +5,7 @@
 
 #include "utils/tostring.h"
 #include "physics/physics.h"
-#include "voxeleffect/voxelexplosiongenerator.h"
+#include "voxeleffect/voxelexplosiongenerator2.h"
 
 
 Rocket::Rocket(glm::vec3 position, glm::quat orientation, const glm::vec3& initialSpeed, float travelSpeed, float lifetime, WorldObject* target)
@@ -62,27 +62,31 @@ void Rocket::update(float deltaSec){
     }
 
     m_lifetime -= deltaSec;
-    if (m_lifetime < 0)
+    if (m_lifetime < 0){
         World::instance()->god().scheduleRemoval(this);
+        spawnExplosion();
+    }
 
     Ship::update(deltaSec);
 }
 
 void Rocket::onCollision(){
     World::instance()->god().scheduleRemoval(this);
-    VoxelExplosionGenerator generator;
-    generator.setTransform(m_transform);
-    generator.setColor(0xFF0000);
-    generator.setDensity(4);
-    generator.setLifetime(1.0f, 0.2f);
-    generator.spawn();
+    spawnExplosion();
 }
 
 void Rocket::onSpawnFail(){
-    VoxelExplosionGenerator generator;
-    generator.setTransform(m_transform);
+    spawnExplosion();
+}
+
+void Rocket::spawnExplosion(){
+    VoxelExplosionGenerator2 generator;
+    generator.setPosition(m_transform.position());
+    generator.setScale(m_transform.scale() / 3.0f);
     generator.setColor(0xFF0000);
-    generator.setDensity(4);
+    generator.setCount(100);
     generator.setLifetime(1.0f, 0.2f);
+    generator.setForce(20.0f);
     generator.spawn();
+
 }

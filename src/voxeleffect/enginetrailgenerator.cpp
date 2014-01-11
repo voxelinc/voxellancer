@@ -31,23 +31,23 @@ void EngineTrailGenerator::setEngine(Engine* engine){
     m_lastPosition = engine->position() + m_engine->ship()->transform().orientation() * glm::vec3(0, 0, m_spawnOffset);
 
     m_generator.setColor(0x0000FF);
-    m_generator.setDensity(2);
-    m_generator.setForce(0.3f);
+    m_generator.setCount(8); //setDensity(2);
+    m_generator.setForce(2);
     m_generator.setLifetime(prop_lifetime, 0.1f);
-    m_generator.setScale(m_engine->ship()->transform().scale() / 5.0f);
+    m_generator.setScale(m_engine->ship()->transform().scale() / 10.0f);
 }
 
 void EngineTrailGenerator::update(float deltaSec){
     assert(m_engine);
 
-    //this is neccessary to prevent a trail between origin and spawn-position
-    if (!m_lastValid){
-        m_lastPosition = calculateSpawnPosition();
-        m_lastValid = true;
-    }
 
     glm::vec3 speedLocalSystem = glm::inverse(m_engine->ship()->transform().orientation()) * m_engine->ship()->physics().speed();
     if (speedLocalSystem.z <= 0.5){ //only when not moving backwards
+        if (!m_lastValid){
+            m_lastPosition = calculateSpawnPosition();
+            m_lastValid = true;
+        }
+
         glm::vec3 newPosition = calculateSpawnPosition();
         glm::vec3 distance = newPosition - m_lastPosition;
         int stepCount = (int)glm::floor(glm::length(distance) / prop_stepDistance);
@@ -58,28 +58,28 @@ void EngineTrailGenerator::update(float deltaSec){
             for (int i = 0; i < stepCount; i++){
                 currentPosition += step;
 
-                m_generator.setPosition(currentPosition);
-                m_generator.setOrientation(m_engine->ship()->transform().orientation());
-                m_generator.setImpactVector(m_engine->ship()->transform().orientation() * glm::vec3(0, 0, 0.1f));
-
-                m_generator.spawn();
-                m_lastSpawn = glfwGetTime();
+                spawnAt(currentPosition);
             }
-            m_lastPosition = currentPosition;
         }
+    } else {
+        m_lastValid = false;
     }
 
     // When not moving, we still want some exhausts
     if (glfwGetTime() - m_lastSpawn > prop_idleTime){
-        m_generator.setPosition(calculateSpawnPosition());
-        m_generator.setOrientation(m_engine->ship()->transform().orientation());
-        m_generator.setImpactVector(m_engine->ship()->transform().orientation() * glm::vec3(0, 0, 0.1f));
-
-        m_generator.spawn();
-        m_lastSpawn = glfwGetTime();
+        spawnAt(calculateSpawnPosition());        
     }
 }
 
 glm::vec3 EngineTrailGenerator::calculateSpawnPosition(){
     return m_engine->position() + m_engine->ship()->transform().orientation() * glm::vec3(0, 0, m_spawnOffset);
+}
+
+void EngineTrailGenerator::spawnAt(glm::vec3 position){
+    m_generator.setPosition(position);
+    m_generator.setImpactVector(m_engine->ship()->transform().orientation() * glm::vec3(0, 0, 0.1f));
+
+    m_generator.spawn();
+    m_lastSpawn = glfwGetTime();
+    m_lastPosition = position;
 }

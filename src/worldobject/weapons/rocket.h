@@ -11,6 +11,8 @@ public:
     virtual void onSpawnFail() override;
 
 private:
+    void spawnExplosion();
+
 	float m_lifetime;
     float m_travelSpeed;
     WorldObject* m_target;
