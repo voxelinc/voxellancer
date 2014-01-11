@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 #include <glow/glow.h>
 
+#include "utils/tostring.h"
 #include "voxel/voxeltreenode.h"
 
 #include "worldobject/worldobject.h"
@@ -267,9 +268,11 @@ void InputHandler::selectNextTarget(bool forward){
 }
 
 glm::vec3 InputHandler::findTargetPoint() {
+    glm::vec3 shootDirection(glm::normalize(m_crossHair.position() - m_crossHair.cameraHead()->position()));
+
     Ray ray(
-        m_crossHair.position(),
-        m_crossHair.orientation() * glm::vec3(0, 0, -1)
+        m_crossHair.cameraHead()->position(),
+        shootDirection
     );
     glm::vec3 targetPoint;
 

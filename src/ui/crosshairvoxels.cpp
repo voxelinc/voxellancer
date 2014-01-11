@@ -70,10 +70,8 @@ CrossHairVoxels::~CrossHairVoxels() {
 
 void CrossHairVoxels::update(float deltaSec) {
     for(CrossHairElement* crossHairElement : m_crossHairElements) {
-        glm::vec3 offset = m_crossHair->orientation() * (glm::vec3(0,0,-5)  + crossHairElement->relativePosition);
-
         WorldTransform transform(crossHairElement->transform());
-        transform.setPosition(m_crossHair->position() + offset);
+        transform.setPosition(m_crossHair->position() + m_crossHair->orientation() * crossHairElement->relativePosition);
         transform.setOrientation(m_crossHair->orientation() * crossHairElement->relativeOrientation);
 
         crossHairElement->setTransform(transform);

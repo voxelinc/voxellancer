@@ -182,8 +182,8 @@ void Game::update(float deltaSec) {
     // avoid big jumps after debugging ;)
     deltaSec = glm::min(1.f, deltaSec);
 
-    m_inputHandler.update(deltaSec);
     World::instance()->update(deltaSec);
+    m_inputHandler.update(deltaSec);
     m_cameraDolly.update(deltaSec);
 //	m_hud->update(deltaSec);
 }
