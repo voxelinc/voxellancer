@@ -14,7 +14,7 @@ StreamRedirect::StreamRedirect(std::ostream &stream, HUD *hud, bool copy) :
 StreamRedirect::~StreamRedirect() {
     // output anything that is left
     if (!m_string.empty()) {
-        m_hud->streamCallback(m_string);
+        m_hud->printLine(m_string);
     }
     delete m_old_wrap;
     m_stream.rdbuf(m_old_buf);
@@ -23,7 +23,7 @@ StreamRedirect::~StreamRedirect() {
 std::basic_streambuf<char>::int_type StreamRedirect::overflow(int_type v) {
 
     if (v == '\n') {
-        m_hud->streamCallback(m_string);
+        m_hud->printLine(m_string);
         if (m_copy) {
             *m_old_wrap << m_string << std::endl;
         }
@@ -44,7 +44,7 @@ std::streamsize StreamRedirect::xsputn(const char *p, std::streamsize n) {
         pos = m_string.find('\n');
         if (pos != std::string::npos) {
             std::string tmp(m_string.begin(), m_string.begin() + pos);
-            m_hud->streamCallback(tmp);
+            m_hud->printLine(tmp);
             if (m_copy) {
                 *m_old_wrap << tmp << std::endl;
             }

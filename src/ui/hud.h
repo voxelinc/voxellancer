@@ -23,7 +23,7 @@ public:
     void update(float deltaSec);
     void draw();
 
-    void streamCallback(std::string line);
+    void printLine(std::string line);
 
 protected:
     void addElement(const std::string& filename, HUDOffsetOrigin origin, glm::vec3 offset, std::vector<std::unique_ptr<HUDElement>> *list);

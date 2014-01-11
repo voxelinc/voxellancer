@@ -216,7 +216,7 @@ void HUD::draw(){
 
 }
 
-void HUD::streamCallback(std::string line){
+void HUD::printLine(std::string line){
     // Find first free line
     for (int i = 0; i < prop_lineBacklog; i++){
         if (m_lastlineTime[i] == 0){
