@@ -5,7 +5,7 @@
 
 #include "utils/tostring.h"
 #include "physics/bulletphysics.h"
-#include "voxeleffect/voxelexplosiongenerator.h"
+#include "voxeleffect/voxelexplosiongenerator2.h"
 
 
 Bullet::Bullet(WorldObject* creator, glm::vec3 position, glm::quat orientation, glm::vec3 direction, float speed, float range) :
@@ -54,19 +54,25 @@ void Bullet::update(float deltaSec){
 
 void Bullet::onCollision(){
     World::instance()->god().scheduleRemoval(this);
-    VoxelExplosionGenerator generator;
-    generator.setTransform(m_transform);
+    VoxelExplosionGenerator2 generator;
+    generator.setPosition(m_transform.position());
+    generator.setRadius(m_transform.scale());
+    generator.setScale(m_transform.scale() / 2.0f);
+    generator.setCount(16);
     generator.setColor(0xFF0000);
-    generator.setForce(0.5f);
+    generator.setForce(6);
     generator.setLifetime(0.7f, 0.2f);
     generator.spawn();
 }
 
 void Bullet::onSpawnFail(){
-    VoxelExplosionGenerator generator;
-    generator.setTransform(m_transform);
+    VoxelExplosionGenerator2 generator;
+    generator.setPosition(m_transform.position());
+    generator.setRadius(m_transform.scale());
+    generator.setScale(m_transform.scale() / 2.0f);
+    generator.setCount(16);
     generator.setColor(0xFF0000);
-    generator.setForce(0.5f);
+    generator.setForce(6);
     generator.setLifetime(0.7f, 0.2f);
     generator.spawn();
 }
