@@ -15,6 +15,13 @@
 #include "voxelmesh.h"
 
 
+struct VoxelParticleData {
+    glm::vec3 position;
+    glm::quat orientation;
+    float scale;
+    glm::vec3 color;
+};
+
 VoxelParticleWorld::VoxelParticleWorld():
     m_initialized(false)
 {
@@ -50,7 +57,6 @@ void VoxelParticleWorld::draw(Camera& camera) {
     if(!m_initialized) {
         initialize();
     }
-
     updateBuffers();
 
     m_program->setUniform("viewProjection", camera.viewProjection());
@@ -68,11 +74,7 @@ void VoxelParticleWorld::draw(Camera& camera) {
 void VoxelParticleWorld::initialize() {
     m_program = new glow::Program();
     m_vertexArrayObject = new glow::VertexArrayObject();
-
-    m_positionBuffer = std::unique_ptr<glow::Buffer>(new glow::Buffer(GL_ARRAY_BUFFER));
-    m_orientationBuffer = std::unique_ptr<glow::Buffer>(new glow::Buffer(GL_ARRAY_BUFFER));
-    m_colorBuffer = std::unique_ptr<glow::Buffer>(new glow::Buffer(GL_ARRAY_BUFFER));
-    m_scaleBuffer = std::unique_ptr<glow::Buffer>(new glow::Buffer(GL_ARRAY_BUFFER));
+    m_particleDataBuffer = new glow::Buffer(GL_ARRAY_BUFFER);
 
     loadProgram();
     setupVertexAttributes();
@@ -91,45 +93,38 @@ void VoxelParticleWorld::loadProgram() {
 void VoxelParticleWorld::setupVertexAttributes() {
     VoxelMesh::bindTo(m_program, m_vertexArrayObject, 0);
 
-    setupVertexAttribute(m_positionBuffer, "v_position", 3, GL_FLOAT, GL_FALSE, 2);
-    setupVertexAttribute(m_orientationBuffer, "v_orientation", 4, GL_FLOAT, GL_FALSE, 3);
-    setupVertexAttribute(m_scaleBuffer, "v_scale", 1, GL_FLOAT, GL_FALSE, 4);
-    setupVertexAttribute(m_colorBuffer, "v_color", 3, GL_FLOAT, GL_FALSE, 5);
+    setupVertexAttribute(offsetof(VoxelParticleData, position), "v_position", 3, GL_FLOAT, GL_FALSE, 2);
+    setupVertexAttribute(offsetof(VoxelParticleData, orientation), "v_orientation", 4, GL_FLOAT, GL_FALSE, 3);
+    setupVertexAttribute(offsetof(VoxelParticleData, scale), "v_scale", 1, GL_FLOAT, GL_FALSE, 4);
+    setupVertexAttribute(offsetof(VoxelParticleData, color), "v_color", 3, GL_FLOAT, GL_FALSE, 5);
 }
 
-void VoxelParticleWorld::setupVertexAttribute(std::unique_ptr<glow::Buffer>& buffer, const std::string& name, int numPerVertex, GLenum type, GLboolean normalised, int bindingNum) {
+void VoxelParticleWorld::setupVertexAttribute(GLint offset, const std::string& name, int numPerVertex, GLenum type, GLboolean normalised, int bindingNum) {
     glow::VertexAttributeBinding* binding = m_vertexArrayObject->binding(bindingNum);
     GLint location = m_program->getAttributeLocation(name);
 
     binding->setAttribute(location);
-    binding->setBuffer(buffer.get(), 0, 0);
-    binding->setFormat(numPerVertex, type, normalised, 0);
+    binding->setBuffer(m_particleDataBuffer, 0, sizeof(VoxelParticleData));
+    binding->setFormat(numPerVertex, type, normalised, offset);
 
     m_vertexArrayObject->enable(location);
 }
 
 void VoxelParticleWorld::updateBuffers() {
-    glow::Vec3Array positions;
-    glow::Array<glm::quat> orientations;
-    glow::FloatArray scales;
-    glow::Vec3Array colors;
+    glow::Array<VoxelParticleData> particleData;
 
-    positions.reserve(m_voxelParticles.size());
-    orientations.reserve(m_voxelParticles.size());
-    scales.reserve(m_voxelParticles.size());
-    colors.reserve(m_voxelParticles.size());
+    particleData.reserve(m_voxelParticles.size());
 
     for (VoxelParticle* voxelParticle : m_voxelParticles) {
-        positions.push_back(voxelParticle->worldTransform().position());
-        orientations.push_back(voxelParticle->worldTransform().orientation());
-        scales.push_back(voxelParticle->worldTransform().scale());
-        colors.push_back(voxelParticle->colorVec());
+        particleData.push_back(VoxelParticleData {
+            voxelParticle->worldTransform().position(),
+            voxelParticle->worldTransform().orientation(),
+            voxelParticle->worldTransform().scale(),
+            voxelParticle->colorVec()
+        });
     }
 
-    m_positionBuffer->setData(positions);
-    m_orientationBuffer->setData(orientations);
-    m_scaleBuffer->setData(scales);
-    m_colorBuffer->setData(colors);
+    m_particleDataBuffer->setData(particleData);
 }
 
 bool VoxelParticleWorld::intersects(VoxelParticle* voxelParticle) {

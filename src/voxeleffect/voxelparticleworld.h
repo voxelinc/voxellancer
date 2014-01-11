@@ -29,10 +29,7 @@ protected:
     glow::ref_ptr<glow::Program> m_program;
     glow::ref_ptr<glow::VertexArrayObject> m_vertexArrayObject;
 
-    std::unique_ptr<glow::Buffer> m_positionBuffer;
-    std::unique_ptr<glow::Buffer> m_orientationBuffer;
-    std::unique_ptr<glow::Buffer> m_colorBuffer;
-    std::unique_ptr<glow::Buffer> m_scaleBuffer;
+    glow::ref_ptr<glow::Buffer> m_particleDataBuffer;
 
     bool m_initialized;
 
@@ -40,7 +37,7 @@ protected:
     void initialize();
     void loadProgram();
     void setupVertexAttributes();
-    void setupVertexAttribute(std::unique_ptr<glow::Buffer>& buffer, const std::string& name, int numPerVertex, GLenum type, GLboolean normalised, int binding);
+    void setupVertexAttribute(GLint offset, const std::string& name, int numPerVertex, GLenum type, GLboolean normalised, int bindingNum);
     void updateBuffers();
     bool intersects(VoxelParticle* voxelParticle);
 };
