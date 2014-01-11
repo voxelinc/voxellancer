@@ -26,11 +26,8 @@ public:
 protected:
     std::list<VoxelParticle*> m_voxelParticles;
 
-    std::unique_ptr<glow::Program> m_program;
-    std::unique_ptr<glow::VertexArrayObject> m_vertexArrayObject;
-
-    std::unique_ptr<glow::Buffer> m_vertexBuffer;
-    std::unique_ptr<glow::Buffer> m_normalBuffer;
+    glow::ref_ptr<glow::Program> m_program;
+    glow::ref_ptr<glow::VertexArrayObject> m_vertexArrayObject;
 
     std::unique_ptr<glow::Buffer> m_positionBuffer;
     std::unique_ptr<glow::Buffer> m_orientationBuffer;

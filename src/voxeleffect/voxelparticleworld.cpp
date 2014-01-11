@@ -66,11 +66,8 @@ void VoxelParticleWorld::draw(Camera& camera) {
 }
 
 void VoxelParticleWorld::initialize() {
-    m_program = std::unique_ptr<glow::Program>(new glow::Program);
-    m_vertexArrayObject = std::unique_ptr<glow::VertexArrayObject>(new glow::VertexArrayObject);
-
-    m_vertexBuffer = std::unique_ptr<glow::Buffer>(new glow::Buffer(GL_ARRAY_BUFFER));
-    m_normalBuffer = std::unique_ptr<glow::Buffer>(new glow::Buffer(GL_ARRAY_BUFFER));
+    m_program = new glow::Program();
+    m_vertexArrayObject = new glow::VertexArrayObject();
 
     m_positionBuffer = std::unique_ptr<glow::Buffer>(new glow::Buffer(GL_ARRAY_BUFFER));
     m_orientationBuffer = std::unique_ptr<glow::Buffer>(new glow::Buffer(GL_ARRAY_BUFFER));
@@ -92,11 +89,8 @@ void VoxelParticleWorld::loadProgram() {
 }
 
 void VoxelParticleWorld::setupVertexAttributes() {
-    m_vertexBuffer->setData(VoxelMesh::vertices());
-    m_normalBuffer->setData(VoxelMesh::normals());
+    VoxelMesh::bindTo(m_program, m_vertexArrayObject, 0);
 
-    setupVertexAttribute(m_vertexBuffer, "v_vertex", 3, GL_FLOAT, GL_TRUE, 0);
-    setupVertexAttribute(m_normalBuffer, "v_normal", 3, GL_FLOAT, GL_FALSE, 1);
     setupVertexAttribute(m_positionBuffer, "v_position", 3, GL_FLOAT, GL_FALSE, 2);
     setupVertexAttribute(m_orientationBuffer, "v_orientation", 4, GL_FLOAT, GL_FALSE, 3);
     setupVertexAttribute(m_scaleBuffer, "v_scale", 1, GL_FLOAT, GL_FALSE, 4);
@@ -108,7 +102,7 @@ void VoxelParticleWorld::setupVertexAttribute(std::unique_ptr<glow::Buffer>& buf
     GLint location = m_program->getAttributeLocation(name);
 
     binding->setAttribute(location);
-    binding->setBuffer(buffer.get(), 0, sizeof(GLfloat) * numPerVertex);
+    binding->setBuffer(buffer.get(), 0, 0);
     binding->setFormat(numPerVertex, type, normalised, 0);
 
     m_vertexArrayObject->enable(location);
