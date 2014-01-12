@@ -8,8 +8,8 @@
 
 #include "voxelcluster.h"
 #include "worldobject/worldobject.h"
+#include "voxel/voxeltreenode.h"
 #include "voxeleffect/voxelexplosiongenerator.h"
-
 
 
 Voxel::Voxel(const glm::ivec3& gridCell, int color, float normalizedMass, float hp):
@@ -75,7 +75,11 @@ void Voxel::onRemoval() {
 }
 
 void Voxel::onDestruction() {
-    if (m_voxelTreeNode && m_voxelTreeNode->worldObject()){
+    assert(m_voxelTreeNode);
+
+    WorldObject* worldObject = m_voxelTreeNode->voxelTree()->worldObject();
+
+    if (m_voxelTreeNode && worldObject) {
         VoxelExplosionGenerator generator;
         generator.setOrientation(m_voxelTreeNode->worldObject()->transform().orientation());
         generator.setPosition(m_voxelTreeNode->worldObject()->transform().applyTo(glm::vec3(m_gridCell)));

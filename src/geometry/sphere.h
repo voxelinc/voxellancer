@@ -23,8 +23,8 @@ public:
     bool contains(const Sphere &other) const;
 
     virtual bool intersects(const Sphere &other) const override;
-    virtual bool nearTo(const TAABB<float>& aabb) const override;
-    virtual bool containedBy(const TAABB<float>& aabb) const override;
+    virtual bool nearTo(const TAABB<int>& aabb) const override;
+    virtual bool containedBy(const TAABB<int>& aabb) const override;
 
     template<typename T> static Sphere containing(const TAABB<T>& aabb);
 

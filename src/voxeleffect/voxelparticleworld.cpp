@@ -153,7 +153,7 @@ bool VoxelParticleWorld::intersects(VoxelParticle* voxelParticle) {
     voxelParticle->intersectionCheckPerformed();
 
     Sphere voxelSphere(voxelParticle->worldTransform().position(), voxelParticle->worldTransform().scale() / 2.0f);
-    WorldTreeQuery worldTreeQuery((WorldTreeNode*)&World::instance()->worldTree(), &voxelSphere);
+    WorldTreeQuery worldTreeQuery(&World::instance()->worldTree(), &voxelSphere);
 
 
     return worldTreeQuery.areVoxelsIntersecting();

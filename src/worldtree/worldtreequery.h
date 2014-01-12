@@ -7,13 +7,14 @@
 
 
 class Voxel;
+class WorldTree;
 class WorldTreeNode;
 class WorldTreeGeode;
 class WorldObject;
 
 class WorldTreeQuery {
 public:
-    WorldTreeQuery(WorldTreeNode* worldTree, const AbstractShape* shape, WorldTreeNode* nodeHint = nullptr, WorldObject* collidableWith = nullptr);
+    WorldTreeQuery(WorldTree* worldTree, const AbstractShape* shape, WorldTreeNode* nodeHint = nullptr, WorldObject* collidableWith = nullptr);
 
     bool areGeodesNear();
     std::set<WorldTreeGeode*> nearGeodes();
@@ -25,7 +26,7 @@ public:
 
 
 protected:
-    WorldTreeNode* m_worldTree;
+    WorldTree* m_worldTree;
     WorldTreeNode* m_nodeHint;
     WorldTreeNode* m_startNode;
     WorldObject* m_collideableWith;
