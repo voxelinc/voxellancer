@@ -32,7 +32,6 @@
 #include "world/god.h"
 #include "skybox.h"
 #include "voxeleffect/voxelparticleworld.h"
-#include "voxeleffect/voxelmesh.h"
 #include "voxel/voxelrenderer.h"
 #include "worldobject/ship.h"
 #include "collision/collisiondetector.h"
@@ -55,7 +54,6 @@ Game::Game(GLFWwindow *window) :
 }
 
 Game::~Game() {
-    VoxelMesh::tearDown();
 }
 
 void Game::reloadConfig() {

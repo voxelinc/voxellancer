@@ -14,6 +14,7 @@
 
 #include "voxelparticle.h"
 #include "voxelmesh.h"
+#include "voxel/voxelrenderer.h"
 
 
 struct VoxelParticleData {
@@ -101,7 +102,7 @@ void VoxelParticleWorld::loadProgram() {
 }
 
 void VoxelParticleWorld::setupVertexAttributes() {
-    VoxelMesh::bindTo(m_program, m_vertexArrayObject, 0);
+    VoxelRenderer::voxelMesh()->bindTo(m_program, m_vertexArrayObject, 0);
 
     setupVertexAttribute(offsetof(VoxelParticleData, position), "v_position", 3, GL_FLOAT, GL_FALSE, 2);
     setupVertexAttribute(offsetof(VoxelParticleData, orientation), "v_orientation", 4, GL_FLOAT, GL_FALSE, 3);

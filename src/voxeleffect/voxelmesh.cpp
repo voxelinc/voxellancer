@@ -22,10 +22,14 @@ static const glm::vec3 back(0, 0, 1);
 static const glm::vec3 dummy(0, 0, 0);
 
 
-glow::ref_ptr<glow::Buffer> VoxelMesh::s_vertexBuffer = nullptr;
+VoxelMesh::VoxelMesh()
+{
+    initBuffer();
+}
+
+
 
 void VoxelMesh::initBuffer() {
-
     glow::Array<glm::vec3> array{
         rub, dummy,
         lub, dummy,
@@ -43,12 +47,8 @@ void VoxelMesh::initBuffer() {
         luf, front
     };
 
-    s_vertexBuffer = new glow::Buffer(GL_ARRAY_BUFFER);
-    s_vertexBuffer->setData(array);
-}
-
-void VoxelMesh::tearDown() {
-    s_vertexBuffer = nullptr;
+    m_vertexBuffer = new glow::Buffer(GL_ARRAY_BUFFER);
+    m_vertexBuffer->setData(array);
 }
 
 void VoxelMesh::setupVertexAttribute(glow::Program* program, glow::VertexArrayObject* vao, const std::string& name, GLboolean normalised, int bindingNum, GLint offset) {
@@ -57,18 +57,10 @@ void VoxelMesh::setupVertexAttribute(glow::Program* program, glow::VertexArrayOb
     assert(location >= 0);
 
     binding->setAttribute(location);
-    binding->setBuffer(vertexBuffer(), 0, sizeof(glm::vec3) * 2);
+    binding->setBuffer(m_vertexBuffer, 0, sizeof(glm::vec3) * 2);
     binding->setFormat(3, GL_FLOAT, normalised, offset);
 
     vao->enable(location);
-}
-
-glow::Buffer* VoxelMesh::vertexBuffer() {
-    if (!s_vertexBuffer) {
-        glow::debug("Create VoxelMesh");
-        initBuffer();
-    }
-    return s_vertexBuffer;
 }
 
 void VoxelMesh::bindTo(
@@ -79,4 +71,3 @@ void VoxelMesh::bindTo(
     setupVertexAttribute(program, vao, "v_vertex", GL_FALSE, bindingIndex + 0, 0);
     setupVertexAttribute(program, vao, "v_normal", GL_TRUE,  bindingIndex + 1, sizeof(glm::vec3));
 }
-
