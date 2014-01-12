@@ -50,8 +50,8 @@ void VoxelRenderer::draw(VoxelCluster * worldObject)
     VoxelRenderData* renderData = worldObject->voxelRenderData();
     
     renderData->vertexArrayObject()->bind();
-    /*glVertexAttribDivisor(m_program->getAttributeLocation("v_position"), 1);
-    glVertexAttribDivisor(m_program->getAttributeLocation("v_color"), 1);*/
+    glVertexAttribDivisor(m_program->getAttributeLocation("v_position"), 1);
+    glVertexAttribDivisor(m_program->getAttributeLocation("v_color"), 1);
     renderData->vertexArrayObject()->drawArraysInstanced(GL_TRIANGLE_STRIP, 0, 14, renderData->voxelCount());
 }
 

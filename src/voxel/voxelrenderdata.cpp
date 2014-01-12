@@ -29,6 +29,7 @@ VoxelRenderData::VoxelRenderData(std::unordered_map<glm::ivec3, Voxel*> &voxel) 
 {
     m_vertexArrayObject = new glow::VertexArrayObject();
     m_voxelDataBuffer = new glow::Buffer(GL_ARRAY_BUFFER);
+    setupVertexAttributes();
 }
 
 VoxelRenderData::~VoxelRenderData() {
