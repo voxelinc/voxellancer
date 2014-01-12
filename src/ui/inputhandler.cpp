@@ -36,46 +36,28 @@ m_camera(camera),
 prop_deadzoneMouse("input.deadzoneMouse"),
 prop_deadzoneGamepad("input.deadzoneGamepad"),
 
-prop_gamepadFireAxesValue("input.gamepadFireAxesValue"),
-prop_gamepadFireIndex("input.gamepadFireIndex"),
-prop_gamepadRocketAxesValue("input.gamepadRocketAxesValue"),
-prop_gamepadRocketIndex("input.gamepadRocketIndex"),
+fireAction("input.mappingFirePrimary", "input.mappingFireSecondary", "Fire"),
+rocketAction("input.mappingRocketPrimary", "input.mappingRocketSecondary", "Launch Rockets"),
 
-prop_gamepadMoveLeftAxesValue("input.gamepadMoveLeftAxesValue"),
-prop_gamepadMoveLeftIndex("input.gamepadMoveLeftIndex"),
-prop_gamepadMoveRightAxesValue("input.gamepadMoveRightAxesValue"),
-prop_gamepadMoveRightIndex("input.gamepadMoveRightIndex"),
+moveLeftAction("input.mappingMoveLeftPrimary", "input.mappingMoveLeftSecondary", "Move Left"),
+moveRightAction("input.mappingMoveRightPrimary", "input.mappingMoveRightSecondary", "Move Right"),
+moveForwardAction("input.mappingMoveForwardPrimary", "input.mappingMoveForwardSecondary", "Move Forward"),
+moveBackwardAction("input.mappingMoveBackwardPrimary", "input.mappingMoveBackwardSecondary", "Move Backward"),
 
-prop_gamepadMoveForwardAxesValue("input.gamepadMoveForwardAxesValue"),
-prop_gamepadMoveForwardIndex("input.gamepadMoveForwardIndex"),
-prop_gamepadMoveBackwardAxesValue("input.gamepadMoveBackwardAxesValue"),
-prop_gamepadMoveBackwardIndex("input.gamepadMoveBackwardIndex"),
+rotateLeftAction("input.mappingRotateLeftPrimary", "input.mappingRotateLeftSecondary", "Rotate Left"),
+rotateRightAction("input.mappingRotateRightPrimary", "input.mappingRotateRightSecondary", "Rotate Right"),
+rotateUpAction("input.mappingRotateUpPrimary", "input.mappingRotateUpSecondary", "Rotate Up"),
+rotateDownAction("input.mappingRotateDownPrimary", "input.mappingRotateDownSecondary", "Rotate Down"),
+rotateClockwiseAction("input.mappingRotateClockwisePrimary", "input.mappingRotateClockwiseSecondary", "Rotate Clockwise"),
+rotateCClockwiseAction("input.mappingRotateCClockwisePrimary", "input.mappingRotateCClockwiseSecondary", "Rotate CounterClockwise"),
 
-prop_gamepadRotateLeftAxesValue("input.gamepadRotateLeftAxesValue"),
-prop_gamepadRotateLeftIndex("input.gamepadRotateLeftIndex"),
-prop_gamepadRotateRightAxesValue("input.gamepadRotateRightAxesValue"),
-prop_gamepadRotateRightIndex("input.gamepadRotateRightIndex"),
+selectNextAction("input.mappingSelectNextPrimary", "input.mappingSelectNextSecondary", "Select Next Target", true),
+selectPreviousAction("input.mappingSelectPreviousPrimary", "input.mappingSelectPreviousSecondary", "Select Previous Target", true),
 
-prop_gamepadRotateUpAxesValue("input.gamepadRotateUpAxesValue"),
-prop_gamepadRotateUpIndex("input.gamepadRotateUpIndex"),
-prop_gamepadRotateDownAxesValue("input.gamepadRotateDownAxesValue"),
-prop_gamepadRotateDownIndex("input.gamepadRotateDownIndex"),
-
-prop_gamepadRotateClockwiseAxesValue("input.gamepadRotateClockwiseAxesValue"),
-prop_gamepadRotateClockwiseIndex("input.gamepadRotateClockwiseIndex"),
-prop_gamepadRotateCClockwiseAxesValue("input.gamepadRotateCClockwiseAxesValue"),
-prop_gamepadRotateCClockwiseIndex("input.gamepadRotateCClockwiseIndex"),
-
-prop_gamepadSelectNextAxesValue("input.gamepadSelectNextAxesValue"),
-prop_gamepadSelectNextIndex("input.gamepadSelectNextIndex"),
-prop_gamepadSelectPreviousAxesValue("input.gamepadSelectPreviousAxesValue"),
-prop_gamepadSelectPreviousIndex("input.gamepadSelectPreviousIndex"),
 m_targeter(new Targeter(player, camera))
 {
 
     joystickSetupState = -1;
-    bumperLeftState = false;
-    bumperRightState = false;
     glfwGetWindowSize(m_window, &m_windowWidth, &m_windowHeight);
     m_targeter->setWindowSize(m_windowWidth, m_windowHeight);
     glfwSetCursorPos(m_window, m_windowWidth / 2, m_windowHeight / 2);
@@ -84,9 +66,8 @@ m_targeter(new Targeter(player, camera))
 
     m_mouseControl = false;
     m_lastfocus = glfwGetWindowAttrib(m_window, GLFW_FOCUSED);
-
-    lastIndex = -1;
-    lastAxesValue = 0;
+    lastSecondaryInput = InputMapping();
+    lastPrimaryInput = InputMapping();
 
     glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
@@ -113,6 +94,7 @@ void InputHandler::resizeEvent(const unsigned int width, const unsigned int heig
 
 void InputHandler::keyCallback(int key, int scancode, int action, int mods){
 	/* Check here for single-time key-presses, that you do not want fired multiple times, e.g. toggles */
+    /* This only applies for menu events etc, for action events set the toggleAction attribute to true */
     if (key == GLFW_KEY_F10 && action == GLFW_PRESS &&  glfwJoystickPresent(GLFW_JOYSTICK_1)){
         joystickSetupState = 0;
         glow::debug("Starting Gamepad configuration. Please press the Buttons or Sticks all the way through before hitting Enter.");
@@ -120,12 +102,6 @@ void InputHandler::keyCallback(int key, int scancode, int action, int mods){
     }
     if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
         m_mouseControl = !m_mouseControl;
-    if (key == GLFW_KEY_TAB && action == GLFW_PRESS){
-        if (glfwGetKey(m_window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
-            m_targeter->selectNextTarget();
-        else
-            m_targeter->selectPreviousTarget();
-    }
     if (key == GLFW_KEY_B && action == GLFW_PRESS){
         VoxelExplosionGenerator g;
         g.setPosition(m_player->playerShip()->transform().position() + m_player->playerShip()->transform().orientation() * glm::vec3(0, 0, -30));
@@ -135,17 +111,16 @@ void InputHandler::keyCallback(int key, int scancode, int action, int mods){
         g.setDensity((rand() % 4) + 2);
         g.spawn();
     }
+    //if (setupPrimaryInputInProgress){
+        lastPrimaryInput = InputMapping(InputType::Keyboard, key, 1);
+    //}
 }
 
 void InputHandler::update(float delta_sec) {
 	/* Check here for every-frame events, e.g. view & movement controls */
     if (glfwGetWindowAttrib(m_window, GLFW_FOCUSED)){
         if (m_lastfocus){
-            handleKeyboardUpdate();
-            if (glfwJoystickPresent(GLFW_JOYSTICK_1)){
-                setupJoystick(GLFW_JOYSTICK_1);
-                handleJoystickUpdate(GLFW_JOYSTICK_1);
-            }
+            handleUpdate();
             handleMouseUpdate();
         }
     }
@@ -153,9 +128,20 @@ void InputHandler::update(float delta_sec) {
 }
 
 
+void InputHandler::handleUpdate(){
 
+    gamepadButtonCnt = 0;
+    gamepadAxisCnt = 0;
+    gamepadButtonValues = glfwGetJoystickButtons(GLFW_JOYSTICK_1, &gamepadButtonCnt);
+    gamepadAxisValues = glfwGetJoystickAxes(GLFW_JOYSTICK_1, &gamepadAxisCnt);
 
-void InputHandler::handleKeyboardUpdate(){
+    handleFireActions();
+    handleMoveActions();
+    handleRotateActions();
+    handleTargetSelectActions();
+}
+
+/*void InputHandler::handleKeyboardUpdate(){
     if (glfwGetKey(m_window, GLFW_KEY_PAGE_DOWN) == GLFW_PRESS){    // move down
         m_player->move(glm::vec3(0, -1, 0));
     }
@@ -186,9 +172,9 @@ void InputHandler::handleKeyboardUpdate(){
     if (glfwGetKey(m_window, GLFW_KEY_R) == GLFW_PRESS){            // fire rocket
         m_player->playerShip()->fireAtObject();
     }
-}
+}*/
 
-void InputHandler::handleJoystickUpdate(int joystickEnum){
+/*void InputHandler::handleJoystickUpdate(int joystickEnum){
 
     gamepadButtonCnt = 0;
     gamepadAxisCnt = 0;
@@ -237,7 +223,7 @@ void InputHandler::handleJoystickUpdate(int joystickEnum){
         rot = glm::normalize(rot);
     }
     m_player->rotate(rot);
-}
+}*/
 
 void InputHandler::handleMouseUpdate(){
     // mouse handling
@@ -275,7 +261,18 @@ void InputHandler::handleMouseUpdate(){
     }
 }
 
-void InputHandler::setupJoystick(int joystickEnum){
+void InputHandler::setupJoystickControls(){
+    if (!getLastSecondaryInput())
+        return;
+    switch (joystickSetupState){
+    case 0: 
+        if (setActionInputMapping(&fireAction, false)){
+            joystickSetupState++;
+        }
+    }
+}
+
+/*void InputHandler::setupJoystick(int joystickEnum){
     if (joystickSetupState < 0)
         return;
     getLastButton(joystickEnum);
@@ -362,55 +359,148 @@ void InputHandler::setupJoystick(int joystickEnum){
         lastAxesValue = 0;
         lastIndex = -1;
     }
-}
+}*/
 
-void InputHandler::getLastButton(int joystickEnum){
-    int cntButtons = 0;
-    int cntAxes = 0;
-    const unsigned char *buttons = glfwGetJoystickButtons(joystickEnum, &cntButtons);
-    const float *axes = glfwGetJoystickAxes(joystickEnum, &cntAxes);
-    for (int i = 0; i < cntButtons; i++){ // get pushed button
-        if (buttons[i] == GLFW_PRESS){
-            lastIndex = i;
-            lastAxesValue = 0;
-            return;
+bool InputHandler::setActionInputMapping(actionKeyMapping* action, bool primary){
+    if (primary && getLastPrimaryInput()){
+        if (getLastPrimaryInput()){
+            action->primaryMapping.set(lastPrimaryInput);
+            lastSecondaryInput = InputMapping();
+            return true;
         }
-    }
-    for (int i = 0; i < cntAxes; i++){ // get pushed axes
-        if (glm::abs(axes[i]) > prop_deadzoneGamepad){
-            // greater maxValue for same axes
-            if (lastIndex == i){ 
-                if (glm::abs(lastAxesValue) < glm::abs(axes[i]))
-                    lastAxesValue = axes[i];
-                return;
-            }
-            // new axes
-            lastIndex = i;
-            lastAxesValue = axes[i];
-            return;
-        }
-    }
-}
-
-float InputHandler::getGamepadInputValue(int index, float axisValue) {
-    if (index == -1)
-        return 0;
-    float inputValue = 0;
-    if (axisValue == 0) {
-        if (gamepadButtonValues[index] == GLFW_PRESS)
-            return 1;
-        else
-            return 0;
     } else {
-        if (glm::abs(gamepadAxisValues[index]) > prop_deadzoneGamepad) {
-            float relativeValue = gamepadAxisValues[index] / axisValue;
+        if (getLastSecondaryInput()){
+            action->secondaryMapping.set(lastSecondaryInput);
+            lastSecondaryInput = InputMapping();
+            return true;
+        }
+    }
+    return false;
+}
+
+bool InputHandler::getLastSecondaryInput(){
+    for (int i = 0; i < gamepadButtonCnt; i++){ // get pushed button
+        if (gamepadButtonValues[i] == GLFW_PRESS){
+            lastSecondaryInput = InputMapping(InputType::GamePadKey, i, 1);
+            return true;
+        }
+    }
+    for (int i = 0; i < gamepadAxisCnt; i++){ // get pushed axes
+        if (glm::abs(gamepadAxisValues[i]) > prop_deadzoneGamepad){
+            // greater maxValue for same axes
+            if (lastPrimaryInput.index == i){
+                if (glm::abs(lastPrimaryInput.maxValue) < glm::abs(gamepadAxisValues[i])){
+                    lastSecondaryInput = InputMapping(InputType::GamePadAxis, i, gamepadAxisValues[i]);
+                    return false;
+                } else{
+                    return true;
+                }
+            }
+            else{
+                lastSecondaryInput = InputMapping(InputType::GamePadAxis, i, gamepadAxisValues[i]);
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+bool InputHandler::getLastPrimaryInput(){
+    if (lastPrimaryInput.type == InputType::None){
+        return false;
+    }
+    return true;
+}
+
+float InputHandler::getInputValue(actionKeyMapping* action) {
+    float inputValue = glm::max(getInputValue(action->primaryMapping.get()), getInputValue(action->secondaryMapping.get()));
+    if (action->toggleAction){
+        if (inputValue){
+            if (action->toggleStatus){
+                inputValue = 0;
+            }
+            action->toggleStatus = true;
+        } else {
+            action->toggleStatus = false;
+        }
+    }
+    return inputValue;
+}
+
+float InputHandler::getInputValue(InputMapping mapping){
+    switch (mapping.type()){
+    case InputType::None:
+        return 0;
+    case InputType::Keyboard:
+        if (glfwGetKey(m_window, mapping.index()) == GLFW_PRESS){
+            return 1;
+        }
+        else {
+            return 0;
+        }
+    case InputType::GamePadKey:
+        if (gamepadButtonCnt > mapping.index() && gamepadButtonValues[mapping.index()] == GLFW_PRESS) {
+            return 1;
+        }
+        else {
+            return 0;
+        }
+    case InputType::GamePadAxis:
+        if (gamepadAxisCnt > mapping.index() && glm::abs(gamepadAxisValues[mapping.index()]) > prop_deadzoneGamepad) {
+            float relativeValue = gamepadAxisValues[mapping.index()] / mapping.maxValue();
             if (relativeValue > 0) {
                 return glm::min(relativeValue, 1.0f);
-            } else {
+            }
+            else {
                 return 0;
             }
         } else {
             return 0;
         }
+    default: return 0;
+    }
+}
+
+
+
+void InputHandler::handleFireActions(){
+    if (getInputValue(&fireAction)){
+        m_player->playerShip()->fireAtPoint(m_targeter->findTargetPoint(m_windowWidth / 2, m_windowHeight / 2));
+    }
+    if (getInputValue(&rocketAction)){
+        m_player->playerShip()->fireAtObject();
+    }
+}
+
+void InputHandler::handleMoveActions(){
+    m_player->move(glm::vec3(-getInputValue(&moveLeftAction), 0, 0));
+    m_player->move(glm::vec3(getInputValue(&moveRightAction), 0, 0));
+    m_player->move(glm::vec3(0, 0, -getInputValue(&moveForwardAction)));
+    m_player->move(glm::vec3(0, 0, getInputValue(&moveBackwardAction)));
+}
+
+void InputHandler::handleRotateActions(){
+    glm::vec3 rot = glm::vec3(0);
+    rot.x = getInputValue(&rotateUpAction)
+        - getInputValue(&rotateDownAction);
+    rot.y = getInputValue(&rotateLeftAction)
+        - getInputValue(&rotateRightAction);
+    rot.z = getInputValue(&rotateClockwiseAction)
+        - getInputValue(&rotateCClockwiseAction);
+    if (glm::length(rot) < prop_deadzoneGamepad){
+        rot = glm::vec3(0);
+    }
+    if (glm::length(rot) > 1){
+        rot = glm::normalize(rot);
+    }
+    m_player->rotate(rot);
+}
+
+void InputHandler::handleTargetSelectActions(){
+    if (getInputValue(&selectNextAction)){
+        m_targeter->selectNextTarget();
+    }
+    if (getInputValue(&selectPreviousAction)){
+        m_targeter->selectPreviousTarget();
     }
 }

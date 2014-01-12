@@ -190,6 +190,7 @@ void Game::update(float deltaSec) {
     //m_treeStateReporter.nudge();
 
     m_inputHandler.update(deltaSec);
+    m_player.applyUpdate();
     World::instance()->update(deltaSec);
     m_player.setFollowCam();
 	m_hud->update(deltaSec);

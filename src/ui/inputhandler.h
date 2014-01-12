@@ -4,6 +4,7 @@
 
 #include <GLFW/glfw3.h>
 
+#include "input/inputmapping.h"
 #include "property/propertymanager.h"
 #include "property/property.h"
 #include "worldobject/ship.h"
@@ -11,7 +12,32 @@
 
 class WorldObject;
 
+struct actionKeyMapping {
+    Property<InputMapping> primaryMapping;
+    Property<InputMapping> secondaryMapping;
+    bool toggleAction;
+    bool toggleStatus;
+    std::string name;
+
+    actionKeyMapping(char* primary, char* secondary, std::string name) :
+        primaryMapping(primary),
+        secondaryMapping(secondary),
+        toggleAction(false),
+        toggleStatus(false),
+        name(name)
+    {};
+
+    actionKeyMapping(char* primary, char* secondary, std::string name, bool toggleAction) :
+        primaryMapping(primary),
+        secondaryMapping(secondary),
+        toggleAction(toggleAction),
+        toggleStatus(false),
+        name(name)
+    {};
+};
+
 class InputHandler {
+
 public:
     InputHandler(GLFWwindow *window, Camera *camera);
     InputHandler(GLFWwindow *window, Player *player, Camera *camera);
@@ -28,61 +54,60 @@ protected:
     Targeter* m_targeter;
 
     void toggleControls();
-    void handleKeyboardUpdate();
-    void handleJoystickUpdate(int joystickEnum);
+    void handleUpdate();
+    //void handleKeyboardUpdate();
+    //void handleJoystickUpdate(int joystickEnum);
     void handleMouseUpdate();
-    void setupJoystick(int joystickEnum);
-    void getLastButton(int joystickEnum);
-    float getGamepadInputValue(int index, float axisValue);
 
+    void handleFireActions();
+    void handleMoveActions();
+    void handleRotateActions();
+    void handleTargetSelectActions();
+
+    void setupJoystick();
+    void getLastButton();
+    float getInputValue(actionKeyMapping* action);
+    float getInputValue(InputMapping mapping);
+    bool setActionInputMapping(actionKeyMapping* action, bool primary);
+    bool getLastPrimaryInput();
+    bool getLastSecondaryInput();
+
+    void setupJoystickControls();
     int joystickSetupState;
+
     int gamepadButtonCnt, gamepadAxisCnt;
     const unsigned char *gamepadButtonValues;
     const float *gamepadAxisValues;
-    bool bumperLeftState, bumperRightState;
+
     bool m_mouseControl;
     int m_windowWidth, m_windowHeight;
     int m_cursorMaxDistance;
-	int m_lastfocus;
-    float lastAxesValue;
-    int lastIndex;
+    int m_lastfocus;
+    InputMapping lastPrimaryInput;
+    InputMapping lastSecondaryInput;
+    bool setupPrimaryInputInProgress;
+    bool setupSecondaryInputInProgress;
+
 
     Property<float> prop_deadzoneMouse;
     Property<float> prop_deadzoneGamepad;
 
-    Property<float> prop_gamepadFireAxesValue;
-    Property<int> prop_gamepadFireIndex;
-    Property<float> prop_gamepadRocketAxesValue;
-    Property<int> prop_gamepadRocketIndex;
+    actionKeyMapping fireAction;
+    actionKeyMapping rocketAction;
 
-    Property<float> prop_gamepadMoveLeftAxesValue;
-    Property<int> prop_gamepadMoveLeftIndex;
-    Property<float> prop_gamepadMoveRightAxesValue;
-    Property<int> prop_gamepadMoveRightIndex;
+    actionKeyMapping moveLeftAction;
+    actionKeyMapping moveRightAction;
+    actionKeyMapping moveForwardAction;
+    actionKeyMapping moveBackwardAction;
 
-    Property<float> prop_gamepadMoveForwardAxesValue;
-    Property<int> prop_gamepadMoveForwardIndex;
-    Property<float> prop_gamepadMoveBackwardAxesValue;
-    Property<int> prop_gamepadMoveBackwardIndex;
+    actionKeyMapping rotateLeftAction;
+    actionKeyMapping rotateRightAction;
+    actionKeyMapping rotateUpAction;
+    actionKeyMapping rotateDownAction;
+    actionKeyMapping rotateClockwiseAction;
+    actionKeyMapping rotateCClockwiseAction;
 
-    Property<float> prop_gamepadRotateRightAxesValue;
-    Property<int> prop_gamepadRotateRightIndex;
-    Property<float> prop_gamepadRotateLeftAxesValue;
-    Property<int> prop_gamepadRotateLeftIndex;
-
-    Property<float> prop_gamepadRotateUpAxesValue;
-    Property<int> prop_gamepadRotateUpIndex;
-    Property<float> prop_gamepadRotateDownAxesValue;
-    Property<int> prop_gamepadRotateDownIndex;
-
-    Property<float> prop_gamepadRotateClockwiseAxesValue;
-    Property<int> prop_gamepadRotateClockwiseIndex;
-    Property<float> prop_gamepadRotateCClockwiseAxesValue;
-    Property<int> prop_gamepadRotateCClockwiseIndex;
-
-    Property<float> prop_gamepadSelectNextAxesValue;
-    Property<int> prop_gamepadSelectNextIndex;
-    Property<float> prop_gamepadSelectPreviousAxesValue;
-    Property<int> prop_gamepadSelectPreviousIndex;
+    actionKeyMapping selectNextAction;
+    actionKeyMapping selectPreviousAction;
 
 };
