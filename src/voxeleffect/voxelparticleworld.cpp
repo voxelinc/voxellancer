@@ -127,14 +127,20 @@ void VoxelParticleWorld::setBufferSize(int size) {
 }
 
 void VoxelParticleWorld::updateBuffers() {
-    //if (m_particles.size() > m_bufferSize) {
-    //    setBufferSize(nextPowerOf2(m_particles.size()));
-    //}
+    if (m_particles.size() > m_bufferSize) {
+        setBufferSize(nextPowerOf2(m_particles.size()));
+    }
 
-    //ParticleData* particleData = static_cast<ParticleData*>(m_particleDataBuffer->mapRange(0, m_particles.size() * sizeof(ParticleData), GL_MAP_WRITE_BIT));
-    glow::Array<ParticleData> particleData;
-    particleData.reserve(m_particles.size());
-    
+    ParticleData* particleData = static_cast<ParticleData*>(m_particleDataBuffer->mapRange(0, m_particles.size() * sizeof(ParticleData), GL_MAP_WRITE_BIT));
+    //glow::Array<ParticleData> particleData;
+    //particleData.reserve(m_particles.size());
+
+    int err;
+    if ((err = glGetError()) != GL_NO_ERROR) {
+        glow::debug("map size: %; buffersize %; error code %; - %;", m_particles.size() * sizeof(ParticleData), m_particleDataBuffer->getParameter(GL_BUFFER_SIZE), err, gluErrorString(err));
+        return;
+    }
+    glow::debug("no error");
 
     int i = 0;
     for (VoxelParticle* particle : m_particles) {
@@ -146,9 +152,9 @@ void VoxelParticleWorld::updateBuffers() {
         });
     }
 
-    m_particleDataBuffer->setData(m_particles.size() * sizeof(ParticleData), particleData.rawData(), GL_STATIC_DRAW);
+    //m_particleDataBuffer->setData(m_particles.size() * sizeof(ParticleData), particleData.rawData(), GL_STATIC_DRAW);
 
-    //m_particleDataBuffer->unmap();
+    m_particleDataBuffer->unmap();
 }
 
 bool VoxelParticleWorld::intersects(VoxelParticle* voxelParticle) {
