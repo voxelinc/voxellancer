@@ -17,8 +17,8 @@ namespace glow {
 
 class VoxelMesh {
 public:
-    static void bindTo(glow::ref_ptr<glow::Program> program,
-                       glow::ref_ptr<glow::VertexArrayObject> vao,
+    static void bindTo(glow::Program* program,
+                       glow::VertexArrayObject* vao,
                        int bindingIndex);
     static void tearDown();
 
@@ -27,7 +27,7 @@ protected:
     static glow::ref_ptr<glow::Buffer> s_vertexBuffer;
 
 
-    static void setupVertexAttribute(glow::ref_ptr<glow::Program> program, glow::ref_ptr<glow::VertexArrayObject> vao, const std::string& name, GLboolean normalised, int bindingNum, GLint offset);
-    static glow::ref_ptr<glow::Buffer> vertexBuffer();
+    static void setupVertexAttribute(glow::Program* program, glow::VertexArrayObject* vao, const std::string& name, GLboolean normalised, int bindingNum, GLint offset);
+    static glow::Buffer* vertexBuffer();
     static void initBuffer();
 };

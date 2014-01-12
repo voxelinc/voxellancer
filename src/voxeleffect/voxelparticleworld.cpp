@@ -84,6 +84,7 @@ void VoxelParticleWorld::initialize() {
 
     loadProgram();
     setupVertexAttributes();
+    setBufferSize(1024);
 
     m_initialized = true;
 }
@@ -103,8 +104,6 @@ void VoxelParticleWorld::setupVertexAttributes() {
     setupVertexAttribute(offsetof(VoxelParticleData, orientation), "v_orientation", 4, GL_FLOAT, GL_FALSE, 3);
     setupVertexAttribute(offsetof(VoxelParticleData, scale), "v_scale", 1, GL_FLOAT, GL_FALSE, 4);
     setupVertexAttribute(offsetof(VoxelParticleData, color), "v_color", 3, GL_FLOAT, GL_FALSE, 5);
-
-    setBufferSize(1024);
 }
 
 void VoxelParticleWorld::setupVertexAttribute(GLint offset, const std::string& name, int numPerVertex, GLenum type, GLboolean normalised, int bindingNum) {

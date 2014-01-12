@@ -51,7 +51,7 @@ void VoxelMesh::tearDown() {
     s_vertexBuffer = nullptr;
 }
 
-void VoxelMesh::setupVertexAttribute(glow::ref_ptr<glow::Program> program, glow::ref_ptr<glow::VertexArrayObject> vao, const std::string& name, GLboolean normalised, int bindingNum, GLint offset) {
+void VoxelMesh::setupVertexAttribute(glow::Program* program, glow::VertexArrayObject* vao, const std::string& name, GLboolean normalised, int bindingNum, GLint offset) {
     glow::VertexAttributeBinding* binding = vao->binding(bindingNum);
     GLint location = program->getAttributeLocation(name);
     assert(location >= 0);
@@ -63,16 +63,17 @@ void VoxelMesh::setupVertexAttribute(glow::ref_ptr<glow::Program> program, glow:
     vao->enable(location);
 }
 
-glow::ref_ptr<glow::Buffer> VoxelMesh::vertexBuffer() {
+glow::Buffer* VoxelMesh::vertexBuffer() {
     if (!s_vertexBuffer) {
+        glow::debug("Create VoxelMesh");
         initBuffer();
     }
     return s_vertexBuffer;
 }
 
 void VoxelMesh::bindTo(
-    glow::ref_ptr<glow::Program> program,
-    glow::ref_ptr<glow::VertexArrayObject> vao,
+    glow::Program* program,
+    glow::VertexArrayObject* vao,
     int bindingIndex)
 {
     setupVertexAttribute(program, vao, "v_vertex", GL_FALSE, bindingIndex + 0, 0);

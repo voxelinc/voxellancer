@@ -5,76 +5,89 @@
 
 #include <glowutils/MathMacros.h>
 #include <glow/DebugMessageOutput.h>
+#include <glow/VertexArrayObject.h>
+#include <glow/VertexAttributeBinding.h>
+#include <glow/Buffer.h>
+#include <glow/Program.h>
 
 #include "utils/tostring.h"
 
 #include "voxelcluster.h"
+#include "voxeleffect/voxelmesh.h"
+#include "voxelrenderer.h"
 
 
+struct VoxelData {
+    glm::vec3 position;
+    glm::vec3 color;
+};
 
 VoxelRenderData::VoxelRenderData(std::unordered_map<glm::ivec3, Voxel*> &voxel) :
     m_voxel(voxel),
-    m_texturesDirty(true)
+    m_isDirty(true),
+    m_bufferSize(0)
 {
-    m_positionTexture = new glow::Texture(GL_TEXTURE_1D);
-    m_positionTexture->setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    m_positionTexture->setParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    m_colorTexture = new glow::Texture(GL_TEXTURE_1D);
-    m_colorTexture->setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    m_colorTexture->setParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    m_vertexArrayObject = new glow::VertexArrayObject();
+    m_voxelDataBuffer = new glow::Buffer(GL_ARRAY_BUFFER);
 }
-
 
 VoxelRenderData::~VoxelRenderData() {
+    
 }
 
-void VoxelRenderData::updateTextures() {
-    int size = nextPowerOf2(m_voxel.size());
-    std::vector<unsigned char> positionData(size * 3);
-    std::vector<unsigned char> colorData(size * 3);
+void VoxelRenderData::setupVertexAttributes() {
+    VoxelMesh::bindTo(VoxelRenderer::program(), m_vertexArrayObject, 0);
+
+    setupVertexAttribute(offsetof(VoxelData, position), "v_position", 3, GL_FLOAT, GL_FALSE, 2);
+    setupVertexAttribute(offsetof(VoxelData, color), "v_color", 3, GL_FLOAT, GL_FALSE, 3);
+}
+
+void VoxelRenderData::setupVertexAttribute(GLint offset, const std::string& name, int numPerVertex, GLenum type, GLboolean normalised, int bindingNum) {
+    glow::VertexAttributeBinding* binding = m_vertexArrayObject->binding(bindingNum);
+    GLint location = VoxelRenderer::program()->getAttributeLocation(name);
+
+    binding->setAttribute(location);
+    binding->setBuffer(m_voxelDataBuffer, 0, sizeof(VoxelData));
+    binding->setFormat(numPerVertex, type, normalised, offset);
+
+    m_vertexArrayObject->enable(location);
+}
+
+void VoxelRenderData::updateBuffer() {
+    if (m_bufferSize < m_voxel.size() || m_bufferSize > m_voxel.size() * 2) {
+        m_voxelDataBuffer->setData(m_voxel.size() * sizeof(VoxelData), nullptr, GL_DYNAMIC_DRAW);
+        m_bufferSize = m_voxel.size();
+    }
+    
+    VoxelData* voxelData = static_cast<VoxelData*>(m_voxelDataBuffer->mapRange(0, m_voxel.size() * sizeof(VoxelData), GL_MAP_WRITE_BIT));
 
     int i = 0;
     for (auto pair : m_voxel) {
         Voxel *voxel = pair.second;
         assert(voxel != nullptr);
 
-        positionData[i * 3 + 0] = static_cast<unsigned char>(voxel->gridCell().x);
-        positionData[i * 3 + 1] = static_cast<unsigned char>(voxel->gridCell().y);
-        positionData[i * 3 + 2] = static_cast<unsigned char>(voxel->gridCell().z);
-        colorData[i * 3 + 0] = voxel->color() >> 16;
-        colorData[i * 3 + 1] = (voxel->color() & 0xFF00) >> 8;
-        colorData[i * 3 + 2] = voxel->color() & 0xFF;
-
+        voxelData[i].position = glm::vec3(voxel->gridCell());
+        voxelData[i].color.x = (voxel->color() >> 16) / 255.0f;
+        voxelData[i].color.y = ((voxel->color() & 0xFF00) >> 8) / 255.0f;
+        voxelData[i].color.z = (voxel->color() & 0xFF) / 255.0f;
         i++;
     }
-    m_voxelCount = i;
 
-    m_positionTexture->image1D(0, GL_RGB, size, 0, GL_RGB, GL_UNSIGNED_BYTE, &positionData.front());
-    m_colorTexture->image1D(0, GL_RGB, size, 0, GL_RGB, GL_UNSIGNED_BYTE, &colorData.front());
-    CheckGLError();
+    m_voxelDataBuffer->unmap();
 
-    m_texturesDirty = false;
+    m_isDirty = false;
 }
 
-// returns the number of voxel that will be rendered
 int VoxelRenderData::voxelCount() {
-    if (m_texturesDirty)
-        updateTextures();
-    return m_voxelCount;
-}
-
-glow::Texture * VoxelRenderData::positionTexture() {
-    if (m_texturesDirty)
-        updateTextures();
-    return m_positionTexture;
-}
-
-glow::Texture * VoxelRenderData::colorTexture() {
-    if (m_texturesDirty)
-        updateTextures();
-    return m_colorTexture;
+    return m_voxel.size();
 }
 
 void VoxelRenderData::invalidate() {
-    m_texturesDirty = true;
+    m_isDirty = true;
+}
+
+glow::VertexArrayObject* VoxelRenderData::vertexArrayObject() {
+    if (m_isDirty)
+        updateBuffer(); 
+    return m_vertexArrayObject;
 }
