@@ -81,9 +81,9 @@ void Voxel::onDestruction() {
 
     if (m_voxelTreeNode && worldObject) {
         VoxelExplosionGenerator generator;
-        generator.setOrientation(m_voxelTreeNode->worldObject()->transform().orientation());
-        generator.setPosition(m_voxelTreeNode->worldObject()->transform().applyTo(glm::vec3(m_gridCell)));
-        generator.setScale(m_voxelTreeNode->worldObject()->transform().scale() * 0.6f, 0.4f);
+        generator.setOrientation(worldObject->transform().orientation());
+        generator.setPosition(worldObject->transform().applyTo(glm::vec3(m_gridCell)));
+        generator.setScale(worldObject->transform().scale() * 0.6f, 0.4f);
         generator.setColor(m_color);
         generator.setForce(0.4f, 0.5f);
         generator.setSpawnProbability(0.5);
