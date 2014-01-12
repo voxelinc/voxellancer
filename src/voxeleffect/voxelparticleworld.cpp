@@ -27,30 +27,30 @@ struct ParticleData {
 VoxelParticleWorld::VoxelParticleWorld():
     m_initialized(false),
     m_bufferSize(0),
-    m_voxelParticles()
+    m_particles()
 {
 
 }
 
 VoxelParticleWorld::~VoxelParticleWorld() {
-    for (VoxelParticle* voxelParticle : m_voxelParticles) {
+    for (VoxelParticle* voxelParticle : m_particles) {
         delete voxelParticle;
     }
 }
 
 void VoxelParticleWorld::addParticle(VoxelParticle* voxelParticle) {
-    m_voxelParticles.push_back(voxelParticle);
+    m_particles.push_back(voxelParticle);
 }
 
 void VoxelParticleWorld::update(float deltaSec) {
-    for (std::list<VoxelParticle*>::iterator i = m_voxelParticles.begin(); i != m_voxelParticles.end(); ) {
+    for (std::list<VoxelParticle*>::iterator i = m_particles.begin(); i != m_particles.end(); ) {
         VoxelParticle* voxelParticle = *i;
 
         voxelParticle->update(deltaSec);
 
         if (intersects(voxelParticle) || voxelParticle->isDead()) {
             delete voxelParticle;
-            i = m_voxelParticles.erase(i);
+            i = m_particles.erase(i);
         } else {
             ++i;
         }
@@ -61,7 +61,7 @@ void VoxelParticleWorld::draw(Camera& camera) {
     if(!m_initialized) {
         initialize();
     }
-    if (m_voxelParticles.size() == 0) {
+    if (m_particles.size() == 0) {
         return;
     }
 
@@ -75,7 +75,7 @@ void VoxelParticleWorld::draw(Camera& camera) {
     glVertexAttribDivisor(m_program->getAttributeLocation("v_orientation"), 1);
     glVertexAttribDivisor(m_program->getAttributeLocation("v_scale"), 1);
     glVertexAttribDivisor(m_program->getAttributeLocation("v_color"), 1);
-    m_vertexArrayObject->drawArraysInstanced(GL_TRIANGLE_STRIP, 0, 14, m_voxelParticles.size());
+    m_vertexArrayObject->drawArraysInstanced(GL_TRIANGLE_STRIP, 0, 14, m_particles.size());
     m_program->release();
 }
 
@@ -127,26 +127,26 @@ void VoxelParticleWorld::setBufferSize(int size) {
 }
 
 void VoxelParticleWorld::updateBuffers() {
-    //if (m_voxelParticles.size() > m_bufferSize) {
-    //    setBufferSize(nextPowerOf2(m_voxelParticles.size()));
+    //if (m_particles.size() > m_bufferSize) {
+    //    setBufferSize(nextPowerOf2(m_particles.size()));
     //}
 
-    //ParticleData* particleData = static_cast<ParticleData*>(m_particleBuffer->mapRange(0, m_voxelParticles.size() * sizeof(ParticleData), GL_MAP_WRITE_BIT));
+    //ParticleData* particleData = static_cast<ParticleData*>(m_particleDataBuffer->mapRange(0, m_particles.size() * sizeof(ParticleData), GL_MAP_WRITE_BIT));
     glow::Array<ParticleData> particleData;
-    particleData.reserve(m_voxelParticles.size());
-
+    particleData.reserve(m_particles.size());
+    
 
     int i = 0;
-    for (VoxelParticle* voxelParticle : m_voxelParticles) {
-        particleData.push_back(ParticleData{
-            voxelParticle->worldTransform().position(),
-            voxelParticle->worldTransform().orientation(),
-            voxelParticle->worldTransform().scale(),
-            voxelParticle->color()
+    for (VoxelParticle* particle : m_particles) {
+        particleData[i++] = (ParticleData{
+            particle->worldTransform().position(),
+            particle->worldTransform().orientation(),
+            particle->worldTransform().scale(),
+            particle->color()
         });
     }
 
-    m_particleDataBuffer->setData(m_voxelParticles.size() * sizeof(ParticleData), particleData.rawData(), GL_STATIC_DRAW);
+    m_particleDataBuffer->setData(m_particles.size() * sizeof(ParticleData), particleData.rawData(), GL_STATIC_DRAW);
 
     //m_particleDataBuffer->unmap();
 }

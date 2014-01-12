@@ -25,7 +25,7 @@ public:
 
 
 protected:
-    std::list<VoxelParticle*> m_voxelParticles;
+    std::list<VoxelParticle*> m_particles;
 
     int m_bufferSize;
 
