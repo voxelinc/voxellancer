@@ -17,10 +17,8 @@ class WorldObject;
 
 class InputHandler {
 public:
-    InputHandler(GLFWwindow *window, Player *player, CameraDolly* cameraDolly);
+    InputHandler(GLFWwindow *window, Player *player);
 	virtual ~InputHandler();
-
-    CrossHair& crossHair();
 
 	void resizeEvent(const unsigned int width, const unsigned int height);
 	void keyCallback(int key, int scancode, int action, int mods);
@@ -37,9 +35,6 @@ protected:
 	GLFWwindow *m_window;
     Player* m_player;
 
-    CrossHair m_crossHair;
-
-
 	int m_windowWidth, m_windowHeight;
 	int m_lastfocus;
 
@@ -49,4 +44,5 @@ protected:
     Property<float> prop_deadzone;
 
     glm::vec3 findTargetPoint();
+    void placeCrossHair(double winX, double winY);
 };

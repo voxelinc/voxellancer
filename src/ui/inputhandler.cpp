@@ -36,14 +36,11 @@
 */
 
 
-InputHandler::InputHandler(GLFWwindow *window, Player* player, CameraDolly* cameraDolly) :
+InputHandler::InputHandler(GLFWwindow *window, Player* player) :
     m_window(window),
     m_player(player),
-    m_crossHair(&cameraDolly->cameraHead()),
     prop_deadzone("input.deadzone")
 {
-    cameraDolly->cameraHead().setCrossHair(&m_crossHair);
-
     bumperLeftState = false;
     bumperRightState = false;
     glfwGetWindowSize(m_window, &m_windowWidth, &m_windowHeight);
@@ -61,10 +58,6 @@ InputHandler::~InputHandler(){
 
 }
 
-CrossHair& InputHandler::crossHair() {
-    return m_crossHair;
-}
-
 void InputHandler::resizeEvent(const unsigned int width, const unsigned int height){
 	//glfwGetWindowSize(m_window, &m_windowWidth, &m_windowHeight);
 	m_lastfocus = false; // through window resize everything becomes scrambled
@@ -79,8 +72,6 @@ void InputHandler::keyCallback(int key, int scancode, int action, int mods){
 }
 
 void InputHandler::update(float deltaSec) {
-    m_crossHair.update(deltaSec);
-
 	/* Check here for every-frame events, e.g. view & movement controls */
     if (glfwGetWindowAttrib(m_window, GLFW_FOCUSED)){
         if (m_lastfocus){
@@ -166,6 +157,8 @@ void InputHandler::update(float deltaSec) {
             double x, y;
             glfwGetCursorPos(m_window, &x, &y);
 
+            placeCrossHair(x, y);
+
             // shoot
             if (glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS){
                 m_player->playerShip()->fireAtPoint(findTargetPoint());
@@ -180,7 +173,7 @@ void InputHandler::update(float deltaSec) {
             float angX = 0;
             float angY = 0;
 
-            if (1 || m_mouseControl || glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS){
+            if (m_mouseControl || glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS){
                 glm::vec3 rot;
                 x = m_windowWidth / 2 - (int)floor(x);
                 y = m_windowHeight / 2 - (int)floor(y);
@@ -268,10 +261,10 @@ void InputHandler::selectNextTarget(bool forward){
 }
 
 glm::vec3 InputHandler::findTargetPoint() {
-    glm::vec3 shootDirection(glm::normalize(m_crossHair.position() - m_crossHair.cameraHead()->position()));
+    glm::vec3 shootDirection(glm::normalize(m_player->hud().crossHair().position() - m_player->cameraDolly().cameraHead().position()));
 
     Ray ray(
-        m_crossHair.cameraHead()->position(),
+        m_player->hud().crossHair().position(),
         shootDirection
     );
     glm::vec3 targetPoint;
@@ -292,3 +285,10 @@ glm::vec3 InputHandler::findTargetPoint() {
 
     return targetPoint;
 }
+
+void InputHandler::placeCrossHair(double winX, double winY) {
+    int width, height;
+    glfwGetWindowSize(glfwGetCurrentContext(), &width, &height);
+    m_player->hud().setCrossHairOffset(glm::vec2((winX - (width/2))/(width/2), (winY - (height/2))/(height/2)));
+}
+

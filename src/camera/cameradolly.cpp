@@ -8,23 +8,18 @@
 #include "game.h"
 
 
-CameraDolly::CameraDolly(Game* game):
+CameraDolly::CameraDolly():
     InertiaFollower(10.0f, 10.0f),
-    m_game(game),
     m_cameraHead(this),
     m_followWorldObjectHandle(WorldObjectHandle::nullHandle())
 {
-}
-
-Game* CameraDolly::game() {
-    return m_game;
 }
 
 CameraHead& CameraDolly::cameraHead() {
     return m_cameraHead;
 }
 
-void CameraDolly::setFollowObject(WorldObject* m_followWorldObject) {
+void CameraDolly::followWorldObject(WorldObject* m_followWorldObject) {
     m_followWorldObjectHandle = m_followWorldObject->handle();
 }
 

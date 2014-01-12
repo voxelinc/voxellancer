@@ -18,12 +18,22 @@ const glm::vec3& InertiaFollower::position() const {
     return m_position;
 }
 
+void InertiaFollower::setPosition(const glm::vec3& position) {
+    m_position = position;
+}
+
 const glm::quat& InertiaFollower::orientation() const {
     return m_orientation;
 }
 
+void InertiaFollower::setOrientation(const glm::quat& orientation) {
+    m_orientation = orientation;
+}
+
 void InertiaFollower::follow(const glm::vec3& targetPosition, const glm::quat& targetOrientation, float deltaSec) {
-    m_position = glm::mix(m_position, targetPosition, m_directionalInertia * deltaSec);
-    m_orientation = glm::slerp(m_orientation, targetOrientation, m_angularInertia * deltaSec);
+    float mix = std::min(1.0f, m_directionalInertia * deltaSec);
+
+    m_position = glm::mix(m_position, targetPosition, mix);
+    m_orientation = glm::slerp(m_orientation, targetOrientation, mix);
 }
 

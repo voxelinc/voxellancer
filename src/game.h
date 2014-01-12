@@ -53,10 +53,7 @@ private:
     World* m_world;
 	InputHandler m_inputHandler;
     Player m_player;
-	CameraDolly m_cameraDolly;
 
-	std::unique_ptr<Skybox> m_skybox;
-//	std::unique_ptr<HUD> m_hud;
 	std::unique_ptr<HD3000Dummy> m_hd3000dummy;
 	std::unique_ptr<LinuxVMDummy> m_linuxvmdummy;
 };

@@ -2,11 +2,14 @@
 
 #include <GLFW/glfw3.h>
 
+#include "ui/hud.h"
+
 #include "cameradolly.h"
 
 
 CameraHead::CameraHead(CameraDolly* cameraDolly):
-    m_cameraDolly(cameraDolly)
+    m_cameraDolly(cameraDolly),
+    m_hud(nullptr)
 {
     setupMonoView();
 }
@@ -15,16 +18,20 @@ CameraDolly* CameraHead::cameraDolly() {
     return m_cameraDolly;
 }
 
-CrossHair* CameraHead::crossHair() {
-    return m_crossHair;
+HUD* CameraHead::hud() {
+    return m_hud;
 }
 
-void CameraHead::setCrossHair(CrossHair* crossHair) {
-    m_crossHair = crossHair;
+void CameraHead::setHUD(HUD* hud) {
+    m_hud = hud;
 }
 
 const glm::quat& CameraHead::relativeOrientation() const {
     return m_relativeOrientation;
+}
+
+const std::list<CameraEye*>& CameraHead::eyes() const {
+    return m_eyes;
 }
 
 glm::vec3 CameraHead::position() const {

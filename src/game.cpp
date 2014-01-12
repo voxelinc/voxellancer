@@ -46,8 +46,7 @@ class Ship;
 
 Game::Game(GLFWwindow *window) :
     m_window(window),
-    m_cameraDolly(this),
-    m_inputHandler(window, &m_player, &m_cameraDolly)
+    m_inputHandler(window, &m_player)
 {
     reloadConfig();
 }
@@ -58,10 +57,6 @@ Game::~Game() {
 
 void Game::reloadConfig() {
 	PropertyManager::instance()->load("data/config.ini");
-}
-
-Skybox& Game::skybox() {
-    return *m_skybox;
 }
 
 void Game::initialize() {
@@ -76,8 +71,6 @@ void Game::initialize() {
     glow::debug("create world");
     m_world = World::instance();
 
-    glow::debug("Create Skybox");
-	m_skybox = std::unique_ptr<Skybox>(new Skybox);
 
     Ship *normandy = new Ship();
     ClusterCache::instance()->fillObject(normandy, "data/voxelcluster/normandy.csv");
@@ -115,8 +108,6 @@ void Game::initialize() {
     wall->objectInfo().setShowOnHud(true);
     wall->objectInfo().setCanLockOn(true);
     m_world->god().scheduleSpawn(wall);
-
-    m_cameraDolly.setFollowObject(testCluster);
 
 
     WorldObject *planet = new WorldObject();
@@ -183,8 +174,9 @@ void Game::update(float deltaSec) {
     deltaSec = glm::min(1.f, deltaSec);
 
     World::instance()->update(deltaSec);
+    m_player.update(deltaSec);
     m_inputHandler.update(deltaSec);
-    m_cameraDolly.update(deltaSec);
+
 //	m_hud->update(deltaSec);
 }
 
@@ -194,7 +186,7 @@ void Game::draw() {
 	glCullFace(GL_BACK);
 	glClear(GL_DEPTH_BUFFER_BIT);
 
-    m_cameraDolly.draw();
+    m_player.draw();
 
     m_hd3000dummy->drawIfActive();
 }

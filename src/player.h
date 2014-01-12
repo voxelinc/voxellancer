@@ -1,5 +1,13 @@
-#include "worldobject/ship.h"
+#pragma once
+
 #include "camera/camera.h"
+#include "camera/cameradolly.h"
+
+#include "ui/hud.h"
+
+#include "worldobject/ship.h"
+
+
 
 class Player
 {
@@ -14,14 +22,20 @@ public:
 
     void applyAcceleration();
 
-    Ship* playerShip();
+    void update(float deltaSec);
+    void draw();
 
+    Ship* playerShip();
+    CameraDolly& cameraDolly();
+    HUD& hud();
 
 
 private:
-    Ship *m_playerShip;
-    glm::vec3 m_shipOffset;
+    Ship* m_playerShip;
     glm::vec3 acc;
     glm::vec3 accAng;
+
+    CameraDolly m_cameraDolly;
+    HUD m_hud;
 };
 

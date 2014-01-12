@@ -10,7 +10,10 @@ public:
     InertiaFollower(float directionalInertia, float angularInertia);
 
     const glm::vec3& position() const;
+    void setPosition(const glm::vec3& position);
+
     const glm::quat& orientation() const;
+    void setOrientation(const glm::quat& orientation);
 
     void follow(const glm::vec3& targetPosition, const glm::quat& targetOrientation, float deltaSec);
 

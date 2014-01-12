@@ -34,6 +34,10 @@ CameraEye::CameraEye(CameraHead* cameraHead, int viewportWidth, int viewportHeig
 //    m_fbo.unbind();
 }
 
+Camera& CameraEye::camera() {
+    return m_camera;
+}
+
 void CameraEye::update(float deltaSec) {
     m_camera.setPosition(m_cameraHead->position() + m_cameraHead->orientation() * m_relativePosition);
     m_camera.setOrientation(m_cameraHead->orientation());
@@ -42,7 +46,7 @@ void CameraEye::update(float deltaSec) {
 void CameraEye::draw() {
  //   m_fbo.bind();
 
-	m_cameraHead->cameraDolly()->game()->skybox().draw(&m_camera);
+	World::instance()->skybox().draw(&m_camera);
 
     VoxelRenderer::instance()->prepareDraw(&m_camera);
 
@@ -50,7 +54,7 @@ void CameraEye::draw() {
         VoxelRenderer::instance()->draw(worldObject);
     }
 
-    m_cameraHead->crossHair()->draw();
+    m_cameraHead->hud()->draw();
     World::instance()->voxelParticleWorld().draw(m_camera);
 
     VoxelRenderer::instance()->afterDraw();

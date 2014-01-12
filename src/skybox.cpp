@@ -1,5 +1,6 @@
 #include "skybox.h"
 
+#include <iostream>
 #include <stdexcept>
 #include <glow/Shader.h>
 #include <glow/VertexAttributeBinding.h>

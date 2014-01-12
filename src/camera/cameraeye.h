@@ -14,6 +14,8 @@ class CameraEye {
 public:
     CameraEye(CameraHead* cameraHead, int viewportWidth, int viewportHeight, glm::vec3 relativePosition);
 
+    Camera& camera();
+
     void update(float deltaSec);
     void draw();
 

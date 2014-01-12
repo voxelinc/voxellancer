@@ -7,6 +7,7 @@
 #include "cameraeye.h"
 
 
+class HUD;
 class CameraDolly;
 class CrossHair;
 
@@ -16,10 +17,12 @@ public:
 
     CameraDolly* cameraDolly();
 
-    CrossHair* crossHair();
-    void setCrossHair(CrossHair* crossHair);
+    HUD* hud();
+    void setHUD(HUD* hud);
 
     const glm::quat& relativeOrientation() const;
+
+    const std::list<CameraEye*>& eyes() const;
 
     glm::vec3 position() const;
     glm::quat orientation() const;
@@ -33,8 +36,7 @@ public:
 
 protected:
     CameraDolly* m_cameraDolly;
-
-    CrossHair* m_crossHair;
+    HUD* m_hud;
 
     glm::quat m_relativeOrientation;
 

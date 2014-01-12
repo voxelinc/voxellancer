@@ -7,18 +7,17 @@
 #include "crosshairvoxels.h"
 
 
+class HUD;
 class CameraHead;
 
 class CrossHair {
 public:
-    CrossHair(CameraHead* cameraHead);
+    CrossHair(HUD* hud);
 
-    CameraHead* cameraHead();
+    HUD* hud();
 
     glm::vec3 position() const;
-    const glm::quat& orientation() const;
-
-    float distanceToBase() const;
+    glm::quat orientation() const;
 
     const glm::quat& directionOffset() const;
     void setDirectionOffset(const glm::quat& directionOffset);
@@ -28,9 +27,7 @@ public:
 
 
 protected:
-    CameraHead* m_cameraHead;
-    InertiaFollower m_base;
-    float m_distanceToBase;
+    HUD* m_hud;
     glm::quat m_directionOffset;
     CrossHairVoxels m_crossHairVoxels;
 };

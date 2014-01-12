@@ -1,31 +1,28 @@
 #include "crosshair.h"
 
 #include "camera/camerahead.h"
+#include "camera/cameradolly.h"
+
+#include "hud.h"
 
 
-CrossHair::CrossHair(CameraHead* cameraHead):
-    m_cameraHead(cameraHead),
-    m_base(45.0f, 45.0f),
-    m_crossHairVoxels(this),
-    m_distanceToBase(5.0f)
+CrossHair::CrossHair(HUD* hud):
+    m_hud(hud),
+    m_crossHairVoxels(this)
 {
 
 }
 
-CameraHead* CrossHair::cameraHead() {
-    return m_cameraHead;
+HUD* CrossHair::hud() {
+    return m_hud;
 }
 
 glm::vec3 CrossHair::position() const {
-    return m_base.position() + m_base.orientation() * glm::vec3(0, 0 , -m_distanceToBase);
+    return m_hud->position() + orientation() * glm::vec3(0, 0 , -m_hud->sphere().radius());
 }
 
-const glm::quat& CrossHair::orientation() const {
-    return m_base.orientation();
-}
-
-float CrossHair::distanceToBase() const {
-    return m_distanceToBase;
+glm::quat CrossHair::orientation() const {
+    return m_hud->orientation() * m_directionOffset;
 }
 
 const glm::quat& CrossHair::directionOffset() const {
@@ -37,8 +34,7 @@ void CrossHair::setDirectionOffset(const glm::quat& directionOffset) {
 }
 
 void CrossHair::update(float deltaSec) {
-    m_base.follow(m_cameraHead->position(), m_directionOffset * m_cameraHead->orientation(), deltaSec);
-    m_crossHairVoxels.update(deltaSec);
+
 }
 
 void CrossHair::draw() {

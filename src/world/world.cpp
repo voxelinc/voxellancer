@@ -13,6 +13,7 @@ World *World::s_instance = nullptr;
 
 World::World()
 {
+    m_skybox = std::unique_ptr<Skybox>(new Skybox());
     m_worldLogic = std::unique_ptr<WorldLogic>(new WorldLogic(*this));
     m_worldTree = std::unique_ptr<WorldTree>(new WorldTree());
     m_god = std::unique_ptr<God>(new God(*this));
@@ -21,6 +22,10 @@ World::World()
 
 World::~World() {
 
+}
+
+Skybox &World::skybox() {
+    return *m_skybox;
 }
 
 WorldLogic &World::worldLogic() {

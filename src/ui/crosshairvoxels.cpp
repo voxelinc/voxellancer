@@ -36,8 +36,8 @@ static CrossHairElement* newDot() {
 CrossHairVoxels::CrossHairVoxels(CrossHair* crossHair):
     m_crossHair(crossHair)
 {
-    float baseX = 0.5f;
-    float baseY = 0.2f;
+    float baseX = 0.2f;
+    float baseY = 0.1f;
 
     CrossHairElement *lu = newStick();
     lu->relativeOrientation = glm::angleAxis(150.0f, glm::vec3(0.0f, 0.0f, 1.0f));
@@ -69,17 +69,17 @@ CrossHairVoxels::~CrossHairVoxels() {
 }
 
 void CrossHairVoxels::update(float deltaSec) {
+
+}
+
+void CrossHairVoxels::draw() {
     for(CrossHairElement* crossHairElement : m_crossHairElements) {
         WorldTransform transform(crossHairElement->transform());
         transform.setPosition(m_crossHair->position() + m_crossHair->orientation() * crossHairElement->relativePosition);
         transform.setOrientation(m_crossHair->orientation() * crossHairElement->relativeOrientation);
 
         crossHairElement->setTransform(transform);
-    }
-}
 
-void CrossHairVoxels::draw() {
-    for(CrossHairElement* crossHairElement : m_crossHairElements) {
         VoxelRenderer::instance()->draw(crossHairElement);
     }
 }

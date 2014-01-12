@@ -1,7 +1,10 @@
 #include "player.h"
 
-Player::Player() {
-    m_shipOffset = glm::vec3(0, 5, 10);
+Player::Player():
+    m_hud(this)
+{
+    m_cameraDolly.cameraHead().setHUD(&m_hud);
+
     acc = glm::vec3(0);
     accAng = glm::vec3(0);
 }
@@ -19,6 +22,7 @@ void Player::rotate(glm::vec3 direction){
 
 void Player::setShip(Ship* ship){
     m_playerShip = ship;
+    m_cameraDolly.followWorldObject(ship);
 }
 
 void Player::applyAcceleration(){
@@ -34,6 +38,24 @@ void Player::applyAcceleration(){
     accAng = glm::vec3(0);
 }
 
+void Player::update(float deltaSec) {
+    m_cameraDolly.update(deltaSec);
+    m_hud.update(deltaSec);
+}
+
+void Player::draw() {
+    m_cameraDolly.draw();
+}
+
 Ship* Player::playerShip() {
     return m_playerShip;
 }
+
+CameraDolly& Player::cameraDolly() {
+    return m_cameraDolly;
+}
+
+HUD& Player::hud() {
+    return m_hud;
+}
+

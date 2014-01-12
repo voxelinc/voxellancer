@@ -14,21 +14,17 @@ class Game;
 
 class CameraDolly: public InertiaFollower {
 public:
-    CameraDolly(Game* game);
-
-    Game* game();
+    CameraDolly();
 
     CameraHead& cameraHead();
 
-    void setFollowObject(WorldObject* m_followWorldObject);
+    void followWorldObject(WorldObject* m_followWorldObject);
 
     void update(float deltaSec);
     void draw();
 
 
 protected:
-    Game* m_game;
-
     CameraHead m_cameraHead;
 
     std::shared_ptr<WorldObjectHandle> m_followWorldObjectHandle;
