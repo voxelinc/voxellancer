@@ -130,7 +130,7 @@ void VoxelParticleWorld::updateBuffers() {
     if (m_particles.size() > m_bufferSize) {
         setBufferSize(nextPowerOf2(m_particles.size()));
     }
-    ParticleData* particleData = static_cast<ParticleData*>(m_particleDataBuffer->mapRange(0, m_particles.size() * sizeof(ParticleData), GL_MAP_WRITE_BIT));
+    ParticleData* particleData = static_cast<ParticleData*>(m_particleDataBuffer->mapRange(0, m_particles.size() * sizeof(ParticleData), GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT));
     
     int i = 0;
     for (VoxelParticle* particle : m_particles) {
