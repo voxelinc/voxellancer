@@ -55,27 +55,22 @@ void VoxelRenderData::setupVertexAttribute(GLint offset, const std::string& name
 }
 
 void VoxelRenderData::updateBuffer() {
-    //if (m_bufferSize < m_voxel.size() || m_bufferSize > m_voxel.size() * 2) {
-    //    m_voxelDataBuffer->setData(m_voxel.size() * sizeof(VoxelData), nullptr, GL_STREAM_DRAW);
-    //    m_bufferSize = m_voxel.size();
-    //}
+    if (m_bufferSize < m_voxel.size() || m_bufferSize > m_voxel.size() * 2) {
+        m_voxelDataBuffer->setData(m_voxel.size() * sizeof(VoxelData), nullptr, GL_DYNAMIC_DRAW);
+        m_bufferSize = m_voxel.size();
+    }
 
-    //VoxelData* voxelData = static_cast<VoxelData*>(m_voxelDataBuffer->mapRange(0, m_voxel.size() * sizeof(VoxelData), GL_MAP_WRITE_BIT));
+    VoxelData* voxelData = static_cast<VoxelData*>(m_voxelDataBuffer->mapRange(0, m_voxel.size() * sizeof(VoxelData), GL_MAP_WRITE_BIT));
 
-    glow::Array<VoxelData> voxelData;
-    voxelData.reserve(m_voxel.size());
 
     int i = 0;
     for (auto pair : m_voxel) {
         Voxel *voxel = pair.second;
         assert(voxel != nullptr);
-        voxelData.push_back(VoxelData{ glm::vec3(voxel->gridCell()), voxel->color() });
-        i++;
+        voxelData[i++] = VoxelData{ glm::vec3(voxel->gridCell()), voxel->color() };
     }
 
-    //m_voxelDataBuffer->unmap();
-
-    m_voxelDataBuffer->setData(m_voxel.size() * sizeof(VoxelData), voxelData.rawData(), GL_STATIC_DRAW);
+    m_voxelDataBuffer->unmap();
 
     m_isDirty = false;
 }
