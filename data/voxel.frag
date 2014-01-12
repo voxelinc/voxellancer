@@ -3,7 +3,7 @@
 uniform float withBorder;
 
 flat in vec3 f_normal;
-flat in vec3 f_color;
+in vec3 f_color;
 in vec3 modelposition;
 
 out vec4 fragColor;

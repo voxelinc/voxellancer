@@ -9,8 +9,7 @@ in float v_scale;
 in vec4 v_color;
 
 flat out vec3 f_normal;
-flat out vec3 f_color;
-
+out vec3 f_color;
 out vec3 modelposition;
 
 uniform mat4 viewProjection;
