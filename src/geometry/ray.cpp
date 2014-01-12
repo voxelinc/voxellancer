@@ -47,12 +47,12 @@ bool Ray::intersects(const Sphere& sphere) const {
     return t0 >= 0 || t1 >= 0;
 }
 
-bool Ray::nearTo(const TAABB<float>& aabb) const {
+bool Ray::nearTo(const TAABB<int>& aabb) const {
     Sphere aabbSphere = Sphere::containing(aabb);
     return intersects(aabbSphere);
 }
 
-bool Ray::containedBy(const TAABB<float>& aabb) const {
+bool Ray::containedBy(const TAABB<int>& aabb) const {
     return false;
 }
 

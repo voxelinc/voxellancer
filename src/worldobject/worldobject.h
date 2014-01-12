@@ -68,6 +68,7 @@ protected:
     Physics m_physics;
 
     std::shared_ptr<WorldObjectHandle> m_handle;
+
     ObjectInfo m_objectInfo;
     Voxel* m_crucialVoxel;
 };

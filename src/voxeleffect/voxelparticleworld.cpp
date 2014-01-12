@@ -17,7 +17,7 @@
 #include "voxel/voxelrenderer.h"
 
 
-struct VoxelParticleData {
+struct ParticleData {
     glm::vec3 position;
     glm::quat orientation;
     float scale;
@@ -104,10 +104,10 @@ void VoxelParticleWorld::loadProgram() {
 void VoxelParticleWorld::setupVertexAttributes() {
     VoxelRenderer::voxelMesh()->bindTo(m_program, m_vertexArrayObject, 0);
 
-    setupVertexAttribute(offsetof(VoxelParticleData, position), "v_position", 3, GL_FLOAT, GL_FALSE, 2);
-    setupVertexAttribute(offsetof(VoxelParticleData, orientation), "v_orientation", 4, GL_FLOAT, GL_FALSE, 3);
-    setupVertexAttribute(offsetof(VoxelParticleData, scale), "v_scale", 1, GL_FLOAT, GL_FALSE, 4);
-    setupVertexAttribute(offsetof(VoxelParticleData, color), "v_color", GL_BGRA, GL_UNSIGNED_BYTE, GL_TRUE, 5);
+    setupVertexAttribute(offsetof(ParticleData, position), "v_position", 3, GL_FLOAT, GL_FALSE, 2);
+    setupVertexAttribute(offsetof(ParticleData, orientation), "v_orientation", 4, GL_FLOAT, GL_FALSE, 3);
+    setupVertexAttribute(offsetof(ParticleData, scale), "v_scale", 1, GL_FLOAT, GL_FALSE, 4);
+    setupVertexAttribute(offsetof(ParticleData, color), "v_color", GL_BGRA, GL_UNSIGNED_BYTE, GL_TRUE, 5);
 }
 
 void VoxelParticleWorld::setupVertexAttribute(GLint offset, const std::string& name, int numPerVertex, GLenum type, GLboolean normalised, int bindingNum) {
@@ -115,7 +115,7 @@ void VoxelParticleWorld::setupVertexAttribute(GLint offset, const std::string& n
     GLint location = m_program->getAttributeLocation(name);
 
     binding->setAttribute(location);
-    binding->setBuffer(m_particleDataBuffer, 0, sizeof(VoxelParticleData));
+    binding->setBuffer(m_particleDataBuffer, 0, sizeof(ParticleData));
     binding->setFormat(numPerVertex, type, normalised, offset);
 
     m_vertexArrayObject->enable(location);
@@ -123,7 +123,7 @@ void VoxelParticleWorld::setupVertexAttribute(GLint offset, const std::string& n
 
 void VoxelParticleWorld::setBufferSize(int size) {
     m_bufferSize = size;
-    m_particleDataBuffer->setData(m_bufferSize * sizeof(VoxelParticleData), nullptr, GL_STREAM_DRAW);
+    m_particleDataBuffer->setData(m_bufferSize * sizeof(ParticleData), nullptr, GL_STREAM_DRAW);
 }
 
 void VoxelParticleWorld::updateBuffers() {
@@ -131,14 +131,14 @@ void VoxelParticleWorld::updateBuffers() {
     //    setBufferSize(nextPowerOf2(m_voxelParticles.size()));
     //}
 
-    //VoxelParticleData* particleData = static_cast<VoxelParticleData*>(m_particleDataBuffer->mapRange(0, m_voxelParticles.size() * sizeof(VoxelParticleData), GL_MAP_WRITE_BIT));
-    glow::Array<VoxelParticleData> particleData;
+    //ParticleData* particleData = static_cast<ParticleData*>(m_particleBuffer->mapRange(0, m_voxelParticles.size() * sizeof(ParticleData), GL_MAP_WRITE_BIT));
+    glow::Array<ParticleData> particleData;
     particleData.reserve(m_voxelParticles.size());
 
 
     int i = 0;
     for (VoxelParticle* voxelParticle : m_voxelParticles) {
-        particleData.push_back(VoxelParticleData {
+        particleData.push_back(ParticleData{
             voxelParticle->worldTransform().position(),
             voxelParticle->worldTransform().orientation(),
             voxelParticle->worldTransform().scale(),
@@ -146,7 +146,7 @@ void VoxelParticleWorld::updateBuffers() {
         });
     }
 
-    m_particleDataBuffer->setData(m_voxelParticles.size() * sizeof(VoxelParticleData), particleData.rawData(), GL_STATIC_DRAW);
+    m_particleDataBuffer->setData(m_voxelParticles.size() * sizeof(ParticleData), particleData.rawData(), GL_STATIC_DRAW);
 
     //m_particleDataBuffer->unmap();
 }
@@ -158,7 +158,7 @@ bool VoxelParticleWorld::intersects(VoxelParticle* voxelParticle) {
     voxelParticle->intersectionCheckPerformed();
 
     Sphere voxelSphere(voxelParticle->worldTransform().position(), voxelParticle->worldTransform().scale() / 2.0f);
-    WorldTreeQuery worldTreeQuery((WorldTreeNode*)&World::instance()->worldTree(), &voxelSphere);
+    WorldTreeQuery worldTreeQuery(&World::instance()->worldTree(), &voxelSphere);
 
 
     return worldTreeQuery.areVoxelsIntersecting();
