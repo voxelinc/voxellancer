@@ -50,6 +50,8 @@ void VoxelRenderer::draw(VoxelCluster * worldObject)
     VoxelRenderData* renderData = worldObject->voxelRenderData();
     
     renderData->vertexArrayObject()->bind();
+    glVertexAttribDivisor(m_program->getAttributeLocation("v_vertex"), 0);
+    glVertexAttribDivisor(m_program->getAttributeLocation("v_normal"), 0);
     glVertexAttribDivisor(m_program->getAttributeLocation("v_position"), 1);
     glVertexAttribDivisor(m_program->getAttributeLocation("v_color"), 1);
     renderData->vertexArrayObject()->drawArraysInstanced(GL_TRIANGLE_STRIP, 0, 14, renderData->voxelCount());
@@ -68,8 +70,8 @@ bool VoxelRenderer::prepared(){
 }
 
 void VoxelRenderer::createAndSetupShaders() {
-    glow::Shader * vertexShader = glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/voxelrenderer.vert");
-    glow::Shader * fragmentShader = glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/voxelrenderer.frag");
+    glow::Shader * vertexShader = glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/voxelcluster.vert");
+    glow::Shader * fragmentShader = glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/voxel.frag");
 
     m_program = new glow::Program();
     m_program->bindAttributeLocation(0, "v_vertex");

@@ -19,7 +19,7 @@
 
 struct VoxelData {
     glm::vec3 position;
-    glm::vec3 color;
+    int color;
 };
 
 VoxelRenderData::VoxelRenderData(std::unordered_map<glm::ivec3, Voxel*> &voxel) :
@@ -40,7 +40,7 @@ void VoxelRenderData::setupVertexAttributes() {
     VoxelMesh::bindTo(VoxelRenderer::program(), m_vertexArrayObject, 0);
 
     setupVertexAttribute(offsetof(VoxelData, position), "v_position", 3, GL_FLOAT, GL_FALSE, 2);
-    setupVertexAttribute(offsetof(VoxelData, color), "v_color", 3, GL_FLOAT, GL_FALSE, 3);
+    setupVertexAttribute(offsetof(VoxelData, color), "v_color", GL_BGRA, GL_UNSIGNED_BYTE, GL_TRUE, 3);
 }
 
 void VoxelRenderData::setupVertexAttribute(GLint offset, const std::string& name, int numPerVertex, GLenum type, GLboolean normalised, int bindingNum) {
@@ -55,26 +55,27 @@ void VoxelRenderData::setupVertexAttribute(GLint offset, const std::string& name
 }
 
 void VoxelRenderData::updateBuffer() {
-    if (m_bufferSize < m_voxel.size() || m_bufferSize > m_voxel.size() * 2) {
-        m_voxelDataBuffer->setData(m_voxel.size() * sizeof(VoxelData), nullptr, GL_DYNAMIC_DRAW);
-        m_bufferSize = m_voxel.size();
-    }
-    
-    VoxelData* voxelData = static_cast<VoxelData*>(m_voxelDataBuffer->mapRange(0, m_voxel.size() * sizeof(VoxelData), GL_MAP_WRITE_BIT));
+    //if (m_bufferSize < m_voxel.size() || m_bufferSize > m_voxel.size() * 2) {
+    //    m_voxelDataBuffer->setData(m_voxel.size() * sizeof(VoxelData), nullptr, GL_STREAM_DRAW);
+    //    m_bufferSize = m_voxel.size();
+    //}
+
+    //VoxelData* voxelData = static_cast<VoxelData*>(m_voxelDataBuffer->mapRange(0, m_voxel.size() * sizeof(VoxelData), GL_MAP_WRITE_BIT));
+
+    glow::Array<VoxelData> voxelData;
+    voxelData.reserve(m_voxel.size());
 
     int i = 0;
     for (auto pair : m_voxel) {
         Voxel *voxel = pair.second;
         assert(voxel != nullptr);
-
-        voxelData[i].position = glm::vec3(voxel->gridCell());
-        voxelData[i].color.x = (voxel->color() >> 16) / 255.0f;
-        voxelData[i].color.y = ((voxel->color() & 0xFF00) >> 8) / 255.0f;
-        voxelData[i].color.z = (voxel->color() & 0xFF) / 255.0f;
+        voxelData.push_back(VoxelData{ glm::vec3(voxel->gridCell()), voxel->color() });
         i++;
     }
 
-    m_voxelDataBuffer->unmap();
+    //m_voxelDataBuffer->unmap();
+
+    m_voxelDataBuffer->setData(m_voxel.size() * sizeof(VoxelData), voxelData.rawData(), GL_STATIC_DRAW);
 
     m_isDirty = false;
 }

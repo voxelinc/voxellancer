@@ -12,9 +12,6 @@ VoxelParticle::VoxelParticle(const WorldTransform& transform, int color, float l
     m_intersectionCheckCountdown(m_intersectionCheckPeriod),
     m_intersectionCheckPeriod("vfx.debrisIntersectionCheckPeriod")
 {
-    m_colorVec.x = (m_color >> 16) / 255.0f;
-    m_colorVec.y = ((m_color & 0xFF00) >> 8) / 255.0f;
-    m_colorVec.z = (m_color & 0xFF) / 255.0f;
 }
 
 const WorldTransform& VoxelParticle::worldTransform() const {
@@ -27,10 +24,6 @@ void VoxelParticle::setWorldTransform(const WorldTransform& transform) {
 
 int VoxelParticle::color() const {
     return m_color;
-}
-
-const glm::vec3& VoxelParticle::colorVec() const {
-    return m_colorVec;
 }
 
 float VoxelParticle::lifetime() const {

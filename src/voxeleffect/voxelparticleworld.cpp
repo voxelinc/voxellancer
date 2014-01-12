@@ -20,12 +20,13 @@ struct VoxelParticleData {
     glm::vec3 position;
     glm::quat orientation;
     float scale;
-    glm::vec3 color;
+    int color;
 };
 
 VoxelParticleWorld::VoxelParticleWorld():
     m_initialized(false),
-    m_bufferSize(0)
+    m_bufferSize(0),
+    m_voxelParticles()
 {
 
 }
@@ -90,11 +91,13 @@ void VoxelParticleWorld::initialize() {
 }
 
 void VoxelParticleWorld::loadProgram() {
-    glow::Shader* vertexShader = glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/voxel.vert");
+    glow::Shader* vertexShader = glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/particle.vert");
     glow::Shader* fragmentShader = glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/voxel.frag");
 
     m_program->attach(vertexShader, fragmentShader);
     m_program->bindFragDataLocation(0, "fragColor");
+    m_program->setUniform("withBorder", 1.0f);
+
 }
 
 void VoxelParticleWorld::setupVertexAttributes() {
@@ -103,7 +106,7 @@ void VoxelParticleWorld::setupVertexAttributes() {
     setupVertexAttribute(offsetof(VoxelParticleData, position), "v_position", 3, GL_FLOAT, GL_FALSE, 2);
     setupVertexAttribute(offsetof(VoxelParticleData, orientation), "v_orientation", 4, GL_FLOAT, GL_FALSE, 3);
     setupVertexAttribute(offsetof(VoxelParticleData, scale), "v_scale", 1, GL_FLOAT, GL_FALSE, 4);
-    setupVertexAttribute(offsetof(VoxelParticleData, color), "v_color", 3, GL_FLOAT, GL_FALSE, 5);
+    setupVertexAttribute(offsetof(VoxelParticleData, color), "v_color", GL_BGRA, GL_UNSIGNED_BYTE, GL_TRUE, 5);
 }
 
 void VoxelParticleWorld::setupVertexAttribute(GLint offset, const std::string& name, int numPerVertex, GLenum type, GLboolean normalised, int bindingNum) {
@@ -134,7 +137,7 @@ void VoxelParticleWorld::updateBuffers() {
             voxelParticle->worldTransform().position(),
             voxelParticle->worldTransform().orientation(),
             voxelParticle->worldTransform().scale(),
-            voxelParticle->colorVec()
+            voxelParticle->color()
         };
     }
 

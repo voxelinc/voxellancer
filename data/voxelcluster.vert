@@ -12,19 +12,19 @@ in vec3 v_normal;
 
 // instance data
 in vec3 v_position;
-in vec3 v_color;
+in vec4 v_color;
 
-flat out vec3 normal;
-out vec3 color;
+flat out vec3 f_normal;
+out vec3 f_color;
 out vec3 modelposition;
 
 void main()
 {
 	modelposition = v_vertex;
 
-    color = v_color;
+    f_color = v_color.xyz;
 
 	gl_Position = viewProjection * model * (vec4(v_vertex + v_position, 1.0));
 
-    normal = (model * vec4(v_normal, 0.0)).xyz;
+    f_normal = (model * vec4(v_normal, 0.0)).xyz;
 }
