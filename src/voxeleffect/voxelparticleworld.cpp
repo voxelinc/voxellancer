@@ -126,22 +126,28 @@ void VoxelParticleWorld::setBufferSize(int size) {
 }
 
 void VoxelParticleWorld::updateBuffers() {
-    if (m_voxelParticles.size() > m_bufferSize) {
-        setBufferSize(nextPowerOf2(m_voxelParticles.size()));
-    }
+    //if (m_voxelParticles.size() > m_bufferSize) {
+    //    setBufferSize(nextPowerOf2(m_voxelParticles.size()));
+    //}
 
-    VoxelParticleData* particleData = static_cast<VoxelParticleData*>(m_particleDataBuffer->mapRange(0, m_voxelParticles.size() * sizeof(VoxelParticleData), GL_MAP_WRITE_BIT));
+    //VoxelParticleData* particleData = static_cast<VoxelParticleData*>(m_particleDataBuffer->mapRange(0, m_voxelParticles.size() * sizeof(VoxelParticleData), GL_MAP_WRITE_BIT));
+    glow::Array<VoxelParticleData> particleData;
+    particleData.reserve(m_voxelParticles.size());
+
+
     int i = 0;
     for (VoxelParticle* voxelParticle : m_voxelParticles) {
-        particleData[i++] = VoxelParticleData {
+        particleData.push_back(VoxelParticleData {
             voxelParticle->worldTransform().position(),
             voxelParticle->worldTransform().orientation(),
             voxelParticle->worldTransform().scale(),
             voxelParticle->color()
-        };
+        });
     }
 
-    m_particleDataBuffer->unmap();
+    m_particleDataBuffer->setData(m_voxelParticles.size() * sizeof(VoxelParticleData), particleData.rawData(), GL_STATIC_DRAW);
+
+    //m_particleDataBuffer->unmap();
 }
 
 bool VoxelParticleWorld::intersects(VoxelParticle* voxelParticle) {
