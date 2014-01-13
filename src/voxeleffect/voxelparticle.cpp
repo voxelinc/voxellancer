@@ -10,7 +10,7 @@ VoxelParticle::VoxelParticle(const WorldTransform& transform, int color, float l
     m_directionalDampening(0.0f),
     m_angularDampening(0.0f),
     m_intersectionCheckCountdown(m_intersectionCheckPeriod),
-    m_intersectionCheckPeriod("vfx.debrisIntersectionCheckPeriod")
+    m_intersectionCheckPeriod("vfx.particleIntersectionCheckPeriod")
 {
     m_colorVec.x = (m_color >> 16) / 255.0f;
     m_colorVec.y = ((m_color & 0xFF00) >> 8) / 255.0f;

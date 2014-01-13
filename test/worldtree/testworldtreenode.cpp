@@ -50,7 +50,7 @@ go_bandit([]() {
             AssertThat(worldTree->root()->geodes().size(), Equals(2));
             AssertThat(worldTree->root()->subnodes().size(), Equals(0));
 
-            float oldWidth = worldTree->root()->aabb().extent(XAxis);
+            float oldWidth = (float)worldTree->root()->aabb().extent(XAxis);
 
             worldTree->insert(c);
             AssertThat(worldTree->root()->geodes().size(), Equals(0));

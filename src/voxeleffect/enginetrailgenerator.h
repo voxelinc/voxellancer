@@ -3,7 +3,7 @@
 #include <glm/glm.hpp>
 
 #include "property/property.h"
-#include "voxeleffect/voxelexplosiongenerator2.h"
+#include "voxeleffect/voxelexplosiongenerator.h"
 
 class Engine;
 
@@ -23,7 +23,7 @@ protected:
     void spawnAt(glm::vec3 position);
 
     Engine* m_engine;
-    VoxelExplosionGenerator2 m_generator;
+    VoxelExplosionGenerator m_generator;
     float m_spawnOffset;
 
     glm::vec3 m_lastPosition;

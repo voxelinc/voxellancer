@@ -47,12 +47,12 @@ void World::update(float deltaSecs) {
     m_deltaSec = deltaSecs;
 
     m_worldLogic->update(deltaSecs);
+    m_voxelParticleWorld->update(deltaSecs);
 
     for (WorldObject *worldObject : m_worldObjects) {
         worldObject->update(deltaSecs);
     }
 
-    m_voxelParticleWorld->update(deltaSecs);
 }
 
 float World::deltaSec() const {

@@ -1,30 +1,28 @@
 #pragma once
+
 #include <glm/glm.hpp>
 
 #include "property/property.h"
 
 class WorldTransform;
 
-class VoxelExplosionGenerator2
+class VoxelParticleSpawnBase
 {
 public:
-    VoxelExplosionGenerator2();
-    virtual ~VoxelExplosionGenerator2();
+    VoxelParticleSpawnBase();
+    virtual ~VoxelParticleSpawnBase();
 
     void setPosition(const glm::vec3& position);
-    void setRadius(float radius);
-    void setScale(float scale);
-    void setForce(float force);
+    void setOrientation(const glm::quat& orientation);
+    void setScale(float scale, float randomization = 0.0f);
+    void setForce(float force, float randomization = 0.0f);
     void setLifetime(float lifetime, float randomization = 0.0f);
     void setColor(int color);
-    void setCount(int count);
     void setImpactVector(const glm::vec3& impactVector);
 
-    void spawn();
 
 protected:
     glm::vec3 m_position;
-    float m_radius;
     float m_scale;
     float m_scaleRandomization;
     float m_force;
@@ -32,17 +30,16 @@ protected:
     float m_lifetime;
     float m_lifetimeRandomization;
     int m_color;
-    int m_count;
     glm::vec3 m_impactVector;
 
+    float m_particleDampening;
+    float m_particleAngularDampening;
+    float m_particleBaseForce;
+    float m_particleAngularBaseForce;
 
-    Property<float> m_debrisDampening;
-    Property<float> m_debrisAngularDampening;
-    Property<float> m_debrisBaseForce;
-    Property<float> m_debrisAngularBaseForce;
 
     glm::vec3 createDirectionalSpeed();
     glm::vec3 createAngularSpeed();
     float createLifetime();
-
 };
+

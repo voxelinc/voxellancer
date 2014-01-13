@@ -30,12 +30,12 @@ void EngineTrailGenerator::setEngine(Engine* engine){
     m_spawnOffset = m_engine->ship()->transform().scale() * 0.75f;
     m_lastPosition = engine->position() + m_engine->ship()->transform().orientation() * glm::vec3(0, 0, m_spawnOffset);
 
-    m_generator.setColor(0x0000FF);
-    m_generator.setCount(8); //setDensity(2);
-    m_generator.setForce(0.15f);
+    m_generator.setColor(0x6666FF);
+    m_generator.setCount(8);
+    m_generator.setForce(0.10f, 0.3f);
     m_generator.setLifetime(prop_lifetime, 0.1f);
-    m_generator.setScale(m_engine->ship()->transform().scale() / 10.0f);
-    m_generator.setRadius(m_engine->ship()->transform().scale() * 0.2f);
+    m_generator.setScale(m_engine->ship()->transform().scale() / 15.0f);
+    m_generator.setRadius(m_engine->ship()->transform().scale() * 0.3f);
 }
 
 void EngineTrailGenerator::update(float deltaSec){
