@@ -16,6 +16,7 @@
 #include "world/handler/splitdetector.h"
 #include "world/helper/worldobjectmodification.h"
 #include <list>
+#include "world/handler/splitdetector_fill.h"
 
 
 using namespace bandit;
@@ -49,6 +50,13 @@ static void doSplitDetection(WorldObject* planet, WorldObjectModification &mod, 
         t.searchSplitOffs(mods);
     }
     AssertThat(t.splitDataList().size(), Equals(assumedSplits));
+
+    SplitDetectorFill t2;
+    {
+        glow::AutoTimer a("fill split detection");
+        t2.searchSplitOffs(mods);
+    }
+    AssertThat(t2.splitDataList().size(), Equals(assumedSplits));
 }
 
 go_bandit([](){
@@ -100,7 +108,7 @@ go_bandit([](){
             int diameter = 36;
             planet = createPlanet(diameter);
 
-            // make a circular hole
+            // make a plane split
             WorldObjectModification mod(planet);
 
             for (int x = 0; x < diameter; x++) {
