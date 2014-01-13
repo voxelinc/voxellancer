@@ -5,6 +5,8 @@
 
 #include "worldtransform.h"
 
+#include "utils/math.h"
+
 #include "worldobject/hardpoint.h"
 #include "worldobject/ship.h"
 
@@ -28,7 +30,7 @@ void BulletTransformHelper::transform() {
     glm::vec3 hardpointDirection = shipOrientation * glm::vec3(0, 0, -1);
     glm::vec3 bulletUp = glm::cross(bulletDirection, hardpointDirection);
 
-    bulletTransform.setOrientation(shipOrientation);
+    bulletTransform.setOrientation(Math::quatFromDir(bulletDirection));
 
 /*
     Below code leads to nan() - orientation of bullets sometimes. Disabled until someone unmagics and debugs it.
@@ -40,6 +42,8 @@ void BulletTransformHelper::transform() {
 //        float angle = glm::acos(glm::dot(bulletDirection, hardpointDirection));
 //        bulletTransform.rotateWorld(glm::angleAxis(-glm::degrees(angle), rotationAxis)); //then rotate towards target
 //    }
+
+
 
     float bulletLength = m_bullet->minimalGridAABB().extent(ZAxis) * m_bullet->transform().scale();
     bulletTransform.setPosition(m_hardpoint->position() + bulletDirection * (bulletLength / 2.0f));
