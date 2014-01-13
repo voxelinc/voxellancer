@@ -5,13 +5,15 @@
 #include <limits>
 
 #include "world/helper/worldobjectmodification.h"
+#include <stack>
 
 
 class SplitData;
 class WorldObject;
 class Voxel;
 
-static int UNKNOWN = std::numeric_limits<int>::max(); 
+static int UNKNOWN = 0;
+static int VISITED = -1;
 
 struct VoxelGroup {
     VoxelGroup(): voxel(nullptr), groupId(UNKNOWN) { }
@@ -31,7 +33,7 @@ public:
 protected:
     std::vector<SplitData*> m_splitDataList;
     std::vector<VoxelGroup> m_voxelArray;
-    std::vector<int> m_groupMapping;
+    std::stack<glm::ivec3> m_stack;
     int m_xy;
     int m_x;
     glm::ivec3 m_llf;
@@ -46,12 +48,8 @@ protected:
     void init(WorldObject* worldObject);
 
     int address(glm::ivec3 &pos);
-    VoxelGroup& voxelGroup(int x, int y, int z);
-    void searchGroupId(int x, int y, int z);
-    int getNeighbourGroupId(int x, int y, int z);
-    int groupId(int x, int y, int z);
-    int getMinNeighbourGroupId(int x, int y, int z, int id);
-    void mergeGroups();
-    int minMapping(int i);
+    VoxelGroup* voxelGroup(glm::ivec3 &pos);
+    void fillColor(glm::ivec3& start, int groupId);
+    void visit(glm::ivec3& p);
 };
 

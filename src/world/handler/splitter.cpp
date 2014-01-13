@@ -8,7 +8,7 @@
 #include "voxel/voxel.h"
 #include "worldobject/split.h"
 
-void Splitter::split(std::list<SplitData*> &splits) {
+void Splitter::split(std::vector<SplitData*> &splits) {
     std::unordered_set<WorldObject*> splittedWorldObjects;
 
     m_splitOffWorldObjects.clear();

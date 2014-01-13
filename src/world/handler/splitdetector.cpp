@@ -34,7 +34,7 @@ void SplitDetector::searchSplitOffs(std::list<WorldObjectModification>& worldObj
 }
 
 
-std::list<SplitData*> &SplitDetector::splitDataList() {
+std::vector<SplitData*> &SplitDetector::splitDataList() {
     return m_splitDataList;
 }
 
@@ -85,8 +85,7 @@ void SplitDetector::findSplits(WorldObject* currentWorldObject, std::unordered_s
 }
 
 void SplitDetector::createSplit(WorldObject* currentWorldObject, std::unordered_set<Voxel *>& splitVoxels) {
-    SplitData * split = new SplitData();
-    split->setExWorldObject(currentWorldObject);
+    SplitData * split = new SplitData(currentWorldObject);
     for (Voxel * voxel : splitVoxels) {
         split->addVoxel(voxel);
     }

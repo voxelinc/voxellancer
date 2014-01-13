@@ -6,12 +6,12 @@
 #include "handler/voxelcollisionaccumulator.h"
 #include "handler/damageimpactgenerator.h"
 #include "handler/elasticimpulsegenerator.h"
-#include "handler/splitdetector.h"
 #include "handler/splitter.h"
 #include "handler/garbagecollector.h"
 #include "handler/wrecker.h"
 #include "handler/elasticimpulsor.h"
 #include "handler/voxelhangman.h"
+#include "handler/splitdetector_fill.h"
 
 
 class World;
@@ -36,7 +36,7 @@ protected:
     Damager m_damager;
     DamageForwarder m_damageForwarder;
     DamageImpactGenerator m_damageImpactGenerator;
-    SplitDetector m_splitDetector;
+    SplitDetectorFill m_splitDetector;
     Splitter m_splitter;
     //Wrecker m_wrecker;
     GarbageCollector m_garbageCollector;

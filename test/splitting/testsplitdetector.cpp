@@ -10,6 +10,7 @@
 #include "property/propertymanager.h"
 #include "world/helper/splitdata.h"
 #include "voxel/voxel.h"
+#include "world/handler/splitdetector_fill.h"
 
 using namespace bandit;
 
@@ -19,7 +20,7 @@ go_bandit([]() {
         PropertyManager::instance()->load("data/config.ini");
 
         WorldObject* w = nullptr;
-        SplitDetector detector;
+        SplitDetectorFill detector;
         Splitter splitter;
 
         Voxel* voxels[9];

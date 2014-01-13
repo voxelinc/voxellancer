@@ -11,12 +11,11 @@ class WorldObject;
 class SplitData
 {
 public:
-    SplitData();
+    SplitData(WorldObject* worldObject);
     
     void addVoxel(Voxel *voxel);
 
     WorldObject *exWorldObject();
-    void setExWorldObject(WorldObject *exWorldObject);
 
     std::list<Voxel*> splitOffVoxels();
     glm::ivec3 llf();

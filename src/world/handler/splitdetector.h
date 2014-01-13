@@ -15,11 +15,11 @@ class SplitDetector
 public:
     void searchSplitOffs(std::list<WorldObjectModification>& worldObjectModifications);
 
-    std::list<SplitData*> &splitDataList();
+    std::vector<SplitData*> &splitDataList();
 
 
 protected:
-    std::list<SplitData*> m_splitDataList;
+    std::vector<SplitData*> m_splitDataList;
 
     void clear();
     void findSplits(WorldObject* currentWorldObject, std::unordered_set<Voxel*>& borderVoxel, bool foundSplit = false);

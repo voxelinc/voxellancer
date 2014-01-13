@@ -19,7 +19,6 @@ void SplitDetectorFill::searchSplitOffs(std::list<WorldObjectModification>& worl
             findSplits(currentWorldObject);
         }
     }
-    
 }
 
 
@@ -30,20 +29,16 @@ void SplitDetectorFill::findSplits(WorldObject* worldObject)
     for (int z = 0; z < m_size.z; z++) {
         for (int y = 0; y < m_size.y; y++) {
             for (int x = 0; x < m_size.x; x++) {
-                VoxelGroup& v = voxelGroup(x, y, z);
-                if (v.voxel != nullptr && v.groupId == UNKNOWN) {
-                    searchGroupId(x, y, z);
+                VoxelGroup* v = voxelGroup(glm::ivec3(x,y,z));
+                if (v->voxel != nullptr && v->groupId == UNKNOWN) {
+                    fillColor(glm::ivec3(x,y,z), m_nextGroupId++);
                 }
             }
         }
     }
 
-    mergeGroups();
-
     createSplitData(worldObject);
-
 }
-
 
 void SplitDetectorFill::init(WorldObject* worldObject)
 {
@@ -62,79 +57,66 @@ void SplitDetectorFill::init(WorldObject* worldObject)
         int index = address(pos);
         m_voxelArray[index].voxel = pair.second;
     }
-    m_nextGroupId = 0;
+    m_nextGroupId = UNKNOWN+1;
 }
 
-
-void SplitDetectorFill::searchGroupId(int x, int y, int z)
+void SplitDetectorFill::fillColor(glm::ivec3& start, int color)
 {
-    VoxelGroup& v = voxelGroup(x, y, z);
-    if (v.voxel == nullptr){
-        return;
-    }
-    v.groupId = getNeighbourGroupId(x, y, z);
-}
+    m_stack.push(start);
 
-void SplitDetectorFill::mergeGroups()
-{
-    m_groupMapping.resize(m_nextGroupId);
+    while (!m_stack.empty()) {
+        glm::ivec3 p = m_stack.top();
+        m_stack.pop();
+        VoxelGroup* v = voxelGroup(p);
 
-    for (int i = 0; i < m_nextGroupId; i++)
-    {
-        m_groupMapping[i] = i;
-    }
+        if (v->groupId <= UNKNOWN) {
+            v->groupId = color;
+        
+            visit(glm::ivec3(p.x - 1, p.y - 1, p.z));
+            visit(glm::ivec3(p.x - 1, p.y + 1, p.z));
+            visit(glm::ivec3(p.x + 1, p.y + 1, p.z));
+            visit(glm::ivec3(p.x + 1, p.y - 1, p.z));
+            visit(glm::ivec3(p.x - 1, p.y, p.z - 1));
+            visit(glm::ivec3(p.x - 1, p.y, p.z + 1));
+            visit(glm::ivec3(p.x + 1, p.y, p.z + 1));
+            visit(glm::ivec3(p.x + 1, p.y, p.z - 1));
+            visit(glm::ivec3(p.x, p.y - 1, p.z - 1));
+            visit(glm::ivec3(p.x, p.y - 1, p.z + 1));
+            visit(glm::ivec3(p.x, p.y + 1, p.z + 1));
+            visit(glm::ivec3(p.x, p.y + 1, p.z - 1));
 
-    for (int z = 0; z < m_size.z; z++) {
-        for (int y = 0; y < m_size.y; y++) {
-            for (int x = 0; x < m_size.x; x++) {
-                VoxelGroup& v = voxelGroup(x, y, z);
-                if (v.voxel != nullptr) {
-                    int m = getMinNeighbourGroupId(x, y, z, v.groupId);
-                    if (v.groupId != m){
-                        m_groupMapping[v.groupId] = glm::min(v.groupId, m);
-                    }
-                }
-            }
+            visit(glm::ivec3(p.x, p.y, p.z - 1));
+            visit(glm::ivec3(p.x, p.y, p.z + 1));
+            visit(glm::ivec3(p.x, p.y - 1, p.z));
+            visit(glm::ivec3(p.x, p.y + 1, p.z));
+            visit(glm::ivec3(p.x - 1, p.y, p.z));
+            visit(glm::ivec3(p.x + 1, p.y, p.z));
         }
     }
+}
 
-    for (int i = 0; i < m_nextGroupId; i++)
-    {
-        m_groupMapping[i] = minMapping(i);
+
+void SplitDetectorFill::visit(glm::ivec3& p) {
+    if (p.x < 0 || p.y < 0 || p.z < 0 || p.x >= m_size.x || p.y >= m_size.y || p.z >= m_size.z){
+        return;
     }
+    VoxelGroup* v = voxelGroup(p);
+    if (v->voxel == nullptr || v->groupId != UNKNOWN) {
+        return;
+    }
+    static int counter;
+    counter++;
+    v->groupId = VISITED;
+    m_stack.push(p);
 }
 
-int SplitDetectorFill::minMapping(int i)
-{
-    if (m_groupMapping[i] == i)
-        return i;
-    return minMapping(m_groupMapping[i]);
-}
-
-
-int SplitDetectorFill::getMinNeighbourGroupId(int x, int y, int z, int id) {
-    int minId =
-        glm::min(groupId(x - 1, y, z),
-        glm::min(groupId(x, y - 1, z),
-        glm::min(groupId(x, y, z - 1),
-        glm::min(groupId(x - 1, y - 1, z),
-        glm::min(groupId(x - 1, y, z - 1),
-        glm::min(groupId(x, y - 1, z - 1),
-        
-        glm::min(groupId(x + 1, y - 1, z),
-        glm::min(groupId(x + 1, y, z - 1),
-        glm::min(groupId(x + 1, y - 1, z - 1), id
-        )))))))));
-        
-    return minId;
-}
 
 void SplitDetectorFill::createSplitData(WorldObject* worldObject)
 {
     m_splitDataList.resize(m_nextGroupId);
     for (int i = 0; i < m_nextGroupId; i++)
     {
-        m_splitDataList[i] = new SplitData();
+        m_splitDataList[i] = new SplitData(worldObject);
     }
 
     int crucialVoxelGroup = 0;
@@ -161,34 +143,14 @@ void SplitDetectorFill::createSplitData(WorldObject* worldObject)
 }
 
 
-int SplitDetectorFill::getNeighbourGroupId(int x, int y, int z) {
-    int id =
-        groupId(x - 1, y, z) ||
-        groupId(x, y - 1, z) ||
-        groupId(x, y, z - 1) ||
-        groupId(x - 1, y - 1, z) ||
-        groupId(x - 1, y, z - 1) ||
-        groupId(x, y - 1, z - 1) ||
-        m_nextGroupId++;
-    return id;
-}
-
-int SplitDetectorFill::groupId(int x, int y, int z) {
-    if (x < 0 || y < 0 || z < 0){
-        return UNKNOWN;
-    }
-    return voxelGroup(x, y, z).groupId;
-}
-
 int SplitDetectorFill::address(glm::ivec3 &pos)
 {
     return pos.z * m_xy + pos.y * m_x + pos.x;
 }
 
-VoxelGroup& SplitDetectorFill::voxelGroup(int x, int y, int z)
+VoxelGroup* SplitDetectorFill::voxelGroup(glm::ivec3& p)
 {
-    int index = z * m_xy + y * m_x + x;
-    return m_voxelArray[index];
+    return &m_voxelArray[address(p)];
 }
 
 std::vector<SplitData*> &SplitDetectorFill::splitDataList() {
@@ -199,9 +161,5 @@ void SplitDetectorFill::clear() {
     for(SplitData *split : m_splitDataList) {
         delete split;
     }
-
     m_splitDataList.clear();
 }
-
-
-

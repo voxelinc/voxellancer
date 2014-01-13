@@ -1,13 +1,12 @@
 #include "splitdata.h"
 
 
-SplitData::SplitData():
-    m_exWorldObject(nullptr),
+SplitData::SplitData(WorldObject* worldObject):
+    m_exWorldObject(worldObject),
     m_llf(std::numeric_limits<int>::max())
 {
 
 }
-
 
 void SplitData::addVoxel(Voxel *voxel) {
     m_splitOffVoxels.push_back(voxel);
@@ -16,10 +15,6 @@ void SplitData::addVoxel(Voxel *voxel) {
 
 WorldObject *SplitData::exWorldObject() {
     return m_exWorldObject;
-}
-
-void SplitData::setExWorldObject(WorldObject *exWorldObject) {
-    m_exWorldObject = exWorldObject;
 }
 
 std::list<Voxel*> SplitData::splitOffVoxels() {
