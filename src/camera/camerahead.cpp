@@ -34,6 +34,22 @@ const std::list<CameraEye*>& CameraHead::eyes() const {
     return m_eyes;
 }
 
+float CameraHead::fovy() const {
+    return m_eyes.front()->camera().fovy();
+}
+
+float CameraHead::nearZ() const {
+    return m_eyes.front()->camera().zNear();
+}
+
+float CameraHead::farZ() const {
+    return m_eyes.front()->camera().zFar();
+}
+
+float CameraHead::aspectRatio() const {
+    return m_eyes.front()->camera().aspectRatio();
+}
+
 glm::vec3 CameraHead::position() const {
     return m_cameraDolly->position();
 }

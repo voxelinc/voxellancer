@@ -24,6 +24,11 @@ public:
 
     const std::list<CameraEye*>& eyes() const;
 
+    float fovy() const;
+    float nearZ() const;
+    float farZ() const;
+    float aspectRatio() const;
+
     glm::vec3 position() const;
     glm::quat orientation() const;
 

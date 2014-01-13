@@ -289,6 +289,6 @@ glm::vec3 InputHandler::findTargetPoint() {
 void InputHandler::placeCrossHair(double winX, double winY) {
     int width, height;
     glfwGetWindowSize(glfwGetCurrentContext(), &width, &height);
-    m_player->hud().setCrossHairOffset(glm::vec2((winX - (width/2))/(width/2), (winY - (height/2))/(height/2)));
+    m_player->hud().setCrossHairOffset(glm::vec2((winX - (width/2))/(width/2), -(winY - (height/2))/(height/2)));
 }
 

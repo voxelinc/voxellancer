@@ -2,6 +2,8 @@
 
 #include <GL/glew.h>
 
+#include <chrono>
+#include <thread>
 #include <algorithm>
 #include <random>
 #include <memory>

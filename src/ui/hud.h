@@ -29,5 +29,7 @@ protected:
     Sphere m_sphere;
 
     CrossHair m_crossHair;
+
+    glm::vec3 m_position;
 };
 
