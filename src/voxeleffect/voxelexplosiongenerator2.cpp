@@ -5,19 +5,26 @@
 #include "world/god.h"
 #include "world/world.h"
 #include "utils/randfloat.h"
-#include "voxeleffectparticle.h"
+#include "utils/randvec.h"
 
+#include "voxelparticle.h"
+#include "voxelparticleworld.h"
 
 VoxelExplosionGenerator2::VoxelExplosionGenerator2() :
     m_position(0, 0, 0),
-    m_radius(1),
+    m_radius(0.5f),
     m_scale(1.0f),
     m_force(1.0f),
+    m_forceRandomization(0.0f),
     m_lifetime(1.0f),
     m_lifetimeRandomization(0.0f),
     m_color(0xFFFFFF),
     m_count(10),
-    m_impactVector(0,0,0)
+    m_impactVector(0, 0, 0),
+    m_debrisDampening("physics.debrisDampening"),
+    m_debrisAngularDampening("physics.debrisAngularDampening"),
+    m_debrisBaseForce("physics.debrisBaseForce"),
+    m_debrisAngularBaseForce("physics.debrisAngularBaseForce")
 {
 }
 
@@ -61,30 +68,34 @@ void VoxelExplosionGenerator2::setImpactVector(const glm::vec3& impactVector) {
 void VoxelExplosionGenerator2::spawn() {
     // spawn explosionSpawnCount voxels with color and scale at position within a sphere with radius with a speed of ~force in all directions modified by ~impactVector
     WorldTransform transform;
-    transform.setPosition(m_position);
+    transform.setScale(m_scale);
 
     for (int i = 0; i < m_count; i++){
-        float lifetime = m_lifetime;
-        if (m_lifetimeRandomization > 0.0f) lifetime *= RandFloat::rand(1.0f - m_lifetimeRandomization, 1.0f + m_lifetimeRandomization);
 
-        VoxelEffectParticle* newObject = new VoxelEffectParticle(0.95f * m_scale, lifetime);
-        Voxel* voxel = new Voxel(glm::ivec3(0), m_color, 0.00000001f, 0.01f);
-        voxel->addToObject(newObject);
-        newObject->setCrucialVoxel(glm::ivec3(0));
+        glm::vec3 randDirection = createDirectionalSpeed();
+        transform.setPosition(m_position + (m_radius * randDirection));
 
-        float angX = RandFloat::rand(-180.0f, 180.0f);
-        float angY = glm::degrees(glm::acos(RandFloat::rand(-1.0f, 1.0f)));
-        glm::vec3 randDirection = glm::quat(glm::vec3(angX, angY, 0.0f)) * glm::vec3(0, 0, RandFloat::rand(0.0f, 1.0f));
+        VoxelParticle* particle = new VoxelParticle(transform, m_color, createLifetime());
+        particle->setAngularSpeed(createAngularSpeed(), m_debrisDampening);
+        particle->setDirectionalSpeed(randDirection, m_debrisAngularDampening);
 
-        newObject->setPosition(transform.applyTo(m_scale * randDirection));
-        newObject->physics().setSpeed((m_force * randDirection) + m_impactVector);
-
-        newObject->physics().setAngularSpeed(glm::vec3(
-            m_force * RandFloat::rand(-10.0f, 10.0f),
-            m_force * RandFloat::rand(-10.0f, 10.0f),
-            m_force * RandFloat::rand(-10.0f, 10.0f)));
-
-        World::instance()->god().scheduleSpawn(newObject);
+        World::instance()->voxelParticleWorld().addParticle(particle);
 
     }
+}
+
+
+glm::vec3 VoxelExplosionGenerator2::createDirectionalSpeed() {
+    float speedVal = RandFloat::randomize(m_force, m_forceRandomization) * m_debrisBaseForce.get();
+    glm::vec3 speedDir = RandVec3::randUnitVec();
+
+    return speedVal * speedDir + m_impactVector;
+}
+
+glm::vec3 VoxelExplosionGenerator2::createAngularSpeed() {
+    return RandVec3::randUnitVec() * RandFloat::randomize(m_force, m_forceRandomization) * m_debrisAngularBaseForce.get();
+}
+
+float VoxelExplosionGenerator2::createLifetime() {
+    return RandFloat::randomize(m_lifetime, m_lifetimeRandomization);
 }

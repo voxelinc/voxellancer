@@ -32,9 +32,10 @@ void EngineTrailGenerator::setEngine(Engine* engine){
 
     m_generator.setColor(0x0000FF);
     m_generator.setCount(8); //setDensity(2);
-    m_generator.setForce(2);
+    m_generator.setForce(0.15f);
     m_generator.setLifetime(prop_lifetime, 0.1f);
     m_generator.setScale(m_engine->ship()->transform().scale() / 10.0f);
+    m_generator.setRadius(m_engine->ship()->transform().scale() * 0.2f);
 }
 
 void EngineTrailGenerator::update(float deltaSec){

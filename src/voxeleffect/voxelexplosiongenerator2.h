@@ -26,11 +26,23 @@ protected:
     glm::vec3 m_position;
     float m_radius;
     float m_scale;
+    float m_scaleRandomization;
     float m_force;
+    float m_forceRandomization;
     float m_lifetime;
     float m_lifetimeRandomization;
     int m_color;
     int m_count;
     glm::vec3 m_impactVector;
+
+
+    Property<float> m_debrisDampening;
+    Property<float> m_debrisAngularDampening;
+    Property<float> m_debrisBaseForce;
+    Property<float> m_debrisAngularBaseForce;
+
+    glm::vec3 createDirectionalSpeed();
+    glm::vec3 createAngularSpeed();
+    float createLifetime();
 
 };

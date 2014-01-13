@@ -7,18 +7,19 @@
 
 
 class Voxel;
+class VoxelTree;
 class VoxelTreeNode;
 
 class VoxelTreeQuery {
 public:
-    VoxelTreeQuery(VoxelTreeNode* voxelTree, const AbstractShape* shape);
+    VoxelTreeQuery(VoxelTree* voxelTree, const AbstractShape* shape);
 
     bool areVoxelsIntersecting();
     std::set<Voxel*> intersectingVoxels();
 
 
 protected:
-    VoxelTreeNode* m_voxelTree;
+    VoxelTree* m_voxelTree;
     const AbstractShape* m_shape;
     bool m_queryInterrupted;
 

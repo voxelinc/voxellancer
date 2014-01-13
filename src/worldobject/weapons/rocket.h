@@ -1,6 +1,8 @@
 #include "worldobject/ship.h"
 #include "resource/clustercache.h"
 
+#include "worldobject/worldobjecthandle.h"
+
 class Rocket : public Ship {
 
 public:
@@ -15,5 +17,5 @@ private:
 
 	float m_lifetime;
     float m_travelSpeed;
-    WorldObject* m_target;
+    std::shared_ptr<WorldObjectHandle> m_target;
 };

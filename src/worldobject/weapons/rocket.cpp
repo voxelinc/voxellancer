@@ -6,62 +6,72 @@
 #include "utils/tostring.h"
 #include "physics/physics.h"
 #include "voxeleffect/voxelexplosiongenerator2.h"
+#include "worldobject/ship.h"
+#include "ai/character.h"
 
-
-Rocket::Rocket(glm::vec3 position, glm::quat orientation, const glm::vec3& initialSpeed, float travelSpeed, float lifetime, WorldObject* target)
+Rocket::Rocket(glm::vec3 position, glm::quat orientation, const glm::vec3& initialSpeed, float travelSpeed, float lifetime, WorldObject* target) :
+    Ship()
+    //WorldObject(0.8f, CollisionFilterClass::Rocket)
 {
     m_collisionFilterClass = CollisionFilterClass::Rocket;
     m_transform.setScale(0.8f);
 
     m_lifetime = lifetime;
     m_travelSpeed = travelSpeed;
-    m_target = target;
+    if (target) {
+        m_target = target->handle();
+    } else {
+        m_target = WorldObjectHandle::nullHandle();
+    }
     glm::vec3 myOrientation = orientation * glm::vec3(0, 0, -1);
 
     ClusterCache::instance()->fillObject(this, "data/voxelcluster/rocket.csv");
 
     m_transform.setOrientation(orientation); //set orientation to ship orientation
 
-    m_transform.setPosition(position + myOrientation * (m_collisionDetector->voxeltree().gridAABB().axisMax(Axis::ZAxis) / 2.0f + 1.4f));
+    m_transform.setPosition(position + myOrientation * (minimalGridAABB().axisMax(Axis::ZAxis) / 2.0f + glm::root_two<float>()));
 
-    m_physics->setSpeed(initialSpeed + myOrientation * (m_travelSpeed * 0.1f)); // rocket is ejected with 10% of its travel speed
+    m_physics.setSpeed(initialSpeed + myOrientation * (m_travelSpeed * 0.1f)); // rocket is ejected with 10% of its travel speed
 
     m_objectInfo.setName("Rocket");
     m_objectInfo.setShowOnHud(false);
     m_objectInfo.setCanLockOn(false);
 }
 
-void Rocket::update(float deltaSec){
+void Rocket::update(float deltaSec) {
     // orient towards target
-    if (m_target){
-        glm::vec3 dir = glm::inverse(m_transform.orientation()) * glm::normalize(m_target->transform().position() - m_transform.position());
+    if (m_target->get()){
+        glm::vec3 dir = glm::inverse(m_transform.orientation()) * glm::normalize(m_target->get()->transform().position() - m_transform.position());
         glm::vec3 myOrientation = glm::vec3(0, 0, -1);
         glm::vec3 cross = glm::cross(dir, myOrientation);
         glm::quat rotation;
-        if (cross != glm::vec3(0)){
+        if (cross != glm::vec3(0)) {
             glm::vec3 rotationAxis = glm::normalize(cross);
             float angle = glm::acos(glm::dot(dir, myOrientation));
-            if (angle > glm::radians(0.1)){
+            if (angle > glm::radians(0.1)) {
                 rotation = glm::angleAxis(-glm::degrees(angle), rotationAxis);
             }
         } else { // the target is either perfectly in front or behind us
-            if (dir == -myOrientation)
+            if (dir == -myOrientation) {
                 rotation = glm::angleAxis(90.0f, glm::vec3(1, 0, 0));
+            }
         }
 
-        if (rotation != glm::quat())
+        if (rotation != glm::quat()) {
             //m_transform.rotate(0.1f * rotation); // directly rotating is easier
-            m_physics->setAngularSpeed(0.1f * glm::eulerAngles(rotation));
+            m_physics.setAngularSpeed(0.1f * glm::eulerAngles(rotation));
+        }
 
     }
     // accelerate to travelSpeed
-    if (glm::length(m_physics->speed()) < m_travelSpeed){
-        float missingSpeed = m_travelSpeed - glm::length(m_physics->speed());
+    if (glm::length(m_physics.speed()) < m_travelSpeed) {
+        float missingSpeed = m_travelSpeed - glm::length(m_physics.speed());
         // accelerate forward, not towards target
-        m_physics->accelerate(glm::vec3(0, 0, -missingSpeed));
+        m_physics.accelerate(glm::vec3(0, 0, -missingSpeed));
     }
 
     m_lifetime -= deltaSec;
+
     if (m_lifetime < 0){
         World::instance()->god().scheduleRemoval(this);
         spawnExplosion();
@@ -84,9 +94,9 @@ void Rocket::spawnExplosion(){
     generator.setPosition(m_transform.position());
     generator.setScale(m_transform.scale() / 3.0f);
     generator.setColor(0xFF0000);
-    generator.setCount(100);
+    generator.setCount(150);
     generator.setLifetime(1.0f, 0.2f);
-    generator.setForce(20.0f);
+    generator.setForce(1.5f);
     generator.spawn();
 
 }
