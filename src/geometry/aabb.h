@@ -43,11 +43,11 @@ public:
 
 
     bool contains(const TAABB<T> &other) const;
-    bool contains(const glm::detail::tvec3<T> &vec) const;
+    template<typename OtherT> bool contains(const glm::detail::tvec3<OtherT> &vec) const;
 
     virtual bool intersects(const Sphere& sphere) const override;
-    virtual bool nearTo(const TAABB<float>& other) const override;
-    virtual bool containedBy(const TAABB<float>& other) const override;
+    virtual bool nearTo(const TAABB<int>& other) const override;
+    virtual bool containedBy(const TAABB<int>& other) const override;
 
     TAABB<T> united(const TAABB<T> &other) const;
     void unite(const TAABB<T> &other);
