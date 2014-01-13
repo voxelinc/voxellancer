@@ -1,25 +1,26 @@
 #pragma once
 
 #include <GL/glew.h>
+#include <vector>
 
 #include <GLFW/glfw3.h>
 
-#include "input/inputmapping.h"
+#include "ui/inputconfigurator.h"
 #include "property/propertymanager.h"
-#include "property/property.h"
 #include "worldobject/ship.h"
 #include "ui/targeter.h"
 
 class WorldObject;
+class InputConfigurator;
 
-struct actionKeyMapping {
+struct ActionKeyMapping {
     Property<InputMapping> primaryMapping;
     Property<InputMapping> secondaryMapping;
     bool toggleAction;
     bool toggleStatus;
     std::string name;
 
-    actionKeyMapping(char* primary, char* secondary, std::string name) :
+    ActionKeyMapping(char* primary, char* secondary, std::string name) :
         primaryMapping(primary),
         secondaryMapping(secondary),
         toggleAction(false),
@@ -27,13 +28,26 @@ struct actionKeyMapping {
         name(name)
     {};
 
-    actionKeyMapping(char* primary, char* secondary, std::string name, bool toggleAction) :
+    ActionKeyMapping(char* primary, char* secondary, std::string name, bool toggleAction) :
         primaryMapping(primary),
         secondaryMapping(secondary),
         toggleAction(toggleAction),
         toggleStatus(false),
         name(name)
     {};
+};
+
+struct SecondaryInputValues {
+    int buttonCnt, axisCnt;
+    const unsigned char *buttonValues;
+    const float *axisValues;
+
+    SecondaryInputValues(){
+        buttonCnt = 0;
+        axisCnt = 0;
+        buttonValues = glfwGetJoystickButtons(GLFW_JOYSTICK_1, &buttonCnt);
+        axisValues = glfwGetJoystickAxes(GLFW_JOYSTICK_1, &axisCnt);
+    }
 };
 
 class InputHandler {
@@ -52,11 +66,12 @@ protected:
     Camera* m_camera;
     Player* m_player;
     Targeter* m_targeter;
+    InputConfigurator* m_inputConfigurator;
+    SecondaryInputValues m_secondaryInputValues;
+    std::vector<ActionKeyMapping*> m_actions;
 
     void toggleControls();
     void handleUpdate();
-    //void handleKeyboardUpdate();
-    //void handleJoystickUpdate(int joystickEnum);
     void handleMouseUpdate();
 
     void handleFireActions();
@@ -64,50 +79,42 @@ protected:
     void handleRotateActions();
     void handleTargetSelectActions();
 
-    void setupJoystick();
-    void getLastButton();
-    float getInputValue(actionKeyMapping* action);
+    float getInputValue(ActionKeyMapping* action);
     float getInputValue(InputMapping mapping);
-    bool setActionInputMapping(actionKeyMapping* action, bool primary);
-    bool getLastPrimaryInput();
-    bool getLastSecondaryInput();
+
+    void addActionsToVector();
 
     void setupJoystickControls();
     int joystickSetupState;
 
-    int gamepadButtonCnt, gamepadAxisCnt;
-    const unsigned char *gamepadButtonValues;
-    const float *gamepadAxisValues;
+    void retrieveInputValues();
 
     bool m_mouseControl;
     int m_windowWidth, m_windowHeight;
     int m_cursorMaxDistance;
     int m_lastfocus;
-    InputMapping lastPrimaryInput;
-    InputMapping lastSecondaryInput;
-    bool setupPrimaryInputInProgress;
-    bool setupSecondaryInputInProgress;
 
 
     Property<float> prop_deadzoneMouse;
     Property<float> prop_deadzoneGamepad;
 
-    actionKeyMapping fireAction;
-    actionKeyMapping rocketAction;
 
-    actionKeyMapping moveLeftAction;
-    actionKeyMapping moveRightAction;
-    actionKeyMapping moveForwardAction;
-    actionKeyMapping moveBackwardAction;
+    ActionKeyMapping fireAction;
+    ActionKeyMapping rocketAction;
 
-    actionKeyMapping rotateLeftAction;
-    actionKeyMapping rotateRightAction;
-    actionKeyMapping rotateUpAction;
-    actionKeyMapping rotateDownAction;
-    actionKeyMapping rotateClockwiseAction;
-    actionKeyMapping rotateCClockwiseAction;
+    ActionKeyMapping moveLeftAction;
+    ActionKeyMapping moveRightAction;
+    ActionKeyMapping moveForwardAction;
+    ActionKeyMapping moveBackwardAction;
 
-    actionKeyMapping selectNextAction;
-    actionKeyMapping selectPreviousAction;
+    ActionKeyMapping rotateLeftAction;
+    ActionKeyMapping rotateRightAction;
+    ActionKeyMapping rotateUpAction;
+    ActionKeyMapping rotateDownAction;
+    ActionKeyMapping rotateClockwiseAction;
+    ActionKeyMapping rotateCClockwiseAction;
+
+    ActionKeyMapping selectNextAction;
+    ActionKeyMapping selectPreviousAction;
 
 };
