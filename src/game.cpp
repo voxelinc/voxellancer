@@ -31,6 +31,7 @@
 #include "world/world.h"
 #include "world/god.h"
 #include "skybox.h"
+#include "voxeleffect/voxelparticleworld.h"
 #include "voxel/voxelrenderer.h"
 #include "worldobject/ship.h"
 #include "collision/collisiondetector.h"
@@ -39,6 +40,7 @@
 #include "ai/characters/dummycharacter.h"
 #include "ai/elevatedtasks/dummyelevatedtask.h"
 #include "ai/basictask.h"
+#include "voxeleffect/voxelmesh.h"
 
 
 class Ship;
@@ -53,7 +55,7 @@ Game::Game(GLFWwindow *window) :
 }
 
 Game::~Game() {
-
+    VoxelMesh::tearDown();
 }
 
 void Game::reloadConfig() {
@@ -208,6 +210,7 @@ void Game::draw() {
     // draw all other voxelclusters...
     m_voxelRenderer->afterDraw();
 
+    World::instance()->voxelParticleWorld().draw(m_camera);
 
 	m_hud->draw();
 
