@@ -93,11 +93,20 @@ void InputHandler::resizeEvent(const unsigned int width, const unsigned int heig
 void InputHandler::keyCallback(int key, int scancode, int action, int mods){
 	/* Check here for single-time key-presses, that you do not want fired multiple times, e.g. toggles */
     /* This only applies for menu events etc, for action events set the toggleAction attribute to true */
+
+    if (action == GLFW_PRESS){
+        m_inputConfigurator->setLastPrimaryInput(InputMapping(InputType::Keyboard, key, 1));
+    }
+    else {
+        m_inputConfigurator->setLastPrimaryInput(InputMapping());
+    }
+
     if (key == GLFW_KEY_F10 && action == GLFW_PRESS &&  glfwJoystickPresent(GLFW_JOYSTICK_1)){
         m_inputConfigurator->startConfiguration(false);
     }
     if (key == GLFW_KEY_F11 && action == GLFW_PRESS){
         m_inputConfigurator->startConfiguration(true);
+        m_inputConfigurator->setLastPrimaryInput(InputMapping());
     }
     if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
         m_mouseControl = !m_mouseControl;
@@ -109,11 +118,6 @@ void InputHandler::keyCallback(int key, int scancode, int action, int mods){
         g.setForce((float)(rand() % 2) + 1);
         g.setDensity((rand() % 4) + 2);
         g.spawn();
-    }
-    if (action == GLFW_PRESS){
-        m_inputConfigurator->setLastPrimaryInput(InputMapping(InputType::Keyboard, key, 1));
-    } else {
-        m_inputConfigurator->setLastPrimaryInput(InputMapping());
     }
     
 }

@@ -106,11 +106,11 @@ bool InputConfigurator::isConfiguring(){
 
 void InputConfigurator::startConfiguration(bool primary){
     if (primary){
-        printf("Starting configuration for primary input device (keyboard),\nplease follow the instructions\n");
+        printf("Starting configuration for primary input device (keyboard),\nPlease follow the instructions\n");
         primaryConfigurationState = 0;
     }
     else {
-        printf("Starting configuration for secondary input device (gamepad/Joystick),\nplease follow the instructions\n");
+        printf("Starting configuration for secondary input device (gamepad/Joystick),\nPlease follow the instructions\n");
         secondaryConfigurationState = 0;
     }
     displayedInstructions = false;
@@ -129,7 +129,7 @@ void InputConfigurator::update(){
 
 void InputConfigurator::setupPrimaryControls(){
     if (!displayedInstructions){
-        printf("Please press Joystick button or axis for action: %s \n", actions->at(secondaryConfigurationState)->name.c_str());
+        printf("Please press Joystick button or axis for action: %s \n", actions->at(primaryConfigurationState)->name.c_str());
         displayedInstructions = true;
     }
     if (beginningKeyConfiguration){
