@@ -13,8 +13,43 @@
 #include "../bandit_extension/vec3helper.h"
 #include "worldobject/ship.h"
 #include "resource/clustercache.h"
+#include "world/handler/splitdetector.h"
+#include "world/helper/worldobjectmodification.h"
+#include <list>
+
 
 using namespace bandit;
+
+static WorldObject* createPlanet(int diameter)
+{
+    WorldObject* planet = new WorldObject();
+    glm::vec3 middle(diameter / 2, diameter / 2, diameter / 2);
+    for (int x = 0; x < diameter; x++) {
+        for (int y = 0; y < diameter; y++) {
+            for (int z = 0; z < diameter; z++) {
+                glm::vec3 cell(x, y, z);
+
+                if (glm::length(cell - middle) < diameter / 2) {
+                    planet->addVoxel(new Voxel(glm::ivec3(x, y, z), 0x0055AA));
+                }
+            }
+        }
+    }
+    planet->setCrucialVoxel(glm::ivec3(middle));
+    planet->objectInfo().setName("Planet");	return planet;
+}
+
+static void doSplitDetection(WorldObject* planet, WorldObjectModification &mod, int assumedSplits)
+{
+    glow::debug("remaining voxel: %; removed voxels: %;", planet->voxelCount(), mod.removedVoxels().size());
+    std::list<WorldObjectModification> mods{ mod };
+    SplitDetector t;
+    {
+        glow::AutoTimer a("old split detection");
+        t.searchSplitOffs(mods);
+    }
+    AssertThat(t.splitDataList().size(), Equals(assumedSplits));
+}
 
 go_bandit([](){
     describe("VoxelTree", [](){
@@ -29,9 +64,61 @@ go_bandit([](){
 
         after_each([&]() {
         });
-        
-       
-        it("test performance, unskip for testing", [&]() {
+
+        it("test a big hole", [&]() {
+            WorldObject* planet;
+
+            int diameter = 36;
+            planet = createPlanet(diameter);
+
+            // make a circular hole
+            WorldObjectModification mod(planet);
+            glm::ivec3 centerOfHole(4, diameter / 2, 0);
+            int diameterOfHole = 22;
+
+            for (int x = -diameterOfHole / 2; x < diameterOfHole / 2; x++) {
+                for (int y = -diameterOfHole / 2; y < diameterOfHole / 2; y++) {
+                    for (int z = -diameterOfHole / 2; z < diameterOfHole / 2; z++) {
+                        glm::ivec3 cell = centerOfHole + glm::ivec3(x, y, z);
+                        if (glm::length(glm::vec3(cell - centerOfHole)) <= diameterOfHole / 2) {
+                            Voxel* v = planet->voxel(cell);
+                            if (v) {
+                                mod.removedVoxel(cell);
+                                planet->removeVoxel(v);
+                            }
+                        }
+                    }
+                }
+            }
+
+            doSplitDetection(planet, mod, 0);
+        });
+
+        it("test a split by a plane", [&]() {
+            WorldObject* planet;
+
+            int diameter = 36;
+            planet = createPlanet(diameter);
+
+            // make a circular hole
+            WorldObjectModification mod(planet);
+
+            for (int x = 0; x < diameter; x++) {
+                for (int y = 0; y < diameter; y++) {
+                    glm::ivec3 cell = glm::ivec3(x, y, diameter / 2);
+                    Voxel* v = planet->voxel(cell);
+                    if (v) {
+                        mod.removedVoxel(cell);
+                        planet->removeVoxel(v);
+                    }
+                }
+            }
+
+            doSplitDetection(planet, mod, 1);
+        });
+
+
+        it_skip("test global performance", [&]() {
             Ship *ship;
             Ship *normandy;            
             WorldObject *planet;
@@ -64,23 +151,8 @@ go_bandit([](){
                 wall->objectInfo().setName("Wall");
                 World::instance()->god().scheduleSpawn(wall);
 
-                planet = new WorldObject();
+                planet = createPlanet(28);
                 planet->move(glm::vec3(20, 10, -130));
-                int diameter = 28;
-                glm::vec3 middle(diameter / 2, diameter / 2, diameter / 2);
-                for (int x = 0; x < diameter; x++) {
-                    for (int y = 0; y < diameter; y++) {
-                        for (int z = 0; z < diameter; z++) {
-                            glm::vec3 cell(x, y, z);
-
-                            if (glm::length(cell - middle) < diameter / 2) {
-                                planet->addVoxel(new Voxel(glm::ivec3(x, y, z), 0x0055AA));
-                            }
-                        }
-                    }
-                }
-                planet->setCrucialVoxel(glm::ivec3(middle));
-                planet->objectInfo().setName("Planet");
                 World::instance()->god().scheduleSpawn(planet);
 
                 glow::debug("Initial spawn");

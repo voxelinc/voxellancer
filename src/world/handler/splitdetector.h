@@ -13,7 +13,7 @@ class Voxel;
 class SplitDetector
 {
 public:
-    void searchSplitOffs(std::list<WorldObjectModification> worldObjectModifications);
+    void searchSplitOffs(std::list<WorldObjectModification>& worldObjectModifications);
 
     std::list<SplitData*> &splitDataList();
 
