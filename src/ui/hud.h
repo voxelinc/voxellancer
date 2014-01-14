@@ -38,7 +38,7 @@ protected:
     Camera* m_gameCamera;
     WorldTransform m_hudCamera, m_lastGameCamera;
     Camera m_renderCamera;
-    std::unique_ptr<VoxelRenderer> m_voxelRenderer;
+    std::shared_ptr<VoxelRenderer> m_voxelRenderer;
     std::unique_ptr<VoxelFont> m_font;
     std::vector<std::unique_ptr<HUDElement>> m_elements;
     std::vector<std::unique_ptr<HUDElement>> m_numbers;

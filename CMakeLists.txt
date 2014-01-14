@@ -163,7 +163,7 @@ set(LIBS_TO_LINK
     ${Boost_LIBRARIES}
     glow
     glowutils
-	${LIBS_TO_LINK}
+    ${LIBS_TO_LINK}
 )
 
 target_link_libraries(${target}

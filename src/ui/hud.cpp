@@ -13,7 +13,7 @@
 
 HUD::HUD(Player* player) :
     m_player(player),
-    m_voxelRenderer(new VoxelRenderer()),
+    m_voxelRenderer(VoxelRenderer::instance()),
     m_font(new VoxelFont()),
     m_gameCamera(0),
     m_renderCamera(),
@@ -94,7 +94,7 @@ void HUD::update(float deltaSec){
     // For a smooth movement we need to simulate 1/inertia_rate "hud steps" per second
     double total = deltaSec + m_delta_sec_remain;
     double progress = 0.0;
-	double steptime = 1.0 / prop_inertiaRate;
+    double steptime = 1.0 / prop_inertiaRate;
     // progress steps in steptime from 0 to total, rate is the percentage
     while (total - progress > steptime){
         float rate = (float)(progress / total);
@@ -103,7 +103,7 @@ void HUD::update(float deltaSec){
         // this assumes the input was constant contious within time from the last frame to now
         stepAnim(glm::mix(m_lastGameCamera.position(), m_gameCamera->position(), rate),
             glm::slerp(m_lastGameCamera.orientation(), m_gameCamera->orientation(), rate));
-		progress += steptime;
+        progress += steptime;
     }
     m_delta_sec_remain = total - progress;
 

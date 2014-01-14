@@ -13,7 +13,7 @@ public:
     virtual void onSpawnFail() override;
 
 private:
-	float m_lifetime;
+    float m_lifetime;
     float m_travelSpeed;
     std::shared_ptr<WorldObjectHandle> m_target;
 };
