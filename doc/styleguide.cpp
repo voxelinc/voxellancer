@@ -22,8 +22,10 @@ void StyleGuide::setValue(const Value &value) {
 
 void StyleGuide::update() {
     if (m_worldIsSaved) { // Always enclose blocks with {}, even if they are only 1 line long
-        saveWorld();
-    }
+        relax();
+    } else {
+		saveWorld();
+	}
 
     for (int x = 0; x < 10; x++) {
         x += 1;
