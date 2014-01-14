@@ -42,11 +42,12 @@ void Bullet::update(float deltaSec){
     }
 }
 
-void Bullet::onCollision(){
+void Bullet::onCollision() {
+    World::instance()->god().scheduleRemoval(this);
     explode();
 }
 
-void Bullet::onSpawnFail(){
+void Bullet::onSpawnFail() {
     explode();
 }
 

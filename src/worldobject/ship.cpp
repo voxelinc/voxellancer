@@ -42,7 +42,7 @@ void Ship::addHardpointVoxel(HardpointVoxel* voxel){
 }
 
 void Ship::removeHardpoint(Hardpoint *hardpoint) {
-    std::remove(m_hardpoints.begin(), m_hardpoints.end(), hardpoint);
+    m_hardpoints.remove(hardpoint);
     delete hardpoint;
 }
 
@@ -75,8 +75,9 @@ void Ship::fireAtObject() {
 float Ship::minAimDistance(){ // is this needed ?!
     float range = 1000;
     for (Hardpoint *hardpoint : m_hardpoints){
-        if (hardpoint->aimRange() != -1)
+        if (hardpoint->aimRange() != -1) {
             range = glm::min(hardpoint->aimRange(), range);
+        }
     }
     return range;
 }

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <vector>
+#include <list>
 #include "worldobject.h"
 #include "world/world.h"
 #include "world/god.h"
@@ -40,7 +40,7 @@ protected:
 
     Property<float> prop_maxSpeed;
     Property<float> prop_maxRotSpeed;
-    
-	std::vector<Hardpoint*> m_hardpoints;
+
+	std::list<Hardpoint*> m_hardpoints;
     std::shared_ptr<WorldObjectHandle> m_targetObjectHandle;
 };
