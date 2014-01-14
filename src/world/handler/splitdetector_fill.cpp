@@ -54,8 +54,8 @@ void SplitDetectorFill::findSplits(WorldObject* worldObject)
 
 void SplitDetectorFill::init(WorldObject* worldObject)
 {
-    m_llf = worldObject->gridAABB().llf();
-    m_size = worldObject->gridAABB().rub() - m_llf + glm::ivec3(1);
+    m_llf = worldObject->minimalGridAABB().llf();
+    m_size = worldObject->minimalGridAABB().rub() - m_llf + glm::ivec3(1);
 
     m_voxelArray.clear();
     m_voxelArray.resize(m_size.x * m_size.y * m_size.z + 1);
@@ -150,7 +150,15 @@ void SplitDetectorFill::createSplitData(WorldObject* worldObject)
     if (crucialVoxelGroup > 0) {
         m_splitDataList.erase(m_splitDataList.begin() + crucialVoxelGroup);
     } else {
-        m_splitDataList.erase(m_splitDataList.begin());
+        int biggestIndex = 0;
+        int biggestSize = m_splitDataList[0]->splitOffVoxels().size();
+        for (int i = 0; i < m_splitDataList.size(); i++) {
+            if (m_splitDataList[i]->splitOffVoxels().size() > biggestSize) {
+                int biggestIndex = i;
+                int biggestSize = m_splitDataList[i]->splitOffVoxels().size();
+            }
+        }
+        m_splitDataList.erase(m_splitDataList.begin() + biggestIndex);
     }
 }
 
