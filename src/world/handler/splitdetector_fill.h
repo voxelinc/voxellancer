@@ -12,15 +12,6 @@ class SplitData;
 class WorldObject;
 class Voxel;
 
-static int UNKNOWN = 0;
-static int VISITED = -1;
-
-struct VoxelGroup {
-    VoxelGroup(): voxel(nullptr), groupId(UNKNOWN) { }
-    Voxel* voxel;
-    int groupId;
-};
-
 
 class SplitDetectorFill
 {
@@ -29,8 +20,13 @@ public:
 
     std::vector<SplitData*> &splitDataList();
 
-
 protected:
+    struct VoxelGroup {
+        VoxelGroup();
+        Voxel* voxel;
+        int groupId;
+    };
+    
     std::vector<SplitData*> m_splitDataList;
     std::vector<VoxelGroup> m_voxelArray;
     std::stack<glm::ivec3> m_stack;
@@ -47,9 +43,9 @@ protected:
 
     void init(WorldObject* worldObject);
 
-    int address(glm::ivec3 &pos);
-    VoxelGroup* voxelGroup(glm::ivec3 &pos);
-    void fillColor(glm::ivec3& start, int groupId);
-    void visit(glm::ivec3& p);
+    int address(const glm::ivec3& pos);
+    VoxelGroup* voxelGroup(const glm::ivec3& pos);
+    void fillColor(const glm::ivec3& start, int groupId);
+    void visit(const glm::ivec3& p);
 };
 

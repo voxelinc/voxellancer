@@ -17,7 +17,7 @@ WorldObject *SplitData::exWorldObject() {
     return m_exWorldObject;
 }
 
-std::list<Voxel*> SplitData::splitOffVoxels() {
+std::vector<Voxel*> SplitData::splitOffVoxels() {
     return m_splitOffVoxels;
 }
 

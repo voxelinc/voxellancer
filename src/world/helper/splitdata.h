@@ -17,12 +17,12 @@ public:
 
     WorldObject *exWorldObject();
 
-    std::list<Voxel*> splitOffVoxels();
+    std::vector<Voxel*> splitOffVoxels();
     glm::ivec3 llf();
 
 protected:
     WorldObject* m_exWorldObject;
-    std::list<Voxel*> m_splitOffVoxels;
+    std::vector<Voxel*> m_splitOffVoxels;
     glm::ivec3 m_llf;
 };
 

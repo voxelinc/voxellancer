@@ -46,7 +46,7 @@ static void doSplitDetection(WorldObject* planet, WorldObjectModification &mod, 
     std::list<WorldObjectModification> mods{ mod };
     SplitDetector t;
     {
-        glow::AutoTimer a("old split detection");
+        glow::AutoTimer a("old split detection ");
         t.searchSplitOffs(mods);
     }
     AssertThat(t.splitDataList().size(), Equals(assumedSplits));
