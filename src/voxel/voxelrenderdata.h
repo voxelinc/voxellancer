@@ -8,7 +8,13 @@
 #include "voxel.h"
 
 
-// this class contains texture with color and position information about voxel
+namespace glow {
+    class Program;
+    class VertexArrayObject;
+    class Buffer;
+};
+
+
 class VoxelRenderData
 {
 public:
@@ -16,19 +22,21 @@ public:
     ~VoxelRenderData();
 
     void invalidate();
-
-    glow::Texture *positionTexture();
-    glow::Texture *colorTexture();
     int voxelCount();
 
+    glow::VertexArrayObject* vertexArrayObject();
 
 private:
-    void updateTextures();
-
     std::unordered_map<glm::ivec3, Voxel*> &m_voxel;
-    int m_voxelCount;
-    bool m_texturesDirty;
-    glow::ref_ptr<glow::Texture> m_positionTexture;
-    glow::ref_ptr<glow::Texture> m_colorTexture;
+    bool m_isDirty;
+    int m_bufferSize;
+
+    glow::ref_ptr<glow::Buffer> m_voxelDataBuffer;
+    glow::ref_ptr<glow::VertexArrayObject> m_vertexArrayObject;
+
+    void updateBuffer();
+    void setupVertexAttributes();
+    void setupVertexAttribute(GLint offset, const std::string& name, int numPerVertex, GLenum type, GLboolean normalised, int bindingNum);
+
 };
 

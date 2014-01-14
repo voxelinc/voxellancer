@@ -38,9 +38,6 @@ go_bandit([](){
             cluster->addVoxel(new Voxel(glm::ivec3(3, 4, 5), 0x808000));
             cluster->addVoxel(new Voxel(glm::ivec3(1, 5, 3), 0xFF8000));
 
-            GLuint id1 = cluster->voxelRenderData()->positionTexture()->id();
-            GLuint id2 = cluster->voxelRenderData()->colorTexture()->id();
-
             // cant assert anything usefull just verify that nothing crashes ;)
             AssertThat(cluster->voxelRenderData()->voxelCount(), Equals(3));
         });

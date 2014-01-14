@@ -1,7 +1,9 @@
 #version 130
 
+uniform float withBorder;
+
 flat in vec3 f_normal;
-flat in vec3 f_color;
+in vec3 f_color;
 in vec3 modelposition;
 
 out vec4 fragColor;
@@ -21,5 +23,5 @@ void main() {
     float diffuse = dot(n_normal, lightdir);
     diffuse = max(0, diffuse) + 0.2;
     
-    fragColor = vec4(f_color * diffuse - border, 1.0);
+    fragColor = vec4(f_color * diffuse - border * withBorder, 1.0);
 }
