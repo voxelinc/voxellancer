@@ -27,9 +27,7 @@ VoxelRenderData::VoxelRenderData(std::unordered_map<glm::ivec3, Voxel*> &voxel) 
     m_isDirty(true),
     m_bufferSize(0)
 {
-    m_vertexArrayObject = new glow::VertexArrayObject();
-    m_voxelDataBuffer = new glow::Buffer(GL_ARRAY_BUFFER);
-    setupVertexAttributes();
+    
 }
 
 VoxelRenderData::~VoxelRenderData() {
@@ -37,6 +35,9 @@ VoxelRenderData::~VoxelRenderData() {
 }
 
 void VoxelRenderData::setupVertexAttributes() {
+    m_vertexArrayObject = new glow::VertexArrayObject();
+    m_voxelDataBuffer = new glow::Buffer(GL_ARRAY_BUFFER);
+    
     VoxelRenderer::voxelMesh()->bindTo(VoxelRenderer::program(), m_vertexArrayObject, 0);
 
     setupVertexAttribute(offsetof(VoxelData, position), "v_position", 3, GL_FLOAT, GL_FALSE, 2);
@@ -55,6 +56,10 @@ void VoxelRenderData::setupVertexAttribute(GLint offset, const std::string& name
 }
 
 void VoxelRenderData::updateBuffer() {
+    if (!m_vertexArrayObject) {
+        setupVertexAttributes();
+    }
+
     if (m_bufferSize < m_voxel.size() || m_bufferSize > m_voxel.size() * 2) {
         m_voxelDataBuffer->setData(m_voxel.size() * sizeof(VoxelData), nullptr, GL_DYNAMIC_DRAW);
         m_bufferSize = m_voxel.size();
