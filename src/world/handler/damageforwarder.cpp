@@ -22,7 +22,7 @@ void DamageForwarder::forwardDamageImpacts(std::list<DamageImpact> &dampedDeadly
 
         m_currentWorldObject = dampedDeadlyDamageImpact.worldObject();
         VoxelNeighbourHelper nHelper(m_currentWorldObject, false);
-        const std::list<Voxel*>& neighbours = nHelper.neighbours(deadVoxel);
+        const std::vector<Voxel*>& neighbours = nHelper.neighbours(deadVoxel);
 
         for(Voxel *neighbour : neighbours) {
             glm::vec3 voxelVec = static_cast<glm::vec3>(neighbour->gridCell() - deadVoxel->gridCell());
