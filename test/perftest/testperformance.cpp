@@ -1,5 +1,6 @@
 #include <bandit/bandit.h>
 
+#include <list>
 #include <iostream>
 #include <math.h>
 
@@ -15,8 +16,7 @@
 #include "resource/clustercache.h"
 #include "world/handler/splitdetector.h"
 #include "world/helper/worldobjectmodification.h"
-#include <list>
-#include "world/handler/splitdetector_fill.h"
+
 
 
 using namespace bandit;
@@ -44,21 +44,15 @@ static void doSplitDetection(WorldObject* planet, WorldObjectModification &mod, 
 {
     glow::debug("remaining voxel: %; removed voxels: %;", planet->voxelCount(), mod.removedVoxels().size());
     std::list<WorldObjectModification> mods{ mod };
+
     SplitDetector t;
     {
-        glow::AutoTimer a("old split detection ");
-        t.searchSplitOffs(mods);
-    }
-    AssertThat(t.splitDataList().size(), Equals(assumedSplits));
-
-    SplitDetectorFill t2;
-    {
-        glow::AutoTimer a("fill split detection");
-        for (int i = 0; i < 1000; i++) {
-            t2.searchSplitOffs(mods);
+        glow::AutoTimer a("20x split detection");
+        for (int i = 0; i < 20; i++) {
+            t.searchSplitOffs(mods);
         }
     }
-    AssertThat(t2.splitDataList().size(), Equals(assumedSplits));
+    AssertThat(t.splitDataList().size(), Equals(assumedSplits));
 }
 
 go_bandit([](){

@@ -5,7 +5,7 @@
 #include "voxel/voxelcluster.h"
 
 
-VoxelNeighbourHelper::VoxelNeighbourHelper(VoxelCluster *voxelCluster, bool includeDiagonals):
+VoxelNeighbourHelper::VoxelNeighbourHelper(VoxelCluster* voxelCluster, bool includeDiagonals):
     m_voxelCluster(voxelCluster),
     m_includeDiagonals(includeDiagonals),
     m_neighbours(18)
@@ -13,7 +13,7 @@ VoxelNeighbourHelper::VoxelNeighbourHelper(VoxelCluster *voxelCluster, bool incl
     assert(voxelCluster != nullptr);
 }
 
-const std::vector<Voxel*>& VoxelNeighbourHelper::neighbours(const Voxel * voxel) {
+const std::vector<Voxel*>& VoxelNeighbourHelper::neighbours(const Voxel* voxel) {
     return neighbours(voxel->gridCell());
 }
 
@@ -47,7 +47,7 @@ const std::vector<Voxel*>& VoxelNeighbourHelper::neighbours(const glm::ivec3& po
 }
 
 void VoxelNeighbourHelper::considerNeighbour(const glm::ivec3& pos, const glm::ivec3 &offset) {
-    Voxel * neighbour = m_voxelCluster->voxel(pos + offset);
+    Voxel* neighbour = m_voxelCluster->voxel(pos + offset);
     if(neighbour != nullptr) {
         m_neighbours.push_back(neighbour);
     }

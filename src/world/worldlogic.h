@@ -11,7 +11,7 @@
 #include "handler/wrecker.h"
 #include "handler/elasticimpulsor.h"
 #include "handler/voxelhangman.h"
-#include "handler/splitdetector_fill.h"
+#include "handler/splitdetector.h"
 
 
 class World;
@@ -36,7 +36,7 @@ protected:
     Damager m_damager;
     DamageForwarder m_damageForwarder;
     DamageImpactGenerator m_damageImpactGenerator;
-    SplitDetectorFill m_splitDetector;
+    SplitDetector m_splitDetector;
     Splitter m_splitter;
     //Wrecker m_wrecker;
     GarbageCollector m_garbageCollector;
