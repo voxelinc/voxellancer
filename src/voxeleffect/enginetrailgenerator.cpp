@@ -78,7 +78,7 @@ glm::vec3 EngineTrailGenerator::calculateSpawnPosition(){
 
 void EngineTrailGenerator::spawnAt(glm::vec3 position){
     m_generator.setPosition(position);
-    m_generator.setImpactVector(m_engine->ship()->transform().orientation() * glm::vec3(0, 0, 0.1f));
+    m_generator.setImpactVector(m_engine->ship()->transform().orientation() * (glm::vec3(0, 0, 0.1f) * glm::abs(m_engine->ship()->physics().acceleration()) / 5.0f));
 
     m_generator.spawn();
     m_lastSpawn = glfwGetTime();
