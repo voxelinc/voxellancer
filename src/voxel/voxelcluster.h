@@ -23,7 +23,7 @@ class WorldTree;
 class VoxelCluster
 {
 public:
-	VoxelCluster(float scale);
+    VoxelCluster(float scale);
     virtual ~VoxelCluster();
 
     const WorldTransform& transform();

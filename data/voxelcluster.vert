@@ -20,11 +20,11 @@ out vec3 modelposition;
 
 void main()
 {
-	modelposition = v_vertex;
+    modelposition = v_vertex;
 
     f_color = v_color.xyz;
 
-	gl_Position = viewProjection * model * (vec4(v_vertex + v_position, 1.0));
+    gl_Position = viewProjection * model * (vec4(v_vertex + v_position, 1.0));
 
     f_normal = (model * vec4(v_normal, 0.0)).xyz;
 }

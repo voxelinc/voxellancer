@@ -30,7 +30,7 @@ const glm::quat& WorldTransform::orientation() const {
 
 void WorldTransform::setOrientation(const glm::quat& quat){
     assert(std::isfinite(quat.x) && std::isfinite(quat.y) && std::isfinite(quat.z) && std::isfinite(quat.w));
-	m_orientation = quat;
+    m_orientation = quat;
 }
 
 const glm::vec3 &WorldTransform::position() const {

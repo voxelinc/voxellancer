@@ -7,10 +7,10 @@
 
 
 namespace glow {
-	class Texture;
-	class Program;
-	class VertexArrayObject;
-	class Buffer;
+    class Texture;
+    class Program;
+    class VertexArrayObject;
+    class Buffer;
 };
 
 class Camera;

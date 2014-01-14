@@ -29,13 +29,13 @@ class Ship;
 class Game {
 
 public:
-	Game(GLFWwindow *window);
-	virtual ~Game();
-	void initialize();
-	void reloadConfig();
+    Game(GLFWwindow *window);
+    virtual ~Game();
+    void initialize();
+    void reloadConfig();
 
     void update(float deltaSec);
-	void draw();
+    void draw();
 
     InputHandler * inputHandler();
 
@@ -43,17 +43,17 @@ private:
     void testFMOD();
 
 private:
-	GLFWwindow* m_window;
-	InputHandler m_inputHandler;
+    GLFWwindow* m_window;
+    InputHandler m_inputHandler;
     Player m_player;
-	Camera m_camera;
+    Camera m_camera;
 
     World* m_world;
 
     std::shared_ptr<VoxelRenderer> m_voxelRenderer;
     std::unique_ptr<Skybox> m_skybox;
-	std::unique_ptr<HUD> m_hud;
-	std::unique_ptr<HD3000Dummy> m_hd3000dummy;
-	std::unique_ptr<LinuxVMDummy> m_linuxvmdummy;
+    std::unique_ptr<HUD> m_hud;
+    std::unique_ptr<HD3000Dummy> m_hd3000dummy;
+    std::unique_ptr<LinuxVMDummy> m_linuxvmdummy;
 };
 
