@@ -22,21 +22,12 @@ HUD::HUD(Player* player):
 void HUD::setCrossHairOffset(const glm::vec2& planeOffset) {
     CameraHead& cameraHead = m_player->cameraDolly().cameraHead();
 
-    float vsh = std::sin(glm::radians(cameraHead.fovy() / 2.0f)) * cameraHead.nearZ();
-    float vsw = vsh * cameraHead.aspectRatio();
+    float nearPlaneHeight = 2 * std::sin(glm::radians(cameraHead.fovy()) / 2.0f) * cameraHead.nearZ();
+    float nearPlaneWidth = nearPlaneHeight * cameraHead.aspectRatio();
 
-    glm::vec3 onNP;
-    onNP = glm::vec3(planeOffset.x * vsw, planeOffset.y * vsh, 0);
-    onNP = cameraHead.orientation() * onNP;
-    onNP = onNP + glm::vec3(0, 0, -cameraHead.nearZ());
-    onNP = cameraHead.orientation() * onNP + cameraHead.position();
-    glm::vec3 dir = onNP - position();
+    glm::vec3 target = glm::vec3(planeOffset.x * nearPlaneWidth / 2.0f, planeOffset.y * nearPlaneHeight / 2.0f,-cameraHead.nearZ());
 
-//    glm::vec3 np = cameraHead.position() + cameraHead.orientation() * glm::vec3(0, 0, -cameraHead.nearZ());
-//    glm::vec3 ch = onNP + np;
-//    glm::vec3 dir = ch - position();
-
-    glm::quat o = Math::quatFromDir(dir) * glm::inverse(cameraHead.orientation());
+    glm::quat o = Math::quatFromDir(target);
 
     m_crossHair.setDirectionOffset(o);
 }

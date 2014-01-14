@@ -4,6 +4,7 @@
 #include <glow/glow.h>
 
 #include "utils/tostring.h"
+#include "utils/aimhelper.h"
 #include "voxel/voxeltreenode.h"
 
 #include "worldobject/worldobject.h"
@@ -267,23 +268,8 @@ glm::vec3 InputHandler::findTargetPoint() {
         m_player->hud().crossHair().position(),
         shootDirection
     );
-    glm::vec3 targetPoint;
 
-    WorldTreeQuery wordltreequery(&World::instance()->worldTree(), &ray);
-
-    std::set<Voxel*> intersectingVoxels = wordltreequery.intersectingVoxels();
-
-    if(!intersectingVoxels.empty()) {
-        Voxel* targetVoxel = *intersectingVoxels.begin();
-        WorldObject* worldObject = targetVoxel->voxelTreeNode()->voxelTree()->worldObject();
-        targetPoint = worldObject->transform().applyTo(glm::vec3(targetVoxel->gridCell()));
-    }
-    else {
-        targetPoint = ray.origin() + ray.direction() * 512.0f;
-    }
-
-
-    return targetPoint;
+    return AimHelper(m_player->playerShip(),ray).aim();
 }
 
 void InputHandler::placeCrossHair(double winX, double winY) {

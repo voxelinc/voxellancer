@@ -17,19 +17,20 @@ public:
 };
 
 static CrossHairElement* newStick() {
+    int color = 0x33FF00;
+
     CrossHairElement* stick = new CrossHairElement();
-    stick->addVoxel(new Voxel(glm::ivec3(0, 0, 0), 0xFFAA00));
-    stick->addVoxel(new Voxel(glm::ivec3(1, 0, 0), 0xFFAA00));
-    stick->addVoxel(new Voxel(glm::ivec3(2, 0, 0), 0xFFAA00));
-    stick->addVoxel(new Voxel(glm::ivec3(3, 0, 0), 0xFFAA00));
-    stick->addVoxel(new Voxel(glm::ivec3(4, 0, 0), 0xFFAA00));
-    stick->addVoxel(new Voxel(glm::ivec3(5, 0, 0), 0xFFAA00));
+
+    for(int v = 0; v < 6; v++) {
+        stick->addVoxel(new Voxel(glm::ivec3(v, 0, 0), color));
+    }
+
     return stick;
 }
 
 static CrossHairElement* newDot() {
     CrossHairElement* dot = new CrossHairElement();
-    dot->addVoxel(new Voxel(glm::ivec3(0, 0, 0), 0xFFAAAAFF));
+    dot->addVoxel(new Voxel(glm::ivec3(0, 0, 0), 0x33FF00));
     return dot;
 }
 
