@@ -18,7 +18,6 @@ public:
     virtual void onCollision() override;
     virtual void onSpawnFail() override;
 
-
 protected:
     void spawnExplosion();
 

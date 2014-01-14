@@ -18,25 +18,27 @@
 #include "voxeleffect/voxelmesh.h"
 
 
+std::weak_ptr<VoxelRenderer> VoxelRenderer::s_instance;
+
+
 VoxelRenderer::VoxelRenderer() :
-    m_texture(0),
-    m_shaderProgram(0),
-    m_vertexArrayObject(0),
-    m_prepared(false)
+    m_program(0),
+    m_prepared(false),
+    m_voxelMesh()
 {
-	createAndSetupShaders();
-	createAndSetupGeometry();
+    glow::debug("Create Voxelrenderer");
+    createAndSetupShaders();
 }
 
 
 void VoxelRenderer::prepareDraw(Camera * camera, bool withBorder)
 {
-    m_shaderProgram->setUniform("projection", camera->projection());
-    m_shaderProgram->setUniform("view", camera->view());
-    m_shaderProgram->setUniform("viewProjection", camera->viewProjection());
-	m_shaderProgram->setUniform("withBorder", (withBorder ? 1.0f : 0.0f));
-
-    m_shaderProgram->use();
+    m_program->setUniform("projection", camera->projection());
+    m_program->setUniform("view", camera->view());
+    m_program->setUniform("viewProjection", camera->viewProjection());
+	m_program->setUniform("withBorder", (withBorder ? 1.0f : 0.0f));
+    
+    m_program->use();
     glProvokingVertex(GL_LAST_VERTEX_CONVENTION);
     m_prepared = true;
 }
@@ -44,21 +46,24 @@ void VoxelRenderer::prepareDraw(Camera * camera, bool withBorder)
 
 void VoxelRenderer::draw(VoxelCluster * worldObject)
 {
-    m_shaderProgram->setUniform("model", worldObject->transform().matrix());
-
-    glActiveTexture(GL_TEXTURE0);
-    worldObject->voxelRenderData()->positionTexture()->bind();
-    glActiveTexture(GL_TEXTURE1);
-    worldObject->voxelRenderData()->colorTexture()->bind();
-
-    m_vertexArrayObject->drawArraysInstanced(GL_TRIANGLE_STRIP, 0, 14, worldObject->voxelRenderData()->voxelCount());
+    m_program->setUniform("model", worldObject->transform().matrix());
+    m_program->setUniform("emissive", worldObject->emissive());
+    
+    VoxelRenderData* renderData = worldObject->voxelRenderData();
+    
+    renderData->vertexArrayObject()->bind();
+    glVertexAttribDivisor(m_program->getAttributeLocation("v_vertex"), 0);
+    glVertexAttribDivisor(m_program->getAttributeLocation("v_normal"), 0);
+    glVertexAttribDivisor(m_program->getAttributeLocation("v_position"), 1);
+    glVertexAttribDivisor(m_program->getAttributeLocation("v_color"), 1);
+    renderData->vertexArrayObject()->drawArraysInstanced(GL_TRIANGLE_STRIP, 0, 14, renderData->voxelCount());
 }
 
 
 void VoxelRenderer::afterDraw()
 {
     glActiveTexture(GL_TEXTURE0);
-    m_shaderProgram->release();
+    m_program->release();
     m_prepared = false;
 }
 
@@ -67,22 +72,35 @@ bool VoxelRenderer::prepared(){
 }
 
 void VoxelRenderer::createAndSetupShaders() {
-    glow::Shader * vertexShader = glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/voxelrenderer.vert");
-    glow::Shader * fragmentShader = glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/voxelrenderer.frag");
+    glow::Shader * vertexShader = glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/voxelcluster.vert");
+    glow::Shader * fragmentShader = glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/voxel.frag");
 
-    m_shaderProgram = new glow::Program();
-    m_shaderProgram->bindAttributeLocation(0, "v_vertex");
-    m_shaderProgram->bindAttributeLocation(1, "v_normal");
-    m_shaderProgram->attach(vertexShader, fragmentShader);
-    m_shaderProgram->bindFragDataLocation(0, "fragColor");
+    m_program = new glow::Program();
+    m_program->bindAttributeLocation(0, "v_vertex");
+    m_program->bindAttributeLocation(1, "v_normal");
+    m_program->bindAttributeLocation(2, "v_position");
+    m_program->bindAttributeLocation(3, "v_color");
+    m_program->attach(vertexShader, fragmentShader);
+    m_program->bindFragDataLocation(0, "fragColor");
 
-    m_shaderProgram->getUniform<GLint>("positionSampler")->set(0);
-    m_shaderProgram->getUniform<GLint>("colorSampler")->set(1);
 }
 
-void VoxelRenderer::createAndSetupGeometry() {
-    m_vertexArrayObject = new glow::VertexArrayObject();
-
-    VoxelMesh::bindTo(m_shaderProgram, m_vertexArrayObject);
+glow::Program* VoxelRenderer::program() {
+    assert(!s_instance.expired());
+    return s_instance.lock()->m_program;
 }
 
+VoxelMesh* VoxelRenderer::voxelMesh() {
+    assert(!s_instance.expired());
+    return &s_instance.lock()->m_voxelMesh;
+}
+
+std::shared_ptr<VoxelRenderer> VoxelRenderer::instance() {
+    if (auto sp = s_instance.lock()) {
+        return sp;
+    } else {
+        sp = std::shared_ptr<VoxelRenderer>(new VoxelRenderer());
+        s_instance = sp;
+        return sp;
+    }
+}

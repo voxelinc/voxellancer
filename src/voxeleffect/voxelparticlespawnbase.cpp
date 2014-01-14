@@ -21,6 +21,7 @@ VoxelParticleSpawnBase::VoxelParticleSpawnBase() :
     m_lifetime(1.0f),
     m_lifetimeRandomization(0.0f),
     m_color(0xFFFFFF),
+    m_colorEmissiveness(0.0f),
     m_impactVector(0, 0, 0),
     m_particleDampening(0.0f),
     m_particleAngularDampening(0.0f),
@@ -54,8 +55,9 @@ void VoxelParticleSpawnBase::setLifetime(float lifetime, float lifetimeRandomiza
     m_lifetimeRandomization = lifetimeRandomization;
 }
 
-void VoxelParticleSpawnBase::setColor(int color) {
+void VoxelParticleSpawnBase::setColor(int color, float emissiveness) {
     m_color = color;
+    m_colorEmissiveness = emissiveness;
 }
 void VoxelParticleSpawnBase::setImpactVector(const glm::vec3& impactVector) {
     m_impactVector = impactVector;

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include <glow/ref_ptr.h>
 #include <glow/Array.h>
 
@@ -15,15 +17,14 @@ namespace glow {
 
 class VoxelMesh {
 public:
-    static void bindTo(glow::ref_ptr<glow::Program> program, 
-                       glow::ref_ptr<glow::VertexArrayObject> vao, 
-                       int index = 0);
-    static void tearDown();
+    VoxelMesh();
+    void bindTo(glow::Program* program,
+                       glow::VertexArrayObject* vao,
+                       int bindingIndex);
+
 protected:
-    static glow::ref_ptr<glow::Buffer> vertexBuffer();
-    static void initBuffer();
+    glow::ref_ptr<glow::Buffer> m_vertexBuffer;
 
-    static glow::ref_ptr<glow::Buffer> s_vertexBuffer;
-
+    void setupVertexAttribute(glow::Program* program, glow::VertexArrayObject* vao, const std::string& name, GLboolean normalised, int bindingNum, GLint offset);
+    void initBuffer();
 };
-

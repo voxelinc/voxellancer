@@ -41,7 +41,7 @@ void VoxelExplosionGenerator::spawn() {
         glm::vec3 randDirection = createDirectionalSpeed();
         transform.setPosition(m_position + (m_radius * randDirection));
 
-        VoxelParticle* particle = new VoxelParticle(transform, m_color, createLifetime());
+        VoxelParticle* particle = new VoxelParticle(transform, m_color, m_colorEmissiveness, createLifetime());
         particle->setAngularSpeed(createAngularSpeed(), m_particleDampening);
         particle->setDirectionalSpeed(randDirection, m_particleAngularDampening);
 

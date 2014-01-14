@@ -16,6 +16,7 @@
 #include "game.h"
 #include "ui/inputhandler.h"
 
+
 static GLint MajorVersionRequire = 3;
 static GLint MinorVersionRequire = 1;
 
@@ -140,7 +141,11 @@ int main(void)
 #else
 	glfwSwapInterval(1);
 #endif
+
+//#define TRYCATCH
+#ifdef TRYCATCH
 	try {
+#endif
 		PropertyManager::instance()->load("data/config.ini");
 
         std::srand((unsigned int)time(NULL));
@@ -163,19 +168,19 @@ int main(void)
 			glfwSwapBuffers(window);
 			glfwPollEvents();
 		}
-
 		delete game;
 		glfwDestroyWindow(window);
 		glfwTerminate();
-	}
-	catch (std::exception &e){
-		glfwDestroyWindow(window);
+#ifdef TRYCATCH
+    }
+    catch (std::exception &e) {
+        glfwDestroyWindow(window);
 		glfwTerminate();
         glow::fatal("Termination after Exception: %;", e.what());
 		std::cout << "Hit enter to quit" << std::endl;
 		std::cin.ignore(1, '\n');
 	}
-
+#endif
     return 0;
 }
 

@@ -13,7 +13,7 @@
 
 HUD::HUD(Player* player) :
     m_player(player),
-    m_voxelRenderer(new VoxelRenderer()),
+    m_voxelRenderer(VoxelRenderer::instance()),
     m_font(new VoxelFont()),
     m_gameCamera(0),
     m_renderCamera(),

@@ -17,7 +17,7 @@ public:
     void setScale(float scale, float randomization = 0.0f);
     void setForce(float force, float randomization = 0.0f);
     void setLifetime(float lifetime, float randomization = 0.0f);
-    void setColor(int color);
+    void setColor(int color, float emissiveness = 0.0f);
     void setImpactVector(const glm::vec3& impactVector);
 
 
@@ -30,6 +30,7 @@ protected:
     float m_lifetime;
     float m_lifetimeRandomization;
     int m_color;
+    float m_colorEmissiveness;
     glm::vec3 m_impactVector;
 
     float m_particleDampening;

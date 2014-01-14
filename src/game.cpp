@@ -40,7 +40,6 @@
 #include "ai/characters/dummycharacter.h"
 #include "ai/elevatedtasks/dummyelevatedtask.h"
 #include "ai/basictask.h"
-#include "voxeleffect/voxelmesh.h"
 
 
 class Ship;
@@ -55,7 +54,6 @@ Game::Game(GLFWwindow *window) :
 }
 
 Game::~Game() {
-    VoxelMesh::tearDown();
 }
 
 void Game::reloadConfig() {
@@ -77,10 +75,10 @@ void Game::initialize() {
     glow::debug("Create Skybox");
 	m_skybox = std::unique_ptr<Skybox>(new Skybox);
 
-	glow::debug("Create Voxel");
-    m_voxelRenderer = std::unique_ptr<VoxelRenderer>(new VoxelRenderer);
+    m_voxelRenderer = VoxelRenderer::instance();
 
-    
+
+    glow::debug("Create WorldObjects");
     Ship *normandy = new Ship();
     ClusterCache::instance()->fillObject(normandy, "data/voxelcluster/normandy.csv");
     normandy->setPosition(glm::vec3(0, 0, -100));
@@ -90,8 +88,8 @@ void Game::initialize() {
     m_world->god().scheduleSpawn(normandy);
     // TODO: use these dummies to test BasicTasks
     normandy->setCharacter(
-        new DummyCharacter(*normandy, 
-        new DummyElevatedTask(*normandy, 
+        new DummyCharacter(*normandy,
+        new DummyElevatedTask(*normandy,
         new BasicTask(*normandy))));
 
     Ship *testCluster = new Ship();
@@ -118,6 +116,7 @@ void Game::initialize() {
     wall->objectInfo().setCanLockOn(true);
     m_world->god().scheduleSpawn(wall);
 
+    glow::debug("Create Planet");
     WorldObject *planet = new WorldObject();
     planet->move(glm::vec3(20, 10, -30));
     int diameter = 28;
