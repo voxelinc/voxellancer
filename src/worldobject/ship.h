@@ -34,6 +34,7 @@ public:
     void setCharacter(Character* character);
     Character* character();
 
+
 protected:
     std::unique_ptr<Character> m_character;
     BoardComputer m_boardComputer;
@@ -42,5 +43,6 @@ protected:
     Property<float> prop_maxRotSpeed;
 
 	std::list<Hardpoint*> m_hardpoints;
+
     std::shared_ptr<WorldObjectHandle> m_targetObjectHandle;
 };

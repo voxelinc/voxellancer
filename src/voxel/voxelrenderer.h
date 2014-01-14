@@ -1,12 +1,16 @@
 #pragma once
+#include <memory>
+
 #include <glow/ref_ptr.h>
+
+#include "voxeleffect/voxelmesh.h"
 
 
 namespace glow {
-	class Texture;
-	class Program;
-	class VertexArrayObject;
-	class Buffer;
+    class Texture;
+    class Program;
+    class VertexArrayObject;
+    class Buffer;
 };
 
 class Camera;
@@ -14,27 +18,24 @@ class VoxelCluster;
 
 class VoxelRenderer {
 public:
-    static VoxelRenderer* instance();
-
     void prepareDraw(Camera * camera, bool withBorder = true);
     void draw(VoxelCluster * cluster);
     void afterDraw();
 
     bool prepared();
 
+    static std::shared_ptr<VoxelRenderer> instance();
+    static glow::Program* program();
+    static VoxelMesh* voxelMesh();
 
-protected:
-    static VoxelRenderer* s_instance;
-
-    glow::ref_ptr<glow::Texture> m_texture;
-	glow::ref_ptr<glow::Program> m_shaderProgram;
-	glow::ref_ptr<glow::VertexArrayObject> m_vertexArrayObject;
-	glow::ref_ptr<glow::Buffer> m_vertexBuffer;
+private:
+    glow::ref_ptr<glow::Program> m_program;
+    VoxelMesh m_voxelMesh;
     bool m_prepared;
 
+    static std::weak_ptr<VoxelRenderer> s_instance;
 
     VoxelRenderer();
-
     void createAndSetupShaders();
-    void createAndSetupGeometry();
 };
+

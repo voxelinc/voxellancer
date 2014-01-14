@@ -16,6 +16,7 @@
 #include "game.h"
 #include "ui/inputhandler.h"
 
+
 static GLint MajorVersionRequire = 3;
 static GLint MinorVersionRequire = 1;
 
@@ -49,11 +50,11 @@ static void resizeCallback(GLFWwindow* window, int width, int height)
 static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, GL_TRUE);
-	if (key == GLFW_KEY_F5 && action == GLFW_PRESS)
-		glowutils::FileRegistry::instance().reloadAll();
-	if (key == GLFW_KEY_F6 && action == GLFW_PRESS)
-		game->reloadConfig();
+        glfwSetWindowShouldClose(window, GL_TRUE);
+    if (key == GLFW_KEY_F5 && action == GLFW_PRESS)
+        glowutils::FileRegistry::instance().reloadAll();
+    if (key == GLFW_KEY_F6 && action == GLFW_PRESS)
+        game->reloadConfig();
 
 	game->inputHandler().keyCallback(key, scancode, action, mods);
 }
@@ -77,104 +78,109 @@ void setCallbacks(GLFWwindow* window)
 
 int main(void)
 {
-	GLFWwindow* window = nullptr;
+    GLFWwindow* window = nullptr;
 
-	if (!glfwInit()) {
-		glow::fatal("could not init glfw");
-		exit(-1);
-	}
+    if (!glfwInit()) {
+        glow::fatal("could not init glfw");
+        exit(-1);
+    }
 
-	glfwSetErrorCallback(errorCallback);
+    glfwSetErrorCallback(errorCallback);
 
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, MajorVersionRequire);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, MinorVersionRequire);
-	//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	//glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, MajorVersionRequire);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, MinorVersionRequire);
+    //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
 #if defined(NDEBUG)
-	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_FALSE);
+    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_FALSE);
 #else
-	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
+    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
 #endif
 
-	window = glfwCreateWindow(1280, 720, "Voxellancer", NULL, NULL);
+    window = glfwCreateWindow(1280, 720, "Voxellancer", NULL, NULL);
 #ifndef WIN32
-	if (!window){
-		// If 3.1 is not available and this is linux, assume we want mesa software rendering and try again
-		putenv("LIBGL_ALWAYS_SOFTWARE=1");
+    if (!window){
+        // If 3.1 is not available and this is linux, assume we want mesa software rendering and try again
+        putenv("LIBGL_ALWAYS_SOFTWARE=1");
 
-		glfwTerminate();
-		if (!glfwInit()) {
-			glow::fatal("could not init glfw");
-			exit(-1);
-		}
+        glfwTerminate();
+        if (!glfwInit()) {
+            glow::fatal("could not init glfw");
+            exit(-1);
+        }
 
-		window = glfwCreateWindow(1280, 720, "Voxellancer", NULL, NULL);
-	}
+        window = glfwCreateWindow(1280, 720, "Voxellancer", NULL, NULL);
+    }
 #endif
-	if (!window) {
-		glfwTerminate();
-		glow::fatal("could not create window");
-		exit(-1);
-	}
+    if (!window) {
+        glfwTerminate();
+        glow::fatal("could not create window");
+        exit(-1);
+    }
 
-	glfwMakeContextCurrent(window);
+    glfwMakeContextCurrent(window);
 
-	setCallbacks(window);
+    setCallbacks(window);
 
-	checkVersion();
+    checkVersion();
 
-	glewExperimental = GL_TRUE;
-	if (glewInit() != GLEW_OK) {
-		glow::fatal("glewInit() failed");
-	}
-	CheckGLError();
+    glewExperimental = GL_TRUE;
+    if (glewInit() != GLEW_OK) {
+        glow::fatal("glewInit() failed");
+    }
+    CheckGLError();
 
 
 #ifdef WIN32 // TODO: find a way to correctly detect debug extension in linux
-	glow::DebugMessageOutput::enable();
+    glow::DebugMessageOutput::enable();
 #endif
 
 #ifdef WIN32
-	wglSwapIntervalEXT(1); // glfw doesn't work!?
+    wglSwapIntervalEXT(1); // glfw doesn't work!?
 #else
-	glfwSwapInterval(1);
+    glfwSwapInterval(1);
 #endif
-	try {
-		PropertyManager::instance()->load("data/config.ini");
+
+//#define TRYCATCH
+#ifdef TRYCATCH
+    try {
+#endif
+        PropertyManager::instance()->load("data/config.ini");
 
         std::srand((unsigned int)time(NULL));
 
-		game = new Game(window);
-		game->initialize();
+        game = new Game(window);
+        game->initialize();
 
 		int width, height;
 		glfwGetFramebufferSize(window, &width, &height);
         game->inputHandler().resizeEvent(width, height);
 
-		glow::debug("Entering mainloop");
-		double time = glfwGetTime();
-		while (!glfwWindowShouldClose(window))
-		{
-			double delta = glfwGetTime() - time;
-			time += delta;
-			game->update(static_cast<float>(delta));
-			game->draw();
-			glfwSwapBuffers(window);
-			glfwPollEvents();
-		}
-
-		delete game;
-		glfwDestroyWindow(window);
-		glfwTerminate();
-	}
-	catch (std::exception &e){
-		glfwDestroyWindow(window);
-		glfwTerminate();
+        glow::debug("Entering mainloop");
+        double time = glfwGetTime();
+        while (!glfwWindowShouldClose(window))
+        {
+            double delta = glfwGetTime() - time;
+            time += delta;
+            game->update(static_cast<float>(delta));
+            game->draw();
+            glfwSwapBuffers(window);
+            glfwPollEvents();
+        }
+        delete game;
+        glfwDestroyWindow(window);
+        glfwTerminate();
+#ifdef TRYCATCH
+    }
+    catch (std::exception &e) {
+        glfwDestroyWindow(window);
+        glfwTerminate();
         glow::fatal("Termination after Exception: %;", e.what());
-		std::cout << "Hit enter to quit" << std::endl;
-		std::cin.ignore(1, '\n');
-	}
+        std::cout << "Hit enter to quit" << std::endl;
+        std::cin.ignore(1, '\n');
+    }
+#endif
     return 0;
 }
 

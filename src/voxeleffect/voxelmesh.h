@@ -1,18 +1,30 @@
 #pragma once
 
+#include <string>
+
+#include <glow/ref_ptr.h>
 #include <glow/Array.h>
 
 #include <glm/glm.hpp>
 
 
-class VoxelMesh {
-public:
-    static const glow::Array<glm::vec3> vertices();
-    static const glow::Array<glm::vec3> normals();
-
-
-protected:
-    static glow::Array<glm::vec3> s_vertices;
-    static glow::Array<glm::vec3> s_normals;
+namespace glow {
+    class Program;
+    class VertexArrayObject;
+    class Buffer;
 };
 
+
+class VoxelMesh {
+public:
+    VoxelMesh();
+    void bindTo(glow::Program* program,
+                glow::VertexArrayObject* vao,
+                int bindingIndex);
+
+protected:
+    glow::ref_ptr<glow::Buffer> m_vertexBuffer;
+
+    void setupVertexAttribute(glow::Program* program, glow::VertexArrayObject* vao, const std::string& name, GLboolean normalised, int bindingNum, GLint offset);
+    void initBuffer();
+};

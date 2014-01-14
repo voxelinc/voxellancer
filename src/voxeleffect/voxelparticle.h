@@ -17,7 +17,6 @@ public:
     void setWorldTransform(const WorldTransform& transform);
 
     int color() const;
-    const glm::vec3& colorVec() const;
 
     float lifetime() const;
     bool isDead() const;
@@ -35,7 +34,6 @@ protected:
     WorldTransform m_transform;
 
     int m_color;
-    glm::vec3 m_colorVec;
 
     float m_lifetime;
 

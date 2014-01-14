@@ -9,55 +9,55 @@ public:
 	Camera(int viewportWidth, int viewportHeight);
 	virtual ~Camera();
 
-	/* Overwrite WorldObject functions for performance:
-	*	WorldObject recalculates the matrix on every read access,
-	*	Camera should recalculate on every write access, as reads are more common */
+    /* Overwrite WorldObject functions for performance:
+    *  WorldObject recalculates the matrix on every read access,
+    *  Camera should recalculate on every write access, as reads are more common */
 
-	void move(glm::vec3 dist);
-	void setPosition(glm::vec3 pos);
+    void move(glm::vec3 dist);
+    void setPosition(glm::vec3 pos);
 
-	void rotateX(float rot);
-	void rotateY(float rot);
-	void rotateZ(float rot);
-	void setOrientation(glm::quat quat);
+    void rotateX(float rot);
+    void rotateY(float rot);
+    void rotateZ(float rot);
+    void setOrientation(glm::quat quat);
 
-	const glm::mat4 view();
-	const glm::mat4 viewInverted();
+    const glm::mat4 view();
+    const glm::mat4 viewInverted();
     const glm::quat orientation();
     const glm::vec3 position();
 
-	/* Projection from glow::Camera */
+    /* Projection from glow::Camera */
 
-	float zNear() const;
-	void setZNear(float zNear);
-	float zFar() const;
-	void setZFar(float zFar);
+    float zNear() const;
+    void setZNear(float zNear);
+    float zFar() const;
+    void setZFar(float zFar);
 
-	float fovy() const;
-	void setFovy(float fovy);
+    float fovy() const;
+    void setFovy(float fovy);
 
-	const glm::ivec2 viewport() const;
-	void setViewport(const glm::ivec2 & viewport);
+    const glm::ivec2 viewport() const;
+    void setViewport(const glm::ivec2 & viewport);
 
-	float aspectRatio() const;
+    float aspectRatio() const;
 
-	const glm::mat4 projection();
+    const glm::mat4 projection();
 
-	const glm::mat4 viewProjection();
+    const glm::mat4 viewProjection();
 
 protected:
-	void viewDirty();
-	void projectionDirty();
+    void viewDirty();
+    void projectionDirty();
 
-	float m_fovy;
-	float m_aspect;
-	float m_zNear;
-	float m_zFar;
+    float m_fovy;
+    float m_aspect;
+    float m_zNear;
+    float m_zFar;
 
-	glm::ivec2 m_viewport;
+    glm::ivec2 m_viewport;
 
-	glm::mat4 m_view;
-	glm::mat4 m_projection;
-	glm::mat4 m_viewProjection;
-
+    glm::mat4 m_view;
+    glm::mat4 m_projection;
+    glm::mat4 m_viewProjection;
 };
+

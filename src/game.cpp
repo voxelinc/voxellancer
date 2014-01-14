@@ -54,29 +54,31 @@ Game::Game(GLFWwindow *window) :
 }
 
 Game::~Game() {
-
 }
 
 void Game::reloadConfig() {
-	PropertyManager::instance()->load("data/config.ini");
+    PropertyManager::instance()->load("data/config.ini");
 }
 
 void Game::initialize() {
     glow::AutoTimer t("Initialize Game");
 
-	glow::debug("Game::testFMOD()");
+    glow::debug("Game::testFMOD()");
     //testFMOD();
 
-	//Must be created first
-	m_linuxvmdummy = std::unique_ptr<LinuxVMDummy>(new LinuxVMDummy);
+    //Must be created first
+    m_linuxvmdummy = std::unique_ptr<LinuxVMDummy>(new LinuxVMDummy);
 
     glow::debug("create world");
     m_world = World::instance();
 
+    m_voxelRenderer = VoxelRenderer::instance();
 
+
+    glow::debug("Create WorldObjects");
     Ship *normandy = new Ship();
     ClusterCache::instance()->fillObject(normandy, "data/voxelcluster/normandy.csv");
-	normandy->setPosition(glm::vec3(0, 0, -100));
+    normandy->setPosition(glm::vec3(0, 0, -100));
     normandy->objectInfo().setName("Normandy");
     normandy->objectInfo().setShowOnHud(true);
     normandy->objectInfo().setCanLockOn(true);
@@ -111,10 +113,10 @@ void Game::initialize() {
     wall->objectInfo().setCanLockOn(true);
     m_world->god().scheduleSpawn(wall);
 
-
+    glow::debug("Create Planet");
     WorldObject *planet = new WorldObject();
     planet->move(glm::vec3(20, 10, -30));
-    int diameter = 28;
+    int diameter = 24;
     glm::vec3 middle(diameter/2, diameter/2, diameter/2);
     for(int x = 0; x < diameter; x++) {
         for(int y = 0; y < diameter; y++) {
@@ -157,13 +159,13 @@ void Game::initialize() {
     glow::debug("Initial spawn");
     m_world->god().spawn();
 
-//	m_hud = std::unique_ptr<HUD>(new HUD(&m_player));
-//	m_hud->setCamera(&m_camera);
-
     m_hd3000dummy = std::unique_ptr<HD3000Dummy>(new HD3000Dummy);
 
+    m_out = new StreamRedirect(std::cout, &m_player.hud(), true);
+    m_err = new StreamRedirect(std::cerr, &m_player.hud(), true);
+
     glClearColor(0.2f, 0.3f, 0.4f, 1.f);
-	glow::debug("Game::initialize Done");
+    glow::debug("Game::initialize Done");
 }
 
 

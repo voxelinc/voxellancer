@@ -6,21 +6,21 @@
 #include "worldtransform.h"
 
 enum HUDOffsetOrigin {
-	Center,
-	TopLeft,
-	Top,
-	TopRight,
-	Right,
-	BottomRight,
-	Bottom,
-	BottomLeft,
-	Left
+    Center,
+    TopLeft,
+    Top,
+    TopRight,
+    Right,
+    BottomRight,
+    Bottom,
+    BottomLeft,
+    Left
 };
 
 class HUDElement : public VoxelCluster {
 public:
-	HUDElement();
+    HUDElement();
 
-	glm::vec3 m_offset;
-	HUDOffsetOrigin m_origin;
+    glm::vec3 m_offset;
+    HUDOffsetOrigin m_origin;
 };

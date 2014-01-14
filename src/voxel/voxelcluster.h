@@ -20,7 +20,7 @@
 class VoxelCluster
 {
 public:
-	VoxelCluster(float scale);
+    VoxelCluster(float scale);
     virtual ~VoxelCluster();
 
     WorldTransform& transform();
@@ -52,10 +52,10 @@ public:
 
 
 protected:
+    std::unordered_map<glm::ivec3, Voxel*> m_voxels;
     VoxelRenderData m_voxelRenderData;
     WorldTransform m_transform;
 
-    std::unordered_map<glm::ivec3, Voxel*> m_voxels;
 
     std::set<Voxel*, VoxelGridCmp<XAxis, YAxis, ZAxis>> m_voxelsXSorted;
     std::set<Voxel*, VoxelGridCmp<YAxis, XAxis, ZAxis>> m_voxelsYSorted;

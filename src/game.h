@@ -12,6 +12,7 @@
 #include "camera/cameradolly.h"
 
 #include "ui/inputhandler.h"
+#include "ui/streamredirect.h"
 
 #include "utils/timedtask.h"
 
@@ -31,21 +32,17 @@ class Ship;
 class Game {
 
 public:
-	Game(GLFWwindow *window);
-	virtual ~Game();
-	void initialize();
-	void reloadConfig();
+    Game(GLFWwindow* window);
+    virtual ~Game();
+    void initialize();
+    void reloadConfig();
 
     Skybox& skybox();
 
     void update(float deltaSec);
-	void draw();
+    void draw();
 
     InputHandler& inputHandler();
-
-
-private:
-    void testFMOD();
 
 
 private:
@@ -56,5 +53,9 @@ private:
 
 	std::unique_ptr<HD3000Dummy> m_hd3000dummy;
 	std::unique_ptr<LinuxVMDummy> m_linuxvmdummy;
+	std::shared_ptr<VoxelRenderer> m_voxelRenderer;
+
+    StreamRedirect* m_out;
+    StreamRedirect* m_err;
 };
 

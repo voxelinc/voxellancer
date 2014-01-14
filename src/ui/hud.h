@@ -1,6 +1,10 @@
 #pragma once
 
+#include <vector>
+
 #include "geometry/sphere.h"
+
+#include "property/property.h"
 
 #include "crosshair.h"
 
@@ -22,6 +26,8 @@ public:
 
     void update(float deltaSec);
     void draw();
+
+    void printLine(std::string line);
 
 
 protected:
