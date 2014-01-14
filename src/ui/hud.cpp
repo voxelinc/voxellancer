@@ -27,7 +27,7 @@ void HUD::setCrossHairOffset(const glm::vec2& planeOffset) {
 
     glm::vec3 target = glm::vec3(planeOffset.x * nearPlaneWidth / 2.0f, planeOffset.y * nearPlaneHeight / 2.0f,-cameraHead.nearZ());
 
-    glm::quat offset = Math::quatFromDir(target);
+    glm::quat offset = Math::quatFromViewDirection(target);
 
     m_crossHair.setDirectionOffset(offset);
 }
