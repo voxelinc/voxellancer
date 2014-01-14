@@ -29,37 +29,37 @@
 */
 
 
-InputHandler::InputHandler(GLFWwindow *window, Player* player, Camera *camera) :
-m_window(window),
-m_player(player),
-m_camera(camera),
-prop_deadzoneMouse("input.deadzoneMouse"),
-prop_deadzoneGamepad("input.deadzoneGamepad"),
+InputHandler::InputHandler(GLFWwindow* window, Player* player, Camera* camera, HUD* hud) :
+    m_window(window),
+    m_player(player),
+    m_camera(camera),
+    prop_deadzoneMouse("input.deadzoneMouse"),
+    prop_deadzoneGamepad("input.deadzoneGamepad"),
 
-fireAction("input.mappingFirePrimary", "input.mappingFireSecondary", "Fire"),
-rocketAction("input.mappingRocketPrimary", "input.mappingRocketSecondary", "Launch Rockets"),
+    fireAction("input.mappingFirePrimary", "input.mappingFireSecondary", "Fire"),
+    rocketAction("input.mappingRocketPrimary", "input.mappingRocketSecondary", "Launch Rockets"),
 
-moveLeftAction("input.mappingMoveLeftPrimary", "input.mappingMoveLeftSecondary", "Move Left"),
-moveRightAction("input.mappingMoveRightPrimary", "input.mappingMoveRightSecondary", "Move Right"),
-moveForwardAction("input.mappingMoveForwardPrimary", "input.mappingMoveForwardSecondary", "Move Forward"),
-moveBackwardAction("input.mappingMoveBackwardPrimary", "input.mappingMoveBackwardSecondary", "Move Backward"),
+    moveLeftAction("input.mappingMoveLeftPrimary", "input.mappingMoveLeftSecondary", "Move Left"),
+    moveRightAction("input.mappingMoveRightPrimary", "input.mappingMoveRightSecondary", "Move Right"),
+    moveForwardAction("input.mappingMoveForwardPrimary", "input.mappingMoveForwardSecondary", "Move Forward"),
+    moveBackwardAction("input.mappingMoveBackwardPrimary", "input.mappingMoveBackwardSecondary", "Move Backward"),
 
-rotateLeftAction("input.mappingRotateLeftPrimary", "input.mappingRotateLeftSecondary", "Rotate Left"),
-rotateRightAction("input.mappingRotateRightPrimary", "input.mappingRotateRightSecondary", "Rotate Right"),
-rotateUpAction("input.mappingRotateUpPrimary", "input.mappingRotateUpSecondary", "Rotate Up"),
-rotateDownAction("input.mappingRotateDownPrimary", "input.mappingRotateDownSecondary", "Rotate Down"),
-rotateClockwiseAction("input.mappingRotateClockwisePrimary", "input.mappingRotateClockwiseSecondary", "Rotate Clockwise"),
-rotateCClockwiseAction("input.mappingRotateCClockwisePrimary", "input.mappingRotateCClockwiseSecondary", "Rotate CounterClockwise"),
+    rotateLeftAction("input.mappingRotateLeftPrimary", "input.mappingRotateLeftSecondary", "Rotate Left"),
+    rotateRightAction("input.mappingRotateRightPrimary", "input.mappingRotateRightSecondary", "Rotate Right"),
+    rotateUpAction("input.mappingRotateUpPrimary", "input.mappingRotateUpSecondary", "Rotate Up"),
+    rotateDownAction("input.mappingRotateDownPrimary", "input.mappingRotateDownSecondary", "Rotate Down"),
+    rotateClockwiseAction("input.mappingRotateClockwisePrimary", "input.mappingRotateClockwiseSecondary", "Rotate Clockwise"),
+    rotateCClockwiseAction("input.mappingRotateCClockwisePrimary", "input.mappingRotateCClockwiseSecondary", "Rotate CounterClockwise"),
 
-selectNextAction("input.mappingSelectNextPrimary", "input.mappingSelectNextSecondary", "Select Next Target", true),
-selectPreviousAction("input.mappingSelectPreviousPrimary", "input.mappingSelectPreviousSecondary", "Select Previous Target", true),
+    selectNextAction("input.mappingSelectNextPrimary", "input.mappingSelectNextSecondary", "Select Next Target", true),
+    selectPreviousAction("input.mappingSelectPreviousPrimary", "input.mappingSelectPreviousSecondary", "Select Previous Target", true),
 
-m_secondaryInputValues(),
-m_actions(),
+    m_secondaryInputValues(),
+    m_actions(),
 
-m_inputConfigurator(new InputConfigurator(&m_actions, &m_secondaryInputValues, &prop_deadzoneGamepad)),
+    m_inputConfigurator(new InputConfigurator(&m_actions, &m_secondaryInputValues, &prop_deadzoneGamepad, hud)),
 
-m_targeter(new Targeter(player, camera))
+    m_targeter(new Targeter(player, camera))
 {
     addActionsToVector();
 

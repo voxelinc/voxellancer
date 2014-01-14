@@ -12,6 +12,7 @@
 
 class WorldObject;
 class InputConfigurator;
+class HUD;
 
 struct ActionKeyMapping {
     Property<InputMapping> primaryMapping;
@@ -53,8 +54,7 @@ struct SecondaryInputValues {
 class InputHandler {
 
 public:
-    InputHandler(GLFWwindow *window, Camera *camera);
-    InputHandler(GLFWwindow *window, Player *player, Camera *camera);
+    InputHandler(GLFWwindow *window, Player* player, Camera* camera, HUD* hud);
 	virtual ~InputHandler();
 
 	void resizeEvent(const unsigned int width, const unsigned int height);

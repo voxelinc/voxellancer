@@ -9,12 +9,12 @@
 struct ActionKeyMapping;
 struct SecondaryInputValues;
 
+class HUD;
 
 class InputConfigurator
 {
 public:
-    InputConfigurator();
-    InputConfigurator(std::vector<ActionKeyMapping*>* actions, SecondaryInputValues *secondaryInputValues, Property<float>* deadzone);
+    InputConfigurator(std::vector<ActionKeyMapping*>* actions, SecondaryInputValues *secondaryInputValues, Property<float>* deadzone, HUD* hud);
     void startConfiguration(bool primary);
     bool isConfiguring();
     void update();
@@ -30,6 +30,8 @@ public:
 private:
     std::vector<ActionKeyMapping*>* actions;
     SecondaryInputValues *secondaryInputValues;
+
+    HUD* hud;
 
     Property<float>* prop_deadzoneMouse;
     Property<float>* prop_deadzoneGamepad;

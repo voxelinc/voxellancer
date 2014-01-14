@@ -1,20 +1,16 @@
 #include "inputconfigurator.h"
 
-InputConfigurator::InputConfigurator(){
+#include "ui/hud.h"
 
-    primaryConfigurationState = -1;
-    secondaryConfigurationState = -1;
-}
 
-InputConfigurator::InputConfigurator(std::vector<ActionKeyMapping*>* actions, SecondaryInputValues *secondaryInputValues, Property<float>* deadzone){
+InputConfigurator::InputConfigurator(std::vector<ActionKeyMapping*>* actions, SecondaryInputValues *secondaryInputValues, Property<float>* deadzone, HUD* hud){
+    this->hud = hud;
     this->actions = actions;
     this->secondaryInputValues = secondaryInputValues;
     prop_deadzoneGamepad = deadzone;
     primaryConfigurationState = -1;
     secondaryConfigurationState = -1;
 }
-
-
 
 bool InputConfigurator::setActionInputMapping(ActionKeyMapping* action, bool primary){
     if (primary){
@@ -106,11 +102,11 @@ bool InputConfigurator::isConfiguring(){
 
 void InputConfigurator::startConfiguration(bool primary){
     if (primary){
-        printf("Starting configuration for primary input device (keyboard),\nPlease follow the instructions\n");
+        hud->printLine("Starting configuration for primary input device (keyboard), Please follow the instructions");
         primaryConfigurationState = 0;
     }
     else {
-        printf("Starting configuration for secondary input device (gamepad/Joystick),\nPlease follow the instructions\n");
+        hud->printLine("Starting configuration for secondary input device (gamepad/Joystick), Please follow the instructions");
         secondaryConfigurationState = 0;
     }
     displayedInstructions = false;
@@ -129,13 +125,13 @@ void InputConfigurator::update(){
 
 void InputConfigurator::setupPrimaryControls(){
     if (!displayedInstructions){
-        printf("Please press Joystick button or axis for action: %s \n", actions->at(primaryConfigurationState)->name.c_str());
+        hud->printLine("Please press Joystick button or axis for action: " + actions->at(primaryConfigurationState)->name);
         displayedInstructions = true;
     }
     if (beginningKeyConfiguration){
         if (isSecondaryInput()){
             if (!displayedKeyPressedWarning){
-                printf("Please release all buttons before setting a new key mapping\n");
+                hud->printLine("Please release all buttons before setting a new key mapping");
                 displayedKeyPressedWarning = true;
             }
             return;
@@ -151,7 +147,7 @@ void InputConfigurator::setupPrimaryControls(){
     lastPrimaryInput = InputMapping();
     primaryConfigurationState++;
     if (primaryConfigurationState >= actions->size()){
-        printf("Joystick setup complete\n");
+        hud->printLine("Joystick setup complete");
         primaryConfigurationState = -1;
     }
     beginningKeyConfiguration = true;
@@ -161,13 +157,13 @@ void InputConfigurator::setupPrimaryControls(){
 
 void InputConfigurator::setupSecondaryControls(){
     if (!displayedInstructions){
-        printf("Please press Joystick button or axis for action: %s \n", actions->at(secondaryConfigurationState)->name.c_str());
+        hud->printLine("Please press Joystick button or axis for action: " + actions->at(secondaryConfigurationState)->name);
         displayedInstructions = true;
     }
     if (beginningKeyConfiguration){
         if (isSecondaryInput()){
             if (!displayedKeyPressedWarning){
-                printf("Please release all buttons before setting a new key mapping\n");
+                hud->printLine("Please release all buttons before setting a new key mapping");
                 displayedKeyPressedWarning = true;
             }
             return;
@@ -183,7 +179,7 @@ void InputConfigurator::setupSecondaryControls(){
     lastSecondaryInput = InputMapping();
     secondaryConfigurationState++;
     if (secondaryConfigurationState >= actions->size()){
-        printf("Joystick setup complete\n");
+        hud->printLine("Joystick setup complete");
         secondaryConfigurationState = -1;
     }
     beginningKeyConfiguration = true;
