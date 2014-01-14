@@ -11,13 +11,13 @@ class WorldTransform {
 public:
     WorldTransform(glm::vec3 center = glm::vec3(0), float scale = 1.0);
     WorldTransform(const WorldTransform& worldTransform, const glm::vec3& positionDelta, const glm::quat& orientationDelta);
-	virtual ~WorldTransform();
+    virtual ~WorldTransform();
 
-	const glm::vec3 &position() const;
-	void setPosition(const glm::vec3 &pos);
+    const glm::vec3 &position() const;
+    void setPosition(const glm::vec3 &pos);
 
-	const glm::quat& orientation() const;
-	void setOrientation(const glm::quat& quat);
+    const glm::quat& orientation() const;
+    void setOrientation(const glm::quat& quat);
 
     const glm::vec3& center() const;
     void setCenter(const glm::vec3& center);
@@ -26,7 +26,7 @@ public:
     float scale() const;
     void setScale(float scale);
 
-	void move(const glm::vec3& dist);
+    void move(const glm::vec3& dist);
     void moveWorld(const glm::vec3& dist);
 
     void rotate(const glm::quat &qrot);
@@ -35,7 +35,7 @@ public:
     bool operator==(const WorldTransform &other) const;
     bool operator!=(const WorldTransform &other) const;
 
-	const glm::mat4 matrix() const;
+    const glm::mat4 matrix() const;
 
     glm::vec3 applyTo(const glm::vec3 &vertex) const;
     glm::vec3 inverseApplyTo(const glm::vec3 &vertex) const;
@@ -43,7 +43,7 @@ public:
 
 
 protected:
-	glm::vec3 m_position;
+    glm::vec3 m_position;
     glm::quat m_orientation;
     glm::vec3 m_center;
     float m_scale;

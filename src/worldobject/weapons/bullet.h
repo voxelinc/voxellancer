@@ -24,6 +24,6 @@ protected:
     void spawnExplosion();
 
     WorldObject *m_creator;
-	float m_lifetime;
+    float m_lifetime;
 };
 

@@ -18,13 +18,13 @@ out vec3 modelposition;
 uniform mat4 viewProjection;
 
 vec3 qtransform(vec4 q, vec3 v) { 
-	vec3 QuatVector = vec3(q.x, q.y, q.z);
-	vec3 uv = cross(QuatVector, v);
-	vec3 uuv = cross(QuatVector, uv);
-	uv *= (2 * q.w); 
-	uuv *= 2; 
+    vec3 QuatVector = vec3(q.x, q.y, q.z);
+    vec3 uv = cross(QuatVector, v);
+    vec3 uuv = cross(QuatVector, uv);
+    uv *= (2 * q.w); 
+    uuv *= 2; 
 
-	return v + uv + uuv;
+    return v + uv + uuv;
 }
 
 void main() {
