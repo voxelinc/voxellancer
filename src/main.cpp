@@ -128,7 +128,8 @@ int main(void)
 	if (glewInit() != GLEW_OK) {
 		glow::fatal("glewInit() failed");
 	}
-	glGetError();
+	CheckGLError();
+
 
 #ifdef WIN32 // TODO: find a way to correctly detect debug extension in linux
 	glow::DebugMessageOutput::enable();
@@ -174,6 +175,7 @@ int main(void)
 		std::cout << "Hit enter to quit" << std::endl;
 		std::cin.ignore(1, '\n');
 	}
+
     return 0;
 }
 

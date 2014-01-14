@@ -43,15 +43,15 @@ bool Line::intersects(const Sphere& sphere) const {
     return r1.intersects(sphere) && r2.intersects(sphere);
 }
 
-bool Line::nearTo(const TAABB<float>& aabb) const {
-    glm::vec3 llf(std::min(m_a.x, m_b.x), std::min(m_a.y, m_b.y), std::min(m_a.z, m_b.z));
-    glm::vec3 rub(std::max(m_a.x, m_b.x), std::max(m_a.y, m_b.y), std::max(m_a.z, m_b.z));
+bool Line::nearTo(const TAABB<int>& aabb) const {
+    glm::ivec3 llf(std::min(m_a.x, m_b.x), std::min(m_a.y, m_b.y), std::min(m_a.z, m_b.z));
+    glm::ivec3 rub(std::max(m_a.x, m_b.x), std::max(m_a.y, m_b.y), std::max(m_a.z, m_b.z));
 
-    TAABB<float> lineAABB(llf, rub);
+    TAABB<int> lineAABB(llf, rub);
     return lineAABB.intersects(aabb);
 }
 
-bool Line::containedBy(const TAABB<float>& aabb) const {
+bool Line::containedBy(const TAABB<int>& aabb) const {
     return aabb.contains(m_a) && aabb.contains(m_b);
 }
 

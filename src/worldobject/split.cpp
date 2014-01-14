@@ -1,7 +1,7 @@
 #include "split.h"
 
 Split::Split(const WorldTransform& transform, CollisionFilterClass collisionFilterClass):
-    WorldObject(transform.scale(), glm::vec3(0), collisionFilterClass)
+    WorldObject(transform.scale(), collisionFilterClass)
 {
     m_transform.setPosition(transform.position());
     m_transform.setOrientation(transform.orientation());

@@ -20,8 +20,8 @@ public:
     void setDirection(const glm::vec3& direction);
 
     virtual bool intersects(const Sphere& sphere) const override;
-    virtual bool nearTo(const TAABB<float>& aabb) const override;
-    virtual bool containedBy(const TAABB<float>& aabb) const override;
+    virtual bool nearTo(const TAABB<int>& aabb) const override;
+    virtual bool containedBy(const TAABB<int>& aabb) const override;
 
 
 protected:

@@ -6,6 +6,7 @@
 #include "../bandit_extension/vec3helper.h"
 #include "worldobject/worldobject.h"
 #include "voxel/voxel.h"
+#include "voxel/voxeltreenode.h"
 
 
 using namespace bandit;
@@ -35,20 +36,8 @@ go_bandit([](){
             AssertThat(a.aabb().contains(glm::vec3(9.49, 0, 0)), Equals(true));
         });
 
-        it("works in rotated  worldobject", [&]() {
-            WorldObject a;
-            a.addVoxel(new Voxel(glm::ivec3(0, 0, 0), 0xFFFFFF));
-            a.addVoxel(new Voxel(glm::ivec3(1, 0, 0), 0xFFFFFF));
-            a.addVoxel(new Voxel(glm::ivec3(2, 0, 0), 0xFFFFFF));
-            a.addVoxel(new Voxel(glm::ivec3(3, 0, 0), 0xFFFFFF));
-            a.addVoxel(new Voxel(glm::ivec3(4, 0, 0), 0xFFFFFF));
 
-            a.rotate(glm::angleAxis(90.f, glm::vec3(0, 1, 0)));
-
-            AssertThat(a.aabb().contains(glm::vec3(0, 0, -2.49)), Equals(true));
-        });
-
-        it("incremental mass and center calculation works", [&]() {
+        it("incremental mass calculation works", [&]() {
             WorldObject a(0.8f);
             WorldObject b(0.8f);
 

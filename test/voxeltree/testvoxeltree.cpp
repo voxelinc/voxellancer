@@ -19,150 +19,127 @@ using namespace bandit;
 
 go_bandit([](){
     describe("VoxelTree", [](){
-        World *world;
-        WorldObject *obj;
-        VoxelTreeNode *vt;
+        WorldObject* dummy;
+        VoxelTree* tree;
 
         PropertyManager::instance()->reset();
         PropertyManager::instance()->load("data/config.ini");
 
         before_each([&]() {
-            world = new World();
-            obj = new WorldObject(1);
-            vt = &obj->collisionDetector().voxeltree();
+            dummy = new WorldObject(1);
+            tree = &dummy->collisionDetector().voxelTree();
         });
 
         after_each([&]() {
-            delete world;
-            delete obj;
+            delete dummy;
         });
 
         it("mint is atomic and leaf", [&]() {
-            AssertThat(vt->isAtomic(), Equals(true));
-            AssertThat(vt->isLeaf(), Equals(true));
+            AssertThat(tree->root()->isAtomic(), Equals(true));
+            AssertThat(tree->root()->isLeaf(), Equals(true));
         });
 
         it("basic insert", [&]() {
-            obj->addVoxel(new Voxel(glm::ivec3(0, 0, 0)));
-            AssertThat(vt->gridAABB(), Equals(Grid3dAABB(glm::ivec3(0,0,0), glm::ivec3(0, 0, 0))));
+            Voxel v(glm::ivec3(0, 0, 0));
+            tree->insert(&v);
+
+            AssertThat(tree->root()->gridAABB(), Equals(Grid3dAABB(glm::ivec3(0,0,0), glm::ivec3(0, 0, 0))));
         });
 
         it("simple insert", [&]() {
-            Voxel *v = new Voxel(glm::ivec3(1, 1, 1));
+            Voxel v1(glm::ivec3(1, 1, 1));
+            Voxel v2(glm::ivec3(2, 1, 1));
+            Voxel v3(glm::ivec3(10, 1, 1));
+            Voxel v4(glm::ivec3(2, 10, 5));
 
-            obj->addVoxel(new Voxel(glm::ivec3(1, 1, 1)));
-            AssertThat(vt->subnodes().size(), Equals(8));
-            AssertThat(vt->gridAABB(), Equals(Grid3dAABB(glm::ivec3(0,0,0), glm::ivec3(1, 1, 1))));
+            tree->insert(&v1);
+            AssertThat(tree->root()->subnodes().size(), Equals(1));
+            AssertThat(tree->root()->gridAABB(), Equals(Grid3dAABB(glm::ivec3(0,0,0), glm::ivec3(1, 1, 1))));
 
-            obj->addVoxel(new Voxel(glm::ivec3(5, 1, 1)));
-            AssertThat(vt->subnodes().size(), Equals(8));
-            AssertThat(vt->gridAABB(), Equals(Grid3dAABB(glm::ivec3(0,0,0), glm::ivec3(7, 7, 7))));
+            tree->insert(&v2);
+            AssertThat(tree->root()->subnodes().size(), Equals(2));
+            AssertThat(tree->root()->gridAABB(), Equals(Grid3dAABB(glm::ivec3(0,0,0), glm::ivec3(3, 3, 3))));
 
-            obj->addVoxel(new Voxel(glm::ivec3(2, 5, 5)));
-            AssertThat(vt->subnodes().size(), Equals(8));
-            AssertThat(vt->gridAABB(), Equals(Grid3dAABB(glm::ivec3(0,0,0), glm::ivec3(7, 7, 7))));
+            tree->insert(&v3);
+            AssertThat(tree->root()->subnodes().size(), Equals(2));
+            AssertThat(tree->root()->gridAABB(), Equals(Grid3dAABB(glm::ivec3(0,0,0), glm::ivec3(15, 15, 15))));
+
+            tree->insert(&v4);
+            AssertThat(tree->root()->subnodes().size(), Equals(3));
+            AssertThat(tree->root()->gridAABB(), Equals(Grid3dAABB(glm::ivec3(0,0,0), glm::ivec3(15, 15, 15))));
         });
 
-        it("is moved when the cluster moves", [&]() {
-            AssertThat(vt->boundingSphere().position(), EqualsWithDelta(glm::vec3(0), glm::vec3(0.01, 0.01, 0.01)));
+        it("is moved when the transform moves", [&]() {
+            WorldTransform transform;
 
-            obj->move(glm::vec3(4, 3, 2));
-            AssertThat(vt->boundingSphere().position(), EqualsWithDelta(glm::vec3(4, 3, 2), glm::vec3(0.01, 0.01, 0.01)));
+            AssertThat(tree->root()->sphere(transform).position(), EqualsWithDelta(glm::vec3(0), glm::vec3(0.01, 0.01, 0.01)));
 
-            obj->move(glm::vec3(1, 2, 3));
-            obj->move(glm::vec3(-1, 2, 2));
-            AssertThat(vt->boundingSphere().position(), EqualsWithDelta(glm::vec3(4, 7, 7), glm::vec3(0.01, 0.01, 0.01)));
-        });
+            transform.move(glm::vec3(4, 3, 2));
+            AssertThat(tree->root()->sphere(transform).position(), EqualsWithDelta(glm::vec3(4, 3, 2), glm::vec3(0.01, 0.01, 0.01)));
 
-        it("can adjust its center", [&]() {
-            WorldObject *d = new WorldObject(1.0, glm::vec3(1,1,1));
-
-            AssertThat(d->collisionDetector().voxeltree().boundingSphere().position(), EqualsWithDelta(glm::vec3(-1, -1, -1), glm::vec3(0.01, 0.01, 0.01)));
-        });
-
-        it("can adjust its center and scale", [&]() {
-            WorldObject *d = new WorldObject(3.0f, glm::vec3(1, 1, 1));
-
-            AssertThat(d->collisionDetector().voxeltree().boundingSphere().radius(), EqualsWithDelta(2.5f, 0.1f));
-            AssertThat(d->collisionDetector().voxeltree().boundingSphere().position(), EqualsWithDelta(glm::vec3(-3, -3, -3), glm::vec3(0.01, 0.01, 0.01)));
-        });
-
-        // skip until is is clear what this test is supposed to test :)
-        it_skip("initially positions all subnodes right", [&]() {
-            WorldObject *d = new WorldObject(6);
-
-            d->addVoxel(new Voxel(glm::ivec3(1, 1, 1))); // There are 8 subnodes now
-
-            for(VoxelTreeNode *subnode : d->collisionDetector().voxeltree().subnodes()) {
-                float distance = glm::length(subnode->boundingSphere().position());
-                AssertThat(distance, EqualsWithDelta(5.2, 0.01)); // what is supposed to happen here?
-            }
+            transform.move(glm::vec3(1, 2, 3));
+            transform.move(glm::vec3(-1, 2, 2));
+            AssertThat(tree->root()->sphere(transform).position(), EqualsWithDelta(glm::vec3(4, 7, 7), glm::vec3(0.01, 0.01, 0.01)));
         });
 
         it("supports basic rotation with voxel in center", [&]() {
-            glm::vec3 v;
-            VoxelTreeNode *n = nullptr;
+            Voxel v1(glm::ivec3(1, 1, 1));
+            Voxel v2(glm::ivec3(0, 0, 0));
+            WorldTransform transform;
 
-            obj->addVoxel(new Voxel(glm::ivec3(1, 1, 1)));
+            tree->insert(&v1);
 
-            for (VoxelTreeNode *subnode : obj->collisionDetector().voxeltree().subnodes()) {
-                if (subnode->voxel() != nullptr) {
-                    n = subnode;
-                }
-            }
-            assert(n != nullptr);
+            VoxelTreeNode *n = tree->root()->subnodes().front();
 
-            AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(1, 1, 1), glm::vec3(0.01, 0.01, 0.01)));
-            obj->addVoxel(new Voxel(glm::ivec3(0, 0, 0))); // Center in middle now
-            AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(1, 1, 1), glm::vec3(0.01, 0.01, 0.01)));
+            AssertThat(n->sphere(transform).position(), EqualsWithDelta(glm::vec3(1, 1, 1), glm::vec3(0.01, 0.01, 0.01)));
+            tree->insert(&v2); // Center in middle now
+            AssertThat(n->sphere(transform).position(), EqualsWithDelta(glm::vec3(1, 1, 1), glm::vec3(0.01, 0.01, 0.01)));
 
-            obj->rotate(glm::angleAxis((float)90.0, glm::vec3(1, 0, 0)));
-            AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(1, 0, 1), glm::vec3(0.01, 0.01, 0.01)));
-
+            transform.rotate(glm::angleAxis(90.0f, glm::vec3(1, 0, 0)));
+            AssertThat(n->sphere(transform).position(), EqualsWithDelta(glm::vec3(1, -1, 1), glm::vec3(0.01, 0.01, 0.01)));
         });
 
         it("supports basic rotation with voxel out of center", [&]() {
             glm::vec3 v;
-            VoxelTreeNode *n = nullptr;
+            Voxel v1(glm::ivec3(1, 1, 1));
+            Voxel v2(glm::ivec3(0, 0, 0));
+            WorldTransform transform;
 
-            obj->addVoxel(new Voxel(glm::ivec3(1, 1, 1)));
-            //obj->transform().setCenter(glm::vec3(1,1,0));
+            tree->insert(&v1);
 
-            for(VoxelTreeNode *subnode : obj->collisionDetector().voxeltree().subnodes()) {
-                if(subnode->voxel() != nullptr) {
-                    n = subnode;
-                }
-            }
+            VoxelTreeNode *n = tree->root()->subnodes().front();
 
-            obj->addVoxel(new Voxel(glm::ivec3(0, 0, 0)));
-            assert(n != nullptr);
+            tree->insert(&v2);
+            transform.setCenter(glm::vec3(0.5, 0.5, 0.5));
+            transform.setPosition(glm::vec3(0.5, 0.5, 0.5));
 
-            AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(1,1,1), glm::vec3(0.01, 0.01, 0.01)));
-            AssertThat(vt->boundingSphere().position(), EqualsWithDelta(glm::vec3(0.5, 0.5, 0.5), glm::vec3(0.01, 0.01, 0.01)));
+            AssertThat(n->sphere(transform).position(), EqualsWithDelta(glm::vec3(1,1,1), glm::vec3(0.01, 0.01, 0.01)));
+            AssertThat(tree->root()->sphere(transform).position(), EqualsWithDelta(glm::vec3(0.5, 0.5, 0.5), glm::vec3(0.01, 0.01, 0.01)));
 
-            obj->rotate(glm::angleAxis((float)90.0, glm::vec3(1, 0, 0)));
-            AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(1, 0, 1), glm::vec3(0.01, 0.01, 0.01)));
+            transform.rotate(glm::angleAxis((float)90.0, glm::vec3(1, 0, 0)));
+            AssertThat(n->sphere(transform).position(), EqualsWithDelta(glm::vec3(1, 0, 1), glm::vec3(0.01, 0.01, 0.01)));
 
-            obj->rotate(glm::angleAxis((float)90.0f, glm::vec3(0, 1, 0)));
-            AssertThat(n->boundingSphere().position(), EqualsWithDelta(glm::vec3(1, 1, 1), glm::vec3(0.01, 0.01, 0.01)));
+            transform.rotate(glm::angleAxis((float)90.0f, glm::vec3(0, 1, 0)));
+            AssertThat(n->sphere(transform).position(), EqualsWithDelta(glm::vec3(1, 1, 1), glm::vec3(0.01, 0.01, 0.01)));
         });
-
 
         it("can be queried for voxels in sphere", [&]() {
             Sphere sphere;
+            Voxel v1(glm::ivec3(1, 1, 0));
+            Voxel v2(glm::ivec3(2, 2, 0));
 
-            obj->addVoxel(new Voxel(glm::ivec3(1, 1, 0)));
+            tree->insert(&v1);
 
             sphere = Sphere(glm::vec3(0,0,0), 0.5f);
-            AssertThat(VoxelTreeQuery(vt, &sphere).intersectingVoxels().size(), Equals(0));
+            AssertThat(VoxelTreeQuery(tree, &sphere).intersectingVoxels().size(), Equals(0));
 
-            sphere =  Sphere(glm::vec3(0,0,0), 1.0f);
-            AssertThat(VoxelTreeQuery(vt, &sphere).intersectingVoxels().size(), Equals(1));
+            sphere = Sphere(glm::vec3(0,0,0), 1.0f);
+            AssertThat(VoxelTreeQuery(tree, &sphere).intersectingVoxels().size(), Equals(1));
 
-            obj->addVoxel(new Voxel(glm::ivec3(2, 2, 0)));
+            tree->insert(&v2);
 
             sphere = Sphere(glm::vec3(1.5,1.5,0), 0.5f);
-            AssertThat(VoxelTreeQuery(vt, &sphere).intersectingVoxels().size(), Equals(2));
+            AssertThat(VoxelTreeQuery(tree, &sphere).intersectingVoxels().size(), Equals(2));
         });
     });
 });
