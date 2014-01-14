@@ -1,9 +1,9 @@
-#include "voxelparticle.h"
+#include "particle.h"
 
 #include <algorithm>
 
 
-VoxelParticle::VoxelParticle(const WorldTransform& transform, int color, float emissive, float lifetime):
+Particle::Particle(const WorldTransform& transform, int color, float emissive, float lifetime):
     m_transform(transform),
     m_color(color),
     m_emissive(emissive),
@@ -15,49 +15,49 @@ VoxelParticle::VoxelParticle(const WorldTransform& transform, int color, float e
 {
 }
 
-const WorldTransform& VoxelParticle::worldTransform() const {
+const WorldTransform& Particle::worldTransform() const {
     return m_transform;
 }
 
-void VoxelParticle::setWorldTransform(const WorldTransform& transform) {
+void Particle::setWorldTransform(const WorldTransform& transform) {
     m_transform = transform;
 }
 
-int VoxelParticle::color() const {
+int Particle::color() const {
     return m_color;
 }
 
-float VoxelParticle::emissive() const{
+float Particle::emissive() const{
     return m_emissive;
 }
 
-float VoxelParticle::lifetime() const {
+float Particle::lifetime() const {
     return m_lifetime;
 }
 
-bool VoxelParticle::isDead() const {
+bool Particle::isDead() const {
     return m_lifetime == 0.0f;
 }
 
-void VoxelParticle::setDirectionalSpeed(const glm::vec3& speed, float dampening) {
+void Particle::setDirectionalSpeed(const glm::vec3& speed, float dampening) {
     m_directionalSpeed = speed;
     m_directionalDampening = dampening;
 }
 
-void VoxelParticle::setAngularSpeed(const glm::vec3& speed, float dampening) {
+void Particle::setAngularSpeed(const glm::vec3& speed, float dampening) {
     m_angularSpeed = speed;
     m_angularDampening = dampening;
 }
 
-bool VoxelParticle::intersectionCheckDue() const {
+bool Particle::intersectionCheckDue() const {
     return m_intersectionCheckCountdown < 0;
 }
 
-void VoxelParticle::intersectionCheckPerformed() {
+void Particle::intersectionCheckPerformed() {
     m_intersectionCheckCountdown += m_intersectionCheckPeriod;
 }
 
-void VoxelParticle::update(float deltaSec) {
+void Particle::update(float deltaSec) {
     m_directionalSpeed *= 1.0f - (m_directionalDampening * deltaSec);
     m_angularSpeed *= 1.0f - (m_angularDampening * deltaSec);
 

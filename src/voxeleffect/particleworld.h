@@ -11,21 +11,21 @@
 #include "camera.h"
 
 
-class VoxelParticle;
+class Particle;
 
-class VoxelParticleWorld {
+class ParticleWorld {
 public:
-    VoxelParticleWorld();
-    ~VoxelParticleWorld();
+    ParticleWorld();
+    ~ParticleWorld();
 
-    void addParticle(VoxelParticle* voxelParticle);
+    void addParticle(Particle* voxelParticle);
 
     void update(float deltaSec);
     void draw(Camera& camera);
 
 
 protected:
-    std::list<VoxelParticle*> m_particles;
+    std::list<Particle*> m_particles;
 
     int m_bufferSize;
 
@@ -42,6 +42,6 @@ protected:
     void setupVertexAttribute(GLint offset, const std::string& name, int numPerVertex, GLenum type, GLboolean normalised, int bindingNum);
     void setBufferSize(int size);
     void updateBuffers();
-    bool intersects(VoxelParticle* voxelParticle);
+    bool intersects(Particle* voxelParticle);
 };
 

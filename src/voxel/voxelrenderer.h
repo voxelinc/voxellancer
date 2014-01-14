@@ -3,7 +3,7 @@
 
 #include <glow/ref_ptr.h>
 
-#include "voxeleffect/voxelmesh.h"
+#include "voxeleffect/mesh.h"
 
 
 namespace glow {
@@ -27,11 +27,11 @@ public:
 
     static std::shared_ptr<VoxelRenderer> instance();
     static glow::Program* program();
-    static VoxelMesh* voxelMesh();
+    static Mesh* mesh();
 
 private:
     glow::ref_ptr<glow::Program> m_program;
-    VoxelMesh m_voxelMesh;
+    Mesh m_mesh;
     bool m_prepared;
 
     static std::weak_ptr<VoxelRenderer> s_instance;

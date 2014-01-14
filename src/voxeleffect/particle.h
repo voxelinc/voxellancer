@@ -9,9 +9,9 @@
 #include "worldtransform.h"
 
 
-class VoxelParticle {
+class Particle {
 public:
-    VoxelParticle(const WorldTransform& transform, int color, float emissive, float m_lifetime = INFINITY);
+    Particle(const WorldTransform& transform, int color, float emissive, float m_lifetime = INFINITY);
 
     const WorldTransform& worldTransform() const;
     void setWorldTransform(const WorldTransform& transform);

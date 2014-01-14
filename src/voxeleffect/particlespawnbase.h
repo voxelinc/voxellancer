@@ -6,11 +6,11 @@
 
 class WorldTransform;
 
-class VoxelParticleSpawnBase
+class ParticleSpawnBase
 {
 public:
-    VoxelParticleSpawnBase();
-    virtual ~VoxelParticleSpawnBase();
+    ParticleSpawnBase();
+    virtual ~ParticleSpawnBase();
 
     void setPosition(const glm::vec3& position);
     void setOrientation(const glm::quat& orientation);

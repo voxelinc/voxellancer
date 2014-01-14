@@ -15,7 +15,7 @@
 #include "voxel/voxelrenderer.h"
 #include "voxel/voxelcluster.h"
 #include "camera.h"
-#include "voxeleffect/voxelmesh.h"
+#include "voxeleffect/mesh.h"
 
 
 std::weak_ptr<VoxelRenderer> VoxelRenderer::s_instance;
@@ -24,7 +24,7 @@ std::weak_ptr<VoxelRenderer> VoxelRenderer::s_instance;
 VoxelRenderer::VoxelRenderer() :
     m_program(0),
     m_prepared(false),
-    m_voxelMesh()
+    m_mesh()
 {
     glow::debug("Create Voxelrenderer");
     createAndSetupShaders();
@@ -90,9 +90,9 @@ glow::Program* VoxelRenderer::program() {
     return s_instance.lock()->m_program;
 }
 
-VoxelMesh* VoxelRenderer::voxelMesh() {
+Mesh* VoxelRenderer::mesh() {
     assert(!s_instance.expired());
-    return &s_instance.lock()->m_voxelMesh;
+    return &s_instance.lock()->m_mesh;
 }
 
 std::shared_ptr<VoxelRenderer> VoxelRenderer::instance() {

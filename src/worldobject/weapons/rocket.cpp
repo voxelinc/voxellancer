@@ -5,7 +5,7 @@
 
 #include "utils/tostring.h"
 #include "physics/physics.h"
-#include "voxeleffect/voxelexplosiongenerator.h"
+#include "voxeleffect/explosiongenerator.h"
 #include "worldobject/ship.h"
 #include "ai/character.h"
 
@@ -90,13 +90,12 @@ void Rocket::onSpawnFail(){
 }
 
 void Rocket::spawnExplosion(){
-    VoxelExplosionGenerator generator;
+    ExplosionGenerator generator;
     generator.setPosition(m_transform.position());
     generator.setScale(m_transform.scale() / 3.0f);
-    generator.setColor(0xFF0000);
+    generator.setColor(0xFF0000, 0.2f);
     generator.setCount(150);
     generator.setLifetime(1.0f, 0.2f);
     generator.setForce(1.5f);
     generator.spawn();
-
 }

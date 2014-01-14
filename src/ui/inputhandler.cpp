@@ -3,7 +3,7 @@
 #include <glm/glm.hpp>
 #include <glow/glow.h>
 
-#include "voxeleffect/voxelexplosiongenerator.h"
+#include "voxeleffect/explosiongenerator.h"
 
 /*
 * 360 gamepad assignment: (direction given for positive values)
