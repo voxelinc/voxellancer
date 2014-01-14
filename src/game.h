@@ -30,18 +30,18 @@ class TreeStateReporter : public TimedTask
 public:
     TreeStateReporter();
 
-    void setWorldTree(WorldTree *worldTree);
+    void setWorldTree(WorldTree* worldTree);
 
     virtual void exec();
 
 protected:
-    WorldTree *m_worldTree;
+    WorldTree* m_worldTree;
 };
 
 class Game {
 
 public:
-	Game(GLFWwindow *window);
+	Game(GLFWwindow* window);
 	virtual ~Game();
 	void initialize();
 	void reloadConfig();
@@ -49,18 +49,18 @@ public:
     void update(float deltaSec);
 	void draw();
 
-    InputHandler * inputHandler();
+    InputHandler* inputHandler();
 
 private:
     void testFMOD();
 
 private:
-	GLFWwindow *m_window;
+	GLFWwindow* m_window;
 	InputHandler m_inputHandler;
     Player m_player;
 	Camera m_camera;
 
-    World * m_world;
+    World* m_world;
 
 	std::unique_ptr<Skybox> m_skybox;
 	std::unique_ptr<HUD> m_hud;
@@ -70,6 +70,7 @@ private:
 
     TreeStateReporter m_treeStateReporter;
 
-    StreamRedirect *m_out, *m_err;
+    StreamRedirect* m_out;
+    StreamRedirect* m_err;
 };
 

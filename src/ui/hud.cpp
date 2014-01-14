@@ -113,7 +113,7 @@ void HUD::update(float deltaSec){
 
     // framerate measurement (not the best algorithm but the most compact)
     float thisFrame = 1.0f / deltaSec;
-    if (thisFrame < 1.0f || thisFrame > 9999.0f) m_frameRate = 0.0f;
+    if (thisFrame < 1.0f || thisFrame > 999.0f) m_frameRate = 0.0f;
     else m_frameRate = m_frameRate * 0.8f + thisFrame * 0.2f;
 
     // lines backlog
