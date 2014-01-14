@@ -30,18 +30,19 @@ void BulletTransformHelper::transform() {
     glm::vec3 hardpointDirection = shipOrientation * glm::vec3(0, 0, -1);
     glm::vec3 bulletUp = glm::cross(bulletDirection, hardpointDirection);
 
-    bulletTransform.setOrientation(Math::quatFromDir(bulletDirection));
+    //bulletTransform.setOrientation(Math::quatFromDir(bulletDirection));
+    bulletTransform.setOrientation(m_hardpoint->ship()->transform().orientation());
 
 /*
     Below code leads to nan() - orientation of bullets sometimes. Disabled until someone unmagics and debugs it.
     I have my guesses, yet no idea what it does.
     No major visual loss...
 */
-//    if (bulletUp != glm::vec3(0)) {
-//        glm::vec3 rotationAxis = glm::normalize(cross);
-//        float angle = glm::acos(glm::dot(bulletDirection, hardpointDirection));
-//        bulletTransform.rotateWorld(glm::angleAxis(-glm::degrees(angle), rotationAxis)); //then rotate towards target
-//    }
+    if (bulletUp != glm::vec3(0)) {
+        glm::vec3 rotationAxis = glm::normalize(bulletUp);
+        float angle = glm::acos(glm::dot(bulletDirection, hardpointDirection));
+        bulletTransform.rotateWorld(glm::angleAxis(-glm::degrees(angle), rotationAxis)); //then rotate towards target
+    }
 
 
 
