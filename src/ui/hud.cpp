@@ -124,6 +124,10 @@ void HUD::update(float deltaSec){
             m_lastlineTime[i] = m_lastlineTime[i + 1];
         }
         m_lastlineTime[prop_lineBacklog - 1] = 0;
+        //for a fluent disappearance-effect
+        if (m_lastlineTime[0] != 0 && m_lastlineTime[0] + prop_lineTime - 0.2 < glfwGetTime()){
+            m_lastlineTime[0] = glfwGetTime() - prop_lineTime + 0.2;
+        }
     }
 }
 
