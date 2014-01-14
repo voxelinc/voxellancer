@@ -49,21 +49,11 @@ private:
 
     World* m_world;
 
-	std::unique_ptr<Skybox> m_skybox;
-	std::unique_ptr<HUD> m_hud;
-	std::unique_ptr<VoxelRenderer> m_voxelRenderer;
-	std::unique_ptr<HD3000Dummy> m_hd3000dummy;
-	std::unique_ptr<LinuxVMDummy> m_linuxvmdummy;
-    std::shared_ptr<VoxelRenderer> m_voxelRenderer;
     std::unique_ptr<Skybox> m_skybox;
     std::unique_ptr<HUD> m_hud;
     std::unique_ptr<HD3000Dummy> m_hd3000dummy;
     std::unique_ptr<LinuxVMDummy> m_linuxvmdummy;
-	std::unique_ptr<Skybox> m_skybox;
-	std::unique_ptr<HUD> m_hud;
-	std::unique_ptr<VoxelRenderer> m_voxelRenderer;
-	std::unique_ptr<HD3000Dummy> m_hd3000dummy;
-	std::unique_ptr<LinuxVMDummy> m_linuxvmdummy;
+    std::shared_ptr<VoxelRenderer> m_voxelRenderer;
 
     StreamRedirect* m_out;
     StreamRedirect* m_err;
