@@ -1,6 +1,6 @@
 #include "math.h"
 
-glm::quat Math::quatFromDir(const glm::vec3& dir) {
+glm::quat Math::quatFromViewDirection(const glm::vec3& dir) {
     glm::vec3 nd = glm::normalize(dir);
 
     glm::vec3 euler (
