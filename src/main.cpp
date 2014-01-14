@@ -141,7 +141,7 @@ int main(void)
 	glfwSwapInterval(1);
 #endif
 
-#define TRYCATCH
+//#define TRYCATCH
 
 #ifdef TRYCATCH
 	try {

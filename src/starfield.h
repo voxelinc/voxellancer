@@ -1,5 +1,7 @@
 #pragma once
 
+#include <queue>
+
 #include <glm/glm.hpp>
 
 #include <glow/ref_ptr.h>
@@ -25,9 +27,10 @@ public:
 private:
     void createAndSetupShaders();
     void createAndSetupGeometry();
-
+    
     Camera* m_camera;
     Player* m_player;
+    std::queue<glm::mat4> m_matricesQueue;
 
     glow::ref_ptr<glow::Program> m_shaderProgram;
     glow::ref_ptr<glow::VertexArrayObject> m_vertexArrayObject;

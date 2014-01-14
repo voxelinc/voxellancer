@@ -186,12 +186,9 @@ void Game::initialize() {
 
 
 void Game::update(float deltaSec) {
-    // skip non-updates
-    if (deltaSec == 0) return;
-
     //if (deltaSec < 1 / 60) deltaSec = 1 / 60;
     // avoid big jumps after debugging ;)
-    deltaSec = glm::min(1.f, deltaSec);
+    deltaSec = glm::max(glm::min(1.f, deltaSec), 0.001f);
 
     m_inputHandler.update(deltaSec);
     World::instance()->update(deltaSec);

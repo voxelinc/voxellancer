@@ -46,6 +46,13 @@ Starfield::Starfield(Player* player, Camera* camera):
 
 void Starfield::update(float deltaSec) {
 
+    m_matricesQueue.push(m_camera->viewProjection());
+
+    if (m_matricesQueue.size() > 10) {
+        m_matricesQueue.pop();
+    }
+
+
     Star* starbuffer = (Star*) m_starBuffer->map(GL_READ_WRITE);
     glm::vec3 position = m_player->playerShip()->transform().position();
 
@@ -86,13 +93,16 @@ void Starfield::draw() {
     glDisable(GL_CULL_FACE);
     glEnable(GL_BLEND); 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glDepthMask(GL_FALSE);
 
     m_shaderProgram->setUniform("viewProjection", m_camera->viewProjection());
+    m_shaderProgram->setUniform("oldViewProjection", m_matricesQueue.front());
     m_shaderProgram->setUniform("speed", glm::vec4(m_player->playerShip()->physics().speed(), 0));
     m_shaderProgram->setUniform("aspectRatio", m_camera->aspectRatio());
     m_shaderProgram->use();
     m_vertexArrayObject->drawArrays(GL_POINTS, (GLint)0, (GLsizei)STAR_COUNT);
     
+    glDepthMask(GL_TRUE);
     glDisable(GL_BLEND);
     glEnable(GL_CULL_FACE);
 }
