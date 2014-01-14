@@ -36,7 +36,7 @@ void VoxelRenderer::prepareDraw(Camera * camera, bool withBorder)
     m_program->setUniform("projection", camera->projection());
     m_program->setUniform("view", camera->view());
     m_program->setUniform("viewProjection", camera->viewProjection());
-	m_program->setUniform("withBorder", (withBorder ? 1.0f : 0.0f));
+    m_program->setUniform("withBorder", (withBorder ? 1.0f : 0.0f));
     
     m_program->use();
     glProvokingVertex(GL_LAST_VERTEX_CONVENTION);
@@ -96,11 +96,11 @@ VoxelMesh* VoxelRenderer::voxelMesh() {
 }
 
 std::shared_ptr<VoxelRenderer> VoxelRenderer::instance() {
-    if (auto sp = s_instance.lock()) {
-        return sp;
+    if (std::shared_ptr<VoxelRenderer> renderer = s_instance.lock()) {
+        return renderer;
     } else {
-        sp = std::shared_ptr<VoxelRenderer>(new VoxelRenderer());
-        s_instance = sp;
-        return sp;
+        renderer = std::shared_ptr<VoxelRenderer>(new VoxelRenderer());
+        s_instance = renderer;
+        return renderer;
     }
 }

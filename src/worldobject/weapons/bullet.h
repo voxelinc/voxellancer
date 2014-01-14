@@ -22,6 +22,6 @@ public:
 
 protected:
     WorldObject *m_creator;
-	float m_lifetime;
+    float m_lifetime;
 };
 

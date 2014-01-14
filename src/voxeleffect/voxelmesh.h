@@ -19,8 +19,8 @@ class VoxelMesh {
 public:
     VoxelMesh();
     void bindTo(glow::Program* program,
-                       glow::VertexArrayObject* vao,
-                       int bindingIndex);
+                glow::VertexArrayObject* vao,
+                int bindingIndex);
 
 protected:
     glow::ref_ptr<glow::Buffer> m_vertexBuffer;

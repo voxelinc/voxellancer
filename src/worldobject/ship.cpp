@@ -10,8 +10,8 @@
 Ship::Ship() :
     WorldObject(CollisionFilterClass::Ship),
     m_hardpoints(),
-	prop_maxSpeed("ship.maxSpeed"),
-	prop_maxRotSpeed("ship.maxRotSpeed"),
+    prop_maxSpeed("ship.maxSpeed"),
+    prop_maxRotSpeed("ship.maxRotSpeed"),
     m_character(new Character(*this)),
     m_boardComputer(*this),
     m_targetObjectHandle(WorldObjectHandle::nullHandle())
