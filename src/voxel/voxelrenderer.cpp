@@ -95,11 +95,11 @@ VoxelMesh* VoxelRenderer::voxelMesh() {
 }
 
 std::shared_ptr<VoxelRenderer> VoxelRenderer::instance() {
-    if (auto sp = s_instance.lock()) {
-        return sp;
+    if (std::shared_ptr<VoxelRenderer> renderer = s_instance.lock()) {
+        return renderer;
     } else {
-        sp = std::shared_ptr<VoxelRenderer>(new VoxelRenderer());
-        s_instance = sp;
-        return sp;
+        renderer = std::shared_ptr<VoxelRenderer>(new VoxelRenderer());
+        s_instance = renderer;
+        return renderer;
     }
 }
