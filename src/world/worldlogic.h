@@ -6,12 +6,12 @@
 #include "handler/voxelcollisionaccumulator.h"
 #include "handler/damageimpactgenerator.h"
 #include "handler/elasticimpulsegenerator.h"
-#include "handler/splitdetector.h"
 #include "handler/splitter.h"
 #include "handler/garbagecollector.h"
 #include "handler/wrecker.h"
 #include "handler/elasticimpulsor.h"
 #include "handler/voxelhangman.h"
+#include "handler/splitdetector.h"
 
 
 class World;

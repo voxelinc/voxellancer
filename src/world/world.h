@@ -30,7 +30,7 @@ public:
     float deltaSec() const;
 
     static World *instance();
-
+    static void reset();
 
 protected:
     static World *s_instance;

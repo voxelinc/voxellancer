@@ -1,1 +1,1 @@
-make_test(test_damageforwarder test_damageforwarder.cpp)
+make_test(test_damageforwarder testdamageforwarder.cpp)
