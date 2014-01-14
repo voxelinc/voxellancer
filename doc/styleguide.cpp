@@ -30,6 +30,10 @@ void StyleGuide::update() {
         foo();
     }
 
+    for (Foo* foo : m_allFoos) {
+        dontGiveA(foo);
+    }
+
     switch (seats) {
     case Taken:
     break;
