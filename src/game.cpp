@@ -31,6 +31,7 @@
 #include "world/world.h"
 #include "world/god.h"
 #include "skybox.h"
+#include "voxeleffect/voxelparticleworld.h"
 #include "voxel/voxelrenderer.h"
 #include "worldobject/ship.h"
 #include "collision/collisiondetector.h"
@@ -39,6 +40,7 @@
 #include "ai/characters/dummycharacter.h"
 #include "ai/elevatedtasks/dummyelevatedtask.h"
 #include "ai/basictask.h"
+#include "voxeleffect/voxelmesh.h"
 
 
 class Ship;
@@ -53,7 +55,7 @@ Game::Game(GLFWwindow *window) :
 }
 
 Game::~Game() {
-
+    VoxelMesh::tearDown();
 }
 
 void Game::reloadConfig() {
@@ -118,7 +120,7 @@ void Game::initialize() {
 
     WorldObject *planet = new WorldObject();
     planet->move(glm::vec3(20, 10, -30));
-    int diameter = 28;
+    int diameter = 24;
     glm::vec3 middle(diameter/2, diameter/2, diameter/2);
     for(int x = 0; x < diameter; x++) {
         for(int y = 0; y < diameter; y++) {
@@ -173,6 +175,9 @@ void Game::initialize() {
 
     m_hd3000dummy = std::unique_ptr<HD3000Dummy>(new HD3000Dummy);
 
+    m_out = new StreamRedirect(std::cout, m_hud.get(), true);
+    m_err = new StreamRedirect(std::cerr, m_hud.get(), true);
+    
     glClearColor(0.2f, 0.3f, 0.4f, 1.f);
 	glow::debug("Game::initialize Done");
 }
@@ -209,6 +214,7 @@ void Game::draw() {
     // draw all other voxelclusters...
     m_voxelRenderer->afterDraw();
 
+    World::instance()->voxelParticleWorld().draw(m_camera);
 
 	m_hud->draw();
 
