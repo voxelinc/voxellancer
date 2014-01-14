@@ -119,7 +119,7 @@ void Game::initialize() {
     glow::debug("Create Planet");
     WorldObject *planet = new WorldObject();
     planet->move(glm::vec3(20, 10, -30));
-    int diameter = 28;
+    int diameter = 24;
     glm::vec3 middle(diameter/2, diameter/2, diameter/2);
     for(int x = 0; x < diameter; x++) {
         for(int y = 0; y < diameter; y++) {
@@ -174,6 +174,9 @@ void Game::initialize() {
 
     m_hd3000dummy = std::unique_ptr<HD3000Dummy>(new HD3000Dummy);
 
+    m_out = new StreamRedirect(std::cout, m_hud.get(), true);
+    m_err = new StreamRedirect(std::cerr, m_hud.get(), true);
+    
     glClearColor(0.2f, 0.3f, 0.4f, 1.f);
 	glow::debug("Game::initialize Done");
 }
