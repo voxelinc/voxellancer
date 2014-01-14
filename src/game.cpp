@@ -40,7 +40,6 @@
 #include "ai/characters/dummycharacter.h"
 #include "ai/elevatedtasks/dummyelevatedtask.h"
 #include "ai/basictask.h"
-#include "voxeleffect/voxelmesh.h"
 
 
 class Ship;
@@ -54,43 +53,42 @@ Game::Game(GLFWwindow *window) :
 }
 
 Game::~Game() {
-    VoxelMesh::tearDown();
 }
 
 void Game::reloadConfig() {
-	PropertyManager::instance()->load("data/config.ini");
+    PropertyManager::instance()->load("data/config.ini");
 }
 
 void Game::initialize() {
     glow::AutoTimer t("Initialize Game");
 
-	glow::debug("Game::testFMOD()");
+    glow::debug("Game::testFMOD()");
     //testFMOD();
 
-	//Must be created first
-	m_linuxvmdummy = std::unique_ptr<LinuxVMDummy>(new LinuxVMDummy);
+    //Must be created first
+    m_linuxvmdummy = std::unique_ptr<LinuxVMDummy>(new LinuxVMDummy);
 
     glow::debug("create world");
     m_world = World::instance();
 
     glow::debug("Create Skybox");
-	m_skybox = std::unique_ptr<Skybox>(new Skybox);
+    m_skybox = std::unique_ptr<Skybox>(new Skybox);
 
-	glow::debug("Create Voxel");
-    m_voxelRenderer = std::unique_ptr<VoxelRenderer>(new VoxelRenderer);
+    m_voxelRenderer = VoxelRenderer::instance();
 
-    
+
+    glow::debug("Create WorldObjects");
     Ship *normandy = new Ship();
     ClusterCache::instance()->fillObject(normandy, "data/voxelcluster/normandy.csv");
-	normandy->setPosition(glm::vec3(0, 0, -100));
+    normandy->setPosition(glm::vec3(0, 0, -100));
     normandy->objectInfo().setName("Normandy");
     normandy->objectInfo().setShowOnHud(true);
     normandy->objectInfo().setCanLockOn(true);
     m_world->god().scheduleSpawn(normandy);
     // TODO: use these dummies to test BasicTasks
     normandy->setCharacter(
-        new DummyCharacter(*normandy, 
-        new DummyElevatedTask(*normandy, 
+        new DummyCharacter(*normandy,
+        new DummyElevatedTask(*normandy,
         new BasicTask(*normandy))));
 
     Ship *testCluster = new Ship();
@@ -117,6 +115,7 @@ void Game::initialize() {
     wall->objectInfo().setCanLockOn(true);
     m_world->god().scheduleSpawn(wall);
 
+    glow::debug("Create Planet");
     WorldObject *planet = new WorldObject();
     planet->move(glm::vec3(20, 10, -30));
     int diameter = 24;
@@ -162,15 +161,15 @@ void Game::initialize() {
     glow::debug("Initial spawn");
     m_world->god().spawn();
 
-	glow::debug("Setup Camera");
-	//viewport set in resize
-	//m_camera.setPosition(glm::vec3(0, 5, 30));
-	m_camera.setZNear(1);
-	m_camera.setZFar(9999);
+    glow::debug("Setup Camera");
+    //viewport set in resize
+    //m_camera.setPosition(glm::vec3(0, 5, 30));
+    m_camera.setZNear(1);
+    m_camera.setZFar(9999);
 
-	glow::debug("Create HUD");
-	m_hud = std::unique_ptr<HUD>(new HUD(&m_player));
-	m_hud->setCamera(&m_camera);
+    glow::debug("Create HUD");
+    m_hud = std::unique_ptr<HUD>(new HUD(&m_player));
+    m_hud->setCamera(&m_camera);
 
     glow::debug("Create InputHandler");
     m_inputHandler = std::unique_ptr<InputHandler>(new InputHandler(m_window, &m_player, &m_camera, m_hud.get()));
@@ -197,16 +196,16 @@ void Game::update(float deltaSec) {
     m_player.applyUpdate();
     World::instance()->update(deltaSec);
     m_player.setFollowCam();
-	m_hud->update(deltaSec);
+    m_hud->update(deltaSec);
 }
 
 void Game::draw() {
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glFrontFace(GL_CCW);
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
+    //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glFrontFace(GL_CCW);
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
 
-	m_skybox->draw(&m_camera);
+    m_skybox->draw(&m_camera);
 
     m_voxelRenderer->prepareDraw(&m_camera);
     for (WorldObject * worldObject : m_world->worldObjects()) {
@@ -218,7 +217,7 @@ void Game::draw() {
 
     World::instance()->voxelParticleWorld().draw(m_camera);
 
-	m_hud->draw();
+    m_hud->draw();
 
     m_hd3000dummy->drawIfActive();
 }
@@ -232,7 +231,7 @@ void ERRCHECK(FMOD_RESULT result) {
 }
 */
 void Game::testFMOD() {
-	/*
+    /*
     FMOD::System * system = 0;
     FMOD::Sound  * sound = 0;
     FMOD::Channel *channel = 0;
