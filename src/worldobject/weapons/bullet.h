@@ -18,7 +18,7 @@ public:
     virtual void onCollision() override;
     virtual void onSpawnFail() override;
 
-    virtual float emissive() override;
+    virtual float emissiveness() override;
 
 protected:
     WorldObject *m_creator;

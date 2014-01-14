@@ -22,6 +22,7 @@ VoxelExplosionGenerator::VoxelExplosionGenerator() :
     m_lifetime(1.0f),
     m_lifetimeRandomization(0.0f),
     m_color(0xFFFFFF),
+    m_emissiveness(0),
     m_density(2),
     m_impactVector(0,0,0),
     m_spawnProbability(1.0f),
@@ -104,7 +105,7 @@ void VoxelExplosionGenerator::spawn() {
                 particleTransform.setScale(createScale());
                 particleTransform.setPosition(gridTransform.applyTo(glm::vec3(x, y, z)));
 
-                VoxelParticle* particle = new VoxelParticle(particleTransform, m_color, m_emissive, createLifetime());
+                VoxelParticle* particle = new VoxelParticle(particleTransform, m_color, m_emissiveness, createLifetime());
                 particle->setAngularSpeed(createAngularSpeed(), m_debrisDampening);
                 particle->setDirectionalSpeed(createDirectionalSpeed(), m_debrisAngularDampening);
 
@@ -133,7 +134,7 @@ float VoxelExplosionGenerator::createScale() {
     return RandFloat::randomize(m_scale / m_density, m_scaleRandomization);
 }
 
-void VoxelExplosionGenerator::setEmissive(float emissive) {
-    m_emissive = emissive;
+void VoxelExplosionGenerator::setemissiveness(float emissiveness) {
+    m_emissiveness = emissiveness;
 }
 

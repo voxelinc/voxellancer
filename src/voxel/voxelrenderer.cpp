@@ -47,7 +47,7 @@ void VoxelRenderer::prepareDraw(Camera * camera, bool withBorder)
 void VoxelRenderer::draw(VoxelCluster * worldObject)
 {
     m_program->setUniform("model", worldObject->transform().matrix());
-    m_program->setUniform("emissive", worldObject->emissive());
+    m_program->setUniform("emissiveness", worldObject->emissiveness());
     
     VoxelRenderData* renderData = worldObject->voxelRenderData();
     
