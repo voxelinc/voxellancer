@@ -1,5 +1,6 @@
 #include "skybox.h"
 
+#include <iostream>
 #include <stdexcept>
 #include <glow/Shader.h>
 #include <glow/VertexAttributeBinding.h>
@@ -11,9 +12,34 @@ Skybox::Skybox() :
 	m_texture(0),
 	m_shaderProgram(0),
 	m_vertexArrayObject(0),
-	m_vertexBuffer(0)
+	m_vertexBuffer(0),
+	m_initialized(false)
 {
-	/* Texture */
+
+}
+
+void Skybox::draw(Camera *camera) {
+    if(!m_initialized) {
+        initialize();
+    }
+
+	glDisable(GL_DEPTH_TEST);
+
+	m_texture->bind();
+	// we don't use camera->viewInverted() because the skybox does not travel with the camera
+	m_shaderProgram->setUniform("viewProjectionInverted", glm::mat4_cast(camera->orientation())*glm::inverse(camera->projection()));
+	m_shaderProgram->use();
+
+	m_vertexArrayObject->drawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+	m_shaderProgram->release();
+	m_texture->unbind();
+
+	glEnable(GL_DEPTH_TEST);
+}
+
+void Skybox::initialize() {
+/* Texture */
 	m_texture = new glow::Texture(GL_TEXTURE_CUBE_MAP);
 	if(!DdsTexture::loadImageCube(m_texture,
 		"data/skybox/nebula_1024_right1.dds",
@@ -63,23 +89,6 @@ Skybox::Skybox() :
 	binding1->setFormat(3, GL_FLOAT, GL_FALSE, 0);
 
 	m_vertexArrayObject->enable(a_vertex);
-}
 
-Skybox::~Skybox(){
-}
-
-void Skybox::draw(Camera *camera){
-	glDisable(GL_DEPTH_TEST);
-
-	m_texture->bind();
-	// we don't use camera->viewInverted() because the skybox does not travel with the camera
-	m_shaderProgram->setUniform("viewProjectionInverted", glm::mat4_cast(camera->orientation())*glm::inverse(camera->projection()));
-	m_shaderProgram->use();
-
-	m_vertexArrayObject->drawArrays(GL_TRIANGLE_FAN, 0, 4);
-
-	m_shaderProgram->release();
-	m_texture->unbind();
-
-	glEnable(GL_DEPTH_TEST);
+	m_initialized = true;
 }

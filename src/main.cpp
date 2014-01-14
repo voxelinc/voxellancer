@@ -43,7 +43,7 @@ static void resizeCallback(GLFWwindow* window, int width, int height)
     glow::info("Resizing viewport to %;x%;", width, height);
     if (width > 0 && height > 0) {
         glViewport(0, 0, width, height);
-        game->inputHandler()->resizeEvent(width, height);
+        game->inputHandler().resizeEvent(width, height);
     }
 }
 
@@ -56,7 +56,7 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
     if (key == GLFW_KEY_F6 && action == GLFW_PRESS)
         game->reloadConfig();
 
-    game->inputHandler()->keyCallback(key, scancode, action, mods);
+	game->inputHandler().keyCallback(key, scancode, action, mods);
 }
 
 static void mouseButtonCallback(GLFWwindow* window, int Button, int Action, int mods) {
@@ -153,9 +153,9 @@ int main(void)
         game = new Game(window);
         game->initialize();
 
-        int width, height;
-        glfwGetFramebufferSize(window, &width, &height);
-        game->inputHandler()->resizeEvent(width, height);
+		int width, height;
+		glfwGetFramebufferSize(window, &width, &height);
+        game->inputHandler().resizeEvent(width, height);
 
         glow::debug("Entering mainloop");
         double time = glfwGetTime();

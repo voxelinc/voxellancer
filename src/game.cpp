@@ -2,6 +2,8 @@
 
 #include <GL/glew.h>
 
+#include <chrono>
+#include <thread>
 #include <algorithm>
 #include <random>
 #include <memory>
@@ -46,9 +48,7 @@ class Ship;
 
 Game::Game(GLFWwindow *window) :
     m_window(window),
-    m_camera(),
-    m_player(&m_camera),
-    m_inputHandler(window, &m_player, &m_camera)
+    m_inputHandler(window, &m_player)
 {
     reloadConfig();
 }
@@ -71,9 +71,6 @@ void Game::initialize() {
 
     glow::debug("create world");
     m_world = World::instance();
-
-    glow::debug("Create Skybox");
-    m_skybox = std::unique_ptr<Skybox>(new Skybox);
 
     m_voxelRenderer = VoxelRenderer::instance();
 
@@ -162,21 +159,11 @@ void Game::initialize() {
     glow::debug("Initial spawn");
     m_world->god().spawn();
 
-    glow::debug("Setup Camera");
-    //viewport set in resize
-    //m_camera.setPosition(glm::vec3(0, 5, 30));
-    m_camera.setZNear(1);
-    m_camera.setZFar(9999);
-
-    glow::debug("Create HUD");
-    m_hud = std::unique_ptr<HUD>(new HUD(&m_player));
-    m_hud->setCamera(&m_camera);
-
     m_hd3000dummy = std::unique_ptr<HD3000Dummy>(new HD3000Dummy);
 
-    m_out = new StreamRedirect(std::cout, m_hud.get(), true);
-    m_err = new StreamRedirect(std::cerr, m_hud.get(), true);
-    
+    m_out = new StreamRedirect(std::cout, &m_player.hud(), true);
+    m_err = new StreamRedirect(std::cerr, &m_player.hud(), true);
+
     glClearColor(0.2f, 0.3f, 0.4f, 1.f);
     glow::debug("Game::initialize Done");
 }
@@ -190,64 +177,25 @@ void Game::update(float deltaSec) {
     // avoid big jumps after debugging ;)
     deltaSec = glm::min(1.f, deltaSec);
 
-    m_inputHandler.update(deltaSec);
     World::instance()->update(deltaSec);
-    m_player.setFollowCam();
-    m_hud->update(deltaSec);
+    m_player.update(deltaSec);
+    m_inputHandler.update(deltaSec);
+
+//	m_hud->update(deltaSec);
 }
 
 void Game::draw() {
-    //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glFrontFace(GL_CCW);
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
+	glFrontFace(GL_CCW);
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+	glClear(GL_DEPTH_BUFFER_BIT);
 
-    m_skybox->draw(&m_camera);
-
-    m_voxelRenderer->prepareDraw(&m_camera);
-    for (WorldObject * worldObject : m_world->worldObjects()) {
-        m_voxelRenderer->draw(worldObject);
-    }
-
-    // draw all other voxelclusters...
-    m_voxelRenderer->afterDraw();
-
-    World::instance()->voxelParticleWorld().draw(m_camera);
-
-    m_hud->draw();
+    m_player.draw();
 
     m_hd3000dummy->drawIfActive();
 }
-/*
-void ERRCHECK(FMOD_RESULT result) {
-    if (result != FMOD_OK)
-    {
-        printf("FMOD error! (%d) %s\n", result, FMOD_ErrorString(result));
-        exit(-1);
-    }
-}
-*/
-void Game::testFMOD() {
-    /*
-    FMOD::System * system = 0;
-    FMOD::Sound  * sound = 0;
-    FMOD::Channel *channel = 0;
 
-    FMOD_RESULT result = FMOD::System_Create(&system);
-    ERRCHECK(result);
-
-    result = system->init(32, FMOD_INIT_NORMAL, 0);
-    ERRCHECK(result);
-
-    result = system->createSound("data/LASER.mp3", FMOD_SOFTWARE, 0, &sound);
-    ERRCHECK(result);
-
-    result = system->playSound(FMOD_CHANNEL_FREE, sound, false, &channel);
-    ERRCHECK(result);
-    */
-}
-
-InputHandler * Game::inputHandler() {
-    return &m_inputHandler;
+InputHandler& Game::inputHandler() {
+    return m_inputHandler;
 }
 

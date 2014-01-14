@@ -1,6 +1,10 @@
 #pragma once
+
 #include <memory>
 #include <list>
+
+#include "skybox.h"
+
 
 class WorldLogic;
 class WorldTree;
@@ -14,6 +18,7 @@ public:
     World();
     virtual ~World();
 
+    Skybox &skybox();
     WorldLogic &worldLogic();
     God &god();
     WorldTree &worldTree();
@@ -32,6 +37,7 @@ protected:
 
     float m_deltaSec;
 
+	std::unique_ptr<Skybox> m_skybox;
     std::unique_ptr<WorldTree> m_worldTree;
     std::unique_ptr<WorldLogic> m_worldLogic;
     std::unique_ptr<God> m_god;

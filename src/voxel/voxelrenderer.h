@@ -17,7 +17,6 @@ class Camera;
 class VoxelCluster;
 
 class VoxelRenderer {
-
 public:
     void prepareDraw(Camera * camera, bool withBorder = true);
     void draw(VoxelCluster * cluster);
@@ -39,3 +38,4 @@ private:
     VoxelRenderer();
     void createAndSetupShaders();
 };
+

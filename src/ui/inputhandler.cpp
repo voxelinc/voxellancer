@@ -3,6 +3,14 @@
 #include <glm/glm.hpp>
 #include <glow/glow.h>
 
+#include "utils/tostring.h"
+#include "utils/aimhelper.h"
+#include "voxel/voxeltreenode.h"
+
+#include "worldobject/worldobject.h"
+
+#include "worldtree/worldtreequery.h"
+
 #include "voxeleffect/voxelexplosiongenerator.h"
 
 /*
@@ -29,13 +37,11 @@
 */
 
 
-InputHandler::InputHandler(GLFWwindow *window, Player* player, Camera *camera) :
+InputHandler::InputHandler(GLFWwindow *window, Player* player) :
     m_window(window),
     m_player(player),
-    m_camera(camera),
     prop_deadzone("input.deadzone")
 {
-
     bumperLeftState = false;
     bumperRightState = false;
     glfwGetWindowSize(m_window, &m_windowWidth, &m_windowHeight);
@@ -55,9 +61,6 @@ InputHandler::~InputHandler(){
 
 void InputHandler::resizeEvent(const unsigned int width, const unsigned int height){
 	//glfwGetWindowSize(m_window, &m_windowWidth, &m_windowHeight);
-	m_windowWidth = width;
-	m_windowHeight = height;
-	m_camera->setViewport(glm::ivec2(m_windowWidth, m_windowHeight));
 	m_lastfocus = false; // through window resize everything becomes scrambled
 }
 
@@ -97,9 +100,6 @@ void InputHandler::update(float deltaSec) {
             if (glfwGetKey(m_window, GLFW_KEY_E) == GLFW_PRESS){
                 m_player->rotate(glm::vec3(0, 0, -1));
             }
-            if (glfwGetKey(m_window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS){
-                m_player->boost();
-            }
             if (glfwGetKey(m_window, GLFW_KEY_E) == GLFW_PRESS){
                 m_player->rotate(glm::vec3(0, 0, -1));
             }
@@ -128,7 +128,7 @@ void InputHandler::update(float deltaSec) {
                 }
                 if (glm::abs(axes[2]) > prop_deadzone){
                     if (axes[2] < 0)
-                        m_player->playerShip()->fireAtPoint(findTargetPoint(m_windowWidth / 2, m_windowHeight / 2));
+                        m_player->playerShip()->fireAtPoint(findTargetPoint());
                     else
                         m_player->playerShip()->fireAtObject();
                 }
@@ -158,9 +158,11 @@ void InputHandler::update(float deltaSec) {
             double x, y;
             glfwGetCursorPos(m_window, &x, &y);
 
+            placeCrossHair(x, y);
+
             // shoot
             if (glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS){
-                m_player->playerShip()->fireAtPoint(findTargetPoint(x, y));
+                m_player->playerShip()->fireAtPoint(findTargetPoint());
             }
             if (glfwGetKey(m_window, GLFW_KEY_R) == GLFW_PRESS){
                 m_player->playerShip()->fireAtObject();
@@ -259,12 +261,20 @@ void InputHandler::selectNextTarget(bool forward){
     m_player->playerShip()->setTargetObject(findNextTarget(forward));
 }
 
-glm::vec3 InputHandler::findTargetPoint(double x, double y){
-    glm::vec4 pointEnd((x * 2 / m_windowWidth - 1), -1 * (y * 2 / m_windowHeight - 1), 1, 1); //get normalized device coords
-    pointEnd = glm::inverse(m_camera->viewProjection())*pointEnd; //find point on zfar
-    glm::vec3 vec = glm::vec3(pointEnd); // no need for w component
-    vec = glm::normalize(vec); // normalize
-    vec *= m_player->playerShip()->minAimDistance(); // set aimdistance
-    vec += m_camera->position(); //adjust for camera translation
-    return vec;
+glm::vec3 InputHandler::findTargetPoint() {
+    glm::vec3 shootDirection(glm::normalize(m_player->hud().crossHair().position() - m_player->cameraDolly().cameraHead().position()));
+
+    Ray ray(
+        m_player->hud().crossHair().position(),
+        shootDirection
+    );
+
+    return AimHelper(m_player->playerShip(),ray).aim();
 }
+
+void InputHandler::placeCrossHair(double winX, double winY) {
+    int width, height;
+    glfwGetWindowSize(glfwGetCurrentContext(), &width, &height);
+    m_player->hud().setCrossHairOffset(glm::vec2((winX - (width/2))/(width/2), -(winY - (height/2))/(height/2)));
+}
+

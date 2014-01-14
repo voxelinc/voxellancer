@@ -1,28 +1,41 @@
+#pragma once
+
+#include "camera/camera.h"
+#include "camera/cameradolly.h"
+
+#include "ui/hud.h"
 
 #include "worldobject/ship.h"
-#include "camera.h"
+
+
 
 class Player
 {
 
 public:
-    Player(Camera *camera);
+    Player();
 
     void setShip(Ship *ship);
+
     void move(glm::vec3 direction);
     void rotate(glm::vec3 direction);
+
     void applyAcceleration();
-    void setFollowCam();
+
+    void update(float deltaSec);
+    void draw();
+
     Ship* playerShip();
-    void setShipToCam(float deltaSec);
-    void boost();
+    CameraDolly& cameraDolly();
+    HUD& hud();
 
 
 private:
-    Camera *m_camera;
-    Ship *m_playerShip;
-    glm::vec3 m_shipOffset;
+    Ship* m_playerShip;
     glm::vec3 acc;
     glm::vec3 accAng;
 
+    CameraDolly m_cameraDolly;
+    HUD m_hud;
 };
+

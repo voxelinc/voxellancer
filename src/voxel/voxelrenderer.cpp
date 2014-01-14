@@ -11,10 +11,11 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
 
+#include "camera/camera.h"
 
 #include "voxel/voxelrenderer.h"
 #include "voxel/voxelcluster.h"
-#include "camera.h"
+
 #include "voxeleffect/voxelmesh.h"
 
 
@@ -30,16 +31,17 @@ VoxelRenderer::VoxelRenderer() :
     createAndSetupShaders();
 }
 
-
 void VoxelRenderer::prepareDraw(Camera * camera, bool withBorder)
 {
     m_program->setUniform("projection", camera->projection());
     m_program->setUniform("view", camera->view());
     m_program->setUniform("viewProjection", camera->viewProjection());
     m_program->setUniform("withBorder", (withBorder ? 1.0f : 0.0f));
-    
+
     m_program->use();
+
     glProvokingVertex(GL_LAST_VERTEX_CONVENTION);
+
     m_prepared = true;
 }
 
@@ -47,9 +49,9 @@ void VoxelRenderer::prepareDraw(Camera * camera, bool withBorder)
 void VoxelRenderer::draw(VoxelCluster * worldObject)
 {
     m_program->setUniform("model", worldObject->transform().matrix());
-    
+
     VoxelRenderData* renderData = worldObject->voxelRenderData();
-    
+
     renderData->vertexArrayObject()->bind();
     glVertexAttribDivisor(m_program->getAttributeLocation("v_vertex"), 0);
     glVertexAttribDivisor(m_program->getAttributeLocation("v_normal"), 0);
