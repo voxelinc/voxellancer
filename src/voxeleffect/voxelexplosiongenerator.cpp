@@ -134,7 +134,7 @@ float VoxelExplosionGenerator::createScale() {
     return RandFloat::randomize(m_scale / m_density, m_scaleRandomization);
 }
 
-void VoxelExplosionGenerator::setemissiveness(float emissiveness) {
+void VoxelExplosionGenerator::setEmissiveness(float emissiveness) {
     m_emissiveness = emissiveness;
 }
 

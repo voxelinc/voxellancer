@@ -59,7 +59,7 @@ void Bullet::onCollision(){
     World::instance()->god().scheduleRemoval(this);
     VoxelExplosionGenerator generator;
     generator.setTransform(m_transform);
-    generator.setemissiveness(emissiveness());
+    generator.setEmissiveness(emissiveness());
     generator.setColor(0xFF0000);
     generator.setForce(0.5f);
     generator.setLifetime(0.7f, 0.2f);
@@ -70,7 +70,7 @@ void Bullet::onSpawnFail(){
     VoxelExplosionGenerator generator;
     generator.setTransform(m_transform);
     generator.setColor(0xFF0000);
-    generator.setemissiveness(emissiveness());
+    generator.setEmissiveness(emissiveness());
     generator.setForce(0.5f);
     generator.setLifetime(0.7f, 0.2f);
     generator.spawn();

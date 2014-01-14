@@ -19,7 +19,7 @@ public:
     void setForce(float force, float randomization = 0.0f);
     void setLifetime(float lifetime, float randomization = 0.0f);
     void setColor(int color);
-    void setemissiveness(float emissiveness);
+    void setEmissiveness(float emissiveness);
     void setDensity(int density);
     void setImpactVector(const glm::vec3& impactVector);
     void setSpawnProbability(float spawnProbability);
