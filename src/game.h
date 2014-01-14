@@ -10,6 +10,7 @@
 #include <GLFW/glfw3.h>
 
 #include "ui/inputhandler.h"
+#include "ui/streamredirect.h"
 
 #include "utils/timedtask.h"
 #include "worldtree/worldtree.h"
@@ -24,12 +25,10 @@ class HD3000Dummy;
 class LinuxVMDummy;
 class Ship;
 
-
-
 class Game {
 
 public:
-    Game(GLFWwindow *window);
+    Game(GLFWwindow* window);
     virtual ~Game();
     void initialize();
     void reloadConfig();
@@ -37,7 +36,7 @@ public:
     void update(float deltaSec);
     void draw();
 
-    InputHandler * inputHandler();
+    InputHandler* inputHandler();
 
 private:
     void testFMOD();
@@ -50,10 +49,23 @@ private:
 
     World* m_world;
 
+	std::unique_ptr<Skybox> m_skybox;
+	std::unique_ptr<HUD> m_hud;
+	std::unique_ptr<VoxelRenderer> m_voxelRenderer;
+	std::unique_ptr<HD3000Dummy> m_hd3000dummy;
+	std::unique_ptr<LinuxVMDummy> m_linuxvmdummy;
     std::shared_ptr<VoxelRenderer> m_voxelRenderer;
     std::unique_ptr<Skybox> m_skybox;
     std::unique_ptr<HUD> m_hud;
     std::unique_ptr<HD3000Dummy> m_hd3000dummy;
     std::unique_ptr<LinuxVMDummy> m_linuxvmdummy;
+	std::unique_ptr<Skybox> m_skybox;
+	std::unique_ptr<HUD> m_hud;
+	std::unique_ptr<VoxelRenderer> m_voxelRenderer;
+	std::unique_ptr<HD3000Dummy> m_hd3000dummy;
+	std::unique_ptr<LinuxVMDummy> m_linuxvmdummy;
+
+    StreamRedirect* m_out;
+    StreamRedirect* m_err;
 };
 

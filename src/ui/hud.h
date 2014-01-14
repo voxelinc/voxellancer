@@ -23,6 +23,8 @@ public:
     void update(float deltaSec);
     void draw();
 
+    void printLine(std::string line);
+
 protected:
     void addElement(const std::string& filename, HUDOffsetOrigin origin, glm::vec3 offset, std::vector<std::unique_ptr<HUDElement>> *list);
 
@@ -46,8 +48,12 @@ protected:
     float m_frameRate;
     float m_dx, m_dy;
 
+    std::vector<std::string> m_lastline;
+    std::vector<double> m_lastlineTime;
+
     Property<float> prop_distance, prop_moveMultiplier, prop_inertiaMove, prop_inertiaRotate, prop_inertiaRate,
-        prop_arrowMaxdistance, prop_arrowRadius;
+        prop_arrowMaxdistance, prop_arrowRadius, prop_lineTime;
     Property<bool> prop_showFramerate;
+    Property<int> prop_lineBacklog;
 
 };
