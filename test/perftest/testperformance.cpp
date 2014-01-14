@@ -54,7 +54,9 @@ static void doSplitDetection(WorldObject* planet, WorldObjectModification &mod, 
     SplitDetectorFill t2;
     {
         glow::AutoTimer a("fill split detection");
-        t2.searchSplitOffs(mods);
+        for (int i = 0; i < 1000; i++) {
+            t2.searchSplitOffs(mods);
+        }
     }
     AssertThat(t2.splitDataList().size(), Equals(assumedSplits));
 }

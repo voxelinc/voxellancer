@@ -9,9 +9,11 @@ public:
 
     operator T();
 
-    char * name();
+    char* name();
     T get();
     void set(T value);
+
+    T* operator->();
 
 private:
     char * m_name;

@@ -16,11 +16,11 @@
 
 #include <glow/AutoTimer.h>
 #include <glow/logging.h>
-
+/*
 #include <fmod.hpp>
 #include <fmod_dsp.h>
 #include <fmod_errors.h>
-
+*/
 #include "property/propertymanager.h"
 #include "resource/clustercache.h"
 #include "utils/hd3000dummy.h"
@@ -31,13 +31,19 @@
 #include "world/world.h"
 #include "world/god.h"
 #include "skybox.h"
+#include "voxeleffect/voxelparticleworld.h"
 #include "voxel/voxelrenderer.h"
 #include "worldobject/ship.h"
 #include "collision/collisiondetector.h"
 #include "worldobject/worldobject.h"
 
-class Ship;
+#include "ai/characters/dummycharacter.h"
+#include "ai/elevatedtasks/dummyelevatedtask.h"
+#include "ai/basictask.h"
+#include "voxeleffect/voxelmesh.h"
 
+
+class Ship;
 
 Game::Game(GLFWwindow *window) :
     m_window(window),
@@ -48,16 +54,15 @@ Game::Game(GLFWwindow *window) :
     reloadConfig();
 }
 
-Game::~Game(){
-
+Game::~Game() {
+    VoxelMesh::tearDown();
 }
 
 void Game::reloadConfig() {
 	PropertyManager::instance()->load("data/config.ini");
 }
 
-void Game::initialize()
-{
+void Game::initialize() {
     glow::AutoTimer t("Initialize Game");
 
 	glow::debug("Game::testFMOD()");
@@ -68,7 +73,6 @@ void Game::initialize()
 
     glow::debug("create world");
     m_world = World::instance();
-    m_treeStateReporter.setWorldTree(&m_world->worldTree());
 
     glow::debug("Create Skybox");
 	m_skybox = std::unique_ptr<Skybox>(new Skybox);
@@ -76,31 +80,19 @@ void Game::initialize()
 	glow::debug("Create Voxel");
     m_voxelRenderer = std::unique_ptr<VoxelRenderer>(new VoxelRenderer);
 
-
-    WorldObject *testClusterMoveable = new WorldObject();
-    testClusterMoveable->move(glm::vec3(-20, 0, 0));
-    testClusterMoveable->rotate(glm::angleAxis(-90.f, glm::vec3(0, 1, 0)));
-    testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 7), 0x00FF00));
-    testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 6), 0xFFFF00));
-    testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 5), 0xFFFF00));
-    testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 4), 0xFFFF00));
-    testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 3), 0xFFFF00));
-    testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 2), 0xFFFF00));
-    testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 1), 0xFFFF00));
-    testClusterMoveable->addVoxel(new Voxel(glm::ivec3(1, 1, 7), 0x0000FF));
-    testClusterMoveable->addVoxel(new Voxel(glm::ivec3(1, 0, 7), 0xFF0000));
-    testClusterMoveable->addVoxel(new Voxel(glm::ivec3(0, 0, 8), 0xFF0080));
-    testClusterMoveable->objectInfo().setName("movable");
-    m_world->god().scheduleSpawn(testClusterMoveable);
-
-    //m_inputHandler.setVoxelCluster(m_testClusterMoveable);
-
-
+    
     Ship *normandy = new Ship();
     ClusterCache::instance()->fillObject(normandy, "data/voxelcluster/normandy.csv");
 	normandy->setPosition(glm::vec3(0, 0, -100));
     normandy->objectInfo().setName("Normandy");
+    normandy->objectInfo().setShowOnHud(true);
+    normandy->objectInfo().setCanLockOn(true);
     m_world->god().scheduleSpawn(normandy);
+    // TODO: use these dummies to test BasicTasks
+    normandy->setCharacter(
+        new DummyCharacter(*normandy, 
+        new DummyElevatedTask(*normandy, 
+        new BasicTask(*normandy))));
 
     Ship *testCluster = new Ship();
     ClusterCache::instance()->fillObject(testCluster, "data/voxelcluster/basicship.csv");
@@ -122,6 +114,8 @@ void Game::initialize()
         }
     }
     wall->objectInfo().setName("Wall");
+    wall->objectInfo().setShowOnHud(true);
+    wall->objectInfo().setCanLockOn(true);
     m_world->god().scheduleSpawn(wall);
 
     WorldObject *planet = new WorldObject();
@@ -141,6 +135,8 @@ void Game::initialize()
     }
     planet->setCrucialVoxel(glm::ivec3(middle));
     planet->objectInfo().setName("Planet");
+    planet->objectInfo().setShowOnHud(true);
+    planet->objectInfo().setCanLockOn(true);
     m_world->god().scheduleSpawn(planet);
 
 
@@ -184,8 +180,7 @@ void Game::initialize()
 }
 
 
-void Game::update(float deltaSec)
-{
+void Game::update(float deltaSec) {
     // skip non-updates
     if (deltaSec == 0) return;
 
@@ -193,16 +188,13 @@ void Game::update(float deltaSec)
     // avoid big jumps after debugging ;)
     deltaSec = glm::min(1.f, deltaSec);
 
-    //m_treeStateReporter.nudge();
-
     m_inputHandler.update(deltaSec);
     World::instance()->update(deltaSec);
     m_player.setFollowCam();
 	m_hud->update(deltaSec);
 }
 
-void Game::draw()
-{
+void Game::draw() {
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glFrontFace(GL_CCW);
 	glEnable(GL_CULL_FACE);
@@ -218,23 +210,23 @@ void Game::draw()
     // draw all other voxelclusters...
     m_voxelRenderer->afterDraw();
 
+    World::instance()->voxelParticleWorld().draw(m_camera);
 
 	m_hud->draw();
 
     m_hd3000dummy->drawIfActive();
 }
-
-void ERRCHECK(FMOD_RESULT result)
-{
+/*
+void ERRCHECK(FMOD_RESULT result) {
     if (result != FMOD_OK)
     {
         printf("FMOD error! (%d) %s\n", result, FMOD_ErrorString(result));
         exit(-1);
     }
 }
-
-void Game::testFMOD()
-{
+*/
+void Game::testFMOD() {
+	/*
     FMOD::System * system = 0;
     FMOD::Sound  * sound = 0;
     FMOD::Channel *channel = 0;
@@ -250,29 +242,10 @@ void Game::testFMOD()
 
     result = system->playSound(FMOD_CHANNEL_FREE, sound, false, &channel);
     ERRCHECK(result);
+    */
 }
 
-InputHandler * Game::inputHandler()
-{
+InputHandler * Game::inputHandler() {
     return &m_inputHandler;
 }
-
-TreeStateReporter::TreeStateReporter():
-    TimedTask(std::chrono::duration<float>(1.5f)),
-    m_worldTree(nullptr)
-{
-
-}
-
-void TreeStateReporter::setWorldTree(WorldTree *worldTree) {
-    m_worldTree = worldTree;
-}
-
-void TreeStateReporter::exec() {
-    int nodes, empty, geodes, depth;
-    m_worldTree->poll(nodes, empty, geodes, depth);
-    std::cout << "WorldTree: " << nodes << " nodes; " << empty << " empty; " << geodes << " geodes; " << depth << " maxdepth" << std::endl;
-    m_worldTree->print();
-}
-
 

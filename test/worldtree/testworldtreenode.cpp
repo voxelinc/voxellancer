@@ -17,116 +17,123 @@ go_bandit([]() {
         PropertyManager::instance()->reset();
         PropertyManager::instance()->load("data/config.ini");
 
-        WorldObject *dummy = new WorldObject();
+        WorldObject *dummy;
+        WorldTree *worldTree;
 
-        it("simpleInserts", [&]() {
-            WorldTreeNode *node = new WorldTreeNode(0, nullptr, AABB(glm::vec3(-2, -2, -2), glm::vec3(2, 2, 2)));
-            WorldTreeGeode *a = new WorldTreeGeode(); a->setWorldObject(dummy);
-            WorldTreeGeode *b = new WorldTreeGeode(); b->setWorldObject(dummy);
-            WorldTreeGeode *c = new WorldTreeGeode(); c->setWorldObject(dummy);
+        before_each([&] {
+            dummy = new WorldObject();
+            worldTree = new WorldTree();
+        });
 
-            a->setAABB(AABB(glm::vec3(0, 0, 0), glm::vec3(5, 5, 5)));
-            b->setAABB(AABB(glm::vec3(1, 0, 0), glm::vec3(1.5, 1, 1)));
-            c->setAABB(AABB(glm::vec3(-3, -2, -1), glm::vec3(1, 2, 3)));
+        after_each([&] {
+            delete dummy;
+            delete worldTree;
+        });
 
-            node->insert(b);
-            AssertThat(node->geodes().size(), Equals(1));
-            AssertThat(node->subnodes().size(), Equals(0));
-            AssertThat(b->containingNode(), Equals(node));
+        it("simple inserts", [&]() {
+            WorldTreeGeode *a = new WorldTreeGeode(dummy);
+            WorldTreeGeode *b = new WorldTreeGeode(dummy);
+            WorldTreeGeode *c = new WorldTreeGeode(dummy);
+            WorldTreeGeode *d = new WorldTreeGeode(dummy);
 
-            float oldWidth = node->aabb().extent(XAxis);
+            a->setAABB(IAABB(glm::ivec3(0, 0, 0), glm::ivec3(5, 5, 5)));
+            b->setAABB(IAABB(glm::ivec3(1, 0, 0), glm::ivec3(1.5, 1, 1)));
+            c->setAABB(IAABB(glm::ivec3(9, 2, 2), glm::ivec3(10, 3, 3)));
+            d->setAABB(IAABB(glm::ivec3(9, 2, 2), glm::ivec3(1000, 3, 3)));
 
-            node->insert(a);
-            AssertThat(node->geodes().size(), Equals(0));
-            AssertThat(node->subnodes().size(), Equals(8));
-            AssertThat(node->aabb().extent(XAxis), EqualsWithDelta(oldWidth*2, 0.5f));
-            AssertThat(a->containingNode(), Equals(node));
+            worldTree->insert(b);
+            AssertThat(worldTree->root()->geodes().size(), Equals(1));
+            AssertThat(worldTree->root()->subnodes().size(), Equals(0));
+            AssertThat(b->containingNode(), Equals(worldTree->root()));
 
-            node->insert(c);
-            AssertThat(node->geodes().size(), Equals(0));
-            AssertThat(node->subnodes().size(), Equals(8));
-            AssertThat(c->containingNode(), Equals(node));
-            AssertThat(node->aabb().extent(XAxis), EqualsWithDelta(oldWidth*4, 0.5f));
+            worldTree->insert(a);
+            AssertThat(worldTree->root()->geodes().size(), Equals(2));
+            AssertThat(worldTree->root()->subnodes().size(), Equals(0));
 
-            delete a, b, c;
+            float oldWidth = worldTree->root()->aabb().extent(XAxis);
+
+            worldTree->insert(c);
+            AssertThat(worldTree->root()->geodes().size(), Equals(0));
+            AssertThat(worldTree->root()->subnodes().size(), Equals(2));
+            AssertThat(worldTree->root()->aabb().extent(XAxis), EqualsWithDelta(oldWidth*2, 0.5f));
+
+            worldTree->insert(d);
+            AssertThat(worldTree->root()->geodes().size(), Equals(0));
+            AssertThat(worldTree->root()->subnodes().size(), Equals(2));
         });
 
         it("can detect geodes in an AABB", [&]() {
-            WorldTreeNode *node = new WorldTreeNode(0, nullptr, AABB(glm::vec3(-2, -2, -2), glm::vec3(2, 2, 2)));
             WorldTreeGeode *e1, *e2;
             WorldTreeGeode *a, *b, *c;
             AABB aabb;
 
-            e1 = new WorldTreeGeode(); e1->setWorldObject(dummy);
-            e2 = new WorldTreeGeode(); e2->setWorldObject(dummy);
+            e1 = new WorldTreeGeode(dummy);
+            e2 = new WorldTreeGeode(dummy);
 
-            e1->setAABB(AABB(glm::vec3(-100, -100, -100), glm::vec3(-99, -99, -99)));
-            e2->setAABB(AABB(glm::vec3(99, 99, 99), glm::vec3(100, 100, 100)));
+            e1->setAABB(IAABB(glm::ivec3(-100, -100, -100), glm::ivec3(-99, -99, -99)));
+            e2->setAABB(IAABB(glm::ivec3(99, 99, 99), glm::ivec3(100, 100, 100)));
 
-            node->insert(e1);
-            node->insert(e2);
+            worldTree->insert(e1);
+            worldTree->insert(e2);
 
-            a = new WorldTreeGeode(); a->setWorldObject(dummy);
-            b = new WorldTreeGeode(); b->setWorldObject(dummy);
-            c = new WorldTreeGeode(); c->setWorldObject(dummy);
+            a = new WorldTreeGeode(dummy);
+            b = new WorldTreeGeode(dummy);
+            c = new WorldTreeGeode(dummy);
 
-            a->setAABB(AABB(glm::vec3(50, 20, 30), glm::vec3(60, 30, 35)));
-            b->setAABB(AABB(glm::vec3(5, 20, 30), glm::vec3(15, 30, 35)));
-            c->setAABB(AABB(glm::vec3(-50, 0, 0), glm::vec3(0, 5, 5)));
+            a->setAABB(IAABB(glm::ivec3(50, 20, 30), glm::ivec3(60, 30, 35)));
+            b->setAABB(IAABB(glm::ivec3(5, 20, 30), glm::ivec3(15, 30, 35)));
+            c->setAABB(IAABB(glm::ivec3(-50, 0, 0), glm::ivec3(0, 5, 5)));
 
-            node->insert(a);
-            node->insert(b);
-            node->insert(c);
+            worldTree->insert(a);
+            worldTree->insert(b);
+            worldTree->insert(c);
 
             aabb = AABB(glm::vec3(-100, -100, -100), glm::vec3(100, 100, 100));
-            std::set<WorldTreeGeode*> q1 = WorldTreeQuery(node, &aabb).nearGeodes();
+            std::set<WorldTreeGeode*> q1 = WorldTreeQuery(worldTree, &aabb).nearGeodes();
             AssertThat(q1.size(), Equals(5));
 
             aabb = AABB(glm::vec3(-98, -98, -98), glm::vec3(100, 100, 100));
-            std::set<WorldTreeGeode*> q2 = WorldTreeQuery(node, &aabb).nearGeodes();
+            std::set<WorldTreeGeode*> q2 = WorldTreeQuery(worldTree, &aabb).nearGeodes();
             AssertThat(q2.size(), Equals(4));
 
             aabb = AABB(glm::vec3(-45, 2, 4), glm::vec3(55, 25, 40));
-            std::set<WorldTreeGeode*> q3 = WorldTreeQuery(node, &aabb).nearGeodes();
+            std::set<WorldTreeGeode*> q3 = WorldTreeQuery(worldTree, &aabb).nearGeodes();
             AssertThat(q3.size(), Equals(3));
-
-            delete e1, e2, a, b, c;
         });
 
         it("moves geodes correctly within the tree on aabb change", [&]() {
-            WorldTreeNode *node = new WorldTreeNode(0, nullptr, AABB(glm::vec3(-2, -2, -2), glm::vec3(2, 2, 2)));
             WorldTreeGeode *e1, *e2;
             WorldTreeGeode *a;
             AABB aabb;
 
-            e1 = new WorldTreeGeode();e1->setWorldObject(dummy);
-            e2 = new WorldTreeGeode();e2->setWorldObject(dummy);
+            e1 = new WorldTreeGeode(dummy);
+            e2 = new WorldTreeGeode(dummy);
 
-            e1->setAABB(AABB(glm::vec3(-100, -100, -100), glm::vec3(-99, -99, -99)));
-            e2->setAABB(AABB(glm::vec3(99, 99, 99), glm::vec3(100, 100, 100)));
+            e1->setAABB(IAABB(glm::ivec3(-100, -100, -100), glm::ivec3(-99, -99, -99)));
+            e2->setAABB(IAABB(glm::ivec3(99, 99, 99), glm::ivec3(100, 100, 100)));
 
-            node->insert(e1);
-            node->insert(e2);
+            worldTree->insert(e1);
+            worldTree->insert(e2);
 
-            a = new WorldTreeGeode(); a->setWorldObject(dummy);
-            a->setAABB(AABB(glm::vec3(50, 20, 30), glm::vec3(60, 30, 35)));
-            node->insert(a);
+            a = new WorldTreeGeode(dummy);
+            a->setAABB(IAABB(glm::ivec3(50, 20, 30), glm::ivec3(60, 30, 35)));
+            worldTree->insert(a);
 
             aabb = AABB(glm::vec3(55, 25, 29), glm::vec3(56, 26, 36));
-            std::set<WorldTreeGeode*> q1 = WorldTreeQuery(node, &aabb).nearGeodes();
+            std::set<WorldTreeGeode*> q1 = WorldTreeQuery(worldTree, &aabb).nearGeodes();
             AssertThat(q1.size(), Equals(1));
             AssertThat(q1.find(a) != q1.end(), Equals(true));
 
-            a->setAABB(AABB(glm::vec3(-10, 40, 30), glm::vec3(0, 50, 35)));
-            node->aabbChanged(a);
+            a->setAABB(IAABB(glm::ivec3(-10, 40, 30), glm::ivec3(0, 50, 35)));
+            worldTree->aabbChanged(a);
 
             aabb = AABB(glm::vec3(-9, 41, 31), glm::vec3(-8, 42, 32));
-            std::set<WorldTreeGeode*> q2 = WorldTreeQuery(node, &aabb).nearGeodes();
+            std::set<WorldTreeGeode*> q2 = WorldTreeQuery(worldTree, &aabb).nearGeodes();
             AssertThat(q2.size(), Equals(1));
             AssertThat(q2.find(a) != q2.end(), Equals(true));
 
             aabb = AABB(glm::vec3(55, 25, 29), glm::vec3(56, 26, 36));
-            std::set<WorldTreeGeode*> q3 = WorldTreeQuery(node, &aabb).nearGeodes();
+            std::set<WorldTreeGeode*> q3 = WorldTreeQuery(worldTree, &aabb).nearGeodes();
             AssertThat(q3.size(), Equals(0));
             AssertThat(q3.find(a) == q3.end(), Equals(true));
 
@@ -134,6 +141,7 @@ go_bandit([]() {
         });
 
         it("can be queried for voxels in sphere", [&]() {
+
             WorldTree worldTree;
             WorldObject a;
             WorldObject b;
@@ -162,63 +170,61 @@ go_bandit([]() {
         });
 
         it("can be queried for voxels in ray", [&]() {
-            WorldTree worldTree;
             WorldObject a;
 
             a.addVoxel(new Voxel(glm::ivec3(0,0,0)));
             a.setPosition(glm::vec3(1.5, 1.5, 0));
-            worldTree.insert(&a);
+            worldTree->insert(&a);
 
             Ray r1(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 0.0f));
             Ray r2(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(4.0f, 1.0f, 0.0f));
 
-            AssertThat(WorldTreeQuery(&worldTree, &r1).intersectingVoxels().size(), Equals(1));
-            AssertThat(WorldTreeQuery(&worldTree, &r1).areVoxelsIntersecting(), Equals(true));
-            AssertThat(WorldTreeQuery(&worldTree, &r1).intersectingWorldObjects().size(), Equals(1));
-            AssertThat(WorldTreeQuery(&worldTree, &r2).intersectingVoxels().size(), Equals(0));
-            AssertThat(WorldTreeQuery(&worldTree, &r2).areVoxelsIntersecting(), Equals(false));
-            AssertThat(WorldTreeQuery(&worldTree, &r2).intersectingWorldObjects().size(), Equals(0));
+            AssertThat(WorldTreeQuery(worldTree, &r1).intersectingVoxels().size(), Equals(1));
+            AssertThat(WorldTreeQuery(worldTree, &r1).areVoxelsIntersecting(), Equals(true));
+            AssertThat(WorldTreeQuery(worldTree, &r1).intersectingWorldObjects().size(), Equals(1));
+            AssertThat(WorldTreeQuery(worldTree, &r2).intersectingVoxels().size(), Equals(0));
+            AssertThat(WorldTreeQuery(worldTree, &r2).areVoxelsIntersecting(), Equals(false));
+            AssertThat(WorldTreeQuery(worldTree, &r2).intersectingWorldObjects().size(), Equals(0));
 
             WorldObject b;
 
             b.addVoxel(new Voxel(glm::ivec3(0,0,0)));
             b.addVoxel(new Voxel(glm::ivec3(1,0,0)));
             b.setPosition(glm::vec3(3.0f, 3.0f, 0));
-            worldTree.insert(&b);
+            worldTree->insert(&b);
 
             Ray r3(glm::vec3(3.0f, 5.0f, 0.0f), glm::vec3(-1.0f, -2.0f, 0.0f));
-            AssertThat(WorldTreeQuery(&worldTree, &r3).intersectingVoxels().size(), Equals(2));
-            AssertThat(WorldTreeQuery(&worldTree, &r3).areVoxelsIntersecting(), Equals(true));
-            AssertThat(WorldTreeQuery(&worldTree, &r3).intersectingWorldObjects().size(), Equals(2));
+            AssertThat(WorldTreeQuery(worldTree, &r3).intersectingVoxels().size(), Equals(2));
+            AssertThat(WorldTreeQuery(worldTree, &r3).areVoxelsIntersecting(), Equals(true));
+            AssertThat(WorldTreeQuery(worldTree, &r3).intersectingWorldObjects().size(), Equals(2));
         });
 
         it("can be queried for voxels on line", [&]() {
-            WorldTree worldTree;
             WorldObject a;
 
             a.addVoxel(new Voxel(glm::ivec3(0,0,0)));
             a.setPosition(glm::vec3(1.5, 1.5, 0));
-            worldTree.insert(&a);
+            worldTree->insert(&a);
 
             Line l1(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.3f, 1.3f, 0.0f));
             Line l2(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(4.0f, 1.0f, 0.0f));
 
-            AssertThat(WorldTreeQuery(&worldTree, &l1).intersectingVoxels().size(), Equals(1));
-            AssertThat(WorldTreeQuery(&worldTree, &l2).intersectingVoxels().size(), Equals(0));
+            AssertThat(WorldTreeQuery(worldTree, &l1).intersectingVoxels().size(), Equals(1));
+            AssertThat(WorldTreeQuery(worldTree, &l2).intersectingVoxels().size(), Equals(0));
 
             WorldObject b;
 
             b.addVoxel(new Voxel(glm::ivec3(0,0,0)));
             b.addVoxel(new Voxel(glm::ivec3(1,0,0)));
             b.setPosition(glm::vec3(3.0f, 3.0f, 0));
-            worldTree.insert(&b);
+            worldTree->insert(&b);
 
             Line l3(glm::vec3(3.0f, 5.0f, 0.0f), glm::vec3(-1.0f, -2.0f, 0.0f));
-            AssertThat(WorldTreeQuery(&worldTree, &l3).intersectingVoxels().size(), Equals(1));
+            AssertThat(WorldTreeQuery(worldTree, &l3).intersectingVoxels().size(), Equals(1));
 
             Line l4(glm::vec3(3.0f, 5.0f, 0.0f), glm::vec3(-10.0f, -20.0f, 0.0f));
-            AssertThat(WorldTreeQuery(&worldTree, &l4).intersectingVoxels().size(), Equals(2));
-            AssertThat(WorldTreeQuery(&worldTree, &l4).intersectingWorldObjects().size(), Equals(2));
+            AssertThat(WorldTreeQuery(worldTree, &l4).intersectingVoxels().size(), Equals(2));
+            AssertThat(WorldTreeQuery(worldTree, &l4).intersectingWorldObjects().size(), Equals(2));
         });
     });
 });

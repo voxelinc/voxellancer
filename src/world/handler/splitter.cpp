@@ -19,10 +19,6 @@ void Splitter::split(std::vector<SplitData*> &splits) {
         splittedWorldObjects.insert(split->exWorldObject());
         removeExtractedVoxelsFromEx(split);
     }
-
-    for (WorldObject* splitted : splittedWorldObjects) {
-        splitted->collisionDetector().rebuildVoxelTree();
-    }
 }
 
 std::list<WorldObject*> &Splitter::splitOffWorldObjects() {
