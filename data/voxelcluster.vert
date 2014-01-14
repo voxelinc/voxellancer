@@ -18,8 +18,7 @@ flat out vec3 f_normal;
 out vec3 f_color;
 out vec3 modelposition;
 
-void main()
-{
+void main() {
     modelposition = v_vertex;
 
     f_color = v_color.xyz;
