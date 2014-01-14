@@ -31,6 +31,7 @@
 #include "world/world.h"
 #include "world/god.h"
 #include "skybox.h"
+#include "voxeleffect/voxelparticleworld.h"
 #include "voxel/voxelrenderer.h"
 #include "worldobject/ship.h"
 #include "collision/collisiondetector.h"
@@ -40,6 +41,7 @@
 #include "ai/elevatedtasks/dummyelevatedtask.h"
 #include "ai/basictask.h"
 #include "starfield.h"
+#include "voxeleffect/voxelmesh.h"
 
 
 class Ship;
@@ -54,7 +56,7 @@ Game::Game(GLFWwindow *window) :
 }
 
 Game::~Game() {
-
+    VoxelMesh::tearDown();
 }
 
 void Game::reloadConfig() {
@@ -72,7 +74,6 @@ void Game::initialize() {
 
     glow::debug("create world");
     m_world = World::instance();
-    m_treeStateReporter.setWorldTree(&m_world->worldTree());
 
     glow::debug("Create Skybox");
 	m_skybox = std::unique_ptr<Skybox>(new Skybox());
@@ -192,8 +193,6 @@ void Game::update(float deltaSec) {
     // avoid big jumps after debugging ;)
     deltaSec = glm::min(1.f, deltaSec);
 
-    //m_treeStateReporter.nudge();
-
     m_inputHandler.update(deltaSec);
     World::instance()->update(deltaSec);
     m_player.setFollowCam();
@@ -218,6 +217,7 @@ void Game::draw() {
     m_voxelRenderer->afterDraw();
 
     m_starfield->draw();
+    World::instance()->voxelParticleWorld().draw(m_camera);
 
 	m_hud->draw();
 
@@ -255,23 +255,4 @@ void Game::testFMOD() {
 InputHandler * Game::inputHandler() {
     return &m_inputHandler;
 }
-
-TreeStateReporter::TreeStateReporter():
-    TimedTask(std::chrono::duration<float>(1.5f)),
-    m_worldTree(nullptr)
-{
-
-}
-
-void TreeStateReporter::setWorldTree(WorldTree *worldTree) {
-    m_worldTree = worldTree;
-}
-
-void TreeStateReporter::exec() {
-    int nodes, empty, geodes, depth;
-    m_worldTree->poll(nodes, empty, geodes, depth);
-    std::cout << "WorldTree: " << nodes << " nodes; " << empty << " empty; " << geodes << " geodes; " << depth << " maxdepth" << std::endl;
-    m_worldTree->print();
-}
-
 

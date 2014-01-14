@@ -25,18 +25,7 @@ class LinuxVMDummy;
 class Ship;
 class Starfield;
 
-class TreeStateReporter : public TimedTask
-{
-public:
-    TreeStateReporter();
 
-    void setWorldTree(WorldTree *worldTree);
-
-    virtual void exec();
-
-protected:
-    WorldTree *m_worldTree;
-};
 
 class Game {
 
@@ -68,7 +57,5 @@ private:
 	std::unique_ptr<HD3000Dummy> m_hd3000dummy;
     std::unique_ptr<LinuxVMDummy> m_linuxvmdummy;
     std::unique_ptr<Starfield> m_starfield;
-
-    TreeStateReporter m_treeStateReporter;
 };
 
