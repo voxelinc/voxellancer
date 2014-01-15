@@ -13,7 +13,7 @@
 
 HUD::HUD(Player* player) :
     m_player(player),
-    m_voxelRenderer(new VoxelRenderer()),
+    m_voxelRenderer(VoxelRenderer::instance()),
     m_font(new VoxelFont()),
     m_gameCamera(0),
     m_renderCamera(),
@@ -21,6 +21,8 @@ HUD::HUD(Player* player) :
     m_shipArrow(),
     m_delta_sec_remain(0),
     m_frameRate(0),
+    m_lastline(),
+    m_lastlineTime(),
     m_dx(1),
     m_dy(1),
     prop_distance("hud.distance"),
@@ -30,7 +32,9 @@ HUD::HUD(Player* player) :
     prop_inertiaRate("hud.inertiaRate"),
     prop_arrowMaxdistance("hud.arrowMaxdistance"),
     prop_arrowRadius("hud.arrowRadius"),
-    prop_showFramerate("hud.showFramerate")
+    prop_showFramerate("hud.showFramerate"),
+    prop_lineBacklog("hud.lineBacklog"),
+    prop_lineTime("hud.lineTime")
 {
     assert(player != nullptr);
     m_font->setRenderer(m_voxelRenderer.get());
@@ -51,6 +55,12 @@ HUD::HUD(Player* player) :
     ClusterCache::instance()->fillCluster(m_shipArrow.get(), "data/hud/arrow.csv");
     m_shipArrow->m_origin = Center;
     m_shipArrow->m_offset = glm::vec3(-2, -2, 0);
+
+
+    for (int i = 0; i < prop_lineBacklog; i++){
+        m_lastlineTime.push_back(0);
+        m_lastline.push_back("");
+    }
 }
 
 void HUD::addElement(const std::string& filename, HUDOffsetOrigin origin, glm::vec3 offset, std::vector<std::unique_ptr<HUDElement>> *list){
@@ -84,7 +94,7 @@ void HUD::update(float deltaSec){
     // For a smooth movement we need to simulate 1/inertia_rate "hud steps" per second
     double total = deltaSec + m_delta_sec_remain;
     double progress = 0.0;
-	double steptime = 1.0 / prop_inertiaRate;
+    double steptime = 1.0 / prop_inertiaRate;
     // progress steps in steptime from 0 to total, rate is the percentage
     while (total - progress > steptime){
         float rate = (float)(progress / total);
@@ -93,7 +103,7 @@ void HUD::update(float deltaSec){
         // this assumes the input was constant contious within time from the last frame to now
         stepAnim(glm::mix(m_lastGameCamera.position(), m_gameCamera->position(), rate),
             glm::slerp(m_lastGameCamera.orientation(), m_gameCamera->orientation(), rate));
-		progress += steptime;
+        progress += steptime;
     }
     m_delta_sec_remain = total - progress;
 
@@ -103,8 +113,22 @@ void HUD::update(float deltaSec){
 
     // framerate measurement (not the best algorithm but the most compact)
     float thisFrame = 1.0f / deltaSec;
-    if (thisFrame < 1.0f || thisFrame > 9999.0f) m_frameRate = 0.0f;
+    if (thisFrame < 1.0f || thisFrame > 999.0f) m_frameRate = 0.0f;
     else m_frameRate = m_frameRate * 0.8f + thisFrame * 0.2f;
+
+    // lines backlog
+    if (m_lastlineTime[0] + prop_lineTime < glfwGetTime()){
+        //line is obsolete, move up
+        for (int i = 0; i < prop_lineBacklog - 1; i++){
+            m_lastline[i] = m_lastline[i + 1];
+            m_lastlineTime[i] = m_lastlineTime[i + 1];
+        }
+        m_lastlineTime[prop_lineBacklog - 1] = 0;
+        //for a fluent disappearance-effect
+        if (m_lastlineTime[0] != 0 && m_lastlineTime[0] + prop_lineTime - 0.2 < glfwGetTime()){
+            m_lastlineTime[0] = glfwGetTime() - prop_lineTime + 0.2;
+        }
+    }
 }
 
 void HUD::draw(){
@@ -179,6 +203,7 @@ void HUD::draw(){
         m_font->drawString(std::to_string((int)glm::round(m_frameRate)), calculatePosition(TopLeft, glm::vec3(4, -5, 0)), s3x5, 0.8f);
     }
 
+    // draw locked target
     std::string lockstr;
     if (m_player->playerShip()->targetObject())
         lockstr = "Locked: " + m_player->playerShip()->targetObject()->objectInfo().name();
@@ -186,9 +211,34 @@ void HUD::draw(){
         lockstr = "No Lock";
     m_font->drawString(lockstr, calculatePosition(Bottom, glm::vec3(0, 8, 0)), s3x5, 0.5f, aCenter);
 
+    // draw output lines
+    for (int i = 0; i < prop_lineBacklog; i++){
+        if (m_lastlineTime[i] != 0)
+            m_font->drawString(m_lastline[i], calculatePosition(TopLeft, glm::vec3(15, -3 - (4*i), 0)), s5x7, 0.4f);
+    }
+
     m_voxelRenderer->afterDraw();
 
 }
+
+void HUD::printLine(std::string line){
+    // Find first free line
+    for (int i = 0; i < prop_lineBacklog; i++){
+        if (m_lastlineTime[i] == 0){
+            m_lastline[i] = line;
+            m_lastlineTime[i] = glfwGetTime();
+            return;
+        }
+    }
+    // No free line, move up
+    for (int i = 0; i < prop_lineBacklog - 1; i++){
+        m_lastline[i] = m_lastline[i + 1];
+        m_lastlineTime[i] = m_lastlineTime[i + 1];
+    }
+    m_lastline[prop_lineBacklog - 1] = line;
+    m_lastlineTime[prop_lineBacklog - 1] = glfwGetTime();
+}
+
 
 glm::vec3 HUD::calculatePosition(HUDOffsetOrigin origin, glm::vec3 offset){
     switch (origin){

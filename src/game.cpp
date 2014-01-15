@@ -41,7 +41,6 @@
 #include "ai/elevatedtasks/dummyelevatedtask.h"
 #include "ai/basictask.h"
 #include "starfield.h"
-#include "voxeleffect/voxelmesh.h"
 
 
 class Ship;
@@ -56,47 +55,45 @@ Game::Game(GLFWwindow *window) :
 }
 
 Game::~Game() {
-    VoxelMesh::tearDown();
 }
 
 void Game::reloadConfig() {
-	PropertyManager::instance()->load("data/config.ini");
+    PropertyManager::instance()->load("data/config.ini");
 }
 
 void Game::initialize() {
     glow::AutoTimer t("Initialize Game");
 
-	glow::debug("Game::testFMOD()");
+    glow::debug("Game::testFMOD()");
     //testFMOD();
 
-	//Must be created first
-	m_linuxvmdummy = std::unique_ptr<LinuxVMDummy>(new LinuxVMDummy());
+    //Must be created first
+    m_linuxvmdummy = std::unique_ptr<LinuxVMDummy>(new LinuxVMDummy());
 
     glow::debug("create world");
     m_world = World::instance();
 
     glow::debug("Create Skybox");
-	m_skybox = std::unique_ptr<Skybox>(new Skybox());
+    m_skybox = std::unique_ptr<Skybox>(new Skybox());
 
     glow::debug("Create Starfield");
     m_starfield = std::unique_ptr<Starfield>(new Starfield(&m_player, &m_camera));
 
+    m_voxelRenderer = VoxelRenderer::instance();
 
-	glow::debug("Create Voxel");
-    m_voxelRenderer = std::unique_ptr<VoxelRenderer>(new VoxelRenderer);
 
-    
+    glow::debug("Create WorldObjects");
     Ship *normandy = new Ship();
     ClusterCache::instance()->fillObject(normandy, "data/voxelcluster/normandy.csv");
-	normandy->setPosition(glm::vec3(0, 0, -100));
+    normandy->setPosition(glm::vec3(0, 0, -100));
     normandy->objectInfo().setName("Normandy");
     normandy->objectInfo().setShowOnHud(true);
     normandy->objectInfo().setCanLockOn(true);
     m_world->god().scheduleSpawn(normandy);
     // TODO: use these dummies to test BasicTasks
     normandy->setCharacter(
-        new DummyCharacter(*normandy, 
-        new DummyElevatedTask(*normandy, 
+        new DummyCharacter(*normandy,
+        new DummyElevatedTask(*normandy,
         new BasicTask(*normandy))));
 
     Ship *testCluster = new Ship();
@@ -123,9 +120,10 @@ void Game::initialize() {
     wall->objectInfo().setCanLockOn(true);
     m_world->god().scheduleSpawn(wall);
 
+    glow::debug("Create Planet");
     WorldObject *planet = new WorldObject();
     planet->move(glm::vec3(20, 10, -30));
-    int diameter = 28;
+    int diameter = 24;
     glm::vec3 middle(diameter/2, diameter/2, diameter/2);
     for(int x = 0; x < diameter; x++) {
         for(int y = 0; y < diameter; y++) {
@@ -168,20 +166,23 @@ void Game::initialize() {
     glow::debug("Initial spawn");
     m_world->god().spawn();
 
-	glow::debug("Setup Camera");
-	//viewport set in resize
-	//m_camera.setPosition(glm::vec3(0, 5, 30));
-	m_camera.setZNear(1);
-	m_camera.setZFar(9999);
+    glow::debug("Setup Camera");
+    //viewport set in resize
+    //m_camera.setPosition(glm::vec3(0, 5, 30));
+    m_camera.setZNear(1);
+    m_camera.setZFar(9999);
 
-	glow::debug("Create HUD");
-	m_hud = std::unique_ptr<HUD>(new HUD(&m_player));
-	m_hud->setCamera(&m_camera);
+    glow::debug("Create HUD");
+    m_hud = std::unique_ptr<HUD>(new HUD(&m_player));
+    m_hud->setCamera(&m_camera);
 
     m_hd3000dummy = std::unique_ptr<HD3000Dummy>(new HD3000Dummy);
 
+    m_out = new StreamRedirect(std::cout, m_hud.get(), true);
+    m_err = new StreamRedirect(std::cerr, m_hud.get(), true);
+    
     glClearColor(0.2f, 0.3f, 0.4f, 1.f);
-	glow::debug("Game::initialize Done");
+    glow::debug("Game::initialize Done");
 }
 
 
@@ -193,17 +194,17 @@ void Game::update(float deltaSec) {
     m_inputHandler.update(deltaSec);
     World::instance()->update(deltaSec);
     m_player.setFollowCam();
-	m_hud->update(deltaSec);
     m_starfield->update(deltaSec);
+    m_hud->update(deltaSec);
 }
 
 void Game::draw() {
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glFrontFace(GL_CCW);
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
+    //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glFrontFace(GL_CCW);
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
 
-	m_skybox->draw(&m_camera);
+    m_skybox->draw(&m_camera);
 
     m_voxelRenderer->prepareDraw(&m_camera);
     for (WorldObject * worldObject : m_world->worldObjects()) {
@@ -216,7 +217,7 @@ void Game::draw() {
     m_starfield->draw();
     World::instance()->voxelParticleWorld().draw(m_camera);
 
-	m_hud->draw();
+    m_hud->draw();
 
     m_hd3000dummy->drawIfActive();
 }
@@ -230,7 +231,7 @@ void ERRCHECK(FMOD_RESULT result) {
 }
 */
 void Game::testFMOD() {
-	/*
+    /*
     FMOD::System * system = 0;
     FMOD::Sound  * sound = 0;
     FMOD::Channel *channel = 0;
