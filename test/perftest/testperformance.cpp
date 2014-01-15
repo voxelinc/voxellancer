@@ -69,7 +69,7 @@ go_bandit([](){
         after_each([&]() {
         });
 
-        it("test a big hole", [&]() {
+        it_skip("test a big hole", [&]() {
             WorldObject* planet;
 
             int diameter = 36;
@@ -98,7 +98,7 @@ go_bandit([](){
             doSplitDetection(planet, mod, 0);
         });
 
-        it("test a split by a plane", [&]() {
+        it_skip("test a split by a plane", [&]() {
             WorldObject* planet;
 
             int diameter = 36;

@@ -35,6 +35,9 @@ public:
     static PropertyManager * instance();
     static void reset();
 
+    template <class T>
+    T get(char * name);
+
 private:
     template <class T>
     PropertyCollection<T> *getPropertyCollection(Property<T> * prop);

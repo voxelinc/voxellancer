@@ -23,7 +23,7 @@ namespace std {
 class Voxel
 {
 public:
-    Voxel(const glm::ivec3& gridCell, const int color = 0xFFFFFF, float mass = Property<float>("voxel.DefaultMass"), float hp = Property<float>("voxel.DefaultHP"));
+    Voxel(const glm::ivec3& gridCell, const int color = 0xFFFFFF, float mass = Property<float>::get("voxel.DefaultMass"), float hp = Property<float>::get("voxel.DefaultHP"));
     Voxel(const Voxel& other);
     virtual ~Voxel();
 
