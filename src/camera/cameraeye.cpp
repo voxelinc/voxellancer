@@ -17,17 +17,18 @@
 #include "cameradolly.h"
 
 
-CameraEye::CameraEye(CameraHead* cameraHead, int viewportWidth, int viewportHeight, glm::vec3 relativePosition):
+CameraEye::CameraEye(CameraHead* cameraHead, const Viewport& viewport, glm::vec3 relativePosition):
     m_cameraHead(cameraHead),
     m_camera(viewportWidth, viewportHeight),
-    m_relativePosition(relativePosition)
+    m_relativePosition(relativePosition),
+    m_viewportX(viewport)
 {
     glow::Texture* texture = new glow::Texture(GL_TEXTURE_2D);
 
     texture->setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     texture->setParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    texture->image2D(0, GL_RGB, viewportWidth, viewportHeight, 0, GL_RGB, GL_FLOAT, nullptr, GL_TEXTURE_2D);
+    texture->image2D(0, GL_RGB, m_viewportWidth, m_viewportHeight, 0, GL_RGB, GL_FLOAT, nullptr, GL_TEXTURE_2D);
 
     m_fbo.attachTexture2D(GL_DRAW_FRAMEBUFFER, texture);
 
@@ -38,13 +39,21 @@ Camera& CameraEye::camera() {
     return m_camera;
 }
 
+glow::FrameBufferObject& CameraEye::fbo() {
+    return m_fbo;
+}
+
+Viewport& CameraEye::viewport() {
+    return m_viewport;
+}
+
 void CameraEye::update(float deltaSec) {
     m_camera.setPosition(m_cameraHead->position() + m_cameraHead->orientation() * m_relativePosition);
     m_camera.setOrientation(m_cameraHead->orientation());
 }
 
 void CameraEye::draw() {
- //   m_fbo.bind();
+    m_fbo.bind();
 
 	World::instance()->skybox().draw(&m_camera);
 
@@ -59,6 +68,8 @@ void CameraEye::draw() {
 
     VoxelRenderer::instance()->afterDraw();
 
- //   m_fbo.unbind();
+    m_fbo.unbind();
 }
+
+
 

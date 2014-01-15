@@ -2,7 +2,10 @@
 
 #include <GLFW/glfw3.h>
 
+#include "geometry/viewport.h"
+
 #include "ui/hud.h"
+#include "utils/screenblit.h"
 
 #include "cameradolly.h"
 
@@ -62,26 +65,31 @@ void CameraHead::setupMonoView() {
     clearEyes();
     setViewport();
 
-    m_eyes.push_back(new CameraEye(this, m_viewportWidth, m_viewportHeight, glm::vec3(0.0f, 0.0f, 0.0f)));
+    m_eyes.push_back(new CameraEye(this, Viewport(0, 0, m_viewportWidth, m_viewportHeight), glm::vec3(0.0f, 0.0f, 0.0f)));
+
+    m_screenBlitter.setProgram(&m_monoProgram);
 }
 
 void CameraHead::setupStereoView() {
     clearEyes();
     setViewport();
 
-    m_eyes.push_back(new CameraEye(this, m_viewportWidth/2, m_viewportHeight, glm::vec3( 1.0f, 0.0f, 0.0f)));
-    m_eyes.push_back(new CameraEye(this, m_viewportWidth/2, m_viewportHeight, glm::vec3(-1.0f, 0.0f, 0.0f)));
+    m_eyes.push_back(new CameraEye(this, Viewport(0, 0, m_viewportWidth/2, m_viewportHeight), glm::vec3( 1.0f, 0.0f, 0.0f)));
+    m_eyes.push_back(new CameraEye(this, Viewport(m_viewportWidth/2, 0, m_viewportWidth/2, m_viewportHeight), glm::vec3(-1.0f, 0.0f, 0.0f)));
+
+    m_screenBlitter.setProgram(&m_monoProgram);
 }
 
 void CameraHead::update(float deltaSec) {
-    for(CameraEye* eye : m_eyes) {
+    for (CameraEye* eye : m_eyes) {
         eye->update(deltaSec);
     }
 }
 
 void CameraHead::draw() {
-    for(CameraEye* eye : m_eyes) {
+    for (CameraEye* eye : m_eyes) {
         eye->draw();
+        m_screenBlitter.blit(eye->fbo(), eye->viewport()));
     }
 }
 

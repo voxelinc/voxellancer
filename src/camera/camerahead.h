@@ -2,9 +2,18 @@
 
 #include <list>
 
+#include <glow/Program.h>
+
 #include <glm/gtx/quaternion.hpp>
 
+#include "utils/screenblitter.h"
+
+#include "programs/monoprogram.h"
+//#include "programs/stereoprogram.h"
+
 #include "cameraeye.h"
+
+
 
 
 class HUD;
@@ -42,6 +51,11 @@ public:
 protected:
     CameraDolly* m_cameraDolly;
     HUD* m_hud;
+
+    MonoProgram m_monoProgram;
+    //StereoProgram m_stereoProgram;
+
+    ScreenBlitter m_screenBlitter;
 
     glm::quat m_relativeOrientation;
 
