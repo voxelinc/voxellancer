@@ -1,18 +1,20 @@
 #version 130
 
-uniform sampler2D texture;
 uniform vec2 offset;
 uniform vec2 scale;
+uniform sampler2D texture;
 
-in vec2 v_screenCoord;
+in vec2 v_quadCoord;
 
 out vec2 f_texCoord;
 
 
 void main() {
-    vec2 coord = v_screenCoord * scale + offset;
+    vec2 normalizedCoords = (v_quadCoord + 1.0f) / 2.0 * scale + offset;
+
+    vec2 coord = (normalizedCoords * 2) - 1;
 
     gl_Position = vec4(coord, 0, 1);
-    f_texCoord = v_screenCoord + 1.0 / 2.0;
+    f_texCoord = (v_quadCoord + vec2(1.0, 1.0)) / 2.0;
 }
 

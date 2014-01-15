@@ -1,12 +1,14 @@
 #include "screenblitter.h"
 
+#include <iostream>
+
 #include <glow/Buffer.h>
 #include <glow/FrameBufferAttachment.h>
 #include <glow/TextureAttachment.h>
 #include <glow/VertexAttributeBinding.h>
 
 
-static GLfloat screenCoords[] = {
+static GLfloat quadCoords[] = {
     -1.0f,  1.0f,
     -1.0f, -1.0f,
      1.0f,  1.0f,
@@ -26,7 +28,7 @@ void ScreenBlitter::setProgram(glow::Program* program) {
 void ScreenBlitter::blit(glow::FrameBufferObject& fbo, const Viewport& viewport) {
     glow::FrameBufferObject::defaultFBO()->bind();
 
-    glow::FrameBufferAttachment* fba = fbo.attachment(GL_DRAW_FRAMEBUFFER);
+    glow::FrameBufferAttachment* fba = fbo.attachment(GL_COLOR_ATTACHMENT0);
     assert(fba->isTextureAttachment());
     glow::Texture* texture = dynamic_cast<glow::TextureAttachment*>(fba)->texture();
 
@@ -46,7 +48,7 @@ void ScreenBlitter::blit(glow::FrameBufferObject& fbo, const Viewport& viewport)
 
 void ScreenBlitter::setupGeometry() {
     glow::Buffer* screenCoordsBuffer = new glow::Buffer(GL_ARRAY_BUFFER);
-    screenCoordsBuffer->setData(sizeof(screenCoords), screenCoords);
+    screenCoordsBuffer->setData(sizeof(quadCoords), quadCoords);
 
     glow::VertexAttributeBinding* binding = m_vertexArrayObject.binding(0);
     binding->setAttribute(0);

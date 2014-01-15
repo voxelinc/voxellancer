@@ -1,5 +1,7 @@
 #include "camera.h"
 
+#include <iostream>
+
 #include <glm/gtx/transform.hpp>
 
 

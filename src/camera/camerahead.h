@@ -8,6 +8,7 @@
 
 #include "utils/screenblitter.h"
 
+#include "geometry/viewport.h"
 #include "programs/monoprogram.h"
 //#include "programs/stereoprogram.h"
 
@@ -61,10 +62,12 @@ protected:
 
     std::list<CameraEye*> m_eyes;
 
-    int m_viewportWidth;
-    int m_viewportHeight;
-
+    Viewport m_viewport;
 
     void clearEyes();
     void setViewport();
+
+    bool viewportDirty();
+    void viewportChanged();
 };
+

@@ -12,9 +12,10 @@
 
 CameraHead::CameraHead(CameraDolly* cameraDolly):
     m_cameraDolly(cameraDolly),
-    m_hud(nullptr)
+    m_hud(nullptr),
+    m_viewport(0, 0, 0, 0)
 {
-    setupMonoView();
+    setupStereoView();
 }
 
 CameraDolly* CameraHead::cameraDolly() {
@@ -65,7 +66,7 @@ void CameraHead::setupMonoView() {
     clearEyes();
     setViewport();
 
-    m_eyes.push_back(new CameraEye(this, Viewport(0, 0, m_viewportWidth, m_viewportHeight), glm::vec3(0.0f, 0.0f, 0.0f)));
+    m_eyes.push_back(new CameraEye(this, Viewport(0, 0, m_viewport.width(), m_viewport.height()), glm::vec3(0.0f, 0.0f, 0.0f)));
 
     m_screenBlitter.setProgram(&m_monoProgram);
 }
@@ -74,13 +75,17 @@ void CameraHead::setupStereoView() {
     clearEyes();
     setViewport();
 
-    m_eyes.push_back(new CameraEye(this, Viewport(0, 0, m_viewportWidth/2, m_viewportHeight), glm::vec3( 1.0f, 0.0f, 0.0f)));
-    m_eyes.push_back(new CameraEye(this, Viewport(m_viewportWidth/2, 0, m_viewportWidth/2, m_viewportHeight), glm::vec3(-1.0f, 0.0f, 0.0f)));
+    m_eyes.push_back(new CameraEye(this, Viewport(0, 0, m_viewport.width()/2,  m_viewport.height()), glm::vec3(-2.0f, 0.0f, 0.0f)));
+    m_eyes.push_back(new CameraEye(this, Viewport(m_viewport.width()/2, 0, m_viewport.width()/2,  m_viewport.height()), glm::vec3(2.0f, 0.0f, 0.0f)));
 
     m_screenBlitter.setProgram(&m_monoProgram);
 }
 
 void CameraHead::update(float deltaSec) {
+    if(viewportDirty()) {
+        viewportChanged();
+    }
+
     for (CameraEye* eye : m_eyes) {
         eye->update(deltaSec);
     }
@@ -89,6 +94,10 @@ void CameraHead::update(float deltaSec) {
 void CameraHead::draw() {
     for (CameraEye* eye : m_eyes) {
         eye->draw();
+    }
+
+    glViewport(0, 0, m_viewport.width(), m_viewport.height());
+    for (CameraEye* eye : m_eyes) {
         m_screenBlitter.blit(eye->fbo(), eye->viewport());
     }
 }
@@ -101,6 +110,30 @@ void CameraHead::clearEyes() {
 }
 
 void CameraHead::setViewport() {
-    glfwGetWindowSize(glfwGetCurrentContext(), &m_viewportWidth, &m_viewportHeight);
+    int width;
+    int height;
+
+    glfwGetWindowSize(glfwGetCurrentContext(), &width, &height);
+
+    m_viewport = Viewport(0, 0, width, height);
+}
+
+bool CameraHead::viewportDirty() {
+    int width;
+    int height;
+
+    glfwGetWindowSize(glfwGetCurrentContext(), &width, &height);
+
+    return width != m_viewport.width() || height != m_viewport.height();
+}
+
+void CameraHead::viewportChanged() {
+    if (m_eyes.size() == 1) {
+        setupMonoView();
+    } else if(m_eyes.size() == 2) {
+        setupStereoView();
+    } else {
+        assert(0);
+    }
 }
 

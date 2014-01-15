@@ -25,12 +25,19 @@ CameraEye::CameraEye(CameraHead* cameraHead, const Viewport& viewport, glm::vec3
 {
     glow::Texture* texture = new glow::Texture(GL_TEXTURE_2D);
 
+    texture->bind();
+
+    texture->image2D(0, GL_RGB, m_viewport.width(), m_viewport.height(), 0, GL_RGB, GL_FLOAT, nullptr);
+
     texture->setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     texture->setParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    texture->image2D(0, GL_RGB, m_viewport.width(), m_viewport.height(), 0, GL_RGB, GL_FLOAT, nullptr, GL_TEXTURE_2D);
+    m_fbo.attachTexture2D(GL_COLOR_ATTACHMENT0, texture);
 
-    m_fbo.attachTexture2D(GL_DRAW_FRAMEBUFFER, texture);
+    glow::RenderBufferObject* rbo = new glow::RenderBufferObject();
+    rbo->storage(GL_DEPTH_COMPONENT, m_viewport.width(), m_viewport.height());
+
+    m_fbo.attachRenderBuffer(GL_DEPTH_ATTACHMENT, rbo);
 
     m_fbo.unbind();
 }
@@ -54,6 +61,9 @@ void CameraEye::update(float deltaSec) {
 
 void CameraEye::draw() {
     m_fbo.bind();
+
+    glClear(GL_DEPTH_BUFFER_BIT);
+    glViewport(0, 0, m_viewport.width(), m_viewport.height());
 
 	World::instance()->skybox().draw(&m_camera);
 

@@ -45,7 +45,7 @@ glm::vec2 Viewport::scale() const {
 
     return glm::vec2(
         static_cast<float>(m_width) / static_cast<float>(width),
-        static_cast<float>(m_width) / static_cast<float>(height)
+        static_cast<float>(m_height) / static_cast<float>(height)
     );
 }
 

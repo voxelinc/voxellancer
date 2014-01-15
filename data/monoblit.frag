@@ -10,6 +10,6 @@ out vec3 fragColor;
 
 
 void main() {
-    fragColor = vec3(f_texCoord, 0); //texture2D(texture, f_texCoord);
+    fragColor = texture2D(texture, f_texCoord);
 }
 

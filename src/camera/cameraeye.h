@@ -4,6 +4,7 @@
 
 #include <glow/Buffer.h>
 #include <glow/FrameBufferObject.h>
+#include <glow/RenderBufferObject.h>
 
 #include "geometry/viewport.h"
 
