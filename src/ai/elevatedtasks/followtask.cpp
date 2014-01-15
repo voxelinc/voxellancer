@@ -2,6 +2,7 @@
 
 #include "worldobject/ship.h"
 #include "worldobject/worldobjecthandle.h"
+#include <list>
 
 FollowTask::FollowTask(Ship& ship, std::shared_ptr<WorldObjectHandle> target) :
     ElevatedTask(ship),
@@ -13,5 +14,6 @@ void FollowTask::update(float deltaSec) {
     if (WorldObject* target = m_target->get()) {
         m_ship.boardComputer()->rotateTo(target->transform().position());
         m_ship.boardComputer()->moveTo(target->transform().position(), 30);
+        m_ship.boardComputer()->shootBullet(std::list<std::shared_ptr<WorldObjectHandle>>{m_target});
     }
 }

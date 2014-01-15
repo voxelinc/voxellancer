@@ -81,7 +81,7 @@ void BoardComputer::rotateTo(glm::vec3 position) {
 
 
 void BoardComputer::shootBullet(const std::list<std::shared_ptr<WorldObjectHandle>>& targets) {
-    float max_angle = glm::pi<float>() / 6.0f;  // 30 degree
+    float max_angle = glm::pi<float>() / 3.0f;
     
     for (auto targetHandle : targets) {
         if (WorldObject* target = targetHandle->get()) {
