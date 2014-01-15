@@ -1,4 +1,4 @@
-#include "monoprogram.h"
+#include "monoblitprogram.h"
 
 #include <iostream>
 
@@ -6,14 +6,11 @@
 #include <glowutils/File.h>
 
 
-MonoProgram::MonoProgram() {
+MonoBlitProgram::MonoBlitProgram() {
     glow::Shader* vertShader = glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/monoblit.vert");
     glow::Shader* fragShader = glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/monoblit.frag");
 
-    bindAttributeLocation(0, "v_quadCoord");
-//    bindAttributeLocation(1, "texture");
-//    bindAttributeLocation(2, "offset");
-//    bindAttributeLocation(3, "scale");
+    bindAttributeLocation(BlitProgram::VERTEX_LOCATION, "v_vertex");
 
     attach(vertShader, fragShader);
     link();
@@ -21,6 +18,6 @@ MonoProgram::MonoProgram() {
 
     bindFragDataLocation(0, "fragColor");
 
-    getUniform<GLint>("texture")->set(0);
+    getUniform<GLint>("texture")->set(BlitProgram::TEXTURE_LOCATION);
 }
 

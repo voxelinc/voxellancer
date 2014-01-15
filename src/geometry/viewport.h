@@ -5,6 +5,7 @@
 
 class Viewport {
 public:
+    Viewport();
     Viewport(int x, int y, int width, int height);
 
     int x() const;

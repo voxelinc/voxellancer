@@ -34,6 +34,7 @@ class Game {
 public:
     Game(GLFWwindow* window);
     virtual ~Game();
+
     void initialize();
     void reloadConfig();
 

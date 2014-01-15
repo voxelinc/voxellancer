@@ -9,8 +9,8 @@
 #include "utils/screenblitter.h"
 
 #include "geometry/viewport.h"
-#include "programs/monoprogram.h"
-//#include "programs/stereoprogram.h"
+#include "programs/monoblitprogram.h"
+#include "programs/stereoblitprogram.h"
 
 #include "cameraeye.h"
 
@@ -53,7 +53,7 @@ protected:
     CameraDolly* m_cameraDolly;
     HUD* m_hud;
 
-    MonoProgram m_monoProgram;
+    MonoBlitProgram m_monoProgram;
     //StereoProgram m_stereoProgram;
 
     ScreenBlitter m_screenBlitter;

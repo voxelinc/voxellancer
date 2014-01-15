@@ -3,9 +3,10 @@
 #include <glow/Buffer.h>
 #include <glow/Program.h>
 #include <glow/FrameBufferObject.h>
-#include <glow/VertexArrayObject.h>
 
 #include "geometry/viewport.h"
+
+#include "programs/blitprogram.h"
 
 
 class glow::Program;
@@ -14,14 +15,13 @@ class ScreenBlitter {
 public:
     ScreenBlitter();
 
-    void setProgram(glow::Program* program);
+    void setProgram(BlitProgram* blitProgram);
 
     void blit(glow::FrameBufferObject& fbo, const Viewport& viewport);
 
 
 protected:
-    glow::Program* m_program;
-    glow::VertexArrayObject m_vertexArrayObject;
+    BlitProgram* m_blitProgram;
 
     void setupGeometry();
 };
