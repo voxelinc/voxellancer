@@ -11,7 +11,7 @@ BoardComputer::BoardComputer(Ship& ship) :
 
 // accelerates towards position. Tries to keep a minimum distance of minDistance to the target
 void BoardComputer::moveTo(glm::vec3 position, float minDistance) {
-    glm::vec3 delta = m_ship.transform().position() - position;
+    glm::vec3 delta = position - m_ship.transform().position();
     glm::vec3 direction = glm::normalize(delta);
     float distance = glm::length(delta);
 

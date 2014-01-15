@@ -22,7 +22,7 @@ Bullet::Bullet(WorldObject* creator, glm::vec3 position, glm::quat orientation, 
     if (cross != glm::vec3(0)){
         glm::vec3 rotationAxis = glm::normalize(cross);
         float angle = glm::acos(glm::dot(dir, myOrientation));
-        m_transform.rotateWorld(glm::angleAxis(-glm::degrees(angle), rotationAxis)); //then rotate towards target
+        m_transform.rotateWorld(glm::angleAxis(-angle, rotationAxis)); //then rotate towards target
     }
 
     m_transform.setPosition(position + dir * (minimalGridAABB().axisMax(Axis::ZAxis) / 2.0f + glm::root_two<float>()));

@@ -27,6 +27,7 @@ public:
     void fireAtPoint(glm::vec3 target);
     void fireAtObject();
     float minAimDistance();
+    BoardComputer* boardComputer();
 
     virtual void accelerate(const glm::vec3& direction) override;
     virtual void accelerateAngular(const glm::vec3& axis) override;

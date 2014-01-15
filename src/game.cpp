@@ -103,7 +103,7 @@ void Game::initialize() {
 
     WorldObject *wall = new WorldObject(1);
     wall->move(glm::vec3(-30, 0, -50));
-    wall->rotate(glm::angleAxis(-90.f, glm::vec3(0, 1, 0)));
+    wall->rotate(glm::angleAxis(glm::radians(-90.f), glm::vec3(0, 1, 0)));
     for(int x = 0; x < 20; x++) {
         for(int y = 0; y < 15; y++) {
             for(int z = 0; z < 3; z++) {

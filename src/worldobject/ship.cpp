@@ -99,3 +99,7 @@ void Ship::setCharacter(Character* character){
 Character* Ship::character(){
     return m_character.get();
 }
+
+BoardComputer* Ship::boardComputer() {
+    return &m_boardComputer;
+}
