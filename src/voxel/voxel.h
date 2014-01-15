@@ -23,7 +23,7 @@ namespace std {
 class Voxel
 {
 public:
-    Voxel(const glm::ivec3& gridCell, const int color = 0xFFFFFF, float mass = Property<float>("voxel.DefaultMass"), float hp = Property<float>("voxel.DefaultHP"));
+    Voxel(const glm::ivec3& gridCell, const int color = 0xFFFFFF, float mass = Property<float>("voxel.DefaultMass"), float hp = Property<float>("voxel.DefaultHP"), const float emissiveness = 0);
     Voxel(const Voxel& other);
     virtual ~Voxel();
 
@@ -35,7 +35,8 @@ public:
     virtual void addToCluster(VoxelCluster *cluster);
     virtual void addToObject(WorldObject *object);
 
-    int color() const;
+    unsigned int color() const;
+    float emissiveness() const;
 
     float hp() const;
     void applyDamage(float deltaHp);
@@ -50,7 +51,7 @@ public:
 protected:
     glm::ivec3 m_gridCell;
     VoxelTreeNode *m_voxelTreeNode;
-    int m_color;
+    unsigned int m_color;
     float m_hp;
     float m_normalizedMass;
 };

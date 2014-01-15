@@ -12,15 +12,15 @@
 #include "voxeleffect/voxelexplosiongenerator.h"
 
 
-Voxel::Voxel(const glm::ivec3& gridCell, int color, float normalizedMass, float hp):
+Voxel::Voxel(const glm::ivec3& gridCell, int color, float normalizedMass, float hp, float emissiveness) :
     m_gridCell(gridCell),
     m_voxelTreeNode(nullptr),
-    m_color(color),
+    m_color((color & 0xFFFFFF) + (static_cast<int>(emissiveness * 0xFF) << 24)),
     m_normalizedMass(normalizedMass),
     m_hp(hp)
 {
     assert(m_normalizedMass > 0.0f);
-
+    assert((m_color & 0xFFFFFF) == (color & 0xFFFFFF));
     assert( gridCell.x >= 0 && gridCell.x < 256 &&
             gridCell.y >= 0 && gridCell.y < 256 &&
             gridCell.z >= 0 && gridCell.z < 256);
@@ -54,8 +54,12 @@ void Voxel::setVoxelTreeNode(VoxelTreeNode* voxelTreeNode) {
     m_voxelTreeNode = voxelTreeNode;
 }
 
-int Voxel::color() const {
+unsigned int Voxel::color() const {
     return m_color;
+}
+
+float Voxel::emissiveness() const {
+    return (m_color >> 24) / 255.0f;
 }
 
 float Voxel::hp() const {
@@ -91,4 +95,3 @@ void Voxel::onDestruction() {
         generator.spawn();
     }
 }
-
