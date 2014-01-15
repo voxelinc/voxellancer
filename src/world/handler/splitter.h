@@ -1,6 +1,7 @@
 #pragma once
 
 #include <list>
+#include <vector>
 
 class SplitData;
 class WorldObject;
@@ -8,7 +9,7 @@ class WorldObject;
 class Splitter
 {
 public:
-    void split(std::list<SplitData*> &splits);
+    void split(std::vector<SplitData*> &splits);
     std::list<WorldObject*> &splitOffWorldObjects();
 
 

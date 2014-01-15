@@ -1,2 +1,2 @@
 
-make_test(test_split test_splitdetector.cpp)
+make_test(test_split testsplitdetector.cpp)
