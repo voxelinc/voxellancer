@@ -5,7 +5,7 @@
 #include "geometry/viewport.h"
 
 #include "ui/hud.h"
-#include "utils/screenblit.h"
+#include "utils/screenblitter.h"
 
 #include "cameradolly.h"
 
@@ -89,7 +89,7 @@ void CameraHead::update(float deltaSec) {
 void CameraHead::draw() {
     for (CameraEye* eye : m_eyes) {
         eye->draw();
-        m_screenBlitter.blit(eye->fbo(), eye->viewport()));
+        m_screenBlitter.blit(eye->fbo(), eye->viewport());
     }
 }
 
