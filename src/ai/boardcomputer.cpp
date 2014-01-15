@@ -1,8 +1,11 @@
 #include "boardcomputer.h"
 
+#include <cmath>
+
 #include <glm/gtc/quaternion.hpp>
 
 #include "worldobject/ship.h"
+
 
 BoardComputer::BoardComputer(Ship& ship) :
     m_ship(ship)
@@ -29,7 +32,7 @@ void BoardComputer::moveTo(glm::vec3 position, float minDistance) {
 
 float angleBetween(glm::vec3 u, glm::vec3 v) {
     float angle = glm::acos(glm::dot(glm::normalize(u), glm::normalize(v)));
-    assert(isfinite(angle));
+    assert(std::isfinite(angle));
     return angle;
 }
 
@@ -82,7 +85,7 @@ void BoardComputer::rotateTo(glm::vec3 position) {
 
 void BoardComputer::shootBullet(const std::list<std::shared_ptr<WorldObjectHandle>>& targets) {
     float max_angle = glm::pi<float>() / 3.0f;
-    
+
     for (auto targetHandle : targets) {
         if (WorldObject* target = targetHandle->get()) {
             glm::vec3 shipDirection = m_ship.transform().orientation() * glm::vec3(0, 0, -1);
