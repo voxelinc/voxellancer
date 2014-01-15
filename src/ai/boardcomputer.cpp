@@ -18,7 +18,7 @@ void BoardComputer::moveTo(glm::vec3 position, float minDistance) {
     if (distance < minDistance) {
         m_ship.accelerate(-direction);
     } else if (distance < minDistance*2) {
-        float f = (distance - minDistance) / minDistance;
+        float f = (distance - minDistance*1.5f) / minDistance;
         m_ship.accelerate(direction*f);
     }
     else {
@@ -42,12 +42,12 @@ glm::quat quatFrom(glm::vec3 u, glm::vec3 v) {
 void BoardComputer::rotateTo(glm::vec3 position) {
     float minDelta = glm::pi<float>() / 24.0f; // 5 degrees
     glm::vec3 shipDirection = m_ship.transform().orientation() * glm::vec3(0, 0, -1);
-    glm::vec3 targetDirection = position - m_ship.transform().position();
+    glm::vec3 targetDirection = glm::normalize(position - m_ship.transform().position());
     glm::quat rotation = quatFrom(shipDirection, targetDirection);
 
     if (glm::abs(glm::angle(rotation)) > minDelta) {
         glm::vec3 euler = glm::eulerAngles(rotation);
-        m_ship.accelerateAngular(glm::normalize(euler));
+        m_ship.accelerateAngular(glm::normalize(euler)*0.1f);
     }
 }
 
