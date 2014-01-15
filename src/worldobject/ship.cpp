@@ -87,7 +87,7 @@ void Ship::accelerate(const glm::vec3& direction) {
     m_physics.accelerate(direction * prop_maxSpeed.get());
 }
 
-
+// accelerate in local coordinates!
 void Ship::accelerateAngular(const glm::vec3& axis) {
     m_physics.accelerateAngular(axis * prop_maxRotSpeed.get());
 }

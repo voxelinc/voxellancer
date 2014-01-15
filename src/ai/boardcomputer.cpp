@@ -12,7 +12,7 @@ BoardComputer::BoardComputer(Ship& ship) :
 // accelerates towards position. Tries to keep a minimum distance of minDistance to the target
 void BoardComputer::moveTo(glm::vec3 position, float minDistance) {
     glm::vec3 delta = position - m_ship.transform().position();
-    glm::vec3 direction = glm::normalize(delta);
+    glm::vec3 direction = glm::inverse(m_ship.transform().orientation()) * glm::normalize(delta);
     float distance = glm::length(delta);
 
     if (distance < minDistance) {
@@ -41,8 +41,8 @@ glm::quat quatFrom(glm::vec3 u, glm::vec3 v) {
 
 void BoardComputer::rotateTo(glm::vec3 position) {
     float minDelta = glm::pi<float>() / 24.0f; // 5 degrees
-    glm::vec3 shipDirection = m_ship.transform().orientation() * glm::vec3(0, 0, -1);
-    glm::vec3 targetDirection = glm::normalize(position - m_ship.transform().position());
+    glm::vec3 shipDirection =  glm::vec3(0, 0, -1);
+    glm::vec3 targetDirection = glm::inverse(m_ship.transform().orientation()) * glm::normalize(position - m_ship.transform().position());
     glm::quat rotation = quatFrom(shipDirection, targetDirection);
 
     if (glm::abs(glm::angle(rotation)) > minDelta) {
@@ -50,6 +50,35 @@ void BoardComputer::rotateTo(glm::vec3 position) {
         m_ship.accelerateAngular(glm::normalize(euler)*0.1f);
     }
 }
+//
+//glm::vec3 targetDirection = glm::inverse(m_ship.transform().orientation()) * glm::normalize(position - m_ship.transform().position());
+//glm::vec3 shipDirection = glm::vec3(0, 0, -1);
+//glm::vec3 w = glm::cross(targetDirection, shipDirection);
+//glm::quat rotation;
+//if (w != glm::vec3(0)) {
+//    glm::vec3 rotationAxis = glm::normalize(w);
+//    float angle = glm::acos(glm::dot(targetDirection, shipDirection));
+//    if (angle > glm::radians(0.1)) {
+//        rotation = glm::angleAxis(-angle, rotationAxis);
+//    }
+//} else { // the target is either perfectly in front or behind us
+//    if (targetDirection == -shipDirection) {
+//        rotation = glm::angleAxis(glm::pi<float>() / 2, glm::vec3(1, 0, 0));
+//    }
+//}
+//
+//float minAngle = glm::pi<float>() / 24.0f; // 5 degree
+//float f = 1;
+//if (distance < minAngle) {
+//    f = -1;
+//} else if (distance < minDistance * 2) {
+//    float f = (distance - minDistance*1.5f) / minDistance * glm::min(glm::length(m_ship.physics().speed() * 0.2f), 1.0f);
+//}
+//
+//if (rotation != glm::quat()) {
+//    m_ship.accelerateAngular((0.2f * glm::normalize(glm::eulerAngles(rotation))));
+//}
+
 
 void BoardComputer::shootBullet(const std::list<std::shared_ptr<WorldObjectHandle>>& targets) {
     float max_angle = glm::pi<float>() / 6.0f;  // 30 degree

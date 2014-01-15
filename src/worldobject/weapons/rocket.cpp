@@ -48,7 +48,7 @@ void Rocket::update(float deltaSec) {
             }
         } else { // the target is either perfectly in front or behind us
             if (dir == -myOrientation) {
-                rotation = glm::angleAxis(90.0f, glm::vec3(1, 0, 0));
+                rotation = glm::angleAxis(glm::pi<float>() / 2.0f, glm::vec3(1, 0, 0));
             }
         }
 
