@@ -50,7 +50,6 @@ Game::Game(GLFWwindow *window) :
     m_player(&m_camera),
     m_inputHandler(window, &m_player, &m_camera)
 {
-    reloadConfig();
 }
 
 Game::~Game() {
