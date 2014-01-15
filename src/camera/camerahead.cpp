@@ -15,7 +15,7 @@ CameraHead::CameraHead(CameraDolly* cameraDolly):
     m_hud(nullptr),
     m_viewport(0, 0, 0, 0)
 {
-    setupStereoView();
+    setupMonoView();
 }
 
 CameraDolly* CameraHead::cameraDolly() {
