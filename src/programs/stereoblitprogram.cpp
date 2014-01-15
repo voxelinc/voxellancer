@@ -1,4 +1,4 @@
-#include "monoblitprogram.h"
+#include "stereoblitprogram.h"
 
 #include <iostream>
 

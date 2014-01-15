@@ -15,7 +15,7 @@ CameraHead::CameraHead(CameraDolly* cameraDolly):
     m_hud(nullptr),
     m_viewport(0, 0, 0, 0)
 {
-    setupMonoView();
+    setupStereoView();
 }
 
 CameraDolly* CameraHead::cameraDolly() {
@@ -68,17 +68,17 @@ void CameraHead::setupMonoView() {
 
     m_eyes.push_back(new CameraEye(this, Viewport(0, 0, m_viewport.width(), m_viewport.height()), glm::vec3(0.0f, 0.0f, 0.0f)));
 
-    m_screenBlitter.setProgram(&m_monoProgram);
+    m_screenBlitter.setProgram(&m_monoBlitProgram);
 }
 
 void CameraHead::setupStereoView() {
     clearEyes();
     setViewport();
 
-    m_eyes.push_back(new CameraEye(this, Viewport(0, 0, m_viewport.width()/2,  m_viewport.height()), glm::vec3(-2.0f, 0.0f, 0.0f)));
-    m_eyes.push_back(new CameraEye(this, Viewport(m_viewport.width()/2, 0, m_viewport.width()/2,  m_viewport.height()), glm::vec3(2.0f, 0.0f, 0.0f)));
+    m_eyes.push_back(new CameraEye(this, Viewport(0, 0, m_viewport.width()/2,  m_viewport.height()), glm::vec3(-0.3f, 0.0f, 0.0f)));
+    m_eyes.push_back(new CameraEye(this, Viewport(m_viewport.width()/2, 0, m_viewport.width()/2,  m_viewport.height()), glm::vec3(0.3f, 0.0f, 0.0f)));
 
-    m_screenBlitter.setProgram(&m_monoProgram);
+    m_screenBlitter.setProgram(&m_stereoBlitProgram);
 }
 
 void CameraHead::update(float deltaSec) {

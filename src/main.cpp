@@ -1,6 +1,5 @@
-
-
 #include <iostream>
+
 #ifdef WIN32
 #include <windows.h>
 #endif
@@ -13,8 +12,13 @@
 #include <glow/global.h>
 #include <glowutils/FileRegistry.h>
 
-#include "game.h"
+#include "etc/windowmanager.h"
+
+#include "geometry/size.h"
+
 #include "ui/inputhandler.h"
+
+#include "game.h"
 
 
 static GLint MajorVersionRequire = 3;
@@ -78,8 +82,6 @@ void setCallbacks(GLFWwindow* window)
 
 int main(void)
 {
-    GLFWwindow* window = nullptr;
-
     if (!glfwInit()) {
         glow::fatal("could not init glfw");
         exit(-1);
@@ -98,28 +100,8 @@ int main(void)
     glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
 #endif
 
-    window = glfwCreateWindow(1280, 720, "Voxellancer", NULL, NULL);
-#ifndef WIN32
-    if (!window){
-        // If 3.1 is not available and this is linux, assume we want mesa software rendering and try again
-        putenv("LIBGL_ALWAYS_SOFTWARE=1");
-
-        glfwTerminate();
-        if (!glfwInit()) {
-            glow::fatal("could not init glfw");
-            exit(-1);
-        }
-
-        window = glfwCreateWindow(1280, 720, "Voxellancer", NULL, NULL);
-    }
-#endif
-    if (!window) {
-        glfwTerminate();
-        glow::fatal("could not create window");
-        exit(-1);
-    }
-
-    glfwMakeContextCurrent(window);
+    WindowManager::instance()->setFullScreenResolution(Size<int>(1280, 800));
+    GLFWwindow* window = glfwGetCurrentContext();
 
     setCallbacks(window);
 

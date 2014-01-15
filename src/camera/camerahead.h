@@ -15,8 +15,6 @@
 #include "cameraeye.h"
 
 
-
-
 class HUD;
 class CameraDolly;
 class CrossHair;
@@ -53,8 +51,8 @@ protected:
     CameraDolly* m_cameraDolly;
     HUD* m_hud;
 
-    MonoBlitProgram m_monoProgram;
-    //StereoProgram m_stereoProgram;
+    MonoBlitProgram m_monoBlitProgram;
+    StereoBlitProgram m_stereoBlitProgram;
 
     ScreenBlitter m_screenBlitter;
 
