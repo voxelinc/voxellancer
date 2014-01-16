@@ -46,3 +46,10 @@ T* Property<T>::operator->() {
         return &m_value;
     }
 }
+
+
+template <class T>
+T Property<T>::get(char* name) {
+    return PropertyManager::instance()->get<float>(name);
+}
+

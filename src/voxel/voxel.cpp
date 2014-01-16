@@ -12,15 +12,15 @@
 #include "voxeleffect/voxeldebrisgenerator.h"
 
 
-Voxel::Voxel(const glm::ivec3& gridCell, int color, float normalizedMass, float hp):
+Voxel::Voxel(const glm::ivec3& gridCell, uint32_t color, float normalizedMass, float hp, float emissiveness):
     m_gridCell(gridCell),
     m_voxelTreeNode(nullptr),
     m_color(color),
+    m_emissiveness(emissiveness),
     m_normalizedMass(normalizedMass),
     m_hp(hp)
 {
     assert(m_normalizedMass > 0.0f);
-
     assert( gridCell.x >= 0 && gridCell.x < 256 &&
             gridCell.y >= 0 && gridCell.y < 256 &&
             gridCell.z >= 0 && gridCell.z < 256);
@@ -54,8 +54,12 @@ void Voxel::setVoxelTreeNode(VoxelTreeNode* voxelTreeNode) {
     m_voxelTreeNode = voxelTreeNode;
 }
 
-int Voxel::color() const {
+uint32_t Voxel::color() const {
     return m_color;
+}
+
+float Voxel::emissiveness() const {
+    return m_emissiveness;
 }
 
 float Voxel::hp() const {
@@ -91,4 +95,21 @@ void Voxel::onDestruction() {
         generator.spawn();
     }
 }
+float Voxel::defaultMass() {
+    if (s_defaultMass == nullptr) {
+        s_defaultMass = new Property<float>("voxel.DefaultMass");
+    }
+    return s_defaultMass->get();
+}
+
+float Voxel::defaultHp() {
+    if (s_defaultHp == nullptr) {
+        s_defaultHp = new Property<float>("voxel.DefaultHP");
+    }
+    return s_defaultHp->get();
+}
+
+Property<float>* Voxel::s_defaultMass;
+
+Property<float>* Voxel::s_defaultHp;
 

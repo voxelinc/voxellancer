@@ -19,7 +19,7 @@ Bullet::Bullet(WorldObject* creator, glm::vec3 position, glm::quat orientation, 
     ClusterCache::instance()->fillObject(this, "data/voxelcluster/bullet.csv");
 
     m_transform.setOrientation(orientation); //set orientation to ship orientation
-    if (cross != glm::vec3(0)){
+    if (cross != glm::vec3(0)) {
         glm::vec3 rotationAxis = glm::normalize(cross);
         float angle = glm::acos(glm::dot(dir, myOrientation));
         m_transform.rotateWorld(glm::angleAxis(-glm::degrees(angle), rotationAxis)); //then rotate towards target
@@ -49,22 +49,22 @@ bool Bullet::specialIsCollideableWith(const CollisionFilterable *other) const {
     return static_cast<CollisionFilterable*>(m_creator) != other;
 }
 
-void Bullet::update(float deltaSec){
+void Bullet::update(float deltaSec) {
     m_lifetime -= deltaSec;
     if (m_lifetime < 0)
         World::instance()->god().scheduleRemoval(this);
 }
 
-void Bullet::onCollision(){
+void Bullet::onCollision() {
     World::instance()->god().scheduleRemoval(this);
     spawnExplosion();
 }
 
-void Bullet::onSpawnFail(){
+void Bullet::onSpawnFail() {
     spawnExplosion();
 }
 
-void Bullet::spawnExplosion(){
+void Bullet::spawnExplosion() {
     VoxelExplosionGenerator generator;
     generator.setPosition(m_transform.position());
     generator.setRadius(m_transform.scale());
@@ -74,5 +74,8 @@ void Bullet::spawnExplosion(){
     generator.setForce(0.6f);
     generator.setLifetime(0.7f, 0.2f);
     generator.spawn();
+}
 
+float Bullet::emissiveness() {
+    return 0.2f;
 }

@@ -163,7 +163,7 @@ IAABB VoxelCluster::calculateAABB(const WorldTransform& transform) {
     return IAABB(llf, rub);
 }
 
-float VoxelCluster::emissive() {
+float VoxelCluster::emissiveness() {
     return 0.0f;
 }
 

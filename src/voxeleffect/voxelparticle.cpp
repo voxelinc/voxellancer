@@ -3,10 +3,10 @@
 #include <algorithm>
 
 
-VoxelParticle::VoxelParticle(const WorldTransform& transform, int color, float emissive, float lifetime):
+VoxelParticle::VoxelParticle(const WorldTransform& transform, int color, float emissiveness, float lifetime):
     m_transform(transform),
     m_color(color),
-    m_emissive(emissive),
+    m_emissiveness(emissiveness),
     m_lifetime(lifetime),
     m_directionalDampening(0.0f),
     m_angularDampening(0.0f),
@@ -27,8 +27,8 @@ int VoxelParticle::color() const {
     return m_color;
 }
 
-float VoxelParticle::emissive() const{
-    return m_emissive;
+float VoxelParticle::emissiveness() const{
+    return m_emissiveness;
 }
 
 float VoxelParticle::lifetime() const {
