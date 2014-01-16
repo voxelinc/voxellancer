@@ -6,7 +6,6 @@
 
 #include "world.h"
 #include "god.h"
-#include "glow/AutoTimer.h"
 
 #include <glow/AutoTimer.h>
 

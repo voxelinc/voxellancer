@@ -58,7 +58,8 @@ go_bandit([]() {
             modification.removedVoxel(voxels[0]->gridCell());
             w->removeVoxel(voxels[0]);
 
-            detector.searchSplitOffs(std::list<WorldObjectModification>{ modification });
+            std::list<WorldObjectModification>l{ modification };
+            detector.searchSplitOffs(l);
 
             AssertThat(detector.splitDataList(), IsEmpty());
         });
@@ -71,7 +72,8 @@ go_bandit([]() {
             modification.removedVoxel(voxels[2]->gridCell());
             w->removeVoxel(voxels[2]);
 
-            detector.searchSplitOffs(std::list<WorldObjectModification>{ modification });
+            std::list<WorldObjectModification>l{ modification };
+            detector.searchSplitOffs(l);
 
             AssertThat(detector.splitDataList().size(), Equals(1));
 
@@ -94,7 +96,8 @@ go_bandit([]() {
             modification.removedVoxel(voxels[1]->gridCell());
             w->removeVoxel(voxels[1]);
 
-            detector.searchSplitOffs(std::list<WorldObjectModification>{ modification });
+            std::list<WorldObjectModification>l{ modification };
+            detector.searchSplitOffs(l);
 
             AssertThat(detector.splitDataList().size(), Equals(1));
         });
@@ -106,7 +109,8 @@ go_bandit([]() {
             modification.removedVoxel(voxels[3]->gridCell());
             w->removeVoxel(voxels[3]);
 
-            detector.searchSplitOffs(std::list<WorldObjectModification>{ modification });
+            std::list<WorldObjectModification>l{ modification };
+            detector.searchSplitOffs(l);
 
             AssertThat(detector.splitDataList().size(), Equals(0));
         });
@@ -123,7 +127,8 @@ go_bandit([]() {
             modification.removedVoxel(voxels[1]->gridCell());
             w->removeVoxel(voxels[1]);
 
-            detector.searchSplitOffs(std::list<WorldObjectModification>{ modification });
+            std::list<WorldObjectModification>l{ modification };
+            detector.searchSplitOffs(l);
 
             AssertThat(detector.splitDataList().size(), Equals(2));
         });
@@ -136,7 +141,9 @@ go_bandit([]() {
             modification.removedVoxel(voxels[0]->gridCell());
             w->removeVoxel(voxels[0]);
 
-            detector.searchSplitOffs(std::list<WorldObjectModification>{ modification });
+            std::list<WorldObjectModification>l{ modification };
+            detector.searchSplitOffs(l);
+
             splitter.split(detector.splitDataList());
 
             AssertThat(splitter.splitOffWorldObjects().size(), Equals(0));
@@ -149,7 +156,8 @@ go_bandit([]() {
             modification.removedVoxel(voxels[2]->gridCell());
             w->removeVoxel(voxels[2]);
 
-            detector.searchSplitOffs(std::list<WorldObjectModification>{ modification });
+            std::list<WorldObjectModification>l{ modification };
+            detector.searchSplitOffs(l);
             splitter.split(detector.splitDataList());
 
             AssertThat(splitter.splitOffWorldObjects().size(), Equals(1));
@@ -172,7 +180,9 @@ go_bandit([]() {
             modification.removedVoxel(voxels[3]->gridCell());
             w->removeVoxel(voxels[3]);
 
-            detector.searchSplitOffs(std::list<WorldObjectModification>{ modification });
+            std::list<WorldObjectModification>l{ modification };
+            detector.searchSplitOffs(l);
+
             splitter.split(detector.splitDataList());
 
             AssertThat(splitter.splitOffWorldObjects().size(), Equals(2));

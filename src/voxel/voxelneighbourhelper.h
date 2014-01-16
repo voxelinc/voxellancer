@@ -11,12 +11,12 @@ class VoxelNeighbourHelper
 public:
     VoxelNeighbourHelper(VoxelCluster *voxelCluster, bool includeDiagonals = true);
 
-    const std::list<Voxel*>& neighbours(const glm::ivec3& pos);
-    const std::list<Voxel*>& neighbours(const Voxel* voxel);
+    const std::vector<Voxel*>& neighbours(const glm::ivec3& pos);
+    const std::vector<Voxel*>& neighbours(const Voxel* voxel);
 
 protected:
     VoxelCluster *m_voxelCluster;
-    std::list<Voxel*> m_neighbours;
+    std::vector<Voxel*> m_neighbours;
     bool m_includeDiagonals;
 
     void considerNeighbour(const glm::ivec3& pos, const glm::ivec3& offset);
