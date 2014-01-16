@@ -41,9 +41,8 @@ void EngineTrailGenerator::setEngine(Engine* engine) {
 void EngineTrailGenerator::update(float deltaSec) {
     assert(m_engine);
 
-
     glm::vec3 speedLocalSystem = glm::inverse(m_engine->ship()->transform().orientation()) * m_engine->ship()->physics().speed();
-    if (speedLocalSystem.z <= 0.5){ //only when not moving backwards
+    if (speedLocalSystem.z <= 0.5) { //only when not moving backwards
         if (!m_lastValid){
             m_lastPosition = calculateSpawnPosition();
             m_lastValid = true;

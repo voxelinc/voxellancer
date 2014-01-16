@@ -6,8 +6,7 @@
 
 class WorldTransform;
 
-class VoxelExplosionGenerator : public VoxelParticleSpawnBase
-{
+class VoxelExplosionGenerator : public VoxelParticleSpawnBase {
 public:
     VoxelExplosionGenerator();
     virtual ~VoxelExplosionGenerator();

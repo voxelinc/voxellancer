@@ -37,7 +37,6 @@ void VoxelExplosionGenerator::spawn() {
     transform.setScale(m_scale);
 
     for (int i = 0; i < m_count; i++) {
-
         glm::vec3 randDirection = createDirectionalSpeed();
         transform.setPosition(m_position + (m_radius * randDirection));
 
@@ -46,7 +45,6 @@ void VoxelExplosionGenerator::spawn() {
         particle->setDirectionalSpeed(randDirection, m_particleAngularDampening);
 
         World::instance()->voxelParticleWorld().addParticle(particle);
-
     }
 }
 
