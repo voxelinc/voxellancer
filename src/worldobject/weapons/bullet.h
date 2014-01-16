@@ -21,6 +21,8 @@ public:
     virtual float emissiveness() override;
 
 protected:
+    void spawnExplosion();
+
     WorldObject *m_creator;
     float m_lifetime;
 };
