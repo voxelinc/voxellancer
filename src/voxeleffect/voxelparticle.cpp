@@ -16,7 +16,7 @@ VoxelParticle::VoxelParticle(const WorldTransform& transform, int color, float e
     m_angularDampening(0.0f)
 {
     if (s_intersectionCheckPeriod == nullptr) {
-        s_intersectionCheckPeriod = new Property<float>("vfx.debrisIntersectionCheckPeriod");
+        s_intersectionCheckPeriod = new Property<float>("vfx.particleIntersectionCheckPeriod");
     }
     m_intersectionCheckCountdown = s_intersectionCheckPeriod->get();
 }
