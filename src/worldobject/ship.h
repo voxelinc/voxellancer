@@ -44,8 +44,8 @@ protected:
     Property<float> prop_maxSpeed;
     Property<float> prop_maxRotSpeed;
     
-	std::vector<Hardpoint*> m_hardpoints;
-    std::vector<Engine*> m_engines;
+	std::list<Hardpoint*> m_hardpoints;
+    std::list<Engine*> m_engines;
 
     std::shared_ptr<WorldObjectHandle> m_targetObjectHandle;
 };

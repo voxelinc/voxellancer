@@ -49,15 +49,7 @@ void Ship::addHardpointVoxel(HardpointVoxel* voxel) {
 }
 
 void Ship::removeHardpoint(Hardpoint* hardpoint) {
-    std::vector<Hardpoint*>::iterator iterator = m_hardpoints.begin();
-    while (iterator != m_hardpoints.end()) {
-        if (*iterator == hardpoint) {
-            delete *iterator;
-            m_hardpoints.erase(iterator);
-            break;
-        }
-        ++iterator;
-    }
+    m_hardpoints.remove(hardpoint);
 }
 
 void Ship::addEngineVoxel(EngineVoxel* voxel) {
@@ -68,15 +60,7 @@ void Ship::addEngineVoxel(EngineVoxel* voxel) {
 }
 
 void Ship::removeEngine(Engine* engine) {
-    std::vector<Engine*>::iterator iterator = m_engines.begin();
-    while (iterator != m_engines.end()) {
-        if (*iterator == engine) {
-            delete *iterator;
-            m_engines.erase(iterator);
-            break;
-        }
-        ++iterator;
-    }
+    m_engines.remove(engine);
 }
 
 void Ship::setTargetObject(WorldObject* target) {
