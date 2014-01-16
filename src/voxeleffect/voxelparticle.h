@@ -11,12 +11,13 @@
 
 class VoxelParticle {
 public:
-    VoxelParticle(const WorldTransform& transform, int color, float m_lifetime = INFINITY);
+    VoxelParticle(const WorldTransform& transform, int color, float emissiveness, float m_lifetime = INFINITY);
 
     const WorldTransform& worldTransform() const;
     void setWorldTransform(const WorldTransform& transform);
 
     int color() const;
+    float emissiveness() const;
 
     float lifetime() const;
     bool isDead() const;
@@ -29,11 +30,11 @@ public:
 
     void update(float deltaSec);
 
-
 protected:
     WorldTransform m_transform;
 
     int m_color;
+    float m_emissiveness;
 
     float m_lifetime;
 

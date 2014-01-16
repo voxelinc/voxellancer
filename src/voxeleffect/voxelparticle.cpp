@@ -3,9 +3,10 @@
 #include <algorithm>
 
 
-VoxelParticle::VoxelParticle(const WorldTransform& transform, int color, float lifetime):
+VoxelParticle::VoxelParticle(const WorldTransform& transform, int color, float emissiveness, float lifetime):
     m_transform(transform),
     m_color(color),
+    m_emissiveness(emissiveness),
     m_lifetime(lifetime),
     m_directionalDampening(0.0f),
     m_angularDampening(0.0f),
@@ -24,6 +25,10 @@ void VoxelParticle::setWorldTransform(const WorldTransform& transform) {
 
 int VoxelParticle::color() const {
     return m_color;
+}
+
+float VoxelParticle::emissiveness() const{
+    return m_emissiveness;
 }
 
 float VoxelParticle::lifetime() const {
@@ -63,4 +68,6 @@ void VoxelParticle::update(float deltaSec) {
 
     m_intersectionCheckCountdown -= deltaSec;
 }
+
+
 
