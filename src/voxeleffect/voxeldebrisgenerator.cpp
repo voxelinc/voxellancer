@@ -1,4 +1,4 @@
-#include "debrisgenerator.h"
+#include "voxeldebrisgenerator.h"
 
 #include <ctime>
 
@@ -8,11 +8,11 @@
 #include "utils/randfloat.h"
 #include "utils/randbool.h"
 
-#include "particle.h"
-#include "particleworld.h"
+#include "voxelparticle.h"
+#include "voxelparticleworld.h"
 
 
-DebrisGenerator::DebrisGenerator() :
+VoxelDebrisGenerator::VoxelDebrisGenerator() :
     m_orientation(),
     m_density(2),
     m_spawnProbability(1.0f)
@@ -23,23 +23,23 @@ DebrisGenerator::DebrisGenerator() :
     m_particleAngularBaseForce = Property<float>("physics.debrisAngularBaseForce");
 }
 
-DebrisGenerator::~DebrisGenerator() {
+VoxelDebrisGenerator::~VoxelDebrisGenerator() {
 }
 
 
-void DebrisGenerator::setOrientation(const glm::quat& orientation) {
+void VoxelDebrisGenerator::setOrientation(const glm::quat& orientation) {
     m_orientation = orientation;
 }
 
-void DebrisGenerator::setDensity(int density) {
+void VoxelDebrisGenerator::setDensity(int density) {
     m_density = density;
 }
 
-void DebrisGenerator::setSpawnProbability(float spawnProbability) {
+void VoxelDebrisGenerator::setSpawnProbability(float spawnProbability) {
     m_spawnProbability = spawnProbability;
 }
 
-void DebrisGenerator::spawn() {
+void VoxelDebrisGenerator::spawn() {
     WorldTransform gridTransform;
     WorldTransform particleTransform;
 
@@ -60,17 +60,17 @@ void DebrisGenerator::spawn() {
                 particleTransform.setScale(createScale());
                 particleTransform.setPosition(gridTransform.applyTo(glm::vec3(x, y, z)));
 
-                Particle* particle = new Particle(particleTransform, m_color, m_colorEmissiveness, createLifetime());
+                VoxelParticle* particle = new VoxelParticle(particleTransform, m_color, m_colorEmissiveness, createLifetime());
                 particle->setAngularSpeed(createAngularSpeed(), m_particleDampening);
                 particle->setDirectionalSpeed(createDirectionalSpeed(), m_particleAngularDampening);
 
-                World::instance()->particleWorld().addParticle(particle);
+                World::instance()->voxelParticleWorld().addParticle(particle);
             }
         }
     }
 }
 
-float DebrisGenerator::createScale() {
+float VoxelDebrisGenerator::createScale() {
     return RandFloat::randomize(m_scale / m_density, m_scaleRandomization);
 }
 

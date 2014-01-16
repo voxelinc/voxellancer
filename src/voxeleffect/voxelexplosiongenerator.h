@@ -2,15 +2,15 @@
 #include <glm/glm.hpp>
 
 #include "property/property.h"
-#include "particlespawnbase.h"
+#include "voxelparticlespawnbase.h"
 
 class WorldTransform;
 
-class ExplosionGenerator : public ParticleSpawnBase
+class VoxelExplosionGenerator : public VoxelParticleSpawnBase
 {
 public:
-    ExplosionGenerator();
-    virtual ~ExplosionGenerator();
+    VoxelExplosionGenerator();
+    virtual ~VoxelExplosionGenerator();
 
     void setRadius(float radius);
     void setCount(int count);

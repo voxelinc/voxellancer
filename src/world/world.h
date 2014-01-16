@@ -6,7 +6,7 @@ class WorldLogic;
 class WorldTree;
 class God;
 class WorldObject;
-class ParticleWorld;
+class VoxelParticleWorld;
 
 class World
 {
@@ -17,7 +17,7 @@ public:
     WorldLogic &worldLogic();
     God &god();
     WorldTree &worldTree();
-    ParticleWorld& particleWorld();
+    VoxelParticleWorld& voxelParticleWorld();
     std::list<WorldObject*> &worldObjects();
 
     void update(float deltaSecs);
@@ -35,7 +35,7 @@ protected:
     std::unique_ptr<WorldTree> m_worldTree;
     std::unique_ptr<WorldLogic> m_worldLogic;
     std::unique_ptr<God> m_god;
-    std::unique_ptr<ParticleWorld> m_particleWorld;
+    std::unique_ptr<VoxelParticleWorld> m_voxelParticleWorld;
 
     std::list<WorldObject*> m_worldObjects;
 

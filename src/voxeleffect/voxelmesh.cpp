@@ -1,4 +1,4 @@
-#include "mesh.h"
+#include "voxelmesh.h"
 #include <glow/Buffer.h>
 #include <glow/VertexArrayObject.h>
 #include <glow/VertexAttributeBinding.h>
@@ -22,14 +22,14 @@ static const glm::vec3 back(0, 0, 1);
 static const glm::vec3 dummy(0, 0, 0);
 
 
-Mesh::Mesh()
+VoxelMesh::VoxelMesh()
 {
     initBuffer();
 }
 
 
 
-void Mesh::initBuffer() {
+void VoxelMesh::initBuffer() {
     glow::Array<glm::vec3> array{
         rub, dummy,
         lub, dummy,
@@ -51,7 +51,7 @@ void Mesh::initBuffer() {
     m_vertexBuffer->setData(array);
 }
 
-void Mesh::setupVertexAttribute(glow::Program* program, glow::VertexArrayObject* vao, const std::string& name, GLboolean normalised, int bindingNum, GLint offset) {
+void VoxelMesh::setupVertexAttribute(glow::Program* program, glow::VertexArrayObject* vao, const std::string& name, GLboolean normalised, int bindingNum, GLint offset) {
     glow::VertexAttributeBinding* binding = vao->binding(bindingNum);
     GLint location = program->getAttributeLocation(name);
     assert(location >= 0);
@@ -63,7 +63,7 @@ void Mesh::setupVertexAttribute(glow::Program* program, glow::VertexArrayObject*
     vao->enable(location);
 }
 
-void Mesh::bindTo(
+void VoxelMesh::bindTo(
     glow::Program* program,
     glow::VertexArrayObject* vao,
     int bindingIndex)

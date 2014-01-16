@@ -31,7 +31,7 @@
 #include "world/world.h"
 #include "world/god.h"
 #include "skybox.h"
-#include "voxeleffect/particleworld.h"
+#include "voxeleffect/voxelparticleworld.h"
 #include "voxel/voxelrenderer.h"
 #include "worldobject/ship.h"
 #include "collision/collisiondetector.h"
@@ -212,7 +212,7 @@ void Game::draw() {
     // draw all other voxelclusters...
     m_voxelRenderer->afterDraw();
 
-    World::instance()->particleWorld().draw(m_camera);
+    World::instance()->voxelParticleWorld().draw(m_camera);
 
     m_hud->draw();
 

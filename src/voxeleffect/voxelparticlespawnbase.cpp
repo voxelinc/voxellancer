@@ -1,4 +1,4 @@
-#include "particlespawnbase.h"
+#include "voxelparticlespawnbase.h"
 
 #include <ctime>
 
@@ -8,11 +8,11 @@
 #include "utils/randfloat.h"
 #include "utils/randbool.h"
 
-#include "particle.h"
-#include "particleworld.h"
+#include "voxelparticle.h"
+#include "voxelparticleworld.h"
 
 
-ParticleSpawnBase::ParticleSpawnBase() :
+VoxelParticleSpawnBase::VoxelParticleSpawnBase() :
     m_position(0, 0, 0),
     m_scale(1.0f),
     m_scaleRandomization(0.0f),
@@ -30,50 +30,50 @@ ParticleSpawnBase::ParticleSpawnBase() :
 {
 }
 
-ParticleSpawnBase::~ParticleSpawnBase() {
+VoxelParticleSpawnBase::~VoxelParticleSpawnBase() {
 }
 
-void ParticleSpawnBase::setPosition(const glm::vec3& position) {
+void VoxelParticleSpawnBase::setPosition(const glm::vec3& position) {
     m_position = position;
 }
 
-void ParticleSpawnBase::setScale(float scale, float randomization) {
+void VoxelParticleSpawnBase::setScale(float scale, float randomization) {
     assert(0.0f <= randomization && randomization <= 1.0f);
     m_scale = scale;
     m_scaleRandomization = randomization;
 }
 
-void ParticleSpawnBase::setForce(float force, float randomization) {
+void VoxelParticleSpawnBase::setForce(float force, float randomization) {
     assert(0.0f <= randomization && randomization <= 1.0f);
     m_force = force;
     m_forceRandomization = randomization;
 }
 
-void ParticleSpawnBase::setLifetime(float lifetime, float lifetimeRandomization) {
+void VoxelParticleSpawnBase::setLifetime(float lifetime, float lifetimeRandomization) {
     assert(0.0f <= lifetimeRandomization && lifetimeRandomization <= 1.0f);
     m_lifetime = lifetime;
     m_lifetimeRandomization = lifetimeRandomization;
 }
 
-void ParticleSpawnBase::setColor(int color, float emissiveness) {
+void VoxelParticleSpawnBase::setColor(int color, float emissiveness) {
     m_color = color;
     m_colorEmissiveness = emissiveness;
 }
-void ParticleSpawnBase::setImpactVector(const glm::vec3& impactVector) {
+void VoxelParticleSpawnBase::setImpactVector(const glm::vec3& impactVector) {
     m_impactVector = impactVector;
 }
 
-glm::vec3 ParticleSpawnBase::createDirectionalSpeed() {
+glm::vec3 VoxelParticleSpawnBase::createDirectionalSpeed() {
     float speedVal = RandFloat::randomize(m_force, m_forceRandomization) * m_particleBaseForce;
     glm::vec3 speedDir = RandVec3::randUnitVec();
 
     return speedVal * speedDir + m_impactVector;
 }
 
-glm::vec3 ParticleSpawnBase::createAngularSpeed() {
+glm::vec3 VoxelParticleSpawnBase::createAngularSpeed() {
     return RandVec3::randUnitVec() * RandFloat::randomize(m_force, m_forceRandomization) * m_particleAngularBaseForce;
 }
 
-float ParticleSpawnBase::createLifetime() {
+float VoxelParticleSpawnBase::createLifetime() {
     return RandFloat::randomize(m_lifetime, m_lifetimeRandomization);
 }

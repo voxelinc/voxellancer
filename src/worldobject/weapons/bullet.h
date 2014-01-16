@@ -18,8 +18,6 @@ public:
     virtual void onCollision() override;
     virtual void onSpawnFail() override;
 
-    virtual float emissive();
-
 protected:
     void spawnExplosion();
 

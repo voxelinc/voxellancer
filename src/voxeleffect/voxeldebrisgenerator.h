@@ -3,15 +3,15 @@
 #include <glm/glm.hpp>
 
 #include "property/property.h"
-#include "particlespawnbase.h"
+#include "voxelparticlespawnbase.h"
 
 class WorldTransform;
 
-class DebrisGenerator : public ParticleSpawnBase
+class VoxelDebrisGenerator : public VoxelParticleSpawnBase
 {
 public:
-    DebrisGenerator();
-    virtual ~DebrisGenerator();
+    VoxelDebrisGenerator();
+    virtual ~VoxelDebrisGenerator();
 
     void setOrientation(const glm::quat& orientation);
     void setDensity(int density);

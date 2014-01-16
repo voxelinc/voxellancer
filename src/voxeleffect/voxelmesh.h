@@ -15,9 +15,9 @@ namespace glow {
 };
 
 
-class Mesh {
+class VoxelMesh {
 public:
-    Mesh();
+    VoxelMesh();
     void bindTo(glow::Program* program,
                 glow::VertexArrayObject* vao,
                 int bindingIndex);

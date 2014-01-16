@@ -1,4 +1,4 @@
-#include "particleworld.h"
+#include "voxelparticleworld.h"
 
 #include <iostream>
 
@@ -12,8 +12,8 @@
 #include "world/world.h"
 #include "worldtree/worldtreequery.h"
 
-#include "particle.h"
-#include "mesh.h"
+#include "voxelparticle.h"
+#include "voxelmesh.h"
 #include "voxel/voxelrenderer.h"
 
 
@@ -25,7 +25,7 @@ struct ParticleData {
     float emissive;
 };
 
-ParticleWorld::ParticleWorld():
+VoxelParticleWorld::VoxelParticleWorld():
     m_initialized(false),
     m_bufferSize(0),
     m_particles()
@@ -33,19 +33,19 @@ ParticleWorld::ParticleWorld():
 
 }
 
-ParticleWorld::~ParticleWorld() {
-    for (Particle* voxelParticle : m_particles) {
+VoxelParticleWorld::~VoxelParticleWorld() {
+    for (VoxelParticle* voxelParticle : m_particles) {
         delete voxelParticle;
     }
 }
 
-void ParticleWorld::addParticle(Particle* voxelParticle) {
+void VoxelParticleWorld::addParticle(VoxelParticle* voxelParticle) {
     m_particles.push_back(voxelParticle);
 }
 
-void ParticleWorld::update(float deltaSec) {
-    for (std::list<Particle*>::iterator i = m_particles.begin(); i != m_particles.end(); ) {
-        Particle* voxelParticle = *i;
+void VoxelParticleWorld::update(float deltaSec) {
+    for (std::list<VoxelParticle*>::iterator i = m_particles.begin(); i != m_particles.end(); ) {
+        VoxelParticle* voxelParticle = *i;
 
         voxelParticle->update(deltaSec);
 
@@ -58,7 +58,7 @@ void ParticleWorld::update(float deltaSec) {
     }
 }
 
-void ParticleWorld::draw(Camera& camera) {
+void VoxelParticleWorld::draw(Camera& camera) {
     if(!m_initialized) {
         initialize();
     }
@@ -81,7 +81,7 @@ void ParticleWorld::draw(Camera& camera) {
     m_program->release();
 }
 
-void ParticleWorld::initialize() {
+void VoxelParticleWorld::initialize() {
     m_program = new glow::Program();
     m_vertexArrayObject = new glow::VertexArrayObject();
     m_particleDataBuffer = new glow::Buffer(GL_ARRAY_BUFFER);
@@ -93,7 +93,7 @@ void ParticleWorld::initialize() {
     m_initialized = true;
 }
 
-void ParticleWorld::loadProgram() {
+void VoxelParticleWorld::loadProgram() {
     glow::Shader* vertexShader = glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/particle.vert");
     glow::Shader* fragmentShader = glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/voxel.frag");
 
@@ -103,8 +103,8 @@ void ParticleWorld::loadProgram() {
 
 }
 
-void ParticleWorld::setupVertexAttributes() {
-    VoxelRenderer::mesh()->bindTo(m_program, m_vertexArrayObject, 0);
+void VoxelParticleWorld::setupVertexAttributes() {
+    VoxelRenderer::voxelMesh()->bindTo(m_program, m_vertexArrayObject, 0);
 
     setupVertexAttribute(offsetof(ParticleData, position), "v_position", 3, GL_FLOAT, GL_FALSE, 2);
     setupVertexAttribute(offsetof(ParticleData, orientation), "v_orientation", 4, GL_FLOAT, GL_FALSE, 3);
@@ -113,7 +113,7 @@ void ParticleWorld::setupVertexAttributes() {
     setupVertexAttribute(offsetof(ParticleData, emissive), "v_emissive", 1, GL_FLOAT, GL_FALSE, 6);
 }
 
-void ParticleWorld::setupVertexAttribute(GLint offset, const std::string& name, int numPerVertex, GLenum type, GLboolean normalised, int bindingNum) {
+void VoxelParticleWorld::setupVertexAttribute(GLint offset, const std::string& name, int numPerVertex, GLenum type, GLboolean normalised, int bindingNum) {
     glow::VertexAttributeBinding* binding = m_vertexArrayObject->binding(bindingNum);
     GLint location = m_program->getAttributeLocation(name);
 
@@ -124,19 +124,19 @@ void ParticleWorld::setupVertexAttribute(GLint offset, const std::string& name, 
     m_vertexArrayObject->enable(location);
 }
 
-void ParticleWorld::setBufferSize(int size) {
+void VoxelParticleWorld::setBufferSize(int size) {
     m_bufferSize = size;
     m_particleDataBuffer->setData(m_bufferSize * sizeof(ParticleData), nullptr, GL_STREAM_DRAW);
 }
 
-void ParticleWorld::updateBuffers() {
+void VoxelParticleWorld::updateBuffers() {
     if (m_particles.size() > m_bufferSize) {
         setBufferSize(nextPowerOf2(m_particles.size()));
     }
     ParticleData* particleData = static_cast<ParticleData*>(m_particleDataBuffer->mapRange(0, m_particles.size() * sizeof(ParticleData), GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT));
     
     int i = 0;
-    for (Particle* particle : m_particles) {
+    for (VoxelParticle* particle : m_particles) {
         particleData[i++] = ParticleData{
             particle->worldTransform().position(),
             particle->worldTransform().orientation(),
@@ -149,7 +149,7 @@ void ParticleWorld::updateBuffers() {
     m_particleDataBuffer->unmap();
 }
 
-bool ParticleWorld::intersects(Particle* voxelParticle) {
+bool VoxelParticleWorld::intersects(VoxelParticle* voxelParticle) {
     if(!voxelParticle->intersectionCheckDue()) {
         return false;
     }
