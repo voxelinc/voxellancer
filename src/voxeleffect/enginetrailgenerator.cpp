@@ -24,7 +24,7 @@ EngineTrailGenerator::EngineTrailGenerator() :
 EngineTrailGenerator::~EngineTrailGenerator() {
 }
 
-void EngineTrailGenerator::setEngine(Engine* engine){
+void EngineTrailGenerator::setEngine(Engine* engine) {
     assert(engine != nullptr);
     m_engine = engine;
     m_spawnOffset = m_engine->ship()->transform().scale() * 0.75f;
@@ -38,7 +38,7 @@ void EngineTrailGenerator::setEngine(Engine* engine){
     m_generator.setRadius(m_engine->ship()->transform().scale() * 0.3f);
 }
 
-void EngineTrailGenerator::update(float deltaSec){
+void EngineTrailGenerator::update(float deltaSec) {
     assert(m_engine);
 
 
@@ -67,16 +67,16 @@ void EngineTrailGenerator::update(float deltaSec){
     }
 
     // When not moving, we still want some exhausts
-    if (glfwGetTime() - m_lastSpawn > prop_idleTime){
+    if (glfwGetTime() - m_lastSpawn > prop_idleTime) {
         spawnAt(calculateSpawnPosition());        
     }
 }
 
-glm::vec3 EngineTrailGenerator::calculateSpawnPosition(){
+glm::vec3 EngineTrailGenerator::calculateSpawnPosition() {
     return m_engine->position() + m_engine->ship()->transform().orientation() * glm::vec3(0, 0, m_spawnOffset);
 }
 
-void EngineTrailGenerator::spawnAt(glm::vec3 position){
+void EngineTrailGenerator::spawnAt(glm::vec3 position) {
     m_generator.setPosition(position);
     m_generator.setImpactVector(m_engine->ship()->transform().orientation() * (glm::vec3(0, 0, 0.1f) * glm::abs(m_engine->ship()->physics().acceleration()) / 5.0f));
 

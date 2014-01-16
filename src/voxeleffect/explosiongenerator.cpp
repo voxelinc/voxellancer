@@ -23,7 +23,7 @@ ExplosionGenerator::ExplosionGenerator() :
 ExplosionGenerator::~ExplosionGenerator() {
 }
 
-void ExplosionGenerator::setRadius(float radius){
+void ExplosionGenerator::setRadius(float radius) {
     m_radius = radius;
 }
 
@@ -36,7 +36,7 @@ void ExplosionGenerator::spawn() {
     WorldTransform transform;
     transform.setScale(m_scale);
 
-    for (int i = 0; i < m_count; i++){
+    for (int i = 0; i < m_count; i++) {
 
         glm::vec3 randDirection = createDirectionalSpeed();
         transform.setPosition(m_position + (m_radius * randDirection));

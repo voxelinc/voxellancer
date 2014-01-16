@@ -14,22 +14,22 @@ EngineVoxel::EngineVoxel(const glm::ivec3& gridCell, int color, float mass, floa
 EngineVoxel::~EngineVoxel() {
 }
 
-void EngineVoxel::addToObject(WorldObject *object){
+void EngineVoxel::addToObject(WorldObject *object) {
     m_worldObject = object;
     object->addEngineVoxel(this);
 }
 
-void EngineVoxel::setEngine(Engine* engine){
+void EngineVoxel::setEngine(Engine* engine) {
     m_engine = engine;
 }
 
-void EngineVoxel::onRemoval(){
+void EngineVoxel::onRemoval() {
     if (m_engine){
         m_engine->voxelRemoved();
         m_engine = nullptr;
     }
 }
 
-void EngineVoxel::onDestruction(){
+void EngineVoxel::onDestruction() {
     Voxel::onDestruction();
 }
