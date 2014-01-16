@@ -41,6 +41,7 @@ go_bandit([](){
             // cant assert anything usefull just verify that nothing crashes ;)
             AssertThat(cluster->voxelRenderData()->voxelCount(), Equals(3));
         });
+
     });
     describe("voxel hasher", []() {
         it("can hash glm::ivec3", [&]() {
