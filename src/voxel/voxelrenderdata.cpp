@@ -17,6 +17,7 @@
 #include "voxelrenderer.h"
 
 
+
 struct VoxelData {
     glm::vec3 position;
     int color;
@@ -27,17 +28,17 @@ VoxelRenderData::VoxelRenderData(std::unordered_map<glm::ivec3, Voxel*> &voxel) 
     m_isDirty(true),
     m_bufferSize(0)
 {
-    
+
 }
 
 VoxelRenderData::~VoxelRenderData() {
-    
+
 }
 
 void VoxelRenderData::setupVertexAttributes() {
     m_vertexArrayObject = new glow::VertexArrayObject();
     m_voxelDataBuffer = new glow::Buffer(GL_ARRAY_BUFFER);
-    
+
     VoxelRenderer::voxelMesh()->bindTo(VoxelRenderer::program(), m_vertexArrayObject, 0);
 
     setupVertexAttribute(offsetof(VoxelData, position), "v_position", 3, GL_FLOAT, GL_FALSE, 2);
@@ -66,12 +67,11 @@ void VoxelRenderData::updateBuffer() {
     }
 
     VoxelData* voxelData = static_cast<VoxelData*>(m_voxelDataBuffer->mapRange(0, m_voxel.size() * sizeof(VoxelData), GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT));
-
+    assert(voxelData != nullptr);
 
     int i = 0;
     for (auto pair : m_voxel) {
         Voxel *voxel = pair.second;
-        assert(voxel != nullptr);
         voxelData[i++] = VoxelData{ glm::vec3(voxel->gridCell()), voxel->color() };
     }
 
@@ -90,6 +90,6 @@ void VoxelRenderData::invalidate() {
 
 glow::VertexArrayObject* VoxelRenderData::vertexArrayObject() {
     if (m_isDirty)
-        updateBuffer(); 
+        updateBuffer();
     return m_vertexArrayObject;
 }

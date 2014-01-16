@@ -6,6 +6,8 @@
 
 #include <glm/gtx/quaternion.hpp>
 
+#include "etc/oculus/oculusmanager.h"
+
 #include "utils/screenblitter.h"
 
 #include "geometry/viewport.h"
@@ -50,6 +52,9 @@ public:
 protected:
     CameraDolly* m_cameraDolly;
     HUD* m_hud;
+
+    Oculus* m_oculus;
+    OculusManager m_oculusManager;
 
     MonoBlitProgram m_monoBlitProgram;
     StereoBlitProgram m_stereoBlitProgram;

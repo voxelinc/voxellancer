@@ -12,7 +12,7 @@
 #include "cameradolly.h"
 
 
-static const float GAMEUNIT_IN_METRES = 0.5;
+static const float GAMEUNIT_IN_METRES = 2.5;
 
 static float toGameUnits(float metre) {
     return metre / GAMEUNIT_IN_METRES;
@@ -26,6 +26,7 @@ static float toMetres(float gameUnits) {
 CameraHead::CameraHead(CameraDolly* cameraDolly):
     m_cameraDolly(cameraDolly),
     m_hud(nullptr),
+    m_oculus(nullptr),
     m_viewport(0, 0, 0, 0)
 {
     setupStereoView();
@@ -115,6 +116,14 @@ void CameraHead::setupStereoView() {
 }
 
 void CameraHead::update(float deltaSec) {
+    if(m_oculus == nullptr && m_eyes.size() == 2) {
+        m_oculus = m_oculusManager.oculus();
+    }
+
+    if(m_oculus != nullptr) {
+        m_relativeOrientation = m_oculus->orientation();
+    }
+
     if(viewportDirty()) {
         viewportChanged();
     }

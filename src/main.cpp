@@ -4,6 +4,8 @@
 #include <windows.h>
 #endif
 
+#include <OVR.h>
+
 #include <GL/glew.h>
 
 #include <GLFW/glfw3.h>
@@ -113,6 +115,8 @@ int main(void)
     }
     CheckGLError();
 
+    OVR::System::Init(OVR::Log::ConfigureDefaultLog(OVR::LogMask_All));
+
 
 #ifdef WIN32 // TODO: find a way to correctly detect debug extension in linux
     glow::DebugMessageOutput::enable();
@@ -163,6 +167,9 @@ int main(void)
         std::cin.ignore(1, '\n');
     }
 #endif
+
+    OVR::System::Destroy();
+
     return 0;
 }
 
