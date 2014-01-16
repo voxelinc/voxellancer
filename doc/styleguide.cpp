@@ -16,7 +16,7 @@ const Value& StyleGuide::value() const {
     return m_value;
 }
 
-void StyleGuide::setValue(const Value &value) {
+void StyleGuide::setValue(const Value& value) {
     m_value = value;
 }
 
