@@ -12,7 +12,7 @@
 #include "voxeleffect/voxelexplosiongenerator.h"
 
 
-Voxel::Voxel(const glm::ivec3& gridCell, uint32_t color, float normalizedMass, float hp, float emissiveness) :
+Voxel::Voxel(const glm::ivec3& gridCell, uint32_t color, float normalizedMass, float hp, float emissiveness):
     m_gridCell(gridCell),
     m_voxelTreeNode(nullptr),
     m_color(color),
