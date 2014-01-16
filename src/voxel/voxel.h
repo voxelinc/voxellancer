@@ -20,10 +20,11 @@ namespace std {
     };
 }
 
+
 class Voxel
 {
 public:
-    Voxel(const glm::ivec3& gridCell, const int color = 0xFFFFFF, float mass = Property<float>::get("voxel.DefaultMass"), float hp = Property<float>::get("voxel.DefaultHP"));
+    Voxel(const glm::ivec3& gridCell, const int color = 0xFFFFFF, float mass = defaultMass(), float hp = defaultHp());
     Voxel(const Voxel& other);
     virtual ~Voxel();
 
@@ -47,11 +48,18 @@ public:
     virtual void onDestruction();
 
 
+
 protected:
     glm::ivec3 m_gridCell;
     VoxelTreeNode *m_voxelTreeNode;
     int m_color;
     float m_hp;
     float m_normalizedMass;
+
+    static Property<float>* s_defaultMass;
+    static Property<float>* s_defaultHp;
+
+    static float defaultMass();
+    static float defaultHp();
 };
 
