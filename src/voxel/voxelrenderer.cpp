@@ -56,6 +56,7 @@ void VoxelRenderer::draw(VoxelCluster * worldObject)
     glVertexAttribDivisor(m_program->getAttributeLocation("v_normal"), 0);
     glVertexAttribDivisor(m_program->getAttributeLocation("v_position"), 1);
     glVertexAttribDivisor(m_program->getAttributeLocation("v_color"), 1);
+    glVertexAttribDivisor(m_program->getAttributeLocation("v_emissiveness"), 1);
     renderData->vertexArrayObject()->drawArraysInstanced(GL_TRIANGLE_STRIP, 0, 14, renderData->voxelCount());
 }
 
@@ -80,6 +81,7 @@ void VoxelRenderer::createAndSetupShaders() {
     m_program->bindAttributeLocation(1, "v_normal");
     m_program->bindAttributeLocation(2, "v_position");
     m_program->bindAttributeLocation(3, "v_color");
+    m_program->bindAttributeLocation(4, "v_emissiveness");
     m_program->attach(vertexShader, fragmentShader);
     m_program->bindFragDataLocation(0, "fragColor");
 

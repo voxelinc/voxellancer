@@ -42,20 +42,6 @@ go_bandit([](){
             AssertThat(cluster->voxelRenderData()->voxelCount(), Equals(3));
         });
 
-        describe("voxel", []() {
-            it("calculates color with emissiveness", [&]() {
-                Voxel * v = new Voxel(glm::ivec3(0), 0xFFAABBCC, 1, 0, 0.0f);
-                AssertThat(v->color(), Equals(0xAABBCC));
-                AssertThat(v->emissiveness(), EqualsWithDelta(0, 0.01f));
-
-                v = new Voxel(glm::ivec3(0), 0xAABBCC, 1, 0, 0.2f);
-                AssertThat(v->emissiveness(), EqualsWithDelta(0.2f, 0.01f));
-
-                v = new Voxel(glm::ivec3(0), 0xAABBCC, 1, 0, 1.0f);
-                AssertThat(v->emissiveness(), EqualsWithDelta(1.0f, 0.01f));
-                AssertThat(v->color(), Equals(0xFFAABBCC));
-            });
-        });
     });
     describe("voxel hasher", []() {
         it("can hash glm::ivec3", [&]() {
