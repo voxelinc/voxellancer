@@ -3,16 +3,22 @@
 #include <algorithm>
 
 
+Property<float>* VoxelParticle::s_intersectionCheckPeriod = nullptr;
+
+
+
 VoxelParticle::VoxelParticle(const WorldTransform& transform, int color, float emissiveness, float lifetime):
     m_transform(transform),
     m_color(color),
     m_emissiveness(emissiveness),
     m_lifetime(lifetime),
     m_directionalDampening(0.0f),
-    m_angularDampening(0.0f),
-    m_intersectionCheckCountdown(m_intersectionCheckPeriod),
-    m_intersectionCheckPeriod("vfx.debrisIntersectionCheckPeriod")
+    m_angularDampening(0.0f)
 {
+    if (s_intersectionCheckPeriod == nullptr) {
+        s_intersectionCheckPeriod = new Property<float>("vfx.debrisIntersectionCheckPeriod");
+    }
+    m_intersectionCheckCountdown = s_intersectionCheckPeriod->get();
 }
 
 const WorldTransform& VoxelParticle::worldTransform() const {
@@ -54,7 +60,7 @@ bool VoxelParticle::intersectionCheckDue() const {
 }
 
 void VoxelParticle::intersectionCheckPerformed() {
-    m_intersectionCheckCountdown += m_intersectionCheckPeriod;
+    m_intersectionCheckCountdown += s_intersectionCheckPeriod->get();
 }
 
 void VoxelParticle::update(float deltaSec) {
