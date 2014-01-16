@@ -12,7 +12,7 @@
 #include "voxeleffect/voxelexplosiongenerator.h"
 
 
-Voxel::Voxel(const glm::ivec3& gridCell, uint32_t color, float normalizedMass, float hp, float emissiveness) :
+Voxel::Voxel(const glm::ivec3& gridCell, uint32_t color, float normalizedMass, float hp, float emissiveness):
     m_gridCell(gridCell),
     m_voxelTreeNode(nullptr),
     m_color(color),
@@ -95,3 +95,21 @@ void Voxel::onDestruction() {
         generator.spawn();
     }
 }
+float Voxel::defaultMass() {
+    if (s_defaultMass == nullptr) {
+        s_defaultMass = new Property<float>("voxel.DefaultMass");
+    }
+    return s_defaultMass->get();
+}
+
+float Voxel::defaultHp() {
+    if (s_defaultHp == nullptr) {
+        s_defaultHp = new Property<float>("voxel.DefaultHP");
+    }
+    return s_defaultHp->get();
+}
+
+Property<float>* Voxel::s_defaultMass;
+
+Property<float>* Voxel::s_defaultHp;
+
