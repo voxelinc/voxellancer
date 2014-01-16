@@ -38,7 +38,7 @@ public:
     virtual ~StyleGuide();
 
     const Value& value() const;
-    void setValue(const Value &value);
+    void setValue(const Value& value);
 
     /*
     Declare every method that overrides a virtual method from the base-class

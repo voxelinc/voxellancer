@@ -24,8 +24,8 @@ void StyleGuide::update() {
     if (m_worldIsSaved) { // Always enclose blocks with {}, even if they are only 1 line long
         relax();
     } else {
-		saveWorld();
-	}
+        saveWorld();
+    }
 
     for (int x = 0; x < 10; x++) {
         x += 1;
@@ -37,11 +37,12 @@ void StyleGuide::update() {
     }
 
     switch (seats) {
-    case Taken:
-    break;
+        case Taken:
+            performCountermeasure();
+            break;
 
-    default:
-        takeSeat();
+        default:
+            takeSeat();
     }
 
     while (true) {
