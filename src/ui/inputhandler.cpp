@@ -7,6 +7,8 @@
 #include "utils/aimhelper.h"
 #include "voxel/voxeltreenode.h"
 
+#include "etc/windowmanager.h"
+
 #include "worldobject/worldobject.h"
 
 #include "worldtree/worldtreequery.h"
@@ -66,10 +68,24 @@ void InputHandler::resizeEvent(const unsigned int width, const unsigned int heig
 
 void InputHandler::keyCallback(int key, int scancode, int action, int mods){
 	/* Check here for single-time key-presses, that you do not want fired multiple times, e.g. toggles */
+
     if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
         m_mouseControl = !m_mouseControl;
     if (key == GLFW_KEY_TAB && action == GLFW_PRESS)
         selectNextTarget(glfwGetKey(m_window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS);
+
+    if (action == GLFW_PRESS) {
+        if (key == GLFW_KEY_F) {
+            int monitor = WindowManager::instance()->currentMonitor();
+            if (monitor < 0) {
+                monitor = 0;
+            } else {
+                monitor = (monitor+1) % WindowManager::instance()->monitors().size();
+            }
+
+            WindowManager::instance()->setFullScreenResolution(Size<int>(1280,800), monitor);
+        }
+    }
 }
 
 void InputHandler::update(float deltaSec) {

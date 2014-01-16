@@ -25,6 +25,7 @@ void Camera::viewDirty(){
 
 void Camera::projectionDirty(){
     m_projection = glm::perspective(m_fovy, m_aspect, m_zNear, m_zFar);
+    m_projection = glm::translate(m_projectionOffset) * m_projection;
     m_viewProjection = m_projection * m_view;
 }
 
@@ -128,6 +129,15 @@ void Camera::setViewport(const glm::ivec2& viewport) {
 
     m_aspect = viewport.x / glm::max(static_cast<float>(viewport.y), 1.f);
     m_viewport = viewport;
+    projectionDirty();
+}
+
+const glm::vec3& Camera::projectionOffset() const {
+    return m_projectionOffset;
+}
+
+void Camera::setProjectionOffset(const glm::vec3& projectionOffset) {
+    m_projectionOffset = projectionOffset;
     projectionDirty();
 }
 

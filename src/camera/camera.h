@@ -39,6 +39,9 @@ public:
     const glm::ivec2 viewport() const;
     void setViewport(const glm::ivec2 & viewport);
 
+    const glm::vec3& projectionOffset() const;
+    void setProjectionOffset(const glm::vec3& projectionOffset);
+
     float aspectRatio() const;
 
     const glm::mat4 projection();
@@ -55,6 +58,8 @@ protected:
     float m_zFar;
 
     glm::ivec2 m_viewport;
+
+    glm::vec3 m_projectionOffset;
 
     glm::mat4 m_view;
     glm::mat4 m_projection;
