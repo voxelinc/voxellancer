@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <cmath>
 
 #include <glm/glm.hpp>
@@ -45,5 +46,6 @@ protected:
     float m_angularDampening;
 
     float m_intersectionCheckCountdown;
-    Property<float> m_intersectionCheckPeriod;
+
+    static Property<float>* s_intersectionCheckPeriod;
 };
