@@ -59,7 +59,8 @@ m_actions(),
 
 m_inputConfigurator(new InputConfigurator(&m_actions, &m_secondaryInputValues, &prop_deadzoneGamepad, hud)),
 
-m_targeter(new TargetSelector(player, camera)) {
+m_targeter(new TargetSelector(player, camera))
+{
     addActionsToVector();
 
     glfwGetWindowSize(m_window, &m_windowWidth, &m_windowHeight);
@@ -128,7 +129,6 @@ void InputHandler::update(float delta_sec) {
 
 
 void InputHandler::retrieveInputValues() {
-
     m_secondaryInputValues.buttonCnt = 0;
     m_secondaryInputValues.axisCnt = 0;
     m_secondaryInputValues.buttonValues = glfwGetJoystickButtons(GLFW_JOYSTICK_1, &m_secondaryInputValues.buttonCnt);
@@ -136,7 +136,6 @@ void InputHandler::retrieveInputValues() {
 }
 
 void InputHandler::handleUpdate() {
-
     handleFireActions();
     handleMoveActions();
     handleRotateActions();
@@ -179,8 +178,6 @@ void InputHandler::handleMouseUpdate() {
 
     }
 }
-
-
 
 void InputHandler::addActionsToVector() {
     m_actions.push_back(&fireAction);

@@ -1,5 +1,8 @@
 #include "ui/targetselector.h"
 
+#include <algorithm>
+
+
 TargetSelector::TargetSelector(Player *player, Camera *camera) {
     m_player = player;
     m_camera = camera;
@@ -12,77 +15,33 @@ void TargetSelector::setWindowSize(int width, int height) {
     m_cursorMaxDistance = glm::min(m_windowHeight, m_windowWidth) / 2;
 }
 
-
 void TargetSelector::selectNextTarget() {
-    m_player->playerShip()->setTargetObject(findNextTarget());
+    std::list<WorldObject*>& worldObjects = World::instance()->worldObjects();
+    m_player->playerShip()->setTargetObject(findNextTarget(worldObjects.begin(), worldObjects.end()));
 }
 
 void TargetSelector::selectPreviousTarget() {
-        m_player->playerShip()->setTargetObject(findPreviousTarget());
-}
-
-WorldObject* TargetSelector::findNextTarget() {
     std::list<WorldObject*>& worldObjects = World::instance()->worldObjects();
-
-    if (!m_player->playerShip()->targetObject()){
-        auto iterator = worldObjects.begin();
-        // find next lockable target
-        while (iterator != worldObjects.end() && (!(*iterator)->objectInfo().canLockOn() || *iterator == m_player->playerShip())){
-            ++iterator;
-        }
-        if (iterator == worldObjects.end())
-            return nullptr;
-        return *iterator;
-    }
-    else {
-        // Find current target
-        for (auto iterator = worldObjects.begin(); iterator != worldObjects.end(); ++iterator){
-            if (*iterator == m_player->playerShip()->targetObject()){
-                ++iterator;
-                // find next lockable target
-                while (iterator != worldObjects.end() && (!(*iterator)->objectInfo().canLockOn() || *iterator == m_player->playerShip())){
-                    ++iterator;
-                }
-                if (iterator == worldObjects.end())
-                    return nullptr;
-                return *iterator;
-            }
-        }
-    }
-    return nullptr;
+    m_player->playerShip()->setTargetObject(findNextTarget(worldObjects.rbegin(), worldObjects.rend()));
 }
 
-WorldObject* TargetSelector::findPreviousTarget() {
-    std::list<WorldObject*>& worldObjects = World::instance()->worldObjects();
+template<typename IteratorType>
+WorldObject* TargetSelector::findNextTarget(IteratorType begin, IteratorType end) {
+    IteratorType searchBegin = begin;
 
-    if (!m_player->playerShip()->targetObject()){
-        auto iterator = worldObjects.rbegin();
-        // find next lockable target
-        while (iterator != worldObjects.rend() && (!(*iterator)->objectInfo().canLockOn() || *iterator == m_player->playerShip())){
-            ++iterator;
-        }
-        if (iterator == worldObjects.rend())
-            return nullptr;
-        return *iterator;
+    if (m_player->playerShip()->targetObject() != nullptr) {
+        searchBegin = std::find(begin, end, m_player->playerShip()->targetObject());
+        searchBegin++;
     }
-    else {
-        // Find current target backwards
-        for (auto iterator = worldObjects.rbegin(); iterator != worldObjects.rend(); ++iterator){
-            if (*iterator == m_player->playerShip()->targetObject()){
-                ++iterator;
-                // find next lockable target
-                while (iterator != worldObjects.rend() && (!(*iterator)->objectInfo().canLockOn() || *iterator == m_player->playerShip())){
-                    ++iterator;
-                }
-                if (iterator == worldObjects.rend())
-                    return nullptr;
-                return *iterator;
-            }
-        }
+
+    IteratorType newTarget = std::find_if(searchBegin, end, canLockOnPredicate());
+
+    if(newTarget == end) {
+        newTarget = std::find_if(begin, searchBegin, canLockOnPredicate());
     }
-    return nullptr;
+
+    return newTarget != end ? *newTarget : nullptr;
 }
-
 
 glm::vec3 TargetSelector::findTargetPoint(double x, double y) {
     glm::vec4 pointEnd((x * 2 / m_windowWidth - 1), -1 * (y * 2 / m_windowHeight - 1), 1, 1); //get normalized device coords
@@ -93,3 +52,10 @@ glm::vec3 TargetSelector::findTargetPoint(double x, double y) {
     vec += m_camera->position(); //adjust for camera translation
     return vec;
 }
+
+std::function<bool(WorldObject*)> TargetSelector::canLockOnPredicate() {
+    return [] (WorldObject* worldObject) {
+        return worldObject->objectInfo().canLockOn();
+    };
+}
+

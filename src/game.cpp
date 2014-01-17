@@ -91,7 +91,7 @@ void Game::initialize() {
         new BasicTask(*normandy))));
 
     Ship *testCluster = new Ship();
-    ClusterCache::instance()->fillObject(testCluster, "data/voxelcluster/basicship.csv");
+    ClusterCache::instance()->fillObject(testCluster, "data/voxelcluster/eagle.csv");
     testCluster->setPosition(glm::vec3(0, 0, 10));
     testCluster->objectInfo().setName("basicship");
     testCluster->objectInfo().setShowOnHud(false);
@@ -178,7 +178,7 @@ void Game::initialize() {
 
     m_out = new StreamRedirect(std::cout, m_hud.get(), true);
     m_err = new StreamRedirect(std::cerr, m_hud.get(), true);
-    
+
 	glow::debug("Game::initialize Done");
 }
 
