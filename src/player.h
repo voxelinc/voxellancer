@@ -1,5 +1,7 @@
+#pragma once
 
 #include "worldobject/ship.h"
+
 #include "camera.h"
 
 class Player
@@ -22,7 +24,7 @@ private:
     Camera *m_camera;
     Ship *m_playerShip;
     glm::vec3 m_shipOffset;
-    glm::vec3 acceleration;
-    glm::vec3 accelerationAngular;
+    glm::vec3 m_acceleration;
+    glm::vec3 m_accelerationAngular;
 
 };

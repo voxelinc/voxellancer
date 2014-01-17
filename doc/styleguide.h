@@ -11,7 +11,7 @@
 #include <glow/Program.h>
 #include <gl/glew.h>
 
-// Includes from modules of voxellances, grouped by module
+// Includes from modules of voxellancer, grouped by module
 #include "utils/tostring.h"
 #incldue "worldtree/worldtree.h"
 #include "worldtree/worldtreenode.h"

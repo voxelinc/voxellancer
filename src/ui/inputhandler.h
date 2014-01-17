@@ -1,14 +1,15 @@
 #pragma once
 
-#include <GL/glew.h>
 #include <vector>
 
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-#include "ui/inputconfigurator.h"
 #include "property/propertymanager.h"
 #include "worldobject/ship.h"
-#include "ui/targeter.h"
+
+#include "inputconfigurator.h"
+#include "targetselector.h"
 
 class WorldObject;
 class InputConfigurator;
@@ -26,8 +27,8 @@ struct ActionKeyMapping {
         secondaryMapping(secondary),
         toggleAction(false),
         toggleStatus(false),
-        name(name)
-    {};
+        name(name) {
+};
 
     ActionKeyMapping(char* primary, char* secondary, std::string name, bool toggleAction) :
         primaryMapping(primary),
@@ -55,7 +56,6 @@ class InputHandler {
 
 public:
     InputHandler(GLFWwindow *window, Player* player, Camera* camera, HUD* hud);
-	virtual ~InputHandler();
 
 	void resizeEvent(const unsigned int width, const unsigned int height);
 	void keyCallback(int key, int scancode, int action, int mods);
@@ -65,7 +65,7 @@ protected:
     GLFWwindow *m_window;
     Camera* m_camera;
     Player* m_player;
-    Targeter* m_targeter;
+    TargetSelector* m_targeter;
     InputConfigurator* m_inputConfigurator;
     SecondaryInputValues m_secondaryInputValues;
     std::vector<ActionKeyMapping*> m_actions;
@@ -94,10 +94,8 @@ protected:
     int m_cursorMaxDistance;
     int m_lastfocus;
 
-
     Property<float> prop_deadzoneMouse;
     Property<float> prop_deadzoneGamepad;
-
 
     ActionKeyMapping fireAction;
     ActionKeyMapping rocketAction;

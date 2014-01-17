@@ -1,17 +1,14 @@
 #pragma once
 
-#include <GL/glew.h>
-
-//#include <GLFW/glfw3.h>
+#include "world/world.h"
 
 #include "player.h"
 #include "camera.h"
-#include "world/world.h"
 
 
-class Targeter {
+class TargetSelector {
 public:
-    Targeter(Player *player, Camera *camera);
+    TargetSelector(Player *player, Camera *camera);
     void setWindowSize(int width, int height);
     void selectNextTarget();
     void selectPreviousTarget();

@@ -1,27 +1,27 @@
-#include "ui/targeter.h"
+#include "ui/targetselector.h"
 
-Targeter::Targeter(Player *player, Camera *camera){
+TargetSelector::TargetSelector(Player *player, Camera *camera) {
     m_player = player;
     m_camera = camera;
     m_world = World::instance();
 }
 
-void Targeter::setWindowSize(int width, int height){
+void TargetSelector::setWindowSize(int width, int height) {
     m_windowHeight = height;
     m_windowWidth = width;
     m_cursorMaxDistance = glm::min(m_windowHeight, m_windowWidth) / 2;
 }
 
 
-void Targeter::selectNextTarget(){
+void TargetSelector::selectNextTarget() {
     m_player->playerShip()->setTargetObject(findNextTarget());
 }
 
-void Targeter::selectPreviousTarget(){
+void TargetSelector::selectPreviousTarget() {
         m_player->playerShip()->setTargetObject(findPreviousTarget());
 }
 
-WorldObject* Targeter::findNextTarget(){
+WorldObject* TargetSelector::findNextTarget() {
     std::list<WorldObject*>& worldObjects = World::instance()->worldObjects();
 
     if (!m_player->playerShip()->targetObject()){
@@ -52,7 +52,7 @@ WorldObject* Targeter::findNextTarget(){
     return nullptr;
 }
 
-WorldObject* Targeter::findPreviousTarget(){
+WorldObject* TargetSelector::findPreviousTarget() {
     std::list<WorldObject*>& worldObjects = World::instance()->worldObjects();
 
     if (!m_player->playerShip()->targetObject()){
@@ -84,7 +84,7 @@ WorldObject* Targeter::findPreviousTarget(){
 }
 
 
-glm::vec3 Targeter::findTargetPoint(double x, double y){
+glm::vec3 TargetSelector::findTargetPoint(double x, double y) {
     glm::vec4 pointEnd((x * 2 / m_windowWidth - 1), -1 * (y * 2 / m_windowHeight - 1), 1, 1); //get normalized device coords
     pointEnd = glm::inverse(m_camera->viewProjection())*pointEnd; //find point on zfar
     glm::vec3 vec = glm::vec3(pointEnd); // no need for w component

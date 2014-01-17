@@ -30,37 +30,36 @@
 
 
 InputHandler::InputHandler(GLFWwindow* window, Player* player, Camera* camera, HUD* hud) :
-    m_window(window),
-    m_player(player),
-    m_camera(camera),
-    prop_deadzoneMouse("input.deadzoneMouse"),
-    prop_deadzoneGamepad("input.deadzoneGamepad"),
+m_window(window),
+m_player(player),
+m_camera(camera),
+prop_deadzoneMouse("input.deadzoneMouse"),
+prop_deadzoneGamepad("input.deadzoneGamepad"),
 
-    fireAction("input.mappingFirePrimary", "input.mappingFireSecondary", "Fire"),
-    rocketAction("input.mappingRocketPrimary", "input.mappingRocketSecondary", "Launch Rockets"),
+fireAction("input.mappingFirePrimary", "input.mappingFireSecondary", "Fire"),
+rocketAction("input.mappingRocketPrimary", "input.mappingRocketSecondary", "Launch Rockets"),
 
-    moveLeftAction("input.mappingMoveLeftPrimary", "input.mappingMoveLeftSecondary", "Move Left"),
-    moveRightAction("input.mappingMoveRightPrimary", "input.mappingMoveRightSecondary", "Move Right"),
-    moveForwardAction("input.mappingMoveForwardPrimary", "input.mappingMoveForwardSecondary", "Move Forward"),
-    moveBackwardAction("input.mappingMoveBackwardPrimary", "input.mappingMoveBackwardSecondary", "Move Backward"),
+moveLeftAction("input.mappingMoveLeftPrimary", "input.mappingMoveLeftSecondary", "Move Left"),
+moveRightAction("input.mappingMoveRightPrimary", "input.mappingMoveRightSecondary", "Move Right"),
+moveForwardAction("input.mappingMoveForwardPrimary", "input.mappingMoveForwardSecondary", "Move Forward"),
+moveBackwardAction("input.mappingMoveBackwardPrimary", "input.mappingMoveBackwardSecondary", "Move Backward"),
 
-    rotateLeftAction("input.mappingRotateLeftPrimary", "input.mappingRotateLeftSecondary", "Rotate Left"),
-    rotateRightAction("input.mappingRotateRightPrimary", "input.mappingRotateRightSecondary", "Rotate Right"),
-    rotateUpAction("input.mappingRotateUpPrimary", "input.mappingRotateUpSecondary", "Rotate Up"),
-    rotateDownAction("input.mappingRotateDownPrimary", "input.mappingRotateDownSecondary", "Rotate Down"),
-    rotateClockwiseAction("input.mappingRotateClockwisePrimary", "input.mappingRotateClockwiseSecondary", "Rotate Clockwise"),
-    rotateCClockwiseAction("input.mappingRotateCClockwisePrimary", "input.mappingRotateCClockwiseSecondary", "Rotate CounterClockwise"),
+rotateLeftAction("input.mappingRotateLeftPrimary", "input.mappingRotateLeftSecondary", "Rotate Left"),
+rotateRightAction("input.mappingRotateRightPrimary", "input.mappingRotateRightSecondary", "Rotate Right"),
+rotateUpAction("input.mappingRotateUpPrimary", "input.mappingRotateUpSecondary", "Rotate Up"),
+rotateDownAction("input.mappingRotateDownPrimary", "input.mappingRotateDownSecondary", "Rotate Down"),
+rotateClockwiseAction("input.mappingRotateClockwisePrimary", "input.mappingRotateClockwiseSecondary", "Rotate Clockwise"),
+rotateCClockwiseAction("input.mappingRotateCClockwisePrimary", "input.mappingRotateCClockwiseSecondary", "Rotate CounterClockwise"),
 
-    selectNextAction("input.mappingSelectNextPrimary", "input.mappingSelectNextSecondary", "Select Next Target", true),
-    selectPreviousAction("input.mappingSelectPreviousPrimary", "input.mappingSelectPreviousSecondary", "Select Previous Target", true),
+selectNextAction("input.mappingSelectNextPrimary", "input.mappingSelectNextSecondary", "Select Next Target", true),
+selectPreviousAction("input.mappingSelectPreviousPrimary", "input.mappingSelectPreviousSecondary", "Select Previous Target", true),
 
-    m_secondaryInputValues(),
-    m_actions(),
+m_secondaryInputValues(),
+m_actions(),
 
-    m_inputConfigurator(new InputConfigurator(&m_actions, &m_secondaryInputValues, &prop_deadzoneGamepad, hud)),
+m_inputConfigurator(new InputConfigurator(&m_actions, &m_secondaryInputValues, &prop_deadzoneGamepad, hud)),
 
-    m_targeter(new Targeter(player, camera))
-{
+m_targeter(new TargetSelector(player, camera)) {
     addActionsToVector();
 
     glfwGetWindowSize(m_window, &m_windowWidth, &m_windowHeight);
@@ -77,57 +76,46 @@ InputHandler::InputHandler(GLFWwindow* window, Player* player, Camera* camera, H
     retrieveInputValues();
 }
 
-InputHandler::~InputHandler(){
-
-}
-
-
-void InputHandler::resizeEvent(const unsigned int width, const unsigned int height){
-	m_windowWidth = width;
-	m_windowHeight = height;
-	m_camera->setViewport(glm::ivec2(m_windowWidth, m_windowHeight));
-	m_lastfocus = false;
+void InputHandler::resizeEvent(const unsigned int width, const unsigned int height) {
+    m_windowWidth = width;
+    m_windowHeight = height;
+    m_camera->setViewport(glm::ivec2(m_windowWidth, m_windowHeight));
+    m_lastfocus = false;
     m_targeter->setWindowSize(width, height);
 }
 
-void InputHandler::keyCallback(int key, int scancode, int action, int mods){
-	/* Check here for single-time key-presses, that you do not want fired multiple times, e.g. toggles */
+/*
+*    Check here for single-time key-presses, that you do not want fired multiple times, e.g. toggles
+*    This only applies for menu events etc, for action events set the toggleAction attribute to true
+*/
+void InputHandler::keyCallback(int key, int scancode, int action, int mods) {
+    /* Check here for single-time key-presses, that you do not want fired multiple times, e.g. toggles */
     /* This only applies for menu events etc, for action events set the toggleAction attribute to true */
 
-    if (action == GLFW_PRESS){
+    if (action == GLFW_PRESS) {
         m_inputConfigurator->setLastPrimaryInput(InputMapping(InputType::Keyboard, key, 1));
-    }
-    else {
+    } else {
         m_inputConfigurator->setLastPrimaryInput(InputMapping());
     }
 
-    if (key == GLFW_KEY_F10 && action == GLFW_PRESS &&  glfwJoystickPresent(GLFW_JOYSTICK_1)){
+    if (key == GLFW_KEY_F10 && action == GLFW_PRESS &&  glfwJoystickPresent(GLFW_JOYSTICK_1)) {
         m_inputConfigurator->startConfiguration(false);
     }
-    if (key == GLFW_KEY_F11 && action == GLFW_PRESS){
+    if (key == GLFW_KEY_F11 && action == GLFW_PRESS) {
         m_inputConfigurator->startConfiguration(true);
         m_inputConfigurator->setLastPrimaryInput(InputMapping());
     }
     if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
         m_mouseControl = !m_mouseControl;
-    if (key == GLFW_KEY_B && action == GLFW_PRESS){
-        VoxelExplosionGenerator g;
-        g.setPosition(m_player->playerShip()->transform().position() + m_player->playerShip()->transform().orientation() * glm::vec3(0, 0, -30));
-        g.setOrientation(m_player->playerShip()->transform().orientation());
-        g.setScale((float)(rand() % 3) + 1);
-        g.setForce((float)(rand() % 2) + 1);
-        g.setDensity((rand() % 4) + 2);
-        g.spawn();
-    }
-    
 }
-
+/*
+*Check here for every-frame events, e.g. view & movement controls
+*/
 void InputHandler::update(float delta_sec) {
-	/* Check here for every-frame events, e.g. view & movement controls */
-    if (glfwGetWindowAttrib(m_window, GLFW_FOCUSED)){
-        if (m_lastfocus){
+    if (glfwGetWindowAttrib(m_window, GLFW_FOCUSED)) {
+        if (m_lastfocus) {
             retrieveInputValues();
-            if (m_inputConfigurator->isConfiguring()){
+            if (m_inputConfigurator->isConfiguring()) {
                 m_inputConfigurator->update();
             } else {
                 handleUpdate();
@@ -135,11 +123,11 @@ void InputHandler::update(float delta_sec) {
             }
         }
     }
-	m_lastfocus = glfwGetWindowAttrib(m_window, GLFW_FOCUSED);
+    m_lastfocus = glfwGetWindowAttrib(m_window, GLFW_FOCUSED);
 }
 
 
-void InputHandler::retrieveInputValues(){
+void InputHandler::retrieveInputValues() {
 
     m_secondaryInputValues.buttonCnt = 0;
     m_secondaryInputValues.axisCnt = 0;
@@ -147,7 +135,7 @@ void InputHandler::retrieveInputValues(){
     m_secondaryInputValues.axisValues = glfwGetJoystickAxes(GLFW_JOYSTICK_1, &m_secondaryInputValues.axisCnt);
 }
 
-void InputHandler::handleUpdate(){
+void InputHandler::handleUpdate() {
 
     handleFireActions();
     handleMoveActions();
@@ -156,13 +144,13 @@ void InputHandler::handleUpdate(){
 }
 
 
-void InputHandler::handleMouseUpdate(){
+void InputHandler::handleMouseUpdate() {
     // mouse handling
     double x, y;
     glfwGetCursorPos(m_window, &x, &y);
 
     // shoot
-    if (glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS){
+    if (glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
         m_player->playerShip()->fireAtPoint(m_targeter->findTargetPoint(x, y));
     }
 
@@ -172,7 +160,7 @@ void InputHandler::handleMouseUpdate(){
     float angX = 0;
     float angY = 0;
 
-    if (m_mouseControl || glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS){
+    if (m_mouseControl || glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS) {
         glm::vec3 rot;
         x = m_windowWidth / 2 - (int)floor(x);
         y = m_windowHeight / 2 - (int)floor(y);
@@ -181,10 +169,10 @@ void InputHandler::handleMouseUpdate(){
         rot = glm::vec3(y, x, 0);
         rot /= m_cursorMaxDistance;
 
-        if (glm::length(rot) < prop_deadzoneMouse){
+        if (glm::length(rot) < prop_deadzoneMouse) {
             rot = glm::vec3(0);
         }
-        if (glm::length(rot) > 1){
+        if (glm::length(rot) > 1) {
             rot = glm::normalize(rot);
         }
         m_player->rotate(rot);
@@ -213,9 +201,9 @@ void InputHandler::addActionsToVector() {
 
 float InputHandler::getInputValue(ActionKeyMapping* action) {
     float inputValue = glm::max(getInputValue(action->primaryMapping.get()), getInputValue(action->secondaryMapping.get()));
-    if (action->toggleAction){
-        if (inputValue){
-            if (action->toggleStatus){
+    if (action->toggleAction) {
+        if (inputValue) {
+            if (action->toggleStatus) {
                 inputValue = 0;
             }
             action->toggleStatus = true;
@@ -226,80 +214,77 @@ float InputHandler::getInputValue(ActionKeyMapping* action) {
     return inputValue;
 }
 
-float InputHandler::getInputValue(InputMapping mapping){
-    switch (mapping.type()){
-    case InputType::None:
-        return 0;
-    case InputType::Keyboard:
-        if (glfwGetKey(m_window, mapping.index()) == GLFW_PRESS){
-            return 1;
-        }
-        else {
+float InputHandler::getInputValue(InputMapping mapping) {
+    switch (mapping.type()) {
+        case InputType::None:
             return 0;
-        }
-    case InputType::GamePadKey:
-        if (m_secondaryInputValues.buttonCnt > mapping.index() && m_secondaryInputValues.buttonValues[mapping.index()] == GLFW_PRESS) {
-            return 1;
-        }
-        else {
-            return 0;
-        }
-    case InputType::GamePadAxis:
-        if (m_secondaryInputValues.axisCnt > mapping.index() && glm::abs(m_secondaryInputValues.axisValues[mapping.index()]) > prop_deadzoneGamepad) {
-            float relativeValue = m_secondaryInputValues.axisValues[mapping.index()] / mapping.maxValue();
-            if (relativeValue > 0) {
-                return glm::min(relativeValue, 1.0f);
-            }
-            else {
+        case InputType::Keyboard:
+            if (glfwGetKey(m_window, mapping.index()) == GLFW_PRESS) {
+                return 1;
+            } else {
                 return 0;
             }
-        } else {
-            return 0;
-        }
-    default: return 0;
+        case InputType::GamePadKey:
+            if (m_secondaryInputValues.buttonCnt > mapping.index() && m_secondaryInputValues.buttonValues[mapping.index()] == GLFW_PRESS) {
+                return 1;
+            } else {
+                return 0;
+            }
+        case InputType::GamePadAxis:
+            if (m_secondaryInputValues.axisCnt > mapping.index() && glm::abs(m_secondaryInputValues.axisValues[mapping.index()]) > prop_deadzoneGamepad) {
+                float relativeValue = m_secondaryInputValues.axisValues[mapping.index()] / mapping.maxValue();
+                if (relativeValue > 0) {
+                    return glm::min(relativeValue, 1.0f);
+                } else {
+                    return 0;
+                }
+            } else {
+                return 0;
+            }
+        default: return 0;
     }
 }
 
 
 
-void InputHandler::handleFireActions(){
-    if (getInputValue(&fireAction)){
+void InputHandler::handleFireActions() {
+    if (getInputValue(&fireAction)) {
         m_player->playerShip()->fireAtPoint(m_targeter->findTargetPoint(m_windowWidth / 2, m_windowHeight / 2));
     }
-    if (getInputValue(&rocketAction)){
+    if (getInputValue(&rocketAction)) {
         m_player->playerShip()->fireAtObject();
     }
 }
 
-void InputHandler::handleMoveActions(){
+void InputHandler::handleMoveActions() {
     m_player->move(glm::vec3(-getInputValue(&moveLeftAction), 0, 0));
     m_player->move(glm::vec3(getInputValue(&moveRightAction), 0, 0));
     m_player->move(glm::vec3(0, 0, -getInputValue(&moveForwardAction)));
     m_player->move(glm::vec3(0, 0, getInputValue(&moveBackwardAction)));
 }
 
-void InputHandler::handleRotateActions(){
+void InputHandler::handleRotateActions() {
     glm::vec3 rot = glm::vec3(0);
     rot.x = getInputValue(&rotateUpAction)
         - getInputValue(&rotateDownAction);
     rot.y = getInputValue(&rotateLeftAction)
         - getInputValue(&rotateRightAction);
-    rot.z = - getInputValue(&rotateClockwiseAction)
+    rot.z = -getInputValue(&rotateClockwiseAction)
         + getInputValue(&rotateCClockwiseAction);
-    if (glm::length(rot) < prop_deadzoneGamepad){
+    if (glm::length(rot) < prop_deadzoneGamepad) {
         rot = glm::vec3(0);
     }
-    if (glm::length(rot) > 1){
+    if (glm::length(rot) > 1) {
         rot = glm::normalize(rot);
     }
     m_player->rotate(rot);
 }
 
-void InputHandler::handleTargetSelectActions(){
-    if (getInputValue(&selectNextAction)){
+void InputHandler::handleTargetSelectActions() {
+    if (getInputValue(&selectNextAction)) {
         m_targeter->selectNextTarget();
     }
-    if (getInputValue(&selectPreviousAction)){
+    if (getInputValue(&selectPreviousAction)) {
         m_targeter->selectPreviousTarget();
     }
 }

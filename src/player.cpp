@@ -3,16 +3,16 @@
 Player::Player(Camera* camera) {
     m_camera = camera;
     m_shipOffset = glm::vec3(0, 5, 10);
-    acceleration = glm::vec3(0);
-    accelerationAngular = glm::vec3(0);
+    m_acceleration = glm::vec3(0);
+    m_accelerationAngular = glm::vec3(0);
 }
 
 void Player::move(glm::vec3 direction) {
-    acceleration += direction;
+    m_acceleration += direction;
 }
 
 void Player::rotate(glm::vec3 direction) {
-    accelerationAngular += direction;
+    m_accelerationAngular += direction;
 }
 
 void Player::setShip(Ship* ship) {
@@ -21,17 +21,17 @@ void Player::setShip(Ship* ship) {
 }
 
 void Player::applyUpdate() {
-    if (acceleration != glm::vec3(0)) {
-        acceleration = glm::normalize(acceleration);
+    if (m_acceleration != glm::vec3(0)) {
+        m_acceleration = glm::normalize(m_acceleration);
     }
-    m_playerShip->accelerate(acceleration);
-    if (accelerationAngular == glm::vec3(0)) { // dampen rotation
-        accelerationAngular = m_playerShip->physics().angularSpeed();
-        accelerationAngular *= -1.5f;
+    m_playerShip->accelerate(m_acceleration);
+    if (m_accelerationAngular == glm::vec3(0)) { // dampen rotation
+        m_accelerationAngular = m_playerShip->physics().angularSpeed();
+        m_accelerationAngular *= -1.5f;
     }
-    m_playerShip->accelerateAngular(accelerationAngular);
-    acceleration = glm::vec3(0);
-    accelerationAngular = glm::vec3(0);
+    m_playerShip->accelerateAngular(m_accelerationAngular);
+    m_acceleration = glm::vec3(0);
+    m_accelerationAngular = glm::vec3(0);
 }
 
 void Player::setFollowCam() {
@@ -47,11 +47,11 @@ Ship* Player::playerShip() {
 }
 
 void Player::setShipToCam(float delta_sec) {
-    acceleration *= 2;
-    accelerationAngular /= 30;
-    m_camera->move(acceleration);
-    m_camera->rotateX(accelerationAngular.x);
-    m_camera->rotateY(accelerationAngular.y);
+    m_acceleration *= 2;
+    m_accelerationAngular /= 30;
+    m_camera->move(m_acceleration);
+    m_camera->rotateX(m_accelerationAngular.x);
+    m_camera->rotateY(m_accelerationAngular.y);
 
 
     glm::vec3 newShipPosition = m_camera->position() - m_camera->orientation()*m_shipOffset;
@@ -60,10 +60,10 @@ void Player::setShipToCam(float delta_sec) {
 
     diff *= 1;
     acc = diff - m_playerShip->physics().speed();
-    m_playerShip->accelerateAngular(accelerationAngular);
+    m_playerShip->accelerateAngular(m_accelerationAngular);
     m_playerShip->accelerate(acc);
     acc = glm::vec3(0);
-    accelerationAngular = glm::vec3(0);
+    m_accelerationAngular = glm::vec3(0);
 }
 
 void Player::boost() {
