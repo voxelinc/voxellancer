@@ -18,6 +18,19 @@ PropertyCollection<T>::~PropertyCollection()
 
 }
 
+
+template <class T>
+T PropertyCollection<T>::get(char* name) {
+    auto iter = m_values.find(name);
+    if (iter != m_values.end()) {
+        return iter->second;
+    } else {
+        glow::debug("PropertyCollection: could not find a value for %;", name);
+        return T();
+    }
+}
+
+
 template <class T>
 bool PropertyCollection<T>::update(const std::string & key, const std::string & svalue) {
     if (!regexns::regex_match(svalue, m_regex)) {

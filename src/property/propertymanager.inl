@@ -13,3 +13,8 @@ void PropertyManager::unregisterProperty(Property<T> * prop)
 {
     getPropertyCollection(prop)->unregisterProperty(prop);
 }
+
+template <class T>
+T PropertyManager::get(char * name) {
+    return getPropertyCollection<T>(nullptr)->get(name);
+}

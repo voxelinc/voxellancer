@@ -49,7 +49,6 @@ Game::Game(GLFWwindow *window) :
     m_camera(),
     m_player(&m_camera)
 {
-    reloadConfig();
 }
 
 Game::~Game() {

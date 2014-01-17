@@ -8,7 +8,7 @@ class Ship;
 
 class Hardpoint {
 public:
-    Hardpoint(Ship* ship, const glm::vec3& positionInGrid, Weapon *weapon);
+    Hardpoint(Ship* ship, const glm::ivec3& positionInGrid, Weapon *weapon);
     ~Hardpoint();
 
     void installWeapon(Weapon *weapon);

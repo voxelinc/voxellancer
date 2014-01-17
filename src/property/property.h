@@ -15,6 +15,8 @@ public:
 
     T* operator->();
 
+    static T get(char* name);
+
 private:
     char * m_name;
     T m_value;

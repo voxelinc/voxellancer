@@ -11,6 +11,7 @@
 class World;
 class God;
 class Hardpoint;
+class Engine;
 class Character;
 class WorldObjectHandle;
 
@@ -20,7 +21,9 @@ public:
     virtual void update(float deltaSec);
 
     virtual void addHardpointVoxel(HardpointVoxel* voxel);
-    void removeHardpoint(Hardpoint *hardpoint);
+    void removeHardpoint(Hardpoint* hardpoint);
+    virtual void addEngineVoxel(EngineVoxel* voxel);
+    void removeEngine(Engine* engine);
 
     void setTargetObject(WorldObject* target);
     WorldObject* targetObject();
@@ -41,6 +44,8 @@ protected:
     Property<float> prop_maxSpeed;
     Property<float> prop_maxRotSpeed;
     
-    std::vector<Hardpoint*> m_hardpoints;
+	std::list<Hardpoint*> m_hardpoints;
+    std::list<Engine*> m_engines;
+
     std::shared_ptr<WorldObjectHandle> m_targetObjectHandle;
 };
