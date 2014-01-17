@@ -13,6 +13,11 @@ Oculus::Oculus(OVR::HMDDevice* hmdDevice):
     if(m_sensorDevice) {
         m_sensorFusion.AttachToSensor(m_sensorDevice);
     }
+
+    OVR::HMDInfo ovrInfo;
+    m_hmdDevice->GetDeviceInfo(&ovrInfo);
+
+    m_info = std::unique_ptr<OculusInfo>(new OculusInfo(ovrInfo));
 }
 
 glm::quat Oculus::orientation() {
@@ -26,3 +31,9 @@ glm::quat Oculus::orientation() {
 
     return glm::quat(euler);
 }
+
+const OculusInfo& Oculus::info() const {
+    assert(m_info.get());
+    return *(m_info.get());
+}
+

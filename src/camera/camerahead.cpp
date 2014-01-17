@@ -89,7 +89,12 @@ void CameraHead::setupStereoView() {
     clearEyes();
     setViewport();
 
-    OculusInfo oculusInfo;
+    if(m_oculus == nullptr) {
+        m_oculus = m_oculusManager.oculus();
+    }
+
+    assert(m_oculus);
+    OculusInfo oculusInfo = m_oculus->info();
 
     CameraEye* leftEye = new CameraEye(this, Viewport(0, 0, m_viewport.width()/2,  m_viewport.height()), glm::vec3(-toGameUnits(oculusInfo.interpupillaryDistance() / 2.0f), 0.0f, 0.0f));
     CameraEye* rightEye = new CameraEye(this, Viewport(m_viewport.width()/2, 0, m_viewport.width()/2,  m_viewport.height()), glm::vec3(toGameUnits(oculusInfo.interpupillaryDistance() / 2.0f), 0.0f, 0.0f));
@@ -111,6 +116,8 @@ void CameraHead::setupStereoView() {
 
     m_eyes.push_back(leftEye);
     m_eyes.push_back(rightEye);
+
+    m_stereoBlitProgram.setDistortionKs(oculusInfo.distortionKs());
 
     m_screenBlitter.setProgram(&m_stereoBlitProgram);
 }

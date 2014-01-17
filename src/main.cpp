@@ -102,7 +102,8 @@ int main(void)
     glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
 #endif
 
-    WindowManager::instance()->setFullScreenResolution(Size<int>(1280, 800), 1);
+ //   WindowManager::instance()->setFullScreenResolution(Size<int>(1280, 800), 1);
+    WindowManager::instance()->setWindowedResolution(Size<int>(1280, 800));
     GLFWwindow* window = glfwGetCurrentContext();
 
     setCallbacks(window);

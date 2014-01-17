@@ -19,7 +19,7 @@ public:
     void setSource(glow::FrameBufferObject* sourceFBO);
     void setDestination(glow::FrameBufferObject* targetFBO, const Viewport& m_targetViewpoer);
 
-    void blit();
+    virtual void blit();
 
 
 protected:
