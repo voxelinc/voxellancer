@@ -107,7 +107,7 @@ void Game::initialize() {
     follower->objectInfo().setName("follower");
     follower->objectInfo().setShowOnHud(true);
     follower->setCharacter(new DummyCharacter(*follower, new FollowTask(*follower, playerShip->handle())));
-    m_world->god().scheduleSpawn(follower);
+    //m_world->god().scheduleSpawn(follower);
 
     WorldObject *wall = new WorldObject(1);
     wall->move(glm::vec3(-30, 0, -50));
@@ -146,23 +146,26 @@ void Game::initialize() {
     planet->objectInfo().setCanLockOn(true);
     m_world->god().scheduleSpawn(planet);
 
+    Ship* previous = normandy;
+    for(int e = 0; e < 30; e++) {
+        Ship *enemy = new Ship();
+        int r = 600;
+        enemy->move(glm::vec3(-10 + rand()%r-r/2,rand()%r-r/2,-200 + rand()%r-r/2));
 
-    for(int e = 0; e < 15; e++) {
-        WorldObject *enemy = new WorldObject();
-        int r = 80;
-        enemy->move(glm::vec3(-80 + rand()%r-r/2,rand()%r-r/2,-20 + rand()%r-r/2));
-
-        for(int x = 0; x < 4; x++) {
+        /*for(int x = 0; x < 4; x++) {
             for(int y = 0; y < 2; y++) {
                 for(int z = 0; z < 8; z++) {
                     enemy->addVoxel(new Voxel(glm::ivec3(x, y, z), 0xF0FF00));
                 }
             }
-        }
+        }*/
         enemy->objectInfo().setName("enemy");
         enemy->objectInfo().setShowOnHud(false);
         enemy->objectInfo().setCanLockOn(false);
+        ClusterCache::instance()->fillObject(enemy, "data/voxelcluster/basicship.csv");
+        enemy->setCharacter(new DummyCharacter(*enemy, new FollowTask(*enemy, previous->handle())));
         m_world->god().scheduleSpawn(enemy);
+        previous = enemy;
 
     }
 
