@@ -40,6 +40,7 @@
 #include "ai/characters/dummycharacter.h"
 #include "ai/elevatedtasks/dummyelevatedtask.h"
 #include "ai/basictask.h"
+#include "ai/elevatedtasks/followtask.h"
 
 
 class Ship;
@@ -87,22 +88,29 @@ void Game::initialize() {
     m_world->god().scheduleSpawn(normandy);
     // TODO: use these dummies to test BasicTasks
     normandy->setCharacter(
-        new DummyCharacter(*normandy,
-        new DummyElevatedTask(*normandy,
-        new BasicTask(*normandy))));
+        new DummyCharacter(*normandy, new DummyElevatedTask(*normandy, new BasicTask(*normandy)))
+    );
 
-    Ship *testCluster = new Ship();
-    ClusterCache::instance()->fillObject(testCluster, "data/voxelcluster/basicship.csv");
-    testCluster->setPosition(glm::vec3(0, 0, 10));
-    testCluster->objectInfo().setName("basicship");
-    testCluster->objectInfo().setShowOnHud(false);
-    m_world->god().scheduleSpawn(testCluster);
+    Ship *playerShip = new Ship();
+    ClusterCache::instance()->fillObject(playerShip, "data/voxelcluster/basicship.csv");
+    playerShip->setPosition(glm::vec3(0, 0, 10));
+    playerShip->objectInfo().setName("basicship");
+    playerShip->objectInfo().setShowOnHud(false);
+    m_world->god().scheduleSpawn(playerShip);
 
-    m_player.setShip(testCluster);
+    m_player.setShip(playerShip);
+
+    Ship *follower = new Ship();
+    ClusterCache::instance()->fillObject(follower, "data/voxelcluster/basicship.csv");
+    follower->setPosition(glm::vec3(40, 0, -50));
+    follower->objectInfo().setName("follower");
+    follower->objectInfo().setShowOnHud(true);
+    follower->setCharacter(new DummyCharacter(*follower, new FollowTask(*follower, playerShip->handle())));
+    m_world->god().scheduleSpawn(follower);
 
     WorldObject *wall = new WorldObject(1);
     wall->move(glm::vec3(-30, 0, -50));
-    wall->rotate(glm::angleAxis(-90.f, glm::vec3(0, 1, 0)));
+    wall->rotate(glm::angleAxis(glm::radians(-90.f), glm::vec3(0, 1, 0)));
     for(int x = 0; x < 20; x++) {
         for(int y = 0; y < 15; y++) {
             for(int z = 0; z < 3; z++) {
