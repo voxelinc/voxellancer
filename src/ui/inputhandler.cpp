@@ -100,15 +100,24 @@ void InputHandler::keyCallback(int key, int scancode, int action, int mods) {
         m_inputConfigurator->setLastPrimaryInput(InputMapping());
     }
 
-    if (key == GLFW_KEY_F10 && action == GLFW_PRESS &&  glfwJoystickPresent(GLFW_JOYSTICK_1)) {
-        m_inputConfigurator->startConfiguration(false);
+    if(action == GLFW_PRESS) {
+        switch(key) {
+            case GLFW_KEY_F10:
+                if (glfwJoystickPresent(GLFW_JOYSTICK_1)) {
+                    m_inputConfigurator->startConfiguration(false);
+                }
+            break;
+
+            case GLFW_KEY_F11:
+                m_inputConfigurator->startConfiguration(true);
+                m_inputConfigurator->setLastPrimaryInput(InputMapping());
+            break;
+
+            case GLFW_KEY_SPACE:
+                m_mouseControl = !m_mouseControl;
+            break;
+        }
     }
-    if (key == GLFW_KEY_F11 && action == GLFW_PRESS) {
-        m_inputConfigurator->startConfiguration(true);
-        m_inputConfigurator->setLastPrimaryInput(InputMapping());
-    }
-    if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
-        m_mouseControl = !m_mouseControl;
 }
 /*
 *Check here for every-frame events, e.g. view & movement controls

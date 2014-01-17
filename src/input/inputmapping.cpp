@@ -2,10 +2,10 @@
 
 
 InputMapping::InputMapping(InputType type, int index, float maxValue) :
-m_type(type),
-m_index(index),
-m_maxValue(maxValue) {
-
+    m_type(type),
+    m_index(index),
+    m_maxValue(maxValue)
+{
 }
 
 InputMapping::InputMapping() :InputMapping(InputType::None, 0, 0.0f) {

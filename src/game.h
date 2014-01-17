@@ -48,10 +48,10 @@ private:
 
     World* m_world;
 
-	std::unique_ptr<Skybox> m_skybox;
-	std::unique_ptr<HUD> m_hud;
+    std::unique_ptr<Skybox> m_skybox;
+    std::unique_ptr<HUD> m_hud;
     std::unique_ptr<InputHandler> m_inputHandler;
-	std::unique_ptr<HD3000Dummy> m_hd3000dummy;
+    std::unique_ptr<HD3000Dummy> m_hd3000dummy;
     std::unique_ptr<LinuxVMDummy> m_linuxvmdummy;
     std::shared_ptr<VoxelRenderer> m_voxelRenderer;
 
