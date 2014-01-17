@@ -41,6 +41,7 @@
 #include "ai/elevatedtasks/dummyelevatedtask.h"
 #include "ai/basictask.h"
 #include "ai/elevatedtasks/followtask.h"
+#include "ai/basictasks/fight.h"
 
 
 class Ship;
@@ -101,13 +102,12 @@ void Game::initialize() {
 
     m_player.setShip(playerShip);
 
-    Ship *follower = new Ship();
-    ClusterCache::instance()->fillObject(follower, "data/voxelcluster/basicship.csv");
-    follower->setPosition(glm::vec3(40, 0, -50));
-    follower->objectInfo().setName("follower");
-    follower->objectInfo().setShowOnHud(true);
-    follower->setCharacter(new DummyCharacter(*follower, new FollowTask(*follower, playerShip->handle())));
-    //m_world->god().scheduleSpawn(follower);
+    Ship *aitester = new Ship();
+    ClusterCache::instance()->fillObject(aitester, "data/voxelcluster/basicship.csv");
+    aitester->setPosition(glm::vec3(40, 0, -50));
+    aitester->objectInfo().setName("follower");
+    aitester->objectInfo().setShowOnHud(true);
+    m_world->god().scheduleSpawn(aitester);
 
     WorldObject *wall = new WorldObject(1);
     wall->move(glm::vec3(-30, 0, -50));
@@ -147,7 +147,8 @@ void Game::initialize() {
     m_world->god().scheduleSpawn(planet);
 
     Ship* previous = normandy;
-    for(int e = 0; e < 30; e++) {
+    std::list<std::shared_ptr<WorldObjectHandle>> enemies;
+    for(int e = 0; e < 5; e++) {
         Ship *enemy = new Ship();
         int r = 600;
         enemy->move(glm::vec3(-10 + rand()%r-r/2,rand()%r-r/2,-200 + rand()%r-r/2));
@@ -163,11 +164,12 @@ void Game::initialize() {
         enemy->objectInfo().setShowOnHud(false);
         enemy->objectInfo().setCanLockOn(false);
         ClusterCache::instance()->fillObject(enemy, "data/voxelcluster/basicship.csv");
-        enemy->setCharacter(new DummyCharacter(*enemy, new FollowTask(*enemy, previous->handle())));
+        //enemy->setCharacter(new DummyCharacter(*enemy, new FollowTask(*enemy, previous->handle())));
         m_world->god().scheduleSpawn(enemy);
+        enemies.push_back(enemy->handle());
         previous = enemy;
-
     }
+    aitester->setCharacter(new DummyCharacter(*aitester, new DummyElevatedTask(*aitester, new Fight(*aitester, enemies))));
 
 
     glow::debug("Initial spawn");
