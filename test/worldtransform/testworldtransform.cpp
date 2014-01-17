@@ -37,13 +37,13 @@ go_bandit([](){
 
             AssertThat(glm::angle(glm::inverse(q1)*q2), EqualsWithDelta(0, 0.01));
 
-            q2 = glm::angleAxis(90.f, glm::vec3(1, 0, 0));
+            q2 = glm::angleAxis(glm::radians(90.0f), glm::vec3(1, 0, 0));
 
-            AssertThat(glm::angle(glm::inverse(q1)*q2), EqualsWithDelta(90, 0.01));
+            AssertThat(glm::angle(glm::inverse(q1)*q2), EqualsWithDelta(glm::radians(90.0f), 0.01));
 
-            q1 = glm::angleAxis(90.f, glm::vec3(-1, 0, 0));
+            q1 = glm::angleAxis(glm::radians(90.0f), glm::vec3(-1, 0, 0));
 
-            AssertThat(glm::angle(glm::inverse(q1)*q2), EqualsWithDelta(180, 0.01));
+            AssertThat(glm::angle(glm::inverse(q1)*q2), EqualsWithDelta(glm::radians(180.0f), 0.01));
 
 
             q1 = glm::quat(0.324251682f, -0.124075770f, 0.936692774f, -0.0455596969f);
@@ -103,7 +103,7 @@ go_bandit([](){
             WorldTransform t;
 
             t.setPosition(glm::vec3(12, -5, 3));
-            t.setOrientation(glm::angleAxis(56.0f, glm::normalize(glm::vec3(2, 6, -3))));
+            t.setOrientation(glm::angleAxis(glm::radians(56.0f), glm::normalize(glm::vec3(2, 6, -3))));
             t.setScale(2.5f);
             t.setCenter(glm::vec3(1, 0, 0));
 
