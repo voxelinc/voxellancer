@@ -49,11 +49,11 @@ void Rocket::update(float deltaSec) {
             glm::vec3 rotationAxis = glm::normalize(cross);
             float angle = glm::acos(glm::dot(dir, myOrientation));
             if (angle > glm::radians(0.1)) {
-                rotation = glm::angleAxis(-glm::degrees(angle), rotationAxis);
+                rotation = glm::angleAxis(-angle, rotationAxis);
             }
         } else { // the target is either perfectly in front or behind us
             if (dir == -myOrientation) {
-                rotation = glm::angleAxis(90.0f, glm::vec3(1, 0, 0));
+                rotation = glm::angleAxis(glm::pi<float>() / 2.0f, glm::vec3(1, 0, 0));
             }
         }
 

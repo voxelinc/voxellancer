@@ -177,13 +177,13 @@ void HUD::draw(){
                 delta.z = 0;
                 // calculate angle of ship and fov
                 float len = glm::length(delta);
-                float degship = glm::degrees(glm::atan(len, glm::abs(deltaz)));
-                float degfov = m_renderCamera.fovy() / 2;
+                float radship = glm::atan(len, glm::abs(deltaz));
+                float radfov = m_renderCamera.fovy() / 2;
                 // draw arrow if behind of us or out of "scope"
-                if (glm::length(delta) != 0 && (deltaz > 0 || degship / degfov > prop_arrowRadius * 1.15f)){
+                if (glm::length(delta) != 0 && (deltaz > 0 || radship / radfov > prop_arrowRadius * 1.15f)){
                     delta = glm::normalize(delta);
                     //rotate arrow towards ship (arrow model points upwards)
-                    glm::quat absOrientation = glm::angleAxis(glm::degrees(glm::atan(delta.x, delta.y)), glm::vec3(0, 0, -1));
+                    glm::quat absOrientation = glm::angleAxis(glm::atan(delta.x, delta.y), glm::vec3(0, 0, -1));
                     m_shipArrow->setOrientation(absOrientation);
                     // move arrow out of HUD center
                     glm::vec3 absPosition = glm::vec3(0, 0, -prop_distance) /* move back to HUD pane */
@@ -279,7 +279,7 @@ void HUD::adjustPositions(){
     m_renderCamera.setFovy(m_gameCamera->fovy());
     m_renderCamera.setViewport(m_gameCamera->viewport());
 
-    m_dy = floor(glm::tan(glm::radians(m_renderCamera.fovy() / 2.0f)) * prop_distance);
+    m_dy = floor(glm::tan(m_renderCamera.fovy() / 2.0f) * prop_distance);
     m_dx = m_renderCamera.aspectRatio()*m_dy;
 
     for (std::unique_ptr<HUDElement>& element : m_elements)    {
