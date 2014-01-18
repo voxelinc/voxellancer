@@ -29,7 +29,7 @@
 */
 
 
-InputHandler::InputHandler(GLFWwindow* window, Player* player, Camera* camera, HUD* hud) :
+InputHandler::InputHandler(GLFWwindow* window, Player* player, Camera* camera, HUD* hud):
     m_window(window),
     m_player(player),
     m_camera(camera),
