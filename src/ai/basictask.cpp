@@ -2,7 +2,7 @@
 
 
 BasicTask::BasicTask(Ship& ship) :
-m_ship(ship)
+	m_ship(ship)
 {
 }
 

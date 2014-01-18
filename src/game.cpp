@@ -41,6 +41,7 @@
 #include "ai/elevatedtasks/dummyelevatedtask.h"
 #include "ai/basictask.h"
 #include "ai/elevatedtasks/followtask.h"
+#include "ai/basictasks/flytotask.h"
 
 
 class Ship;
@@ -86,9 +87,11 @@ void Game::initialize() {
     normandy->objectInfo().setCanLockOn(true);
     m_world->god().scheduleSpawn(normandy);
     // TODO: use these dummies to test BasicTasks
+	/*FlyToTask* ta = new FlyToTask(*normandy);
+	ta->setTargetPoint(glm::vec3(100, 100, -100));
     normandy->setCharacter(
-        new DummyCharacter(*normandy, new DummyElevatedTask(*normandy, new BasicTask(*normandy)))
-    );
+		new DummyCharacter(*normandy, new DummyElevatedTask(*normandy, ta))
+    );*/
 
     Ship *playerShip = new Ship();
     ClusterCache::instance()->fillObject(playerShip, "data/voxelcluster/basicship.csv");
@@ -104,8 +107,12 @@ void Game::initialize() {
     follower->setPosition(glm::vec3(40, 0, -50));
     follower->objectInfo().setName("follower");
     follower->objectInfo().setShowOnHud(true);
-    follower->setCharacter(new DummyCharacter(*follower, new FollowTask(*follower, playerShip->handle())));
-    m_world->god().scheduleSpawn(follower);
+    //follower->setCharacter(new DummyCharacter(*follower, new FollowTask(*follower, normandy->handle())));
+	m_world->god().scheduleSpawn(follower);
+	FlyToTask* task = new FlyToTask(*follower);
+	task->setTargetPoint(glm::vec3(40, 50, 50));
+	follower->setCharacter(
+		new DummyCharacter(*follower, new DummyElevatedTask(*follower, task)));
 
     WorldObject *wall = new WorldObject(1);
     wall->move(glm::vec3(-30, 0, -50));
