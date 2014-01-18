@@ -50,7 +50,7 @@ void BoardComputer::rotateTo(glm::vec3 position) {
 
     if (glm::abs(glm::angle(rotation)) > minDelta) {
         glm::vec3 euler = glm::eulerAngles(rotation);
-        m_ship.accelerateAngular(glm::normalize(euler)*0.1f);
+        m_ship.accelerateAngular(glm::normalize(euler)*0.5f);
     }
 }
 //
