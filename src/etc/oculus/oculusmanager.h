@@ -8,6 +8,7 @@
 class OculusManager {
 public:
     OculusManager();
+    ~OculusManager();
 
     bool isOculusAvailable() const;
 

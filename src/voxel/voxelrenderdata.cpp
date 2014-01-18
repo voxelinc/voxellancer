@@ -20,7 +20,8 @@
 
 struct VoxelData {
     glm::vec3 position;
-    int color;
+    uint32_t color;
+    float emissiveness;
 };
 
 VoxelRenderData::VoxelRenderData(std::unordered_map<glm::ivec3, Voxel*> &voxel) :
@@ -40,9 +41,9 @@ void VoxelRenderData::setupVertexAttributes() {
     m_voxelDataBuffer = new glow::Buffer(GL_ARRAY_BUFFER);
 
     VoxelRenderer::voxelMesh()->bindTo(VoxelRenderer::program(), m_vertexArrayObject, 0);
-
     setupVertexAttribute(offsetof(VoxelData, position), "v_position", 3, GL_FLOAT, GL_FALSE, 2);
     setupVertexAttribute(offsetof(VoxelData, color), "v_color", GL_BGRA, GL_UNSIGNED_BYTE, GL_TRUE, 3);
+    setupVertexAttribute(offsetof(VoxelData, emissiveness), "v_emissiveness", 1, GL_FLOAT, GL_FALSE, 4);
 }
 
 void VoxelRenderData::setupVertexAttribute(GLint offset, const std::string& name, int numPerVertex, GLenum type, GLboolean normalised, int bindingNum) {
@@ -72,12 +73,8 @@ void VoxelRenderData::updateBuffer() {
     int i = 0;
     for (auto pair : m_voxel) {
         Voxel *voxel = pair.second;
-
-        glm::ivec3 iposition = voxel->gridCell();
-        glm::vec3 position = glm::vec3(iposition);
-        int color = voxel->color();
-
-        voxelData[i++] = VoxelData{ position, color };
+        assert(voxel != nullptr);
+        voxelData[i++] = VoxelData{ glm::vec3(voxel->gridCell()), voxel->color(), voxel->emissiveness() };
     }
 
     m_voxelDataBuffer->unmap();

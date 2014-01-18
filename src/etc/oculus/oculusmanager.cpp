@@ -9,17 +9,21 @@ OculusManager::OculusManager():
     m_deviceManager = OVR::DeviceManager::Create();
 }
 
-bool OculusManager::isOculusAvailable() const {
+OculusManager::~OculusManager() {
+    m_deviceManager->Release();
+}
 
+bool OculusManager::isOculusAvailable() const {
+    return false;
 }
 
 Oculus* OculusManager::oculus() {
     OVR::HMDDevice* hmd = m_deviceManager->EnumerateDevices<OVR::HMDDevice>().CreateDevice();
 
     if (hmd != nullptr) {
-        std::cout << "Oculus Rift detected" << std::endl;
         return new Oculus(hmd);
     } else {
         return nullptr;
     }
 }
+

@@ -24,6 +24,7 @@ class CrossHair;
 class CameraHead {
 public:
     CameraHead(CameraDolly* cameraDolly);
+    ~CameraHead();
 
     CameraDolly* cameraDolly();
 

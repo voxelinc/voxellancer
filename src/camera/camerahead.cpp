@@ -7,20 +7,11 @@
 #include "geometry/viewport.h"
 
 #include "ui/hud.h"
+
 #include "utils/screenblitter.h"
+#include "utils/metrics.h"
 
 #include "cameradolly.h"
-
-
-static const float GAMEUNIT_IN_METRES = 2.5;
-
-static float toGameUnits(float metre) {
-    return metre / GAMEUNIT_IN_METRES;
-}
-
-static float toMetres(float gameUnits) {
-    return gameUnits * GAMEUNIT_IN_METRES;
-}
 
 
 CameraHead::CameraHead(CameraDolly* cameraDolly):
@@ -30,6 +21,10 @@ CameraHead::CameraHead(CameraDolly* cameraDolly):
     m_viewport(0, 0, 0, 0)
 {
     setupStereoView();
+}
+
+CameraHead::~CameraHead() {
+    delete m_oculus;
 }
 
 CameraDolly* CameraHead::cameraDolly() {
@@ -96,8 +91,10 @@ void CameraHead::setupStereoView() {
     assert(m_oculus);
     OculusInfo oculusInfo = m_oculus->info();
 
-    CameraEye* leftEye = new CameraEye(this, Viewport(0, 0, m_viewport.width()/2,  m_viewport.height()), glm::vec3(-toGameUnits(oculusInfo.interpupillaryDistance() / 2.0f), 0.0f, 0.0f));
-    CameraEye* rightEye = new CameraEye(this, Viewport(m_viewport.width()/2, 0, m_viewport.width()/2,  m_viewport.height()), glm::vec3(toGameUnits(oculusInfo.interpupillaryDistance() / 2.0f), 0.0f, 0.0f));
+    glm::vec3 interpupillaryOffset(Metrics::instance()->toGameUnits(oculusInfo.interpupillaryDistance()), 0.0f, 0.0f);
+
+    CameraEye* leftEye = new CameraEye(this, Viewport(0, 0, m_viewport.width()/2,  m_viewport.height()), -interpupillaryOffset);
+    CameraEye* rightEye = new CameraEye(this, Viewport(m_viewport.width()/2, 0, m_viewport.width()/2,  m_viewport.height()), interpupillaryOffset);
 
     float halfScreenDistance = oculusInfo.vScreenSize() / 2.0f;
     float yfov = glm::degrees(2.0f * atan(halfScreenDistance / oculusInfo.eyeToScreenDistance()));

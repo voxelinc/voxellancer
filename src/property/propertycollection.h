@@ -18,6 +18,7 @@ public:
     void registerProperty(Property<T> * prop);
     void unregisterProperty(Property<T> * prop);
     bool update(const std::string & key, const std::string & svalue);
+    T get(char* name);
 
 private:
     std::map<std::string, T> m_values;
@@ -26,5 +27,4 @@ private:
     std::function<T(const std::string&)> m_converter;
 
 };
-
 #include "propertycollection.inl"

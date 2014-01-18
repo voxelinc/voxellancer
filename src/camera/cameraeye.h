@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include <glm/glm.hpp>
 
 #include <glow/Buffer.h>
@@ -7,6 +9,10 @@
 #include <glow/RenderBufferObject.h>
 
 #include "geometry/viewport.h"
+
+#include "utils/hd3000dummy.h"
+
+#include "voxel/voxelrenderer.h"
 
 #include "camera.h"
 
@@ -26,12 +32,16 @@ public:
 
 
 protected:
+    std::shared_ptr<VoxelRenderer> m_voxelRenderer;
+
     CameraHead* m_cameraHead;
     Camera m_camera;
     glm::vec3 m_relativePosition;
     Viewport m_viewport;
 
     glow::FrameBufferObject m_fbo;
+
+	HD3000Dummy m_hd3000dummy;
 };
 
 

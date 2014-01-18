@@ -34,7 +34,7 @@ bool Bullet::specialIsCollideableWith(const CollisionFilterable *other) const {
     return static_cast<CollisionFilterable*>(m_creator) != other;
 }
 
-void Bullet::update(float deltaSec){
+void Bullet::update(float deltaSec) {
     m_lifetime -= deltaSec;
 
     if (m_lifetime <= 0.0f) {
@@ -44,19 +44,26 @@ void Bullet::update(float deltaSec){
 
 void Bullet::onCollision() {
     World::instance()->god().scheduleRemoval(this);
-    explode();
+    spawnExplosion();
 }
 
 void Bullet::onSpawnFail() {
-    explode();
+    spawnExplosion();
 }
 
-void Bullet::explode() {
+void Bullet::spawnExplosion() {
     VoxelExplosionGenerator generator;
-    generator.setTransform(m_transform);
-    generator.setColor(0xFF0000);
-    generator.setForce(0.5f);
+    generator.setPosition(m_transform.position());
+    generator.setRadius(m_transform.scale());
+    generator.setScale(m_transform.scale() / 2.0f);
+    generator.setCount(4);
+    generator.setColor(0xFF0000, 0.4f);
+    generator.setForce(0.6f);
     generator.setLifetime(0.7f, 0.2f);
     generator.spawn();
+}
+
+float Bullet::emissiveness() {
+    return 0.2f;
 }
 

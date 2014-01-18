@@ -30,15 +30,11 @@ class Ship;
 
 
 class Game {
-
 public:
     Game(GLFWwindow* window);
-    virtual ~Game();
 
     void initialize();
     void reloadConfig();
-
-    Skybox& skybox();
 
     void update(float deltaSec);
     void draw();
@@ -48,13 +44,10 @@ public:
 
 private:
 	GLFWwindow* m_window;
+
     World* m_world;
 	InputHandler m_inputHandler;
     Player m_player;
-
-	std::unique_ptr<HD3000Dummy> m_hd3000dummy;
-	std::unique_ptr<LinuxVMDummy> m_linuxvmdummy;
-	std::shared_ptr<VoxelRenderer> m_voxelRenderer;
 
     StreamRedirect* m_out;
     StreamRedirect* m_err;

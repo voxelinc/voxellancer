@@ -1,9 +1,9 @@
-#include "worldobject/worldobject.h"
+#include "worldobject/ship.h"
 #include "resource/clustercache.h"
 
 #include "worldobject/worldobjecthandle.h"
 
-class Rocket : public WorldObject {
+class Rocket : public Ship {
 
 public:
     Rocket(glm::vec3 position, glm::quat orientation, const glm::vec3& initialSpeed, float travelSpeed, float lifetime, WorldObject* target);
@@ -13,7 +13,9 @@ public:
     virtual void onSpawnFail() override;
 
 private:
-    float m_lifetime;
+    void spawnExplosion();
+
+	float m_lifetime;
     float m_travelSpeed;
     std::shared_ptr<WorldObjectHandle> m_target;
 };

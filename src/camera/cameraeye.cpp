@@ -4,8 +4,6 @@
 
 #include <glow/Texture.h>
 
-#include "voxel/voxelrenderer.h"
-
 #include "voxeleffect/voxelparticleworld.h"
 
 #include "world/world.h"
@@ -18,6 +16,7 @@
 
 
 CameraEye::CameraEye(CameraHead* cameraHead, const Viewport& viewport, glm::vec3 relativePosition):
+    m_voxelRenderer(VoxelRenderer::instance()),
     m_cameraHead(cameraHead),
     m_camera(viewport.width(), viewport.height()),
     m_relativePosition(relativePosition),
@@ -67,7 +66,7 @@ void CameraEye::draw() {
 
 	World::instance()->skybox().draw(&m_camera);
 
-    VoxelRenderer::instance()->prepareDraw(&m_camera);
+    m_voxelRenderer->prepareDraw(&m_camera);
 
     for (WorldObject* worldObject : World::instance()->worldObjects()) {
         VoxelRenderer::instance()->draw(worldObject);
@@ -76,7 +75,9 @@ void CameraEye::draw() {
     m_cameraHead->hud()->draw();
     World::instance()->voxelParticleWorld().draw(m_camera);
 
-    VoxelRenderer::instance()->afterDraw();
+    m_voxelRenderer->afterDraw();
+
+    m_hd3000dummy.drawIfActive();
 
     m_fbo.unbind();
 }

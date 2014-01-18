@@ -19,6 +19,6 @@ glm::vec3 CameraFollowHelper::followPosition() {
     sphere.setPosition(m_worldObject->transform().position());
     sphere.setRadius(m_worldObject->minimalGridAABB().diameter() * m_worldObject->transform().scale());
 
-    return sphere.position() + (m_worldObject->transform().orientation() * glm::vec3(0.0f, 1.5f, 2.5f)) * sphere.radius();
+    return sphere.position() + (m_worldObject->transform().orientation() * glm::vec3(0.0f, 1.5f, 3.5f)) * sphere.radius();
 }
 

@@ -31,8 +31,7 @@ VoxelRenderer::VoxelRenderer() :
     createAndSetupShaders();
 }
 
-void VoxelRenderer::prepareDraw(Camera * camera, bool withBorder)
-{
+void VoxelRenderer::prepareDraw(Camera * camera, bool withBorder) {
     m_program->setUniform("projection", camera->projection());
     m_program->setUniform("view", camera->view());
     m_program->setUniform("viewProjection", camera->viewProjection());
@@ -46,9 +45,9 @@ void VoxelRenderer::prepareDraw(Camera * camera, bool withBorder)
 }
 
 
-void VoxelRenderer::draw(VoxelCluster * worldObject)
-{
+void VoxelRenderer::draw(VoxelCluster * worldObject) {
     m_program->setUniform("model", worldObject->transform().matrix());
+    m_program->setUniform("emissiveness", worldObject->emissiveness());
 
     VoxelRenderData* renderData = worldObject->voxelRenderData();
 
@@ -57,18 +56,18 @@ void VoxelRenderer::draw(VoxelCluster * worldObject)
     glVertexAttribDivisor(m_program->getAttributeLocation("v_normal"), 0);
     glVertexAttribDivisor(m_program->getAttributeLocation("v_position"), 1);
     glVertexAttribDivisor(m_program->getAttributeLocation("v_color"), 1);
+    glVertexAttribDivisor(m_program->getAttributeLocation("v_emissiveness"), 1);
     renderData->vertexArrayObject()->drawArraysInstanced(GL_TRIANGLE_STRIP, 0, 14, renderData->voxelCount());
 }
 
 
-void VoxelRenderer::afterDraw()
-{
+void VoxelRenderer::afterDraw() {
     glActiveTexture(GL_TEXTURE0);
     m_program->release();
     m_prepared = false;
 }
 
-bool VoxelRenderer::prepared(){
+bool VoxelRenderer::prepared() {
     return m_prepared;
 }
 
@@ -81,9 +80,9 @@ void VoxelRenderer::createAndSetupShaders() {
     m_program->bindAttributeLocation(1, "v_normal");
     m_program->bindAttributeLocation(2, "v_position");
     m_program->bindAttributeLocation(3, "v_color");
+    m_program->bindAttributeLocation(4, "v_emissiveness");
     m_program->attach(vertexShader, fragmentShader);
     m_program->bindFragDataLocation(0, "fragColor");
-
 }
 
 glow::Program* VoxelRenderer::program() {
@@ -105,3 +104,4 @@ std::shared_ptr<VoxelRenderer> VoxelRenderer::instance() {
         return renderer;
     }
 }
+

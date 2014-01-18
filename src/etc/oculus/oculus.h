@@ -15,6 +15,7 @@
 class Oculus {
 public:
     Oculus(OVR::HMDDevice* hmdDevice);
+    ~Oculus();
 
     glm::quat orientation();
 

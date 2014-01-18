@@ -20,6 +20,11 @@ Oculus::Oculus(OVR::HMDDevice* hmdDevice):
     m_info = std::unique_ptr<OculusInfo>(new OculusInfo(ovrInfo));
 }
 
+Oculus::~Oculus() {
+    m_sensorDevice->Release();
+    m_hmdDevice->Release();
+}
+
 glm::quat Oculus::orientation() {
     glm::vec3 euler;
     OVR::Quatf ovrOrientation = m_sensorFusion.GetOrientation();

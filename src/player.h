@@ -8,10 +8,7 @@
 #include "worldobject/ship.h"
 
 
-
-class Player
-{
-
+class Player {
 public:
     Player();
 
@@ -19,8 +16,6 @@ public:
 
     void move(glm::vec3 direction);
     void rotate(glm::vec3 direction);
-
-    void applyAcceleration();
 
     void update(float deltaSec);
     void draw();
@@ -30,12 +25,12 @@ public:
     HUD& hud();
 
 
-private:
+protected:
     Ship* m_playerShip;
-    glm::vec3 acc;
-    glm::vec3 accAng;
-
     CameraDolly m_cameraDolly;
     HUD m_hud;
+
+    glm::vec3 m_acceleration;
+    glm::vec3 m_accelerationAngular;
 };
 

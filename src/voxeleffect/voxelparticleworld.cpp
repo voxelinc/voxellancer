@@ -8,6 +8,7 @@
 #include <glowutils/MathMacros.h>
 
 #include "geometry/sphere.h"
+#include "geometry/point.h"
 
 #include "world/world.h"
 #include "worldtree/worldtreequery.h"
@@ -22,6 +23,7 @@ struct ParticleData {
     glm::quat orientation;
     float scale;
     int color;
+    float emissiveness;
 };
 
 VoxelParticleWorld::VoxelParticleWorld():
@@ -75,6 +77,7 @@ void VoxelParticleWorld::draw(Camera& camera) {
     glVertexAttribDivisor(m_program->getAttributeLocation("v_orientation"), 1);
     glVertexAttribDivisor(m_program->getAttributeLocation("v_scale"), 1);
     glVertexAttribDivisor(m_program->getAttributeLocation("v_color"), 1);
+    glVertexAttribDivisor(m_program->getAttributeLocation("v_emissiveness"), 1);
     m_vertexArrayObject->drawArraysInstanced(GL_TRIANGLE_STRIP, 0, 14, m_particles.size());
     m_program->release();
 }
@@ -108,6 +111,7 @@ void VoxelParticleWorld::setupVertexAttributes() {
     setupVertexAttribute(offsetof(ParticleData, orientation), "v_orientation", 4, GL_FLOAT, GL_FALSE, 3);
     setupVertexAttribute(offsetof(ParticleData, scale), "v_scale", 1, GL_FLOAT, GL_FALSE, 4);
     setupVertexAttribute(offsetof(ParticleData, color), "v_color", GL_BGRA, GL_UNSIGNED_BYTE, GL_TRUE, 5);
+    setupVertexAttribute(offsetof(ParticleData, emissiveness), "v_emissiveness", 1, GL_FLOAT, GL_FALSE, 6);
 }
 
 void VoxelParticleWorld::setupVertexAttribute(GLint offset, const std::string& name, int numPerVertex, GLenum type, GLboolean normalised, int bindingNum) {
@@ -138,7 +142,8 @@ void VoxelParticleWorld::updateBuffers() {
             particle->worldTransform().position(),
             particle->worldTransform().orientation(),
             particle->worldTransform().scale(),
-            particle->color()
+            particle->color(),
+            particle->emissiveness()
         };
     }
 
@@ -151,8 +156,11 @@ bool VoxelParticleWorld::intersects(VoxelParticle* voxelParticle) {
     }
     voxelParticle->intersectionCheckPerformed();
 
-    Sphere voxelSphere(voxelParticle->worldTransform().position(), voxelParticle->worldTransform().scale() / 2.0f);
-    WorldTreeQuery worldTreeQuery(&World::instance()->worldTree(), &voxelSphere);
+//    Sphere voxelSphere(voxelParticle->worldTransform().position(), voxelParticle->worldTransform().scale() / 2.0f);
+//    WorldTreeQuery worldTreeQuery(&World::instance()->worldTree(), &voxelSphere);
+
+    Point voxelPoint(voxelParticle->worldTransform().position());
+    WorldTreeQuery worldTreeQuery(&World::instance()->worldTree(), &voxelPoint);
 
     return worldTreeQuery.areVoxelsIntersecting();
 }

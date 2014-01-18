@@ -46,14 +46,10 @@
 
 class Ship;
 
-Game::Game(GLFWwindow *window) :
+Game::Game(GLFWwindow *window):
     m_window(window),
     m_inputHandler(window, &m_player)
 {
-    reloadConfig();
-}
-
-Game::~Game() {
 }
 
 void Game::reloadConfig() {
@@ -66,13 +62,8 @@ void Game::initialize() {
     glow::debug("Game::testFMOD()");
     //testFMOD();
 
-    //Must be created first
-    m_linuxvmdummy = std::unique_ptr<LinuxVMDummy>(new LinuxVMDummy);
-
     glow::debug("create world");
     m_world = World::instance();
-
-    m_voxelRenderer = VoxelRenderer::instance();
 
 
     glow::debug("Create WorldObjects");
@@ -159,13 +150,12 @@ void Game::initialize() {
     glow::debug("Initial spawn");
     m_world->god().spawn();
 
-    m_hd3000dummy = std::unique_ptr<HD3000Dummy>(new HD3000Dummy);
-
     m_out = new StreamRedirect(std::cout, &m_player.hud(), true);
     m_err = new StreamRedirect(std::cerr, &m_player.hud(), true);
 
     glClearColor(0.2f, 0.3f, 0.4f, 1.f);
-    glow::debug("Game::initialize Done");
+
+	glow::debug("Game::initialize Done");
 }
 
 
@@ -191,8 +181,6 @@ void Game::draw() {
 	glClear(GL_DEPTH_BUFFER_BIT);
 
     m_player.draw();
-
-    m_hd3000dummy->drawIfActive();
 }
 
 InputHandler& Game::inputHandler() {

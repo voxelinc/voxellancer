@@ -50,6 +50,7 @@ public:
     void rotate(const glm::quat& param1);
     void move(const glm::vec3& vec3);
 
+    virtual float emissiveness();
 
 protected:
     std::unordered_map<glm::ivec3, Voxel*> m_voxels;

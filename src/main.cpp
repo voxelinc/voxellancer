@@ -150,12 +150,16 @@ int main(void)
         {
             double delta = glfwGetTime() - time;
             time += delta;
+
             game->update(static_cast<float>(delta));
             game->draw();
+
             glfwSwapBuffers(window);
             glfwPollEvents();
         }
+
         delete game;
+
         glfwDestroyWindow(window);
         glfwTerminate();
 #ifdef TRYCATCH
@@ -168,7 +172,6 @@ int main(void)
         std::cin.ignore(1, '\n');
     }
 #endif
-
     OVR::System::Destroy();
 
     return 0;
