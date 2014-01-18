@@ -23,6 +23,18 @@ StereoBlitProgram::StereoBlitProgram() {
     getUniform<GLint>("texture")->set(BlitProgram::TEXTURE_LOCATION);
 }
 
+void StereoBlitProgram::setDistortionKs(std::vector<float> distortionKs) {
+    m_distortionKs = distortionKs;
+}
+
+void StereoBlitProgram::setDistortionScale(float distortionScale) {
+    m_distortionScale = distortionScale;
+}
+
+void StereoBlitProgram::setLensCenter(float lensCenter) {
+    m_lensCenter = lensCenter;
+}
+
 void StereoBlitProgram::blit() {
     assert(m_distortionKs.size() == 4);
 
@@ -34,11 +46,8 @@ void StereoBlitProgram::blit() {
     );
 
     getUniform<glm::vec4>("distortionKs")->set(distortionVec);
+    getUniform<float>("distortionScale")->set(m_distortionScale);
+    getUniform<float>("lensCenter")->set(m_lensCenter);
 
     BlitProgram::blit();
 }
-
-void StereoBlitProgram::setDistortionKs(std::vector<float> distortionKs) {
-    m_distortionKs = distortionKs;
-}
-

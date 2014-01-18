@@ -93,21 +93,18 @@ void CameraHead::setupStereoView() {
 
     glm::vec3 interpupillaryOffset(Metrics::instance()->toGameUnits(oculusInfo.interpupillaryDistance()), 0.0f, 0.0f);
 
-    CameraEye* leftEye = new CameraEye(this, Viewport(0, 0, m_viewport.width()/2,  m_viewport.height()), -interpupillaryOffset);
-    CameraEye* rightEye = new CameraEye(this, Viewport(m_viewport.width()/2, 0, m_viewport.width()/2,  m_viewport.height()), interpupillaryOffset);
+    CameraEye* leftEye = new CameraEye(this, Viewport(0, 0, m_viewport.width()/2,  m_viewport.height()), -interpupillaryOffset, oculusInfo.distortionScale());
+    CameraEye* rightEye = new CameraEye(this, Viewport(m_viewport.width()/2, 0, m_viewport.width()/2,  m_viewport.height()), interpupillaryOffset, oculusInfo.distortionScale());
 
     float halfScreenDistance = oculusInfo.vScreenSize() / 2.0f;
-    float yfov = glm::degrees(2.0f * atan(halfScreenDistance / oculusInfo.eyeToScreenDistance()));
-    std::cout << "Using fovy " << yfov << std::endl;
 
-    leftEye->camera().setFovy(yfov);
-    rightEye->camera().setFovy(yfov);
+    leftEye->camera().setFovy(oculusInfo.fovy());
+    rightEye->camera().setFovy(oculusInfo.fovy());
 
     float viewCenter = oculusInfo.hScreenSize() * 0.25f;
     float eyeProjectionShift = viewCenter - oculusInfo.lensSeparationDistance() * 0.5f;
     float projectionCenterOffset = 4.0f * eyeProjectionShift / oculusInfo.hScreenSize();
-    std::cout << "Using projectionCenterOffset " << projectionCenterOffset << std::endl;
-//
+
     leftEye->camera().setProjectionOffset(glm::vec3(projectionCenterOffset, 0.0f, 0.0f));
     rightEye->camera().setProjectionOffset(-glm::vec3(projectionCenterOffset, 0.0f, 0.0f));
 
@@ -115,6 +112,8 @@ void CameraHead::setupStereoView() {
     m_eyes.push_back(rightEye);
 
     m_stereoBlitProgram.setDistortionKs(oculusInfo.distortionKs());
+    m_stereoBlitProgram.setDistortionScale(oculusInfo.distortionScale());
+    m_stereoBlitProgram.setLensCenter(oculusInfo.lensCenter());
 
     m_screenBlitter.setProgram(&m_stereoBlitProgram);
 }

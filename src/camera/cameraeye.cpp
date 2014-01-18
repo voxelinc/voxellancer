@@ -15,7 +15,7 @@
 #include "cameradolly.h"
 
 
-CameraEye::CameraEye(CameraHead* cameraHead, const Viewport& viewport, glm::vec3 relativePosition):
+CameraEye::CameraEye(CameraHead* cameraHead, const Viewport& viewport, glm::vec3 relativePosition, float renderResolutionFactor):
     m_voxelRenderer(VoxelRenderer::instance()),
     m_cameraHead(cameraHead),
     m_camera(viewport.width(), viewport.height()),
@@ -26,7 +26,9 @@ CameraEye::CameraEye(CameraHead* cameraHead, const Viewport& viewport, glm::vec3
 
     texture->bind();
 
-    texture->image2D(0, GL_RGB, m_viewport.width(), m_viewport.height(), 0, GL_RGB, GL_FLOAT, nullptr);
+    m_textureSize.setWidth(m_viewport.width() * renderResolutionFactor);
+    m_textureSize.setHeight(m_viewport.height() * renderResolutionFactor);
+    texture->image2D(0, GL_RGB, m_textureSize.width(), m_textureSize.height(), 0, GL_RGB, GL_FLOAT, nullptr);
 
     texture->setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     texture->setParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -34,7 +36,7 @@ CameraEye::CameraEye(CameraHead* cameraHead, const Viewport& viewport, glm::vec3
     m_fbo.attachTexture2D(GL_COLOR_ATTACHMENT0, texture);
 
     glow::RenderBufferObject* rbo = new glow::RenderBufferObject();
-    rbo->storage(GL_DEPTH_COMPONENT, m_viewport.width(), m_viewport.height());
+    rbo->storage(GL_DEPTH_COMPONENT, m_textureSize.width(), m_textureSize.height());
 
     m_fbo.attachRenderBuffer(GL_DEPTH_ATTACHMENT, rbo);
 
@@ -62,7 +64,7 @@ void CameraEye::draw() {
     m_fbo.bind();
 
     glClear(GL_DEPTH_BUFFER_BIT);
-    glViewport(0, 0, m_viewport.width(), m_viewport.height());
+    glViewport(0, 0, m_textureSize.width(), m_textureSize.height());
 
 	World::instance()->skybox().draw(&m_camera);
 

@@ -9,6 +9,7 @@
 #include <glow/RenderBufferObject.h>
 
 #include "geometry/viewport.h"
+#include "geometry/size.h"
 
 #include "utils/hd3000dummy.h"
 
@@ -21,7 +22,7 @@ class CameraHead;
 
 class CameraEye {
 public:
-    CameraEye(CameraHead* cameraHead, const Viewport& viewport, glm::vec3 relativePosition);
+    CameraEye(CameraHead* cameraHead, const Viewport& viewport, glm::vec3 relativePosition, float renderResolutionFactor = 1.0f);
 
     Camera& camera();
     glow::FrameBufferObject& fbo();
@@ -33,6 +34,8 @@ public:
 
 protected:
     std::shared_ptr<VoxelRenderer> m_voxelRenderer;
+
+    Size<int> m_textureSize;
 
     CameraHead* m_cameraHead;
     Camera m_camera;

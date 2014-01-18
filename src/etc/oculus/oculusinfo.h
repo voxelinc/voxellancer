@@ -28,6 +28,12 @@ public:
     float distortionK(int index) const;
     std::vector<float> distortionKs() const;
 
+    float distortionScale() const;
+
+    float fovy() const;
+
+    float lensCenter() const;
+
 
 protected:
     float m_hScreenSize;
@@ -39,5 +45,7 @@ protected:
     int m_hResolution;
     int m_vResolution;
     std::vector<float> m_distortionKs;
+    float m_distortionScale;
+    float m_fovy;
 };
 

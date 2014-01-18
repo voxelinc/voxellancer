@@ -4,10 +4,13 @@ uniform sampler2D texture;
 uniform vec2 offset;
 uniform vec2 scale;
 uniform vec4 distortionKs;
+uniform float distortionScale;
+uniform float lensCenter;
 
-in vec2 f_texCoord;
+in vec2 f_viewportC;
 
 out vec3 fragColor;
+
 
 vec2 HmdWarp(vec2 linear) {
     float radiusSquared = linear.x * linear.x + linear.y * linear.y;
@@ -16,13 +19,13 @@ vec2 HmdWarp(vec2 linear) {
         distortionKs.y * radiusSquared +
         distortionKs.z * radiusSquared * radiusSquared +
         distortionKs.w * radiusSquared * radiusSquared * radiusSquared
-    );
-    return rvector;
+    ) / distortionScale;
+    return (rvector + 1.0) / 2.0;
 }
 
 void main() {
-    vec2 eyeC = (f_texCoord-0.5) * 2.0;
-    vec2 texC = HmdWarp(eyeC);
+    vec2 lensC = f_viewportC - vec2(lensCenter, 0);
+    vec2 texC = HmdWarp(f_viewportC);
 
     if(texC.x < 0 || texC.x > 1) {
         discard;
@@ -31,6 +34,6 @@ void main() {
         discard;
     }
 
-    fragColor = texture2D(texture, eyeC);
+    fragColor = texture2D(texture, texC);
 }
 
