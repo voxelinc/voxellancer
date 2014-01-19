@@ -1,5 +1,6 @@
 #include "camerahead.h"
 
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
 #include "cameradolly.h"
@@ -21,22 +22,6 @@ const glm::quat& CameraHead::relativeOrientation() const {
 
 void CameraHead::setRelativeOrientation(const glm::quat& relativeOrientation) {
     m_relativeOrientation = relativeOrientation;
-}
-
-float CameraHead::fovy() const {
-    return m_eyes.front()->camera().fovy();
-}
-
-float CameraHead::nearZ() const {
-    return m_eyes.front()->camera().zNear();
-}
-
-float CameraHead::farZ() const {
-    return m_eyes.front()->camera().zFar();
-}
-
-float CameraHead::aspectRatio() const {
-    return m_eyes.front()->camera().aspectRatio();
 }
 
 glm::vec3 CameraHead::position() const {

@@ -5,7 +5,8 @@
 
 Game::Game():
     m_inputHandler(&m_player),
-    m_gameScene(this)
+    m_gameScene(this),
+    m_hmdManager(this)
 {
     m_viewer.setScene(&m_gameScene);
     m_viewer.setCameraHead(&m_player.cameraDolly().cameraHead());
@@ -15,7 +16,7 @@ InputHandler& Game::inputHandler() {
     return m_inputHandler;
 }
 
-Player& Game::player() {g
+Player& Game::player() {
     return m_player;
 }
 

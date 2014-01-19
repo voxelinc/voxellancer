@@ -1,9 +1,10 @@
 #pragma once
 
-#include "scene.h"
-#include "stereorenderinfo.h"
-#include "view.h"
 
+class CameraHead;
+class Scene;
+class View;
+class StereoRenderInfo;
 
 class Viewer {
 public:

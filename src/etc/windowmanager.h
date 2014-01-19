@@ -6,6 +6,7 @@
 #include <GLFW/glfw3.h>
 
 #include "geometry/size.h"
+#include "geometry/viewport.h"
 
 
 class WindowManager {
@@ -13,6 +14,9 @@ public:
     static WindowManager* instance();
 
     Size<int> resolution() const;
+    Viewport viewport() const;
+
+    float aspectRatio() const;
 
     void setWindowedResolution(const Size<int>& resolution);
     void setFullScreenResolution(const Size<int>& resolution, int monitor = 0);

@@ -2,8 +2,10 @@
 
 #include <OVR.h>
 
-#include "oculus.h"
+#include "hmd.h"
 
+
+class Game;
 
 class HMDManager {
 public:
@@ -17,7 +19,7 @@ public:
 
 protected:
     Game* m_game;
-    HMD* hmd;
+    HMD* m_hmd;
     OVR::DeviceManager* m_deviceManager;
 };
 

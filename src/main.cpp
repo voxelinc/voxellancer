@@ -15,6 +15,7 @@
 #include <glowutils/FileRegistry.h>
 
 #include "etc/windowmanager.h"
+#include "etc/cli/commandlineparser.h"
 
 #include "geometry/size.h"
 
@@ -145,13 +146,15 @@ int main(int argc, char* argv[]) {
 
         std::srand((unsigned int)time(NULL));
 
-        game = new Game(window);
+        game = new Game();
         game->initialize();
 
         if(clParser.hmd()) {
             game->hmdManager().setupHMD();
         } else {
-            game->viewer().toStereoMode(StereoRenderInfo::dummy());
+            if(clParser.stereoView()) {
+                game->viewer().toStereoView(StereoRenderInfo::dummy());
+            }
         }
 
 		int width, height;

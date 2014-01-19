@@ -3,7 +3,7 @@
 Player::Player():
     m_hud(this)
 {
-    m_cameraDolly.cameraHead().setHUD(&m_hud);
+
 }
 
 void Player::move(glm::vec3 direction) {
@@ -36,10 +36,6 @@ void Player::update(float deltaSec) {
 
     m_acceleration = glm::vec3(0);
     m_accelerationAngular = glm::vec3(0);
-}
-
-void Player::draw() {
-    m_cameraDolly.draw();
 }
 
 Ship* Player::playerShip() {

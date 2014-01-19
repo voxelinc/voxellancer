@@ -1,4 +1,4 @@
-#include "oculusinfo.h"
+#include "stereorenderinfo.h"
 
 #include <cassert>
 #include <iostream>
@@ -60,21 +60,14 @@ StereoRenderInfo StereoRenderInfo::dummy() {
     result.m_vResolution = resolution.height();
 
     result.m_distortionKs = std::vector<float>{
-        hmdInfo.DistortionK[0],
-        hmdInfo.DistortionK[1],
-        hmdInfo.DistortionK[2],
-        hmdInfo.DistortionK[3]
+        0.6f,
+        0.5f,
+        0.2f,
+        0.1f
     };
 
-    OVR::Util::Render::StereoConfig stereoConfig;
-
-    stereoConfig.SetFullViewport(OVR::Util::Render::Viewport(0, 0, resolution.width(), resolution.height()));
-    stereoConfig.SetHMDInfo(hmdInfo);
-    stereoConfig.SetStereoMode(OVR::Util::Render::Stereo_LeftRight_Multipass);
-    stereoConfig.SetDistortionFitPointVP(-1.0f, 0.0f);
-
-    result.m_distortionScale = stereoConfig.GetDistortionScale();
-    result.m_fovy = stereoConfig.GetYFOVDegrees();
+    result.m_distortionScale = 1.5;
+    result.m_fovy = 120.0f;
 
     return result;
 }

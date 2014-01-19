@@ -39,12 +39,14 @@
 #include "ai/elevatedtasks/dummyelevatedtask.h"
 #include "ai/basictask.h"
 
+#include "game.h"
+
 
 GameScenario::GameScenario() {
 
 }
 
-GameScenario::populate(Game* game) {
+void GameScenario::populate(Game* game) {
     glow::AutoTimer t("Initialize Game");
 
     glow::debug("create world");
@@ -71,7 +73,7 @@ GameScenario::populate(Game* game) {
     testCluster->objectInfo().setShowOnHud(false);
     world->god().scheduleSpawn(testCluster);
 
-    m_player.setShip(testCluster);
+    game->player().setShip(testCluster);
 
     WorldObject *wall = new WorldObject(1);
     wall->move(glm::vec3(-30, 0, -50));

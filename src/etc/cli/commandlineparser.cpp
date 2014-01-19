@@ -1,5 +1,7 @@
 #include "commandlineparser.h"
 
+#include <string>
+
 
 CommandLineParser::CommandLineParser():
     m_hmd(false),

@@ -34,6 +34,14 @@ Size<int> WindowManager::resolution() const {
     return Size<int>(width, height);
 }
 
+Viewport WindowManager::viewport() const {
+    return Viewport(0, 0, resolution().width(), resolution().height());
+}
+
+float WindowManager::aspectRatio() const {
+    return static_cast<float>(resolution().width()) / static_cast<float>(resolution().height());
+}
+
 void WindowManager::setWindowedResolution(const Size<int>& resolution) {
     GLFWwindow* window = glfwCreateWindow(resolution.width(), resolution.height(), "Voxellancer", NULL, NULL);
 

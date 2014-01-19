@@ -60,6 +60,6 @@ protected:
     float m_distortionScale;
     float m_fovy;
 
-    float StereoRenderInfo::projectionCenterOffset();
+    float projectionCenterOffset() const;
 };
 

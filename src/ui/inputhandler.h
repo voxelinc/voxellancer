@@ -7,7 +7,7 @@
 
 #include "camera/cameradolly.h"
 
-#include "etc/hmd/hmdinputhandler.h"
+#include "etc/hmd/hmd.h"
 
 #include "property/propertymanager.h"
 #include "property/property.h"
@@ -90,6 +90,7 @@ protected:
 
     void handleUpdate();
     void handleMouseUpdate();
+    void handleHMDUpdate();
 
     void handleFireActions();
     void handleMoveActions();

@@ -9,6 +9,7 @@
 #include "etc/windowmanager.h"
 
 #include "render/scene.h"
+#include "render/stereorenderinfo.h"
 
 
 StereoView::StereoView(const StereoRenderInfo& stereoRenderInfo):
@@ -34,7 +35,7 @@ void StereoView::draw(Scene* scene, CameraHead* cameraHead) {
     Viewport viewport = WindowManager::instance()->viewport();
     glViewport(0, 0, viewport.width(), viewport.height());
 
-    m_screenBlitter.blit(m_leftEye->fbo(), Viewport(0, 0, viewport.width()/2, viewport.height()));
-    m_screenBlitter.blit(m_rightEye->fbo(), Viewport(viewport.width()/2, 0, viewport.width()/2, viewport.height()));
+    m_screenBlitter.blit(m_leftEye.fbo(), Viewport(0, 0, viewport.width()/2, viewport.height()));
+    m_screenBlitter.blit(m_rightEye.fbo(), Viewport(viewport.width()/2, 0, viewport.width()/2, viewport.height()));
 }
 

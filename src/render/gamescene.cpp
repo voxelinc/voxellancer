@@ -1,6 +1,7 @@
 #include "gamescene.h"
 
 #include "voxel/voxelrenderer.h"
+#include "voxeleffect/voxelparticleworld.h"
 
 #include "game.h"
 

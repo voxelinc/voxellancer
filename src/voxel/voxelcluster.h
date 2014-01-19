@@ -6,6 +6,8 @@
 
 #include <glm/glm.hpp>
 
+#include <GL/glew.h>
+
 #include <glow/Texture.h>
 #include <glow/ref_ptr.h>
 

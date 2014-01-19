@@ -1,10 +1,11 @@
 #pragma once
 
+class Scene;
+class CameraHead;
 
 class View {
 public:
-    View();
-    virtual ~View();
+    virtual ~View() {};
 
     virtual void resized() = 0;
 

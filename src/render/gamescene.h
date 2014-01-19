@@ -1,5 +1,9 @@
 #pragma once
 
+#include <memory>
+
+#include "utils/hd3000dummy.h"
+
 #include "scene.h"
 
 
@@ -15,7 +19,7 @@ public:
 
 protected:
     Game* m_game;
-    VoxelRenderer* m_voxelRenderer;
+    std::shared_ptr<VoxelRenderer> m_voxelRenderer;
 	HD3000Dummy m_hd3000dummy;
-}
+};
 

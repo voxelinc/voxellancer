@@ -10,8 +10,11 @@
 
 #include "geometry/size.h"
 
-#include "stereorenderinfo.h"
 
+
+class Scene;
+class CameraHead;
+class StereoRenderInfo;
 
 class StereoViewEye {
 public:

@@ -4,7 +4,7 @@
 #include <glow/FrameBufferObject.h>
 #include <glow/RenderBufferObject.h>
 
-#include "program/stereoblitprogram.h"
+#include "programs/stereoblitprogram.h"
 
 #include "view.h"
 #include "stereovieweye.h"

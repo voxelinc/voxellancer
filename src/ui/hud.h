@@ -22,7 +22,7 @@ public:
     glm::vec3 position() const;
     glm::quat orientation() const;
 
-    void setCrossHairOffset(const glm::vec2& planeOffset);
+    void setCrossHairOffset(const glm::vec2& mousePosition);
 
     void update(float deltaSec);
     void draw();

@@ -2,19 +2,9 @@
 
 #include <list>
 
-#include <glow/Program.h>
-
 #include <glm/gtx/quaternion.hpp>
 
-#include "etc/oculus/oculusmanager.h"
-
-#include "utils/screenblitter.h"
-
 #include "geometry/viewport.h"
-#include "programs/monoblitprogram.h"
-#include "programs/stereoblitprogram.h"
-
-#include "cameraeye.h"
 
 
 class HUD;
@@ -30,14 +20,9 @@ public:
     const glm::quat& relativeOrientation() const;
     void setRelativeOrientation(const glm::quat& relativeOrientation);
 
-    float fovy() const;
-    float nearZ() const;
-    float farZ() const;
-    float aspectRatio() const;
-
     glm::vec3 position() const;
     glm::quat orientation() const;
-g
+
 
 protected:
     CameraDolly* m_cameraDolly;

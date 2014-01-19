@@ -18,7 +18,6 @@ public:
     void rotate(glm::vec3 direction);
 
     void update(float deltaSec);
-    void draw();
 
     Ship* playerShip();
     CameraDolly& cameraDolly();

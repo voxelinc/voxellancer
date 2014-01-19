@@ -1,14 +1,24 @@
 #include "stereovieweye.h"
 
+#include <glow/Texture.h>
+#include <glow/RenderBufferObject.h>
+
+#include "camera/camerahead.h"
+
+#include "etc/windowmanager.h"
+
+#include "scene.h"
+#include "stereorenderinfo.h"
+
 
 StereoViewEye::StereoViewEye(const StereoRenderInfo& stereoRenderInfo, EyeSide side):
     m_side(side),
+    m_camera(WindowManager::instance()->resolution().width(), WindowManager::instance()->resolution().height()),
     m_distortionScale(stereoRenderInfo.distortionScale())
 {
     setupFBO();
-    setupCamera(stereoRenderInfo)
 
-    camera.setFovy(stereoRenderInfo.fovy());
+    m_camera.setFovy(stereoRenderInfo.fovy());
 
     if(m_side == Left) {
         m_offset = stereoRenderInfo.leftEyeOffset();
@@ -32,7 +42,7 @@ void StereoViewEye::draw(Scene* scene, CameraHead* cameraHead) {
     glClear(GL_DEPTH_BUFFER_BIT);
     glViewport(0, 0, m_textureSize.width(), m_textureSize.height());
 
-    scene->draw(&camera);
+    scene->draw(&m_camera);
 
     m_fbo.unbind();
 }

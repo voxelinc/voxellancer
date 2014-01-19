@@ -5,6 +5,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 
+#include "etc/windowmanager.h"
+
 #include "utils/tostring.h"
 #include "utils/math.h"
 
@@ -14,18 +16,21 @@
 HUD::HUD(Player* player):
     m_player(player),
     m_crossHair(this),
-    m_sphere(glm::vec3(0, 0, 3), 5.0f)
+    m_sphere(glm::vec3(0, 0, 0), 5.0f)
 {
 
 }
 
-void HUD::setCrossHairOffset(const glm::vec2& planeOffset) {
+void HUD::setCrossHairOffset(const glm::vec2& mousePosition) {
     CameraHead& cameraHead = m_player->cameraDolly().cameraHead();
 
-    float nearPlaneHeight = 2 * std::sin(glm::radians(cameraHead.fovy()) / 2.0f) * cameraHead.nearZ();
-    float nearPlaneWidth = nearPlaneHeight * cameraHead.aspectRatio();
+    float fovy = 120.0f;
+    float nearZ = 1.0f;
 
-    glm::vec3 target = glm::vec3(planeOffset.x * nearPlaneWidth / 2.0f, planeOffset.y * nearPlaneHeight / 2.0f,-cameraHead.nearZ());
+    float nearPlaneHeight = 2 * std::sin(glm::radians(fovy) / 2.0f) * nearZ;
+    float nearPlaneWidth = nearPlaneHeight * WindowManager::instance()->aspectRatio();
+
+    glm::vec3 target = glm::vec3(mousePosition.x * nearPlaneWidth / 2.0f, mousePosition.y * nearPlaneHeight / 2.0f, -nearZ);
 
     glm::quat offset = Math::quatFromViewDirection(target);
 
