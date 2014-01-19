@@ -7,15 +7,17 @@
 
 class HMDManager {
 public:
-    HMDManager();
+    HMDManager(Game* game);
     ~HMDManager();
 
-    bool isOculusAvailable() const;
+    void setupHMD();
 
-    HMD* oculus();
+    HMD* hmd();
 
 
 protected:
+    Game* m_game;
+    HMD* hmd;
     OVR::DeviceManager* m_deviceManager;
 };
 

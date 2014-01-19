@@ -21,7 +21,6 @@ public:
     void followWorldObject(WorldObject* m_followWorldObject);
 
     void update(float deltaSec);
-    void draw();
 
 
 protected:

@@ -8,18 +8,22 @@
 
 #include "etc/windowmanager.h"
 
+#include "utils/metrics.h"
 
-StereoRenderInfo::StereoRenderInfo(const OVR::HMDInfo& hmdInfo):
-    m_hScreenSize(hmdInfo.HScreenSize),
-    m_vScreenSize(hmdInfo.VScreenSize),
-    m_vScreenCenter(hmdInfo.VScreenCenter),
-    m_eyeToScreenDistance(hmdInfo.EyeToScreenDistance),
-    m_lensSeparationDistance(hmdInfo.LensSeparationDistance),
-    m_interpupillaryDistance(hmdInfo.InterpupillaryDistance),
-    m_hResolution(hmdInfo.HResolution),
-    m_vResolution(hmdInfo.VResolution)
-{
-    m_distortionKs = std::vector<float>{
+
+StereoRenderInfo StereoRenderInfo::fromOVRInfo(const OVR::HMDInfo& hmdInfo) {
+    StereoRenderInfo result;
+
+    result.m_hScreenSize = hmdInfo.HScreenSize;
+    result.m_vScreenSize = hmdInfo.VScreenSize;
+    result.m_vScreenCenter = hmdInfo.VScreenCenter;
+    result.m_eyeToScreenDistance = hmdInfo.EyeToScreenDistance;
+    result.m_lensSeparationDistance = hmdInfo.LensSeparationDistance;
+    result.m_interpupillaryDistance = hmdInfo.InterpupillaryDistance;
+    result.m_hResolution = hmdInfo.HResolution;
+    result.m_vResolution = hmdInfo.VResolution;
+
+    result.m_distortionKs = std::vector<float>{
         hmdInfo.DistortionK[0],
         hmdInfo.DistortionK[1],
         hmdInfo.DistortionK[2],
@@ -35,8 +39,59 @@ StereoRenderInfo::StereoRenderInfo(const OVR::HMDInfo& hmdInfo):
     stereoConfig.SetStereoMode(OVR::Util::Render::Stereo_LeftRight_Multipass);
     stereoConfig.SetDistortionFitPointVP(-1.0f, 0.0f);
 
-    m_distortionScale = stereoConfig.GetDistortionScale();
-    m_fovy = stereoConfig.GetYFOVDegrees();
+    result.m_distortionScale = stereoConfig.GetDistortionScale();
+    result.m_fovy = stereoConfig.GetYFOVDegrees();
+
+    return result;
+}
+
+StereoRenderInfo StereoRenderInfo::dummy() {
+    StereoRenderInfo result;
+
+    Size<int> resolution(WindowManager::instance()->resolution());
+
+    result.m_hScreenSize = 0.15f;
+    result.m_vScreenSize = 0.06f;
+    result.m_vScreenCenter = result.m_vScreenSize / 2.0f;
+    result.m_eyeToScreenDistance = 0.04f;
+    result.m_lensSeparationDistance = 0.05f;
+    result.m_interpupillaryDistance = 0.064f;
+    result.m_hResolution = resolution.width();
+    result.m_vResolution = resolution.height();
+
+    result.m_distortionKs = std::vector<float>{
+        hmdInfo.DistortionK[0],
+        hmdInfo.DistortionK[1],
+        hmdInfo.DistortionK[2],
+        hmdInfo.DistortionK[3]
+    };
+
+    OVR::Util::Render::StereoConfig stereoConfig;
+
+    stereoConfig.SetFullViewport(OVR::Util::Render::Viewport(0, 0, resolution.width(), resolution.height()));
+    stereoConfig.SetHMDInfo(hmdInfo);
+    stereoConfig.SetStereoMode(OVR::Util::Render::Stereo_LeftRight_Multipass);
+    stereoConfig.SetDistortionFitPointVP(-1.0f, 0.0f);
+
+    result.m_distortionScale = stereoConfig.GetDistortionScale();
+    result.m_fovy = stereoConfig.GetYFOVDegrees();
+
+    return result;
+}
+
+StereoRenderInfo::StereoRenderInfo():
+    m_hScreenSize(0.0f),
+    m_vScreenSize(0.0f),
+    m_vScreenCenter(0.0f),
+    m_eyeToScreenDistance(0.0f),
+    m_lensSeparationDistance(0.0f),
+    m_interpupillaryDistance(0.0f),
+    m_hResolution(0),
+    m_vResolution(0),
+    m_distortionScale(0.0f),
+    m_fovy(0.0f)
+{
+
 }
 
 float StereoRenderInfo::hScreenSize() const {
@@ -90,5 +145,27 @@ float StereoRenderInfo::fovy() const {
 
 float StereoRenderInfo::lensCenter() const {
     return 1 - 2 * m_lensSeparationDistance / m_hScreenSize;
+}
+
+glm::vec3 StereoRenderInfo::leftEyeOffset() const {
+    return glm::vec3(Metrics::instance()->toGameUnits(-m_interpupillaryDistance / 2.0f), 0.0f, 0.0f);
+}
+
+glm::vec3 StereoRenderInfo::rightEyeOffset() const {
+    return glm::vec3(Metrics::instance()->toGameUnits(m_interpupillaryDistance / 2.0f), 0.0f, 0.0f);
+}
+
+glm::vec3 StereoRenderInfo::leftEyeProjectionOffset() const {
+    return glm::vec3(projectionCenterOffset(), 0.0f, 0.0f);
+}
+
+glm::vec3 StereoRenderInfo::rightEyeProjectionOffset() const {
+    return glm::vec3(-projectionCenterOffset(), 0.0f, 0.0f);
+}
+
+float StereoRenderInfo::projectionCenterOffset() const {
+    float viewCenter = m_hScreenSize * 0.25f;
+    float eyeProjectionShift = viewCenter - m_lensSeparationDistance * 0.5f;
+    return 4.0f * eyeProjectionShift / m_hScreenSize;
 }
 

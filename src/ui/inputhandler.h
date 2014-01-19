@@ -64,9 +64,8 @@ struct SecondaryInputValues {
 class InputHandler {
 public:
     InputHandler(Player *player);
-    ~InputHandler();
 
-    void setHMDInputHandler(HMDInputHandler* hmdInputHandler);
+    void setHMD(HMD* hmd);
 
 	void resizeEvent(const unsigned int width, const unsigned int height);
 	void keyCallback(int key, int scancode, int action, int mods);
@@ -75,7 +74,7 @@ public:
 
 protected:
     Player* m_player;
-    HMDInputHandler* m_hmdInputHandler;
+    HMD* m_hmd;
     TargetSelector* m_targetSelector;
     InputConfigurator* m_inputConfigurator;
     SecondaryInputValues m_secondaryInputValues;

@@ -9,7 +9,11 @@
 
 class StereoRenderInfo {
 public:
-    StereoRenderInfo(const OVR::HMDInfo& hmdInfo);
+    static StereoRenderInfo fromOVRInfo(const OVR::HMDInfo& hmdInfo);
+    static StereoRenderInfo dummy();
+
+
+    StereoRenderInfo();
 
     float hScreenSize() const;
     float vScreenSize() const;
@@ -34,6 +38,14 @@ public:
 
     float lensCenter() const;
 
+    glm::vec3 leftEyeOffset() const;
+    glm::vec3 rightEyeOffset() const;
+
+    glm::vec3 leftEyeProjectionOffset() const;
+    glm::vec3 rightEyeProjectionOffset() const;
+
+
+
 
 protected:
     float m_hScreenSize;
@@ -47,5 +59,7 @@ protected:
     std::vector<float> m_distortionKs;
     float m_distortionScale;
     float m_fovy;
+
+    float StereoRenderInfo::projectionCenterOffset();
 };
 

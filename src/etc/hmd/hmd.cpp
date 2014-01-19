@@ -17,7 +17,7 @@ HMD::HMD(OVR::HMDDevice* hmdDevice):
     OVR::HMDInfo ovrInfo;
     m_hmdDevice->GetDeviceInfo(&ovrInfo);
 
-    m_info = std::unique_ptr<StereoRenderInfo>(new StereoRenderInfo(ovrInfo));
+    m_stereoRenderInfo = StereoRenderInfo::fromOVRInfo(ovrInfo);
 }
 
 HMD::~HMD() {
@@ -29,7 +29,7 @@ glm::quat HMD::orientation() {
     glm::vec3 euler;
     OVR::Quatf ovrOrientation = m_sensorFusion.GetOrientation();
 
-    ovrOrientation.GetEulerAngles<OVR::Axis_X, OVR::Axis_Y, OVR::Axis_Z, OVR::Rotate_CW, OVR::Handed_R>(&euler.x, &euler.y, &euler.z);
+    ovrOrientation.GetEulerAngles<OVR::Axis_X, OVR::Axis_Y, OVR::Axis_Z,g OVR::Rotate_CW, OVR::Handed_R>(&euler.x, &euler.y, &euler.z);
 
     euler.x *= -1.0f;
     euler.y *= -1.0f;
@@ -38,7 +38,6 @@ glm::quat HMD::orientation() {
 }
 
 const StereoRenderInfo& HMD::info() const {
-    assert(m_info.get());
-    return *(m_info.get());
+    return m_stereoRenderInfo;
 }
 

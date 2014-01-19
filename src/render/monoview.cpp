@@ -12,6 +12,10 @@ MonoView::MonoView() {
 
 }
 
+void MonoView::resized() {
+
+}
+
 void MonoView::draw(Scene* scene, CameraHead* cameraHead) {
     Camera camera(WindowManager::instance()->resolution().width(), WindowManager::instance()->resolution().height());
 

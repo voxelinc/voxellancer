@@ -1,6 +1,7 @@
 #pragma once
 
 #include "scene.h"
+#include "stereorenderinfo.h"
 #include "view.h"
 
 
@@ -13,7 +14,9 @@ public:
     void setCameraHead(CameraHead* cameraHead);
 
     void toMonoView();
-    void toStereoView();
+    void toStereoView(const StereoRenderInfo& stereoRenderInfo);
+
+    void resized();
 
     void draw();
 

@@ -42,7 +42,7 @@
 InputHandler::InputHandler(Player* player):
     m_player(player),
 
-    m_hmdInputHandler(nullptr),
+    m_hmd(nullptr),
 
     prop_deadzoneMouse("input.deadzoneMouse"),
     prop_deadzoneGamepad("input.deadzoneGamepad"),
@@ -84,12 +84,8 @@ InputHandler::InputHandler(Player* player):
     retrieveInputValues();
 }
 
-InputHandler::~InputHandler() {
-    delete m_hmdInputHandler;
-}
-
-void InputHandler::setHMDInputHandler(HMDInputHandler* hmdInputHandler) {
-    m_hmdInputHandler = hmdInputHandler;
+void InputHandler::setHMD(HMD* hmd) {
+    m_hmd = hmd;
 }
 
 void InputHandler::resizeEvent(const unsigned int width, const unsigned int height){
@@ -199,8 +195,10 @@ void InputHandler::handleMouseUpdate() {
 }
 
 void InputHandler::handleHMDUpdate() {
-    if(m_hmdInputHandler) {
-        m_hmdInputHandler->update();
+    if(m_hmd) {
+        m_player->cameraDolly().cameraHead().setRelativeOrientation(m_hmd->orientation());
+    } else {
+        m_player->cameraDolly().cameraHead().setRelativeOrientation(glm::quat());
     }
 }
 

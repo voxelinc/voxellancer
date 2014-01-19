@@ -4,18 +4,26 @@
 #include <glow/FrameBufferObject.h>
 #include <glow/RenderBufferObject.h>
 
+#include "program/stereoblitprogram.h"
+
 #include "view.h"
 #include "stereovieweye.h"
+#include "screenblitter.h"
 
 
 class StereoView: public View {
 public:
-    StereoView();
+    StereoView(const StereoRenderInfo& stereoRenderInfo);
+
+    void resized();
 
     virtual void draw(Scene* scene, CameraHead* cameraHead) override;
 
 
 protected:
-    glow::FrameBufferObject m_fbo;
+    StereoViewEye m_leftEye;
+    StereoViewEye m_rightEye;
+    ScreenBlitter m_screenBlitter;
+    StereoBlitProgram m_stereoBlitProgram;
 };
 

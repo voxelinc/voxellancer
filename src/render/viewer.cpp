@@ -23,12 +23,17 @@ void Viewer::toMonoView() {
     m_view = new MonoView();
 }
 
-void Viewer::toStereoView() {
+void Viewer::toStereoView(const StereoRenderInfo& stereoRenderInfo) {
     delete m_view;
 
-    m_view = new StereoView();
+    m_view = new StereoView(stereoRenderInfo);
+}
+
+void Viewer::resized() {
+    m_view->resized();
 }
 
 void Viewer::draw() {
     m_view->draw(scene, cameraHead);
 }
+

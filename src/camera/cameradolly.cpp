@@ -30,10 +30,5 @@ void CameraDolly::update(float deltaSec) {
         CameraFollowHelper followHelper(followWorldObject);
         follow(followHelper.followPosition(), followWorldObject->transform().orientation(), deltaSec);
     }
-    m_cameraHead.update(deltaSec);
-}
-
-void CameraDolly::draw() {
-    m_cameraHead.draw();
 }
 

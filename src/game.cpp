@@ -15,7 +15,7 @@ InputHandler& Game::inputHandler() {
     return m_inputHandler;
 }
 
-Player& Game::player() {
+Player& Game::player() {g
     return m_player;
 }
 

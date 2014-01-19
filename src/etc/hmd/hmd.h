@@ -9,8 +9,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 
-#include "oculusinfo.h"
-
+#include "render/stereorenderinfo.h"
 
 class HMD {
 public:
@@ -19,7 +18,7 @@ public:
 
     glm::quat orientation();
 
-    const StereoRenderInfo& info() const;
+    const StereoRenderInfo& stereoRenderInfo() const;
 
 
 protected:
@@ -27,6 +26,6 @@ protected:
     OVR::SensorDevice* m_sensorDevice;
     OVR::SensorFusion m_sensorFusion;
 
-    std::unique_ptr<StereoRenderInfo> m_info;
+    StereoRenderInfo m_stereoRenderInfo;
 };
 
