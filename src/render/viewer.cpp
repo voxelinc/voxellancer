@@ -34,8 +34,8 @@ void Viewer::toStereoView(const StereoRenderInfo& stereoRenderInfo) {
     m_view = new StereoView(stereoRenderInfo);
 }
 
-void Viewer::resized() {
-    m_view->resized();
+void Viewer::resize() {
+    m_view->resize();
 }
 
 void Viewer::draw() {

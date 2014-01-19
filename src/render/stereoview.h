@@ -15,7 +15,7 @@ class StereoView: public View {
 public:
     StereoView(const StereoRenderInfo& stereoRenderInfo);
 
-    void resized();
+    void resize();
 
     virtual void draw(Scene* scene, CameraHead* cameraHead) override;
 

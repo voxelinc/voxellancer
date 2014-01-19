@@ -1,8 +1,8 @@
 #version 130
 
 uniform sampler2D texture;
-uniform vec2 offset;
-uniform vec2 scale;
+uniform vec2 viewportPosition;
+uniform vec2 viewportSize;
 uniform vec4 distortionKs;
 uniform float distortionScale;
 uniform float lensCenter;

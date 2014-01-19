@@ -23,9 +23,9 @@ StereoView::StereoView(const StereoRenderInfo& stereoRenderInfo):
     m_screenBlitter.setProgram(&m_stereoBlitProgram);
 }
 
-void StereoView::resized() {
-    m_leftEye.resized();
-    m_rightEye.resized();
+void StereoView::resize() {
+    m_leftEye.resize();
+    m_rightEye.resize();
 }
 
 void StereoView::draw(Scene* scene, CameraHead* cameraHead) {

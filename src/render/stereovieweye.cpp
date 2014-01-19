@@ -47,7 +47,7 @@ void StereoViewEye::draw(Scene* scene, CameraHead* cameraHead) {
     m_fbo.unbind();
 }
 
-void StereoViewEye::resized() {
+void StereoViewEye::resize() {
     setupFBO();
 }
 

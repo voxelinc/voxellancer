@@ -28,7 +28,7 @@ public:
 
     glow::FrameBufferObject& fbo();
 
-    void resized();
+    void resize();
 
     void draw(Scene* scene, CameraHead* cameraHead);
 

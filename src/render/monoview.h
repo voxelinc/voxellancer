@@ -9,7 +9,7 @@ class MonoView: public View {
 public:
     MonoView();
 
-    void resized() override;
+    void resize() override;
 
     virtual void draw(Scene* scene, CameraHead* cameraHead) override;
 };

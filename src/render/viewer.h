@@ -17,7 +17,7 @@ public:
     void toMonoView();
     void toStereoView(const StereoRenderInfo& stereoRenderInfo);
 
-    void resized();
+    void resize();
 
     void draw();
 

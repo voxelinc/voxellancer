@@ -21,17 +21,21 @@ HMDManager::~HMDManager() {
 void HMDManager::setupHMD() {
     m_hmd = hmd();
 
-    m_game->viewer().toStereoView(m_hmd->stereoRenderInfo());
-    m_game->inputHandler().setHMD(m_hmd);
+    if(m_hmd) {
+        m_game->viewer().toStereoView(m_hmd->stereoRenderInfo());
+        m_game->inputHandler().setHMD(m_hmd);
+    } else {
+        std::cout << "Failed to setup HMD. No Oculus Rift connected?" << std::endl;
+    }
 }
 
 HMD* HMDManager::hmd() {
-    OVR::HMDDevice* hmd = m_deviceManager->EnumerateDevices<OVR::HMDDevice>().CreateDevice();
-
-    if (hmd != nullptr) {
-        return new HMD(hmd);
-    } else {
-        return nullptr;
+    if(m_hmd == nullptr) {
+        OVR::HMDDevice* ovrHMD = m_deviceManager->EnumerateDevices<OVR::HMDDevice>().CreateDevice();
+        if(ovrHMD) {
+            m_hmd = new HMD(ovrHMD);
+        }
     }
+    return m_hmd;
 }
 

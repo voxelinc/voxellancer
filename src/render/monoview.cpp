@@ -12,7 +12,7 @@ MonoView::MonoView() {
 
 }
 
-void MonoView::resized() {
+void MonoView::resize() {
 
 }
 
