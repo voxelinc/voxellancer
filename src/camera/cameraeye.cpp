@@ -65,21 +65,21 @@ void CameraEye::draw() {
 
     glClear(GL_DEPTH_BUFFER_BIT);
     glViewport(0, 0, m_textureSize.width(), m_textureSize.height());
-
-	World::instance()->skybox().draw(&m_camera);
-
-    m_voxelRenderer->prepareDraw(&m_camera);
-
-    for (WorldObject* worldObject : World::instance()->worldObjects()) {
-        VoxelRenderer::instance()->draw(worldObject);
-    }
-
-    m_cameraHead->hud()->draw();
-    World::instance()->voxelParticleWorld().draw(m_camera);
-
-    m_voxelRenderer->afterDraw();
-
-    m_hd3000dummy.drawIfActive();
+//
+//	World::instance()->skybox().draw(&m_camera);
+//
+//    m_voxelRenderer->prepareDraw(&m_camera);
+//
+//    for (WorldObject* worldObject : World::instance()->worldObjects()) {
+//        VoxelRenderer::instance()->draw(worldObject);
+//    }
+//
+//    m_cameraHead->hud()->draw();
+//    World::instance()->voxelParticleWorld().draw(m_camera);
+//
+//    m_voxelRenderer->afterDraw();
+//
+//    m_hd3000dummy.drawIfActive();
 
     m_fbo.unbind();
 }

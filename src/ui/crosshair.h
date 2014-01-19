@@ -2,6 +2,8 @@
 
 #include <glm/gtc/quaternion.hpp>
 
+#include "camera/camera.h"
+
 #include "utils/inertiafollower.h"
 
 #include "crosshairvoxels.h"

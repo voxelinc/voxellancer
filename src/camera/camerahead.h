@@ -54,8 +54,8 @@ protected:
     CameraDolly* m_cameraDolly;
     HUD* m_hud;
 
-    Oculus* m_oculus;
-    OculusManager m_oculusManager;
+    HMD* m_oculus;
+    HMDManager m_oculusManager;
 
     MonoBlitProgram m_monoBlitProgram;
     StereoBlitProgram m_stereoBlitProgram;

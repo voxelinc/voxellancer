@@ -7,6 +7,8 @@
 
 #include "camera/cameradolly.h"
 
+#include "etc/hmd/hmdinputhandler.h"
+
 #include "property/propertymanager.h"
 #include "property/property.h"
 
@@ -16,6 +18,7 @@
 
 #include "inputconfigurator.h"
 #include "targetselector.h"
+
 
 class WorldObject;
 class InputConfigurator;
@@ -60,16 +63,19 @@ struct SecondaryInputValues {
 
 class InputHandler {
 public:
-    InputHandler(GLFWwindow *window, Player *player);
+    InputHandler(Player *player);
+    ~InputHandler();
+
+    void setHMDInputHandler(HMDInputHandler* hmdInputHandler);
 
 	void resizeEvent(const unsigned int width, const unsigned int height);
 	void keyCallback(int key, int scancode, int action, int mods);
-	void update(float delta_sec);
+	void update(float deltaSec);
+
 
 protected:
-    GLFWwindow *m_window;
-    Camera* m_camera;
     Player* m_player;
+    HMDInputHandler* m_hmdInputHandler;
     TargetSelector* m_targetSelector;
     InputConfigurator* m_inputConfigurator;
     SecondaryInputValues m_secondaryInputValues;
@@ -99,6 +105,7 @@ protected:
     void setupJoystickControls();
 
     void retrieveInputValues();
+
 
     Property<float> prop_deadzoneMouse;
     Property<float> prop_deadzoneGamepad;

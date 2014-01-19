@@ -14,7 +14,7 @@
 HUD::HUD(Player* player):
     m_player(player),
     m_crossHair(this),
-    m_sphere(glm::vec3(0, 0, 0), 5.0f)
+    m_sphere(glm::vec3(0, 0, 3), 5.0f)
 {
 
 }
@@ -45,7 +45,7 @@ CrossHair& HUD::crossHair() {
 }
 
 glm::vec3 HUD::position() const {
-    return m_player->cameraDolly().cameraHead().position() + m_sphere.position();
+    return m_player->cameraDolly().cameraHead().position() + m_player->cameraDolly().cameraHead().orientation() * m_sphere.position();
 }
 
 glm::quat HUD::orientation() const {
@@ -60,7 +60,5 @@ void HUD::draw() {
     m_crossHair.draw();
 }
 
-void HUD::printLine(std::string line){
 
-}
 

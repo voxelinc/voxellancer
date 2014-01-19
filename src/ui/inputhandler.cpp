@@ -39,9 +39,10 @@
 * B9: right stick
 */
 
-InputHandler::InputHandler(GLFWwindow *window, Player* player):
-    m_window(window),
+InputHandler::InputHandler(Player* player):
     m_player(player),
+
+    m_hmdInputHandler(nullptr),
 
     prop_deadzoneMouse("input.deadzoneMouse"),
     prop_deadzoneGamepad("input.deadzoneGamepad"),
@@ -76,11 +77,19 @@ InputHandler::InputHandler(GLFWwindow *window, Player* player):
     m_cursorMaxDistance = glm::min(WindowManager::instance()->resolution().width(), WindowManager::instance()->resolution().height()) / 2;
 
     m_mouseControl = false;
-    m_lastfocus = glfwGetWindowAttrib(m_window, GLFW_FOCUSED);
+    m_lastfocus = glfwGetWindowAttrib(glfwGetCurrentContext(), GLFW_FOCUSED);
 
-    glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+//    glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
     retrieveInputValues();
+}
+
+InputHandler::~InputHandler() {
+    delete m_hmdInputHandler;
+}
+
+void InputHandler::setHMDInputHandler(HMDInputHandler* hmdInputHandler) {
+    m_hmdInputHandler = hmdInputHandler;
 }
 
 void InputHandler::resizeEvent(const unsigned int width, const unsigned int height){
@@ -122,8 +131,8 @@ void InputHandler::keyCallback(int key, int scancode, int action, int mods) {
 /*
 *Check here for every-frame events, e.g. view & movement controls
 */
-void InputHandler::update(float delta_sec) {
-    if (glfwGetWindowAttrib(m_window, GLFW_FOCUSED)) {
+void InputHandler::update(float deltaSec) {
+    if (glfwGetWindowAttrib(glfwGetCurrentContext(), GLFW_FOCUSED)) {
         if (m_lastfocus) {
             retrieveInputValues();
             if (m_inputConfigurator->isConfiguring()) {
@@ -131,10 +140,11 @@ void InputHandler::update(float delta_sec) {
             } else {
                 handleUpdate();
                 handleMouseUpdate();
+                handleHMDUpdate();
             }
         }
     }
-    m_lastfocus = glfwGetWindowAttrib(m_window, GLFW_FOCUSED);
+    m_lastfocus = glfwGetWindowAttrib(glfwGetCurrentContext(), GLFW_FOCUSED);
 }
 
 void InputHandler::retrieveInputValues() {
@@ -154,11 +164,11 @@ void InputHandler::handleUpdate() {
 void InputHandler::handleMouseUpdate() {
     // mouse handling
     double x, y;
-    glfwGetCursorPos(m_window, &x, &y);
+    glfwGetCursorPos(glfwGetCurrentContext(), &x, &y);
 
     placeCrossHair(x, y);
 
-    if (glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+    if (glfwGetMouseButton(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
         m_player->playerShip()->fireAtPoint(findTargetPoint());
     }
 
@@ -168,7 +178,7 @@ void InputHandler::handleMouseUpdate() {
     float angX = 0;
     float angY = 0;
 
-    if (m_mouseControl || glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS) {
+    if (m_mouseControl || glfwGetMouseButton(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS) {
         glm::vec3 rot;
         x = WindowManager::instance()->resolution().width() / 2 - (int)floor(x);
         y = WindowManager::instance()->resolution().height() / 2 - (int)floor(y);
@@ -185,6 +195,12 @@ void InputHandler::handleMouseUpdate() {
         }
         m_player->rotate(rot);
 
+    }
+}
+
+void InputHandler::handleHMDUpdate() {
+    if(m_hmdInputHandler) {
+        m_hmdInputHandler->update();
     }
 }
 
@@ -225,7 +241,7 @@ float InputHandler::getInputValue(InputMapping mapping) {
         case InputType::None:
             return 0;
         case InputType::Keyboard:
-            if (glfwGetKey(m_window, mapping.index()) == GLFW_PRESS) {
+            if (glfwGetKey(glfwGetCurrentContext(), mapping.index()) == GLFW_PRESS) {
                 return 1;
             } else {
                 return 0;

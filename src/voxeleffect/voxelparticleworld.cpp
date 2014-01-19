@@ -101,7 +101,6 @@ void VoxelParticleWorld::loadProgram() {
     m_program->attach(vertexShader, fragmentShader);
     m_program->bindFragDataLocation(0, "fragColor");
     m_program->setUniform("withBorder", 1.0f);
-
 }
 
 void VoxelParticleWorld::setupVertexAttributes() {

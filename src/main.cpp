@@ -18,6 +18,9 @@
 
 #include "geometry/size.h"
 
+#include "render/stereorenderinfo.h"
+#include "render/dummystereorenderinfo.h"
+
 #include "ui/inputhandler.h"
 
 #include "game.h"
@@ -26,7 +29,7 @@
 static GLint MajorVersionRequire = 3;
 static GLint MinorVersionRequire = 1;
 
-static Game * game;
+static Game* game;
 
 static void checkVersion() {
     glow::info("OpenGL Version Needed %;.%; (%;.%; Found)",
@@ -39,13 +42,11 @@ static void checkVersion() {
     glow::info("GLSL version: %;\n", glow::query::getString(GL_SHADING_LANGUAGE_VERSION));
 }
 
-static void errorCallback(int error, const char* description)
-{
+static void errorCallback(int error, const char* description) {
     glow::warning(description);
 }
 
-static void resizeCallback(GLFWwindow* window, int width, int height)
-{
+static void resizeCallback(GLFWwindow* window, int width, int height) {
     glow::info("Resizing viewport to %;x%;", width, height);
     if (width > 0 && height > 0) {
         glViewport(0, 0, width, height);
@@ -53,14 +54,16 @@ static void resizeCallback(GLFWwindow* window, int width, int height)
     }
 }
 
-static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
-{
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, GL_TRUE);
-    if (key == GLFW_KEY_F5 && action == GLFW_PRESS)
+    }
+    if (key == GLFW_KEY_F5 && action == GLFW_PRESS) {
         glowutils::FileRegistry::instance().reloadAll();
-    if (key == GLFW_KEY_F6 && action == GLFW_PRESS)
-        game->reloadConfig();
+    }
+    if (key == GLFW_KEY_F6 && action == GLFW_PRESS) {
+        PropertyManager::instance()->load("data/config.ini");
+    }
 
 	game->inputHandler().keyCallback(key, scancode, action, mods);
 }
@@ -73,19 +76,19 @@ static void cursorPositionCallback(GLFWwindow* window, double x, double y) {
 
 }
 
-void setCallbacks(GLFWwindow* window)
-{
+void setCallbacks(GLFWwindow* window) {
     glfwSetMouseButtonCallback(window, mouseButtonCallback);
     glfwSetCursorPosCallback(window, cursorPositionCallback);
     glfwSetKeyCallback(window, keyCallback);
     glfwSetWindowSizeCallback(window, resizeCallback);
 }
 
+int main(int argc, char* argv[]) {
+    CommandLineParser clParser;
+    clParser.parse(argc, argv);
 
-int main(void)
-{
     if (!glfwInit()) {
-        glow::fatal("could not init glfw");
+        glow::fatal("Could not init glfw");
         exit(-1);
     }
 
@@ -102,9 +105,14 @@ int main(void)
     glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
 #endif
 
- //   WindowManager::instance()->setFullScreenResolution(Size<int>(1280, 800), 1);
-    WindowManager::instance()->setWindowedResolution(Size<int>(1280, 800));
+    if(clParser.hmd()) {
+        WindowManager::instance()->setFullScreenResolution(Size<int>(1280, 800), 1);
+    } else {
+        WindowManager::instance()->setWindowedResolution(Size<int>(1280, 800));
+    }
+
     GLFWwindow* window = glfwGetCurrentContext();
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
     setCallbacks(window);
 
@@ -118,6 +126,7 @@ int main(void)
 
     OVR::System::Init(OVR::Log::ConfigureDefaultLog(OVR::LogMask_All));
 
+    glClearColor(0.0f, 0.0f, 0.3f, 1.0f);
 
 #ifdef WIN32 // TODO: find a way to correctly detect debug extension in linux
     glow::DebugMessageOutput::enable();
@@ -140,14 +149,19 @@ int main(void)
         game = new Game(window);
         game->initialize();
 
+        if(clParser.hmd()) {
+            game->hmdManager().setupHMD();
+        } else {
+            game->viewer().toStereoMode(DummyStereoRenderInfo());
+        }
+
 		int width, height;
 		glfwGetFramebufferSize(window, &width, &height);
         game->inputHandler().resizeEvent(width, height);
 
         glow::debug("Entering mainloop");
         double time = glfwGetTime();
-        while (!glfwWindowShouldClose(window))
-        {
+        while (!glfwWindowShouldClose(window)) {
             double delta = glfwGetTime() - time;
             time += delta;
 

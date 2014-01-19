@@ -43,8 +43,8 @@ protected:
     Viewport m_viewport;
 
     glow::FrameBufferObject m_fbo;
-
-	HD3000Dummy m_hd3000dummy;
+//
+//	HD3000Dummy m_hd3000dummy;
 };
 
 

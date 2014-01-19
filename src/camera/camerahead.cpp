@@ -89,7 +89,7 @@ void CameraHead::setupStereoView() {
     }
 
     assert(m_oculus);
-    OculusInfo oculusInfo = m_oculus->info();
+    StereoRenderInfo oculusInfo = m_oculus->info();
 
     glm::vec3 interpupillaryOffset(Metrics::instance()->toGameUnits(oculusInfo.interpupillaryDistance()), 0.0f, 0.0f);
 

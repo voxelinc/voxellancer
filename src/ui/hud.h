@@ -27,8 +27,6 @@ public:
     void update(float deltaSec);
     void draw();
 
-    void printLine(std::string line);
-
 
 protected:
     Player* m_player;
