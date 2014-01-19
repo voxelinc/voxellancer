@@ -58,8 +58,8 @@ void StereoViewEye::setupFBO() {
 
     texture->bind();
 
-    m_textureSize.setWidth(WindowManager::instance()->resolution().width()/2 * m_distortionScale);
-    m_textureSize.setHeight(WindowManager::instance()->resolution().height() * m_distortionScale);
+    m_textureSize.setWidth(static_cast<int>(WindowManager::instance()->resolution().width()/2 * m_distortionScale));
+    m_textureSize.setHeight(static_cast<int>(WindowManager::instance()->resolution().height() * m_distortionScale));
 
     texture->image2D(0, GL_RGB, m_textureSize.width(), m_textureSize.height(), 0, GL_RGB, GL_FLOAT, nullptr);
 

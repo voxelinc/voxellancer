@@ -28,7 +28,7 @@ protected:
 
     glm::vec3 m_lastPosition;
     bool m_lastValid;
-    double m_lastSpawn;
+    double m_timeSinceLastSpawn;
 
     Property<float> prop_lifetime, prop_stepDistance, prop_idleTime;
 };

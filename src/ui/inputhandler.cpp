@@ -1,5 +1,8 @@
 #include "inputhandler.h"
 
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+
 #include <glm/glm.hpp>
 #include <glow/glow.h>
 
@@ -322,4 +325,11 @@ void InputHandler::placeCrossHair(double winX, double winY) {
     int width, height;
     glfwGetWindowSize(glfwGetCurrentContext(), &width, &height);
     m_player->hud().setCrossHairOffset(glm::vec2((winX - (width/2))/(width/2), -(winY - (height/2))/(height/2)));
+}
+
+SecondaryInputValues::SecondaryInputValues() {
+    buttonCnt = 0;
+    axisCnt = 0;
+    buttonValues = glfwGetJoystickButtons(GLFW_JOYSTICK_1, &buttonCnt);
+    axisValues = glfwGetJoystickAxes(GLFW_JOYSTICK_1, &axisCnt);
 }
