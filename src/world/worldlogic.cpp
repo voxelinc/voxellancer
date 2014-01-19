@@ -6,7 +6,6 @@
 
 #include "world.h"
 #include "god.h"
-#include "glow/AutoTimer.h"
 
 #include <glow/AutoTimer.h>
 
@@ -18,6 +17,7 @@ WorldLogic::WorldLogic(World &world):
 }
 
 void WorldLogic::update(float deltaSecs) {
+
     m_mover.moveWorldObjects(deltaSecs);
 
     m_voxelCollisionAccumulator.parse(m_mover.voxelCollisions());

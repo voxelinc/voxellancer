@@ -42,8 +42,7 @@ private:
     void testFMOD();
 
 private:
-    GLFWwindow* m_window;
-    InputHandler m_inputHandler;
+	GLFWwindow* m_window;
     Player m_player;
     Camera m_camera;
 
@@ -51,6 +50,7 @@ private:
 
     std::unique_ptr<Skybox> m_skybox;
     std::unique_ptr<HUD> m_hud;
+    std::unique_ptr<InputHandler> m_inputHandler;
     std::unique_ptr<HD3000Dummy> m_hd3000dummy;
     std::unique_ptr<LinuxVMDummy> m_linuxvmdummy;
     std::shared_ptr<VoxelRenderer> m_voxelRenderer;

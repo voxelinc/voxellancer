@@ -18,8 +18,11 @@ public:
     virtual void onCollision() override;
     virtual void onSpawnFail() override;
 
+    virtual float emissiveness() override;
 
 protected:
+    void spawnExplosion();
+
     WorldObject *m_creator;
     float m_lifetime;
 };

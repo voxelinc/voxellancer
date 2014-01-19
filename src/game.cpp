@@ -49,10 +49,8 @@ class Ship;
 Game::Game(GLFWwindow *window) :
     m_window(window),
     m_camera(),
-    m_player(&m_camera),
-    m_inputHandler(window, &m_player, &m_camera)
+    m_player(&m_camera)
 {
-    reloadConfig();
 }
 
 Game::~Game() {
@@ -92,14 +90,13 @@ void Game::initialize() {
     normandy->setCharacter(
         new DummyCharacter(*normandy, new DummyElevatedTask(*normandy, new BasicTask(*normandy)))
     );
-
+	
     Ship *playerShip = new Ship();
     ClusterCache::instance()->fillObject(playerShip, "data/voxelcluster/basicship.csv");
     playerShip->setPosition(glm::vec3(0, 0, 10));
     playerShip->objectInfo().setName("basicship");
     playerShip->objectInfo().setShowOnHud(false);
     m_world->god().scheduleSpawn(playerShip);
-
     m_player.setShip(playerShip);
 
     Ship *aitester = new Ship();
@@ -207,13 +204,16 @@ void Game::initialize() {
     m_hud = std::unique_ptr<HUD>(new HUD(&m_player));
     m_hud->setCamera(&m_camera);
 
+    glow::debug("Create InputHandler");
+    m_inputHandler = std::unique_ptr<InputHandler>(new InputHandler(m_window, &m_player, &m_camera, m_hud.get()));
+
+    glow::debug("Create Utils");
     m_hd3000dummy = std::unique_ptr<HD3000Dummy>(new HD3000Dummy);
 
     m_out = new StreamRedirect(std::cout, m_hud.get(), true);
     m_err = new StreamRedirect(std::cerr, m_hud.get(), true);
-    
-    glClearColor(0.2f, 0.3f, 0.4f, 1.f);
-    glow::debug("Game::initialize Done");
+
+	glow::debug("Game::initialize Done");
 }
 
 
@@ -225,7 +225,8 @@ void Game::update(float deltaSec) {
     // avoid big jumps after debugging ;)
     deltaSec = glm::min(1.f, deltaSec);
 
-    m_inputHandler.update(deltaSec);
+    m_inputHandler->update(deltaSec);
+    m_player.applyUpdate();
     World::instance()->update(deltaSec);
     m_player.setFollowCam();
     m_hud->update(deltaSec);
@@ -282,7 +283,7 @@ void Game::testFMOD() {
     */
 }
 
-InputHandler * Game::inputHandler() {
-    return &m_inputHandler;
+InputHandler* Game::inputHandler() {
+    return m_inputHandler.get();
 }
 
