@@ -54,11 +54,13 @@ void WorldTransform::moveWorld(const glm::vec3& dist) {
 
 // rotate around local axis
 void WorldTransform::rotate(const glm::quat &qrot) {
-    m_orientation = m_orientation * qrot;
+	m_orientation = m_orientation * qrot;
+	assert(std::isfinite(m_orientation.x) && std::isfinite(m_orientation.y) && std::isfinite(m_orientation.z) && std::isfinite(m_orientation.w));
 }
 
 void WorldTransform::rotateWorld(const glm::quat &qrot) {
-    m_orientation = qrot * m_orientation;
+	m_orientation = qrot * m_orientation;
+	assert(std::isfinite(m_orientation.x) && std::isfinite(m_orientation.y) && std::isfinite(m_orientation.z) && std::isfinite(m_orientation.w));
 }
 
 const glm::mat4 WorldTransform::matrix() const {
