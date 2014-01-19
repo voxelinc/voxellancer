@@ -50,8 +50,8 @@ void BlitProgram::blit() {
     texture->bind();
 
     setUniform<GLint>("texture", 0);
-    setUniform<glm::vec2>("offset", m_destinationViewport.offset());
-    setUniform<glm::vec2>("scale", m_destinationViewport.scale());
+    setUniform<glm::vec2>("viewportPosition", m_destinationViewport.offset());
+    setUniform<glm::vec2>("viewportSize", m_destinationViewport.scale());
 
     use();
     m_vertexArrayObject.drawArrays(GL_TRIANGLE_STRIP, 0, 4);

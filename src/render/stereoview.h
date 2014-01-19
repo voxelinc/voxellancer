@@ -13,9 +13,9 @@
 
 class StereoView: public View {
 public:
-    StereoView(const StereoRenderInfo& stereoRenderInfo);
+    StereoView(const Viewport& viewport, const StereoRenderInfo& stereoRenderInfo);
 
-    void resize();
+    virtual void setViewport(const Viewport& viewport) override;
 
     virtual void draw(Scene* scene, CameraHead* cameraHead) override;
 
@@ -26,7 +26,7 @@ protected:
     ScreenBlitter m_screenBlitter;
     StereoBlitProgram m_stereoBlitProgram;
 
-    float m_leftEyeLensCenter;
-    float m_rightEyeLensCenter;
+    glm::vec2 m_leftEyeLensCenter;
+    glm::vec2 m_rightEyeLensCenter;
 };
 

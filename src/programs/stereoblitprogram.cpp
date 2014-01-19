@@ -31,7 +31,7 @@ void StereoBlitProgram::setDistortionScale(float distortionScale) {
     m_distortionScale = distortionScale;
 }
 
-void StereoBlitProgram::setLensCenter(float lensCenter) {
+void StereoBlitProgram::setLensCenter(glm::vec2 lensCenter) {
     m_lensCenter = lensCenter;
 }
 
@@ -47,7 +47,7 @@ void StereoBlitProgram::blit() {
 
     getUniform<glm::vec4>("distortionKs")->set(distortionVec);
     getUniform<float>("distortionScale")->set(m_distortionScale);
-    getUniform<float>("lensCenter")->set(m_lensCenter);
+    getUniform<glm::vec2>("lensCenter")->set(m_lensCenter);
 
     BlitProgram::blit();
 }

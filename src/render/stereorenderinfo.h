@@ -36,7 +36,8 @@ public:
 
     float fovy() const;
 
-    float lensCenter() const;
+    glm::vec2 leftEyeLensCenter() const;
+    glm::vec2 rightEyeLensCenter() const;
 
     glm::vec3 leftEyeOffset() const;
     glm::vec3 rightEyeOffset() const;

@@ -8,10 +8,11 @@
 #include "stereoview.h"
 
 
-Viewer::Viewer():
+Viewer::Viewer(const Viewport& viewport):
     m_scene(nullptr),
     m_view(nullptr),
-    m_cameraHead(nullptr)
+    m_cameraHead(nullptr),
+    m_viewport(viewport)
 {
     toMonoView();
 }
@@ -24,18 +25,21 @@ void Viewer::setCameraHead(CameraHead* cameraHead) {
     m_cameraHead = cameraHead;
 }
 
+void Viewer::setViewport(const Viewport& viewport) {
+    m_viewport = viewport;
+    if(m_view) {
+        m_view->setViewport(viewport);
+    }
+}
+
 void Viewer::toMonoView() {
     delete m_view;
-    m_view = new MonoView();
+    m_view = new MonoView(m_viewport);
 }
 
 void Viewer::toStereoView(const StereoRenderInfo& stereoRenderInfo) {
     delete m_view;
-    m_view = new StereoView(stereoRenderInfo);
-}
-
-void Viewer::resize() {
-    m_view->resize();
+    m_view = new StereoView(m_viewport, stereoRenderInfo);
 }
 
 void Viewer::draw() {

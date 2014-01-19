@@ -1,8 +1,6 @@
 #version 130
 
 uniform sampler2D texture;
-uniform vec2 viewportPosition;
-uniform vec2 viewportSize;
 
 in vec2 f_texCoord;
 

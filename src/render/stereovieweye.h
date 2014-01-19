@@ -24,11 +24,11 @@ public:
     };
 
 public:
-    StereoViewEye(const StereoRenderInfo& stereoRenderInfo, EyeSide side);
+    StereoViewEye(const Size<int>& viewportResolution, const StereoRenderInfo& stereoRenderInfo, EyeSide side);
 
     glow::FrameBufferObject& fbo();
 
-    void resize();
+    void setViewportResolution(const Size<int>& viewportResolution);
 
     void draw(Scene* scene, CameraHead* cameraHead);
 
@@ -42,6 +42,8 @@ protected:
     float m_distortionScale;
     Size<int> m_textureSize;
     glow::FrameBufferObject m_fbo;
+
+    Size<int> m_viewportResolution;
 
 
     void setupFBO();

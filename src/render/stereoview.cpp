@@ -14,11 +14,12 @@
 #include "render/stereorenderinfo.h"
 
 
-StereoView::StereoView(const StereoRenderInfo& stereoRenderInfo):
-    m_leftEye(stereoRenderInfo, StereoViewEye::Left),
-    m_rightEye(stereoRenderInfo, StereoViewEye::Right),
-    m_leftEyeLensCenter(stereoRenderInfo.lensCenter()),
-    m_rightEyeLensCenter(-stereoRenderInfo.lensCenter())
+StereoView::StereoView(const Viewport& viewport, const StereoRenderInfo& stereoRenderInfo):
+    View(viewport),
+    m_leftEye(Size<int>(viewport.width()/2, viewport.height()), stereoRenderInfo, StereoViewEye::Left),
+    m_rightEye(Size<int>(viewport.width()/2, viewport.height()), stereoRenderInfo, StereoViewEye::Right),
+    m_leftEyeLensCenter(stereoRenderInfo.leftEyeLensCenter()),
+    m_rightEyeLensCenter(stereoRenderInfo.rightEyeLensCenter())
 {
     m_stereoBlitProgram.setDistortionKs(stereoRenderInfo.distortionKs());
     m_stereoBlitProgram.setDistortionScale(stereoRenderInfo.distortionScale());
@@ -26,9 +27,11 @@ StereoView::StereoView(const StereoRenderInfo& stereoRenderInfo):
     m_screenBlitter.setProgram(&m_stereoBlitProgram);
 }
 
-void StereoView::resize() {
-    m_leftEye.resize();
-    m_rightEye.resize();
+void StereoView::setViewport(const Viewport& viewport) {
+    View::setViewport(viewport);
+
+    m_leftEye.setViewportResolution(Size<int>(viewport.width()/2, viewport.height()));
+    m_rightEye.setViewportResolution(Size<int>(viewport.width()/2, viewport.height()));
 }
 
 void StereoView::draw(Scene* scene, CameraHead* cameraHead) {

@@ -3,7 +3,7 @@
 uniform sampler2D texture;
 uniform vec4 distortionKs;
 uniform float distortionScale;
-uniform float lensCenter;
+uniform vec2 lensCenter;
 
 in vec2 f_viewportC;
 
@@ -22,7 +22,7 @@ vec2 HmdWarp(vec2 linear) {
 }
 
 void main() {
-    vec2 lensC = f_viewportC - vec2(lensCenter, 0);
+    vec2 lensC = f_viewportC - lensCenter;
     vec2 texC = HmdWarp(f_viewportC);
 
     if(texC.x < 0 || texC.x > 1) {

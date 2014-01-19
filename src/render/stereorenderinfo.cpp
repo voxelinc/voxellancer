@@ -136,8 +136,12 @@ float StereoRenderInfo::fovy() const {
     return m_fovy;
 }
 
-float StereoRenderInfo::lensCenter() const {
-    return 1 - 2 * m_lensSeparationDistance / m_hScreenSize;
+glm::vec2 StereoRenderInfo::leftEyeLensCenter() const {
+    return glm::vec2(1 - 2 * m_lensSeparationDistance / m_hScreenSize, 0.0f);
+}
+
+glm::vec2 StereoRenderInfo::rightEyeLensCenter() const {
+    return glm::vec2(-(1 - 2 * m_lensSeparationDistance / m_hScreenSize), 0.0f);
 }
 
 glm::vec3 StereoRenderInfo::leftEyeOffset() const {

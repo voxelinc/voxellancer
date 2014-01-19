@@ -11,7 +11,7 @@ public:
 
     void setDistortionKs(std::vector<float> distortionKs);
     void setDistortionScale(float distortionScale);
-    void setLensCenter(float lensCenter);
+    void setLensCenter(glm::vec2 lensCenter);
 
     virtual void blit() override;
 
@@ -19,6 +19,6 @@ public:
 protected:
     std::vector<float> m_distortionKs;
     float m_distortionScale;
-    float m_lensCenter;
+    glm::vec2 m_lensCenter;
 };
 

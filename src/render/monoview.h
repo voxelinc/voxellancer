@@ -7,9 +7,7 @@ class CameraHead;
 
 class MonoView: public View {
 public:
-    MonoView();
-
-    void resize() override;
+    MonoView(const Viewport& viewport);
 
     virtual void draw(Scene* scene, CameraHead* cameraHead) override;
 };

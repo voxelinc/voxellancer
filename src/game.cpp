@@ -1,10 +1,13 @@
 #include "game.h"
 
+#include "etc/windowmanager.h"
+
 #include "gamescenario.h"
 
 
 Game::Game():
     m_inputHandler(&m_player),
+    m_viewer(Viewport(0, 0, WindowManager::instance()->resolution().width(), WindowManager::instance()->resolution().height())),
     m_gameScene(this),
     m_hmdManager(this)
 {

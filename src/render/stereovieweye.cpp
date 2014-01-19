@@ -13,10 +13,11 @@
 #include "stereorenderinfo.h"
 
 
-StereoViewEye::StereoViewEye(const StereoRenderInfo& stereoRenderInfo, EyeSide side):
+StereoViewEye::StereoViewEye(const Size<int>& viewportResolution, const StereoRenderInfo& stereoRenderInfo, EyeSide side):
     m_side(side),
-    m_camera(WindowManager::instance()->resolution().width()/2, WindowManager::instance()->resolution().height()),
-    m_distortionScale(stereoRenderInfo.distortionScale())
+    m_camera(viewportResolution.width(), viewportResolution.height()),
+    m_distortionScale(stereoRenderInfo.distortionScale()),
+    m_viewportResolution(viewportResolution)
 {
     setupFBO();
 
@@ -49,7 +50,11 @@ void StereoViewEye::draw(Scene* scene, CameraHead* cameraHead) {
     m_fbo.unbind();
 }
 
-void StereoViewEye::resize() {
+void StereoViewEye::setViewportResolution(const Size<int>& viewportResolution) {
+    m_viewportResolution = viewportResolution;
+
+    m_camera.setViewport(glm::ivec2(m_viewportResolution.width(), m_viewportResolution.height()));
+
     setupFBO();
 }
 
@@ -58,8 +63,8 @@ void StereoViewEye::setupFBO() {
 
     texture->bind();
 
-    m_textureSize.setWidth(WindowManager::instance()->resolution().width()/2 * m_distortionScale);
-    m_textureSize.setHeight(WindowManager::instance()->resolution().height() * m_distortionScale);
+    m_textureSize.setWidth(m_viewportResolution.width() * m_distortionScale);
+    m_textureSize.setHeight(m_viewportResolution.height() * m_distortionScale);
 
     texture->image2D(0, GL_RGB, m_textureSize.width(), m_textureSize.height(), 0, GL_RGB, GL_FLOAT, nullptr);
 
