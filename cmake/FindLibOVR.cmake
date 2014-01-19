@@ -25,11 +25,18 @@ set(LIBOVR_LIBRARIES ${LIBOVR_LIBRARY})
 set(LIBOVR_INCLUDE_DIRS ${LIBOVR_INCLUDE_DIR})
 
 if(LINUX) 
-	set(LIBOVR_LIBRARIES
-		${LIBOVR_LIBRARIES}
-		Xinerama
-		udev
-	)
+    set(LIBOVR_LIBRARIES
+        ${LIBOVR_LIBRARIES}
+        Xinerama
+        udev
+    )
+endif()
+
+if(WIN32) 
+    set(LIBOVR_LIBRARIES
+        ${LIBOVR_LIBRARIES}
+        winmm
+    )
 endif()
 
 mark_as_advanced( LIBOVR_FOUND )

@@ -2,12 +2,10 @@
 
 #include <vector>
 
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-
 #include "geometry/size.h"
 #include "geometry/viewport.h"
 
+struct GLFWmonitor;
 
 class WindowManager {
 public:

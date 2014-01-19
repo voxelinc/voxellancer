@@ -1,8 +1,5 @@
 #pragma once
 
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-
 #include "etc/hmd/hmdmanager.h"
 
 #include "render/viewer.h"

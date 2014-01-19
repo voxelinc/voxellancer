@@ -2,9 +2,6 @@
 
 #include <vector>
 
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-
 #include "camera/cameradolly.h"
 
 #include "etc/hmd/hmd.h"
@@ -53,12 +50,7 @@ struct SecondaryInputValues {
     const unsigned char *buttonValues;
     const float *axisValues;
 
-    SecondaryInputValues(){
-        buttonCnt = 0;
-        axisCnt = 0;
-        buttonValues = glfwGetJoystickButtons(GLFW_JOYSTICK_1, &buttonCnt);
-        axisValues = glfwGetJoystickAxes(GLFW_JOYSTICK_1, &axisCnt);
-    }
+    SecondaryInputValues();
 };
 
 class InputHandler {

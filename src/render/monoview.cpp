@@ -1,5 +1,8 @@
 #include "monoview.h"
 
+#include <GL/glew.h>
+#include <GL/gl.h>
+
 #include "camera/camera.h"
 #include "camera/camerahead.h"
 
@@ -26,3 +29,4 @@ void MonoView::draw(Scene* scene, CameraHead* cameraHead) {
 
     scene->draw(&camera);
 }
+
