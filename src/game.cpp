@@ -104,19 +104,19 @@ void Game::initialize() {
 
     Ship *follower = new Ship();
     ClusterCache::instance()->fillObject(follower, "data/voxelcluster/basicship.csv");
-    follower->setPosition(glm::vec3(40, 0, -50));
+    follower->setPosition(glm::vec3(100, 0, -50));
     follower->objectInfo().setName("follower");
     follower->objectInfo().setShowOnHud(true);
     //follower->setCharacter(new DummyCharacter(*follower, new FollowTask(*follower, normandy->handle())));
 	m_world->god().scheduleSpawn(follower);
 	FlyToTask* task = new FlyToTask(*follower);
-	task->setTargetPoint(glm::vec3(40, 50, 50));
+	task->setTargetPoint(glm::vec3(-100, 0, -50));
 	follower->setCharacter(
 		new DummyCharacter(*follower, new DummyElevatedTask(*follower, task)));
 
     WorldObject *wall = new WorldObject(1);
-    wall->move(glm::vec3(-30, 0, -50));
-    wall->rotate(glm::angleAxis(glm::radians(-90.f), glm::vec3(0, 1, 0)));
+    wall->move(glm::vec3(-30, -20, -60));
+    //wall->rotate(glm::angleAxis(glm::radians(-90.f), glm::vec3(0, 1, 0)));
     for(int x = 0; x < 20; x++) {
         for(int y = 0; y < 15; y++) {
             for(int z = 0; z < 3; z++) {
@@ -131,7 +131,7 @@ void Game::initialize() {
 
     glow::debug("Create Planet");
     WorldObject *planet = new WorldObject();
-    planet->move(glm::vec3(20, 10, -30));
+    planet->move(glm::vec3(20, -5, -60));
     int diameter = 24;
     glm::vec3 middle(diameter/2, diameter/2, diameter/2);
     for(int x = 0; x < diameter; x++) {
