@@ -92,7 +92,7 @@ void WindowManager::setFullScreenResolution(const Size<int>& resolution, int mon
 }
 
 bool WindowManager::fullScreen() const {
-
+    return false; // TODO
 }
 
 void WindowManager::setFullScreen(bool fullScreen) {
