@@ -25,5 +25,8 @@ protected:
     StereoViewEye m_rightEye;
     ScreenBlitter m_screenBlitter;
     StereoBlitProgram m_stereoBlitProgram;
+
+    float m_leftEyeLensCenter;
+    float m_rightEyeLensCenter;
 };
 

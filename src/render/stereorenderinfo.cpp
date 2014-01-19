@@ -11,7 +11,7 @@
 #include "utils/metrics.h"
 
 
-StereoRenderInfo StereoRenderInfo::fromOVRInfo(const OVR::HMDInfo& hmdInfo) {
+StereoRenderInfo StereoRenderInfo::fromOVRInfo(const OVR::HMDInfo& hmdInfo) { std::cout << "From OVR" << std::endl;
     StereoRenderInfo result;
 
     result.m_hScreenSize = hmdInfo.HScreenSize;

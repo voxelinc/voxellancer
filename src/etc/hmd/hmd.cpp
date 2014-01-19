@@ -33,6 +33,7 @@ glm::quat HMD::orientation() {
 
     euler.x *= -1.0f;
     euler.y *= -1.0f;
+    euler.z *= -1.0f;
 
     return glm::quat(euler);
 }
