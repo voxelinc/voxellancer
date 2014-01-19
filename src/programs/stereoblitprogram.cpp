@@ -51,3 +51,4 @@ void StereoBlitProgram::blit() {
 
     BlitProgram::blit();
 }
+

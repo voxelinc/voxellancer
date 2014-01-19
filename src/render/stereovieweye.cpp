@@ -1,5 +1,7 @@
 #include "stereovieweye.h"
 
+#include <iostream>
+
 #include <glow/Texture.h>
 #include <glow/RenderBufferObject.h>
 
@@ -13,7 +15,7 @@
 
 StereoViewEye::StereoViewEye(const StereoRenderInfo& stereoRenderInfo, EyeSide side):
     m_side(side),
-    m_camera(WindowManager::instance()->resolution().width(), WindowManager::instance()->resolution().height()),
+    m_camera(WindowManager::instance()->resolution().width()/2, WindowManager::instance()->resolution().height()),
     m_distortionScale(stereoRenderInfo.distortionScale())
 {
     setupFBO();
@@ -56,8 +58,9 @@ void StereoViewEye::setupFBO() {
 
     texture->bind();
 
-    m_textureSize.setWidth(WindowManager::instance()->resolution().width() * m_distortionScale);
+    m_textureSize.setWidth(WindowManager::instance()->resolution().width()/2 * m_distortionScale);
     m_textureSize.setHeight(WindowManager::instance()->resolution().height() * m_distortionScale);
+
     texture->image2D(0, GL_RGB, m_textureSize.width(), m_textureSize.height(), 0, GL_RGB, GL_FLOAT, nullptr);
 
     texture->setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
