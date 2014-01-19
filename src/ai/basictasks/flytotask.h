@@ -18,7 +18,8 @@ public:
     virtual void update(float deltaSec);
 
 protected:
-	glm::vec3 calculateEvasionPoint();
+    glm::vec3 calculateTargetPoint();
+    glm::vec3 calculateEvasionPointFor(WorldObject* obstacle);
 	WorldObject* closestObjectExceptSelf(std::set<WorldObject*>* objects);
 
 	glm::vec3 m_targetPoint;

@@ -90,13 +90,13 @@ void Game::initialize() {
     // TODO: use these dummies to test BasicTasks
     PatrolWaypointsTask* ta = new PatrolWaypointsTask(
         *normandy,
-        std::list<glm::vec3>{ glm::vec3(400, 0, -400), glm::vec3(-400, 0, -400), glm::vec3(0, 50, -600) });
+        std::list<glm::vec3>{ glm::vec3(400, 0, -400), glm::vec3(-400, 0, -400), glm::vec3(0, 100, -600) });
     normandy->setCharacter(
 		new DummyCharacter(*normandy, ta)
     );
 
     Ship *playerShip = new Ship();
-    ClusterCache::instance()->fillObject(playerShip, "data/voxelcluster/basicship.csv");
+    ClusterCache::instance()->fillObject(playerShip, "data/voxelcluster/normandy.csv");
     playerShip->setPosition(glm::vec3(0, 0, 10));
     playerShip->objectInfo().setName("basicship");
     playerShip->objectInfo().setShowOnHud(false);
