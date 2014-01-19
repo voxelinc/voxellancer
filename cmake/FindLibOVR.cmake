@@ -9,7 +9,9 @@ find_path(LIBOVR_INCLUDE_DIR OVR.h
     DOC "The directory where OVR.h resides")
 
 find_library(LIBOVR_LIBRARY
-    NAMES ovr
+    NAMES ovr libovr64
+    PATHS
+    ${LIB_DIR}/OculusSDK/LibOVR/Lib/x64
     DOC "The LIBOVR library")
 
     
