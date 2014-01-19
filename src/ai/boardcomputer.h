@@ -16,8 +16,8 @@ class BoardComputer
 public:
     BoardComputer(Ship& ship);
     
-    void moveTo(glm::vec3 position, float minDistance = 0);
-    void rotateTo(glm::vec3 position);
+    void moveTo(const glm::vec3& position, float minDistance = 0);
+    void rotateTo(const glm::vec3& position);
     void shootBullet(const std::list<std::shared_ptr<WorldObjectHandle>>& targets);
     void shootRockets(std::shared_ptr<WorldObjectHandle> target);
 

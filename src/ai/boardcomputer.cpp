@@ -14,7 +14,7 @@ BoardComputer::BoardComputer(Ship& ship) :
 }
 
 // accelerates towards position. Tries to keep a minimum distance of minDistance to the target
-void BoardComputer::moveTo(glm::vec3 position, float minDistance) {
+void BoardComputer::moveTo(const glm::vec3& position, float minDistance) {
     glm::vec3 delta = position - m_ship.transform().position();
     glm::vec3 direction = glm::inverse(m_ship.transform().orientation()) * glm::normalize(delta);
     float distance = glm::length(delta);
@@ -30,19 +30,22 @@ void BoardComputer::moveTo(glm::vec3 position, float minDistance) {
 
 }
 
-float angleBetween(glm::vec3 u, glm::vec3 v) {
+float angleBetween(const glm::vec3& u, const glm::vec3& v) {
     float angle = glm::acos(glm::dot(glm::normalize(u), glm::normalize(v)));
     assert(std::isfinite(angle));
     return angle;
 }
 
-glm::quat quatFrom(glm::vec3 u, glm::vec3 v) {
+glm::quat quatFrom(const glm::vec3& u, const glm::vec3& v) {
     float angle = angleBetween(u, v);
-    glm::vec3 w = glm::normalize(glm::cross(u, v));
-    return glm::angleAxis(angle, w);
+    glm::vec3 w = glm::cross(u, v);
+    if (w == glm::vec3(0)) {
+        w = RandVec3::randUnitVec();
+    }
+    return glm::angleAxis(angle, glm::normalize(w));
 }
 
-void BoardComputer::rotateTo(glm::vec3 position) {
+void BoardComputer::rotateTo(const glm::vec3& position) {
     float minDelta = glm::radians(5.0f);
     glm::vec3 shipDirection =  glm::vec3(0, 0, -1);
     glm::vec3 targetDirection = glm::inverse(m_ship.transform().orientation()) * glm::normalize(position - m_ship.transform().position());

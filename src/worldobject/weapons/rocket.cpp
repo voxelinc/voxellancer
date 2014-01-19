@@ -48,13 +48,13 @@ void Rocket::update(float deltaSec) {
             }
         } else { // the target is either perfectly in front or behind us
             if (dir == -myOrientation) {
-                rotation = glm::angleAxis(glm::pi<float>() / 2.0f, glm::vec3(1, 0, 0));
+                rotation = glm::angleAxis(glm::half_pi<float>(), glm::vec3(1, 0, 0));
             }
         }
 
         if (rotation != glm::quat()) {
             //m_transform.rotate(0.1f * rotation); // directly rotating is easier
-            m_physics.setAngularSpeed(0.1f * glm::eulerAngles(rotation));
+            m_physics.setAngularSpeed(6.0f * glm::eulerAngles(rotation));
         }
 
     }
