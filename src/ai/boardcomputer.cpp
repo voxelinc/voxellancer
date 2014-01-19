@@ -31,7 +31,7 @@ void BoardComputer::moveTo(const glm::vec3& position, float minDistance) {
 }
 
 float angleBetween(const glm::vec3& u, const glm::vec3& v) {
-    float angle = glm::acos(glm::dot(glm::normalize(u), glm::normalize(v)));
+    float angle = glm::acos(glm::clamp(glm::dot(glm::normalize(u), glm::normalize(v)), 0.0f, 1.0f));
     assert(std::isfinite(angle));
     return angle;
 }

@@ -42,7 +42,7 @@ void Rocket::update(float deltaSec) {
         glm::quat rotation;
         if (cross != glm::vec3(0)) {
             glm::vec3 rotationAxis = glm::normalize(cross);
-            float angle = glm::acos(glm::dot(dir, myOrientation));
+            float angle = glm::acos(glm::clamp(glm::dot(dir, myOrientation), 0.0f, 1.0f));
             if (angle > glm::radians(0.1)) {
                 rotation = glm::angleAxis(-angle, rotationAxis);
             }
