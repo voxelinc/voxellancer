@@ -17,7 +17,7 @@ Bullet::Bullet(WorldObject* creator, glm::vec3 position, glm::quat orientation, 
     glm::vec3 cross = glm::cross(dir, myOrientation);
 
     ClusterCache::instance()->fillObject(this, "data/voxelcluster/bullet.csv");
-
+    
     m_transform.setOrientation(orientation); //set orientation to ship orientation
     if (cross != glm::vec3(0)) {
         glm::vec3 rotationAxis = glm::normalize(cross);
@@ -35,6 +35,7 @@ Bullet::Bullet(WorldObject* creator, glm::vec3 position, glm::quat orientation, 
     m_objectInfo.setCanLockOn(false);
 
     CollisionFilterable::setCollideableWith(CollisionFilterClass::Bullet, false);
+    CollisionFilterable::setCollideableWith(CollisionFilterClass::Ship, false);
 
     m_physics.setDampening(0);
     m_physics.setAngularDampening(0);

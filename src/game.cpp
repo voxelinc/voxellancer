@@ -149,22 +149,22 @@ void Game::initialize() {
     for (int e = 0; e < 1; e++) {
         Ship *enemy = new Ship();
         int r = 200;
-        enemy->move(glm::vec3(-30 + rand() % r - r / 2, rand() % r - r / 2, -200 + rand() % r - r / 2));
+        enemy->move(glm::vec3(-200 + rand() % r - r / 2, rand() % r - r / 2, -200 + rand() % r - r / 2));
         enemy->objectInfo().setName("enemy2");
         enemy->objectInfo().setShowOnHud(false);
         enemy->objectInfo().setCanLockOn(false);
-        ClusterCache::instance()->fillObject(enemy, "data/voxelcluster/normandy.csv");
+        ClusterCache::instance()->fillObject(enemy, "data/voxelcluster/basicship.csv");
         m_world->god().scheduleSpawn(enemy);
         enemies2.push_back(enemy->handle());
     }
     for (int e = 0; e < 1; e++) {
         Ship *enemy = new Ship();
         int r = 200;
-        enemy->move(glm::vec3(40 + rand() % r - r / 2, rand() % r - r / 2, -200 + rand() % r - r / 2));
+        enemy->move(glm::vec3(200 + rand() % r - r / 2, rand() % r - r / 2, -200 + rand() % r - r / 2));
         enemy->objectInfo().setName("enemy1");
         enemy->objectInfo().setShowOnHud(false);
         enemy->objectInfo().setCanLockOn(false);
-        ClusterCache::instance()->fillObject(enemy, "data/voxelcluster/normandy.csv");
+        ClusterCache::instance()->fillObject(enemy, "data/voxelcluster/basicship.csv");
         m_world->god().scheduleSpawn(enemy);
         enemies1.push_back(enemy->handle());
     }

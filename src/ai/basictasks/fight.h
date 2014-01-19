@@ -19,6 +19,7 @@ protected:
     WorldObject* m_primaryTarget;
     void updateTargets();
     void updateState();
-    int state;
+    int m_state;
+    int m_maxFireDistance, m_maxRocketDistance;
 };
 

@@ -35,11 +35,10 @@ void Player::applyUpdate() {
 }
 
 void Player::setFollowCam() {
-    m_camera->setPosition(glm::mix(m_camera->position(), m_playerShip->transform().position(), 0.5f));
     m_camera->setPosition(m_playerShip->transform().position());
     m_camera->setOrientation(glm::slerp(m_camera->orientation(), m_playerShip->transform().orientation(), 0.5f));
-    m_camera->move(glm::vec3(0, m_playerShip->transform().center().y + 10, m_playerShip->transform().center().z + 15));
-    m_camera->rotateX(-5);
+    m_camera->move(glm::vec3(0, m_playerShip->transform().center().y + 7, m_playerShip->transform().center().z + 15));
+    m_camera->rotateX((float)glm::radians(5.0f));
 }
 
 Ship* Player::playerShip() {

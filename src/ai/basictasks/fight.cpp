@@ -4,11 +4,14 @@ Fight::Fight(Ship& ship, std::list<std::shared_ptr<WorldObjectHandle>> targets) 
 BasicTask(ship),
 m_targets(targets)
 {
-    state = 0;
+    m_state = 0;
+    m_maxFireDistance = 400;
+    m_maxRocketDistance = 150;
 }
 
 void Fight::update(float deltaSec) {
     updateTargets();
+    updateState();
 
     if (m_targets.empty()) {
         return;
@@ -54,5 +57,15 @@ bool Fight::isInProgress() {
 }
 
 void Fight::updateState() {
+    switch (m_state) {
+        case 0:
+            if (m_targets.empty()) {
+                return;
+            } else {
+                if (glm::length(m_ship.transform().position() - m_primaryTarget->transform().position) < m_maxFireDistance) {
 
+                }
+                return;
+            }
+    }
 }
