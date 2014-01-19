@@ -149,25 +149,25 @@ void Game::initialize() {
     Ship* previous = normandy;
     std::list<std::shared_ptr<WorldObjectHandle>> enemies1;
     std::list<std::shared_ptr<WorldObjectHandle>> enemies2;
-    for (int e = 0; e < 5; e++) {
+    for (int e = 0; e < 1; e++) {
         Ship *enemy = new Ship();
         int r = 200;
-        enemy->move(glm::vec3(-300 + rand() % r - r / 2, rand() % r - r / 2, -200 + rand() % r - r / 2));
+        enemy->move(glm::vec3(-30 + rand() % r - r / 2, rand() % r - r / 2, -200 + rand() % r - r / 2));
         enemy->objectInfo().setName("enemy2");
         enemy->objectInfo().setShowOnHud(false);
         enemy->objectInfo().setCanLockOn(false);
-        ClusterCache::instance()->fillObject(enemy, "data/voxelcluster/basicship.csv");
+        ClusterCache::instance()->fillObject(enemy, "data/voxelcluster/normandy.csv");
         m_world->god().scheduleSpawn(enemy);
         enemies2.push_back(enemy->handle());
     }
-    for (int e = 0; e < 6; e++) {
+    for (int e = 0; e < 1; e++) {
         Ship *enemy = new Ship();
         int r = 200;
-        enemy->move(glm::vec3(400 + rand() % r - r / 2, rand() % r - r / 2, -200 + rand() % r - r / 2));
+        enemy->move(glm::vec3(40 + rand() % r - r / 2, rand() % r - r / 2, -200 + rand() % r - r / 2));
         enemy->objectInfo().setName("enemy1");
         enemy->objectInfo().setShowOnHud(false);
         enemy->objectInfo().setCanLockOn(false);
-        ClusterCache::instance()->fillObject(enemy, "data/voxelcluster/basicship.csv");
+        ClusterCache::instance()->fillObject(enemy, "data/voxelcluster/normandy.csv");
         m_world->god().scheduleSpawn(enemy);
         enemies1.push_back(enemy->handle());
     }
@@ -191,7 +191,7 @@ void Game::initialize() {
         e->setCharacter(new DummyCharacter(*e, new DummyElevatedTask(*e, new Fight(*e, enemies1))));
     }
 
-    //aitester->setCharacter(new DummyCharacter(*aitester, new DummyElevatedTask(*aitester, new Fight(*aitester, enemies))));
+   //aitester->setCharacter(new DummyCharacter(*aitester, new DummyElevatedTask(*aitester, new Fight(*aitester, std::list<std::shared_ptr<WorldObjectHandle>>{playerShip->handle()}))));
 
 
     glow::debug("Initial spawn");

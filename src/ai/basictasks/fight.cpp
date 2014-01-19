@@ -4,6 +4,7 @@ Fight::Fight(Ship& ship, std::list<std::shared_ptr<WorldObjectHandle>> targets) 
 BasicTask(ship),
 m_targets(targets)
 {
+    state = 0;
 }
 
 void Fight::update(float deltaSec) {
@@ -50,4 +51,8 @@ bool Fight::isInProgress() {
         return true;
     }
     return false;
+}
+
+void Fight::updateState() {
+
 }

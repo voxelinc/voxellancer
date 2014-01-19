@@ -18,5 +18,7 @@ protected:
     std::list<std::shared_ptr<WorldObjectHandle>> m_targets;
     WorldObject* m_primaryTarget;
     void updateTargets();
+    void updateState();
+    int state;
 };
 
