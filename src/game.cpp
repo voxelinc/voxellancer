@@ -42,6 +42,7 @@
 #include "ai/basictask.h"
 #include "ai/elevatedtasks/followtask.h"
 #include "ai/basictasks/flytotask.h"
+#include "ai/elevatedtasks/patrolwaypointstask.h"
 
 
 class Ship;
@@ -87,11 +88,12 @@ void Game::initialize() {
     normandy->objectInfo().setCanLockOn(true);
     m_world->god().scheduleSpawn(normandy);
     // TODO: use these dummies to test BasicTasks
-	/*FlyToTask* ta = new FlyToTask(*normandy);
-	ta->setTargetPoint(glm::vec3(100, 100, -100));
+    PatrolWaypointsTask* ta = new PatrolWaypointsTask(
+        *normandy,
+        std::list<glm::vec3>{ glm::vec3(400, 0, -400), glm::vec3(-400, 0, -400), glm::vec3(0, 50, -600) });
     normandy->setCharacter(
-		new DummyCharacter(*normandy, new DummyElevatedTask(*normandy, ta))
-    );*/
+		new DummyCharacter(*normandy, ta)
+    );
 
     Ship *playerShip = new Ship();
     ClusterCache::instance()->fillObject(playerShip, "data/voxelcluster/basicship.csv");
