@@ -9,12 +9,12 @@
 #include "resource/ddstexture.h"
 
 Skybox::Skybox() :
-	m_texture(0),
-	m_shaderProgram(0),
-	m_vertexArrayObject(0),
-	m_vertexBuffer(0)
+    m_texture(0),
+    m_shaderProgram(0),
+    m_vertexArrayObject(0),
+    m_vertexBuffer(0)
 {
-	
+    
 }
 
 void Skybox::initialize() {
@@ -71,20 +71,20 @@ void Skybox::initialize() {
 }
 
 void Skybox::draw(Camera *camera){
-    if (m_texture) {
+    if (!m_texture) {
         initialize();
     }
-	glDisable(GL_DEPTH_TEST);
+    glDisable(GL_DEPTH_TEST);
 
-	m_texture->bind();
-	// we don't use camera->viewInverted() because the skybox does not travel with the camera
-	m_shaderProgram->setUniform("viewProjectionInverted", glm::mat4_cast(camera->orientation())*glm::inverse(camera->projection()));
-	m_shaderProgram->use();
+    m_texture->bind();
+    // we don't use camera->viewInverted() because the skybox does not travel with the camera
+    m_shaderProgram->setUniform("viewProjectionInverted", glm::mat4_cast(camera->orientation())*glm::inverse(camera->projection()));
+    m_shaderProgram->use();
 
-	m_vertexArrayObject->drawArrays(GL_TRIANGLE_FAN, 0, 4);
+    m_vertexArrayObject->drawArrays(GL_TRIANGLE_FAN, 0, 4);
 
-	m_shaderProgram->release();
-	m_texture->unbind();
+    m_shaderProgram->release();
+    m_texture->unbind();
 
-	glEnable(GL_DEPTH_TEST);
+    glEnable(GL_DEPTH_TEST);
 }
