@@ -26,7 +26,6 @@ void Point::set(const glm::vec3& p) {
     m_p = p;
 }
 
-
 bool Point::intersects(const Sphere& sphere) const {
     return glm::length(sphere.position() - m_p) < sphere.radius();
 }
