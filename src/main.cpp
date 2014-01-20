@@ -143,6 +143,7 @@ int main(void)
 #endif
 
 //#define TRYCATCH
+
 #ifdef TRYCATCH
     try {
 #endif

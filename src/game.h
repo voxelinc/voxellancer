@@ -24,6 +24,7 @@ class VoxelRenderer;
 class HD3000Dummy;
 class LinuxVMDummy;
 class Ship;
+class Starfield;
 
 class Game {
 
@@ -53,6 +54,7 @@ private:
     std::unique_ptr<InputHandler> m_inputHandler;
     std::unique_ptr<HD3000Dummy> m_hd3000dummy;
     std::unique_ptr<LinuxVMDummy> m_linuxvmdummy;
+    std::unique_ptr<Starfield> m_starfield;
     std::shared_ptr<VoxelRenderer> m_voxelRenderer;
 
     StreamRedirect* m_out;
