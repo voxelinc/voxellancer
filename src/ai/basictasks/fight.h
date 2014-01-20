@@ -19,7 +19,16 @@ protected:
     WorldObject* m_primaryTarget;
     void updateTargets();
     void updateState();
+    void setState(int newState);
+
+    glm::vec3 findPositionBehindTarget();
+    float targetDistance();
+    float pointDistance(glm::vec3 point);
+    float Fight::angleToTarget();
+
     int m_state;
-    int m_maxFireDistance, m_maxRocketDistance;
+    bool m_stateChanged;
+    float m_maxFireDistance, m_maxRocketDistance, m_minEnemyDistance;
+    glm::vec3 m_positionBehindTarget;
 };
 

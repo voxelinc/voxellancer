@@ -89,9 +89,18 @@ void Ship::fireAtObject() {
 
 float Ship::minAimDistance() { // is this needed ?!
     float range = 1000;
-    for (Hardpoint *hardpoint : m_hardpoints){
+    for (Hardpoint *hardpoint : m_hardpoints) {
         if (hardpoint->aimRange() != -1)
             range = glm::min(hardpoint->aimRange(), range);
+    }
+    return range;
+}
+
+float Ship::maxAimDistance() { // is this needed ?!
+    float range = 0;
+    for (Hardpoint *hardpoint : m_hardpoints) {
+        if (hardpoint->aimRange() != -1)
+            range = glm::max(hardpoint->aimRange(), range);
     }
     return range;
 }
