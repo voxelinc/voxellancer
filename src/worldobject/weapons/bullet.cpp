@@ -37,7 +37,7 @@ Bullet::Bullet(WorldObject* creator, glm::vec3 position, glm::quat orientation, 
     m_objectInfo.setCanLockOn(false);
 
     CollisionFilterable::setCollideableWith(CollisionFilterClass::Bullet, false);
-    CollisionFilterable::setCollideableWith(CollisionFilterClass::Ship, false);
+    //CollisionFilterable::setCollideableWith(CollisionFilterClass::Ship, false);
 
     m_physics.setDampening(0);
     m_physics.setAngularDampening(0);

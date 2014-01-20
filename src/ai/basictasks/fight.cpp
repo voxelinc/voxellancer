@@ -16,9 +16,9 @@ void Fight::update(float deltaSec) {
     updateState();
 
     switch (m_state) {
-        case 0:
+        case idle:
             return;
-        case 1:
+        case approach:
             if (angleToTarget() > 45.0f) {
                 m_ship.boardComputer()->rotateTo(m_primaryTarget->transform().position());
             } else {
@@ -27,7 +27,7 @@ void Fight::update(float deltaSec) {
             }
             m_ship.boardComputer()->shootBullet(m_targets);
             break;
-        case 2:
+        case engage:
             if (angleToTarget() > 45.0f) {
                 m_ship.boardComputer()->moveTo(m_ship.transform().position() + glm::vec3(0, 0, -1)*m_ship.transform().orientation());
                 m_ship.boardComputer()->rotateTo(m_primaryTarget->transform().position());
@@ -38,9 +38,11 @@ void Fight::update(float deltaSec) {
                     m_ship.boardComputer()->shootRockets(m_primaryTarget->handle());
                 }
             }
-            m_ship.boardComputer()->shootBullet(m_targets);
+            if (targetDistance() < m_maxFireDistance) {
+                m_ship.boardComputer()->shootBullet(m_targets);
+            }
             break;
-        case 3:
+        case evade:
             m_ship.boardComputer()->rotateTo(m_positionBehindTarget);
             m_ship.boardComputer()->moveTo(m_positionBehindTarget);
             m_ship.boardComputer()->shootBullet(m_targets);
@@ -75,7 +77,7 @@ void Fight::setTargets(std::list<std::shared_ptr<WorldObjectHandle>> targets) {
 }
 
 bool Fight::isInProgress() {
-    if (m_targets.empty()) {
+    if (m_state == idle) {
         return true;
     }
     return false;
@@ -83,47 +85,47 @@ bool Fight::isInProgress() {
 
 void Fight::updateState() {
     switch (m_state) {
-        case 0:
+        case idle:
             if (m_targets.empty()) {
                 return;
             } else {
-                setState(1);
+                setState(approach);
             }
             break;
-        case 1:
+        case approach:
             if (targetDistance() < m_maxFireDistance) {
-                setState(2);
+                setState(engage);
             }
             break;
-        case 2:
+        case engage:
             //printf("targetDistance: %f, minEnemyDistance: %f\n", targetDistance(), m_minEnemyDistance);
             if (targetDistance() < m_minEnemyDistance) {
-                setState(3);
+                setState(evade);
                 m_positionBehindTarget = findPositionBehindTarget();
             }
             break;
-        case 3:
-            if (pointDistance(m_positionBehindTarget) < 50 && targetDistance() < m_minEnemyDistance) {
+        case evade:
+            if (pointDistance(m_positionBehindTarget) < 20 && targetDistance() < m_minEnemyDistance) {
                 m_positionBehindTarget = findPositionBehindTarget();
             }
-            if (pointDistance(m_positionBehindTarget) > 50)
+            if (pointDistance(m_positionBehindTarget) > 20)
                 break;
             if (targetDistance() < m_minEnemyDistance) {
                 break;
             }
             if (targetDistance() < m_maxFireDistance) {
-                setState(2);
+                setState(engage);
             } else {
-                setState(1);
+                setState(approach);
             }
             break;
         default:
-            printf("Unexpected case");
+            assert(false);
             return;
     }
 
     if (m_state > 0 && m_targets.empty()) {
-        setState(0);
+        setState(idle);
     }
 
     if (m_stateChanged) {
@@ -133,30 +135,26 @@ void Fight::updateState() {
 }
 
 float Fight::targetDistance() {
-    return glm::length(m_ship.transform().position() - m_primaryTarget->transform().position());
+    return glm::length(m_ship.transform().position() - m_primaryTarget->transform().position()) - m_ship.minimalGridSphere().radius() - m_primaryTarget->minimalGridSphere().radius();
 }
 
 float Fight::pointDistance(glm::vec3 point) {
-    return glm::length(m_ship.transform().position() - point);
+    return glm::length(m_ship.transform().position() - point) - m_ship.minimalGridSphere().radius();
 }
 
 glm::vec3 Fight::findPositionBehindTarget() {
     float x = (rand() % 50 - 25) / 100.0f;
     float y = (rand() % 50 - 25) / 100.0f;
     glm::vec3 point = glm::vec3(x, y, -1);
-    point *= 2 * m_minEnemyDistance;
+    point *= 3 * m_minEnemyDistance;
     point = point * m_ship.transform().orientation();
     point += m_ship.transform().position();
-    printf("start: %f %f %f target: %f %f %f point: %f %f %f", m_ship.transform().position().x, m_ship.transform().position().y, m_ship.transform().position().z
-        , m_primaryTarget->transform().position().x, m_primaryTarget->transform().position().y, m_primaryTarget->transform().position().z
-        , point.x, point.y, point.z);
     return point;
 }
 
 void Fight::setState(int newState) {
     m_stateChanged = true;
     m_state = newState;
-    printf("new State: %i\n", m_state);
 }
 
 float Fight::angleToTarget() {

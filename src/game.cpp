@@ -86,13 +86,12 @@ void Game::initialize() {
     normandy->objectInfo().setShowOnHud(true);
     normandy->objectInfo().setCanLockOn(true);
     //m_world->god().scheduleSpawn(normandy);
-    // TODO: use these dummies to test BasicTasks
     normandy->setCharacter(
         new DummyCharacter(*normandy, new DummyElevatedTask(*normandy, new BasicTask(*normandy)))
     );
 	
     Ship *playerShip = new Ship();
-    ClusterCache::instance()->fillObject(playerShip, "data/voxelcluster/basicship.csv");
+    ClusterCache::instance()->fillObject(playerShip, "data/voxelcluster/eagle.csv");
     playerShip->setPosition(glm::vec3(0, 0, 10));
     playerShip->objectInfo().setName("basicship");
     playerShip->objectInfo().setShowOnHud(false);

@@ -4,6 +4,13 @@
 #include "../basictask.h"
 #include "worldobject/ship.h"
 
+enum State {
+    idle,
+    approach,
+    engage,
+    evade
+};
+
 class Fight : public BasicTask {
 public:
     Fight(Ship& ship, std::list<std::shared_ptr<WorldObjectHandle>> targets);
