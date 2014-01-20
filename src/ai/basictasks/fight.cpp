@@ -7,7 +7,7 @@ m_targets(targets)
     m_state = 0;
     m_maxFireDistance = m_ship.maxAimDistance();
     m_maxRocketDistance = 200.0f;
-    m_minEnemyDistance = 130.0f;
+    m_minEnemyDistance = 100.0f;
     m_stateChanged = false;
 }
 
@@ -43,6 +43,7 @@ void Fight::update(float deltaSec) {
         case 3:
             m_ship.boardComputer()->rotateTo(m_positionBehindTarget);
             m_ship.boardComputer()->moveTo(m_positionBehindTarget);
+            m_ship.boardComputer()->shootBullet(m_targets);
             break;
     }
 
@@ -140,10 +141,15 @@ float Fight::pointDistance(glm::vec3 point) {
 }
 
 glm::vec3 Fight::findPositionBehindTarget() {
-    float x = (rand() % 100 - 50) / 100.0f;
-    float y = (rand() % 100 - 50) / 100.0f;
+    float x = (rand() % 50 - 25) / 100.0f;
+    float y = (rand() % 50 - 25) / 100.0f;
     glm::vec3 point = glm::vec3(x, y, -1);
-    point *= 3 * m_minEnemyDistance;
+    point *= 2 * m_minEnemyDistance;
+    point = point * m_ship.transform().orientation();
+    point += m_ship.transform().position();
+    printf("start: %f %f %f target: %f %f %f point: %f %f %f", m_ship.transform().position().x, m_ship.transform().position().y, m_ship.transform().position().z
+        , m_primaryTarget->transform().position().x, m_primaryTarget->transform().position().y, m_primaryTarget->transform().position().z
+        , point.x, point.y, point.z);
     return point;
 }
 

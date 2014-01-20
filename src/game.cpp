@@ -101,7 +101,7 @@ void Game::initialize() {
 
     Ship *aitester = new Ship();
     ClusterCache::instance()->fillObject(aitester, "data/voxelcluster/basicship.csv");
-    aitester->setPosition(glm::vec3(40, 0, -50));
+    aitester->setPosition(glm::vec3(40, 0, -500));
     aitester->objectInfo().setName("follower");
     aitester->objectInfo().setShowOnHud(true);
     m_world->god().scheduleSpawn(aitester);
@@ -146,7 +146,7 @@ void Game::initialize() {
     Ship* previous = normandy;
     std::list<std::shared_ptr<WorldObjectHandle>> enemies1;
     std::list<std::shared_ptr<WorldObjectHandle>> enemies2;
-    for (int e = 0; e < 1; e++) {
+    for (int e = 0; e < 0; e++) {
         Ship *enemy = new Ship();
         int r = 200;
         enemy->move(glm::vec3(-200 + rand() % r - r / 2, rand() % r - r / 2, -200 + rand() % r - r / 2));
@@ -157,7 +157,7 @@ void Game::initialize() {
         m_world->god().scheduleSpawn(enemy);
         enemies2.push_back(enemy->handle());
     }
-    for (int e = 0; e < 1; e++) {
+    for (int e = 0; e < 0; e++) {
         Ship *enemy = new Ship();
         int r = 200;
         enemy->move(glm::vec3(200 + rand() % r - r / 2, rand() % r - r / 2, -200 + rand() % r - r / 2));
@@ -188,7 +188,7 @@ void Game::initialize() {
         e->setCharacter(new DummyCharacter(*e, new DummyElevatedTask(*e, new Fight(*e, enemies1))));
     }
 
-   //aitester->setCharacter(new DummyCharacter(*aitester, new DummyElevatedTask(*aitester, new Fight(*aitester, std::list<std::shared_ptr<WorldObjectHandle>>{playerShip->handle()}))));
+    aitester->setCharacter(new DummyCharacter(*aitester, new DummyElevatedTask(*aitester, new Fight(*aitester, std::list<std::shared_ptr<WorldObjectHandle>>{playerShip->handle()}))));
 
 
     glow::debug("Initial spawn");
