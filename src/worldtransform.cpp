@@ -29,7 +29,7 @@ const glm::quat& WorldTransform::orientation() const {
 }
 
 void WorldTransform::setOrientation(const glm::quat& quat){
-	m_orientation = quat;
+    m_orientation = quat;
     assert(std::isfinite(m_orientation.x) && std::isfinite(m_orientation.y) && std::isfinite(m_orientation.z) && std::isfinite(m_orientation.w));
 }
 

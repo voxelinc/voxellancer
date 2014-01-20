@@ -26,7 +26,7 @@ public:
 
 
 private:
-	InputHandler m_inputHandler;
+    InputHandler m_inputHandler;
     Player m_player;
     Viewer m_viewer;
     GameScene m_gameScene;

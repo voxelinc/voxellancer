@@ -13,7 +13,7 @@ GameScene::GameScene(Game* game):
 }
 
 void GameScene::draw(Camera* camera) {
-	World::instance()->skybox().draw(camera);
+    World::instance()->skybox().draw(camera);
 
     m_voxelRenderer->prepareDraw(camera);
 

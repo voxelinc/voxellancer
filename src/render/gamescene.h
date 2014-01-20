@@ -20,6 +20,6 @@ public:
 protected:
     Game* m_game;
     std::shared_ptr<VoxelRenderer> m_voxelRenderer;
-	HD3000Dummy m_hd3000dummy;
+    HD3000Dummy m_hd3000dummy;
 };
 
