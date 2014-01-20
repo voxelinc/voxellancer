@@ -7,7 +7,7 @@ uniform vec2 lensCenter;
 
 in vec2 f_viewportC;
 
-out vec3 fragColor;
+out vec4 fragColor;
 
 
 vec2 HmdWarp(vec2 linear) {
