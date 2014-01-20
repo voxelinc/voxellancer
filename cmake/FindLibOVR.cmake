@@ -12,6 +12,8 @@ find_library(LIBOVR_LIBRARY
     NAMES ovr libovr64
     PATHS
     ${LIB_DIR}/OculusSDK/LibOVR/Lib/x64
+    ${LIB_DIR}/OculusSDK/LibOVR/Lib/Linux/Release/x86_64
+
     DOC "The LIBOVR library")
 
     
