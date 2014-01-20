@@ -47,19 +47,19 @@ void Rocket::update(float deltaSec) {
         glm::quat rotation;
         if (cross != glm::vec3(0)) {
             glm::vec3 rotationAxis = glm::normalize(cross);
-            float angle = glm::acos(glm::dot(dir, myOrientation));
+            float angle = glm::acos(glm::clamp(glm::dot(dir, myOrientation), 0.0f, 1.0f));
             if (angle > glm::radians(0.1)) {
                 rotation = glm::angleAxis(-angle, rotationAxis);
             }
         } else { // the target is either perfectly in front or behind us
             if (dir == -myOrientation) {
-                rotation = glm::angleAxis(glm::pi<float>() / 2.0f, glm::vec3(1, 0, 0));
+                rotation = glm::angleAxis(glm::half_pi<float>(), glm::vec3(1, 0, 0));
             }
         }
 
         if (rotation != glm::quat()) {
             //m_transform.rotate(0.1f * rotation); // directly rotating is easier
-            m_physics.setAngularSpeed(0.1f * glm::eulerAngles(rotation));
+            m_physics.setAngularSpeed(6.0f * glm::eulerAngles(rotation));
         }
 
     }

@@ -11,6 +11,7 @@ Bullet::Bullet(WorldObject* creator, glm::vec3 position, glm::quat orientation, 
     WorldObject(0.5f, CollisionFilterClass::Bullet),
     m_creator(creator)
 {
+    assert(std::isfinite(orientation.x) && std::isfinite(orientation.y) && std::isfinite(orientation.z) && std::isfinite(orientation.w));
     m_lifetime = range / speed;
     glm::vec3 dir = glm::normalize(direction);
     glm::vec3 myOrientation = orientation * glm::vec3(0, 0, -1);
@@ -21,8 +22,9 @@ Bullet::Bullet(WorldObject* creator, glm::vec3 position, glm::quat orientation, 
     m_transform.setOrientation(orientation); //set orientation to ship orientation
     if (cross != glm::vec3(0)) {
         glm::vec3 rotationAxis = glm::normalize(cross);
-        float angle = glm::acos(glm::dot(dir, myOrientation));
-        m_transform.rotateWorld(glm::angleAxis(-angle, rotationAxis)); //then rotate towards target
+        float angle = glm::acos(glm::clamp(glm::dot(dir, myOrientation), 0.0f, 1.0f));
+        glm::quat orientation = glm::angleAxis(-angle, rotationAxis);
+        m_transform.rotateWorld(orientation); //then rotate towards target
     }
 
     m_transform.setPosition(position + dir * (minimalGridAABB().axisMax(Axis::ZAxis) / 2.0f + glm::root_two<float>()));
