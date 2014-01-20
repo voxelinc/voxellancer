@@ -1,7 +1,7 @@
 #include "flytotask.h"
 
 #include "worldobject/ship.h"
-#include "geometry/line.h"
+#include "geometry/capsule.h"
 #include "worldtree/worldtreequery.h"
 
 FlyToTask::FlyToTask(Ship& ship) :
@@ -22,9 +22,12 @@ void FlyToTask::update(float deltaSec) {
 
 glm::vec3 FlyToTask::calculateTargetPoint() {
     //TODO: don't just check the line from center to center, consider own size
+    /*
     Line mainLine(m_ship.transform().position(), m_targetPoint);
     WorldTreeQuery mainQuery(&World::instance()->worldTree(), &mainLine);
-    std::set<WorldObject*> obstacles = mainQuery.intersectingWorldObjects();
+    std::set<WorldObject*> obstacles = mainQuery.intersectingWorldObjects();*/
+    Capsule capsule = Capsule(m_ship.transform().position(), m_targetPoint - m_ship.transform().position(), m_ship.minimalGridSphere().radius());
+    std::set<WorldObject*> obstacles = WorldTreeQuery(&World::instance()->worldTree(), &capsule).intersectingWorldObjects();
     if (obstacles.size() > 1) {
         WorldObject* obstacle = closestObjectExceptSelf(&obstacles);
         if (obstacle) {

@@ -114,7 +114,7 @@ void Game::initialize() {
 	FlyToTask* task = new FlyToTask(*follower);
 	task->setTargetPoint(glm::vec3(-100, 0, -50));
 	follower->setCharacter(
-		new DummyCharacter(*follower, new DummyElevatedTask(*follower, task)));
+        new DummyCharacter(*follower, new DummyElevatedTask(*follower, task)));
 
     WorldObject *wall = new WorldObject(1);
     wall->move(glm::vec3(-30, -20, -60));
