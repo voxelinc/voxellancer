@@ -60,7 +60,7 @@ bool VoxelParticle::intersectionCheckDue() const {
 }
 
 void VoxelParticle::intersectionCheckPerformed() {
-    m_intersectionCheckCountdown += s_intersectionCheckPeriod->get();
+    m_intersectionCheckCountdown = s_intersectionCheckPeriod->get();
 }
 
 void VoxelParticle::update(float deltaSec) {

@@ -122,7 +122,7 @@ go_bandit([](){
         });
 
 
-        it_skip("test global performance", [&]() {
+        it("test global performance", [&]() {
             Ship *ship;
             Ship *normandy;            
             WorldObject *planet;
@@ -166,10 +166,10 @@ go_bandit([](){
             ship->accelerate(glm::vec3(0, 0, 1));
             {
                 glow::AutoTimer t("simulation");
-                for (int i = 0; i < 10000; i++) {
+                for (int i = 0; i < 1000; i++) {
                     ship->setTargetObject(planet);
-                    ship->fireAtObject();
-                    //ship->fireAtPoint(planet->transform().position());
+                    //ship->fireAtObject();
+                    ship->fireAtPoint(planet->transform().position());
                     World::instance()->update(0.016f);
                 }
             }
