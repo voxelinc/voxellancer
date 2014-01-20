@@ -17,20 +17,20 @@ void TargetSelector::setWindowSize(int width, int height) {
 
 void TargetSelector::selectNextTarget() {
     std::list<WorldObject*>& worldObjects = World::instance()->worldObjects();
-    m_player->playerShip()->setTargetObject(findNextTarget(worldObjects.begin(), worldObjects.end()));
+    m_player->ship()->setTargetObject(findNextTarget(worldObjects.begin(), worldObjects.end()));
 }
 
 void TargetSelector::selectPreviousTarget() {
     std::list<WorldObject*>& worldObjects = World::instance()->worldObjects();
-    m_player->playerShip()->setTargetObject(findNextTarget(worldObjects.rbegin(), worldObjects.rend()));
+    m_player->ship()->setTargetObject(findNextTarget(worldObjects.rbegin(), worldObjects.rend()));
 }
 
 template<typename IteratorType>
 WorldObject* TargetSelector::findNextTarget(IteratorType begin, IteratorType end) {
     IteratorType searchBegin = begin;
 
-    if (m_player->playerShip()->targetObject() != nullptr) {
-        searchBegin = std::find(begin, end, m_player->playerShip()->targetObject());
+    if (m_player->ship()->targetObject() != nullptr) {
+        searchBegin = std::find(begin, end, m_player->ship()->targetObject());
         searchBegin++;
     }
 
@@ -48,7 +48,7 @@ glm::vec3 TargetSelector::findTargetPoint(double x, double y) {
     pointEnd = glm::inverse(m_camera->viewProjection())*pointEnd; //find point on zfar
     glm::vec3 vec = glm::vec3(pointEnd); // no need for w component
     vec = glm::normalize(vec); // normalize
-    vec *= m_player->playerShip()->minAimDistance(); // set aimdistance
+    vec *= m_player->ship()->minAimDistance(); // set aimdistance
     vec += m_camera->position(); //adjust for camera translation
     return vec;
 }

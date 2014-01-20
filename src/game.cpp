@@ -41,6 +41,7 @@
 #include "ai/elevatedtasks/dummyelevatedtask.h"
 #include "ai/basictask.h"
 
+#include "etc/SoundManager.h"
 
 class Ship;
 
@@ -63,6 +64,9 @@ void Game::initialize() {
 
     glow::debug("Game::testFMOD()");
     //testFMOD();
+
+    m_soundManager = std::unique_ptr<SoundManager>(new SoundManager());
+    m_soundManager->play("data/Rocket Thrusters-SoundBible.com-1432176431.ogg", glm::vec3(0, 0, -100));
 
     //Must be created first
     m_linuxvmdummy = std::unique_ptr<LinuxVMDummy>(new LinuxVMDummy);
@@ -179,7 +183,7 @@ void Game::initialize() {
     m_out = new StreamRedirect(std::cout, m_hud.get(), true);
     m_err = new StreamRedirect(std::cerr, m_hud.get(), true);
 
-	glow::debug("Game::initialize Done");
+    glow::debug("Game::initialize Done");
 }
 
 
@@ -196,6 +200,8 @@ void Game::update(float deltaSec) {
     World::instance()->update(deltaSec);
     m_player.setFollowCam();
     m_hud->update(deltaSec);
+
+    m_soundManager->setListener(m_player.ship()->transform().position(), m_player.ship()->transform().orientation());
 }
 
 void Game::draw() {
@@ -219,34 +225,6 @@ void Game::draw() {
     m_hud->draw();
 
     m_hd3000dummy->drawIfActive();
-}
-/*
-void ERRCHECK(FMOD_RESULT result) {
-    if (result != FMOD_OK)
-    {
-        printf("FMOD error! (%d) %s\n", result, FMOD_ErrorString(result));
-        exit(-1);
-    }
-}
-*/
-void Game::testFMOD() {
-    /*
-    FMOD::System * system = 0;
-    FMOD::Sound  * sound = 0;
-    FMOD::Channel *channel = 0;
-
-    FMOD_RESULT result = FMOD::System_Create(&system);
-    ERRCHECK(result);
-
-    result = system->init(32, FMOD_INIT_NORMAL, 0);
-    ERRCHECK(result);
-
-    result = system->createSound("data/LASER.mp3", FMOD_SOFTWARE, 0, &sound);
-    ERRCHECK(result);
-
-    result = system->playSound(FMOD_CHANNEL_FREE, sound, false, &channel);
-    ERRCHECK(result);
-    */
 }
 
 InputHandler* Game::inputHandler() {

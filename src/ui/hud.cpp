@@ -163,7 +163,7 @@ void HUD::draw(){
             if (ship->objectInfo().showOnHud()) {
 
                 if (i < 11){
-                    glm::vec3 dist = ship->transform().position() - m_player->playerShip()->transform().position();
+                    glm::vec3 dist = ship->transform().position() - m_player->ship()->transform().position();
                     std::stringstream s; s.setf(std::ios::fixed, std::ios::floatfield); s.precision(2);
                     s << ship->objectInfo().name() << ": " << ship->voxelMap().size() << "/" << (float)glm::length(dist);
                     m_font->drawString(s.str(), calculatePosition(BottomLeft, glm::vec3(4, 5 + 4 * i, 0)), s5x7, 0.4f);
@@ -205,8 +205,8 @@ void HUD::draw(){
 
     // draw locked target
     std::string lockstr;
-    if (m_player->playerShip()->targetObject())
-        lockstr = "Locked: " + m_player->playerShip()->targetObject()->objectInfo().name();
+    if (m_player->ship()->targetObject())
+        lockstr = "Locked: " + m_player->ship()->targetObject()->objectInfo().name();
     else
         lockstr = "No Lock";
     m_font->drawString(lockstr, calculatePosition(Bottom, glm::vec3(0, 8, 0)), s3x5, 0.5f, aCenter);

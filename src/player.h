@@ -15,14 +15,14 @@ public:
     void rotate(glm::vec3 direction);
     void applyUpdate();
     void setFollowCam();
-    Ship* playerShip();
+    Ship* ship();
     void setShipToCam(float deltaSec);
     void boost();
 
 
 private:
     Camera *m_camera;
-    Ship *m_playerShip;
+    Ship *m_ship;
     glm::vec3 m_shipOffset;
     glm::vec3 m_acceleration;
     glm::vec3 m_accelerationAngular;

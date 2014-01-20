@@ -160,7 +160,7 @@ void InputHandler::handleMouseUpdate() {
 
     // shoot
     if (glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
-        m_player->playerShip()->fireAtPoint(m_targeter->findTargetPoint(x, y));
+        m_player->ship()->fireAtPoint(m_targeter->findTargetPoint(x, y));
     }
 
     // spin
@@ -256,10 +256,10 @@ float InputHandler::getInputValue(InputMapping mapping) {
 
 void InputHandler::handleFireActions() {
     if (getInputValue(&fireAction)) {
-        m_player->playerShip()->fireAtPoint(m_targeter->findTargetPoint(m_windowWidth / 2, m_windowHeight / 2));
+        m_player->ship()->fireAtPoint(m_targeter->findTargetPoint(m_windowWidth / 2, m_windowHeight / 2));
     }
     if (getInputValue(&rocketAction)) {
-        m_player->playerShip()->fireAtObject();
+        m_player->ship()->fireAtObject();
     }
 }
 
