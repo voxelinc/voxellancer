@@ -22,5 +22,6 @@ void MonoBlitProgram::initializeShaders() {
 
     bindFragDataLocation(0, "fragColor");
 
-    getUniform<GLint>("texture")->set(BlitProgram::TEXTURE_LOCATION);
+    setUniform("texture", BlitProgram::TEXTURE_LOCATION);
 }
+
