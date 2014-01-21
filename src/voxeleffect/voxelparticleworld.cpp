@@ -74,7 +74,7 @@ bool VoxelParticleWorld::intersects(VoxelParticle* voxelParticle) {
         WorldObject* worldObject = geode->worldObject();
         glm::ivec3 cell = glm::ivec3(worldObject->transform().inverseApplyTo(position));
         if (worldObject->voxel(cell)) {
-            return false;
+            return true;
         }
     }
 
