@@ -24,22 +24,20 @@ find_library(SFML_LIBRARY_AUDIO
     DOC "The SFML Audio library")
 
 if(WIN32)
+    find_library(SFML_D_LIBRARY
+        NAMES SFML sfml-system-d
+        PATHS
+        ${LIB_DIR}/SFML-2.1/lib/Debug
+        DOC "The SFML library (debug)")
 
-find_library(SFML_D_LIBRARY
-    NAMES SFML sfml-system-d
-    PATHS
-    ${LIB_DIR}/SFML-2.1/lib/Debug
-    DOC "The SFML library (debug)")
-
-find_library(SFML_D_LIBRARY_AUDIO
-    NAMES SFML sfml-audio-d
-    PATHS
-    ${LIB_DIR}/SFML-2.1/lib/Debug
-    DOC "The SFML Audio library (debug)")
-
-set(SFML_LIBRARIES 
-    optimized ${SFML_LIBRARY} optimized ${SFML_LIBRARY_AUDIO}
-    debug ${SFML_D_LIBRARY} debug ${SFML_D_LIBRARY_AUDIO})
+    find_library(SFML_D_LIBRARY_AUDIO
+        NAMES SFML sfml-audio-d
+        PATHS
+        ${LIB_DIR}/SFML-2.1/lib/Debug
+        DOC "The SFML Audio library (debug)")
+    set(SFML_LIBRARIES 
+        optimized ${SFML_LIBRARY} optimized ${SFML_LIBRARY_AUDIO}
+        debug ${SFML_D_LIBRARY} debug ${SFML_D_LIBRARY_AUDIO})
 else()
     set(SFML_LIBRARIES ${SFML_LIBRARY} ${SFML_LIBRARY_AUDIO})
 endif()
@@ -72,7 +70,6 @@ if(WIN32)
     set(SFML_BINARIES ${SFML_BINARY} ${SFML_BINARY_AUDIO} ${OPENAL_BINARY} ${SNDFILE_BINARY})
     set(SFML_BINARIES ${SFML_BINARIES} ${SFML_D_BINARY} ${SFML_D_BINARY_AUDIO})
 endif()
-
 
     
 if(SFML_INCLUDE_DIR AND SFML_LIBRARY)
