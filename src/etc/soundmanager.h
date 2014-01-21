@@ -3,7 +3,7 @@
 #include <memory>
 #include <string>
 #include <unordered_map>
-#include <vector>
+#include <list>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
@@ -22,6 +22,8 @@ public:
 protected:
     std::unordered_map<std::string, sf::SoundBuffer*> m_buffer;
     std::vector<std::shared_ptr<sf::Sound>> m_sounds;
+    int m_nextCleanup;
 
     sf::SoundBuffer* obtain(std::string soundFile);
+    void cleanUp();
 };

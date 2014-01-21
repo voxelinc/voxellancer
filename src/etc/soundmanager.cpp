@@ -6,7 +6,8 @@
 
 SoundManager::SoundManager() :
     m_buffer(),
-    m_sounds()
+    m_sounds(),
+    m_nextCleanup(0)
 {
     setListener(glm::vec3(0), glm::quat());
 }
@@ -26,6 +27,11 @@ std::weak_ptr<sf::Sound> SoundManager::play(std::string soundFile, glm::vec3 p, 
     sound->play();
     sound->setLoop(true);
     m_sounds.push_back(sound);
+
+    m_nextCleanup++;
+    if (m_nextCleanup == 100) {
+        cleanUp();
+    }
     return sound;
 }
 
@@ -39,5 +45,18 @@ sf::SoundBuffer* SoundManager::obtain(std::string soundFile) {
         m_buffer[soundFile] = buffer;
     }
     return buffer;
+}
+
+void SoundManager::cleanUp()
+{
+    for (auto iter = m_sounds.begin(); iter != m_sounds.end();)
+    {
+        sf::Sound * sound = iter->get();
+        if (sound->getStatus() == sf::SoundSource::Stopped) {
+            iter = m_sounds.erase(iter);
+        } else {
+            ++iter;
+        }
+    }
 }
 
