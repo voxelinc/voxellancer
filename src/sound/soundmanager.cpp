@@ -7,6 +7,7 @@
 #include "sound.h"
 
 
+SoundManager* SoundManager::s_current;
 static const int CLEANUP_PERIOD = 100;
 
 SoundManager::SoundManager() :
@@ -15,6 +16,12 @@ SoundManager::SoundManager() :
     m_nextCleanup(0)
 {
     setListener(glm::vec3(0), glm::quat());
+}
+
+SoundManager::~SoundManager() {
+    if (s_current == this) {
+        s_current = nullptr;
+    }
 }
 
 void SoundManager::setListener(const glm::vec3& p, const glm::quat& orientation) {
@@ -69,4 +76,34 @@ void SoundManager::cleanUp()
         }
     }
     m_nextCleanup = 0;
+}
+
+SoundManager* SoundManager::current() {
+    assert(s_current != nullptr);
+    return s_current;
+}
+
+void SoundManager::activate() {
+    assert(s_current == nullptr);
+    s_current = this;
+    
+    for (std::shared_ptr<Sound>& sound : m_sounds) {
+        if (sound->status() == Sound::Paused) {
+            sound->play();
+        }
+    }
+}
+
+void SoundManager::deactivate() {
+    assert(s_current == this);
+    s_current = nullptr;
+
+    m_nextCleanup = CLEANUP_PERIOD;
+    cleanUp();
+
+    for (std::shared_ptr<Sound>& sound : m_sounds) {
+        if (sound->status() == Sound::Playing) {
+            sound->pause();
+        }
+    }
 }

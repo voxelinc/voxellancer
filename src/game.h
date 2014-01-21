@@ -21,7 +21,6 @@ public:
     Player& player();
     Viewer& viewer();
     HMDManager& hmdManager();
-    SoundManager& soundManager();
 
     void initialize();
 
@@ -35,7 +34,5 @@ private:
     Viewer m_viewer;
     GameScene m_gameScene;
     HMDManager m_hmdManager;
-    std::shared_ptr<SoundManager> m_soundManager;
-
 };
 

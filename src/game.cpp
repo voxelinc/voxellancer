@@ -10,11 +10,11 @@ Game::Game():
     m_inputHandler(&m_player),
     m_viewer(Viewport(0, 0, WindowManager::instance()->resolution().width(), WindowManager::instance()->resolution().height())),
     m_gameScene(this),
-    m_hmdManager(this),
-    m_soundManager(new SoundManager())
+    m_hmdManager(this)
 {
     m_viewer.setScene(&m_gameScene);
     m_viewer.setCameraHead(&m_player.cameraDolly().cameraHead());
+    m_gameScene.setCameraHead(&m_player.cameraDolly().cameraHead());
 }
 
 InputHandler& Game::inputHandler() {
@@ -33,11 +33,8 @@ HMDManager& Game::hmdManager() {
     return m_hmdManager;
 }
 
-SoundManager& Game::soundManager() {
-    return *m_soundManager;
-}
-
 void Game::initialize() {
+    assert(m_viewer.scene() == &m_gameScene);
     GameScenario scenario;
     scenario.populate(this);
 }
@@ -46,13 +43,12 @@ void Game::update(float deltaSec) {
     if (deltaSec == 0.0f) {
         return;
     }
-
     deltaSec = glm::min(1.0f, deltaSec);
-
+    
+    m_viewer.update(deltaSec);
     World::instance()->update(deltaSec);
     m_player.update(deltaSec);
     m_inputHandler.update(deltaSec);
-    m_soundManager->setListener(m_player.playerShip()->transform().position(), m_player.playerShip()->transform().orientation());
 }
 
 void Game::draw() {

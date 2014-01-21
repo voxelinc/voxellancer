@@ -3,6 +3,7 @@
 #include "voxel/voxelrenderer.h"
 #include "voxeleffect/voxelparticleworld.h"
 #include "utils/hd3000dummy.h"
+#include "sound/soundmanager.h"
 
 #include "game.h"
 
@@ -10,7 +11,8 @@
 GameScene::GameScene(Game* game):
     m_game(game),
     m_voxelRenderer(VoxelRenderer::instance()),
-    m_hd3000dummy(new HD3000Dummy())
+    m_hd3000dummy(new HD3000Dummy()),
+    m_soundManager(new SoundManager())
 {
 }
 
@@ -30,4 +32,20 @@ void GameScene::draw(Camera* camera) {
     World::instance()->voxelParticleWorld().draw(*camera);
 
     m_hd3000dummy->drawIfActive();
+}
+
+void GameScene::activate() {
+    m_soundManager->activate();
+}
+
+void GameScene::deactivate() {
+    m_soundManager->deactivate();
+}
+
+void GameScene::setCameraHead(CameraHead* dolly) {
+    m_dolly = dolly;
+}
+
+void GameScene::update(float deltaSec) {
+    m_soundManager->setListener(m_dolly->position(), m_dolly->orientation());
 }

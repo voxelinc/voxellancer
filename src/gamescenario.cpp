@@ -32,7 +32,7 @@ void GameScenario::populate(Game* game) {
     normandy->objectInfo().setName("Normandy");
     normandy->objectInfo().setShowOnHud(true);
     normandy->objectInfo().setCanLockOn(true);
-    normandy->setEngineSound(game->soundManager().create("data/Rocket Thrusters.ogg"));
+    normandy->setEngineSound(SoundManager::current()->create("data/Rocket Thrusters.ogg"));
     world->god().scheduleSpawn(normandy);
     // TODO: use these dummies to test BasicTasks
     normandy->setCharacter(
