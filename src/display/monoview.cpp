@@ -10,7 +10,7 @@
 
 #include "etc/windowmanager.h"
 
-#include "displayscene.h"
+#include "display/scene.h"
 
 
 MonoView::MonoView(const Viewport& viewport):

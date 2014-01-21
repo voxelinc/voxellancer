@@ -19,7 +19,7 @@
 
 #include "geometry/size.h"
 
-#include "displaystereorenderinfo.h"
+#include "display/stereorenderinfo.h"
 
 #include "ui/inputhandler.h"
 
