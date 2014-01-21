@@ -1,6 +1,6 @@
 #include "sound.h"
 
-#include <SFML/audio.hpp>
+#include <SFML/Audio.hpp>
 
 Sound::Sound(const sf::SoundBuffer& sound) :
     m_sound(new sf::Sound(sound))
