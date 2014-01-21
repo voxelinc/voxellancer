@@ -3,7 +3,6 @@
 #include <iostream>
 #include <vector>
 
-#include <glowutils/MathMacros.h>
 #include <glow/DebugMessageOutput.h>
 #include <glow/VertexArrayObject.h>
 #include <glow/VertexAttributeBinding.h>
