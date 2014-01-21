@@ -42,10 +42,10 @@ void GameScene::deactivate() {
     m_soundManager->deactivate();
 }
 
-void GameScene::setCameraHead(CameraHead* dolly) {
-    m_dolly = dolly;
+void GameScene::setCameraHead(CameraHead* head) {
+    m_head = head;
 }
 
 void GameScene::update(float deltaSec) {
-    m_soundManager->setListener(m_dolly->position(), m_dolly->orientation());
+    m_soundManager->setListener(m_head->position(), m_head->orientation());
 }
