@@ -28,6 +28,7 @@ public:
     Sound* setAttenuation(float attenuation);
     Sound* setLooping(bool loop);
     Sound* setRelativeToListener(bool relative);
+    Sound* setMinDistance(float distance);
 
 protected:
     std::unique_ptr<sf::Sound> m_sound;

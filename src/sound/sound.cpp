@@ -57,3 +57,8 @@ Sound* Sound::setRelativeToListener(bool relative) {
     m_sound->setRelativeToListener(relative);
     return this;
 }
+
+Sound* Sound::setMinDistance(float distance) {
+    m_sound->setMinDistance(distance);
+    return this;
+}
