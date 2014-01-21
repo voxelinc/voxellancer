@@ -11,7 +11,7 @@
 #include "utils/metrics.h"
 
 
-StereoRenderInfo StereoRenderInfo::fromOVRInfo(const OVR::HMDInfo& hmdInfo) { std::cout << "From OVR" << std::endl;
+StereoRenderInfo StereoRenderInfo::fromOVRInfo(const OVR::HMDInfo& hmdInfo) {
     StereoRenderInfo result;
 
     result.m_hScreenSize = hmdInfo.HScreenSize;
@@ -82,7 +82,8 @@ StereoRenderInfo::StereoRenderInfo():
     m_hResolution(0),
     m_vResolution(0),
     m_distortionScale(0.0f),
-    m_fovy(0.0f)
+    m_fovy(0.0f),
+    m_eyeZOffset("vr.eyeZOffset")
 {
 
 }
@@ -145,11 +146,11 @@ glm::vec2 StereoRenderInfo::rightEyeLensCenter() const {
 }
 
 glm::vec3 StereoRenderInfo::leftEyeOffset() const {
-    return glm::vec3(Metrics::instance()->toGameUnits(-m_interpupillaryDistance / 2.0f), 0.0f, 0.0f);
+    return glm::vec3(Metrics::instance()->toGameUnits(-m_interpupillaryDistance / 2.0f), 0.0f, Metrics::instance()->toGameUnits(m_eyeZOffset.get()));
 }
 
 glm::vec3 StereoRenderInfo::rightEyeOffset() const {
-    return glm::vec3(Metrics::instance()->toGameUnits(m_interpupillaryDistance / 2.0f), 0.0f, 0.0f);
+    return glm::vec3(Metrics::instance()->toGameUnits(m_interpupillaryDistance / 2.0f), 0.0f, Metrics::instance()->toGameUnits(m_eyeZOffset.get()));
 }
 
 glm::vec3 StereoRenderInfo::leftEyeProjectionOffset() const {
