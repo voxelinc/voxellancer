@@ -1,8 +1,13 @@
 #include "soundmanager.h"
 
+#include <SFML/Audio.hpp>
+
 #include <glow/logging.h>
 
-#include <SFML/Audio.hpp>
+#include "sound.h"
+
+
+static const int CLEANUP_PERIOD = 100;
 
 SoundManager::SoundManager() :
     m_buffer(),
@@ -12,15 +17,13 @@ SoundManager::SoundManager() :
     setListener(glm::vec3(0), glm::quat());
 }
 
-void SoundManager::setListener(glm::vec3 p, glm::quat orientation) {
+void SoundManager::setListener(const glm::vec3& p, const glm::quat& orientation) {
     glm::vec3 d = orientation * glm::vec3(0, 0, -1);
     sf::Listener::setPosition(sf::Vector3f(p.x, p.y, p.z));
     sf::Listener::setDirection(sf::Vector3f(d.x, d.y, d.z));
 }
 
-static const int CLEANUPPERIOD = 100;
-
-std::shared_ptr<Sound> SoundManager::play(std::string soundFile, glm::vec3 position, bool relative) {
+std::shared_ptr<Sound> SoundManager::play(std::string soundFile, const glm::vec3& position, bool relative) {
     std::shared_ptr<Sound> sound = create(soundFile);
     sound->setPosition(position)->setRelativeToListener(relative)->play();
     return sound;
@@ -54,7 +57,7 @@ sf::SoundBuffer* SoundManager::obtain(std::string soundFile) {
 
 void SoundManager::cleanUp()
 {
-    if (m_nextCleanup++ < CLEANUPPERIOD) {
+    if (m_nextCleanup++ < CLEANUP_PERIOD) {
         return;
     }
     for (std::list<std::shared_ptr<Sound>>::iterator iter = m_sounds.begin(); iter != m_sounds.end();)
@@ -66,5 +69,4 @@ void SoundManager::cleanUp()
         }
     }
     m_nextCleanup = 0;
-
 }

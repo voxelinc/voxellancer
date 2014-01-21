@@ -127,7 +127,7 @@ Character* Ship::character() {
 
 void Ship::setEngineSound(std::shared_ptr<Sound> sound) {
     m_sound = sound;
-    sound->setLoop(true);
+    sound->setLooping(true);
     sound->setPosition(m_transform.applyTo(m_enginePos));
     sound->play();
 }

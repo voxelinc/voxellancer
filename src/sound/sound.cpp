@@ -2,22 +2,22 @@
 
 #include <SFML/Audio.hpp>
 
+
 Sound::Sound(const sf::SoundBuffer& sound) :
     m_sound(new sf::Sound(sound))
 {
-
 }
 
 Sound::Status Sound::status() {
     switch (m_sound->getStatus()) {
-    case sf::SoundSource::Playing:
-        return Playing;
-    case sf::SoundSource::Paused:
-        return Paused;
-    case sf::SoundSource::Stopped:
-        return Stopped;
-    default:
-        return Stopped;
+        case sf::SoundSource::Playing:
+            return Playing;
+        case sf::SoundSource::Paused:
+            return Paused;
+        case sf::SoundSource::Stopped:
+            return Stopped;
+        default:
+            return Stopped;
     }
 }
 
@@ -48,7 +48,7 @@ Sound* Sound::setVolume(float volume) {
     return this;
 }
 
-Sound* Sound::setLoop(bool loop) {
+Sound* Sound::setLooping(bool loop) {
     m_sound->setLoop(loop);
     return this;
 }

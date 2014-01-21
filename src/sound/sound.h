@@ -3,12 +3,11 @@
 #include <memory>
 #include <glm/glm.hpp>
 
+
 namespace sf {
     class Sound;
     class SoundBuffer;
 }
-
-
 
 class Sound
 {
@@ -28,9 +27,10 @@ public:
     Sound* setPosition(const glm::vec3& position);
     Sound* setVolume(float volume);
     Sound* setAttenuation(float attenuation);
-    Sound* setLoop(bool loop);
+    Sound* setLooping(bool loop);
     Sound* setRelativeToListener(bool relative);
-private:
+
+protected:
     std::unique_ptr<sf::Sound> m_sound;
 };
 
