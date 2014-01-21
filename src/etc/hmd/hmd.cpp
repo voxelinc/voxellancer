@@ -28,11 +28,7 @@ glm::quat HMD::orientation() {
     glm::vec3 euler;
     OVR::Quatf ovrOrientation = m_sensorFusion.GetOrientation();
 
-    ovrOrientation.GetEulerAngles<OVR::Axis_X, OVR::Axis_Y, OVR::Axis_Z, OVR::Rotate_CW, OVR::Handed_R>(&euler.x, &euler.y, &euler.z);
-
-    euler.x *= -1.0f;
-    euler.y *= -1.0f;
-    euler.z *= -1.0f;
+    ovrOrientation.GetEulerAngles<OVR::Axis_X, OVR::Axis_Y, OVR::Axis_Z, OVR::Rotate_CCW, OVR::Handed_R>(&euler.x, &euler.y, &euler.z);
 
     return glm::quat(euler);
 }
