@@ -15,8 +15,7 @@ git clone -b 0.9.4.6 https://github.com/g-truc/glm.git glm
 # glfw
 git clone -b 3.0.3 https://github.com/glfw/glfw.git glfw
 pushd glfw
-git 
-cmake . 
+cmake .
 make -j8
 popd
 

@@ -3,7 +3,6 @@
 #include "voxel/voxelrenderer.h"
 #include "voxeleffect/voxelparticleworld.h"
 #include "utils/hd3000dummy.h"
-#include "sound/soundmanager.h"
 
 #include "game.h"
 

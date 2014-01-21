@@ -20,9 +20,9 @@ void SoundManager::setListener(glm::vec3 p, glm::quat orientation) {
 
 static const int CLEANUPPERIOD = 100;
 
-std::shared_ptr<Sound> SoundManager::play(std::string soundFile, glm::vec3 position) {
+std::shared_ptr<Sound> SoundManager::play(std::string soundFile, glm::vec3 position, bool relative) {
     std::shared_ptr<Sound> sound = create(soundFile);
-    sound->setPosition(position)->play();
+    sound->setPosition(position)->setRelativeToListener(relative)->play();
     return sound;
 }
 
