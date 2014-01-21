@@ -7,7 +7,6 @@
 #include <glowutils/File.h>
 #include <glowutils/MathMacros.h>
 
-#include "geometry/sphere.h"
 
 #include "world/world.h"
 #include "worldtree/worldtreequery.h"
@@ -15,6 +14,9 @@
 #include "voxelparticle.h"
 #include "voxelmesh.h"
 #include "voxel/voxelrenderer.h"
+#include "worldobject/worldobject.h"
+#include "worldtree/worldtreegeode.h"
+#include "geometry/point.h"
 
 
 struct ParticleData {
@@ -44,19 +46,41 @@ void VoxelParticleWorld::addParticle(VoxelParticle* voxelParticle) {
 }
 
 void VoxelParticleWorld::update(float deltaSec) {
-    for (std::list<VoxelParticle*>::iterator i = m_particles.begin(); i != m_particles.end(); ) {
-        VoxelParticle* voxelParticle = *i;
+    for (std::list<VoxelParticle*>::iterator iter = m_particles.begin(); iter != m_particles.end(); ) {
+        VoxelParticle* voxelParticle = *iter;
 
         voxelParticle->update(deltaSec);
 
         if (intersects(voxelParticle) || voxelParticle->isDead()) {
             delete voxelParticle;
-            i = m_particles.erase(i);
+            iter = m_particles.erase(iter);
         } else {
-            ++i;
+            ++iter;
         }
     }
 }
+
+bool VoxelParticleWorld::intersects(VoxelParticle* voxelParticle) {
+    if (!voxelParticle->intersectionCheckDue()) {
+        return false;
+    }
+    voxelParticle->intersectionCheckPerformed();
+
+    glm::vec3 position = voxelParticle->worldTransform().position();
+    Point voxelSphere(position); // approximate a point
+    WorldTreeQuery query(&World::instance()->worldTree(), &voxelSphere);
+
+    for (WorldTreeGeode* geode : query.nearGeodes()) {
+        WorldObject* worldObject = geode->worldObject();
+        glm::ivec3 cell = glm::ivec3(worldObject->transform().inverseApplyTo(position));
+        if (worldObject->voxel(cell)) {
+            return false;
+        }
+    }
+
+    return false;
+}
+
 
 void VoxelParticleWorld::draw(Camera& camera) {
     if(!m_initialized) {
@@ -149,16 +173,4 @@ void VoxelParticleWorld::updateBuffers() {
     m_particleDataBuffer->unmap();
 }
 
-bool VoxelParticleWorld::intersects(VoxelParticle* voxelParticle) {
-    if(!voxelParticle->intersectionCheckDue()) {
-        return false;
-    }
-    voxelParticle->intersectionCheckPerformed();
-
-    Sphere voxelSphere(voxelParticle->worldTransform().position(), voxelParticle->worldTransform().scale() / 2.0f);
-    WorldTreeQuery worldTreeQuery(&World::instance()->worldTree(), &voxelSphere);
-
-
-    return worldTreeQuery.areVoxelsIntersecting();
-}
 
