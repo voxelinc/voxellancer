@@ -27,14 +27,15 @@ git clone -b v1.1.4 https://github.com/joakimkarlsson/bandit.git bandit
 unzip ovr_sdk_linux_0.2.5c.tar.zip
 
 # glow
-pushd 
+pushd ..
 git submodule init
 git submodule update
 popd
 
-# sfml - requires libopenal-dev libsndfile1-dev
+# sfml - requires libopenal-dev libsndfile1-dev libjpeg-dev
 git clone -b 2.1 https://github.com/LaurentGomila/SFML.git SFML-2.1
-pushd sfml
+pushd SFML-2.1
+cmake .
 make sfml-audio
 popd
 
