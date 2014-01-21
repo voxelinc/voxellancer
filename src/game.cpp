@@ -89,9 +89,9 @@ void Game::initialize() {
     normandy->setCharacter(
         new DummyCharacter(*normandy, new DummyElevatedTask(*normandy, new BasicTask(*normandy)))
     );
-	
+
     Ship *playerShip = new Ship();
-    ClusterCache::instance()->fillObject(playerShip, "data/voxelcluster/eagle.csv");
+    ClusterCache::instance()->fillObject(playerShip, "data/voxelcluster/basicship.csv");
     playerShip->setPosition(glm::vec3(0, 0, 10));
     playerShip->objectInfo().setName("basicship");
     playerShip->objectInfo().setShowOnHud(false);
