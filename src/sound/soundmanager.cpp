@@ -17,14 +17,17 @@ void SoundManager::setListener(glm::vec3 p, glm::quat orientation) {
     sf::Listener::setDirection(sf::Vector3f(d.x, d.y, d.z));
 }
 
-std::weak_ptr<sf::Sound> SoundManager::play(std::string soundFile, glm::vec3 p, bool relative) {
-    std::shared_ptr<sf::Sound> sound = std::make_shared<sf::Sound>(*obtain(soundFile));
-    assert(sound->getBuffer()->getChannelCount() == 1); // sounds with more than one channel don't work with positions!
-    sound->setPosition(sf::Vector3f(p.x, p.y, p.z));
+Sound SoundManager::play(std::string soundFile, glm::vec3 position, bool relative) {
+    sf::SoundBuffer* buffer = obtain(soundFile);
+    // sounds don't work with more than one channel!
+    assert(buffer->getChannelCount() == 1);
+
+    Sound sound(*buffer);
+    sound.setPosition(position);
     //sound->setRelativeToListener(relative);
-    sound->setAttenuation(0.05f);
-    sound->play();
-    sound->setLoop(true);
+    sound.setAttenuation(0.05f);
+    sound.play();
+    sound.setLoop(true);
     m_sounds.push_back(sound);
     return sound;
 }
