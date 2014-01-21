@@ -3,9 +3,10 @@
 #include <memory>
 #include <string>
 #include <unordered_map>
+#include <vector>
 
-#include <GLM/glm.hpp>
-#include <GLM/gtc/quaternion.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtc/quaternion.hpp>
 
 namespace sf {
     class SoundBuffer;

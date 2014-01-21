@@ -1,4 +1,4 @@
-#include "SoundManager.h"
+#include "soundmanager.h"
 
 #include <glow/logging.h>
 

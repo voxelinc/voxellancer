@@ -16,11 +16,7 @@
 
 #include <glow/AutoTimer.h>
 #include <glow/logging.h>
-/*
-#include <fmod.hpp>
-#include <fmod_dsp.h>
-#include <fmod_errors.h>
-*/
+
 #include "property/propertymanager.h"
 #include "resource/clustercache.h"
 #include "utils/hd3000dummy.h"
@@ -41,7 +37,7 @@
 #include "ai/elevatedtasks/dummyelevatedtask.h"
 #include "ai/basictask.h"
 
-#include "etc/SoundManager.h"
+#include "etc/soundmanager.h"
 
 class Ship;
 

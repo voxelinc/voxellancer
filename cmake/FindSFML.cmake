@@ -12,14 +12,18 @@ find_path(SFML_INCLUDE_DIR SFML/Audio.hpp
 find_library(SFML_LIBRARY
     NAMES SFML sfml-system
     PATHS
+    ${LIB_DIR}/SFML-2.1/lib
     ${LIB_DIR}/SFML-2.1/lib/Release
     DOC "The SFML library")
 
 find_library(SFML_LIBRARY_AUDIO
     NAMES SFML sfml-audio
     PATHS
+    ${LIB_DIR}/SFML-2.1/lib
     ${LIB_DIR}/SFML-2.1/lib/Release
     DOC "The SFML Audio library")
+
+if(WIN32)
 
 find_library(SFML_D_LIBRARY
     NAMES SFML sfml-system-d
@@ -36,7 +40,9 @@ find_library(SFML_D_LIBRARY_AUDIO
 set(SFML_LIBRARIES 
     optimized ${SFML_LIBRARY} optimized ${SFML_LIBRARY_AUDIO}
     debug ${SFML_D_LIBRARY} debug ${SFML_D_LIBRARY_AUDIO})
-
+else()
+    set(SFML_LIBRARIES ${SFML_LIBRARY} ${SFML_LIBRARY_AUDIO})
+endif()
 
 if(WIN32)
     find_file(SFML_BINARY
