@@ -30,7 +30,11 @@ VoxelCluster::~VoxelCluster() {
     }
 }
 
-const WorldTransform& VoxelCluster::transform() {
+WorldTransform& VoxelCluster::transform() {
+    return m_transform;
+}
+
+const WorldTransform& VoxelCluster::transform() const {
     return m_transform;
 }
 
@@ -59,6 +63,10 @@ const IAABB& VoxelCluster::aabb() {
 
 IAABB VoxelCluster::aabb(const WorldTransform& transform) {
     return calculateAABB(transform);
+}
+
+void VoxelCluster::setTransform(const WorldTransform& transform) {
+    m_transform = transform;
 }
 
 Voxel* VoxelCluster::voxel(const glm::ivec3& position) {

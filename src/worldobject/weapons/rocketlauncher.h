@@ -6,12 +6,15 @@
 class RocketLauncher : public Weapon {
 public:
     RocketLauncher();
-    virtual AimType aimType();
-    virtual void shootAtObject(Hardpoint* source, WorldObject* target);
-    virtual void update(float deltaSec);
-    virtual float aimRange();
+
+    virtual AimType aimType() override;
+    virtual void shootAtObject(Hardpoint* source, WorldObject* target) override;
+    virtual void update(float deltaSec) override;
+    virtual float bulletRange() override;
 
 private:
-    Property<float> prop_aimRange, prop_cooldownTime, prop_speed, prop_lifetime;
-    float m_cooldown;
+    Property<float> m_bulletRange;
+    Property<float> m_cooldownTime;
+    Property<float> m_speed;
+    Property<float> m_lifetime;
 };

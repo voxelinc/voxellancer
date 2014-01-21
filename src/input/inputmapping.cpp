@@ -23,3 +23,4 @@ int InputMapping::index() {
 float InputMapping::maxValue() {
     return m_maxValue;
 }
+

@@ -23,6 +23,9 @@ popd
 # bandit
 git clone -b v1.1.4 https://github.com/joakimkarlsson/bandit.git bandit
 
+# OculusSDK
+unzip ovr_sdk_linux_0.2.5c.tar.zip
+
 # glow
 pushd 
 git submodule init

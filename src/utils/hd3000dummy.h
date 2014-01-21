@@ -16,7 +16,6 @@ class HD3000Dummy
 {
 public:
     HD3000Dummy();
-    ~HD3000Dummy();
 
     void drawIfActive();
 

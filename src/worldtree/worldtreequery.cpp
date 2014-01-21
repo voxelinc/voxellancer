@@ -3,21 +3,23 @@
 #include <functional>
 #include <cassert>
 
-#include <worldtree/worldtree.h>
+#include "collision/collisionfilterable.h"
 
-#include <worldtree/worldtreenode.h>
-#include <worldtree/worldtreegeode.h>
-#include <worldobject/worldobject.h>
+#include "worldtree/worldtree.h"
+#include "worldtree/worldtreenode.h"
+#include "worldtree/worldtreegeode.h"
+
+#include "worldobject/worldobject.h"
 
 #include "voxel/voxel.h"
 #include "voxel/voxeltreequery.h"
 
 
 
-WorldTreeQuery::WorldTreeQuery(WorldTree* worldTree, const AbstractShape* shape, WorldTreeNode* nodeHint, WorldObject* collidableWith):
+WorldTreeQuery::WorldTreeQuery(WorldTree* worldTree, const AbstractShape* shape, WorldTreeNode* nodeHint, CollisionFilterable* collisionFilter):
     m_worldTree(worldTree),
     m_nodeHint(nodeHint),
-    m_collideableWith(collidableWith),
+    m_collisionFilter(collisionFilter),
     m_shape(shape),
     m_queryInterrupted(false)
 {
@@ -122,7 +124,7 @@ void WorldTreeQuery::query(WorldTreeNode* node, std::function<void(WorldTreeGeod
             assert(geode->aabb().intersects(node->aabb()));
             assert(geode->worldObject() != nullptr);
 
-            if(m_collideableWith == nullptr || m_collideableWith->isCollideableWith(geode->worldObject())) {
+            if(m_collisionFilter == nullptr || m_collisionFilter->isCollideableWith(geode->worldObject())) {
                 if(m_shape->nearTo(geode->aabb())) {
                     onGeodeInteraction(geode);
 

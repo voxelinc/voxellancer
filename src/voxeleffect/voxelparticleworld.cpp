@@ -7,7 +7,6 @@
 #include <glowutils/File.h>
 #include <glowutils/MathMacros.h>
 
-
 #include "world/world.h"
 #include "worldtree/worldtreequery.h"
 
@@ -81,7 +80,6 @@ bool VoxelParticleWorld::intersects(VoxelParticle* voxelParticle) {
     return false;
 }
 
-
 void VoxelParticleWorld::draw(Camera& camera) {
     if(!m_initialized) {
         initialize();
@@ -124,7 +122,6 @@ void VoxelParticleWorld::loadProgram() {
     m_program->attach(vertexShader, fragmentShader);
     m_program->bindFragDataLocation(0, "fragColor");
     m_program->setUniform("withBorder", 1.0f);
-
 }
 
 void VoxelParticleWorld::setupVertexAttributes() {
@@ -158,7 +155,7 @@ void VoxelParticleWorld::updateBuffers() {
         setBufferSize(nextPowerOf2(m_particles.size()));
     }
     ParticleData* particleData = static_cast<ParticleData*>(m_particleDataBuffer->mapRange(0, m_particles.size() * sizeof(ParticleData), GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT));
-    
+
     int i = 0;
     for (VoxelParticle* particle : m_particles) {
         particleData[i++] = ParticleData{
@@ -172,5 +169,3 @@ void VoxelParticleWorld::updateBuffers() {
 
     m_particleDataBuffer->unmap();
 }
-
-

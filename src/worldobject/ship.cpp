@@ -9,6 +9,7 @@
 #include "worldobject/weapons/rocketlauncher.h"
 #include "ai/character.h"
 
+
 Ship::Ship() :
     WorldObject(CollisionFilterClass::Ship),
     m_hardpoints(),
@@ -48,7 +49,7 @@ void Ship::addHardpointVoxel(HardpointVoxel* voxel) {
     addVoxel(voxel);
 }
 
-void Ship::removeHardpoint(Hardpoint* hardpoint) {
+void Ship::removeHardpoint(Hardpoint *hardpoint) {
     m_hardpoints.remove(hardpoint);
 }
 
@@ -80,9 +81,11 @@ void Ship::fireAtPoint(glm::vec3 target) {
 }
 
 void Ship::fireAtObject() {
-    for (Hardpoint* hardpoint : m_hardpoints) {
-        if (hardpoint->aimType() == Object) {
-            hardpoint->shootAtObject(targetObject());
+    if(targetObject()) {
+        for (Hardpoint* hardpoint : m_hardpoints) {
+            if (hardpoint->aimType() == Object) {
+                hardpoint->shootAtObject(targetObject());
+            }
         }
     }
 }
@@ -90,8 +93,9 @@ void Ship::fireAtObject() {
 float Ship::minAimDistance() { // is this needed ?!
     float range = 1000;
     for (Hardpoint *hardpoint : m_hardpoints){
-        if (hardpoint->aimRange() != -1)
+        if (hardpoint->aimRange() != -1) {
             range = glm::min(hardpoint->aimRange(), range);
+        }
     }
     return range;
 }
@@ -99,7 +103,6 @@ float Ship::minAimDistance() { // is this needed ?!
 void Ship::accelerate(const glm::vec3& direction) {
     m_physics.accelerate(direction * prop_maxSpeed.get());
 }
-
 
 void Ship::accelerateAngular(const glm::vec3& axis) {
     m_physics.accelerateAngular(axis * prop_maxRotSpeed.get());
@@ -112,3 +115,4 @@ void Ship::setCharacter(Character* character) {
 Character* Ship::character() {
     return m_character.get();
 }
+
