@@ -9,18 +9,7 @@
 
 
 StereoBlitProgram::StereoBlitProgram() {
-    glow::Shader* vertShader = glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/stereoblit.vert");
-    glow::Shader* fragShader = glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/stereoblit.frag");
 
-    bindAttributeLocation(BlitProgram::VERTEX_LOCATION, "v_vertex");
-
-    attach(vertShader, fragShader);
-    link();
-    assert(checkLinkStatus());
-
-    bindFragDataLocation(0, "fragColor");
-
-    getUniform<GLint>("texture")->set(BlitProgram::TEXTURE_LOCATION);
 }
 
 void StereoBlitProgram::setDistortionKs(std::vector<float> distortionKs) {
@@ -50,5 +39,20 @@ void StereoBlitProgram::blit() {
     getUniform<glm::vec2>("lensCenter")->set(m_lensCenter);
 
     BlitProgram::blit();
+}
+
+void StereoBlitProgram::initializeShaders() {
+    glow::Shader* vertShader = glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/stereoblit.vert");
+    glow::Shader* fragShader = glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/stereoblit.frag");
+
+    bindAttributeLocation(BlitProgram::VERTEX_LOCATION, "v_vertex");
+
+    attach(vertShader, fragShader);
+    link();
+    assert(checkLinkStatus());
+
+    bindFragDataLocation(0, "fragColor");
+
+    getUniform<GLint>("texture")->set(BlitProgram::TEXTURE_LOCATION);
 }
 

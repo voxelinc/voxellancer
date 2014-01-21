@@ -8,15 +8,10 @@
 
 #include "utils/tostring.h"
 #include "utils/aimhelper.h"
-#include "voxel/voxeltreenode.h"
 
 #include "etc/windowmanager.h"
 
 #include "worldobject/worldobject.h"
-
-#include "worldtree/worldtreequery.h"
-
-#include "voxeleffect/voxelexplosiongenerator.h"
 
 
 /*

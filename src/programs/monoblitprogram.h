@@ -6,5 +6,9 @@
 class MonoBlitProgram: public BlitProgram {
 public:
     MonoBlitProgram();
+
+
+protected:
+    virtual void initializeShaders() override;
 };
 

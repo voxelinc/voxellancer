@@ -8,7 +8,6 @@ HMD::HMD(OVR::HMDDevice* hmdDevice):
     m_hmdDevice(hmdDevice)
 {
     m_sensorDevice = m_hmdDevice->GetSensor();
-    assert(m_sensorDevice);
 
     if(m_sensorDevice) {
         m_sensorFusion.AttachToSensor(m_sensorDevice);

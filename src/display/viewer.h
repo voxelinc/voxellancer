@@ -16,8 +16,8 @@ public:
     void setCameraHead(CameraHead* cameraHead);
     void setViewport(const Viewport& viewport);
 
-    void toMonoView();
-    void toStereoView(const StereoRenderInfo& stereoRenderInfo);
+    void switchToMonoView();
+    void switchToStereoView(const StereoRenderInfo& stereoRenderInfo);
 
 
     void draw();

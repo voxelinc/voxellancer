@@ -14,7 +14,7 @@ Viewer::Viewer(const Viewport& viewport):
     m_cameraHead(nullptr),
     m_viewport(viewport)
 {
-    toMonoView();
+    switchToMonoView();
 }
 
 void Viewer::setScene(Scene* scene) {
@@ -32,12 +32,12 @@ void Viewer::setViewport(const Viewport& viewport) {
     }
 }
 
-void Viewer::toMonoView() {
+void Viewer::switchToMonoView() {
     delete m_view;
     m_view = new MonoView(m_viewport);
 }
 
-void Viewer::toStereoView(const StereoRenderInfo& stereoRenderInfo) {
+void Viewer::switchToStereoView(const StereoRenderInfo& stereoRenderInfo) {
     delete m_view;
     m_view = new StereoView(m_viewport, stereoRenderInfo);
 }

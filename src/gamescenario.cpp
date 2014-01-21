@@ -1,43 +1,16 @@
 #include "gamescenario.h"
 
-#include <GL/glew.h>
-
-#include <chrono>
-#include <thread>
-#include <algorithm>
-#include <random>
-#include <memory>
-#include <iostream>
-#include <fstream>
-#include <memory>
-
 #include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtx/transform.hpp>
 
 #include <glow/AutoTimer.h>
-#include <glow/logging.h>
-
-#include "property/propertymanager.h"
-#include "resource/clustercache.h"
-#include "utils/hd3000dummy.h"
-#include "utils/linuxvmdummy.h"
-#include "ui/inputhandler.h"
-#include "ui/hud.h"
-
-#include "world/world.h"
-#include "world/god.h"
-#include "skybox.h"
-#include "voxeleffect/voxelparticleworld.h"
-#include "voxel/voxelrenderer.h"
-#include "worldobject/ship.h"
-#include "collision/collisiondetector.h"
-#include "worldobject/worldobject.h"
 
 #include "ai/characters/dummycharacter.h"
 #include "ai/elevatedtasks/dummyelevatedtask.h"
 #include "ai/basictask.h"
+
+#include "resource/clustercache.h"
+
+#include "worldobject/ship.h"
 
 #include "game.h"
 

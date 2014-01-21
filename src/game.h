@@ -2,8 +2,8 @@
 
 #include "etc/hmd/hmdmanager.h"
 
-#include "render/viewer.h"
-#include "render/gamescene.h"
+#include "display/viewer.h"
+#include "display/gamescene.h"
 
 #include "ui/inputhandler.h"
 

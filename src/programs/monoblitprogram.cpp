@@ -7,6 +7,10 @@
 
 
 MonoBlitProgram::MonoBlitProgram() {
+
+}
+
+void MonoBlitProgram::initializeShaders() {
     glow::Shader* vertShader = glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/monoblit.vert");
     glow::Shader* fragShader = glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/monoblit.frag");
 
@@ -20,4 +24,3 @@ MonoBlitProgram::MonoBlitProgram() {
 
     getUniform<GLint>("texture")->set(BlitProgram::TEXTURE_LOCATION);
 }
-

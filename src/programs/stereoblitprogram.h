@@ -20,5 +20,8 @@ protected:
     std::vector<float> m_distortionKs;
     float m_distortionScale;
     glm::vec2 m_lensCenter;
+
+
+    virtual void initializeShaders() override;
 };
 

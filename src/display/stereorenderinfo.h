@@ -46,8 +46,6 @@ public:
     glm::vec3 rightEyeProjectionOffset() const;
 
 
-
-
 protected:
     float m_hScreenSize;
     float m_vScreenSize;

@@ -34,5 +34,6 @@ protected:
 
 
     virtual void initialize();
+    virtual void initializeShaders() = 0;
 };
 

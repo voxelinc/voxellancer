@@ -6,7 +6,6 @@
 #include "geometry/sphere.h"
 
 
-
 CameraFollowHelper::CameraFollowHelper(WorldObject* worldObject):
     m_worldObject(worldObject)
 {

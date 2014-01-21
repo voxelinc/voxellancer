@@ -1,7 +1,5 @@
 #include "ship.h"
 
-#include <algorithm>
-
 #include "hardpoint.h"
 #include "engine.h"
 #include "voxel/specialvoxels/hardpointvoxel.h"

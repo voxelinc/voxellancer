@@ -11,8 +11,8 @@ CommandLineParser::CommandLineParser():
 }
 
 void CommandLineParser::parse(int argc, char* argv[]) {
-    for(int a = 1; a < argc; a++) {
-        std::string arg(argv[a]);
+    for(int i = 1; i < argc; i++) {
+        std::string arg(argv[i]);
 
         if(arg == "-hmd") {
             m_hmd = true;

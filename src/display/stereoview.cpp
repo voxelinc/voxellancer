@@ -10,8 +10,8 @@
 
 #include "etc/windowmanager.h"
 
-#include "render/scene.h"
-#include "render/stereorenderinfo.h"
+#include "displayscene.h"
+#include "displaystereorenderinfo.h"
 
 
 StereoView::StereoView(const Viewport& viewport, const StereoRenderInfo& stereoRenderInfo):

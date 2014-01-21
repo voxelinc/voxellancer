@@ -9,7 +9,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 
-#include "render/stereorenderinfo.h"
+#include "display/stereorenderinfo.h"
 
 class HMD {
 public:

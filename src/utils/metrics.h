@@ -5,20 +5,14 @@
 
 class Metrics {
 public:
-    Metrics();
+    static float gameUnit();
+    static void setGameUnit(float gameUnit);
 
-    static std::shared_ptr<Metrics> instance();
-
-    float gameUnit() const;
-    void setGameUnit(float gameUnit);
-
-    float toGameUnits(float metre);
-    float toMetres(float gameUnits);
+    static float toGameUnits(float metre);
+    static float toMetres(float gameUnits);
 
 
 protected:
-    float m_gameUnit;
-
-    static std::weak_ptr<Metrics> s_instance;
+    static float s_gameUnit;
 };
 

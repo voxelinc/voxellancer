@@ -1,15 +1,14 @@
 #pragma once
 
-#include <glow/Buffer.h>
-#include <glow/Program.h>
-#include <glow/FrameBufferObject.h>
-
 #include "geometry/viewport.h"
 
-#include "programs/blitprogram.h"
 
+namespace glow {
+    class Program;
+    class FrameBufferObject;
+}
 
-class glow::Program;
+class BlitProgram;
 
 class ScreenBlitter {
 public:

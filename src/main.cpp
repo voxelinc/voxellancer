@@ -19,7 +19,7 @@
 
 #include "geometry/size.h"
 
-#include "render/stereorenderinfo.h"
+#include "displaystereorenderinfo.h"
 
 #include "ui/inputhandler.h"
 
@@ -153,7 +153,7 @@ int main(int argc, char* argv[]) {
             game->hmdManager().setupHMD();
         } else {
             if(clParser.stereoView()) {
-                game->viewer().toStereoView(StereoRenderInfo::dummy());
+                game->viewer().switchToStereoView(StereoRenderInfo::dummy());
             }
         }
 

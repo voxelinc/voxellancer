@@ -69,6 +69,8 @@ void BlitProgram::initialize() {
     binding->setFormat(2, GL_FLOAT, GL_FALSE, 0);
     m_vertexArrayObject.enable(VERTEX_LOCATION);
 
+    initializeShaders();
+
     m_initialized = true;
 }
 
