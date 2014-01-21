@@ -25,6 +25,10 @@ void StereoBlitProgram::setLensCenter(glm::vec2 lensCenter) {
 }
 
 void StereoBlitProgram::blit() {
+    if(!m_initialized) { // Kinda ugly, but needs to be done to set the uniforms. Any ideas anybody?
+        initialize();
+    }
+
     assert(m_distortionKs.size() == 4);
 
     glm::vec4 distortionVec(

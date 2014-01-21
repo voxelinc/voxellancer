@@ -1,5 +1,7 @@
 #include "viewer.h"
 
+#include <iostream>
+
 #include "camera/camerahead.h"
 
 #include "scene.h"

@@ -43,6 +43,7 @@ void StereoView::draw(Scene* scene, CameraHead* cameraHead) {
 
     m_stereoBlitProgram.setLensCenter(m_leftEyeLensCenter);
     m_screenBlitter.blit(m_leftEye.fbo(), Viewport(0, 0, viewport.width()/2, viewport.height()));
+
     m_stereoBlitProgram.setLensCenter(m_rightEyeLensCenter);
     m_screenBlitter.blit(m_rightEye.fbo(), Viewport(viewport.width()/2, 0, viewport.width()/2, viewport.height()));
 }
