@@ -6,7 +6,7 @@
 
 #include <glm/glm.hpp>
 
-#include "glow/AutoTimer.h"
+#include <glowutils/AutoTimer.h>
 
 #include "utils/tostring.h"
 #include "world/world.h"
@@ -47,7 +47,7 @@ static void doSplitDetection(WorldObject* planet, WorldObjectModification &mod, 
 
     SplitDetector t;
     {
-        glow::AutoTimer a("20x split detection");
+        glowutils::AutoTimer a("20x split detection");
         for (int i = 0; i < 20; i++) {
             t.searchSplitOffs(mods);
         }
@@ -127,7 +127,7 @@ go_bandit([](){
             Ship *normandy;            
             WorldObject *planet;
             {
-                glow::AutoTimer t("init perftest");
+                glowutils::AutoTimer t("init perftest");
 
                 normandy = new Ship();
                 ClusterCache::instance()->fillObject(normandy, "data/voxelcluster/normandy.csv");
@@ -165,7 +165,7 @@ go_bandit([](){
             normandy->accelerate(glm::vec3(0, 0, 1));
             ship->accelerate(glm::vec3(0, 0, 1));
             {
-                glow::AutoTimer t("simulation");
+                glowutils::AutoTimer t("simulation");
                 for (int i = 0; i < 1000; i++) {
                     ship->setTargetObject(planet);
                     //ship->fireAtObject();

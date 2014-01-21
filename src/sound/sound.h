@@ -9,8 +9,7 @@ namespace sf {
     class SoundBuffer;
 }
 
-class Sound
-{
+class Sound {
 public:
     enum Status {
         Paused, Playing, Stopped
