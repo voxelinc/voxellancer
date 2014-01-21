@@ -8,6 +8,8 @@
 #include "voxeleffect/voxelexplosiongenerator.h"
 #include "worldobject/ship.h"
 #include "ai/character.h"
+#include "ai/boardcomputer.h"
+
 
 Rocket::Rocket(glm::vec3 position, glm::quat orientation, const glm::vec3& initialSpeed, float travelSpeed, float lifetime, WorldObject* target) :
     Ship()

@@ -1,7 +1,6 @@
 #pragma once
 
-#include "camera/camera.h"
-
+class Camera;
 
 class Scene {
 public:

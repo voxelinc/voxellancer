@@ -4,6 +4,7 @@
 #include <glm/gtx/quaternion.hpp>
 
 #include "camerafollowhelper.h"
+#include "worldobject/worldobjecthandle.h"
 
 #include "game.h"
 

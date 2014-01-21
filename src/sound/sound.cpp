@@ -3,27 +3,57 @@
 #include <SFML/audio.hpp>
 
 Sound::Sound(const sf::SoundBuffer& sound) :
-    m_sound(std::make_shared<sf::Sound>(sound))
+    m_sound(new sf::Sound(sound))
 {
 
 }
 
-void Sound::setPosition(const glm::vec3& p) {
-    m_sound->setPosition(sf::Vector3f(p.x, p.y, p.z));
+Sound::Status Sound::status() {
+    switch (m_sound->getStatus()) {
+    case sf::SoundSource::Playing:
+        return Playing;
+    case sf::SoundSource::Paused:
+        return Paused;
+    case sf::SoundSource::Stopped:
+        return Stopped;
+    default:
+        return Stopped;
+    }
 }
 
 void Sound::play() {
     m_sound->play();
 }
 
-void Sound::setAttenuation(float attenuation) {
+void Sound::stop() {
+    m_sound->stop();
+}
+
+void Sound::pause() {
+    m_sound->pause();
+}
+
+Sound* Sound::setPosition(const glm::vec3& p) {
+    m_sound->setPosition(sf::Vector3f(p.x, p.y, p.z));
+    return this;
+}
+
+Sound* Sound::setAttenuation(float attenuation) {
     m_sound->setAttenuation(attenuation);
+    return this;
 }
 
-void Sound::setLoop(bool loop) {
+Sound* Sound::setVolume(float volume) {
+    m_sound->setVolume(volume);
+    return this;
+}
+
+Sound* Sound::setLoop(bool loop) {
     m_sound->setLoop(loop);
+    return this;
 }
 
-void Sound::setRelativeToListener(bool relative) {
+Sound* Sound::setRelativeToListener(bool relative) {
     m_sound->setRelativeToListener(relative);
+    return this;
 }

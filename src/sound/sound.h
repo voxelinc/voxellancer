@@ -9,17 +9,28 @@ namespace sf {
 }
 
 
+
 class Sound
 {
 public:
+    enum Status {
+        Paused, Playing, Stopped
+    };
+
     Sound(const sf::SoundBuffer& sound);
 
-    void setPosition(const glm::vec3& position);
+    Status status();
+
     void play();
-    void setAttenuation(float attenuation);
-    void setLoop(bool loop);
-    void setRelativeToListener(bool relative);
+    void stop();
+    void pause();
+
+    Sound* setPosition(const glm::vec3& position);
+    Sound* setVolume(float volume);
+    Sound* setAttenuation(float attenuation);
+    Sound* setLoop(bool loop);
+    Sound* setRelativeToListener(bool relative);
 private:
-    std::shared_ptr<sf::Sound> m_sound;
+    std::unique_ptr<sf::Sound> m_sound;
 };
 

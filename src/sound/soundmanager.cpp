@@ -18,23 +18,25 @@ void SoundManager::setListener(glm::vec3 p, glm::quat orientation) {
     sf::Listener::setDirection(sf::Vector3f(d.x, d.y, d.z));
 }
 
-Sound SoundManager::play(std::string soundFile, glm::vec3 position, bool relative) {
+static const int CLEANUPPERIOD = 100;
+
+std::shared_ptr<Sound> SoundManager::play(std::string soundFile, glm::vec3 position) {
+    std::shared_ptr<Sound> sound = create(soundFile);
+    sound->setPosition(position)->play();
+    return sound;
+}
+
+std::shared_ptr<Sound> SoundManager::create(std::string soundFile) {
+    cleanUp();
+
     sf::SoundBuffer* buffer = obtain(soundFile);
     // sounds don't work with more than one channel!
     assert(buffer->getChannelCount() == 1);
 
-    Sound sound(*buffer);
-    sound.setPosition(position);
-    //sound->setRelativeToListener(relative);
-    sound.setAttenuation(0.05f);
-    sound.play();
-    sound.setLoop(true);
+    std::shared_ptr<Sound> sound(new Sound(*buffer));
+    sound->setAttenuation(0.05f);
     m_sounds.push_back(sound);
 
-    m_nextCleanup++;
-    if (m_nextCleanup == 100) {
-        cleanUp();
-    }
     return sound;
 }
 
@@ -52,14 +54,17 @@ sf::SoundBuffer* SoundManager::obtain(std::string soundFile) {
 
 void SoundManager::cleanUp()
 {
-    for (auto iter = m_sounds.begin(); iter != m_sounds.end();)
+    if (m_nextCleanup++ < CLEANUPPERIOD) {
+        return;
+    }
+    for (std::list<std::shared_ptr<Sound>>::iterator iter = m_sounds.begin(); iter != m_sounds.end();)
     {
-        sf::Sound * sound = iter->get();
-        if (sound->getStatus() == sf::SoundSource::Stopped) {
+        if ((*iter)->status() == Sound::Stopped) {
             iter = m_sounds.erase(iter);
         } else {
             ++iter;
         }
     }
-}
+    m_nextCleanup = 0;
 
+}

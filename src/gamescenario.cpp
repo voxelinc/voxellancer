@@ -11,7 +11,7 @@
 #include "resource/clustercache.h"
 
 #include "worldobject/ship.h"
-
+#include "sound/soundmanager.h"
 #include "game.h"
 
 
@@ -21,7 +21,7 @@ GameScenario::GameScenario() {
 
 void GameScenario::populate(Game* game) {
     glow::AutoTimer t("Initialize Game");
-
+    
     glow::debug("create world");
     World* world = World::instance();
 
@@ -32,6 +32,7 @@ void GameScenario::populate(Game* game) {
     normandy->objectInfo().setName("Normandy");
     normandy->objectInfo().setShowOnHud(true);
     normandy->objectInfo().setCanLockOn(true);
+    normandy->setEngineSound(game->soundManager().create("data/Rocket Thrusters.ogg"));
     world->god().scheduleSpawn(normandy);
     // TODO: use these dummies to test BasicTasks
     normandy->setCharacter(

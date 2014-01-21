@@ -1,14 +1,15 @@
 #pragma once
 
+#include <memory>
+
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 
 #include "utils/inertiafollower.h"
-
-#include "worldobject/worldobject.h"
-
 #include "camerahead.h"
 
+class WorldObject;
+class WorldObjectHandle;
 
 class Game;
 
