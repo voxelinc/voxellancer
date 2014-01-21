@@ -1,22 +1,36 @@
 #include "metrics.h"
 
 
-float Metrics::s_gameUnit = 2.5f;
+std::weak_ptr<Metrics> Metrics::s_instance;
 
+Metrics::Metrics():
+    m_gameUnit("general.unitInMetres")
+{
+}
+
+std::shared_ptr<Metrics> Metrics::instance() {
+    if (std::shared_ptr<Metrics> renderer = s_instance.lock()) {
+        return renderer;
+    } else {
+        renderer = std::shared_ptr<Metrics>(new Metrics());
+        s_instance = renderer;
+        return renderer;
+    }
+}
 
 float Metrics::gameUnit() {
-    return s_gameUnit;
+    return m_gameUnit;
 }
 
 void Metrics::setGameUnit(float gameUnit) {
-    s_gameUnit = gameUnit;
+    m_gameUnit.set(gameUnit);
 }
 
 float Metrics::toGameUnits(float metre) {
-    return metre / s_gameUnit;
+    return metre / m_gameUnit;
 }
 
 float Metrics::toMetres(float gameUnits) {
-    return gameUnits * s_gameUnit;
+    return gameUnits * m_gameUnit;
 }
 
