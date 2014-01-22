@@ -40,3 +40,4 @@ void CrossHair::update(float deltaSec) {
 void CrossHair::draw() {
     m_crossHairVoxels.draw();
 }
+
