@@ -145,7 +145,7 @@ void Game::initialize() {
     Ship* previous = normandy;
     std::list<std::shared_ptr<WorldObjectHandle>> enemies1;
     std::list<std::shared_ptr<WorldObjectHandle>> enemies2;
-    for (int e = 0; e < 0; e++) {
+    for (int e = 0; e < 50; e++) {
         Ship *enemy = new Ship();
         int r = 200;
         enemy->move(glm::vec3(-200 + rand() % r - r / 2, rand() % r - r / 2, -200 + rand() % r - r / 2));
@@ -156,7 +156,7 @@ void Game::initialize() {
         m_world->god().scheduleSpawn(enemy);
         enemies2.push_back(enemy->handle());
     }
-    for (int e = 0; e < 0; e++) {
+    for (int e = 0; e < 50; e++) {
         Ship *enemy = new Ship();
         int r = 200;
         enemy->move(glm::vec3(200 + rand() % r - r / 2, rand() % r - r / 2, -200 + rand() % r - r / 2));
