@@ -31,7 +31,7 @@ protected:
     glm::vec3 findPositionBehindTarget();
     float targetDistance();
     float pointDistance(glm::vec3 point);
-    float Fight::angleToTarget();
+    float angleToTarget();
 
     int m_state;
     bool m_stateChanged;
