@@ -21,11 +21,6 @@ void FlyToTask::update(float deltaSec) {
 }
 
 glm::vec3 FlyToTask::calculateTargetPoint() {
-    //TODO: don't just check the line from center to center, consider own size
-    /*
-    Line mainLine(m_ship.transform().position(), m_targetPoint);
-    WorldTreeQuery mainQuery(&World::instance()->worldTree(), &mainLine);
-    std::set<WorldObject*> obstacles = mainQuery.intersectingWorldObjects();*/
     Capsule capsule = Capsule(m_ship.transform().position(), m_targetPoint - m_ship.transform().position(), m_ship.minimalGridSphere().radius());
     std::set<WorldObject*> obstacles = WorldTreeQuery(&World::instance()->worldTree(), &capsule).intersectingWorldObjects();
     if (obstacles.size() > 1) {
@@ -48,7 +43,7 @@ glm::vec3 FlyToTask::calculateEvasionPointFor(WorldObject* obstacle) {
 	float cosAlpha = dotP / (glm::length(toTarget) * glm::length(toObject));
 	glm::vec3 crossPoint = m_ship.transform().position() + (glm::normalize(toTarget) * cosAlpha * glm::length(toObject));
 	glm::vec3 evasionDirection = glm::normalize(crossPoint - obstacle->transform().position());
-	float evasionDistance = obstacle->minimalGridSphere().radius() + m_ship.minimalGridSphere().radius();
+	float evasionDistance = obstacle->minimalGridSphere().radius() + m_ship.minimalGridSphere().radius() * 1.5f;
 	return obstacle->transform().position() + evasionDirection * evasionDistance;
 }
 

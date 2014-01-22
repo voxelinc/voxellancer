@@ -40,6 +40,8 @@ public:
 
     float mass() const;
 
+    const WorldTransform projectedTransformIn(float deltaSec);
+
     std::list<VoxelCollision>& move(float deltaSec);
 
     void addVoxel(Voxel* voxel);

@@ -80,13 +80,19 @@ float Physics::mass() const {
     return m_mass;
 }
 
+const WorldTransform Physics::projectedTransformIn(float deltaSec){
+    WorldTransform targetTransform(m_worldObject.transform());
+    targetTransform.moveWorld(m_speed * deltaSec);
+    targetTransform.rotate(glm::quat(m_angularSpeed * deltaSec));
+
+    return targetTransform;
+}
+
 std::list<VoxelCollision> &Physics::move(float deltaSec) {
     updateSpeed(deltaSec);
 
     if (m_speed != glm::vec3(0.0f) || m_angularSpeed != glm::vec3(0.0f)) {
-        WorldTransform targetTransform(m_worldObject.transform());
-        targetTransform.moveWorld(m_speed * deltaSec);
-        targetTransform.rotate(glm::quat(m_angularSpeed * deltaSec));
+        WorldTransform targetTransform = projectedTransformIn(deltaSec);
 
         Movement movement(m_worldObject, m_worldObject.transform(), targetTransform);
         movement.perform();
