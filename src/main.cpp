@@ -105,11 +105,11 @@ int main(int argc, char* argv[]) {
     glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
 #endif
 
-//    if(clParser.hmd()) {
+    if(clParser.hmd()) {
         WindowManager::instance()->setFullScreenResolution(Size<int>(1280, 800), 1);
-//    } else {
-//        WindowManager::instance()->setWindowedResolution(Size<int>(1280, 800));
-//    }
+    } else {
+        WindowManager::instance()->setWindowedResolution(Size<int>(1280, 800));
+    }
 
     GLFWwindow* window = glfwGetCurrentContext();
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
