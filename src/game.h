@@ -36,6 +36,8 @@ public:
     void update(float deltaSec);
     void draw();
 
+    Player& player();
+
     InputHandler* inputHandler();
 
 private:
