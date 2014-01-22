@@ -99,20 +99,7 @@ int main(void)
 #endif
 
     window = glfwCreateWindow(1280, 720, "Voxellancer", NULL, NULL);
-#ifndef WIN32
-    if (!window){
-        // If 3.1 is not available and this is linux, assume we want mesa software rendering and try again
-        putenv("LIBGL_ALWAYS_SOFTWARE=1");
 
-        glfwTerminate();
-        if (!glfwInit()) {
-            glow::fatal("could not init glfw");
-            exit(-1);
-        }
-
-        window = glfwCreateWindow(1280, 720, "Voxellancer", NULL, NULL);
-    }
-#endif
     if (!window) {
         glfwTerminate();
         glow::fatal("could not create window");

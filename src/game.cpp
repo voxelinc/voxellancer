@@ -24,7 +24,6 @@
 #include "property/propertymanager.h"
 #include "resource/clustercache.h"
 #include "utils/hd3000dummy.h"
-#include "utils/linuxvmdummy.h"
 #include "ui/inputhandler.h"
 #include "ui/hud.h"
 
@@ -63,10 +62,7 @@ void Game::initialize() {
 
     glow::debug("Game::testFMOD()");
     //testFMOD();
-
-    //Must be created first
-    m_linuxvmdummy = std::unique_ptr<LinuxVMDummy>(new LinuxVMDummy);
-
+    
     glow::debug("create world");
     m_world = World::instance();
 
