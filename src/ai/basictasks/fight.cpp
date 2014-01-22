@@ -143,9 +143,7 @@ float Fight::pointDistance(glm::vec3 point) {
 }
 
 glm::vec3 Fight::findPositionBehindTarget() {
-    float x = (rand() % 50 - 25) / 100.0f;
-    float y = (rand() % 50 - 25) / 100.0f;
-    glm::vec3 point = glm::vec3(x, y, -1);
+    glm::vec3 point = glm::vec3(RandFloat::rand(-0.25f, 0.25), RandFloat::rand(-0.25f, 0.25), -1);
     point *= 3 * m_minEnemyDistance;
     point = point * m_ship.transform().orientation();
     point += m_ship.transform().position();

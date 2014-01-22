@@ -3,6 +3,7 @@
 #include "worldobject/worldobjecthandle.h"
 #include "../basictask.h"
 #include "worldobject/ship.h"
+#include "utils/randfloat.h"
 
 enum State {
     idle,
