@@ -8,6 +8,10 @@
 #include "utils/randvec.h"
 
 
+static const float s_minActDistance = 0.1f;
+static const float s_minActAngle = glm::radians(1.0f);
+
+
 BoardComputer::BoardComputer(Ship& ship) :
     m_ship(ship)
 {
@@ -21,11 +25,9 @@ void BoardComputer::moveTo(const glm::vec3& position) {
     glm::vec3 direction = glm::inverse(m_ship.transform().orientation()) * glm::normalize(delta);
     float distance = glm::length(delta);
 
-    
+    if (distance > s_minActDistance) {
         m_ship.accelerate(direction);
-    
-    
-
+    }
 }
 
 float angleBetween(const glm::vec3& u, const glm::vec3& v) {
@@ -57,7 +59,7 @@ void BoardComputer::rotateTo(const glm::vec3& position, const glm::vec3& up) {
         glm::quat upRotation = quatFrom(upDirection, newUpDirection);
         rotation = upRotation * rotation; // glm::slerp(glm::quat(), upRotation, 0.2f);
     } else {
-        //TODO: make it look naturally, e.g. up is to the "inside" of the rotation
+        //make it look naturally, e.g. up is to the "inside" of the rotation
         if(glm::abs(glm::angle(rotation)) > glm::radians(20.0f)) {
             glm::vec3 upDirection = glm::vec3(0, 1, 0);
             glm::vec3 newUpDirection = glm::vec3(0, 0, 1) + (rotation * glm::vec3(0, 0, -1)); //glm::slerp(glm::quat(), rotation, 0.5f) * glm::vec3(0, 0, -1);
@@ -66,7 +68,7 @@ void BoardComputer::rotateTo(const glm::vec3& position, const glm::vec3& up) {
         }
     }
 
-    if (glm::abs(glm::angle(rotation)) > minDelta) {
+    if (glm::abs(glm::angle(rotation)) > s_minActAngle) {
         glm::vec3 euler = glm::eulerAngles(rotation);
         m_ship.accelerateAngular(glm::normalize(euler) * 0.2f);
     }
