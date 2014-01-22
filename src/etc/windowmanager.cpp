@@ -64,8 +64,23 @@ void WindowManager::setWindowedResolution(const Size<int>& resolution) {
     glfwMakeContextCurrent(window);
 }
 
-void WindowManager::setFullScreenResolution(const Size<int>& resolution, int monitor) {
-    GLFWwindow* window = glfwCreateWindow(resolution.width(), resolution.height(), "Voxellancer", monitors()[monitor], NULL);
+void WindowManager::setFullScreenResolution(const Size<int>& resolution, int monitorIndex) {
+    std::vector<GLFWmonitor*> monitors = this->monitors();
+    assert(monitors.size() > 0);
+
+    GLFWwindow* window;
+    GLFWmonitor* monitor;
+
+    if(monitorIndex >= monitors.size()) {
+        glow::info("Using primary monitors since specified monitor is not available");
+        monitor = glfwGetPrimaryMonitor();
+    }
+    else {
+        monitor = monitors[monitorIndex];
+    }
+
+    window = glfwCreateWindow(resolution.width(), resolution.height(), "Voxellancer", monitor, NULL);
+
 
 #ifndef WIN32
     if (window == nullptr) {
@@ -78,7 +93,7 @@ void WindowManager::setFullScreenResolution(const Size<int>& resolution, int mon
             exit(-1);
         }
 
-        window = glfwCreateWindow(resolution.width(), resolution.height(), "Voxellancer",  monitors()[monitor], NULL);
+        window = glfwCreateWindow(resolution.width(), resolution.height(), "Voxellancer",  monitor, NULL);
     }
 #endif
 
@@ -89,6 +104,10 @@ void WindowManager::setFullScreenResolution(const Size<int>& resolution, int mon
     }
 
     glfwMakeContextCurrent(window);
+}
+
+void WindowManager::shutdown() {
+    glfwDestroyWindow(glfwGetCurrentContext());
 }
 
 bool WindowManager::fullScreen() const {

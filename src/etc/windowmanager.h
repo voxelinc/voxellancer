@@ -17,7 +17,9 @@ public:
     float aspectRatio() const;
 
     void setWindowedResolution(const Size<int>& resolution);
-    void setFullScreenResolution(const Size<int>& resolution, int monitor = 0);
+    void setFullScreenResolution(const Size<int>& resolution, int monitorIndex = 0);
+
+    void shutdown();
 
     bool fullScreen() const;
     void setFullScreen(bool fullScreen);
