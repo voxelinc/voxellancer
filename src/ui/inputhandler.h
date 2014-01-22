@@ -9,7 +9,7 @@
 #include "property/propertymanager.h"
 #include "property/property.h"
 
-#include "ui/crosshair.h"
+#include "ui/hud/crosshair.h"
 
 #include "worldobject/ship.h"
 

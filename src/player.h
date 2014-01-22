@@ -3,7 +3,7 @@
 #include "camera/camera.h"
 #include "camera/cameradolly.h"
 
-#include "ui/hud.h"
+#include "ui/hud/hud.h"
 
 #include "worldobject/ship.h"
 
