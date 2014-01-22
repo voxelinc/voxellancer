@@ -40,7 +40,6 @@
 #include "ai/characters/dummycharacter.h"
 #include "ai/elevatedtasks/dummyelevatedtask.h"
 #include "ai/basictask.h"
-#include "ai/elevatedtasks/followtask.h"
 #include "ai/basictasks/flytotask.h"
 #include "ai/elevatedtasks/patrolwaypointstask.h"
 
@@ -109,7 +108,6 @@ void Game::initialize() {
     follower->setPosition(glm::vec3(100, 0, -50));
     follower->objectInfo().setName("follower");
     follower->objectInfo().setShowOnHud(true);
-    //follower->setCharacter(new DummyCharacter(*follower, new FollowTask(*follower, normandy->handle())));
 	m_world->god().scheduleSpawn(follower);
 	FlyToTask* task = new FlyToTask(*follower);
 	task->setTargetPoint(glm::vec3(-100, 0, -50));
