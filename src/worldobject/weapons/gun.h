@@ -13,7 +13,7 @@ public:
 
 
 private:
-    Property<float> m_bulletRange;
+    Property<float> m_range;
     Property<float> m_cooldownTime;
     Property<float> m_bulletSpeed;
 };
