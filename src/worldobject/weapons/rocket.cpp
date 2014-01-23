@@ -2,16 +2,14 @@
 
 #include "world/god.h"
 #include "world/world.h"
-
-#include "utils/tostring.h"
+#include "utils/geometryhelper.h"
 #include "physics/physics.h"
 #include "voxeleffect/voxelexplosiongenerator.h"
-#include "worldobject/ship.h"
-#include "ai/character.h"
+#include "ai/character.h" //ship holds a unique_ptr to a character and we inherit from it (C2338)
+
 
 Rocket::Rocket(glm::vec3 position, glm::quat orientation, const glm::vec3& initialSpeed, float travelSpeed, float lifetime, WorldObject* target) :
     Ship()
-    //WorldObject(0.8f, CollisionFilterClass::Rocket)
 {
     m_collisionFilterClass = CollisionFilterClass::Rocket;
     m_transform.setScale(0.8f);
@@ -48,7 +46,7 @@ void Rocket::update(float deltaSec) {
         glm::quat rotation;
         if (cross != glm::vec3(0)) {
             glm::vec3 rotationAxis = glm::normalize(cross);
-            float angle = glm::acos(glm::clamp(glm::dot(dir, myOrientation), 0.0f, 1.0f));
+            float angle = GeometryHelper::angleBetween(dir, myOrientation);
             if (angle > glm::radians(0.1)) {
                 rotation = glm::angleAxis(-angle, rotationAxis);
             }

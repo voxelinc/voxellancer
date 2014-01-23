@@ -2,8 +2,7 @@
 
 #include "world/god.h"
 #include "world/world.h"
-
-#include "utils/tostring.h"
+#include "utils/geometryhelper.h"
 #include "voxeleffect/voxelexplosiongenerator.h"
 
 
@@ -22,7 +21,7 @@ Bullet::Bullet(WorldObject* creator, glm::vec3 position, glm::quat orientation, 
     m_transform.setOrientation(orientation); //set orientation to ship orientation
     if (cross != glm::vec3(0)) {
         glm::vec3 rotationAxis = glm::normalize(cross);
-        float angle = glm::acos(glm::clamp(glm::dot(dir, myOrientation), 0.0f, 1.0f));
+        float angle = GeometryHelper::angleBetween(dir, myOrientation);
         glm::quat orientation = glm::angleAxis(-angle, rotationAxis);
         m_transform.rotateWorld(orientation); //then rotate towards target
     }
