@@ -35,7 +35,7 @@ void Gun::shootAtPoint(Hardpoint* sourceHardpoint, glm::vec3 target) {
     }
 }
 
-float Gun::bulletRange() {
+float Gun::range() {
     return m_bulletRange;
 }
 

@@ -128,7 +128,7 @@ int main(int argc, char* argv[]) {
     if(clParser.hmd()) {
         WindowManager::instance()->setFullScreenResolution(1);
     } else {
-        WindowManager::instance()->setWindowedResolution(Size<int>(Property<float>("window.width"), Property<float>("window.height")));
+        WindowManager::instance()->setWindowedResolution(Size<int>(Property<int>("window.width"), Property<int>("window.height")));
     }
 
     GLFWwindow* window = glfwGetCurrentContext();

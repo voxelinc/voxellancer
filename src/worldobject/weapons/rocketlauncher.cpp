@@ -31,6 +31,7 @@ void RocketLauncher::shootAtObject(Hardpoint* source, WorldObject* target){
     }
 }
 
-float RocketLauncher::bulletRange(){
+float RocketLauncher::range(){
     return m_bulletRange;
 }
+
