@@ -27,7 +27,8 @@ Bullet::Bullet(WorldObject* creator, glm::vec3 position, glm::quat orientation, 
         m_transform.rotateWorld(orientation); //then rotate towards target
     }
 
-    m_transform.setPosition(position + dir * (minimalGridAABB().axisMax(Axis::ZAxis) / 2.0f + glm::root_two<float>()));
+    //TODO: #300
+    m_transform.setPosition(position + dir * (minimalGridAABB().axisMax(Axis::ZAxis) * m_transform.scale() / 2.0f + glm::root_two<float>()));
 
     m_physics.setSpeed(dir * speed);
     m_physics.setAngularSpeed(glm::vec3(0, 0, 50)); //set spinning

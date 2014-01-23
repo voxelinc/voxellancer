@@ -29,7 +29,8 @@ Rocket::Rocket(glm::vec3 position, glm::quat orientation, const glm::vec3& initi
 
     m_transform.setOrientation(orientation); //set orientation to ship orientation
 
-    m_transform.setPosition(position + myOrientation * (minimalGridAABB().axisMax(Axis::ZAxis) / 2.0f + glm::root_two<float>()));
+    //TODO: #300
+    m_transform.setPosition(position + myOrientation * (minimalGridAABB().axisMax(Axis::ZAxis) * m_transform.scale() / 2.0f + glm::root_two<float>()));
 
     m_physics.setSpeed(initialSpeed + myOrientation * (m_travelSpeed * 0.1f)); // rocket is ejected with 10% of its travel speed
 

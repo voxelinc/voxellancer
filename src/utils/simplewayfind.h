@@ -15,6 +15,7 @@ public:
     static glm::vec3 calculateTravelPoint(WorldObject& object, const glm::vec3& targetPoint);
 
 protected:
+    static glm::vec3 calculateEvasionDirectionFor(WorldObject& self, WorldObject& obstacle, const glm::vec3& targetPoint);
     static glm::vec3 calculateEvasionPointFor(WorldObject& self, WorldObject& obstacle, const glm::vec3& targetPoint);
     static WorldObject* closestObjectExceptSelf(WorldObject& self, std::set<WorldObject*>* objects);
 };

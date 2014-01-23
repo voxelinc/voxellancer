@@ -11,7 +11,8 @@ PatrolWaypointsTask::PatrolWaypointsTask(Ship& ship, std::list<glm::vec3> points
 }
 
 void PatrolWaypointsTask::update(float deltaSec) {
-    if (glm::length(*m_currentPoint - m_ship.transform().position()) < m_ship.minimalGridSphere().radius() * 0.5){
+    //TODO: #300
+    if (glm::length(*m_currentPoint - m_ship.transform().position()) < m_ship.minimalGridSphere().radius() * m_ship.transform().scale() * 0.5){
         m_currentPoint++;
         if (m_currentPoint == m_points.end()) {
             m_currentPoint = m_points.begin();
