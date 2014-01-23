@@ -24,7 +24,7 @@ go_bandit([](){
         });
 
         it("moves in the right direction", [&]() {
-            ship->boardComputer()->moveTo(glm::vec3(1, 0, 0), 0);
+            ship->boardComputer()->moveTo(glm::vec3(1, 0, 0));
             AssertThat(ship->physics().acceleration().x, IsGreaterThan(0));
             AssertThat(ship->physics().acceleration().y, Equals(0));
             AssertThat(ship->physics().acceleration().z, Equals(0));
