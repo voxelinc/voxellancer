@@ -38,13 +38,12 @@ void StereoView::draw(Scene* scene, CameraHead* cameraHead) {
     m_leftEye.draw(scene, cameraHead);
     m_rightEye.draw(scene, cameraHead);
 
-    Viewport viewport = WindowManager::instance()->viewport();
-    glViewport(0, 0, viewport.width(), viewport.height());
+    glViewport(m_viewport.x(), m_viewport.y(), m_viewport.width(), m_viewport.height());
 
     m_stereoBlitProgram.setLensCenter(m_leftEyeLensCenter);
-    m_screenBlitter.blit(m_leftEye.fbo(), Viewport(0, 0, viewport.width()/2, viewport.height()));
+    m_screenBlitter.blit(m_leftEye.fbo(), Viewport(m_viewport.x(), m_viewport.y(), m_viewport.width()/2, m_viewport.height()));
 
     m_stereoBlitProgram.setLensCenter(m_rightEyeLensCenter);
-    m_screenBlitter.blit(m_rightEye.fbo(), Viewport(viewport.width()/2, 0, viewport.width()/2, viewport.height()));
+    m_screenBlitter.blit(m_rightEye.fbo(), Viewport(m_viewport.x() + m_viewport.width()/2, m_viewport.y(), m_viewport.width()/2, m_viewport.height()));
 }
 

@@ -17,6 +17,8 @@
 #include "etc/windowmanager.h"
 #include "etc/cli/commandlineparser.h"
 
+#include "geometry/viewport.h"
+
 #include "geometry/size.h"
 
 #include "display/stereorenderinfo.h"
@@ -51,6 +53,7 @@ static void resizeCallback(GLFWwindow* window, int width, int height) {
     if (width > 0 && height > 0) {
         glViewport(0, 0, width, height);
         game->inputHandler().resizeEvent(width, height);
+        game->viewer().setViewport(Viewport(0, 0, width, height));
     }
 }
 
@@ -121,12 +124,12 @@ int main(int argc, char* argv[]) {
 #else
     glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
 #endif
-//
-//    if(clParser.hmd()) {
+
+    if(clParser.hmd()) {
         WindowManager::instance()->setFullScreenResolution(1);
-//    } else {
-//        WindowManager::instance()->setWindowedResolution(Size<int>(Property<float>("window.width"), Property<float>("window.height")));
-//    }
+    } else {
+        WindowManager::instance()->setWindowedResolution(Size<int>(Property<float>("window.width"), Property<float>("window.height")));
+    }
 
     GLFWwindow* window = glfwGetCurrentContext();
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
