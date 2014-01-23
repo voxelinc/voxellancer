@@ -10,7 +10,7 @@ in vec3 modelposition;
 out vec4 fragColor;
 
 void main() {
-    float border_size = 0.15;
+    float border_size = 0.10;
     float border_darkness = 0.2;
 
     // modelposition is between -0.5 and 0.5

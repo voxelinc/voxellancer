@@ -1,16 +1,12 @@
 #pragma once
 
-#include <glm/glm.hpp>
-#include <glm/gtx/quaternion.hpp>
-
 #include "utils/inertiafollower.h"
 
 #include "worldobject/worldobject.h"
 
 #include "camerahead.h"
+#include "camerafollowhelper.h"
 
-
-class Game;
 
 class CameraDolly: public InertiaFollower {
 public:
@@ -25,7 +21,6 @@ public:
 
 protected:
     CameraHead m_cameraHead;
-
-    std::shared_ptr<WorldObjectHandle> m_followWorldObjectHandle;
+    CameraFollowHelper m_followHelper;
 };
 
