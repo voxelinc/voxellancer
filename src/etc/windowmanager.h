@@ -17,7 +17,7 @@ public:
     float aspectRatio() const;
 
     void setWindowedResolution(const Size<int>& resolution);
-    void setFullScreenResolution(const Size<int>& resolution, int monitorIndex = 0);
+    void setFullScreenResolution(int monitorIndex = 0);
 
     void shutdown();
 
@@ -32,5 +32,6 @@ protected:
     static WindowManager* s_instance;
 
     WindowManager();
+    Size<int> maxResolution(GLFWmonitor* monitor);
 };
 

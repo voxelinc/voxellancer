@@ -9,8 +9,6 @@
 #include "property/propertymanager.h"
 #include "property/property.h"
 
-#include "ui/crosshair.h"
-
 #include "worldobject/ship.h"
 
 #include "inputconfigurator.h"
@@ -80,14 +78,14 @@ protected:
 protected:
     void toggleControls();
 
-    void handleUpdate();
-    void handleMouseUpdate();
-    void handleHMDUpdate();
+    void processUpdate();
+    void processMouseUpdate();
+    void processHMDUpdate();
 
-    void handleFireActions();
-    void handleMoveActions();
-    void handleRotateActions();
-    void handleTargetSelectActions();
+    void processFireActions();
+    void processMoveActions();
+    void processRotateActions();
+    void processTargetSelectActions();
 
     float getInputValue(ActionKeyMapping* action);
     float getInputValue(InputMapping mapping);
