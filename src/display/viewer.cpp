@@ -11,7 +11,6 @@
 
 
 Viewer::Viewer(const Viewport& viewport):
-    m_scene(nullptr),
     m_view(nullptr),
     m_cameraHead(nullptr),
     m_viewport(viewport)
@@ -42,14 +41,12 @@ void Viewer::setViewport(const Viewport& viewport) {
     }
 }
 
-void Viewer::switchToMonoView() {
-    delete m_view;
-    m_view = new MonoView(m_viewport);
+void Viewer::switchToMonoView() {;
+    m_view = std::unique_ptr<View>(new MonoView(m_viewport));
 }
 
 void Viewer::switchToStereoView(const StereoRenderInfo& stereoRenderInfo) {
-    delete m_view;
-    m_view = new StereoView(m_viewport, stereoRenderInfo);
+    m_view = std::unique_ptr<View>(new StereoView(m_viewport, stereoRenderInfo));
 }
 
 void Viewer::draw() {

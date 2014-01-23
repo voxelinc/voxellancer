@@ -55,9 +55,9 @@ void Hardpoint::shootAtObject(WorldObject* target){
     }
 }
 
-float Hardpoint::aimRange(){
+float Hardpoint::range(){
     if (m_weapon) {
-        return m_weapon->bulletRange();
+        return m_weapon->range();
     } else {
         return -1;
     }

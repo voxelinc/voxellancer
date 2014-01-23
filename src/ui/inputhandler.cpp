@@ -132,9 +132,9 @@ void InputHandler::update(float deltaSec) {
             if (m_inputConfigurator->isConfiguring()) {
                 m_inputConfigurator->update();
             } else {
-                handleUpdate();
-                handleMouseUpdate();
-                handleHMDUpdate();
+                processUpdate();
+                processMouseUpdate();
+                processHMDUpdate();
             }
         }
     }
@@ -148,14 +148,14 @@ void InputHandler::retrieveInputValues() {
     m_secondaryInputValues.axisValues = glfwGetJoystickAxes(GLFW_JOYSTICK_1, &m_secondaryInputValues.axisCnt);
 }
 
-void InputHandler::handleUpdate() {
-    handleFireActions();
-    handleMoveActions();
-    handleRotateActions();
-    handleTargetSelectActions();
+void InputHandler::processUpdate() {
+    processFireActions();
+    processMoveActions();
+    processRotateActions();
+    processTargetSelectActions();
 }
 
-void InputHandler::handleMouseUpdate() {
+void InputHandler::processMouseUpdate() {
     // mouse handling
     double x, y;
     glfwGetCursorPos(glfwGetCurrentContext(), &x, &y);
@@ -192,7 +192,7 @@ void InputHandler::handleMouseUpdate() {
     }
 }
 
-void InputHandler::handleHMDUpdate() {
+void InputHandler::processHMDUpdate() {
     if(m_hmd) {
         m_player->cameraDolly().cameraHead().setRelativeOrientation(m_hmd->orientation());
     } else {
@@ -263,7 +263,7 @@ float InputHandler::getInputValue(InputMapping mapping) {
     }
 }
 
-void InputHandler::handleFireActions() {
+void InputHandler::processFireActions() {
     if (getInputValue(&fireAction)) {
         m_player->playerShip()->fireAtPoint(findTargetPoint());
     }
@@ -272,14 +272,14 @@ void InputHandler::handleFireActions() {
     }
 }
 
-void InputHandler::handleMoveActions() {
+void InputHandler::processMoveActions() {
     m_player->move(glm::vec3(-getInputValue(&moveLeftAction), 0, 0));
     m_player->move(glm::vec3(getInputValue(&moveRightAction), 0, 0));
     m_player->move(glm::vec3(0, 0, -getInputValue(&moveForwardAction)));
     m_player->move(glm::vec3(0, 0, getInputValue(&moveBackwardAction)));
 }
 
-void InputHandler::handleRotateActions() {
+void InputHandler::processRotateActions() {
     glm::vec3 rot = glm::vec3(0);
     rot.x = getInputValue(&rotateUpAction)
         - getInputValue(&rotateDownAction);
@@ -296,7 +296,7 @@ void InputHandler::handleRotateActions() {
     m_player->rotate(rot);
 }
 
-void InputHandler::handleTargetSelectActions() {
+void InputHandler::processTargetSelectActions() {
     if (getInputValue(&selectNextAction)) {
         m_targetSelector->selectNextTarget();
     }

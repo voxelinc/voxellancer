@@ -17,8 +17,7 @@
 #include "voxelgridcmp.h"
 
 
-class VoxelCluster
-{
+class VoxelCluster {
 public:
     VoxelCluster(float scale);
     virtual ~VoxelCluster();

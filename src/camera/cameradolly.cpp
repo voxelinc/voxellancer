@@ -1,18 +1,9 @@
 #include "cameradolly.h"
 
-#include <glm/glm.hpp>
-#include <glm/gtx/quaternion.hpp>
-
-#include "camerafollowhelper.h"
-#include "worldobject/worldobjecthandle.h"
-
-#include "game.h"
-
 
 CameraDolly::CameraDolly():
     InertiaFollower(10.0f, 10.0f),
-    m_cameraHead(this),
-    m_followWorldObjectHandle(WorldObjectHandle::nullHandle())
+    m_cameraHead(this)
 {
 }
 
@@ -20,16 +11,15 @@ CameraHead& CameraDolly::cameraHead() {
     return m_cameraHead;
 }
 
-void CameraDolly::followWorldObject(WorldObject* m_followWorldObject) {
-    m_followWorldObjectHandle = m_followWorldObject->handle();
+void CameraDolly::followWorldObject(WorldObject* followWorldObject) {
+    m_followHelper.setTarget(followWorldObject);
 }
 
 void CameraDolly::update(float deltaSec) {
-    WorldObject* followWorldObject = m_followWorldObjectHandle->get();
+    WorldObject* followWorldObject = m_followHelper.target();
 
     if(followWorldObject) {
-        CameraFollowHelper followHelper(followWorldObject);
-        follow(followHelper.followPosition(), followWorldObject->transform().orientation(), deltaSec);
+        follow(m_followHelper.followPosition(), followWorldObject->transform().orientation(), deltaSec);
     }
 }
 

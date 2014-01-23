@@ -1,17 +1,21 @@
 #pragma once
 
-#include <glm/glm.hpp>
-
 #include "worldobject/worldobject.h"
+#include "worldobject/worldobjecthandle.h"
 
 
 class CameraFollowHelper {
 public:
-    CameraFollowHelper(WorldObject* worldObject);
+    CameraFollowHelper();
+
+    WorldObject* target();
+    void setTarget(WorldObject* target);
 
     glm::vec3 followPosition();
 
 
 protected:
-    WorldObject* m_worldObject;
+    std::shared_ptr<WorldObjectHandle> m_target;
 };
+
+

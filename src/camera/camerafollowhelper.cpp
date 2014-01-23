@@ -6,18 +6,27 @@
 #include "geometry/sphere.h"
 
 
-CameraFollowHelper::CameraFollowHelper(WorldObject* worldObject):
-    m_worldObject(worldObject)
+CameraFollowHelper::CameraFollowHelper():
+    m_target(nullptr)
 {
+}
 
+WorldObject* CameraFollowHelper::target() {
+    return m_target.get()->get();
+}
+
+void CameraFollowHelper::setTarget(WorldObject* target) {
+    m_target = target->handle();
 }
 
 glm::vec3 CameraFollowHelper::followPosition() {
     Sphere sphere;
 
-    sphere.setPosition(m_worldObject->transform().position());
-    sphere.setRadius(m_worldObject->minimalGridAABB().diameter() * m_worldObject->transform().scale());
+    WorldObject* worldObject = m_target->get();
 
-    return sphere.position() + (m_worldObject->transform().orientation() * glm::vec3(0.0f, 0.6f, 1.5f)) * sphere.radius();
+    sphere.setPosition(worldObject->transform().position());
+    sphere.setRadius(worldObject->minimalGridAABB().diameter() * worldObject->transform().scale());
+
+    return sphere.position() + (worldObject->transform().orientation() * glm::vec3(0.0f, 0.6f, 1.5f)) * sphere.radius();
 }
 

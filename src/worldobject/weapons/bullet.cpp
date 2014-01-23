@@ -59,14 +59,14 @@ void Bullet::spawnExplosion() {
     generator.setPosition(m_transform.position());
     generator.setRadius(m_transform.scale());
     generator.setScale(m_transform.scale() / 2.0f);
-    generator.setCount(4);
-    generator.setColor(0xFF0000, 0.4f);
+    generator.setCount(16);
+    generator.setColor(0xFF0000, emissiveness());
     generator.setForce(0.6f);
     generator.setLifetime(0.7f, 0.2f);
     generator.spawn();
 }
 
 float Bullet::emissiveness() {
-    return 0.2f;
+    return 0.4f;
 }
 

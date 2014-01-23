@@ -9,9 +9,10 @@
 
 
 Gun::Gun() :
-m_bulletRange("weapons.GunBulletRange"),
-m_cooldownTime("weapons.GunCooldownTime"),
-m_bulletSpeed("weapons.GunBulletSpeed") {
+    m_range("weapons.GunRange"),
+    m_cooldownTime("weapons.GunCooldownTime"),
+    m_bulletSpeed("weapons.GunBulletSpeed")
+{
     Weapon::setCoolDownTime(m_cooldownTime);
 }
 
@@ -25,7 +26,7 @@ void Gun::update(float deltaSec) {
 
 void Gun::shootAtPoint(Hardpoint* sourceHardpoint, glm::vec3 target) {
     if (canFire()) {
-        Bullet *bullet = new Bullet(worldObject(), m_bulletRange / m_bulletSpeed);
+        Bullet *bullet = new Bullet(worldObject(), m_range / m_bulletSpeed);
 
         BulletTransformHelper bulletTransformHelper(bullet, sourceHardpoint, m_bulletSpeed, target);
         bulletTransformHelper.transform();
@@ -36,7 +37,7 @@ void Gun::shootAtPoint(Hardpoint* sourceHardpoint, glm::vec3 target) {
     }
 }
 
-float Gun::bulletRange() {
-    return m_bulletRange;
+float Gun::range() {
+    return m_range;
 }
 

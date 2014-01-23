@@ -9,11 +9,11 @@ public:
     virtual AimType aimType() override;
     virtual void shootAtPoint(Hardpoint* sourceHardpoint, glm::vec3 target) override;
     virtual void update(float deltaSec) override;
-    virtual float bulletRange() override;
+    virtual float range() override;
 
 
 private:
-    Property<float> m_bulletRange;
+    Property<float> m_range;
     Property<float> m_cooldownTime;
     Property<float> m_bulletSpeed;
 };

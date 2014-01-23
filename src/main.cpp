@@ -24,6 +24,8 @@
 #include "etc/windowmanager.h"
 #include "etc/cli/commandlineparser.h"
 
+#include "geometry/viewport.h"
+
 #include "geometry/size.h"
 
 #include "display/stereorenderinfo.h"
@@ -59,6 +61,7 @@ static void resizeCallback(GLFWwindow* window, int width, int height) {
     if (width > 0 && height > 0) {
         glViewport(0, 0, width, height);
         game->inputHandler().resizeEvent(width, height);
+        game->viewer().setViewport(Viewport(0, 0, width, height));
     }
 }
 
@@ -91,9 +94,26 @@ void setCallbacks(GLFWwindow* window) {
     glfwSetWindowSizeCallback(window, resizeCallback);
 }
 
+static void mainloop() {
+    glow::debug("Entering mainloop");
+    double time = glfwGetTime();
+    while (!glfwWindowShouldClose(glfwGetCurrentContext())) {
+        double delta = glfwGetTime() - time;
+        time += delta;
+
+        game->update(static_cast<float>(delta));
+        game->draw();
+
+        glfwSwapBuffers(glfwGetCurrentContext());
+        glfwPollEvents();
+    }
+}
+
 int main(int argc, char* argv[]) {
     CommandLineParser clParser;
     clParser.parse(argc, argv);
+
+    PropertyManager::instance()->load("data/config.ini");
 
     if (!glfwInit()) {
         glow::fatal("Could not init glfw");
@@ -114,9 +134,9 @@ int main(int argc, char* argv[]) {
 #endif
 
     if(clParser.hmd()) {
-        WindowManager::instance()->setFullScreenResolution(Size<int>(1280, 800), 1);
+        WindowManager::instance()->setFullScreenResolution(1);
     } else {
-        WindowManager::instance()->setWindowedResolution(Size<int>(1280, 800));
+        WindowManager::instance()->setWindowedResolution(Size<int>(Property<int>("window.width"), Property<int>("window.height")));
     }
 
     GLFWwindow* window = glfwGetCurrentContext();
@@ -146,12 +166,10 @@ int main(int argc, char* argv[]) {
     glfwSwapInterval(1);
 #endif
 
-//#define TRYCATCH
+    //#define TRYCATCH
 #ifdef TRYCATCH
     try {
 #endif
-        PropertyManager::instance()->load("data/config.ini");
-
         std::srand((unsigned int)time(NULL));
 
         game = new Game();
@@ -165,27 +183,12 @@ int main(int argc, char* argv[]) {
             }
         }
 
-		int width, height;
-		glfwGetFramebufferSize(window, &width, &height);
+        int width, height;
+        glfwGetFramebufferSize(window, &width, &height);
         game->inputHandler().resizeEvent(width, height);
 
-        glow::debug("Entering mainloop");
-        double time = glfwGetTime();
-        while (!glfwWindowShouldClose(window)) {
-            double delta = glfwGetTime() - time;
-            time += delta;
+        mainloop();
 
-            game->update(static_cast<float>(delta));
-            game->draw();
-
-            glfwSwapBuffers(window);
-            glfwPollEvents();
-        }
-
-        delete game;
-
-        glfwDestroyWindow(window);
-        glfwTerminate();
 #ifdef TRYCATCH
     }
     catch (std::exception &e) {
@@ -196,6 +199,10 @@ int main(int argc, char* argv[]) {
         std::cin.ignore(1, '\n');
     }
 #endif
+
+    delete game;
+    WindowManager::instance()->shutdown();
+    glfwTerminate();
     OVR::System::Destroy();
 
     return 0;
