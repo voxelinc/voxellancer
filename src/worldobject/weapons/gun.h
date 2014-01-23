@@ -6,13 +6,14 @@
 class Gun : public Weapon {
 public:
     Gun();
-    virtual AimType aimType();
-    virtual void shootAtPoint(Hardpoint* source, glm::vec3 target);
-    virtual void update(float deltaSec);
-    virtual float aimRange();
+    virtual AimType aimType() override;
+    virtual void shootAtPoint(Hardpoint* sourceHardpoint, glm::vec3 target) override;
+    virtual void update(float deltaSec) override;
+    virtual float range() override;
+
 
 private:
-    Property<float> prop_aimRange, prop_cooldownTime, prop_speed;
-
-    float m_cooldown;
+    Property<float> m_range;
+    Property<float> m_cooldownTime;
+    Property<float> m_bulletSpeed;
 };

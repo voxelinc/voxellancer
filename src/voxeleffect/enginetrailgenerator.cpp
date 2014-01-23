@@ -1,8 +1,6 @@
 #include "enginetrailgenerator.h"
 
-#include <GL/glew.h> //this is not needed but wants to be included befor gl.h which is included by glfw
 
-#include <GLFW/glfw3.h>
 
 #include "worldobject/engine.h"
 #include "worldobject/ship.h"
@@ -14,7 +12,7 @@ EngineTrailGenerator::EngineTrailGenerator() :
     m_spawnOffset(0.5f),
     m_lastPosition(),
     m_lastValid(false),
-    m_lastSpawn(0),
+    m_timeSinceLastSpawn(0),
     prop_lifetime("vfx.engineTrailLifetime"),
     prop_stepDistance("vfx.engineTrailStepDistance"),
     prop_idleTime("vfx.engineTrailIdleCooldown")
@@ -65,8 +63,10 @@ void EngineTrailGenerator::update(float deltaSec) {
         m_lastValid = false;
     }
 
+    m_timeSinceLastSpawn += deltaSec;
+
     // When not moving, we still want some exhausts
-    if (glfwGetTime() - m_lastSpawn > prop_idleTime) {
+    if (m_timeSinceLastSpawn > prop_idleTime) {
         spawnAt(calculateSpawnPosition());        
     }
 }
@@ -80,6 +80,6 @@ void EngineTrailGenerator::spawnAt(glm::vec3 position) {
     m_generator.setImpactVector(m_engine->ship()->transform().orientation() * (glm::vec3(0, 0, 0.1f) * glm::abs(m_engine->ship()->physics().acceleration()) / 5.0f));
 
     m_generator.spawn();
-    m_lastSpawn = glfwGetTime();
+    m_timeSinceLastSpawn = 0.0f;
     m_lastPosition = position;
 }

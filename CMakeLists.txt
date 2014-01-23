@@ -93,6 +93,7 @@ find_package(GLEW REQUIRED)
 find_package(GLFW REQUIRED)
 #find_package(FMOD REQUIRED)
 find_package(BANDIT REQUIRED)
+find_package(LibOVR REQUIRED)
 
 if(REGEX_USE_BOOST)
 find_package(Boost REQUIRED regex)
@@ -111,6 +112,7 @@ include_directories(
     ${GLM_INCLUDE_DIR}
     #${FMOD_INCLUDE_DIR}
     ${BANDIT_INCLUDE_DIR}
+    ${LIBOVR_INCLUDE_DIRS}
 )
 
 
@@ -161,6 +163,7 @@ set(LIBS_TO_LINK
     ${GLFW_LIBRARY}
     #${FMOD_LIBRARY}
     ${Boost_LIBRARIES}
+    ${LIBOVR_LIBRARIES}
     glow
     glowutils
     ${LIBS_TO_LINK}

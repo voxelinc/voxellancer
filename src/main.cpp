@@ -1,9 +1,10 @@
-
-
 #include <iostream>
+
 #ifdef WIN32
 #include <windows.h>
 #endif
+
+#include <OVR.h>
 
 #include <GL/glew.h>
 
@@ -13,14 +14,24 @@
 #include <glow/global.h>
 #include <glowutils/FileRegistry.h>
 
-#include "game.h"
+#include "etc/windowmanager.h"
+#include "etc/cli/commandlineparser.h"
+
+#include "geometry/viewport.h"
+
+#include "geometry/size.h"
+
+#include "display/stereorenderinfo.h"
+
 #include "ui/inputhandler.h"
+
+#include "game.h"
 
 
 static GLint MajorVersionRequire = 3;
 static GLint MinorVersionRequire = 1;
 
-static Game * game;
+static Game* game;
 
 static void checkVersion() {
     glow::info("OpenGL Version Needed %;.%; (%;.%; Found)",
@@ -33,30 +44,31 @@ static void checkVersion() {
     glow::info("GLSL version: %;\n", glow::query::getString(GL_SHADING_LANGUAGE_VERSION));
 }
 
-static void errorCallback(int error, const char* description)
-{
+static void errorCallback(int error, const char* description) {
     glow::warning(description);
 }
 
-static void resizeCallback(GLFWwindow* window, int width, int height)
-{
+static void resizeCallback(GLFWwindow* window, int width, int height) {
     glow::info("Resizing viewport to %;x%;", width, height);
     if (width > 0 && height > 0) {
         glViewport(0, 0, width, height);
-        game->inputHandler()->resizeEvent(width, height);
+        game->inputHandler().resizeEvent(width, height);
+        game->viewer().setViewport(Viewport(0, 0, width, height));
     }
 }
 
-static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
-{
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, GL_TRUE);
-    if (key == GLFW_KEY_F5 && action == GLFW_PRESS)
+    }
+    if (key == GLFW_KEY_F5 && action == GLFW_PRESS) {
         glowutils::FileRegistry::instance().reloadAll();
-    if (key == GLFW_KEY_F6 && action == GLFW_PRESS)
-        game->reloadConfig();
+    }
+    if (key == GLFW_KEY_F6 && action == GLFW_PRESS) {
+        PropertyManager::instance()->load("data/config.ini");
+    }
 
-    game->inputHandler()->keyCallback(key, scancode, action, mods);
+	game->inputHandler().keyCallback(key, scancode, action, mods);
 }
 
 static void mouseButtonCallback(GLFWwindow* window, int Button, int Action, int mods) {
@@ -67,21 +79,36 @@ static void cursorPositionCallback(GLFWwindow* window, double x, double y) {
 
 }
 
-void setCallbacks(GLFWwindow* window)
-{
+void setCallbacks(GLFWwindow* window) {
     glfwSetMouseButtonCallback(window, mouseButtonCallback);
     glfwSetCursorPosCallback(window, cursorPositionCallback);
     glfwSetKeyCallback(window, keyCallback);
     glfwSetWindowSizeCallback(window, resizeCallback);
 }
 
+static void mainloop() {
+    glow::debug("Entering mainloop");
+    double time = glfwGetTime();
+    while (!glfwWindowShouldClose(glfwGetCurrentContext())) {
+        double delta = glfwGetTime() - time;
+        time += delta;
 
-int main(void)
-{
-    GLFWwindow* window = nullptr;
+        game->update(static_cast<float>(delta));
+        game->draw();
+
+        glfwSwapBuffers(glfwGetCurrentContext());
+        glfwPollEvents();
+    }
+}
+
+int main(int argc, char* argv[]) {
+    CommandLineParser clParser;
+    clParser.parse(argc, argv);
+
+    PropertyManager::instance()->load("data/config.ini");
 
     if (!glfwInit()) {
-        glow::fatal("could not init glfw");
+        glow::fatal("Could not init glfw");
         exit(-1);
     }
 
@@ -98,28 +125,14 @@ int main(void)
     glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
 #endif
 
-    window = glfwCreateWindow(1280, 720, "Voxellancer", NULL, NULL);
-#ifndef WIN32
-    if (!window){
-        // If 3.1 is not available and this is linux, assume we want mesa software rendering and try again
-        putenv("LIBGL_ALWAYS_SOFTWARE=1");
-
-        glfwTerminate();
-        if (!glfwInit()) {
-            glow::fatal("could not init glfw");
-            exit(-1);
-        }
-
-        window = glfwCreateWindow(1280, 720, "Voxellancer", NULL, NULL);
-    }
-#endif
-    if (!window) {
-        glfwTerminate();
-        glow::fatal("could not create window");
-        exit(-1);
+    if(clParser.hmd()) {
+        WindowManager::instance()->setFullScreenResolution(1);
+    } else {
+        WindowManager::instance()->setWindowedResolution(Size<int>(Property<int>("window.width"), Property<int>("window.height")));
     }
 
-    glfwMakeContextCurrent(window);
+    GLFWwindow* window = glfwGetCurrentContext();
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
     setCallbacks(window);
 
@@ -131,6 +144,9 @@ int main(void)
     }
     CheckGLError();
 
+    OVR::System::Init(OVR::Log::ConfigureDefaultLog(OVR::LogMask_All));
+
+    glClearColor(0.0f, 0.0f, 0.3f, 1.0f);
 
 #ifdef WIN32 // TODO: find a way to correctly detect debug extension in linux
     glow::DebugMessageOutput::enable();
@@ -142,35 +158,29 @@ int main(void)
     glfwSwapInterval(1);
 #endif
 
-//#define TRYCATCH
+    //#define TRYCATCH
 #ifdef TRYCATCH
     try {
 #endif
-        PropertyManager::instance()->load("data/config.ini");
-
         std::srand((unsigned int)time(NULL));
 
-        game = new Game(window);
+        game = new Game();
         game->initialize();
+
+        if(clParser.hmd()) {
+            game->hmdManager().setupHMD();
+        } else {
+            if(clParser.stereoView()) {
+                game->viewer().switchToStereoView(StereoRenderInfo::dummy());
+            }
+        }
 
         int width, height;
         glfwGetFramebufferSize(window, &width, &height);
-        game->inputHandler()->resizeEvent(width, height);
+        game->inputHandler().resizeEvent(width, height);
 
-        glow::debug("Entering mainloop");
-        double time = glfwGetTime();
-        while (!glfwWindowShouldClose(window))
-        {
-            double delta = glfwGetTime() - time;
-            time += delta;
-            game->update(static_cast<float>(delta));
-            game->draw();
-            glfwSwapBuffers(window);
-            glfwPollEvents();
-        }
-        delete game;
-        glfwDestroyWindow(window);
-        glfwTerminate();
+        mainloop();
+
 #ifdef TRYCATCH
     }
     catch (std::exception &e) {
@@ -181,6 +191,12 @@ int main(void)
         std::cin.ignore(1, '\n');
     }
 #endif
+
+    delete game;
+    WindowManager::instance()->shutdown();
+    glfwTerminate();
+    OVR::System::Destroy();
+
     return 0;
 }
 

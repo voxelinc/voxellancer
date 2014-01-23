@@ -3,18 +3,23 @@
 #include <assert.h>
 
 
+std::shared_ptr<WorldObjectHandle> WorldObjectHandle::s_nullInstance;
 
 WorldObjectHandle::WorldObjectHandle(WorldObject* worldObject) :
     m_worldObject(worldObject)
 {
 }
 
-void WorldObjectHandle::invalidate() {
-    m_worldObject = nullptr;
-}
-
 WorldObject* WorldObjectHandle::get() {
     return m_worldObject;
+}
+
+bool WorldObjectHandle::valid() const {
+    return m_worldObject != nullptr;
+}
+
+void WorldObjectHandle::invalidate() {
+    m_worldObject = nullptr;
 }
 
 std::shared_ptr<WorldObjectHandle> WorldObjectHandle::nullHandle() {
@@ -23,6 +28,4 @@ std::shared_ptr<WorldObjectHandle> WorldObjectHandle::nullHandle() {
     }
     return s_nullInstance;
 }
-
-std::shared_ptr<WorldObjectHandle> WorldObjectHandle::s_nullInstance;
 

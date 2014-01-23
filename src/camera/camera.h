@@ -6,8 +6,8 @@
 /* Represents the camera. matrix thus is the view matrix for all other objects */
 class Camera : protected WorldTransform { //protected so we don't have matrix, because we want view
 public:
-    Camera();
-    virtual ~Camera();
+	Camera(int viewportWidth, int viewportHeight);
+	virtual ~Camera();
 
     /* Overwrite WorldObject functions for performance:
     *  WorldObject recalculates the matrix on every read access,
@@ -39,6 +39,9 @@ public:
     const glm::ivec2 viewport() const;
     void setViewport(const glm::ivec2 & viewport);
 
+    const glm::vec3& projectionOffset() const;
+    void setProjectionOffset(const glm::vec3& projectionOffset);
+
     float aspectRatio() const;
 
     const glm::mat4 projection();
@@ -56,8 +59,10 @@ protected:
 
     glm::ivec2 m_viewport;
 
+    glm::vec3 m_projectionOffset;
+
     glm::mat4 m_view;
     glm::mat4 m_projection;
     glm::mat4 m_viewProjection;
-
 };
+

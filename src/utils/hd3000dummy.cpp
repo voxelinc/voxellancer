@@ -17,13 +17,8 @@ HD3000Dummy::HD3000Dummy():
     m_vertexBuffer->setData(glow::Array<glm::vec3>{glm::vec3(0, 0, 0)});
 }
 
-HD3000Dummy::~HD3000Dummy()
-{
-
-}
-
-void HD3000Dummy::drawIfActive()
-{
-    if (m_usedummy)
+void HD3000Dummy::drawIfActive() {
+    if (m_usedummy) {
         m_vertexArrayObject->drawArrays(GL_TRIANGLE_STRIP, 0, 1);
+    }
 }

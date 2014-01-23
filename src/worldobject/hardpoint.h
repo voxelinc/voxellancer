@@ -21,7 +21,7 @@ public:
     AimType aimType();
     void shootAtPoint(glm::vec3 target);
     void shootAtObject(WorldObject* target);
-    float aimRange();
+    float range();
 
     void voxelRemoved();
 
