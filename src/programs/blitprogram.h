@@ -1,5 +1,7 @@
 #pragma once
 
+#include <iostream>
+
 #include <glow/Program.h>
 #include <glow/FrameBufferObject.h>
 #include <glow/VertexArrayObject.h>
@@ -7,7 +9,7 @@
 #include "geometry/viewport.h"
 
 
-class BlitProgram: public glow::Program {
+class BlitProgram: protected glow::Program {
 public:
     const GLint VERTEX_LOCATION = 0;
     const GLint TEXTURE_LOCATION = 0;
@@ -35,5 +37,9 @@ protected:
 
     virtual void initialize();
     virtual void initializeShaders() = 0;
+    
+    template<typename T> void setUniform(const std::string& name, const T& value);
 };
 
+
+#include "blitprogram.inl"

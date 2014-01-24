@@ -40,21 +40,6 @@ float WindowManager::aspectRatio() const {
 void WindowManager::setWindowedResolution(const Size<int>& resolution) {
     GLFWwindow* window = glfwCreateWindow(resolution.width(), resolution.height(), "Voxellancer", NULL, NULL);
 
-#ifndef WIN32
-    if (window == nullptr) {
-        // If 3.1 is not available and this is linux, assume we want mesa software rendering and try again
-        putenv("LIBGL_ALWAYS_SOFTWARE=1");
-
-        glfwTerminate();
-        if (!glfwInit()) {
-            glow::fatal("could not init glfw");
-            exit(-1);
-        }
-
-        window = glfwCreateWindow(resolution.width(), resolution.height(), "Voxellancer", NULL, NULL);
-    }
-#endif
-
     if (window == nullptr) {
         glfwTerminate();
         glow::fatal("Could not create window");
@@ -64,24 +49,27 @@ void WindowManager::setWindowedResolution(const Size<int>& resolution) {
     glfwMakeContextCurrent(window);
 }
 
-void WindowManager::setFullScreenResolution(const Size<int>& resolution, int monitor) {
-    GLFWwindow* window = glfwCreateWindow(resolution.width(), resolution.height(), "Voxellancer", monitors()[monitor], NULL);
+void WindowManager::setFullScreenResolution(int monitorIndex) {
+    std::vector<GLFWmonitor*> monitors = this->monitors();
+    assert(monitors.size() > 0);
 
-#ifndef WIN32
-    if (window == nullptr) {
-        // If 3.1 is not available and this is linux, assume we want mesa software rendering and try again
-        putenv("LIBGL_ALWAYS_SOFTWARE=1");
+    GLFWwindow* window;
+    GLFWmonitor* monitor;
 
-        glfwTerminate();
-        if (!glfwInit()) {
-            glow::fatal("could not init glfw");
-            exit(-1);
-        }
-
-        window = glfwCreateWindow(resolution.width(), resolution.height(), "Voxellancer",  monitors()[monitor], NULL);
+    if(monitorIndex >= monitors.size()) {
+        glow::info("Using primary monitors since specified monitor is not available");
+        monitor = glfwGetPrimaryMonitor();
     }
-#endif
+    else {
+        monitor = monitors[monitorIndex];
+    }
+    assert(monitor);
 
+    Size<int> resolution = maxResolution(monitor);
+
+    glow::info("Fullscreen resolution %d; x %d;", resolution.width(), resolution.height());
+
+    window = glfwCreateWindow(resolution.width(), resolution.height(), "Voxellancer", monitor, NULL);
     if (window == nullptr) {
         glfwTerminate();
         glow::fatal("Could not create window");
@@ -89,6 +77,10 @@ void WindowManager::setFullScreenResolution(const Size<int>& resolution, int mon
     }
 
     glfwMakeContextCurrent(window);
+}
+
+void WindowManager::shutdown() {
+    glfwDestroyWindow(glfwGetCurrentContext());
 }
 
 bool WindowManager::fullScreen() const {
@@ -127,4 +119,11 @@ int WindowManager::currentMonitor() const {
 
 WindowManager::WindowManager() {
 
+}
+
+Size<int> WindowManager::maxResolution(GLFWmonitor* monitor) {
+    int count;
+    const GLFWvidmode* modes = glfwGetVideoModes(monitor, &count);
+
+    return Size<int>(modes[count-1].width, modes[count-1].height);
 }

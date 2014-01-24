@@ -13,3 +13,4 @@ View::~View() {
 void View::setViewport(const Viewport& viewport) {
     m_viewport = viewport;
 }
+

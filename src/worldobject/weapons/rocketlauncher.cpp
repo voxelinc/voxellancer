@@ -5,7 +5,7 @@
 #include "worldobject/ship.h"
 
 RocketLauncher::RocketLauncher() :
-    m_bulletRange("weapons.RocketLauncherBulletRange"),
+    m_range("weapons.RocketLauncherRange"),
     m_cooldownTime("weapons.RocketLauncherCooldownTime"),
     m_speed("weapons.RocketLauncherBulletSpeed"),
     m_lifetime("weapons.RocketLauncherLifetime")
@@ -31,6 +31,7 @@ void RocketLauncher::shootAtObject(Hardpoint* source, WorldObject* target){
     }
 }
 
-float RocketLauncher::bulletRange(){
-    return m_bulletRange;
+float RocketLauncher::range(){
+    return m_range;
 }
+

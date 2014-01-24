@@ -4,7 +4,6 @@
 #include <glm/gtx/quaternion.hpp>
 
 
-// Listen to Mercenary - The Follower. Awesome song. We need more metal in this game.
 class InertiaFollower {
 public:
     InertiaFollower(float directionalInertia, float angularInertia);

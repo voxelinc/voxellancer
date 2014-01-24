@@ -33,7 +33,7 @@ public:
     float coolDownTime() const;
     void setCoolDownTime(float coolDownTime);
 
-    virtual float bulletRange() = 0;
+    virtual float range() = 0;
 
     WorldObject *worldObject();
     void setWorldObject(WorldObject* worldObject);
