@@ -58,9 +58,11 @@ public:
 
     bool scheduledForDeletion();
 
+
 protected:
     // Only god can set this mark. Unfortunately the method will be able to access all our protected members
     friend void God::scheduleRemoval(WorldObject* worldObject);
+
     void markScheduledForDeletion();
     bool m_scheduledForDeletion;
 

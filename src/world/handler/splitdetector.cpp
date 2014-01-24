@@ -17,7 +17,7 @@ static const int UNKNOWN = -2;
 
 SplitDetector::VoxelGroup::VoxelGroup():
     voxel(nullptr),
-    groupId(UNKNOWN) 
+    groupId(UNKNOWN)
 {
 }
 
@@ -52,8 +52,8 @@ void SplitDetector::findSplits(WorldObject* worldObject) {
 }
 
 void SplitDetector::init(WorldObject* worldObject) {
-    m_llf = worldObject->minimalGridAABB().llf();
-    m_size = worldObject->minimalGridAABB().rub() - m_llf + glm::ivec3(1);
+    m_llf = worldObject->bounds().minimalGridAABB().llf();
+    m_size = worldObject->bounds().minimalGridAABB().rub() - m_llf + glm::ivec3(1);
 
     m_voxelArray.clear();
     m_voxelArray.resize(m_size.x * m_size.y * m_size.z + 1);
@@ -83,7 +83,7 @@ void SplitDetector::fillColor(const glm::ivec3& start, int color) {
 
         if (v->groupId < FIRST_GROUP) {
             v->groupId = color;
-        
+
             visit(glm::ivec3(p.x + 1, p.y + 1, p.z));
             visit(glm::ivec3(p.x - 1, p.y + 1, p.z));
             visit(glm::ivec3(p.x + 1, p.y - 1, p.z));
