@@ -1,7 +1,11 @@
 #include "player.h"
 
-Player::Player():
-    m_hud(this)
+#include "game.h"
+
+
+Player::Player(Game* game):
+    m_game(game),
+    m_hud(this, &game->viewer())
 {
 
 }

@@ -13,8 +13,9 @@
 #include "player.h"
 
 
-HUD::HUD(Player* player):
+HUD::HUD(Player* player, Viewer* viewer):
     m_player(player),
+    m_viewer(viewer),
     m_crossHair(this),
     m_sphere(glm::vec3(0, 0, 0), 5.0f)
 {
@@ -24,12 +25,13 @@ HUD::HUD(Player* player):
 void HUD::setCrossHairOffset(const glm::vec2& mousePosition) {
     CameraHead& cameraHead = m_player->cameraDolly().cameraHead();
 
-    float fovy = 60.0f;
-    float nearZ = 1.0f;
+    float fovy = m_viewer->view().fovy();
+    float nearZ = m_viewer->view().zNear();
+    float ar = m_viewer->view().aspectRatio();
     float d = glm::length(glm::vec2(1.0f, nearZ));
 
     float nearPlaneHeight = 2 * std::tan(glm::radians(fovy) / 2.0f);
-    float nearPlaneWidth = nearPlaneHeight * WindowManager::instance()->aspectRatio();
+    float nearPlaneWidth = nearPlaneHeight * ar;
 
     glm::vec3 nearPlaneTarget = glm::vec3(mousePosition.x * nearPlaneWidth / 2.0f, mousePosition.y * nearPlaneHeight / 2.0f, -nearZ);
 

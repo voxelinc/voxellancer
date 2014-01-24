@@ -2,6 +2,8 @@
 
 #include <vector>
 
+#include "display/viewer.h"
+
 #include "geometry/sphere.h"
 
 #include "property/property.h"
@@ -13,7 +15,7 @@ class Player;
 
 class HUD {
 public:
-    HUD(Player* player);
+    HUD(Player* player, Viewer* viewer);
 
     Player* player();
     const Sphere& sphere() const;
@@ -30,6 +32,7 @@ public:
 
 protected:
     Player* m_player;
+    Viewer* m_viewer;
     Sphere m_sphere;
 
     CrossHair m_crossHair;

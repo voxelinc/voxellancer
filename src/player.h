@@ -8,9 +8,11 @@
 #include "worldobject/ship.h"
 
 
+class Game;
+
 class Player {
 public:
-    Player();
+    Player(Game* game);
 
     void setShip(Ship *ship);
 
@@ -25,6 +27,7 @@ public:
 
 
 protected:
+    Game* m_game;
     Ship* m_playerShip;
     CameraDolly m_cameraDolly;
     HUD m_hud;

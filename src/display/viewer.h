@@ -15,6 +15,8 @@ class Viewer {
 public:
     Viewer(const Viewport& viewport);
 
+    const View& view() const;
+
     void setScene(Scene* scene);
     void setCameraHead(CameraHead* cameraHead);
     void setViewport(const Viewport& viewport);

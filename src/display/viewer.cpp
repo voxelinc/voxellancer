@@ -18,6 +18,10 @@ Viewer::Viewer(const Viewport& viewport):
     switchToMonoView();
 }
 
+const View& Viewer::view() const {
+    return *m_view.get();
+}
+
 void Viewer::setScene(Scene* scene) {
     m_scene = scene;
 }
