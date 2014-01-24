@@ -27,6 +27,13 @@ TAABB<T>::TAABB(const glm::detail::tvec3<T> &llf, const glm::detail::tvec3<T> &r
 }
 
 template<typename T>
+template<typename OtherT>
+TAABB<T>::TAABB(const TAABB<OtherT>& other) {
+    m_llf = static_cast<glm::detail::tvec3<T>>(other.llf());
+    m_rub = static_cast<glm::detail::tvec3<T>>(other.rub());
+}
+
+template<typename T>
 const glm::detail::tvec3<T> &TAABB<T>::llf() const {
     return m_llf;
 }
@@ -66,6 +73,11 @@ glm::detail::tvec3<T> TAABB<T>::middle() const {
 template<typename T>
 T TAABB<T>::extent(Axis axis) const {
     return m_rub[(int)axis] - m_llf[(int)axis];
+}
+
+template<typename T>
+T TAABB<T>::diameter() const {
+    return static_cast<T>(glm::length(glm::vec3(m_rub - m_llf)));
 }
 
 template<typename T>

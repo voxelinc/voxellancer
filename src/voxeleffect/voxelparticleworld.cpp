@@ -7,14 +7,15 @@
 #include <glowutils/File.h>
 #include <glowutils/MathMacros.h>
 
-#include "geometry/sphere.h"
-
 #include "world/world.h"
 #include "worldtree/worldtreequery.h"
 
 #include "voxelparticle.h"
 #include "voxelmesh.h"
 #include "voxel/voxelrenderer.h"
+#include "worldobject/worldobject.h"
+#include "worldtree/worldtreegeode.h"
+#include "geometry/point.h"
 
 
 struct ParticleData {
@@ -44,18 +45,39 @@ void VoxelParticleWorld::addParticle(VoxelParticle* voxelParticle) {
 }
 
 void VoxelParticleWorld::update(float deltaSec) {
-    for (std::list<VoxelParticle*>::iterator i = m_particles.begin(); i != m_particles.end(); ) {
-        VoxelParticle* voxelParticle = *i;
+    for (std::list<VoxelParticle*>::iterator iter = m_particles.begin(); iter != m_particles.end(); ) {
+        VoxelParticle* voxelParticle = *iter;
 
         voxelParticle->update(deltaSec);
 
         if (intersects(voxelParticle) || voxelParticle->isDead()) {
             delete voxelParticle;
-            i = m_particles.erase(i);
+            iter = m_particles.erase(iter);
         } else {
-            ++i;
+            ++iter;
         }
     }
+}
+
+bool VoxelParticleWorld::intersects(VoxelParticle* voxelParticle) {
+    if (!voxelParticle->intersectionCheckDue()) {
+        return false;
+    }
+    voxelParticle->intersectionCheckPerformed();
+
+    glm::vec3 position = voxelParticle->worldTransform().position();
+    Point voxelSphere(position); // approximate a point
+    WorldTreeQuery query(&World::instance()->worldTree(), &voxelSphere);
+
+    for (WorldTreeGeode* geode : query.nearGeodes()) {
+        WorldObject* worldObject = geode->worldObject();
+        glm::ivec3 cell = glm::ivec3(worldObject->transform().inverseApplyTo(position));
+        if (worldObject->voxel(cell)) {
+            return false;
+        }
+    }
+
+    return false;
 }
 
 void VoxelParticleWorld::draw(Camera& camera) {
@@ -100,7 +122,6 @@ void VoxelParticleWorld::loadProgram() {
     m_program->attach(vertexShader, fragmentShader);
     m_program->bindFragDataLocation(0, "fragColor");
     m_program->setUniform("withBorder", 1.0f);
-
 }
 
 void VoxelParticleWorld::setupVertexAttributes() {
@@ -134,7 +155,7 @@ void VoxelParticleWorld::updateBuffers() {
         setBufferSize(nextPowerOf2(m_particles.size()));
     }
     ParticleData* particleData = static_cast<ParticleData*>(m_particleDataBuffer->mapRange(0, m_particles.size() * sizeof(ParticleData), GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT));
-    
+
     int i = 0;
     for (VoxelParticle* particle : m_particles) {
         particleData[i++] = ParticleData{
@@ -148,17 +169,3 @@ void VoxelParticleWorld::updateBuffers() {
 
     m_particleDataBuffer->unmap();
 }
-
-bool VoxelParticleWorld::intersects(VoxelParticle* voxelParticle) {
-    if(!voxelParticle->intersectionCheckDue()) {
-        return false;
-    }
-    voxelParticle->intersectionCheckPerformed();
-
-    Sphere voxelSphere(voxelParticle->worldTransform().position(), voxelParticle->worldTransform().scale() / 2.0f);
-    WorldTreeQuery worldTreeQuery(&World::instance()->worldTree(), &voxelSphere);
-
-
-    return worldTreeQuery.areVoxelsIntersecting();
-}
-

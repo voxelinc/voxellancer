@@ -1,9 +1,18 @@
 #include "inputhandler.h"
 
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+
 #include <glm/glm.hpp>
 #include <glow/glow.h>
 
-#include "voxeleffect/voxelexplosiongenerator.h"
+#include "utils/tostring.h"
+#include "utils/aimhelper.h"
+
+#include "etc/windowmanager.h"
+
+#include "worldobject/worldobject.h"
+
 
 /*
 * 360 gamepad assignment: (direction given for positive values)
@@ -28,11 +37,14 @@
 * B9: right stick
 */
 
-
-InputHandler::InputHandler(GLFWwindow* window, Player* player, Camera* camera, HUD* hud):
-    m_window(window),
+InputHandler::InputHandler(Player* player):
     m_player(player),
+<<<<<<< HEAD
     m_camera(camera),
+=======
+
+    m_hmd(nullptr),
+>>>>>>> master
 
     prop_deadzoneMouse("input.deadzoneMouse"),
     prop_deadzoneGamepad("input.deadzoneGamepad"),
@@ -58,32 +70,32 @@ InputHandler::InputHandler(GLFWwindow* window, Player* player, Camera* camera, H
     m_secondaryInputValues(),
     m_actions(),
 
-    m_inputConfigurator(new InputConfigurator(&m_actions, &m_secondaryInputValues, &prop_deadzoneGamepad, hud)),
+    m_inputConfigurator(new InputConfigurator(&m_actions, &m_secondaryInputValues, &prop_deadzoneGamepad, &m_player->hud())),
 
+<<<<<<< HEAD
     m_targeter(new TargetSelector(player, camera))
+=======
+    m_targetSelector(new TargetSelector(player))
+>>>>>>> master
 {
     addActionsToVector();
 
-    glfwGetWindowSize(m_window, &m_windowWidth, &m_windowHeight);
-    m_targeter->setWindowSize(m_windowWidth, m_windowHeight);
-    glfwSetCursorPos(m_window, m_windowWidth / 2, m_windowHeight / 2);
-
-    m_cursorMaxDistance = glm::min(m_windowHeight, m_windowWidth) / 2;
+    m_cursorMaxDistance = glm::min(WindowManager::instance()->resolution().width(), WindowManager::instance()->resolution().height()) / 2;
 
     m_mouseControl = false;
-    m_lastfocus = glfwGetWindowAttrib(m_window, GLFW_FOCUSED);
+    m_lastfocus = glfwGetWindowAttrib(glfwGetCurrentContext(), GLFW_FOCUSED);
 
-    glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+//    glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
     retrieveInputValues();
 }
 
-void InputHandler::resizeEvent(const unsigned int width, const unsigned int height) {
-    m_windowWidth = width;
-    m_windowHeight = height;
-    m_camera->setViewport(glm::ivec2(m_windowWidth, m_windowHeight));
-    m_lastfocus = false;
-    m_targeter->setWindowSize(width, height);
+void InputHandler::setHMD(HMD* hmd) {
+    m_hmd = hmd;
+}
+
+void InputHandler::resizeEvent(const unsigned int width, const unsigned int height){
+	m_lastfocus = false; // through window resize everything becomes scrambled
 }
 
 /*
@@ -91,9 +103,6 @@ void InputHandler::resizeEvent(const unsigned int width, const unsigned int heig
 *    This only applies for menu events etc, for action events set the toggleAction attribute to true
 */
 void InputHandler::keyCallback(int key, int scancode, int action, int mods) {
-    /* Check here for single-time key-presses, that you do not want fired multiple times, e.g. toggles */
-    /* This only applies for menu events etc, for action events set the toggleAction attribute to true */
-
     if (action == GLFW_PRESS) {
         m_inputConfigurator->setLastPrimaryInput(InputMapping(InputType::Keyboard, key, 1));
     } else {
@@ -119,24 +128,26 @@ void InputHandler::keyCallback(int key, int scancode, int action, int mods) {
         }
     }
 }
+
+
 /*
 *Check here for every-frame events, e.g. view & movement controls
 */
-void InputHandler::update(float delta_sec) {
-    if (glfwGetWindowAttrib(m_window, GLFW_FOCUSED)) {
+void InputHandler::update(float deltaSec) {
+    if (glfwGetWindowAttrib(glfwGetCurrentContext(), GLFW_FOCUSED)) {
         if (m_lastfocus) {
             retrieveInputValues();
             if (m_inputConfigurator->isConfiguring()) {
                 m_inputConfigurator->update();
             } else {
-                handleUpdate();
-                handleMouseUpdate();
+                processUpdate();
+                processMouseUpdate();
+                processHMDUpdate();
             }
         }
     }
-    m_lastfocus = glfwGetWindowAttrib(m_window, GLFW_FOCUSED);
+    m_lastfocus = glfwGetWindowAttrib(glfwGetCurrentContext(), GLFW_FOCUSED);
 }
-
 
 void InputHandler::retrieveInputValues() {
     m_secondaryInputValues.buttonCnt = 0;
@@ -145,22 +156,22 @@ void InputHandler::retrieveInputValues() {
     m_secondaryInputValues.axisValues = glfwGetJoystickAxes(GLFW_JOYSTICK_1, &m_secondaryInputValues.axisCnt);
 }
 
-void InputHandler::handleUpdate() {
-    handleFireActions();
-    handleMoveActions();
-    handleRotateActions();
-    handleTargetSelectActions();
+void InputHandler::processUpdate() {
+    processFireActions();
+    processMoveActions();
+    processRotateActions();
+    processTargetSelectActions();
 }
 
-
-void InputHandler::handleMouseUpdate() {
+void InputHandler::processMouseUpdate() {
     // mouse handling
     double x, y;
-    glfwGetCursorPos(m_window, &x, &y);
+    glfwGetCursorPos(glfwGetCurrentContext(), &x, &y);
 
-    // shoot
-    if (glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
-        m_player->playerShip()->fireAtPoint(m_targeter->findTargetPoint(x, y));
+    placeCrossHair(x, y);
+
+    if (glfwGetMouseButton(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+        m_player->playerShip()->fireAtPoint(findTargetPoint());
     }
 
     // spin
@@ -169,10 +180,10 @@ void InputHandler::handleMouseUpdate() {
     float angX = 0;
     float angY = 0;
 
-    if (m_mouseControl || glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS) {
+    if (m_mouseControl || glfwGetMouseButton(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS) {
         glm::vec3 rot;
-        x = m_windowWidth / 2 - (int)floor(x);
-        y = m_windowHeight / 2 - (int)floor(y);
+        x = WindowManager::instance()->resolution().width() / 2 - (int)floor(x);
+        y = WindowManager::instance()->resolution().height() / 2 - (int)floor(y);
         x = glm::min((double)m_cursorMaxDistance, x);
         y = glm::min((double)m_cursorMaxDistance, y);
         rot = glm::vec3(y, x, 0);
@@ -186,6 +197,14 @@ void InputHandler::handleMouseUpdate() {
         }
         m_player->rotate(rot);
 
+    }
+}
+
+void InputHandler::processHMDUpdate() {
+    if(m_hmd) {
+        m_player->cameraDolly().cameraHead().setRelativeOrientation(m_hmd->orientation());
+    } else {
+        m_player->cameraDolly().cameraHead().setRelativeOrientation(glm::quat());
     }
 }
 
@@ -226,7 +245,7 @@ float InputHandler::getInputValue(InputMapping mapping) {
         case InputType::None:
             return 0;
         case InputType::Keyboard:
-            if (glfwGetKey(m_window, mapping.index()) == GLFW_PRESS) {
+            if (glfwGetKey(glfwGetCurrentContext(), mapping.index()) == GLFW_PRESS) {
                 return 1;
             } else {
                 return 0;
@@ -252,25 +271,23 @@ float InputHandler::getInputValue(InputMapping mapping) {
     }
 }
 
-
-
-void InputHandler::handleFireActions() {
+void InputHandler::processFireActions() {
     if (getInputValue(&fireAction)) {
-        m_player->playerShip()->fireAtPoint(m_targeter->findTargetPoint(m_windowWidth / 2, m_windowHeight / 2));
+        m_player->playerShip()->fireAtPoint(findTargetPoint());
     }
     if (getInputValue(&rocketAction)) {
         m_player->playerShip()->fireAtObject();
     }
 }
 
-void InputHandler::handleMoveActions() {
+void InputHandler::processMoveActions() {
     m_player->move(glm::vec3(-getInputValue(&moveLeftAction), 0, 0));
     m_player->move(glm::vec3(getInputValue(&moveRightAction), 0, 0));
     m_player->move(glm::vec3(0, 0, -getInputValue(&moveForwardAction)));
     m_player->move(glm::vec3(0, 0, getInputValue(&moveBackwardAction)));
 }
 
-void InputHandler::handleRotateActions() {
+void InputHandler::processRotateActions() {
     glm::vec3 rot = glm::vec3(0);
     rot.x = getInputValue(&rotateUpAction)
         - getInputValue(&rotateDownAction);
@@ -287,11 +304,35 @@ void InputHandler::handleRotateActions() {
     m_player->rotate(rot);
 }
 
-void InputHandler::handleTargetSelectActions() {
+void InputHandler::processTargetSelectActions() {
     if (getInputValue(&selectNextAction)) {
-        m_targeter->selectNextTarget();
+        m_targetSelector->selectNextTarget();
     }
     if (getInputValue(&selectPreviousAction)) {
-        m_targeter->selectPreviousTarget();
+        m_targetSelector->selectPreviousTarget();
     }
+}
+
+glm::vec3 InputHandler::findTargetPoint() {
+    glm::vec3 shootDirection(glm::normalize(m_player->hud().crossHair().position() - m_player->cameraDolly().cameraHead().position()));
+
+    Ray ray(
+        m_player->hud().crossHair().position(),
+        shootDirection
+    );
+
+    return AimHelper(m_player->playerShip(),ray).aim();
+}
+
+void InputHandler::placeCrossHair(double winX, double winY) {
+    int width, height;
+    glfwGetWindowSize(glfwGetCurrentContext(), &width, &height);
+    m_player->hud().setCrossHairOffset(glm::vec2((winX - (width/2))/(width/2), -(winY - (height/2))/(height/2)));
+}
+
+SecondaryInputValues::SecondaryInputValues() {
+    buttonCnt = 0;
+    axisCnt = 0;
+    buttonValues = glfwGetJoystickButtons(GLFW_JOYSTICK_1, &buttonCnt);
+    axisValues = glfwGetJoystickAxes(GLFW_JOYSTICK_1, &axisCnt);
 }

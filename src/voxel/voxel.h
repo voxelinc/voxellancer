@@ -32,6 +32,8 @@ public:
 
     const glm::ivec3 &gridCell() const;
 
+    glm::vec3 position() const;
+
     VoxelTreeNode *voxelTreeNode();
     void setVoxelTreeNode(VoxelTreeNode* voxelTreeNode);
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <vector>
+#include <list>
 #include "worldobject.h"
 #include "world/world.h"
 #include "world/god.h"
@@ -38,14 +38,15 @@ public:
     void setCharacter(Character* character);
     Character* character();
 
+
 protected:
     std::unique_ptr<Character> m_character;
     BoardComputer m_boardComputer;
 
     Property<float> prop_maxSpeed;
     Property<float> prop_maxRotSpeed;
-    
-	std::list<Hardpoint*> m_hardpoints;
+
+    std::list<Hardpoint*> m_hardpoints;
     std::list<Engine*> m_engines;
 
     std::shared_ptr<WorldObjectHandle> m_targetObjectHandle;
