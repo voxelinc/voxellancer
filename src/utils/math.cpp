@@ -1,13 +1,16 @@
 #include "math.h"
 
-glm::quat Math::quatFromViewDirection(const glm::vec3& dir) {
-    glm::vec3 nd = glm::normalize(dir);
+#include <iostream>
 
-    glm::vec3 euler (
-         std::asin(nd.y),
-        -std::asin(nd.x),
-        0.0f
-    );
+#include <glm/gtx/quaternion.hpp>
+#include <glm/gtx/quaternion.hpp>
 
-    return glm::quat(euler);
+
+glm::quat Math::differenceFromViewDirection(const glm::vec3& dir) {
+    return xyDifference(glm::vec3(0, 0, -1), dir);
 }
+
+glm::quat Math::xyDifference(const glm::vec3& from, const glm::vec3& to) {
+    glm::vec3 rotationAxis = glm::cross(from, to)
+}
+

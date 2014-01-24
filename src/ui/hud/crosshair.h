@@ -24,9 +24,6 @@ public:
     const glm::quat& orientationOffset() const;
     void setOrientationOffset(const glm::quat& orientationOffset);
 
-    const glm::vec3& positionOffset() const;
-    void setPositionOffset(const glm::vec3& positionOffset);
-
     void update(float deltaSec);
     void draw();
 
@@ -34,6 +31,5 @@ public:
 protected:
     HUD* m_hud;
     glm::quat m_orientationOffset;
-    glm::vec3 m_positionOffset;
     CrossHairVoxels m_crossHairVoxels;
 };

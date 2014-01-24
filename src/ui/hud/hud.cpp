@@ -31,11 +31,10 @@ void HUD::setCrossHairOffset(const glm::vec2& mousePosition) {
     float nearPlaneHeight = 2 * std::tan(glm::radians(fovy) / 2.0f);
     float nearPlaneWidth = nearPlaneHeight * WindowManager::instance()->aspectRatio();
 
-    glm::vec3 target = glm::vec3(mousePosition.x * nearPlaneWidth / 2.0f, mousePosition.y * nearPlaneHeight / 2.0f, -nearZ);
+    glm::vec3 nearPlaneTarget = glm::vec3(mousePosition.x * nearPlaneWidth / 2.0f, mousePosition.y * nearPlaneHeight / 2.0f, -nearZ);
 
-    glm::quat offset = Math::quatFromViewDirection(target);
+    glm::quat offset = Math::differenceFromViewDirection(nearPlaneTarget);
 
-    m_crossHair.setPositionOffset(glm::normalize(target) * m_sphere.radius());
     m_crossHair.setOrientationOffset(offset);
 }
 

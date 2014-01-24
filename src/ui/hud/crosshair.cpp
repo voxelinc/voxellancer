@@ -18,7 +18,7 @@ HUD* CrossHair::hud() {
 }
 
 glm::vec3 CrossHair::position() const {
-    return m_hud->position() + m_hud->orientation() * m_positionOffset;
+    return m_hud->position() + orientation() * glm::vec3(0, 0, -m_hud->sphere().radius());
 }
 
 glm::quat CrossHair::orientation() const {
@@ -31,14 +31,6 @@ const glm::quat& CrossHair::orientationOffset() const {
 
 void CrossHair::setOrientationOffset(const glm::quat& orientationOffset) {
     m_orientationOffset = orientationOffset;
-}
-
-const glm::vec3& CrossHair::positionOffset() const {
-    return m_positionOffset;
-}
-
-void CrossHair::setPositionOffset(const glm::vec3& positionOffset) {
-    m_positionOffset = positionOffset;
 }
 
 void CrossHair::update(float deltaSec) {
