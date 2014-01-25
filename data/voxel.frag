@@ -10,7 +10,7 @@ in vec3 modelposition;
 out vec4 fragColor;
 
 void main() {
-    float border_size = 0.05;
+    float border_size = 0.10;
     float border_darkness = 0.2;
 
     // modelposition is between -0.5 and 0.5
@@ -22,7 +22,7 @@ void main() {
     vec3 lightdir = normalize(vec3(0.3f, 0.5f, 1.0f));
     vec3 n_normal = normalize(f_normal);
     float diffuse = dot(n_normal, lightdir);
-    diffuse = max(0, diffuse) + 0.2;
+    diffuse = max(0, diffuse) + 0.4;
     
     fragColor = vec4(f_color * (diffuse + f_emissiveness) - vec3(border * withBorder), 1.0);
 }

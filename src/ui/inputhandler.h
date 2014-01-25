@@ -2,14 +2,18 @@
 
 #include <vector>
 
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
+#include "camera/cameradolly.h"
+
+#include "etc/hmd/hmd.h"
 
 #include "property/propertymanager.h"
+#include "property/property.h"
+
 #include "worldobject/ship.h"
 
 #include "inputconfigurator.h"
 #include "targetselector.h"
+
 
 class WorldObject;
 class InputConfigurator;
@@ -44,40 +48,44 @@ struct SecondaryInputValues {
     const unsigned char *buttonValues;
     const float *axisValues;
 
-    SecondaryInputValues(){
-        buttonCnt = 0;
-        axisCnt = 0;
-        buttonValues = glfwGetJoystickButtons(GLFW_JOYSTICK_1, &buttonCnt);
-        axisValues = glfwGetJoystickAxes(GLFW_JOYSTICK_1, &axisCnt);
-    }
+    SecondaryInputValues();
 };
 
 class InputHandler {
-
 public:
-    InputHandler(GLFWwindow *window, Player* player, Camera* camera, HUD* hud);
+    InputHandler(Player *player);
+
+    void setHMD(HMD* hmd);
 
 	void resizeEvent(const unsigned int width, const unsigned int height);
 	void keyCallback(int key, int scancode, int action, int mods);
-	void update(float delta_sec);
+	void update(float deltaSec);
+
 
 protected:
-    GLFWwindow *m_window;
-    Camera* m_camera;
     Player* m_player;
-    TargetSelector* m_targeter;
+    HMD* m_hmd;
+    TargetSelector* m_targetSelector;
     InputConfigurator* m_inputConfigurator;
     SecondaryInputValues m_secondaryInputValues;
     std::vector<ActionKeyMapping*> m_actions;
 
-    void toggleControls();
-    void handleUpdate();
-    void handleMouseUpdate();
+    bool m_mouseControl;
+    int m_cursorMaxDistance;
+    int m_lastfocus;
 
-    void handleFireActions();
-    void handleMoveActions();
-    void handleRotateActions();
-    void handleTargetSelectActions();
+
+protected:
+    void toggleControls();
+
+    void processUpdate();
+    void processMouseUpdate();
+    void processHMDUpdate();
+
+    void processFireActions();
+    void processMoveActions();
+    void processRotateActions();
+    void processTargetSelectActions();
 
     float getInputValue(ActionKeyMapping* action);
     float getInputValue(InputMapping mapping);
@@ -85,14 +93,9 @@ protected:
     void addActionsToVector();
 
     void setupJoystickControls();
-    int joystickSetupState;
 
     void retrieveInputValues();
 
-    bool m_mouseControl;
-    int m_windowWidth, m_windowHeight;
-    int m_cursorMaxDistance;
-    int m_lastfocus;
 
     Property<float> prop_deadzoneMouse;
     Property<float> prop_deadzoneGamepad;
@@ -115,4 +118,6 @@ protected:
     ActionKeyMapping selectNextAction;
     ActionKeyMapping selectPreviousAction;
 
+    glm::vec3 findTargetPoint();
+    void placeCrossHair(double winX, double winY);
 };
