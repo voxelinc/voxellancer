@@ -5,8 +5,6 @@
 
 #include "worldtransform.h"
 
-#include "utils/math.h"
-
 #include "worldobject/hardpoint.h"
 #include "worldobject/ship.h"
 #include "utils/geometryhelper.h"

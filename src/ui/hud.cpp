@@ -8,7 +8,7 @@
 #include "etc/windowmanager.h"
 
 #include "utils/tostring.h"
-#include "utils/math.h"
+#include "utils/geometryhelper.h"
 
 #include "player.h"
 
@@ -32,7 +32,7 @@ void HUD::setCrossHairOffset(const glm::vec2& mousePosition) {
 
     glm::vec3 target = glm::vec3(mousePosition.x * nearPlaneWidth / 2.0f, mousePosition.y * nearPlaneHeight / 2.0f, -nearZ);
 
-    glm::quat offset = Math::quatFromViewDirection(target);
+    glm::quat offset = GeometryHelper::quatFromViewDirection(target);
 
     m_crossHair.setDirectionOffset(offset);
 }

@@ -36,19 +36,19 @@ void BoardComputer::rotateTo(const glm::vec3& position, const glm::vec3& up) {
 
     glm::vec3 shipDirection = projectedOrientation * glm::vec3(0, 0, -1);
     glm::vec3 targetDirection = glm::inverse(m_ship.transform().orientation()) * glm::normalize(position - m_ship.transform().position());
-    glm::quat rotation = GeometryHelper::quatFrom(shipDirection, targetDirection);
+    glm::quat rotation = GeometryHelper::quatFromTo(shipDirection, targetDirection);
 
     if (up != glm::vec3(0, 0, 0)){
         glm::vec3 upDirection = glm::vec3(0, 1, 0);
         glm::vec3 newUpDirection = glm::inverse(m_ship.transform().orientation()) * glm::normalize(up);
-        glm::quat upRotation = GeometryHelper::quatFrom(upDirection, newUpDirection);
+        glm::quat upRotation = GeometryHelper::quatFromTo(upDirection, newUpDirection);
         rotation = upRotation * rotation;
     } else {
         //make it look naturally, e.g. up is to the "inside" of the rotation
         if(glm::abs(glm::angle(rotation)) > glm::radians(20.0f)) {
             glm::vec3 upDirection = glm::vec3(0, 1, 0);
             glm::vec3 newUpDirection = glm::vec3(0, 0, 1) + (rotation * glm::vec3(0, 0, -1));
-            glm::quat upRotation = GeometryHelper::quatFrom(upDirection, newUpDirection);
+            glm::quat upRotation = GeometryHelper::quatFromTo(upDirection, newUpDirection);
             rotation = upRotation * rotation;
         }
     }
