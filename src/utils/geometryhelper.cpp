@@ -1,6 +1,7 @@
 #include "geometryhelper.h"
 
 #include "randvec.h"
+#include "worldobject/worldobject.h"
 
 
 float GeometryHelper::angleBetween(const glm::vec3& u, const glm::vec3& v) {
@@ -28,4 +29,18 @@ glm::quat GeometryHelper::quatFromViewDirection(const glm::vec3& dir) {
         );
 
     return glm::quat(euler);
+}
+
+WorldObject* GeometryHelper::closestObject(WorldObject& self, std::set<WorldObject*>* objects){
+    WorldObject* closestObject = nullptr;
+    float closestDistance = std::numeric_limits<float>::max();
+
+    for (WorldObject* object : *objects) {
+        float distance = glm::length(object->transform().position() - self.transform().position());
+        if (distance < closestDistance) {
+            closestDistance = distance;
+            closestObject = object;
+        }
+    }
+    return closestObject;
 }

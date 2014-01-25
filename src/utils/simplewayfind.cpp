@@ -4,20 +4,29 @@
 #include "geometry/capsule.h"
 #include "worldtree/worldtreequery.h"
 #include "worldobject/worldobject.h"
+#include "utils/geometryhelper.h"
 
 
-glm::vec3 SimpleWayfind::calculateTravelPoint(WorldObject& object, const glm::vec3& targetPoint) {
+glm::vec3 SimpleWayfind::calculateTravelPoint(WorldObject& object, glm::vec3 targetPoint) {
+    //Wayfinding doesn't care about projectiles
+    bool collideBullets = object.isCollideableWith(CollisionFilterClass::Bullet);
+    object.setCollideableWith(CollisionFilterClass::Bullet, false);
+    bool collideRockets = object.isCollideableWith(CollisionFilterClass::Rocket);
+    object.setCollideableWith(CollisionFilterClass::Rocket, false);
+
     //TODO: use #300
     Capsule capsule = Capsule(object.transform().position(), targetPoint - object.transform().position(), object.minimalGridSphere().radius() * object.transform().scale());
-    std::set<WorldObject*> obstacles = WorldTreeQuery(&World::instance()->worldTree(), &capsule).intersectingWorldObjects();
+    std::set<WorldObject*> obstacles = WorldTreeQuery(&World::instance()->worldTree(), &capsule, nullptr, &object).intersectingWorldObjects();
 
-    if (obstacles.size() > 1) { // we will always be in it
-        WorldObject* obstacle = closestObjectExceptSelf(object, &obstacles);
+    if (!obstacles.empty()) {
+        WorldObject* obstacle = GeometryHelper::closestObject(object, &obstacles);
         if (obstacle) {
-            return calculateEvasionPointFor(object, *obstacle, targetPoint);
+            targetPoint = calculateEvasionPointFor(object, *obstacle, targetPoint);
         }
     }
 
+    object.setCollideableWith(CollisionFilterClass::Bullet, collideBullets);
+    object.setCollideableWith(CollisionFilterClass::Rocket, collideRockets);
     return targetPoint;
 }
 
@@ -43,16 +52,3 @@ glm::vec3 SimpleWayfind::calculateEvasionPointFor(WorldObject& self, WorldObject
     return obstacle.transform().position() + evasionDirection * evasionDistance;
 }
 
-WorldObject* SimpleWayfind::closestObjectExceptSelf(WorldObject& self, std::set<WorldObject*>* objects){
-    WorldObject* closestObject = nullptr;
-    float closestDistance = -1;
-
-    for (WorldObject* object : *objects) {
-        float distance = glm::length(object->transform().position() - self.transform().position());
-        if ((closestDistance == -1 || distance < closestDistance) && object != &self){
-            closestDistance = distance;
-            closestObject = object;
-        }
-    }
-    return closestObject;
-}
