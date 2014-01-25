@@ -1,4 +1,4 @@
-#include "Capsule.h"
+#include "capsule.h"
 
 #include <iostream>
 
