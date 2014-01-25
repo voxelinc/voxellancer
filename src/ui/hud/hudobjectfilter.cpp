@@ -15,7 +15,7 @@
 #include "hudobjectdelegate.h"
 
 
-static float SCAN_RADIUS = 20.0f;
+static float SCAN_RADIUS = 150.0f;
 
 HUDObjectFilter::HUDObjectFilter(HUD* hud):
     m_hud(hud)

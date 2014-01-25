@@ -13,21 +13,6 @@ HUDObjectFilterUpdate::HUDObjectFilterUpdate(HUD* hud, const std::set<WorldObjec
     m_newWorldObjects(newWorldObjects),
     m_obsoleteWorldObjects(obsoleteWorldObjects)
 {
-    if(m_newWorldObjects.size() > 0) {
-        std::cout << "New: ";
-        for(WorldObject* wo : newWorldObjects) {
-            std::cout << wo->objectInfo().name() << " ";
-        }
-        std::cout << std::endl;
-    }
-
-    if(m_obsoleteWorldObjects.size() > 0) {
-            std::cout << "Obsolete: ";
-        for(WorldObject* wo : obsoleteWorldObjects) {
-            std::cout << wo->objectInfo().name() << " ";
-        }
-        std::cout << std::endl;
-    }
 }
 
 void HUDObjectFilterUpdate::apply() {

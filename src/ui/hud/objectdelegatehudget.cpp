@@ -33,7 +33,7 @@ void ObjectDelegateHudget::update(float deltaSec) {
 
     m_voxels.setEdgeLength(1.0f);
 
-    glm::vec3 direction = glm::normalize(worldObject->transform().position() - m_hud->position());
+    glm::vec3 direction = glm::inverse(m_hud->orientation()) * (worldObject->transform().position() - m_hud->position());
     m_orientationOffset = Math::differenceFromViewDirection(direction);
 }
 
