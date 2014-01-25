@@ -6,7 +6,7 @@
 
 
 Camera::Camera(int viewportWidth, int viewportHeight):
-	m_fovy(60.f),
+	m_fovy(glm::radians(60.f)),
 	m_aspect(1.f),
 	m_zNear(1),
 	m_zFar(9999)
