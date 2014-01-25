@@ -5,13 +5,12 @@
 #include "voxel/voxelcluster.h"
 
 
-class ObjectDelegateHudget;
-class ObjectDelegateHudgetVoxels;
+class ObjectHudget;
 
-class ObjectDelegateHudgetVoxels {
+class ObjectHudgetVoxels {
 public:
-    ObjectDelegateHudgetVoxels(ObjectDelegateHudget* hudget);
-    ~ObjectDelegateHudgetVoxels();
+    ObjectHudgetVoxels(ObjectHudget* hudget);
+    ~ObjectHudgetVoxels();
 
     void setEdgeLength(float edgeLength);
 
@@ -19,7 +18,7 @@ public:
 
 
 protected:
-    ObjectDelegateHudget* m_hudget;
+    ObjectHudget* m_hudget;
     VoxelCluster* m_lu;
     VoxelCluster* m_lb;
     VoxelCluster* m_ru;

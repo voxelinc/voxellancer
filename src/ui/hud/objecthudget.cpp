@@ -1,4 +1,4 @@
-#include "objectdelegatehudget.h"
+#include "objecthudget.h"
 
 #include <glm/glm.hpp>
 
@@ -8,7 +8,7 @@
 #include "hud.h"
 
 
-ObjectDelegateHudget::ObjectDelegateHudget(HUD* hud, HUDObjectDelegate* objectDelegate):
+ObjectHudget::ObjectHudget(HUD* hud, HUDObjectDelegate* objectDelegate):
     Hudget(hud),
     m_objectDelegate(objectDelegate),
     m_voxels(this)
@@ -16,15 +16,15 @@ ObjectDelegateHudget::ObjectDelegateHudget(HUD* hud, HUDObjectDelegate* objectDe
 
 }
 
-glm::vec3 ObjectDelegateHudget::position() const {
+glm::vec3 ObjectHudget::position() const {
     return m_hud->position() + orientation() * glm::vec3(0, 0, -m_hud->sphere().radius());
 }
 
-glm::quat ObjectDelegateHudget::orientation() const {
+glm::quat ObjectHudget::orientation() const {
     return m_hud->orientation() * m_orientationOffset;
 }
 
-void ObjectDelegateHudget::update(float deltaSec) {
+void ObjectHudget::update(float deltaSec) {
     WorldObject* worldObject = m_objectDelegate->worldObject();
 
     if(!worldObject) {
@@ -37,7 +37,7 @@ void ObjectDelegateHudget::update(float deltaSec) {
     m_orientationOffset = Math::differenceFromViewDirection(direction);
 }
 
-void ObjectDelegateHudget::draw() {
+void ObjectHudget::draw() {
     m_voxels.draw();
 }
 

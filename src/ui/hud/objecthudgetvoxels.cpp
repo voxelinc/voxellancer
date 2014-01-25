@@ -1,29 +1,29 @@
-#include "objectdelegatehudgetvoxels.h"
+#include "objecthudgetvoxels.h"
 
 #include "voxel/voxelrenderer.h"
 
-#include "objectdelegatehudget.h"
+#include "objecthudget.h"
 
 
-ObjectDelegateHudgetVoxels::ObjectDelegateHudgetVoxels(ObjectDelegateHudget* hudget):
+ObjectHudgetVoxels::ObjectHudgetVoxels(ObjectHudget* hudget):
     m_hudget(hudget),
     m_edgeLength(0.0f)
 {
     setupCorners();
 }
 
-ObjectDelegateHudgetVoxels::~ObjectDelegateHudgetVoxels() {
+ObjectHudgetVoxels::~ObjectHudgetVoxels() {
     delete m_lu;
     delete m_lb;
     delete m_ru;
     delete m_rb;
 }
 
-void ObjectDelegateHudgetVoxels::setEdgeLength(float edgeLength) {
+void ObjectHudgetVoxels::setEdgeLength(float edgeLength) {
     m_edgeLength = edgeLength;
 }
 
-void ObjectDelegateHudgetVoxels::draw() {
+void ObjectHudgetVoxels::draw() {
     m_lu->transform().setPosition(m_hudget->position() + m_hudget->orientation() * (glm::vec3(-0.7, 0.7, 0) * m_edgeLength / 2.0f));
     m_lu->transform().setOrientation(m_hudget->orientation());
     VoxelRenderer::instance()->draw(m_lu);
@@ -41,7 +41,7 @@ void ObjectDelegateHudgetVoxels::draw() {
     VoxelRenderer::instance()->draw(m_rb);
 }
 
-void ObjectDelegateHudgetVoxels::setupCorners() {
+void ObjectHudgetVoxels::setupCorners() {
     float size = 0.05;
     int color = 0x66AAFF;
 

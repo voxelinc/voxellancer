@@ -11,8 +11,9 @@
 
 #include "property/property.h"
 
+#include "worldtree/worldtreescanner.h"
+
 #include "crosshair.h"
-#include "hudobjectfilter.h"
 
 
 class Player;
@@ -56,7 +57,7 @@ protected:
 
     std::list<Hudget*> m_hudgets;
 
-    HUDObjectFilter m_objectFilter;
+    WorldTreeScanner m_scanner;
     std::list<HUDObjectDelegate*> m_objectDelegates;
 };
 

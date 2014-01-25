@@ -22,8 +22,9 @@ HUD::HUD(Player* player, Viewer* viewer):
     m_viewer(viewer),
     m_crossHair(this),
     m_sphere(glm::vec3(0, 0, 0), 5.0f),
-    m_objectFilter(this)
+    m_scanner(&World::instance()->worldTree())
 {
+    m_scanner.setScanRadius(150.0f);
     m_hudgets.push_back(&m_crossHair);
 }
 
@@ -97,11 +98,21 @@ HUDObjectDelegate* HUD::objectDelegate(WorldObject* worldObject) {
 }
 
 void HUD::update(float deltaSec) {
+    m_scanner.update(deltaSec, m_player->playerShip());
+
+    for(WorldObject* worldObject : m_scanner.foundWorldObjects()) {
+        HUDObjectDelegate* objectDelgate = new HUDObjectDelegate(this, worldObject);
+        addObjectDelegate(objectDelgate);
+    }
+
+    for(WorldObject* worldObject : m_scanner.lostWorldObjects()) {
+        HUDObjectDelegate* objectDelgate = objectDelegate(worldObject);
+        removeObjectDelegate(objectDelgate);
+    }
+
     for(Hudget* hudget : m_hudgets) {
         hudget->update(deltaSec);
     }
-
-    m_objectFilter.filterUpdate().apply();
 }
 
 void HUD::draw() {

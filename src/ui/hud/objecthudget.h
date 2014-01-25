@@ -4,14 +4,14 @@
 #include <glm/gtx/quaternion.hpp>
 
 #include "hudget.h"
-#include "objectdelegatehudgetvoxels.h"
+#include "objecthudgetvoxels.h"
 
 
 class HUDObjectDelegate;
 
-class ObjectDelegateHudget: public Hudget {
+class ObjectHudget: public Hudget {
 public:
-    ObjectDelegateHudget(HUD* hud, HUDObjectDelegate* objectDelegate);
+    ObjectHudget(HUD* hud, HUDObjectDelegate* objectDelegate);
 
     glm::vec3 position() const;
     glm::quat orientation() const;
@@ -23,7 +23,7 @@ public:
 
 protected:
     HUDObjectDelegate* m_objectDelegate;
-    ObjectDelegateHudgetVoxels m_voxels;
+    ObjectHudgetVoxels m_voxels;
     glm::quat m_orientationOffset;
 };
 
