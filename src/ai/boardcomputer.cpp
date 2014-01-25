@@ -18,14 +18,31 @@ BoardComputer::BoardComputer(Ship& ship) :
 {
 }
 
-void BoardComputer::moveTo(const glm::vec3& position) {
+void BoardComputer::moveTo(const glm::vec3& position, bool deaccelerate) {
     glm::vec3 projectedPosition = m_ship.physics().projectedTransformIn(1.0f).position();
 
     glm::vec3 delta = position - projectedPosition;
-    glm::vec3 direction = glm::inverse(m_ship.transform().orientation()) * glm::normalize(delta);
     float distance = glm::length(delta);
 
     if (distance > s_minActDistance) {
+        if (!deaccelerate && m_ship.physics().speed() != glm::vec3(0)) {
+            glm::vec3 currentPosition = m_ship.transform().position();
+            float angleFromProjected = GeometryHelper::angleBetween(m_ship.physics().speed(), delta);
+            float angleFromCurrent = GeometryHelper::angleBetween(m_ship.physics().speed(), position - currentPosition);
+
+            if (angleFromCurrent < glm::quarter_pi<float>() && angleFromProjected > glm::half_pi<float>()) {
+                // the projection is already past the target, but we don't want to deaccelerate
+                // instead, project the target from our current position to a sphere around our position
+                float projectionDistance = glm::length(projectedPosition - currentPosition);
+                glm::vec3 fakePosition = currentPosition + glm::normalize(position - currentPosition) * projectionDistance;
+
+                delta = fakePosition - currentPosition; // for a better precision this would hvae to be projectedPosition
+                                                        // but due to dampening the rocket would then slow down in front of the target
+                distance = glm::length(delta);
+            } 
+        }
+
+        glm::vec3 direction = glm::inverse(m_ship.transform().orientation()) * glm::normalize(delta);
         m_ship.accelerate(direction);
     }
 }

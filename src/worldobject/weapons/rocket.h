@@ -6,7 +6,7 @@
 class Rocket : public Ship {
 
 public:
-    Rocket(glm::vec3 position, glm::quat orientation, const glm::vec3& initialSpeed, float travelSpeed, float lifetime, WorldObject* target);
+    Rocket(glm::vec3 position, glm::quat orientation, const glm::vec3& initialSpeed, float ejectSpeed, WorldObject* target);
     virtual void update(float deltaSec);
 
     virtual void onCollision() override;
