@@ -5,20 +5,11 @@
 #include <glm/gtx/transform.hpp>
 
 
-<<<<<<< HEAD:src/camera.cpp
-Camera::Camera():
-    m_fovy(glm::radians(60.f)),
-    m_aspect(1.f),
-    m_zNear(0.1f),
-    m_zFar(64.0f),
-    m_viewport(0,0)
-=======
 Camera::Camera(int viewportWidth, int viewportHeight):
 	m_fovy(60.f),
 	m_aspect(1.f),
 	m_zNear(1),
 	m_zFar(9999)
->>>>>>> master:src/camera/camera.cpp
 {
     setViewport(glm::ivec2(viewportWidth, viewportHeight));
 }

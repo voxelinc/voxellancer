@@ -39,12 +39,8 @@
 
 InputHandler::InputHandler(Player* player):
     m_player(player),
-<<<<<<< HEAD
-    m_camera(camera),
-=======
 
     m_hmd(nullptr),
->>>>>>> master
 
     prop_deadzoneMouse("input.deadzoneMouse"),
     prop_deadzoneGamepad("input.deadzoneGamepad"),
@@ -72,11 +68,7 @@ InputHandler::InputHandler(Player* player):
 
     m_inputConfigurator(new InputConfigurator(&m_actions, &m_secondaryInputValues, &prop_deadzoneGamepad, &m_player->hud())),
 
-<<<<<<< HEAD
-    m_targeter(new TargetSelector(player, camera))
-=======
     m_targetSelector(new TargetSelector(player))
->>>>>>> master
 {
     addActionsToVector();
 

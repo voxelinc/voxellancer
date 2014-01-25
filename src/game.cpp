@@ -5,37 +5,6 @@
 #include "gamescenario.h"
 
 
-<<<<<<< HEAD
-#include <glow/AutoTimer.h>
-#include <glow/logging.h>
-/*
-#include <fmod.hpp>
-#include <fmod_dsp.h>
-#include <fmod_errors.h>
-*/
-#include "property/propertymanager.h"
-#include "resource/clustercache.h"
-#include "utils/hd3000dummy.h"
-#include "utils/linuxvmdummy.h"
-#include "ui/inputhandler.h"
-#include "ui/hud.h"
-
-#include "world/world.h"
-#include "world/god.h"
-#include "skybox.h"
-#include "voxeleffect/voxelparticleworld.h"
-#include "voxel/voxelrenderer.h"
-#include "worldobject/ship.h"
-#include "collision/collisiondetector.h"
-#include "worldobject/worldobject.h"
-
-#include "ai/characters/dummycharacter.h"
-#include "ai/elevatedtasks/dummyelevatedtask.h"
-#include "ai/basictask.h"
-#include "ai/basictasks/flytotask.h"
-#include "ai/elevatedtasks/patrolwaypointstask.h"
-
-
 class Ship;
 
 Game::Game():

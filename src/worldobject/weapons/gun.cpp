@@ -3,7 +3,7 @@
 #include "world/god.h"
 #include "worldobject/hardpoint.h"
 #include "worldobject/ship.h"
-#include "bullettransformhelper.h"
+#include "bulletspawnhelper.h"
 
 
 Gun::Gun() :
@@ -26,8 +26,8 @@ void Gun::shootAtPoint(Hardpoint* sourceHardpoint, glm::vec3 target) {
     if (canFire()) {
         Bullet *bullet = new Bullet(worldObject(), m_range / m_bulletSpeed);
 
-        BulletTransformHelper bulletTransformHelper(bullet, sourceHardpoint, m_bulletSpeed, target);
-        bulletTransformHelper.transform();
+        BulletSpawnHelper bulletSpawnHelper(bullet, sourceHardpoint, m_bulletSpeed, target);
+        bulletSpawnHelper.setupBullet();
 
         World::instance()->god().scheduleSpawn(bullet);
 
