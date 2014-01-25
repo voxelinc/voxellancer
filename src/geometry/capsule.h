@@ -12,10 +12,10 @@ template<typename T> class TAABB;
 class Capsule : public AbstractShape {
 public:
     Capsule();
-    Capsule(const glm::vec3& source, const glm::vec3& direction, const float radius);
+    Capsule(const glm::vec3& origin, const glm::vec3& direction, const float radius);
 
-    const glm::vec3& source() const;
-    void setSource(const glm::vec3& source);
+    const glm::vec3& origin() const;
+    void setOrigin(const glm::vec3& origin);
 
     const glm::vec3& direction() const;
     void setDirection(const glm::vec3& direction);
@@ -29,7 +29,7 @@ public:
 
 
 protected:
-    glm::vec3 m_source;
+    glm::vec3 m_origin;
     glm::vec3 m_direction;
     float m_radius;
 };

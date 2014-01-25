@@ -14,19 +14,19 @@ Capsule::Capsule() {
 
 }
 
-Capsule::Capsule(const glm::vec3& source, const glm::vec3& direction, const float radius) :
-    m_source(source),
+Capsule::Capsule(const glm::vec3& origin, const glm::vec3& direction, const float radius) :
+    m_origin(origin),
     m_direction(direction),
     m_radius(radius)
 {
 }
 
-const glm::vec3& Capsule::source() const {
-    return m_source;
+const glm::vec3& Capsule::origin() const {
+    return m_origin;
 }
 
-void Capsule::setSource(const glm::vec3& source) {
-    m_source = source;
+void Capsule::setOrigin(const glm::vec3& origin) {
+    m_origin = origin;
 }
 
 const glm::vec3& Capsule::direction() const {
@@ -48,8 +48,8 @@ void Capsule::setRadius(const float radius) {
 
 bool Capsule::intersects(const Sphere& sphere) const {
     //http://www.gamedev.net/topic/190774-intersection-of-sphere-and-cylinder/
-    float t = glm::dot(m_direction, sphere.position() - m_source) / glm::dot(m_direction, m_direction);
-    glm::vec3 closestPoint = m_source + glm::clamp(t, 0.0f, 1.0f) * m_direction;
+    float t = glm::dot(m_direction, sphere.position() - m_origin) / glm::dot(m_direction, m_direction);
+    glm::vec3 closestPoint = m_origin + glm::clamp(t, 0.0f, 1.0f) * m_direction;
     glm::vec3 distance = sphere.position() - closestPoint;
     return (glm::dot(distance, distance) <= (sphere.radius() + m_radius) * (sphere.radius() + m_radius));
 }
@@ -60,8 +60,8 @@ bool Capsule::nearTo(const TAABB<int>& aabb) const {
         (m_direction.y < 0 ? -m_radius : m_radius),
         (m_direction.z < 0 ? -m_radius : m_radius));
 
-    glm::vec3 a(m_source - extendDirection);
-    glm::vec3 b(m_source + m_direction + extendDirection);
+    glm::vec3 a(m_origin - extendDirection);
+    glm::vec3 b(m_origin + m_direction + extendDirection);
     glm::ivec3 llf(std::min(a.x, b.x), std::min(a.y, b.y), std::min(a.z, b.z));
     glm::ivec3 rub(std::max(a.x, b.x), std::max(a.y, b.y), std::max(a.z, b.z));
 
@@ -77,7 +77,7 @@ bool Capsule::containedBy(const TAABB<int>& aabb) const {
 
     //extend endpoints along axes
     glm::vec3 normalizedDirection = glm::normalize(m_direction);
-    return aabb.contains(m_source - extendDirection)
-        && aabb.contains(m_source + m_direction + extendDirection);
+    return aabb.contains(m_origin - extendDirection)
+        && aabb.contains(m_origin + m_direction + extendDirection);
 }
 
