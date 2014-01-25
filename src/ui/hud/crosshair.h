@@ -7,16 +7,15 @@
 #include "utils/inertiafollower.h"
 
 #include "crosshairvoxels.h"
+#include "hudget.h"
 
 
 class HUD;
 class CameraHead;
 
-class CrossHair {
+class CrossHair: public Hudget {
 public:
     CrossHair(HUD* hud);
-
-    HUD* hud();
 
     glm::vec3 position() const;
     glm::quat orientation() const;
@@ -29,7 +28,7 @@ public:
 
 
 protected:
-    HUD* m_hud;
     glm::quat m_orientationOffset;
     CrossHairVoxels m_crossHairVoxels;
 };
+

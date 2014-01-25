@@ -7,14 +7,10 @@
 
 
 CrossHair::CrossHair(HUD* hud):
-    m_hud(hud),
+    Hudget(hud),
     m_crossHairVoxels(this)
 {
 
-}
-
-HUD* CrossHair::hud() {
-    return m_hud;
 }
 
 glm::vec3 CrossHair::position() const {

@@ -1,5 +1,8 @@
 #pragma once
 
+#include <algorithm>
+#include <list>
+#include <set>
 #include <vector>
 
 #include "display/viewer.h"
@@ -9,9 +12,13 @@
 #include "property/property.h"
 
 #include "crosshair.h"
+#include "hudobjectfilter.h"
 
 
 class Player;
+class Hudget;
+class WorldObject;
+class HUDObjectDelegate;
 
 class HUD {
 public:
@@ -19,10 +26,20 @@ public:
 
     Player* player();
     const Sphere& sphere() const;
+
     CrossHair& crossHair();
 
     glm::vec3 position() const;
     glm::quat orientation() const;
+
+    void addHudget(Hudget* hudget);
+    void removeHudget(Hudget* hudget);
+
+    void addObjectDelegate(HUDObjectDelegate* objectDelegate);
+    void removeObjectDelegate(HUDObjectDelegate* objectDelegate);
+
+    const std::list<HUDObjectDelegate*>& objectDelegates() const;
+    HUDObjectDelegate* objectDelegate(WorldObject* worldObject);
 
     void setCrossHairOffset(const glm::vec2& mousePosition);
 
@@ -37,6 +54,9 @@ protected:
 
     CrossHair m_crossHair;
 
-    glm::vec3 m_position;
+    std::list<Hudget*> m_hudgets;
+
+    HUDObjectFilter m_objectFilter;
+    std::list<HUDObjectDelegate*> m_objectDelegates;
 };
 

@@ -1,5 +1,6 @@
 #include "hud.h"
 
+#include <algorithm>
 #include <cmath>
 
 #include <glm/glm.hpp>
@@ -12,14 +13,18 @@
 
 #include "player.h"
 
+#include "hudget.h"
+#include "hudobjectdelegate.h"
+
 
 HUD::HUD(Player* player, Viewer* viewer):
     m_player(player),
     m_viewer(viewer),
     m_crossHair(this),
-    m_sphere(glm::vec3(0, 0, 0), 5.0f)
+    m_sphere(glm::vec3(0, 0, 0), 5.0f),
+    m_objectFilter(this)
 {
-
+    m_hudgets.push_back(&m_crossHair);
 }
 
 void HUD::setCrossHairOffset(const glm::vec2& mousePosition) {
@@ -60,12 +65,49 @@ glm::quat HUD::orientation() const {
     return m_player->cameraDolly().cameraHead().orientation();
 }
 
+void HUD::addHudget(Hudget* hudget) {
+    m_hudgets.push_back(hudget);
+}
+
+void HUD::removeHudget(Hudget* hudget) {
+    m_hudgets.remove(hudget);
+}
+
+void HUD::addObjectDelegate(HUDObjectDelegate* objectDelegate) {
+    m_objectDelegates.push_back(objectDelegate);
+    addHudget(objectDelegate->hudget());
+}
+
+void HUD::removeObjectDelegate(HUDObjectDelegate* objectDelegate) {
+    m_objectDelegates.remove(objectDelegate);
+    removeHudget(objectDelegate->hudget());
+
+    delete objectDelegate;
+}
+
+const std::list<HUDObjectDelegate*>& HUD::objectDelegates() const {
+    return m_objectDelegates;
+}
+
+HUDObjectDelegate* HUD::objectDelegate(WorldObject* worldObject) {
+    std::list<HUDObjectDelegate*>::iterator i = std::find_if(m_objectDelegates.begin(), m_objectDelegates.end(), [&](HUDObjectDelegate* objectDelegate) {
+        return objectDelegate->worldObject() == worldObject;
+    });
+    return i == m_objectDelegates.end() ? nullptr : *i;
+}
+
 void HUD::update(float deltaSec) {
-    m_crossHair.update(deltaSec);
+    for(Hudget* hudget : m_hudgets) {
+        hudget->update(deltaSec);
+    }
+
+    m_objectFilter.filterUpdate().apply();
 }
 
 void HUD::draw() {
-    m_crossHair.draw();
+    for(Hudget* hudget : m_hudgets) {
+        hudget->draw();
+    }
 }
 
 
