@@ -75,26 +75,27 @@ void HUD::removeHudget(Hudget* hudget) {
 }
 
 void HUD::addObjectDelegate(HUDObjectDelegate* objectDelegate) {
-    m_objectDelegates.push_back(objectDelegate);
+    m_objectDelegates[objectDelegate->worldObject()] = objectDelegate;
     addHudget(objectDelegate->hudget());
 }
 
 void HUD::removeObjectDelegate(HUDObjectDelegate* objectDelegate) {
-    m_objectDelegates.remove(objectDelegate);
+    std::function<bool(std::pair<WorldObject*, HUDObjectDelegate*>)> findDelegatePredicate = [&](std::pair<WorldObject*, HUDObjectDelegate*> pair) {
+        return pair.second == objectDelegate;
+    };
+    std::map<WorldObject*, HUDObjectDelegate*>::iterator i = std::find_if(m_objectDelegates.begin(), m_objectDelegates.end(), findDelegatePredicate);
+
+    assert(i != m_objectDelegates.end());
+    m_objectDelegates.erase(i);
+
     removeHudget(objectDelegate->hudget());
 
     delete objectDelegate;
 }
 
-const std::list<HUDObjectDelegate*>& HUD::objectDelegates() const {
-    return m_objectDelegates;
-}
-
 HUDObjectDelegate* HUD::objectDelegate(WorldObject* worldObject) {
-    std::list<HUDObjectDelegate*>::iterator i = std::find_if(m_objectDelegates.begin(), m_objectDelegates.end(), [&](HUDObjectDelegate* objectDelegate) {
-        return objectDelegate->worldObject() == worldObject;
-    });
-    return i == m_objectDelegates.end() ? nullptr : *i;
+    std::map<WorldObject*, HUDObjectDelegate*>::iterator i = m_objectDelegates.find(worldObject);
+    return i == m_objectDelegates.end() ? nullptr : i->second;
 }
 
 void HUD::update(float deltaSec) {

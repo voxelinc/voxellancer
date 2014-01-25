@@ -25,5 +25,8 @@ protected:
     HUDObjectDelegate* m_objectDelegate;
     ObjectHudgetVoxels m_voxels;
     glm::quat m_orientationOffset;
+
+
+    void calculateEdgeLength();
 };
 

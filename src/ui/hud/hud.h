@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <list>
+#include <map>
 #include <set>
 #include <vector>
 
@@ -39,7 +40,6 @@ public:
     void addObjectDelegate(HUDObjectDelegate* objectDelegate);
     void removeObjectDelegate(HUDObjectDelegate* objectDelegate);
 
-    const std::list<HUDObjectDelegate*>& objectDelegates() const;
     HUDObjectDelegate* objectDelegate(WorldObject* worldObject);
 
     void setCrossHairOffset(const glm::vec2& mousePosition);
@@ -58,6 +58,6 @@ protected:
     std::list<Hudget*> m_hudgets;
 
     WorldTreeScanner m_scanner;
-    std::list<HUDObjectDelegate*> m_objectDelegates;
+    std::map<WorldObject*, HUDObjectDelegate*> m_objectDelegates;
 };
 

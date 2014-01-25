@@ -25,3 +25,4 @@ WorldObject* HUDObjectDelegate::worldObject() {
 Hudget* HUDObjectDelegate::hudget() {
     return m_hudget;
 }
+

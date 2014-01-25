@@ -23,7 +23,7 @@ VoxelCluster::VoxelCluster(float scale):
 }
 
 VoxelCluster::~VoxelCluster() {
-    for (auto& element : m_voxels){
+    for (auto& element : m_voxels) {
         delete element.second;
     }
 }
