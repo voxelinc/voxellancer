@@ -16,7 +16,7 @@ class PatrolWaypointsTask : public ElevatedTask {
 public:
     PatrolWaypointsTask(Ship& ship, std::list<glm::vec3> points);
 
-    virtual void update(float deltaSec);
+    virtual void update(float deltaSec) override;
 
 protected:
     FlyToTask m_flyTask;
