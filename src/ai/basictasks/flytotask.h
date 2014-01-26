@@ -11,14 +11,14 @@ class WorldObject;
 
 class FlyToTask : public BasicTask {
 public:
-	FlyToTask(Ship& ship);
+    FlyToTask(Ship& ship);
 
-	void setTargetPoint(glm::vec3 point);
+    void setTargetPoint(const glm::vec3& point);
 
-    virtual void update(float deltaSec);
+    virtual void update(float deltaSec) override;
 
 protected:
 
-	glm::vec3 m_targetPoint;
+    glm::vec3 m_targetPoint;
 };
 

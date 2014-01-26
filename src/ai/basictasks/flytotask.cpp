@@ -10,7 +10,7 @@ FlyToTask::FlyToTask(Ship& ship) :
 {
 }
 
-void FlyToTask::setTargetPoint(glm::vec3 point) {
+void FlyToTask::setTargetPoint(const glm::vec3& point) {
 	m_targetPoint = point;
 }
 
