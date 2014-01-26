@@ -5,14 +5,16 @@
 #include "worldobject/ship.h"
 #include "utils/randfloat.h"
 
-enum State {
-    idle,
-    approach,
-    engage,
-    evade
-};
 
 class Fight : public BasicTask {
+
+    enum State {
+        IDLE,
+        APPROACH,
+        ENGAGE,
+        EVADE
+    };
+
 public:
     Fight(Ship& ship, std::list<std::shared_ptr<WorldObjectHandle>> targets);
 
@@ -29,7 +31,7 @@ protected:
     void updateState();
     void setState(int newState);
 
-    glm::vec3 findPositionBehindTarget();
+    glm::vec3 findRandomEvasionPoint();
     float targetDistance();
     float pointDistance(glm::vec3 point);
     float angleToTarget();
