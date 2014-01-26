@@ -7,7 +7,7 @@
 class Bullet : public WorldObject {
 
 public:
-    Bullet(WorldObject* creator, glm::vec3 position, glm::quat orientation, glm::vec3 direction, float speed, float range);
+    Bullet(WorldObject* creator, float lifetime);
 
     WorldObject* creator() const;
 
@@ -25,5 +25,7 @@ protected:
 
     WorldObject *m_creator;
     float m_lifetime;
+
+    void explode();
 };
 

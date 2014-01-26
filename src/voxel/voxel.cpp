@@ -12,6 +12,9 @@
 #include "voxeleffect/voxeldebrisgenerator.h"
 
 
+Property<float>* Voxel::s_defaultMass;
+Property<float>* Voxel::s_defaultHp;
+
 Voxel::Voxel(const glm::ivec3& gridCell, uint32_t color, float normalizedMass, float hp, float emissiveness):
     m_gridCell(gridCell),
     m_voxelTreeNode(nullptr),
@@ -36,6 +39,11 @@ Voxel::~Voxel() {
 
 const glm::ivec3& Voxel::gridCell() const {
     return m_gridCell;
+}
+
+glm::vec3 Voxel::position() const {
+    assert(m_voxelTreeNode);
+    return m_voxelTreeNode->voxelTree()->worldObject()->transform().applyTo(static_cast<glm::vec3>(m_gridCell));
 }
 
 void Voxel::addToCluster(VoxelCluster *cluster) {
@@ -91,7 +99,7 @@ void Voxel::onDestruction() {
         generator.setColor(m_color);
         generator.setForce(0.4f, 0.5f);
         generator.setSpawnProbability(0.5);
-        generator.setLifetime(Property<float>("vfx.debrisLifetime"), 0.3f);
+        generator.setLifetime(Property<float>("vfx.debrisLifetime"), 0.9f);
         generator.spawn();
     }
 }
@@ -109,7 +117,4 @@ float Voxel::defaultHp() {
     return s_defaultHp->get();
 }
 
-Property<float>* Voxel::s_defaultMass;
-
-Property<float>* Voxel::s_defaultHp;
 

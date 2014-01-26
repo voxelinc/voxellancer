@@ -8,7 +8,7 @@
 #include <glow/VertexArrayObject.h>
 #include <glow/Buffer.h>
 
-#include "camera.h"
+#include "camera/camera.h"
 
 
 class VoxelParticle;
