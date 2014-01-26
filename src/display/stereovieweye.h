@@ -1,20 +1,21 @@
 #pragma once
 
-#include <glm/glm.hpp>
+#include <memory>
 
-#include <glow/Buffer.h>
-#include <glow/FrameBufferObject.h>
-#include <glow/RenderBufferObject.h>
+#include <glm/glm.hpp>
 
 #include "camera/camera.h"
 
 #include "geometry/size.h"
 
-
+namespace glow {
+    class FrameBufferObject;
+}
 
 class Scene;
 class CameraHead;
 class StereoRenderInfo;
+class FrameBuffer;
 
 class StereoViewEye {
 public:
@@ -41,11 +42,6 @@ protected:
 
     float m_distortionScale;
     Size<int> m_textureSize;
-    glow::FrameBufferObject m_fbo;
-
-    Size<int> m_viewportResolution;
-
-
-    void setupFBO();
+    std::shared_ptr<FrameBuffer> m_fbo;
 };
 

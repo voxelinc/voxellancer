@@ -8,10 +8,11 @@
 #include <glow/VertexAttributeBinding.h>
 
 #include "programs/blitprogram.h"
+#include "programs/monoblitprogram.h"
 
 
 ScreenBlitter::ScreenBlitter():
-    m_blitProgram(nullptr)
+    m_blitProgram(new MonoBlitProgram())
 {
 }
 
