@@ -5,35 +5,33 @@
 #include "worldobject/ship.h"
 
 RocketLauncher::RocketLauncher() :
-    prop_aimRange("weapons.RocketAimRange"),
-    prop_cooldownTime("weapons.RocketCooldownTime"),
-    prop_speed("weapons.RocketSpeed"),
-    prop_lifetime("weapons.RocketLifetime"),
-    m_cooldown(0)
+    m_range("weapons.RocketLauncherRange"),
+    m_cooldownTime("weapons.RocketLauncherCooldownTime"),
+    m_speed("weapons.RocketLauncherBulletSpeed"),
+    m_lifetime("weapons.RocketLauncherLifetime")
 {
+    Weapon::setCoolDownTime(m_cooldownTime);
 }
 
 AimType RocketLauncher::aimType(){
     return Object;
 }
 
-void RocketLauncher::update(float deltaSec){
-    if (m_cooldown <= 0){ //avoid negative overflow
-        m_cooldown = 0;
-    } else {
-        m_cooldown -= deltaSec;
-    }
+void RocketLauncher::update(float deltaSec) {
+    Weapon::update(deltaSec);
 }
 
 
 void RocketLauncher::shootAtObject(Hardpoint* source, WorldObject* target){
-    if (m_cooldown <= 0){
-        Rocket *r = new Rocket(source->position(), source->ship()->transform().orientation(), source->ship()->physics().speed(), prop_speed, prop_lifetime, target);
-        m_cooldown = prop_cooldownTime;
+    if (canFire()) {
+        Rocket *r = new Rocket(source->position(), source->ship()->transform().orientation(), source->ship()->physics().speed(), m_speed, m_lifetime, target);
         World::instance()->god().scheduleSpawn(r);
+
+        fired();
     }
 }
 
-float RocketLauncher::aimRange(){
-    return prop_aimRange;
+float RocketLauncher::range(){
+    return m_range;
 }
+

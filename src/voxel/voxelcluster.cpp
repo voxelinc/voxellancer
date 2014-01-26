@@ -6,10 +6,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 
-#include <glow/DebugMessageOutput.h>
 #include <glow/ChangeListener.h>
 #include <glow/logging.h>
-#include <glowutils/MathMacros.h>
 
 #include "utils/tostring.h"
 
@@ -30,7 +28,11 @@ VoxelCluster::~VoxelCluster() {
     }
 }
 
-const WorldTransform& VoxelCluster::transform() {
+WorldTransform& VoxelCluster::transform() {
+    return m_transform;
+}
+
+const WorldTransform& VoxelCluster::transform() const {
     return m_transform;
 }
 
@@ -59,6 +61,10 @@ const IAABB& VoxelCluster::aabb() {
 
 IAABB VoxelCluster::aabb(const WorldTransform& transform) {
     return calculateAABB(transform);
+}
+
+void VoxelCluster::setTransform(const WorldTransform& transform) {
+    m_transform = transform;
 }
 
 Voxel* VoxelCluster::voxel(const glm::ivec3& position) {

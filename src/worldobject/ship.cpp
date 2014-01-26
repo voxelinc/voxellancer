@@ -8,6 +8,9 @@
 #include "worldobject/weapons/gun.h"
 #include "worldobject/weapons/rocketlauncher.h"
 #include "ai/character.h"
+#include "ai/boardcomputer.h"
+#include "sound/sound.h"
+
 
 Ship::Ship() :
     WorldObject(CollisionFilterClass::Ship),
@@ -16,7 +19,7 @@ Ship::Ship() :
     prop_maxSpeed("ship.maxSpeed"),
     prop_maxRotSpeed("ship.maxRotSpeed"),
     m_character(new Character(*this)),
-    m_boardComputer(*this),
+    m_boardComputer(new BoardComputer(*this)),
     m_targetObjectHandle(WorldObjectHandle::nullHandle())
 {
 }
@@ -29,6 +32,10 @@ void Ship::update(float deltaSec) {
 
     for (Engine *engine : m_engines) {
         engine->update(deltaSec);
+    }
+
+    if (m_sound) {
+        m_sound->setPosition(m_transform.applyTo(m_enginePos));
     }
 
     WorldObject::update(deltaSec);
@@ -48,7 +55,7 @@ void Ship::addHardpointVoxel(HardpointVoxel* voxel) {
     addVoxel(voxel);
 }
 
-void Ship::removeHardpoint(Hardpoint* hardpoint) {
+void Ship::removeHardpoint(Hardpoint *hardpoint) {
     m_hardpoints.remove(hardpoint);
 }
 
@@ -57,6 +64,9 @@ void Ship::addEngineVoxel(EngineVoxel* voxel) {
     voxel->setEngine(engine);
     m_engines.push_back(engine);
     addVoxel(voxel);
+
+    updateEnginePosition();
+
 }
 
 void Ship::removeEngine(Engine* engine) {
@@ -80,18 +90,21 @@ void Ship::fireAtPoint(glm::vec3 target) {
 }
 
 void Ship::fireAtObject() {
-    for (Hardpoint* hardpoint : m_hardpoints) {
-        if (hardpoint->aimType() == Object) {
-            hardpoint->shootAtObject(targetObject());
+    if(targetObject()) {
+        for (Hardpoint* hardpoint : m_hardpoints) {
+            if (hardpoint->aimType() == Object) {
+                hardpoint->shootAtObject(targetObject());
+            }
         }
     }
 }
 
 float Ship::minAimDistance() { // is this needed ?!
     float range = 1000;
-    for (Hardpoint *hardpoint : m_hardpoints) {
-        if (hardpoint->aimRange() != -1)
-            range = glm::min(hardpoint->aimRange(), range);
+    for (Hardpoint *hardpoint : m_hardpoints){
+        if (hardpoint->range() > 0) {
+            range = glm::min(hardpoint->range(), range);
+        }
     }
     return range;
 }
@@ -109,7 +122,6 @@ void Ship::accelerate(const glm::vec3& direction) {
     m_physics.accelerate(direction * prop_maxSpeed.get());
 }
 
-// accelerate in local coordinates!
 void Ship::accelerateAngular(const glm::vec3& axis) {
     m_physics.accelerateAngular(axis * prop_maxRotSpeed.get());
 }
@@ -122,6 +134,17 @@ Character* Ship::character() {
     return m_character.get();
 }
 
-BoardComputer* Ship::boardComputer() {
-    return &m_boardComputer;
+void Ship::setEngineSound(std::shared_ptr<Sound> sound) {
+    m_sound = sound;
+    sound->setLooping(true);
+    sound->setPosition(m_transform.applyTo(m_enginePos));
+    sound->play();
+}
+
+void Ship::updateEnginePosition() {
+    m_enginePos = glm::vec3(0);
+    for (const Engine* engine : m_engines) {
+        m_enginePos += engine->positionInGrid();
+    }
+    m_enginePos /= m_engines.size();
 }

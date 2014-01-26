@@ -5,32 +5,16 @@
 
 #include "utils/tostring.h"
 #include "voxeleffect/voxelexplosiongenerator.h"
+#include "sound/sound.h"
+#include "sound/soundmanager.h"
 
 
-Bullet::Bullet(WorldObject* creator, glm::vec3 position, glm::quat orientation, glm::vec3 direction, float speed, float range) :
+Bullet::Bullet(WorldObject* creator, float lifetime) :
     WorldObject(0.5f, CollisionFilterClass::Bullet),
-    m_creator(creator)
+    m_creator(creator),
+    m_lifetime(lifetime)
 {
-    assert(std::isfinite(orientation.x) && std::isfinite(orientation.y) && std::isfinite(orientation.z) && std::isfinite(orientation.w));
-    m_lifetime = range / speed;
-    glm::vec3 dir = glm::normalize(direction);
-    glm::vec3 myOrientation = orientation * glm::vec3(0, 0, -1);
-    glm::vec3 cross = glm::cross(dir, myOrientation);
-
     ClusterCache::instance()->fillObject(this, "data/voxelcluster/bullet.csv");
-    
-    m_transform.setOrientation(orientation); //set orientation to ship orientation
-    if (cross != glm::vec3(0)) {
-        glm::vec3 rotationAxis = glm::normalize(cross);
-        float angle = glm::acos(glm::clamp(glm::dot(dir, myOrientation), 0.0f, 1.0f));
-        glm::quat orientation = glm::angleAxis(-angle, rotationAxis);
-        m_transform.rotateWorld(orientation); //then rotate towards target
-    }
-
-    m_transform.setPosition(position + dir * (minimalGridAABB().axisMax(Axis::ZAxis) / 2.0f + glm::root_two<float>()));
-
-    m_physics.setSpeed(dir * speed);
-    m_physics.setAngularSpeed(glm::vec3(0, 0, 50)); //set spinning
 
     m_objectInfo.setName("Bullet");
     m_objectInfo.setShowOnHud(false);
@@ -39,8 +23,9 @@ Bullet::Bullet(WorldObject* creator, glm::vec3 position, glm::quat orientation, 
     CollisionFilterable::setCollideableWith(CollisionFilterClass::Bullet, false);
     //CollisionFilterable::setCollideableWith(CollisionFilterClass::Ship, false);
 
-    m_physics.setDampening(0);
-    m_physics.setAngularDampening(0);
+    m_physics.setAngularSpeed(glm::vec3(0.0f, 0.0f, 50));
+    m_physics.setDampening(0.0f);
+    m_physics.setAngularDampening(0.0f);
 }
 
 
@@ -54,11 +39,14 @@ bool Bullet::specialIsCollideableWith(const CollisionFilterable *other) const {
 
 void Bullet::update(float deltaSec) {
     m_lifetime -= deltaSec;
-    if (m_lifetime < 0)
+
+    if (m_lifetime <= 0.0f) {
         World::instance()->god().scheduleRemoval(this);
+    }
 }
 
 void Bullet::onCollision() {
+    SoundManager::current()->play("data/sound/hit2.ogg", m_transform.position());
     World::instance()->god().scheduleRemoval(this);
     spawnExplosion();
 }
@@ -82,3 +70,4 @@ void Bullet::spawnExplosion() {
 float Bullet::emissiveness() {
     return 0.4f;
 }
+

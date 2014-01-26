@@ -17,7 +17,11 @@ Engine::Engine(Ship* ship, EngineVoxel* voxel) :
 Engine::~Engine() {
 }
 
-glm::vec3 Engine::position() {
+glm::vec3 Engine::positionInGrid() const {
+    return m_positionInGrid;
+}
+
+glm::vec3 Engine::position() const{
     return m_ship->transform().applyTo(m_positionInGrid);
 }
 
@@ -32,4 +36,6 @@ void Engine::update(float deltaSec) {
 void Engine::voxelRemoved() {
     m_ship->removeEngine(this);
 }
+
+
 

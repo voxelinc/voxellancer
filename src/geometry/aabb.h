@@ -16,6 +16,7 @@ class TAABB: public AbstractShape {
 public:
     TAABB();
     TAABB(const glm::detail::tvec3<T> &llf, const glm::detail::tvec3<T> &rub);
+    template<typename OtherT> TAABB(const TAABB<OtherT>& other);
 
     inline const glm::detail::tvec3<T> &llf() const;
     inline void setLlf(const glm::detail::tvec3<T> &llf);
@@ -29,6 +30,7 @@ public:
     glm::detail::tvec3<T> middle() const;
 
     virtual T extent(Axis axis) const;
+    T diameter() const;
 
     TAABB<T> moved(Axis axis, T delta) const;
     TAABB<T> moved(const glm::detail::tvec3<T> &delta) const;
@@ -40,7 +42,6 @@ public:
     TAABB<T> expanded(Axis axis, T delta) const;
 
     template<typename OtherT> bool intersects(const TAABB<OtherT> &other) const;
-
 
     bool contains(const TAABB<T> &other) const;
     template<typename OtherT> bool contains(const glm::detail::tvec3<OtherT> &vec) const;

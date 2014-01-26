@@ -3,34 +3,41 @@
 #include "world/god.h"
 #include "worldobject/hardpoint.h"
 #include "worldobject/ship.h"
+#include "bullettransformhelper.h"
+#include "sound/sound.h"
+#include "sound/soundmanager.h"
+
 
 Gun::Gun() :
-    prop_aimRange("weapons.GunAimRange"),
-    prop_cooldownTime("weapons.GunCooldownTime"),
-    prop_speed("weapons.GunSpeed"),
-    m_cooldown(0)
+    m_range("weapons.GunRange"),
+    m_cooldownTime("weapons.GunCooldownTime"),
+    m_bulletSpeed("weapons.GunBulletSpeed")
 {
+    Weapon::setCoolDownTime(m_cooldownTime);
 }
 
-AimType Gun::aimType(){
+AimType Gun::aimType() {
     return Point;
 }
 
-void Gun::update(float deltaSec){
-    m_cooldown -= deltaSec;
-    if (m_cooldown <= 0){ //avoid negative overflow
-        m_cooldown = 0;
+void Gun::update(float deltaSec) {
+    Weapon::update(deltaSec);
+}
+
+void Gun::shootAtPoint(Hardpoint* sourceHardpoint, glm::vec3 target) {
+    if (canFire()) {
+        Bullet *bullet = new Bullet(worldObject(), m_range / m_bulletSpeed);
+
+        BulletTransformHelper bulletTransformHelper(bullet, sourceHardpoint, m_bulletSpeed, target);
+        bulletTransformHelper.transform();
+
+        World::instance()->god().scheduleSpawn(bullet);
+        SoundManager::current()->play("data/sound/laser.ogg", sourceHardpoint->position())->setVolume(3);
+        fired();
     }
 }
 
-void Gun::shootAtPoint(Hardpoint* source, glm::vec3 target){
-    if (m_cooldown <= 0){
-        Bullet *b = new Bullet(worldObject(), source->position(), source->ship()->transform().orientation(), target - source->position(), prop_speed, prop_aimRange);
-        m_cooldown = prop_cooldownTime;
-        World::instance()->god().scheduleSpawn(b);
-    }
+float Gun::range() {
+    return m_range;
 }
 
-float Gun::aimRange(){
-    return prop_aimRange;
-}
