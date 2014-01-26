@@ -20,7 +20,7 @@ BattleScenario::BattleScenario() {
 
 }
 
-void BattleScenario::loadScenario(Game* game) {
+void BattleScenario::populate(Game* game) {
     glowutils::AutoTimer t("Initialize Game");
 
 
@@ -48,9 +48,17 @@ void BattleScenario::loadScenario(Game* game) {
     aitester->setCharacter(new DummyCharacter(*aitester, new DummyElevatedTask(*aitester, new Fight(*aitester, std::list<std::shared_ptr<WorldObjectHandle>>{playerShip->handle()}))));
 
     // create two opposing enemy forces
+    populateBattle(10, 10);
+
+    glow::debug("Initial spawn");
+    world->god().spawn();
+}
+
+void BattleScenario::populateBattle(int numberOfEnemies1, int numberOfEnemies2) {
+    World* world = World::instance();
     std::list<std::shared_ptr<WorldObjectHandle>> enemies1;
     std::list<std::shared_ptr<WorldObjectHandle>> enemies2;
-    for (int e = 0; e < 10; e++) {
+    for (int e = 0; e < numberOfEnemies1; e++) {
         Ship *enemy = new Ship();
         int r = 200;
         enemy->move(glm::vec3(-200 + rand() % r - r / 2, rand() % r - r / 2, -200 + rand() % r - r / 2));
@@ -61,7 +69,7 @@ void BattleScenario::loadScenario(Game* game) {
         world->god().scheduleSpawn(enemy);
         enemies2.push_back(enemy->handle());
     }
-    for (int e = 0; e < 10; e++) {
+    for (int e = 0; e < numberOfEnemies2; e++) {
         Ship *enemy = new Ship();
         int r = 200;
         enemy->move(glm::vec3(200 + rand() % r - r / 2, rand() % r - r / 2, -200 + rand() % r - r / 2));
@@ -91,8 +99,4 @@ void BattleScenario::loadScenario(Game* game) {
         Ship* e = (Ship*)handle->get();
         e->setCharacter(new DummyCharacter(*e, new DummyElevatedTask(*e, new Fight(*e, enemies1))));
     }
-
-
-    glow::debug("Initial spawn");
-    world->god().spawn();
 }

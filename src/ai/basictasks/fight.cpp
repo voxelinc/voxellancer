@@ -55,7 +55,7 @@ void Fight::updateTargets() {
     auto iterator = m_targets.begin();
     while (iterator != m_targets.end()) {
         if (!(*iterator)->get()) {
-            m_targets.erase(iterator++);
+            iterator = m_targets.erase(iterator);
         } else {
             iterator++;
         }

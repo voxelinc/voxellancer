@@ -7,5 +7,8 @@ class BattleScenario {
 public:
     BattleScenario();
 
-    void loadScenario(Game* game);
+    void populate(Game* game);
+
+private:
+    void populateBattle(int numberOfEnemies1, int numberOfEnemies2);
 };
