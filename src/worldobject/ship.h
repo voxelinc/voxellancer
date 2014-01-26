@@ -18,15 +18,19 @@ class WorldObjectHandle;
 class Ship : public WorldObject {
 public:
     Ship();
+
     virtual void update(float deltaSec);
 
     virtual void addHardpointVoxel(HardpointVoxel* voxel);
     void removeHardpoint(Hardpoint* hardpoint);
+    const std::list<Hardpoint*> hardpoints() const;
+
     virtual void addEngineVoxel(EngineVoxel* voxel);
     void removeEngine(Engine* engine);
 
     void setTargetObject(WorldObject* target);
     WorldObject* targetObject();
+
     void fireAtPoint(glm::vec3 target);
     void fireAtObject();
     float minAimDistance();

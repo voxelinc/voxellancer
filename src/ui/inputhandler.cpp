@@ -7,7 +7,7 @@
 #include <glow/glow.h>
 
 #include "utils/tostring.h"
-#include "utils/aimhelper.h"
+#include "utils/aimer.h"
 
 #include "etc/windowmanager.h"
 
@@ -313,7 +313,7 @@ glm::vec3 InputHandler::findTargetPoint() {
         shootDirection
     );
 
-    return AimHelper(m_player->playerShip(),ray).aim();
+    return Aimer(m_player->playerShip(),ray).aim();
 }
 
 void InputHandler::placeCrossHair(double winX, double winY) {

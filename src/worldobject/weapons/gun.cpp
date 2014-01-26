@@ -14,8 +14,16 @@ Gun::Gun() :
     Weapon::setCoolDownTime(m_cooldownTime);
 }
 
-AimType Gun::aimType(){
+AimType Gun::aimType() {
     return Point;
+}
+
+float Gun::bulletSpeed() const {
+    return m_bulletSpeed;
+}
+
+float Gun::range() {
+    return m_range;
 }
 
 void Gun::update(float deltaSec){
@@ -33,9 +41,5 @@ void Gun::shootAtPoint(Hardpoint* sourceHardpoint, glm::vec3 target) {
 
         fired();
     }
-}
-
-float Gun::range() {
-    return m_range;
 }
 

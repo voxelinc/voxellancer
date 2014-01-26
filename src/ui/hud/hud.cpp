@@ -21,11 +21,13 @@ HUD::HUD(Player* player, Viewer* viewer):
     m_player(player),
     m_viewer(viewer),
     m_crossHair(this),
+//    m_aimHelper(this),
     m_sphere(glm::vec3(0, 0, 0), 5.0f),
     m_scanner(&World::instance()->worldTree())
 {
     m_scanner.setScanRadius(150.0f);
     m_hudgets.push_back(&m_crossHair);
+//    m_hudgets.push_back(&m_aimHelper);
 }
 
 void HUD::setCrossHairOffset(const glm::vec2& mousePosition) {
@@ -102,13 +104,17 @@ void HUD::update(float deltaSec) {
     m_scanner.update(deltaSec, m_player->playerShip());
 
     for(WorldObject* worldObject : m_scanner.foundWorldObjects()) {
-        HUDObjectDelegate* objectDelgate = new HUDObjectDelegate(this, worldObject);
-        addObjectDelegate(objectDelgate);
+        if(worldObject->objectInfo().showOnHud()) {
+            HUDObjectDelegate* objectDelgate = new HUDObjectDelegate(this, worldObject);
+            addObjectDelegate(objectDelgate);
+        }
     }
 
     for(WorldObject* worldObject : m_scanner.lostWorldObjects()) {
         HUDObjectDelegate* objectDelgate = objectDelegate(worldObject);
-        removeObjectDelegate(objectDelgate);
+        if(objectDelgate) {
+            removeObjectDelegate(objectDelgate);
+        }
     }
 
     for(Hudget* hudget : m_hudgets) {

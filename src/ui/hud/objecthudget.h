@@ -13,9 +13,8 @@ class ObjectHudget: public Hudget {
 public:
     ObjectHudget(HUD* hud, HUDObjectDelegate* objectDelegate);
 
-    glm::vec3 position() const;
-    glm::quat orientation() const;
-
+    virtual glm::vec3 position() const override;
+    virtual glm::quat orientation() const override;
 
     void update(float deltaSec);
     void draw();
@@ -27,6 +26,6 @@ protected:
     glm::quat m_orientationOffset;
 
 
-    void calculateEdgeLength();
+    void calculateOpeningAngle();
 };
 

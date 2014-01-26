@@ -15,6 +15,7 @@
 #include "worldtree/worldtreescanner.h"
 
 #include "crosshair.h"
+#include "aimhelperhudget.h"
 
 
 class Player;
@@ -54,6 +55,7 @@ protected:
     Sphere m_sphere;
 
     CrossHair m_crossHair;
+//    AimHelperHudget m_aimHelper;
 
     std::list<Hudget*> m_hudgets;
 

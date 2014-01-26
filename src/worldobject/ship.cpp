@@ -53,6 +53,10 @@ void Ship::removeHardpoint(Hardpoint *hardpoint) {
     m_hardpoints.remove(hardpoint);
 }
 
+const std::list<Hardpoint*> Ship::hardpoints() const {
+    return m_hardpoints;
+}
+
 void Ship::addEngineVoxel(EngineVoxel* voxel) {
     Engine* engine = new Engine(this, voxel);
     voxel->setEngine(engine);

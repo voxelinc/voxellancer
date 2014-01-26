@@ -8,9 +8,12 @@
 class Voxel;
 class WorldObject;
 
-class AimHelper {
+/*
+    Identifies the position of the voxel a worldObject is aiming at
+*/
+class Aimer {
 public:
-    AimHelper(WorldObject* worldObject, const Ray& ray);
+    Aimer(WorldObject* worldObject, const Ray& ray);
 
     glm::vec3 aim();
 

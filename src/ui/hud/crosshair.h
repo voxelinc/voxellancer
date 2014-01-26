@@ -17,8 +17,8 @@ class CrossHair: public Hudget {
 public:
     CrossHair(HUD* hud);
 
-    glm::vec3 position() const;
-    glm::quat orientation() const;
+    virtual glm::vec3 position() const override;
+    virtual glm::quat orientation() const override;
 
     const glm::quat& orientationOffset() const;
     void setOrientationOffset(const glm::quat& orientationOffset);

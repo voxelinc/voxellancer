@@ -32,7 +32,7 @@ void ObjectHudget::update(float deltaSec) {
         return;
     }
 
-    calculateEdgeLength();
+    calculateOpeningAngle();
 
     glm::vec3 direction = glm::inverse(m_hud->orientation()) * (worldObject->transform().position() - m_hud->position());
     m_orientationOffset = Math::differenceFromViewDirection(direction);
@@ -42,17 +42,15 @@ void ObjectHudget::draw() {
     m_voxels.draw();
 }
 
-void ObjectHudget::calculateEdgeLength() {
+void ObjectHudget::calculateOpeningAngle() {
     WorldObject* worldObject = m_objectDelegate->worldObject();
 
     float radius = worldObject->bounds().sphere().radius();
     float distance = glm::length(m_hud->position() - worldObject->transform().position());
     float alpha = std::atan2(radius, distance);
 
-    float edgeLength = std::tan(alpha) * m_hud->sphere().radius() * 2;
+    alpha = std::max(alpha, 0.3f); // Hack, set minimum size
 
-    edgeLength = std::max(edgeLength, 0.3f);
-
-    m_voxels.setEdgeLength(edgeLength);
+    m_voxels.setOpeningAngle(alpha);
 }
 
