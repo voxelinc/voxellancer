@@ -32,6 +32,6 @@ protected:
     static WindowManager* s_instance;
 
     WindowManager();
-    Size<int> maxResolution(GLFWmonitor* monitor);
+    Size<int> currentResolution(GLFWmonitor* monitor);
 };
 
