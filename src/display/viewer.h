@@ -15,6 +15,7 @@ class Viewer {
 public:
     Viewer(const Viewport& viewport);
 
+    Scene* scene();
     void setScene(Scene* scene);
     void setCameraHead(CameraHead* cameraHead);
     void setViewport(const Viewport& viewport);
@@ -23,7 +24,7 @@ public:
     void switchToStereoView(const StereoRenderInfo& stereoRenderInfo);
 
     void draw();
-
+    void update(float deltaSec);
 
 protected:
     Scene* m_scene;

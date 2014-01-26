@@ -91,7 +91,7 @@ find_package(OpenGL REQUIRED)
 find_package(GLM REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(GLFW REQUIRED)
-#find_package(FMOD REQUIRED)
+find_package(SFML REQUIRED)
 find_package(BANDIT REQUIRED)
 find_package(LibOVR REQUIRED)
 
@@ -110,7 +110,7 @@ include_directories(
     ${GLEW_INCLUDE_DIR}
     ${GLFW_INCLUDE_DIR}
     ${GLM_INCLUDE_DIR}
-    #${FMOD_INCLUDE_DIR}
+    ${SFML_INCLUDE_DIR}
     ${BANDIT_INCLUDE_DIR}
     ${LIBOVR_INCLUDE_DIRS}
 )
@@ -161,7 +161,7 @@ set(LIBS_TO_LINK
     ${OPENGL_LIBRARIES}
     ${GLEW_LIBRARY}
     ${GLFW_LIBRARY}
-    #${FMOD_LIBRARY}
+    ${SFML_LIBRARIES}
     ${Boost_LIBRARIES}
     ${LIBOVR_LIBRARIES}
     glow
@@ -184,7 +184,7 @@ set_target_properties(${target}
     DEBUG_POSTFIX "d${DEBUG_POSTFIX}"
 )
 
-set(BINARIES ${GLEW_BINARY} ${GLFW_BINARY} ${FMOD_BINARY})
+set(BINARIES ${GLEW_BINARY} ${GLFW_BINARY} ${SFML_BINARIES})
 
 if(WIN32)
     foreach( binary ${BINARIES})

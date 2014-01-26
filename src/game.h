@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "etc/hmd/hmdmanager.h"
 
 #include "display/viewer.h"
@@ -9,6 +11,7 @@
 
 #include "player.h"
 
+class SoundManager;
 
 class Game {
 public:

@@ -1,6 +1,5 @@
 #include "hmdmanager.h"
 
-#include <glow/DebugMessageOutput.h>
 #include <glow/logging.h>
 
 #include <iostream>

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdint.h>
+
 #include <glm/gtx/quaternion.hpp>
 
 
@@ -10,5 +12,8 @@ public:
     to look into the local-coordinate-system view direction dir
     */
     static glm::quat quatFromViewDirection(const glm::vec3& dir);
+
+    static uint32_t nextPowerOf2(uint32_t n);
+
 };
 
