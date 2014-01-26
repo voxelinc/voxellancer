@@ -59,6 +59,8 @@ void BlitProgram::blit() {
 }
 
 void BlitProgram::initialize() {
+    m_initialized = true;
+    
     m_vertexBuffer = new glow::Buffer(GL_ARRAY_BUFFER);
 
     m_vertexBuffer->setData(sizeof(vertices), vertices);
@@ -71,6 +73,5 @@ void BlitProgram::initialize() {
 
     initializeShaders();
 
-    m_initialized = true;
 }
 

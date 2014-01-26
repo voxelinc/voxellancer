@@ -46,7 +46,7 @@ void StereoViewEye::draw(Scene* scene, CameraHead* cameraHead) {
     glClear(GL_DEPTH_BUFFER_BIT);
     glViewport(0, 0, m_textureSize.width(), m_textureSize.height());
 
-    scene->draw(&m_camera, &m_fbo->get());
+    scene->draw(&m_camera, &m_fbo->get(), Viewport(0, 0, m_textureSize.width(), m_textureSize.height()));
 
     m_fbo->unbind();
 }

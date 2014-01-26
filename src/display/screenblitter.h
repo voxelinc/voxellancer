@@ -16,7 +16,7 @@ public:
 
     void setProgram(BlitProgram* blitProgram);
 
-    void blit(glow::FrameBufferObject& fbo, const Viewport& viewport);
+    void blit(glow::FrameBufferObject& source, const Viewport& viewport);
 
 
 protected:

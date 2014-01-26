@@ -46,3 +46,7 @@ void FrameBuffer::setupFBO() {
 glow::FrameBufferObject& FrameBuffer::get() {
     return *m_fbo;
 }
+
+void FrameBuffer::clear() {
+    m_fbo->clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}

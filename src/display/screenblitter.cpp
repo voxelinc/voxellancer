@@ -20,8 +20,8 @@ void ScreenBlitter::setProgram(BlitProgram* blitProgram) {
     m_blitProgram = blitProgram;
 }
 
-void ScreenBlitter::blit(glow::FrameBufferObject& fbo, const Viewport& viewport) {
-    m_blitProgram->setSource(&fbo);
+void ScreenBlitter::blit(glow::FrameBufferObject& source, const Viewport& viewport) {
+    m_blitProgram->setSource(&source);
     m_blitProgram->setDestination(glow::FrameBufferObject::defaultFBO(), viewport);
     m_blitProgram->blit();
 }

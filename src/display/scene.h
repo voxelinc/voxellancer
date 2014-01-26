@@ -6,10 +6,11 @@ namespace glow {
 }
 
 class Camera;
+class Viewport;
 
 class Scene {
 public:
-    virtual void draw(Camera* camera, glow::FrameBufferObject* destination) = 0;
+    virtual void draw(Camera* camera, glow::FrameBufferObject* destination, const Viewport& viewPort) = 0;
     virtual void update(float deltaSec) = 0;
     virtual void setViewportResolution(const Size<int>& viewportResolution) = 0;
 

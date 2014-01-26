@@ -13,6 +13,7 @@ public:
     FrameBuffer();
     void bind();
     void unbind();
+    void clear();
 
     glow::FrameBufferObject& get();
     void setResolution(const Size<int>& resolution);
