@@ -18,7 +18,12 @@ VoxelParticle::VoxelParticle(const WorldTransform& transform, int color, float e
     if (s_intersectionCheckPeriod == nullptr) {
         s_intersectionCheckPeriod = new Property<float>("vfx.particleIntersectionCheckPeriod");
     }
-    m_intersectionCheckCountdown = s_intersectionCheckPeriod->get();
+    if (m_lifetime > 3.0f) {
+        m_intersectionCheckCountdown = s_intersectionCheckPeriod->get();
+        m_intersectionChecked = false;
+    } else {
+        m_intersectionChecked = true;
+    }
 }
 
 const WorldTransform& VoxelParticle::worldTransform() const {
@@ -56,11 +61,11 @@ void VoxelParticle::setAngularSpeed(const glm::vec3& speed, float dampening) {
 }
 
 bool VoxelParticle::intersectionCheckDue() const {
-    return m_intersectionCheckCountdown < 0;
+    return m_intersectionCheckCountdown < 0 && !m_intersectionChecked;
 }
 
 void VoxelParticle::intersectionCheckPerformed() {
-    m_intersectionCheckCountdown = s_intersectionCheckPeriod->get();
+    m_intersectionChecked = true;
 }
 
 void VoxelParticle::update(float deltaSec) {
