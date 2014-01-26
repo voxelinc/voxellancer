@@ -3,17 +3,23 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 
+#include "utils/randfloat.h"
+
 #include "voxel/voxelrenderer.h"
 
 #include "crosshair.h"
+#include "hud.h"
 
 
 class CrossHairElement: public VoxelCluster {
 public:
-    CrossHairElement(): VoxelCluster(0.05f) {};
+    CrossHairElement():
+        VoxelCluster(0.08f)
+    {
+    };
 
-    glm::vec3 relativePosition;
     glm::quat relativeOrientation;
+    float zOrientation;
 };
 
 static CrossHairElement* newStick() {
@@ -37,24 +43,28 @@ static CrossHairElement* newDot() {
 CrossHairVoxels::CrossHairVoxels(CrossHair* crossHair):
     m_crossHair(crossHair)
 {
-    float baseX = 0.2f;
-    float baseY = 0.1f;
+    float baseX = 0.06f;
+    float baseY = 0.03f;
 
     CrossHairElement *lu = newStick();
-    lu->relativeOrientation = glm::angleAxis(150.0f, glm::vec3(0.0f, 0.0f, 1.0f));
-    lu->relativePosition = glm::vec3(-baseX, baseY, 0.0f);
+    lu->relativeOrientation = glm::quat(glm::vec3(baseY, baseX, 0.0f));
+    lu->zOrientation = glm::radians(150.0f);
+
     CrossHairElement *lb = newStick();
-    lb->relativeOrientation = glm::angleAxis(210.0f, glm::vec3(0.0f, 0.0f, 1.0f));
-    lb->relativePosition = glm::vec3(-baseX, -baseY, 0.0f);
+    lb->relativeOrientation = glm::quat(glm::vec3(-baseY, baseX, 0.0f));
+    lb->zOrientation = glm::radians(210.0f);
+
     CrossHairElement *ru = newStick();
-    ru->relativeOrientation = glm::angleAxis(330.0f, glm::vec3(0.0f, 0.0f, 1.0f));
-    ru->relativePosition = glm::vec3(baseX, -baseY, 0.0f);
+    ru->relativeOrientation = glm::quat(glm::vec3(baseY, -baseX, 0.0f));
+    ru->zOrientation = glm::radians(30.0f);
+
     CrossHairElement *rb = newStick();
-    rb->relativeOrientation = glm::angleAxis(30.0f, glm::vec3(0.0f, 0.0f, 1.0f));
-    rb->relativePosition = glm::vec3(baseX, baseY, 0.0f);
+    rb->relativeOrientation = glm::quat(glm::vec3(-baseY, -baseX, 0.0f));
+    rb->zOrientation = glm::radians(330.0f);
 
     CrossHairElement *dot = newDot();
-    dot->relativePosition = glm::vec3(0.0f, 0.0f, -0.0f);
+    dot->relativeOrientation = glm::quat(glm::vec3(0.0f, 0.0f, 0.0f));
+    dot->zOrientation = 0.0f;
 
     m_crossHairElements.push_back(lu);
     m_crossHairElements.push_back(lb);
@@ -74,13 +84,10 @@ void CrossHairVoxels::update(float deltaSec) {
 }
 
 void CrossHairVoxels::draw() {
-    for(CrossHairElement* crossHairElement : m_crossHairElements) {
-        WorldTransform transform(crossHairElement->transform());
-        transform.setPosition(m_crossHair->position() + m_crossHair->orientation() * crossHairElement->relativePosition);
-        transform.setOrientation(m_crossHair->orientation() * crossHairElement->relativeOrientation);
+    for(CrossHairElement* element : m_crossHairElements) {
+        element->transform().setPosition(m_crossHair->position() + (m_crossHair->orientation() * element->relativeOrientation * glm::vec3(0, 0, -m_crossHair->hud()->sphere().radius())));
+        element->transform().setOrientation(m_crossHair->orientation() * element->relativeOrientation * glm::quat(glm::vec3(0, 0, element->zOrientation)));
 
-        crossHairElement->setTransform(transform);
-
-        VoxelRenderer::instance()->draw(crossHairElement);
+        VoxelRenderer::instance()->draw(element);
     }
 }
