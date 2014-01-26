@@ -5,6 +5,8 @@
 
 #include "utils/tostring.h"
 #include "voxeleffect/voxelexplosiongenerator.h"
+#include "sound/sound.h"
+#include "sound/soundmanager.h"
 
 
 Bullet::Bullet(WorldObject* creator, float lifetime) :
@@ -43,6 +45,7 @@ void Bullet::update(float deltaSec) {
 }
 
 void Bullet::onCollision() {
+    SoundManager::current()->play("data/sound/hit2.ogg", m_transform.position());
     World::instance()->god().scheduleRemoval(this);
     spawnExplosion();
 }
