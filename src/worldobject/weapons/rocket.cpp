@@ -9,6 +9,9 @@
 #include "worldobject/ship.h"
 #include "ai/character.h"
 #include "ai/boardcomputer.h"
+#include "resource/clustercache.h"
+#include "sound/soundmanager.h"
+#include "sound/sound.h"
 
 
 Rocket::Rocket(glm::vec3 position, glm::quat orientation, const glm::vec3& initialSpeed, float travelSpeed, float lifetime, WorldObject* target) :
@@ -28,6 +31,9 @@ Rocket::Rocket(glm::vec3 position, glm::quat orientation, const glm::vec3& initi
     glm::vec3 myOrientation = orientation * glm::vec3(0, 0, -1);
 
     ClusterCache::instance()->fillObject(this, "data/voxelcluster/rocket.csv");
+
+    m_sound = SoundManager::current()->play("data/sound/Missile firing fl.ogg", position);
+    m_sound->setVolume(50.0f);
 
     m_transform.setOrientation(orientation); //set orientation to ship orientation
 
@@ -78,11 +84,16 @@ void Rocket::update(float deltaSec) {
         World::instance()->god().scheduleRemoval(this);
         spawnExplosion();
     }
-
+    
+    m_sound->setPosition(m_transform.position());
+    
     Ship::update(deltaSec);
 }
 
 void Rocket::onCollision(){
+    m_sound->stop();
+    SoundManager::current()->play("data/sound/102733__sarge4267__explosion3.ogg", m_transform.position());
+
     World::instance()->god().scheduleRemoval(this);
     spawnExplosion();
 }

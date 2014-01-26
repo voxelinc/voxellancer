@@ -44,7 +44,8 @@ std::shared_ptr<Sound> SoundManager::create(std::string soundFile) {
     assert(buffer->getChannelCount() == 1);
 
     std::shared_ptr<Sound> sound(new Sound(*buffer));
-    sound->setAttenuation(0.05f);
+    sound->setAttenuation(0.1f);
+    sound->setMinDistance(5.0f);
     m_sounds.push_back(sound);
 
     return sound;

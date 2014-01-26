@@ -13,7 +13,8 @@
 Viewer::Viewer(const Viewport& viewport):
     m_view(nullptr),
     m_cameraHead(nullptr),
-    m_viewport(viewport)
+    m_viewport(viewport),
+    m_scene(nullptr)
 {
     switchToMonoView();
 }

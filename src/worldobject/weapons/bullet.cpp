@@ -45,7 +45,7 @@ void Bullet::update(float deltaSec) {
 }
 
 void Bullet::onCollision() {
-    SoundManager::current()->play("data/sound/hit.wav", m_transform.position())->setAttenuation(0.3f);
+    SoundManager::current()->play("data/sound/hit2.ogg", m_transform.position());
     World::instance()->god().scheduleRemoval(this);
     spawnExplosion();
 }
