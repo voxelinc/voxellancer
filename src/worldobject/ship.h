@@ -5,6 +5,7 @@
 
 #include "worldobject.h"
 #include "property/property.h"
+#include "ai/boardcomputer.h"
 
 class World;
 class God;
@@ -13,7 +14,6 @@ class Engine;
 class Character;
 class WorldObjectHandle;
 class Sound;
-class BoardComputer;
 
 class Ship : public WorldObject {
 public:

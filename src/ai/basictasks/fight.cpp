@@ -20,6 +20,7 @@ void Fight::update(float deltaSec) {
             return;
         case approach:
             if (angleToTarget() > 45.0f) {
+                m_ship.boardComputer();
                 m_ship.boardComputer()->rotateTo(m_primaryTarget->transform().position());
             } else {
                 m_ship.boardComputer()->rotateTo(m_primaryTarget->transform().position());

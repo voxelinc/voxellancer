@@ -112,8 +112,8 @@ float Ship::minAimDistance() { // is this needed ?!
 float Ship::maxAimDistance() { // is this needed ?!
     float range = 0;
     for (Hardpoint *hardpoint : m_hardpoints) {
-        if (hardpoint->aimRange() != -1)
-            range = glm::max(hardpoint->aimRange(), range);
+        if (hardpoint->range() != -1)
+            range = glm::max(hardpoint->range(), range);
     }
     return range;
 }
@@ -147,4 +147,8 @@ void Ship::updateEnginePosition() {
         m_enginePos += engine->positionInGrid();
     }
     m_enginePos /= m_engines.size();
+}
+
+BoardComputer* Ship::boardComputer() {
+    return m_boardComputer.get();
 }

@@ -36,7 +36,7 @@ HMDManager& Game::hmdManager() {
 
 void Game::initialize() {
     assert(m_viewer.scene() == &m_gameScene);
-    BattleScenario scenario;
+    GameScenario scenario;
     scenario.populate(this);
 }
 
