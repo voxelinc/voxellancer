@@ -46,6 +46,7 @@ protected:
     float m_angularDampening;
 
     float m_intersectionCheckCountdown;
+    bool m_intersectionChecked;
 
     static Property<float>* s_intersectionCheckPeriod;
 };
