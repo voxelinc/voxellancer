@@ -25,7 +25,7 @@ HUD::HUD(Player* player, Viewer* viewer):
     m_sphere(glm::vec3(0, 0, 0), 5.0f),
     m_scanner(&World::instance()->worldTree())
 {
-    m_scanner.setScanRadius(150.0f);
+    m_scanner.setScanRadius(1050.0f);
     m_hudgets.push_back(&m_crossHair);
 //    m_hudgets.push_back(&m_aimHelper);
 }

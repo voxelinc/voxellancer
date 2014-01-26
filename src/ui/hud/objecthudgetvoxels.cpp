@@ -13,13 +13,15 @@ public:
     ObjectHudgetCorner(ObjectHudgetVoxels* objectHudgetVoxels, const glm::ivec3& baseOffset):
         m_objectHudgetVoxels(objectHudgetVoxels),
         m_baseOffset(baseOffset),
-        m_baseOrientation(glm::vec3(baseOffset) * 0.1f),
         m_voxelCluster(0.05f)
     {
+        m_baseOrientation = glm::quat(glm::vec3(-m_baseOffset.y, -m_baseOffset.x, 0));
+
         int color = 0x66AAFF;
 
         int edgeLength = 3;
         m_voxelCluster.addVoxel(new Voxel(glm::ivec3(edgeLength, edgeLength, 0), color));
+        m_voxelCluster.transform().setCenter(glm::vec3(edgeLength, edgeLength, 0));
 
         for(int i = 1; i < edgeLength; i++) {
             m_voxelCluster.addVoxel(new Voxel(glm::ivec3(-baseOffset.x * i + edgeLength, edgeLength, 0), color));
@@ -28,10 +30,11 @@ public:
     }
 
     void draw() {
-        Hudget* hudget = m_objectHudgetVoxels->hudget();
-        glm::quat orientation = m_baseOrientation * hudget->orientation();
+        ObjectHudget* objectHudget = m_objectHudgetVoxels->hudget();
+        glm::vec3 euler = glm::vec3(-m_baseOffset.y, -m_baseOffset.x, 0) * (m_objectHudgetVoxels->openingAngle());
+        glm::quat orientation = objectHudget->orientation() * glm::quat(euler);
 
-        m_voxelCluster.transform().setPosition(hudget->position() + orientation * glm::vec3(0, 0, -hudget->hud()->sphere().radius()));
+        m_voxelCluster.transform().setPosition(objectHudget->position() + orientation * glm::vec3(0, 0, -objectHudget->hud()->sphere().radius()));
         m_voxelCluster.transform().setOrientation(orientation);
 
         VoxelRenderer::instance()->draw(&m_voxelCluster);

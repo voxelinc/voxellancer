@@ -49,7 +49,7 @@ void ObjectHudget::calculateOpeningAngle() {
     float distance = glm::length(m_hud->position() - worldObject->transform().position());
     float alpha = std::atan2(radius, distance);
 
-    alpha = std::max(alpha, 0.3f); // Hack, set minimum size
+    alpha = std::max(alpha, 0.05f); // Hack, set minimum size
 
     m_voxels.setOpeningAngle(alpha);
 }
