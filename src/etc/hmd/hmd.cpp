@@ -27,10 +27,8 @@ HMD::~HMD() {
 glm::quat HMD::orientation() {
     glm::vec3 euler;
     OVR::Quatf ovrOrientation = m_sensorFusion.GetOrientation();
-
-    ovrOrientation.GetEulerAngles<OVR::Axis_X, OVR::Axis_Y, OVR::Axis_Z, OVR::Rotate_CCW, OVR::Handed_R>(&euler.x, &euler.y, &euler.z);
-
-    return glm::quat(euler);
+    
+    return glm::quat(ovrOrientation.w, ovrOrientation.x, ovrOrientation.y, ovrOrientation.z);
 }
 
 const StereoRenderInfo& HMD::stereoRenderInfo() const {
