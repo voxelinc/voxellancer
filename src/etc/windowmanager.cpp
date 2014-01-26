@@ -65,7 +65,7 @@ void WindowManager::setFullScreenResolution(int monitorIndex) {
     }
     assert(monitor);
 
-    Size<int> resolution = maxResolution(monitor);
+    Size<int> resolution = currentResolution(monitor);
 
     glow::info("Fullscreen resolution %d; x %d;", resolution.width(), resolution.height());
 
@@ -121,9 +121,8 @@ WindowManager::WindowManager() {
 
 }
 
-Size<int> WindowManager::maxResolution(GLFWmonitor* monitor) {
-    int count;
-    const GLFWvidmode* modes = glfwGetVideoModes(monitor, &count);
+Size<int> WindowManager::currentResolution(GLFWmonitor* monitor) {
+    const GLFWvidmode* mode = glfwGetVideoMode(monitor);
 
-    return Size<int>(modes[count-1].width, modes[count-1].height);
+    return Size<int>(mode->width, mode->height);
 }
