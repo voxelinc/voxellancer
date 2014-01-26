@@ -59,3 +59,7 @@ void Game::draw() {
 
     m_viewer.draw();
 }
+
+void Game::setOutputBuffer(int i) {
+    m_gameScene.setOutputBuffer(i);
+}

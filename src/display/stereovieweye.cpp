@@ -33,8 +33,8 @@ StereoViewEye::StereoViewEye(const Size<int>& viewportResolution, const StereoRe
     }
 }
 
-glow::FrameBufferObject& StereoViewEye::fbo() {
-    return m_fbo->get();
+FrameBuffer& StereoViewEye::fbo() {
+    return *m_fbo;
 }
 
 void StereoViewEye::draw(Scene* scene, CameraHead* cameraHead) {

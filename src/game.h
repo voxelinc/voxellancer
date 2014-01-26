@@ -27,6 +27,7 @@ public:
     void update(float deltaSec);
     void draw();
 
+    void setOutputBuffer(int i);
 
 private:
     InputHandler m_inputHandler;

@@ -11,37 +11,26 @@
 #include "geometry/size.h"
 #include "framebuffer.h"
 
+
 GameScene::GameScene(Game* game):
     m_game(game),
     m_voxelRenderer(VoxelRenderer::instance()),
     m_hd3000dummy(new HD3000Dummy()),
     m_soundManager(new SoundManager()),
     m_blitter(new MonoBlitProgram()),
-    m_colorFbo(new FrameBuffer())
+    m_framebuffer(new FrameBuffer(5)),
+    m_outputBuffer(0)
 {
 }
 
 void GameScene::draw(Camera* camera, glow::FrameBufferObject* destination, const Viewport& viewPort) {
-    m_colorFbo->bind();
-    m_colorFbo->clear();
-    glEnable(GL_DEPTH_TEST);
+    m_framebuffer->clear();
 
-    World::instance()->skybox().draw(camera);
-
-    m_voxelRenderer->prepareDraw(camera);
-    for (WorldObject* worldObject : World::instance()->worldObjects()) {
-        VoxelRenderer::instance()->draw(worldObject);
-    }
-    m_game->player().hud().draw();
-    m_voxelRenderer->afterDraw();
-
-    World::instance()->voxelParticleWorld().draw(*camera);
-
-    m_hd3000dummy->drawIfActive();
-
-    m_colorFbo->unbind();
-
-    m_blitter->setSource(&m_colorFbo->get());
+    m_framebuffer->setDrawBuffers({ Color, NormalZ, Emissisiveness });
+    drawGame(camera);
+    
+    glDrawBuffer(GL_COLOR_ATTACHMENT0);
+    m_blitter->setSource(m_framebuffer->texture(m_outputBuffer));
     m_blitter->setDestination(destination, viewPort);
     m_blitter->blit();
 }
@@ -63,5 +52,25 @@ void GameScene::update(float deltaSec) {
 }
 
 void GameScene::setViewportResolution(const Size<int>& viewportResolution) {
-    m_colorFbo->setResolution(viewportResolution);
+    m_framebuffer->setResolution(Size<int>(viewportResolution.width(), viewportResolution.height()));
+}
+
+void GameScene::setOutputBuffer(int i) {
+    m_outputBuffer = i;
+}
+
+void GameScene::drawGame(Camera* camera) {
+    World::instance()->skybox().draw(camera);
+
+    m_voxelRenderer->prepareDraw(camera);
+    for (WorldObject* worldObject : World::instance()->worldObjects()) {
+        VoxelRenderer::instance()->draw(worldObject);
+    }
+    m_game->player().hud().draw();
+    m_voxelRenderer->afterDraw();
+
+    World::instance()->voxelParticleWorld().draw(*camera);
+
+    m_hd3000dummy->drawIfActive();
+
 }

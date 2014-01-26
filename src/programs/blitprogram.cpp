@@ -4,8 +4,6 @@
 
 #include <glow/Buffer.h>
 #include <glow/Texture.h>
-#include <glow/TextureAttachment.h>
-#include <glow/FrameBufferAttachment.h>
 #include <glow/VertexAttributeBinding.h>
 
 
@@ -25,8 +23,8 @@ BlitProgram::~BlitProgram() {
 
 }
 
-void BlitProgram::setSource(glow::FrameBufferObject* sourceFBO) {
-    m_sourceFBO = sourceFBO;
+void BlitProgram::setSource(glow::Texture* source) {
+    m_source = source;
 }
 
 void BlitProgram::setDestination(glow::FrameBufferObject* destinationFBO, const Viewport& destinationViewport) {
@@ -40,14 +38,9 @@ void BlitProgram::blit() {
     }
 
     m_destinationFBO->bind();
-
-    glow::FrameBufferAttachment* fba = m_sourceFBO->attachment(GL_COLOR_ATTACHMENT0);
-    assert(fba->isTextureAttachment());
-
-    glow::Texture* texture = dynamic_cast<glow::TextureAttachment*>(fba)->texture();
-
+    
     glActiveTexture(GL_TEXTURE0);
-    texture->bind();
+    m_source->bind();
 
     setUniform<GLint>("texture", 0);
     setUniform<glm::vec2>("viewportPosition", m_destinationViewport.offset());

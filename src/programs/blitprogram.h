@@ -18,7 +18,7 @@ public:
     BlitProgram();
     virtual ~BlitProgram();
 
-    void setSource(glow::FrameBufferObject* sourceFBO);
+    void setSource(glow::Texture* source);
     void setDestination(glow::FrameBufferObject* targetFBO, const Viewport& m_targetViewpoer);
 
     virtual void blit();
@@ -28,7 +28,7 @@ protected:
     glow::VertexArrayObject m_vertexArrayObject;
     glow::ref_ptr<glow::Buffer> m_vertexBuffer;
 
-    glow::FrameBufferObject* m_sourceFBO;
+    glow::Texture* m_source;
     glow::FrameBufferObject* m_destinationFBO;
     Viewport m_destinationViewport;
 

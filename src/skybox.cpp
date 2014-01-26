@@ -43,7 +43,6 @@ void Skybox::initialize() {
 
     m_shaderProgram = new glow::Program();
     m_shaderProgram->attach(vertexShader, fragmentShader);
-    m_shaderProgram->bindFragDataLocation(0, "fragColor");
 
     m_shaderProgram->getUniform<GLint>("texCube")->set(0);
 

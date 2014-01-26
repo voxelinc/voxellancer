@@ -2,11 +2,12 @@
 
 #include "geometry/viewport.h"
 
-
 namespace glow {
     class Program;
     class FrameBufferObject;
 }
+
+class FrameBuffer;
 
 class BlitProgram;
 
@@ -16,7 +17,7 @@ public:
 
     void setProgram(BlitProgram* blitProgram);
 
-    void blit(glow::FrameBufferObject& source, const Viewport& viewport);
+    void blit(FrameBuffer& source, const Viewport& viewport);
 
 
 protected:

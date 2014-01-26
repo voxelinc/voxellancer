@@ -32,6 +32,8 @@ VoxelRenderer::VoxelRenderer() :
 }
 
 void VoxelRenderer::prepareDraw(Camera * camera, bool withBorder) {
+    glEnable(GL_DEPTH_TEST);
+    
     m_program->setUniform("projection", camera->projection());
     m_program->setUniform("view", camera->view());
     m_program->setUniform("viewProjection", camera->viewProjection());
@@ -76,13 +78,7 @@ void VoxelRenderer::createAndSetupShaders() {
     glow::Shader * fragmentShader = glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/voxel.frag");
 
     m_program = new glow::Program();
-    m_program->bindAttributeLocation(0, "v_vertex");
-    m_program->bindAttributeLocation(1, "v_normal");
-    m_program->bindAttributeLocation(2, "v_position");
-    m_program->bindAttributeLocation(3, "v_color");
-    m_program->bindAttributeLocation(4, "v_emissiveness");
     m_program->attach(vertexShader, fragmentShader);
-    m_program->bindFragDataLocation(0, "fragColor");
 }
 
 glow::Program* VoxelRenderer::program() {

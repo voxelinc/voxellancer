@@ -1,4 +1,4 @@
-#version 130
+#version 150
 
 uniform float withBorder;
 
@@ -7,7 +7,9 @@ in vec3 f_color;
 in float f_emissiveness;
 in vec3 modelposition;
 
-out vec4 fragColor;
+layout(location=0) out vec4 fragColor;
+layout(location=1) out vec4 normalz;
+layout(location=2) out vec4 emissiveness;
 
 void main() {
     float border_size = 0.10;
@@ -25,4 +27,6 @@ void main() {
     diffuse = max(0, diffuse) + 0.4;
     
     fragColor = vec4(f_color * (diffuse + f_emissiveness) - vec3(border * withBorder), 1.0);
+    emissiveness = vec4(vec3(f_emissiveness), 1.0);
+    normalz = vec4(n_normal/2+0.5, gl_FragCoord.z);
 }

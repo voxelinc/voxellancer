@@ -27,7 +27,7 @@ public:
 public:
     StereoViewEye(const Size<int>& viewportResolution, const StereoRenderInfo& stereoRenderInfo, EyeSide side);
 
-    glow::FrameBufferObject& fbo();
+    FrameBuffer& fbo();
 
     void setViewportResolution(const Size<int>& viewportResolution);
 

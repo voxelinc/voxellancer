@@ -75,6 +75,9 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
     if (key == GLFW_KEY_F6 && action == GLFW_PRESS) {
         PropertyManager::instance()->load("data/config.ini");
     }
+    if (key >= GLFW_KEY_1 && key <= GLFW_KEY_9 && action == GLFW_PRESS) {
+        game->setOutputBuffer(key-GLFW_KEY_1);
+    }
 
 	game->inputHandler().keyCallback(key, scancode, action, mods);
 }
