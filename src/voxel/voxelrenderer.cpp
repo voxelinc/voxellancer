@@ -6,7 +6,7 @@
 #include <glow/Program.h>
 #include <glow/Buffer.h>
 #include <glow/Shader.h>
-#include <glowutils/File.h>
+#include <glowutils/global.h>
 
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>

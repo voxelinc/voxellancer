@@ -3,7 +3,7 @@
 #include <stdexcept>
 #include <glow/Shader.h>
 #include <glow/VertexAttributeBinding.h>
-#include <glowutils/File.h>
+#include <glowutils/global.h>
 
 
 #include "resource/ddstexture.h"

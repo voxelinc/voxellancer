@@ -3,7 +3,7 @@
 #include <iostream>
 
 #include <glow/Shader.h>
-#include <glowutils/File.h>
+#include <glowutils/global.h>
 
 
 MonoBlitProgram::MonoBlitProgram() {
