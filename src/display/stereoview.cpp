@@ -35,15 +35,15 @@ void StereoView::setViewport(const Viewport& viewport) {
 }
 
 float StereoView::fovy() const {
-    m_leftEye.camera().fovy();
+    return m_leftEye.camera().fovy();
 }
 
 float StereoView::zNear() const {
-    m_leftEye.camera().zNear();
+    return m_leftEye.camera().zNear();
 }
 
 float StereoView::aspectRatio() const {
-    m_leftEye.camera().aspectRatio();
+    return m_leftEye.camera().aspectRatio();
 }
 
 void StereoView::draw(Scene* scene, CameraHead* cameraHead) {
