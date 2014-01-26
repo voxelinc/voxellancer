@@ -40,7 +40,7 @@ void BulletTransformHelper::transform() {
     if (bulletUp != glm::vec3(0)) {
         glm::vec3 rotationAxis = glm::normalize(bulletUp);
         float angle = glm::acos(glm::dot(bulletDirection, hardpointDirection));
-        bulletTransform.rotateWorld(glm::angleAxis(-glm::degrees(angle), rotationAxis)); //then rotate towards target
+        bulletTransform.rotateWorld(glm::angleAxis(-angle, rotationAxis)); //then rotate towards target
     }
 
     float bulletLength = m_bullet->minimalGridAABB().extent(ZAxis) * m_bullet->transform().scale();
