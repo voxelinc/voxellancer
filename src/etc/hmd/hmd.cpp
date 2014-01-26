@@ -25,7 +25,6 @@ HMD::~HMD() {
 }
 
 glm::quat HMD::orientation() {
-    glm::vec3 euler;
     OVR::Quatf ovrOrientation = m_sensorFusion.GetOrientation();
     
     return glm::quat(ovrOrientation.w, ovrOrientation.x, ovrOrientation.y, ovrOrientation.z);
