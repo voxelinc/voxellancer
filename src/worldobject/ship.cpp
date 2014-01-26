@@ -39,11 +39,11 @@ void Ship::addHardpointVoxel(HardpointVoxel* voxel) {
     Hardpoint* point;
     //TODO: Adding the actual Launcher here is wrong, this is test code
     //point = new Hardpoint(this, glm::vec3(voxel->gridCell()), new Gun());
-    if (m_hardpoints.size() % 3 == 0) {
-        point = new Hardpoint(this, voxel->gridCell(), new RocketLauncher());
-    } else {
+//    if (m_hardpoints.size() % 3 == 0) {
+//        point = new Hardpoint(this, voxel->gridCell(), new RocketLauncher());
+//    } else {
         point = new Hardpoint(this, voxel->gridCell(), new Gun());
-    }
+//    }
     voxel->setHardpoint(point);
     m_hardpoints.push_back(point);
     addVoxel(voxel);
@@ -69,6 +69,7 @@ void Ship::removeEngine(Engine* engine) {
 }
 
 void Ship::setTargetObject(WorldObject* target) {
+    std::cout << "Target: " << (target ? target->objectInfo().name() : std::string("none")) << std::endl;
     m_targetObjectHandle = target ? target->handle() : WorldObjectHandle::nullHandle();
 }
 

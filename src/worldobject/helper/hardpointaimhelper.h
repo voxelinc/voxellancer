@@ -22,15 +22,17 @@ public:
         (e.g. ship faster than bullet) then this will return false.
         direction() and point() are invalid then.
     */
-    bool isHitable() const;
+    bool isHitable();
 
-    const glm::vec3& direction() const;
-    const glm::vec3& point() const;
+    const glm::vec3& direction();
+    const glm::vec3& point();
 
 
 protected:
     Hardpoint* m_shooter;
     WorldObject* m_targetObject;
+
+    bool m_aimed;
 
     glm::vec3 m_shooterPosition;
     glm::vec3 m_targetPosition;

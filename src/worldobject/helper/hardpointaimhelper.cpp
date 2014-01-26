@@ -6,7 +6,10 @@
 
 HardpointAimHelper::HardpointAimHelper(Hardpoint* shooter, WorldObject* targetObject):
     m_shooter(shooter),
-    m_targetObject(targetObject)
+    m_targetObject(targetObject),
+    m_bulletSpeed(0.0f),
+    m_hitable(false),
+    m_aimed(false)
 {
     assert(m_shooter->weapon());
 
@@ -37,17 +40,28 @@ void HardpointAimHelper::aim() {
     m_hitable = true;
 
     m_direction = glm::normalize(m_point - m_shooterPosition);
+
+    m_aimed = true;
 }
 
-bool HardpointAimHelper::isHitable() const {
+bool HardpointAimHelper::isHitable() {
+    if(!m_aimed) {
+        aim();
+    }
     return m_hitable;
 }
 
-const glm::vec3& HardpointAimHelper::direction() const {
+const glm::vec3& HardpointAimHelper::direction() {
+    if(!m_aimed) {
+        aim();
+    }
     return m_direction;
 }
 
-const glm::vec3& HardpointAimHelper::point() const {
+const glm::vec3& HardpointAimHelper::point() {
+    if(!m_aimed) {
+        aim();
+    }
     return m_point;
 }
 

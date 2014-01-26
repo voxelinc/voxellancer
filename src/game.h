@@ -7,6 +7,7 @@
 
 #include "ui/inputhandler.h"
 
+#include "gamescenario.h"
 #include "player.h"
 
 
@@ -30,6 +31,7 @@ private:
     Player m_player;
     Viewer m_viewer;
     GameScene m_gameScene;
+    GameScenario m_scenario;
     HMDManager m_hmdManager;
 };
 

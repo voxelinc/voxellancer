@@ -2,7 +2,6 @@
 
 #include "etc/windowmanager.h"
 
-#include "gamescenario.h"
 
 
 Game::Game():
@@ -33,8 +32,7 @@ HMDManager& Game::hmdManager() {
 }
 
 void Game::initialize() {
-    GameScenario scenario;
-    scenario.populate(this);
+    m_scenario.populate(this);
 }
 
 void Game::update(float deltaSec) {
@@ -44,6 +42,7 @@ void Game::update(float deltaSec) {
 
     deltaSec = glm::min(1.0f, deltaSec);
 
+    m_scenario.update(deltaSec);
     World::instance()->update(deltaSec);
     m_player.update(deltaSec);
     m_inputHandler.update(deltaSec);

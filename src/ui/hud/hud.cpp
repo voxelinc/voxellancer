@@ -21,13 +21,13 @@ HUD::HUD(Player* player, Viewer* viewer):
     m_player(player),
     m_viewer(viewer),
     m_crossHair(this),
-//    m_aimHelper(this),
+    m_aimHelper(this),
     m_sphere(glm::vec3(0, 0, 0), 5.0f),
     m_scanner(&World::instance()->worldTree())
 {
     m_scanner.setScanRadius(1050.0f);
     m_hudgets.push_back(&m_crossHair);
-//    m_hudgets.push_back(&m_aimHelper);
+    m_hudgets.push_back(&m_aimHelper);
 }
 
 void HUD::setCrossHairOffset(const glm::vec2& mousePosition) {
