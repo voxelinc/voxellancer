@@ -8,5 +8,5 @@ RenderPass::RenderPass(std::string name):
 
 const std::string& RenderPass::name() const
 {
-    return m_name
+    return m_name;
 }
