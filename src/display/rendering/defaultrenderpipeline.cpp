@@ -41,7 +41,7 @@ void DefaultRenderPipeline::addFinalization() {
     auto pass = std::make_shared<PostProcessingPass>("blurh", m_quad);
     pass->setSamplers({ "color", "bloom" });
     pass->setInput({ BufferName::Color, BufferName::Bloom });
-    pass->setOutput({ BufferName::Combined });
+    pass->setOutput({ BufferName::Default });
     pass->setFragmentShader("data/shader/combine.frag");
     add(pass);
 }

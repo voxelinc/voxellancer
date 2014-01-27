@@ -21,14 +21,15 @@ PostProcessingPass::PostProcessingPass(std::string name, Quad& quad) :
 {
 }
 
-void PostProcessingPass::bindFrameBuffer(FrameBuffer& frameBuffer) {
-    frameBuffer.bind();
+void PostProcessingPass::beforeDraw(FrameBuffer& frameBuffer) {
     frameBuffer.setDrawBuffers(m_output);
     for (int i = 0; i < m_samplers.size(); i++) {
         glActiveTexture(GL_TEXTURE0 + i);
         frameBuffer.texture(static_cast<int>(m_input[i]))->bind();
         m_program->setUniform<GLint>(m_samplers[i], i);
     }
+    glDisable(GL_DEPTH_TEST);
+    m_program->setUniform("viewport", frameBuffer.resolution()); frameBuffer.bind();
 }
 
 
@@ -37,11 +38,8 @@ void PostProcessingPass::apply(FrameBuffer& frameBuffer) {
         initialize();
     }
 
-    glDisable(GL_DEPTH_TEST);
+    beforeDraw(frameBuffer);
 
-    m_program->setUniform("viewport", frameBuffer.resolution());
-
-    bindFrameBuffer(frameBuffer);
     m_program->use();
     m_quad.draw();
     m_program->release();

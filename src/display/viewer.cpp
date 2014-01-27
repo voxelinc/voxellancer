@@ -29,7 +29,6 @@ void Viewer::setScene(Scene* scene) {
     }
     m_scene = scene;
     scene->activate();
-    scene->setViewport(glm::ivec2(m_viewport.width(), m_viewport.height()));
 }
 
 void Viewer::setCameraHead(CameraHead* cameraHead) {
@@ -40,9 +39,6 @@ void Viewer::setViewport(const Viewport& viewport) {
     m_viewport = viewport;
     if (m_view) {
         m_view->setViewport(viewport);
-    }
-    if (m_scene) {
-        m_scene->setViewport(glm::ivec2(viewport.width(), viewport.height()));
     }
 }
 

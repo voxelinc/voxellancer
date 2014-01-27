@@ -8,19 +8,20 @@
 #include "sound/soundmanager.h"
 #include "programs/monoblitprogram.h"
 #include "game.h"
-#include "geometry/size.h"
 #include "rendering/framebuffer.h"
 #include "rendering/renderpipeline.h"
+#include "rendering/blitter.h"
 
 GameScene::GameScene(Game* game) :
     m_game(game),
     m_voxelRenderer(VoxelRenderer::instance()),
     m_hd3000dummy(new HD3000Dummy()),
     m_soundManager(new SoundManager()),
-    m_blitter(new MonoBlitProgram()),
+    m_blitter(new Blitter()),
     m_framebuffer(new FrameBuffer(8)),
     m_renderPipeline(RenderPipeline::getDefault()),
-    m_currentOutputBuffer(0) {
+    m_currentOutputBuffer(0) 
+{
 }
 
 void GameScene::draw(Camera* camera, glow::FrameBufferObject* destination, const glm::ivec2& resolution) {
@@ -32,10 +33,8 @@ void GameScene::draw(Camera* camera, glow::FrameBufferObject* destination, const
 
     m_renderPipeline->apply(*m_framebuffer);
 
-    glDrawBuffer(GL_COLOR_ATTACHMENT0);
-    m_blitter->setSource(m_framebuffer->texture(m_currentOutputBuffer));
-    m_blitter->setDestination(destination, Viewport(0, 0, m_viewPort.x, m_viewPort.y));
-    m_blitter->blit();
+    m_blitter->setInput({ static_cast<BufferName>(m_currentOutputBuffer) });
+    m_blitter->apply(*m_framebuffer, destination);
 }
 
 void GameScene::activate() {
@@ -52,10 +51,6 @@ void GameScene::setCameraHead(CameraHead* head) {
 
 void GameScene::update(float deltaSec) {
     m_soundManager->setListener(m_head->position(), m_head->orientation());
-}
-
-void GameScene::setViewport(const glm::ivec2& viewport) {
-    m_viewPort = viewport;
 }
 
 void GameScene::setOutputBuffer(int i) {

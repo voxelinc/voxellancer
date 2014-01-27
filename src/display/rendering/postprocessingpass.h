@@ -21,7 +21,7 @@ public:
     PostProcessingPass(std::string name, Quad& quad);
 
     void apply(FrameBuffer& frameBuffer);
-    void bindFrameBuffer(FrameBuffer& frameBuffer);
+    void beforeDraw(FrameBuffer& frameBuffer);
 
     void setSamplers(const std::vector<std::string>& samplers);
     void setInput(const std::vector<BufferName>& input);

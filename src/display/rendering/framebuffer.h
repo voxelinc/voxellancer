@@ -13,7 +13,7 @@ namespace glow {
 }
 
 enum class BufferName {
-    Combined = 0,
+    Default = 0,
     Color,
     NormalZ,
     Emissisiveness,

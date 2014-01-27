@@ -18,8 +18,8 @@ void main() {
     vec2 texCoord = v_uv - float(int(gaussRadius/2)) * shift;
     vec3 color = vec3(0); 
     for (int i=0; i<gaussRadius; ++i) { 
-        color += gaussFilter[i] * texture2D(source, texCoord).xyz;
+        color += gaussFilter[i] * texture(source, texCoord).xyz;
         texCoord += shift;
     }
-    gl_FragColor = vec4(color,1.0);
+    fragColor = vec4(color,1.0);
 }

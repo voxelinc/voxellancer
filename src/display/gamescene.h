@@ -14,6 +14,7 @@ class SoundManager;
 class CameraHead;
 class MonoBlitProgram;
 class FrameBuffer;
+class Blitter;
 class RenderPipeline;
 
 class GameScene: public Scene {
@@ -30,19 +31,17 @@ public:
     virtual void activate();
     virtual void deactivate();
 
-    void setViewport(const glm::ivec2& viewport);
     void setOutputBuffer(int i);
 protected:
     Game* m_game;
     CameraHead* m_head;
-    std::shared_ptr<MonoBlitProgram> m_blitter;
+    std::shared_ptr<Blitter> m_blitter;
     std::shared_ptr<FrameBuffer> m_framebuffer;
     std::shared_ptr<VoxelRenderer> m_voxelRenderer;
     std::shared_ptr<HD3000Dummy> m_hd3000dummy;
     std::shared_ptr<SoundManager> m_soundManager;
     std::shared_ptr<RenderPipeline> m_renderPipeline;
 
-    glm::ivec2 m_viewPort;
     int m_currentOutputBuffer;
 };
 
