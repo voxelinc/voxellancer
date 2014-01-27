@@ -9,7 +9,7 @@
 #include "programs/monoblitprogram.h"
 #include "game.h"
 #include "geometry/size.h"
-#include "framebuffer.h"
+#include "rendering/framebuffer.h"
 
 
 GameScene::GameScene(Game* game):

@@ -10,7 +10,7 @@
 #include "etc/windowmanager.h"
 
 #include "scene.h"
-#include "framebuffer.h"
+#include "rendering/framebuffer.h"
 #include "stereorenderinfo.h"
 
 

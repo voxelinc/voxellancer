@@ -4,7 +4,7 @@
 
 #include "programs/blitprogram.h"
 #include "programs/monoblitprogram.h"
-#include "framebuffer.h"
+#include "rendering/framebuffer.h"
 
 
 ScreenBlitter::ScreenBlitter():

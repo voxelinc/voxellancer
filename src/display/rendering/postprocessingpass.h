@@ -3,6 +3,8 @@
 #include <vector>
 #include <glow/ref_ptr.h>
 
+#include "renderpass.h"
+
 namespace glow {
     class Program;
 }
@@ -12,9 +14,9 @@ class FrameBuffer;
 
 
 
-class RenderPass {
+class PostProcessingPass : public RenderPass {
 public:
-    RenderPass();
+    PostProcessingPass();
 
     void apply(FrameBuffer& frameBuffer);
     void setSampler(FrameBuffer& frameBuffer);

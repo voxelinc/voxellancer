@@ -1,4 +1,5 @@
 #pragma once
+
 #include "renderpipeline.h"
 
 #include <vector>
@@ -6,7 +7,7 @@
 class FrameBuffer;
 class RenderPass;
 
-class DefaultRenderPipeline : RenderPipeline {
+class DefaultRenderPipeline : public RenderPipeline {
 public:
     DefaultRenderPipeline();
 
@@ -17,7 +18,5 @@ public:
     void addBloom();
 protected:
     
-    std::vector<RenderPass*> m_passes;
-
 
 };
