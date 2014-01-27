@@ -15,15 +15,13 @@
 #include "game.h"
 
 
-GameScenario::GameScenario() {
+GameScenario::GameScenario(Game* game) :
+BaseScenario(game)
+{
 
 }
 
-void GameScenario::populate(Game* game) {
-    glowutils::AutoTimer t("Initialize Game");
-    
-    glow::debug("create world");
-    World* world = World::instance();
+void GameScenario::populateWorld() {
 
     glow::debug("Create WorldObjects");
     Ship *normandy = new Ship();
@@ -33,7 +31,7 @@ void GameScenario::populate(Game* game) {
     normandy->objectInfo().setShowOnHud(true);
     normandy->objectInfo().setCanLockOn(true);
     normandy->setEngineSound(SoundManager::current()->create("data/sound/Rocket Thrusters.ogg"));
-    world->god().scheduleSpawn(normandy);
+    m_world->god().scheduleSpawn(normandy);
     // TODO: use these dummies to test BasicTasks
     normandy->setCharacter(
         new DummyCharacter(*normandy,
@@ -45,9 +43,9 @@ void GameScenario::populate(Game* game) {
     testCluster->setPosition(glm::vec3(0, 0, 10));
     testCluster->objectInfo().setName("basicship");
     testCluster->objectInfo().setShowOnHud(false);
-    world->god().scheduleSpawn(testCluster);
+    m_world->god().scheduleSpawn(testCluster);
 
-    game->player().setShip(testCluster);
+    m_game->player().setShip(testCluster);
 
     WorldObject *wall = new WorldObject(1);
     wall->move(glm::vec3(-30, 0, -50));
@@ -62,7 +60,7 @@ void GameScenario::populate(Game* game) {
     wall->objectInfo().setName("Wall");
     wall->objectInfo().setShowOnHud(true);
     wall->objectInfo().setCanLockOn(true);
-    world->god().scheduleSpawn(wall);
+    m_world->god().scheduleSpawn(wall);
 
     glow::debug("Create Planet");
     WorldObject *planet = new WorldObject();
@@ -84,7 +82,7 @@ void GameScenario::populate(Game* game) {
     planet->objectInfo().setName("Planet");
     planet->objectInfo().setShowOnHud(true);
     planet->objectInfo().setCanLockOn(true);
-    world->god().scheduleSpawn(planet);
+    m_world->god().scheduleSpawn(planet);
 
     for(int e = 0; e < 15; e++) {
         WorldObject *enemy = new WorldObject();
@@ -101,10 +99,10 @@ void GameScenario::populate(Game* game) {
         enemy->objectInfo().setName("enemy");
         enemy->objectInfo().setShowOnHud(false);
         enemy->objectInfo().setCanLockOn(false);
-        world->god().scheduleSpawn(enemy);
+        m_world->god().scheduleSpawn(enemy);
 
     }
 
     glow::debug("Initial spawn");
-    world->god().spawn();
+    m_world->god().spawn();
 }

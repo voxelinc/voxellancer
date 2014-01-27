@@ -1,12 +1,14 @@
 #pragma once
 
+#include "scenarios/basescenario.h"
 
 class Game;
 
-class GameScenario {
+class GameScenario : public BaseScenario {
 public:
-    GameScenario();
+    GameScenario(Game* game);
 
-    void populate(Game* game);
+protected:
+    virtual void populateWorld();
 };
 
