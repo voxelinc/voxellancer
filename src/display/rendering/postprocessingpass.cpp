@@ -6,7 +6,8 @@
 #include "framebuffer.h"
 
 
-PostProcessingPass::PostProcessingPass():
+PostProcessingPass::PostProcessingPass(std::string name):
+    RenderPass(name),
     m_program(nullptr)
 {
 

@@ -1,15 +1,18 @@
 #pragma once
 
+#include <string>
+
 class FrameBuffer;
 
 
 class RenderPass {
 public:
-    RenderPass();
+    RenderPass(std::string name);
 
     virtual void apply(FrameBuffer& frameBuffer) = 0;
-       
-protected:
+    const std::string& name() const;
 
+protected:
+    std::string m_name;
 
 };

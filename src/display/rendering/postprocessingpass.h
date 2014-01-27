@@ -16,7 +16,7 @@ class FrameBuffer;
 
 class PostProcessingPass : public RenderPass {
 public:
-    PostProcessingPass();
+    PostProcessingPass(std::string name);
 
     void apply(FrameBuffer& frameBuffer);
     void setSampler(FrameBuffer& frameBuffer);
