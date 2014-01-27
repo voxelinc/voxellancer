@@ -24,7 +24,7 @@ GameScene::GameScene(Game* game) :
 {
 }
 
-void GameScene::draw(Camera* camera, glow::FrameBufferObject* destination, const glm::ivec2& resolution) {
+void GameScene::draw(Camera* camera, glow::FrameBufferObject* target, const glm::ivec2& resolution) {
     m_framebuffer->setResolution(resolution);
     m_framebuffer->clear();
 
@@ -34,7 +34,7 @@ void GameScene::draw(Camera* camera, glow::FrameBufferObject* destination, const
     m_renderPipeline->apply(*m_framebuffer);
 
     m_blitter->setInput({ static_cast<BufferName>(m_currentOutputBuffer) });
-    m_blitter->apply(*m_framebuffer, destination);
+    m_blitter->apply(*m_framebuffer, target);
 }
 
 void GameScene::activate() {

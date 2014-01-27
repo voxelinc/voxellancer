@@ -23,7 +23,7 @@ public:
 
     void setCameraHead(CameraHead* head);
 
-    virtual void draw(Camera* camera, glow::FrameBufferObject* destination, const glm::ivec2& resolution) override;
+    virtual void draw(Camera* camera, glow::FrameBufferObject* target, const glm::ivec2& resolution) override;
 
     void drawGame(Camera* camera);
 
