@@ -1,4 +1,4 @@
-#include "PostProcessingPass.h"
+#include "postprocessingpass.h"
 
 #include <assert.h>
 
