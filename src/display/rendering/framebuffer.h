@@ -12,7 +12,7 @@ namespace glow {
     class Texture;
 }
 
-enum BufferName {
+enum class BufferName {
     Combined = 0,
     Color,
     NormalZ,

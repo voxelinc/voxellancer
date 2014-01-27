@@ -10,7 +10,7 @@ namespace glow {
     class Program;
 }
 
-enum BufferName;
+enum class BufferName;
 class FrameBuffer;
 class Quad;
 

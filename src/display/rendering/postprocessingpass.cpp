@@ -26,7 +26,7 @@ void PostProcessingPass::bindFrameBuffer(FrameBuffer& frameBuffer) {
     frameBuffer.setDrawBuffers(m_output);
     for (int i = 0; i < m_samplers.size(); i++) {
         glActiveTexture(GL_TEXTURE0 + i);
-        frameBuffer.texture(m_input[i])->bind();
+        frameBuffer.texture(static_cast<int>(m_input[i]))->bind();
         m_program->setUniform<GLint>(m_samplers[i], i);
     }
 }

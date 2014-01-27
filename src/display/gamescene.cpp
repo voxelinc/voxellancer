@@ -27,7 +27,7 @@ GameScene::GameScene(Game* game):
 void GameScene::draw(Camera* camera, glow::FrameBufferObject* destination, const Viewport& viewPort) {
     m_framebuffer->clear();
 
-    m_framebuffer->setDrawBuffers({ Color, NormalZ, Emissisiveness });
+    m_framebuffer->setDrawBuffers({ BufferName::Color, BufferName::NormalZ, BufferName::Emissisiveness });
     drawGame(camera);
     
     m_renderPipeline->apply(*m_framebuffer);
