@@ -9,31 +9,33 @@ namespace glow {
     class Program;
 }
 
-enum Buffer;
+enum BufferName;
 class FrameBuffer;
+class Quad;
 
 
 
 class PostProcessingPass : public RenderPass {
 public:
-    PostProcessingPass(std::string name);
+    PostProcessingPass(std::string name, Quad& quad);
 
     void apply(FrameBuffer& frameBuffer);
-    void setSampler(FrameBuffer& frameBuffer);
+    void bindFrameBuffer(FrameBuffer& frameBuffer);
 
     void setSamplers(const std::vector<std::string>& samplers);
-    void setInput(const std::vector<Buffer>& input);
-    void setOutput(const std::vector<Buffer>& output);
+    void setInput(const std::vector<BufferName>& input);
+    void setOutput(const std::vector<BufferName>& output);
     void setFragmentShader(const std::string& output);
-    
-protected:
-    
-    glow::ref_ptr<glow::Program> m_program;
-    std::vector<std::string> samplers;
-    std::vector<Buffer> input;
-    std::vector<Buffer> output;
-    std::string fragmentShader;
-    std::string vertexShader;
+    void initialize();
 
+protected:
+    glow::ref_ptr<glow::Program> m_program;
+    
+    std::vector<std::string> m_samplers;
+    std::vector<BufferName> m_input;
+    std::vector<BufferName> m_output;
+    std::string m_fragmentShader;
+    std::string m_vertexShader;
+    Quad& m_quad;
 
 };

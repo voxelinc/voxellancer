@@ -10,7 +10,7 @@
 #include "game.h"
 #include "geometry/size.h"
 #include "rendering/framebuffer.h"
-
+#include "rendering/renderpipeline.h"
 
 GameScene::GameScene(Game* game):
     m_game(game),
@@ -18,7 +18,8 @@ GameScene::GameScene(Game* game):
     m_hd3000dummy(new HD3000Dummy()),
     m_soundManager(new SoundManager()),
     m_blitter(new MonoBlitProgram()),
-    m_framebuffer(new FrameBuffer(5)),
+    m_framebuffer(new FrameBuffer(8)),
+    m_renderPipeline(RenderPipeline::getDefault()),
     m_outputBuffer(0)
 {
 }
@@ -29,6 +30,8 @@ void GameScene::draw(Camera* camera, glow::FrameBufferObject* destination, const
     m_framebuffer->setDrawBuffers({ Color, NormalZ, Emissisiveness });
     drawGame(camera);
     
+    m_renderPipeline->apply(*m_framebuffer);
+
     glDrawBuffer(GL_COLOR_ATTACHMENT0);
     m_blitter->setSource(m_framebuffer->texture(m_outputBuffer));
     m_blitter->setDestination(destination, viewPort);
@@ -52,7 +55,7 @@ void GameScene::update(float deltaSec) {
 }
 
 void GameScene::setViewportResolution(const Size<int>& viewportResolution) {
-    m_framebuffer->setResolution(Size<int>(viewportResolution.width(), viewportResolution.height()));
+    m_framebuffer->setResolution(glm::ivec2(viewportResolution.width(), viewportResolution.height()));
 }
 
 void GameScene::setOutputBuffer(int i) {

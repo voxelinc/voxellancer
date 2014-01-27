@@ -57,6 +57,6 @@ void StereoViewEye::setViewportResolution(const Size<int>& viewportResolution) {
 
     m_camera.setViewport(glm::ivec2(viewportResolution.width(), viewportResolution.height()));
 
-    m_fbo->setResolution(m_textureSize);
+    m_fbo->setResolution(glm::ivec2(viewportResolution.width(), viewportResolution.height()));
 }
 

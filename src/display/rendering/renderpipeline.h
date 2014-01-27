@@ -17,9 +17,11 @@ public:
     void insert(std::shared_ptr<RenderPass> pass, std::string after);
 
     static RenderPipeline* getDefault();
+
 protected:
-    
+
+
+private:
     std::vector<std::shared_ptr<RenderPass>> m_passes;
-
-
+    
 };

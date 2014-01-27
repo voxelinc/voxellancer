@@ -11,12 +11,12 @@
 
 FrameBuffer::FrameBuffer(int colorAttachments, bool depthAttachment):
     m_fbo(new glow::FrameBufferObject()),
-    m_colorAttachments(colorAttachments),
-    m_depthAttachment(depthAttachment)
+    m_colorAttachmentCount(colorAttachments),
+    m_useDepthAttachment(depthAttachment)
 {
 }
 
-void FrameBuffer::setResolution(const Size<int>& resolution) {
+void FrameBuffer::setResolution(const glm::ivec2& resolution) {
     m_resolution = resolution;
     setupFBO();
 }
@@ -30,11 +30,11 @@ void FrameBuffer::unbind() {
 }
 
 void FrameBuffer::setupFBO() {
-    for (int i = 0; i < m_colorAttachments; i++) {
+    for (int i = 0; i < m_colorAttachmentCount; i++) {
         glow::Texture* texture = new glow::Texture(GL_TEXTURE_2D);
         texture->bind();
 
-        texture->image2D(0, GL_RGB, m_resolution.width(), m_resolution.height(), 0, GL_RGB, GL_FLOAT, nullptr);
+        texture->image2D(0, GL_RGB, m_resolution.x, m_resolution.y, 0, GL_RGB, GL_FLOAT, nullptr);
 
         texture->setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         texture->setParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -42,9 +42,9 @@ void FrameBuffer::setupFBO() {
         m_fbo->attachTexture2D(GL_COLOR_ATTACHMENT0+i, texture);
     }
 
-    if (m_depthAttachment) {
+    if (m_useDepthAttachment) {
         glow::RenderBufferObject* rbo = new glow::RenderBufferObject();
-        rbo->storage(GL_DEPTH_COMPONENT, m_resolution.width(), m_resolution.height());
+        rbo->storage(GL_DEPTH_COMPONENT, m_resolution.x, m_resolution.y);
         m_fbo->attachRenderBuffer(GL_DEPTH_ATTACHMENT, rbo);
     }
     m_fbo->unbind();
@@ -58,21 +58,25 @@ void FrameBuffer::clear() {
     m_fbo->clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void FrameBuffer::setDrawBuffers(std::vector<Buffer> buffers) {
+void FrameBuffer::setDrawBuffers(std::vector<BufferName> buffers) {
     std::vector<GLenum> enums;
-    for (Buffer value : buffers) {
-        assert(value < m_colorAttachments);
+    for (BufferName value : buffers) {
+        assert(value < m_colorAttachmentCount);
         enums.push_back(GL_COLOR_ATTACHMENT0 + value);
     }
     m_fbo->setDrawBuffers(enums);
 }
 
 glow::Texture* FrameBuffer::texture(int i) {
-    assert(i < m_colorAttachments);
+    assert(i < m_colorAttachmentCount);
     glow::FrameBufferAttachment* fba = m_fbo->attachment(GL_COLOR_ATTACHMENT0 + i);
     assert(fba->isTextureAttachment());
     glow::Texture* texture = dynamic_cast<glow::TextureAttachment*>(fba)->texture();
     return texture;
+}
+
+const glm::ivec2& FrameBuffer::resolution() {
+    return m_resolution;
 }
 
 

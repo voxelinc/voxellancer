@@ -28,5 +28,5 @@ void main() {
     
     fragColor = vec4(f_color * (diffuse + f_emissiveness) - vec3(border * withBorder), 1.0);
     emissiveness = vec4(vec3(f_emissiveness), 1.0);
-    normalz = vec4(n_normal/2+0.5, gl_FragCoord.z);
+    normalz = vec4((n_normal+1)/2, gl_FragCoord.z);
 }

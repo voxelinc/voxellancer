@@ -12,12 +12,12 @@ out vec4 fragColor;
 
 vec2 HmdWarp(vec2 linear) {
     float radiusSquared = linear.x * linear.x + linear.y * linear.y;
-    vec2 rvector = linear * (
+    vec2 rvector = linear / distortionScale * (
         distortionKs.x +
         distortionKs.y * radiusSquared +
         distortionKs.z * radiusSquared * radiusSquared +
         distortionKs.w * radiusSquared * radiusSquared * radiusSquared
-    ) / distortionScale;
+    );
     return (rvector + 1.0) / 2.0;
 }
 

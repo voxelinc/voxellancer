@@ -1,8 +1,10 @@
 #pragma once
 
-#include "renderpipeline.h"
-
 #include <vector>
+
+#include "renderpipeline.h"
+#include "quad.h"
+
 
 class FrameBuffer;
 class RenderPass;
@@ -16,7 +18,8 @@ public:
     void addBlurVertical();
     void addBlurHorizontal();
     void addBloom();
-protected:
-    
 
+protected:
+    Quad m_quad;
+    
 };

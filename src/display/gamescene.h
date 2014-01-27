@@ -12,6 +12,7 @@ class SoundManager;
 class CameraHead;
 class MonoBlitProgram;
 class FrameBuffer;
+class RenderPipeline;
 
 class GameScene: public Scene {
 public:
@@ -37,6 +38,7 @@ protected:
     std::shared_ptr<VoxelRenderer> m_voxelRenderer;
     std::shared_ptr<HD3000Dummy> m_hd3000dummy;
     std::shared_ptr<SoundManager> m_soundManager;
+    std::shared_ptr<RenderPipeline> m_renderPipeline;
     int m_outputBuffer;
 };
 

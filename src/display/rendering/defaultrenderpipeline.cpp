@@ -5,7 +5,8 @@
 
 
 DefaultRenderPipeline::DefaultRenderPipeline():
-    RenderPipeline("defaultpipeline")
+    RenderPipeline("defaultpipeline"),
+    m_quad()
 {
 
 }
@@ -13,32 +14,32 @@ DefaultRenderPipeline::DefaultRenderPipeline():
 void DefaultRenderPipeline::setup() {
     addBlurVertical();
     addBlurHorizontal();
-    addBloom();
+    //addBloom();
 }
 
 void DefaultRenderPipeline::addBlurVertical() {
-    auto pass = std::make_shared<PostProcessingPass>("blurv");
-    pass->setSamplers({ "texture" });
+    auto pass = std::make_shared<PostProcessingPass>("blurv", m_quad);
+    pass->setSamplers({ "source" });
     pass->setInput({ Emissisiveness });
     pass->setOutput({ EmissisivenessBlur1 });
-    pass->setFragmentShader("data/blurv.frag");
+    pass->setFragmentShader("data/shader/gauss_blur_5_v.frag");
     add(pass);
 }
 
 void DefaultRenderPipeline::addBlurHorizontal() {
-    auto pass = std::make_shared<PostProcessingPass>("blurh");
-    pass->setSamplers({ "texture" });
-    pass->setInput({ EmissisivenessBlur1 });
+    auto pass = std::make_shared<PostProcessingPass>("blurh", m_quad);
+    pass->setSamplers({ "source" });
+    pass->setInput({ Color });
     pass->setOutput({ EmissisivenessBlur2 });
-    pass->setFragmentShader("data/blurh.frag");
+    pass->setFragmentShader("data/shader/gauss_blur_5_h.frag");
     add(pass);
 }
 
 void DefaultRenderPipeline::addBloom() {
-    auto pass = std::make_shared<PostProcessingPass>("bloom");
-    pass->setSamplers({ "texture" });
+    auto pass = std::make_shared<PostProcessingPass>("bloom", m_quad);
+    pass->setSamplers({ "source" });
     pass->setInput({ EmissisivenessBlur2 });
     pass->setOutput({ Bloom });
-    pass->setFragmentShader("data/bloom.frag");
+    pass->setFragmentShader("data/shader/bloom.frag");
     add(pass);
 }

@@ -2,16 +2,17 @@
 
 #include <vector>
 
+#include <glm/glm.hpp>
+
 #include <glow/ref_ptr.h>
 
-#include "geometry/size.h"
 
 namespace glow {
     class FrameBufferObject;
     class Texture;
 }
 
-enum Buffer {
+enum BufferName {
     Color = 0,
     NormalZ = 1,
     Emissisiveness = 2,
@@ -29,14 +30,17 @@ public:
     void clear();
 
     glow::FrameBufferObject& get();
-    void setDrawBuffers(std::vector<Buffer> buffers);
-    void setResolution(const Size<int>& resolution);
+    void setDrawBuffers(std::vector<BufferName> buffers);
+    
+    void setResolution(const glm::ivec2& resolution);
+    const glm::ivec2& resolution();
+
     glow::Texture* texture(int i);
 
 protected:
-    Size<int> m_resolution;
-    int m_colorAttachments;
-    bool m_depthAttachment;
+    int m_colorAttachmentCount;
+    bool m_useDepthAttachment;
+    glm::ivec2 m_resolution;
     glow::ref_ptr<glow::FrameBufferObject> m_fbo;
     
     void setupFBO();

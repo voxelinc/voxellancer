@@ -23,6 +23,5 @@ public:
 protected:
     BlitProgram* m_blitProgram;
 
-    void setupGeometry();
 };
 

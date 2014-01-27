@@ -10,6 +10,7 @@ layout(location=2) out vec4 emissiveness;
 
 void main() {
 	fragColor = texture(texCube, v_tex);
-    emissiveness = vec4(vec3(0.05),1.0);
+    float brightness = length(fragColor.xyz);
+    emissiveness = vec4(vec3(brightness*brightness), 1.0);
     normalz = vec4(0);
 }
