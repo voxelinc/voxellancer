@@ -17,7 +17,7 @@ public:
     
     void addBlurVertical();
     void addBlurHorizontal();
-    void addBloom();
+    void addFinalization();
 
 protected:
     Quad m_quad;

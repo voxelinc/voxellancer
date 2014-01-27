@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <glow/ref_ptr.h>
+#include <glow/Program.h>
 
 #include "renderpass.h"
 
@@ -26,7 +27,9 @@ public:
     void setInput(const std::vector<BufferName>& input);
     void setOutput(const std::vector<BufferName>& output);
     void setFragmentShader(const std::string& output);
-    void initialize();
+
+    template<typename T> 
+    void setUniform(const std::string& name, const T& value);
 
 protected:
     glow::ref_ptr<glow::Program> m_program;
@@ -38,4 +41,14 @@ protected:
     std::string m_vertexShader;
     Quad& m_quad;
 
+    void initialize();
 };
+
+
+template<typename T>
+void PostProcessingPass::setUniform(const std::string& name, const T& value) {
+    if (!m_program) {
+        initialize();
+    }
+    m_program->setUniform(name, value);
+}

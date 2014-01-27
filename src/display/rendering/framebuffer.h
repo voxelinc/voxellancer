@@ -13,13 +13,12 @@ namespace glow {
 }
 
 enum BufferName {
-    Color = 0,
-    NormalZ = 1,
-    Emissisiveness = 2,
-    EmissisivenessBlur1 = 3,
-    EmissisivenessBlur2 = 4,
-    Bloom = 5,
-    Combined = 6
+    Combined = 0,
+    Color,
+    NormalZ,
+    Emissisiveness,
+    BlurTmp,
+    Bloom,
 };
 
 class FrameBuffer {

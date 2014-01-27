@@ -67,6 +67,6 @@ void Bullet::spawnExplosion() {
 }
 
 float Bullet::emissiveness() {
-    return 0.4f;
+    return 1.0f;
 }
 

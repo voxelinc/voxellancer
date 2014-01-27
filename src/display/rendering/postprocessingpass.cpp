@@ -19,7 +19,6 @@ PostProcessingPass::PostProcessingPass(std::string name, Quad& quad) :
     m_fragmentShader(""),
     m_vertexShader("data/shader/screenquad.vert")
 {
-
 }
 
 void PostProcessingPass::bindFrameBuffer(FrameBuffer& frameBuffer) {
@@ -37,6 +36,9 @@ void PostProcessingPass::apply(FrameBuffer& frameBuffer) {
     if (!m_program) {
         initialize();
     }
+
+    glDisable(GL_DEPTH_TEST);
+
     m_program->setUniform("viewport", frameBuffer.resolution());
 
     bindFrameBuffer(frameBuffer);
