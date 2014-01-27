@@ -4,7 +4,8 @@
 #include "worldobject/hardpoint.h"
 #include "worldobject/ship.h"
 #include "bulletspawnhelper.h"
-
+#include "sound/sound.h"
+#include "sound/soundmanager.h"
 
 Gun::Gun() :
     m_range("weapons.GunRange"),
@@ -14,11 +15,11 @@ Gun::Gun() :
     Weapon::setCoolDownTime(m_cooldownTime);
 }
 
-AimType Gun::aimType(){
+AimType Gun::aimType() {
     return Point;
 }
 
-void Gun::update(float deltaSec){
+void Gun::update(float deltaSec) {
     Weapon::update(deltaSec);
 }
 
@@ -30,7 +31,7 @@ void Gun::shootAtPoint(Hardpoint* sourceHardpoint, glm::vec3 target) {
         bulletSpawnHelper.setupBullet();
 
         World::instance()->god().scheduleSpawn(bullet);
-
+        SoundManager::current()->play("data/sound/laser.ogg", sourceHardpoint->position())->setVolume(3);
         fired();
     }
 }

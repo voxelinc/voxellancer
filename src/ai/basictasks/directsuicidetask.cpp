@@ -1,6 +1,7 @@
 #include "directsuicidetask.h"
 
 #include "worldobject/ship.h"
+#include "ai/boardcomputer.h"
 #include "utils/geometryhelper.h"
 
 
