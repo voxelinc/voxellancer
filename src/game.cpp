@@ -2,6 +2,7 @@
 
 #include "etc/windowmanager.h"
 
+#include "sound/soundmanager.h"
 #include "gamescenario.h"
 
 
@@ -15,6 +16,7 @@ Game::Game():
 {
     m_viewer.setScene(&m_gameScene);
     m_viewer.setCameraHead(&m_player.cameraDolly().cameraHead());
+    m_gameScene.setCameraHead(&m_player.cameraDolly().cameraHead());
 }
 
 InputHandler& Game::inputHandler() {
@@ -34,6 +36,7 @@ HMDManager& Game::hmdManager() {
 }
 
 void Game::initialize() {
+    assert(m_viewer.scene() == &m_gameScene);
     GameScenario scenario;
     scenario.populate(this);
 }
@@ -42,9 +45,9 @@ void Game::update(float deltaSec) {
     if (deltaSec == 0.0f) {
         return;
     }
-
     deltaSec = glm::min(1.0f, deltaSec);
-
+    
+    m_viewer.update(deltaSec);
     World::instance()->update(deltaSec);
     m_player.update(deltaSec);
     m_inputHandler.update(deltaSec);
@@ -58,4 +61,3 @@ void Game::draw() {
 
     m_viewer.draw();
 }
-

@@ -1,7 +1,6 @@
 #include "splitter.h"
 #include <unordered_set>
 
-#include <glow/AutoTimer.h>
 
 #include "world/helper/splitdata.h"
 

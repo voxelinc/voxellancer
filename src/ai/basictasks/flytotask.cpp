@@ -1,6 +1,7 @@
 #include "flytotask.h"
 
 #include "worldobject/ship.h"
+#include "ai/boardcomputer.h"
 #include "utils/simplewayfind.h"
 
 

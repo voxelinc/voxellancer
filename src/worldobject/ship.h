@@ -1,12 +1,10 @@
 #pragma once
 
 #include <list>
+#include <memory>
+
 #include "worldobject.h"
-#include "world/world.h"
-#include "world/god.h"
-#include "property/propertymanager.h"
 #include "property/property.h"
-#include "ai/boardcomputer.h"
 
 class World;
 class God;
@@ -14,6 +12,8 @@ class Hardpoint;
 class Engine;
 class Character;
 class WorldObjectHandle;
+class Sound;
+class BoardComputer;
 
 class Ship : public WorldObject {
 public:
@@ -23,6 +23,8 @@ public:
     virtual void addHardpointVoxel(HardpointVoxel* voxel);
     void removeHardpoint(Hardpoint* hardpoint);
     virtual void addEngineVoxel(EngineVoxel* voxel);
+
+
     void removeEngine(Engine* engine);
 
     void setTargetObject(WorldObject* target);
@@ -37,11 +39,13 @@ public:
 
     void setCharacter(Character* character);
     Character* character();
-
+    void setEngineSound(std::shared_ptr<Sound> sound);
 
 protected:
     std::unique_ptr<Character> m_character;
-    BoardComputer m_boardComputer;
+    std::unique_ptr<BoardComputer> m_boardComputer;
+    std::shared_ptr<Sound> m_sound;
+    glm::vec3 m_enginePos;
 
     Property<float> prop_maxSpeed;
     Property<float> prop_maxRotSpeed;
@@ -50,4 +54,7 @@ protected:
     std::list<Engine*> m_engines;
 
     std::shared_ptr<WorldObjectHandle> m_targetObjectHandle;
+
+    void updateEnginePosition();
+
 };
