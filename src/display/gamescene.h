@@ -2,6 +2,8 @@
 
 #include <memory>
 
+#include <glm/glm.hpp>
+
 #include "scene.h"
 
 
@@ -20,7 +22,7 @@ public:
 
     void setCameraHead(CameraHead* head);
 
-    virtual void draw(Camera* camera, glow::FrameBufferObject* destination, const Viewport& viewPort) override;
+    virtual void draw(Camera* camera, glow::FrameBufferObject* destination, const glm::ivec2& resolution) override;
 
     void drawGame(Camera* camera);
 
@@ -28,7 +30,7 @@ public:
     virtual void activate();
     virtual void deactivate();
 
-    void setViewportResolution(const Size<int>& viewportResolution);
+    void setViewport(const glm::ivec2& viewport);
     void setOutputBuffer(int i);
 protected:
     Game* m_game;
@@ -39,6 +41,8 @@ protected:
     std::shared_ptr<HD3000Dummy> m_hd3000dummy;
     std::shared_ptr<SoundManager> m_soundManager;
     std::shared_ptr<RenderPipeline> m_renderPipeline;
-    int m_outputBuffer;
+
+    glm::ivec2 m_viewPort;
+    int m_currentOutputBuffer;
 };
 

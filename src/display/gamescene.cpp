@@ -12,7 +12,7 @@
 #include "rendering/framebuffer.h"
 #include "rendering/renderpipeline.h"
 
-GameScene::GameScene(Game* game):
+GameScene::GameScene(Game* game) :
     m_game(game),
     m_voxelRenderer(VoxelRenderer::instance()),
     m_hd3000dummy(new HD3000Dummy()),
@@ -20,21 +20,21 @@ GameScene::GameScene(Game* game):
     m_blitter(new MonoBlitProgram()),
     m_framebuffer(new FrameBuffer(8)),
     m_renderPipeline(RenderPipeline::getDefault()),
-    m_outputBuffer(0)
-{
+    m_currentOutputBuffer(0) {
 }
 
-void GameScene::draw(Camera* camera, glow::FrameBufferObject* destination, const Viewport& viewPort) {
+void GameScene::draw(Camera* camera, glow::FrameBufferObject* destination, const glm::ivec2& resolution) {
+    m_framebuffer->setResolution(resolution);
     m_framebuffer->clear();
 
     m_framebuffer->setDrawBuffers({ BufferName::Color, BufferName::NormalZ, BufferName::Emissisiveness });
     drawGame(camera);
-    
+
     m_renderPipeline->apply(*m_framebuffer);
 
     glDrawBuffer(GL_COLOR_ATTACHMENT0);
-    m_blitter->setSource(m_framebuffer->texture(m_outputBuffer));
-    m_blitter->setDestination(destination, viewPort);
+    m_blitter->setSource(m_framebuffer->texture(m_currentOutputBuffer));
+    m_blitter->setDestination(destination, Viewport(0, 0, m_viewPort.x, m_viewPort.y));
     m_blitter->blit();
 }
 
@@ -54,12 +54,12 @@ void GameScene::update(float deltaSec) {
     m_soundManager->setListener(m_head->position(), m_head->orientation());
 }
 
-void GameScene::setViewportResolution(const Size<int>& viewportResolution) {
-    m_framebuffer->setResolution(glm::ivec2(viewportResolution.width(), viewportResolution.height()));
+void GameScene::setViewport(const glm::ivec2& viewport) {
+    m_viewPort = viewport;
 }
 
 void GameScene::setOutputBuffer(int i) {
-    m_outputBuffer = i;
+    m_currentOutputBuffer = i;
 }
 
 void GameScene::drawGame(Camera* camera) {
@@ -75,5 +75,4 @@ void GameScene::drawGame(Camera* camera) {
     World::instance()->voxelParticleWorld().draw(*camera);
 
     m_hd3000dummy->drawIfActive();
-
 }

@@ -17,8 +17,10 @@ FrameBuffer::FrameBuffer(int colorAttachments, bool depthAttachment):
 }
 
 void FrameBuffer::setResolution(const glm::ivec2& resolution) {
-    m_resolution = resolution;
-    setupFBO();
+    if (resolution != m_resolution) {
+        m_resolution = resolution;
+        setupFBO();
+    }
 }
 
 void FrameBuffer::bind() {

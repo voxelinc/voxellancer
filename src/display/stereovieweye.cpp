@@ -42,11 +42,11 @@ void StereoViewEye::draw(Scene* scene, CameraHead* cameraHead) {
     m_camera.setOrientation(cameraHead->orientation());
 
     m_fbo->bind();
+    m_fbo->clear();
 
-    glClear(GL_DEPTH_BUFFER_BIT);
     glViewport(0, 0, m_textureSize.width(), m_textureSize.height());
 
-    scene->draw(&m_camera, &m_fbo->get(), Viewport(0, 0, m_textureSize.width(), m_textureSize.height()));
+    scene->draw(&m_camera, &m_fbo->get(), glm::ivec2(m_textureSize.width(), m_textureSize.height()));
 
     m_fbo->unbind();
 }
@@ -57,6 +57,6 @@ void StereoViewEye::setViewportResolution(const Size<int>& viewportResolution) {
 
     m_camera.setViewport(glm::ivec2(viewportResolution.width(), viewportResolution.height()));
 
-    m_fbo->setResolution(glm::ivec2(viewportResolution.width(), viewportResolution.height()));
+    m_fbo->setResolution(glm::ivec2(m_textureSize.width(), m_textureSize.height()));
 }
 
