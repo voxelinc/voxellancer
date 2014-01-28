@@ -3,6 +3,9 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include <glow/logging.hpp>
+
+
 #include "ui/hud/hud.h"
 
 
@@ -95,10 +98,10 @@ bool InputConfigurator::isConfiguring() {
 
 void InputConfigurator::startConfiguration(bool primary) {
     if (primary) {
-//        m_hud->printLine("Starting configuration for primary input device (keyboard), Please follow the instructions");
+        glow::info("Starting configuration for primary input device (keyboard), Please follow the instructions");
         primaryConfigurationState = 0;
     } else {
-//        m_hud->printLine("Starting configuration for secondary input device (gamepad/Joystick), Please follow the instructions");
+        glow::info("Starting configuration for secondary input device (gamepad/Joystick), Please follow the instructions");
         secondaryConfigurationState = 0;
     }
     displayedInstructions = false;
@@ -117,13 +120,13 @@ void InputConfigurator::update() {
 
 void InputConfigurator::setupPrimaryControls() {
     if (!displayedInstructions) {
-//        m_hud->printLine("Please press Joystick button or axis for action: " + m_actions->at(primaryConfigurationState)->name);
+        glow::info("Please press Joystick button or axis for action: %;", m_actions->at(primaryConfigurationState)->name);
         displayedInstructions = true;
     }
     if (beginningKeyConfiguration) {
         if (isSecondaryInput()) {
             if (!displayedKeyPressedWarning) {
-     //           m_hud->printLine("Please release all buttons before setting a new key mapping");
+                glow::info("Please release all buttons before setting a new key mapping");
                 displayedKeyPressedWarning = true;
             }
             return;
@@ -138,7 +141,7 @@ void InputConfigurator::setupPrimaryControls() {
     lastPrimaryInput = InputMapping();
     primaryConfigurationState++;
     if (primaryConfigurationState >= m_actions->size()) {
- //       m_hud->printLine("Joystick setup complete");
+        glow::info("Joystick setup complete");
         primaryConfigurationState = -1;
     }
     beginningKeyConfiguration = true;
@@ -148,13 +151,13 @@ void InputConfigurator::setupPrimaryControls() {
 
 void InputConfigurator::setupSecondaryControls() {
     if (!displayedInstructions) {
-//        m_hud->printLine("Please press Joystick button or axis for action: " + m_actions->at(secondaryConfigurationState)->name);
+        glow::info("Please press Joystick button or axis for action: %;", m_actions->at(secondaryConfigurationState)->name);
         displayedInstructions = true;
     }
     if (beginningKeyConfiguration) {
         if (isSecondaryInput()) {
             if (!displayedKeyPressedWarning) {
-  //              m_hud->printLine("Please release all buttons before setting a new key mapping");
+                glow::info("Please release all buttons before setting a new key mapping");
                 displayedKeyPressedWarning = true;
             }
             return;
@@ -169,7 +172,7 @@ void InputConfigurator::setupSecondaryControls() {
     lastSecondaryInput = InputMapping();
     secondaryConfigurationState++;
     if (secondaryConfigurationState >= m_actions->size()) {
- //       m_hud->printLine("Joystick setup complete");
+        glow::info("Joystick setup complete");
         secondaryConfigurationState = -1;
     }
     beginningKeyConfiguration = true;

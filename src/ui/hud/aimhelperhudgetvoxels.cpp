@@ -7,8 +7,8 @@
 
 AimHelperHudgetVoxels::AimHelperHudgetVoxels(AimHelperHudget* aimHelperHudget):
     m_aimHelperHudget(aimHelperHudget),
-    m_dot(0.2f),
-    m_circle(0.2f)
+    m_dot(0.04f),
+    m_circle(0.04f)
 {
     int color = 0xFFAA00;
     int radius = 5;

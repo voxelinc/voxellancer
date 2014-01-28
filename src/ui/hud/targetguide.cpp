@@ -2,7 +2,10 @@
 
 #include <algorithm>
 
+#include <glm/gtx/vector_angle.hpp>
+
 #include "utils/geometryhelper.h"
+#include "utils/tostring.h"
 
 #include "worldobject/ship.h"
 #include "worldobject/worldobject.h"
@@ -76,14 +79,23 @@ void TargetGuide::adjustArrowCount() {
 
 void TargetGuide::adjustArrows() {
     glm::quat targetOrientation = orientationToTarget();
+    float totalAngle = glm::radians(glm::angle(glm::inverse(m_hud->crossHair().orientationOffset()) * targetOrientation));
 
     for(int i = 0; i < m_arrows.size(); i++) {
         TargetGuideArrow* arrow = m_arrows[i];
 
-        arrow->setTargetOrientation(targetOrientation);
+        float angle = (i+1) * (1.0f / ARROWS_PER_RAD);
+        glm::quat orientation = glm::slerp(m_hud->crossHair().orientationOffset(), targetOrientation, angle / totalAngle);
 
-        glm::quat orientation = glm::slerp(m_hud->crossHair().orientationOffset(), targetOrientation, static_cast<float>(i+1) / (m_arrows.size() + 1));
         arrow->setRelativeOrientation(orientation);
+
+        glm::vec3 alpha = orientation * glm::vec3(1, 0, 0);
+        glm::vec3 targetVec = glm::inverse(m_hud->orientation()) * glm::normalize(target()->transform().position() - m_hud->position());
+        glm::vec3 arrowVec = orientation * glm::vec3(0, 0, -1);
+
+        glm::vec3 beta = targetVec - arrowVec;
+
+        arrow->setPointToOrientation(glm::quat(glm::vec3(0, 0, -GeometryHelper::angleBetween(alpha, beta))));
     }
 }
 

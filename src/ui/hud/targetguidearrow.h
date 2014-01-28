@@ -13,7 +13,7 @@ class TargetGuideArrow: public Hudget {
 public:
     TargetGuideArrow(TargetGuide* targetGuide);
 
-    void setTargetOrientation(const glm::quat& targetOrientation);
+    void setPointToOrientation(const glm::quat& targetOrientation);
     void setRelativeOrientation(const glm::quat& relativeOrientation);
 
     virtual glm::vec3 position() const override;
@@ -26,7 +26,7 @@ public:
 protected:
     TargetGuide* m_targetGuide;
     TargetGuideArrowVoxels m_voxels;
-    glm::quat m_targetOrientation;
+    glm::quat m_pointToOrientation;
     glm::quat m_relativeOrientation;
 };
 

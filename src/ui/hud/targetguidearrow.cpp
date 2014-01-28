@@ -11,8 +11,8 @@ TargetGuideArrow::TargetGuideArrow(TargetGuide* targetGuide):
 {
 }
 
-void TargetGuideArrow::setTargetOrientation(const glm::quat& targetOrientation) {
-    m_targetOrientation = targetOrientation;
+void TargetGuideArrow::setPointToOrientation(const glm::quat& pointToOrientation) {
+    m_pointToOrientation = pointToOrientation;
 }
 
 void TargetGuideArrow::setRelativeOrientation(const glm::quat& relativeOrientation) {
@@ -21,11 +21,11 @@ void TargetGuideArrow::setRelativeOrientation(const glm::quat& relativeOrientati
 
 glm::vec3 TargetGuideArrow::position() const {
     HUD* hud = m_targetGuide->hud();
-    return hud->position() + (hud->orientation() * m_relativeOrientation * glm::vec3(0, 0, -hud->sphere().radius()));
+    return m_hud->position() + m_targetGuide->hud()->orientation() * m_relativeOrientation * glm::vec3(0, 0, -m_hud->sphere().radius());
 }
 
 glm::quat TargetGuideArrow::orientation() const {
-    return m_targetGuide->hud()->orientation() * m_relativeOrientation;
+    return m_targetGuide->hud()->orientation() * m_relativeOrientation * m_pointToOrientation;
 }
 
 void TargetGuideArrow::update(float deltaSec) {

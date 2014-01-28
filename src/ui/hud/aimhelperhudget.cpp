@@ -16,7 +16,7 @@
 
 
 AimHelperHudget::AimHelperHudget(HUD* hud):
-    CircularHudget(hud, 4.0f),
+    CircularHudget(hud, 0.15f),
     m_voxels(this),
     m_distanceRange(m_hud->sphere().radius() * 2, m_hud->sphere().radius() * 10)
 {
@@ -80,7 +80,8 @@ void AimHelperHudget::calculateTargetPoint(WorldObject* targetObject) {
 
 void AimHelperHudget::calculatePosition() {
     glm::vec3 delta = m_targetPoint - m_hud->centerOfView();
-    float distance = m_distanceRange.clamp(glm::length(delta));
+    //float distance = m_distanceRange.clamp(glm::length(delta));
+    float distance = m_hud->sphere().radius();
     m_position = m_hud->centerOfView() + distance * glm::normalize(delta);
 }
 
