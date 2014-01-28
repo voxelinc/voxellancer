@@ -58,11 +58,11 @@ HUD& Player::hud() {
     return *m_hud;
 }
 
-const glm::vec3& Player::cameraPosition() {
+glm::vec3 Player::cameraPosition() {
     return m_cameraDolly->cameraHead().position();
 }
 
-const glm::quat& Player::cameraOrientation() {
+glm::quat Player::cameraOrientation() {
     return m_cameraDolly->cameraHead().orientation();
 }
 

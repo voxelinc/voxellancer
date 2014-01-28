@@ -317,7 +317,7 @@ void InputHandler::processTargetSelectActions() {
 
 glm::vec3 InputHandler::findTargetPoint() {
     glm::vec3 shootDirection(glm::normalize(m_player->hud().crossHair().position() - m_player->cameraPosition()));
-    
+
     Ray ray(
         m_player->hud().crossHair().position(),
         shootDirection

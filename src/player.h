@@ -25,8 +25,8 @@ public:
     CameraDolly& cameraDolly();
     HUD& hud();
 
-    const glm::vec3& cameraPosition();
-    const glm::quat& cameraOrientation();
+    glm::vec3 cameraPosition();
+    glm::quat cameraOrientation();
 
 protected:
     Handle<Ship> m_playerShip;
