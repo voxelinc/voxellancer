@@ -33,7 +33,7 @@ void GameScene::draw(Camera* camera, glow::FrameBufferObject* target, const glm:
 
     m_renderPipeline->apply(*m_framebuffer);
 
-    m_blitter->setInput({ static_cast<BufferName>(m_currentOutputBuffer) });
+    m_blitter->setInputMapping({ { "source", static_cast<BufferName>(m_currentOutputBuffer) } });
     m_blitter->apply(*m_framebuffer, target);
 }
 

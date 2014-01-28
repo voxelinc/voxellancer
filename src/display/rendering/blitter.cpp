@@ -9,9 +9,8 @@
 Blitter::Blitter() :
     PostProcessingPass("blitter", *new Quad())
 {
-    setInput({ BufferName::Default });
+    setInputMapping({ { "source", BufferName::Default } });
     setOutput({ BufferName::Default });
-    setSamplers({ "source" });
     setFragmentShader("data/shader/blit.frag");
 }
 
