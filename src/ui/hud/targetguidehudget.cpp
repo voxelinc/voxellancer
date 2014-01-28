@@ -17,9 +17,17 @@ glm::quat TargetGuideHudget::orientation() const {
 }
 
 void TargetGuideHudget::update(float deltaSec) {
+    setVisible(target() != nullptr);
 
+    if(target()) {
+        adjustArrowCount();
+        adjustArrows();
+    }
 }
 
 void TargetGuideHudget::draw() {
-
+    for(TargetGuideArrow& arrow : m_arrows) {
+        arrow.draw();
+    }
 }
+
