@@ -52,7 +52,7 @@ public:
 
 protected:
     std::unordered_map<glm::ivec3, Voxel*> m_voxels;
-    std::shared_ptr<VoxelRenderData> m_voxelRenderData;
+    std::unique_ptr<VoxelRenderData> m_voxelRenderData;
     WorldTransform m_transform;
 
 

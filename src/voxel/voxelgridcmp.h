@@ -1,5 +1,7 @@
 #pragma once
 
+#include "geometry/axis.h"
+
 class Voxel;
 
 template<Axis highPriorityAxis, Axis middlePriorityAxis, Axis lowPriorityAxis>

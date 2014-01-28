@@ -13,6 +13,7 @@ class HUD;
 class Player {
 public:
     Player();
+    ~Player();
 
     void setShip(Ship *ship);
 

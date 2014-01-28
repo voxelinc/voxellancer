@@ -16,10 +16,12 @@
 GameScene::GameScene(Game* game):
     m_game(game),
     m_voxelRenderer(VoxelRenderer::instance()),
-    m_hd3000dummy(new HD3000Dummy()),
+    m_hd3000dummy(std::unique_ptr<HD3000Dummy>(new HD3000Dummy())),
     m_soundManager(new SoundManager())
 {
 }
+
+GameScene::~GameScene() = default;
 
 void GameScene::draw(Camera* camera) {
     World::instance()->skybox().draw(camera);
@@ -54,3 +56,4 @@ void GameScene::setPlayer(Player* player) {
 void GameScene::update(float deltaSec) {
     m_soundManager->setListener(m_player->cameraPosition(), m_player->cameraOrientation());
 }
+

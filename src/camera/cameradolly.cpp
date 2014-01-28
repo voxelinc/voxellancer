@@ -9,6 +9,9 @@ CameraDolly::CameraDolly():
 {
 }
 
+CameraDolly::~CameraDolly() {
+}
+
 CameraHead& CameraDolly::cameraHead() {
     return m_cameraHead;
 }
@@ -24,4 +27,3 @@ void CameraDolly::update(float deltaSec) {
         follow(m_followHelper.followPosition(), followWorldObject->transform().orientation(), deltaSec);
     }
 }
-

@@ -44,7 +44,7 @@ public:
 
 
 protected:
-    std::shared_ptr<VoxelTree> m_voxelTree;
+    std::unique_ptr<VoxelTree> m_voxelTree;
     WorldObject& m_worldObject;
     WorldTreeGeode* m_geode;
     WorldTree* m_worldTree;

@@ -13,6 +13,8 @@ Player::Player():
 
 }
 
+Player::~Player() = default;
+
 void Player::move(const glm::vec3& direction) {
     m_acceleration += direction;
 }
@@ -65,5 +67,6 @@ glm::vec3 Player::cameraPosition() {
 glm::quat Player::cameraOrientation() {
     return m_cameraDolly->cameraHead().orientation();
 }
+
 
 
