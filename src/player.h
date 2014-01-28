@@ -30,8 +30,8 @@ public:
 
 protected:
     Handle<Ship> m_playerShip;
-    std::shared_ptr<CameraDolly> m_cameraDolly;
-    std::shared_ptr<HUD> m_hud;
+    std::unique_ptr<CameraDolly> m_cameraDolly;
+    std::unique_ptr<HUD> m_hud;
 
     glm::vec3 m_acceleration;
     glm::vec3 m_accelerationAngular;

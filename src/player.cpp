@@ -6,8 +6,8 @@
 
 
 Player::Player():
-    m_hud(std::make_shared<HUD>(this)),
-    m_cameraDolly(std::make_shared<CameraDolly>()),
+    m_hud(std::unique_ptr<HUD>(new HUD(this))),
+    m_cameraDolly(std::unique_ptr<CameraDolly>(new CameraDolly())),
     m_playerShip(nullptr)
 {
 

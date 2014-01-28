@@ -4,6 +4,7 @@
 #include "voxeleffect/voxelparticleworld.h"
 #include "utils/hd3000dummy.h"
 #include "sound/soundmanager.h"
+#include "collision/collisiondetector.h"
 
 #include "worldobject/worldobject.h"
 #include "game.h"

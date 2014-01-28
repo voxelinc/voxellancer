@@ -7,7 +7,7 @@
 #include "world/world.h"
 #include "player.h"
 #include "camera/cameradolly.h"
-
+#include "ui/hud.h"
 
 Game::Game():
     m_inputHandler(&m_player),
