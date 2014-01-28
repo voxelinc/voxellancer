@@ -16,7 +16,7 @@
 GameScene::GameScene(Game* game):
     m_game(game),
     m_voxelRenderer(VoxelRenderer::instance()),
-    m_hd3000dummy(std::unique_ptr<HD3000Dummy>(new HD3000Dummy())),
+    m_hd3000dummy(new HD3000Dummy()),
     m_soundManager(new SoundManager())
 {
 }

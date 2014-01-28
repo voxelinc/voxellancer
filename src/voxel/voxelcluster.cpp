@@ -16,7 +16,7 @@
 
 VoxelCluster::VoxelCluster(float scale):
     m_voxels(),
-    m_voxelRenderData(std::unique_ptr<VoxelRenderData>(new VoxelRenderData(m_voxels))),
+    m_voxelRenderData(new VoxelRenderData(m_voxels)),
     m_transform(glm::vec3(0), scale),
     m_minimalGridSphereValid(false),
     m_minimalGridAABBValid(false),

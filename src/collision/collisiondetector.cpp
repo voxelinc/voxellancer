@@ -14,7 +14,7 @@
 
 
 CollisionDetector::CollisionDetector(WorldObject& worldObject) :
-    m_voxelTree(std::unique_ptr<VoxelTree>(new VoxelTree(&worldObject))),
+    m_voxelTree(new VoxelTree(&worldObject)),
     m_worldTree(nullptr),
     m_geode(nullptr),
     m_worldObject(worldObject)
