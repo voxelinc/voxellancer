@@ -69,7 +69,6 @@ void Ship::removeEngine(Engine* engine) {
 }
 
 void Ship::setTargetObject(WorldObject* target) {
-    std::cout << "Target: " << (target ? target->objectInfo().name() : std::string("none")) << std::endl;
     m_targetObjectHandle = target ? target->handle() : WorldObjectHandle::nullHandle();
 }
 

@@ -18,6 +18,9 @@ public:
 
     HUD* hud();
 
+    bool visible() const;
+    void setVisible(bool visible);
+
     bool pressed() const;
     bool hovered() const;
 
@@ -48,6 +51,9 @@ public:
 
 protected:
     HUD* m_hud;
+
+    bool m_visible;
+
     bool m_pressed;
     bool m_hovered;
     bool m_clicked;

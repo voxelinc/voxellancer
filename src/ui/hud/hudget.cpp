@@ -5,6 +5,7 @@
 
 Hudget::Hudget(HUD* hud):
     m_hud(hud),
+    m_visible(true),
     m_pressed(false),
     m_hovered(false),
     m_clicked(false),
@@ -17,6 +18,14 @@ Hudget::Hudget(HUD* hud):
 
 HUD* Hudget::hud() {
     return m_hud;
+}
+
+bool Hudget::visible() const {
+    return m_visible;
+}
+
+void Hudget::setVisible(bool visible) {
+    m_visible = visible;
 }
 
 bool Hudget::pressed() const {

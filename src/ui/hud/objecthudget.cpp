@@ -34,7 +34,7 @@ void ObjectHudget::update(float deltaSec) {
 
     calculateOpeningAngle();
 
-    glm::vec3 direction = glm::inverse(m_hud->orientation()) * (worldObject->transform().position() - m_hud->position());
+    glm::vec3 direction = glm::inverse(m_hud->orientation()) * (worldObject->transform().position() - m_hud->centerOfView());
     m_orientationOffset = Math::differenceFromViewDirection(direction);
 }
 
@@ -46,7 +46,7 @@ void ObjectHudget::calculateOpeningAngle() {
     WorldObject* worldObject = m_objectDelegate->worldObject();
 
     float radius = worldObject->bounds().sphere().radius();
-    float distance = glm::length(m_hud->position() - worldObject->transform().position());
+    float distance = glm::length(m_hud->centerOfView() - worldObject->transform().position());
     float alpha = std::atan2(radius, distance);
 
     alpha = std::max(alpha, 0.05f); // Hack, set minimum size

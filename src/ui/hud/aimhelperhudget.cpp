@@ -43,24 +43,40 @@ void AimHelperHudget::update(float deltaSec) {
     Ship* ship = m_hud->player()->playerShip();
     WorldObject* targetObject = ship->targetObject();
 
-    if(targetObject) {
-        if(!ship->hardpoints().empty()) {
-            m_targetPoint = glm::vec3(0.0f, 0.0f, 0.0f);
-
-            for(Hardpoint* hardpoint : ship->hardpoints()) {
-                HardpointAimHelper aimHelper(hardpoint, targetObject);
-                aimHelper.aim();
-                m_targetPoint += aimHelper.point();
-            }
-            m_targetPoint /= ship->hardpoints().size();
-        }
-
+    if (targetObject) {
+        calculateTargetPoint(targetObject);
         calculatePosition();
+    } else {
+        setVisible(false);
     }
 }
 
 void AimHelperHudget::draw() {
     m_voxels.draw();
+}
+
+void AimHelperHudget::calculateTargetPoint(WorldObject* targetObject) {
+    int hitableHardpointCount = 0;
+    Ship* ship = m_hud->player()->playerShip();
+
+    m_targetPoint = glm::vec3(0.0f, 0.0f, 0.0f);
+
+    for(Hardpoint* hardpoint : ship->hardpoints()) {
+        HardpointAimHelper aimHelper(hardpoint, targetObject);
+        aimHelper.aim();
+
+        if(aimHelper.isHitable()) {
+            m_targetPoint += aimHelper.point();
+            hitableHardpointCount++;
+        }
+    }
+
+    if(hitableHardpointCount > 0) {
+        setVisible(true);
+        m_targetPoint /= hitableHardpointCount;
+    } else {
+        setVisible(false);
+    }
 }
 
 void AimHelperHudget::calculatePosition() {

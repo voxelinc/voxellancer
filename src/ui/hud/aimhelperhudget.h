@@ -34,7 +34,7 @@ protected:
     glm::vec3 m_targetPoint;
     Range m_distanceRange;
 
-
+    void calculateTargetPoint(WorldObject* targetObject);
     void calculatePosition();
 };
 

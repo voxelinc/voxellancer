@@ -113,15 +113,17 @@ void HUD::update(float deltaSec) {
 
     Ray toCrossHair = Ray::fromTo(m_player->cameraDolly().cameraHead().position(), m_crossHair.position());
 
-    for(Hudget* hudget : m_hudgets) {
+    for (Hudget* hudget : m_hudgets) {
         hudget->pointerAt(toCrossHair, false);
         hudget->update(deltaSec);
     }
 }
 
 void HUD::draw() {
-    for(Hudget* hudget : m_hudgets) {
-        hudget->draw();
+    for (Hudget* hudget : m_hudgets) {
+        if (hudget->visible()) {
+            hudget->draw();
+        }
     }
 }
 
