@@ -8,6 +8,8 @@
 #include "worldobject/weapons/gun.h"
 #include "worldobject/weapons/rocketlauncher.h"
 #include "ai/character.h"
+#include "ai/boardcomputer.h"
+#include "sound/sound.h"
 
 
 Ship::Ship() :
@@ -17,7 +19,7 @@ Ship::Ship() :
     prop_maxSpeed("ship.maxSpeed"),
     prop_maxRotSpeed("ship.maxRotSpeed"),
     m_character(new Character(*this)),
-    m_boardComputer(*this),
+    m_boardComputer(new BoardComputer(*this)),
     m_targetObjectHandle(WorldObjectHandle::nullHandle())
 {
 }
@@ -30,6 +32,10 @@ void Ship::update(float deltaSec) {
 
     for (Engine *engine : m_engines) {
         engine->update(deltaSec);
+    }
+
+    if (m_sound) {
+        m_sound->setPosition(m_transform.applyTo(m_enginePos));
     }
 
     WorldObject::update(deltaSec);
@@ -62,6 +68,9 @@ void Ship::addEngineVoxel(EngineVoxel* voxel) {
     voxel->setEngine(engine);
     m_engines.push_back(engine);
     addVoxel(voxel);
+
+    updateEnginePosition();
+
 }
 
 void Ship::removeEngine(Engine* engine) {
@@ -118,5 +127,20 @@ void Ship::setCharacter(Character* character) {
 
 Character* Ship::character() {
     return m_character.get();
+}
+
+void Ship::setEngineSound(std::shared_ptr<Sound> sound) {
+    m_sound = sound;
+    sound->setLooping(true);
+    sound->setPosition(m_transform.applyTo(m_enginePos));
+    sound->play();
+}
+
+void Ship::updateEnginePosition() {
+    m_enginePos = glm::vec3(0);
+    for (const Engine* engine : m_engines) {
+        m_enginePos += engine->positionInGrid();
+    }
+    m_enginePos /= m_engines.size();
 }
 

@@ -12,6 +12,7 @@
 #include "utils/geometryhelper.h"
 
 #include "player.h"
+#include "world/world.h"
 
 #include "hudget.h"
 #include "hudobjectdelegate.h"

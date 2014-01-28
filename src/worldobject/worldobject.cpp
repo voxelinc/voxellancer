@@ -1,7 +1,5 @@
 #include "worldobject.h"
 
-#include <glow/AutoTimer.h>
-
 #include "utils/tostring.h"
 #include "voxel/specialvoxels/enginevoxel.h"
 #include "voxel/specialvoxels/hardpointvoxel.h"

@@ -19,16 +19,16 @@ glm::quat GeometryHelper::quatFromTo(const glm::vec3& u, const glm::vec3& v) {
     return glm::angleAxis(angle, glm::normalize(w));
 }
 
-glm::quat GeometryHelper::quatFromViewDirection(const glm::vec3& dir) {
-    glm::vec3 nd = glm::normalize(dir);
+glm::quat GeometryHelper::quatFromViewDirection(const glm::vec3& direction) {
+    glm::vec3 v = direction;
+    glm::vec3 u = glm::vec3(0, 0, -1);
 
-    glm::vec3 euler(
-        std::asin(nd.y),
-        -std::asin(nd.x),
-        0.0f
-        );
-
-    return glm::quat(euler);
+    float angle = glm::degrees(angleBetween(u, v));
+    glm::vec3 w = glm::cross(u, v);
+    if (w == glm::vec3(0)) {
+        w = RandVec3::randUnitVec();
+    }
+    return glm::angleAxis(angle, glm::normalize(w));
 }
 
 WorldObject* GeometryHelper::closestObject(WorldObject& self, std::set<WorldObject*>* objects){

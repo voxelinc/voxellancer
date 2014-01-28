@@ -7,7 +7,6 @@
 #include "world.h"
 #include "god.h"
 
-#include <glow/AutoTimer.h>
 
 
 WorldLogic::WorldLogic(World &world):

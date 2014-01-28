@@ -8,10 +8,17 @@
 
 #include <GL/glew.h>
 
+#ifdef WIN32
+#include <GL/wglew.h>
+#endif
+
 #include <GLFW/glfw3.h>
 
-#include <glow/logging.h>
+#include <glow/Version.h>
 #include <glow/global.h>
+#include <glow/logging.h>
+#include <glow/debugmessageoutput.h>
+#include <glowutils/global.h>
 #include <glowutils/FileRegistry.h>
 
 #include "etc/windowmanager.h"
@@ -36,12 +43,13 @@ static Game* game;
 static void checkVersion() {
     glow::info("OpenGL Version Needed %;.%; (%;.%; Found)",
         MajorVersionRequire, MinorVersionRequire,
-        glow::query::majorVersion(), glow::query::minorVersion());
-    glow::info("version %;", glow::query::version().toString());
-    glow::info("vendor: %;", glow::query::vendor());
-    glow::info("renderer %;", glow::query::renderer());
-    glow::info("core profile: %;", glow::query::isCoreProfile() ? "true" : "false");
-    glow::info("GLSL version: %;\n", glow::query::getString(GL_SHADING_LANGUAGE_VERSION));
+        glow::Version::currentMajorVersion(), glow::Version::currentMinorVersion());
+    glow::info("version %;", glow::Version::current().toString());
+    glow::info("vendor: %;", glow::Version::vendor());
+    glow::info("renderer %;", glow::Version::renderer());
+    glow::info("core profile: %;", glow::Version::currentVersionIsInCoreProfile() ? "true" : "false");
+    glow::info("GLSL version: %;", glow::getString(GL_SHADING_LANGUAGE_VERSION));
+    glow::info("GL Versionstring: %;\n", glow::Version::versionString());
 }
 
 static void errorCallback(int error, const char* description) {
@@ -150,9 +158,9 @@ int main(int argc, char* argv[]) {
     glClearColor(0.0f, 0.0f, 0.3f, 1.0f);
 
 #ifdef WIN32 // TODO: find a way to correctly detect debug extension in linux
-    glow::DebugMessageOutput::enable();
+    glow::debugmessageoutput::enable();
 #endif
-
+ 
 #ifdef WIN32
     wglSwapIntervalEXT(1); // glfw doesn't work!?
 #else

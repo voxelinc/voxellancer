@@ -4,8 +4,7 @@
 
 #include <glow/Shader.h>
 #include <glow/VertexAttributeBinding.h>
-#include <glowutils/File.h>
-#include <glowutils/MathMacros.h>
+#include <glowutils/global.h>
 
 #include "world/world.h"
 #include "worldtree/worldtreequery.h"
@@ -16,6 +15,7 @@
 #include "worldobject/worldobject.h"
 #include "worldtree/worldtreegeode.h"
 #include "geometry/point.h"
+#include "utils/math.h"
 
 
 struct ParticleData {
@@ -152,7 +152,7 @@ void VoxelParticleWorld::setBufferSize(int size) {
 
 void VoxelParticleWorld::updateBuffers() {
     if (m_particles.size() > m_bufferSize) {
-        setBufferSize(nextPowerOf2(m_particles.size()));
+        setBufferSize(Math::nextPowerOf2(m_particles.size()));
     }
     ParticleData* particleData = static_cast<ParticleData*>(m_particleDataBuffer->mapRange(0, m_particles.size() * sizeof(ParticleData), GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT));
 

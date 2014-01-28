@@ -6,10 +6,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 
-#include <glow/DebugMessageOutput.h>
 #include <glow/ChangeListener.h>
 #include <glow/logging.h>
-#include <glowutils/MathMacros.h>
 
 #include "utils/tostring.h"
 

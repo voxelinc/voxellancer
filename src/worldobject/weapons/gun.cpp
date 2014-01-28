@@ -4,6 +4,8 @@
 #include "worldobject/hardpoint.h"
 #include "worldobject/ship.h"
 #include "bullettransformhelper.h"
+#include "sound/sound.h"
+#include "sound/soundmanager.h"
 
 
 Gun::Gun() :
@@ -38,7 +40,7 @@ void Gun::shootAtPoint(Hardpoint* sourceHardpoint, glm::vec3 target) {
         bulletTransformHelper.transform();
 
         World::instance()->god().scheduleSpawn(bullet);
-
+        SoundManager::current()->play("data/sound/laser.ogg", sourceHardpoint->position())->setVolume(3);
         fired();
     }
 }
