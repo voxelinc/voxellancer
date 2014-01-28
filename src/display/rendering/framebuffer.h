@@ -29,7 +29,7 @@ public:
     void clear();
 
     glow::FrameBufferObject& get();
-    void setDrawBuffers(std::vector<BufferName> buffers);
+    void setDrawBuffers(const std::vector<BufferName>& buffers);
     
     void setResolution(const glm::ivec2& resolution);
     const glm::ivec2& resolution();
