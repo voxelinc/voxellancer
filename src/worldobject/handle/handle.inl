@@ -17,6 +17,11 @@ T* Handle<T>::get() {
 }
 
 template<class T>
+T* Handle<T>::operator->() {
+    return m_impl->get();
+}
+
+template<class T>
 bool Handle<T>::valid() const {
     return m_impl->valid();
 }

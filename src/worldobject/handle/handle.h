@@ -14,6 +14,7 @@ public:
     explicit Handle(T* object);
 
     T* get();
+    T* operator->();
 
     bool valid() const;
 
