@@ -47,8 +47,8 @@ void GameScene::deactivate() {
     m_soundManager->deactivate();
 }
 
-void GameScene::setPlayer(Player* head) {
-    m_player = head;
+void GameScene::setPlayer(Player* player) {
+    m_player = player;
 }
 
 void GameScene::update(float deltaSec) {
