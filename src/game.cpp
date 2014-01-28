@@ -1,5 +1,7 @@
 #include "game.h"
 
+#include <GL/glew.h>
+
 #include "etc/windowmanager.h"
 
 #include "sound/soundmanager.h"
