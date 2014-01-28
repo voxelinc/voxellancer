@@ -8,9 +8,17 @@
 
 CrossHair::CrossHair(HUD* hud):
     Hudget(hud),
-    m_crossHairVoxels(this)
+    m_voxels(this)
 {
 
+}
+
+bool CrossHair::actionActive() const {
+    return m_actionActive;
+}
+
+void CrossHair::setActionActive(bool actionActive) {
+    m_actionActive = actionActive;
 }
 
 glm::vec3 CrossHair::position() const {
@@ -34,6 +42,6 @@ void CrossHair::update(float deltaSec) {
 }
 
 void CrossHair::draw() {
-    m_crossHairVoxels.draw();
+    m_voxels.draw();
 }
 

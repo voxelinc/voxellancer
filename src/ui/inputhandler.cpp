@@ -160,10 +160,13 @@ void InputHandler::processMouseUpdate() {
     double x, y;
     glfwGetCursorPos(glfwGetCurrentContext(), &x, &y);
 
+    bool pressed = glfwGetMouseButton(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS;
+
+    m_player->hud().crossHair().setActionActive(pressed);
 
     placeCrossHair(x, y);
 
-    if (glfwGetMouseButton(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+    if (pressed) {
         m_player->fire();
     }
 
@@ -265,6 +268,8 @@ float InputHandler::getInputValue(InputMapping mapping) {
 }
 
 void InputHandler::processFireActions() {
+    m_player->hud().crossHair().setActionActive(getInputValue(&fireAction));
+
     if (getInputValue(&fireAction)) {
         m_player->fire();
     }

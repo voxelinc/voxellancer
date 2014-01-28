@@ -4,7 +4,7 @@
 
 #include <glm/glm.hpp>
 
-#include "utils/math.h"
+#include "utils/geometryhelper.h"
 #include "hudobjectdelegate.h"
 
 #include "hud.h"
@@ -35,7 +35,7 @@ void ObjectHudget::update(float deltaSec) {
     calculateOpeningAngle();
 
     glm::vec3 direction = glm::inverse(m_hud->orientation()) * (worldObject->transform().position() - m_hud->centerOfView());
-    m_orientationOffset = Math::differenceFromViewDirection(direction);
+    m_orientationOffset = GeometryHelper::quatFromViewDirection(direction);
 }
 
 void ObjectHudget::draw() {

@@ -16,6 +16,7 @@
 
 #include "crosshair.h"
 #include "aimhelperhudget.h"
+#include "targetguide.h"
 
 
 class Player;
@@ -32,6 +33,7 @@ public:
 
     CrossHair& crossHair();
     AimHelperHudget& aimHelper();
+    TargetGuide& targetGuide();
 
     glm::vec3 centerOfView() const;
     glm::vec3 position() const;
@@ -58,6 +60,7 @@ protected:
 
     CrossHair m_crossHair;
     AimHelperHudget m_aimHelper;
+    TargetGuide m_targetGuide;
 
     std::list<Hudget*> m_hudgets;
 

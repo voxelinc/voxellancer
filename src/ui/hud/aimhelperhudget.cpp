@@ -2,7 +2,6 @@
 
 #include <iostream>
 
-#include "utils/math.h"
 #include "utils/geometryhelper.h"
 #include "utils/tostring.h"
 
@@ -34,7 +33,7 @@ glm::vec3 AimHelperHudget::position() const {
 
 glm::quat AimHelperHudget::orientation() const {
     glm::vec3 direction = glm::inverse(m_hud->orientation()) * (position() - m_hud->centerOfView());
-    glm::quat orientationOffset = Math::differenceFromViewDirection(direction);
+    glm::quat orientationOffset = GeometryHelper::quatFromViewDirection(direction);
 
     return m_hud->orientation() * orientationOffset;
 }
