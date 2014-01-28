@@ -5,9 +5,7 @@
 #include "voxel/specialvoxels/hardpointvoxel.h"
 #include "voxel/specialvoxels/cockpitvoxel.h"
 #include "voxel/specialvoxels/fuelvoxel.h"
-
-#include "worldobjecthandle.h"
-
+#include "worldobject/handle/handle.h"
 
 WorldObject::WorldObject(CollisionFilterClass collisionFilterClass):
     WorldObject(1.0f, collisionFilterClass)
@@ -21,13 +19,13 @@ WorldObject::WorldObject(float scale, CollisionFilterClass collisionFilterClass)
     m_collisionDetector(*this),
     m_objectInfo(),
     m_crucialVoxel(nullptr),
-    m_handle(new WorldObjectHandle(this)),
+    m_handle(Handle<WorldObject>(this)),
     m_scheduledForDeletion(false)
 {
 }
 
  WorldObject::~WorldObject() {
-     m_handle->invalidate();
+     m_handle.invalidate();
 }
 
 CollisionDetector& WorldObject::collisionDetector() {
@@ -122,7 +120,7 @@ void WorldObject::onSpawnFail() {
 
 }
 
-std::shared_ptr<WorldObjectHandle> WorldObject::handle() const {
+Handle<WorldObject>& WorldObject::handle() {
     return m_handle;
 }
 

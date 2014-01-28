@@ -4,6 +4,9 @@
 
 #include "sound/soundmanager.h"
 #include "gamescenario.h"
+#include "world/world.h"
+#include "player.h"
+#include "camera/cameradolly.h"
 
 
 Game::Game():
@@ -14,7 +17,7 @@ Game::Game():
 {
     m_viewer.setScene(&m_gameScene);
     m_viewer.setCameraHead(&m_player.cameraDolly().cameraHead());
-    m_gameScene.setCameraHead(&m_player.cameraDolly().cameraHead());
+    m_gameScene.setPlayer(&m_player);
 }
 
 InputHandler& Game::inputHandler() {

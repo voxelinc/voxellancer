@@ -5,7 +5,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 
-#include "worldobject/worldobjecthandle.h"
+#include "worldobject/handle/handle.h"
 
 
 class Ship;
@@ -18,8 +18,8 @@ public:
     
     void moveTo(glm::vec3 position);
     void rotateTo(glm::quat orientation);
-    void shootBullet(const std::list<std::shared_ptr<WorldObjectHandle>>& targets);
-    void ShootRockets(std::shared_ptr<WorldObjectHandle> target);
+    void shootBullet(const std::list<Handle<WorldObject>>& targets);
+    void ShootRockets(Handle<WorldObject> target);
 
 protected:
     Ship& m_ship;

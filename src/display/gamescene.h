@@ -8,13 +8,13 @@ class Game;
 class VoxelRenderer;
 class HD3000Dummy;
 class SoundManager;
-class CameraHead;
+class Player;
 
 class GameScene: public Scene {
 public:
     GameScene(Game* game);
 
-    void setCameraHead(CameraHead* head);
+    void setPlayer(Player* head);
 
     virtual void draw(Camera* camera) override;
     virtual void update(float deltaSec);
@@ -23,7 +23,7 @@ public:
 
 protected:
     Game* m_game;
-    CameraHead* m_head;
+    Player* m_player;
     std::shared_ptr<VoxelRenderer> m_voxelRenderer;
     std::shared_ptr<HD3000Dummy> m_hd3000dummy;
     std::shared_ptr<SoundManager> m_soundManager;

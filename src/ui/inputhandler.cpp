@@ -12,6 +12,10 @@
 #include "etc/windowmanager.h"
 
 #include "worldobject/worldobject.h"
+#include "player.h"
+#include "hud.h"
+#include "worldobject/ship.h"
+#include "camera/cameradolly.h"
 
 
 /*
@@ -306,8 +310,8 @@ void InputHandler::processTargetSelectActions() {
 }
 
 glm::vec3 InputHandler::findTargetPoint() {
-    glm::vec3 shootDirection(glm::normalize(m_player->hud().crossHair().position() - m_player->cameraDolly().cameraHead().position()));
-
+    glm::vec3 shootDirection(glm::normalize(m_player->hud().crossHair().position() - m_player->cameraPosition()));
+    
     Ray ray(
         m_player->hud().crossHair().position(),
         shootDirection

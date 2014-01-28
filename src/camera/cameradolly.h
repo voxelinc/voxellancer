@@ -1,12 +1,10 @@
 #pragma once
 
-
 #include "utils/inertiafollower.h"
 #include "camerahead.h"
 #include "camerafollowhelper.h"
 
 class WorldObject;
-class WorldObjectHandle;
 
 class CameraDolly: public InertiaFollower {
 public:

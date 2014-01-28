@@ -1,27 +1,34 @@
 #include "player.h"
 
+#include "ui/hud.h"
+#include "camera/cameradolly.h"
+#include "worldobject/ship.h"
+
+
 Player::Player():
-    m_hud(this)
+    m_hud(std::make_shared<HUD>(this)),
+    m_cameraDolly(std::make_shared<CameraDolly>()),
+    m_playerShip(nullptr)
 {
 
 }
 
-void Player::move(glm::vec3 direction) {
+void Player::move(const glm::vec3& direction) {
     m_acceleration += direction;
 }
 
-void Player::rotate(glm::vec3 direction) {
+void Player::rotate(const glm::vec3& direction) {
     m_accelerationAngular += direction;
 }
 
 void Player::setShip(Ship* ship) {
     m_playerShip = ship;
-    m_cameraDolly.followWorldObject(ship);
+    m_cameraDolly->followWorldObject(ship);
 }
 
 void Player::update(float deltaSec) {
-    m_cameraDolly.update(deltaSec);
-    m_hud.update(deltaSec);
+    m_cameraDolly->update(deltaSec);
+    m_hud->update(deltaSec);
 
     if (m_acceleration != glm::vec3(0)) {
         m_acceleration = glm::normalize(m_acceleration);
@@ -39,15 +46,23 @@ void Player::update(float deltaSec) {
 }
 
 Ship* Player::playerShip() {
-    return m_playerShip;
+    return m_playerShip.get();
 }
 
 CameraDolly& Player::cameraDolly() {
-    return m_cameraDolly;
+    return *m_cameraDolly;
 }
 
 HUD& Player::hud() {
-    return m_hud;
+    return *m_hud;
+}
+
+const glm::vec3& Player::cameraPosition() {
+    return m_cameraDolly->cameraHead().position();
+}
+
+const glm::quat& Player::cameraOrientation() {
+    return m_cameraDolly->cameraHead().orientation();
 }
 
 

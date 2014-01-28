@@ -9,13 +9,13 @@
 #include "voxel/voxelcluster.h"
 #include "ui/objectinfo.h"
 #include "world/god.h"
+#include "handle/handle.h"
 
 
 class EngineVoxel;
 class HardpointVoxel;
 class CockpitVoxel;
 class FuelVoxel;
-class WorldObjectHandle;
 
 class WorldObject : public VoxelCluster, public CollisionFilterable
 {
@@ -54,7 +54,7 @@ public:
     virtual void onCollision();
     virtual void onSpawnFail();
 
-    std::shared_ptr<WorldObjectHandle> handle() const;
+    Handle<WorldObject>& handle();
 
     bool scheduledForDeletion();
 
@@ -67,7 +67,7 @@ protected:
     CollisionDetector m_collisionDetector;
     Physics m_physics;
 
-    std::shared_ptr<WorldObjectHandle> m_handle;
+    Handle<WorldObject> m_handle;
 
     ObjectInfo m_objectInfo;
     Voxel* m_crucialVoxel;

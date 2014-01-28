@@ -5,7 +5,11 @@
 #include "utils/hd3000dummy.h"
 #include "sound/soundmanager.h"
 
+#include "worldobject/worldobject.h"
 #include "game.h"
+#include "player.h"
+#include "ui/hud.h"
+#include "world/world.h"
 
 
 GameScene::GameScene(Game* game):
@@ -42,10 +46,10 @@ void GameScene::deactivate() {
     m_soundManager->deactivate();
 }
 
-void GameScene::setCameraHead(CameraHead* head) {
-    m_head = head;
+void GameScene::setPlayer(Player* head) {
+    m_player = head;
 }
 
 void GameScene::update(float deltaSec) {
-    m_soundManager->setListener(m_head->position(), m_head->orientation());
+    m_soundManager->setListener(m_player->cameraPosition(), m_player->cameraOrientation());
 }

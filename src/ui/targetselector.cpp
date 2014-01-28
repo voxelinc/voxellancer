@@ -2,6 +2,10 @@
 
 #include <algorithm>
 
+#include "player.h"
+#include "worldobject/ship.h"
+#include "world/world.h"
+
 
 TargetSelector::TargetSelector(Player *player):
     m_player(player)

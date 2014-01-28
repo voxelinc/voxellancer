@@ -13,6 +13,7 @@
 #include "worldobject/ship.h"
 #include "sound/soundmanager.h"
 #include "game.h"
+#include "world/world.h"
 
 
 GameScenario::GameScenario() {
