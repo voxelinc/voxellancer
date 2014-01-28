@@ -1,8 +1,12 @@
 #pragma once
 
+#include <iostream>
+#include <sstream>
+
 #include <string>
 #include <glm/glm.hpp>
 #include <bandit/assertion_frameworks/snowhouse/snowhouse/stringize.h>
+
 #include "utils/tostring.h"
 
 

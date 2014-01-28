@@ -1,6 +1,5 @@
 #pragma once
 
-
 class Voxel;
 
 template<Axis highPriorityAxis, Axis middlePriorityAxis, Axis lowPriorityAxis>
