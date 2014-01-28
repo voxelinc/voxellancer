@@ -20,11 +20,6 @@ m_game(game)
 }
 
 void BaseScenario::clear() {
-    for (std::list<WorldObject*>::iterator iterator = m_world->worldObjects().begin(); iterator != m_world->worldObjects().end();iterator++) {
-        (*iterator)->scheduledForDeletion();
-    }
-    
-
     m_world->reset();
 }
 

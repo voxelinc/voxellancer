@@ -3,7 +3,7 @@
 #include "etc/windowmanager.h"
 
 #include "sound/soundmanager.h"
-#include "gamescenario.h"
+#include "scenarios/gamescenario.h"
 
 
 Game::Game():

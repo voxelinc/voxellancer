@@ -8,7 +8,6 @@ public:
     BaseScenario(Game* game);
 
     virtual void load();
-    virtual void clear();
     virtual void reset();
 
 protected:
@@ -17,5 +16,6 @@ protected:
 
     virtual void createWorld();
     virtual void populateWorld();
+    virtual void clear();
 };
 
