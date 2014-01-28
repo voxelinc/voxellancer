@@ -14,7 +14,7 @@ class GameScene: public Scene {
 public:
     GameScene(Game* game);
 
-    void setPlayer(Player* head);
+    void setPlayer(Player* player);
 
     virtual void draw(Camera* camera) override;
     virtual void update(float deltaSec);
