@@ -6,7 +6,7 @@
 #include "utils/randfloat.h"
 
 
-class Fight : public BasicTask {
+class FightTask : public BasicTask {
 
     enum State {
         IDLE,
@@ -16,7 +16,7 @@ class Fight : public BasicTask {
     };
 
 public:
-    Fight(Ship& ship, std::list<std::shared_ptr<WorldObjectHandle>> targets);
+    FightTask(Ship& ship, std::list<std::shared_ptr<WorldObjectHandle>> targets);
 
     virtual void update(float deltaSec);
     virtual void addTargets(std::list<std::shared_ptr<WorldObjectHandle>> targets);

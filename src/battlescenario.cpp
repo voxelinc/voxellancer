@@ -7,7 +7,7 @@
 #include "ai/characters/dummycharacter.h"
 #include "ai/elevatedtasks/dummyelevatedtask.h"
 #include "ai/basictask.h"
-#include "ai/basictasks/fight.h"
+#include "ai/basictasks/fighttask.h"
 
 #include "resource/clustercache.h"
 
@@ -45,7 +45,7 @@ void BattleScenario::populate(Game* game) {
     aitester->objectInfo().setName("basicship");
     aitester->objectInfo().setShowOnHud(false);
     //world->god().scheduleSpawn(aitester);
-    aitester->setCharacter(new DummyCharacter(*aitester, new DummyElevatedTask(*aitester, new Fight(*aitester, std::list<std::shared_ptr<WorldObjectHandle>>{playerShip->handle()}))));
+    aitester->setCharacter(new DummyCharacter(*aitester, new DummyElevatedTask(*aitester, new FightTask(*aitester, std::list<std::shared_ptr<WorldObjectHandle>>{playerShip->handle()}))));
 
     // create two opposing enemy forces
     populateBattle(10, 10);
@@ -88,7 +88,7 @@ void BattleScenario::populateBattle(int numberOfEnemies1, int numberOfEnemies2) 
         copy(tmpVector.begin(), tmpVector.end(), enemies2.begin());
 
         Ship* e = (Ship*)handle->get();
-        e->setCharacter(new DummyCharacter(*e, new DummyElevatedTask(*e, new Fight(*e, enemies2))));
+        e->setCharacter(new DummyCharacter(*e, new DummyElevatedTask(*e, new FightTask(*e, enemies2))));
     }
     for (std::shared_ptr<WorldObjectHandle> handle : enemies2) {
         std::vector<std::shared_ptr<WorldObjectHandle>> tmpVector(enemies1.size());
@@ -97,6 +97,6 @@ void BattleScenario::populateBattle(int numberOfEnemies1, int numberOfEnemies2) 
         copy(tmpVector.begin(), tmpVector.end(), enemies1.begin());
 
         Ship* e = (Ship*)handle->get();
-        e->setCharacter(new DummyCharacter(*e, new DummyElevatedTask(*e, new Fight(*e, enemies1))));
+        e->setCharacter(new DummyCharacter(*e, new DummyElevatedTask(*e, new FightTask(*e, enemies1))));
     }
 }

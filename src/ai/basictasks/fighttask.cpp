@@ -1,6 +1,6 @@
-#include "fight.h"
+#include "fighttask.h"
 
-Fight::Fight(Ship& ship, std::list<std::shared_ptr<WorldObjectHandle>> targets) :
+FightTask::FightTask(Ship& ship, std::list<std::shared_ptr<WorldObjectHandle>> targets) :
 BasicTask(ship),
 m_targets(targets)
 {
@@ -11,7 +11,7 @@ m_targets(targets)
     m_stateChanged = false;
 }
 
-void Fight::update(float deltaSec) {
+void FightTask::update(float deltaSec) {
     updateTargets();
     updateState();
 
@@ -51,7 +51,7 @@ void Fight::update(float deltaSec) {
     }
 }
 
-void Fight::updateTargets() {
+void FightTask::updateTargets() {
     auto iterator = m_targets.begin();
     while (iterator != m_targets.end()) {
         if (!(*iterator)->get()) {
@@ -66,19 +66,19 @@ void Fight::updateTargets() {
 }
 
 
-void Fight::addTargets(std::list<std::shared_ptr<WorldObjectHandle>> targets) {
+void FightTask::addTargets(std::list<std::shared_ptr<WorldObjectHandle>> targets) {
     m_targets.insert(m_targets.end(), targets.begin(), targets.end());
 }
 
-void Fight::setTargets(std::list<std::shared_ptr<WorldObjectHandle>> targets) {
+void FightTask::setTargets(std::list<std::shared_ptr<WorldObjectHandle>> targets) {
     m_targets = targets;
 }
 
-bool Fight::isInProgress() {
+bool FightTask::isInProgress() {
     return m_state != IDLE;
 }
 
-void Fight::updateState() {
+void FightTask::updateState() {
     switch (m_state) {
         case IDLE:
             if (m_targets.empty()) {
@@ -128,15 +128,15 @@ void Fight::updateState() {
     }
 }
 
-float Fight::targetDistance() {
+float FightTask::targetDistance() {
     return glm::length(m_ship.transform().position() - m_primaryTarget->transform().position()) - m_ship.minimalGridSphere().radius() * m_ship.transform().scale() - m_primaryTarget->minimalGridSphere().radius() * m_primaryTarget->transform().scale();
 }
 
-float Fight::pointDistance(glm::vec3 point) {
+float FightTask::pointDistance(glm::vec3 point) {
     return glm::length(m_ship.transform().position() - point) - m_ship.minimalGridSphere().radius() * m_ship.transform().scale();
 }
 
-glm::vec3 Fight::findRandomEvasionPoint() {
+glm::vec3 FightTask::findRandomEvasionPoint() {
     glm::vec3 point = glm::vec3(RandFloat::rand(-0.25f, 0.25), RandFloat::rand(-0.25f, 0.25), -1);
     point *= 3 * m_minEnemyDistance;
     point = point * m_ship.transform().orientation();
@@ -144,12 +144,12 @@ glm::vec3 Fight::findRandomEvasionPoint() {
     return point;
 }
 
-void Fight::setState(int newState) {
+void FightTask::setState(int newState) {
     m_stateChanged = true;
     m_state = newState;
 }
 
-float Fight::angleToTarget() {
+float FightTask::angleToTarget() {
     glm::vec3 shipDirection = glm::vec3(0, 0, -1);
     glm::vec3 targetDirection = glm::inverse(m_ship.transform().orientation()) * glm::normalize(m_primaryTarget->transform().position() - m_ship.transform().position());
     float angle = glm::acos(glm::clamp(glm::dot(glm::normalize(shipDirection), glm::normalize(targetDirection)), 0.0f, 1.0f));
