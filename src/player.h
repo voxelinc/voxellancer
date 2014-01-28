@@ -6,6 +6,9 @@
 
 #include "worldobject/handle/handle.h"
 
+#include "camera/cameradolly.h"
+#include "ui/hud.h"
+
 class Camera;
 class CameraDolly;
 class HUD;
@@ -31,8 +34,8 @@ public:
 
 protected:
     Handle<Ship> m_playerShip;
-    std::unique_ptr<CameraDolly> m_cameraDolly;
-    std::unique_ptr<HUD> m_hud;
+    CameraDolly m_cameraDolly;
+    HUD m_hud;
 
     glm::vec3 m_acceleration;
     glm::vec3 m_accelerationAngular;

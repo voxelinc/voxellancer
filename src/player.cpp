@@ -6,8 +6,8 @@
 
 
 Player::Player():
-    m_hud(new HUD(this)),
-    m_cameraDolly(new CameraDolly()),
+    m_hud(this),
+    m_cameraDolly(),
     m_playerShip(nullptr)
 {
 
@@ -25,12 +25,12 @@ void Player::rotate(const glm::vec3& direction) {
 
 void Player::setShip(Ship* ship) {
     m_playerShip = ship->shipHandle();
-    m_cameraDolly->followWorldObject(ship);
+    m_cameraDolly.followWorldObject(ship);
 }
 
 void Player::update(float deltaSec) {
-    m_cameraDolly->update(deltaSec);
-    m_hud->update(deltaSec);
+    m_cameraDolly.update(deltaSec);
+    m_hud.update(deltaSec);
 
     if (Ship* playerShip = m_playerShip.get()) {
         if (m_acceleration != glm::vec3(0)) {
@@ -53,19 +53,19 @@ Ship* Player::playerShip() {
 }
 
 CameraDolly& Player::cameraDolly() {
-    return *m_cameraDolly;
+    return m_cameraDolly;
 }
 
 HUD& Player::hud() {
-    return *m_hud;
+    return m_hud;
 }
 
 glm::vec3 Player::cameraPosition() {
-    return m_cameraDolly->cameraHead().position();
+    return m_cameraDolly.cameraHead().position();
 }
 
 glm::quat Player::cameraOrientation() {
-    return m_cameraDolly->cameraHead().orientation();
+    return m_cameraDolly.cameraHead().orientation();
 }
 
 

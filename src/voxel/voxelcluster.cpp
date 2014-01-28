@@ -16,7 +16,7 @@
 
 VoxelCluster::VoxelCluster(float scale):
     m_voxels(),
-    m_voxelRenderData(new VoxelRenderData(m_voxels)),
+    m_voxelRenderData(m_voxels),
     m_transform(glm::vec3(0), scale),
     m_minimalGridSphereValid(false),
     m_minimalGridAABBValid(false),
@@ -78,7 +78,7 @@ void VoxelCluster::addVoxel(Voxel* voxel) {
     assert(m_voxels[voxel->gridCell()] == nullptr);
 
     m_voxels[voxel->gridCell()] = voxel;
-    m_voxelRenderData->invalidate();
+    m_voxelRenderData.invalidate();
     
     extendGridAABB(voxel);
 }
@@ -89,12 +89,12 @@ void VoxelCluster::removeVoxel(Voxel* voxel) {
     shrinkGridAABB(voxel);
 
     m_voxels.erase(voxel->gridCell());
-    m_voxelRenderData->invalidate();
+    m_voxelRenderData.invalidate();
     delete voxel;
 }
 
 VoxelRenderData* VoxelCluster::voxelRenderData() {
-    return m_voxelRenderData.get();
+    return &m_voxelRenderData;
 }
 
 const std::unordered_map<glm::ivec3, Voxel*>& VoxelCluster::voxelMap() const {

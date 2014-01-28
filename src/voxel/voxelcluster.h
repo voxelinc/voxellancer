@@ -12,6 +12,8 @@
 #include "voxelgridcmp.h"
 #include "utils/vec3hash.h"
 
+#include "voxelrenderdata.h"
+
 
 class Voxel;
 class VoxelRenderData;
@@ -52,7 +54,7 @@ public:
 
 protected:
     std::unordered_map<glm::ivec3, Voxel*> m_voxels;
-    std::unique_ptr<VoxelRenderData> m_voxelRenderData;
+    VoxelRenderData m_voxelRenderData;
     WorldTransform m_transform;
 
 
