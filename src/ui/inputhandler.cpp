@@ -160,10 +160,11 @@ void InputHandler::processMouseUpdate() {
     double x, y;
     glfwGetCursorPos(glfwGetCurrentContext(), &x, &y);
 
+
     placeCrossHair(x, y);
 
     if (glfwGetMouseButton(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
-        m_player->playerShip()->fireAtPoint(findTargetPoint());
+        m_player->fire();
     }
 
     // spin
@@ -265,7 +266,7 @@ float InputHandler::getInputValue(InputMapping mapping) {
 
 void InputHandler::processFireActions() {
     if (getInputValue(&fireAction)) {
-        m_player->playerShip()->fireAtPoint(findTargetPoint());
+        m_player->fire();
     }
     if (getInputValue(&rocketAction)) {
         m_player->playerShip()->fireAtObject();
@@ -303,17 +304,6 @@ void InputHandler::processTargetSelectActions() {
     if (getInputValue(&selectPreviousAction)) {
         m_targetSelector->selectPreviousTarget();
     }
-}
-
-glm::vec3 InputHandler::findTargetPoint() {
-    glm::vec3 shootDirection(glm::normalize(m_player->hud().crossHair().position() - m_player->cameraDolly().cameraHead().position()));
-
-    Ray ray(
-        m_player->hud().crossHair().position(),
-        shootDirection
-    );
-
-    return Aimer(m_player->playerShip(),ray).aim();
 }
 
 void InputHandler::placeCrossHair(double winX, double winY) {

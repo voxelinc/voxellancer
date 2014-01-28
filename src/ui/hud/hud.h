@@ -31,7 +31,9 @@ public:
     const Sphere& sphere() const;
 
     CrossHair& crossHair();
+    AimHelperHudget& aimHelper();
 
+    glm::vec3 centerOfView() const;
     glm::vec3 position() const;
     glm::quat orientation() const;
 
@@ -61,5 +63,8 @@ protected:
 
     WorldTreeScanner m_scanner;
     std::map<WorldObject*, HUDObjectDelegate*> m_objectDelegates;
+
+
+    void updateScanner(float deltaSec);
 };
 

@@ -3,6 +3,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 
+#include "geometry/ray.h"
+
 
 class HUD;
 
@@ -16,6 +18,27 @@ public:
 
     HUD* hud();
 
+    bool pressed() const;
+    bool hovered() const;
+
+    bool clicked() const;
+    bool released() const;
+
+    bool entered() const;
+    bool left() const;
+
+    /*
+        Shall return true when the Clickable is under a
+        pointer at quat orientation
+    */
+    virtual bool isAt(const Ray& ray) const;
+
+    /*
+        To be called every frame, clicked shall be true when the
+        pointer was clicked in that exact frame
+    */
+    virtual void pointerAt(const Ray& ray, bool pressed);
+
     virtual glm::vec3 position() const = 0;
     virtual glm::quat orientation() const = 0;
 
@@ -25,5 +48,11 @@ public:
 
 protected:
     HUD* m_hud;
+    bool m_pressed;
+    bool m_hovered;
+    bool m_clicked;
+    bool m_released;
+    bool m_entered;
+    bool m_left;
 };
 

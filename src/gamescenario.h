@@ -1,5 +1,8 @@
 #pragma once
 
+#include <memory>
+
+#include "worldobject/worldobjecthandle.h"
 
 class Game;
 class Ship;
@@ -13,7 +16,7 @@ public:
 
 
 protected:
-    Ship *m_normandy;
-    Ship *m_aimTester;
+    std::shared_ptr<WorldObjectHandle> m_normandy;
+    std::shared_ptr<WorldObjectHandle> m_aimTester;
 };
 

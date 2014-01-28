@@ -1,5 +1,7 @@
 #include "player.h"
 
+#include "utils/aimer.h"
+
 #include "game.h"
 
 
@@ -16,6 +18,22 @@ void Player::move(glm::vec3 direction) {
 
 void Player::rotate(glm::vec3 direction) {
     m_accelerationAngular += direction;
+}
+
+void Player::fire() {
+    if(playerShip()) {
+        glm::vec3 targetPoint;
+
+        if(m_hud.aimHelper().hovered()) {
+            targetPoint = m_hud.aimHelper().targetPoint();
+        } else {
+            glm::vec3 shootDirection(glm::normalize(m_hud.crossHair().position() - m_cameraDolly.cameraHead().position()));
+            Ray ray(m_hud.crossHair().position(), shootDirection);
+            targetPoint = Aimer(playerShip(), ray).aim();
+        }
+
+        playerShip()->fireAtPoint(targetPoint);
+    }
 }
 
 void Player::setShip(Ship* ship) {

@@ -26,18 +26,20 @@ void GameScenario::populate(Game* game) {
     World* world = World::instance();
 
     glow::debug("Create WorldObjects");
-    m_normandy = new Ship();
-    ClusterCache::instance()->fillObject(m_normandy, "data/voxelcluster/normandy.csv");
-    m_normandy->setPosition(glm::vec3(0, 0, -100));
-    m_normandy->objectInfo().setName("Normandy");
-    m_normandy->objectInfo().setShowOnHud(true);
-    m_normandy->objectInfo().setCanLockOn(true);
-    world->god().scheduleSpawn(m_normandy);
+    Ship* normandy = new Ship();
+    ClusterCache::instance()->fillObject(normandy, "data/voxelcluster/normandy.csv");
+    normandy->setPosition(glm::vec3(0, 0, -100));
+    normandy->objectInfo().setName("Normandy");
+    normandy->objectInfo().setShowOnHud(true);
+    normandy->objectInfo().setCanLockOn(true);
+    world->god().scheduleSpawn(normandy);
     // TODO: use these dummies to test BasicTasks
-    m_normandy->setCharacter(
-        new DummyCharacter(*m_normandy,
-        new DummyElevatedTask(*m_normandy,
-        new BasicTask(*m_normandy))));
+    normandy->setCharacter(
+        new DummyCharacter(*normandy,
+        new DummyElevatedTask(*normandy,
+        new BasicTask(*normandy))));
+    m_normandy = normandy->handle();
+
 
     Ship *testCluster = new Ship();
     ClusterCache::instance()->fillObject(testCluster, "data/voxelcluster/basicship.csv");
@@ -46,14 +48,15 @@ void GameScenario::populate(Game* game) {
     testCluster->objectInfo().setShowOnHud(false);
     world->god().scheduleSpawn(testCluster);
 
-    m_aimTester = new Ship();
-    ClusterCache::instance()->fillObject(m_aimTester, "data/voxelcluster/basicship.csv");
-    m_aimTester->setPosition(glm::vec3(10, 0, -20));
-    m_aimTester->rotate(glm::quat(glm::vec3(10, 0,0)));
-    m_aimTester->objectInfo().setName("aimTester");
-    m_aimTester->objectInfo().setShowOnHud(true);
-    m_aimTester->objectInfo().setCanLockOn(true);
-    world->god().scheduleSpawn(m_aimTester);
+    Ship* aimTester = new Ship();
+    ClusterCache::instance()->fillObject(aimTester, "data/voxelcluster/basicship.csv");
+    aimTester->setPosition(glm::vec3(10, 0, -20));
+    aimTester->rotate(glm::quat(glm::vec3(10, 0,0)));
+    aimTester->objectInfo().setName("aimTester");
+    aimTester->objectInfo().setShowOnHud(true);
+    aimTester->objectInfo().setCanLockOn(true);
+    world->god().scheduleSpawn(aimTester);
+    m_aimTester = aimTester->handle();
 
     game->player().setShip(testCluster);
 
@@ -118,9 +121,15 @@ void GameScenario::populate(Game* game) {
 }
 
 void GameScenario::update(float deltaSec) {
-    m_normandy->accelerate(glm::vec3(0, 0, -0.3f));
-    m_normandy->accelerateAngular(glm::vec3(0.1f, 0.05f, 0.0f));
-    m_aimTester->accelerate(glm::vec3(0, 0, -0.4f));
-    m_aimTester->accelerateAngular(glm::vec3(0.0f, 0.0f, 0.4f));
+    if(m_normandy->get()) {
+        Ship* normandy = dynamic_cast<Ship*>(m_normandy->get());
+        normandy->accelerate(glm::vec3(0, 0, -0.3f));
+        normandy->accelerateAngular(glm::vec3(0.1f, 0.05f, 0.0f));
+    }
+    if(m_aimTester->get()) {
+        Ship* aimTester = dynamic_cast<Ship*>(m_aimTester->get());
+        aimTester->accelerate(glm::vec3(0, 0, -0.4f));
+        aimTester->accelerateAngular(glm::vec3(0.0f, 0.0f, 0.4f));
+    }
 }
 

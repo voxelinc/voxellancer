@@ -2,8 +2,10 @@
 
 #include <glm/glm.hpp>
 
+#include "geometry/range.h"
+
 #include "aimhelperhudgetvoxels.h"
-#include "hudget.h"
+#include "circularhudget.h"
 
 
 class HUD;
@@ -13,9 +15,11 @@ class HUD;
     will collide i.e. not actually on the hud-sphere but
     in the world
 */
-class AimHelperHudget: public Hudget {
+class AimHelperHudget: public CircularHudget {
 public:
     AimHelperHudget(HUD* hud);
+
+    const glm::vec3& targetPoint() const;
 
     virtual glm::vec3 position() const override;
     virtual glm::quat orientation() const override;
@@ -27,8 +31,10 @@ public:
 protected:
     AimHelperHudgetVoxels m_voxels;
     glm::vec3 m_position;
+    glm::vec3 m_targetPoint;
+    Range m_distanceRange;
 
 
-    float bulletSpeed();
+    void calculatePosition();
 };
 

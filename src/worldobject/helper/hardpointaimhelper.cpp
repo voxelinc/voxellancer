@@ -1,5 +1,7 @@
 #include "hardpointaimhelper.h"
 
+#include <iostream>
+
 #include "worldobject/hardpoint.h"
 #include "worldobject/worldobject.h"
 
@@ -31,14 +33,13 @@ void HardpointAimHelper::aim() {
         m_point = targetPositionIn(timeDelta);
 
         iterations++;
-        if(iterations > 10) {
+        if(iterations > 20) { std::cout << "not hitable" << std::endl;
             m_hitable = false;
             return;
         }
     } while(offset > 0.1f);
 
     m_hitable = true;
-
     m_direction = glm::normalize(m_point - m_shooterPosition);
 
     m_aimed = true;

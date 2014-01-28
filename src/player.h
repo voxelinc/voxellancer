@@ -19,6 +19,8 @@ public:
     void move(glm::vec3 direction);
     void rotate(glm::vec3 direction);
 
+    void fire();
+
     void update(float deltaSec);
 
     Ship* playerShip();

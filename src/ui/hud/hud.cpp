@@ -30,26 +30,12 @@ HUD::HUD(Player* player, Viewer* viewer):
     m_hudgets.push_back(&m_aimHelper);
 }
 
-void HUD::setCrossHairOffset(const glm::vec2& mousePosition) {
-    CameraHead& cameraHead = m_player->cameraDolly().cameraHead();
-
-    float fovy = m_viewer->view().fovy();
-    float nearZ = m_viewer->view().zNear();
-    float ar = m_viewer->view().aspectRatio();
-    float d = glm::length(glm::vec2(1.0f, nearZ));
-
-    float nearPlaneHeight = 2 * std::tan(glm::radians(fovy) / 2.0f);
-    float nearPlaneWidth = nearPlaneHeight * ar;
-
-    glm::vec3 nearPlaneTarget = glm::vec3(mousePosition.x * nearPlaneWidth / 2.0f, mousePosition.y * nearPlaneHeight / 2.0f, -nearZ);
-
-    glm::quat offset = Math::differenceFromViewDirection(nearPlaneTarget);
-
-    m_crossHair.setOrientationOffset(offset);
-}
-
 Player* HUD::player() {
     return m_player;
+}
+
+glm::vec3 HUD::centerOfView() const {
+    return m_player->cameraDolly().cameraHead().position();
 }
 
 const Sphere& HUD::sphere() const {
@@ -59,6 +45,10 @@ const Sphere& HUD::sphere() const {
 CrossHair& HUD::crossHair() {
     return m_crossHair;
 }
+
+ AimHelperHudget& HUD::aimHelper() {
+    return m_aimHelper;
+ }
 
 glm::vec3 HUD::position() const {
     return m_player->cameraDolly().cameraHead().position() + m_player->cameraDolly().cameraHead().orientation() * m_sphere.position();
@@ -100,7 +90,42 @@ HUDObjectDelegate* HUD::objectDelegate(WorldObject* worldObject) {
     return i == m_objectDelegates.end() ? nullptr : i->second;
 }
 
+void HUD::setCrossHairOffset(const glm::vec2& mousePosition) {
+    CameraHead& cameraHead = m_player->cameraDolly().cameraHead();
+
+    float fovy = m_viewer->view().fovy();
+    float nearZ = m_viewer->view().zNear();
+    float ar = m_viewer->view().aspectRatio();
+    float d = glm::length(glm::vec2(1.0f, nearZ));
+
+    float nearPlaneHeight = 2 * std::tan(glm::radians(fovy) / 2.0f);
+    float nearPlaneWidth = nearPlaneHeight * ar;
+
+    glm::vec3 nearPlaneTarget = glm::vec3(mousePosition.x * nearPlaneWidth / 2.0f, mousePosition.y * nearPlaneHeight / 2.0f, -nearZ);
+
+    glm::quat offset = Math::differenceFromViewDirection(nearPlaneTarget);
+
+    m_crossHair.setOrientationOffset(offset);
+}
+
 void HUD::update(float deltaSec) {
+    updateScanner(deltaSec);
+
+    Ray toCrossHair = Ray::fromTo(m_player->cameraDolly().cameraHead().position(), m_crossHair.position());
+
+    for(Hudget* hudget : m_hudgets) {
+        hudget->pointerAt(toCrossHair, false);
+        hudget->update(deltaSec);
+    }
+}
+
+void HUD::draw() {
+    for(Hudget* hudget : m_hudgets) {
+        hudget->draw();
+    }
+}
+
+void HUD::updateScanner(float deltaSec) {
     m_scanner.update(deltaSec, m_player->playerShip());
 
     for(WorldObject* worldObject : m_scanner.foundWorldObjects()) {
@@ -116,17 +141,5 @@ void HUD::update(float deltaSec) {
             removeObjectDelegate(objectDelgate);
         }
     }
-
-    for(Hudget* hudget : m_hudgets) {
-        hudget->update(deltaSec);
-    }
 }
-
-void HUD::draw() {
-    for(Hudget* hudget : m_hudgets) {
-        hudget->draw();
-    }
-}
-
-
 

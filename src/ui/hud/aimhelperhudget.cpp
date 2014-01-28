@@ -1,5 +1,9 @@
 #include "aimhelperhudget.h"
 
+#include <iostream>
+
+#include "utils/math.h"
+#include "utils/geometryhelper.h"
 #include "utils/tostring.h"
 
 #include "worldobject/ship.h"
@@ -13,9 +17,15 @@
 
 
 AimHelperHudget::AimHelperHudget(HUD* hud):
-    Hudget(hud),
-    m_voxels(this)
+    CircularHudget(hud, 4.0f),
+    m_voxels(this),
+    m_distanceRange(m_hud->sphere().radius() * 2, m_hud->sphere().radius() * 10)
 {
+
+}
+
+const glm::vec3& AimHelperHudget::targetPoint() const {
+    return m_targetPoint;
 }
 
 glm::vec3 AimHelperHudget::position() const {
@@ -23,7 +33,10 @@ glm::vec3 AimHelperHudget::position() const {
 }
 
 glm::quat AimHelperHudget::orientation() const {
-    return m_hud->orientation();
+    glm::vec3 direction = glm::inverse(m_hud->orientation()) * (position() - m_hud->centerOfView());
+    glm::quat orientationOffset = Math::differenceFromViewDirection(direction);
+
+    return m_hud->orientation() * orientationOffset;
 }
 
 void AimHelperHudget::update(float deltaSec) {
@@ -32,20 +45,27 @@ void AimHelperHudget::update(float deltaSec) {
 
     if(targetObject) {
         if(!ship->hardpoints().empty()) {
-            m_position = glm::vec3(0.0f, 0.0f, 0.0f);
+            m_targetPoint = glm::vec3(0.0f, 0.0f, 0.0f);
 
             for(Hardpoint* hardpoint : ship->hardpoints()) {
                 HardpointAimHelper aimHelper(hardpoint, targetObject);
                 aimHelper.aim();
-                m_position += aimHelper.point();
+                m_targetPoint += aimHelper.point();
             }
-            m_position /= ship->hardpoints().size();
-            //std::cout << "Position: " << toString(m_position) << " " << toString(targetObject->transform().position()) << std::endl;
+            m_targetPoint /= ship->hardpoints().size();
         }
+
+        calculatePosition();
     }
 }
 
 void AimHelperHudget::draw() {
     m_voxels.draw();
+}
+
+void AimHelperHudget::calculatePosition() {
+    glm::vec3 delta = m_targetPoint - m_hud->centerOfView();
+    float distance = m_distanceRange.clamp(glm::length(delta));
+    m_position = m_hud->centerOfView() + distance * glm::normalize(delta);
 }
 

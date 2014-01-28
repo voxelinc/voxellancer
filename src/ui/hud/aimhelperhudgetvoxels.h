@@ -15,5 +15,6 @@ public:
 protected:
     AimHelperHudget* m_aimHelperHudget;
     VoxelCluster m_dot;
+    VoxelCluster m_circle;
 };
 
