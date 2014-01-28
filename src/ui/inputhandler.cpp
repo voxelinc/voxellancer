@@ -167,7 +167,9 @@ void InputHandler::processMouseUpdate() {
     placeCrossHair(x, y);
 
     if (glfwGetMouseButton(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
-        m_player->playerShip()->fireAtPoint(findTargetPoint());
+        if (m_player->playerShip()) {
+            m_player->playerShip()->fireAtPoint(findTargetPoint());
+        }
     }
 
     // spin
@@ -269,10 +271,14 @@ float InputHandler::getInputValue(InputMapping mapping) {
 
 void InputHandler::processFireActions() {
     if (getInputValue(&fireAction)) {
-        m_player->playerShip()->fireAtPoint(findTargetPoint());
+        if (m_player->playerShip()) {
+            m_player->playerShip()->fireAtPoint(findTargetPoint());
+        }
     }
     if (getInputValue(&rocketAction)) {
-        m_player->playerShip()->fireAtObject();
+        if (m_player->playerShip()) {
+            m_player->playerShip()->fireAtObject();
+        }
     }
 }
 

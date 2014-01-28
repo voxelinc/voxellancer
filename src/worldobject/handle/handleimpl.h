@@ -6,7 +6,7 @@ template<class T>
 class HandleImpl {
 
 public:
-    HandleImpl(T* object);
+    explicit HandleImpl(T* object);
 
     T* get();
 

@@ -24,6 +24,13 @@ Ship::Ship() :
 {
 }
 
+
+Ship::~Ship() {
+    m_shipHandle.invalidate();
+}
+
+
+
 void Ship::update(float deltaSec) {
     m_character->update(deltaSec);
     for(Hardpoint *hardpoint : m_hardpoints) {
@@ -140,3 +147,6 @@ void Ship::updateEnginePosition() {
     m_enginePos /= m_engines.size();
 }
 
+Handle<Ship> Ship::shipHandle() {
+    return m_shipHandle;
+}

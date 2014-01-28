@@ -25,6 +25,10 @@ void TargetSelector::selectPreviousTarget() {
 
 template<typename IteratorType>
 WorldObject* TargetSelector::findNextTarget(IteratorType begin, IteratorType end) {
+    if (!m_player->playerShip()) {
+        return nullptr;
+    }
+
     IteratorType searchBegin = begin;
 
     if (m_player->playerShip()->targetObject() != nullptr) {

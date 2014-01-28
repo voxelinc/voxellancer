@@ -26,8 +26,3 @@ void Handle<T>::invalidate() {
     m_impl->invalidate();
 }
 
-template<class T>
-T* Handle<T>::operator->() {
-    assert(valid());
-    return m_impl->get();
-}

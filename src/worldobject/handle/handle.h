@@ -11,10 +11,9 @@ class HandleImpl;
 template<class T>
 class Handle {
 public:
-    Handle(T* object);
+    explicit Handle(T* object);
 
     T* get();
-    T* operator->();
 
     bool valid() const;
 

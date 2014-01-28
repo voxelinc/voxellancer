@@ -22,7 +22,7 @@ void Player::rotate(const glm::vec3& direction) {
 }
 
 void Player::setShip(Ship* ship) {
-    m_playerShip = ship;
+    m_playerShip = ship->shipHandle();
     m_cameraDolly->followWorldObject(ship);
 }
 
@@ -30,17 +30,18 @@ void Player::update(float deltaSec) {
     m_cameraDolly->update(deltaSec);
     m_hud->update(deltaSec);
 
-    if (m_acceleration != glm::vec3(0)) {
-        m_acceleration = glm::normalize(m_acceleration);
-    }
-    m_playerShip->accelerate(m_acceleration);
+    if (Ship* playerShip = m_playerShip.get()) {
+        if (m_acceleration != glm::vec3(0)) {
+            m_acceleration = glm::normalize(m_acceleration);
+        }
+        playerShip->accelerate(m_acceleration);
 
-    if (m_accelerationAngular == glm::vec3(0)) { // dampen rotation
-        m_accelerationAngular = m_playerShip->physics().angularSpeed();
-        m_accelerationAngular *= -1.5f;
+        if (m_accelerationAngular == glm::vec3(0)) { // dampen rotation
+            m_accelerationAngular = playerShip->physics().angularSpeed();
+            m_accelerationAngular *= -1.5f;
+        }
+        playerShip->accelerateAngular(m_accelerationAngular);
     }
-    m_playerShip->accelerateAngular(m_accelerationAngular);
-
     m_acceleration = glm::vec3(0);
     m_accelerationAngular = glm::vec3(0);
 }
