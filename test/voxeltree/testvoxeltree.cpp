@@ -9,6 +9,7 @@
 #include "utils/tostring.h"
 #include "world/world.h"
 #include "voxel/voxeltreequery.h"
+#include "voxel/voxeltree.h"
 #include "voxel/voxeltreenode.h"
 #include "worldobject/worldobject.h"
 #include "../bandit_extension/vec3helper.h"

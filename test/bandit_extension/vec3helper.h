@@ -1,13 +1,9 @@
 #pragma once
 
 #include <string>
-#include <sstream>
-#include <iostream>
-
 #include <glm/glm.hpp>
 #include <bandit/assertion_frameworks/snowhouse/snowhouse/stringize.h>
 #include "utils/tostring.h"
-#include "voxel/voxel.h"
 
 
 // adds vec3 support to bandit

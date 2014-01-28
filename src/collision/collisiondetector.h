@@ -6,16 +6,15 @@
 
 #include <glm/glm.hpp>
 
-#include "voxel/voxel.h"
-#include "voxel/voxeltree.h"
 #include "collision/voxelcollision.h"
-#include "geometry/sphere.h"
 
-
+class Voxel;
 class WorldTree;
 class WorldTreeGeode;
 class WorldObject;
-
+class Sphere;
+class VoxelTree;
+class VoxelTreeNode;
 
 // this class contains datastructures for collision detection
 class CollisionDetector
@@ -33,22 +32,19 @@ public:
     void reset();
 
     WorldTreeGeode* geode();
-    const WorldTreeGeode* geode() const;
     void setGeode(WorldTreeGeode* geode);
 
     void setWorldTree(WorldTree* worldTree);
     WorldTree* worldTree();
-    const WorldTree* worldTree() const;
 
     VoxelTree& voxelTree();
-    const VoxelTree& voxelTree() const;
 
     void updateGeode();
 
 
 protected:
+    std::shared_ptr<VoxelTree> m_voxelTree;
     WorldObject& m_worldObject;
-    VoxelTree m_voxelTree;
     WorldTreeGeode* m_geode;
     WorldTree* m_worldTree;
     std::list<VoxelCollision> m_collisions;

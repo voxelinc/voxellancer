@@ -14,6 +14,7 @@
 #include "sound/soundmanager.h"
 #include "game.h"
 #include "world/world.h"
+#include "voxel/voxel.h"
 
 
 GameScenario::GameScenario() {

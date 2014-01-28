@@ -6,6 +6,8 @@
 
 #include "../bandit_extension/vec3helper.h"
 #include "voxel/voxelcluster.h"
+#include "voxel/voxel.h"
+#include "voxel/voxelrenderdata.h"
 
 using namespace bandit;
 
@@ -37,7 +39,7 @@ go_bandit([](){
             cluster->addVoxel(new Voxel(glm::ivec3('a', 'b', 'c'), 0xFF8000));
             cluster->addVoxel(new Voxel(glm::ivec3(3, 4, 5), 0x808000));
             cluster->addVoxel(new Voxel(glm::ivec3(1, 5, 3), 0xFF8000));
-
+            
             // cant assert anything usefull just verify that nothing crashes ;)
             AssertThat(cluster->voxelRenderData()->voxelCount(), Equals(3));
         });
