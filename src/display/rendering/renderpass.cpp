@@ -6,7 +6,6 @@ RenderPass::RenderPass(std::string name):
 
 }
 
-const std::string& RenderPass::name() const
-{
+const std::string& RenderPass::name() const {
     return m_name;
 }

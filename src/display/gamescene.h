@@ -11,7 +11,6 @@ class Game;
 class VoxelRenderer;
 class HD3000Dummy;
 class SoundManager;
-
 class CameraHead;
 class MonoBlitProgram;
 class FrameBuffer;
@@ -27,14 +26,12 @@ public:
     void setPlayer(Player* player);
 
     virtual void draw(Camera* camera, glow::FrameBufferObject* target, const glm::ivec2& resolution) override;
-
-    void drawGame(Camera* camera);
-
-    virtual void update(float deltaSec);
-    virtual void activate();
-    virtual void deactivate();
+    virtual void update(float deltaSec) override;
+    virtual void activate() override;
+    virtual void deactivate() override;
 
     void setOutputBuffer(int i);
+
 protected:
     std::unique_ptr<Blitter> m_blitter;
     std::unique_ptr<FrameBuffer> m_framebuffer;
@@ -47,6 +44,8 @@ protected:
     Player* m_player;
 
     int m_currentOutputBuffer;
+
+    void drawGame(Camera* camera);
 
 };
 

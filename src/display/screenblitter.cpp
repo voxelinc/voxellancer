@@ -10,7 +10,7 @@
 
 
 ScreenBlitter::ScreenBlitter():
-    m_blitProgram(new MonoBlitProgram())
+    m_blitProgram(nullptr)
 {
 }
 

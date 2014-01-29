@@ -33,6 +33,9 @@ StereoViewEye::StereoViewEye(const Size<int>& viewportResolution, const StereoRe
     }
 }
 
+
+StereoViewEye::~StereoViewEye() = default;
+
 FrameBuffer& StereoViewEye::fbo() {
     return *m_fbo;
 }
@@ -59,4 +62,3 @@ void StereoViewEye::setViewportResolution(const Size<int>& viewportResolution) {
 
     m_fbo->setResolution(glm::ivec2(m_textureSize.width(), m_textureSize.height()));
 }
-

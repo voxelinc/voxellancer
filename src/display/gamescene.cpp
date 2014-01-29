@@ -1,7 +1,5 @@
 #include "gamescene.h"
 
-#include <glow/FrameBufferObject.h>
-
 #include "voxel/voxelrenderer.h"
 #include "voxeleffect/voxelparticleworld.h"
 #include "utils/hd3000dummy.h"
