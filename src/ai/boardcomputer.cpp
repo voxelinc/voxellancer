@@ -11,7 +11,7 @@
 
 static const float s_minActDistance = 0.1f;
 static const float s_minActAngle = glm::radians(1.0f);
-
+static const float s_minAutoUpAngle = glm::radians(10.0f);
 
 BoardComputer::BoardComputer(Ship& ship) :
     m_ship(ship)
@@ -31,7 +31,6 @@ void BoardComputer::moveTo(const glm::vec3& position) {
 }
 
 void BoardComputer::rotateTo(const glm::vec3& position, const glm::vec3& up) {
-    float minDelta = glm::radians(5.0f);
     glm::quat projectedOrientation = glm::inverse(m_ship.transform().orientation()) * m_ship.physics().projectedTransformIn(1.0f).orientation();
 
     glm::vec3 shipDirection = projectedOrientation * glm::vec3(0, 0, -1);
@@ -44,22 +43,30 @@ void BoardComputer::rotateTo(const glm::vec3& position, const glm::vec3& up) {
     }
 
     if (up != glm::vec3(0, 0, 0)){
+        rotateUpTo(up);
+    } else {
+        rotateUpAuto(rotation);
+    }
+
+}
+
+void BoardComputer::rotateUpTo(const glm::vec3& up) {
+    glm::vec3 upDirection = glm::vec3(0, 1, 0);
+    glm::vec3 newUpDirection = glm::inverse(m_ship.transform().orientation()) * glm::normalize(up);
+    glm::quat upRotation = GeometryHelper::quatFromTo(upDirection, newUpDirection);
+    glm::vec3 euler = glm::eulerAngles(upRotation);
+    m_ship.accelerateAngular(glm::normalize(euler));
+}
+
+void BoardComputer::rotateUpAuto(const glm::quat& rotation) {
+    //make it look naturally, e.g. up is to the "inside" of the rotation
+    if (glm::abs(glm::angle(rotation)) > glm::radians(s_minAutoUpAngle)) {
         glm::vec3 upDirection = glm::vec3(0, 1, 0);
-        glm::vec3 newUpDirection = glm::inverse(m_ship.transform().orientation()) * glm::normalize(up);
+        glm::vec3 newUpDirection = glm::vec3(0, 0, 1) + (rotation * glm::vec3(0, 0, -1));
         glm::quat upRotation = GeometryHelper::quatFromTo(upDirection, newUpDirection);
         glm::vec3 euler = glm::eulerAngles(upRotation);
         m_ship.accelerateAngular(glm::normalize(euler));
-    } else {
-        //make it look naturally, e.g. up is to the "inside" of the rotation
-        if (glm::abs(glm::angle(rotation)) > glm::radians(20.0f)) {
-            glm::vec3 upDirection = glm::vec3(0, 1, 0);
-            glm::vec3 newUpDirection = glm::vec3(0, 0, 1) + (rotation * glm::vec3(0, 0, -1));
-            glm::quat upRotation = GeometryHelper::quatFromTo(upDirection, newUpDirection);
-            glm::vec3 euler = glm::eulerAngles(upRotation);
-            m_ship.accelerateAngular(glm::normalize(euler));
-        }
     }
-
 }
 
 void BoardComputer::shootBullet(const std::list<std::shared_ptr<WorldObjectHandle>>& targets) {

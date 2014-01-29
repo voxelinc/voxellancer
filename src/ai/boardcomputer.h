@@ -22,6 +22,9 @@ public:
     void shootRockets(std::shared_ptr<WorldObjectHandle> target);
 
 protected:
+    void rotateUpTo(const glm::vec3& up);
+    void rotateUpAuto(const glm::quat& rotation);
+
     Ship& m_ship;
 
 };
