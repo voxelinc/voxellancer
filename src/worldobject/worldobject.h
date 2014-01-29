@@ -57,7 +57,7 @@ public:
 
     bool scheduledForDeletion();
 
-    void markScheduledForDeletion();
+    void onScheduleForDeletion();
 
 protected:
     bool m_scheduledForDeletion;

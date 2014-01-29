@@ -13,7 +13,7 @@ CameraFollowHelper::CameraFollowHelper():
 }
 
 WorldObject* CameraFollowHelper::target() {
-    return m_target.get();
+    return *m_target;
 }
 
 void CameraFollowHelper::setTarget(WorldObject* target) {

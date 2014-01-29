@@ -130,6 +130,6 @@ bool WorldObject::scheduledForDeletion() {
     return m_scheduledForDeletion;
 }
 
-void WorldObject::markScheduledForDeletion() {
+void WorldObject::onScheduleForDeletion() {
     m_scheduledForDeletion = true;
 }

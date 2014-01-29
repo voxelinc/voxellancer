@@ -19,7 +19,7 @@ public:
     void moveTo(glm::vec3 position);
     void rotateTo(glm::quat orientation);
     void shootBullet(const std::list<Handle<WorldObject>>& targets);
-    void ShootRockets(Handle<WorldObject> target);
+    void shootRockets(Handle<WorldObject> target);
 
 protected:
     Ship& m_ship;

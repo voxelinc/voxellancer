@@ -9,7 +9,6 @@ class WorldObject;
 class CameraDolly: public InertiaFollower {
 public:
     CameraDolly();
-    ~CameraDolly();
 
     CameraHead& cameraHead();
 
