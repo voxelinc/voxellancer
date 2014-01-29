@@ -3,7 +3,7 @@
 #include <list>
 #include <glm/glm.hpp>
 
-#include "worldtransform.h"
+#include "geometry/transform.h"
 
 
 class WorldObject;
@@ -13,7 +13,7 @@ class Movement {
 
 
 public:
-    Movement(WorldObject& worldObject, const WorldTransform& originalTransform, const WorldTransform& targetTransform);
+    Movement(WorldObject& worldObject, const Transform& originalTransform, const Transform& targetTransform);
     virtual ~Movement();
 
     bool perform();
@@ -22,13 +22,13 @@ public:
 protected:
     WorldObject& m_worldObject;
     CollisionDetector& m_collisionDetector;
-    WorldTransform m_originalTransform;
-    WorldTransform m_targetTransform;
+    Transform m_originalTransform;
+    Transform m_targetTransform;
     float m_distance;
 
     bool performSplitted();
     bool performStepped();
     int calculateStepCount();
-    WorldTransform calculateStep(int s, int stepCount) const;
+    Transform calculateStep(int s, int stepCount) const;
 };
 

@@ -132,6 +132,10 @@ Character* Ship::character() {
     return m_character.get();
 }
 
+BoardComputer* Ship::boardComputer() {
+    return m_boardComputer.get();
+}
+
 void Ship::setEngineSound(std::shared_ptr<Sound> sound) {
     m_sound = sound;
     sound->setLooping(true);

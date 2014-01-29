@@ -6,18 +6,22 @@
 
 
 class Sphere;
-class Transform;
+class WorldTransform;
 template<typename T> class TAABB;
 
-class Ray: public AbstractShape {
+class Capsule : public AbstractShape {
 public:
-    Ray(const glm::vec3& origin, const glm::vec3& direction);
+    Capsule();
+    Capsule(const glm::vec3& origin, const glm::vec3& direction, const float radius);
 
     const glm::vec3& origin() const;
     void setOrigin(const glm::vec3& origin);
 
     const glm::vec3& direction() const;
     void setDirection(const glm::vec3& direction);
+
+    const float radius() const;
+    void setRadius(const float radius);
 
     virtual bool intersects(const Sphere& sphere) const override;
     virtual bool nearTo(const TAABB<int>& aabb) const override;
@@ -27,4 +31,6 @@ public:
 protected:
     glm::vec3 m_origin;
     glm::vec3 m_direction;
+    float m_radius;
 };
+

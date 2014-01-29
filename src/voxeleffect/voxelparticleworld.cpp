@@ -65,7 +65,7 @@ bool VoxelParticleWorld::intersects(VoxelParticle* voxelParticle) {
     }
     voxelParticle->intersectionCheckPerformed();
 
-    glm::vec3 position = voxelParticle->worldTransform().position();
+    glm::vec3 position = voxelParticle->transform().position();
     Point voxelSphere(position); // approximate a point
     WorldTreeQuery query(&World::instance()->worldTree(), &voxelSphere);
 
@@ -159,9 +159,9 @@ void VoxelParticleWorld::updateBuffers() {
     int i = 0;
     for (VoxelParticle* particle : m_particles) {
         particleData[i++] = ParticleData{
-            particle->worldTransform().position(),
-            particle->worldTransform().orientation(),
-            particle->worldTransform().scale(),
+            particle->transform().position(),
+            particle->transform().orientation(),
+            particle->transform().scale(),
             particle->color(),
             particle->emissiveness()
         };

@@ -4,7 +4,7 @@
 
 #include "property/property.h"
 
-class WorldTransform;
+class Transform;
 
 class VoxelParticleSpawnBase
 {

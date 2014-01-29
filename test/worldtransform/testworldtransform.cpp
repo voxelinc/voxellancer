@@ -6,14 +6,14 @@
 #include <glm/glm.hpp>
 
 #include "../bandit_extension/vec3helper.h"
-#include "worldtransform.h"
+#include "geometry/transform.h"
 #include "property/propertymanager.h"
 
 using namespace bandit;
 
 
 go_bandit([](){
-    describe("WorldTransform", [](){
+    describe("Transform", [](){
         PropertyManager::instance()->reset();
         PropertyManager::instance()->load("data/config.ini");
 
@@ -38,13 +38,13 @@ go_bandit([](){
 
             AssertThat(glm::angle(glm::inverse(q1)*q2), EqualsWithDelta(0, 0.01));
 
-            q2 = glm::angleAxis(90.f, glm::vec3(1, 0, 0));
+            q2 = glm::angleAxis(glm::radians(90.0f), glm::vec3(1, 0, 0));
 
-            AssertThat(glm::angle(glm::inverse(q1)*q2), EqualsWithDelta(90, 0.01));
+            AssertThat(glm::angle(glm::inverse(q1)*q2), EqualsWithDelta(glm::radians(90.0f), 0.01));
 
-            q1 = glm::angleAxis(90.f, glm::vec3(-1, 0, 0));
+            q1 = glm::angleAxis(glm::radians(90.0f), glm::vec3(-1, 0, 0));
 
-            AssertThat(glm::angle(glm::inverse(q1)*q2), EqualsWithDelta(180, 0.01));
+            AssertThat(glm::angle(glm::inverse(q1)*q2), EqualsWithDelta(glm::radians(180.0f), 0.01));
 
 
             q1 = glm::quat(0.324251682f, -0.124075770f, 0.936692774f, -0.0455596969f);
@@ -68,7 +68,7 @@ go_bandit([](){
 
         it("applyTo(vec3) equals matrix()*vec3", [&]() {
             glm::vec3 vtest(1.0, 2.0, 3.0);
-            WorldTransform w(glm::vec3(0), 2.0);
+            Transform w(glm::vec3(0), 2.0);
 
             AssertThat(w.applyTo(vtest), EqualsWithDelta(glm::vec3(w.matrix() * glm::vec4(vtest, 1.0)), glm::vec3(0.01)));
 
@@ -89,10 +89,10 @@ go_bandit([](){
         it("test adjust center", [&]() {
             glm::vec3 vtest(5.0, 8.0, 12.0);
             glm::vec3 vdiff(1.0, 0.0, 2.0);
-            WorldTransform  w1(glm::vec3(1, 2, 3), 2.0);
+            Transform  w1(glm::vec3(1, 2, 3), 2.0);
             glm::quat orientation = glm::angleAxis(123.f, glm::vec3(1, 3, 5));
             w1.setOrientation(orientation);
-            WorldTransform w2(w1);
+            Transform w2(w1);
 
             w2.setCenterAndAdjustPosition(w1.center() - vdiff);
 
@@ -101,10 +101,10 @@ go_bandit([](){
 
 
         it("supports inverseApplyTo", [&]() {
-            WorldTransform t;
+            Transform t;
 
             t.setPosition(glm::vec3(12, -5, 3));
-            t.setOrientation(glm::angleAxis(56.0f, glm::normalize(glm::vec3(2, 6, -3))));
+            t.setOrientation(glm::angleAxis(glm::radians(56.0f), glm::normalize(glm::vec3(2, 6, -3))));
             t.setScale(2.5f);
             t.setCenter(glm::vec3(1, 0, 0));
 
