@@ -13,8 +13,6 @@ Player::Player():
 
 }
 
-Player::~Player() = default;
-
 void Player::move(const glm::vec3& direction) {
     m_acceleration += direction;
 }

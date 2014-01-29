@@ -44,6 +44,5 @@ protected:
     std::unique_ptr<VoxelParticleWorld> m_voxelParticleWorld;
 
     std::list<WorldObject*> m_worldObjects;
-
 };
 

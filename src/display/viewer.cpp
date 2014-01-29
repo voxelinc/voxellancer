@@ -19,9 +19,6 @@ Viewer::Viewer(const Viewport& viewport):
     switchToMonoView();
 }
 
-
-Viewer::~Viewer() = default;
-
 Scene* Viewer::scene() {
     return m_scene;
 }

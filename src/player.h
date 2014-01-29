@@ -4,10 +4,13 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 
+#include "camera/cameradolly.h"
+
+#include "ui/hud.h"
+
 #include "worldobject/handle/handle.h"
 
-#include "camera/cameradolly.h"
-#include "ui/hud.h"
+
 
 class Camera;
 class CameraDolly;
@@ -16,7 +19,6 @@ class HUD;
 class Player {
 public:
     Player();
-    ~Player();
 
     void setShip(Ship *ship);
 

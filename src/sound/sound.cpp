@@ -1,14 +1,10 @@
 #include "sound.h"
 
-#include <SFML/Audio.hpp>
-
 
 Sound::Sound(const sf::SoundBuffer& sound) :
     m_sound(new sf::Sound(sound))
 {
 }
-
-Sound::~Sound() = default;
 
 Sound::Status Sound::status() {
     switch (m_sound->getStatus()) {

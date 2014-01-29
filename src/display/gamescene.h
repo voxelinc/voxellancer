@@ -2,18 +2,19 @@
 
 #include <memory>
 
+#include "utils/hd3000dummy.h"
+
 #include "scene.h"
+
 
 class Game;
 class VoxelRenderer;
-class HD3000Dummy;
 class SoundManager;
 class Player;
 
 class GameScene: public Scene {
 public:
     GameScene(Game* game);
-    ~GameScene();
 
     void setPlayer(Player* player);
 
@@ -27,6 +28,6 @@ protected:
     Player* m_player;
     std::shared_ptr<VoxelRenderer> m_voxelRenderer;
     std::shared_ptr<SoundManager> m_soundManager;
-    std::unique_ptr<HD3000Dummy> m_hd3000dummy;
+    HD3000Dummy m_hd3000dummy;
 };
 
