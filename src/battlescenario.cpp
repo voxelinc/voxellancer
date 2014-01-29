@@ -51,7 +51,7 @@ void BattleScenario::populate(Game* game) {
     aitester->setCharacter(new DummyCharacter(*aitester, new DummyElevatedTask(*aitester, new FightTask(*aitester, {playerShip->handle()}))));
 
     // create two opposing enemy forces
-    populateBattle(2, 2);
+    populateBattle(4, 4);
 
     glow::debug("Initial spawn");
     world->god().spawn();
@@ -88,13 +88,12 @@ void BattleScenario::populateBattle(int numberOfEnemies1, int numberOfEnemies2) 
 }
 
 void BattleScenario::setTargets(const std::vector<Ship*>& fleet, const std::vector<Ship*>& enemies) {
+    std::vector<Handle<WorldObject>> enemyHandles;
+    for (Ship* enemy : enemies) {
+        enemyHandles.push_back(enemy->handle());
+    }
     for (Ship* ship : fleet) {
-        std::vector<Handle<WorldObject>> enemyHandles;
-        for (Ship* enemy : enemies) {
-            enemyHandles.push_back(enemy->handle());
-        }
         std::random_shuffle(enemyHandles.begin(), enemyHandles.end());
-
         ship->setCharacter(new DummyCharacter(*ship, new DummyElevatedTask(*ship, new FightTask(*ship, enemyHandles))));
     }
 }

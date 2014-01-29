@@ -19,11 +19,11 @@ class FightTask : public BasicTask {
     };
 
 public:
-    FightTask(Ship& ship, std::vector<Handle<WorldObject>> targets);
+    FightTask(Ship& ship, const std::vector<Handle<WorldObject>>& targets);
 
     virtual void update(float deltaSec);
-    virtual void addTargets(std::vector<Handle<WorldObject>> targets);
-    virtual void setTargets(std::vector<Handle<WorldObject>> targets);
+    virtual void addTargets(const std::vector<Handle<WorldObject>>& targets);
+    virtual void setTargets(const std::vector<Handle<WorldObject>>& targets);
 
     virtual bool isInProgress();
 

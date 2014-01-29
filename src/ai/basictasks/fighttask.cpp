@@ -2,7 +2,7 @@
 #include "utils/randfloat.h"
 #include "worldobject/ship.h"
 
-FightTask::FightTask(Ship& ship, std::vector<Handle<WorldObject>> targets) :
+FightTask::FightTask(Ship& ship, const std::vector<Handle<WorldObject>>& targets) :
 BasicTask(ship),
 m_targets(targets)
 {
@@ -68,11 +68,11 @@ void FightTask::updateTargets() {
 }
 
 
-void FightTask::addTargets(std::vector<Handle<WorldObject>> targets) {
+void FightTask::addTargets(const std::vector<Handle<WorldObject>>& targets) {
     m_targets.insert(m_targets.end(), targets.begin(), targets.end());
 }
 
-void FightTask::setTargets(std::vector<Handle<WorldObject>> targets) {
+void FightTask::setTargets(const std::vector<Handle<WorldObject>>& targets) {
     m_targets = targets;
 }
 
