@@ -11,11 +11,11 @@ namespace glow {
 
 class Camera;
 
-class Quad {
+class ScreenQuad {
 public:
     static const int VERTEX_ATTRIBUTE_LOCATION = 0;
 
-    Quad();
+    ScreenQuad();
 
     void draw();
 

@@ -1,4 +1,4 @@
-#include "quad.h"
+#include "screenquad.h"
 
 #include <glow/Buffer.h>
 #include <glow/VertexArrayObject.h>
@@ -12,13 +12,13 @@ static GLfloat vertices[] = {
     1.0f, -1.0f
 };
 
-Quad::Quad():
+ScreenQuad::ScreenQuad():
     m_vertexArrayObject(),
     m_vertexBuffer()
 {
 }
 
-void Quad::draw() {
+void ScreenQuad::draw() {
     if (!m_vertexArrayObject) {
         initialize();
     }
@@ -26,7 +26,7 @@ void Quad::draw() {
     m_vertexArrayObject->drawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
 
-void Quad::initialize() {
+void ScreenQuad::initialize() {
     m_vertexBuffer = new glow::Buffer(GL_ARRAY_BUFFER);
     m_vertexBuffer->setData(sizeof(vertices), vertices);
 

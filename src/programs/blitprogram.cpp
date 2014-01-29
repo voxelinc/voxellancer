@@ -5,17 +5,13 @@
 #include <glow/Buffer.h>
 #include <glow/Texture.h>
 #include <glow/VertexAttributeBinding.h>
+#include "display/rendering/screenquad.h"
 
 
-static GLfloat vertices[] = {
-    -1.0f,  1.0f,
-    -1.0f, -1.0f,
-     1.0f,  1.0f,
-     1.0f, -1.0f
-};
 
 BlitProgram::BlitProgram():
-    m_initialized(false)
+    m_initialized(false),
+    m_quad(new ScreenQuad())
 {
 }
 
@@ -36,9 +32,7 @@ void BlitProgram::blit() {
     if(!m_initialized) {
         initialize();
     }
-
-    m_destinationFBO->bind();
-    
+       
     glActiveTexture(GL_TEXTURE0);
     m_source->bind();
 
@@ -47,24 +41,12 @@ void BlitProgram::blit() {
     setUniform<glm::vec2>("viewportSize", m_destinationViewport.scale());
 
     use();
-    m_vertexArrayObject.drawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    m_quad->draw();
     release();
 }
 
 void BlitProgram::initialize() {
     m_initialized = true;
-    
-    m_vertexBuffer = new glow::Buffer(GL_ARRAY_BUFFER);
-
-    m_vertexBuffer->setData(sizeof(vertices), vertices);
-
-    glow::VertexAttributeBinding* binding = m_vertexArrayObject.binding(0);
-    binding->setAttribute(VERTEX_LOCATION);
-    binding->setBuffer(m_vertexBuffer, 0, sizeof(GLfloat) * 2);
-    binding->setFormat(2, GL_FLOAT, GL_FALSE, 0);
-    m_vertexArrayObject.enable(VERTEX_LOCATION);
-
     initializeShaders();
-
 }
 

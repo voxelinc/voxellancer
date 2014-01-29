@@ -5,18 +5,18 @@
 #include <glow/Program.h>
 #include <glowutils/global.h>
 
-#include "quad.h"
+#include "screenquad.h"
 #include "framebuffer.h"
 
 
-PostProcessingPass::PostProcessingPass(std::string name, Quad& quad) :
+PostProcessingPass::PostProcessingPass(std::string name, ScreenQuad& quad) :
     RenderPass(name),
     m_quad(quad),
     m_program(nullptr),
     m_output(),
     m_inputMapping(),
     m_fragmentShader(""),
-    m_vertexShader("data/shader/screenquad.vert")
+    m_vertexShader("data/postprocessing/screenquad.vert")
 {
 }
 

@@ -14,13 +14,13 @@ namespace glow {
 
 enum class BufferName;
 class FrameBuffer;
-class Quad;
+class ScreenQuad;
 
 
 
 class PostProcessingPass : public RenderPass {
 public:
-    PostProcessingPass(std::string name, Quad& quad);
+    PostProcessingPass(std::string name, ScreenQuad& quad);
 
     void apply(FrameBuffer& frameBuffer);
     void beforeDraw(FrameBuffer& frameBuffer);
@@ -39,7 +39,7 @@ protected:
     std::vector<BufferName> m_output;
     std::string m_fragmentShader;
     std::string m_vertexShader;
-    Quad& m_quad;
+    ScreenQuad& m_quad;
 
     void initialize();
 };
