@@ -70,7 +70,7 @@ go_bandit([](){
         });
 
         it("is moved when the transform moves", [&]() {
-            WorldTransform transform;
+            Transform transform;
 
             AssertThat(tree->root()->sphere(transform).position(), EqualsWithDelta(glm::vec3(0), glm::vec3(0.01, 0.01, 0.01)));
 
@@ -85,7 +85,7 @@ go_bandit([](){
         it("supports basic rotation with voxel in center", [&]() {
             Voxel v1(glm::ivec3(1, 1, 1));
             Voxel v2(glm::ivec3(0, 0, 0));
-            WorldTransform transform;
+            Transform transform;
 
             tree->insert(&v1);
 
@@ -103,7 +103,7 @@ go_bandit([](){
             glm::vec3 v;
             Voxel v1(glm::ivec3(1, 1, 1));
             Voxel v2(glm::ivec3(0, 0, 0));
-            WorldTransform transform;
+            Transform transform;
 
             tree->insert(&v1);
 

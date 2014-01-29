@@ -11,7 +11,7 @@
 
 #include "geometry/aabb.h"
 
-#include "worldtransform.h"
+#include "geometry/transform.h"
 #include "voxel.h"
 #include "voxelrenderdata.h"
 #include "voxelgridcmp.h"
@@ -22,9 +22,9 @@ public:
     VoxelCluster(float scale);
     virtual ~VoxelCluster();
 
-    WorldTransform& transform();
-    const WorldTransform& transform() const;
-    void setTransform(const WorldTransform& transform);
+    Transform& transform();
+    const Transform& transform() const;
+    void setTransform(const Transform& transform);
 
 
     const IAABB& minimalGridAABB();
@@ -32,7 +32,7 @@ public:
     const Sphere& minimalGridSphere();
 
     const IAABB& aabb();
-    IAABB aabb(const WorldTransform& transform);
+    IAABB aabb(const Transform& transform);
 
     Voxel* voxel(const glm::ivec3& position);
 
@@ -54,7 +54,7 @@ public:
 protected:
     std::unordered_map<glm::ivec3, Voxel*> m_voxels;
     VoxelRenderData m_voxelRenderData;
-    WorldTransform m_transform;
+    Transform m_transform;
 
 
     std::set<Voxel*, VoxelGridCmp<XAxis, YAxis, ZAxis>> m_voxelsXSorted;
@@ -67,7 +67,7 @@ protected:
 
     void calculateMinimalGridAABB();
     void calculateMinimalGridSphere();
-    IAABB calculateAABB(const WorldTransform& transform);
+    IAABB calculateAABB(const Transform& transform);
 
 
 private:
@@ -78,7 +78,7 @@ private:
     bool m_minimalGridSphereValid;
 
     IAABB m_aabb;
-    WorldTransform m_cachedAABBTransform;
+    Transform m_cachedAABBTransform;
     bool m_aabbValid;
 };
 

@@ -6,14 +6,14 @@
 
 #include "collision/voxelcollision.h"
 #include "property/property.h"
-#include "worldtransform.h"
+#include "geometry/transform.h"
 #include "physics/impulse.h"
 
 #include "movement.h"
 
 
 class WorldObject;
-class WorldTransform;
+class Transform;
 
 class Physics {
 public:

@@ -19,7 +19,7 @@ void ElasticImpulsor::parse(std::list<Impulse>& worldObjectImpulses) {
 
         assert(physics.mass() > 0);
 
-        WorldTransform targetTransform(worldObject->transform(), physics.speed(), glm::quat(physics.angularSpeed()));
+        Transform targetTransform(worldObject->transform(), physics.speed(), glm::quat(physics.angularSpeed()));
 
         glm::vec3 v1 = targetTransform.applyTo(glm::vec3(worldObjectImpulse.voxel()->gridCell())) - worldObject->transform().applyTo(glm::vec3(worldObjectImpulse.voxel()->gridCell()));
         glm::vec3 v2 = worldObjectImpulse.speed();

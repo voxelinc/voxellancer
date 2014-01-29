@@ -12,12 +12,12 @@ void DamageImpactGenerator::parse(std::list<WorldObjectCollision>& worldObjectCo
         float massPerImpactA = worldObjectCollision.worldObjectA()->physics().mass() / worldObjectCollision.voxelCollisions().size();
         float massPerImpactB = worldObjectCollision.worldObjectB()->physics().mass() / worldObjectCollision.voxelCollisions().size();
 
-        WorldTransform targetTransformA(worldObjectCollision.worldObjectA()->transform(), 
-            worldObjectCollision.worldObjectA()->physics().speed(), 
+        Transform targetTransformA(worldObjectCollision.worldObjectA()->transform(),
+            worldObjectCollision.worldObjectA()->physics().speed(),
             glm::quat(worldObjectCollision.worldObjectA()->physics().angularSpeed()));
 
-        WorldTransform targetTransformB(worldObjectCollision.worldObjectB()->transform(), 
-            worldObjectCollision.worldObjectB()->physics().speed(), 
+        Transform targetTransformB(worldObjectCollision.worldObjectB()->transform(),
+            worldObjectCollision.worldObjectB()->physics().speed(),
             glm::quat(worldObjectCollision.worldObjectB()->physics().angularSpeed()));
 
         for(VoxelCollision& voxelCollision :  worldObjectCollision.voxelCollisions()) {

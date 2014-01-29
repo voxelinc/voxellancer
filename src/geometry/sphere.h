@@ -5,7 +5,7 @@
 #include "abstractshape.h"
 
 
-class WorldTransform;
+class Transform;
 template<typename T> class TAABB;
 
 class Sphere : public AbstractShape {
