@@ -6,6 +6,8 @@
 
 #include "ui/hud.h"
 
+#include "utils/hd3000dummy.h"
+
 #include "voxel/voxelrenderer.h"
 #include "voxeleffect/voxelparticleworld.h"
 
@@ -20,10 +22,14 @@
 
 GameScene::GameScene(Game* game):
     m_game(game),
+    m_hd3000dummy(new HD3000Dummy()),
     m_voxelRenderer(VoxelRenderer::instance()),
     m_soundManager(new SoundManager())
 {
 }
+
+/* To allow pimple of HD3000Dummy. */
+GameScene::~GameScene() = default;
 
 void GameScene::draw(Camera* camera) {
     World::instance()->skybox().draw(camera);
@@ -40,7 +46,7 @@ void GameScene::draw(Camera* camera) {
 
     World::instance()->voxelParticleWorld().draw(*camera);
 
-    m_hd3000dummy.drawIfActive();
+    m_hd3000dummy->drawIfActive();
 }
 
 void GameScene::activate() {
