@@ -1,10 +1,7 @@
 #pragma once
 
 #include <memory>
-
 #include <glm/glm.hpp>
-
-#include <SFML/Audio.hpp>
 
 
 namespace sf {
@@ -19,6 +16,7 @@ public:
     };
 
     Sound(const sf::SoundBuffer& sound);
+    ~Sound();
 
     Status status();
 
@@ -32,7 +30,6 @@ public:
     Sound* setLooping(bool loop);
     Sound* setRelativeToListener(bool relative);
     Sound* setMinDistance(float distance);
-
 
 protected:
     std::unique_ptr<sf::Sound> m_sound;
