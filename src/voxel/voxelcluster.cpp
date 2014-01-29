@@ -34,8 +34,8 @@ Transform& VoxelCluster::transform() {
     return m_transform;
 }
 
-const Transform& VoxelCluster::transform() const {
-    return m_transform;
+void VoxelCluster::setTransform(const Transform& transform) {
+    m_transform = transform;
 }
 
 const IAABB& VoxelCluster::minimalGridAABB() {
@@ -63,10 +63,6 @@ const IAABB& VoxelCluster::aabb() {
 
 IAABB VoxelCluster::aabb(const Transform& transform) {
     return calculateAABB(transform);
-}
-
-void VoxelCluster::setTransform(const Transform& transform) {
-    m_transform = transform;
 }
 
 Voxel* VoxelCluster::voxel(const glm::ivec3& position) {

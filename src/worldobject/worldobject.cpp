@@ -9,12 +9,7 @@
 #include "collision/collisiondetector.h"
 
 
-WorldObject::WorldObject(CollisionFilterClass collisionFilterClass):
-    WorldObject(1.0f, collisionFilterClass)
-{
-}
-
-WorldObject::WorldObject(float scale, CollisionFilterClass collisionFilterClass) :
+WorldObject::WorldObject(CollisionFilterClass collisionFilterClass, float scale):
     CollisionFilterable(collisionFilterClass),
     VoxelCluster(scale),
     m_physics(*this, scale),

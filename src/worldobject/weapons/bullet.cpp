@@ -10,7 +10,7 @@
 
 
 Bullet::Bullet(WorldObject* creator, float lifetime) :
-    WorldObject(0.5f, CollisionFilterClass::Bullet),
+    WorldObject(CollisionFilterClass::Bullet,0.5f),
     m_creator(creator),
     m_lifetime(lifetime)
 {

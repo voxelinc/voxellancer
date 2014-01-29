@@ -66,7 +66,7 @@ void GameScenario::populate(Game* game) {
 
     game->player().setShip(testCluster);
 
-    WorldObject *wall = new WorldObject(1);
+    WorldObject *wall = new WorldObject(CollisionFilterClass::Other, 1.0f);
     wall->transform().move(glm::vec3(-30, 0, -50));
     wall->transform().rotate(glm::angleAxis(-90.f, glm::vec3(0, 1, 0)));
     for(int x = 0; x < 20; x++) {

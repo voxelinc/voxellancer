@@ -24,7 +24,6 @@ public:
     virtual ~VoxelCluster();
 
     Transform& transform();
-    const Transform& transform() const;
     void setTransform(const Transform& transform);
 
 

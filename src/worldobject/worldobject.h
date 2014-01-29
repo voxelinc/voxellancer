@@ -5,10 +5,15 @@
 
 #include "collision/collisiondetector.h"
 #include "collision/collisionfilterable.h"
+
+#include "worldobject/handle/handle.h"
+
 #include "physics/physics.h"
-#include "voxel/voxelcluster.h"
+
 #include "ui/objectinfo.h"
-#include "handle/handle.h"
+
+#include "voxel/voxelcluster.h"
+
 
 class CollisionDetector;
 class EngineVoxel;
@@ -16,12 +21,9 @@ class HardpointVoxel;
 class CockpitVoxel;
 class FuelVoxel;
 
-class WorldObject : public VoxelCluster, public CollisionFilterable
-{
+class WorldObject : public VoxelCluster, public CollisionFilterable {
 public:
-    WorldObject(CollisionFilterClass collisionFilterClass = CollisionFilterClass::Other);
-    WorldObject(float scale, CollisionFilterClass collisionFilterClass = CollisionFilterClass::Other);
-
+    WorldObject(CollisionFilterClass collisionFilterClass = CollisionFilterClass::Other, float scale = 1.0f);
     virtual ~WorldObject();
 
     CollisionDetector& collisionDetector();
