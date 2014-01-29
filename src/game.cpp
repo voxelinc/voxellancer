@@ -55,8 +55,8 @@ void Game::update(float deltaSec) {
 
 void Game::draw() {
     glFrontFace(GL_CCW);
-  //  glEnable(GL_CULL_FACE);
-//   glCullFace(GL_BACK);
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
     glClear(GL_DEPTH_BUFFER_BIT);
 
     m_viewer.draw();
