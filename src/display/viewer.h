@@ -14,6 +14,7 @@ class StereoRenderInfo;
 class Viewer {
 public:
     Viewer(const Viewport& viewport);
+    ~Viewer();
 
     Scene* scene();
     void setScene(Scene* scene);

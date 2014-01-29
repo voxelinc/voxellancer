@@ -2,14 +2,9 @@
 
 #include <vector>
 
-#include "camera/cameradolly.h"
-
 #include "etc/hmd/hmd.h"
 
-#include "property/propertymanager.h"
 #include "property/property.h"
-
-#include "worldobject/ship.h"
 
 #include "inputconfigurator.h"
 #include "targetselector.h"

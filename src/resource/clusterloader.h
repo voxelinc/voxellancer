@@ -4,8 +4,7 @@
 #include <string>
 #include <vector>
 
-#include "voxel/voxel.h"
-
+class Voxel;
 class VoxelCluster;
 
 class ClusterLoader {

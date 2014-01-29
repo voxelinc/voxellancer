@@ -11,8 +11,12 @@
 #include "rendering/framebuffer.h"
 #include "rendering/renderpipeline.h"
 #include "rendering/blitter.h"
+#include "player.h"
+#include "ui/hud.h"
+#include "world/world.h"
+#include "skybox.h"
 
-GameScene::GameScene(Game* game) :
+GameScene::GameScene(Game* game):
     m_game(game),
     m_voxelRenderer(VoxelRenderer::instance()),
     m_hd3000dummy(new HD3000Dummy()),
@@ -45,12 +49,12 @@ void GameScene::deactivate() {
     m_soundManager->deactivate();
 }
 
-void GameScene::setCameraHead(CameraHead* head) {
-    m_head = head;
+void GameScene::setPlayer(Player* player) {
+    m_player = player;
 }
 
 void GameScene::update(float deltaSec) {
-    m_soundManager->setListener(m_head->position(), m_head->orientation());
+    m_soundManager->setListener(m_player->cameraPosition(), m_player->cameraOrientation());
 }
 
 void GameScene::setOutputBuffer(int i) {
