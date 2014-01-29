@@ -8,6 +8,7 @@
 #include "player.h"
 #include "camera/cameradolly.h"
 #include "ui/hud.h"
+#include "battlescenario.h"
 
 class Ship;
 
@@ -41,6 +42,7 @@ HMDManager& Game::hmdManager() {
 void Game::initialize() {
     assert(m_viewer.scene() == &m_gameScene);
     GameScenario scenario;
+    //BattleScenario scenario;
     scenario.populate(this);
 }
 

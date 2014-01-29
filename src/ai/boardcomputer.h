@@ -1,5 +1,6 @@
 #pragma once
 
+#include <vector>
 #include <list>
 
 #include <glm/glm.hpp>
@@ -18,7 +19,7 @@ public:
     
     void moveTo(const glm::vec3& position);
     void rotateTo(const glm::vec3& position, const glm::vec3& up = glm::vec3(0, 0, 0));
-    void shootBullet(const std::list<Handle<WorldObject>>& targets);
+    void shootBullet(const std::vector<Handle<WorldObject>>& targets);
     void shootRockets(Handle<WorldObject> target);
 
 protected:

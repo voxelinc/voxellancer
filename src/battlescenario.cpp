@@ -16,6 +16,7 @@
 #include "game.h"
 #include "world/world.h"
 #include "world/god.h"
+#include "utils/randvec.h"
 
 
 BattleScenario::BattleScenario() {
@@ -47,7 +48,7 @@ void BattleScenario::populate(Game* game) {
     aitester->objectInfo().setName("basicship");
     aitester->objectInfo().setShowOnHud(false);
     //world->god().scheduleSpawn(aitester);
-    aitester->setCharacter(new DummyCharacter(*aitester, new DummyElevatedTask(*aitester, new FightTask(*aitester, std::list<Handle<WorldObject>>{playerShip->handle()}))));
+    aitester->setCharacter(new DummyCharacter(*aitester, new DummyElevatedTask(*aitester, new FightTask(*aitester, {playerShip->handle()}))));
 
     // create two opposing enemy forces
     populateBattle(2, 2);
@@ -58,47 +59,42 @@ void BattleScenario::populate(Game* game) {
 
 void BattleScenario::populateBattle(int numberOfEnemies1, int numberOfEnemies2) {
     World* world = World::instance();
-    std::list<Handle<WorldObject>> enemies1;
-    std::list<Handle<WorldObject>> enemies2;
+    std::vector<Ship*> fleet1;
+    std::vector<Ship*> fleet2;
     for (int e = 0; e < numberOfEnemies1; e++) {
-        Ship *enemy = new Ship();
-        int r = 200;
-        enemy->move(glm::vec3(-200 + rand() % r - r / 2, rand() % r - r / 2, -200 + rand() % r - r / 2));
-        enemy->objectInfo().setName("enemy2");
-        enemy->objectInfo().setShowOnHud(false);
-        enemy->objectInfo().setCanLockOn(false);
-        ClusterCache::instance()->fillObject(enemy, "data/voxelcluster/basicship.csv");
-        world->god().scheduleSpawn(enemy);
-        enemies2.push_back(enemy->handle());
+        Ship *ship = new Ship();
+        float r = 200;
+        ship->move(RandVec3::rand(0.0f, r) + glm::vec3(-200, 0, -200));
+        ship->objectInfo().setName("enemy2");
+        ship->objectInfo().setShowOnHud(false);
+        ship->objectInfo().setCanLockOn(false);
+        ClusterCache::instance()->fillObject(ship, "data/voxelcluster/basicship.csv");
+        world->god().scheduleSpawn(ship);
+        fleet2.push_back(ship);
     }
     for (int e = 0; e < numberOfEnemies2; e++) {
-        Ship *enemy = new Ship();
-        int r = 200;
-        enemy->move(glm::vec3(200 + rand() % r - r / 2, rand() % r - r / 2, -200 + rand() % r - r / 2));
-        enemy->objectInfo().setName("enemy1");
-        enemy->objectInfo().setShowOnHud(false);
-        enemy->objectInfo().setCanLockOn(false);
-        ClusterCache::instance()->fillObject(enemy, "data/voxelcluster/basicship.csv");
-        world->god().scheduleSpawn(enemy);
-        enemies1.push_back(enemy->handle());
+        Ship *ship = new Ship();
+        float r = 200;
+        ship->move(RandVec3::rand(0.0f, r) + glm::vec3(200, 0, -200));
+        ship->objectInfo().setName("enemy1");
+        ship->objectInfo().setShowOnHud(false);
+        ship->objectInfo().setCanLockOn(false);
+        ClusterCache::instance()->fillObject(ship, "data/voxelcluster/basicship.csv");
+        world->god().scheduleSpawn(ship);
+        fleet1.push_back(ship);
     }
-    for (Handle<WorldObject> handle : enemies1) {
+    setTargets(fleet1, fleet2);
+    setTargets(fleet2, fleet1);
+}
 
-        std::vector<Handle<WorldObject>> tmpVector(enemies2.size());
-        std::copy(enemies2.begin(), enemies2.end(), tmpVector.begin());
-        std::random_shuffle(tmpVector.begin(), tmpVector.end());
-        copy(tmpVector.begin(), tmpVector.end(), enemies2.begin());
+void BattleScenario::setTargets(const std::vector<Ship*>& fleet, const std::vector<Ship*>& enemies) {
+    for (Ship* ship : fleet) {
+        std::vector<Handle<WorldObject>> enemyHandles;
+        for (Ship* enemy : enemies) {
+            enemyHandles.push_back(enemy->handle());
+        }
+        std::random_shuffle(enemyHandles.begin(), enemyHandles.end());
 
-        Ship* e = (Ship*)handle->get();
-        e->setCharacter(new DummyCharacter(*e, new DummyElevatedTask(*e, new FightTask(*e, enemies2))));
-    }
-    for (Handle<WorldObject> handle : enemies2) {
-        std::vector<Handle<WorldObject>> tmpVector(enemies1.size());
-        std::copy(enemies1.begin(), enemies1.end(), tmpVector.begin());
-        std::random_shuffle(tmpVector.begin(), tmpVector.end());
-        copy(tmpVector.begin(), tmpVector.end(), enemies1.begin());
-
-        Ship* e = (Ship*)handle->get();
-        e->setCharacter(new DummyCharacter(*e, new DummyElevatedTask(*e, new FightTask(*e, enemies1))));
+        ship->setCharacter(new DummyCharacter(*ship, new DummyElevatedTask(*ship, new FightTask(*ship, enemyHandles))));
     }
 }

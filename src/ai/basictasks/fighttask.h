@@ -1,10 +1,13 @@
 #pragma once
 
-#include "worldobject/handle/handle.h"
-#include "../basictask.h"
-#include "worldobject/ship.h"
-#include "utils/randfloat.h"
+#include <vector>
+#include <glm/glm.hpp>
 
+#include "worldobject/handle/handle.h"
+#include "ai/basictask.h"
+
+class Ship;
+class WorldObject;
 
 class FightTask : public BasicTask {
 
@@ -16,16 +19,16 @@ class FightTask : public BasicTask {
     };
 
 public:
-    FightTask(Ship& ship, std::list<Handle<WorldObject>> targets);
+    FightTask(Ship& ship, std::vector<Handle<WorldObject>> targets);
 
     virtual void update(float deltaSec);
-    virtual void addTargets(std::list<Handle<WorldObject>> targets);
-    virtual void setTargets(std::list<Handle<WorldObject>> targets);
+    virtual void addTargets(std::vector<Handle<WorldObject>> targets);
+    virtual void setTargets(std::vector<Handle<WorldObject>> targets);
 
     virtual bool isInProgress();
 
 protected:
-    std::list<Handle<WorldObject>> m_targets;
+    std::vector<Handle<WorldObject>> m_targets;
     WorldObject* m_primaryTarget;
     void updateTargets();
     void updateState();

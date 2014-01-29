@@ -67,7 +67,7 @@ void BoardComputer::rotateUpAuto(const glm::quat& rotation) {
     }
 }
 
-void BoardComputer::shootBullet(const std::list<Handle<WorldObject>>& targets) {
+void BoardComputer::shootBullet(const std::vector<Handle<WorldObject>>& targets) {
     float max_angle = glm::radians(45.0f);
 
     for (auto targetHandle : targets) {

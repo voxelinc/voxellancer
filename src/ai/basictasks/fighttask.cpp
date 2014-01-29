@@ -1,6 +1,8 @@
 #include "fighttask.h"
+#include "utils/randfloat.h"
+#include "worldobject/ship.h"
 
-FightTask::FightTask(Ship& ship, std::list<std::shared_ptr<WorldObjectHandle>> targets) :
+FightTask::FightTask(Ship& ship, std::vector<Handle<WorldObject>> targets) :
 BasicTask(ship),
 m_targets(targets)
 {
@@ -24,7 +26,7 @@ void FightTask::update(float deltaSec) {
                 m_ship.boardComputer()->rotateTo(m_primaryTarget->transform().position());
             } else {
                 m_ship.boardComputer()->rotateTo(m_primaryTarget->transform().position());
-                m_ship.boardComputer()->moveTo(m_primaryTarget->transform().position(), m_minEnemyDistance);
+                m_ship.boardComputer()->moveTo(m_primaryTarget->transform().position());
             }
             m_ship.boardComputer()->shootBullet(m_targets);
             break;
@@ -34,7 +36,7 @@ void FightTask::update(float deltaSec) {
                 m_ship.boardComputer()->rotateTo(m_primaryTarget->transform().position());
             } else {
                 m_ship.boardComputer()->rotateTo(m_primaryTarget->transform().position());
-                m_ship.boardComputer()->moveTo(m_primaryTarget->transform().position(), m_minEnemyDistance);
+                m_ship.boardComputer()->moveTo(m_primaryTarget->transform().position());
                 if (angleToTarget() < 15.0f && targetDistance() < m_maxRocketDistance) {
                     m_ship.boardComputer()->shootRockets(m_primaryTarget->handle());
                 }
@@ -54,23 +56,23 @@ void FightTask::update(float deltaSec) {
 void FightTask::updateTargets() {
     auto iterator = m_targets.begin();
     while (iterator != m_targets.end()) {
-        if (!(*iterator)->get()) {
+        if (!iterator->get()) {
             iterator = m_targets.erase(iterator);
         } else {
             iterator++;
         }
     }
     if (!m_targets.empty()) {
-        m_primaryTarget = m_targets.front()->get();
+        m_primaryTarget = m_targets.front().get();
     }
 }
 
 
-void FightTask::addTargets(std::list<std::shared_ptr<WorldObjectHandle>> targets) {
+void FightTask::addTargets(std::vector<Handle<WorldObject>> targets) {
     m_targets.insert(m_targets.end(), targets.begin(), targets.end());
 }
 
-void FightTask::setTargets(std::list<std::shared_ptr<WorldObjectHandle>> targets) {
+void FightTask::setTargets(std::vector<Handle<WorldObject>> targets) {
     m_targets = targets;
 }
 
