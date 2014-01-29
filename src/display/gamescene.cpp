@@ -4,9 +4,14 @@
 #include "voxeleffect/voxelparticleworld.h"
 #include "utils/hd3000dummy.h"
 #include "sound/soundmanager.h"
+#include "collision/collisiondetector.h"
 
+#include "worldobject/worldobject.h"
 #include "game.h"
-
+#include "player.h"
+#include "ui/hud.h"
+#include "world/world.h"
+#include "skybox.h"
 
 GameScene::GameScene(Game* game):
     m_game(game),
@@ -15,6 +20,8 @@ GameScene::GameScene(Game* game):
     m_soundManager(new SoundManager())
 {
 }
+
+GameScene::~GameScene() = default;
 
 void GameScene::draw(Camera* camera) {
     World::instance()->skybox().draw(camera);
@@ -42,10 +49,11 @@ void GameScene::deactivate() {
     m_soundManager->deactivate();
 }
 
-void GameScene::setCameraHead(CameraHead* head) {
-    m_head = head;
+void GameScene::setPlayer(Player* player) {
+    m_player = player;
 }
 
 void GameScene::update(float deltaSec) {
-    m_soundManager->setListener(m_head->position(), m_head->orientation());
+    m_soundManager->setListener(m_player->cameraPosition(), m_player->cameraOrientation());
 }
+

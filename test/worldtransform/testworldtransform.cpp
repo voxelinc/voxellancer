@@ -7,6 +7,7 @@
 
 #include "../bandit_extension/vec3helper.h"
 #include "worldtransform.h"
+#include "property/propertymanager.h"
 
 using namespace bandit;
 

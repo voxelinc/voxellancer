@@ -5,6 +5,8 @@
 #include "physics/physics.h"
 
 #include "utils/tostring.h"
+#include "physics/impulse.h"
+#include "voxel/voxel.h"
 
 
 ElasticImpulsor::ElasticImpulsor():
@@ -20,7 +22,6 @@ void ElasticImpulsor::parse(std::list<Impulse>& worldObjectImpulses) {
         assert(physics.mass() > 0);
 
         WorldTransform targetTransform(worldObject->transform(), physics.speed(), glm::quat(physics.angularSpeed()));
-
         glm::vec3 v1 = targetTransform.applyTo(glm::vec3(worldObjectImpulse.voxel()->gridCell())) - worldObject->transform().applyTo(glm::vec3(worldObjectImpulse.voxel()->gridCell()));
         glm::vec3 v2 = worldObjectImpulse.speed();
         float m1 = physics.mass();

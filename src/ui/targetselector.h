@@ -1,11 +1,9 @@
 #pragma once
 
-#include "camera/camera.h"
+#include <functional>
 
-#include "world/world.h"
-
-#include "player.h"
-
+class WorldObject;
+class Player;
 
 class TargetSelector {
 public:
@@ -13,8 +11,7 @@ public:
 
     void selectNextTarget();
     void selectPreviousTarget();
-
-
+    
 private:
     Player* m_player;
 

@@ -10,6 +10,8 @@
 #include <glow/logging.h>
 
 #include "utils/tostring.h"
+#include "voxelrenderdata.h"
+#include "voxel.h"
 
 
 VoxelCluster::VoxelCluster(float scale):
@@ -77,7 +79,7 @@ void VoxelCluster::addVoxel(Voxel* voxel) {
 
     m_voxels[voxel->gridCell()] = voxel;
     m_voxelRenderData.invalidate();
-
+    
     extendGridAABB(voxel);
 }
 

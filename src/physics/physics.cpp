@@ -17,6 +17,7 @@
 #include "world/world.h"
 
 #include "utils/tostring.h"
+#include "voxel/voxel.h"
 
 
 Physics::Physics(WorldObject& worldObject, float scale) :

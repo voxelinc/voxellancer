@@ -6,6 +6,7 @@
 #include "voxel/voxelrenderer.h"
 
 #include "crosshair.h"
+#include "voxel/voxel.h"
 
 
 class CrossHairElement: public VoxelCluster {
