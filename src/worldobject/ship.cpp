@@ -116,8 +116,8 @@ float Ship::minAimDistance() { // is this needed ?!
     return range;
 }
 
-void Ship::accelerate(const glm::vec3& direction) {
-    m_physics.accelerate(direction * prop_maxSpeed.get());
+void Ship::accelerateDirectional(const glm::vec3& direction) {
+    m_physics.accelerateDirectional(direction * prop_maxSpeed.get());
 }
 
 void Ship::accelerateAngular(const glm::vec3& axis) {

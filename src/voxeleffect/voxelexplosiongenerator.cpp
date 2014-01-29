@@ -14,7 +14,7 @@ VoxelExplosionGenerator::VoxelExplosionGenerator() :
     m_radius(0.5f),
     m_count(10)
 {
-    m_particleDampening = Property<float>("physics.explosionDampening");
+    m_particleDampening = Property<float>("physics.explosionDirectionalDampening");
     m_particleAngularDampening = Property<float>("physics.explosionAngularDampening");
     m_particleBaseForce = Property<float>("physics.explosionBaseForce");
     m_particleAngularBaseForce = Property<float>("physics.explosionAngularBaseForce");

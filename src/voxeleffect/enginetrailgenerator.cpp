@@ -39,7 +39,7 @@ void EngineTrailGenerator::setEngine(Engine* engine) {
 void EngineTrailGenerator::update(float deltaSec) {
     assert(m_engine);
 
-    glm::vec3 speedLocalSystem = glm::inverse(m_engine->ship()->transform().orientation()) * m_engine->ship()->physics().speed();
+    glm::vec3 speedLocalSystem = glm::inverse(m_engine->ship()->transform().orientation()) * m_engine->ship()->physics().directionalSpeed();
     if (speedLocalSystem.z <= 0.5) { //only when not moving backwards
         if (!m_lastValid){
             m_lastPosition = calculateSpawnPosition();
@@ -67,7 +67,7 @@ void EngineTrailGenerator::update(float deltaSec) {
 
     // When not moving, we still want some exhausts
     if (m_timeSinceLastSpawn > prop_idleTime) {
-        spawnAt(calculateSpawnPosition());        
+        spawnAt(calculateSpawnPosition());
     }
 }
 
@@ -77,7 +77,7 @@ glm::vec3 EngineTrailGenerator::calculateSpawnPosition() {
 
 void EngineTrailGenerator::spawnAt(glm::vec3 position) {
     m_generator.setPosition(position);
-    m_generator.setImpactVector(m_engine->ship()->transform().orientation() * (glm::vec3(0, 0, 0.1f) * glm::abs(m_engine->ship()->physics().acceleration()) / 5.0f));
+    m_generator.setImpactVector(m_engine->ship()->transform().orientation() * (glm::vec3(0, 0, 0.1f) * glm::abs(m_engine->ship()->physics().directionalAcceleration()) / 5.0f));
 
     m_generator.spawn();
     m_timeSinceLastSpawn = 0.0f;

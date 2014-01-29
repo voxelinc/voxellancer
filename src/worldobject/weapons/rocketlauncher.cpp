@@ -24,7 +24,7 @@ void RocketLauncher::update(float deltaSec) {
 
 void RocketLauncher::shootAtObject(Hardpoint* source, WorldObject* target){
     if (canFire()) {
-        Rocket *r = new Rocket(source->position(), source->ship()->transform().orientation(), source->ship()->physics().speed(), m_speed, m_lifetime, target);
+        Rocket *r = new Rocket(source->position(), source->ship()->transform().orientation(), source->ship()->physics().directionalSpeed(), m_speed, m_lifetime, target);
         World::instance()->god().scheduleSpawn(r);
 
         fired();

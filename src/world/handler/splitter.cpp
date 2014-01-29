@@ -36,7 +36,7 @@ WorldObject *Splitter::createWorldObjectFromSplitOff(SplitData *split) {
     worldObject->objectInfo().setCanLockOn(false);
     worldObject->objectInfo().setShowOnHud(false);
 
-    worldObject->physics().setSpeed(worldObject->physics().speed());
+    worldObject->physics().setDirectionalSpeed(worldObject->physics().directionalSpeed());
     worldObject->physics().setAngularSpeed(worldObject->physics().angularSpeed());
 
     for(Voxel *voxel : split->splitOffVoxels()) {

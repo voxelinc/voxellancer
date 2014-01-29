@@ -47,11 +47,8 @@ void Game::initialize() {
 }
 
 void Game::update(float deltaSec) {
-    if (deltaSec == 0.0f) {
-        return;
-    }
-    deltaSec = glm::min(1.0f, deltaSec);
-    
+    deltaSec = glm::min(1.0f / 10.0f, deltaSec);
+
     m_viewer.update(deltaSec);
     World::instance()->update(deltaSec);
     m_player.update(deltaSec);

@@ -23,7 +23,7 @@ public:
     virtual void addHardpointVoxel(HardpointVoxel* voxel);
     void removeHardpoint(Hardpoint* hardpoint);
     virtual void addEngineVoxel(EngineVoxel* voxel);
-    
+
     Handle<Ship> shipHandle();
 
     void removeEngine(Engine* engine);
@@ -35,13 +35,13 @@ public:
     float minAimDistance();
     BoardComputer* boardComputer();
 
-    virtual void accelerate(const glm::vec3& direction) override;
+    virtual void accelerateDirectional(const glm::vec3& direction) override;
     virtual void accelerateAngular(const glm::vec3& axis) override;
 
     void setCharacter(Character* character);
     Character* character();
     void setEngineSound(std::shared_ptr<Sound> sound);
-    
+
 protected:
     std::unique_ptr<Character> m_character;
     std::unique_ptr<BoardComputer> m_boardComputer;

@@ -39,14 +39,14 @@ void BulletSpawnHelper::setupBullet() {
         bulletTransform.rotateWorld(orientation); //then rotate towards target
     }
 
-    
+
     //TODO: #300
     float bulletLength = m_bullet->minimalGridAABB().extent(ZAxis) * m_bullet->transform().scale();
     float spawnDistance = glm::root_two<float>() * m_bullet->transform().scale();
     bulletTransform.setPosition(m_hardpoint->position() + bulletDirection * (bulletLength / 2.0f + spawnDistance));
 
     m_bullet->setTransform(bulletTransform);
-    m_bullet->physics().setSpeed(bulletDirection * m_bulletSpeed);
+    m_bullet->physics().setDirectionalSpeed(bulletDirection * m_bulletSpeed);
     m_bullet->physics().setAngularSpeed(glm::vec3(0.0f, 0.0f, 50.0f));
 }
 

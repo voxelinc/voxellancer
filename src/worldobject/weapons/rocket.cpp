@@ -37,7 +37,7 @@ Rocket::Rocket(glm::vec3 position, glm::quat orientation, const glm::vec3& initi
     //TODO: #300
     m_transform.setPosition(position + myOrientation * (minimalGridAABB().axisMax(Axis::ZAxis) * m_transform.scale() / 2.0f + glm::root_two<float>()));
 
-    m_physics.setSpeed(initialSpeed + myOrientation * (m_travelSpeed * 0.1f)); // rocket is ejected with 10% of its travel speed
+    m_physics.setDirectionalSpeed(initialSpeed + myOrientation * (m_travelSpeed * 0.1f)); // rocket is ejected with 10% of its travel speed
 
     m_objectInfo.setName("Rocket");
     m_objectInfo.setShowOnHud(false);
@@ -69,10 +69,10 @@ void Rocket::update(float deltaSec) {
         }
     }
     // accelerate to travelSpeed
-    if (glm::length(m_physics.speed()) < m_travelSpeed) {
-        float missingSpeed = m_travelSpeed - glm::length(m_physics.speed());
+    if (glm::length(m_physics.directionalSpeed()) < m_travelSpeed) {
+        float missingSpeed = m_travelSpeed - glm::length(m_physics.directionalSpeed());
         // accelerate forward, not towards target
-        m_physics.accelerate(glm::vec3(0, 0, -missingSpeed));
+        m_physics.accelerateDirectional(glm::vec3(0, 0, -missingSpeed));
     }
 
     m_lifetime -= deltaSec;
@@ -81,9 +81,9 @@ void Rocket::update(float deltaSec) {
         World::instance()->god().scheduleRemoval(this);
         spawnExplosion();
     }
-    
+
     m_sound->setPosition(m_transform.position());
-    
+
     Ship::update(deltaSec);
 }
 

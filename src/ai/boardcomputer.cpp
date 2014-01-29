@@ -26,7 +26,7 @@ void BoardComputer::moveTo(const glm::vec3& position) {
     float distance = glm::length(delta);
 
     if (distance > s_minActDistance) {
-        m_ship.accelerate(direction);
+        m_ship.accelerateDirectional(direction);
     }
 }
 

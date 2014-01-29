@@ -33,7 +33,7 @@ std::list<Impulse>& ElasticImpulseGenerator::worldObjectImpulses() {
 
 void ElasticImpulseGenerator::generateImpulse(VoxelCollisionParticipant &from, VoxelCollisionParticipant &to) {
     Transform targetTransformFrom(from.worldObject()->transform(),
-        from.worldObject()->physics().speed(),
+        from.worldObject()->physics().directionalSpeed(),
         glm::quat(from.worldObject()->physics().angularSpeed()));
 
     glm::vec3 speed = targetTransformFrom.applyTo(

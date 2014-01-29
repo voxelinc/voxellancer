@@ -36,7 +36,7 @@ void Player::update(float deltaSec) {
         if (m_acceleration != glm::vec3(0)) {
             m_acceleration = glm::normalize(m_acceleration);
         }
-        playerShip->accelerate(m_acceleration);
+        playerShip->accelerateDirectional(m_acceleration);
 
         if (m_accelerationAngular == glm::vec3(0)) { // dampen rotation
             m_accelerationAngular = playerShip->physics().angularSpeed();

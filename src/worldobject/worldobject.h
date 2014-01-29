@@ -42,10 +42,10 @@ public:
     virtual void addCockpitVoxel(CockpitVoxel* voxel);
     virtual void addFuelVoxel(FuelVoxel* voxel);
 
-    Voxel *crucialVoxel();
+    Voxel* crucialVoxel();
     void setCrucialVoxel(const glm::ivec3& cell);
 
-    virtual void accelerate(const glm::vec3& direction);
+    virtual void accelerateDirectional(const glm::vec3& direction);
     virtual void accelerateAngular(const glm::vec3& axis);
 
     void setCenterAndAdjustPosition(const glm::vec3& newCenter);
@@ -58,17 +58,18 @@ public:
     Handle<WorldObject>& handle();
 
     bool scheduledForDeletion();
-
     void onScheduleForDeletion();
 
-protected:
-    bool m_scheduledForDeletion;
 
+protected:
     CollisionDetector m_collisionDetector;
     Physics m_physics;
+    ObjectInfo m_objectInfo;
 
     Handle<WorldObject> m_handle;
 
-    ObjectInfo m_objectInfo;
     Voxel* m_crucialVoxel;
+
+    bool m_scheduledForDeletion;
 };
+

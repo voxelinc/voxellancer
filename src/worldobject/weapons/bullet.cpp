@@ -24,7 +24,7 @@ Bullet::Bullet(WorldObject* creator, float lifetime) :
     CollisionFilterable::setCollideableWith(CollisionFilterClass::Bullet, false);
 
     m_physics.setAngularSpeed(glm::vec3(0.0f, 0.0f, 50));
-    m_physics.setDampening(0.0f);
+    m_physics.setDirectionalDampening(0.0f);
     m_physics.setAngularDampening(0.0f);
 }
 

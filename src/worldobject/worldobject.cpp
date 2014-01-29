@@ -83,8 +83,8 @@ void WorldObject::addFuelVoxel(FuelVoxel* voxel) {
     addVoxel(voxel);
 }
 
-void WorldObject::accelerate(const glm::vec3& direction) {
-    m_physics.accelerate(direction);
+void WorldObject::accelerateDirectional(const glm::vec3& direction) {
+    m_physics.accelerateDirectional(direction);
 }
 
 void WorldObject::accelerateAngular(const glm::vec3& axis) {
