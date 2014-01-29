@@ -14,7 +14,8 @@
 
 
 Rocket::Rocket(glm::vec3 position, glm::quat orientation, const glm::vec3& initialSpeed, float travelSpeed, float lifetime, WorldObject* target) :
-    Ship()
+    Ship(),
+    m_target(nullptr)
 {
     m_collisionFilterClass = CollisionFilterClass::Rocket;
     m_transform.setScale(0.8f);
@@ -23,8 +24,6 @@ Rocket::Rocket(glm::vec3 position, glm::quat orientation, const glm::vec3& initi
     m_travelSpeed = travelSpeed;
     if (target) {
         m_target = target->handle();
-    } else {
-        m_target = WorldObjectHandle::nullHandle();
     }
     glm::vec3 myOrientation = orientation * glm::vec3(0, 0, -1);
 
@@ -47,8 +46,8 @@ Rocket::Rocket(glm::vec3 position, glm::quat orientation, const glm::vec3& initi
 
 void Rocket::update(float deltaSec) {
     // orient towards target
-    if (m_target->get()){
-        glm::vec3 dir = glm::inverse(m_transform.orientation()) * glm::normalize(m_target->get()->transform().position() - m_transform.position());
+    if (m_target.valid()){
+        glm::vec3 dir = glm::inverse(m_transform.orientation()) * glm::normalize(m_target->transform().position() - m_transform.position());
         glm::vec3 myOrientation = glm::vec3(0, 0, -1);
         glm::vec3 cross = glm::cross(dir, myOrientation);
         glm::quat rotation;
@@ -68,7 +67,6 @@ void Rocket::update(float deltaSec) {
             //m_transform.rotate(0.1f * rotation); // directly rotating is easier
             m_physics.setAngularSpeed(6.0f * glm::eulerAngles(rotation));
         }
-
     }
     // accelerate to travelSpeed
     if (glm::length(m_physics.speed()) < m_travelSpeed) {

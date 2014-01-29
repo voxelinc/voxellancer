@@ -6,12 +6,12 @@
 
 /* General Object in our 3D world with position and orientation
 */
-class WorldTransform {
+class Transform {
 
 public:
-    WorldTransform(glm::vec3 center = glm::vec3(0), float scale = 1.0);
-    WorldTransform(const WorldTransform& worldTransform, const glm::vec3& positionDelta, const glm::quat& orientationDelta);
-    virtual ~WorldTransform();
+    Transform(glm::vec3 center = glm::vec3(0), float scale = 1.0);
+    Transform(const Transform& transform, const glm::vec3& positionDelta, const glm::quat& orientationDelta);
+    virtual ~Transform();
 
     const glm::vec3 &position() const;
     void setPosition(const glm::vec3 &pos);
@@ -32,8 +32,8 @@ public:
     void rotate(const glm::quat &qrot);
     void rotateWorld(const glm::quat &qrot);
 
-    bool operator==(const WorldTransform &other) const;
-    bool operator!=(const WorldTransform &other) const;
+    bool operator==(const Transform &other) const;
+    bool operator!=(const Transform &other) const;
 
     const glm::mat4 matrix() const;
 

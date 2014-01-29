@@ -4,6 +4,7 @@
 #include <sstream>
 
 #include "voxel/voxelcluster.h"
+#include "voxel/voxel.h"
 
 
 ClusterLoader::ClusterLoader()

@@ -4,6 +4,7 @@
 #include <glm/gtx/quaternion.hpp>
 
 #include "geometry/sphere.h"
+#include "worldobject/worldobject.h"
 
 
 CameraFollowHelper::CameraFollowHelper():
@@ -12,7 +13,7 @@ CameraFollowHelper::CameraFollowHelper():
 }
 
 WorldObject* CameraFollowHelper::target() {
-    return m_target.get()->get();
+    return *m_target;
 }
 
 void CameraFollowHelper::setTarget(WorldObject* target) {
@@ -22,7 +23,7 @@ void CameraFollowHelper::setTarget(WorldObject* target) {
 glm::vec3 CameraFollowHelper::followPosition() {
     Sphere sphere;
 
-    WorldObject* worldObject = m_target->get();
+    WorldObject* worldObject = m_target.get();
 
     sphere.setPosition(worldObject->transform().position());
     sphere.setRadius(worldObject->minimalGridAABB().diameter() * worldObject->transform().scale());

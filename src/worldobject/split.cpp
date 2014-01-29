@@ -1,6 +1,6 @@
 #include "split.h"
 
-Split::Split(const WorldTransform& transform, CollisionFilterClass collisionFilterClass):
+Split::Split(const Transform& transform, CollisionFilterClass collisionFilterClass):
     WorldObject(transform.scale(), collisionFilterClass)
 {
     m_transform.setPosition(transform.position());

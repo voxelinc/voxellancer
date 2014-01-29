@@ -1,10 +1,10 @@
 #pragma once
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "worldtransform.h"
+#include "geometry/transform.h"
 
 /* Represents the camera. matrix thus is the view matrix for all other objects */
-class Camera : protected WorldTransform { //protected so we don't have matrix, because we want view
+class Camera : protected Transform { //protected so we don't have matrix, because we want view
 public:
 	Camera(int viewportWidth, int viewportHeight);
 	virtual ~Camera();

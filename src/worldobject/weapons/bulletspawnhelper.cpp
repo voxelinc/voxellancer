@@ -3,7 +3,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 
-#include "worldtransform.h"
+#include "geometry/transform.h"
 
 #include "worldobject/hardpoint.h"
 #include "worldobject/ship.h"
@@ -22,7 +22,7 @@ BulletSpawnHelper::BulletSpawnHelper(Bullet* bullet, Hardpoint* hardpoint, float
 }
 
 void BulletSpawnHelper::setupBullet() {
-    WorldTransform bulletTransform(m_bullet->transform());
+    Transform bulletTransform(m_bullet->transform());
 
     glm::quat shipOrientation = m_hardpoint->ship()->transform().orientation();
     glm::vec3 bulletDirection = glm::normalize(m_target - m_hardpoint->position());

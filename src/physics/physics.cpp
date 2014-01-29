@@ -5,7 +5,7 @@
 
 #include <glm/gtx/quaternion.hpp>
 
-#include "worldtransform.h"
+#include "geometry/transform.h"
 
 #include "collision/collisiondetector.h"
 
@@ -17,6 +17,7 @@
 #include "world/world.h"
 
 #include "utils/tostring.h"
+#include "voxel/voxel.h"
 
 
 Physics::Physics(WorldObject& worldObject, float scale) :
@@ -80,8 +81,8 @@ float Physics::mass() const {
     return m_mass;
 }
 
-const WorldTransform Physics::projectedTransformIn(float deltaSec){
-    WorldTransform targetTransform(m_worldObject.transform());
+const Transform Physics::projectedTransformIn(float deltaSec){
+    Transform targetTransform(m_worldObject.transform());
     targetTransform.moveWorld(m_speed * deltaSec);
     targetTransform.rotate(glm::quat(m_angularSpeed * deltaSec));
 
@@ -92,7 +93,7 @@ std::list<VoxelCollision> &Physics::move(float deltaSec) {
     updateSpeed(deltaSec);
 
     if (m_speed != glm::vec3(0.0f) || m_angularSpeed != glm::vec3(0.0f)) {
-        WorldTransform targetTransform = projectedTransformIn(deltaSec);
+        Transform targetTransform = projectedTransformIn(deltaSec);
 
         Movement movement(m_worldObject, m_worldObject.transform(), targetTransform);
         movement.perform();

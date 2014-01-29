@@ -15,7 +15,9 @@
 #include "worldobject/ship.h"
 #include "sound/soundmanager.h"
 #include "game.h"
-
+#include "world/world.h"
+#include "voxel/voxel.h"
+#include "world/god.h"
 
 GameScenario::GameScenario() {
 

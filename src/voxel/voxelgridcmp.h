@@ -1,5 +1,6 @@
 #pragma once
 
+#include "geometry/axis.h"
 
 class Voxel;
 

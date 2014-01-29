@@ -9,8 +9,10 @@
 #include "utils/tostring.h"
 #include "world/world.h"
 #include "voxel/voxeltreequery.h"
+#include "voxel/voxeltree.h"
 #include "voxel/voxeltreenode.h"
 #include "worldobject/worldobject.h"
+#include "collision/collisiondetector.h"
 #include "../bandit_extension/vec3helper.h"
 
 using namespace bandit;
@@ -70,7 +72,7 @@ go_bandit([](){
         });
 
         it("is moved when the transform moves", [&]() {
-            WorldTransform transform;
+            Transform transform;
 
             AssertThat(tree->root()->sphere(transform).position(), EqualsWithDelta(glm::vec3(0), glm::vec3(0.01, 0.01, 0.01)));
 
@@ -85,7 +87,7 @@ go_bandit([](){
         it("supports basic rotation with voxel in center", [&]() {
             Voxel v1(glm::ivec3(1, 1, 1));
             Voxel v2(glm::ivec3(0, 0, 0));
-            WorldTransform transform;
+            Transform transform;
 
             tree->insert(&v1);
 
@@ -103,7 +105,7 @@ go_bandit([](){
             glm::vec3 v;
             Voxel v1(glm::ivec3(1, 1, 1));
             Voxel v2(glm::ivec3(0, 0, 0));
-            WorldTransform transform;
+            Transform transform;
 
             tree->insert(&v1);
 
