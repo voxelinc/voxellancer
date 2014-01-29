@@ -9,7 +9,7 @@ EngineVoxel::EngineVoxel(const glm::ivec3& gridCell, int color, float mass, floa
     m_worldObject(nullptr),
     m_engine(nullptr)    
 {
-    m_emissiveness = 0.3f;
+    m_emissiveness = 0.5f;
 }
 
 EngineVoxel::~EngineVoxel() {

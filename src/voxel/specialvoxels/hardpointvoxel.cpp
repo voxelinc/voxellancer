@@ -8,7 +8,7 @@ HardpointVoxel::HardpointVoxel(const glm::ivec3& gridCell, int color, float mass
     Voxel(gridCell, color, mass, hp),
     m_hardpoint(nullptr)
 {
-    m_emissiveness = 0.4f;
+    m_emissiveness = 0.35f;
 }
 
 HardpointVoxel::~HardpointVoxel() {

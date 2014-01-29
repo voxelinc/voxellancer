@@ -6,7 +6,6 @@
 #include "voxeleffect/voxelparticleworld.h"
 #include "utils/hd3000dummy.h"
 #include "sound/soundmanager.h"
-#include "programs/monoblitprogram.h"
 #include "game.h"
 #include "rendering/framebuffer.h"
 #include "rendering/renderpipeline.h"
@@ -15,6 +14,7 @@
 #include "ui/hud.h"
 #include "world/world.h"
 #include "skybox.h"
+#include "worldobject/worldobject.h"
 
 GameScene::GameScene(Game* game):
     m_game(game),
@@ -27,6 +27,8 @@ GameScene::GameScene(Game* game):
     m_currentOutputBuffer(0) 
 {
 }
+
+GameScene::~GameScene() = default;
 
 void GameScene::draw(Camera* camera, glow::FrameBufferObject* target, const glm::ivec2& resolution) {
     m_framebuffer->setResolution(resolution);
@@ -75,3 +77,4 @@ void GameScene::drawGame(Camera* camera) {
 
     m_hd3000dummy->drawIfActive();
 }
+
