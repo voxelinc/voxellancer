@@ -2,6 +2,8 @@
 
 #include <glm/gtx/quaternion.hpp>
 
+#include "utils/geometryhelper.h"
+
 #include "voxel/voxelrenderer.h"
 
 #include "hud.h"
@@ -31,7 +33,7 @@ public:
         ObjectHudget* objectHudget = m_objectHudgetVoxels->hudget();
 
         glm::vec3 euler = glm::vec3(-m_baseOffset.y, -m_baseOffset.x, 0) * (m_objectHudgetVoxels->openingAngle());
-        glm::vec3 direction = glm::quat(euler) * objectHudget->localDirection();
+        glm::vec3 direction = GeometryHelper::quatFromViewDirection(objectHudget->localDirection()) * glm::quat(euler) * glm::vec3(0, 0, -1);
 
         transform().setPosition(objectHudget->worldPosition(direction));
         transform().setOrientation(objectHudget->worldOrientation(direction));
