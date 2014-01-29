@@ -77,12 +77,12 @@ endif()
 
 # GET REPOSITORY VERSION
 # Add a revision file containing the git-head tag for cpack and install
-include(GetGitRevisionDescription)
-get_git_head_revision(GIT_REFSPEC GIT_SHA1)
+# include(GetGitRevisionDescription)
+# get_git_head_revision(GIT_REFSPEC GIT_SHA1)
 
 # Generate a shorter, googlelike variation for rev
-string(SUBSTRING ${GIT_SHA1} 0 12 GIT_REV)
-file(WRITE ${CMAKE_BINARY_DIR}/revision ${GIT_REV})
+# string(SUBSTRING ${GIT_SHA1} 0 12 GIT_REV)
+# file(WRITE ${CMAKE_BINARY_DIR}/revision ${GIT_REV})
 
 
 # DEPENDENCIES
@@ -156,6 +156,8 @@ add_executable(${target}
     ${SRC_FILES}
     ${SHADER_FILES}
 )
+
+add_definitions(-DGLM_FORCE_RADIANS)
 
 set(LIBS_TO_LINK
     ${OPENGL_LIBRARIES}

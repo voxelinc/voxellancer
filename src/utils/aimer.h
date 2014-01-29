@@ -4,6 +4,8 @@
 
 #include "geometry/ray.h"
 
+#include "property/property.h"
+
 
 class Voxel;
 class WorldObject;
@@ -21,6 +23,7 @@ public:
 protected:
     WorldObject* m_worldObject;
     Ray m_ray;
+    Property<float> m_infityAimDistance;
 
     glm::vec3 nearestTarget(const std::set<Voxel*>& voxels) const;
     float distanceTo(Voxel* voxel) const;

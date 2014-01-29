@@ -33,7 +33,7 @@ void HardpointAimHelper::aim() {
         m_point = targetPositionIn(timeDelta);
 
         iterations++;
-        if(iterations > 20) { std::cout << "not hitable" << std::endl;
+        if(iterations > 20) {
             m_hitable = false;
             return;
         }

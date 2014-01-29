@@ -6,17 +6,18 @@
 
 #include <glm/glm.hpp>
 
-#include <glow/Texture.h>
-#include <glow/ref_ptr.h>
-
 #include "geometry/aabb.h"
+#include "geometry/transform.h"
 
-#include "worldtransform.h"
+#include "utils/vec3hash.h"
 
-#include "voxel.h"
-#include "voxelrenderdata.h"
 #include "voxelclusterbounds.h"
+#include "voxelgridcmp.h"
+#include "voxelrenderdata.h"
 
+
+class Voxel;
+class VoxelRenderData;
 
 class VoxelCluster {
 public:
@@ -25,9 +26,9 @@ public:
 
     VoxelClusterBounds& bounds();
 
-    WorldTransform& transform();
-    const WorldTransform& transform() const;
-    void setTransform(const WorldTransform& transform);
+    Transform& transform();
+    const Transform& transform() const;
+    void setTransform(const Transform& transform);
 
     Voxel* voxel(const glm::ivec3& position);
 
@@ -51,6 +52,6 @@ protected:
     std::unordered_map<glm::ivec3, Voxel*> m_voxels;
     VoxelClusterBounds m_bounds;
     VoxelRenderData m_voxelRenderData;
-    WorldTransform m_transform;
+    Transform m_transform;
 };
 

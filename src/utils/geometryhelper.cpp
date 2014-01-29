@@ -23,7 +23,7 @@ glm::quat GeometryHelper::quatFromViewDirection(const glm::vec3& direction) {
     glm::vec3 v = direction;
     glm::vec3 u = glm::vec3(0, 0, -1);
 
-    float angle = glm::degrees(angleBetween(u, v));
+    float angle = angleBetween(u, v);
     glm::vec3 w = glm::cross(u, v);
     if (w == glm::vec3(0)) {
         w = RandVec3::randUnitVec();
@@ -44,3 +44,4 @@ WorldObject* GeometryHelper::closestObject(WorldObject& self, std::set<WorldObje
     }
     return closestObject;
 }
+

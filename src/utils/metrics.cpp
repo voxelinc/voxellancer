@@ -9,12 +9,12 @@ Metrics::Metrics():
 }
 
 std::shared_ptr<Metrics> Metrics::instance() {
-    if (std::shared_ptr<Metrics> renderer = s_instance.lock()) {
-        return renderer;
+    if (std::shared_ptr<Metrics> metrics = s_instance.lock()) {
+        return metrics;
     } else {
-        renderer = std::shared_ptr<Metrics>(new Metrics());
-        s_instance = renderer;
-        return renderer;
+        metrics = std::shared_ptr<Metrics>(new Metrics());
+        s_instance = metrics;
+        return metrics;
     }
 }
 

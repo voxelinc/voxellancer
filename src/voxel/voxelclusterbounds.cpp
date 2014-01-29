@@ -54,7 +54,7 @@ const IAABB& VoxelClusterBounds::aabb() {
     return m_aabb;
 }
 
-IAABB VoxelClusterBounds::aabb(const WorldTransform& transform) {
+IAABB VoxelClusterBounds::aabb(const Transform& transform) {
     return calculateAABB(transform);
 }
 
@@ -63,7 +63,7 @@ const Sphere& VoxelClusterBounds::sphere() {
     return m_sphere;
 }
 
-Sphere VoxelClusterBounds::sphere(const WorldTransform& transform) {
+Sphere VoxelClusterBounds::sphere(const Transform& transform) {
     Sphere result(minimalGridSphere());
 
     result.setPosition(transform.applyTo(result.position()));
@@ -92,7 +92,7 @@ void VoxelClusterBounds::calculateMinimalGridSphere() {
     m_minimalGridSphereValid = true;
 }
 
-IAABB VoxelClusterBounds::calculateAABB(const WorldTransform& transform) {
+IAABB VoxelClusterBounds::calculateAABB(const Transform& transform) {
     glm::vec3 middle = transform.applyTo(minimalGridSphere().position());
     float radius = minimalGridSphere().radius() * transform.scale();
 

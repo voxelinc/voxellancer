@@ -1,7 +1,6 @@
 #pragma once
 
 #include "worldobject/worldobject.h"
-#include "resource/clustercache.h"
 
 
 class Bullet : public WorldObject {

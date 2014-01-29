@@ -40,7 +40,7 @@ StereoRenderInfo StereoRenderInfo::fromOVRInfo(const OVR::HMDInfo& hmdInfo) {
     stereoConfig.SetDistortionFitPointVP(-1.0f, 0.0f);
 
     result.m_distortionScale = stereoConfig.GetDistortionScale();
-    result.m_fovy = stereoConfig.GetYFOVDegrees();
+    result.m_fovy = glm::radians(stereoConfig.GetYFOVDegrees());
 
     return result;
 }
@@ -67,7 +67,7 @@ StereoRenderInfo StereoRenderInfo::dummy() {
     };
 
     result.m_distortionScale = 1.5;
-    result.m_fovy = 120.0f;
+    result.m_fovy = glm::radians(120.0f);
 
     return result;
 }

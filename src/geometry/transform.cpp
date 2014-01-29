@@ -1,8 +1,8 @@
-#include "worldtransform.h"
+#include "geometry/transform.h"
 
 #include <glow/logging.h>
 
-WorldTransform::WorldTransform(glm::vec3 center, float scale) :
+Transform::Transform(glm::vec3 center, float scale) :
     m_position(0),
     m_orientation(),
     m_center(center),
@@ -11,8 +11,8 @@ WorldTransform::WorldTransform(glm::vec3 center, float scale) :
     assert(std::isfinite(center.x) && std::isfinite(center.y) && std::isfinite(center.z));
 }
 
-WorldTransform::WorldTransform(const WorldTransform& worldTransform, const glm::vec3& positionDelta, const glm::quat& orientationDelta):
-    WorldTransform(worldTransform)
+Transform::Transform(const Transform& transform, const glm::vec3& positionDelta, const glm::quat& orientationDelta):
+    Transform(transform)
 {
     moveWorld(positionDelta);
     rotate(orientationDelta);
@@ -20,93 +20,93 @@ WorldTransform::WorldTransform(const WorldTransform& worldTransform, const glm::
     assert(std::isfinite(m_orientation.x) && std::isfinite(m_orientation.y) && std::isfinite(m_orientation.z) && std::isfinite(m_orientation.w));
 }
 
-WorldTransform::~WorldTransform() {
+Transform::~Transform() {
 
 }
 
-const glm::quat& WorldTransform::orientation() const {
+const glm::quat& Transform::orientation() const {
     return m_orientation;
 }
 
-void WorldTransform::setOrientation(const glm::quat& quat){
+void Transform::setOrientation(const glm::quat& quat){
     m_orientation = quat;
     assert(std::isfinite(m_orientation.x) && std::isfinite(m_orientation.y) && std::isfinite(m_orientation.z) && std::isfinite(m_orientation.w));
 }
 
-const glm::vec3 &WorldTransform::position() const {
+const glm::vec3 &Transform::position() const {
     return m_position;
 }
 
-void WorldTransform::setPosition(const glm::vec3& pos){
+void Transform::setPosition(const glm::vec3& pos){
     assert(std::isfinite(pos.x) && std::isfinite(pos.y) && std::isfinite(pos.z));
     m_position = pos;
 }
 
 // move in local axis direction
-void WorldTransform::move(const glm::vec3& dist) {
+void Transform::move(const glm::vec3& dist) {
     m_position += m_orientation * dist;
 }
 
 // move in world axis direction
-void WorldTransform::moveWorld(const glm::vec3& dist) {
+void Transform::moveWorld(const glm::vec3& dist) {
     m_position += dist;
 }
 
 // rotate around local axis
-void WorldTransform::rotate(const glm::quat &qrot) {
+void Transform::rotate(const glm::quat &qrot) {
     m_orientation = m_orientation * qrot;
     assert(std::isfinite(m_orientation.x) && std::isfinite(m_orientation.y) && std::isfinite(m_orientation.z) && std::isfinite(m_orientation.w));
 }
 
-void WorldTransform::rotateWorld(const glm::quat &qrot) {
+void Transform::rotateWorld(const glm::quat &qrot) {
     m_orientation = qrot * m_orientation;
     assert(std::isfinite(m_orientation.x) && std::isfinite(m_orientation.y) && std::isfinite(m_orientation.z) && std::isfinite(m_orientation.w));
 }
 
-const glm::mat4 WorldTransform::matrix() const {
+const glm::mat4 Transform::matrix() const {
     return glm::translate(m_position) * glm::mat4_cast(m_orientation) * glm::scale(m_scale, m_scale, m_scale) * glm::translate(-m_center);
 }
 
 // should do the same as matrix() * vertex
-glm::vec3 WorldTransform::applyTo(const glm::vec3 &vertex) const {
+glm::vec3 Transform::applyTo(const glm::vec3 &vertex) const {
     return m_position + (m_orientation * (m_scale * (-m_center + vertex)));
 }
 
-glm::vec3 WorldTransform::inverseApplyTo(const glm::vec3 &vertex) const {
+glm::vec3 Transform::inverseApplyTo(const glm::vec3 &vertex) const {
     return ((glm::inverse(m_orientation) * (vertex - m_position)) / m_scale) + m_center;
 }
 
-float WorldTransform::scale() const {
+float Transform::scale() const {
     return m_scale;
 }
 
-void WorldTransform::setScale(float scale) {
+void Transform::setScale(float scale) {
     assert(std::isfinite(scale) && scale > 0.0f);
     m_scale = scale;
 }
 
-const glm::vec3& WorldTransform::center() const {
+const glm::vec3& Transform::center() const {
     return m_center;
 }
 
-void WorldTransform::setCenter(const glm::vec3& center) {
+void Transform::setCenter(const glm::vec3& center) {
     assert(std::isfinite(center.x) && std::isfinite(center.y) && std::isfinite(center.z));
     m_center = center;
 }
 
-bool WorldTransform::operator==(const WorldTransform &other) const {
+bool Transform::operator==(const Transform &other) const {
     return m_position == other.m_position &&
            m_orientation == other.m_orientation &&
            m_center == other.m_center &&
            m_scale == other.m_scale;
 }
 
-bool WorldTransform::operator!=(const WorldTransform &other) const {
+bool Transform::operator!=(const Transform &other) const {
     return !(*this == other);
 }
 
 // calculate offset between old and new center and adjust position accordingly
-void WorldTransform::setCenterAndAdjustPosition(const glm::vec3& newCenter) {
+void Transform::setCenterAndAdjustPosition(const glm::vec3& newCenter) {
     glm::vec3 oldOrigin = applyTo(glm::vec3(0.0f, 0.0f, 0.0f));
     setCenter(newCenter);
     glm::vec3 newOrigin = applyTo(glm::vec3(0.0f, 0.0f, 0.0f));

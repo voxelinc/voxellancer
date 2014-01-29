@@ -12,6 +12,10 @@
 #include "etc/windowmanager.h"
 
 #include "worldobject/worldobject.h"
+#include "player.h"
+#include "ui/hud/hud.h"
+#include "worldobject/ship.h"
+#include "camera/cameradolly.h"
 
 
 /*
@@ -274,7 +278,9 @@ void InputHandler::processFireActions() {
         m_player->fire();
     }
     if (getInputValue(&rocketAction)) {
-        m_player->playerShip()->fireAtObject();
+        if (m_player->playerShip()) {
+            m_player->playerShip()->fireAtObject();
+        }
     }
 }
 

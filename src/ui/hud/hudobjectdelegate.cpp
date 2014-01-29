@@ -19,7 +19,7 @@ HUD* HUDObjectDelegate::hud() {
 }
 
 WorldObject* HUDObjectDelegate::worldObject() {
-    return m_worldObjectHandle.get()->get();
+    return m_worldObjectHandle.get();
 }
 
 Hudget* HUDObjectDelegate::hudget() {

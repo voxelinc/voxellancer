@@ -2,8 +2,6 @@
 
 #include <stdint.h>
 
-#include <glm/gtx/quaternion.hpp>
-
 
 class Math {
 public:

@@ -10,6 +10,8 @@
 #include <glow/logging.h>
 
 #include "utils/tostring.h"
+#include "voxelrenderdata.h"
+#include "voxel.h"
 
 
 VoxelCluster::VoxelCluster(float scale):
@@ -30,15 +32,15 @@ VoxelClusterBounds& VoxelCluster::bounds() {
     return m_bounds;
 }
 
-WorldTransform& VoxelCluster::transform() {
+Transform& VoxelCluster::transform() {
     return m_transform;
 }
 
-const WorldTransform& VoxelCluster::transform() const {
+const Transform& VoxelCluster::transform() const {
     return m_transform;
 }
 
-void VoxelCluster::setTransform(const WorldTransform& transform) {
+void VoxelCluster::setTransform(const Transform& transform) {
     m_transform = transform;
 }
 

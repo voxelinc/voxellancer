@@ -2,7 +2,8 @@
 
 #include "geometry/grid3daabb.h"
 
-#include "voxel/voxelcluster.h"
+#include "voxelcluster.h"
+#include "voxel.h"
 
 
 VoxelNeighbourHelper::VoxelNeighbourHelper(VoxelCluster* voxelCluster, bool includeDiagonals):

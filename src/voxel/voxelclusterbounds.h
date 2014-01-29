@@ -22,10 +22,10 @@ public:
     const Sphere& minimalGridSphere();
 
     const IAABB& aabb();
-    IAABB aabb(const WorldTransform& transform);
+    IAABB aabb(const Transform& transform);
 
     const Sphere& sphere();
-    Sphere sphere(const WorldTransform& transform);
+    Sphere sphere(const Transform& transform);
 
 
 protected:
@@ -37,7 +37,7 @@ protected:
 
     void calculateMinimalGridAABB();
     void calculateMinimalGridSphere();
-    IAABB calculateAABB(const WorldTransform& transform);
+    IAABB calculateAABB(const Transform& transform);
 
 
 private:
@@ -48,7 +48,7 @@ private:
     bool m_minimalGridSphereValid;
 
     IAABB m_aabb;
-    WorldTransform m_cachedAABBTransform;
+    Transform m_cachedAABBTransform;
     bool m_aabbValid;
 
     Sphere m_sphere;

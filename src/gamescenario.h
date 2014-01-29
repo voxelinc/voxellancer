@@ -2,7 +2,10 @@
 
 #include <memory>
 
-#include "worldobject/worldobjecthandle.h"
+#include "worldobject/ship.h"
+#include "worldobject/worldobject.h"
+#include "worldobject/handle/handle.h"
+
 
 class Game;
 class Ship;
@@ -16,7 +19,7 @@ public:
 
 
 protected:
-    std::shared_ptr<WorldObjectHandle> m_normandy;
-    std::shared_ptr<WorldObjectHandle> m_aimTester;
+    Handle<Ship> m_normandy;
+    Handle<Ship> m_aimTester;
 };
 

@@ -16,7 +16,7 @@ static const float ATOMIC_DIRECTIONAL_STEP = 0.4f;
 static const float ATOMIC_ANGULAR_STEP = 30.0f;
 static const float MAX_STEPPED_DISTANCE = 1.2f;
 
-Movement::Movement(WorldObject& worldObject, const WorldTransform& originalTransform, const WorldTransform& targetTransform):
+Movement::Movement(WorldObject& worldObject, const Transform& originalTransform, const Transform& targetTransform):
     m_worldObject(worldObject),
     m_collisionDetector(m_worldObject.collisionDetector()),
     m_originalTransform(originalTransform),
@@ -54,7 +54,7 @@ bool Movement::perform() {
 }
 
 bool Movement::performSplitted() {
-    WorldTransform pivotTransform;
+    Transform pivotTransform;
 
     pivotTransform.setOrientation(glm::slerp(m_originalTransform.orientation(), m_targetTransform.orientation(), 0.5f));
     pivotTransform.setPosition(glm::mix(m_originalTransform.position(), m_targetTransform.position(), 0.5f));
@@ -74,8 +74,8 @@ bool Movement::performStepped() {
     int stepCount = calculateStepCount();
 
     for (int s = 0; s < stepCount; s++) {
-        WorldTransform newTransform(calculateStep(s, stepCount));
-        WorldTransform oldTransform = m_worldObject.transform();
+        Transform newTransform(calculateStep(s, stepCount));
+        Transform oldTransform = m_worldObject.transform();
 
         m_worldObject.updateTransformAndGeode(newTransform.position(), newTransform.orientation());
 
@@ -103,8 +103,8 @@ int Movement::calculateStepCount() {
     return steps;
 }
 
-WorldTransform Movement::calculateStep(int s, int stepCount) const {
-    WorldTransform transform;
+Transform Movement::calculateStep(int s, int stepCount) const {
+    Transform transform;
 
     float rel = static_cast<float>(s + 1) / static_cast<float>(stepCount);
 

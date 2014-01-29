@@ -1,19 +1,18 @@
-#include "bullettransformhelper.h"
+#include "bulletspawnhelper.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 
-#include "worldtransform.h"
-
-#include "utils/geometryhelper.h"
+#include "geometry/transform.h"
 
 #include "worldobject/hardpoint.h"
 #include "worldobject/ship.h"
+#include "utils/geometryhelper.h"
 
 #include "bullet.h"
 
 
-BulletTransformHelper::BulletTransformHelper(Bullet* bullet, Hardpoint* hardpoint, float bulletSpeed, const glm::vec3& target):
+BulletSpawnHelper::BulletSpawnHelper(Bullet* bullet, Hardpoint* hardpoint, float bulletSpeed, const glm::vec3& target):
     m_bullet(bullet),
     m_hardpoint(hardpoint),
     m_bulletSpeed(bulletSpeed),
@@ -22,8 +21,8 @@ BulletTransformHelper::BulletTransformHelper(Bullet* bullet, Hardpoint* hardpoin
 
 }
 
-void BulletTransformHelper::transform() {
-    WorldTransform bulletTransform(m_bullet->transform());
+void BulletSpawnHelper::setupBullet() {
+    Transform bulletTransform(m_bullet->transform());
 
     glm::quat shipOrientation = m_hardpoint->ship()->transform().orientation();
     glm::vec3 bulletDirection = glm::normalize(m_target - m_hardpoint->position());
@@ -33,21 +32,21 @@ void BulletTransformHelper::transform() {
     //bulletTransform.setOrientation(Math::quatFromDir(bulletDirection));
     bulletTransform.setOrientation(m_hardpoint->ship()->transform().orientation());
 
-/*
-    Below code leads to nan() - orientation of bullets sometimes.
-    Please whoever wrote it, make it more readable and try to solve the bug
-*/
     if (bulletUp != glm::vec3(0)) {
         glm::vec3 rotationAxis = glm::normalize(bulletUp);
-        float angle = glm::acos(glm::dot(bulletDirection, hardpointDirection));
-        bulletTransform.rotateWorld(glm::angleAxis(-glm::degrees(angle), rotationAxis)); //then rotate towards target
+        float angle = GeometryHelper::angleBetween(bulletDirection, hardpointDirection);
+        glm::quat orientation = glm::angleAxis(-angle, rotationAxis);
+        bulletTransform.rotateWorld(orientation); //then rotate towards target
     }
 
+    //TODO: #300
     float bulletLength = m_bullet->bounds().minimalGridAABB().extent(ZAxis) * m_bullet->transform().scale();
-    bulletTransform.setPosition(m_hardpoint->position() + bulletDirection * (bulletLength / 2.0f));
+    float spawnDistance = glm::root_two<float>() * m_bullet->transform().scale();
+    bulletTransform.setPosition(m_hardpoint->position() + bulletDirection * (bulletLength / 2.0f + spawnDistance));
 
     m_bullet->setTransform(bulletTransform);
     m_bullet->physics().setSpeed(bulletDirection * m_bulletSpeed);
+    m_bullet->physics().setAngularSpeed(glm::vec3(0.0f, 0.0f, 50.0f));
 }
 
 

@@ -11,11 +11,14 @@
 #include "utils/tostring.h"
 #include "utils/geometryhelper.h"
 
-#include "player.h"
 #include "world/world.h"
+
+#include "worldobject/ship.h"
 
 #include "hudget.h"
 #include "hudobjectdelegate.h"
+
+#include "player.h"
 
 
 HUD::HUD(Player* player, Viewer* viewer):
@@ -99,7 +102,7 @@ void HUD::setCrossHairOffset(const glm::vec2& mousePosition) {
     float ar = m_viewer->view().aspectRatio();
     float d = glm::length(glm::vec2(1.0f, nearZ));
 
-    float nearPlaneHeight = 2 * std::tan(glm::radians(fovy) / 2.0f);
+    float nearPlaneHeight = 2 * std::tan(fovy / 2.0f);
     float nearPlaneWidth = nearPlaneHeight * ar;
 
     glm::vec3 nearPlaneTarget = glm::vec3(mousePosition.x * nearPlaneWidth / 2.0f, mousePosition.y * nearPlaneHeight / 2.0f, -nearZ);

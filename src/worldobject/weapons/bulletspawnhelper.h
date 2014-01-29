@@ -6,11 +6,11 @@
 class Bullet;
 class Hardpoint;
 
-class BulletTransformHelper {
+class BulletSpawnHelper {
 public:
-    BulletTransformHelper(Bullet* bullet, Hardpoint* hardpoint, float bulletSpeed, const glm::vec3& target);
+    BulletSpawnHelper(Bullet* bullet, Hardpoint* hardpoint, float bulletSpeed, const glm::vec3& target);
 
-    void transform();
+    void setupBullet();
 
 
 protected:

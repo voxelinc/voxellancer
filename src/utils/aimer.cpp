@@ -35,7 +35,8 @@ namespace {
 
 Aimer::Aimer(WorldObject* worldObject, const Ray& ray):
     m_worldObject(worldObject),
-    m_ray(ray)
+    m_ray(ray),
+    m_infityAimDistance("general.inifinityAimDistance")
 {
 }
 
@@ -78,6 +79,6 @@ float Aimer::distanceTo(Voxel* voxel) const {
 }
 
 glm::vec3 Aimer::infinity() const {
-    return m_ray.origin() + m_ray.direction() * 512.0f;
+    return m_ray.origin() + m_ray.direction() * m_infityAimDistance.get();
 }
 
