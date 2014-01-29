@@ -21,20 +21,16 @@ public:
 
     const glm::vec3& targetPoint() const;
 
-    virtual glm::vec3 position() const override;
-    virtual glm::quat orientation() const override;
-
     virtual void update(float deltaSec) override;
     virtual void draw();
 
 
 protected:
     AimHelperHudgetVoxels m_voxels;
-    glm::vec3 m_position;
     glm::vec3 m_targetPoint;
     Range m_distanceRange;
 
     void calculateTargetPoint(WorldObject* targetObject);
-    void calculatePosition();
+    void calculatedDirection();
 };
 

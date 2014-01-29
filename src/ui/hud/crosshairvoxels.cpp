@@ -85,9 +85,10 @@ void CrossHairVoxels::update(float deltaSec) {
 
 void CrossHairVoxels::draw() {
     for(CrossHairElement* element : m_crossHairElements) {
-        element->transform().setPosition(m_crossHair->position() + (m_crossHair->orientation() * element->relativeOrientation * glm::vec3(0, 0, -m_crossHair->hud()->sphere().radius())));
-        element->transform().setOrientation(m_crossHair->orientation() * element->relativeOrientation * glm::quat(glm::vec3(0, 0, element->zOrientation)));
+        element->transform().setPosition(m_crossHair->worldPosition() + (m_crossHair->worldOrientation() * element->relativeOrientation * glm::vec3(0, 0, -m_crossHair->hud()->sphere().radius())));
+        element->transform().setOrientation(m_crossHair->worldOrientation() * element->relativeOrientation * glm::quat(glm::vec3(0, 0, element->zOrientation)));
 
         VoxelRenderer::instance()->draw(element);
     }
 }
+

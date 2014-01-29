@@ -28,11 +28,11 @@ AimHelperHudgetVoxels::AimHelperHudgetVoxels(AimHelperHudget* aimHelperHudget):
 }
 
 void AimHelperHudgetVoxels::draw() {
-    m_dot.transform().setPosition(m_aimHelperHudget->position());
-    m_dot.transform().setOrientation(m_aimHelperHudget->orientation());
+    m_dot.transform().setPosition(m_aimHelperHudget->worldPosition());
+    m_dot.transform().setOrientation(m_aimHelperHudget->worldOrientation());
 
-    m_circle.transform().setPosition(m_aimHelperHudget->position());
-    m_circle.transform().setOrientation(m_aimHelperHudget->orientation());
+    m_circle.transform().setPosition(m_aimHelperHudget->worldPosition());
+    m_circle.transform().setOrientation(m_aimHelperHudget->worldOrientation());
 
     VoxelRenderer::instance()->draw(&m_dot);
     VoxelRenderer::instance()->draw(&m_circle);

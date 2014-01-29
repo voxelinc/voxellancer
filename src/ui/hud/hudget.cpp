@@ -1,10 +1,15 @@
 #include "hudget.h"
 
+#include "utils/geometryhelper.h"
+
 #include "hud.h"
 
 
 Hudget::Hudget(HUD* hud):
     m_hud(hud),
+    m_direction(0.0f, 0.0f, -1.0f),
+    m_directionAngle(0.0f),
+    m_relativeDistance(1.0f),
     m_visible(true),
     m_pressed(false),
     m_hovered(false),
@@ -72,5 +77,49 @@ void Hudget::pointerAt(const Ray& ray, bool pressed) {
         m_hovered = false;
         m_pressed = false;
     }
+}
+
+void Hudget::setRelativeDistance(float relativeDistance) {
+    m_relativeDistance = relativeDistance;
+}
+
+void Hudget::pointToWorldPoint(const glm::vec3& worldPoint) {
+    m_direction = glm::normalize(glm::inverse(m_hud->orientation()) * (worldPoint - m_hud->position()));
+}
+
+void Hudget::pointToLocalPoint(const glm::vec3& localPoint) {
+    m_direction = glm::normalize(localPoint);
+}
+
+glm::vec3 Hudget::localDirection() const {
+    return m_direction;
+}
+
+glm::vec3 Hudget::worldDirection() const {
+    return m_hud->orientation() * m_direction;
+}
+
+float Hudget::directionAngle() const {
+    return m_directionAngle;
+}
+
+float Hudget::setDirectionAngle(float directionAngle) {
+    m_directionAngle = directionAngle;
+}
+
+glm::vec3 Hudget::worldPosition() const {
+    return worldPosition(m_direction * m_relativeDistance);
+}
+
+glm::vec3 Hudget::worldPosition(const glm::vec3& localVector) const {
+    return m_hud->position() + m_hud->orientation() * (localVector * m_hud->sphere().radius());
+}
+
+glm::quat Hudget::worldOrientation() const {
+    return worldOrientation(m_direction * m_relativeDistance);
+}
+
+glm::quat Hudget::worldOrientation(const glm::vec3& localVector) const {
+    return m_hud->orientation() * GeometryHelper::quatFromViewDirection(localVector * m_hud->sphere().radius()) * glm::quat(glm::vec3(0.0f, 0.0f, m_directionAngle));
 }
 

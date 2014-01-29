@@ -42,8 +42,39 @@ public:
     */
     virtual void pointerAt(const Ray& ray, bool pressed);
 
-    virtual glm::vec3 position() const = 0;
-    virtual glm::quat orientation() const = 0;
+    /*
+        Set the relative distance from the HUD center, where 1.0f
+        is exactly on the HUD-sphere
+    */
+    void setRelativeDistance(float relativeDistance);
+
+    /*
+        Set the direction the hudget shall point, either to a
+        position in the world or one in the local coordinate system
+    */
+    void pointToWorldPoint(const glm::vec3& worldPoint);
+    void pointToLocalPoint(const glm::vec3& localPoint);
+
+    glm::vec3 localDirection() const;
+    glm::vec3 worldDirection() const;
+
+    /*
+        Additionally to the direction, a rotation on the direction-vector
+        can be added to orientate the hudget
+    */
+    float directionAngle() const;
+    float setDirectionAngle(float directionAngle);
+
+
+    /*
+        Since the Hudgets need to be placed in world-coordinates
+        to make stereo-rendering easier, these functions can be used
+        to retrieve world-coordinates
+    */
+    glm::vec3 worldPosition() const;
+    glm::vec3 worldPosition(const glm::vec3& localVector) const;
+    glm::quat worldOrientation() const;
+    glm::quat worldOrientation(const glm::vec3& localVector) const;
 
     virtual void update(float deltaSec) = 0;
     virtual void draw() = 0;
@@ -51,6 +82,10 @@ public:
 
 protected:
     HUD* m_hud;
+
+    glm::vec3 m_direction;
+    float m_directionAngle;
+    float m_relativeDistance;
 
     bool m_visible;
 

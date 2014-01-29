@@ -8,44 +8,41 @@
 #include "objecthudget.h"
 
 
-class ObjectHudgetCorner {
+class ObjectHudgetCorner: public VoxelCluster {
 public:
     ObjectHudgetCorner(ObjectHudgetVoxels* objectHudgetVoxels, const glm::ivec3& baseOffset):
+        VoxelCluster(0.05f),
         m_objectHudgetVoxels(objectHudgetVoxels),
-        m_baseOffset(baseOffset),
-        m_voxelCluster(0.05f)
+        m_baseOffset(baseOffset)
     {
-        m_baseOrientation = glm::quat(glm::vec3(-m_baseOffset.y, -m_baseOffset.x, 0));
-
         int color = 0x66AAFF;
 
         int edgeLength = 3;
-        m_voxelCluster.addVoxel(new Voxel(glm::ivec3(edgeLength, edgeLength, 0), color));
-        m_voxelCluster.transform().setCenter(glm::vec3(edgeLength, edgeLength, 0));
+        addVoxel(new Voxel(glm::ivec3(edgeLength, edgeLength, 0), color));
+        transform().setCenter(glm::vec3(edgeLength, edgeLength, 0));
 
         for(int i = 1; i < edgeLength; i++) {
-            m_voxelCluster.addVoxel(new Voxel(glm::ivec3(-baseOffset.x * i + edgeLength, edgeLength, 0), color));
-            m_voxelCluster.addVoxel(new Voxel(glm::ivec3(edgeLength, baseOffset.y * i + edgeLength, 0), color));
+            addVoxel(new Voxel(glm::ivec3(-baseOffset.x * i + edgeLength, edgeLength, 0), color));
+            addVoxel(new Voxel(glm::ivec3(edgeLength, baseOffset.y * i + edgeLength, 0), color));
         }
     }
 
     void draw() {
         ObjectHudget* objectHudget = m_objectHudgetVoxels->hudget();
+
         glm::vec3 euler = glm::vec3(-m_baseOffset.y, -m_baseOffset.x, 0) * (m_objectHudgetVoxels->openingAngle());
-        glm::quat orientation = objectHudget->orientation() * glm::quat(euler);
+        glm::vec3 direction = glm::quat(euler) * objectHudget->localDirection();
 
-        m_voxelCluster.transform().setPosition(objectHudget->position() + orientation * glm::vec3(0, 0, -objectHudget->hud()->sphere().radius()));
-        m_voxelCluster.transform().setOrientation(orientation);
+        transform().setPosition(objectHudget->worldPosition(direction));
+        transform().setOrientation(objectHudget->worldOrientation(direction));
 
-        VoxelRenderer::instance()->draw(&m_voxelCluster);
+        VoxelRenderer::instance()->draw(this);
     }
 
 
 protected:
     ObjectHudgetVoxels* m_objectHudgetVoxels;
     glm::ivec3 m_baseOffset;
-    glm::quat m_baseOrientation;
-    VoxelCluster m_voxelCluster;
 };
 
 

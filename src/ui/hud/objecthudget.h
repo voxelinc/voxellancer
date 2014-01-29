@@ -13,18 +13,13 @@ class ObjectHudget: public Hudget {
 public:
     ObjectHudget(HUD* hud, HUDObjectDelegate* objectDelegate);
 
-    virtual glm::vec3 position() const override;
-    virtual glm::quat orientation() const override;
-
-    void update(float deltaSec);
-    void draw();
+    virtual void update(float deltaSec) override;
+    virtual void draw() override;
 
 
 protected:
     HUDObjectDelegate* m_objectDelegate;
     ObjectHudgetVoxels m_voxels;
-    glm::quat m_orientationOffset;
-
 
     void calculateOpeningAngle();
 };

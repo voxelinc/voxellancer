@@ -24,18 +24,11 @@ public:
     bool actionActive() const;
     void setActionActive(bool actionActive);
 
-    virtual glm::vec3 position() const override;
-    virtual glm::quat orientation() const override;
-
-    const glm::quat& orientationOffset() const;
-    void setOrientationOffset(const glm::quat& orientationOffset);
-
-    void update(float deltaSec);
-    void draw();
+    virtual void update(float deltaSec) override;
+    virtual void draw() override;
 
 
 protected:
-    glm::quat m_orientationOffset;
     bool m_actionActive;
     CrossHairVoxels m_voxels;
 };

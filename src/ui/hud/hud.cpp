@@ -23,7 +23,6 @@ HUD::HUD(Player* player, Viewer* viewer):
     m_viewer(viewer),
     m_crossHair(this),
     m_aimHelper(this),
-    m_targetGuide(this),
     m_sphere(glm::vec3(0, 0, 0), 5.0f),
     m_scanner(&World::instance()->worldTree())
 {
@@ -50,10 +49,6 @@ CrossHair& HUD::crossHair() {
 
 AimHelperHudget& HUD::aimHelper() {
     return m_aimHelper;
-}
-
-TargetGuide& HUD::targetGuide() {
-    return m_targetGuide;
 }
 
 glm::vec3 HUD::position() const {
@@ -109,16 +104,13 @@ void HUD::setCrossHairOffset(const glm::vec2& mousePosition) {
 
     glm::vec3 nearPlaneTarget = glm::vec3(mousePosition.x * nearPlaneWidth / 2.0f, mousePosition.y * nearPlaneHeight / 2.0f, -nearZ);
 
-    glm::quat offset = GeometryHelper::quatFromViewDirection(nearPlaneTarget);
-
-    m_crossHair.setOrientationOffset(offset);
+    m_crossHair.pointToLocalPoint(nearPlaneTarget);
 }
 
 void HUD::update(float deltaSec) {
     updateScanner(deltaSec);
-    m_targetGuide.update(deltaSec);
 
-    Ray toCrossHair = Ray::fromTo(m_player->cameraDolly().cameraHead().position(), m_crossHair.position());
+    Ray toCrossHair = Ray::fromTo(m_player->cameraDolly().cameraHead().position(), m_crossHair.worldPosition());
 
     for (Hudget* hudget : m_hudgets) {
         hudget->pointerAt(toCrossHair, m_crossHair.actionActive());

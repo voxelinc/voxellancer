@@ -15,6 +15,6 @@ float CircularHudget::radius() const {
 }
 
 bool CircularHudget::isAt(const Ray& ray) const {
-    return ray.intersects(Sphere(position(), m_radius));
+    return ray.intersects(Sphere(worldPosition(), m_radius));
 }
 

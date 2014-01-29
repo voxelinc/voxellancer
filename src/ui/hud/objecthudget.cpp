@@ -18,24 +18,13 @@ ObjectHudget::ObjectHudget(HUD* hud, HUDObjectDelegate* objectDelegate):
 
 }
 
-glm::vec3 ObjectHudget::position() const {
-    return m_hud->position() + orientation() * glm::vec3(0, 0, -m_hud->sphere().radius());
-}
-
-glm::quat ObjectHudget::orientation() const {
-    return m_hud->orientation() * m_orientationOffset;
-}
-
 void ObjectHudget::update(float deltaSec) {
     WorldObject* worldObject = m_objectDelegate->worldObject();
-    if(!worldObject) {
-        return;
+
+    if(worldObject) {
+        calculateOpeningAngle();
+        pointToWorldPoint(worldObject->transform().position());
     }
-
-    calculateOpeningAngle();
-
-    glm::vec3 direction = glm::inverse(m_hud->orientation()) * (worldObject->transform().position() - m_hud->centerOfView());
-    m_orientationOffset = GeometryHelper::quatFromViewDirection(direction);
 }
 
 void ObjectHudget::draw() {
@@ -47,9 +36,9 @@ void ObjectHudget::calculateOpeningAngle() {
 
     float radius = worldObject->bounds().sphere().radius();
     float distance = glm::length(m_hud->centerOfView() - worldObject->transform().position());
-    float alpha = std::atan2(radius, distance);
+    float alpha = std::atan2(radius, distance) * 0.95f;
 
-    alpha = std::max(alpha, 0.05f); // Hack, set minimum size
+    alpha = std::max(alpha, 0.04f); // Hack, set minimum size
 
     m_voxels.setOpeningAngle(alpha);
 }
