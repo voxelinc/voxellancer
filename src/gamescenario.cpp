@@ -25,14 +25,14 @@ GameScenario::GameScenario() {
 
 void GameScenario::populate(Game* game) {
     glowutils::AutoTimer t("Initialize Game");
-    
+
     glow::debug("create world");
     World* world = World::instance();
 
     glow::debug("Create WorldObjects");
     Ship *normandy = new Ship();
     ClusterCache::instance()->fillObject(normandy, "data/voxelcluster/normandy.csv");
-    normandy->setPosition(glm::vec3(0, 0, -100));
+    normandy->transform().setPosition(glm::vec3(0, 0, -100));
     normandy->objectInfo().setName("Normandy");
     normandy->objectInfo().setShowOnHud(true);
     normandy->objectInfo().setCanLockOn(true);
@@ -48,7 +48,7 @@ void GameScenario::populate(Game* game) {
 
     Ship *follower = new Ship();
     ClusterCache::instance()->fillObject(follower, "data/voxelcluster/basicship.csv");
-    follower->setPosition(glm::vec3(100, 0, -50));
+    follower->transform().setPosition(glm::vec3(100, 0, -50));
     follower->objectInfo().setName("follower");
     follower->objectInfo().setShowOnHud(true);
     world->god().scheduleSpawn(follower);
@@ -59,7 +59,7 @@ void GameScenario::populate(Game* game) {
 
     Ship *testCluster = new Ship();
     ClusterCache::instance()->fillObject(testCluster, "data/voxelcluster/basicship.csv");
-    testCluster->setPosition(glm::vec3(0, 0, 10));
+    testCluster->transform().setPosition(glm::vec3(0, 0, 10));
     testCluster->objectInfo().setName("basicship");
     testCluster->objectInfo().setShowOnHud(false);
     world->god().scheduleSpawn(testCluster);
@@ -67,8 +67,8 @@ void GameScenario::populate(Game* game) {
     game->player().setShip(testCluster);
 
     WorldObject *wall = new WorldObject(1);
-    wall->move(glm::vec3(-30, 0, -50));
-    wall->rotate(glm::angleAxis(-90.f, glm::vec3(0, 1, 0)));
+    wall->transform().move(glm::vec3(-30, 0, -50));
+    wall->transform().rotate(glm::angleAxis(-90.f, glm::vec3(0, 1, 0)));
     for(int x = 0; x < 20; x++) {
         for(int y = 0; y < 15; y++) {
             for(int z = 0; z < 3; z++) {
@@ -83,7 +83,7 @@ void GameScenario::populate(Game* game) {
 
     glow::debug("Create Planet");
     WorldObject *planet = new WorldObject();
-    planet->move(glm::vec3(20, 10, -30));
+    planet->transform().move(glm::vec3(20, 10, -30));
     int diameter = 24;
     glm::vec3 middle(diameter/2, diameter/2, diameter/2);
     for(int x = 0; x < diameter; x++) {
@@ -106,7 +106,7 @@ void GameScenario::populate(Game* game) {
     for(int e = 0; e < 15; e++) {
         WorldObject *enemy = new WorldObject();
         int r = 80;
-        enemy->move(glm::vec3(-80 + rand()%r-r/2,rand()%r-r/2,-20 + rand()%r-r/2));
+        enemy->transform().move(glm::vec3(-80 + rand()%r-r/2,rand()%r-r/2,-20 + rand()%r-r/2));
 
         for(int x = 0; x < 4; x++) {
             for(int y = 0; y < 2; y++) {
@@ -125,3 +125,4 @@ void GameScenario::populate(Game* game) {
     glow::debug("Initial spawn");
     world->god().spawn();
 }
+

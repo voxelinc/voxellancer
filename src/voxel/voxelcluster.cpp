@@ -79,7 +79,7 @@ void VoxelCluster::addVoxel(Voxel* voxel) {
 
     m_voxels[voxel->gridCell()] = voxel;
     m_voxelRenderData.invalidate();
-    
+
     extendGridAABB(voxel);
 }
 
@@ -103,22 +103,6 @@ const std::unordered_map<glm::ivec3, Voxel*>& VoxelCluster::voxelMap() const {
 
 int VoxelCluster::voxelCount() const {
     return m_voxels.size();
-}
-
-void VoxelCluster::rotate(const glm::quat& rotation) {
-    m_transform.rotate(rotation);
-}
-
-void VoxelCluster::move(const glm::vec3& vec3) {
-    m_transform.move(vec3);
-}
-
-void VoxelCluster::setOrientation(const glm::quat& orientation) {
-    m_transform.setOrientation(orientation);
-}
-
-void VoxelCluster::setPosition(const glm::vec3& pos) {
-    m_transform.setPosition(pos);
 }
 
 void VoxelCluster::extendGridAABB(Voxel* voxel) {

@@ -126,27 +126,27 @@ go_bandit([](){
 
         it("test global performance", [&]() {
             Ship *ship;
-            Ship *normandy;            
+            Ship *normandy;
             WorldObject *planet;
             {
                 glowutils::AutoTimer t("init perftest");
 
                 normandy = new Ship();
                 ClusterCache::instance()->fillObject(normandy, "data/voxelcluster/normandy.csv");
-                normandy->setPosition(glm::vec3(0, 0, -100));
+                normandy->transform().setPosition(glm::vec3(0, 0, -100));
                 normandy->objectInfo().setName("Normandy");
                 World::instance()->god().scheduleSpawn(normandy);
 
                 ship = new Ship();
                 ClusterCache::instance()->fillObject(ship, "data/voxelcluster/basicship.csv");
-                ship->setPosition(glm::vec3(0, 0, 10));
+                ship->transform().setPosition(glm::vec3(0, 0, 10));
                 ship->objectInfo().setName("basicship");
                 ship->objectInfo().setShowOnHud(false);
                 World::instance()->god().scheduleSpawn(ship);
 
                 WorldObject *wall = new WorldObject(1);
-                wall->move(glm::vec3(-20, 0, -50));
-                wall->rotate(glm::angleAxis(-90.f, glm::vec3(0, 1, 0)));
+                wall->transform().move(glm::vec3(-20, 0, -50));
+                wall->transform().rotate(glm::angleAxis(-90.f, glm::vec3(0, 1, 0)));
                 for (int x = 0; x < 20; x++) {
                     for (int y = 0; y < 15; y++) {
                         for (int z = 0; z < 3; z++) {
@@ -158,7 +158,7 @@ go_bandit([](){
                 World::instance()->god().scheduleSpawn(wall);
 
                 planet = createPlanet(28);
-                planet->move(glm::vec3(20, 10, -130));
+                planet->transform().move(glm::vec3(20, 10, -130));
                 World::instance()->god().scheduleSpawn(planet);
 
                 glow::debug("Initial spawn");

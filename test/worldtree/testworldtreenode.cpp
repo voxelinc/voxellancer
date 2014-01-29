@@ -149,10 +149,10 @@ go_bandit([]() {
 
             a.addVoxel(new Voxel(glm::ivec3(0,0,0)));
             a.addVoxel(new Voxel(glm::ivec3(1,0,0)));
-            a.setPosition(glm::vec3(2.5, 0, 0));
+            a.transform().setPosition(glm::vec3(2.5, 0, 0));
             worldTree.insert(&a);
 
-            b.setPosition(glm::vec3(0,3,0));
+            b.transform().setPosition(glm::vec3(0,3,0));
             b.addVoxel(new Voxel(glm::ivec3(0,0,0)));
             worldTree.insert(&b);
 
@@ -174,7 +174,7 @@ go_bandit([]() {
             WorldObject a;
 
             a.addVoxel(new Voxel(glm::ivec3(0,0,0)));
-            a.setPosition(glm::vec3(1.5, 1.5, 0));
+            a.transform().setPosition(glm::vec3(1.5, 1.5, 0));
             worldTree->insert(&a);
 
             Ray r1(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 0.0f));
@@ -191,7 +191,7 @@ go_bandit([]() {
 
             b.addVoxel(new Voxel(glm::ivec3(0,0,0)));
             b.addVoxel(new Voxel(glm::ivec3(1,0,0)));
-            b.setPosition(glm::vec3(3.0f, 3.0f, 0));
+            b.transform().setPosition(glm::vec3(3.0f, 3.0f, 0));
             worldTree->insert(&b);
 
             Ray r3(glm::vec3(3.0f, 5.0f, 0.0f), glm::vec3(-1.0f, -2.0f, 0.0f));
@@ -204,7 +204,7 @@ go_bandit([]() {
             WorldObject a;
 
             a.addVoxel(new Voxel(glm::ivec3(0,0,0)));
-            a.setPosition(glm::vec3(1.5, 1.5, 0));
+            a.transform().setPosition(glm::vec3(1.5, 1.5, 0));
             worldTree->insert(&a);
 
             Line l1(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.3f, 1.3f, 0.0f));
@@ -217,7 +217,7 @@ go_bandit([]() {
 
             b.addVoxel(new Voxel(glm::ivec3(0,0,0)));
             b.addVoxel(new Voxel(glm::ivec3(1,0,0)));
-            b.setPosition(glm::vec3(3.0f, 3.0f, 0));
+            b.transform().setPosition(glm::vec3(3.0f, 3.0f, 0));
             worldTree->insert(&b);
 
             Line l3(glm::vec3(3.0f, 5.0f, 0.0f), glm::vec3(-1.0f, -2.0f, 0.0f));

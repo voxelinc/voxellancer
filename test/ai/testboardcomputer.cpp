@@ -14,13 +14,13 @@ go_bandit([](){
     describe("boardComputer", [](){
 
         Ship* ship;
- 
+
         PropertyManager::instance()->reset();
         PropertyManager::instance()->load("data/config.ini");
 
         before_each([&](){
             ship = new Ship();
-            ship->setPosition(glm::vec3(0, 0, 0));
+            ship->transform().setPosition(glm::vec3(0, 0, 0));
         });
 
         it("moves in the right direction", [&]() {

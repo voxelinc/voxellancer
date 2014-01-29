@@ -101,8 +101,8 @@ void WorldObject::setCenterAndAdjustPosition(const glm::vec3& newCenter) {
 }
 
 void WorldObject::updateTransformAndGeode(const glm::vec3& position, const glm::quat& orientation) {
-    setOrientation(orientation);
-    setPosition(position);
+    transform().setOrientation(orientation);
+    transform().setPosition(position);
     m_collisionDetector.updateGeode();
 }
 
