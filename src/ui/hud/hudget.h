@@ -63,7 +63,7 @@ public:
         can be added to orientate the hudget
     */
     float directionAngle() const;
-    float setDirectionAngle(float directionAngle);
+    void setDirectionAngle(float directionAngle);
 
 
     /*
