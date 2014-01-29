@@ -5,7 +5,7 @@
 
 #include <glm/gtx/quaternion.hpp>
 
-#include "worldtransform.h"
+#include "geometry/transform.h"
 
 #include "collision/collisiondetector.h"
 
@@ -85,7 +85,7 @@ std::list<VoxelCollision> &Physics::move(float deltaSec) {
     updateSpeed(deltaSec);
 
     if (m_speed != glm::vec3(0.0f) || m_angularSpeed != glm::vec3(0.0f)) {
-        WorldTransform targetTransform(m_worldObject.transform());
+        Transform targetTransform(m_worldObject.transform());
         targetTransform.moveWorld(m_speed * deltaSec);
         targetTransform.rotate(glm::quat(m_angularSpeed * deltaSec));
 

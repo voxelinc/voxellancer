@@ -7,15 +7,15 @@
 
 #include "property/property.h"
 
-#include "worldtransform.h"
+#include "geometry/transform.h"
 
 
 class VoxelParticle {
 public:
-    VoxelParticle(const WorldTransform& transform, int color, float emissiveness, float m_lifetime = INFINITY);
+    VoxelParticle(const Transform& transform, int color, float emissiveness, float m_lifetime = INFINITY);
 
-    const WorldTransform& worldTransform() const;
-    void setWorldTransform(const WorldTransform& transform);
+    const Transform& transform() const;
+    void setTransform(const Transform& transform);
 
     int color() const;
     float emissiveness() const;
@@ -31,8 +31,9 @@ public:
 
     void update(float deltaSec);
 
+
 protected:
-    WorldTransform m_transform;
+    Transform m_transform;
 
     int m_color;
     float m_emissiveness;

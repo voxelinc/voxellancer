@@ -76,7 +76,7 @@ void CrossHairVoxels::update(float deltaSec) {
 
 void CrossHairVoxels::draw() {
     for(CrossHairElement* crossHairElement : m_crossHairElements) {
-        WorldTransform transform(crossHairElement->transform());
+        Transform transform(crossHairElement->transform());
         transform.setPosition(m_crossHair->position() + m_crossHair->orientation() * crossHairElement->relativePosition);
         transform.setOrientation(m_crossHair->orientation() * crossHairElement->relativeOrientation);
 

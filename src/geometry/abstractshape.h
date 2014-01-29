@@ -2,7 +2,7 @@
 
 class Sphere;
 template<typename T> class TAABB;
-class WorldTransform;
+class Transform;
 
 class AbstractShape {
 public:

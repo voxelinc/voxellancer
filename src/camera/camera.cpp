@@ -30,32 +30,32 @@ void Camera::projectionDirty(){
 }
 
 void Camera::move(glm::vec3 dist){
-    WorldTransform::move(dist);
+    Transform::move(dist);
     viewDirty();
 }
 
 void Camera::setPosition(glm::vec3 pos){
-    WorldTransform::setPosition(pos);
+    Transform::setPosition(pos);
     viewDirty();
 }
 
 void Camera::rotateX(float rot){
-    WorldTransform::rotate(glm::angleAxis(rot, glm::vec3(1,0,0)));
+    Transform::rotate(glm::angleAxis(rot, glm::vec3(1,0,0)));
     viewDirty();
 }
 
 void Camera::rotateY(float rot){
-    WorldTransform::rotate(glm::angleAxis(rot, glm::vec3(0, 1, 0)));
+    Transform::rotate(glm::angleAxis(rot, glm::vec3(0, 1, 0)));
     viewDirty();
 }
 
 void Camera::rotateZ(float rot){
-    WorldTransform::rotate(glm::angleAxis(rot, glm::vec3(0, 0, -1)));
+    Transform::rotate(glm::angleAxis(rot, glm::vec3(0, 0, -1)));
     viewDirty();
 }
 
 void Camera::setOrientation(glm::quat quat){
-    WorldTransform::setOrientation(quat);
+    Transform::setOrientation(quat);
     viewDirty();
 }
 
@@ -68,7 +68,7 @@ const glm::mat4 Camera::viewInverted(){
 }
 
 const glm::quat Camera::orientation(){
-    return WorldTransform::orientation();
+    return Transform::orientation();
 }
 
 const glm::vec3 Camera::position() {

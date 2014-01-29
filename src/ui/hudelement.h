@@ -3,7 +3,7 @@
 #include <glm/glm.hpp>
 
 #include "voxel/voxelcluster.h"
-#include "worldtransform.h"
+#include "geometry/transform.h"
 
 enum HUDOffsetOrigin {
     Center,
