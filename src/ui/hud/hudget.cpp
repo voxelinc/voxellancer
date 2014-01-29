@@ -34,27 +34,27 @@ void Hudget::setVisible(bool visible) {
 }
 
 bool Hudget::pressed() const {
-    return m_pressed;
+    return m_pressed && m_visible;
 }
 
 bool Hudget::hovered() const {
-    return m_hovered;
+    return m_hovered && m_visible;
 }
 
 bool Hudget::clicked() const {
-    return m_clicked;
+    return m_clicked && m_visible;
 }
 
 bool Hudget::released() const {
-    return m_released;
+    return m_released && m_visible;
 }
 
 bool Hudget::entered() const {
-    return m_entered;
+    return m_entered && m_visible;
 }
 
 bool Hudget::left() const {
-    return m_left;
+    return m_left && m_visible;
 }
 
 bool Hudget::isAt(const Ray& ray) const {
