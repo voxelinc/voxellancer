@@ -5,7 +5,7 @@
 
 #include "worldtransform.h"
 
-#include "utils/math.h"
+#include "utils/geometryhelper.h"
 
 #include "worldobject/hardpoint.h"
 #include "worldobject/ship.h"
@@ -39,8 +39,9 @@ void BulletTransformHelper::transform() {
 */
     if (bulletUp != glm::vec3(0)) {
         glm::vec3 rotationAxis = glm::normalize(bulletUp);
-        float angle = glm::acos(glm::dot(bulletDirection, hardpointDirection));
-        bulletTransform.rotateWorld(glm::angleAxis(-angle, rotationAxis)); //then rotate towards target
+        float angle = GeometryHelper::angleBetween(bulletDirection, hardpointDirection);
+        glm::quat orientation = glm::angleAxis(-angle, rotationAxis);
+        bulletTransform.rotateWorld(orientation); //then rotate towards target
     }
 
     float bulletLength = m_bullet->minimalGridAABB().extent(ZAxis) * m_bullet->transform().scale();

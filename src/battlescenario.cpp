@@ -28,7 +28,7 @@ void BattleScenario::populate(Game* game) {
     World* world = World::instance();
 
     glow::debug("Create WorldObjects");
-    
+
     // create playership
     Ship *playerShip = new Ship();
     ClusterCache::instance()->fillObject(playerShip, "data/voxelcluster/basicship.csv");
@@ -48,7 +48,7 @@ void BattleScenario::populate(Game* game) {
     aitester->setCharacter(new DummyCharacter(*aitester, new DummyElevatedTask(*aitester, new FightTask(*aitester, std::list<std::shared_ptr<WorldObjectHandle>>{playerShip->handle()}))));
 
     // create two opposing enemy forces
-    populateBattle(10, 10);
+    populateBattle(2, 2);
 
     glow::debug("Initial spawn");
     world->god().spawn();
