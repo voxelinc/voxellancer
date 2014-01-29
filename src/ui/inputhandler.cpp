@@ -268,7 +268,7 @@ float InputHandler::getInputValue(InputMapping mapping) {
 }
 
 void InputHandler::processFireActions() {
-    m_player->hud().crossHair().setActionActive(getInputValue(&fireAction));
+    m_player->hud().crossHair().setActionActive(getInputValue(&fireAction) > 0.001);
 
     if (getInputValue(&fireAction)) {
         m_player->fire();

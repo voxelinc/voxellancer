@@ -103,7 +103,7 @@ float Hudget::directionAngle() const {
     return m_directionAngle;
 }
 
-float Hudget::setDirectionAngle(float directionAngle) {
+void Hudget::setDirectionAngle(float directionAngle) {
     m_directionAngle = directionAngle;
 }
 
