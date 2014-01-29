@@ -19,7 +19,9 @@ BoardComputer::BoardComputer(Ship& ship) :
 }
 
 void BoardComputer::moveTo(const glm::vec3& position) {
-    glm::vec3 delta = position - m_ship.transform().position();
+    glm::vec3 projectedPosition = m_ship.physics().projectedTransformIn(1.0f).position();
+    glm::vec3 delta = position - projectedPosition;
+
     glm::vec3 direction = glm::inverse(m_ship.transform().orientation()) * glm::normalize(delta);
     float distance = glm::length(delta);
 
