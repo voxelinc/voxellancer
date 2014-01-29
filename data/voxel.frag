@@ -9,7 +9,7 @@ in vec3 modelposition;
 
 const float border_size = 0.10;
 const float border_darkness = 0.2;
-const float ambient = 0.1;
+const float ambient = 0.3;
 const vec3 lightdir = normalize(vec3(0.3f, 0.5f, 1.0f));
 
 layout(location=0) out vec4 fragColor;
