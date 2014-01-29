@@ -6,10 +6,10 @@
 
 #include "glow/logging.hpp"
 
-#include "voxelcluster.h"
 #include "worldobject/worldobject.h"
 #include "voxel/voxeltreenode.h"
 #include "voxeleffect/voxeldebrisgenerator.h"
+#include "voxeltree.h"
 
 
 Property<float>* Voxel::s_defaultMass;

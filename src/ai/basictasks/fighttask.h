@@ -1,6 +1,6 @@
 #pragma once
 
-#include "worldobject/worldobjecthandle.h"
+#include "worldobject/handle/handle.h"
 #include "../basictask.h"
 #include "worldobject/ship.h"
 #include "utils/randfloat.h"
@@ -16,16 +16,16 @@ class FightTask : public BasicTask {
     };
 
 public:
-    FightTask(Ship& ship, std::list<std::shared_ptr<WorldObjectHandle>> targets);
+    FightTask(Ship& ship, std::list<Handle<WorldObject>> targets);
 
     virtual void update(float deltaSec);
-    virtual void addTargets(std::list<std::shared_ptr<WorldObjectHandle>> targets);
-    virtual void setTargets(std::list<std::shared_ptr<WorldObjectHandle>> targets);
+    virtual void addTargets(std::list<Handle<WorldObject>> targets);
+    virtual void setTargets(std::list<Handle<WorldObject>> targets);
 
     virtual bool isInProgress();
 
 protected:
-    std::list<std::shared_ptr<WorldObjectHandle>> m_targets;
+    std::list<Handle<WorldObject>> m_targets;
     WorldObject* m_primaryTarget;
     void updateTargets();
     void updateState();

@@ -40,8 +40,8 @@ void VoxelDebrisGenerator::setSpawnProbability(float spawnProbability) {
 }
 
 void VoxelDebrisGenerator::spawn() {
-    WorldTransform gridTransform;
-    WorldTransform particleTransform;
+    Transform gridTransform;
+    Transform particleTransform;
 
     gridTransform.setPosition(m_position);
     gridTransform.setOrientation(m_orientation);

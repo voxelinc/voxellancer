@@ -4,13 +4,12 @@
 #include "engine.h"
 #include "voxel/specialvoxels/hardpointvoxel.h"
 #include "voxel/specialvoxels/enginevoxel.h"
-#include "worldobject/worldobjecthandle.h"
+#include "worldobject/handle/handle.h"
 #include "worldobject/weapons/gun.h"
 #include "worldobject/weapons/rocketlauncher.h"
 #include "ai/character.h"
 #include "ai/boardcomputer.h"
 #include "sound/sound.h"
-
 
 Ship::Ship() :
     WorldObject(CollisionFilterClass::Ship),
@@ -20,9 +19,17 @@ Ship::Ship() :
     prop_maxRotSpeed("ship.maxRotSpeed"),
     m_character(new Character(*this)),
     m_boardComputer(new BoardComputer(*this)),
-    m_targetObjectHandle(WorldObjectHandle::nullHandle())
+    m_shipHandle(Handle<Ship>(this)),
+    m_targetObjectHandle(Handle<WorldObject>(nullptr))
 {
 }
+
+
+Ship::~Ship() {
+    m_shipHandle.invalidate();
+}
+
+
 
 void Ship::update(float deltaSec) {
     m_character->update(deltaSec);
@@ -74,11 +81,11 @@ void Ship::removeEngine(Engine* engine) {
 }
 
 void Ship::setTargetObject(WorldObject* target) {
-    m_targetObjectHandle = target ? target->handle() : WorldObjectHandle::nullHandle();
+    m_targetObjectHandle = target ? target->handle() : Handle<WorldObject>(nullptr);
 }
 
 WorldObject* Ship::targetObject() {
-    return m_targetObjectHandle->get();
+    return m_targetObjectHandle.get();
 }
 
 void Ship::fireAtPoint(glm::vec3 target) {
@@ -134,6 +141,10 @@ Character* Ship::character() {
     return m_character.get();
 }
 
+BoardComputer* Ship::boardComputer() {
+    return m_boardComputer.get();
+}
+
 void Ship::setEngineSound(std::shared_ptr<Sound> sound) {
     m_sound = sound;
     sound->setLooping(true);
@@ -149,6 +160,6 @@ void Ship::updateEnginePosition() {
     m_enginePos /= m_engines.size();
 }
 
-BoardComputer* Ship::boardComputer() {
-    return m_boardComputer.get();
+Handle<Ship> Ship::shipHandle() {
+    return m_shipHandle;
 }

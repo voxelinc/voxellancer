@@ -5,7 +5,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 
-#include "worldobject/worldobjecthandle.h"
+#include "worldobject/handle/handle.h"
 
 
 class Ship;
@@ -16,12 +16,16 @@ class BoardComputer
 public:
     BoardComputer(Ship& ship);
     
-    void moveTo(const glm::vec3& position, float minDistance = 0);
-    void rotateTo(const glm::vec3& position);
-    void shootBullet(const std::list<std::shared_ptr<WorldObjectHandle>>& targets);
-    void shootRockets(std::shared_ptr<WorldObjectHandle> target);
+    void moveTo(const glm::vec3& position);
+    void rotateTo(const glm::vec3& position, const glm::vec3& up = glm::vec3(0, 0, 0));
+    void shootBullet(const std::list<Handle<WorldObject>>& targets);
+    void shootRockets(Handle<WorldObject> target);
 
 protected:
+    void rotateUpTo(const glm::vec3& up);
+    void rotateUpAuto(const glm::quat& rotation);
+
     Ship& m_ship;
+
 };
 

@@ -1,5 +1,7 @@
 #include "cameradolly.h"
 
+#include "worldobject/worldobject.h"
+
 
 CameraDolly::CameraDolly():
     InertiaFollower(10.0f, 10.0f),
@@ -22,4 +24,3 @@ void CameraDolly::update(float deltaSec) {
         follow(m_followHelper.followPosition(), followWorldObject->transform().orientation(), deltaSec);
     }
 }
-

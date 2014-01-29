@@ -26,7 +26,7 @@ std::list<WorldObject*> &Splitter::splitOffWorldObjects() {
 
 WorldObject *Splitter::createWorldObjectFromSplitOff(SplitData *split) {
     WorldObject *worldObject;
-    WorldTransform transform = split->exWorldObject()->transform();
+    Transform transform = split->exWorldObject()->transform();
     transform.setCenter(transform.center()/* - glm::vec3(split->llf())*/);
 
 

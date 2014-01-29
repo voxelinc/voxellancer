@@ -14,6 +14,8 @@
 #include "worldobject/ship.h"
 
 #include "game.h"
+#include "world/world.h"
+#include "world/god.h"
 
 
 BattleScenario::BattleScenario() {
@@ -45,7 +47,7 @@ void BattleScenario::populate(Game* game) {
     aitester->objectInfo().setName("basicship");
     aitester->objectInfo().setShowOnHud(false);
     //world->god().scheduleSpawn(aitester);
-    aitester->setCharacter(new DummyCharacter(*aitester, new DummyElevatedTask(*aitester, new FightTask(*aitester, std::list<std::shared_ptr<WorldObjectHandle>>{playerShip->handle()}))));
+    aitester->setCharacter(new DummyCharacter(*aitester, new DummyElevatedTask(*aitester, new FightTask(*aitester, std::list<Handle<WorldObject>>{playerShip->handle()}))));
 
     // create two opposing enemy forces
     populateBattle(2, 2);
@@ -56,8 +58,8 @@ void BattleScenario::populate(Game* game) {
 
 void BattleScenario::populateBattle(int numberOfEnemies1, int numberOfEnemies2) {
     World* world = World::instance();
-    std::list<std::shared_ptr<WorldObjectHandle>> enemies1;
-    std::list<std::shared_ptr<WorldObjectHandle>> enemies2;
+    std::list<Handle<WorldObject>> enemies1;
+    std::list<Handle<WorldObject>> enemies2;
     for (int e = 0; e < numberOfEnemies1; e++) {
         Ship *enemy = new Ship();
         int r = 200;
@@ -80,9 +82,9 @@ void BattleScenario::populateBattle(int numberOfEnemies1, int numberOfEnemies2) 
         world->god().scheduleSpawn(enemy);
         enemies1.push_back(enemy->handle());
     }
-    for (std::shared_ptr<WorldObjectHandle> handle : enemies1) {
+    for (Handle<WorldObject> handle : enemies1) {
 
-        std::vector<std::shared_ptr<WorldObjectHandle>> tmpVector(enemies2.size());
+        std::vector<Handle<WorldObject>> tmpVector(enemies2.size());
         std::copy(enemies2.begin(), enemies2.end(), tmpVector.begin());
         std::random_shuffle(tmpVector.begin(), tmpVector.end());
         copy(tmpVector.begin(), tmpVector.end(), enemies2.begin());
@@ -90,8 +92,8 @@ void BattleScenario::populateBattle(int numberOfEnemies1, int numberOfEnemies2) 
         Ship* e = (Ship*)handle->get();
         e->setCharacter(new DummyCharacter(*e, new DummyElevatedTask(*e, new FightTask(*e, enemies2))));
     }
-    for (std::shared_ptr<WorldObjectHandle> handle : enemies2) {
-        std::vector<std::shared_ptr<WorldObjectHandle>> tmpVector(enemies1.size());
+    for (Handle<WorldObject> handle : enemies2) {
+        std::vector<Handle<WorldObject>> tmpVector(enemies1.size());
         std::copy(enemies1.begin(), enemies1.end(), tmpVector.begin());
         std::random_shuffle(tmpVector.begin(), tmpVector.end());
         copy(tmpVector.begin(), tmpVector.end(), enemies1.begin());

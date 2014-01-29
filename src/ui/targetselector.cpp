@@ -2,6 +2,10 @@
 
 #include <algorithm>
 
+#include "player.h"
+#include "worldobject/ship.h"
+#include "world/world.h"
+
 
 TargetSelector::TargetSelector(Player *player):
     m_player(player)
@@ -21,6 +25,10 @@ void TargetSelector::selectPreviousTarget() {
 
 template<typename IteratorType>
 WorldObject* TargetSelector::findNextTarget(IteratorType begin, IteratorType end) {
+    if (!m_player->playerShip()) {
+        return nullptr;
+    }
+
     IteratorType searchBegin = begin;
 
     if (m_player->playerShip()->targetObject() != nullptr) {
