@@ -6,6 +6,8 @@
 #include "worldobject/worldobject.h"
 
 #include "utils/tostring.h"
+#include "collision/voxelcollision.h"
+#include "voxel/voxel.h"
 
 
 void ElasticImpulseGenerator::parse(std::list<WorldObjectCollision>& worldObjectCollisions) {

@@ -6,16 +6,17 @@
 
 #include <glm/glm.hpp>
 
-#include <glow/Texture.h>
-#include <glow/ref_ptr.h>
-
 #include "geometry/aabb.h"
-
 #include "geometry/transform.h"
-#include "voxel.h"
-#include "voxelrenderdata.h"
-#include "voxelgridcmp.h"
 
+#include "utils/vec3hash.h"
+
+#include "voxelgridcmp.h"
+#include "voxelrenderdata.h"
+
+
+class Voxel;
+class VoxelRenderData;
 
 class VoxelCluster {
 public:

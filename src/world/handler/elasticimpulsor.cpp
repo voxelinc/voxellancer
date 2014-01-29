@@ -5,6 +5,8 @@
 #include "physics/physics.h"
 
 #include "utils/tostring.h"
+#include "physics/impulse.h"
+#include "voxel/voxel.h"
 
 
 ElasticImpulsor::ElasticImpulsor():
