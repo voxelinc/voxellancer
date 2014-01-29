@@ -11,6 +11,8 @@
 #include "camera/cameradolly.h"
 #include "ui/hud.h"
 
+class Ship;
+
 Game::Game():
     m_inputHandler(&m_player),
     m_viewer(Viewport(0, 0, WindowManager::instance()->resolution().width(), WindowManager::instance()->resolution().height())),

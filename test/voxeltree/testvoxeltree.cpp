@@ -97,7 +97,7 @@ go_bandit([](){
             tree->insert(&v2); // Center in middle now
             AssertThat(n->sphere(transform).position(), EqualsWithDelta(glm::vec3(1, 1, 1), glm::vec3(0.01, 0.01, 0.01)));
 
-            transform.rotate(glm::angleAxis(90.0f, glm::vec3(1, 0, 0)));
+            transform.rotate(glm::angleAxis(glm::radians(90.0f), glm::vec3(1, 0, 0)));
             AssertThat(n->sphere(transform).position(), EqualsWithDelta(glm::vec3(1, -1, 1), glm::vec3(0.01, 0.01, 0.01)));
         });
 
@@ -118,10 +118,10 @@ go_bandit([](){
             AssertThat(n->sphere(transform).position(), EqualsWithDelta(glm::vec3(1,1,1), glm::vec3(0.01, 0.01, 0.01)));
             AssertThat(tree->root()->sphere(transform).position(), EqualsWithDelta(glm::vec3(0.5, 0.5, 0.5), glm::vec3(0.01, 0.01, 0.01)));
 
-            transform.rotate(glm::angleAxis((float)90.0, glm::vec3(1, 0, 0)));
+            transform.rotate(glm::angleAxis(glm::radians(90.0f), glm::vec3(1, 0, 0)));
             AssertThat(n->sphere(transform).position(), EqualsWithDelta(glm::vec3(1, 0, 1), glm::vec3(0.01, 0.01, 0.01)));
 
-            transform.rotate(glm::angleAxis((float)90.0f, glm::vec3(0, 1, 0)));
+            transform.rotate(glm::angleAxis(glm::radians(90.0f), glm::vec3(0, 1, 0)));
             AssertThat(n->sphere(transform).position(), EqualsWithDelta(glm::vec3(1, 1, 1), glm::vec3(0.01, 0.01, 0.01)));
         });
 

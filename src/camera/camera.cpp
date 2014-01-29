@@ -6,7 +6,7 @@
 
 
 Camera::Camera(int viewportWidth, int viewportHeight):
-	m_fovy(60.f),
+	m_fovy(glm::radians(60.f)),
 	m_aspect(1.f),
 	m_zNear(1),
 	m_zFar(9999)
@@ -21,7 +21,7 @@ Camera::~Camera(){
 void Camera::viewDirty(){
     m_view = glm::mat4_cast(glm::inverse(m_orientation)) * glm::translate(-m_position);
     m_viewProjection = m_projection * m_view;
-}
+} 
 
 void Camera::projectionDirty(){
     m_projection = glm::perspective(m_fovy, m_aspect, m_zNear, m_zFar);
