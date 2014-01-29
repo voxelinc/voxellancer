@@ -29,21 +29,28 @@ const glm::vec3& AimHelperHudget::targetPoint() const {
 
 void AimHelperHudget::update(float deltaSec) {
     Ship* ship = m_hud->player()->playerShip();
+
+    if(!ship) {
+        setVisible(false);
+        return;
+    }
+
     WorldObject* targetObject = ship->targetObject();
 
-    if (targetObject) {
-        calculateTargetPoint(targetObject);
-
-        pointToWorldPoint(m_targetPoint);
-        setRelativeDistance(1.0f);
-
-        if(hovered()) {
-            setDirectionAngle(directionAngle() + 12.0f * deltaSec);
-        } else {
-            setDirectionAngle(0.0f);
-        }
-    } else {
+    if(!targetObject) {
         setVisible(false);
+        return;
+    }
+
+    calculateTargetPoint(targetObject);
+
+    pointToWorldPoint(m_targetPoint);
+    setRelativeDistance(1.0f);
+
+    if(hovered()) {
+        setDirectionAngle(directionAngle() + 12.0f * deltaSec);
+    } else {
+        setDirectionAngle(0.0f);
     }
 }
 
