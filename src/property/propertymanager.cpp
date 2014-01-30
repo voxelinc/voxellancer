@@ -159,47 +159,47 @@ PropertyManager* PropertyManager::s_instance;
 
 // any better idea or maybe generate these with macros?
 template <>
-PropertyCollection<int> * PropertyManager::getPropertyCollection(Property<int> * prop) {
+PropertyCollection<int>* PropertyManager::getPropertyCollection(Property<int> * prop) {
     return m_intProperties.get();
 }
 
 template <>
-PropertyCollection<char> * PropertyManager::getPropertyCollection(Property<char> * prop) {
+PropertyCollection<char>* PropertyManager::getPropertyCollection(Property<char> * prop) {
     return m_charProperties.get();
 }
 
 template <>
-PropertyCollection<float> * PropertyManager::getPropertyCollection(Property<float> * prop) {
+PropertyCollection<float>* PropertyManager::getPropertyCollection(Property<float> * prop) {
     return m_floatProperties.get();
 }
 
 template <>
-PropertyCollection<bool> * PropertyManager::getPropertyCollection(Property<bool> * prop) {
+PropertyCollection<bool>* PropertyManager::getPropertyCollection(Property<bool> * prop) {
     return m_boolProperties.get();
 }
 
 template <>
-PropertyCollection<std::string> * PropertyManager::getPropertyCollection(Property<std::string> * prop) {
+PropertyCollection<std::string>* PropertyManager::getPropertyCollection(Property<std::string> * prop) {
     return m_stringProperties.get();
 }
 
 template <>
-PropertyCollection<glm::vec2> * PropertyManager::getPropertyCollection(Property<glm::vec2> * prop) {
+PropertyCollection<glm::vec2>* PropertyManager::getPropertyCollection(Property<glm::vec2> * prop) {
     return m_vec2Properties.get();
 }
 
 template <>
-PropertyCollection<glm::vec3> * PropertyManager::getPropertyCollection(Property<glm::vec3> * prop) {
+PropertyCollection<glm::vec3>* PropertyManager::getPropertyCollection(Property<glm::vec3> * prop) {
     return m_vec3Properties.get();
 }
 
 template <>
-PropertyCollection<InputMapping> * PropertyManager::getPropertyCollection(Property<InputMapping> * prop) {
+PropertyCollection<InputMapping>* PropertyManager::getPropertyCollection(Property<InputMapping> * prop) {
     return m_inputMappingProperties.get();
 }
 
 template <>
-PropertyCollection<std::list<std::string>> * PropertyManager::getPropertyCollection(Property<std::list<std::string>> * prop) {
+PropertyCollection<std::list<std::string>>* PropertyManager::getPropertyCollection(Property<std::list<std::string>> * prop) {
     return m_listProperties.get();
 }
 

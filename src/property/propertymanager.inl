@@ -15,6 +15,7 @@ void PropertyManager::unregisterProperty(Property<T> * prop)
 }
 
 template <class T>
-T PropertyManager::get(char * name) {
+T PropertyManager::get(const std::string& name) {
     return getPropertyCollection<T>(nullptr)->get(name);
 }
+

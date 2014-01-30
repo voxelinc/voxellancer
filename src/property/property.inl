@@ -4,7 +4,7 @@
 
 
 template <class T>
-Property<T>::Property(char * name) :
+Property<T>::Property(const std::string& name) :
     m_name(name),
     m_value()
 {
@@ -17,7 +17,7 @@ Property<T>::~Property() {
 }
 
 template <class T>
-char * Property<T>::name() {
+const std::string& Property<T>::name() {
     return m_name;
 }
 
@@ -42,7 +42,7 @@ T* Property<T>::operator->() {
 }
 
 template <class T>
-T Property<T>::get(char* name) {
+T Property<T>::get(const std::string& name) {
     return PropertyManager::instance()->get<float>(name);
 }
 

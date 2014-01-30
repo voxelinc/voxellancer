@@ -1,24 +1,27 @@
 #pragma once
 
-template <class T> 
-class Property {
+#include <string>
 
+
+template <class T>
+class Property {
 public:
-    Property(char * name);
+    Property(const std::string& name);
     virtual ~Property();
 
     operator T();
 
-    char* name();
+    const std::string& name();
     T get();
     void set(T value);
 
     T* operator->();
 
-    static T get(char* name);
+    static T get(const std::string& name);
+
 
 private:
-    char * m_name;
+    std::string m_name;
     T m_value;
 };
 

@@ -33,13 +33,13 @@ public:
     void registerProperty(Property<T> *prop);
 
     template <class T>
-    void unregisterProperty(Property<T> *prop);
+    void unregisterProperty(Property<T>* prop);
 
-    static PropertyManager * instance();
+    static PropertyManager* instance();
     static void reset();
 
     template <class T>
-    T get(char * name);
+    T get(const std::string& name);
 
 
 private:
