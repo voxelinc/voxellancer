@@ -29,6 +29,7 @@ public:
 
     void setOutputBuffer(int i);
 
+
 private:
     InputHandler m_inputHandler;
     Player m_player;
