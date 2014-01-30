@@ -100,7 +100,7 @@ void InputHandler::resizeEvent(const unsigned int width, const unsigned int heig
 */
 void InputHandler::keyCallback(int key, int scancode, int action, int mods) {
     if (action == GLFW_PRESS) {
-        m_inputConfigurator->setLastPrimaryInput(InputMapping(InputType::Keyboard, key, 1));
+        m_inputConfigurator->setLastPrimaryInput(InputMapping(InputType::Keyboard, key, 1, 0.0f));
     } else {
         m_inputConfigurator->setLastPrimaryInput(InputMapping());
     }

@@ -44,7 +44,7 @@ bool InputConfigurator::isSecondaryInput() {
         }
     }
     for (int i = 0; i < m_secondaryInputValues->axisCnt; i++) { // get pushed axes
-        if (glm::abs(m_secondaryInputValues->axisValues[i]) > *prop_deadzoneGamepad) {
+        if (glm::abs(m_secondaryInputValues->axisValues[i]-m_idleValues[i]) > *prop_deadzoneGamepad) {
             valid = true;
         }
     }
@@ -61,22 +61,22 @@ bool InputConfigurator::isPrimaryInput() {
 bool InputConfigurator::isLastSecondaryInputValid() {
     for (int i = 0; i < m_secondaryInputValues->buttonCnt; i++) { // get pushed button
         if (m_secondaryInputValues->buttonValues[i] == GLFW_PRESS) {
-            lastSecondaryInput = InputMapping(InputType::GamePadKey, i, 1);
+            lastSecondaryInput = InputMapping(InputType::GamePadKey, i, 1, 0.0f);
             return true;
         }
     }
     for (int i = 0; i < m_secondaryInputValues->axisCnt; i++) { // get pushed axes
-        if (glm::abs(m_secondaryInputValues->axisValues[i]) > *prop_deadzoneGamepad) {
+        if (glm::abs(m_secondaryInputValues->axisValues[i]-m_idleValues[i]) > *prop_deadzoneGamepad) {
             // greater maxValue for same axes
             if (lastSecondaryInput.index() == i) {
-                if (glm::abs(lastSecondaryInput.maxValue()) <= glm::abs(m_secondaryInputValues->axisValues[i])) {
-                    lastSecondaryInput = InputMapping(InputType::GamePadAxis, i, m_secondaryInputValues->axisValues[i]);
+                if (glm::abs(lastSecondaryInput.maxValue()-m_idleValues[i]) <= glm::abs(m_secondaryInputValues->axisValues[i]-m_idleValues[i])) {
+                    lastSecondaryInput = InputMapping(InputType::GamePadAxis, i, m_secondaryInputValues->axisValues[i], m_idleValues[i]);
                     return false;
                 } else {
                     return true;
                 }
             } else {
-                lastSecondaryInput = InputMapping(InputType::GamePadAxis, i, m_secondaryInputValues->axisValues[i]);
+                lastSecondaryInput = InputMapping(InputType::GamePadAxis, i, m_secondaryInputValues->axisValues[i], m_idleValues[i]);
                 return false;
             }
         }
@@ -102,6 +102,11 @@ void InputConfigurator::startConfiguration(bool primary) {
     } else {
         glow::info("Starting configuration for secondary input device (gamepad/Joystick), Please follow the instructions");
         secondaryConfigurationState = 0;
+
+        m_idleValues.resize(m_secondaryInputValues->axisCnt);
+        for(int a = 0; a < m_secondaryInputValues->axisCnt; a++) {
+            m_idleValues[a] = m_secondaryInputValues->axisValues[a];
+        }
     }
     displayedInstructions = false;
     displayedKeyPressedWarning = false;
@@ -158,7 +163,7 @@ void InputConfigurator::setupSecondaryControls() {
             if (!displayedKeyPressedWarning) {
                 glow::info("Please release all buttons before setting a new key mapping");
                 displayedKeyPressedWarning = true;
-            }
+            }std::cout << "lol" << std::endl;
             return;
         } else {
             beginningKeyConfiguration = false;
