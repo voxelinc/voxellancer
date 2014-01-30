@@ -14,7 +14,6 @@ class StereoRenderInfo;
 class Viewer {
 public:
     Viewer(const Viewport& viewport);
-    ~Viewer();
 
     Scene* scene();
     void setScene(Scene* scene);
@@ -26,6 +25,7 @@ public:
 
     void draw();
     void update(float deltaSec);
+
 
 protected:
     Scene* m_scene;

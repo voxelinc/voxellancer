@@ -1,5 +1,7 @@
 #include "collisiondetector.h"
 
+#include "geometry/sphere.h"
+
 #include "utils/tostring.h"
 
 #include "voxel/voxeltreenode.h"
@@ -9,31 +11,26 @@
 #include "worldtree/worldtreequery.h"
 
 #include "worldobject/worldobject.h"
-#include "geometry/sphere.h"
-#include "voxel/voxeltree.h"
 
 
 CollisionDetector::CollisionDetector(WorldObject& worldObject) :
-    m_voxelTree(new VoxelTree(&worldObject)),
+    m_voxelTree(&worldObject),
     m_worldTree(nullptr),
     m_geode(nullptr),
     m_worldObject(worldObject)
 {
 }
 
-CollisionDetector::~CollisionDetector() {
-}
-
 void CollisionDetector::addVoxel(Voxel* voxel) {
-    m_voxelTree->insert(voxel);
+    m_voxelTree.insert(voxel);
 }
 
 void CollisionDetector::removeVoxel(Voxel* voxel) {
-    m_voxelTree->remove(voxel);
+    m_voxelTree.remove(voxel);
 }
 
 VoxelTree& CollisionDetector::voxelTree() {
-    return *m_voxelTree;
+    return m_voxelTree;
 }
 
 WorldTreeGeode *CollisionDetector::geode() {
@@ -75,7 +72,7 @@ std::list<VoxelCollision>& CollisionDetector::checkCollisions() {
         WorldObject* other = possibleCollider->worldObject();
 
         assert(m_worldObject.isCollideableWith(other));
-        checkCollisions(m_voxelTree->root(), other->collisionDetector().voxelTree().root());
+        checkCollisions(m_voxelTree.root(), other->collisionDetector().voxelTree().root());
     }
 
     return m_collisions;

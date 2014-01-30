@@ -1,26 +1,34 @@
 #include "gamescene.h"
 
-#include "voxel/voxelrenderer.h"
-#include "voxeleffect/voxelparticleworld.h"
-#include "utils/hd3000dummy.h"
-#include "sound/soundmanager.h"
 #include "collision/collisiondetector.h"
 
+#include "sound/soundmanager.h"
+
+#include "ui/hud.h"
+
+#include "utils/hd3000dummy.h"
+
+#include "voxel/voxelrenderer.h"
+#include "voxeleffect/voxelparticleworld.h"
+
+#include "world/world.h"
+
 #include "worldobject/worldobject.h"
+
 #include "game.h"
 #include "player.h"
-#include "ui/hud.h"
-#include "world/world.h"
 #include "skybox.h"
+
 
 GameScene::GameScene(Game* game):
     m_game(game),
-    m_voxelRenderer(VoxelRenderer::instance()),
     m_hd3000dummy(new HD3000Dummy()),
+    m_voxelRenderer(VoxelRenderer::instance()),
     m_soundManager(new SoundManager())
 {
 }
 
+/* To allow pimple of HD3000Dummy. */
 GameScene::~GameScene() = default;
 
 void GameScene::draw(Camera* camera) {

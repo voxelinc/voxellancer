@@ -7,14 +7,16 @@
 
 #include <glm/glm.hpp>
 
+#include "voxel/voxeltree.h"
+
 #include "collision/voxelcollision.h"
+
 
 class Voxel;
 class WorldTree;
 class WorldTreeGeode;
 class WorldObject;
 class Sphere;
-class VoxelTree;
 class VoxelTreeNode;
 
 // this class contains datastructures for collision detection
@@ -22,7 +24,6 @@ class CollisionDetector
 {
 public:
     CollisionDetector(WorldObject& worldObject);
-    ~CollisionDetector();
 
     void addVoxel(Voxel* voxel);
     void removeVoxel(Voxel* voxel);
@@ -44,7 +45,7 @@ public:
 
 
 protected:
-    std::unique_ptr<VoxelTree> m_voxelTree;
+    VoxelTree m_voxelTree;
     WorldObject& m_worldObject;
     WorldTreeGeode* m_geode;
     WorldTree* m_worldTree;

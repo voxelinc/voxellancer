@@ -4,10 +4,11 @@
 
 #include "scene.h"
 
+
 class Game;
 class VoxelRenderer;
-class HD3000Dummy;
 class SoundManager;
+class HD3000Dummy;
 class Player;
 
 class GameScene: public Scene {
@@ -21,6 +22,7 @@ public:
     virtual void update(float deltaSec);
     virtual void activate();
     virtual void deactivate();
+
 
 protected:
     Game* m_game;
