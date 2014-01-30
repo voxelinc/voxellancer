@@ -41,7 +41,7 @@ void FrameBuffer::setupFBO() {
         texture->setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         texture->setParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-        m_fbo->attachTexture2D(GL_COLOR_ATTACHMENT0+i, texture);
+        m_fbo->attachTexture2D(GL_COLOR_ATTACHMENT0 + i, texture);
     }
 
     if (m_useDepthAttachment) {

@@ -12,6 +12,7 @@ public:
     virtual void apply(FrameBuffer& frameBuffer) = 0;
     const std::string& name() const;
 
+
 protected:
     std::string m_name;
 

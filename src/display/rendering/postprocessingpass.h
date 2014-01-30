@@ -8,6 +8,7 @@
 
 #include "renderpass.h"
 
+
 namespace glow {
     class Program;
 }
@@ -16,25 +17,24 @@ enum class BufferName;
 class FrameBuffer;
 class ScreenQuad;
 
-
-
 class PostProcessingPass : public RenderPass {
 public:
     PostProcessingPass(std::string name, ScreenQuad& quad);
 
     void apply(FrameBuffer& frameBuffer);
     void beforeDraw(FrameBuffer& frameBuffer);
-    
+
     void setInputMapping(const std::unordered_map<std::string, BufferName>& inputMapping);
     void setOutput(const std::vector<BufferName>& output);
     void setFragmentShader(const std::string& output);
 
-    template<typename T> 
+    template<typename T>
     void setUniform(const std::string& name, const T& value);
+
 
 protected:
     glow::ref_ptr<glow::Program> m_program;
-    
+
     std::unordered_map<std::string, BufferName> m_inputMapping;
     std::vector<BufferName> m_output;
     std::string m_fragmentShader;
@@ -52,3 +52,4 @@ void PostProcessingPass::setUniform(const std::string& name, const T& value) {
     }
     m_program->setUniform(name, value);
 }
+

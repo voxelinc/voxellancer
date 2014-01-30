@@ -14,6 +14,7 @@
 #include "skybox.h"
 #include "worldobject/worldobject.h"
 
+
 GameScene::GameScene(Game* game):
     m_game(game),
     m_voxelRenderer(VoxelRenderer::instance()),
@@ -22,7 +23,7 @@ GameScene::GameScene(Game* game):
     m_blitter(new Blitter()),
     m_framebuffer(new FrameBuffer(8)),
     m_renderPipeline(RenderPipeline::getDefault()),
-    m_currentOutputBuffer(0) 
+    m_currentOutputBuffer(0)
 {
 }
 
