@@ -62,6 +62,10 @@ void AimHelperHudget::calculateTargetPoint(WorldObject* targetObject) {
     int hitableHardpointCount = 0;
     Ship* ship = m_hud->player()->playerShip();
 
+    if(!ship) {
+        return;
+    }
+
     m_targetPoint = glm::vec3(0.0f, 0.0f, 0.0f);
 
     for(Hardpoint* hardpoint : ship->hardpoints()) {

@@ -2,8 +2,6 @@
 
 #include <vector>
 
-#include "voxel/voxelcluster.h"
-
 
 class ObjectHudget;
 class ObjectHudgetCorner;
