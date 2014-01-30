@@ -159,7 +159,7 @@ int main(int argc, char* argv[]) {
 #ifdef WIN32 // TODO: find a way to correctly detect debug extension in linux
     glow::debugmessageoutput::enable();
 #endif
- 
+
 #ifdef WIN32
     wglSwapIntervalEXT(1); // glfw doesn't work!?
 #else
@@ -171,6 +171,9 @@ int main(int argc, char* argv[]) {
     try {
 #endif
         std::srand((unsigned int)time(NULL));
+
+        ComponentFactory::instance();
+        WorldObjectDB::instance();
 
         game = new Game();
         game->initialize();

@@ -17,12 +17,10 @@ template <class T> class PropertyCollection;
 /**
 * Keeps track of properties and loads ini files.
 * Properties will be updated when a new ini file is loaded.
-*list
 * Implements glow::Changeable, so glow::ChangeListener can
 * be notified about changes.
 **/
 class PropertyManager : public glow::Changeable {
-
 public:
     PropertyManager();
     virtual ~PropertyManager();
@@ -43,7 +41,7 @@ public:
 
 
 private:
-    template <class T>
+    template <class T>Ŕ
     PropertyCollection<T> *getPropertyCollection(Property<T> * prop);
 
     std::unique_ptr<PropertyCollection<float>> m_floatProperties;
@@ -58,5 +56,6 @@ private:
 
     static PropertyManager* s_instance;
 };
+
 
 #include "propertymanager.inl"

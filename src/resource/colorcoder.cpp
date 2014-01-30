@@ -29,16 +29,9 @@ ColorCoder::ColorCoder() :
     prop_crucialMass("colorcode.CrucialMass"),
     prop_crucialHP("colorcode.CrucialHP")
 {
-    
 }
-
-ColorCoder::~ColorCoder(){
-
-}
-
 
 Voxel* ColorCoder::newCodedVoxel(Voxel& voxel){
-
     if (voxel.color() == prop_engineKey){
         return new EngineVoxel(voxel.gridCell(), prop_engineColor, prop_engineMass, prop_engineHP);
     } else if (voxel.color() == prop_hardpointKey){
@@ -52,5 +45,4 @@ Voxel* ColorCoder::newCodedVoxel(Voxel& voxel){
     } else {
         return new Voxel(voxel);
     }
-
 }

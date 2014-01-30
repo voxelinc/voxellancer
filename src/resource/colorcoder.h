@@ -7,12 +7,11 @@ class Voxel;
 class ColorCoder {
 public:
     ColorCoder();
-    ~ColorCoder();
 
     Voxel* newCodedVoxel(Voxel& voxel);
 
-private:
 
+protected:
     Property<int> prop_engineKey, prop_engineColor;
     Property<float> prop_engineMass, prop_engineHP;
     Property<int> prop_hardpointKey, prop_hardpointColor;
