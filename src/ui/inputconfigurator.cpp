@@ -163,7 +163,7 @@ void InputConfigurator::setupSecondaryControls() {
             if (!displayedKeyPressedWarning) {
                 glow::info("Please release all buttons before setting a new key mapping");
                 displayedKeyPressedWarning = true;
-            }std::cout << "lol" << std::endl;
+            }
             return;
         } else {
             beginningKeyConfiguration = false;
