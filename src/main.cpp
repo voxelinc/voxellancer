@@ -133,7 +133,7 @@ int main(int argc, char* argv[]) {
     glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
 #endif
 
-    if(clParser.hmd()) {
+    if(clParser.fullScreen()) {
         WindowManager::instance()->setFullScreenResolution(1);
     } else {
         WindowManager::instance()->setWindowedResolution(Size<int>(Property<int>("window.width"), Property<int>("window.height")));
