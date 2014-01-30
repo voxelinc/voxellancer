@@ -7,7 +7,7 @@
 
 
 Blitter::Blitter() :
-    PostProcessingPass("blitter", *new ScreenQuad())
+    PostProcessingPass("blitter", std::make_shared<ScreenQuad>())
 {
     setInputMapping({ { "source", BufferName::Default } });
     setOutput({ BufferName::Default });
@@ -23,6 +23,6 @@ void Blitter::apply(FrameBuffer& frameBuffer, glow::FrameBufferObject* target) {
     target->bind(GL_DRAW_FRAMEBUFFER);
 
     m_program->use();
-    m_quad.draw();
+    m_quad->draw();
     m_program->release();
 }

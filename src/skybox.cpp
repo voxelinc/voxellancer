@@ -35,11 +35,10 @@ void Skybox::initialize() {
     m_texture->setParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     m_texture->setParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     m_texture->setParameter(GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-
-
+    
     /* Shaders */
-    glow::Shader * vertexShader = glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/skybox/skybox.vert");
-    glow::Shader * fragmentShader = glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/skybox/skybox.frag");
+    glow::Shader* vertexShader = glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/skybox/skybox.vert");
+    glow::Shader* fragmentShader = glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/skybox/skybox.frag");
 
     m_shaderProgram = new glow::Program();
     m_shaderProgram->attach(vertexShader, fragmentShader);
@@ -69,7 +68,7 @@ void Skybox::initialize() {
     m_vertexArrayObject->enable(a_vertex);
 }
 
-void Skybox::draw(Camera *camera){
+void Skybox::draw(Camera* camera){
     if (!m_texture) {
         initialize();
     }

@@ -2,11 +2,12 @@
 
 #include "postprocessingpass.h"
 #include "framebuffer.h"
+#include "screenquad.h"
 
 
 DefaultRenderPipeline::DefaultRenderPipeline():
     RenderPipeline("defaultpipeline"),
-    m_quad()
+    m_quad(std::make_shared<ScreenQuad>())
 {
 
 }
