@@ -1,10 +1,13 @@
 #pragma once
 
+#include <memory>
+#include <list>
 #include <string>
 
 #include <glm/glm.hpp>
 
 #include <glow/Changeable.h>
+
 
 class InputMapping;
 
@@ -14,7 +17,7 @@ template <class T> class PropertyCollection;
 /**
 * Keeps track of properties and loads ini files.
 * Properties will be updated when a new ini file is loaded.
-*
+*list
 * Implements glow::Changeable, so glow::ChangeListener can
 * be notified about changes.
 **/
@@ -24,7 +27,7 @@ public:
     PropertyManager();
     virtual ~PropertyManager();
 
-    void load(std::string file);
+    void load(const std::string& file, const std::string& prefix = "");
 
     template <class T>
     void registerProperty(Property<T> *prop);
@@ -38,19 +41,22 @@ public:
     template <class T>
     T get(char * name);
 
+
 private:
     template <class T>
     PropertyCollection<T> *getPropertyCollection(Property<T> * prop);
 
-    PropertyCollection<float> *m_floatProperties;
-    PropertyCollection<int> *m_intProperties;
-    PropertyCollection<char> *m_charProperties;
-    PropertyCollection<bool> *m_boolProperties;
-    PropertyCollection<std::string> *m_stringProperties;
-    PropertyCollection<glm::vec3> *m_vec3Properties;
-    PropertyCollection<InputMapping> *m_inputMappingProperties;
+    std::unique_ptr<PropertyCollection<float>> m_floatProperties;
+    std::unique_ptr<PropertyCollection<int>> m_intProperties;
+    std::unique_ptr<PropertyCollection<char>> m_charProperties;
+    std::unique_ptr<PropertyCollection<bool>> m_boolProperties;
+    std::unique_ptr<PropertyCollection<std::string>> m_stringProperties;
+    std::unique_ptr<PropertyCollection<glm::vec2>> m_vec2Properties;
+    std::unique_ptr<PropertyCollection<glm::vec3>> m_vec3Properties;
+    std::unique_ptr<PropertyCollection<InputMapping>> m_inputMappingProperties;
+    std::unique_ptr<PropertyCollection<std::list<std::string>>> m_listProperties;
 
-    static PropertyManager * s_instance;
+    static PropertyManager* s_instance;
 };
 
 #include "propertymanager.inl"

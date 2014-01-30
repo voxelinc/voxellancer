@@ -44,8 +44,7 @@ void ClusterCache::fillObject(WorldObject *worldObject, const std::string& filen
     }
 }
 
-
-std::vector<Voxel*> * ClusterCache::getOrCreate(const std::string& filename) {
+std::vector<Voxel*>* ClusterCache::getOrCreate(const std::string& filename) {
     std::map<std::string, std::vector<Voxel*>*>::iterator item = m_items.find(filename);
 
     if (item == m_items.end()) { //load if not loaded yet

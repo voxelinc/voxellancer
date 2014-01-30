@@ -144,7 +144,7 @@ go_bandit([](){
                 ship->objectInfo().setShowOnHud(false);
                 World::instance()->god().scheduleSpawn(ship);
 
-                WorldObject *wall = new WorldObject(1);
+                WorldObject *wall = new WorldObject(CollisionFilterClass::Other, 1);
                 wall->transform().move(glm::vec3(-20, 0, -50));
                 wall->transform().rotate(glm::angleAxis(-90.f, glm::vec3(0, 1, 0)));
                 for (int x = 0; x < 20; x++) {
@@ -164,8 +164,8 @@ go_bandit([](){
                 glow::debug("Initial spawn");
                 World::instance()->god().spawn();
             }
-            normandy->accelerate(glm::vec3(0, 0, 1));
-            ship->accelerate(glm::vec3(0, 0, 1));
+            normandy->accelerateDirectional(glm::vec3(0, 0, 1));
+            ship->accelerateDirectional(glm::vec3(0, 0, 1));
             {
                 glowutils::AutoTimer t("simulation");
                 for (int i = 0; i < 1000; i++) {

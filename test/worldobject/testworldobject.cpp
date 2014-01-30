@@ -38,8 +38,8 @@ go_bandit([](){
 
 
         it("incremental mass calculation works", [&]() {
-            WorldObject a(0.8f);
-            WorldObject b(0.8f);
+            WorldObject a(CollisionFilterClass::Other, 0.8f);
+            WorldObject b(CollisionFilterClass::Other, 0.8f);
 
             a.addVoxel(new Voxel(glm::ivec3(1, 0, 0), 0xFFFFFF));
             a.addVoxel(new Voxel(glm::ivec3(2, 0, 0), 0xFFFFFF));
