@@ -118,6 +118,15 @@ float Ship::minAimDistance() { // is this needed ?!
     return range;
 }
 
+float Ship::maxAimDistance() { // is this needed ?!
+    float range = 0;
+    for (Hardpoint *hardpoint : m_hardpoints) {
+        if (hardpoint->range() != -1)
+            range = glm::max(hardpoint->range(), range);
+    }
+    return range;
+}
+
 void Ship::accelerate(const glm::vec3& direction) {
     m_physics.accelerate(direction * prop_maxSpeed.get());
 }

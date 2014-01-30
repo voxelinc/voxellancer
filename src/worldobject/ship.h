@@ -5,6 +5,7 @@
 
 #include "worldobject.h"
 #include "property/property.h"
+#include "ai/boardcomputer.h"
 
 
 class World;
@@ -13,7 +14,6 @@ class Hardpoint;
 class Engine;
 class Character;
 class Sound;
-class BoardComputer;
 
 class Ship : public WorldObject {
 public:
@@ -38,6 +38,7 @@ public:
     void fireAtPoint(glm::vec3 target);
     void fireAtObject();
     float minAimDistance();
+    float maxAimDistance();
     BoardComputer* boardComputer();
 
     virtual void accelerate(const glm::vec3& direction) override;

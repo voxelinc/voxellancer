@@ -1,7 +1,5 @@
 #include "game.h"
 
-#include <GL/glew.h>
-
 #include "etc/windowmanager.h"
 
 #include "sound/soundmanager.h"
@@ -9,6 +7,7 @@
 #include "world/world.h"
 #include "player.h"
 #include "camera/cameradolly.h"
+
 #include "ui/hud/hud.h"
 
 
@@ -48,12 +47,7 @@ void Game::initialize() {
 }
 
 void Game::update(float deltaSec) {
-    if (deltaSec == 0.0f) {
-        return;
-    }
-    deltaSec = glm::min(1.0f, deltaSec);
-
-    m_scenario.update(deltaSec);
+    deltaSec = glm::min(0.1f, deltaSec);
 
     m_viewer.update(deltaSec);
     World::instance()->update(deltaSec);

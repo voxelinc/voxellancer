@@ -43,7 +43,6 @@
 
 InputHandler::InputHandler(Player* player):
     m_player(player),
-
     m_hmd(nullptr),
 
     prop_deadzoneMouse("input.deadzoneMouse"),

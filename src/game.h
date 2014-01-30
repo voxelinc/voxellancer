@@ -10,6 +10,7 @@
 #include "ui/inputhandler.h"
 
 #include "gamescenario.h"
+#include "battlescenario.h"
 #include "player.h"
 
 
@@ -28,7 +29,6 @@ public:
 
     void update(float deltaSec);
     void draw();
-
 
 private:
     InputHandler m_inputHandler;
