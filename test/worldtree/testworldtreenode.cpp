@@ -8,6 +8,7 @@
 #include "worldtree/worldtreequery.h"
 #include "worldobject/worldobject.h"
 #include "geometry/line.h"
+#include "voxel/voxel.h"
 
 
 using namespace bandit;

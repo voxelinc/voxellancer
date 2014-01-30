@@ -22,8 +22,6 @@ HUD::HUD(Player* player):
 }
 
 void HUD::setCrossHairOffset(const glm::vec2& mousePosition) {
-    CameraHead& cameraHead = m_player->cameraDolly().cameraHead();
-
     float fovy = 120.0f;
     float nearZ = 1.0f;
 
@@ -50,12 +48,12 @@ CrossHair& HUD::crossHair() {
 }
 
 glm::vec3 HUD::position() const {
-    return m_player->cameraDolly().cameraHead().position() + m_player->cameraDolly().cameraHead().orientation() * m_sphere.position();
+    return m_player->cameraPosition() + m_player->cameraOrientation() * m_sphere.position();
 }
 
 
 glm::quat HUD::orientation() const {
-    return m_player->cameraDolly().cameraHead().orientation();
+    return m_player->cameraOrientation();
 }
 
 void HUD::update(float deltaSec) {

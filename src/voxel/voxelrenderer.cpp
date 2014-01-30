@@ -17,6 +17,7 @@
 #include "voxel/voxelcluster.h"
 
 #include "voxeleffect/voxelmesh.h"
+#include "voxelrenderdata.h"
 
 
 std::weak_ptr<VoxelRenderer> VoxelRenderer::s_instance;

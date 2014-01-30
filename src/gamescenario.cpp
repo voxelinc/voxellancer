@@ -15,7 +15,9 @@
 #include "worldobject/ship.h"
 #include "sound/soundmanager.h"
 #include "game.h"
-
+#include "world/world.h"
+#include "voxel/voxel.h"
+#include "world/god.h"
 
 GameScenario::GameScenario() {
 
@@ -63,6 +65,7 @@ void GameScenario::populate(Game* game) {
     world->god().scheduleSpawn(testCluster);
 
     game->player().setShip(testCluster);
+    testCluster->setCollideableWith(CollisionFilterClass::Rocket, false);
 
     WorldObject *wall = new WorldObject(1);
     wall->move(glm::vec3(-30, 0, -50));

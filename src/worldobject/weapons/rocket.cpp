@@ -17,18 +17,18 @@
 
 
 Rocket::Rocket(glm::vec3 position, glm::quat orientation, const glm::vec3& initialSpeed, float ejectSpeed, WorldObject* target) :
-    Ship()
+    Ship(),
+    m_target(nullptr)
 {
     m_collisionFilterClass = CollisionFilterClass::Rocket;
-    m_transform.setScale(0.8f);
+    setCollideableWith(CollisionFilterClass::Rocket, false);
+    m_transform.setScale(0.5f);
 
     m_lifetime = Property<float>("rocket.lifetime");;
     prop_maxSpeed = Property<float>("rocket.maxSpeed");
     prop_maxRotSpeed = Property<float>("rocket.maxRotSpeed");
     if (target) {
         m_target = target->handle();
-    } else {
-        m_target = WorldObjectHandle::nullHandle();
     }
     glm::vec3 myOrientation = orientation * glm::vec3(0, 0, -1);
 

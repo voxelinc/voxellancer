@@ -3,7 +3,7 @@
 #include <iostream>
 
 #include "worldobject/ship.h"
-
+#include "ai/boardcomputer.h"
 
 
 

@@ -2,6 +2,7 @@
 
 #include "resource/clusterloader.h"
 #include "voxel/voxelcluster.h"
+#include "property/propertymanager.h"
 
 using namespace bandit;
 

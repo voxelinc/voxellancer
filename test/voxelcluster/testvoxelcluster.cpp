@@ -6,6 +6,8 @@
 
 #include "../bandit_extension/vec3helper.h"
 #include "voxel/voxelcluster.h"
+#include "voxel/voxel.h"
+#include "voxel/voxelrenderdata.h"
 
 using namespace bandit;
 

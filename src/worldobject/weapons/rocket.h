@@ -2,7 +2,7 @@
 
 #include "worldobject/ship.h"
 
-#include "worldobject/worldobjecthandle.h"
+#include "worldobject/handle/handle.h"
 
 class Sound;
 
@@ -21,5 +21,5 @@ private:
     float m_lifetime;
     float m_travelSpeed;
     std::shared_ptr<Sound> m_sound;
-    std::shared_ptr<WorldObjectHandle> m_target;
+    Handle<WorldObject> m_target;
 };

@@ -1,7 +1,8 @@
 #pragma once
 
 #include "property/property.h"
-#include "voxel/voxel.h"
+
+class Voxel;
 
 class ColorCoder {
 public:

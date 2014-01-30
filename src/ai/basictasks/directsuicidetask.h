@@ -4,7 +4,7 @@
 #include "glm/glm.hpp"
 
 #include "ai/basictask.h"
-#include "worldobject/worldobjecthandle.h"
+#include "worldobject/handle/handle.h"
 
 
 class Ship;
@@ -20,6 +20,6 @@ public:
 
 protected:
 
-	std::shared_ptr<WorldObjectHandle> m_target;
+	Handle<WorldObject> m_target;
 };
 

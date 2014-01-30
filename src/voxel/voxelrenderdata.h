@@ -5,7 +5,8 @@
 #include <glow/Texture.h>
 #include <glow/ref_ptr.h>
 
-#include "voxel.h"
+#include "utils/vec3hash.h"
+
 
 
 namespace glow {
@@ -13,7 +14,7 @@ namespace glow {
     class VertexArrayObject;
     class Buffer;
 };
-
+class Voxel;
 
 class VoxelRenderData
 {

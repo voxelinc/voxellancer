@@ -1,12 +1,12 @@
 #pragma once
 
-#include <list>
+#include <vector>
 
-#include "voxel/voxel.h"
-#include "voxel/voxelcluster.h"
-
+#include <glm/glm.hpp>
 
 class WorldObject;
+class Voxel;
+
 
 class SplitData
 {

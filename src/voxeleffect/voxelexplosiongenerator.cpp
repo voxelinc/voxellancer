@@ -33,7 +33,7 @@ void VoxelExplosionGenerator::setCount(int count) {
 
 void VoxelExplosionGenerator::spawn() {
     // spawn explosionSpawnCount voxels with color and scale at position within a sphere with radius with a speed of ~force in all directions modified by ~impactVector
-    WorldTransform transform;
+    Transform transform;
     transform.setScale(m_scale);
 
     for (int i = 0; i < m_count; i++) {

@@ -46,7 +46,7 @@ void God::scheduleRemoval(WorldObject *worldObject) {
             return;
     }
     m_scheduledRemovals.push_back(worldObject);
-    worldObject->markScheduledForDeletion();
+    worldObject->onScheduleForDeletion();
 }
 
 void God::scheduleRemovals(const std::list<WorldObject*> &removals) {

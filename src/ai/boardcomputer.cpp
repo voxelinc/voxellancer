@@ -11,7 +11,7 @@
 
 static const float s_minActDistance = 0.1f;
 static const float s_minActAngle = glm::radians(1.0f);
-
+static const float s_minAutoUpAngle = glm::radians(10.0f);
 
 BoardComputer::BoardComputer(Ship& ship) :
     m_ship(ship)
@@ -34,12 +34,11 @@ void BoardComputer::moveTo(const glm::vec3& position, bool deaccelerate) {
                 // the projection is already past the target, but we don't want to deaccelerate
                 // instead, project the target from our current position to a sphere around our position
                 float projectionDistance = glm::length(projectedPosition - currentPosition);
-                glm::vec3 fakePosition = currentPosition + glm::normalize(position - currentPosition) * projectionDistance;
+                glm::vec3 fakePosition = currentPosition + glm::normalize(position - currentPosition) * 2.0f * projectionDistance;
 
-                delta = fakePosition - currentPosition; // for a better precision this would hvae to be projectedPosition
+                delta = fakePosition - projectedPosition; // for a better precision this would hvae to be projectedPosition
                                                         // but due to dampening the rocket would then slow down in front of the target
-                distance = glm::length(delta);
-            } 
+            }
         }
 
         glm::vec3 direction = glm::inverse(m_ship.transform().orientation()) * glm::normalize(delta);
@@ -48,7 +47,6 @@ void BoardComputer::moveTo(const glm::vec3& position, bool deaccelerate) {
 }
 
 void BoardComputer::rotateTo(const glm::vec3& position, const glm::vec3& up) {
-    float minDelta = glm::radians(5.0f);
     glm::quat projectedOrientation = glm::inverse(m_ship.transform().orientation()) * m_ship.physics().projectedTransformIn(1.0f).orientation();
 
     glm::vec3 shipDirection = projectedOrientation * glm::vec3(0, 0, -1);
@@ -61,29 +59,37 @@ void BoardComputer::rotateTo(const glm::vec3& position, const glm::vec3& up) {
     }
 
     if (up != glm::vec3(0, 0, 0)){
-        glm::vec3 upDirection = glm::vec3(0, 1, 0);
-        glm::vec3 newUpDirection = glm::inverse(m_ship.transform().orientation()) * glm::normalize(up);
-        glm::quat upRotation = GeometryHelper::quatFromTo(upDirection, newUpDirection);
-        glm::vec3 euler = glm::eulerAngles(upRotation);
-        m_ship.accelerateAngular(glm::normalize(euler));
+        rotateUpTo(up);
     } else {
-        //make it look naturally, e.g. up is to the "inside" of the rotation
-        if (glm::abs(glm::angle(rotation)) > glm::radians(20.0f)) {
-            glm::vec3 upDirection = glm::vec3(0, 1, 0);
-            glm::vec3 newUpDirection = glm::vec3(0, 0, 1) + (rotation * glm::vec3(0, 0, -1));
-            glm::quat upRotation = GeometryHelper::quatFromTo(upDirection, newUpDirection);
-            glm::vec3 euler = glm::eulerAngles(upRotation);
-            m_ship.accelerateAngular(glm::normalize(euler));
-        }
+        rotateUpAuto(rotation);
     }
 
 }
 
-void BoardComputer::shootBullet(const std::list<std::shared_ptr<WorldObjectHandle>>& targets) {
+void BoardComputer::rotateUpTo(const glm::vec3& up) {
+    glm::vec3 upDirection = glm::vec3(0, 1, 0);
+    glm::vec3 newUpDirection = glm::inverse(m_ship.transform().orientation()) * glm::normalize(up);
+    glm::quat upRotation = GeometryHelper::quatFromTo(upDirection, newUpDirection);
+    glm::vec3 euler = glm::eulerAngles(upRotation);
+    m_ship.accelerateAngular(glm::normalize(euler));
+}
+
+void BoardComputer::rotateUpAuto(const glm::quat& rotation) {
+    //make it look naturally, e.g. up is to the "inside" of the rotation
+    if (glm::abs(glm::angle(rotation)) > s_minAutoUpAngle) {
+        glm::vec3 upDirection = glm::vec3(0, 1, 0);
+        glm::vec3 newUpDirection = glm::vec3(0, 0, 1) + (rotation * glm::vec3(0, 0, -1));
+        glm::quat upRotation = GeometryHelper::quatFromTo(upDirection, newUpDirection);
+        glm::vec3 euler = glm::eulerAngles(upRotation);
+        m_ship.accelerateAngular(glm::normalize(euler));
+    }
+}
+
+void BoardComputer::shootBullet(const std::list<Handle<WorldObject>>& targets) {
     float max_angle = glm::radians(45.0f);
 
     for (auto targetHandle : targets) {
-        if (WorldObject* target = targetHandle->get()) {
+        if (WorldObject* target = targetHandle.get()) {
             glm::vec3 shipDirection = m_ship.transform().orientation() * glm::vec3(0, 0, -1);
             glm::vec3 targetDirection = target->transform().position() - m_ship.transform().position();
             float angle = GeometryHelper::angleBetween(shipDirection, targetDirection);
@@ -96,9 +102,9 @@ void BoardComputer::shootBullet(const std::list<std::shared_ptr<WorldObjectHandl
     }
 }
 
-void BoardComputer::shootRockets(std::shared_ptr<WorldObjectHandle> target) {
-    if (target->get()) {
-        m_ship.setTargetObject(target->get());
+void BoardComputer::shootRockets(Handle<WorldObject> target) {
+    if (target.valid()) {
+        m_ship.setTargetObject(target.get());
         m_ship.fireAtObject();
     }
 }
