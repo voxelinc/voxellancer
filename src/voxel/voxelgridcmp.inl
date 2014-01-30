@@ -1,24 +1,26 @@
 #pragma once
 
-template<Axis highPriorityAxis, Axis middlePriorityAxis, Axis lowPriorityAxis>
-bool VoxelGridCmp<highPriorityAxis, middlePriorityAxis, lowPriorityAxis>::operator()(const Voxel* voxel1, const Voxel* voxel2) const {
-    if(voxel1->gridCell()[highPriorityAxis] < voxel2->gridCell()[highPriorityAxis]) {
+#include "voxel.h"
+
+template<Axis high, Axis middle, Axis low>
+bool VoxelGridCmp<high, middle, low>::operator()(const Voxel* voxel1, const Voxel* voxel2) const {
+    if(voxel1->gridCell()[high] < voxel2->gridCell()[high]) {
         return true;
     }
     
-    if(voxel1->gridCell()[highPriorityAxis] > voxel2->gridCell()[highPriorityAxis]) {
+    if(voxel1->gridCell()[high] > voxel2->gridCell()[high]) {
         return false;
     }
 
-    if(voxel1->gridCell()[middlePriorityAxis] < voxel2->gridCell()[middlePriorityAxis]) {
+    if(voxel1->gridCell()[middle] < voxel2->gridCell()[middle]) {
         return true;
     }
     
-    if(voxel1->gridCell()[middlePriorityAxis] > voxel2->gridCell()[middlePriorityAxis]) {
+    if(voxel1->gridCell()[middle] > voxel2->gridCell()[middle]) {
         return false;
     }
 
-    if(voxel1->gridCell()[lowPriorityAxis] < voxel2->gridCell()[lowPriorityAxis]) {
+    if(voxel1->gridCell()[low] < voxel2->gridCell()[low]) {
         return true;
     }
        

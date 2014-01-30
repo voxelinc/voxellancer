@@ -2,9 +2,9 @@
 
 #include "world/god.h"
 #include "world/world.h"
-
-#include "utils/tostring.h"
+#include "utils/geometryhelper.h"
 #include "voxeleffect/voxelexplosiongenerator.h"
+#include "resource/clustercache.h"
 #include "sound/sound.h"
 #include "sound/soundmanager.h"
 
@@ -14,6 +14,7 @@ Bullet::Bullet(WorldObject* creator, float lifetime) :
     m_creator(creator),
     m_lifetime(lifetime)
 {
+
     ClusterCache::instance()->fillObject(this, "data/voxelcluster/bullet.csv");
 
     m_objectInfo.setName("Bullet");
@@ -60,13 +61,14 @@ void Bullet::spawnExplosion() {
     generator.setRadius(m_transform.scale());
     generator.setScale(m_transform.scale() / 2.0f);
     generator.setCount(16);
-    generator.setColor(0xFF0000, emissiveness());
+    generator.setColor(0xFF0000);
+    generator.setEmissiveness(emissiveness());
     generator.setForce(0.6f);
     generator.setLifetime(0.7f, 0.2f);
     generator.spawn();
 }
 
 float Bullet::emissiveness() {
-    return 1.0f;
+    return 0.8f;
 }
 

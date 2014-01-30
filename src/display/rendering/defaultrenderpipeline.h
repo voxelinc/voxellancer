@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "renderpipeline.h"
-#include "quad.h"
+#include "screenquad.h"
 
 
 class FrameBuffer;
@@ -20,6 +20,6 @@ public:
     void addFinalization();
 
 protected:
-    Quad m_quad;
+    ScreenQuad m_quad;
     
 };

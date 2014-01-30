@@ -4,6 +4,7 @@
 
 #include "geometry/aabb.h"
 #include "../bandit_extension/vec3helper.h"
+#include "property/propertymanager.h"
 
 
 using namespace bandit;

@@ -2,12 +2,11 @@
 
 #include "world/god.h"
 #include "world/world.h"
-
-#include "utils/tostring.h"
+#include "utils/geometryhelper.h"
 #include "physics/physics.h"
 #include "voxeleffect/voxelexplosiongenerator.h"
 #include "worldobject/ship.h"
-#include "ai/character.h"
+#include "ai/character.h" //ship holds a unique_ptr to a character and we inherit from it (C2338)
 #include "ai/boardcomputer.h"
 #include "resource/clustercache.h"
 #include "sound/soundmanager.h"
@@ -15,8 +14,8 @@
 
 
 Rocket::Rocket(glm::vec3 position, glm::quat orientation, const glm::vec3& initialSpeed, float travelSpeed, float lifetime, WorldObject* target) :
-    Ship()
-    //WorldObject(0.8f, CollisionFilterClass::Rocket)
+    Ship(),
+    m_target(nullptr)
 {
     m_collisionFilterClass = CollisionFilterClass::Rocket;
     m_transform.setScale(0.8f);
@@ -25,8 +24,6 @@ Rocket::Rocket(glm::vec3 position, glm::quat orientation, const glm::vec3& initi
     m_travelSpeed = travelSpeed;
     if (target) {
         m_target = target->handle();
-    } else {
-        m_target = WorldObjectHandle::nullHandle();
     }
     glm::vec3 myOrientation = orientation * glm::vec3(0, 0, -1);
 
@@ -37,7 +34,8 @@ Rocket::Rocket(glm::vec3 position, glm::quat orientation, const glm::vec3& initi
 
     m_transform.setOrientation(orientation); //set orientation to ship orientation
 
-    m_transform.setPosition(position + myOrientation * (minimalGridAABB().axisMax(Axis::ZAxis) / 2.0f + glm::root_two<float>()));
+    //TODO: #300
+    m_transform.setPosition(position + myOrientation * (minimalGridAABB().axisMax(Axis::ZAxis) * m_transform.scale() / 2.0f + glm::root_two<float>()));
 
     m_physics.setSpeed(initialSpeed + myOrientation * (m_travelSpeed * 0.1f)); // rocket is ejected with 10% of its travel speed
 
@@ -48,28 +46,27 @@ Rocket::Rocket(glm::vec3 position, glm::quat orientation, const glm::vec3& initi
 
 void Rocket::update(float deltaSec) {
     // orient towards target
-    if (m_target->get()){
-        glm::vec3 dir = glm::inverse(m_transform.orientation()) * glm::normalize(m_target->get()->transform().position() - m_transform.position());
+    if (m_target.valid()){
+        glm::vec3 dir = glm::inverse(m_transform.orientation()) * glm::normalize(m_target->transform().position() - m_transform.position());
         glm::vec3 myOrientation = glm::vec3(0, 0, -1);
         glm::vec3 cross = glm::cross(dir, myOrientation);
         glm::quat rotation;
         if (cross != glm::vec3(0)) {
             glm::vec3 rotationAxis = glm::normalize(cross);
-            float angle = glm::acos(glm::dot(dir, myOrientation));
+            float angle = GeometryHelper::angleBetween(dir, myOrientation);
             if (angle > glm::radians(0.1)) {
-                rotation = glm::angleAxis(-glm::degrees(angle), rotationAxis);
+                rotation = glm::angleAxis(-angle, rotationAxis);
             }
         } else { // the target is either perfectly in front or behind us
             if (dir == -myOrientation) {
-                rotation = glm::angleAxis(90.0f, glm::vec3(1, 0, 0));
+                rotation = glm::angleAxis(glm::half_pi<float>(), glm::vec3(1, 0, 0));
             }
         }
 
         if (rotation != glm::quat()) {
             //m_transform.rotate(0.1f * rotation); // directly rotating is easier
-            m_physics.setAngularSpeed(0.1f * glm::eulerAngles(rotation));
+            m_physics.setAngularSpeed(6.0f * glm::eulerAngles(rotation));
         }
-
     }
     // accelerate to travelSpeed
     if (glm::length(m_physics.speed()) < m_travelSpeed) {
@@ -106,7 +103,8 @@ void Rocket::spawnExplosion(){
     VoxelExplosionGenerator generator;
     generator.setPosition(m_transform.position());
     generator.setScale(m_transform.scale() / 3.0f);
-    generator.setColor(0xFF0000, 0.4f);
+    generator.setColor(0xFF0000);
+    generator.setEmissiveness(0.4f);
     generator.setCount(150);
     generator.setLifetime(1.0f, 0.2f);
     generator.setForce(1.5f);

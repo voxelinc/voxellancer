@@ -26,6 +26,7 @@ public:
 
 public:
     StereoViewEye(const Size<int>& viewportResolution, const StereoRenderInfo& stereoRenderInfo, EyeSide side);
+    ~StereoViewEye();
 
     FrameBuffer& fbo();
 
@@ -42,6 +43,6 @@ protected:
 
     float m_distortionScale;
     Size<int> m_textureSize;
-    std::shared_ptr<FrameBuffer> m_fbo;
+    std::unique_ptr<FrameBuffer> m_fbo;
 };
 

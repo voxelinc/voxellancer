@@ -1,10 +1,17 @@
 #include "game.h"
 
+#include <GL/glew.h>
+
 #include "etc/windowmanager.h"
 
 #include "sound/soundmanager.h"
 #include "gamescenario.h"
+#include "world/world.h"
+#include "player.h"
+#include "camera/cameradolly.h"
+#include "ui/hud.h"
 
+class Ship;
 
 Game::Game():
     m_inputHandler(&m_player),
@@ -14,7 +21,7 @@ Game::Game():
 {
     m_viewer.setScene(&m_gameScene);
     m_viewer.setCameraHead(&m_player.cameraDolly().cameraHead());
-    m_gameScene.setCameraHead(&m_player.cameraDolly().cameraHead());
+    m_gameScene.setPlayer(&m_player);
 }
 
 InputHandler& Game::inputHandler() {

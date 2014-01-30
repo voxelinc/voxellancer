@@ -2,17 +2,16 @@
 
 #include <glow/FrameBufferObject.h>
 
-#include "quad.h"
+#include "screenquad.h"
 #include "framebuffer.h"
 
 
 Blitter::Blitter() :
-    PostProcessingPass("blitter", *new Quad())
+    PostProcessingPass("blitter", *new ScreenQuad())
 {
-    setInput({ BufferName::Default });
+    setInputMapping({ { "source", BufferName::Default } });
     setOutput({ BufferName::Default });
-    setSamplers({ "source" });
-    setFragmentShader("data/shader/blit.frag");
+    setFragmentShader("data/postprocessing/blit.frag");
 }
 
 void Blitter::apply(FrameBuffer& frameBuffer, glow::FrameBufferObject* target) {

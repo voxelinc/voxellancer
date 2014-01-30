@@ -1,4 +1,5 @@
 #include "splitdata.h"
+#include "voxel/voxel.h"
 
 
 SplitData::SplitData(WorldObject* worldObject):

@@ -1,6 +1,8 @@
 #pragma once
 
 #include <vector>
+#include <unordered_map>
+
 #include <glow/ref_ptr.h>
 #include <glow/Program.h>
 
@@ -12,19 +14,18 @@ namespace glow {
 
 enum class BufferName;
 class FrameBuffer;
-class Quad;
+class ScreenQuad;
 
 
 
 class PostProcessingPass : public RenderPass {
 public:
-    PostProcessingPass(std::string name, Quad& quad);
+    PostProcessingPass(std::string name, ScreenQuad& quad);
 
     void apply(FrameBuffer& frameBuffer);
     void beforeDraw(FrameBuffer& frameBuffer);
-
-    void setSamplers(const std::vector<std::string>& samplers);
-    void setInput(const std::vector<BufferName>& input);
+    
+    void setInputMapping(const std::unordered_map<std::string, BufferName>& inputMapping);
     void setOutput(const std::vector<BufferName>& output);
     void setFragmentShader(const std::string& output);
 
@@ -34,12 +35,11 @@ public:
 protected:
     glow::ref_ptr<glow::Program> m_program;
     
-    std::vector<std::string> m_samplers;
-    std::vector<BufferName> m_input;
+    std::unordered_map<std::string, BufferName> m_inputMapping;
     std::vector<BufferName> m_output;
     std::string m_fragmentShader;
     std::string m_vertexShader;
-    Quad& m_quad;
+    ScreenQuad& m_quad;
 
     void initialize();
 };

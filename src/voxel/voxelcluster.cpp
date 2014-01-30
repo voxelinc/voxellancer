@@ -10,6 +10,8 @@
 #include <glow/logging.h>
 
 #include "utils/tostring.h"
+#include "voxelrenderdata.h"
+#include "voxel.h"
 
 
 VoxelCluster::VoxelCluster(float scale):
@@ -28,11 +30,11 @@ VoxelCluster::~VoxelCluster() {
     }
 }
 
-WorldTransform& VoxelCluster::transform() {
+Transform& VoxelCluster::transform() {
     return m_transform;
 }
 
-const WorldTransform& VoxelCluster::transform() const {
+const Transform& VoxelCluster::transform() const {
     return m_transform;
 }
 
@@ -59,11 +61,11 @@ const IAABB& VoxelCluster::aabb() {
     return m_aabb;
 }
 
-IAABB VoxelCluster::aabb(const WorldTransform& transform) {
+IAABB VoxelCluster::aabb(const Transform& transform) {
     return calculateAABB(transform);
 }
 
-void VoxelCluster::setTransform(const WorldTransform& transform) {
+void VoxelCluster::setTransform(const Transform& transform) {
     m_transform = transform;
 }
 
@@ -77,7 +79,7 @@ void VoxelCluster::addVoxel(Voxel* voxel) {
 
     m_voxels[voxel->gridCell()] = voxel;
     m_voxelRenderData.invalidate();
-
+    
     extendGridAABB(voxel);
 }
 
@@ -159,7 +161,7 @@ void VoxelCluster::calculateMinimalGridSphere() {
     m_minimalGridSphereValid = true;
 }
 
-IAABB VoxelCluster::calculateAABB(const WorldTransform& transform) {
+IAABB VoxelCluster::calculateAABB(const Transform& transform) {
     glm::vec3 middle = transform.applyTo(minimalGridSphere().position());
     float radius = minimalGridSphere().radius() * transform.scale();
 

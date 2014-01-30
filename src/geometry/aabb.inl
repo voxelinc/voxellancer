@@ -3,7 +3,7 @@
 #include <cassert>
 #include <algorithm>
 
-#include "worldtransform.h"
+#include "geometry/transform.h"
 
 #include "sphere.h"
 #include "line.h"

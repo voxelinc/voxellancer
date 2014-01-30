@@ -13,6 +13,7 @@
 #include "voxelcluster.h"
 #include "voxeleffect/voxelmesh.h"
 #include "voxelrenderer.h"
+#include "voxel.h"
 
 
 

@@ -9,7 +9,7 @@
 class Ray;
 class Line;
 class Sphere;
-class WorldTransform;
+class Transform;
 
 template<typename T>
 class TAABB: public AbstractShape {

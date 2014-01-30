@@ -2,13 +2,15 @@
 
 #include <iostream>
 
+#include <glow/FrameBufferObject.h>
+
 #include "programs/blitprogram.h"
 #include "programs/monoblitprogram.h"
 #include "rendering/framebuffer.h"
 
 
 ScreenBlitter::ScreenBlitter():
-    m_blitProgram(new MonoBlitProgram())
+    m_blitProgram(nullptr)
 {
 }
 

@@ -5,28 +5,29 @@
 #include <glow/Program.h>
 #include <glowutils/global.h>
 
-#include "quad.h"
+#include "screenquad.h"
 #include "framebuffer.h"
 
 
-PostProcessingPass::PostProcessingPass(std::string name, Quad& quad) :
+PostProcessingPass::PostProcessingPass(std::string name, ScreenQuad& quad) :
     RenderPass(name),
     m_quad(quad),
     m_program(nullptr),
-    m_input(),
     m_output(),
-    m_samplers(),
+    m_inputMapping(),
     m_fragmentShader(""),
-    m_vertexShader("data/shader/screenquad.vert")
+    m_vertexShader("data/postprocessing/screenquad.vert")
 {
 }
 
 void PostProcessingPass::beforeDraw(FrameBuffer& frameBuffer) {
     frameBuffer.setDrawBuffers(m_output);
-    for (int i = 0; i < m_samplers.size(); i++) {
+    int i = 0;
+    for (std::pair<std::string, BufferName> mapping : m_inputMapping) {
         glActiveTexture(GL_TEXTURE0 + i);
-        frameBuffer.texture(static_cast<int>(m_input[i]))->bind();
-        m_program->setUniform<GLint>(m_samplers[i], i);
+        m_program->setUniform<GLint>(mapping.first, i);
+        frameBuffer.texture(static_cast<int>(mapping.second))->bind();
+        i++;
     }
     glDisable(GL_DEPTH_TEST);
     m_program->setUniform("viewport", frameBuffer.resolution()); frameBuffer.bind();
@@ -45,12 +46,8 @@ void PostProcessingPass::apply(FrameBuffer& frameBuffer) {
     m_program->release();
 }
 
-void PostProcessingPass::setSamplers(const std::vector<std::string>& samplers) {
-    m_samplers = samplers;
-}
-
-void PostProcessingPass::setInput(const std::vector<BufferName>& input) {
-    m_input = input;
+void PostProcessingPass::setInputMapping(const std::unordered_map<std::string, BufferName>& inputMapping) {
+    m_inputMapping = inputMapping;
 }
 
 void PostProcessingPass::setOutput(const std::vector<BufferName>& output) {
