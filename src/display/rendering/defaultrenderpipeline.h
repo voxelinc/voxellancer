@@ -1,13 +1,14 @@
 #pragma once
 
+#include <memory>
 #include <vector>
 
 #include "renderpipeline.h"
-#include "screenquad.h"
 
 
 class FrameBuffer;
 class RenderPass;
+class ScreenQuad;
 
 class DefaultRenderPipeline : public RenderPipeline {
 public:
@@ -20,6 +21,6 @@ public:
     void addFinalization();
 
 protected:
-    ScreenQuad m_quad;
+    std::shared_ptr<ScreenQuad> m_quad;
     
 };

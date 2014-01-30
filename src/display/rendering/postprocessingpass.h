@@ -19,7 +19,7 @@ class ScreenQuad;
 
 class PostProcessingPass : public RenderPass {
 public:
-    PostProcessingPass(std::string name, ScreenQuad& quad);
+    PostProcessingPass(const std::string& name, std::shared_ptr<ScreenQuad> quad);
 
     void apply(FrameBuffer& frameBuffer);
     void beforeDraw(FrameBuffer& frameBuffer);
@@ -34,12 +34,12 @@ public:
 
 protected:
     glow::ref_ptr<glow::Program> m_program;
+    std::shared_ptr<ScreenQuad> m_quad;
 
     std::unordered_map<std::string, BufferName> m_inputMapping;
     std::vector<BufferName> m_output;
     std::string m_fragmentShader;
     std::string m_vertexShader;
-    ScreenQuad& m_quad;
 
     void initialize();
 };

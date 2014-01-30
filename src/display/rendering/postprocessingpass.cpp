@@ -9,7 +9,7 @@
 #include "framebuffer.h"
 
 
-PostProcessingPass::PostProcessingPass(std::string name, ScreenQuad& quad) :
+PostProcessingPass::PostProcessingPass(const std::string& name, std::shared_ptr<ScreenQuad> quad):
     RenderPass(name),
     m_quad(quad),
     m_program(nullptr),
@@ -42,7 +42,7 @@ void PostProcessingPass::apply(FrameBuffer& frameBuffer) {
     beforeDraw(frameBuffer);
 
     m_program->use();
-    m_quad.draw();
+    m_quad->draw();
     m_program->release();
 }
 

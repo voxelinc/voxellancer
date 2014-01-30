@@ -8,7 +8,7 @@
 
 
 
-RenderPipeline::RenderPipeline(std::string name):
+RenderPipeline::RenderPipeline(const std::string& name):
     RenderPass(name)
 {
 }
@@ -36,7 +36,7 @@ void RenderPipeline::add(std::shared_ptr<RenderPass> pass, int index) {
     }
 }
 
-void RenderPipeline::insert(std::shared_ptr<RenderPass> pass, std::string after) {
+void RenderPipeline::insert(std::shared_ptr<RenderPass> pass, const std::string& after) {
     auto iter = m_passes.begin();
     while (iter != m_passes.end()) {
         if ((*iter)->name() == after) {

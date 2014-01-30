@@ -60,7 +60,7 @@ void FrameBuffer::clear() {
     m_fbo->clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void FrameBuffer::setDrawBuffers(std::vector<BufferName> buffers) {
+void FrameBuffer::setDrawBuffers(const std::vector<BufferName>& buffers) {
     std::vector<GLenum> enums;
     for (BufferName value : buffers) {
         assert(static_cast<int>(value) < m_colorAttachmentCount);
