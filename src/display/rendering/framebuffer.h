@@ -12,15 +12,6 @@ namespace glow {
     class Texture;
 }
 
-enum class BufferName {
-    Default = 0,
-    Color,
-    NormalZ,
-    Emissisiveness,
-    BlurTmp,
-    Bloom,
-};
-
 class FrameBuffer {
 public:
     FrameBuffer(int colorAttachments = 1, bool depthAttachment = true);
@@ -31,13 +22,12 @@ public:
     void clear();
 
     glow::FrameBufferObject& get();
-    void setDrawBuffers(const std::vector<BufferName>& buffers);
+    void setDrawBuffers(const std::vector<int>& buffers);
 
     void setResolution(const glm::ivec2& resolution);
     const glm::ivec2& resolution();
 
     glow::Texture* texture(int i);
-
 
 protected:
     int m_colorAttachmentCount;

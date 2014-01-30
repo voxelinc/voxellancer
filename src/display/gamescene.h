@@ -34,8 +34,8 @@ public:
 
 protected:
     std::unique_ptr<Blitter> m_blitter;
-    std::unique_ptr<FrameBuffer> m_framebuffer;
     std::unique_ptr<RenderPipeline> m_renderPipeline;
+    std::unique_ptr<FrameBuffer> m_framebuffer;
     std::unique_ptr<HD3000Dummy> m_hd3000dummy;
     std::shared_ptr<VoxelRenderer> m_voxelRenderer;
     std::shared_ptr<SoundManager> m_soundManager;

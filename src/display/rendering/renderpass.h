@@ -2,17 +2,16 @@
 
 #include <string>
 
-class FrameBuffer;
 
+class FrameBuffer;
 
 class RenderPass {
 public:
-    RenderPass(std::string name);
+    RenderPass(const std::string& name);
 
     virtual void apply(FrameBuffer& frameBuffer) = 0;
     const std::string& name() const;
-
-
+    
 protected:
     std::string m_name;
 

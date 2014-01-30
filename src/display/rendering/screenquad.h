@@ -4,6 +4,7 @@
 
 #include <glow/ref_ptr.h>
 
+
 namespace glow {
     class VertexArrayObject;
     class Buffer;

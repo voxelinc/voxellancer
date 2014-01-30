@@ -23,10 +23,10 @@ PostProcessingPass::PostProcessingPass(const std::string& name, std::shared_ptr<
 void PostProcessingPass::beforeDraw(FrameBuffer& frameBuffer) {
     frameBuffer.setDrawBuffers(m_output);
     int i = 0;
-    for (std::pair<std::string, BufferName> mapping : m_inputMapping) {
+    for (std::pair<std::string, int> mapping : m_inputMapping) {
         glActiveTexture(GL_TEXTURE0 + i);
         m_program->setUniform<GLint>(mapping.first, i);
-        frameBuffer.texture(static_cast<int>(mapping.second))->bind();
+        frameBuffer.texture(mapping.second)->bind();
         i++;
     }
     glDisable(GL_DEPTH_TEST);
@@ -46,11 +46,11 @@ void PostProcessingPass::apply(FrameBuffer& frameBuffer) {
     m_program->release();
 }
 
-void PostProcessingPass::setInputMapping(const std::unordered_map<std::string, BufferName>& inputMapping) {
+void PostProcessingPass::setInputMapping(const std::unordered_map<std::string, int>& inputMapping) {
     m_inputMapping = inputMapping;
 }
 
-void PostProcessingPass::setOutput(const std::vector<BufferName>& output) {
+void PostProcessingPass::setOutput(const std::vector<int>& output) {
     m_output = output;
 }
 

@@ -2,6 +2,7 @@
 
 #include <assert.h>
 
+#include <glow/global.h>
 #include <glow/FrameBufferObject.h>
 #include <glow/Texture.h>
 #include <glow/RenderBufferObject.h>
@@ -14,6 +15,8 @@ FrameBuffer::FrameBuffer(int colorAttachments, bool depthAttachment):
     m_colorAttachmentCount(colorAttachments),
     m_useDepthAttachment(depthAttachment)
 {
+    assert(colorAttachments >= 0);
+    assert(colorAttachments <= glow::getInteger(GL_MAX_COLOR_ATTACHMENTS));
 }
 
 void FrameBuffer::setResolution(const glm::ivec2& resolution) {
@@ -60,13 +63,13 @@ void FrameBuffer::clear() {
     m_fbo->clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void FrameBuffer::setDrawBuffers(const std::vector<BufferName>& buffers) {
-    std::vector<GLenum> enums;
-    for (BufferName value : buffers) {
+void FrameBuffer::setDrawBuffers(const std::vector<int>& buffers) {
+    std::vector<GLenum> attachments;
+    for (int value : buffers) {
         assert(static_cast<int>(value) < m_colorAttachmentCount);
-        enums.push_back(GL_COLOR_ATTACHMENT0 + static_cast<int>(value));
+        attachments.push_back(GL_COLOR_ATTACHMENT0 + static_cast<int>(value));
     }
-    m_fbo->setDrawBuffers(enums);
+    m_fbo->setDrawBuffers(attachments);
 }
 
 glow::Texture* FrameBuffer::texture(int i) {

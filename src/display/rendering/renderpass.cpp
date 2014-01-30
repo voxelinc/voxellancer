@@ -1,6 +1,6 @@
 #include "renderpass.h"
 
-RenderPass::RenderPass(std::string name):
+RenderPass::RenderPass(const std::string& name) :
     m_name(name)
 {
 

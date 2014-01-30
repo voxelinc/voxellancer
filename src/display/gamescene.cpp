@@ -21,8 +21,8 @@ GameScene::GameScene(Game* game):
     m_hd3000dummy(new HD3000Dummy()),
     m_soundManager(new SoundManager()),
     m_blitter(new Blitter()),
-    m_framebuffer(new FrameBuffer(8)),
     m_renderPipeline(RenderPipeline::getDefault()),
+    m_framebuffer(new FrameBuffer(m_renderPipeline->bufferCount())),
     m_currentOutputBuffer(0)
 {
 }
@@ -33,12 +33,13 @@ void GameScene::draw(Camera* camera, glow::FrameBufferObject* target, const glm:
     m_framebuffer->setResolution(resolution);
     m_framebuffer->clear();
 
-    m_framebuffer->setDrawBuffers({ BufferName::Color, BufferName::NormalZ, BufferName::Emissisiveness });
+    // the pipeline should expect color in 1, normals in 2 and emissiveness in 3
+    m_framebuffer->setDrawBuffers({ 1, 2, 3 }); 
     drawGame(camera);
 
     m_renderPipeline->apply(*m_framebuffer);
 
-    m_blitter->setInputMapping({ { "source", static_cast<BufferName>(m_currentOutputBuffer) } });
+    m_blitter->setInputMapping({ { "source", m_currentOutputBuffer } });
     m_blitter->apply(*m_framebuffer, target);
 }
 

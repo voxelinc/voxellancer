@@ -13,7 +13,6 @@ namespace glow {
     class Program;
 }
 
-enum class BufferName;
 class FrameBuffer;
 class ScreenQuad;
 
@@ -24,8 +23,8 @@ public:
     void apply(FrameBuffer& frameBuffer);
     void beforeDraw(FrameBuffer& frameBuffer);
 
-    void setInputMapping(const std::unordered_map<std::string, BufferName>& inputMapping);
-    void setOutput(const std::vector<BufferName>& output);
+    void setInputMapping(const std::unordered_map<std::string, int>& inputMapping);
+    void setOutput(const std::vector<int>& output);
     void setFragmentShader(const std::string& output);
 
     template<typename T>
@@ -36,8 +35,8 @@ protected:
     glow::ref_ptr<glow::Program> m_program;
     std::shared_ptr<ScreenQuad> m_quad;
 
-    std::unordered_map<std::string, BufferName> m_inputMapping;
-    std::vector<BufferName> m_output;
+    std::unordered_map<std::string, int> m_inputMapping;
+    std::vector<int> m_output;
     std::string m_fragmentShader;
     std::string m_vertexShader;
 

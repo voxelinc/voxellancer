@@ -9,8 +9,8 @@
 Blitter::Blitter() :
     PostProcessingPass("blitter", std::make_shared<ScreenQuad>())
 {
-    setInputMapping({ { "source", BufferName::Default } });
-    setOutput({ BufferName::Default });
+    setInputMapping({ { "source", 0 } });
+    setOutput({ 0 });
     setFragmentShader("data/postprocessing/blit.frag");
 }
 

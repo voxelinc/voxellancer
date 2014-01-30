@@ -7,14 +7,13 @@
 #include "defaultrenderpipeline.h"
 
 
-
 RenderPipeline::RenderPipeline(const std::string& name):
     RenderPass(name)
 {
 }
 
 void RenderPipeline::apply(FrameBuffer& frameBuffer) {
-    if (m_passes.size() == 0) {
+    if (m_passes.empty()) {
         glow::debug("Renderpipeline: intializing");
         setup();
     }
@@ -29,14 +28,14 @@ RenderPipeline* RenderPipeline::getDefault() {
 }
 
 void RenderPipeline::add(std::shared_ptr<RenderPass> pass, int index) {
-    if (index == -1) {
+    if (index < 0) {
         m_passes.push_back(pass);
     } else {
         m_passes.insert(m_passes.begin() + index, pass);
     }
 }
 
-void RenderPipeline::insert(std::shared_ptr<RenderPass> pass, const std::string& after) {
+void RenderPipeline::insertAfter(std::shared_ptr<RenderPass> pass, const std::string& after) {
     auto iter = m_passes.begin();
     while (iter != m_passes.end()) {
         if ((*iter)->name() == after) {
