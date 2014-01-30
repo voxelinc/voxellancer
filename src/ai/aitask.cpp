@@ -9,3 +9,7 @@ AiTask::AiTask(Ship& ship) :
 void AiTask::update(float deltaSec) {
 
 }
+
+bool AiTask::isInProgress() {
+    return true;
+}

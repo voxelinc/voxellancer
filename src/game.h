@@ -27,7 +27,6 @@ public:
     void update(float deltaSec);
     void draw();
 
-
 private:
     InputHandler m_inputHandler;
     Player m_player;
