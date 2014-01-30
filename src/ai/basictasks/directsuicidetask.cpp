@@ -6,7 +6,7 @@
 
 
 DirectSuicideTask::DirectSuicideTask(Ship& ship, WorldObject* target) :
-	BasicTask(ship),
+	AiTask(ship),
 	m_target(target ? target->handle() : Handle<WorldObject>(nullptr))
 {
 }

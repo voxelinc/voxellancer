@@ -3,14 +3,14 @@
 
 #include "glm/glm.hpp"
 
-#include "ai/basictask.h"
+#include "ai/aitask.h"
 #include "worldobject/handle/handle.h"
 
 
 class Ship;
 class WorldObject;
 
-class DirectSuicideTask : public BasicTask {
+class DirectSuicideTask : public AiTask {
 public:
 	DirectSuicideTask(Ship& ship, WorldObject* target);
 

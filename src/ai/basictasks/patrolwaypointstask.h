@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ai/elevatedtask.h"
+#include "ai/aitask.h"
 
 #include <list>
 
@@ -10,9 +10,8 @@
 
 
 class Ship;
-class BasicTask;
 
-class PatrolWaypointsTask : public ElevatedTask {
+class PatrolWaypointsTask : public AiTask {
 public:
     PatrolWaypointsTask(Ship& ship, std::list<glm::vec3> points);
 

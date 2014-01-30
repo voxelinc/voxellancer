@@ -6,7 +6,7 @@
 
 
 FlyToTask::FlyToTask(Ship& ship) :
-	BasicTask(ship),
+	AiTask(ship),
 	m_targetPoint(ship.transform().position())
 {
 }

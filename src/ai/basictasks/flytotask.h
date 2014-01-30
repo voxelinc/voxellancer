@@ -3,13 +3,13 @@
 
 #include "glm/glm.hpp"
 
-#include "ai/basictask.h"
+#include "ai/aitask.h"
 
 
 class Ship;
 class WorldObject;
 
-class FlyToTask : public BasicTask {
+class FlyToTask : public AiTask {
 public:
     FlyToTask(Ship& ship);
 

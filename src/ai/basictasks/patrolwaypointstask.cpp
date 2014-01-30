@@ -3,7 +3,7 @@
 #include "worldobject/ship.h"
 
 PatrolWaypointsTask::PatrolWaypointsTask(Ship& ship, std::list<glm::vec3> points) :
-    ElevatedTask(ship),
+    AiTask(ship),
     m_points(points),
     m_currentPoint(m_points.begin()),
     m_flyTask(ship)

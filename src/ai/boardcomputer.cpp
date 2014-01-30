@@ -36,8 +36,7 @@ void BoardComputer::moveTo(const glm::vec3& position, bool deaccelerate) {
                 float projectionDistance = glm::length(projectedPosition - currentPosition);
                 glm::vec3 fakePosition = currentPosition + glm::normalize(position - currentPosition) * 2.0f * projectionDistance;
 
-                delta = fakePosition - projectedPosition; // for a better precision this would hvae to be projectedPosition
-                                                        // but due to dampening the rocket would then slow down in front of the target
+                delta = fakePosition - projectedPosition;
             }
         }
 
