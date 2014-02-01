@@ -2,6 +2,7 @@
 
 #include "voxel.h"
 
+
 template<Axis high, Axis middle, Axis low>
 bool VoxelGridCmp<high, middle, low>::operator()(const Voxel* voxel1, const Voxel* voxel2) const {
     if(voxel1->gridCell()[high] < voxel2->gridCell()[high]) {
@@ -23,7 +24,7 @@ bool VoxelGridCmp<high, middle, low>::operator()(const Voxel* voxel1, const Voxe
     if(voxel1->gridCell()[low] < voxel2->gridCell()[low]) {
         return true;
     }
-       
+
     return false;
 }
 

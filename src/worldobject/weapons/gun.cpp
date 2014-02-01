@@ -19,7 +19,15 @@ AimType Gun::aimType() {
     return Point;
 }
 
-void Gun::update(float deltaSec) {
+float Gun::bulletSpeed() const {
+    return m_bulletSpeed;
+}
+
+float Gun::range() {
+    return m_range;
+}
+
+void Gun::update(float deltaSec){
     Weapon::update(deltaSec);
 }
 
@@ -34,9 +42,5 @@ void Gun::shootAtPoint(Hardpoint* sourceHardpoint, glm::vec3 target) {
         SoundManager::current()->play("data/sound/laser.ogg", sourceHardpoint->position())->setVolume(3);
         fired();
     }
-}
-
-float Gun::range() {
-    return m_range;
 }
 

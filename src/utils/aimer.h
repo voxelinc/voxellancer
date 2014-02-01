@@ -4,13 +4,18 @@
 
 #include "geometry/ray.h"
 
+#include "property/property.h"
+
 
 class Voxel;
 class WorldObject;
 
-class AimHelper {
+/*
+    Identifies the position of the voxel a worldObject is aiming at
+*/
+class Aimer {
 public:
-    AimHelper(WorldObject* worldObject, const Ray& ray);
+    Aimer(WorldObject* worldObject, const Ray& ray);
 
     glm::vec3 aim();
 
@@ -18,6 +23,7 @@ public:
 protected:
     WorldObject* m_worldObject;
     Ray m_ray;
+    Property<float> m_infityAimDistance;
 
     glm::vec3 nearestTarget(const std::set<Voxel*>& voxels) const;
     float distanceTo(Voxel* voxel) const;

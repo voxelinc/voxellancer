@@ -66,8 +66,8 @@ void BattleScenario::populateBattle(int numberOfEnemies1, int numberOfEnemies2) 
         float r = 200;
         ship->move(RandVec3::rand(0.0f, r) + glm::vec3(-200, 0, -200));
         ship->objectInfo().setName("enemy2");
-        ship->objectInfo().setShowOnHud(false);
-        ship->objectInfo().setCanLockOn(false);
+        ship->objectInfo().setShowOnHud(true);
+        ship->objectInfo().setCanLockOn(true);
         ClusterCache::instance()->fillObject(ship, "data/voxelcluster/basicship.csv");
         world->god().scheduleSpawn(ship);
         fleet2.push_back(ship);
@@ -77,8 +77,8 @@ void BattleScenario::populateBattle(int numberOfEnemies1, int numberOfEnemies2) 
         float r = 200;
         ship->move(RandVec3::rand(0.0f, r) + glm::vec3(200, 0, -200));
         ship->objectInfo().setName("enemy1");
-        ship->objectInfo().setShowOnHud(false);
-        ship->objectInfo().setCanLockOn(false);
+        ship->objectInfo().setShowOnHud(true);
+        ship->objectInfo().setCanLockOn(true);
         ClusterCache::instance()->fillObject(ship, "data/voxelcluster/basicship.csv");
         world->god().scheduleSpawn(ship);
         fleet1.push_back(ship);
