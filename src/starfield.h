@@ -45,7 +45,7 @@ private:
     void cleanUp(int side);
 
     Player* m_player;
-    std::deque<CameraLocation> m_locations;
+    std::deque<CameraLocation> m_locations[2];
     float m_time;
     Property<float> m_starfieldAge;
 

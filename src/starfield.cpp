@@ -145,21 +145,21 @@ void Starfield::createBinding(int index, std::string name, int offset, int size)
 
 void Starfield::addLocation(Camera& camera, int side) {
     CameraLocation location = CameraLocation{ m_time, camera.position(), camera.orientation() };
-    m_locations.push_back(location);
+    m_locations[side].push_back(location);
 }
 
 glm::mat4 Starfield::getMatrixFromPast(Camera& camera, int side) {
     float past = m_time - m_starfieldAge;
     
-    CameraLocation before = m_locations.back();
-    CameraLocation after = m_locations.back();
+    CameraLocation before = m_locations[side].back();
+    CameraLocation after = m_locations[side].back();
 
     // find a location before 'past' and after 'past'
-    auto iter = m_locations.rbegin();
+    auto iter = m_locations[side].rbegin();
     while (iter->time > past) {
         before = *iter;
         iter++;
-        if (iter != m_locations.rend()) {
+        if (iter != m_locations[side].rend()) {
             after = *iter;
         } else {
             break; // not enough locations yet
@@ -179,8 +179,8 @@ glm::mat4 Starfield::getMatrixFromPast(Camera& camera, int side) {
 
 void Starfield::cleanUp(int side) {
     float past = m_time - m_starfieldAge;
-    while (m_locations.size() > 2 && m_locations.at(1).time < past) {
-        m_locations.pop_front();
+    while (m_locations[side].size() > 2 && m_locations[side].at(1).time < past) {
+        m_locations[side].pop_front();
     }
 }
 
