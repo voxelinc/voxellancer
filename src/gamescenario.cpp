@@ -7,6 +7,7 @@
 #include "ai/characters/dummycharacter.h"
 #include "ai/basictasks/flytotask.h"
 #include "ai/basictasks/patrolwaypointstask.h"
+#include "ai/basictasks/formationmembertask.h"
 
 #include "resource/clustercache.h"
 
@@ -39,6 +40,20 @@ void GameScenario::populate(Game* game) {
     PatrolWaypointsTask* ta = new PatrolWaypointsTask(*normandy,
         std::list<glm::vec3>{ glm::vec3(400, 0, 200), glm::vec3(-400, 0, -400), glm::vec3(-600, 0, -400), glm::vec3(0, 100, -600), glm::vec3(-100, 150, -900) });
     normandy->setCharacter(new DummyCharacter(*normandy, ta));
+
+    int member_count = 4;
+    for (int i = 0; i < member_count; i++) {
+        Ship *follower = new Ship();
+        ClusterCache::instance()->fillObject(follower, "data/voxelcluster/basicship.csv");
+        follower->setPosition(glm::vec3(100 * (-member_count / 2.0f + i), 50, 0));
+        follower->objectInfo().setName("member");
+        follower->objectInfo().setShowOnHud(true);
+        normandy->objectInfo().setCanLockOn(true);
+        world->god().scheduleSpawn(follower);
+        FormationMemberTask* task = new FormationMemberTask(*follower, normandy);
+        follower->setCharacter(new DummyCharacter(*follower, task));
+    }
+
 
     Ship *follower = new Ship();
     ClusterCache::instance()->fillObject(follower, "data/voxelcluster/basicship.csv");
