@@ -48,6 +48,6 @@ void CommandLineParser::checkHelp() {
         glow::debug("  -stereo      stereo rendering");
         glow::debug("  -hmd         use head mounted display (e.g. OculusRift)");
         glow::debug("               automatically activates fullscreen and stereo");
+        exit(0);
     }
-    exit(0);
 }
