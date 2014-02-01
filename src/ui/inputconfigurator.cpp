@@ -124,11 +124,11 @@ void InputConfigurator::update() {
 
 void InputConfigurator::setupPrimaryControls() {
     if (!displayedInstructions) {
-        glow::info("Please press Joystick button or axis for action: %;", m_actions->at(primaryConfigurationState)->name);
+        glow::info("Please press Key for action: %;", m_actions->at(primaryConfigurationState)->name);
         displayedInstructions = true;
     }
     if (beginningKeyConfiguration) {
-        if (isSecondaryInput()) {
+        if (isPrimaryInput()) {
             if (!displayedKeyPressedWarning) {
                 glow::info("Please release all buttons before setting a new key mapping");
                 displayedKeyPressedWarning = true;
