@@ -1,22 +1,22 @@
 #include "crucialvoxel.h"
 
+#include "property/property.h"
+
 #include "voxel/voxelcluster.h"
+
 #include "worldobject/worldobject.h"
 
-CrucialVoxel::CrucialVoxel(const glm::ivec3& gridCell, int color, float mass, float hp) :
-    Voxel(gridCell, color, mass, hp),
-    m_worldObject(nullptr)
+
+CrucialVoxel::CrucialVoxel(const glm::ivec3& gridCell, int index) :
+    SpecialVoxel(gridCell, Property<int>("voxels.crucial.color"), Property<float>("voxels.crucial.mass"), Property<float>("voxels.crucial.hp"))
 {
 }
 
-CrucialVoxel::~CrucialVoxel() {
-}
+void CrucialVoxel::addToObject(WorldObject* worldObject){
+    assert(worldObject->crucialVoxel() == nullptr);
 
-void CrucialVoxel::addToObject(WorldObject *object){
-    m_worldObject = object;
-    assert(object->crucialVoxel() == nullptr);
-    object->addVoxel(this);
-    object->setCrucialVoxel(m_gridCell);
+    Voxel::addToObject(worldObject);
+    worldObject->setCrucialVoxel(m_gridCell);
 }
 
 void CrucialVoxel::onRemoval(){
@@ -26,3 +26,4 @@ void CrucialVoxel::onRemoval(){
 void CrucialVoxel::onDestruction(){
     Voxel::onDestruction();
 }
+

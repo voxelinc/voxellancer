@@ -1,26 +1,28 @@
 #include "fuelvoxel.h"
 
+#include "property/property.h"
+
 #include "voxel/voxelcluster.h"
+
 #include "worldobject/worldobject.h"
 
-FuelVoxel::FuelVoxel(const glm::ivec3& gridCell, int color, float mass, float hp) :
-    Voxel(gridCell, color, mass, hp),
+
+FuelVoxel::FuelVoxel(const glm::ivec3& gridCell, int index):
+    SpecialVoxel(gridCell, index, Property<int>("voxels.fuel.color"), Property<float>("voxels.fuel.mass"), Property<float>("voxels.fuel.hp")),
     m_worldObject(nullptr)
 {
 }
 
-FuelVoxel::~FuelVoxel() {
+void FuelVoxel::addToObject(WorldObject* worldObject) {
+    Voxel::addToObject(worldObject);
 }
 
-void FuelVoxel::addToObject(WorldObject *object){
-    m_worldObject = object;
-    object->addFuelVoxel(this);
-}
-
-void FuelVoxel::onRemoval(){
+void FuelVoxel::onRemoval() {
 
 }
-void FuelVoxel::onDestruction(){
+
+void FuelVoxel::onDestruction() {
     //TODO: explode more than default
     Voxel::onDestruction();
 }
+

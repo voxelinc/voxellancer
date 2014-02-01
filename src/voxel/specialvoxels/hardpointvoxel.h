@@ -1,21 +1,21 @@
 #pragma once
 
-#include "voxel/voxel.h"
+#include "voxel/specialvoxel.h"
+
 
 class Hardpoint;
 
-class HardpointVoxel : public Voxel {
+class HardpointVoxel: public SpecialVoxel {
 public:
-    HardpointVoxel(const glm::ivec3& gridCell, int color = 0xFFFFFF, float mass = 1.0f, float hp = 1.0f);
-    ~HardpointVoxel();
+    HardpointVoxel(const glm::ivec3& gridCell, int index);
 
     virtual void addToObject(WorldObject* object) override;
-
-    void setHardpoint(Hardpoint* hardpoint);
 
     virtual void onRemoval() override;
     virtual void onDestruction() override;
 
+
 protected:
     Hardpoint* m_hardpoint;
 };
+

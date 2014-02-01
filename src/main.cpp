@@ -87,11 +87,41 @@ static void cursorPositionCallback(GLFWwindow* window, double x, double y) {
 
 }
 
-void setCallbacks(GLFWwindow* window) {
+static void setCallbacks(GLFWwindow* window) {
     glfwSetMouseButtonCallback(window, mouseButtonCallback);
     glfwSetCursorPosCallback(window, cursorPositionCallback);
     glfwSetKeyCallback(window, keyCallback);
     glfwSetWindowSizeCallback(window, resizeCallback);
+}
+
+static void configureOpenGLContext() {
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, MajorVersionRequire);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, MinorVersionRequire);
+    //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+
+#if defined(NDEBUG)
+    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_FALSE);
+#else
+    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
+#endif
+}
+
+static void miscSettings() {
+    OVR::System::Init(OVR::Log::ConfigureDefaultLog(OVR::LogMask_All));
+
+    glClearColor(0.0f, 0.0f, 0.3f, 1.0f);
+
+#ifdef WIN32 // TODO: find a way to correctly detect debug extension in linux
+    glow::debugmessageoutput::enable();
+#endif
+
+#ifdef WIN32
+    wglSwapIntervalEXT(1); // glfw doesn't work!?
+#else
+    glfwSwapInterval(1);
+#endif
+    std::srand((unsigned int)time(NULL));
 }
 
 static void mainloop() {
@@ -114,24 +144,16 @@ int main(int argc, char* argv[]) {
     clParser.parse(argc, argv);
 
     PropertyManager::instance()->load("data/config.ini");
+    PropertyManager::instance()->load("data/voxels.ini");
 
     if (!glfwInit()) {
-        glow::fatal("Could not init glfw");
+        glow::fatal("Could not init GLFW");
         exit(-1);
     }
 
     glfwSetErrorCallback(errorCallback);
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, MajorVersionRequire);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, MinorVersionRequire);
-    //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-
-#if defined(NDEBUG)
-    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_FALSE);
-#else
-    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
-#endif
+    configureOpenGLContext();
 
     if(clParser.hmd()) {
         WindowManager::instance()->setFullScreenResolution(1);
@@ -152,29 +174,12 @@ int main(int argc, char* argv[]) {
     }
     CheckGLError();
 
-    OVR::System::Init(OVR::Log::ConfigureDefaultLog(OVR::LogMask_All));
-
-    glClearColor(0.0f, 0.0f, 0.3f, 1.0f);
-
-#ifdef WIN32 // TODO: find a way to correctly detect debug extension in linux
-    glow::debugmessageoutput::enable();
-#endif
-
-#ifdef WIN32
-    wglSwapIntervalEXT(1); // glfw doesn't work!?
-#else
-    glfwSwapInterval(1);
-#endif
+    miscSettings();
 
     //#define TRYCATCH
 #ifdef TRYCATCH
     try {
 #endif
-        std::srand((unsigned int)time(NULL));
-
-        ComponentFactory::instance();
-        WorldObjectDB::instance();
-
         game = new Game();
         game->initialize();
 

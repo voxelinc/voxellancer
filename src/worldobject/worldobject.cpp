@@ -15,6 +15,7 @@ WorldObject::WorldObject(CollisionFilterClass collisionFilterClass, float scale)
     m_physics(*this, scale),
     m_collisionDetector(*this),
     m_objectInfo(),
+    m_components(this),
     m_crucialVoxel(nullptr),
     m_handle(Handle<WorldObject>(this)),
     m_scheduledForDeletion(false)
@@ -37,24 +38,29 @@ ObjectInfo& WorldObject::objectInfo() {
     return m_objectInfo;
 }
 
-void WorldObject::update(float deltaSec) {
-
+WorldObjectComponents& WorldObject::components() {
+    return m_components;
 }
 
-std::list<VoxelCollision>& WorldObject::performMovement(float deltaSec) {
-    return m_physics.move(deltaSec);
+void WorldObject::update(float deltaSec) {
+    VoxelCluster::update(deltaSec);
+
+    m_physics.setAcceleration(m_components.maxAcceleration() * m_components.currentRelativeAcceleration());
 }
 
 void WorldObject::addVoxel(Voxel* voxel) {
+    assert(voxel);
+
     VoxelCluster::addVoxel(voxel);
 
     m_physics.addVoxel(voxel);
+
     m_collisionDetector.addVoxel(voxel);
     m_collisionDetector.updateGeode();
 }
 
 void WorldObject::removeVoxel(Voxel* voxel) {
-    assert(voxel != nullptr);
+    assert(voxel);
 
     voxel->onRemoval();
 
@@ -64,44 +70,18 @@ void WorldObject::removeVoxel(Voxel* voxel) {
 
     m_collisionDetector.removeVoxel(voxel);
     m_physics.removeVoxel(voxel);
+
     VoxelCluster::removeVoxel(voxel);
-}
-
-void WorldObject::addEngineVoxel(EngineVoxel* voxel) {
-    addVoxel(voxel);
-}
-
-void WorldObject::addHardpointVoxel(HardpointVoxel* voxel) {
-    addVoxel(voxel);
-}
-
-void WorldObject::addCockpitVoxel(CockpitVoxel* voxel) {
-    addVoxel(voxel);
-}
-
-void WorldObject::addFuelVoxel(FuelVoxel* voxel) {
-    addVoxel(voxel);
-}
-
-void WorldObject::accelerateDirectional(const glm::vec3& direction) {
-    m_physics.accelerateDirectional(direction);
-}
-
-void WorldObject::accelerateAngular(const glm::vec3& axis) {
-    m_physics.accelerateAngular(axis);
-}
-
-void WorldObject::setCenterAndAdjustPosition(const glm::vec3& newCenter) {
-    m_transform.setCenterAndAdjustPosition(newCenter);
 }
 
 void WorldObject::updateTransformAndGeode(const glm::vec3& position, const glm::quat& orientation) {
     transform().setOrientation(orientation);
     transform().setPosition(position);
+
     m_collisionDetector.updateGeode();
 }
 
-Voxel *WorldObject::crucialVoxel() {
+Voxel* WorldObject::crucialVoxel() {
     return m_crucialVoxel;
 }
 
@@ -128,3 +108,4 @@ bool WorldObject::scheduledForDeletion() {
 void WorldObject::onScheduleForDeletion() {
     m_scheduledForDeletion = true;
 }
+

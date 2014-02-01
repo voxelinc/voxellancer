@@ -54,6 +54,7 @@ void GameScene::setPlayer(Player* player) {
 }
 
 void GameScene::update(float deltaSec) {
-    m_soundManager->setListener(m_player->cameraPosition(), m_player->cameraOrientation());
+    CameraHead& cameraHead = m_player->cameraDolly().cameraHead();
+    m_soundManager->setListener(cameraHead.position(), cameraHead.orientation());
 }
 

@@ -1,14 +1,13 @@
 #include "enginetrailgenerator.h"
 
+#include "worldobject/components/engine.h"
+#include "worldobject/worldobject.h"
 
 
-#include "worldobject/engine.h"
-#include "worldobject/ship.h"
-
-
-EngineTrailGenerator::EngineTrailGenerator() :
+EngineTrailGenerator::EngineTrailGenerator(Engine* engine) :
     m_generator(),
-    m_engine(nullptr),
+    m_engine(engine),
+    m_worldObject(engine->engineSlot()->components()->worldObject()),
     m_spawnOffset(0.5f),
     m_lastPosition(),
     m_lastValid(false),
@@ -17,29 +16,26 @@ EngineTrailGenerator::EngineTrailGenerator() :
     prop_stepDistance("vfx.engineTrailStepDistance"),
     prop_idleTime("vfx.engineTrailIdleCooldown")
 {
-}
-
-EngineTrailGenerator::~EngineTrailGenerator() {
-}
-
-void EngineTrailGenerator::setEngine(Engine* engine) {
     assert(engine != nullptr);
-    m_engine = engine;
-    m_spawnOffset = m_engine->ship()->transform().scale() * 0.75f;
-    m_lastPosition = engine->position() + m_engine->ship()->transform().orientation() * glm::vec3(0, 0, m_spawnOffset);
+
+    m_spawnOffset = m_worldObject->transform().scale() * 0.75f;
+    m_lastPosition = engine->position() + m_worldObject->transform().orientation() * glm::vec3(0, 0, m_spawnOffset);
 
     m_generator.setColor(0x6666FF);
     m_generator.setCount(8);
     m_generator.setForce(0.10f, 0.3f);
     m_generator.setLifetime(prop_lifetime, 0.1f);
-    m_generator.setScale(m_engine->ship()->transform().scale() / 15.0f);
-    m_generator.setRadius(m_engine->ship()->transform().scale() * 0.3f);
+    m_generator.setScale(m_worldObject->transform().scale() / 15.0f);
+    m_generator.setRadius(m_worldObject->transform().scale() * 0.3f);
+}
+
+EngineTrailGenerator::~EngineTrailGenerator() {
 }
 
 void EngineTrailGenerator::update(float deltaSec) {
     assert(m_engine);
 
-    glm::vec3 speedLocalSystem = glm::inverse(m_engine->ship()->transform().orientation()) * m_engine->ship()->physics().directionalSpeed();
+    glm::vec3 speedLocalSystem = glm::inverse(m_worldObject->transform().orientation()) * m_worldObject->physics().directionalSpeed();
     if (speedLocalSystem.z <= 0.5) { //only when not moving backwards
         if (!m_lastValid){
             m_lastPosition = calculateSpawnPosition();
@@ -72,14 +68,15 @@ void EngineTrailGenerator::update(float deltaSec) {
 }
 
 glm::vec3 EngineTrailGenerator::calculateSpawnPosition() {
-    return m_engine->position() + m_engine->ship()->transform().orientation() * glm::vec3(0, 0, m_spawnOffset);
+    return m_engine->position() + m_worldObject->transform().orientation() * glm::vec3(0, 0, m_spawnOffset);
 }
 
 void EngineTrailGenerator::spawnAt(glm::vec3 position) {
     m_generator.setPosition(position);
-    m_generator.setImpactVector(m_engine->ship()->transform().orientation() * (glm::vec3(0, 0, 0.1f) * glm::abs(m_engine->ship()->physics().directionalAcceleration()) / 5.0f));
+    m_generator.setImpactVector(m_worldObject->transform().orientation() * (glm::vec3(0, 0, 0.1f) * glm::abs(m_worldObject->physics().directionalAcceleration()) / 5.0f));
 
     m_generator.spawn();
     m_timeSinceLastSpawn = 0.0f;
     m_lastPosition = position;
 }
+

@@ -14,12 +14,12 @@ class InputMapping;
 template <class T> class Property;
 template <class T> class PropertyCollection;
 
-/**
-* Keeps track of properties and loads ini files.
-* Properties will be updated when a new ini file is loaded.
-* Implements glow::Changeable, so glow::ChangeListener can
-* be notified about changes.
-**/
+/*
+ Keeps track of properties and loads ini files.
+ Properties will be updated when a new ini file is loaded.
+ Implements glow::Changeable, so glow::ChangeListener can
+ be notified about changes.
+*/
 class PropertyManager : public glow::Changeable {
 public:
     PropertyManager();
@@ -41,7 +41,7 @@ public:
 
 
 private:
-    template <class T>Ŕ
+    template <class T>
     PropertyCollection<T> *getPropertyCollection(Property<T> * prop);
 
     std::unique_ptr<PropertyCollection<float>> m_floatProperties;
@@ -51,6 +51,7 @@ private:
     std::unique_ptr<PropertyCollection<std::string>> m_stringProperties;
     std::unique_ptr<PropertyCollection<glm::vec2>> m_vec2Properties;
     std::unique_ptr<PropertyCollection<glm::vec3>> m_vec3Properties;
+    std::unique_ptr<PropertyCollection<glm::vec4>> m_vec4Properties;
     std::unique_ptr<PropertyCollection<InputMapping>> m_inputMappingProperties;
     std::unique_ptr<PropertyCollection<std::list<std::string>>> m_listProperties;
 

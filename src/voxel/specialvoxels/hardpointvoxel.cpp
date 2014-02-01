@@ -1,34 +1,36 @@
 #include "hardpointvoxel.h"
 
-#include "voxel/voxelcluster.h"
-#include "worldobject/worldobject.h"
-#include "worldobject/hardpoint.h"
+#include "property/property.h
 
-HardpointVoxel::HardpointVoxel(const glm::ivec3& gridCell, int color, float mass, float hp) :
-    Voxel(gridCell, color, mass, hp),
+#include "voxel/voxelcluster.h"
+
+#include "worldobject/hardpoint.h"
+#include "worldobject/worldobject.h"
+
+
+HardpointVoxel::HardpointVoxel(const glm::ivec3& gridCell, int index):
+    SpecialVoxel(gridCell, index, Property<int>("voxels.hardpoint.color"), Property<float>("voxels.hardpoint.mass"), Property<float>("voxels.hardpoint.hp")),
     m_hardpoint(nullptr)
 {
 }
 
-HardpointVoxel::~HardpointVoxel() {
+void HardpointVoxel::addToObject(WorldObject* worldObject) {
+    Voxel::addToObject(worldObject);
+
+    m_hardpoint = new Hardpoint(&worldObject->components(), this)
+    worldObject->components().addHardpoint(m_hardpoint);
 }
 
-void HardpointVoxel::addToObject(WorldObject *object){
-    object->addHardpointVoxel(this);
-}
-
-void HardpointVoxel::setHardpoint(Hardpoint* hardpoint){
-    m_hardpoint = hardpoint;
-}
-
-void HardpointVoxel::onRemoval(){
-    if (m_hardpoint){
+void HardpointVoxel::onRemoval() {
+    if (m_hardpoint) {
         m_hardpoint->voxelRemoved();
         m_hardpoint = nullptr;
     }
+    Voxel::onRemoval();
 }
 
-void HardpointVoxel::onDestruction(){
+void HardpointVoxel::onDestruction() {
     //Drop Ammo?
     Voxel::onDestruction();
 }
+

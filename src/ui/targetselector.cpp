@@ -15,24 +15,24 @@ TargetSelector::TargetSelector(Player *player):
 
 void TargetSelector::selectNextTarget() {
     std::list<WorldObject*>& worldObjects = World::instance()->worldObjects();
-    m_player->playerShip()->setTargetObject(findNextTarget(worldObjects.begin(), worldObjects.end()));
+    m_player->ship()->setTargetObject(findNextTarget(worldObjects.begin(), worldObjects.end()));
 }
 
 void TargetSelector::selectPreviousTarget() {
     std::list<WorldObject*>& worldObjects = World::instance()->worldObjects();
-    m_player->playerShip()->setTargetObject(findNextTarget(worldObjects.rbegin(), worldObjects.rend()));
+    m_player->ship()->setTargetObject(findNextTarget(worldObjects.rbegin(), worldObjects.rend()));
 }
 
 template<typename IteratorType>
 WorldObject* TargetSelector::findNextTarget(IteratorType begin, IteratorType end) {
-    if (!m_player->playerShip()) {
+    if (!m_player->ship()) {
         return nullptr;
     }
 
     IteratorType searchBegin = begin;
 
-    if (m_player->playerShip()->targetObject() != nullptr) {
-        searchBegin = std::find(begin, end, m_player->playerShip()->targetObject());
+    if (m_player->ship()->targetObject() != nullptr) {
+        searchBegin = std::find(begin, end, m_player->ship()->targetObject());
         searchBegin++;
     }
 

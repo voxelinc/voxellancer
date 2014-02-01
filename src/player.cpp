@@ -8,23 +8,18 @@
 Player::Player():
     m_hud(this),
     m_cameraDolly(),
-    m_playerShip(nullptr)
+    m_ship(nullptr)
 {
 
 }
 
-Player::~Player() = default;
-
-void Player::move(const glm::vec3& direction) {
-    m_acceleration += direction;
-}
-
-void Player::rotate(const glm::vec3& direction) {
-    m_accelerationAngular += direction;
+Ship* Player::ship() {
+    return m_ship.get();
 }
 
 void Player::setShip(Ship* ship) {
-    m_playerShip = ship->shipHandle();
+    m_ship = ship->shipHandle();
+    m_ship->objectInfo().setShowOnHud(false);
     m_cameraDolly.followWorldObject(ship);
 }
 
@@ -32,24 +27,11 @@ void Player::update(float deltaSec) {
     m_cameraDolly.update(deltaSec);
     m_hud.update(deltaSec);
 
-    if (Ship* playerShip = m_playerShip.get()) {
-        if (m_acceleration != glm::vec3(0)) {
-            m_acceleration = glm::normalize(m_acceleration);
-        }
-        playerShip->accelerateDirectional(m_acceleration);
-
-        if (m_accelerationAngular == glm::vec3(0)) { // dampen rotation
-            m_accelerationAngular = playerShip->physics().angularSpeed();
-            m_accelerationAngular *= -1.5f;
-        }
-        playerShip->accelerateAngular(m_accelerationAngular);
+    if (Ship* ship = m_ship.get()) {
+        ship->components().setCurrentRelativeAcceleration(m_acceleration);
     }
-    m_acceleration = glm::vec3(0);
-    m_accelerationAngular = glm::vec3(0);
-}
 
-Ship* Player::playerShip() {
-    return m_playerShip.get();
+    m_acceleration.clear();
 }
 
 CameraDolly& Player::cameraDolly() {
@@ -60,13 +42,10 @@ HUD& Player::hud() {
     return m_hud;
 }
 
-glm::vec3 Player::cameraPosition() {
-    return m_cameraDolly.cameraHead().position();
+void Player::move(const glm::vec3& vec) {
+    m_acceleration.setDirectional(vec);
 }
 
-glm::quat Player::cameraOrientation() {
-    return m_cameraDolly.cameraHead().orientation();
+void Player::rotate(const glm::vec3& euler) {
+    m_acceleration.setAngular(euler);
 }
-
-
-

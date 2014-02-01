@@ -23,8 +23,10 @@ static regexns::regex char_regex() { return regexns::regex(R"(^\w$)"); }
 static regexns::regex string_regex() { return regexns::regex(R"(^.*$)"); }
 static regexns::regex vec2_regex() { return regexns::regex(R"(^([-+]?\d*\.?\d*), ?([-+]?\d*\.?\d*)$)"); }
 static regexns::regex vec3_regex() { return regexns::regex(R"(^([-+]?\d*\.?\d*), ?([-+]?\d*\.?\d*), ?([-+]?\d*\.?\d*)$)"); }
+static regexns::regex vec4_regex() { return regexns::regex(R"(^([-+]?\d*\.?\d*), ?([-+]?\d*\.?\d*), ?([-+]?\d*\.?\d*), ?([-+]?\d*\.?\d*)$)"); }
 static regexns::regex input_mapping_regex() { return regexns::regex(R"(^InputMapping\((\d+), ?(\d+), ?([-+]?\d*\.?\d*)\)$)"); }
 static regexns::regex list_regex() { return regexns::regex(R"(^([a-zA-Z1-9]+)(, ?([a-zA-Z1-9]+))*$)"); }
+
 
 static glm::vec2 vec2Converter(const std::string &s) {
     regexns::smatch matches;
@@ -45,6 +47,18 @@ static glm::vec3 vec3Converter(const std::string &s) {
     float z = std::stof(matches[3]);
 
     return glm::vec3(x, y, z);
+}
+
+static glm::vec3 vec4Converter(const std::string &s) {
+    regexns::smatch matches;
+    regexns::regex_match(s, matches, vec3_regex());
+
+    float x = std::stof(matches[1]);
+    float y = std::stof(matches[2]);
+    float z = std::stof(matches[3]);
+    float w = std::stof(matches[4]);
+
+    return glm::vec3(x, y, z, w);
 }
 
 static std::list<std::string> listConverter(const std::string &s) {
@@ -71,6 +85,7 @@ static InputMapping inputMappingConverter(const std::string &s) {
     return InputMapping(type,index,max_value);
 }
 
+
 PropertyManager::PropertyManager():
     m_floatProperties(new PropertyCollection<float>(float_regex(), [](std::string s) { return std::stof(s); })),
     m_intProperties(new PropertyCollection<int>(int_regex(), [](std::string s) { return std::stoi(s, 0, 0); })), // base=0 allows adding 0x to parse hex
@@ -79,6 +94,7 @@ PropertyManager::PropertyManager():
     m_stringProperties(new PropertyCollection<std::string>(string_regex(), [](std::string s) { return s; })),
     m_vec2Properties(new PropertyCollection<glm::vec2>(vec2_regex(), vec2Converter)),
     m_vec3Properties(new PropertyCollection<glm::vec3>(vec3_regex(), vec3Converter)),
+    m_vec4Properties(new PropertyCollection<glm::vec4>(vec4_regex(), vec4Converter)),
     m_inputMappingProperties(new PropertyCollection<InputMapping>(input_mapping_regex(), inputMappingConverter)),
     m_listProperties(new PropertyCollection<std::list<std::string>>(list_regex(), listConverter))
 {
@@ -126,6 +142,7 @@ void PropertyManager::load(const std::string& file, const std::string& prefix) {
             if (m_stringProperties->update(key, value)) success++;
             if (m_vec2Properties->update(key, value)) success++;
             if (m_vec3Properties->update(key, value)) success++;
+            if (m_vec4properties->update(key, value)) success++;
             if (m_inputMappingProperties->update(key, value)) success++;
             if (m_listProperties->update(key, value)) success++;
 
@@ -159,47 +176,52 @@ PropertyManager* PropertyManager::s_instance;
 
 // any better idea or maybe generate these with macros?
 template <>
-PropertyCollection<int>* PropertyManager::getPropertyCollection(Property<int> * prop) {
+PropertyCollection<int>* PropertyManager::getPropertyCollection(Property<int>* prop) {
     return m_intProperties.get();
 }
 
 template <>
-PropertyCollection<char>* PropertyManager::getPropertyCollection(Property<char> * prop) {
+PropertyCollection<char>* PropertyManager::getPropertyCollection(Property<char>* prop) {
     return m_charProperties.get();
 }
 
 template <>
-PropertyCollection<float>* PropertyManager::getPropertyCollection(Property<float> * prop) {
+PropertyCollection<float>* PropertyManager::getPropertyCollection(Property<float>* prop) {
     return m_floatProperties.get();
 }
 
 template <>
-PropertyCollection<bool>* PropertyManager::getPropertyCollection(Property<bool> * prop) {
+PropertyCollection<bool>* PropertyManager::getPropertyCollection(Property<bool>* prop) {
     return m_boolProperties.get();
 }
 
 template <>
-PropertyCollection<std::string>* PropertyManager::getPropertyCollection(Property<std::string> * prop) {
+PropertyCollection<std::string>* PropertyManager::getPropertyCollection(Property<std::string>* prop) {
     return m_stringProperties.get();
 }
 
 template <>
-PropertyCollection<glm::vec2>* PropertyManager::getPropertyCollection(Property<glm::vec2> * prop) {
+PropertyCollection<glm::vec2>* PropertyManager::getPropertyCollection(Property<glm::vec2>* prop) {
     return m_vec2Properties.get();
 }
 
 template <>
-PropertyCollection<glm::vec3>* PropertyManager::getPropertyCollection(Property<glm::vec3> * prop) {
+PropertyCollection<glm::vec3>* PropertyManager::getPropertyCollection(Property<glm::vec3>* prop) {
     return m_vec3Properties.get();
 }
 
 template <>
-PropertyCollection<InputMapping>* PropertyManager::getPropertyCollection(Property<InputMapping> * prop) {
+PropertyCollection<glm::vec4>* PropertyManager::getPropertyCollection(Property<glm::vec4>* prop) {
+    return m_vec4Properties.get();
+}
+
+template <>
+PropertyCollection<InputMapping>* PropertyManager::getPropertyCollection(Property<InputMapping>* prop) {
     return m_inputMappingProperties.get();
 }
 
 template <>
-PropertyCollection<std::list<std::string>>* PropertyManager::getPropertyCollection(Property<std::list<std::string>> * prop) {
+PropertyCollection<std::list<std::string>>* PropertyManager::getPropertyCollection(Property<std::list<std::string>>* prop) {
     return m_listProperties.get();
 }
 

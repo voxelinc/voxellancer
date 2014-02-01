@@ -117,7 +117,6 @@ void Physics::addVoxel(Voxel* voxel) {
 void Physics::removeVoxel(Voxel* voxel) {
     alterCell(voxel, false);
 }
-
 void Physics::updateSpeed(float deltaSec) {
     m_directionalSpeed *= (1.f - m_directionalDampening * deltaSec);
     m_directionalSpeed += m_directionalAcceleration * deltaSec;

@@ -14,6 +14,8 @@
 
 #include "voxel/voxelcluster.h"
 
+#include "worldobjectcomponents.h"
+
 
 class CollisionDetector;
 class EngineVoxel;
@@ -29,27 +31,17 @@ public:
     CollisionDetector& collisionDetector();
     Physics& physics();
     ObjectInfo& objectInfo();
+    WorldObjectComponents& components();
 
     virtual void update(float deltaSec);
-
-    std::list<VoxelCollision>& performMovement(float deltaSec);
 
     virtual void addVoxel(Voxel* voxel) override;
     virtual void removeVoxel(Voxel* voxel) override;
 
-    virtual void addEngineVoxel(EngineVoxel* voxel);
-    virtual void addHardpointVoxel(HardpointVoxel* voxel);
-    virtual void addCockpitVoxel(CockpitVoxel* voxel);
-    virtual void addFuelVoxel(FuelVoxel* voxel);
-
     Voxel* crucialVoxel();
     void setCrucialVoxel(const glm::ivec3& cell);
 
-    virtual void accelerateDirectional(const glm::vec3& direction);
-    virtual void accelerateAngular(const glm::vec3& axis);
-
     void setCenterAndAdjustPosition(const glm::vec3& newCenter);
-
     void updateTransformAndGeode(const glm::vec3& position, const glm::quat& orientation);
 
     virtual void onCollision();
@@ -65,6 +57,7 @@ protected:
     CollisionDetector m_collisionDetector;
     Physics m_physics;
     ObjectInfo m_objectInfo;
+    WorldObjectComponents m_components;
 
     Handle<WorldObject> m_handle;
 

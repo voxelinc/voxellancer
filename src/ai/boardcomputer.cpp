@@ -26,7 +26,8 @@ void BoardComputer::moveTo(const glm::vec3& position) {
     float distance = glm::length(delta);
 
     if (distance > s_minActDistance) {
-        m_ship.accelerateDirectional(direction);
+        Acceleration acceleration(direction, m_ship.components().currentRelativeAcceleration().angular());
+        m_ship.components().setCurrentRelativeAcceleration(acceleration);
     }
 }
 
@@ -39,7 +40,9 @@ void BoardComputer::rotateTo(const glm::vec3& position, const glm::vec3& up) {
 
     if (glm::abs(glm::angle(rotation)) > s_minActAngle) {
         glm::vec3 euler = glm::eulerAngles(rotation);
-        m_ship.accelerateAngular(glm::normalize(euler));
+
+        Acceleration acceleration(m_ship.components().currentRelativeAcceleration().directional(), glm::normalize(euler));
+        m_ship.components().setCurrentRelativeAcceleration(acceleration);
     }
 
     if (up != glm::vec3(0, 0, 0)){
@@ -55,7 +58,9 @@ void BoardComputer::rotateUpTo(const glm::vec3& up) {
     glm::vec3 newUpDirection = glm::inverse(m_ship.transform().orientation()) * glm::normalize(up);
     glm::quat upRotation = GeometryHelper::quatFromTo(upDirection, newUpDirection);
     glm::vec3 euler = glm::eulerAngles(upRotation);
-    m_ship.accelerateAngular(glm::normalize(euler));
+
+    Acceleration acceleration(m_ship.components().currentRelativeAcceleration().directional(), glm::normalize(euler));
+    m_ship.components().setCurrentRelativeAcceleration(acceleration);
 }
 
 void BoardComputer::rotateUpAuto(const glm::quat& rotation) {
@@ -65,7 +70,9 @@ void BoardComputer::rotateUpAuto(const glm::quat& rotation) {
         glm::vec3 newUpDirection = glm::vec3(0, 0, 1) + (rotation * glm::vec3(0, 0, -1));
         glm::quat upRotation = GeometryHelper::quatFromTo(upDirection, newUpDirection);
         glm::vec3 euler = glm::eulerAngles(upRotation);
-        m_ship.accelerateAngular(glm::normalize(euler));
+
+        Acceleration acceleration(m_ship.components().currentRelativeAcceleration().directional(), glm::normalize(euler));
+        m_ship.components().setCurrentRelativeAcceleration(acceleration);
     }
 }
 
@@ -79,7 +86,7 @@ void BoardComputer::shootBullet(const std::list<Handle<WorldObject>>& targets) {
             float angle = GeometryHelper::angleBetween(shipDirection, targetDirection);
             if (glm::abs(angle) < max_angle) {
                 glm::vec3 offset = RandVec3::rand(0, 1) * glm::length(targetDirection) / 30.0f;
-                m_ship.fireAtPoint(target->transform().position() + offset);
+                m_ship.components().fireAtPoint(target->transform().position() + offset);
                 break;
             }
         }
@@ -89,6 +96,6 @@ void BoardComputer::shootBullet(const std::list<Handle<WorldObject>>& targets) {
 void BoardComputer::shootRockets(Handle<WorldObject> target) {
     if (target.valid()) {
         m_ship.setTargetObject(target.get());
-        m_ship.fireAtObject();
+        m_ship.components().fireAtObject(target.get());
     }
 }

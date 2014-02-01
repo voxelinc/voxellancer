@@ -4,6 +4,7 @@
 
 
 class Ship;
+class WorldObject;
 
 class WorldObjectFactory {
 public:
@@ -15,6 +16,10 @@ public:
 
 protected:
     WorldObject* m_worldObject;
+    std::string m_name;
+
+    void setupHardpoints();
+    void setupEngineSlots();
 };
 
 #include "worldobjectfactory.inl"

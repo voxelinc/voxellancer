@@ -48,12 +48,13 @@ CrossHair& HUD::crossHair() {
 }
 
 glm::vec3 HUD::position() const {
-    return m_player->cameraPosition() + m_player->cameraOrientation() * m_sphere.position();
+    CameraHead& cameraHead = m_player->cameraDolly().cameraHead();
+    return cameraHead.position() + cameraHead.orientation() * m_sphere.position();
 }
 
-
 glm::quat HUD::orientation() const {
-    return m_player->cameraOrientation();
+    CameraHead& cameraHead = m_player->cameraDolly().cameraHead();
+    return cameraHead.orientation();
 }
 
 void HUD::update(float deltaSec) {
