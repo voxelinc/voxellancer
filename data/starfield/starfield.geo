@@ -12,21 +12,19 @@ in float g_size[1];
 out vec2 f_uv;
 out float f_brightness;
 
-const float sizeFactor = 0.1;
+const float sizeFactor = 0.3;
 
 void main(void) {
     float size = g_size[0] * sizeFactor;
     vec4 pos = g_pos[0];
     vec4 oldPos = g_oldPos[0];
-
+    
     vec4 dir = pos - oldPos;
-    if (length(dir) < 0.0001) {
-        dir = vec4(1,0,1,0);
-    }
-
+    dir += vec4(pos.xy, 0,0)/100;
     dir = normalize(dir) * size;
 
-    vec4 orthogonal = normalize(vec4(0,1,0,0)) * size;
+    vec3 temp = cross(normalize(vec3(dir.xy,0)),vec3(0,0,1));
+    vec4 orthogonal = vec4(temp,0) * size;
 
     f_brightness = g_brightness[0];
 

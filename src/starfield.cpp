@@ -7,12 +7,10 @@
 #include <glow/Program.h>
 #include <glow/Buffer.h>
 #include <glowutils/File.h>
+#include <glowutils/global.h>
 
 #include "player.h"
 #include "utils/randfloat.h"
-#include "glowutils/global.h"
-#include "voxel/voxelcluster.h"
-#include "worldobject/ship.h"
 #include "camera/camera.h"
 #include "display/rendering/framebuffer.h"
 #include "display/rendering/buffernames.h"
@@ -45,7 +43,7 @@ void Starfield::update(float deltaSec) {
     m_time += deltaSec;
 
     Star* starbuffer = (Star*) m_starBuffer->map(GL_READ_WRITE);
-    glm::vec3 position = m_player->playerShip()->transform().position();
+    glm::vec3 position = m_player->cameraPosition();
 
     // only perform once per second if this is a performance problem
     for (int i = 0; i < STAR_COUNT; i++) {
@@ -89,6 +87,7 @@ void Starfield::apply(FrameBuffer& frameBuffer, Camera& camera, EyeSide eyeside)
     glDisable(GL_CULL_FACE);
     glEnable(GL_BLEND); 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_DEPTH_TEST);
     glDepthMask(GL_FALSE);
 
     frameBuffer.setDrawBuffers({ BufferNames::Color, BufferNames::Emissisiveness });
@@ -99,7 +98,7 @@ void Starfield::apply(FrameBuffer& frameBuffer, Camera& camera, EyeSide eyeside)
     m_shaderProgram->setUniform("viewProjection", m1);
     m_shaderProgram->setUniform("oldViewProjection", m2);
     m_shaderProgram->use();
-    m_vertexArrayObject->drawArrays(GL_POINTS, (GLint)0, (GLsizei)STAR_COUNT);
+    m_vertexArrayObject->drawArrays(GL_POINTS, 0, STAR_COUNT);
     
     glDepthMask(GL_TRUE);
     glDisable(GL_BLEND);
