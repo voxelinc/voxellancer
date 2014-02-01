@@ -4,10 +4,6 @@ layout(points) in;
 
 layout(triangle_strip, max_vertices=12) out;
 
-uniform mat4 viewProjection;
-uniform vec4 speed;
-uniform float aspectRatio;
-
 in vec4 g_pos[1];
 in vec4 g_oldPos[1];
 in float g_brightness[1];
@@ -16,8 +12,10 @@ in float g_size[1];
 out vec2 f_uv;
 out float f_brightness;
 
+const float sizeFactor = 0.1;
+
 void main(void) {
-    float size = g_size[0];
+    float size = g_size[0] * sizeFactor;
     vec4 pos = g_pos[0];
     vec4 oldPos = g_oldPos[0];
 
@@ -25,7 +23,6 @@ void main(void) {
     if (length(dir) < 0.0001) {
         dir = vec4(1,0,1,0);
     }
-
 
     dir = normalize(dir) * size;
 

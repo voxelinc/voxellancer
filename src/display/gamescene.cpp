@@ -13,31 +13,33 @@
 #include "world/world.h"
 #include "skybox.h"
 #include "worldobject/worldobject.h"
+#include "rendering/buffernames.h"
 
 
-GameScene::GameScene(Game* game):
+GameScene::GameScene(Game* game, Player* player):
     m_game(game),
     m_voxelRenderer(VoxelRenderer::instance()),
     m_hd3000dummy(new HD3000Dummy()),
     m_soundManager(new SoundManager()),
     m_blitter(new Blitter()),
-    m_renderPipeline(RenderPipeline::getDefault()),
+    m_renderPipeline(RenderPipeline::getDefault(player)),
     m_framebuffer(new FrameBuffer(m_renderPipeline->bufferCount())),
-    m_currentOutputBuffer(0)
+    m_currentOutputBuffer(0),
+    m_player(player)
 {
 }
 
 GameScene::~GameScene() = default;
 
-void GameScene::draw(Camera* camera, glow::FrameBufferObject* target, const glm::ivec2& resolution) {
-    m_framebuffer->setResolution(resolution);
+void GameScene::draw(Camera* camera, glow::FrameBufferObject* target, EyeSide side) {
+    m_framebuffer->setResolution(camera->viewport());
     m_framebuffer->clear();
 
     // the pipeline should expect color in 1, normals in 2 and emissiveness in 3
-    m_framebuffer->setDrawBuffers({ 1, 2, 3 }); 
+    m_framebuffer->setDrawBuffers({ BufferNames::Color, BufferNames::NormalZ, BufferNames::Emissisiveness });
     drawGame(camera);
 
-    m_renderPipeline->apply(*m_framebuffer);
+    m_renderPipeline->apply(*m_framebuffer, *camera, side);
 
     m_blitter->setInputMapping({ { "source", m_currentOutputBuffer } });
     m_blitter->apply(*m_framebuffer, target);
@@ -51,11 +53,8 @@ void GameScene::deactivate() {
     m_soundManager->deactivate();
 }
 
-void GameScene::setPlayer(Player* player) {
-    m_player = player;
-}
-
 void GameScene::update(float deltaSec) {
+    m_renderPipeline->update(deltaSec);
     m_soundManager->setListener(m_player->cameraPosition(), m_player->cameraOrientation());
 }
 

@@ -5,8 +5,7 @@
 #include <glm/glm.hpp>
 
 #include "camera/camera.h"
-
-#include "geometry/size.h"
+#include "eyeside.h"
 
 namespace glow {
     class FrameBufferObject;
@@ -19,18 +18,12 @@ class FrameBuffer;
 
 class StereoViewEye {
 public:
-    enum EyeSide {
-        Left,
-        Right
-    };
-
-public:
-    StereoViewEye(const Size<int>& viewportResolution, const StereoRenderInfo& stereoRenderInfo, EyeSide side);
+    StereoViewEye(const glm::ivec2& viewportResolution, const StereoRenderInfo& stereoRenderInfo, EyeSide side);
     ~StereoViewEye();
 
     FrameBuffer& fbo();
 
-    void setViewportResolution(const Size<int>& viewportResolution);
+    void setViewportResolution(const glm::ivec2& viewportResolution);
 
     void draw(Scene* scene, CameraHead* cameraHead);
 
@@ -42,7 +35,7 @@ protected:
     Camera m_camera;
 
     float m_distortionScale;
-    Size<int> m_textureSize;
+    glm::ivec2 m_textureSize;
     std::unique_ptr<FrameBuffer> m_fbo;
 };
 

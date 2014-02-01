@@ -30,6 +30,6 @@ void MonoView::draw(Scene* scene, CameraHead* cameraHead) {
     camera.setPosition(cameraHead->position());
     camera.setOrientation(cameraHead->orientation());
 
-    scene->draw(&camera, glow::FrameBufferObject::defaultFBO(), glm::ivec2(m_viewport.width(), m_viewport.height()));
+    scene->draw(&camera, glow::FrameBufferObject::defaultFBO());
 }
 

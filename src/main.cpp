@@ -26,8 +26,6 @@
 
 #include "geometry/viewport.h"
 
-#include "geometry/size.h"
-
 #include "display/stereorenderinfo.h"
 
 #include "ui/inputhandler.h"

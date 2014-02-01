@@ -2,33 +2,27 @@
 
 #include <glow/Array.h>
 #include <glow/Shader.h>
-#include <glow/Texture.h>
 #include <glow/VertexArrayObject.h>
 #include <glow/VertexAttributeBinding.h>
 #include <glow/Program.h>
 #include <glow/Buffer.h>
-#include <glow/Shader.h>
 #include <glowutils/File.h>
 
-#include "camera.h"
 #include "player.h"
-
 #include "utils/randfloat.h"
+#include "glowutils/global.h"
+#include "voxel/voxelcluster.h"
+#include "worldobject/ship.h"
+#include "camera/camera.h"
+#include "display/rendering/framebuffer.h"
+#include "display/rendering/buffernames.h"
+#include "utils/randvec.h"
 
 
 
 static int STAR_COUNT = 1000;
-static float FIELD_SIZE = 200.0f;
+static float FIELD_SIZE = 300.0f;
 static float STAR_FADE_IN_SEC = 2.0f;
-
-// to be replaced by helper!
-glm::vec3 randVec(float from, float to) {
-    return glm::vec3(
-        RandFloat::rand(from, to),
-        RandFloat::rand(from, to),
-        RandFloat::rand(from, to)
-        );
-}
 
 struct Star {
     glm::vec3 pos;
@@ -36,8 +30,8 @@ struct Star {
     float size;
 };
 
-Starfield::Starfield(Player* player, Camera* camera):
-    m_camera(camera),
+Starfield::Starfield(Player* player) :
+    RenderPass("starfield"),
     m_player(player)
 {
     createAndSetupShaders();
@@ -45,13 +39,6 @@ Starfield::Starfield(Player* player, Camera* camera):
 }
 
 void Starfield::update(float deltaSec) {
-
-    m_matricesQueue.push(m_camera->viewProjection());
-
-    if (m_matricesQueue.size() > 10) {
-        m_matricesQueue.pop();
-    }
-
 
     Star* starbuffer = (Star*) m_starBuffer->map(GL_READ_WRITE);
     glm::vec3 position = m_player->playerShip()->transform().position();
@@ -89,16 +76,25 @@ void Starfield::update(float deltaSec) {
 }
 
 
-void Starfield::draw() {
+void Starfield::apply(FrameBuffer& frameBuffer, Camera& camera, EyeSide eyeside) {
+    int side = eyeside == EyeSide::Left ? 0 : 1;
+    m_matricesQueue[side].push(camera.viewProjection());
+    if (m_matricesQueue[side].size() > 2) { // store for the last 2 frames... need to find a framerate independent way
+        m_matricesQueue[side].pop();
+    }
+
     glDisable(GL_CULL_FACE);
     glEnable(GL_BLEND); 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glDepthMask(GL_FALSE);
 
-    m_shaderProgram->setUniform("viewProjection", m_camera->viewProjection());
-    m_shaderProgram->setUniform("oldViewProjection", m_matricesQueue.front());
-    m_shaderProgram->setUniform("speed", glm::vec4(m_player->playerShip()->physics().speed(), 0));
-    m_shaderProgram->setUniform("aspectRatio", m_camera->aspectRatio());
+    frameBuffer.setDrawBuffers({ BufferNames::Color, BufferNames::Emissisiveness });
+
+    glm::mat4 m1 = camera.viewProjection();
+    glm::mat4 m2 = m_matricesQueue[side].front();
+
+    m_shaderProgram->setUniform("viewProjection", m1);
+    m_shaderProgram->setUniform("oldViewProjection", m2);
     m_shaderProgram->use();
     m_vertexArrayObject->drawArrays(GL_POINTS, (GLint)0, (GLsizei)STAR_COUNT);
     
@@ -116,7 +112,6 @@ void Starfield::createAndSetupShaders() {
     m_shaderProgram->attach(vertexShader, geometryShader, fragmentShader);
     m_shaderProgram->bindFragDataLocation(0, "fragColor");
 
-
 }
 
 
@@ -128,7 +123,7 @@ void Starfield::createAndSetupGeometry() {
     glow::Array<Star> stars;
 
     for (int i = 0; i < STAR_COUNT; i++) {
-        stars.push_back(Star{ randVec(-FIELD_SIZE, FIELD_SIZE), 0.0f, RandFloat::rand(0.5f, 1.5f)});
+        stars.push_back(Star{ RandVec3::rand(-FIELD_SIZE, FIELD_SIZE), 0.0f, RandFloat::rand(0.5f, 1.5f) });
     }
     m_starBuffer->setData(stars);
 

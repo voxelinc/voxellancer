@@ -20,7 +20,8 @@ class PostProcessingPass : public RenderPass {
 public:
     PostProcessingPass(const std::string& name, std::shared_ptr<ScreenQuad> quad);
 
-    void apply(FrameBuffer& frameBuffer);
+    virtual void update(float deltaSec) override;
+    virtual void apply(FrameBuffer& frameBuffer, Camera& camera, EyeSide side) override;
     void beforeDraw(FrameBuffer& frameBuffer);
 
     void setInputMapping(const std::unordered_map<std::string, int>& inputMapping);

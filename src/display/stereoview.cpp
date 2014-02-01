@@ -16,8 +16,8 @@
 
 StereoView::StereoView(const Viewport& viewport, const StereoRenderInfo& stereoRenderInfo):
     View(viewport),
-    m_leftEye(Size<int>(viewport.width() / 2, viewport.height()), stereoRenderInfo, StereoViewEye::Left),
-    m_rightEye(Size<int>(viewport.width() / 2, viewport.height()), stereoRenderInfo, StereoViewEye::Right),
+    m_leftEye(glm::ivec2(viewport.width() / 2, viewport.height()), stereoRenderInfo, EyeSide::Left),
+    m_rightEye(glm::ivec2(viewport.width() / 2, viewport.height()), stereoRenderInfo, EyeSide::Right),
     m_leftEyeLensCenter(stereoRenderInfo.leftEyeLensCenter()),
     m_rightEyeLensCenter(stereoRenderInfo.rightEyeLensCenter())
 {
@@ -30,8 +30,8 @@ StereoView::StereoView(const Viewport& viewport, const StereoRenderInfo& stereoR
 void StereoView::setViewport(const Viewport& viewport) {
     View::setViewport(viewport);
 
-    m_leftEye.setViewportResolution(Size<int>(viewport.width() / 2, viewport.height()));
-    m_rightEye.setViewportResolution(Size<int>(viewport.width() / 2, viewport.height()));
+    m_leftEye.setViewportResolution(glm::ivec2(viewport.width() / 2, viewport.height()));
+    m_rightEye.setViewportResolution(glm::ivec2(viewport.width() / 2, viewport.height()));
 }
 
 void StereoView::draw(Scene* scene, CameraHead* cameraHead) {

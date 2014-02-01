@@ -3,28 +3,20 @@
 #include "postprocessingpass.h"
 #include "framebuffer.h"
 #include "screenquad.h"
+#include "starfield.h"
+#include "buffernames.h"
 
 
-namespace {
-    enum BufferNames {
-        Default = 0,
-        Color,
-        NormalZ,
-        Emissisiveness,
-        BlurTmp,
-        Bloom,
-        BufferCount // should always be last member and not be used as a name
-    };
-}
-
-DefaultRenderPipeline::DefaultRenderPipeline():
+DefaultRenderPipeline::DefaultRenderPipeline(Player* player) :
     RenderPipeline("defaultpipeline"),
-    m_quad(std::make_shared<ScreenQuad>())
+    m_quad(std::make_shared<ScreenQuad>()),
+    m_player(player)
 {
 
 }
 
 void DefaultRenderPipeline::setup() {
+    add(std::make_shared<Starfield>(m_player));
     addBlurVertical();
     addBlurHorizontal();
     addFinalization();
@@ -32,8 +24,8 @@ void DefaultRenderPipeline::setup() {
 
 void DefaultRenderPipeline::addBlurVertical() {
     auto pass = std::make_shared<PostProcessingPass>("blurv", m_quad);
-    pass->setInputMapping({ { "source", Emissisiveness } });
-    pass->setOutput({ BlurTmp });
+    pass->setInputMapping({ { "source", BufferNames::Emissisiveness } });
+    pass->setOutput({ BufferNames::BlurTmp });
     pass->setFragmentShader("data/postprocessing/blur.frag");
     pass->setUniform("direction", glm::vec2(0, 1));
     add(pass);
@@ -41,8 +33,8 @@ void DefaultRenderPipeline::addBlurVertical() {
 
 void DefaultRenderPipeline::addBlurHorizontal() {
     auto pass = std::make_shared<PostProcessingPass>("blurh", m_quad);
-    pass->setInputMapping({ { "source", BlurTmp } });
-    pass->setOutput({ Bloom });
+    pass->setInputMapping({ { "source", BufferNames::BlurTmp } });
+    pass->setOutput({ BufferNames::Bloom });
     pass->setFragmentShader("data/postprocessing/blur.frag");
     pass->setUniform("direction", glm::vec2(1, 0));
     add(pass);
@@ -50,8 +42,8 @@ void DefaultRenderPipeline::addBlurHorizontal() {
 
 void DefaultRenderPipeline::addFinalization() {
     auto pass = std::make_shared<PostProcessingPass>("blurh", m_quad);
-    pass->setInputMapping({ { "color", Color }, { "bloom", Bloom } });
-    pass->setOutput({ Default });
+    pass->setInputMapping({ { "color", BufferNames::Color }, { "bloom", BufferNames::Bloom } });
+    pass->setOutput({ BufferNames::Default });
     pass->setFragmentShader("data/postprocessing/combine.frag");
     add(pass);
 }

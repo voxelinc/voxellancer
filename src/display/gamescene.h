@@ -20,12 +20,12 @@ class Player;
 
 class GameScene: public Scene {
 public:
-    GameScene(Game* game);
+    GameScene(Game* game, Player* player);
     ~GameScene();
 
     void setPlayer(Player* player);
 
-    virtual void draw(Camera* camera, glow::FrameBufferObject* target, const glm::ivec2& resolution) override;
+    virtual void draw(Camera* camera, glow::FrameBufferObject* target, EyeSide side = EyeSide::Left) override;
     virtual void update(float deltaSec) override;
     virtual void activate() override;
     virtual void deactivate() override;

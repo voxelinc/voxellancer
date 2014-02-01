@@ -13,7 +13,7 @@ class ScreenQuad;
 
 class DefaultRenderPipeline : public RenderPipeline {
 public:
-    DefaultRenderPipeline();
+    DefaultRenderPipeline(Player* player);
 
     virtual void setup() override;
     virtual int bufferCount() override;
@@ -24,5 +24,6 @@ public:
     
 protected:
     std::shared_ptr<ScreenQuad> m_quad;
-    
+    Camera* m_camera;
+    Player* m_player;
 };

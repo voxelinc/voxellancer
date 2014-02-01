@@ -14,9 +14,9 @@
 #include "stereorenderinfo.h"
 
 
-StereoViewEye::StereoViewEye(const Size<int>& viewportResolution, const StereoRenderInfo& stereoRenderInfo, EyeSide side):
+StereoViewEye::StereoViewEye(const glm::ivec2& viewportResolution, const StereoRenderInfo& stereoRenderInfo, EyeSide side):
     m_side(side),
-    m_camera(viewportResolution.width(), viewportResolution.height()),
+    m_camera(viewportResolution.x, viewportResolution.y),
     m_distortionScale(stereoRenderInfo.distortionScale()),
     m_fbo(new FrameBuffer())
 {
@@ -24,7 +24,7 @@ StereoViewEye::StereoViewEye(const Size<int>& viewportResolution, const StereoRe
 
     m_camera.setFovy(stereoRenderInfo.fovy());
 
-    if(m_side == Left) {
+    if(m_side == EyeSide::Left) {
         m_offset = stereoRenderInfo.leftEyeOffset();
         m_camera.setProjectionOffset(stereoRenderInfo.leftEyeProjectionOffset());
     } else {
@@ -47,18 +47,17 @@ void StereoViewEye::draw(Scene* scene, CameraHead* cameraHead) {
     m_fbo->bind();
     m_fbo->clear();
 
-    glViewport(0, 0, m_textureSize.width(), m_textureSize.height());
+    glViewport(0, 0, m_textureSize.x, m_textureSize.y);
 
-    scene->draw(&m_camera, &m_fbo->get(), glm::ivec2(m_textureSize.width(), m_textureSize.height()));
+    scene->draw(&m_camera, &m_fbo->get(), m_side);
 
     m_fbo->unbind();
 }
 
-void StereoViewEye::setViewportResolution(const Size<int>& viewportResolution) {
-    m_textureSize.setWidth(static_cast<int>(viewportResolution.width() * m_distortionScale));
-    m_textureSize.setHeight(static_cast<int>(viewportResolution.height() * m_distortionScale));
+void StereoViewEye::setViewportResolution(const glm::ivec2& viewportResolution) {
+    m_textureSize = glm::vec2(viewportResolution) * m_distortionScale;
 
-    m_camera.setViewport(glm::ivec2(viewportResolution.width(), viewportResolution.height()));
+    m_camera.setViewport(m_textureSize);
 
-    m_fbo->setResolution(glm::ivec2(m_textureSize.width(), m_textureSize.height()));
+    m_fbo->setResolution(m_textureSize);
 }

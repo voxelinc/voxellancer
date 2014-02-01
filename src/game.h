@@ -31,8 +31,8 @@ public:
 
 
 private:
-    InputHandler m_inputHandler;
     Player m_player;
+    InputHandler m_inputHandler;
     Viewer m_viewer;
     GameScene m_gameScene;
     HMDManager m_hmdManager;

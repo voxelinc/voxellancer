@@ -6,6 +6,8 @@
 
 #include <glow/ref_ptr.h>
 
+#include "display/rendering/renderpass.h"
+
 
 namespace glow {
     class Texture;
@@ -17,20 +19,19 @@ namespace glow {
 class Camera;
 class Player;
 
-class Starfield {
+class Starfield : public RenderPass {
 public:
-    Starfield(Player* player, Camera* camera);
+    Starfield(Player* player);
 
-    void draw();
-    void update(float deltaSec);
+    virtual void update(float deltaSec) override;
+    virtual void apply(FrameBuffer& frameBuffer, Camera& camera, EyeSide side) override;
 
 private:
     void createAndSetupShaders();
     void createAndSetupGeometry();
     
-    Camera* m_camera;
     Player* m_player;
-    std::queue<glm::mat4> m_matricesQueue;
+    std::queue<glm::mat4> m_matricesQueue[2];
 
     glow::ref_ptr<glow::Program> m_shaderProgram;
     glow::ref_ptr<glow::VertexArrayObject> m_vertexArrayObject;
