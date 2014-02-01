@@ -143,6 +143,7 @@ int main(int argc, char* argv[]) {
     GLFWwindow* window = glfwGetCurrentContext();
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
+
     setCallbacks(window);
 
     checkVersion();

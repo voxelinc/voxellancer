@@ -33,6 +33,9 @@ StereoViewEye::StereoViewEye(const glm::ivec2& viewportResolution, const StereoR
     }
 }
 
+const Camera& StereoViewEye::camera() const {
+    return m_camera;
+}
 
 StereoViewEye::~StereoViewEye() = default;
 

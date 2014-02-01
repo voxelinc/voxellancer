@@ -9,7 +9,10 @@
 
 #include "ui/inputhandler.h"
 
+#include "gamescenario.h"
+#include "battlescenario.h"
 #include "player.h"
+
 
 class SoundManager;
 
@@ -35,6 +38,7 @@ private:
     InputHandler m_inputHandler;
     Viewer m_viewer;
     GameScene m_gameScene;
+    GameScenario m_scenario;
     HMDManager m_hmdManager;
 };
 

@@ -23,6 +23,8 @@ public:
 
     FrameBuffer& fbo();
 
+    const Camera& camera() const;
+
     void setViewportResolution(const glm::ivec2& viewportResolution);
 
     void draw(Scene* scene, CameraHead* cameraHead);

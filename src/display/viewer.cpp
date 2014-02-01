@@ -19,8 +19,9 @@ Viewer::Viewer(const Viewport& viewport):
     switchToMonoView();
 }
 
-
-Viewer::~Viewer() = default;
+const View& Viewer::view() const {
+    return *m_view.get();
+}
 
 Scene* Viewer::scene() {
     return m_scene;
@@ -60,3 +61,4 @@ void Viewer::draw() {
 void Viewer::update(float deltaSec) {
     m_scene->update(deltaSec);
 }
+

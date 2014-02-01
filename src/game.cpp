@@ -7,13 +7,12 @@
 #include "world/world.h"
 #include "player.h"
 #include "camera/cameradolly.h"
-#include "ui/hud.h"
-#include "battlescenario.h"
+
 
 class Ship;
 
 Game::Game():
-    m_player(),
+    m_player(this),
     m_inputHandler(&m_player),
     m_viewer(Viewport(0, 0, WindowManager::instance()->resolution().width(), WindowManager::instance()->resolution().height())),
     m_gameScene(this, &m_player),
@@ -41,15 +40,10 @@ HMDManager& Game::hmdManager() {
 
 void Game::initialize() {
     assert(m_viewer.scene() == &m_gameScene);
-    GameScenario scenario;
-    //BattleScenario scenario;
-    scenario.populate(this);
+    m_scenario.populate(this);
 }
 
 void Game::update(float deltaSec) {
-    if (deltaSec == 0.0f) {
-        return;
-    }
     deltaSec = glm::min(0.1f, deltaSec);
 
     m_viewer.update(deltaSec);

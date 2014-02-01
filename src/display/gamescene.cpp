@@ -9,7 +9,7 @@
 #include "rendering/renderpipeline.h"
 #include "rendering/blitter.h"
 #include "player.h"
-#include "ui/hud.h"
+#include "ui/hud/hud.h"
 #include "world/world.h"
 #include "skybox.h"
 #include "worldobject/worldobject.h"
