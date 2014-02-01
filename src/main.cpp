@@ -169,7 +169,8 @@ int main(int argc, char* argv[]) {
     glfwSwapInterval(1);
 #endif
 
-    //#define TRYCATCH
+//#define TRYCATCH
+
 #ifdef TRYCATCH
     try {
 #endif
