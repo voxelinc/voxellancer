@@ -119,39 +119,29 @@ void Starfield::createAndSetupShaders() {
 
 
 void Starfield::createAndSetupGeometry() {
-    m_vertexArrayObject = new glow::VertexArrayObject();
-
-    m_starBuffer = new glow::Buffer(GL_ARRAY_BUFFER);
-
     glow::Array<Star> stars;
-
     for (int i = 0; i < STAR_COUNT; i++) {
         stars.push_back(Star{ RandVec3::rand(-FIELD_SIZE, FIELD_SIZE), 0.0f, RandFloat::rand(0.5f, 1.5f) });
     }
+    
+    m_starBuffer = new glow::Buffer(GL_ARRAY_BUFFER);
     m_starBuffer->setData(stars);
 
-    glow::VertexAttributeBinding* binding = m_vertexArrayObject->binding(0);
-    GLint location = m_shaderProgram->getAttributeLocation("v_vertex");
-    binding->setAttribute(location);
-    binding->setBuffer(m_starBuffer, 0, sizeof(Star));
-    binding->setFormat(3, GL_FLOAT, GL_FALSE, offsetof(Star, pos));
-    m_vertexArrayObject->enable(location);
-
-    binding = m_vertexArrayObject->binding(1);
-    location = m_shaderProgram->getAttributeLocation("v_brightness");
-    binding->setAttribute(location);
-    binding->setBuffer(m_starBuffer, 0, sizeof(Star));
-    binding->setFormat(1, GL_FLOAT, GL_FALSE, offsetof(Star, brightness));
-    m_vertexArrayObject->enable(location);
-
-    binding = m_vertexArrayObject->binding(2);
-    location = m_shaderProgram->getAttributeLocation("v_size");
-    binding->setAttribute(location);
-    binding->setBuffer(m_starBuffer, 0, sizeof(Star));
-    binding->setFormat(1, GL_FLOAT, GL_FALSE, offsetof(Star, size));
-    m_vertexArrayObject->enable(location);
-
+    m_vertexArrayObject = new glow::VertexArrayObject();
+    createBinding(0, "v_vertex", offsetof(Star, pos), 3);
+    createBinding(1, "v_brightness", offsetof(Star, brightness), 1);
+    createBinding(1, "v_size", offsetof(Star, size), 1);
 }
+
+void Starfield::createBinding(int index, std::string name, int offset, int size) {
+    glow::VertexAttributeBinding* binding = m_vertexArrayObject->binding(index);
+    GLint location = m_shaderProgram->getAttributeLocation(name);
+    binding->setAttribute(location);
+    binding->setBuffer(m_starBuffer, 0, sizeof(Star));
+    binding->setFormat(size, GL_FLOAT, GL_FALSE, offset);
+    m_vertexArrayObject->enable(location);
+}
+
 
 void Starfield::addLocation(Camera& camera, int side) {
     CameraLocation location = CameraLocation{ m_time, camera.position(), camera.orientation() };

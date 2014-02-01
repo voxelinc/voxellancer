@@ -38,6 +38,8 @@ private:
     void createAndSetupShaders();
     void createAndSetupGeometry();
 
+    void createBinding(int index, std::string name, int offset, int size);
+
     void addLocation(Camera& camera, int side);
     glm::mat4 getMatrixFromPast(Camera& camera, int side);
     void cleanUp(int side);
