@@ -1,11 +1,11 @@
-#version 150
+#version 330
 
 uniform vec4 speed;
 
 in vec2 f_uv;
 in float f_brightness;
 
-out vec4 fragColor;
+layout(location=0) out vec4 fragColor;
 
 void main()
 {

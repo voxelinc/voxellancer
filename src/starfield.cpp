@@ -32,13 +32,17 @@ struct Star {
 
 Starfield::Starfield(Player* player) :
     RenderPass("starfield"),
-    m_player(player)
+    m_player(player),
+    m_time(),
+    m_starfieldAge("vfx.starfieldtime"),
+    m_locations()
 {
     createAndSetupShaders();
     createAndSetupGeometry();
 }
 
 void Starfield::update(float deltaSec) {
+    m_time += deltaSec;
 
     Star* starbuffer = (Star*) m_starBuffer->map(GL_READ_WRITE);
     glm::vec3 position = m_player->playerShip()->transform().position();
@@ -78,10 +82,9 @@ void Starfield::update(float deltaSec) {
 
 void Starfield::apply(FrameBuffer& frameBuffer, Camera& camera, EyeSide eyeside) {
     int side = eyeside == EyeSide::Left ? 0 : 1;
-    m_matricesQueue[side].push(camera.viewProjection());
-    if (m_matricesQueue[side].size() > 2) { // store for the last 2 frames... need to find a framerate independent way
-        m_matricesQueue[side].pop();
-    }
+
+    addLocation(camera, side);
+    cleanUp(side);
 
     glDisable(GL_CULL_FACE);
     glEnable(GL_BLEND); 
@@ -91,7 +94,7 @@ void Starfield::apply(FrameBuffer& frameBuffer, Camera& camera, EyeSide eyeside)
     frameBuffer.setDrawBuffers({ BufferNames::Color, BufferNames::Emissisiveness });
 
     glm::mat4 m1 = camera.viewProjection();
-    glm::mat4 m2 = m_matricesQueue[side].front();
+    glm::mat4 m2 = getMatrixFromPast(camera, side);
 
     m_shaderProgram->setUniform("viewProjection", m1);
     m_shaderProgram->setUniform("oldViewProjection", m2);
@@ -128,25 +131,66 @@ void Starfield::createAndSetupGeometry() {
     m_starBuffer->setData(stars);
 
     glow::VertexAttributeBinding* binding = m_vertexArrayObject->binding(0);
-    GLint location = m_shaderProgram->getAttributeLocation("a_vertex");
+    GLint location = m_shaderProgram->getAttributeLocation("v_vertex");
     binding->setAttribute(location);
     binding->setBuffer(m_starBuffer, 0, sizeof(Star));
     binding->setFormat(3, GL_FLOAT, GL_FALSE, offsetof(Star, pos));
     m_vertexArrayObject->enable(location);
 
     binding = m_vertexArrayObject->binding(1);
-    location = m_shaderProgram->getAttributeLocation("a_brightness");
+    location = m_shaderProgram->getAttributeLocation("v_brightness");
     binding->setAttribute(location);
     binding->setBuffer(m_starBuffer, 0, sizeof(Star));
     binding->setFormat(1, GL_FLOAT, GL_FALSE, offsetof(Star, brightness));
     m_vertexArrayObject->enable(location);
 
     binding = m_vertexArrayObject->binding(2);
-    location = m_shaderProgram->getAttributeLocation("a_size");
+    location = m_shaderProgram->getAttributeLocation("v_size");
     binding->setAttribute(location);
     binding->setBuffer(m_starBuffer, 0, sizeof(Star));
     binding->setFormat(1, GL_FLOAT, GL_FALSE, offsetof(Star, size));
     m_vertexArrayObject->enable(location);
 
+}
+
+void Starfield::addLocation(Camera& camera, int side) {
+    CameraLocation location = CameraLocation{ m_time, camera.position(), camera.orientation() };
+    m_locations.push_back(location);
+}
+
+glm::mat4 Starfield::getMatrixFromPast(Camera& camera, int side) {
+    float past = m_time - m_starfieldAge;
+    
+    CameraLocation before = m_locations.back();
+    CameraLocation after = m_locations.back();
+
+    // find a location before 'past' and after 'past'
+    auto iter = m_locations.rbegin();
+    while (iter->time > past) {
+        before = *iter;
+        iter++;
+        if (iter != m_locations.rend()) {
+            after = *iter;
+        } else {
+            break; // not enough locations yet
+        }
+    }
+
+    float interpolation = 0;
+    if (before.time - after.time > 0) {
+        interpolation = (past - after.time) / (before.time - after.time);
+    }
+    assert(interpolation >= 0 && interpolation <= 1);
+    Camera c(camera);
+    c.setPosition(glm::mix(after.position, before.position, interpolation));
+    c.setOrientation(glm::slerp(after.orientation, before.orientation, interpolation));
+    return c.viewProjection();
+}
+
+void Starfield::cleanUp(int side) {
+    float past = m_time - m_starfieldAge;
+    while (m_locations.size() > 2 && m_locations.at(1).time < past) {
+        m_locations.pop_front();
+    }
 }
 
