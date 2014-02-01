@@ -130,7 +130,7 @@ void Starfield::createAndSetupGeometry() {
     m_vertexArrayObject = new glow::VertexArrayObject();
     createBinding(0, "v_vertex", offsetof(Star, pos), 3);
     createBinding(1, "v_brightness", offsetof(Star, brightness), 1);
-    createBinding(1, "v_size", offsetof(Star, size), 1);
+    createBinding(2, "v_size", offsetof(Star, size), 1);
 }
 
 void Starfield::createBinding(int index, std::string name, int offset, int size) {
