@@ -60,7 +60,6 @@ go_bandit([](){
             PropertyManager::instance()->load("test/property/test.ini");
 
             Property<InputMapping> mapping("mapping.fire");
-            int i = mapping->type();
 
             AssertThat(mapping->type(), Equals(InputType::Keyboard));
             AssertThat(mapping->index(), Equals(5));
