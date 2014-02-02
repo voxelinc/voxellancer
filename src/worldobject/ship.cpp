@@ -51,9 +51,9 @@ void Ship::addHardpointVoxel(HardpointVoxel* voxel) {
     //TODO: Adding the actual Launcher here is wrong, this is test code
     //point = new Hardpoint(this, glm::vec3(voxel->gridCell()), new Gun());
     if (m_hardpoints.size() % 3 == 0) {
-        point = new Hardpoint(this, voxel->gridCell(), new RocketLauncher());
+        point = new Hardpoint(this, voxel->gridCell(), std::make_shared<RocketLauncher>());
     } else {
-        point = new Hardpoint(this, voxel->gridCell(), new Gun());
+        point = new Hardpoint(this, voxel->gridCell(), std::make_shared<Gun>());
     }
     voxel->setHardpoint(point);
     m_hardpoints.push_back(point);
