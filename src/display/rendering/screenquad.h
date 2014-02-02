@@ -20,9 +20,11 @@ public:
 
     void draw();
 
+
 protected:
     glow::ref_ptr<glow::VertexArrayObject> m_vertexArrayObject;
     glow::ref_ptr<glow::Buffer> m_vertexBuffer;
 
     void initialize();
 };
+

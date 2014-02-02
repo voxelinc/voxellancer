@@ -15,7 +15,8 @@ public:
     virtual void update(float deltaSec) = 0;
     virtual void apply(FrameBuffer& frameBuffer, Camera& camera, EyeSide side) = 0;
     const std::string& name() const;
-    
+
+
 protected:
     std::string m_name;
 

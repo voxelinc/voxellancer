@@ -17,7 +17,6 @@
 #include "utils/randvec.h"
 
 
-
 static int STAR_COUNT = 1000;
 static float FIELD_SIZE = 300.0f;
 static float STAR_FADE_IN_SEC = 2.0f;
@@ -77,7 +76,6 @@ void Starfield::update(float deltaSec) {
     m_starBuffer->unmap();
 }
 
-
 void Starfield::apply(FrameBuffer& frameBuffer, Camera& camera, EyeSide eyeside) {
     int side = eyeside == EyeSide::Left ? 0 : 1;
 
@@ -85,7 +83,7 @@ void Starfield::apply(FrameBuffer& frameBuffer, Camera& camera, EyeSide eyeside)
     cleanUp(side);
 
     glDisable(GL_CULL_FACE);
-    glEnable(GL_BLEND); 
+    glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_DEPTH_TEST);
     glDepthMask(GL_FALSE);
@@ -99,16 +97,16 @@ void Starfield::apply(FrameBuffer& frameBuffer, Camera& camera, EyeSide eyeside)
     m_shaderProgram->setUniform("oldViewProjection", m2);
     m_shaderProgram->use();
     m_vertexArrayObject->drawArrays(GL_POINTS, 0, STAR_COUNT);
-    
+
     glDepthMask(GL_TRUE);
     glDisable(GL_BLEND);
     glEnable(GL_CULL_FACE);
 }
 
 void Starfield::createAndSetupShaders() {
-    glow::Shader * vertexShader = glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/starfield/starfield.vert");
-    glow::Shader * geometryShader = glowutils::createShaderFromFile(GL_GEOMETRY_SHADER, "data/starfield/starfield.geo");
-    glow::Shader * fragmentShader = glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/starfield/starfield.frag");
+    glow::Shader* vertexShader = glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/starfield/starfield.vert");
+    glow::Shader* geometryShader = glowutils::createShaderFromFile(GL_GEOMETRY_SHADER, "data/starfield/starfield.geo");
+    glow::Shader* fragmentShader = glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/starfield/starfield.frag");
 
     m_shaderProgram = new glow::Program();
     m_shaderProgram->attach(vertexShader, geometryShader, fragmentShader);
@@ -116,13 +114,12 @@ void Starfield::createAndSetupShaders() {
 
 }
 
-
 void Starfield::createAndSetupGeometry() {
     glow::Array<Star> stars;
     for (int i = 0; i < STAR_COUNT; i++) {
         stars.push_back(Star{ RandVec3::rand(-FIELD_SIZE, FIELD_SIZE), 0.0f, RandFloat::rand(0.5f, 1.5f) });
     }
-    
+
     m_starBuffer = new glow::Buffer(GL_ARRAY_BUFFER);
     m_starBuffer->setData(stars);
 
@@ -141,7 +138,6 @@ void Starfield::createBinding(int index, std::string name, int offset, int size)
     m_vertexArrayObject->enable(location);
 }
 
-
 void Starfield::addLocation(Camera& camera, int side) {
     CameraLocation location = CameraLocation{ m_time, camera.position(), camera.orientation() };
     m_locations[side].push_back(location);
@@ -149,7 +145,7 @@ void Starfield::addLocation(Camera& camera, int side) {
 
 glm::mat4 Starfield::getMatrixFromPast(Camera& camera, int side) {
     float past = m_time - m_starfieldAge;
-    
+
     CameraLocation before = m_locations[side].back();
     CameraLocation after = m_locations[side].back();
 
@@ -170,9 +166,11 @@ glm::mat4 Starfield::getMatrixFromPast(Camera& camera, int side) {
         interpolation = (past - after.time) / (before.time - after.time);
     }
     assert(interpolation >= 0 && interpolation <= 1);
+
     Camera c(camera);
     c.setPosition(glm::mix(after.position, before.position, interpolation));
     c.setOrientation(glm::slerp(after.orientation, before.orientation, interpolation));
+
     return c.viewProjection();
 }
 

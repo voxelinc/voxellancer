@@ -21,9 +21,11 @@ public:
     void addBlurVertical();
     void addBlurHorizontal();
     void addFinalization();
-    
+
+
 protected:
     std::shared_ptr<ScreenQuad> m_quad;
     Camera* m_camera;
     Player* m_player;
 };
+

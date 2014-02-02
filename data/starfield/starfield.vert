@@ -12,10 +12,10 @@ out vec4 g_oldPos;
 out float g_brightness;
 out float g_size;
 
-void main()
-{
+void main() {
     g_brightness = v_brightness;
     g_size = v_size;
     g_pos = viewProjection * vec4(v_vertex, 1.0);
     g_oldPos = oldViewProjection * vec4(v_vertex, 1.0);
 }
+

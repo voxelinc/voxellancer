@@ -6,6 +6,7 @@
 #include "renderpass.h"
 #include "display/eyeside.h"
 
+
 class FrameBuffer;
 class Player;
 class Camera;
@@ -25,7 +26,7 @@ public:
 
     static RenderPipeline* getDefault(Player* player);
 
+
 protected:
     std::vector<std::shared_ptr<RenderPass>> m_passes;
-    
 };

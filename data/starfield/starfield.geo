@@ -18,7 +18,7 @@ void main(void) {
     float size = g_size[0] * sizeFactor;
     vec4 pos = g_pos[0];
     vec4 oldPos = g_oldPos[0];
-    
+
     vec4 dir = pos - oldPos;
     dir += vec4(pos.xy, 0,0)/100;
     dir = normalize(dir) * size;
@@ -39,7 +39,7 @@ void main(void) {
     f_uv = vec2(1,0.5);
     gl_Position = pos + orthogonal;
     EmitVertex();
-    
+
     f_uv = vec2(1,1);
     gl_Position = pos + orthogonal + dir;
     EmitVertex();
@@ -57,7 +57,7 @@ void main(void) {
     f_uv = vec2(1,0.5);
     gl_Position = pos + orthogonal;
     EmitVertex();
-    
+
     f_uv = vec2(1,0.5);
     gl_Position = oldPos + orthogonal;
     EmitVertex();
@@ -75,7 +75,7 @@ void main(void) {
     f_uv = vec2(1,0.5);
     gl_Position = oldPos + orthogonal;
     EmitVertex();
-    
+
     f_uv = vec2(1,0);
     gl_Position = oldPos + orthogonal - dir;
     EmitVertex();

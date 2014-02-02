@@ -19,6 +19,5 @@ public:
     // is called by the viewer
     virtual void activate() = 0;
     virtual void deactivate() = 0;
-    
 };
 

@@ -29,6 +29,7 @@ public:
 
     glow::Texture* texture(int i);
 
+
 protected:
     int m_colorAttachmentCount;
     bool m_useDepthAttachment;

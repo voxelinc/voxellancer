@@ -59,7 +59,7 @@ void GameScene::update(float deltaSec) {
 }
 
 void GameScene::setOutputBuffer(int i) {
-    m_currentOutputBuffer = glm::min(i, m_renderPipeline->bufferCount()-1);
+    m_currentOutputBuffer = glm::min(i, m_renderPipeline->bufferCount() - 1);
 }
 
 void GameScene::drawGame(Camera* camera) {

@@ -28,21 +28,13 @@ public:
     virtual void update(float deltaSec) override;
     virtual void apply(FrameBuffer& frameBuffer, Camera& camera, EyeSide side) override;
 
+
 private:
     struct CameraLocation {
         float time;
         glm::vec3 position;
         glm::quat orientation;
     };
-
-    void createAndSetupShaders();
-    void createAndSetupGeometry();
-
-    void createBinding(int index, std::string name, int offset, int size);
-
-    void addLocation(Camera& camera, int side);
-    glm::mat4 getMatrixFromPast(Camera& camera, int side);
-    void cleanUp(int side);
 
     Player* m_player;
     std::deque<CameraLocation> m_locations[2];
@@ -52,4 +44,14 @@ private:
     glow::ref_ptr<glow::Program> m_shaderProgram;
     glow::ref_ptr<glow::VertexArrayObject> m_vertexArrayObject;
     glow::ref_ptr<glow::Buffer> m_starBuffer;
+
+
+    void createAndSetupShaders();
+    void createAndSetupGeometry();
+
+    void createBinding(int index, std::string name, int offset, int size);
+
+    void addLocation(Camera& camera, int side);
+    glm::mat4 getMatrixFromPast(Camera& camera, int side);
+    void cleanUp(int side);
 };

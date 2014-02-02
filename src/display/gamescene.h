@@ -32,6 +32,7 @@ public:
 
     void setOutputBuffer(int i);
 
+
 protected:
     std::unique_ptr<Blitter> m_blitter;
     std::unique_ptr<RenderPipeline> m_renderPipeline;
@@ -46,6 +47,5 @@ protected:
     int m_currentOutputBuffer;
 
     void drawGame(Camera* camera);
-
 };
 

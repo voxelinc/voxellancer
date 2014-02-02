@@ -2,6 +2,7 @@
 
 #include "geometry/viewport.h"
 
+
 namespace glow {
     class Program;
     class FrameBufferObject;
@@ -22,6 +23,5 @@ public:
 
 protected:
     BlitProgram* m_blitProgram;
-
 };
 
