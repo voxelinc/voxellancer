@@ -18,6 +18,7 @@
 #include "world/helper/worldobjectmodification.h"
 #include "voxel/voxel.h"
 #include "world/god.h"
+#include "sound/soundmanager.h"
 
 
 
@@ -62,8 +63,10 @@ go_bandit([](){
         World *world;
         PropertyManager::instance()->reset();
         PropertyManager::instance()->load("data/config.ini");
+        SoundManager soundManager;
 
         before_each([&]() {
+            soundManager.activate();
             World::reset();
             world = World::instance();
         });
