@@ -30,3 +30,4 @@ bool ObjectInfo::canLockOn(){
 void ObjectInfo::setCanLockOn(bool canLockOn){
     m_canLockOn = canLockOn;
 }
+

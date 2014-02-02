@@ -7,6 +7,7 @@
 #include "property/property.h"
 #include "ai/boardcomputer.h"
 
+
 class World;
 class God;
 class Hardpoint;
@@ -19,18 +20,22 @@ class Ship : public WorldObject {
 public:
     Ship();
     virtual ~Ship();
+
     virtual void update(float deltaSec);
 
     virtual void addHardpointVoxel(HardpointVoxel* voxel);
     void removeHardpoint(Hardpoint* hardpoint);
+    const std::list<Hardpoint*> hardpoints() const;
+
     virtual void addEngineVoxel(EngineVoxel* voxel);
-    
+
     Handle<Ship> shipHandle();
 
     void removeEngine(Engine* engine);
 
     void setTargetObject(WorldObject* target);
     WorldObject* targetObject();
+
     void fireAtPoint(glm::vec3 target);
     void fireAtObject();
     float minAimDistance();
@@ -44,7 +49,8 @@ public:
     void setCharacter(Character* character);
     Character* character();
     void setEngineSound(std::shared_ptr<Sound> sound);
-    
+
+
 protected:
     std::unique_ptr<Character> m_character;
     std::unique_ptr<BoardComputer> m_boardComputer;

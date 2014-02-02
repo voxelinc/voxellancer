@@ -1,19 +1,19 @@
 #include "player.h"
 
-#include "ui/hud.h"
-#include "camera/cameradolly.h"
+#include "utils/aimer.h"
+
 #include "worldobject/ship.h"
 
+#include "game.h"
 
-Player::Player():
-    m_hud(this),
-    m_cameraDolly(),
-    m_playerShip(nullptr)
+
+Player::Player(Game* game):
+    m_game(game),
+    m_playerShip(nullptr),
+    m_hud(this, &game->viewer())
 {
 
 }
-
-Player::~Player() = default;
 
 void Player::move(const glm::vec3& direction) {
     m_acceleration += direction;
@@ -21,6 +21,22 @@ void Player::move(const glm::vec3& direction) {
 
 void Player::rotate(const glm::vec3& direction) {
     m_accelerationAngular += direction;
+}
+
+void Player::fire() {
+    if(playerShip()) {
+        glm::vec3 targetPoint;
+
+        if(m_hud.aimHelper().hovered()) {
+            targetPoint = m_hud.aimHelper().targetPoint();
+        } else {
+            glm::vec3 shootDirection(glm::normalize(m_hud.crossHair().worldPosition() - m_cameraDolly.cameraHead().position()));
+            Ray ray(m_hud.crossHair().worldPosition(), shootDirection);
+            targetPoint = Aimer(playerShip(), ray).aim();
+        }
+
+        playerShip()->fireAtPoint(targetPoint);
+    }
 }
 
 void Player::setShip(Ship* ship) {
@@ -67,6 +83,5 @@ glm::vec3 Player::cameraPosition() {
 glm::quat Player::cameraOrientation() {
     return m_cameraDolly.cameraHead().orientation();
 }
-
 
 

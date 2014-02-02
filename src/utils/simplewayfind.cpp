@@ -14,8 +14,7 @@ glm::vec3 SimpleWayfind::calculateTravelPoint(WorldObject& object, glm::vec3 tar
     bool collideRockets = object.isCollideableWith(CollisionFilterClass::Rocket);
     object.setCollideableWith(CollisionFilterClass::Rocket, false);
 
-    //TODO: use #300
-    Capsule capsule = Capsule(object.transform().position(), targetPoint - object.transform().position(), object.minimalGridSphere().radius() * object.transform().scale());
+    Capsule capsule = Capsule(object.transform().position(), targetPoint - object.transform().position(), object.bounds().sphere().radius());
     std::set<WorldObject*> obstacles = WorldTreeQuery(&World::instance()->worldTree(), &capsule, nullptr, &object).intersectingWorldObjects();
 
     if (!obstacles.empty()) {
@@ -46,9 +45,8 @@ glm::vec3 SimpleWayfind::calculateEvasionPointFor(WorldObject& self, WorldObject
     glm::vec3 evasionDirection = calculateEvasionDirectionFor(self, obstacle, targetPoint);
     // Set the evasion point a bit afar so we aim for a safe distance.
     // We will not actually get that far because the line of sight will most likely be free earlier
-    //TODO: replace radius*scale with bounds accessor (#300)
-    float evasionDistance = (obstacle.minimalGridSphere().radius() * obstacle.transform().scale() 
-        + self.minimalGridSphere().radius() * self.transform().scale()) * 2.f;
+    float evasionDistance = (obstacle.bounds().sphere().radius()
+        + self.bounds().sphere().radius()) * 2.f;
     return obstacle.transform().position() + evasionDirection * evasionDistance;
 }
 

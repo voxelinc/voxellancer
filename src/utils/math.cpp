@@ -10,3 +10,4 @@ uint32_t Math::nextPowerOf2(uint32_t v) {
     v++;
     return v;
 }
+

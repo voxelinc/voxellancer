@@ -12,14 +12,21 @@ RocketLauncher::RocketLauncher() :
     Weapon::setCoolDownTime(m_cooldownTime);
 }
 
-AimType RocketLauncher::aimType(){
+AimType RocketLauncher::aimType() {
     return Object;
+}
+
+float RocketLauncher::bulletSpeed() const {
+    return m_speed;
+}
+
+float RocketLauncher::range() {
+    return m_range;
 }
 
 void RocketLauncher::update(float deltaSec) {
     Weapon::update(deltaSec);
 }
-
 
 void RocketLauncher::shootAtObject(Hardpoint* source, WorldObject* target){
     if (canFire()) {
@@ -29,8 +36,3 @@ void RocketLauncher::shootAtObject(Hardpoint* source, WorldObject* target){
         fired();
     }
 }
-
-float RocketLauncher::range(){
-    return m_range;
-}
-

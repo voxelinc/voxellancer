@@ -6,6 +6,8 @@
 
 #include <glm/glm.hpp>
 
+#include "property/property.h"
+
 
 class StereoRenderInfo {
 public:
@@ -58,6 +60,7 @@ protected:
     std::vector<float> m_distortionKs;
     float m_distortionScale;
     float m_fovy;
+    Property<float> m_eyeZOffset;
 
     float projectionCenterOffset() const;
 };

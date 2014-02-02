@@ -131,11 +131,11 @@ void FightTask::updateState() {
 }
 
 float FightTask::targetDistance() {
-    return glm::length(m_ship.transform().position() - m_primaryTarget->transform().position()) - m_ship.minimalGridSphere().radius() * m_ship.transform().scale() - m_primaryTarget->minimalGridSphere().radius() * m_primaryTarget->transform().scale();
+    return glm::length(m_ship.transform().position() - m_primaryTarget->transform().position()) - m_ship.bounds().minimalGridSphere().radius() * m_ship.transform().scale() - m_primaryTarget->bounds().minimalGridSphere().radius() * m_primaryTarget->transform().scale();
 }
 
 float FightTask::pointDistance(glm::vec3 point) {
-    return glm::length(m_ship.transform().position() - point) - m_ship.minimalGridSphere().radius() * m_ship.transform().scale();
+    return glm::length(m_ship.transform().position() - point) - m_ship.bounds().minimalGridSphere().radius() * m_ship.transform().scale();
 }
 
 glm::vec3 FightTask::findRandomEvasionPoint() {

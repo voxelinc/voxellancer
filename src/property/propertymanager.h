@@ -27,30 +27,31 @@ public:
     void load(std::string file);
 
     template <class T>
-    void registerProperty(Property<T> *prop);
+    void registerProperty(Property<T>* prop);
 
     template <class T>
-    void unregisterProperty(Property<T> *prop);
+    void unregisterProperty(Property<T>* prop);
 
-    static PropertyManager * instance();
+    static PropertyManager* instance();
     static void reset();
 
     template <class T>
-    T get(char * name);
+    T get(const char* name);
 
-private:
+
+protected:
     template <class T>
-    PropertyCollection<T> *getPropertyCollection(Property<T> * prop);
+    PropertyCollection<T>* getPropertyCollection(Property<T>* prop);
 
-    PropertyCollection<float> *m_floatProperties;
-    PropertyCollection<int> *m_intProperties;
-    PropertyCollection<char> *m_charProperties;
-    PropertyCollection<bool> *m_boolProperties;
-    PropertyCollection<std::string> *m_stringProperties;
-    PropertyCollection<glm::vec3> *m_vec3Properties;
-    PropertyCollection<InputMapping> *m_inputMappingProperties;
+    PropertyCollection<float>* m_floatProperties;
+    PropertyCollection<int>* m_intProperties;
+    PropertyCollection<char>* m_charProperties;
+    PropertyCollection<bool>* m_boolProperties;
+    PropertyCollection<std::string>* m_stringProperties;
+    PropertyCollection<glm::vec3>* m_vec3Properties;
+    PropertyCollection<InputMapping>* m_inputMappingProperties;
 
-    static PropertyManager * s_instance;
+    static PropertyManager* s_instance;
 };
 
 #include "propertymanager.inl"

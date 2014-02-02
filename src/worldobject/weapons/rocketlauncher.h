@@ -8,9 +8,11 @@ public:
     RocketLauncher();
 
     virtual AimType aimType() override;
+    virtual float bulletSpeed() const override;
+    virtual float range() override;
+
     virtual void shootAtObject(Hardpoint* source, WorldObject* target) override;
     virtual void update(float deltaSec) override;
-    virtual float range() override;
 
 private:
     Property<float> m_range;

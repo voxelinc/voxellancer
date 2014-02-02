@@ -18,12 +18,12 @@ Camera::~Camera(){
 
 }
 
-void Camera::viewDirty(){
+void Camera::viewDirty() {
     m_view = glm::mat4_cast(glm::inverse(m_orientation)) * glm::translate(-m_position);
     m_viewProjection = m_projection * m_view;
 } 
 
-void Camera::projectionDirty(){
+void Camera::projectionDirty() {
     m_projection = glm::perspective(m_fovy, m_aspect, m_zNear, m_zFar);
     m_projection = glm::translate(m_projectionOffset) * m_projection;
     m_viewProjection = m_projection * m_view;

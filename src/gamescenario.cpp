@@ -19,13 +19,16 @@
 #include "voxel/voxel.h"
 #include "world/god.h"
 
-GameScenario::GameScenario() {
 
+GameScenario::GameScenario():
+    m_normandy(nullptr),
+    m_aimTester(nullptr)
+{
 }
 
 void GameScenario::populate(Game* game) {
     glowutils::AutoTimer t("Initialize Game");
-    
+
     glow::debug("create world");
     World* world = World::instance();
 
@@ -49,20 +52,20 @@ void GameScenario::populate(Game* game) {
         follower->setPosition(glm::vec3(100 * (-member_count / 2.0f + i), 50, 0));
         follower->objectInfo().setName("member");
         follower->objectInfo().setShowOnHud(true);
-        normandy->objectInfo().setCanLockOn(true);
+        follower->objectInfo().setCanLockOn(true);
         world->god().scheduleSpawn(follower);
         PatrolWaypointsTask* ta = new PatrolWaypointsTask(*follower,
             std::list<glm::vec3>{ glm::vec3(400, 0, 200), glm::vec3(-400, 0, -400), glm::vec3(-600, 0, -400), glm::vec3(0, 100, -600), glm::vec3(-100, 150, -900) });
         follower->setCharacter(new DummyCharacter(*follower, ta));
         follower->formationLogic()->joinFormation(normandy);
     }
-
-
+    
     Ship *follower = new Ship();
     ClusterCache::instance()->fillObject(follower, "data/voxelcluster/basicship.csv");
     follower->setPosition(glm::vec3(100, 0, -50));
     follower->objectInfo().setName("follower");
     follower->objectInfo().setShowOnHud(true);
+    follower->objectInfo().setCanLockOn(true);
     world->god().scheduleSpawn(follower);
     FlyToTask* task = new FlyToTask(*follower);
     task->setTargetPoint(glm::vec3(-100, 0, -50));
@@ -74,6 +77,16 @@ void GameScenario::populate(Game* game) {
     testCluster->objectInfo().setName("basicship");
     testCluster->objectInfo().setShowOnHud(false);
     world->god().scheduleSpawn(testCluster);
+
+    Ship* aimTester = new Ship();
+    ClusterCache::instance()->fillObject(aimTester, "data/voxelcluster/basicship.csv");
+    aimTester->setPosition(glm::vec3(10, 0, -20));
+    aimTester->rotate(glm::quat(glm::vec3(10, 0,0)));
+    aimTester->objectInfo().setName("aimTester");
+    aimTester->objectInfo().setShowOnHud(true);
+    aimTester->objectInfo().setCanLockOn(true);
+    world->god().scheduleSpawn(aimTester);
+    m_aimTester = aimTester->shipHandle();
 
     game->player().setShip(testCluster);
     testCluster->setCollideableWith(CollisionFilterClass::Rocket, false);
@@ -137,3 +150,17 @@ void GameScenario::populate(Game* game) {
     glow::debug("Initial spawn");
     world->god().spawn();
 }
+
+void GameScenario::update(float deltaSec) {
+    if(m_normandy.get()) {
+        Ship* normandy = m_normandy.get();
+        normandy->accelerate(glm::vec3(0, 0, -0.3f));
+        normandy->accelerateAngular(glm::vec3(0.1f, 0.05f, 0.0f));
+    }
+    if(m_aimTester.get()) {
+        Ship* aimTester = m_aimTester.get();
+        aimTester->accelerate(glm::vec3(0, 0, -0.4f));
+        aimTester->accelerateAngular(glm::vec3(0.0f, 0.0f, 0.4f));
+    }
+}
+

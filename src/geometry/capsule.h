@@ -6,7 +6,7 @@
 
 
 class Sphere;
-class WorldTransform;
+class Transform;
 template<typename T> class TAABB;
 
 class Capsule : public AbstractShape {

@@ -31,8 +31,6 @@ Ship::~Ship() {
     m_shipHandle.invalidate();
 }
 
-
-
 void Ship::update(float deltaSec) {
     m_character->update(deltaSec);
     for(Hardpoint *hardpoint : m_hardpoints) {
@@ -66,6 +64,10 @@ void Ship::addHardpointVoxel(HardpointVoxel* voxel) {
 
 void Ship::removeHardpoint(Hardpoint *hardpoint) {
     m_hardpoints.remove(hardpoint);
+}
+
+const std::list<Hardpoint*> Ship::hardpoints() const {
+    return m_hardpoints;
 }
 
 void Ship::addEngineVoxel(EngineVoxel* voxel) {

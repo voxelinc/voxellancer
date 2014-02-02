@@ -133,3 +133,4 @@ bool WorldObject::scheduledForDeletion() {
 void WorldObject::onScheduleForDeletion() {
     m_scheduledForDeletion = true;
 }
+

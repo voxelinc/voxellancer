@@ -57,7 +57,7 @@ void WindowManager::setFullScreenResolution(int monitorIndex) {
     GLFWmonitor* monitor;
 
     if(monitorIndex >= monitors.size()) {
-        glow::info("Using primary monitors since specified monitor is not available");
+        glow::info("Using primary monitor since specified monitor is not available");
         monitor = glfwGetPrimaryMonitor();
     }
     else {
