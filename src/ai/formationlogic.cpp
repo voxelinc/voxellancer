@@ -107,13 +107,13 @@ glm::vec3 FormationLogic::formationPositionFor(FormationLogic* member) {
             distance += 2 * m_members[i]->ship()->minimalGridSphere().radius() * m_members[i]->ship()->transform().scale() + 10;
         }
         distance += member->ship()->minimalGridSphere().radius() * member->ship()->transform().scale() + 10;
-        return m_ship.transform().position() + m_ship.transform().orientation() * (distance * glm::normalize(glm::vec3(1, 0, 1)));
+        return m_ship.transform().position() + m_ship.physics().speed() + m_ship.transform().orientation() * (distance * glm::normalize(glm::vec3(1, 0, 1)));
     } else { // left wing
         float distance = m_ship.minimalGridSphere().radius() * m_ship.transform().scale(); //TODO #300
         for (int i = 1; i < position; i += 2) {
             distance += 2 * m_members[i]->ship()->minimalGridSphere().radius() * m_members[i]->ship()->transform().scale() + 10;
         }
         distance += member->ship()->minimalGridSphere().radius() * member->ship()->transform().scale() + 10;
-        return m_ship.transform().position() + m_ship.transform().orientation() * (distance * glm::normalize(glm::vec3(-1, 0, 1)));
+        return m_ship.transform().position() + m_ship.physics().speed() + m_ship.transform().orientation() * (distance * glm::normalize(glm::vec3(-1, 0, 1)));
     }
 }
