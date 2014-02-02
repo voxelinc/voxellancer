@@ -7,10 +7,14 @@ FormationMemberTask::FormationMemberTask(Ship& ship, Ship* leader) :
     AiTask(ship),
     m_flyTask(ship)
 {
-    ship.formationLogic()->joinFormation(leader);
+    if (leader) {
+        ship.formationLogic()->joinFormation(leader);
+    }
 }
 
 void FormationMemberTask::update(float deltaSec) {
-    m_flyTask.setTargetPoint(m_ship.formationLogic()->formationPosition());
-    m_flyTask.update(deltaSec);
+    if (m_ship.formationLogic()->inFormation()) {
+        m_flyTask.setTargetPoint(m_ship.formationLogic()->formationPosition());
+        m_flyTask.update(deltaSec);
+    }
 }

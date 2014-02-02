@@ -15,6 +15,7 @@ public:
     Ship* ship();
     
     void joinFormation(Ship* leader);
+    void joinFormation(FormationLogic* leader);
     void leaveFormation();
 
     glm::vec3 formationPosition();

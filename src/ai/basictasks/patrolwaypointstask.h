@@ -7,6 +7,7 @@
 #include "glm/glm.hpp"
 
 #include "ai/basictasks/flytotask.h"
+#include "ai/basictasks/formationmembertask.h"
 
 
 class Ship;
@@ -19,6 +20,7 @@ public:
 
 protected:
     FlyToTask m_flyTask;
+    FormationMemberTask m_formationTask;
     std::list<glm::vec3> m_points;
     std::list<glm::vec3>::iterator m_currentPoint;
 };

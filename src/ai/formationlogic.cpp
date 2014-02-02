@@ -1,6 +1,7 @@
 #include "formationlogic.h"
 
 #include "worldobject/ship.h"
+#include "ai/character.h"
 
 FormationLogic::FormationLogic(Ship& ship) :
     m_ship(ship),
@@ -18,9 +19,15 @@ Ship* FormationLogic::ship() {
 }
 
 void FormationLogic::joinFormation(Ship* leader) {
+    assert(leader);
+    joinFormation(leader->formationLogic());
+}
+
+void FormationLogic::joinFormation(FormationLogic* leader) {
     assert(m_leader == nullptr);
     assert(leader);
-    m_leader = leader->formationLogic();
+    assert(leader != this);
+    m_leader = leader;
     m_leader->onMemberJoin(this);
 }
 
@@ -44,14 +51,41 @@ void FormationLogic::onDestruction() {
         leaveFormation();
     }
     if (!m_members.empty()) {
-        //TODO: designate new leader
-        assert(false);
+        std::list<FormationLogic*> newmembers;
+
+        // choose new leader
+        FormationLogic* newleader = nullptr;
+        float leadermass = 0;
+        for (FormationLogic* member : m_members) {
+            float membermass = member->ship()->physics().mass();
+            if (!newleader || membermass > leadermass) {
+                if (newleader) {
+                    newmembers.push_back(newleader);
+                }
+                newleader = member;
+                leadermass = newleader->ship()->physics().mass();
+            } else {
+                newmembers.push_back(member);
+            }
+        }
+        
+        // break up formation
+        newleader->leaveFormation();
+        for (FormationLogic* member : newmembers) {
+            member->leaveFormation();
+        }
+
+        // assign everyone to new leader
+        for (FormationLogic* member : newmembers) {
+            if (member != newleader) {
+                member->joinFormation(newleader);
+            }
+        }
     }
 }
 
 void FormationLogic::onMemberJoin(FormationLogic* member) {
     assert(m_leader == nullptr); // no stacking of formations
-    //m_members.insert(std::pair<FormationLogic*,int>(member, m_members.size()));
     m_members.push_back(member);
 }
 

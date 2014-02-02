@@ -13,7 +13,7 @@ class Ship;
 
 class FormationMemberTask : public AiTask {
 public:
-    FormationMemberTask(Ship& ship, Ship* leader);
+    FormationMemberTask(Ship& ship, Ship* leader = nullptr);
 
     virtual void update(float deltaSec) override;
 

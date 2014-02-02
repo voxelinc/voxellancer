@@ -8,6 +8,7 @@
 #include "ai/basictasks/flytotask.h"
 #include "ai/basictasks/patrolwaypointstask.h"
 #include "ai/basictasks/formationmembertask.h"
+#include "ai/formationlogic.h"
 
 #include "resource/clustercache.h"
 
@@ -30,7 +31,7 @@ void GameScenario::populate(Game* game) {
 
     glow::debug("Create WorldObjects");
     Ship *normandy = new Ship();
-    ClusterCache::instance()->fillObject(normandy, "data/voxelcluster/normandy.csv");
+    ClusterCache::instance()->fillObject(normandy, "data/voxelcluster/basicship.csv");
     normandy->setPosition(glm::vec3(0, 0, -100));
     normandy->objectInfo().setName("Normandy");
     normandy->objectInfo().setShowOnHud(true);
@@ -50,8 +51,10 @@ void GameScenario::populate(Game* game) {
         follower->objectInfo().setShowOnHud(true);
         normandy->objectInfo().setCanLockOn(true);
         world->god().scheduleSpawn(follower);
-        FormationMemberTask* task = new FormationMemberTask(*follower, normandy);
-        follower->setCharacter(new DummyCharacter(*follower, task));
+        PatrolWaypointsTask* ta = new PatrolWaypointsTask(*follower,
+            std::list<glm::vec3>{ glm::vec3(400, 0, 200), glm::vec3(-400, 0, -400), glm::vec3(-600, 0, -400), glm::vec3(0, 100, -600), glm::vec3(-100, 150, -900) });
+        follower->setCharacter(new DummyCharacter(*follower, ta));
+        follower->formationLogic()->joinFormation(normandy);
     }
 
 
