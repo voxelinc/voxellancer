@@ -25,7 +25,7 @@ void DirectSuicideTask::update(float deltaSec) {
         if (angle < glm::radians(15.0f)) {
             m_ship.boardComputer()->moveTo(targetPoint, false);
         } else {
-            m_ship.boardComputer()->moveTo(m_ship.transform().position() + m_ship.transform().orientation() * (glm::vec3(0, 0, -50)), true);
+            m_ship.boardComputer()->moveTo(m_ship.transform().position() + m_ship.transform().orientation() * (glm::vec3(0, 0, -70)), true);
         }
     } else {
         m_ship.boardComputer()->moveTo(m_ship.transform().position() + m_ship.transform().orientation() * (glm::vec3(0, 0, -100)), false);

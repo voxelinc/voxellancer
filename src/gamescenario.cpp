@@ -20,7 +20,7 @@
 #include "world/god.h"
 
 
-GameScenario::GameScenario():
+GameScenario::GameScenario() :
     m_normandy(nullptr),
     m_aimTester(nullptr)
 {
@@ -34,22 +34,22 @@ void GameScenario::populate(Game* game) {
 
     glow::debug("Create WorldObjects");
     Ship *normandy = new Ship();
-    ClusterCache::instance()->fillObject(normandy, "data/voxelcluster/basicship.csv");
+    ClusterCache::instance()->fillObject(normandy, "data/voxelcluster/normandy.csv");
     normandy->setPosition(glm::vec3(0, 0, -100));
     normandy->objectInfo().setName("Normandy");
     normandy->objectInfo().setShowOnHud(true);
     normandy->objectInfo().setCanLockOn(true);
     normandy->setEngineSound(SoundManager::current()->create("data/sound/Rocket Thrusters.ogg"));
     world->god().scheduleSpawn(normandy);
-    PatrolWaypointsTask* ta = new PatrolWaypointsTask(*normandy,
+    PatrolWaypointsTask* ntask = new PatrolWaypointsTask(*normandy,
         std::list<glm::vec3>{ glm::vec3(400, 0, 200), glm::vec3(-400, 0, -400), glm::vec3(-600, 0, -400), glm::vec3(0, 100, -600), glm::vec3(-100, 150, -900) });
-    normandy->setCharacter(new DummyCharacter(*normandy, ta));
+    normandy->setCharacter(new DummyCharacter(*normandy, ntask));
 
-    int member_count = 4;
-    for (int i = 0; i < member_count; i++) {
+    int nmember_count = 4;
+    for (int i = 0; i < nmember_count; i++) {
         Ship *follower = new Ship();
         ClusterCache::instance()->fillObject(follower, "data/voxelcluster/basicship.csv");
-        follower->setPosition(glm::vec3(100 * (-member_count / 2.0f + i), 50, 0));
+        follower->setPosition(glm::vec3(100 * (-nmember_count / 2.0f + i), 50, 0));
         follower->objectInfo().setName("member");
         follower->objectInfo().setShowOnHud(true);
         follower->objectInfo().setCanLockOn(true);
@@ -59,17 +59,34 @@ void GameScenario::populate(Game* game) {
         follower->setCharacter(new DummyCharacter(*follower, ta));
         follower->formationLogic()->joinFormation(normandy);
     }
-    
-    Ship *follower = new Ship();
-    ClusterCache::instance()->fillObject(follower, "data/voxelcluster/basicship.csv");
-    follower->setPosition(glm::vec3(100, 0, -50));
-    follower->objectInfo().setName("follower");
-    follower->objectInfo().setShowOnHud(true);
-    follower->objectInfo().setCanLockOn(true);
-    world->god().scheduleSpawn(follower);
-    FlyToTask* task = new FlyToTask(*follower);
-    task->setTargetPoint(glm::vec3(-100, 0, -50));
-    follower->setCharacter(new DummyCharacter(*follower, task));
+
+
+
+    Ship *leader = new Ship();
+    ClusterCache::instance()->fillObject(leader, "data/voxelcluster/eagle.csv");
+    leader->setPosition(glm::vec3(0, 200, -100));
+    leader->objectInfo().setName("leader");
+    leader->objectInfo().setShowOnHud(true);
+    leader->objectInfo().setCanLockOn(true);
+    world->god().scheduleSpawn(leader);
+    PatrolWaypointsTask* ltask = new PatrolWaypointsTask(*leader,
+        std::list<glm::vec3>{ glm::vec3(500, 0, 500), glm::vec3(-500, 0, 500), glm::vec3(-500, 0, -500), glm::vec3(500, 0, -500) });
+    leader->setCharacter(new DummyCharacter(*leader, ltask));
+
+    int lmember_count = 2;
+    for (int i = 0; i < lmember_count; i++) {
+        Ship *follower = new Ship();
+        ClusterCache::instance()->fillObject(follower, "data/voxelcluster/basicship.csv");
+        follower->setPosition(glm::vec3(100 * (-lmember_count / 2.0f + i), 200, 0));
+        follower->objectInfo().setName("member");
+        follower->objectInfo().setShowOnHud(true);
+        follower->objectInfo().setCanLockOn(true);
+        world->god().scheduleSpawn(follower);
+        PatrolWaypointsTask* ta = new PatrolWaypointsTask(*follower,
+            std::list<glm::vec3>{ glm::vec3(500, 0, 500), glm::vec3(-500, 0, 500), glm::vec3(-500, 0, -500), glm::vec3(500, 0, -500) });
+        follower->setCharacter(new DummyCharacter(*follower, ta));
+        follower->formationLogic()->joinFormation(leader);
+    }
 
     Ship *testCluster = new Ship();
     ClusterCache::instance()->fillObject(testCluster, "data/voxelcluster/basicship.csv");
@@ -77,17 +94,6 @@ void GameScenario::populate(Game* game) {
     testCluster->objectInfo().setName("basicship");
     testCluster->objectInfo().setShowOnHud(false);
     world->god().scheduleSpawn(testCluster);
-
-    Ship* aimTester = new Ship();
-    ClusterCache::instance()->fillObject(aimTester, "data/voxelcluster/basicship.csv");
-    aimTester->setPosition(glm::vec3(10, 0, -20));
-    aimTester->rotate(glm::quat(glm::vec3(10, 0,0)));
-    aimTester->objectInfo().setName("aimTester");
-    aimTester->objectInfo().setShowOnHud(true);
-    aimTester->objectInfo().setCanLockOn(true);
-    world->god().scheduleSpawn(aimTester);
-    m_aimTester = aimTester->shipHandle();
-
     game->player().setShip(testCluster);
     testCluster->setCollideableWith(CollisionFilterClass::Rocket, false);
 

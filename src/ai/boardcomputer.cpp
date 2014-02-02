@@ -33,7 +33,7 @@ void BoardComputer::moveTo(const glm::vec3& position, bool deaccelerate) {
                 // the projection is already past the target, but we don't want to deaccelerate
                 // instead, project the target from our current position to a sphere around our position
                 float projectionDistance = glm::length(projectedPosition - currentPosition);
-                glm::vec3 fakePosition = currentPosition + glm::normalize(position - currentPosition) * 2.0f * projectionDistance;
+                glm::vec3 fakePosition = currentPosition + glm::normalize(position - currentPosition) * 1.5f * projectionDistance;
 
                 delta = fakePosition - projectedPosition;
             }
