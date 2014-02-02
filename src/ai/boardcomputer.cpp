@@ -22,11 +22,11 @@ void BoardComputer::moveTo(const glm::vec3& position) {
     glm::vec3 projectedPosition = m_ship.physics().projectedTransformIn(1.0f).position();
 
     glm::vec3 delta = position - projectedPosition;
-    glm::vec3 direction = glm::inverse(m_ship.transform().orientation()) * glm::normalize(delta);
+    glm::vec3 localDirection = glm::inverse(m_ship.transform().orientation()) * glm::normalize(delta);
     float distance = glm::length(delta);
 
-    if (distance > s_minActDistance) {
-        setDirectionalAcceleration(direction);
+    if (distance >= s_minActDistance) {
+        m_engineState.setDirectional(localDirection);
     }
 }
 
@@ -40,7 +40,7 @@ void BoardComputer::rotateTo(const glm::vec3& position, const glm::vec3& up) {
     if (glm::abs(glm::angle(rotation)) > s_minActAngle) {
         glm::vec3 euler = glm::eulerAngles(rotation);
 
-        setAngularAcceleration(glm::normalize(euler));
+        m_engineState.setAngular(glm::normalize(euler));
     }
 
     if (up != glm::vec3(0, 0, 0)){
@@ -48,7 +48,6 @@ void BoardComputer::rotateTo(const glm::vec3& position, const glm::vec3& up) {
     } else {
         rotateUpAuto(rotation);
     }
-
 }
 
 void BoardComputer::rotateUpTo(const glm::vec3& up) {
@@ -57,7 +56,7 @@ void BoardComputer::rotateUpTo(const glm::vec3& up) {
     glm::quat upRotation = GeometryHelper::quatFromTo(upDirection, newUpDirection);
     glm::vec3 euler = glm::eulerAngles(upRotation);
 
-    setAngularAcceleration(glm::normalize(euler));
+    m_engineState.setAngular(glm::normalize(euler));
 }
 
 void BoardComputer::rotateUpAuto(const glm::quat& rotation) {
@@ -68,7 +67,7 @@ void BoardComputer::rotateUpAuto(const glm::quat& rotation) {
         glm::quat upRotation = GeometryHelper::quatFromTo(upDirection, newUpDirection);
         glm::vec3 euler = glm::eulerAngles(upRotation);
 
-        setAngularAcceleration(glm::normalize(euler));
+        m_engineState.setAngular(glm::normalize(euler));
     }
 }
 
@@ -96,15 +95,6 @@ void BoardComputer::shootRockets(Handle<WorldObject> target) {
     }
 }
 
-void BoardComputer::setDirectionalAcceleration(const glm::vec3& directional) {
-    EngineState engineState = m_ship.components().engineState();
-    engineState.setDirectional(directional);
-    m_ship.components().setEngineState(engineState);
+void BoardComputer::update(float deltaSec) {
+    m_ship.components().setEngineState(m_engineState);
 }
-
-void BoardComputer::setAngularAcceleration(const glm::vec3& angular) {
-    EngineState engineState = m_ship.components().engineState();
-    engineState.setAngular(angular);
-    m_ship.components().setEngineState(engineState);
-}
-

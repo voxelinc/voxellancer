@@ -38,10 +38,9 @@ void BulletSpawnHelper::setupBullet() {
     if (bulletUp != glm::vec3(0)) {
         glm::vec3 rotationAxis = glm::normalize(bulletUp);
         float angle = GeometryHelper::angleBetween(bulletDirection, hardpointDirection);
-        glm::quat orientation = glm::angleAxis(-angle, rotationAxis);
-        bulletTransform.rotateWorld(orientation); //then rotate towards target
+        glm::quat bulletOrientation = glm::angleAxis(-angle, rotationAxis);
+        bulletTransform.rotateWorld(bulletOrientation); //then rotate towards target
     }
-
 
     //TODO: #300
     float bulletLength = m_bullet->minimalGridAABB().extent(ZAxis) * m_bullet->transform().scale();
@@ -50,8 +49,10 @@ void BulletSpawnHelper::setupBullet() {
 
     m_bullet->setTransform(bulletTransform);
 
-
-    m_bullet->physics().setSpeed(Speed(bulletDirection * m_bulletSpeed, glm::vec3(0.0f, 0.0f, 5.0f)));
+    m_bullet->physics().setSpeed(Speed(
+        bulletDirection * m_bulletSpeed,
+        bulletTransform.orientation() * glm::vec3(0, 0, 5.0f)
+    ));
 }
 
 

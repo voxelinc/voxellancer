@@ -61,7 +61,7 @@ const Transform Physics::projectedTransformIn(float deltaSec){
     Transform targetTransform(m_worldObject.transform());
 
     targetTransform.moveWorld(m_speed.directional() * deltaSec);
-    targetTransform.rotate(glm::quat(m_speed.angular() * deltaSec));
+    targetTransform.rotateWorld(glm::quat(m_speed.angular() * deltaSec));
 
     return targetTransform;
 }

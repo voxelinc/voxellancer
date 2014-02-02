@@ -50,7 +50,7 @@ void WorldObject::update(float deltaSec) {
 
     Acceleration globalAcceleration(
         m_transform.orientation() * localAcceleration.directional(),
-        localAcceleration.angular()
+        m_transform.orientation() * localAcceleration.angular()
     );
 
     m_physics.setAcceleration(globalAcceleration);

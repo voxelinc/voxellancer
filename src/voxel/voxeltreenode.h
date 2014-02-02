@@ -8,10 +8,11 @@
 #include "geometry/sphere.h"
 #include "geometry/ray.h"
 #include "geometry/grid3daabb.h"
+#include "geometry/transform.h"
 
 #include "voxel/voxel.h"
 
-#include "geometry/transform.h"
+
 
 
 class VoxelTree;

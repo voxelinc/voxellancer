@@ -19,6 +19,7 @@
 #include "worldobject/components/hardpoint.h"
 #include "worldobject/components/weapons/gun.h"
 #include "worldobject/components/engines/enginemk1.h"
+#include "worldobject/components/engines/piratethruster.h"
 #include "sound/soundmanager.h"
 #include "game.h"
 #include "world/world.h"
@@ -35,25 +36,35 @@ void GameScenario::populate(Game* game) {
     WorldObjectEquipmentFactory equipmentFactory;
 
     WorldObjectFactory worldObjectFactory;
+    Ship *ship;
 
     glow::debug("Create world");
     World* world = World::instance();
 
     Ship *playerShip = worldObjectFactory.build<Ship>("basicship");
-    playerShip->transform().setPosition(glm::vec3(0, 0, 0));
+    playerShip->transform().setPosition(glm::vec3(0, 0, 50));
 
     playerShip->components().hardpoint(0)->setWeapon(new Gun());
     playerShip->components().hardpoint(1)->setWeapon(new Gun());
 
-    playerShip->components().engineSlot(0)->setEngine(new EngineMK1());
+    playerShip->components().engineSlot(0)->setEngine(new PirateThruster());
 
     game->player().setShip(playerShip);
 
     world->god().scheduleSpawn(playerShip);
 
-    Ship *ship = worldObjectFactory.build<Ship>("basicship");
-    ship->transform().setPosition(glm::vec3(0, 0, -10));
+    ship = worldObjectFactory.build<Ship>("basicship");
+    ship->transform().setPosition(glm::vec3(0, 0, 0));
+    ship->components().engineSlot(0)->setEngine(new PirateThruster());
+    PatrolWaypointsTask* ta = new PatrolWaypointsTask(
+        *ship,
+        std::list<glm::vec3>{ glm::vec3(0, 0, 0), glm::vec3(-400, 0, 0), glm::vec3(-400, 200, 390) });
+    ship->setCharacter(
+        new DummyCharacter(*ship, ta)
+        );
     world->god().scheduleSpawn(ship);
+
+
 
     glow::debug("Initial spawn");
     world->god().spawn();

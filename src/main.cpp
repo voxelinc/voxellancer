@@ -139,6 +139,20 @@ static void mainloop() {
     }
 }
 
+static void loadWorldObjectConfigs() {
+    PropertyManager::instance()->load("data/worldobjects/basicship.ini", "basicship");
+    PropertyManager::instance()->load("data/worldobjects/normandy.ini", "normandy");
+    PropertyManager::instance()->load("data/worldobjects/gunbullet.ini", "gunbullet");
+    PropertyManager::instance()->load("data/worldobjects/torpedo.ini", "torpedo");
+}
+
+static void loadEquipmentConfigs() {
+    PropertyManager::instance()->load("data/equipment/engines/enginemk1.ini", "enginemk1");
+    PropertyManager::instance()->load("data/equipment/engines/piratethruster.ini", "piratethruster");
+    PropertyManager::instance()->load("data/equipment/weapons/gun.ini", "gun");
+    PropertyManager::instance()->load("data/equipment/weapons/torpedolauncher.ini", "torpedolauncher");
+}
+
 int main(int argc, char* argv[]) {
     CommandLineParser clParser;
     clParser.parse(argc, argv);
@@ -180,6 +194,9 @@ int main(int argc, char* argv[]) {
 #ifdef TRYCATCH
     try {
 #endif
+        loadWorldObjectConfigs();
+        loadEquipmentConfigs();
+
         game = new Game();
         game->initialize();
 

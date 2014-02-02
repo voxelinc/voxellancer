@@ -7,10 +7,7 @@
 
 
 WorldObjectEquipmentFactory::WorldObjectEquipmentFactory() {
-    load("engines", "enginemk1");
-    load("engines", "piratethruster");
-    load("weapons", "gun");
-    load("weapons", "torpedolauncher");
+
 }
 
 Weapon* WorldObjectEquipmentFactory::weapon(const std::string& name) {
@@ -29,9 +26,5 @@ Engine* WorldObjectEquipmentFactory::engine(const std::string& name) {
     if (name == "enginemk1") {
         return new EngineMK1();
     }
-}
-
-void WorldObjectEquipmentFactory::load(const std::string& category, const std::string& name) {
-    PropertyManager::instance()->load(std::string("data/equipment/") + category + "/" + name + ".ini", name);
 }
 

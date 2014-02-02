@@ -11,9 +11,7 @@
 
 
 WorldObjectFactory::WorldObjectFactory() {
-    PropertyManager::instance()->load("data/worldobjects/basicship.ini", "basicship");
-    PropertyManager::instance()->load("data/worldobjects/gunbullet.ini", "gunbullet");
-    PropertyManager::instance()->load("data/worldobjects/torpedo.ini", "torpedo");
+
 }
 
 void WorldObjectFactory::setupHardpoints() {

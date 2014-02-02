@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 
+#include "worldobject/components/enginestate.h"
 #include "worldobject/handle/handle.h"
 
 
@@ -18,17 +19,19 @@ public:
 
     void moveTo(const glm::vec3& position);
     void rotateTo(const glm::vec3& position, const glm::vec3& up = glm::vec3(0, 0, 0));
+
     void shootBullet(const std::list<Handle<WorldObject>>& targets);
     void shootRockets(Handle<WorldObject> target);
 
+    void update(float deltaSec);
+
+
 protected:
     Ship& m_ship;
+    EngineState m_engineState;
 
     void rotateUpTo(const glm::vec3& up);
     void rotateUpAuto(const glm::quat& rotation);
-
-    void setDirectionalAcceleration(const glm::vec3& directional);
-    void setAngularAcceleration(const glm::vec3& angular);
 };
 
 

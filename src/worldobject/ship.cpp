@@ -25,6 +25,8 @@ void Ship::update(float deltaSec) {
     WorldObject::update(deltaSec);
 
     m_character->update(deltaSec);
+    m_boardComputer->update(deltaSec);
+
     m_components.update(deltaSec);
 
 //    if (m_sound) {

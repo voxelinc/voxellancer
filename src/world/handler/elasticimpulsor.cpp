@@ -34,7 +34,7 @@ void ElasticImpulsor::parse(std::list<Impulse>& worldObjectImpulses) {
         glm::vec3 r = worldObject->transform().position() - worldObject->transform().applyTo(glm::vec3(worldObjectImpulse.voxel()->gridCell()));
         float vDiff = glm::abs(glm::length(v1 - v2));
 
-        glm::vec3 angular(glm::inverse((worldObject->transform().orientation())) * (m_rotationFactor.get() * vDiff * (1.f / m1) * glm::cross(normal, r)));
+        glm::vec3 angular(m_rotationFactor.get() * vDiff * (1.f / m1) * glm::cross(normal, r));
 
         physics.setSpeed(Speed(directional, angular));
     }
