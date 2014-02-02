@@ -1,7 +1,7 @@
 #pragma once
 
-
 #include "game.h"
+
 
 class BaseScenario {
 public:
