@@ -111,7 +111,6 @@ void Starfield::createAndSetupShaders() {
     m_shaderProgram = new glow::Program();
     m_shaderProgram->attach(vertexShader, geometryShader, fragmentShader);
     m_shaderProgram->bindFragDataLocation(0, "fragColor");
-
 }
 
 void Starfield::createAndSetupGeometry() {
