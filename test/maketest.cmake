@@ -1,7 +1,6 @@
-macro(make_test TEST_TARGET) #TEST_FILES is second argument!
+function(make_test TEST_TARGET) #TEST_FILES is second argument!
         
-    set(TEST_FILES ${ARGV})
-    list(REMOVE_AT TEST_FILES 0)
+    set(TEST_FILES ${ARGN})
     
     source_group("Tests" FILES ${TEST_FILES} ${TEST_MAIN})
 
@@ -32,4 +31,4 @@ macro(make_test TEST_TARGET) #TEST_FILES is second argument!
         DEBUG_POSTFIX               "d${DEBUG_POSTFIX}"
     )
 
-endmacro()
+endfunction()

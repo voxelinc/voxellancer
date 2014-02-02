@@ -1,7 +1,7 @@
 
 # Group source files in folders (e.g. for MSVC solutions)
-# Example: source_group_by_path("${CMAKE_CURRENT_SOURCE_DIR}/src" 
-#   "\\\\.h$|\\\\.hpp$|\\\\.cpp$|\\\\.c$|\\\\.ui$|\\\\.qrc$" "Source Files" ${sources})
+# Example: source_group_by_path_function("${CMAKE_CURRENT_SOURCE_DIR}/src" 
+#   "\\.h$|\\.hpp$|\\.cpp$|\\.c$|\\.ui$|\\.qrc$" "Source Files" ${sources})
 
 function(source_group_by_path_function PARENT_PATH REGEX GROUP)
     foreach(FILENAME ${ARGN})
