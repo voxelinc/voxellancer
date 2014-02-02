@@ -8,7 +8,7 @@ class Bullet : public WorldObject {
 public:
     Bullet(WorldObject* creator, float lifetime);
 
-    WorldObject* creator() const;
+    virtual CollisionFilterable* creator() const override;
 
     virtual bool specialIsCollideableWith(const CollisionFilterable* other) const override;
 

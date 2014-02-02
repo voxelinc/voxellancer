@@ -1,10 +1,11 @@
 #pragma once
 
-#include "voxel/voxelcluster.h"
-#include "worldobject/weapons/weapon.h"
-#include "resource/clustercache.h"
+#include <glm/glm.hpp>
+
+#include "weapons/weapon.h"
 
 class Ship;
+class Weapon;
 
 class Hardpoint {
 public:

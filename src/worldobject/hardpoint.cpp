@@ -1,6 +1,7 @@
 #include "hardpoint.h"
 
 #include "ship.h"
+#include "weapons/weapon.h"
 
 Hardpoint::Hardpoint(Ship* ship, const glm::ivec3& positionInGrid, Weapon *weapon) {
     assert(ship != nullptr);

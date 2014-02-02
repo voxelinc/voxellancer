@@ -69,7 +69,7 @@ void AimHelperHudget::calculateTargetPoint(WorldObject* targetObject) {
     m_targetPoint = glm::vec3(0.0f, 0.0f, 0.0f);
 
     for(Hardpoint* hardpoint : ship->hardpoints()) {
-        if(hardpoint->weapon()->aimType() != Point) {
+        if (hardpoint->weapon()->aimType() != AimType::Point) {
             continue;
         }
 

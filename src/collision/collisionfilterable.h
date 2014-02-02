@@ -19,7 +19,7 @@ public:
 
     bool areMasksCollidable(const CollisionFilterable *other) const;
     virtual bool specialIsCollideableWith(const CollisionFilterable *other) const;
-
+    virtual CollisionFilterable* creator() const;
 
 protected:
     CollisionFilterClass m_collisionFilterClass;

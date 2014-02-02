@@ -10,7 +10,7 @@ class WorldObject;
 class Hardpoint;
 
 // Base class for everything that can be mounted to a Hardpoint
-enum AimType {
+enum class AimType {
     None, // nothing attached
     Point, // manual aiming
     Object // guided

@@ -16,7 +16,7 @@ Gun::Gun() :
 }
 
 AimType Gun::aimType() {
-    return Point;
+    return AimType::Point;
 }
 
 float Gun::bulletSpeed() const {

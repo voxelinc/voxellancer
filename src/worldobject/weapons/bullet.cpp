@@ -21,7 +21,6 @@ Bullet::Bullet(WorldObject* creator, float lifetime) :
     m_objectInfo.setCanLockOn(false);
 
     CollisionFilterable::setCollideableWith(CollisionFilterClass::Bullet, false);
-    //CollisionFilterable::setCollideableWith(CollisionFilterClass::Ship, false);
 
     m_physics.setAngularSpeed(glm::vec3(0.0f, 0.0f, 50));
     m_physics.setDampening(0.0f);
@@ -29,12 +28,12 @@ Bullet::Bullet(WorldObject* creator, float lifetime) :
 }
 
 
-WorldObject* Bullet::creator() const {
+CollisionFilterable* Bullet::creator() const {
     return m_creator;
 }
 
 bool Bullet::specialIsCollideableWith(const CollisionFilterable *other) const {
-    return static_cast<CollisionFilterable*>(m_creator) != other;
+    return m_creator != other;
 }
 
 void Bullet::update(float deltaSec) {

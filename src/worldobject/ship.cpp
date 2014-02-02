@@ -92,7 +92,7 @@ WorldObject* Ship::targetObject() {
 
 void Ship::fireAtPoint(glm::vec3 target) {
     for (Hardpoint* hardpoint : m_hardpoints) {
-        if (hardpoint->aimType() == Point) {
+        if (hardpoint->aimType() == AimType::Point) {
             hardpoint->shootAtPoint(target);
         }
     }
@@ -101,7 +101,7 @@ void Ship::fireAtPoint(glm::vec3 target) {
 void Ship::fireAtObject() {
     if(targetObject()) {
         for (Hardpoint* hardpoint : m_hardpoints) {
-            if (hardpoint->aimType() == Object) {
+            if (hardpoint->aimType() == AimType::Object) {
                 hardpoint->shootAtObject(targetObject());
             }
         }
