@@ -18,8 +18,8 @@ Transform::Transform(const Transform& transform, const glm::vec3& positionDelta,
 {
     moveWorld(positionDelta);
     rotate(orientationDelta);
-    assert(std::isfinite(m_center);
-    assert(std::isfinite(m_orientation);
+    assert(std::isfinite(m_center));
+    assert(std::isfinite(m_orientation));
 }
 
 Transform::~Transform() {
@@ -40,7 +40,7 @@ const glm::vec3 &Transform::position() const {
 }
 
 void Transform::setPosition(const glm::vec3& pos){
-    assert(std::isfinite(pos);
+    assert(std::isfinite(pos));
     m_position = pos;
 }
 
