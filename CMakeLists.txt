@@ -142,6 +142,7 @@ list(REMOVE_ITEM SRC_FILES_EXCEPT_MAIN ${SRC_DIR}/main.cpp)
 file(GLOB_RECURSE SHADER_FILES
     "data/*.vert"
     "data/*.frag"
+    "data/*.geo"
 )
 
 source_group(${SHADER_GROUP} FILES ${SHADER_FILES})
