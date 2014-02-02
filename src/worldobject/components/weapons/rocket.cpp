@@ -1,8 +1,13 @@
 #include "rocket.h"
 
+#include "world/god.h"
+#include "world/world.h"
+
+
 Rocket::Rocket(float lifetime, WorldObject* targetObject, float scale):
-    WorldObject(CollisionFilterableClass::Rocket, scale),
-    m_lifetime(lifetime)
+    WorldObject(CollisionFilterClass::Rocket, scale),
+    m_lifetime(lifetime),
+    m_targetHandle(nullptr)
 {
     if(targetObject) {
         m_targetHandle = targetObject->handle();
@@ -12,12 +17,12 @@ Rocket::Rocket(float lifetime, WorldObject* targetObject, float scale):
     m_objectInfo.setCanLockOn(false);
 }
 
-WorldObject* targetObject() {
-    return m_targetHandle;
+WorldObject* Rocket::targetObject() {
+    return *m_targetHandle;
 }
 
 void Rocket::update(float deltaSec) {
-    Worldobject::update();
+    WorldObject::update(deltaSec);
 }
 
 void Rocket::onCollision() {

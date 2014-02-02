@@ -1,7 +1,8 @@
 #include "engine.h"
 
 
-Engine::Engine():
+Engine::Engine(const std::string& key):
+    WorldObjectEquipment(key),
     m_trailGenerator(this)
 {
 }
@@ -18,15 +19,15 @@ void Engine::update(float deltaSec) {
     m_trailGenerator.update(deltaSec);
 }
 
-const Acceleration& Engine::currentRelativeAcceleration() const {
-    return m_currentRelativeAcceleration;
+const EngineState& Engine::state() const {
+    return m_state;
 }
 
-void Engine::setCurrentRelativeAcceleration(const Acceleration& currentRelativeAcceleration) {
-    m_currentRelativeAcceleration = currentRelativeAcceleration;
+void Engine::setState(const EngineState& state) {
+    m_state = state;
 }
 
 Acceleration Engine::currentAcceleration() const {
-    return m_currentRelativeAcceleration * maxAcceleration();
+    return power().accelerationAt(m_state);
 }
 

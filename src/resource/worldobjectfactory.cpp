@@ -32,7 +32,7 @@ void WorldObjectFactory::setupHardpoints() {
 
 void WorldObjectFactory::setupEngineSlots() {
     for(EngineSlot* engineSlot : m_worldObject->components().engineSlots()) {
-        std::string prefix = m_name + ".engingeslot" + std::to_string(engineSlot->index()) + ".";
+        std::string prefix = m_name + ".engineslot" + std::to_string(engineSlot->index()) + ".";
 
         engineSlot->setDirection(Property<glm::vec3>(prefix + "direction"));
 

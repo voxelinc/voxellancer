@@ -1,14 +1,14 @@
 #pragma once
 
-#include "worldobject/components/acceleration.h"
 #include "worldobject/components/engine.h"
+#include "worldobject/components/enginepower.h"
 
 
 class EngineMK1: public Engine {
 public:
     EngineMK1();
 
-    virtual Acceleration maxAcceleration() const override;
+    virtual EnginePower power() const override;
 
     virtual void update(float deltaSec) override;
 

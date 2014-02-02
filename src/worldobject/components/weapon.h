@@ -3,7 +3,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 
-#include "worldobject/worldobject.h"
+#include "worldobject/components/worldobjectequipment.h"
 
 
 class WorldObject;
@@ -15,9 +15,9 @@ enum class WeaponAimType {
     Object // guided
 };
 
-class Weapon {
+class Weapon: public WorldObjectEquipment {
 public:
-    Weapon();
+    Weapon(const std::string& key);
 
     Hardpoint* hardpoint();
     void setHardpoint(Hardpoint* hardpoint);

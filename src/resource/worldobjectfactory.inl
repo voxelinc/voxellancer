@@ -13,9 +13,8 @@ T* WorldObjectFactory::build(const std::string& name) {
     T* worldObject = new T();
     m_worldObject = worldObject;
 
-    std::string clusterFile = Property<std::string>(m_name + ".general.voxelcluster");
-    ClusterCache::instance()->fillObject(worldObject, std::string("data/voxelcluster/") + clusterFile);
-
+    m_worldObject->loadCluster(name);
+    
     setupHardpoints();
     setupEngineSlots();
 

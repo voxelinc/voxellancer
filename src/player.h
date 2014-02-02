@@ -9,7 +9,7 @@
 
 #include "ui/hud.h"
 
-#include "worldobject/components/acceleration.h"
+#include "worldobject/components/enginestate.h"
 #include "worldobject/handle/handle.h"
 
 
@@ -37,6 +37,6 @@ protected:
     Handle<Ship> m_ship;
     CameraDolly m_cameraDolly;
     HUD m_hud;
-    Acceleration m_acceleration;
+    EngineState m_engineState;
 };
 

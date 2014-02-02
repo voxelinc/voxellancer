@@ -1,6 +1,6 @@
 #pragma once
 
-#include "worldobject/rocket.h"
+#include "worldobject/components/weapons/rocket.h"
 
 #include "worldobject/handle/handle.h"
 
@@ -15,7 +15,6 @@ public:
     virtual void update(float deltaSec);
 
     virtual void onCollision() override;
-    virtual void onSpawnFail() override;
 
 
 private:

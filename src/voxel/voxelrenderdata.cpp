@@ -61,6 +61,10 @@ void VoxelRenderData::updateBuffer() {
         setupVertexAttributes();
     }
 
+    if(m_voxel.empty()) {
+        return;
+    }
+
     if (m_bufferSize < m_voxel.size() || m_bufferSize > m_voxel.size() * 2) {
         m_voxelDataBuffer->setData(m_voxel.size() * sizeof(VoxelData), nullptr, GL_DYNAMIC_DRAW);
         m_bufferSize = m_voxel.size();

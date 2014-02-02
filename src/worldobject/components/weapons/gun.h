@@ -21,7 +21,7 @@ public:
 
 
 protected:
-    Property<float> m_coolDownTime;
+    Property<float> m_cooldownTime;
     Property<float> m_bulletSpeed;
     Property<float> m_bulletLifetime;
 };

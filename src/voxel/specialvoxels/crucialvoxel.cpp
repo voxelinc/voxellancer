@@ -7,8 +7,8 @@
 #include "worldobject/worldobject.h"
 
 
-CrucialVoxel::CrucialVoxel(const glm::ivec3& gridCell, int index) :
-    SpecialVoxel(gridCell, Property<int>("voxels.crucial.color"), Property<float>("voxels.crucial.mass"), Property<float>("voxels.crucial.hp"))
+CrucialVoxel::CrucialVoxel(const glm::ivec3& gridCell, int index):
+    SpecialVoxel(gridCell, Property<int>("voxels.crucial.color"), index, Property<float>("voxels.crucial.mass"), Property<float>("voxels.crucial.hp"))
 {
 }
 

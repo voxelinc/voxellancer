@@ -33,6 +33,8 @@ public:
     ObjectInfo& objectInfo();
     WorldObjectComponents& components();
 
+    void loadCluster(const std::string& key);
+
     virtual void update(float deltaSec);
 
     virtual void addVoxel(Voxel* voxel) override;
@@ -41,7 +43,6 @@ public:
     Voxel* crucialVoxel();
     void setCrucialVoxel(const glm::ivec3& cell);
 
-    void setCenterAndAdjustPosition(const glm::vec3& newCenter);
     void updateTransformAndGeode(const glm::vec3& position, const glm::quat& orientation);
 
     virtual void onCollision();

@@ -9,7 +9,10 @@
 #include <glow/ChangeListener.h>
 #include <glow/logging.h>
 
+#include "resource/clustercache.h"
+
 #include "utils/tostring.h"
+
 #include "voxelrenderdata.h"
 #include "voxel.h"
 

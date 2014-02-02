@@ -1,25 +1,29 @@
 #pragma once
 
+#include <string>
+
 #include <glm/glm.hpp>
 
 #include "voxeleffect/enginetrailgenerator.h"
 
-#include "acceleration.h"
+#include "enginepower.h"
+#include "enginestate.h"
+#include "worldobjectequipment.h"
 
 
 class EngineSlot;
 
-class Engine {
+class Engine: public WorldObjectEquipment {
 public:
-    Engine();
+    Engine(const std::string& key);
 
     EngineSlot* engineSlot();
     void setEngineSlot(EngineSlot* engineSlot);
 
-    virtual Acceleration maxAcceleration() const = 0;
+    virtual EnginePower power() const = 0;
 
-    const Acceleration& currentRelativeAcceleration() const;
-    void setCurrentRelativeAcceleration(const Acceleration& currentRelativeAcceleration);
+    const EngineState& state() const;
+    void setState(const EngineState& state);
 
     Acceleration currentAcceleration() const;
 
@@ -28,7 +32,7 @@ public:
 
 private:
     EngineSlot* m_engineSlot;
-    Acceleration m_currentRelativeAcceleration;
+    EngineState m_state;
     EngineTrailGenerator m_trailGenerator;
 };
 

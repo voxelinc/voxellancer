@@ -2,8 +2,7 @@
 
 #include <glm/glm.hpp>
 
-#include "mountable.h"
-#include "worldobjectcomponent.h"
+#include "worldobjectslot.h"
 
 
 class Weapon;
@@ -13,7 +12,7 @@ class WorldObjectComponents;
 /*
     Slot into which interchangeable weapons may be mounted
 */
-class Hardpoint: public WorldObjectComponent, public Mountable {
+class Hardpoint: public WorldObjectSlot {
 public:
     Hardpoint(WorldObjectComponents* components, HardpointVoxel* voxel);
 

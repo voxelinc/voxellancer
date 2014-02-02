@@ -1,12 +1,10 @@
 #include "worldobject.h"
 
+#include "resource/clustercache.h"
+
 #include "utils/tostring.h"
-#include "voxel/specialvoxels/enginevoxel.h"
-#include "voxel/specialvoxels/hardpointvoxel.h"
-#include "voxel/specialvoxels/cockpitvoxel.h"
-#include "voxel/specialvoxels/fuelvoxel.h"
+
 #include "worldobject/handle/handle.h"
-#include "collision/collisiondetector.h"
 
 
 WorldObject::WorldObject(CollisionFilterClass collisionFilterClass, float scale):
@@ -42,10 +40,20 @@ WorldObjectComponents& WorldObject::components() {
     return m_components;
 }
 
-void WorldObject::update(float deltaSec) {
-    VoxelCluster::update(deltaSec);
+void WorldObject::loadCluster(const std::string& key) {
+    std::string clusterFile = Property<std::string>(key + ".general.voxelcluster");
+    ClusterCache::instance()->fillObject(this, std::string("data/voxelcluster/") + clusterFile);
+}
 
-    m_physics.setAcceleration(m_components.maxAcceleration() * m_components.currentRelativeAcceleration());
+void WorldObject::update(float deltaSec) {
+    Acceleration localAcceleration = m_components.currentAcceleration();
+
+    Acceleration globalAcceleration(
+        m_transform.orientation() * localAcceleration.directional(),
+        localAcceleration.angular()
+    );
+
+    m_physics.setAcceleration(globalAcceleration);
 }
 
 void WorldObject::addVoxel(Voxel* voxel) {

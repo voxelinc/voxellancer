@@ -7,6 +7,7 @@
 
 
 TorpedoLauncher::TorpedoLauncher():
+    Weapon("torpedolauncher"),
     m_cooldownTime("rocketlauncher.general.cooldownTime"),
     m_torpedoLifetime("rocketlauncher.torpedo.lifetime"),
     m_torpedoTravelspeed("rocketlauncher.torpedo.travelspeed")

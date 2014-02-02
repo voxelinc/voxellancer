@@ -144,7 +144,7 @@ int main(int argc, char* argv[]) {
     clParser.parse(argc, argv);
 
     PropertyManager::instance()->load("data/config.ini");
-    PropertyManager::instance()->load("data/voxels.ini");
+    PropertyManager::instance()->load("data/voxels.ini", "voxels");
 
     if (!glfwInit()) {
         glow::fatal("Could not init GLFW");

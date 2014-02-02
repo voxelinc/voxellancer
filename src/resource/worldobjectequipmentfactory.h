@@ -6,9 +6,9 @@
 class Weapon;
 class Engine;
 
-class WorldObjectComponentFactory {
+class WorldObjectEquipmentFactory {
 public:
-    WorldObjectComponentFactory();
+    WorldObjectEquipmentFactory();
 
     Weapon* weapon(const std::string& name);
     Engine* engine(const std::string& name);

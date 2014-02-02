@@ -2,6 +2,8 @@
 
 #include <glm/glm.hpp>
 
+#include "property/property.h"
+
 #include "worldobject/components/weapon.h"
 
 

@@ -1,20 +1,20 @@
-#include "enginemk1.h"
+#include "piratethruster.h"
 
 #include "property/property.h"
 
-#include "worldobject/components/acceleration.h"
 
 
 PirateThruster::PirateThruster():
+    Engine("piratethruster"),
     m_directionalAcceleration("piratethruster.general.directionalAcceleration"),
     m_angularAcceleration("piratethruster.general.angularAcceleration")
 {
 }
 
-Acceleration PirateThruster::maxAcceleration() const {
-    return Acceleration(
-        m_directionalAcceleration,
-        m_angularAcceleration
+EnginePower PirateThruster::power() const {
+    return EnginePower(
+        m_directionalAcceleration.get(),
+        m_angularAcceleration.get()
     );
 }
 

@@ -22,7 +22,7 @@ const std::string& Property<T>::name() {
 }
 
 template <class T>
-T Property<T>::get() {
+T Property<T>::get() const {
     return m_value;
 }
 
@@ -32,7 +32,7 @@ void Property<T>::set(T value) {
 }
 
 template <class T>
-Property<T>::operator T() {
+Property<T>::operator T() const {
     return m_value;
 }
 

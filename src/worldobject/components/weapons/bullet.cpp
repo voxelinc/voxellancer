@@ -1,5 +1,9 @@
 #include "bullet.h"
 
+#include "world/god.h"
+#include "world/world.h"
+
+
 Bullet::Bullet(WorldObject* creator, float lifetime, float scale):
     WorldObject(CollisionFilterClass::Bullet, scale),
     m_creator(creator),
@@ -9,6 +13,8 @@ Bullet::Bullet(WorldObject* creator, float lifetime, float scale):
 
     m_objectInfo.setShowOnHud(false);
     m_objectInfo.setCanLockOn(false);
+
+    m_physics.setDampening(Acceleration(glm::vec3(0.0f), glm::vec3(0.0f)));
 }
 
 WorldObject* Bullet::creator() const {

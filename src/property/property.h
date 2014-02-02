@@ -11,11 +11,11 @@ public:
 
     const std::string& name();
 
-    T get();
+    T get() const;
     void set(T value);
 
     T* operator->();
-    operator T();
+    operator T() const;
 
     static T get(const std::string& name);
 

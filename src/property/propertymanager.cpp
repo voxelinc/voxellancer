@@ -23,7 +23,7 @@ static regexns::regex char_regex() { return regexns::regex(R"(^\w$)"); }
 static regexns::regex string_regex() { return regexns::regex(R"(^.*$)"); }
 static regexns::regex vec2_regex() { return regexns::regex(R"(^([-+]?\d*\.?\d*), ?([-+]?\d*\.?\d*)$)"); }
 static regexns::regex vec3_regex() { return regexns::regex(R"(^([-+]?\d*\.?\d*), ?([-+]?\d*\.?\d*), ?([-+]?\d*\.?\d*)$)"); }
-static regexns::regex vec4_regex() { return regexns::regex(R"(^([-+]?\d*\.?\d*), ?([-+]?\d*\.?\d*), ?([-+]?\d*\.?\d*), ?([-+]?\d*\.?\d*)$)"); }
+static regexns::regex vec4_regex() { return regexns::regex(R"(^([-+]?\d*\.?\d*), *([-+]?\d*\.?\d*), *([-+]?\d*\.?\d*), *([-+]?\d*\.?\d*)$)"); }
 static regexns::regex input_mapping_regex() { return regexns::regex(R"(^InputMapping\((\d+), ?(\d+), ?([-+]?\d*\.?\d*)\)$)"); }
 static regexns::regex list_regex() { return regexns::regex(R"(^([a-zA-Z1-9]+)(, ?([a-zA-Z1-9]+))*$)"); }
 
@@ -49,23 +49,29 @@ static glm::vec3 vec3Converter(const std::string &s) {
     return glm::vec3(x, y, z);
 }
 
-static glm::vec3 vec4Converter(const std::string &s) {
+static glm::vec4 vec4Converter(const std::string &s) {
     regexns::smatch matches;
-    regexns::regex_match(s, matches, vec3_regex());
+    regexns::regex_match(s, matches, vec4_regex());
 
     float x = std::stof(matches[1]);
     float y = std::stof(matches[2]);
     float z = std::stof(matches[3]);
     float w = std::stof(matches[4]);
 
-    return glm::vec3(x, y, z, w);
+    return glm::vec4(x, y, z, w);
 }
 
 static std::list<std::string> listConverter(const std::string &s) {
     regexns::smatch matches;
-    regexns::regex_match(s, matches, vec2_regex());
+    regexns::regex_match(s, matches, list_regex());
+
 
     std::list<std::string> result;
+
+    for(int i = 0; i < matches.size(); i++) {
+        std::cout << i << ": " << matches[i] << std::endl;
+    }
+    std::cout << std::endl;
 
     for(int i = 1; i <= matches.size(); i += 2) {
         result.push_back(matches[i]);
@@ -114,6 +120,8 @@ void PropertyManager::load(const std::string& file, const std::string& prefix) {
     if (!input.is_open()) {
         glow::fatal("PropertyManager: could not open %;", file);
         throw std::runtime_error("Critical configuration file not readable");
+    } else {
+        glow::info("PropertyManager: Loading %; with prefix '%;'", file, prefix);
     }
 
     std::string keyPrefix = prefix.empty() ? std::string() : prefix + std::string(".");
@@ -142,9 +150,10 @@ void PropertyManager::load(const std::string& file, const std::string& prefix) {
             if (m_stringProperties->update(key, value)) success++;
             if (m_vec2Properties->update(key, value)) success++;
             if (m_vec3Properties->update(key, value)) success++;
-            if (m_vec4properties->update(key, value)) success++;
+            if (m_vec4Properties->update(key, value)) success++;
             if (m_inputMappingProperties->update(key, value)) success++;
             if (m_listProperties->update(key, value)) success++;
+
 
             if (success == 0) {
                 glow::warning("PropertyManager: no match %;: %; (line: %;)", key, value, line);

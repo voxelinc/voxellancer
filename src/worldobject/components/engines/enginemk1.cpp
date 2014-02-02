@@ -2,17 +2,17 @@
 
 #include "property/property.h"
 
-#include "worldobject/components/acceleration.h"
 
 
 EngineMK1::EngineMK1():
+    Engine("enginemk1"),
     m_directionalAcceleration("enginemk1.general.directionalAcceleration"),
     m_angularAcceleration("enginemk1.general.angularAcceleration")
 {
 }
 
-Acceleration EngineMK1::maxAcceleration() const {
-    return Acceleration(
+EnginePower EngineMK1::power() const {
+    return EnginePower(
         m_directionalAcceleration,
         m_angularAcceleration
     );

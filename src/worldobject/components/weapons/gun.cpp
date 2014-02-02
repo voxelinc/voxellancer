@@ -3,6 +3,8 @@
 #include "sound/sound.h"
 #include "sound/soundmanager.h"
 
+#include "voxel/specialvoxels/hardpointvoxel.h"
+
 #include "world/world.h"
 #include "world/god.h"
 
@@ -14,27 +16,28 @@
 
 
 Gun::Gun():
-    m_coolDownTime("gun.general.cooldownTime"),
+    Weapon("gun"),
+    m_cooldownTime("gun.general.cooldownTime"),
     m_bulletSpeed("gun.bullet.speed"),
     m_bulletLifetime("gun.bullet.lifetime")
 {
 }
 
-WeaponAimType Gun::aimType() {
+WeaponAimType Gun::aimType() const {
     return WeaponAimType::Point;
 }
 
-float Gun::estimatedRange() {
-    return m_bulletSpeed * m_bulletLifetime;
+float Gun::estimatedRange() const {
+    return m_bulletSpeed.get() * m_bulletLifetime.get();
 }
 
-float Gun::cooldownTime() {
+float Gun::cooldownTime() const {
     return m_cooldownTime;
 }
 
 void Gun::shootAtPoint(const glm::vec3& point) {
     if (canFire()) {
-        GunBullet *bullet = new GunBullet(hardpoint()->components()->worldObject(), m_bulletLifetime * m_bulletSpeed);
+        GunBullet *bullet = new GunBullet(hardpoint()->components()->worldObject(), m_bulletLifetime);
 
         BulletSpawnHelper bulletSpawnHelper(bullet, hardpoint(), m_bulletSpeed, point);
         bulletSpawnHelper.setupBullet();
@@ -43,7 +46,7 @@ void Gun::shootAtPoint(const glm::vec3& point) {
 
         fired();
 
-        SoundManager::current()->play("data/sound/laser.ogg", sourceHardpoint->position())->setVolume(3);
+        SoundManager::current()->play("data/sound/laser.ogg", hardpoint()->voxel()->position())->setVolume(3);
     }
 }
 

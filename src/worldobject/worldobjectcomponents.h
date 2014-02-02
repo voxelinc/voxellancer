@@ -1,6 +1,9 @@
 #pragma once
 
-#include "components/acceleration.h"
+#include <list>
+
+#include "worldobject/components/enginepower.h"
+#include "worldobject/components/enginestate.h"
 
 
 class EngineSlot;
@@ -32,15 +35,22 @@ public:
     std::list<EngineSlot*>& engineSlots();
 
     /*
-        Poll all installed engines for accumulated Acceleration
+        Poll all installed engines for accumulated power
     */
-    Acceleration maxAcceleration() const;
+    EnginePower enginePower() const;
 
     /*
-        Set relative Acceleration on all installed engines
+        Acceleration of all engines accumulated;
     */
-    const Acceleration& currentRelativeAcceleration() const;
-    void setCurrentRelativeAcceleration(const Acceleration& currentRelativeAcceleration);
+    Acceleration currentAcceleration() const;
+
+    /*
+        Set relative state on all installed engines,
+        the value returned by engineState() is the last set and doesn't react on
+        possible indivdual changes of engines;
+    */
+    const EngineState& engineState() const;
+    void setEngineState(const EngineState& engineState);
 
 
     void addHardpoint(Hardpoint* hardpoint);
@@ -74,6 +84,6 @@ protected:
     std::list<EngineSlot*> m_engineSlots;
     std::list<Hardpoint*> m_hardpoints;
 
-    Acceleration m_currentRelativeAcceleration;
+    EngineState m_engineState;
 };
 

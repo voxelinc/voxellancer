@@ -21,12 +21,7 @@
 
 
 Physics::Physics(WorldObject& worldObject, float scale) :
-    m_directionalSpeed(0),
-    m_angularSpeed(0),
-    m_directionalAcceleration(0),
-    m_angularAcceleration(0),
-    m_directionalDampening(Property<float>("physics.globalDirectionalDampening")),
-    m_angularDampening(Property<float>("physics.globalAngularDampening")),
+    m_dampening(glm::vec3(Property<float>("physics.globalDirectionalDampening")), glm::vec3(Property<float>("physics.globalAngularDampening"))),
     m_mass(0),
     m_accumulatedMassVec(0.0f, 0.0f, 0.0f),
     m_worldObject(worldObject)
@@ -34,47 +29,28 @@ Physics::Physics(WorldObject& worldObject, float scale) :
     m_massScaleFactor = glm::pow(scale, 3.f);
 }
 
-Physics::~Physics() {
+const Acceleration& Physics::dampening() const {
+    return m_dampening;
 }
 
-float Physics::directionalDampening() {
-    return m_directionalDampening;
+void Physics::setDampening(const Acceleration& dampening) {
+    m_dampening = dampening;
 }
 
-void Physics::setDirectionalDampening(float directionalDampening) {
-    m_directionalDampening = directionalDampening;
+const Speed& Physics::speed() const {
+    return m_speed;
 }
 
-float Physics::angularDampening() {
-    return m_angularDampening;
+void Physics::setSpeed(const Speed& speed) {
+    m_speed = speed;
 }
 
-void Physics::setAngularDampening(float angularDampening) {
-    m_angularDampening = angularDampening;
+const Acceleration& Physics::acceleration() const {
+    return m_acceleration;
 }
 
-const glm::vec3& Physics::directionalSpeed() const {
-    return m_directionalSpeed;
-}
-
-void Physics::setDirectionalSpeed(const glm::vec3& directionalSpeed) {
-    m_directionalSpeed = directionalSpeed;
-}
-
-const glm::vec3& Physics::angularSpeed() const {
-    return m_angularSpeed;
-}
-
-void Physics::setAngularSpeed(const glm::vec3& angularSpeed) {
-    m_angularSpeed = angularSpeed;
-}
-
-const glm::vec3& Physics::directionalAcceleration() const {
-    return m_directionalAcceleration;
-}
-
-const glm::vec3& Physics::angularAcceleration() const {
-    return m_angularAcceleration;
+void Physics::setAcceleration(const Acceleration& acceleration) {
+    m_acceleration = acceleration;
 }
 
 float Physics::mass() const {
@@ -83,8 +59,9 @@ float Physics::mass() const {
 
 const Transform Physics::projectedTransformIn(float deltaSec){
     Transform targetTransform(m_worldObject.transform());
-    targetTransform.moveWorld(m_directionalSpeed * deltaSec);
-    targetTransform.rotate(glm::quat(m_angularSpeed * deltaSec));
+
+    targetTransform.moveWorld(m_speed.directional() * deltaSec);
+    targetTransform.rotate(glm::quat(m_speed.angular() * deltaSec));
 
     return targetTransform;
 }
@@ -92,7 +69,7 @@ const Transform Physics::projectedTransformIn(float deltaSec){
 std::list<VoxelCollision> &Physics::move(float deltaSec) {
     updateSpeed(deltaSec);
 
-    if (m_directionalSpeed != glm::vec3(0.0f) || m_angularSpeed != glm::vec3(0.0f)) {
+    if (m_speed.directional() != glm::vec3(0.0f) || m_speed.angular() != glm::vec3(0.0f)) {
         Transform targetTransform = projectedTransformIn(deltaSec);
 
         Movement movement(m_worldObject, m_worldObject.transform(), targetTransform);
@@ -102,14 +79,6 @@ std::list<VoxelCollision> &Physics::move(float deltaSec) {
     return m_worldObject.collisionDetector().lastCollisions();
 }
 
-void Physics::accelerateDirectional(const glm::vec3& direction) {
-    m_directionalAcceleration += m_worldObject.transform().orientation() * direction;
-}
-
-void Physics::accelerateAngular(const glm::vec3& axis) {
-    m_angularAcceleration += axis;
-}
-
 void Physics::addVoxel(Voxel* voxel) {
     alterCell(voxel, true);
 }
@@ -117,15 +86,20 @@ void Physics::addVoxel(Voxel* voxel) {
 void Physics::removeVoxel(Voxel* voxel) {
     alterCell(voxel, false);
 }
+
 void Physics::updateSpeed(float deltaSec) {
-    m_directionalSpeed *= (1.f - m_directionalDampening * deltaSec);
-    m_directionalSpeed += m_directionalAcceleration * deltaSec;
+    glm::vec3 directional(m_speed.directional());
+    glm::vec3 angular(m_speed.angular());
 
-    m_angularSpeed *= (1.f - m_angularDampening * deltaSec);
-    m_angularSpeed = m_angularSpeed + (m_angularAcceleration*deltaSec);
+    directional *= (1.0f - m_dampening.directional() * deltaSec);
+    directional += m_acceleration.directional() * deltaSec;
 
-    m_directionalAcceleration = glm::vec3(0);
-    m_angularAcceleration = glm::vec3(0);
+    angular *= (1.0f - m_dampening.angular() * deltaSec);
+    angular += m_acceleration.angular() * deltaSec;
+
+    m_speed = Speed(directional, angular);
+
+    m_acceleration.clear();
 }
 
 void Physics::alterCell(Voxel* voxel, bool isAdd) {
@@ -138,9 +112,9 @@ void Physics::alterCell(Voxel* voxel, bool isAdd) {
     m_accumulatedMassVec = m_accumulatedMassVec + glm::vec3(voxel->gridCell()) * scaledVoxelMass;
 
     if (m_mass > 0.0f) {
-        m_worldObject.setCenterAndAdjustPosition(m_accumulatedMassVec / m_mass);
+        m_worldObject.transform().setCenterAndAdjustPosition(m_accumulatedMassVec / m_mass);
     }  else {
-        m_worldObject.setCenterAndAdjustPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+        m_worldObject.transform().setCenterAndAdjustPosition(glm::vec3(0.0f, 0.0f, 0.0f));
     }
 }
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "worldobject/components/acceleration.h"
+#include "worldobject/components/enginepower.h"
 #include "worldobject/components/engine.h"
 
 
@@ -8,7 +8,7 @@ class PirateThruster: public Engine {
 public:
     PirateThruster();
 
-    virtual Acceleration maxAcceleration() const override;
+    virtual EnginePower power() const override;
 
     virtual void update(float deltaSec) override;
 

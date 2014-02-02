@@ -9,6 +9,7 @@
 GunBullet::GunBullet(WorldObject* creator, float lifetime) :
     Bullet(creator, lifetime, 0.5f)
 {
+    loadCluster("gunbullet");
     m_objectInfo.setName("GunBullet");
 }
 

@@ -3,10 +3,11 @@
 #include "voxel/specialvoxels/hardpointvoxel.h"
 
 #include "worldobject/components/weapon.h"
+#include "worldobject/worldobjectcomponents.h"
 
 
 Hardpoint::Hardpoint(WorldObjectComponents* components, HardpointVoxel* voxel):
-    WorldObjectComponent(components, voxel->index()),
+    WorldObjectSlot(components, voxel->index()),
     m_voxel(voxel),
     m_weapon(nullptr)
 {
@@ -43,7 +44,7 @@ void Hardpoint::setFieldOfAim(const glm::vec2& fieldOfAim) {
 
 void Hardpoint::update(float deltaSec) {
     if(m_weapon) {
-        m_weapon->update();
+        m_weapon->update(deltaSec);
     }
 }
 

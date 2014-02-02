@@ -103,16 +103,17 @@ void Voxel::onDestruction() {
         generator.spawn();
     }
 }
+
 float Voxel::defaultMass() {
     if (s_defaultMass == nullptr) {
-        s_defaultMass = new Property<float>("voxel.DefaultMass");
+        s_defaultMass = new Property<float>("voxels.default.mass");
     }
     return s_defaultMass->get();
 }
 
 float Voxel::defaultHp() {
     if (s_defaultHp == nullptr) {
-        s_defaultHp = new Property<float>("voxel.DefaultHP");
+        s_defaultHp = new Property<float>("voxels.default.hp");
     }
     return s_defaultHp->get();
 }

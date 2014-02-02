@@ -18,8 +18,8 @@ ColorCoder::ColorCoder():
 
 Voxel* ColorCoder::newCodedVoxel(const Voxel& voxel) {
     uint32_t color = voxel.color();
-    uint32_t prefixBits = (color & 0xFFFF0000) >> 16;
-    int index = (color & 0x0000FF00) >> 8;
+    uint32_t prefixBits = (color & 0xFFFF00) >> 8;
+    int index = color & 0x0000FF;
 
     if(prefixBits == m_engineSlotPrefix) {
         return new EngineSlotVoxel(voxel.gridCell(), index);

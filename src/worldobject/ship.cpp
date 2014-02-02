@@ -1,15 +1,12 @@
 #include "ship.h"
 
-#include "hardpoint.h"
-#include "engine.h"
-#include "voxel/specialvoxels/hardpointvoxel.h"
-#include "voxel/specialvoxels/enginevoxel.h"
-#include "worldobject/handle/handle.h"
-#include "worldobject/weapons/gun.h"
-#include "worldobject/weapons/rocketlauncher.h"
 #include "ai/character.h"
 #include "ai/boardcomputer.h"
+
 #include "sound/sound.h"
+
+#include "worldobject/handle/handle.h"
+
 
 Ship::Ship() :
     WorldObject(CollisionFilterClass::Ship),
@@ -28,7 +25,7 @@ void Ship::update(float deltaSec) {
     WorldObject::update(deltaSec);
 
     m_character->update(deltaSec);
-    m_components.update();
+    m_components.update(deltaSec);
 
 //    if (m_sound) {
 //        m_sound->setPosition(m_transform.applyTo(m_enginePos));

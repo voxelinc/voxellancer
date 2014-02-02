@@ -303,8 +303,9 @@ void InputHandler::processRotateActions() {
     if (glm::length(rot) < prop_deadzoneGamepad) {
         rot = glm::vec3(0);
     }
-    rot = glm::normalize(rot); // Rot... in... I knew there would be some shitty metalsong called like that http://www.youtube.com/watch?v=TWaEDmFoNnc
-
+    if(glm::length(rot) > 0.0f) {
+        rot = glm::normalize(rot); // Rot... in... I knew there would be some shitty metalsong called like that http://www.youtube.com/watch?v=TWaEDmFoNnc
+    }
     m_player->rotate(rot);
 }
 

@@ -1,14 +1,10 @@
-#include "rocket.h"
+#include "torpedo.h"
 
 #include "world/god.h"
 #include "world/world.h"
-#include "utils/geometryhelper.h"
-#include "physics/physics.h"
+
 #include "voxeleffect/voxelexplosiongenerator.h"
-#include "worldobject/ship.h"
-#include "ai/character.h" //ship holds a unique_ptr to a character and we inherit from it (C2338)
-#include "ai/boardcomputer.h"
-#include "resource/clustercache.h"
+
 #include "sound/soundmanager.h"
 #include "sound/sound.h"
 
@@ -16,7 +12,7 @@
 Torpedo::Torpedo(float lifetime, WorldObject* target) :
     Rocket(lifetime, target, 0.8f)
 {
-    m_sound = SoundManager::current()->play("data/sound/Missile firing fl.ogg", position);
+    m_sound = SoundManager::current()->play("data/sound/Missile firing fl.ogg", transform().position());
     m_sound->setVolume(50.0f);
 //
 //    glm::vec3 myOrientation = orientation * glm::vec3(0, 0, -1);
@@ -28,7 +24,7 @@ Torpedo::Torpedo(float lifetime, WorldObject* target) :
 }
 
 void Torpedo::update(float deltaSec) {
-    Rocket::update();
+    Rocket::update(deltaSec);
 //    // orient towards target
 //    if (targetObject) {
 //        glm::vec3 dir = glm::inverse(m_transform.orientation()) * glm::normalize(m_target->transform().position() - m_transform.position());

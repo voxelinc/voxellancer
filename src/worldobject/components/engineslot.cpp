@@ -9,7 +9,7 @@
 
 
 EngineSlot::EngineSlot(WorldObjectComponents* components, EngineSlotVoxel* voxel):
-    WorldObjectComponent(components, voxel->index()),
+    WorldObjectSlot(components, voxel->index()),
     m_voxel(voxel),
     m_engine(nullptr)
 {
@@ -32,9 +32,9 @@ Engine* EngineSlot::engine() {
 }
 
 void EngineSlot::setEngine(Engine* engine) {
-    assert(mountable(engine->name()));
+    assert(mountable(engine->key()));
     m_engine = engine;
-    m_engine.setEngineSlot(this);
+    m_engine->setEngineSlot(this);
 }
 
 void EngineSlot::update(float deltaSec) {
@@ -44,6 +44,6 @@ void EngineSlot::update(float deltaSec) {
 }
 
 void EngineSlot::onVoxelRemoval() {
-    m_components->onEngineSlotRemoval(this);
+    m_components->removeEngineSlot(this);
 }
 

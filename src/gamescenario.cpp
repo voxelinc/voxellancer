@@ -12,8 +12,13 @@
 
 #include "resource/clustercache.h"
 #include "resource/worldobjectfactory.h"
+#include "resource/worldobjectequipmentfactory.h"
 
 #include "worldobject/ship.h"
+#include "worldobject/components/engineslot.h"
+#include "worldobject/components/hardpoint.h"
+#include "worldobject/components/weapons/gun.h"
+#include "worldobject/components/engines/enginemk1.h"
 #include "sound/soundmanager.h"
 #include "game.h"
 #include "world/world.h"
@@ -27,6 +32,7 @@ GameScenario::GameScenario() {
 
 void GameScenario::populate(Game* game) {
     glowutils::AutoTimer t("Initialize Game");
+    WorldObjectEquipmentFactory equipmentFactory;
 
     WorldObjectFactory worldObjectFactory;
 
@@ -44,6 +50,10 @@ void GameScenario::populate(Game* game) {
     game->player().setShip(playerShip);
 
     world->god().scheduleSpawn(playerShip);
+
+    Ship *ship = worldObjectFactory.build<Ship>("basicship");
+    ship->transform().setPosition(glm::vec3(0, 0, -10));
+    world->god().scheduleSpawn(ship);
 
     glow::debug("Initial spawn");
     world->god().spawn();

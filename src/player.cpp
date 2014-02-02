@@ -28,10 +28,10 @@ void Player::update(float deltaSec) {
     m_hud.update(deltaSec);
 
     if (Ship* ship = m_ship.get()) {
-        ship->components().setCurrentRelativeAcceleration(m_acceleration);
+        ship->components().setEngineState(m_engineState);
     }
 
-    m_acceleration.clear();
+    m_engineState.clear();
 }
 
 CameraDolly& Player::cameraDolly() {
@@ -43,9 +43,9 @@ HUD& Player::hud() {
 }
 
 void Player::move(const glm::vec3& vec) {
-    m_acceleration.setDirectional(vec);
+    m_engineState.setDirectional(vec);
 }
 
 void Player::rotate(const glm::vec3& euler) {
-    m_acceleration.setAngular(euler);
+    m_engineState.setAngular(euler);
 }
