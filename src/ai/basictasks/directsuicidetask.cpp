@@ -18,7 +18,7 @@ void DirectSuicideTask::setTarget(WorldObject* target) {
 void DirectSuicideTask::update(float deltaSec) {
     if (m_target.valid()) {
         glm::vec3 targetPoint = m_target->physics().projectedTransformIn(0.5f).position();
-        m_ship.boardComputer()->rotateTo(targetPoint); // , m_ship.transform().orientation() * glm::vec3(1, 0, 0));
+        m_ship.boardComputer()->rotateTo(targetPoint);
         glm::vec3 targetDirection = glm::inverse(m_ship.transform().orientation()) * (targetPoint - m_ship.transform().position());
         float angle = GeometryHelper::angleBetween(glm::vec3(0, 0, -1), targetDirection);
 

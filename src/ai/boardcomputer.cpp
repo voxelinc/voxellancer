@@ -68,8 +68,10 @@ void BoardComputer::rotateUpTo(const glm::vec3& up) {
     glm::vec3 upDirection = glm::vec3(0, 1, 0);
     glm::vec3 newUpDirection = glm::inverse(m_ship.transform().orientation()) * glm::normalize(up);
     glm::quat upRotation = GeometryHelper::quatFromTo(upDirection, newUpDirection);
-    glm::vec3 euler = glm::eulerAngles(upRotation);
-    m_ship.accelerateAngular(glm::normalize(euler));
+    if (glm::abs(glm::angle(upRotation)) > s_minActAngle) {
+        glm::vec3 euler = glm::eulerAngles(upRotation);
+        m_ship.accelerateAngular(glm::normalize(euler) * 0.5f);
+    }
 }
 
 void BoardComputer::rotateUpAuto(const glm::quat& rotation) {
@@ -79,7 +81,7 @@ void BoardComputer::rotateUpAuto(const glm::quat& rotation) {
         glm::vec3 newUpDirection = glm::vec3(0, 0, 1) + (rotation * glm::vec3(0, 0, -1));
         glm::quat upRotation = GeometryHelper::quatFromTo(upDirection, newUpDirection);
         glm::vec3 euler = glm::eulerAngles(upRotation);
-        m_ship.accelerateAngular(glm::normalize(euler));
+        m_ship.accelerateAngular(glm::normalize(euler) * 0.5f);
     }
 }
 

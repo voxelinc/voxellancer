@@ -42,6 +42,11 @@ glm::vec3 FormationLogic::formationPosition() {
     return m_leader->formationPositionFor(this);
 }
 
+glm::vec3 FormationLogic::formationUp() {
+    assert(m_leader);
+    return m_leader->ship()->transform().orientation() * glm::vec3(0, 1, 0);
+}
+
 bool FormationLogic::inFormation() {
     return m_leader != nullptr;
 }

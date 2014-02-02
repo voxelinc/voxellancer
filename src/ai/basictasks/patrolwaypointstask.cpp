@@ -17,7 +17,7 @@ void PatrolWaypointsTask::update(float deltaSec) {
         m_formationTask.update(deltaSec);
     } else {
         //TODO: #300
-        if (glm::length(*m_currentPoint - m_ship.transform().position()) < m_ship.minimalGridSphere().radius() * m_ship.transform().scale() * 0.5){
+        if (glm::length(*m_currentPoint - m_ship.transform().position()) < m_ship.minimalGridSphere().radius() * m_ship.transform().scale()){
             m_currentPoint++;
             if (m_currentPoint == m_points.end()) {
                 m_currentPoint = m_points.begin();

@@ -19,6 +19,7 @@ public:
     void leaveFormation();
 
     glm::vec3 formationPosition();
+    glm::vec3 formationUp();
     bool inFormation();
 
     void onDestruction();
