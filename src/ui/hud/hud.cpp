@@ -17,8 +17,11 @@
 
 #include "hudget.h"
 #include "hudobjectdelegate.h"
+#include "objecthudget.h"
 
 #include "player.h"
+
+
 
 
 HUD::HUD(Player* player, Viewer* viewer):
@@ -126,6 +129,30 @@ void HUD::draw() {
         if (hudget->visible()) {
             hudget->draw();
         }
+    }
+}
+
+void HUD::onClick(int button) {
+    Ray toCrossHair = Ray::fromTo(m_player->cameraDolly().cameraHead().position(), m_crossHair.worldPosition());
+    ObjectHudget* first = nullptr;
+    for (Hudget* hudget : m_hudgets) {
+        if (hudget->isAt(toCrossHair)) {
+            // Aweful, must be changed
+            ObjectHudget* oHudget = dynamic_cast<ObjectHudget*>(hudget);
+            if (!oHudget) {
+                continue;
+            }
+            if (!first) {
+                first = oHudget;
+            } else {
+                if (glm::length(oHudget->objectDelegate()->worldObject()->transform().position() - m_player->playerShip()->transform().position()) < glm::length(first->objectDelegate()->worldObject()->transform().position() - m_player->playerShip()->transform().position())) {
+                    first = oHudget;
+                }
+            }
+        }
+    }
+    if (first) {
+        first->onClick();
     }
 }
 

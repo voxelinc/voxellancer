@@ -16,6 +16,12 @@ public:
     virtual void update(float deltaSec) override;
     virtual void draw() override;
 
+    virtual void onClick();
+
+    virtual bool isAt(const Ray& ray) const override;
+
+    HUDObjectDelegate* objectDelegate();
+
 
 protected:
     HUDObjectDelegate* m_objectDelegate;

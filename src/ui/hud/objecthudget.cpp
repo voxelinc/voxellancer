@@ -8,6 +8,9 @@
 #include "hudobjectdelegate.h"
 
 #include "hud.h"
+#include "worldobject/ship.h"
+
+#include "player.h"
 
 
 ObjectHudget::ObjectHudget(HUD* hud, HUDObjectDelegate* objectDelegate):
@@ -20,7 +23,6 @@ ObjectHudget::ObjectHudget(HUD* hud, HUDObjectDelegate* objectDelegate):
 
 void ObjectHudget::update(float deltaSec) {
     WorldObject* worldObject = m_objectDelegate->worldObject();
-
     if(worldObject) {
         calculateOpeningAngle();
         pointToWorldPoint(worldObject->transform().position());
@@ -41,5 +43,17 @@ void ObjectHudget::calculateOpeningAngle() {
     alpha = std::max(alpha, 0.04f); // Hack, set minimum size
 
     m_voxels.setOpeningAngle(alpha);
+}
+
+HUDObjectDelegate* ObjectHudget::objectDelegate() {
+    return m_objectDelegate;
+}
+
+void ObjectHudget::onClick() {
+    hud()->player()->playerShip()->setTargetObject(m_objectDelegate->worldObject());
+}
+
+bool ObjectHudget::isAt(const Ray& ray) const {
+    return ray.intersects(Sphere(worldPosition(), 2.0f)); // needs to depend on hudget size
 }
 

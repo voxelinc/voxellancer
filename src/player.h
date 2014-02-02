@@ -6,14 +6,15 @@
 
 #include "camera/cameradolly.h"
 
-#include "ui/hud/hud.h"
 
 #include "worldobject/handle/handle.h"
 
+#include "ui/hud/hud.h"
+
+class HUD;
 
 class Camera;
 class CameraDolly;
-class HUD;
 
 class Game;
 

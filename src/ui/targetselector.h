@@ -2,6 +2,7 @@
 
 #include <functional>
 
+
 class WorldObject;
 class Player;
 
@@ -11,6 +12,8 @@ public:
 
     void selectNextTarget();
     void selectPreviousTarget();
+
+    void selectTargetOnClick();
     
 private:
     Player* m_player;
