@@ -40,9 +40,11 @@ WorldObjectComponents& WorldObject::components() {
     return m_components;
 }
 
-void WorldObject::loadCluster(const std::string& key) {
+void WorldObject::load(const std::string& key) {
     std::string clusterFile = Property<std::string>(key + ".general.voxelcluster");
     ClusterCache::instance()->fillObject(this, std::string("data/voxelcluster/") + clusterFile);
+
+    m_components.load(key);
 }
 
 void WorldObject::update(float deltaSec) {

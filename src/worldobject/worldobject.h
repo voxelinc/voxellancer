@@ -33,7 +33,7 @@ public:
     ObjectInfo& objectInfo();
     WorldObjectComponents& components();
 
-    void loadCluster(const std::string& key);
+    void load(const std::string& key);
 
     virtual void update(float deltaSec);
 

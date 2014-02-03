@@ -13,10 +13,7 @@ T* WorldObjectFactory::build(const std::string& name) {
     T* worldObject = new T();
     m_worldObject = worldObject;
 
-    m_worldObject->loadCluster(name);
-    
-    setupHardpoints();
-    setupEngineSlots();
+    m_worldObject->load(name);
 
     return worldObject;
 }

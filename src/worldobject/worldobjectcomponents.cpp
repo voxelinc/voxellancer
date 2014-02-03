@@ -11,12 +11,15 @@
 WorldObjectComponents::WorldObjectComponents(WorldObject* worldObject):
     m_worldObject(worldObject)
 {
-    setupHardpoints();
-    setupEngineSlots();
 }
 
 WorldObject* WorldObjectComponents::worldObject() {
     return m_worldObject;
+}
+
+void WorldObjectComponents::load(const std::string& key) {
+    setupHardpoints(key);
+    setupEngineSlots(key);
 }
 
 void WorldObjectComponents::addEngineSlot(EngineSlot* engineSlot) {
@@ -127,9 +130,9 @@ void WorldObjectComponents::update(float deltaSec) {
 }
 
 
-void WorldObjectComponents::setupHardpoints() {
+void WorldObjectComponents::setupHardpoints(const std::string& key) {
     for(Hardpoint* hardpoint : m_hardpoints) {
-        std::string prefix = m_worldObject->name() + ".hardpoint" + std::to_string(hardpoint->index()) + ".";
+        std::string prefix = key + ".hardpoint" + std::to_string(hardpoint->index()) + ".";
 
         hardpoint->setDirection(Property<glm::vec3>(prefix + "direction"));
         hardpoint->setFieldOfAim(Property<glm::vec2>(prefix + "fieldOfAim"));
@@ -141,9 +144,9 @@ void WorldObjectComponents::setupHardpoints() {
     }
 }
 
-void WorldObjectComponents::setupEngineSlots() {
-    for(EngineSlot* engineSlot : m_engineSlots()) {
-        std::string prefix = m_worldObject->name() + ".engineslot" + std::to_string(engineSlot->index()) + ".";
+void WorldObjectComponents::setupEngineSlots(const std::string& key) {
+    for(EngineSlot* engineSlot : m_engineSlots) {
+        std::string prefix = key + ".engineslot" + std::to_string(engineSlot->index()) + ".";
 
         engineSlot->setDirection(Property<glm::vec3>(prefix + "direction"));
 
