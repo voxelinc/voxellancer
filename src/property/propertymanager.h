@@ -11,8 +11,8 @@
 
 class InputMapping;
 
-template <class T> class Property;
-template <class T> class PropertyCollection;
+template<typename T> class Property;
+template<typename T> class PropertyCollection;
 
 /*
  Keeps track of properties and loads ini files.
@@ -27,21 +27,18 @@ public:
 
     void load(const std::string& file, const std::string& prefix = "");
 
-    template <class T>
-    void registerProperty(Property<T>* prop);
-
-    template <class T>
-    void unregisterProperty(Property<T>* prop);
+    template<typename T> void registerProperty(Property<T>* prop);
+    template<typename T> void unregisterProperty(Property<T>* prop);
 
     static PropertyManager* instance();
     static void reset();
 
-    template <class T>
-    T get(const std::string& name);
+    template<typename T> T get(const std::string& name);
+    template<typename T> T get(const std::string& name, const T& defaultValue);
 
 
 protected:
-    template <class T>
+    template<typename T>
     PropertyCollection<T>* getPropertyCollection(Property<T>* prop);
 
     std::unique_ptr<PropertyCollection<float>> m_floatProperties;

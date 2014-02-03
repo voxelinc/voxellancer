@@ -7,12 +7,13 @@ template <class T>
 class Property {
 public:
     Property(const std::string& name);
+    Property(const std::string& name, const T& defaultValue);
     virtual ~Property();
 
-    const std::string& name();
+    const std::string& name() const;
 
     T get() const;
-    void set(T value);
+    void set(const T& value);
 
     operator T() const;
     T* operator->();

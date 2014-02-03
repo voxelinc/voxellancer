@@ -20,6 +20,7 @@ GameScene::GameScene(Game* game):
     m_hd3000dummy(new HD3000Dummy()),
     m_soundManager(new SoundManager())
 {
+
 }
 
 GameScene::~GameScene() = default;

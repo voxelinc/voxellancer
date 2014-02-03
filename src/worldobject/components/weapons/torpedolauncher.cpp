@@ -3,14 +3,16 @@
 #include "world/world.h"
 #include "world/god.h"
 
+#include "resource/worldobjectfactory.h"
+
 #include "torpedo.h"
 
 
 TorpedoLauncher::TorpedoLauncher():
     Weapon("torpedolauncher"),
-    m_cooldownTime("rocketlauncher.general.cooldownTime"),
-    m_torpedoLifetime("rocketlauncher.torpedo.lifetime"),
-    m_torpedoTravelspeed("rocketlauncher.torpedo.travelspeed")
+    m_cooldownTime("torpedolauncher.general.cooldownTime"),
+    m_torpedoLifetime("torpedolauncher.rocket.lifetime"),
+    m_torpedoTravelspeed("torpedolauncher.rocket.travelspeed")
 {
 }
 
@@ -32,9 +34,10 @@ float TorpedoLauncher::cooldownTime() const {
 
 void TorpedoLauncher::shootAtObject(WorldObject* targetObject) {
     if (canFire()) {
-//        Torpedo* torpedo  = new Torpedo(source->position(), source->ship()->transform().orientation(), source->ship()->physics().directionalSpeed(), m_speed, m_lifetime, target);
-//        World::instance()->god().scheduleSpawn(r);
-        fired();
+//        Torpedo* torpedo = WorldObjectFactory::build<Rocket>("torpedo");
+//
+//        World::instance()->god().scheduleSpawn(torpedo);
+//        fired();
     }
 }
 

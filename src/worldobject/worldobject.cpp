@@ -20,6 +20,13 @@ WorldObject::WorldObject(CollisionFilterClass collisionFilterClass, float scale)
 {
 }
 
+WorldObject::WorldObject(const std::string& key):
+    WorldObject(CollisionFilterClass::Other, 1.0f)
+{
+    CollisionFilterable::setClass(CollisionFilterable::classFromString(Property<std::string>(key + ".general.objectType")));
+    m_transform.setSize(PropertyManager::instance()->get<float>(key + ".general.size"));
+}
+
  WorldObject::~WorldObject() {
      m_handle.invalidate();
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <map>
+#include <string>
 
 #include <functional>
 
@@ -20,8 +21,11 @@ public:
 
     void registerProperty(Property<T> * prop);
     void unregisterProperty(Property<T> * prop);
+
     bool update(const std::string & key, const std::string & svalue);
-    T get(char* name);
+
+    T get(const std::string& name) const;
+    T get(const std::string& name, const std::string& defaultValue) const;
 
 
 private:

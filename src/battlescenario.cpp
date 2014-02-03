@@ -17,6 +17,7 @@
 #include "worldobject/components/engine.h"
 #include "worldobject/components/weapon.h"
 #include "worldobject/components/weapons/gun.h"
+#include "worldobject/components/weapons/torpedolauncher.h"
 #include "worldobject/components/engines/piratethruster.h"
 #include "worldobject/ship.h"
 
@@ -48,6 +49,7 @@ void BattleScenario::populate(Game* game) {
     world->god().scheduleSpawn(playerShip);
     playerShip->components().hardpoint(0)->setWeapon(new Gun());
     playerShip->components().hardpoint(1)->setWeapon(new Gun());
+    playerShip->components().hardpoint(2)->setWeapon(new TorpedoLauncher());
     playerShip->components().engineSlot(0)->setEngine(new PirateThruster());
     game->player().setShip(playerShip);
 

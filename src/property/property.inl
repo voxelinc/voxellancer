@@ -4,7 +4,15 @@
 
 
 template <class T>
-Property<T>::Property(const std::string& name) :
+Property<T>::Property(const std::string& name):
+    m_name(name),
+    m_value()
+{
+    PropertyManager::instance()->registerProperty(this);
+}
+
+template <class T>
+Property<T>::Property(const std::string& name, const T& defaultValue):
     m_name(name),
     m_value()
 {
@@ -17,7 +25,7 @@ Property<T>::~Property() {
 }
 
 template <class T>
-const std::string& Property<T>::name() {
+const std::string& Property<T>::name() const {
     return m_name;
 }
 
@@ -27,7 +35,7 @@ T Property<T>::get() const {
 }
 
 template <class T>
-void Property<T>::set(T value) {
+void Property<T>::set(const T& value) {
     m_value = value;
 }
 
