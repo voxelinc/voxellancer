@@ -1,14 +1,12 @@
-#version 130
-#extension GL_ARB_draw_instanced : require
+#version 330
 
-in vec3 v_vertex;
-in vec3 v_normal;
-in vec3 v_position;
-in vec4 v_orientation;
-in float v_scale;
-in vec4 v_color;
-in float v_emissiveness;
-
+layout(location=0) in vec3 v_vertex;
+layout(location=1) in vec3 v_normal;
+layout(location=2) in vec3 v_position;
+layout(location=3) in vec4 v_orientation;
+layout(location=4) in float v_scale;
+layout(location=5) in vec4 v_color;
+layout(location=6) in float v_emissiveness;
 
 flat out vec3 f_normal;
 out vec3 f_color;
