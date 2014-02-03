@@ -11,45 +11,37 @@ Property<T>::Property(char * name) :
 }
 
 template <class T>
-Property<T>::~Property()
-{
+Property<T>::~Property() {
     PropertyManager::instance()->unregisterProperty(this);
 }
 
 template <class T>
-char * Property<T>::name()
-{
+const char* Property<T>::name() const {
     return m_name;
 }
 
 template <class T>
-T Property<T>::get()
-{
+T Property<T>::get() const {
     return m_value;
 }
 
 template <class T>
-void Property<T>::set(T value)
-{
+void Property<T>::set(T value) {
     m_value = value;
 }
 
 template <class T>
-Property<T>::operator T()
-{
+Property<T>::operator T() const {
     return m_value;
 }
 
 template <class T>
 T* Property<T>::operator->() {
-    {
-        return &m_value;
-    }
+    return &m_value;
 }
 
-
 template <class T>
-T Property<T>::get(char* name) {
+T Property<T>::get(const char* name) {
     return PropertyManager::instance()->get<float>(name);
 }
 

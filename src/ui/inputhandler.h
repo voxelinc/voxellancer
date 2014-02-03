@@ -115,6 +115,5 @@ protected:
     ActionKeyMapping selectNextAction;
     ActionKeyMapping selectPreviousAction;
 
-    glm::vec3 findTargetPoint();
     void placeCrossHair(double winX, double winY);
 };

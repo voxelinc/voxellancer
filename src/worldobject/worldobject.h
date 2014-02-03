@@ -56,8 +56,8 @@ public:
     Handle<WorldObject>& handle();
 
     bool scheduledForDeletion();
-
     void onScheduleForDeletion();
+
 
 protected:
     bool m_scheduledForDeletion;

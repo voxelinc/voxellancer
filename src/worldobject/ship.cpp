@@ -29,8 +29,6 @@ Ship::~Ship() {
     m_shipHandle.invalidate();
 }
 
-
-
 void Ship::update(float deltaSec) {
     m_character->update(deltaSec);
     for(Hardpoint *hardpoint : m_hardpoints) {
@@ -64,6 +62,10 @@ void Ship::addHardpointVoxel(HardpointVoxel* voxel) {
 
 void Ship::removeHardpoint(Hardpoint *hardpoint) {
     m_hardpoints.remove(hardpoint);
+}
+
+const std::list<Hardpoint*> Ship::hardpoints() const {
+    return m_hardpoints;
 }
 
 void Ship::addEngineVoxel(EngineVoxel* voxel) {
@@ -112,6 +114,15 @@ float Ship::minAimDistance() { // is this needed ?!
         if (hardpoint->range() > 0) {
             range = glm::min(hardpoint->range(), range);
         }
+    }
+    return range;
+}
+
+float Ship::maxAimDistance() { // is this needed ?!
+    float range = 0;
+    for (Hardpoint *hardpoint : m_hardpoints) {
+        if (hardpoint->range() != -1)
+            range = glm::max(hardpoint->range(), range);
     }
     return range;
 }

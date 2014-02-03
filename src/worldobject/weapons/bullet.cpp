@@ -14,7 +14,6 @@ Bullet::Bullet(WorldObject* creator, float lifetime) :
     m_creator(creator),
     m_lifetime(lifetime)
 {
-
     ClusterCache::instance()->fillObject(this, "data/voxelcluster/bullet.csv");
 
     m_objectInfo.setName("Bullet");
@@ -22,6 +21,7 @@ Bullet::Bullet(WorldObject* creator, float lifetime) :
     m_objectInfo.setCanLockOn(false);
 
     CollisionFilterable::setCollideableWith(CollisionFilterClass::Bullet, false);
+    //CollisionFilterable::setCollideableWith(CollisionFilterClass::Ship, false);
 
     m_physics.setAngularSpeed(glm::vec3(0.0f, 0.0f, 50));
     m_physics.setDampening(0.0f);

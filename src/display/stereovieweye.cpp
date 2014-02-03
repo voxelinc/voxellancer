@@ -32,6 +32,10 @@ StereoViewEye::StereoViewEye(const Size<int>& viewportResolution, const StereoRe
     }
 }
 
+const Camera& StereoViewEye::camera() const {
+    return m_camera;
+}
+
 glow::FrameBufferObject& StereoViewEye::fbo() {
     return m_fbo;
 }
