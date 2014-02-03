@@ -1,5 +1,7 @@
 #pragma once
 
+#include <unordered_map>
+
 
 class CommandLineParser {
 public:
@@ -9,9 +11,12 @@ public:
 
     bool hmd() const;
     bool stereoView() const;
-
+    bool fullScreen() const;
 
 private:
-    bool m_hmd;
-    bool m_stereoView;
+    std::unordered_map<std::string, std::string> m_options;
+    
+    bool isSet(const std::string& arg) const;
+    void checkHelp();
+
 };

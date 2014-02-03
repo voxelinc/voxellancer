@@ -28,7 +28,7 @@ public:
     void load(const std::string& file, const std::string& prefix = "");
 
     template <class T>
-    void registerProperty(Property<T> *prop);
+    void registerProperty(Property<T>* prop);
 
     template <class T>
     void unregisterProperty(Property<T>* prop);
@@ -40,9 +40,9 @@ public:
     T get(const std::string& name);
 
 
-private:
+protected:
     template <class T>
-    PropertyCollection<T> *getPropertyCollection(Property<T> * prop);
+    PropertyCollection<T>* getPropertyCollection(Property<T>* prop);
 
     std::unique_ptr<PropertyCollection<float>> m_floatProperties;
     std::unique_ptr<PropertyCollection<int>> m_intProperties;

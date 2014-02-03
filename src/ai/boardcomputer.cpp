@@ -14,13 +14,13 @@ static const float s_minActAngle = glm::radians(1.0f);
 static const float s_minAutoUpAngle = glm::radians(10.0f);
 
 BoardComputer::BoardComputer(Ship& ship) :
-    m_ship(ship)
+    m_ship(ship),
+    m_overwriteEngineState(false)
 {
 }
 
 void BoardComputer::moveTo(const glm::vec3& position) {
     glm::vec3 projectedPosition = m_ship.physics().projectedTransformIn(1.0f).position();
-
     glm::vec3 delta = position - projectedPosition;
     glm::vec3 localDirection = glm::inverse(m_ship.transform().orientation()) * glm::normalize(delta);
     float distance = glm::length(delta);
@@ -28,6 +28,8 @@ void BoardComputer::moveTo(const glm::vec3& position) {
     if (distance >= s_minActDistance) {
         m_engineState.setDirectional(localDirection);
     }
+
+    m_overwriteEngineState = true;
 }
 
 void BoardComputer::rotateTo(const glm::vec3& position, const glm::vec3& up) {
@@ -48,6 +50,8 @@ void BoardComputer::rotateTo(const glm::vec3& position, const glm::vec3& up) {
     } else {
         rotateUpAuto(rotation);
     }
+
+    m_overwriteEngineState = true;
 }
 
 void BoardComputer::rotateUpTo(const glm::vec3& up) {
@@ -71,7 +75,7 @@ void BoardComputer::rotateUpAuto(const glm::quat& rotation) {
     }
 }
 
-void BoardComputer::shootBullet(const std::list<Handle<WorldObject>>& targets) {
+void BoardComputer::shootBullet(const std::vector<Handle<WorldObject>>& targets) {
     float max_angle = glm::radians(45.0f);
 
     for (auto targetHandle : targets) {
@@ -96,5 +100,9 @@ void BoardComputer::shootRockets(Handle<WorldObject> target) {
 }
 
 void BoardComputer::update(float deltaSec) {
-    m_ship.components().setEngineState(m_engineState);
+    if(m_overwriteEngineState) {
+        m_ship.components().setEngineState(m_engineState);
+    }
+    m_overwriteEngineState = false;
 }
+

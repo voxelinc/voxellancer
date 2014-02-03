@@ -64,17 +64,14 @@ static glm::vec4 vec4Converter(const std::string &s) {
 static std::list<std::string> listConverter(const std::string &s) {
     regexns::smatch matches;
     regexns::regex_match(s, matches, list_regex());
-
-
     std::list<std::string> result;
 
-    for(int i = 0; i < matches.size(); i++) {
-        std::cout << i << ": " << matches[i] << std::endl;
-    }
-    std::cout << std::endl;
-
     for(int i = 1; i <= matches.size(); i += 2) {
-        result.push_back(matches[i]);
+        std::string listEntry = matches[i];
+
+         if(!listEntry.empty()) {
+            result.push_back(matches[i]);
+        }
     }
 
     return result;

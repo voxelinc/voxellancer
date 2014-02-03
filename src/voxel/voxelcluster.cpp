@@ -19,18 +19,20 @@
 
 VoxelCluster::VoxelCluster(float scale):
     m_voxels(),
+    m_bounds(this),
     m_voxelRenderData(m_voxels),
-    m_transform(glm::vec3(0), scale),
-    m_minimalGridSphereValid(false),
-    m_minimalGridAABBValid(false),
-    m_aabbValid(false)
+    m_transform(glm::vec3(0), scale)
 {
 }
 
 VoxelCluster::~VoxelCluster() {
-    for (auto& element : m_voxels){
+    for (auto& element : m_voxels) {
         delete element.second;
     }
+}
+
+VoxelClusterBounds& VoxelCluster::bounds() {
+    return m_bounds;
 }
 
 Transform& VoxelCluster::transform() {
@@ -39,33 +41,6 @@ Transform& VoxelCluster::transform() {
 
 void VoxelCluster::setTransform(const Transform& transform) {
     m_transform = transform;
-}
-
-const IAABB& VoxelCluster::minimalGridAABB() {
-    if(!m_minimalGridAABBValid) {
-        calculateMinimalGridAABB();
-    }
-    return m_minimalGridAABB;
-}
-
-const Sphere& VoxelCluster::minimalGridSphere() {
-    if(!m_minimalGridSphereValid) {
-        calculateMinimalGridSphere();
-    }
-    return m_minimalGridSphere;
-}
-
-const IAABB& VoxelCluster::aabb() {
-    if(!m_aabbValid || m_transform != m_cachedAABBTransform) {
-        m_aabb = calculateAABB(m_transform);
-        m_cachedAABBTransform = m_transform;
-        m_aabbValid = true;
-    }
-    return m_aabb;
-}
-
-IAABB VoxelCluster::aabb(const Transform& transform) {
-    return calculateAABB(transform);
 }
 
 Voxel* VoxelCluster::voxel(const glm::ivec3& position) {
@@ -77,18 +52,17 @@ void VoxelCluster::addVoxel(Voxel* voxel) {
     assert(m_voxels[voxel->gridCell()] == nullptr);
 
     m_voxels[voxel->gridCell()] = voxel;
+    m_bounds.addVoxel(voxel);
     m_voxelRenderData.invalidate();
-
-    extendGridAABB(voxel);
 }
 
 void VoxelCluster::removeVoxel(Voxel* voxel) {
     assert(voxel != nullptr);
 
-    shrinkGridAABB(voxel);
-
+    m_bounds.removeVoxel(voxel); // Needs to be done before removal from m_voxels
     m_voxels.erase(voxel->gridCell());
     m_voxelRenderData.invalidate();
+
     delete voxel;
 }
 
@@ -102,56 +76,6 @@ const std::unordered_map<glm::ivec3, Voxel*>& VoxelCluster::voxelMap() const {
 
 int VoxelCluster::voxelCount() const {
     return m_voxels.size();
-}
-
-void VoxelCluster::extendGridAABB(Voxel* voxel) {
-    m_voxelsXSorted.insert(voxel);
-    m_voxelsYSorted.insert(voxel);
-    m_voxelsZSorted.insert(voxel);
-
-    m_minimalGridSphereValid = false;
-    m_minimalGridAABBValid = false;
-    m_aabbValid = false;
-}
-
-void VoxelCluster::shrinkGridAABB(Voxel* voxel) {
-    m_voxelsXSorted.erase(voxel);
-    m_voxelsYSorted.erase(voxel);
-    m_voxelsZSorted.erase(voxel);
-
-    m_minimalGridSphereValid = false;
-    m_minimalGridAABBValid = false;
-    m_aabbValid = false;
-}
-
-void VoxelCluster::calculateMinimalGridAABB() {
-    if(voxelCount() != 0) {
-        m_minimalGridAABB = IAABB(
-            glm::ivec3((*m_voxelsXSorted.begin())->gridCell().x, (*m_voxelsYSorted.begin())->gridCell().y, (*m_voxelsZSorted.begin())->gridCell().z),
-            glm::ivec3((*m_voxelsXSorted.rbegin())->gridCell().x, (*m_voxelsYSorted.rbegin())->gridCell().y, (*m_voxelsZSorted.rbegin())->gridCell().z)
-        );
-    }
-    else {
-        m_minimalGridAABB = IAABB(glm::ivec3(0, 0, 0), glm::ivec3(0, 0, 0));
-    }
-    m_minimalGridAABBValid = true;
-}
-
-void VoxelCluster::calculateMinimalGridSphere() {
-    m_minimalGridSphere.setPosition(glm::vec3(minimalGridAABB().rub() + minimalGridAABB().llf()) / 2.0f);
-    // m_gridAABB only contains the center of each voxel so add sqrt(2) to add the distance from center to edge
-    m_minimalGridSphere.setRadius((glm::length(glm::vec3(minimalGridAABB().rub() - minimalGridAABB().llf())) + glm::root_two<float>()) / 2.f);
-    m_minimalGridSphereValid = true;
-}
-
-IAABB VoxelCluster::calculateAABB(const Transform& transform) {
-    glm::vec3 middle = transform.applyTo(minimalGridSphere().position());
-    float radius = minimalGridSphere().radius() * transform.scale();
-
-    glm::ivec3 llf(static_cast<glm::ivec3>(middle - glm::vec3(radius, radius, radius)));
-    glm::ivec3 rub(static_cast<glm::ivec3>(middle + glm::vec3(radius + 1, radius + 1, radius + 1)));
-
-    return IAABB(llf, rub);
 }
 
 float VoxelCluster::emissiveness() {

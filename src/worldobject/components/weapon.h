@@ -23,7 +23,8 @@ public:
     void setHardpoint(Hardpoint* hardpoint);
 
     virtual WeaponAimType aimType() const = 0;
-    virtual float estimatedRange() const = 0;
+    virtual float bulletSpeed() const = 0;
+    virtual float bulletLifetime() const = 0;
     virtual float cooldownTime() const = 0;
 
     virtual void shootAtPoint(const glm::vec3& point);

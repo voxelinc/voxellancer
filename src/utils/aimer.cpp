@@ -1,4 +1,4 @@
-#include "aimhelper.h"
+#include "aimer.h"
 
 #include <glm/glm.hpp>
 
@@ -33,13 +33,14 @@ namespace {
     };
 }
 
-AimHelper::AimHelper(WorldObject* worldObject, const Ray& ray):
+Aimer::Aimer(WorldObject* worldObject, const Ray& ray):
     m_worldObject(worldObject),
-    m_ray(ray)
+    m_ray(ray),
+    m_infityAimDistance("general.inifinityAimDistance")
 {
 }
 
-glm::vec3 AimHelper::aim() {
+glm::vec3 Aimer::aim() {
     glm::vec3 targetPoint;
 
     CollisionFilter collisionFilter(m_worldObject);
@@ -55,7 +56,7 @@ glm::vec3 AimHelper::aim() {
     }
 }
 
-glm::vec3 AimHelper::nearestTarget(const std::set<Voxel*>& voxels) const {
+glm::vec3 Aimer::nearestTarget(const std::set<Voxel*>& voxels) const {
     Voxel* anyVoxel = *voxels.begin();
 
     float minDistance = distanceTo(anyVoxel);
@@ -73,10 +74,11 @@ glm::vec3 AimHelper::nearestTarget(const std::set<Voxel*>& voxels) const {
     return targetPoint;
 }
 
-float AimHelper::distanceTo(Voxel* voxel) const {
+float Aimer::distanceTo(Voxel* voxel) const {
     return glm::length(voxel->position() - m_ray.origin());
 }
 
-glm::vec3 AimHelper::infinity() const {
-    return m_ray.origin() + m_ray.direction() * 512.0f;
+glm::vec3 Aimer::infinity() const {
+    return m_ray.origin() + m_ray.direction() * m_infityAimDistance.get();
 }
+

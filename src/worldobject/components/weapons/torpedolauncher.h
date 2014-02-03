@@ -12,7 +12,8 @@ public:
     TorpedoLauncher();
 
     virtual WeaponAimType aimType() const override;
-    virtual float estimatedRange() const override;
+    virtual float bulletLifetime() const override;
+    virtual float bulletSpeed() const override;
     virtual float cooldownTime() const override;
 
     virtual void shootAtObject(WorldObject* targetObject) override;

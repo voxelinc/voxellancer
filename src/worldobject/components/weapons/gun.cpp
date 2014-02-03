@@ -27,8 +27,12 @@ WeaponAimType Gun::aimType() const {
     return WeaponAimType::Point;
 }
 
-float Gun::estimatedRange() const {
-    return m_bulletSpeed.get() * m_bulletLifetime.get();
+float Gun::bulletLifetime() const {
+    return m_bulletLifetime;
+}
+
+float Gun::bulletSpeed() const {
+    return m_bulletSpeed;
 }
 
 float Gun::cooldownTime() const {

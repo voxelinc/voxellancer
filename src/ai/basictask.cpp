@@ -9,3 +9,7 @@ BasicTask::BasicTask(Ship& ship) :
 void BasicTask::update(float deltaSec) {
 
 }
+
+bool BasicTask::isInProgress() {
+    return true;
+}

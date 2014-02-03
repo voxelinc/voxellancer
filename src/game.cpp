@@ -1,7 +1,5 @@
 #include "game.h"
 
-#include <GL/glew.h>
-
 #include "etc/windowmanager.h"
 
 #include "sound/soundmanager.h"
@@ -9,7 +7,9 @@
 #include "world/world.h"
 #include "player.h"
 #include "camera/cameradolly.h"
-#include "ui/hud.h"
+
+#include "ui/hud/hud.h"
+
 
 #include "battlescenario.h"
 
@@ -17,6 +17,7 @@ class Ship;
 
 Game::Game():
     m_inputHandler(&m_player),
+    m_player(this),
     m_viewer(Viewport(0, 0, WindowManager::instance()->resolution().width(), WindowManager::instance()->resolution().height())),
     m_gameScene(this),
     m_hmdManager(this)
@@ -44,12 +45,11 @@ HMDManager& Game::hmdManager() {
 
 void Game::initialize() {
     assert(m_viewer.scene() == &m_gameScene);
-    BattleScenario scenario;
-    scenario.populate(this);
+    m_scenario.populate(this);
 }
 
 void Game::update(float deltaSec) {
-    deltaSec = glm::min(1.0f / 10.0f, deltaSec);
+    deltaSec = glm::min(0.1f, deltaSec);
 
     m_viewer.update(deltaSec);
     World::instance()->update(deltaSec);

@@ -43,6 +43,6 @@ T* Property<T>::operator->() {
 
 template <class T>
 T Property<T>::get(const std::string& name) {
-    return PropertyManager::instance()->get<float>(name);
+    return PropertyManager::instance()->get<T>(name);
 }
 

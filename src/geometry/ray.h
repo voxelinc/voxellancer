@@ -23,6 +23,8 @@ public:
     virtual bool nearTo(const TAABB<int>& aabb) const override;
     virtual bool containedBy(const TAABB<int>& aabb) const override;
 
+    static Ray fromTo(const glm::vec3& from, const glm::vec3& to);
+
 
 protected:
     glm::vec3 m_origin;

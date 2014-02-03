@@ -1,18 +1,21 @@
 #pragma once
 
 #include <map>
+#include <list>
 #include <string>
 
 
 class WorldObjectComponents;
 
 /*
-    Where the (special)voxels define visual appearance, a WorldObjectSlot
-    is responsible for the logic this specialvoxel has.
+    Base class for everything on a worldobject that behaves like a slot
+    that can be (or cannot) be equipped with equipment
 */
 class WorldObjectSlot {
 public:
     WorldObjectSlot(WorldObjectComponents* components, int index);
+
+    std::list<std::string> mountables() const;
 
     bool mountable(const std::string& name) const;
     void setMountable(const std::string& name, bool mountable);

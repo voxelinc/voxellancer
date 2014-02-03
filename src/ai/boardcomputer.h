@@ -1,5 +1,6 @@
 #pragma once
 
+#include <vector>
 #include <list>
 
 #include <glm/glm.hpp>
@@ -20,7 +21,7 @@ public:
     void moveTo(const glm::vec3& position);
     void rotateTo(const glm::vec3& position, const glm::vec3& up = glm::vec3(0, 0, 0));
 
-    void shootBullet(const std::list<Handle<WorldObject>>& targets);
+    void shootBullet(const std::vector<Handle<WorldObject>>& targets);
     void shootRockets(Handle<WorldObject> target);
 
     void update(float deltaSec);
@@ -29,6 +30,7 @@ public:
 protected:
     Ship& m_ship;
     EngineState m_engineState;
+    bool m_overwriteEngineState;
 
     void rotateUpTo(const glm::vec3& up);
     void rotateUpAuto(const glm::quat& rotation);

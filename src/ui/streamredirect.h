@@ -4,7 +4,7 @@
 #include <streambuf>
 #include <string>
 
-#include "ui/hud.h"
+#include "ui/hud/hud.h"
 
 
 class StreamRedirect : public std::basic_streambuf<char> {

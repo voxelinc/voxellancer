@@ -27,8 +27,8 @@
 #include "world/god.h"
 
 
-GameScenario::GameScenario() {
-
+GameScenario::GameScenario()
+{
 }
 
 void GameScenario::populate(Game* game) {
@@ -43,14 +43,10 @@ void GameScenario::populate(Game* game) {
 
     Ship *playerShip = worldObjectFactory.build<Ship>("basicship");
     playerShip->transform().setPosition(glm::vec3(0, 0, 50));
-
     playerShip->components().hardpoint(0)->setWeapon(new Gun());
     playerShip->components().hardpoint(1)->setWeapon(new Gun());
-
     playerShip->components().engineSlot(0)->setEngine(new PirateThruster());
-
     game->player().setShip(playerShip);
-
     world->god().scheduleSpawn(playerShip);
 
     ship = worldObjectFactory.build<Ship>("basicship");
@@ -59,14 +55,11 @@ void GameScenario::populate(Game* game) {
     PatrolWaypointsTask* ta = new PatrolWaypointsTask(
         *ship,
         std::list<glm::vec3>{ glm::vec3(0, 0, 0), glm::vec3(-400, 0, 0), glm::vec3(-400, 200, 390) });
-    ship->setCharacter(
-        new DummyCharacter(*ship, ta)
-        );
-    world->god().scheduleSpawn(ship);
-
-
+    ship->setCharacter(new DummyCharacter(*ship, ta));
+   //  world->god().scheduleSpawn(ship);
 
     glow::debug("Initial spawn");
     world->god().spawn();
 }
+
 

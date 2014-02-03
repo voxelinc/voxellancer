@@ -29,7 +29,7 @@ go_bandit([](){
             a.addVoxel(new Voxel(glm::ivec3(2, 0, 0), 0xFFFFFF));
             a.addVoxel(new Voxel(glm::ivec3(3, 0, 0), 0xFFFFFF));
             a.addVoxel(new Voxel(glm::ivec3(4, 0, 0), 0xFFFFFF));
-            AssertThat(a.aabb().contains(glm::vec3(4.49, 0, 0)), Equals(true));
+            AssertThat(a.bounds().aabb().contains(glm::vec3(4.49, 0, 0)), Equals(true));
             AssertThat(a.transform().position(), EqualsWithDelta(glm::vec3(2, 0, 0), glm::vec3(0.01, 0.01, 0.01)));
 
             a.transform().setPosition(glm::vec3(7, 0, 0));

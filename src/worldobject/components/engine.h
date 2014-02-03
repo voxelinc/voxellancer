@@ -34,5 +34,7 @@ private:
     EngineSlot* m_engineSlot;
     EngineState m_state;
     EngineTrailGenerator m_trailGenerator;
+
+    void setupTrail();
 };
 

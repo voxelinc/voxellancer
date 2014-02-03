@@ -14,13 +14,13 @@ public:
     T get() const;
     void set(T value);
 
-    T* operator->();
     operator T() const;
+    T* operator->();
 
     static T get(const std::string& name);
 
 
-private:
+protected:
     std::string m_name;
     T m_value;
 };

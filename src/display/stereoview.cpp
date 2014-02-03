@@ -34,6 +34,18 @@ void StereoView::setViewport(const Viewport& viewport) {
     m_rightEye.setViewportResolution(Size<int>(viewport.width()/2, viewport.height()));
 }
 
+float StereoView::fovy() const {
+    return m_leftEye.camera().fovy();
+}
+
+float StereoView::zNear() const {
+    return m_leftEye.camera().zNear();
+}
+
+float StereoView::aspectRatio() const {
+    return m_leftEye.camera().aspectRatio();
+}
+
 void StereoView::draw(Scene* scene, CameraHead* cameraHead) {
     m_leftEye.draw(scene, cameraHead);
     m_rightEye.draw(scene, cameraHead);

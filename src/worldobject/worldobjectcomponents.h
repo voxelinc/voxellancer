@@ -85,5 +85,9 @@ protected:
     std::list<Hardpoint*> m_hardpoints;
 
     EngineState m_engineState;
+
+
+    void setupHardpoints();
+    void setupEngineSlots();
 };
 

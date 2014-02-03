@@ -18,8 +18,12 @@ WeaponAimType TorpedoLauncher::aimType() const {
     return WeaponAimType::Object;
 }
 
-float TorpedoLauncher::estimatedRange() const {
-    return m_torpedoLifetime * m_torpedoTravelspeed;
+float TorpedoLauncher::bulletLifetime() const {
+    return m_torpedoLifetime;
+}
+
+float TorpedoLauncher::bulletSpeed() const {
+    return m_torpedoTravelspeed;
 }
 
 float TorpedoLauncher::cooldownTime() const {

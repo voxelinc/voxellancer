@@ -8,35 +8,24 @@
 #include "worldobject/worldobject.h"
 
 #include "clustercache.h"
+#include "worldobjectequipmentfactory.h"
 
 
 WorldObjectFactory::WorldObjectFactory() {
 
 }
 
-void WorldObjectFactory::setupHardpoints() {
-    for(Hardpoint* hardpoint : m_worldObject->components().hardpoints()) {
-        std::string prefix = m_name + ".hardpoint" + std::to_string(hardpoint->index()) + ".";
-
-        hardpoint->setDirection(Property<glm::vec3>(prefix + "direction"));
-        hardpoint->setFieldOfAim(Property<glm::vec2>(prefix + "fieldOfAim"));
-
-        std::list<std::string> mountableWeapons = Property<std::list<std::string>>(prefix + "mountable");
-        for(std::string& weapon : mountableWeapons) {
-            hardpoint->setMountable(weapon, true);
+void WorldObjectFactory::equipSomehow(WorldObject* worldObject) {
+    for(Hardpoint* hardpoint : worldObject->components().hardpoints()) {
+        if(!hardpoint->mountables().empty()) {
+            Weapon* weapon = WorldObjectEquipmentFactory().weapon(hardpoint->mountables().front());
+            hardpoint->setWeapon(weapon);
         }
     }
-}
-
-void WorldObjectFactory::setupEngineSlots() {
-    for(EngineSlot* engineSlot : m_worldObject->components().engineSlots()) {
-        std::string prefix = m_name + ".engineslot" + std::to_string(engineSlot->index()) + ".";
-
-        engineSlot->setDirection(Property<glm::vec3>(prefix + "direction"));
-
-        std::list<std::string> mountableEngines = Property<std::list<std::string>>(prefix + "mountable");
-        for(std::string& engine : mountableEngines) {
-            engineSlot->setMountable(engine, true);
+    for(EngineSlot* engineSlot : worldObject->components().engineSlots()) {
+        if(!engineSlot->mountables().empty()) {
+            Engine* engine = WorldObjectEquipmentFactory().engine(engineSlot->mountables().front());
+            engineSlot->setEngine(engine);
         }
     }
 }

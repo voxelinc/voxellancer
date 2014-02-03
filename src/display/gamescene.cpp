@@ -9,9 +9,10 @@
 #include "worldobject/worldobject.h"
 #include "game.h"
 #include "player.h"
-#include "ui/hud.h"
+#include "ui/hud/hud.h"
 #include "world/world.h"
 #include "skybox.h"
+
 
 GameScene::GameScene(Game* game):
     m_game(game),

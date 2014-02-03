@@ -1,5 +1,7 @@
 #include "worldobjectequipmentfactory.h"
 
+#include <glow/logging.h>
+
 #include "worldobject/components/engines/enginemk1.h"
 #include "worldobject/components/engines/piratethruster.h"
 #include "worldobject/components/weapons/gun.h"
@@ -17,6 +19,8 @@ Weapon* WorldObjectEquipmentFactory::weapon(const std::string& name) {
     if (name == "torpedolauncher") {
         return new TorpedoLauncher();
     }
+    glow::info("No such weapon '%;'", name);
+    exit(-1);
 }
 
 Engine* WorldObjectEquipmentFactory::engine(const std::string& name) {
@@ -26,5 +30,7 @@ Engine* WorldObjectEquipmentFactory::engine(const std::string& name) {
     if (name == "enginemk1") {
         return new EngineMK1();
     }
+    glow::info("No such engine '%;'", name);
+    exit(-1);
 }
 

@@ -19,6 +19,6 @@ EnginePower PirateThruster::power() const {
 }
 
 void PirateThruster::update(float deltaSec) {
-
+    Engine::update(deltaSec);
 }
 

@@ -19,6 +19,6 @@ EnginePower EngineMK1::power() const {
 }
 
 void EngineMK1::update(float deltaSec) {
-
+    Engine::update(deltaSec);
 }
 

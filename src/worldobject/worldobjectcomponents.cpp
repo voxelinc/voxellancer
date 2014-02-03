@@ -11,6 +11,8 @@
 WorldObjectComponents::WorldObjectComponents(WorldObject* worldObject):
     m_worldObject(worldObject)
 {
+    setupHardpoints();
+    setupEngineSlots();
 }
 
 WorldObject* WorldObjectComponents::worldObject() {
@@ -123,4 +125,33 @@ void WorldObjectComponents::update(float deltaSec) {
         engineSlot->update(deltaSec);
     }
 }
+
+
+void WorldObjectComponents::setupHardpoints() {
+    for(Hardpoint* hardpoint : m_hardpoints) {
+        std::string prefix = m_worldObject->name() + ".hardpoint" + std::to_string(hardpoint->index()) + ".";
+
+        hardpoint->setDirection(Property<glm::vec3>(prefix + "direction"));
+        hardpoint->setFieldOfAim(Property<glm::vec2>(prefix + "fieldOfAim"));
+
+        std::list<std::string> mountableWeapons = Property<std::list<std::string>>(prefix + "mountable");
+        for(std::string& weapon : mountableWeapons) {
+            hardpoint->setMountable(weapon, true);
+        }
+    }
+}
+
+void WorldObjectComponents::setupEngineSlots() {
+    for(EngineSlot* engineSlot : m_engineSlots()) {
+        std::string prefix = m_worldObject->name() + ".engineslot" + std::to_string(engineSlot->index()) + ".";
+
+        engineSlot->setDirection(Property<glm::vec3>(prefix + "direction"));
+
+        std::list<std::string> mountableEngines = Property<std::list<std::string>>(prefix + "mountable");
+        for(std::string& engine : mountableEngines) {
+            engineSlot->setMountable(engine, true);
+        }
+    }
+}
+
 

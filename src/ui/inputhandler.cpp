@@ -7,13 +7,13 @@
 #include <glow/glow.h>
 
 #include "utils/tostring.h"
-#include "utils/aimhelper.h"
+#include "utils/aimer.h"
 
 #include "etc/windowmanager.h"
 
 #include "worldobject/worldobject.h"
 #include "player.h"
-#include "hud.h"
+#include "ui/hud/hud.h"
 #include "worldobject/ship.h"
 #include "camera/cameradolly.h"
 
@@ -43,7 +43,6 @@
 
 InputHandler::InputHandler(Player* player):
     m_player(player),
-
     m_hmd(nullptr),
 
     prop_deadzoneMouse("input.deadzoneMouse"),
@@ -164,11 +163,14 @@ void InputHandler::processMouseUpdate() {
     double x, y;
     glfwGetCursorPos(glfwGetCurrentContext(), &x, &y);
 
+    bool pressed = glfwGetMouseButton(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS;
+
+    m_player->hud().crossHair().setActionActive(pressed);
     placeCrossHair(x, y);
 
-    if (glfwGetMouseButton(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+    if (pressed) {
         if (m_player->ship()) {
-            m_player->ship()->components().fireAtPoint(findTargetPoint());
+            m_player->fire();
         }
     }
 
@@ -270,9 +272,11 @@ float InputHandler::getInputValue(InputMapping mapping) {
 }
 
 void InputHandler::processFireActions() {
+    m_player->hud().crossHair().setActionActive(getInputValue(&fireAction) > 0.001);
+
     if (getInputValue(&fireAction)) {
         if (m_player->ship()) {
-            m_player->ship()->components().fireAtPoint(findTargetPoint());
+            m_player->fire();
         }
     }
     if (getInputValue(&rocketAction)) {
@@ -316,18 +320,6 @@ void InputHandler::processTargetSelectActions() {
     if (getInputValue(&selectPreviousAction)) {
         m_targetSelector->selectPreviousTarget();
     }
-}
-
-glm::vec3 InputHandler::findTargetPoint() {
-
-    glm::vec3 shootDirection(glm::normalize(m_player->hud().crossHair().position() - m_player->cameraDolly().cameraHead().position()));
-
-    Ray ray(
-        m_player->hud().crossHair().position(),
-        shootDirection
-    );
-
-    return AimHelper(m_player->ship(), ray).aim();
 }
 
 void InputHandler::placeCrossHair(double winX, double winY) {
