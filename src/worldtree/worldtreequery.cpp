@@ -3,7 +3,7 @@
 #include <functional>
 #include <cassert>
 
-#include "collision/collisionfilterable.h"
+#include "collision/collisionfilter.h"
 
 #include "worldtree/worldtree.h"
 #include "worldtree/worldtreenode.h"
@@ -16,7 +16,7 @@
 
 
 
-WorldTreeQuery::WorldTreeQuery(WorldTree* worldTree, const AbstractShape* shape, WorldTreeNode* nodeHint, CollisionFilterable* collisionFilter):
+WorldTreeQuery::WorldTreeQuery(WorldTree* worldTree, const AbstractShape* shape, WorldTreeNode* nodeHint, CollisionFilter* collisionFilter):
     m_worldTree(worldTree),
     m_nodeHint(nodeHint),
     m_collisionFilter(collisionFilter),

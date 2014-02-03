@@ -7,10 +7,11 @@
 #include "resource/clustercache.h"
 #include "sound/sound.h"
 #include "sound/soundmanager.h"
+#include "collision/collisionfilter.h"
 
 
 Bullet::Bullet(WorldObject* creator, float lifetime) :
-    WorldObject(0.5f, CollisionFilterClass::Bullet),
+    WorldObject(0.5f, new CollisionFilter(CollisionFilterClass::Bullet)),
     m_creator(creator),
     m_lifetime(lifetime)
 {
@@ -20,7 +21,7 @@ Bullet::Bullet(WorldObject* creator, float lifetime) :
     m_objectInfo.setShowOnHud(false);
     m_objectInfo.setCanLockOn(false);
 
-    CollisionFilterable::setCollideableWith(CollisionFilterClass::Bullet, false);
+    m_collisionFilter->setCollideableWith(CollisionFilterClass::Bullet, false);
 
     m_physics.setAngularSpeed(glm::vec3(0.0f, 0.0f, 50));
     m_physics.setDampening(0.0f);
@@ -28,11 +29,11 @@ Bullet::Bullet(WorldObject* creator, float lifetime) :
 }
 
 
-CollisionFilterable* Bullet::creator() const {
+CollisionFilter* Bullet::creator() const {
     return m_creator;
 }
 
-bool Bullet::specialIsCollideableWith(const CollisionFilterable *other) const {
+bool Bullet::specialIsCollideableWith(const CollisionFilter *other) const {
     return m_creator != other;
 }
 

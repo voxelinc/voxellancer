@@ -12,7 +12,7 @@ public:
     Rocket(glm::vec3 position, glm::quat orientation, const glm::vec3& initialSpeed, float travelSpeed, float lifetime, WorldObject* creator, WorldObject* target);
     virtual void update(float deltaSec) override;
 
-    virtual bool specialIsCollideableWith(const CollisionFilterable* other) const override;
+    virtual bool specialIsCollideableWith(const CollisionFilter* other) const override;
     
     virtual void onCollision() override;
     virtual void onSpawnFail() override;

@@ -9,20 +9,20 @@
 #include "collision/collisiondetector.h"
 
 
-WorldObject::WorldObject(CollisionFilterClass collisionFilterClass):
-    WorldObject(1.0f, collisionFilterClass)
+WorldObject::WorldObject(CollisionFilter* collisionFilter) :
+    WorldObject(1.0f, collisionFilter)
 {
 }
 
-WorldObject::WorldObject(float scale, CollisionFilterClass collisionFilterClass) :
-    CollisionFilterable(collisionFilterClass),
+WorldObject::WorldObject(float scale, CollisionFilter* collisionFilter) :
     VoxelCluster(scale),
     m_physics(*this, scale),
     m_collisionDetector(*this),
     m_objectInfo(),
     m_crucialVoxel(nullptr),
     m_handle(Handle<WorldObject>(this)),
-    m_scheduledForDeletion(false)
+    m_scheduledForDeletion(false),
+    m_collisionFilter(collisionFilter)
 {
 }
 

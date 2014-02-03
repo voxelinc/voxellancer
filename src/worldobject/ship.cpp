@@ -10,9 +10,15 @@
 #include "ai/character.h"
 #include "ai/boardcomputer.h"
 #include "sound/sound.h"
+#include "collision/collisionfilter.h"
 
-Ship::Ship() :
-    WorldObject(CollisionFilterClass::Ship),
+
+Ship::Ship() : Ship(new CollisionFilter(this, CollisionFilterClass::Ship))
+{
+}
+
+Ship::Ship(CollisionFilter* collisionFilter):
+    WorldObject(collisionFilter),
     m_hardpoints(),
     m_engines(),
     prop_maxSpeed("ship.maxSpeed"),
@@ -22,6 +28,7 @@ Ship::Ship() :
     m_shipHandle(Handle<Ship>(this)),
     m_targetObjectHandle(Handle<WorldObject>(nullptr))
 {
+
 }
 
 

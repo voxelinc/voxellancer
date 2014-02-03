@@ -2,8 +2,6 @@
 
 #include <glm/glm.hpp>
 
-#include "collision/collisionfilterable.h"
-
 #include "voxel/voxeltree.h"
 #include "voxel/voxeltreenode.h"
 
@@ -12,18 +10,19 @@
 #include "worldobject/worldobject.h"
 
 #include "worldtree/worldtreequery.h"
+#include "collision/collisionfilter.h"
 
 
 namespace {
-    class CollisionFilter: public CollisionFilterable {
+    class CollisionFilter_: public CollisionFilter {
     public:
-        CollisionFilter(WorldObject* worldObject):
-            CollisionFilterable(CollisionFilterClass::Other),
+        CollisionFilter_(WorldObject* worldObject):
+            CollisionFilter(CollisionFilterClass::Other),
             m_worldObject(worldObject)
         {
         }
 
-        virtual bool specialIsCollideableWith(const CollisionFilterable *other) const override {
+        virtual bool specialIsCollideableWith(const CollisionFilter *other) const override {
             return m_worldObject != other;
         }
 
@@ -43,7 +42,7 @@ Aimer::Aimer(WorldObject* worldObject, const Ray& ray):
 glm::vec3 Aimer::aim() {
     glm::vec3 targetPoint;
 
-    CollisionFilter collisionFilter(m_worldObject);
+    CollisionFilter_ collisionFilter(m_worldObject);
     WorldTreeQuery wordltreequery(&World::instance()->worldTree(), &m_ray, nullptr, &collisionFilter);
 
     std::set<Voxel*> intersectingVoxels = wordltreequery.intersectingVoxels();
