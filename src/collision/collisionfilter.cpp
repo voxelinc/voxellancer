@@ -27,10 +27,6 @@ void CollisionFilter::setCollideableWith(CollisionFilterClass collisionFilterCla
     }
 }
 
-bool CollisionFilter::isCollideableWith(CollisionFilterClass collisionFilterClass) const {
-    return (m_collisionMask & static_cast<uint32_t>(collisionFilterClass)) > 0;
-}
-
 bool CollisionFilter::isCollideableWith(const CollisionFilter* other) const {
     return  (owner() != other->owner()) && areMasksCollidable(other) && specialIsCollideableWith(other) && other->specialIsCollideableWith(this);
 }

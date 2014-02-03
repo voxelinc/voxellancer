@@ -2,8 +2,6 @@
 
 #include <memory>
 
-#include "worldobject/ship.h"
-#include "worldobject/worldobject.h"
 #include "worldobject/handle/handle.h"
 
 

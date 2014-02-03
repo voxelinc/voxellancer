@@ -26,6 +26,5 @@ protected:
 
     bool areMasksCollidable(const CollisionFilter* other) const;
     virtual bool specialIsCollideableWith(const CollisionFilter* other) const;
-    bool isCollideableWith(CollisionFilterClass collisionFilterClass) const;
 };
 

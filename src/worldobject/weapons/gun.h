@@ -1,6 +1,7 @@
 #include <glm/glm.hpp>
 
 #include "weapon.h"
+#include "property/property.h"
 
 class Gun : public Weapon {
 public:
