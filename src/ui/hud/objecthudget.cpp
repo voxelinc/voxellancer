@@ -54,6 +54,7 @@ void ObjectHudget::onClick() {
 }
 
 bool ObjectHudget::isAt(const Ray& ray) const {
-    return ray.intersects(Sphere(worldPosition(), 2.0f)); // needs to depend on hudget size
+    return ray.nearTo(m_objectDelegate->worldObject()->bounds().aabb());
+    //return ray.intersects(Sphere(worldPosition(), 2.0f)); // needs to depend on hudget size
 }
 

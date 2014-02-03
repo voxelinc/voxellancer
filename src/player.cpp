@@ -3,6 +3,7 @@
 #include "utils/aimer.h"
 
 #include "worldobject/ship.h"
+#include "world/world.h"
 
 #include "game.h"
 
@@ -85,4 +86,39 @@ glm::quat Player::cameraOrientation() {
     return m_cameraDolly.cameraHead().orientation();
 }
 
+void Player::selectTarget(bool next) {
+    if (next) {
+        playerShip()->setTargetObject(findNextTarget(World::instance()->worldObjects().begin(), World::instance()->worldObjects().end()));
+    } else {
+        playerShip()->setTargetObject(findNextTarget(World::instance()->worldObjects().rbegin(), World::instance()->worldObjects().rend()));
+    }
+}
+
+template<typename IteratorType>
+WorldObject* Player::findNextTarget(IteratorType begin, IteratorType end) {
+    if (!playerShip()) {
+        return nullptr;
+    }
+
+    IteratorType searchBegin = begin;
+
+    if (playerShip()->targetObject() != nullptr) {
+        searchBegin = std::find(begin, end, playerShip()->targetObject());
+        searchBegin++;
+    }
+
+    IteratorType newTarget = std::find_if(searchBegin, end, canLockOnPredicate());
+
+    if (newTarget == end) {
+        newTarget = std::find_if(begin, searchBegin, canLockOnPredicate());
+    }
+
+    return newTarget != end ? *newTarget : nullptr;
+}
+
+std::function<bool(WorldObject*)> Player::canLockOnPredicate() {
+    return [](WorldObject* worldObject) {
+        return worldObject->objectInfo().canLockOn();
+    };
+}
 

@@ -7,9 +7,9 @@
 #include "property/property.h"
 
 #include "inputconfigurator.h"
-#include "targetselector.h"
 
 
+class Player;
 class WorldObject;
 class InputConfigurator;
 class HUD;
@@ -61,7 +61,6 @@ public:
 protected:
     Player* m_player;
     HMD* m_hmd;
-    TargetSelector* m_targetSelector;
     InputConfigurator* m_inputConfigurator;
     SecondaryInputValues m_secondaryInputValues;
     std::vector<ActionKeyMapping*> m_actions;

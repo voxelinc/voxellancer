@@ -69,9 +69,7 @@ InputHandler::InputHandler(Player* player):
     m_secondaryInputValues(),
     m_actions(),
 
-    m_inputConfigurator(new InputConfigurator(&m_actions, &m_secondaryInputValues, &prop_deadzoneGamepad, &m_player->hud())),
-
-    m_targetSelector(new TargetSelector(player))
+    m_inputConfigurator(new InputConfigurator(&m_actions, &m_secondaryInputValues, &prop_deadzoneGamepad, &m_player->hud()))
 {
     addActionsToVector();
 
@@ -83,7 +81,7 @@ InputHandler::InputHandler(Player* player):
 
     retrieveInputValues();
     m_currentTimePressed = 0;
-    m_maxClickTime = 0.1f;
+    m_maxClickTime = 0.075f;
 }
 
 void InputHandler::setHMD(HMD* hmd) {
@@ -130,9 +128,7 @@ void InputHandler::mouseButtonCallback(int button, int action, int mods) {
     if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_RELEASE) {
         if (m_currentTimePressed > 0 && m_currentTimePressed < m_maxClickTime) {
             m_player->hud().onClick(GLFW_MOUSE_BUTTON_RIGHT);
-            //printf("click");
         } else {
-            //printf("dragged");
         }
         m_currentTimePressed = 0;
     }
@@ -198,7 +194,7 @@ void InputHandler::processMouseUpdate(float deltaSec) {
     }
 
 
-    if (m_mouseControl || glfwGetMouseButton(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS) {
+    if (m_mouseControl || glfwGetMouseButton(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS &&  m_maxClickTime < m_currentTimePressed) {
         glm::vec3 rot;
         x = WindowManager::instance()->resolution().width() / 2 - (int)floor(x);
         y = WindowManager::instance()->resolution().height() / 2 - (int)floor(y);
@@ -328,10 +324,10 @@ void InputHandler::processRotateActions() {
 
 void InputHandler::processTargetSelectActions() {
     if (getInputValue(&selectNextAction)) {
-        m_targetSelector->selectNextTarget();
+        m_player->selectTarget(true);
     }
     if (getInputValue(&selectPreviousAction)) {
-        m_targetSelector->selectPreviousTarget();
+        m_player->selectTarget(false);
     }
 }
 
