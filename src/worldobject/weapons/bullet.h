@@ -8,10 +8,6 @@ class Bullet : public WorldObject {
 public:
     Bullet(WorldObject* creator, float lifetime);
 
-    virtual CollisionFilter* creator() const override;
-
-    virtual bool specialIsCollideableWith(const CollisionFilter* other) const override;
-
     virtual void update(float deltaSec) override;
 
     virtual void onCollision() override;

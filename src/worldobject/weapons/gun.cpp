@@ -6,6 +6,7 @@
 #include "bulletspawnhelper.h"
 #include "sound/sound.h"
 #include "sound/soundmanager.h"
+#include "bullet.h"
 
 Gun::Gun() :
     m_range("weapons.GunRange"),

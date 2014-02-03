@@ -9,11 +9,11 @@
 #include "resource/clustercache.h"
 #include "sound/soundmanager.h"
 #include "sound/sound.h"
-#include "collision/collisionfilter.h"
+#include "collision/collisionfilterignoringcreator.h"
 
 
 Rocket::Rocket(glm::vec3 position, glm::quat orientation, const glm::vec3& initialSpeed, float travelSpeed, float lifetime, WorldObject* creator, WorldObject* target) :
-    Ship(new CollisionFilter(this, CollisionFilterClass::Rocket)),
+    Ship(new CollisionFilterIgnoringCreator(this, creator, CollisionFilterClass::Rocket)),
     m_target(nullptr),
     m_creator(creator),
     m_lifetime(lifetime),
@@ -86,9 +86,6 @@ void Rocket::update(float deltaSec) {
     Ship::update(deltaSec);
 }
 
-bool Rocket::specialIsCollideableWith(const CollisionFilter *other) const {
-    return m_creator != other->owner() && m_creator != other->creator(); // prevent shooting down or colliding with your own rockets
-}
 
 void Rocket::onCollision(){
     m_sound->stop();

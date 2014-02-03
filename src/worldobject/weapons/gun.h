@@ -1,7 +1,6 @@
 #include <glm/glm.hpp>
+
 #include "weapon.h"
-#include "bullet.h"
-#include "resource/clustercache.h"
 
 class Gun : public Weapon {
 public:

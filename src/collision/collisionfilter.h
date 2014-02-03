@@ -14,13 +14,8 @@ public:
     uint32_t collisionMask() const;
 
     void setCollideableWith(CollisionFilterClass collisionFilterClass, bool collides);
-
-    bool isCollideableWith(CollisionFilterClass collisionFilterClass) const;
-    bool isCollideableWith(const CollisionFilter *other) const;
-
-    bool areMasksCollidable(const CollisionFilter *other) const;
-    virtual bool specialIsCollideableWith(const CollisionFilter *other) const;
-    
+    bool isCollideableWith(const CollisionFilter* other) const;
+        
     virtual WorldObject* owner() const;
     virtual WorldObject* creator() const;
 
@@ -28,5 +23,9 @@ protected:
     CollisionFilterClass m_collisionFilterClass;
     uint32_t m_collisionMask;
     WorldObject* m_owner;
+
+    bool areMasksCollidable(const CollisionFilter* other) const;
+    virtual bool specialIsCollideableWith(const CollisionFilter* other) const;
+    bool isCollideableWith(CollisionFilterClass collisionFilterClass) const;
 };
 

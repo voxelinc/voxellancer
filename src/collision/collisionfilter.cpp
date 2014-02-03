@@ -31,16 +31,16 @@ bool CollisionFilter::isCollideableWith(CollisionFilterClass collisionFilterClas
     return (m_collisionMask & static_cast<uint32_t>(collisionFilterClass)) > 0;
 }
 
-bool CollisionFilter::isCollideableWith(const CollisionFilter *other) const {
-    return  (this != other) && areMasksCollidable(other) && specialIsCollideableWith(other) && other->specialIsCollideableWith(this);
+bool CollisionFilter::isCollideableWith(const CollisionFilter* other) const {
+    return  (owner() != other->owner()) && areMasksCollidable(other) && specialIsCollideableWith(other) && other->specialIsCollideableWith(this);
 }
 
-bool CollisionFilter::areMasksCollidable(const CollisionFilter *other) const {
+bool CollisionFilter::areMasksCollidable(const CollisionFilter* other) const {
     return (static_cast<uint32_t>(m_collisionFilterClass) & other->collisionMask()) &&
            (static_cast<uint32_t>(other->collisionFilterClass()) & m_collisionMask);
 }
 
-bool CollisionFilter::specialIsCollideableWith(const CollisionFilter *other) const {
+bool CollisionFilter::specialIsCollideableWith(const CollisionFilter* other) const {
     return true;
 }
 

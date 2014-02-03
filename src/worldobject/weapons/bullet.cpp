@@ -7,12 +7,11 @@
 #include "resource/clustercache.h"
 #include "sound/sound.h"
 #include "sound/soundmanager.h"
-#include "collision/collisionfilter.h"
+#include "collision/collisionfilterignoringcreator.h"
 
 
 Bullet::Bullet(WorldObject* creator, float lifetime) :
-    WorldObject(0.5f, new CollisionFilter(CollisionFilterClass::Bullet)),
-    m_creator(creator),
+    WorldObject(new CollisionFilterIgnoringCreator(this, creator, CollisionFilterClass::Bullet), 0.5f),
     m_lifetime(lifetime)
 {
     ClusterCache::instance()->fillObject(this, "data/voxelcluster/bullet.csv");
@@ -26,15 +25,6 @@ Bullet::Bullet(WorldObject* creator, float lifetime) :
     m_physics.setAngularSpeed(glm::vec3(0.0f, 0.0f, 50));
     m_physics.setDampening(0.0f);
     m_physics.setAngularDampening(0.0f);
-}
-
-
-CollisionFilter* Bullet::creator() const {
-    return m_creator;
-}
-
-bool Bullet::specialIsCollideableWith(const CollisionFilter *other) const {
-    return m_creator != other;
 }
 
 void Bullet::update(float deltaSec) {
