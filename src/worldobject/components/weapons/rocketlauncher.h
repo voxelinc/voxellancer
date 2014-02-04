@@ -20,4 +20,6 @@ public:
 
 protected:
     virtual Rocket* createRocket() = 0;
+    void setupRocket(Rocket* rocket, WorldObject* target);
 };
+

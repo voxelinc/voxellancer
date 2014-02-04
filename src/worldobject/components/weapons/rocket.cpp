@@ -1,5 +1,7 @@
 #include "rocket.h"
 
+#include <iostream>
+
 #include "collision/collisionfilter.h"
 
 #include "world/god.h"
@@ -11,7 +13,6 @@ Rocket::Rocket():
     m_targetHandle(nullptr)
 {
     collisionFilter().setCollisionFilterClass(CollisionFilterClass::Rocket);
-    collisionFilter().setCollideableWith(CollisionFilterClass::Rocket, false);
 
     m_objectInfo.setShowOnHud(false);
     m_objectInfo.setCanLockOn(false);
@@ -27,6 +28,12 @@ void Rocket::setTarget(WorldObject* targetObject) {
 
 void Rocket::update(float deltaSec) {
     Projectile::update(deltaSec);
+
+    components().setEngineState(EngineState(
+        glm::vec3(0, 0, -1),
+        glm::vec3(0, 0, 0)
+    ));
+
     // TODO: follow target
 }
 

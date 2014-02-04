@@ -8,7 +8,7 @@
 GenericRocket::GenericRocket(const std::string& propertyPrefix):
     GenericWorldObject(propertyPrefix)
 {
-    setLifetime(Property<float>(propertyPrefix + ".lifetime"));
+    setLifetime(Property<float>(propertyPrefix + ".general.lifetime"));
 }
 
 void GenericRocket::spawnExplosion() {

@@ -2,6 +2,8 @@
 
 #include "resource/worldobjectfactory.h"
 
+#include "worldobject/components/hardpoint.h"
+
 #include "genericrocket.h"
 
 
@@ -21,7 +23,8 @@ void GenericRocketLauncher::update(float deltaSec) {
 }
 
 Rocket* GenericRocketLauncher::createRocket() {
-    GenericRocket* rocket = new GenericRocket(Property<std::string>(propertyPrefix() + ".rocket"));
+    GenericRocket* rocket = new GenericRocket(Property<std::string>(propertyPrefix() + ".general.rocket"));
     WorldObjectFactory().equipSomehow(rocket);
     return rocket;
 }
+

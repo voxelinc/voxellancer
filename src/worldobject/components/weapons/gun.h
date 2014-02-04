@@ -20,5 +20,6 @@ public:
 
 protected:
     virtual Bullet* createBullet() = 0;
+    void setupBullet(Bullet* bullet, const glm::vec3& point);
 };
 
