@@ -39,7 +39,7 @@ private:
     Player* m_player;
     std::deque<CameraLocation> m_locations[2];
     float m_time;
-    float m_LastUpdate;
+    float m_lastUpdate;
     Property<float> m_starfieldAge;
 
     glow::ref_ptr<glow::Program> m_shaderProgram;
