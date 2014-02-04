@@ -22,6 +22,7 @@ protected:
     Property<float> m_cooldownTime;
     Property<float> m_bulletSpeed;
     Property<float> m_bulletLifetime;
+    Property<std::string> m_bulletName;
 
     virtual Bullet* createBullet() override;
 };

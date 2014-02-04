@@ -40,8 +40,7 @@ HMDManager& Game::hmdManager() {
 
 void Game::initialize() {
     assert(m_viewer.scene() == &m_gameScene);
-    GameScenario scenario(this);
-    scenario.load();
+    m_scenario.load();
 }
 
 void Game::update(float deltaSec) {
