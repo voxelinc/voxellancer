@@ -7,6 +7,10 @@
 #include "player.h"
 #include "camera/cameradolly.h"
 
+#include "scenarios/battlescenario.h"
+#include "scenarios/gamescenario.h"
+#include "scenarios/demoscenario.h"
+
 
 class Ship;
 
@@ -15,8 +19,7 @@ Game::Game():
     m_inputHandler(&m_player),
     m_viewer(Viewport(0, 0, WindowManager::instance()->resolution().width(), WindowManager::instance()->resolution().height())),
     m_gameScene(this, &m_player),
-    m_hmdManager(this),
-    m_scenario(this)
+    m_hmdManager(this)
 {
     m_viewer.setScene(&m_gameScene);
     m_viewer.setCameraHead(&m_player.cameraDolly().cameraHead());
@@ -40,8 +43,9 @@ HMDManager& Game::hmdManager() {
 
 void Game::initialize() {
     assert(m_viewer.scene() == &m_gameScene);
-    GameScenario scenario(this);
-    scenario.load();
+    m_scenario = new DemoScenario(this);
+    m_inputHandler.setScenario(m_scenario);
+    m_scenario->load();
 }
 
 void Game::update(float deltaSec) {

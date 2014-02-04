@@ -17,6 +17,8 @@
 #include "worldobject/ship.h"
 #include "camera/cameradolly.h"
 
+#include "scenarios/basescenario.h"
+
 
 /*
 * 360 gamepad assignment: (direction given for positive values)
@@ -40,6 +42,7 @@
 * B8: left stick
 * B9: right stick
 */
+
 
 InputHandler::InputHandler(Player* player):
     m_player(player),
@@ -105,6 +108,7 @@ void InputHandler::keyCallback(int key, int scancode, int action, int mods) {
     }
 
     if(action == GLFW_PRESS) {
+        m_scenario->onKeyPressed(key);
         switch(key) {
             case GLFW_KEY_F10:
                 if (glfwJoystickPresent(GLFW_JOYSTICK_1)) {
@@ -329,4 +333,8 @@ SecondaryInputValues::SecondaryInputValues() {
     axisCnt = 0;
     buttonValues = glfwGetJoystickButtons(GLFW_JOYSTICK_1, &buttonCnt);
     axisValues = glfwGetJoystickAxes(GLFW_JOYSTICK_1, &axisCnt);
+}
+
+void InputHandler::setScenario(BaseScenario* scenario) {
+    m_scenario = scenario;
 }

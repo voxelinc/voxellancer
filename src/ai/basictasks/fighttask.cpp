@@ -29,7 +29,7 @@ void FightTask::update(float deltaSec) {
                 m_ship.boardComputer()->rotateTo(m_primaryTarget->transform().position());
                 m_ship.boardComputer()->moveTo(m_primaryTarget->transform().position());
             }
-            m_ship.boardComputer()->shootBullet(m_targets);
+            //m_ship.boardComputer()->shootBullet(m_targets);
             break;
         case ENGAGE:
             if (angleToTarget() > 45.0f) {
@@ -142,9 +142,7 @@ float FightTask::pointDistance(glm::vec3 point) {
 glm::vec3 FightTask::findRandomEvasionPoint() {
     glm::vec3 point = glm::vec3(RandFloat::rand(-0.25f, 0.25), RandFloat::rand(-0.25f, 0.25), -1);
     point *= 3 * m_minEnemyDistance;
-    point = point * m_ship.transform().orientation();
-    point += m_ship.transform().position();
-    return point;
+    return m_ship.transform().applyTo(point);
 }
 
 void FightTask::setState(int newState) {

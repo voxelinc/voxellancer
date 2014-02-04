@@ -27,7 +27,6 @@ BaseScenario(game)
 
 void GameScenario::populateWorld() {
 
-    glow::debug("Create WorldObjects");
     Ship* normandy = new Ship();
     ClusterCache::instance()->fillObject(normandy, "data/voxelcluster/normandy.csv");
     normandy->setPosition(glm::vec3(0, 0, -100));
@@ -120,7 +119,6 @@ void GameScenario::populateWorld() {
 
     }
 
-    glow::debug("Initial spawn");
     m_world->god().spawn();
 }
 

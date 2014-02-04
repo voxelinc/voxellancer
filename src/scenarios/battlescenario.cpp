@@ -18,28 +18,20 @@
 #include "world/god.h"
 #include "utils/randvec.h"
 
-
-BattleScenario::BattleScenario() {
-
+BattleScenario::BattleScenario(Game* game) :
+BaseScenario(game) {
 }
 
-void BattleScenario::populate(Game* game) {
-    glowutils::AutoTimer t("Initialize Game");
 
-
-    glow::debug("create world");
-    World* world = World::instance();
-
-    glow::debug("Create WorldObjects");
-
+void BattleScenario::populateWorld() {
     // create playership
     Ship *playerShip = new Ship();
     ClusterCache::instance()->fillObject(playerShip, "data/voxelcluster/basicship.csv");
     playerShip->setPosition(glm::vec3(0, 0, 10));
     playerShip->objectInfo().setName("basicship");
     playerShip->objectInfo().setShowOnHud(false);
-    world->god().scheduleSpawn(playerShip);
-    game->player().setShip(playerShip);
+    m_world->god().scheduleSpawn(playerShip);
+    m_game->player().setShip(playerShip);
 
     // create enemy ai driven ship
     Ship *aitester = new Ship();
@@ -53,8 +45,7 @@ void BattleScenario::populate(Game* game) {
     // create two opposing enemy forces
     populateBattle(4, 4);
 
-    glow::debug("Initial spawn");
-    world->god().spawn();
+    m_world->god().spawn();
 }
 
 void BattleScenario::populateBattle(int numberOfEnemies1, int numberOfEnemies2) {

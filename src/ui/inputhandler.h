@@ -9,7 +9,7 @@
 #include "inputconfigurator.h"
 #include "targetselector.h"
 
-
+class BaseScenario;
 class WorldObject;
 class InputConfigurator;
 class HUD;
@@ -56,8 +56,11 @@ public:
 	void keyCallback(int key, int scancode, int action, int mods);
 	void update(float deltaSec);
 
+    void setScenario(BaseScenario* scenario);
+
 
 protected:
+    BaseScenario* m_scenario;
     Player* m_player;
     HMD* m_hmd;
     TargetSelector* m_targetSelector;

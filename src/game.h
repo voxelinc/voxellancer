@@ -9,12 +9,11 @@
 
 #include "ui/inputhandler.h"
 
-#include "battlescenario.h"
 #include "player.h"
-#include "scenarios/gamescenario.h"
 
 
 class SoundManager;
+class BaseScenario;
 
 class Game {
 public:
@@ -38,7 +37,7 @@ private:
     InputHandler m_inputHandler;
     Viewer m_viewer;
     GameScene m_gameScene;
-    GameScenario m_scenario;
+    BaseScenario* m_scenario;
     HMDManager m_hmdManager;
 };
 
