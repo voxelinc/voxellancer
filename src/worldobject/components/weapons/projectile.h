@@ -18,8 +18,6 @@ public:
     float lifetime() const;
     void setLifetime(float lifetime);
 
-    virtual bool specialIsCollideableWith(const CollisionFilterable* other) const override;
-
     virtual void update(float deltaSec) override;
 
 

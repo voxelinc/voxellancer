@@ -3,28 +3,23 @@
 #include "etc/windowmanager.h"
 
 #include "sound/soundmanager.h"
-#include "gamescenario.h"
 #include "world/world.h"
 #include "player.h"
 #include "camera/cameradolly.h"
 
-#include "ui/hud/hud.h"
-
-
-#include "battlescenario.h"
 
 class Ship;
 
 Game::Game():
-    m_inputHandler(&m_player),
     m_player(this),
+    m_inputHandler(&m_player),
     m_viewer(Viewport(0, 0, WindowManager::instance()->resolution().width(), WindowManager::instance()->resolution().height())),
-    m_gameScene(this),
-    m_hmdManager(this)
+    m_gameScene(this, &m_player),
+    m_hmdManager(this),
+    m_scenario(this)
 {
     m_viewer.setScene(&m_gameScene);
     m_viewer.setCameraHead(&m_player.cameraDolly().cameraHead());
-    m_gameScene.setPlayer(&m_player);
 }
 
 InputHandler& Game::inputHandler() {
@@ -45,7 +40,8 @@ HMDManager& Game::hmdManager() {
 
 void Game::initialize() {
     assert(m_viewer.scene() == &m_gameScene);
-    m_scenario.populate(this);
+    GameScenario scenario(this);
+    scenario.load();
 }
 
 void Game::update(float deltaSec) {
@@ -64,5 +60,9 @@ void Game::draw() {
     glClear(GL_DEPTH_BUFFER_BIT);
 
     m_viewer.draw();
+}
+
+void Game::setOutputBuffer(int i) {
+    m_gameScene.setOutputBuffer(i);
 }
 

@@ -1,5 +1,7 @@
 #include "bullet.h"
 
+#include "collision/collisionfilter.h"
+
 #include "world/god.h"
 #include "world/world.h"
 
@@ -7,8 +9,8 @@
 Bullet::Bullet():
     Projectile()
 {
-    CollisionFilterable::setCollisionFilterClass(CollisionFilterClass::Bullet);
-    CollisionFilterable::setCollideableWith(CollisionFilterClass::Bullet, false);
+    collisionFilter().setCollisionFilterClass(CollisionFilterClass::Bullet);
+    collisionFilter().setCollideableWith(CollisionFilterClass::Bullet, false);
 
     m_objectInfo.setShowOnHud(false);
     m_objectInfo.setCanLockOn(false);

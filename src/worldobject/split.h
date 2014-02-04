@@ -6,5 +6,5 @@
 
 class Split : public WorldObject {
 public:
-    Split(const Transform& transform, CollisionFilterClass collisionFilterClass);
+    Split(const Transform& transform);
 };

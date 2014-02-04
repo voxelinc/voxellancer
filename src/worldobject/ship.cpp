@@ -4,20 +4,28 @@
 #include "ai/boardcomputer.h"
 
 #include "sound/sound.h"
+#include "collision/collisionfilter.h"
 
-#include "worldobject/handle/handle.h"
 
+Ship::Ship():
+    Ship(new CollisionFilter(this, CollisionFilterClass::Ship))
+{
+}
 
-Ship::Ship() :
-    WorldObject(CollisionFilterClass::Ship),
+Ship::Ship(CollisionFilter* collisionFilter):
+    WorldObject(collisionFilter),
     m_character(new Character(*this)),
     m_boardComputer(new BoardComputer(*this)),
     m_shipHandle(Handle<Ship>(this)),
     m_targetObjectHandle(Handle<WorldObject>(nullptr))
 {
+
 }
 
 Ship::~Ship() {
+//    if (m_sound) {
+//        m_sound->stop();
+//    }
     m_shipHandle.invalidate();
 }
 

@@ -142,14 +142,15 @@ list(REMOVE_ITEM SRC_FILES_EXCEPT_MAIN ${SRC_DIR}/main.cpp)
 file(GLOB_RECURSE SHADER_FILES
     "data/*.vert"
     "data/*.frag"
+    "data/*.geo"
 )
 
 source_group(${SHADER_GROUP} FILES ${SHADER_FILES})
 
 
-source_group_by_path(${SOURCE_DIR} "\\\\.h$|\\\\.hpp$"
+source_group_by_path_function(${SOURCE_DIR} "\\.h$|\\.hpp$"
     ${HEADER_GROUP} ${SRC_FILES})
-source_group_by_path(${SOURCE_DIR} "\\\\.cpp$|\\\\.c$|\\\\.inl$"
+source_group_by_path_function(${SOURCE_DIR} "\\.cpp$|\\.c$|\\.inl$"
     ${SOURCE_GROUP} ${SRC_FILES})
 
 add_executable(${target}

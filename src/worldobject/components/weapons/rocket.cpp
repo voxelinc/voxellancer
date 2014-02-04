@@ -1,5 +1,7 @@
 #include "rocket.h"
 
+#include "collision/collisionfilter.h"
+
 #include "world/god.h"
 #include "world/world.h"
 
@@ -8,8 +10,8 @@ Rocket::Rocket():
     Projectile(),
     m_targetHandle(nullptr)
 {
-    CollisionFilterable::setCollisionFilterClass(CollisionFilterClass::Rocket);
-    CollisionFilterable::setCollideableWith(CollisionFilterClass::Rocket, false);
+    collisionFilter().setCollisionFilterClass(CollisionFilterClass::Rocket);
+    collisionFilter().setCollideableWith(CollisionFilterClass::Rocket, false);
 
     m_objectInfo.setShowOnHud(false);
     m_objectInfo.setCanLockOn(false);

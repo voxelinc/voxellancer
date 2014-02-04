@@ -12,6 +12,7 @@ HardpointVoxel::HardpointVoxel(const glm::ivec3& gridCell, int index):
     SpecialVoxel(gridCell, index, Property<int>("voxels.hardpoint.color"), Property<float>("voxels.hardpoint.mass"), Property<float>("voxels.hardpoint.hp")),
     m_hardpoint(nullptr)
 {
+    m_emissiveness = 0.35f;
 }
 
 void HardpointVoxel::addToObject(WorldObject* worldObject) {

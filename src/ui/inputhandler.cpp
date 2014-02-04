@@ -131,7 +131,9 @@ void InputHandler::keyCallback(int key, int scancode, int action, int mods) {
 void InputHandler::update(float deltaSec) {
     if (glfwGetWindowAttrib(glfwGetCurrentContext(), GLFW_FOCUSED)) {
         if (m_lastfocus) {
-            retrieveInputValues();
+            if (glfwJoystickPresent(GLFW_JOYSTICK_1)) {
+                retrieveInputValues();
+            }
             if (m_inputConfigurator->isConfiguring()) {
                 m_inputConfigurator->update();
             } else {

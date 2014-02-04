@@ -29,8 +29,7 @@ WorldObject *Splitter::createWorldObjectFromSplitOff(SplitData *split) {
     Transform transform = split->exWorldObject()->transform();
     transform.setCenter(transform.center()/* - glm::vec3(split->llf())*/);
 
-
-    worldObject = new Split(transform, split->exWorldObject()->collisionFilterClass());
+    worldObject = new Split(transform);
 
     worldObject->objectInfo().setName(split->exWorldObject()->objectInfo().name() + " - splitoff");
     worldObject->objectInfo().setCanLockOn(false);

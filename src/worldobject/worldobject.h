@@ -3,16 +3,13 @@
 #include <list>
 #include <memory>
 
-#include "collision/collisiondetector.h"
-#include "collision/collisionfilterable.h"
-
-#include "worldobject/handle/handle.h"
-
 #include "physics/physics.h"
 
 #include "ui/objectinfo.h"
 
 #include "voxel/voxelcluster.h"
+
+#include "worldobject/handle/handle.h"
 
 #include "worldobjectcomponents.h"
 
@@ -22,11 +19,16 @@ class EngineVoxel;
 class HardpointVoxel;
 class CockpitVoxel;
 class FuelVoxel;
+class CollisionFilter;
 
-class WorldObject : public VoxelCluster, public CollisionFilterable {
+
+class WorldObject : public VoxelCluster {
 public:
-    WorldObject(CollisionFilterClass collisionFilterClass = CollisionFilterClass::Other, float scale = 1.0f);
+    WorldObject();
     virtual ~WorldObject();
+
+    CollisionFilter& collisionFilter();
+    void setCollisionFilter(CollisionFilter* collisionFilter);
 
     CollisionDetector& collisionDetector();
     Physics& physics();
@@ -53,7 +55,8 @@ public:
 
 
 protected:
-    CollisionDetector m_collisionDetector;
+    std::unique_ptr<CollisionFilter> m_collisionFilter;
+    std::unique_ptr<CollisionDetector> m_collisionDetector;
     Physics m_physics;
     ObjectInfo m_objectInfo;
     WorldObjectComponents m_components;
@@ -63,5 +66,8 @@ protected:
     Voxel* m_crucialVoxel;
 
     bool m_scheduledForDeletion;
+
+
+    WorldObject(CollisionFilter* collisionFilter, float scale = 1.0f);
 };
 

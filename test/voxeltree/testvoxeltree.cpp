@@ -28,7 +28,7 @@ go_bandit([](){
         PropertyManager::instance()->load("data/config.ini");
 
         before_each([&]() {
-            dummy = new WorldObject(CollisionFilterClass::Other, 1.0f);
+            dummy = new WorldObject();
             tree = &dummy->collisionDetector().voxelTree();
         });
 

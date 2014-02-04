@@ -9,9 +9,9 @@
 
 #include "ui/inputhandler.h"
 
-#include "gamescenario.h"
-#include "battlescenario.h"
+#include "scenarios/battlescenario.h"
 #include "player.h"
+#include "scenarios/gamescenario.h"
 
 
 class SoundManager;
@@ -30,9 +30,12 @@ public:
     void update(float deltaSec);
     void draw();
 
+    void setOutputBuffer(int i);
+
+
 private:
-    InputHandler m_inputHandler;
     Player m_player;
+    InputHandler m_inputHandler;
     Viewer m_viewer;
     GameScene m_gameScene;
     BattleScenario m_scenario;

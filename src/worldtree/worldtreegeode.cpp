@@ -3,8 +3,8 @@
 #include <cassert>
 
 #include "worldtreenode.h"
-
 #include "worldobject/worldobject.h"
+#include "collision/collisiondetector.h"
 
 
 WorldTreeGeode::WorldTreeGeode(WorldObject* worldObject) :

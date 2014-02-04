@@ -1,5 +1,8 @@
 #include "worldobject.h"
 
+#include "collision/collisiondetector.h"
+#include "collision/collisionfilter.h"
+
 #include "resource/clustercache.h"
 
 #include "utils/tostring.h"
@@ -7,16 +10,22 @@
 #include "worldobject/handle/handle.h"
 
 
-WorldObject::WorldObject(CollisionFilterClass collisionFilterClass, float scale):
-    CollisionFilterable(collisionFilterClass),
+WorldObject::WorldObject():
+    WorldObject(new CollisionFilter(this,CollisionFilterClass::Other))
+{
+
+}
+
+WorldObject::WorldObject(CollisionFilter* collisionFilter, float scale):
     VoxelCluster(scale),
     m_physics(*this, scale),
-    m_collisionDetector(*this),
+    m_collisionDetector(new CollisionDetector(*this)),
     m_objectInfo(),
     m_components(this),
     m_crucialVoxel(nullptr),
     m_handle(Handle<WorldObject>(this)),
-    m_scheduledForDeletion(false)
+    m_scheduledForDeletion(false),
+    m_collisionFilter(collisionFilter)
 {
 }
 
@@ -25,7 +34,15 @@ WorldObject::~WorldObject() {
 }
 
 CollisionDetector& WorldObject::collisionDetector() {
-    return m_collisionDetector;
+    return *m_collisionDetector;
+}
+
+CollisionFilter& WorldObject::collisionFilter() {
+    return *m_collisionFilter;
+}
+
+void WorldObject::setCollisionFilter(CollisionFilter* collisionFilter) {
+    m_collisionFilter.reset(collisionFilter);
 }
 
 Physics& WorldObject::physics() {
@@ -58,8 +75,8 @@ void WorldObject::addVoxel(Voxel* voxel) {
 
     m_physics.addVoxel(voxel);
 
-    m_collisionDetector.addVoxel(voxel);
-    m_collisionDetector.updateGeode();
+    m_collisionDetector->addVoxel(voxel);
+    m_collisionDetector->updateGeode();
 }
 
 void WorldObject::removeVoxel(Voxel* voxel) {
@@ -71,7 +88,7 @@ void WorldObject::removeVoxel(Voxel* voxel) {
         m_crucialVoxel = nullptr;  // do spectacular stuff like an explosion
     }
 
-    m_collisionDetector.removeVoxel(voxel);
+    m_collisionDetector->removeVoxel(voxel);
     m_physics.removeVoxel(voxel);
 
     VoxelCluster::removeVoxel(voxel);
@@ -81,7 +98,7 @@ void WorldObject::updateTransformAndGeode(const glm::vec3& position, const glm::
     transform().setOrientation(orientation);
     transform().setPosition(position);
 
-    m_collisionDetector.updateGeode();
+    m_collisionDetector->updateGeode();
 }
 
 Voxel* WorldObject::crucialVoxel() {
@@ -111,4 +128,3 @@ bool WorldObject::scheduledForDeletion() {
 void WorldObject::onScheduleForDeletion() {
     m_scheduledForDeletion = true;
 }
-

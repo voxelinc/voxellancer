@@ -23,6 +23,7 @@ EngineTrailGenerator::EngineTrailGenerator(Engine* engine) :
     assert(engine != nullptr);
 
     m_generator.setColor(0x6666FF);
+    m_generator.setEmissiveness(0.4f);
     m_generator.setCount(8);
     m_generator.setForce(0.10f, 0.3f);
     m_generator.setLifetime(1.0f, 0.1f);

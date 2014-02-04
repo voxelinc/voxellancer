@@ -1,5 +1,7 @@
 #include "projectile.h"
 
+#include "collision/collisionfilterignoringcreator.h"
+
 #include "world/god.h"
 #include "world/world.h"
 
@@ -16,6 +18,15 @@ WorldObject* Projectile::creator() {
 
 void Projectile::setCreator(WorldObject* creator) {
     m_creator = creator;
+
+    CollisionFilterIgnoringCreator* newCollisionFilter = new CollisionFilterIgnoringCreator(
+        this,
+        m_creator,
+        collisionFilter().collisionFilterClass(),
+        collisionFilter().collisionMask()
+    );
+
+    setCollisionFilter(newCollisionFilter);
 }
 
 float Projectile::lifetime() const {
@@ -24,10 +35,6 @@ float Projectile::lifetime() const {
 
 void Projectile::setLifetime(float lifetime) {
     m_lifetime = lifetime;
-}
-
-bool Projectile::specialIsCollideableWith(const CollisionFilterable* other) const {
-    return static_cast<CollisionFilterable*>(m_creator) != other;
 }
 
 void Projectile::update(float deltaSec) {

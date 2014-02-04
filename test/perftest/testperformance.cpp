@@ -18,6 +18,7 @@
 #include "world/helper/worldobjectmodification.h"
 #include "voxel/voxel.h"
 #include "world/god.h"
+#include "sound/soundmanager.h"
 
 
 
@@ -62,8 +63,10 @@ go_bandit([](){
         World *world;
         PropertyManager::instance()->reset();
         PropertyManager::instance()->load("data/config.ini");
+        SoundManager soundManager;
 
         before_each([&]() {
+            soundManager.activate();
             World::reset();
             world = World::instance();
         });
@@ -144,9 +147,10 @@ go_bandit([](){
                 ship->objectInfo().setShowOnHud(false);
                 World::instance()->god().scheduleSpawn(ship);
 
-                WorldObject *wall = new WorldObject(CollisionFilterClass::Other, 1);
+                WorldObject *wall = new WorldObject();
                 wall->transform().move(glm::vec3(-20, 0, -50));
                 wall->transform().rotate(glm::angleAxis(-90.f, glm::vec3(0, 1, 0)));
+
                 for (int x = 0; x < 20; x++) {
                     for (int y = 0; y < 15; y++) {
                         for (int z = 0; z < 3; z++) {
