@@ -53,7 +53,7 @@ bool InputConfigurator::isSecondaryInput() {
 }
 
 bool InputConfigurator::isPrimaryInput() {
-    if (lastPrimaryInput.index() == InputType::None) {
+    if (lastPrimaryInput.index() == static_cast<int>(InputType::None)) {
         return false;
     }
     return true;

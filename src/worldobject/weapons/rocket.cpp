@@ -6,24 +6,23 @@
 #include "physics/physics.h"
 #include "voxeleffect/voxelexplosiongenerator.h"
 #include "worldobject/ship.h"
-#include "ai/character.h" //ship holds a unique_ptr to a character and we inherit from it (C2338)
-#include "ai/boardcomputer.h"
 #include "resource/clustercache.h"
 #include "sound/soundmanager.h"
 #include "sound/sound.h"
+#include "collision/collisionfilterignoringcreator.h"
 
 
-Rocket::Rocket(glm::vec3 position, glm::quat orientation, const glm::vec3& initialSpeed, float travelSpeed, float lifetime, WorldObject* target) :
-    Ship(),
-    m_target(nullptr)
+Rocket::Rocket(glm::vec3 position, glm::quat orientation, const glm::vec3& initialSpeed, float travelSpeed, float lifetime, WorldObject* creator, WorldObject* target) :
+    Ship(new CollisionFilterIgnoringCreator(this, creator, CollisionFilterClass::Rocket)),
+    m_target(nullptr),
+    m_creator(creator),
+    m_lifetime(lifetime),
+    m_travelSpeed(travelSpeed)
 {
-    m_collisionFilterClass = CollisionFilterClass::Rocket;
     m_transform.setScale(0.8f);
 
-    m_collisionDamageFOV = std::numeric_limits<float>::max(); // glm::pi<float>() * 2;
+    m_collisionDamageFOV = std::numeric_limits<float>::max(); // equal damage all around
 
-    m_lifetime = lifetime;
-    m_travelSpeed = travelSpeed;
     if (target) {
         m_target = target->handle();
     }
@@ -88,6 +87,7 @@ void Rocket::update(float deltaSec) {
 
     Ship::update(deltaSec);
 }
+
 
 void Rocket::onCollision(){
     m_sound->stop();

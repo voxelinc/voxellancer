@@ -12,6 +12,7 @@
 
 #include "worldtree/worldtreequery.h"
 #include "worldtree/worldtreegeode.h"
+#include "collision/collisiondetector.h"
 
 
 
@@ -82,14 +83,14 @@ void WorldTreeScanner::update(float deltaSec, WorldObject* worldObject, const gl
 void WorldTreeScanner::scan(WorldObject* worldObject, const glm::vec3& position) {
     Sphere scanSphere(position, m_scanRadius);
 
-    std::set<WorldTreeGeode*> foundGeodes = WorldTreeQuery(m_worldTree, &scanSphere, worldObject->collisionDetector().geode()->containingNode(), worldObject).nearGeodes();
+    std::set<WorldTreeGeode*> foundGeodes = WorldTreeQuery(m_worldTree, &scanSphere, worldObject->collisionDetector().geode()->containingNode(), &worldObject->collisionFilter()).nearGeodes();
 
     m_lostWorldObjects = m_worldObjects; // Re-Found objects are removed from this list
 
     for(std::set<WorldTreeGeode*>::iterator i = foundGeodes.begin(); i != foundGeodes.end(); ++i) {
         WorldTreeGeode* foundGeode = *i;
         WorldObject* foundWorldObject = foundGeode->worldObject();
-
+        
         if(!VoxelTreeQuery(&foundWorldObject->collisionDetector().voxelTree(), &scanSphere).areVoxelsIntersecting()) {
             continue;
         }
