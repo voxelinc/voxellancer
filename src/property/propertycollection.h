@@ -20,9 +20,13 @@ public:
     virtual ~PropertyCollection();
 
     void registerProperty(Property<T> * prop);
+    void registerProperty(Property<T> * prop, const T& defaultValue);
+
     void unregisterProperty(Property<T> * prop);
 
-    bool update(const std::string & key, const std::string & svalue);
+    bool update(const std::string& key, const std::string& svalue);
+
+    void set(const std::string& key, const T& value);
 
     T get(const std::string& name) const;
     T get(const std::string& name, const std::string& defaultValue) const;

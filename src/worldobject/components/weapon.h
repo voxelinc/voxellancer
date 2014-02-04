@@ -3,41 +3,37 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 
-#include "worldobject/components/worldobjectequipment.h"
+#include "equipment.h"
 
 
 class WorldObject;
 class Hardpoint;
 
-enum class WeaponAimType {
-    None, // nothing attached
-    Point, // manual aiming
-    Object // guided
+enum class WeaponType {
+    Gun,
+    RocketLauncher
 };
 
-class Weapon: public WorldObjectEquipment {
+class Weapon: public Equipment {
 public:
-    Weapon(const std::string& key);
+    Weapon(WeaponType type, const std::string& equipmentKey);
 
     Hardpoint* hardpoint();
     void setHardpoint(Hardpoint* hardpoint);
 
-    virtual WeaponAimType aimType() const = 0;
-    virtual float bulletSpeed() const = 0;
-    virtual float bulletLifetime() const = 0;
-    virtual float cooldownTime() const = 0;
+    WeaponType type() const;
 
-    virtual void shootAtPoint(const glm::vec3& point);
-    virtual void shootAtObject(WorldObject* worldObject);
+    virtual float cooldownTime() const = 0;
 
     virtual void update(float deltaSec);
 
     bool canFire();
-    void fired();
+    void onFired();
 
 
 protected:
     Hardpoint* m_hardpoint;
+    WeaponType m_type;
 
     float m_cooldown;
 };

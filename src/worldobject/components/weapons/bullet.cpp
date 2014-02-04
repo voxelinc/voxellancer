@@ -4,11 +4,10 @@
 #include "world/world.h"
 
 
-Bullet::Bullet(WorldObject* creator, float lifetime, float scale):
-    WorldObject(CollisionFilterClass::Bullet, scale),
-    m_creator(creator),
-    m_lifetime(lifetime)
+Bullet::Bullet():
+    Projectile()
 {
+    CollisionFilterable::setCollisionFilterClass(CollisionFilterClass::Bullet);
     CollisionFilterable::setCollideableWith(CollisionFilterClass::Bullet, false);
 
     m_objectInfo.setShowOnHud(false);
@@ -17,15 +16,11 @@ Bullet::Bullet(WorldObject* creator, float lifetime, float scale):
     m_physics.setDampening(Acceleration(glm::vec3(0.0f), glm::vec3(0.0f)));
 }
 
-WorldObject* Bullet::creator() const {
-    return m_creator;
+void Bullet::update(float deltaSec) {
+    Projectile::update(deltaSec);
 }
 
-bool Bullet::specialIsCollideableWith(const CollisionFilterable* other) const {
-    return static_cast<CollisionFilterable*>(m_creator) != other;
-}
-
-void Bullet:: onCollision() {
+void Bullet::onCollision() {
     World::instance()->god().scheduleRemoval(this);
     spawnExplosion();
 }
@@ -34,16 +29,3 @@ void Bullet::onSpawnFail() {
     spawnExplosion();
 }
 
-void Bullet::update(float deltaSec) {
-    WorldObject::update(deltaSec);
-
-    m_lifetime -= deltaSec;
-
-    if (m_lifetime <= 0.0f) {
-        World::instance()->god().scheduleRemoval(this);
-    }
-}
-
-void Bullet::spawnExplosion() {
-
-}

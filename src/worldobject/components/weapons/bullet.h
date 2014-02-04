@@ -1,27 +1,23 @@
 #pragma once
 
-#include "worldobject/worldobject.h"
+#include "projectile.h"
 
 
-class Bullet: public WorldObject {
+/*
+    Base class for every Projectile that flies with a constant undamped speed
+    on a target and is destroyed on collision. Also, not displayed on HUD
+*/
+class Bullet: public Projectile {
 public:
-    Bullet(WorldObject* creator, float lifetime, float scale);
+    Bullet();
 
-    WorldObject* creator() const;
-
-    virtual bool specialIsCollideableWith(const CollisionFilterable* other) const override;
+    virtual void update(float deltaSec) override;
 
     virtual void onCollision() override;
     virtual void onSpawnFail() override;
 
-    virtual void update(float deltaSec) override;
-
 
 protected:
-    WorldObject *m_creator;
-    float m_lifetime;
-
-
-    virtual void spawnExplosion();
+    virtual void spawnExplosion() = 0;
 };
 

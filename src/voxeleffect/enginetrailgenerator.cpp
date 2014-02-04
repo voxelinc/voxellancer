@@ -55,7 +55,7 @@ void EngineTrailGenerator::update(float deltaSec) {
 void EngineTrailGenerator::spawnTrail() {
     WorldObject* worldObject = m_engine->engineSlot()->components()->worldObject();
 
-    m_spawnOffset = worldObject->transform().scale() * 0.75f;
+    m_spawnOffset = worldObject->transform().scale() * 1.0f;
 
     glm::vec3 newPosition = calculateSpawnPosition();
     glm::vec3 distance = newPosition - m_lastSpawnPoint;

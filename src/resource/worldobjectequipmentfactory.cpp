@@ -2,10 +2,9 @@
 
 #include <glow/logging.h>
 
-#include "worldobject/components/engines/enginemk1.h"
-#include "worldobject/components/engines/piratethruster.h"
-#include "worldobject/components/weapons/gun.h"
-#include "worldobject/components/weapons/torpedolauncher.h"
+#include "worldobject/components/engines/genericengine.h"
+#include "worldobject/components/weapons/genericgun.h"
+#include "worldobject/components/weapons/genericrocketlauncher.h"
 
 
 WorldObjectEquipmentFactory::WorldObjectEquipmentFactory() {
@@ -13,24 +12,26 @@ WorldObjectEquipmentFactory::WorldObjectEquipmentFactory() {
 }
 
 Weapon* WorldObjectEquipmentFactory::weapon(const std::string& name) {
-    if (name == "gun") {
-        return new Gun();
+    std::string type = Property<std::string>(name + ".general.type", "gun");
+
+    if(type == "gun") {
+        return new GenericGun(name);
+    } else if(type == "rocketlauncher") {
+        return new GenericRocketLauncher(name);
+    } else {
+        glow::info("No such weapon %;", name);
+        exit(-1);
     }
-    if (name == "torpedolauncher") {
-        return new TorpedoLauncher();
-    }
-    glow::info("No such weapon '%;'", name);
-    exit(-1);
 }
 
 Engine* WorldObjectEquipmentFactory::engine(const std::string& name) {
-    if (name == "piratethruster") {
-        return new PirateThruster();
+    std::string type = Property<std::string>(name + ".general.type", "engine");
+
+    if(type == "engine") {
+        return new GenericEngine(name);
+    } else {
+        glow::info("No such engine %;", name);
+        exit(-1);
     }
-    if (name == "enginemk1") {
-        return new EngineMK1();
-    }
-    glow::info("No such engine '%;'", name);
-    exit(-1);
 }
 

@@ -26,20 +26,12 @@ class FuelVoxel;
 class WorldObject : public VoxelCluster, public CollisionFilterable {
 public:
     WorldObject(CollisionFilterClass collisionFilterClass = CollisionFilterClass::Other, float scale = 1.0f);
-
-    /*
-        This constructor will load all settings from the Properties prefixed with key
-    */
-    WorldObject(const std::string& key);
-
     virtual ~WorldObject();
 
     CollisionDetector& collisionDetector();
     Physics& physics();
     ObjectInfo& objectInfo();
     WorldObjectComponents& components();
-
-    void load(const std::string& key);
 
     virtual void update(float deltaSec);
 

@@ -8,14 +8,14 @@
 
 #include "enginepower.h"
 #include "enginestate.h"
-#include "worldobjectequipment.h"
+#include "equipment.h"
 
 
 class EngineSlot;
 
-class Engine: public WorldObjectEquipment {
+class Engine: public Equipment {
 public:
-    Engine(const std::string& key);
+    Engine(const std::string& equipmentKey);
 
     EngineSlot* engineSlot();
     void setEngineSlot(EngineSlot* engineSlot);

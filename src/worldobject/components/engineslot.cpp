@@ -32,7 +32,7 @@ Engine* EngineSlot::engine() {
 }
 
 void EngineSlot::setEngine(Engine* engine) {
-    assert(mountable(engine->key()));
+    assert(mountable(engine->equipmentKey()));
     m_engine = engine;
     m_engine->setEngineSlot(this);
 }

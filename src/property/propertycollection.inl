@@ -43,16 +43,22 @@ bool PropertyCollection<T>::update(const std::string& key, const std::string& sv
         return false;
     }
 
-    T tvalue = m_converter(svalue);
+    set(key, m_converter(svalue));
+    return true;
+}
 
-    m_values[key] = tvalue;
+
+template<typename T>
+void PropertyCollection<T>::set(const std::string& key, const T& value) {
+    m_values[key] = value;
+
     auto result = m_properties.equal_range(key);
+
     for (auto iter = result.first; iter != result.second; ++iter)
     {
         Property<T>* prop = iter->second;
-        prop->set(tvalue);
+        prop->set(value);
     }
-    return true;
 }
 
 template<typename T>
@@ -63,6 +69,18 @@ void PropertyCollection<T>::registerProperty(Property<T>* prop) {
         prop->set(iter->second);
     } else {
         glow::debug("PropertyCollection: could not find a value for %;", prop->name());
+    }
+}
+
+template<typename T>
+void PropertyCollection<T>::registerProperty(Property<T>* prop, const T& defaultValue) {
+    m_properties.insert(std::pair<std::string, Property<T> *>(prop->name(), prop));
+    auto iter = m_values.find(prop->name());
+    if (iter != m_values.end()) {
+        prop->set(iter->second);
+    } else {
+        set(prop->name(), defaultValue);
+        registerProperty(prop);
     }
 }
 

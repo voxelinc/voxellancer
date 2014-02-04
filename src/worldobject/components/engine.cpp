@@ -4,7 +4,7 @@
 
 
 Engine::Engine(const std::string& key):
-    WorldObjectEquipment(key),
+    Equipment(key),
     m_trailGenerator(this)
 {
     setupTrail();
@@ -35,6 +35,6 @@ Acceleration Engine::currentAcceleration() const {
 }
 
 void Engine::setupTrail() {
-    m_trailGenerator.setLifetime(Property<float>(key() + ".trail.lifetime"));
+    m_trailGenerator.setLifetime(Property<float>(equipmentKey() + ".trail.lifetime"));
 }
 

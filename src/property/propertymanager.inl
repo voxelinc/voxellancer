@@ -5,12 +5,17 @@
 
 template<typename T>
 void PropertyManager::registerProperty(Property<T>* prop) {
-    getPropertyCollection(prop)->registerProperty(prop);
+    getPropertyCollection<T>()->registerProperty(prop);
+}
+
+template<typename T>
+void PropertyManager::registerProperty(Property<T>* prop, const T& defaultValue) {
+    getPropertyCollection<T>()->registerProperty(prop, defaultValue);
 }
 
 template<typename T>
 void PropertyManager::unregisterProperty(Property<T>* prop) {
-    getPropertyCollection(prop)->unregisterProperty(prop);
+    getPropertyCollection<T>()->unregisterProperty(prop);
 }
 
 template<typename T>

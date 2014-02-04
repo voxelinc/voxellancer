@@ -1,5 +1,6 @@
 #include "collisionfilterable.h"
 
+#include <cassert>
 #include <iostream>
 
 
@@ -11,6 +12,10 @@ CollisionFilterable::CollisionFilterable(CollisionFilterClass collisionFilterCla
 
 CollisionFilterClass CollisionFilterable::collisionFilterClass() const {
     return m_collisionFilterClass;
+}
+
+void CollisionFilterable::setCollisionFilterClass(CollisionFilterClass collisionFilterClass) {
+    m_collisionFilterClass = collisionFilterClass;
 }
 
 uint32_t CollisionFilterable::collisionMask() const {
@@ -42,4 +47,5 @@ bool CollisionFilterable::areMasksCollidable(const CollisionFilterable *other) c
 bool CollisionFilterable::specialIsCollideableWith(const CollisionFilterable *other) const {
     return true;
 }
+
 

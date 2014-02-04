@@ -4,25 +4,28 @@
 #include "world/world.h"
 
 
-Rocket::Rocket(float lifetime, WorldObject* targetObject, float scale):
-    WorldObject(CollisionFilterClass::Rocket, scale),
-    m_lifetime(lifetime),
+Rocket::Rocket():
+    Projectile(),
     m_targetHandle(nullptr)
 {
-    if(targetObject) {
-        m_targetHandle = targetObject->handle();
-    }
+    CollisionFilterable::setCollisionFilterClass(CollisionFilterClass::Rocket);
+    CollisionFilterable::setCollideableWith(CollisionFilterClass::Rocket, false);
 
     m_objectInfo.setShowOnHud(false);
     m_objectInfo.setCanLockOn(false);
 }
 
-WorldObject* Rocket::targetObject() {
-    return *m_targetHandle;
+WorldObject* Rocket::target() {
+    return m_targetHandle.get();
+}
+
+void Rocket::setTarget(WorldObject* targetObject) {
+    m_targetHandle = targetObject->handle();
 }
 
 void Rocket::update(float deltaSec) {
-    WorldObject::update(deltaSec);
+    Projectile::update(deltaSec);
+    // TODO: follow target
 }
 
 void Rocket::onCollision() {
@@ -34,6 +37,4 @@ void Rocket::onSpawnFail() {
     spawnExplosion();
 }
 
-void Rocket::spawnExplosion() {
 
-}

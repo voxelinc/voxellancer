@@ -139,17 +139,29 @@ static void mainloop() {
     }
 }
 
+/*
+    At some day, modding-capabilities in mind, this shoul be done by polling the
+    appropriate dirs
+*/
 static void loadWorldObjectConfigs() {
     PropertyManager::instance()->load("data/worldobjects/basicship.ini", "basicship");
+    PropertyManager::instance()->load("data/worldobjects/specialbasicship.ini", "specialbasicship");
     PropertyManager::instance()->load("data/worldobjects/normandy.ini", "normandy");
     PropertyManager::instance()->load("data/worldobjects/gunbullet.ini", "gunbullet");
+    PropertyManager::instance()->load("data/worldobjects/snowball.ini", "snowball");
     PropertyManager::instance()->load("data/worldobjects/torpedo.ini", "torpedo");
 }
 
+/*
+    At some day, modding-capabilities in mind, this shoul be done by polling the
+    appropriate dirs
+*/
 static void loadEquipmentConfigs() {
     PropertyManager::instance()->load("data/equipment/engines/enginemk1.ini", "enginemk1");
     PropertyManager::instance()->load("data/equipment/engines/piratethruster.ini", "piratethruster");
+    PropertyManager::instance()->load("data/equipment/engines/torpedothruster.ini", "torpedothruster");
     PropertyManager::instance()->load("data/equipment/weapons/gun.ini", "gun");
+    PropertyManager::instance()->load("data/equipment/weapons/snowcanon.ini", "snowcanon");
     PropertyManager::instance()->load("data/equipment/weapons/torpedolauncher.ini", "torpedolauncher");
 }
 

@@ -20,14 +20,7 @@ WorldObject::WorldObject(CollisionFilterClass collisionFilterClass, float scale)
 {
 }
 
-WorldObject::WorldObject(const std::string& key):
-    WorldObject(CollisionFilterClass::Other, 1.0f)
-{
-    CollisionFilterable::setClass(CollisionFilterable::classFromString(Property<std::string>(key + ".general.objectType")));
-    m_transform.setSize(PropertyManager::instance()->get<float>(key + ".general.size"));
-}
-
- WorldObject::~WorldObject() {
+WorldObject::~WorldObject() {
      m_handle.invalidate();
 }
 
@@ -45,13 +38,6 @@ ObjectInfo& WorldObject::objectInfo() {
 
 WorldObjectComponents& WorldObject::components() {
     return m_components;
-}
-
-void WorldObject::load(const std::string& key) {
-    std::string clusterFile = Property<std::string>(key + ".general.voxelcluster");
-    ClusterCache::instance()->fillObject(this, std::string("data/voxelcluster/") + clusterFile);
-
-    m_components.load(key);
 }
 
 void WorldObject::update(float deltaSec) {

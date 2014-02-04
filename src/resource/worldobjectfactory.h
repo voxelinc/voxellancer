@@ -2,26 +2,22 @@
 
 #include <string>
 
+#include "worldobject/genericship.h"
+#include "worldobject/genericworldobject.h"
+#include "worldobject/components/weapons/genericbullet.h"
+#include "worldobject/components/weapons/genericrocket.h"
 
 class Ship;
 class WorldObject;
 
 /*
-    To generate worldobjects by name and equip them with engines and weapons
+    To generate worldobjects by name, load their settings
+    and equip them with engines and weapons
 */
 class WorldObjectFactory {
 public:
     WorldObjectFactory();
 
-    template<typename T>
-    T* build(const std::string& name);
-
     void equipSomehow(WorldObject* worldObject);
-
-
-protected:
-    WorldObject* m_worldObject;
-    std::string m_name;
 };
 
-#include "worldobjectfactory.inl"

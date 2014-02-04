@@ -24,12 +24,6 @@ public:
 
     WorldObject* worldObject();
 
-    /*
-        Load the components using the properties prefixed with
-        key
-    */
-    void load(const std::string& key);
-
     void addEngineSlot(EngineSlot* engineSlot);
     void removeEngineSlot(EngineSlot* engineSlot);
 
@@ -91,9 +85,5 @@ protected:
     std::list<Hardpoint*> m_hardpoints;
 
     EngineState m_engineState;
-
-
-    void setupHardpoints(const std::string& key);
-    void setupEngineSlots(const std::string& key);
 };
 

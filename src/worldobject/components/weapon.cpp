@@ -3,9 +3,9 @@
 #include <algorithm>
 
 
-Weapon::Weapon(const std::string& key):
-    WorldObjectEquipment(key),
-    m_hardpoint(nullptr),
+Weapon::Weapon(WeaponType type, const std::string& equipmentKey):
+    Equipment(equipmentKey),
+    m_type(type),
     m_cooldown(0.0f)
 {
 }
@@ -18,12 +18,8 @@ void Weapon::setHardpoint(Hardpoint* hardpoint) {
     m_hardpoint = hardpoint;
 }
 
-void Weapon::shootAtPoint(const glm::vec3& point) {
-
-}
-
-void Weapon::shootAtObject(WorldObject* worldObject) {
-
+WeaponType Weapon::type() const {
+    return m_type;
 }
 
 void Weapon::update(float deltaSec) {
@@ -34,7 +30,7 @@ bool Weapon::canFire() {
     return m_cooldown == 0.0f;
 }
 
-void Weapon::fired() {
+void Weapon::onFired() {
     m_cooldown = cooldownTime();
 }
 

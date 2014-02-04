@@ -17,8 +17,6 @@
 #include "worldobject/components/engine.h"
 #include "worldobject/components/weapon.h"
 #include "worldobject/components/weapons/gun.h"
-#include "worldobject/components/weapons/torpedolauncher.h"
-#include "worldobject/components/engines/piratethruster.h"
 #include "worldobject/ship.h"
 
 #include "world/world.h"
@@ -44,13 +42,11 @@ void BattleScenario::populate(Game* game) {
 
     // create playership
 
-    Ship *playerShip = WorldObjectFactory().build<Ship>("basicship");
+    Ship *playerShip = new GenericShip("specialbasicship");
+    WorldObjectFactory().equipSomehow(playerShip);
     playerShip->transform().setPosition(glm::vec3(0, 0, 10));
     world->god().scheduleSpawn(playerShip);
-    playerShip->components().hardpoint(0)->setWeapon(new Gun());
-    playerShip->components().hardpoint(1)->setWeapon(new Gun());
-    playerShip->components().hardpoint(2)->setWeapon(new TorpedoLauncher());
-    playerShip->components().engineSlot(0)->setEngine(new PirateThruster());
+
     game->player().setShip(playerShip);
 
     populateBattle(4, 4);
@@ -64,8 +60,7 @@ void BattleScenario::populateBattle(int numberOfEnemies1, int numberOfEnemies2) 
     std::vector<Ship*> fleet1;
     std::vector<Ship*> fleet2;
     for (int e = 0; e < numberOfEnemies1; e++) {
-
-        Ship *ship = WorldObjectFactory().build<Ship>("basicship");
+        Ship *ship = new GenericShip("basicship");
         WorldObjectFactory().equipSomehow(ship);
 
         float r = 200;
@@ -78,9 +73,9 @@ void BattleScenario::populateBattle(int numberOfEnemies1, int numberOfEnemies2) 
         fleet2.push_back(ship);
     }
     for (int e = 0; e < numberOfEnemies2; e++) {
-        Ship *ship  = WorldObjectFactory().build<Ship>("basicship");
-        WorldObjectFactory().equipSomehow(ship);
+        Ship *ship = new GenericShip("basicship");
 
+        WorldObjectFactory().equipSomehow(ship);
 
         float r = 200;
         ship->transform().move(RandVec3::rand(0.0f, r) + glm::vec3(200, 0, -200));
@@ -99,7 +94,10 @@ void BattleScenario::populateBattle(int numberOfEnemies1, int numberOfEnemies2) 
 }
 
 void BattleScenario::spawnCapital(const std::vector<Ship*>& enemies) {
-    Ship *ship  = WorldObjectFactory().build<Ship>("normandy");
+    Ship *ship = new GenericShip("normandy");
+    ship->objectInfo().setShowOnHud(true);
+    ship->objectInfo().setCanLockOn(true);
+
     WorldObjectFactory().equipSomehow(ship);
     ship->transform().move(glm::vec3(-200, 300, -200));
 

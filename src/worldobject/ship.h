@@ -16,7 +16,7 @@ class Engine;
 class Character;
 class Sound;
 
-class Ship : public WorldObject {
+class Ship: virtual public WorldObject {
 public:
     Ship();
     virtual ~Ship();

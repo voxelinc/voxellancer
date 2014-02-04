@@ -6,6 +6,8 @@
 #include "worldobject/components/engine.h"
 #include "worldobject/components/hardpoint.h"
 #include "worldobject/components/weapon.h"
+#include "worldobject/components/weapons/gun.h"
+#include "worldobject/components/weapons/rocketlauncher.h"
 
 
 WorldObjectComponents::WorldObjectComponents(WorldObject* worldObject):
@@ -15,11 +17,6 @@ WorldObjectComponents::WorldObjectComponents(WorldObject* worldObject):
 
 WorldObject* WorldObjectComponents::worldObject() {
     return m_worldObject;
-}
-
-void WorldObjectComponents::load(const std::string& key) {
-    setupHardpoints(key);
-    setupEngineSlots(key);
 }
 
 void WorldObjectComponents::addEngineSlot(EngineSlot* engineSlot) {
@@ -100,8 +97,11 @@ void WorldObjectComponents::fireAtPoint(const glm::vec3& point) {
         if(!hardpoint->weapon()) {
             continue;
         }
-        if (hardpoint->weapon()->aimType() == WeaponAimType::Point) {
-            hardpoint->weapon()->shootAtPoint(point);
+        if (hardpoint->weapon()->type() == WeaponType::Gun) {
+            Gun* gun = dynamic_cast<Gun*>(hardpoint->weapon());
+            assert(gun);
+
+            gun->fireAtPoint(point);
         }
     }
 }
@@ -113,8 +113,11 @@ void WorldObjectComponents::fireAtObject(WorldObject* worldObject) {
         if(!hardpoint->weapon()) {
             continue;
         }
-        if (hardpoint->weapon()->aimType() == WeaponAimType::Object) {
-            hardpoint->weapon()->shootAtObject(worldObject);
+        if (hardpoint->weapon()->type() == WeaponType::RocketLauncher) {
+            RocketLauncher* rocketLauncher = dynamic_cast<RocketLauncher*>(hardpoint->weapon());
+            assert(rocketLauncher);
+
+            rocketLauncher->fireAtObject(worldObject);
         }
     }
 }
@@ -128,33 +131,4 @@ void WorldObjectComponents::update(float deltaSec) {
         engineSlot->update(deltaSec);
     }
 }
-
-
-void WorldObjectComponents::setupHardpoints(const std::string& key) {
-    for(Hardpoint* hardpoint : m_hardpoints) {
-        std::string prefix = key + ".hardpoint" + std::to_string(hardpoint->index()) + ".";
-
-        hardpoint->setDirection(Property<glm::vec3>(prefix + "direction"));
-        hardpoint->setFieldOfAim(Property<glm::vec2>(prefix + "fieldOfAim"));
-
-        std::list<std::string> mountableWeapons = Property<std::list<std::string>>(prefix + "mountable");
-        for(std::string& weapon : mountableWeapons) {
-            hardpoint->setMountable(weapon, true);
-        }
-    }
-}
-
-void WorldObjectComponents::setupEngineSlots(const std::string& key) {
-    for(EngineSlot* engineSlot : m_engineSlots) {
-        std::string prefix = key + ".engineslot" + std::to_string(engineSlot->index()) + ".";
-
-        engineSlot->setDirection(Property<glm::vec3>(prefix + "direction"));
-
-        std::list<std::string> mountableEngines = Property<std::list<std::string>>(prefix + "mountable");
-        for(std::string& engine : mountableEngines) {
-            engineSlot->setMountable(engine, true);
-        }
-    }
-}
-
 

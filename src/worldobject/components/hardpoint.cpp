@@ -2,8 +2,10 @@
 
 #include "voxel/specialvoxels/hardpointvoxel.h"
 
-#include "worldobject/components/weapon.h"
 #include "worldobject/worldobjectcomponents.h"
+
+#include "weapon.h"
+
 
 
 Hardpoint::Hardpoint(WorldObjectComponents* components, HardpointVoxel* voxel):

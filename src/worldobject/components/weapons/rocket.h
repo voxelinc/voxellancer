@@ -3,12 +3,19 @@
 #include "worldobject/worldobject.h"
 #include "worldobject/handle/handle.h"
 
+#include "projectile.h"
 
-class Rocket: public WorldObject {
+
+/*
+    Base class for Projectiles that follow a target and attempt to crush into it.
+    Also, currently explodes on any collision
+*/
+class Rocket: public Projectile {
 public:
-    Rocket(float lifetime, WorldObject* targetObject, float scale);
+    Rocket();
 
-    WorldObject* targetObject();
+    WorldObject* target();
+    void setTarget(WorldObject* targetObject);
 
     virtual void update(float deltaSec) override;
 
@@ -17,9 +24,8 @@ public:
 
 
 protected:
-    float m_lifetime;
     Handle<WorldObject> m_targetHandle;
 
-    virtual void spawnExplosion();
+    virtual void spawnExplosion() = 0;
 };
 

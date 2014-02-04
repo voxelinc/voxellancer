@@ -4,6 +4,8 @@
 
 #include "worldobject/components/hardpoint.h"
 #include "worldobject/components/engineslot.h"
+#include "worldobject/components/weapons/bullet.h"
+#include "worldobject/components/weapons/rocket.h"
 #include "worldobject/ship.h"
 #include "worldobject/worldobject.h"
 

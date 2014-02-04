@@ -16,7 +16,7 @@ Property<T>::Property(const std::string& name, const T& defaultValue):
     m_name(name),
     m_value()
 {
-    PropertyManager::instance()->registerProperty(this);
+    PropertyManager::instance()->registerProperty(this, defaultValue);
 }
 
 template <class T>

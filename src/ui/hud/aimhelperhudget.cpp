@@ -72,7 +72,7 @@ void AimHelperHudget::calculateTargetPoint(WorldObject* targetObject) {
         if(!hardpoint->weapon()) {
             continue;
         }
-        if(hardpoint->weapon()->aimType() != WeaponAimType::Point) {
+        if(hardpoint->weapon()->type() != WeaponType::Gun) {
             continue;
         }
 

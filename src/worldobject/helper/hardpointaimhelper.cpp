@@ -6,21 +6,25 @@
 
 #include "worldobject/components/weapon.h"
 #include "worldobject/components/hardpoint.h"
+#include "worldobject/components/weapons/gun.h"
 #include "worldobject/worldobject.h"
 
 
-HardpointAimHelper::HardpointAimHelper(Hardpoint* shooter, WorldObject* targetObject):
-    m_shooter(shooter),
+HardpointAimHelper::HardpointAimHelper(Hardpoint* hardpoint, WorldObject* targetObject):
+    m_hardpoint(hardpoint),
     m_targetObject(targetObject),
     m_bulletSpeed(0.0f),
     m_hitable(false),
     m_aimed(false)
 {
-    assert(m_shooter->weapon());
+    assert(m_hardpoint->weapon());
 
-    m_shooterPosition = m_shooter->voxel()->position();
+    Gun* gun = dynamic_cast<Gun*>(m_hardpoint->weapon());
+    assert(gun);
+
+    m_shooterPosition = m_hardpoint->voxel()->position();
     m_targetPosition = m_targetObject->transform().position();
-    m_bulletSpeed = m_shooter->weapon()->bulletSpeed();
+    m_bulletSpeed = gun->bulletSpeed();
     m_targetSpeed = m_targetObject->physics().speed().directional();
 }
 
