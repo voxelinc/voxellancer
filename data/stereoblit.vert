@@ -10,7 +10,7 @@ out vec2 f_viewportC;
 
 
 void main() {
-    vec2 screenC = (v_vertex + 1.0f) / 2.0 * viewportSize + viewportPosition;
+    vec2 screenC = (v_vertex + 1) / 2 * viewportSize + viewportPosition;
 
     vec2 coord = (screenC * 2) - 1;
 

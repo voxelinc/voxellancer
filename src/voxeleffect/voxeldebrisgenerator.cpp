@@ -60,7 +60,7 @@ void VoxelDebrisGenerator::spawn() {
                 particleTransform.setScale(createScale());
                 particleTransform.setPosition(gridTransform.applyTo(glm::vec3(x, y, z)));
 
-                VoxelParticle* particle = new VoxelParticle(particleTransform, m_color, m_colorEmissiveness, createLifetime());
+                VoxelParticle* particle = new VoxelParticle(particleTransform, m_color, m_emissiveness, createLifetime());
                 particle->setAngularSpeed(createAngularSpeed(), m_particleDampening);
                 particle->setDirectionalSpeed(createDirectionalSpeed(), m_particleAngularDampening);
 

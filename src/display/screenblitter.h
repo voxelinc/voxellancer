@@ -8,6 +8,8 @@ namespace glow {
     class FrameBufferObject;
 }
 
+class FrameBuffer;
+
 class BlitProgram;
 
 class ScreenBlitter {
@@ -16,12 +18,10 @@ public:
 
     void setProgram(BlitProgram* blitProgram);
 
-    void blit(glow::FrameBufferObject& fbo, const Viewport& viewport);
+    void blit(FrameBuffer& source, const Viewport& viewport);
 
 
 protected:
     BlitProgram* m_blitProgram;
-
-    void setupGeometry();
 };
 
