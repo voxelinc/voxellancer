@@ -132,7 +132,7 @@ void InputHandler::update(float deltaSec) {
     if (glfwGetWindowAttrib(glfwGetCurrentContext(), GLFW_FOCUSED)) {
         if (m_lastfocus) {
             if (glfwJoystickPresent(GLFW_JOYSTICK_1)) {
-            retrieveInputValues();
+                retrieveInputValues();
             }
             if (m_inputConfigurator->isConfiguring()) {
                 m_inputConfigurator->update();
@@ -280,8 +280,8 @@ void InputHandler::processFireActions() {
     }
     if (getInputValue(&rocketAction)) {
         if (m_player->playerShip()) {
-        m_player->playerShip()->fireAtObject();
-    }
+            m_player->playerShip()->fireAtObject();
+        }
     }
 }
 

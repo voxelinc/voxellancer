@@ -42,7 +42,6 @@ void BaseScenario::reset() {
 
 void BaseScenario::createWorld() {
     m_world = World::instance();
-    SoundManager::current();
 }
 
 void BaseScenario::populateWorld() {
