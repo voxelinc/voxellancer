@@ -22,7 +22,8 @@ WorldObject::WorldObject(float scale, CollisionFilterClass collisionFilterClass)
     m_objectInfo(),
     m_crucialVoxel(nullptr),
     m_handle(new WorldObjectHandle(this)),
-    m_scheduledForDeletion(false)
+    m_scheduledForDeletion(false),
+    m_collisionDamageFOV(glm::half_pi<float>())
 {
 }
 
@@ -132,4 +133,8 @@ bool WorldObject::scheduledForDeletion() {
 
 void WorldObject::markScheduledForDeletion() {
     m_scheduledForDeletion = true;
+}
+
+float WorldObject::collisionDamageFOV() {
+    return m_collisionDamageFOV;
 }

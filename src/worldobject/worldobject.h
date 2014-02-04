@@ -58,6 +58,8 @@ public:
 
     bool scheduledForDeletion();
 
+    float collisionDamageFOV();
+
 protected:
     // Only god can set this mark. Unfortunately the method will be able to access all our protected members
     friend void God::scheduleRemoval(WorldObject* worldObject);
@@ -71,4 +73,6 @@ protected:
 
     ObjectInfo m_objectInfo;
     Voxel* m_crucialVoxel;
+
+    float m_collisionDamageFOV;
 };

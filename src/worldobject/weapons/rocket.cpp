@@ -15,11 +15,13 @@
 
 
 Rocket::Rocket(glm::vec3 position, glm::quat orientation, const glm::vec3& initialSpeed, float travelSpeed, float lifetime, WorldObject* target) :
-    Ship()
+    Ship()    
     //WorldObject(0.8f, CollisionFilterClass::Rocket)
 {
     m_collisionFilterClass = CollisionFilterClass::Rocket;
     m_transform.setScale(0.8f);
+
+    m_collisionDamageFOV = std::numeric_limits<float>::max(); // glm::pi<float>() * 2;
 
     m_lifetime = lifetime;
     m_travelSpeed = travelSpeed;

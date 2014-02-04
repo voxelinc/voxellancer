@@ -60,7 +60,7 @@ std::list<WorldObjectModification>& Damager::worldObjectModifications() {
 }
 
 DamageImpact Damager::dampDamageImpact(DamageImpact &undamped, float factor) {
-    return DamageImpact(undamped.worldObject(), undamped.voxel(), undamped.damageVec() * factor);
+    return DamageImpact(undamped.worldObject(), undamped.voxel(), undamped.damageVec() * factor, undamped.damageFOV());
 }
 
 void Damager::reset() {
