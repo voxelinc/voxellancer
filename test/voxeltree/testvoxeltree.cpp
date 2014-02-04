@@ -9,8 +9,10 @@
 #include "utils/tostring.h"
 #include "world/world.h"
 #include "voxel/voxeltreequery.h"
+#include "voxel/voxeltree.h"
 #include "voxel/voxeltreenode.h"
 #include "worldobject/worldobject.h"
+#include "collision/collisiondetector.h"
 #include "../bandit_extension/vec3helper.h"
 
 using namespace bandit;
@@ -70,7 +72,7 @@ go_bandit([](){
         });
 
         it("is moved when the transform moves", [&]() {
-            WorldTransform transform;
+            Transform transform;
 
             AssertThat(tree->root()->sphere(transform).position(), EqualsWithDelta(glm::vec3(0), glm::vec3(0.01, 0.01, 0.01)));
 
@@ -85,7 +87,7 @@ go_bandit([](){
         it("supports basic rotation with voxel in center", [&]() {
             Voxel v1(glm::ivec3(1, 1, 1));
             Voxel v2(glm::ivec3(0, 0, 0));
-            WorldTransform transform;
+            Transform transform;
 
             tree->insert(&v1);
 
@@ -95,7 +97,7 @@ go_bandit([](){
             tree->insert(&v2); // Center in middle now
             AssertThat(n->sphere(transform).position(), EqualsWithDelta(glm::vec3(1, 1, 1), glm::vec3(0.01, 0.01, 0.01)));
 
-            transform.rotate(glm::angleAxis(90.0f, glm::vec3(1, 0, 0)));
+            transform.rotate(glm::angleAxis(glm::radians(90.0f), glm::vec3(1, 0, 0)));
             AssertThat(n->sphere(transform).position(), EqualsWithDelta(glm::vec3(1, -1, 1), glm::vec3(0.01, 0.01, 0.01)));
         });
 
@@ -103,7 +105,7 @@ go_bandit([](){
             glm::vec3 v;
             Voxel v1(glm::ivec3(1, 1, 1));
             Voxel v2(glm::ivec3(0, 0, 0));
-            WorldTransform transform;
+            Transform transform;
 
             tree->insert(&v1);
 
@@ -116,10 +118,10 @@ go_bandit([](){
             AssertThat(n->sphere(transform).position(), EqualsWithDelta(glm::vec3(1,1,1), glm::vec3(0.01, 0.01, 0.01)));
             AssertThat(tree->root()->sphere(transform).position(), EqualsWithDelta(glm::vec3(0.5, 0.5, 0.5), glm::vec3(0.01, 0.01, 0.01)));
 
-            transform.rotate(glm::angleAxis((float)90.0, glm::vec3(1, 0, 0)));
+            transform.rotate(glm::angleAxis(glm::radians(90.0f), glm::vec3(1, 0, 0)));
             AssertThat(n->sphere(transform).position(), EqualsWithDelta(glm::vec3(1, 0, 1), glm::vec3(0.01, 0.01, 0.01)));
 
-            transform.rotate(glm::angleAxis((float)90.0f, glm::vec3(0, 1, 0)));
+            transform.rotate(glm::angleAxis(glm::radians(90.0f), glm::vec3(0, 1, 0)));
             AssertThat(n->sphere(transform).position(), EqualsWithDelta(glm::vec3(1, 1, 1), glm::vec3(0.01, 0.01, 0.01)));
         });
 

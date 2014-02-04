@@ -1,21 +1,32 @@
 #pragma once
 
-#include "camera/camera.h"
+#include <memory>
+#include <glm/glm.hpp>
+#include <glm/gtc/quaternion.hpp>
+
 #include "camera/cameradolly.h"
 
-#include "ui/hud.h"
+#include "ui/hud/hud.h"
 
-#include "worldobject/ship.h"
+#include "worldobject/handle/handle.h"
 
+
+class Camera;
+class CameraDolly;
+class HUD;
+
+class Game;
 
 class Player {
 public:
-    Player();
+    Player(Game* game);
 
     void setShip(Ship *ship);
 
-    void move(glm::vec3 direction);
-    void rotate(glm::vec3 direction);
+    void move(const glm::vec3& direction);
+    void rotate(const glm::vec3& direction);
+
+    void fire();
 
     void update(float deltaSec);
 
@@ -23,9 +34,13 @@ public:
     CameraDolly& cameraDolly();
     HUD& hud();
 
+    glm::vec3 cameraPosition();
+    glm::quat cameraOrientation();
+
 
 protected:
-    Ship* m_playerShip;
+    Game* m_game;
+    Handle<Ship> m_playerShip;
     CameraDolly m_cameraDolly;
     HUD m_hud;
 

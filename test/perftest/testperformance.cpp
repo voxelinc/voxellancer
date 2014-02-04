@@ -16,6 +16,8 @@
 #include "resource/clustercache.h"
 #include "world/handler/splitdetector.h"
 #include "world/helper/worldobjectmodification.h"
+#include "voxel/voxel.h"
+#include "world/god.h"
 
 
 

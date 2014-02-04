@@ -5,7 +5,7 @@
 #include "property/property.h"
 #include "voxelparticlespawnbase.h"
 
-class WorldTransform;
+class Transform;
 
 class VoxelDebrisGenerator : public VoxelParticleSpawnBase
 {

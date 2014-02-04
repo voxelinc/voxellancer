@@ -1,9 +1,10 @@
 #pragma once
 
-#include <list>
+#include <vector>
+#include <glm/glm.hpp>
 
-#include "voxel.h"
 
+class Voxel;
 class VoxelCluster;
 
 class VoxelNeighbourHelper

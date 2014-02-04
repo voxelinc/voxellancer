@@ -33,8 +33,8 @@ glm::vec3 RandVec3::rand(float from, float to) {
 }
 
 glm::vec3 RandVec3::randUnitVec() {
-    float angX = RandFloat::rand(-180.0f, 180.0f);
-    float angY = glm::degrees(glm::acos(RandFloat::rand(-1.0f, 1.0f)));
+    float angX = RandFloat::rand(-glm::pi<float>(), glm::pi<float>());
+    float angY = glm::acos(RandFloat::rand(-1.0f, 1.0f));
     glm::vec3 result = glm::quat(glm::vec3(angX, angY, 0.0f)) * glm::vec3(0.0f, 0.0f, 1.0f);
     return glm::normalize(result);
 }

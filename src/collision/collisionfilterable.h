@@ -14,6 +14,7 @@ public:
 
     void setCollideableWith(CollisionFilterClass collisionFilterClass, bool collides);
 
+    bool isCollideableWith(CollisionFilterClass collisionFilterClass) const;
     bool isCollideableWith(const CollisionFilterable *other) const;
 
     bool areMasksCollidable(const CollisionFilterable *other) const;

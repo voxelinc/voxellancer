@@ -16,6 +16,7 @@ public:
     };
 
     Sound(const sf::SoundBuffer& sound);
+    ~Sound();
 
     Status status();
 

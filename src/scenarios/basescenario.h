@@ -1,7 +1,7 @@
 #pragma once
 
-#include "game.h"
-
+class World;
+class Game;
 
 class BaseScenario {
 public:

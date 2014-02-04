@@ -5,19 +5,20 @@
 #include "worldtree/worldtree.h"
 #include "worldlogic.h"
 #include "worldobject/worldobject.h"
+#include "skybox.h"
 
 #include "god.h"
 
 
 World *World::s_instance = nullptr;
 
-World::World()
+World::World():
+    m_skybox(new Skybox()),
+    m_worldLogic(new WorldLogic(*this)),
+    m_worldTree(new WorldTree()),
+    m_god(new God(*this)),
+    m_voxelParticleWorld(new VoxelParticleWorld()) 
 {
-    m_skybox = std::unique_ptr<Skybox>(new Skybox());
-    m_worldLogic = std::unique_ptr<WorldLogic>(new WorldLogic(*this));
-    m_worldTree = std::unique_ptr<WorldTree>(new WorldTree());
-    m_god = std::unique_ptr<God>(new God(*this));
-    m_voxelParticleWorld = std::unique_ptr<VoxelParticleWorld>(new VoxelParticleWorld());
 }
 
 World::~World() {

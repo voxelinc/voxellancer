@@ -3,37 +3,34 @@
 #include <iostream>
 
 #include <glow/Program.h>
-#include <glow/FrameBufferObject.h>
-#include <glow/VertexArrayObject.h>
 
 #include "geometry/viewport.h"
 
+namespace glow {
+    class FrameBufferObject;
+    class Texture;
+}
+
+class ScreenQuad;
 
 class BlitProgram: protected glow::Program {
 public:
-    const GLint VERTEX_LOCATION = 0;
     const GLint TEXTURE_LOCATION = 0;
 
-public:
     BlitProgram();
     virtual ~BlitProgram();
 
-    void setSource(glow::FrameBufferObject* sourceFBO);
+    void setSource(glow::Texture* source);
     void setDestination(glow::FrameBufferObject* targetFBO, const Viewport& m_targetViewpoer);
 
     virtual void blit();
 
-
 protected:
-    glow::VertexArrayObject m_vertexArrayObject;
-    glow::ref_ptr<glow::Buffer> m_vertexBuffer;
-
-    glow::FrameBufferObject* m_sourceFBO;
+    glow::Texture* m_source;
     glow::FrameBufferObject* m_destinationFBO;
+    std::unique_ptr<ScreenQuad> m_quad;
     Viewport m_destinationViewport;
-
     bool m_initialized;
-
 
     virtual void initialize();
     virtual void initializeShaders() = 0;

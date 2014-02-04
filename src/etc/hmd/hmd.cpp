@@ -20,17 +20,18 @@ HMD::HMD(OVR::HMDDevice* hmdDevice):
 }
 
 HMD::~HMD() {
-    m_sensorDevice->Release();
-    m_hmdDevice->Release();
+    if (m_sensorDevice) {
+        m_sensorDevice->Release();
+    }
+    if (m_hmdDevice) {
+        m_hmdDevice->Release();
+    }
 }
 
 glm::quat HMD::orientation() {
-    glm::vec3 euler;
     OVR::Quatf ovrOrientation = m_sensorFusion.GetOrientation();
-
-    ovrOrientation.GetEulerAngles<OVR::Axis_X, OVR::Axis_Y, OVR::Axis_Z, OVR::Rotate_CCW, OVR::Handed_R>(&euler.x, &euler.y, &euler.z);
-
-    return glm::quat(euler);
+    
+    return glm::quat(ovrOrientation.w, ovrOrientation.x, ovrOrientation.y, ovrOrientation.z);
 }
 
 const StereoRenderInfo& HMD::stereoRenderInfo() const {

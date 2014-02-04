@@ -7,24 +7,28 @@
 #include "ai/characters/dummycharacter.h"
 #include "ai/elevatedtasks/dummyelevatedtask.h"
 #include "ai/basictask.h"
+#include "ai/basictasks/flytotask.h"
+#include "ai/elevatedtasks/patrolwaypointstask.h"
 
 #include "resource/clustercache.h"
 
 #include "worldobject/ship.h"
 #include "sound/soundmanager.h"
 #include "game.h"
+#include "world/world.h"
+#include "voxel/voxel.h"
+#include "world/god.h"
 
 
 GameScenario::GameScenario(Game* game) :
 BaseScenario(game)
 {
-
 }
 
 void GameScenario::populateWorld() {
 
     glow::debug("Create WorldObjects");
-    Ship *normandy = new Ship();
+    Ship* normandy = new Ship();
     ClusterCache::instance()->fillObject(normandy, "data/voxelcluster/normandy.csv");
     normandy->setPosition(glm::vec3(0, 0, -100));
     normandy->objectInfo().setName("Normandy");
@@ -33,10 +37,23 @@ void GameScenario::populateWorld() {
     normandy->setEngineSound(SoundManager::current()->create("data/sound/Rocket Thrusters.ogg"));
     m_world->god().scheduleSpawn(normandy);
     // TODO: use these dummies to test BasicTasks
-    normandy->setCharacter(
-        new DummyCharacter(*normandy,
-        new DummyElevatedTask(*normandy,
-        new BasicTask(*normandy))));
+    PatrolWaypointsTask* ta = new PatrolWaypointsTask(
+        *normandy,
+        std::list<glm::vec3>{ glm::vec3(400, 0, 200), glm::vec3(-400, 0, -400), glm::vec3(-600, 0, -400), 
+                              glm::vec3(0, 100, -600), glm::vec3(200, 150, -900) });
+    normandy->setCharacter(new DummyCharacter(*normandy, ta));
+    
+    Ship *follower = new Ship();
+    ClusterCache::instance()->fillObject(follower, "data/voxelcluster/basicship.csv");
+    follower->setPosition(glm::vec3(100, 0, -50));
+    follower->objectInfo().setName("follower");
+    follower->objectInfo().setShowOnHud(true);
+    follower->objectInfo().setCanLockOn(true);
+    m_world->god().scheduleSpawn(follower);
+    FlyToTask* task = new FlyToTask(*follower);
+    task->setTargetPoint(glm::vec3(-100, 0, -50));
+    follower->setCharacter(
+        new DummyCharacter(*follower, new DummyElevatedTask(*follower, task)));
 
     Ship *testCluster = new Ship();
     ClusterCache::instance()->fillObject(testCluster, "data/voxelcluster/basicship.csv");
@@ -106,3 +123,4 @@ void GameScenario::populateWorld() {
     glow::debug("Initial spawn");
     m_world->god().spawn();
 }
+

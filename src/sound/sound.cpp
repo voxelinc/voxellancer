@@ -8,6 +8,8 @@ Sound::Sound(const sf::SoundBuffer& sound) :
 {
 }
 
+Sound::~Sound() = default;
+
 Sound::Status Sound::status() {
     switch (m_sound->getStatus()) {
         case sf::SoundSource::Playing:
@@ -62,3 +64,4 @@ Sound* Sound::setMinDistance(float distance) {
     m_sound->setMinDistance(distance);
     return this;
 }
+

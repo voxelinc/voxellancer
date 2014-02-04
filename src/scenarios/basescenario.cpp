@@ -13,6 +13,7 @@
 
 #include "worldobject/ship.h"
 #include "sound/soundmanager.h"
+#include "world/world.h"
 
 BaseScenario::BaseScenario(Game* game) :
     m_game(game) 

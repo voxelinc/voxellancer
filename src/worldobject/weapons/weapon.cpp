@@ -10,18 +10,6 @@ Weapon::Weapon():
 {
 }
 
-void Weapon::shootAtPoint(Hardpoint* source, glm::vec3 target) {
-
-}
-
-void Weapon::shootAtObject(Hardpoint* source, WorldObject* target) {
-
-}
-
-void Weapon::update(float deltaSec) {
-    m_coolDown = std::max(m_coolDown - deltaSec, 0.0f);
-}
-
 bool Weapon::canFire() {
     return m_coolDown == 0.0f;
 }
@@ -45,3 +33,16 @@ WorldObject *Weapon::worldObject() {
 void Weapon::setWorldObject(WorldObject* worldObject) {
     m_worldObject = worldObject;
 }
+
+void Weapon::shootAtPoint(Hardpoint* source, glm::vec3 target) {
+
+}
+
+void Weapon::shootAtObject(Hardpoint* source, WorldObject* target) {
+
+}
+
+void Weapon::update(float deltaSec) {
+    m_coolDown = std::max(m_coolDown - deltaSec, 0.0f);
+}
+

@@ -3,7 +3,7 @@
 #include <cmath>
 #include <iostream>
 
-#include "worldtransform.h"
+#include "geometry/transform.h"
 
 #include "utils/tostring.h"
 
@@ -54,5 +54,9 @@ bool Ray::nearTo(const TAABB<int>& aabb) const {
 
 bool Ray::containedBy(const TAABB<int>& aabb) const {
     return false;
+}
+
+Ray Ray::fromTo(const glm::vec3& from, const glm::vec3& to) {
+    return Ray(from, to - from);
 }
 
