@@ -30,13 +30,11 @@ void DamageForwarder::forwardDamageImpacts(std::list<DamageImpact> &dampedDeadly
 
             float dotProduct = glm::dot(glm::normalize(damageImpactVec), glm::normalize(voxelVec));
 
-            //if(dotProduct >= 0.0f) {
-                DamageImpact forwarded(m_currentWorldObject, 
-                                       neighbour, 
-                                       dampedDeadlyDamageImpact.damageVec() * forwardFactor(dotProduct, dampedDeadlyDamageImpact.damageFOV(), neighbours.size()), 
-                                       dampedDeadlyDamageImpact.damageFOV());
-                m_damageImpactAccumulator.parse(forwarded);
-            //}
+            DamageImpact forwarded(m_currentWorldObject, 
+                                    neighbour, 
+                                    dampedDeadlyDamageImpact.damageVec() * forwardFactor(dotProduct, dampedDeadlyDamageImpact.damageFOV(), neighbours.size()), 
+                                    dampedDeadlyDamageImpact.damageFOV());
+            m_damageImpactAccumulator.parse(forwarded);
         }
     }
 }
