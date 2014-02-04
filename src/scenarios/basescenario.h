@@ -7,8 +7,8 @@ class BaseScenario {
 public:
     BaseScenario(Game* game);
 
-    virtual void load();
-    virtual void reset();
+    void load();
+    void reset();
 
 protected:
     Game* m_game;

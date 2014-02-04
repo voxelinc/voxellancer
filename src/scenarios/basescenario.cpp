@@ -24,16 +24,14 @@ void BaseScenario::clear() {
 }
 
 void BaseScenario::load() {
-    glowutils::Timer timer("Create Scenario");
-    glow::debug("Create World");
-    timer.start();
-    m_world = World::instance();
-    glow::debug("Creating World took %;", timer.elapsed());
-    timer.reset();
-    glow::debug("Populate World");
-    timer.start();
-    populateWorld();
-    glow::debug("Populating World took %;", timer.elapsed());
+    { 
+        glowutils::AutoTimer timer("Creating World took");
+        m_world = World::instance();
+    }
+    {
+        glowutils::AutoTimer timer("Populating World took");
+        populateWorld();
+    }
 }
 
 void BaseScenario::reset() {

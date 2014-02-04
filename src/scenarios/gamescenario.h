@@ -9,6 +9,6 @@ public:
     GameScenario(Game* game);
 
 protected:
-    virtual void populateWorld();
+    virtual void populateWorld() override;
 };
 
