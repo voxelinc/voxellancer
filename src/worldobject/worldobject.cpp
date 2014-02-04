@@ -135,9 +135,6 @@ void WorldObject::onScheduleForDeletion() {
     m_scheduledForDeletion = true;
 }
 
-<<<<<<< HEAD
 float WorldObject::collisionDamageFOV() {
     return m_collisionDamageFOV;
 }
-=======
->>>>>>> master
