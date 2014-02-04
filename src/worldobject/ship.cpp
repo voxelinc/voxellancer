@@ -3,8 +3,13 @@
 #include "ai/character.h"
 #include "ai/boardcomputer.h"
 
-#include "sound/sound.h"
 #include "collision/collisionfilter.h"
+
+#include "sound/sound.h"
+
+#include "voxel/specialvoxels/engineslotvoxel.h"
+
+#include "worldobject/components/engineslot.h"
 
 
 Ship::Ship():
@@ -65,18 +70,27 @@ Character* Ship::character() {
 BoardComputer* Ship::boardComputer() {
     return m_boardComputer.get();
 }
-
+//
 //void Ship::setEngineSound(std::shared_ptr<Sound> sound) {
 //    m_sound = sound;
 //    sound->setLooping(true);
 //    sound->setPosition(m_transform.applyTo(m_enginePos));
 //    sound->play();
 //}
-
+//
 //void Ship::updateEnginePosition() {
 //    m_enginePos = glm::vec3(0);
-//    for (const Engine* engine : m_engines) {
-//        m_enginePos += engine->positionInGrid();
+//    int engineCount = 0;
+//    for (EngineSlot* engineSlot : components().engineSlots()) {
+//        if(engineSlot->engine()) {
+//            m_enginePos += engineSlot->voxel()->gridCell();
+//            engineCount++;
+//        }
 //    }
-//    m_enginePos /= m_engines.size();
+//
+//    if(engineCount > 0) {
+//        m_enginePos /= engineCount;
+//    } else {
+//        m_sound->stop();
+//    }
 //}

@@ -24,7 +24,7 @@ Sound::Status Sound::status() {
 }
 
 void Sound::play() {
-  //  m_sound->play();
+    m_sound->play();
 }
 
 void Sound::stop() {

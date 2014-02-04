@@ -2,6 +2,9 @@
 
 #include "utils/geometryhelper.h"
 
+#include "sound/sound.h"
+#include "sound/soundmanager.h"
+
 #include "voxel/specialvoxels/hardpointvoxel.h"
 
 #include "world/world.h"
@@ -23,6 +26,7 @@ void Gun::fireAtPoint(const glm::vec3& point) {
         setupBullet(bullet, point);
 
         World::instance()->god().scheduleSpawn(bullet);
+        SoundManager::current()->play("data/sound/laser.ogg", hardpoint()->voxel()->position())->setVolume(3);
 
         onFired();
     }
