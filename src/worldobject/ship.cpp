@@ -26,6 +26,9 @@ Ship::Ship() :
 
 
 Ship::~Ship() {
+    if (m_sound) {
+        m_sound->stop();
+    }
     m_shipHandle.invalidate();
 }
 
