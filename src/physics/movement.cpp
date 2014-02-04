@@ -35,7 +35,7 @@ bool Movement::perform() {
     IAABB phaseAABB = m_worldObject.bounds().aabb(m_originalTransform).united(m_worldObject.bounds().aabb(m_targetTransform));
     WorldTreeNode* nodeHint = m_worldObject.collisionDetector().geode()->containingNode();
 
-    if(WorldTreeQuery(m_collisionDetector.worldTree(), &phaseAABB, nodeHint, &m_worldObject).areGeodesNear()) {
+    if(WorldTreeQuery(m_collisionDetector.worldTree(), &phaseAABB, nodeHint, &m_worldObject.collisionFilter()).areGeodesNear()) {
         glm::vec3 directionalStep = m_targetTransform.position() - m_originalTransform.position();
         m_distance = glm::length(directionalStep);
 

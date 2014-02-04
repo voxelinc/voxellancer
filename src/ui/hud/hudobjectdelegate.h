@@ -1,11 +1,11 @@
 #pragma once
 
-#include "worldobject/worldobject.h"
 #include "worldobject/handle/handle.h"
 
 
 class HUD;
 class Hudget;
+class WorldObject;
 
 /*
     Handle to a WorldObject that also holds the Hudget this
