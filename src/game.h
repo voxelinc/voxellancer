@@ -9,9 +9,9 @@
 
 #include "ui/inputhandler.h"
 
-#include "gamescenario.h"
 #include "battlescenario.h"
 #include "player.h"
+#include "scenarios/gamescenario.h"
 
 
 class SoundManager;
