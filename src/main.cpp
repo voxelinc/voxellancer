@@ -26,8 +26,6 @@
 
 #include "geometry/viewport.h"
 
-#include "geometry/size.h"
-
 #include "display/stereorenderinfo.h"
 
 #include "ui/inputhandler.h"
@@ -74,6 +72,9 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
     }
     if (key == GLFW_KEY_F6 && action == GLFW_PRESS) {
         PropertyManager::instance()->load("data/config.ini");
+    }
+    if (key >= GLFW_KEY_1 && key <= GLFW_KEY_9 && action == GLFW_PRESS) {
+        game->setOutputBuffer(key-GLFW_KEY_1);
     }
 
 	game->inputHandler().keyCallback(key, scancode, action, mods);
@@ -133,7 +134,7 @@ int main(int argc, char* argv[]) {
     glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
 #endif
 
-    if(clParser.hmd()) {
+    if(clParser.fullScreen()) {
         WindowManager::instance()->setFullScreenResolution(1);
     } else {
         WindowManager::instance()->setWindowedResolution(Size<int>(Property<int>("window.width"), Property<int>("window.height")));
@@ -141,6 +142,7 @@ int main(int argc, char* argv[]) {
 
     GLFWwindow* window = glfwGetCurrentContext();
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+
 
     setCallbacks(window);
 
@@ -166,7 +168,8 @@ int main(int argc, char* argv[]) {
     glfwSwapInterval(1);
 #endif
 
-    //#define TRYCATCH
+//#define TRYCATCH
+
 #ifdef TRYCATCH
     try {
 #endif

@@ -7,11 +7,15 @@
 #include <glow/glow.h>
 
 #include "utils/tostring.h"
-#include "utils/aimhelper.h"
+#include "utils/aimer.h"
 
 #include "etc/windowmanager.h"
 
 #include "worldobject/worldobject.h"
+#include "player.h"
+#include "ui/hud/hud.h"
+#include "worldobject/ship.h"
+#include "camera/cameradolly.h"
 
 
 /*
@@ -39,7 +43,6 @@
 
 InputHandler::InputHandler(Player* player):
     m_player(player),
-
     m_hmd(nullptr),
 
     prop_deadzoneMouse("input.deadzoneMouse"),
@@ -128,7 +131,9 @@ void InputHandler::keyCallback(int key, int scancode, int action, int mods) {
 void InputHandler::update(float deltaSec) {
     if (glfwGetWindowAttrib(glfwGetCurrentContext(), GLFW_FOCUSED)) {
         if (m_lastfocus) {
-            retrieveInputValues();
+            if (glfwJoystickPresent(GLFW_JOYSTICK_1)) {
+                retrieveInputValues();
+            }
             if (m_inputConfigurator->isConfiguring()) {
                 m_inputConfigurator->update();
             } else {
@@ -160,10 +165,14 @@ void InputHandler::processMouseUpdate() {
     double x, y;
     glfwGetCursorPos(glfwGetCurrentContext(), &x, &y);
 
+    bool pressed = glfwGetMouseButton(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS;
+
+    m_player->hud().crossHair().setActionActive(pressed);
+
     placeCrossHair(x, y);
 
-    if (glfwGetMouseButton(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
-        m_player->playerShip()->fireAtPoint(findTargetPoint());
+    if (pressed) {
+        m_player->fire();
     }
 
     // spin
@@ -264,11 +273,15 @@ float InputHandler::getInputValue(InputMapping mapping) {
 }
 
 void InputHandler::processFireActions() {
+    m_player->hud().crossHair().setActionActive(getInputValue(&fireAction) > 0.001);
+
     if (getInputValue(&fireAction)) {
-        m_player->playerShip()->fireAtPoint(findTargetPoint());
+        m_player->fire();
     }
     if (getInputValue(&rocketAction)) {
-        m_player->playerShip()->fireAtObject();
+        if (m_player->playerShip()) {
+            m_player->playerShip()->fireAtObject();
+        }
     }
 }
 
@@ -303,17 +316,6 @@ void InputHandler::processTargetSelectActions() {
     if (getInputValue(&selectPreviousAction)) {
         m_targetSelector->selectPreviousTarget();
     }
-}
-
-glm::vec3 InputHandler::findTargetPoint() {
-    glm::vec3 shootDirection(glm::normalize(m_player->hud().crossHair().position() - m_player->cameraDolly().cameraHead().position()));
-
-    Ray ray(
-        m_player->hud().crossHair().position(),
-        shootDirection
-    );
-
-    return AimHelper(m_player->playerShip(),ray).aim();
 }
 
 void InputHandler::placeCrossHair(double winX, double winY) {

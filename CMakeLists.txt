@@ -77,12 +77,12 @@ endif()
 
 # GET REPOSITORY VERSION
 # Add a revision file containing the git-head tag for cpack and install
-include(GetGitRevisionDescription)
-get_git_head_revision(GIT_REFSPEC GIT_SHA1)
+# include(GetGitRevisionDescription)
+# get_git_head_revision(GIT_REFSPEC GIT_SHA1)
 
 # Generate a shorter, googlelike variation for rev
-string(SUBSTRING ${GIT_SHA1} 0 12 GIT_REV)
-file(WRITE ${CMAKE_BINARY_DIR}/revision ${GIT_REV})
+# string(SUBSTRING ${GIT_SHA1} 0 12 GIT_REV)
+# file(WRITE ${CMAKE_BINARY_DIR}/revision ${GIT_REV})
 
 
 # DEPENDENCIES
@@ -142,20 +142,23 @@ list(REMOVE_ITEM SRC_FILES_EXCEPT_MAIN ${SRC_DIR}/main.cpp)
 file(GLOB_RECURSE SHADER_FILES
     "data/*.vert"
     "data/*.frag"
+    "data/*.geo"
 )
 
 source_group(${SHADER_GROUP} FILES ${SHADER_FILES})
 
 
-source_group_by_path(${SOURCE_DIR} "\\\\.h$|\\\\.hpp$"
+source_group_by_path_function(${SOURCE_DIR} "\\.h$|\\.hpp$"
     ${HEADER_GROUP} ${SRC_FILES})
-source_group_by_path(${SOURCE_DIR} "\\\\.cpp$|\\\\.c$|\\\\.inl$"
+source_group_by_path_function(${SOURCE_DIR} "\\.cpp$|\\.c$|\\.inl$"
     ${SOURCE_GROUP} ${SRC_FILES})
 
 add_executable(${target}
     ${SRC_FILES}
     ${SHADER_FILES}
 )
+
+add_definitions(-DGLM_FORCE_RADIANS)
 
 set(LIBS_TO_LINK
     ${OPENGL_LIBRARIES}

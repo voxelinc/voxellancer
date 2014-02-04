@@ -3,7 +3,6 @@
 #include <memory>
 #include <list>
 
-#include "skybox.h"
 
 
 class WorldLogic;
@@ -11,6 +10,7 @@ class WorldTree;
 class God;
 class WorldObject;
 class VoxelParticleWorld;
+class Skybox;
 
 class World
 {

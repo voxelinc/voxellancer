@@ -6,6 +6,7 @@ set(TEST_MAIN ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
 include(maketest.cmake)
 
 if(${OPTION_CREATE_SUB_TEST})
+    add_subdirectory(ai)
     add_subdirectory(geometry)
     add_subdirectory(worldtree)
     add_subdirectory(damageforwarder)

@@ -7,6 +7,7 @@
 #include "world/worldlogic.h"
 #include "world/god.h"
 #include "world/handler/damageforwarder.h"
+#include "voxel/voxel.h"
 
 namespace bandit
 {

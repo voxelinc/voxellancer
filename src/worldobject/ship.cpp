@@ -4,13 +4,12 @@
 #include "engine.h"
 #include "voxel/specialvoxels/hardpointvoxel.h"
 #include "voxel/specialvoxels/enginevoxel.h"
-#include "worldobject/worldobjecthandle.h"
+#include "worldobject/handle/handle.h"
 #include "worldobject/weapons/gun.h"
 #include "worldobject/weapons/rocketlauncher.h"
 #include "ai/character.h"
 #include "ai/boardcomputer.h"
 #include "sound/sound.h"
-
 
 Ship::Ship() :
     WorldObject(CollisionFilterClass::Ship),
@@ -20,8 +19,17 @@ Ship::Ship() :
     prop_maxRotSpeed("ship.maxRotSpeed"),
     m_character(new Character(*this)),
     m_boardComputer(new BoardComputer(*this)),
-    m_targetObjectHandle(WorldObjectHandle::nullHandle())
+    m_shipHandle(Handle<Ship>(this)),
+    m_targetObjectHandle(Handle<WorldObject>(nullptr))
 {
+}
+
+
+Ship::~Ship() {
+    if (m_sound) {
+        m_sound->stop();
+    }
+    m_shipHandle.invalidate();
 }
 
 void Ship::update(float deltaSec) {
@@ -59,6 +67,10 @@ void Ship::removeHardpoint(Hardpoint *hardpoint) {
     m_hardpoints.remove(hardpoint);
 }
 
+const std::list<Hardpoint*> Ship::hardpoints() const {
+    return m_hardpoints;
+}
+
 void Ship::addEngineVoxel(EngineVoxel* voxel) {
     Engine* engine = new Engine(this, voxel);
     voxel->setEngine(engine);
@@ -74,11 +86,11 @@ void Ship::removeEngine(Engine* engine) {
 }
 
 void Ship::setTargetObject(WorldObject* target) {
-    m_targetObjectHandle = target ? target->handle() : WorldObjectHandle::nullHandle();
+    m_targetObjectHandle = target ? target->handle() : Handle<WorldObject>(nullptr);
 }
 
 WorldObject* Ship::targetObject() {
-    return m_targetObjectHandle->get();
+    return m_targetObjectHandle.get();
 }
 
 void Ship::fireAtPoint(glm::vec3 target) {
@@ -109,6 +121,15 @@ float Ship::minAimDistance() { // is this needed ?!
     return range;
 }
 
+float Ship::maxAimDistance() { // is this needed ?!
+    float range = 0;
+    for (Hardpoint *hardpoint : m_hardpoints) {
+        if (hardpoint->range() != -1)
+            range = glm::max(hardpoint->range(), range);
+    }
+    return range;
+}
+
 void Ship::accelerate(const glm::vec3& direction) {
     m_physics.accelerate(direction * prop_maxSpeed.get());
 }
@@ -123,6 +144,10 @@ void Ship::setCharacter(Character* character) {
 
 Character* Ship::character() {
     return m_character.get();
+}
+
+BoardComputer* Ship::boardComputer() {
+    return m_boardComputer.get();
 }
 
 void Ship::setEngineSound(std::shared_ptr<Sound> sound) {
@@ -140,3 +165,6 @@ void Ship::updateEnginePosition() {
     m_enginePos /= m_engines.size();
 }
 
+Handle<Ship> Ship::shipHandle() {
+    return m_shipHandle;
+}

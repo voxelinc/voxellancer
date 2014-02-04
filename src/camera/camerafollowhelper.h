@@ -1,8 +1,10 @@
 #pragma once
 
-#include "worldobject/worldobject.h"
-#include "worldobject/worldobjecthandle.h"
+#include <glm/glm.hpp>
 
+#include "worldobject/handle/handle.h"
+
+class WorldObject;
 
 class CameraFollowHelper {
 public:
@@ -15,7 +17,7 @@ public:
 
 
 protected:
-    std::shared_ptr<WorldObjectHandle> m_target;
+    Handle<WorldObject> m_target;
 };
 
 

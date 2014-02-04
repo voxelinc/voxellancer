@@ -17,9 +17,10 @@ public:
     bool canLockOn();
     void setCanLockOn(bool canLockOn);
 
+
 protected:
     std::string m_name;
     bool m_showOnHud;
     bool m_canLockOn;
-
 };
+

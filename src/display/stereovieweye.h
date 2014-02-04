@@ -1,34 +1,31 @@
 #pragma once
 
+#include <memory>
+
 #include <glm/glm.hpp>
 
-#include <glow/Buffer.h>
-#include <glow/FrameBufferObject.h>
-#include <glow/RenderBufferObject.h>
-
 #include "camera/camera.h"
+#include "eyeside.h"
 
-#include "geometry/size.h"
-
-
+namespace glow {
+    class FrameBufferObject;
+}
 
 class Scene;
 class CameraHead;
 class StereoRenderInfo;
+class FrameBuffer;
 
 class StereoViewEye {
 public:
-    enum EyeSide {
-        Left,
-        Right
-    };
+    StereoViewEye(const glm::ivec2& viewportResolution, const StereoRenderInfo& stereoRenderInfo, EyeSide side);
+    ~StereoViewEye();
 
-public:
-    StereoViewEye(const Size<int>& viewportResolution, const StereoRenderInfo& stereoRenderInfo, EyeSide side);
+    FrameBuffer& fbo();
 
-    glow::FrameBufferObject& fbo();
+    const Camera& camera() const;
 
-    void setViewportResolution(const Size<int>& viewportResolution);
+    void setViewportResolution(const glm::ivec2& viewportResolution);
 
     void draw(Scene* scene, CameraHead* cameraHead);
 
@@ -40,12 +37,7 @@ protected:
     Camera m_camera;
 
     float m_distortionScale;
-    Size<int> m_textureSize;
-    glow::FrameBufferObject m_fbo;
-
-    Size<int> m_viewportResolution;
-
-
-    void setupFBO();
+    glm::ivec2 m_textureSize;
+    std::unique_ptr<FrameBuffer> m_fbo;
 };
 

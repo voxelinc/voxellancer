@@ -6,7 +6,7 @@
 
 
 class Sphere;
-class WorldTransform;
+class Transform;
 template<typename T> class TAABB;
 
 class Ray: public AbstractShape {
@@ -22,6 +22,8 @@ public:
     virtual bool intersects(const Sphere& sphere) const override;
     virtual bool nearTo(const TAABB<int>& aabb) const override;
     virtual bool containedBy(const TAABB<int>& aabb) const override;
+
+    static Ray fromTo(const glm::vec3& from, const glm::vec3& to);
 
 
 protected:
