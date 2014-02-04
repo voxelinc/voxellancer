@@ -53,9 +53,9 @@ void DemoScenario::populateWorld() {
     wall->objectInfo().setCanLockOn(true);
     m_world->god().scheduleSpawn(wall);
 
-    createPlanet(glm::vec3(25, 0, -40), 24, 0x0000AA);
+    createPlanet(glm::vec3(100, 0, -40), 24, 0x0000AA);
 
-    populateBattle(10, 10);
+    populateBattle(5, 5);
 
     m_world->god().spawn();
 }
@@ -117,21 +117,21 @@ void DemoScenario::populateBattle(int numberOfEnemies1, int numberOfEnemies2) {
     World* world = World::instance();
     for (int e = 0; e < numberOfEnemies1; e++) {
         Ship *ship = new Ship();
-        float r = numberOfEnemies1 * 20.0f;
+        float r = numberOfEnemies1 * 50.0f;
         ship->move(RandVec3::rand(0.0f, r) + glm::vec3(-400, 0, -800));
         ship->objectInfo().setName("enemy1");
         ClusterCache::instance()->fillObject(ship, "data/voxelcluster/eagle.csv");
         world->god().scheduleSpawn(ship);
-        m_fleet1.push_back(ship);
+        m_fleet1.push_back(ship->handle());
     }
     for (int e = 0; e < numberOfEnemies2; e++) {
         Ship *ship = new Ship();
-        float r = numberOfEnemies2 * 20.0f;
+        float r = numberOfEnemies2 * 50.0f;
         ship->move(RandVec3::rand(0.0f, r) + glm::vec3(400, 0, -800));
         ship->objectInfo().setName("enemy2");
         ClusterCache::instance()->fillObject(ship, "data/voxelcluster/eagle.csv");
         world->god().scheduleSpawn(ship);
-        m_fleet2.push_back(ship);
+        m_fleet2.push_back(ship->handle());
     }
 }
 
@@ -141,38 +141,41 @@ void DemoScenario::startBattle() {
 }
 
 void DemoScenario::endBattle() {
-    setTargets(m_fleet1, std::vector<Ship*>{});
-    setTargets(m_fleet2, std::vector<Ship*>{});
+    setTargets(m_fleet1, std::vector<Handle<WorldObject>>{});
+    setTargets(m_fleet2, std::vector<Handle<WorldObject>>{});
 }
 
 void DemoScenario::turnBattleOnPlayer() {
-    setTargets(m_fleet1, std::vector<Ship*>{m_game->player().playerShip()});
-    setTargets(m_fleet2, std::vector<Ship*>{m_game->player().playerShip()});
-    for (Ship* enemy : m_fleet1) {
-        if (enemy) {
-            enemy->objectInfo().setShowOnHud(true);
-            enemy->objectInfo().setCanLockOn(true);
+    setTargets(m_fleet1, std::vector<Handle<WorldObject>>{m_game->player().playerShip()->handle()});
+    setTargets(m_fleet2, std::vector<Handle<WorldObject>>{m_game->player().playerShip()->handle()});
+    for (Handle<WorldObject> enemy : m_fleet1) {
+        if (enemy.valid()) {
+            enemy.get()->objectInfo().setShowOnHud(true);
+            enemy.get()->objectInfo().setCanLockOn(true);
         }
     }
-    for (Ship* enemy : m_fleet2) {
-        if (enemy) {
-            enemy->objectInfo().setShowOnHud(true);
-            enemy->objectInfo().setCanLockOn(true);
+    for (Handle<WorldObject> enemy : m_fleet2) {
+        if (enemy.valid()) {
+            enemy.get()->objectInfo().setShowOnHud(true);
+            enemy.get()->objectInfo().setCanLockOn(true);
         }
     }
 }
 
-void DemoScenario::setTargets(const std::vector<Ship*>& fleet, const std::vector<Ship*>& enemies) {
+void DemoScenario::setTargets(const std::vector<Handle<WorldObject>>& fleet, const std::vector<Handle<WorldObject>>& enemies) {
     std::vector<Handle<WorldObject>> enemyHandles;
-    for (Ship* enemy : enemies) {
-        if (enemy) {
-            enemyHandles.push_back(enemy->handle());
+    for (Handle<WorldObject> enemy : enemies) {
+        if (enemy.get()) {
+            enemyHandles.push_back(enemy);
         }
     }
-    for (Ship* ship : fleet) {
-        if (ship) {
-            std::random_shuffle(enemyHandles.begin(), enemyHandles.end());
-            ship->setCharacter(new DummyCharacter(*ship, new DummyElevatedTask(*ship, new FightTask(*ship, enemyHandles))));
+    for (Handle<WorldObject> shipHandle : fleet) {
+        if (shipHandle.valid()) {
+            Ship* ship = dynamic_cast<Ship*>(shipHandle.get());
+            if (ship) {
+                std::random_shuffle(enemyHandles.begin(), enemyHandles.end());
+                ship->setCharacter(new DummyCharacter(*ship, new DummyElevatedTask(*ship, new FightTask(*ship, enemyHandles))));
+            }
         }
     }
 }

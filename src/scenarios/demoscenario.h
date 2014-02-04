@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "scenarios/basescenario.h"
+#include "worldobject/handle/handle.h"
 
 class Game;
 class Ship;
@@ -19,8 +20,8 @@ protected:
 
 private:
 
-    std::vector<Ship*> m_fleet1;
-    std::vector<Ship*> m_fleet2;
+    std::vector<Handle<WorldObject>> m_fleet1;
+    std::vector<Handle<WorldObject>> m_fleet2;
 
     void createDummyTarget(glm::vec3 positionToPlayer);
     void createSingleEnemy(glm::vec3 positionToPlayer);
@@ -30,6 +31,6 @@ private:
     void startBattle();
     void endBattle();
     void turnBattleOnPlayer();
-    void setTargets(const std::vector<Ship*>& fleet, const std::vector<Ship*>& enemies);
+    void setTargets(const std::vector<Handle<WorldObject>>& fleet, const std::vector<Handle<WorldObject>>& enemies);
 
 };
