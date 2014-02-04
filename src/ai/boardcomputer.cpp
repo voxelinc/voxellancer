@@ -9,8 +9,8 @@
 #include "utils/geometryhelper.h"
 
 
-static const float s_minActDistance = 0.1f;
-static const float s_minActAngle = glm::radians(1.0f);
+static const float s_minActDistance = 0.5f;
+static const float s_minActAngle = glm::radians(5.0f);
 static const float s_minAutoUpAngle = glm::radians(10.0f);
 
 BoardComputer::BoardComputer(Ship& ship) :
