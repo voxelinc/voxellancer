@@ -122,7 +122,7 @@ void DemoScenario::onKeyPressed(int key) {
             break;
         case GLFW_KEY_F8:
             turnBattleOnPlayer();
-            break
+            break;
         default:
             break;
     }
