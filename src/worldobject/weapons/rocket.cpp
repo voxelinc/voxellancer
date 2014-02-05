@@ -6,22 +6,21 @@
 #include "physics/physics.h"
 #include "voxeleffect/voxelexplosiongenerator.h"
 #include "worldobject/ship.h"
-#include "ai/character.h" //ship holds a unique_ptr to a character and we inherit from it (C2338)
-#include "ai/boardcomputer.h"
 #include "resource/clustercache.h"
 #include "sound/soundmanager.h"
 #include "sound/sound.h"
+#include "collision/collisionfilterignoringcreator.h"
 
 
-Rocket::Rocket(glm::vec3 position, glm::quat orientation, const glm::vec3& initialSpeed, float travelSpeed, float lifetime, WorldObject* target) :
-    Ship(),
-    m_target(nullptr)
+Rocket::Rocket(glm::vec3 position, glm::quat orientation, const glm::vec3& initialSpeed, float travelSpeed, float lifetime, WorldObject* creator, WorldObject* target) :
+    Ship(new CollisionFilterIgnoringCreator(this, creator, CollisionFilterClass::Rocket)),
+    m_target(nullptr),
+    m_creator(creator),
+    m_lifetime(lifetime),
+    m_travelSpeed(travelSpeed)
 {
-    m_collisionFilterClass = CollisionFilterClass::Rocket;
     m_transform.setScale(0.8f);
 
-    m_lifetime = lifetime;
-    m_travelSpeed = travelSpeed;
     if (target) {
         m_target = target->handle();
     }
@@ -87,6 +86,7 @@ void Rocket::update(float deltaSec) {
     Ship::update(deltaSec);
 }
 
+
 void Rocket::onCollision(){
     m_sound->stop();
     SoundManager::current()->play("data/sound/102733__sarge4267__explosion3.ogg", m_transform.position());
@@ -103,7 +103,8 @@ void Rocket::spawnExplosion(){
     VoxelExplosionGenerator generator;
     generator.setPosition(m_transform.position());
     generator.setScale(m_transform.scale() / 3.0f);
-    generator.setColor(0xFF0000, 0.4f);
+    generator.setColor(0xFF0000);
+    generator.setEmissiveness(0.4f);
     generator.setCount(150);
     generator.setLifetime(1.0f, 0.2f);
     generator.setForce(1.5f);

@@ -10,9 +10,15 @@
 #include "ai/character.h"
 #include "ai/boardcomputer.h"
 #include "sound/sound.h"
+#include "collision/collisionfilter.h"
 
-Ship::Ship() :
-    WorldObject(CollisionFilterClass::Ship),
+
+Ship::Ship() : Ship(new CollisionFilter(this, CollisionFilterClass::Ship))
+{
+}
+
+Ship::Ship(CollisionFilter* collisionFilter):
+    WorldObject(collisionFilter),
     m_hardpoints(),
     m_engines(),
     prop_maxSpeed("ship.maxSpeed"),
@@ -22,10 +28,14 @@ Ship::Ship() :
     m_shipHandle(Handle<Ship>(this)),
     m_targetObjectHandle(Handle<WorldObject>(nullptr))
 {
+
 }
 
 
 Ship::~Ship() {
+    if (m_sound) {
+        m_sound->stop();
+    }
     m_shipHandle.invalidate();
 }
 
@@ -51,9 +61,9 @@ void Ship::addHardpointVoxel(HardpointVoxel* voxel) {
     //TODO: Adding the actual Launcher here is wrong, this is test code
     //point = new Hardpoint(this, glm::vec3(voxel->gridCell()), new Gun());
     if (m_hardpoints.size() % 3 == 0) {
-        point = new Hardpoint(this, voxel->gridCell(), new RocketLauncher());
+        point = new Hardpoint(this, voxel->gridCell(), std::make_shared<RocketLauncher>());
     } else {
-        point = new Hardpoint(this, voxel->gridCell(), new Gun());
+        point = new Hardpoint(this, voxel->gridCell(), std::make_shared<Gun>());
     }
     voxel->setHardpoint(point);
     m_hardpoints.push_back(point);
@@ -92,7 +102,7 @@ WorldObject* Ship::targetObject() {
 
 void Ship::fireAtPoint(glm::vec3 target) {
     for (Hardpoint* hardpoint : m_hardpoints) {
-        if (hardpoint->aimType() == Point) {
+        if (hardpoint->aimType() == AimType::Point) {
             hardpoint->shootAtPoint(target);
         }
     }
@@ -101,7 +111,7 @@ void Ship::fireAtPoint(glm::vec3 target) {
 void Ship::fireAtObject() {
     if(targetObject()) {
         for (Hardpoint* hardpoint : m_hardpoints) {
-            if (hardpoint->aimType() == Object) {
+            if (hardpoint->aimType() == AimType::Object) {
                 hardpoint->shootAtObject(targetObject());
             }
         }

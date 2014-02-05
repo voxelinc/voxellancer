@@ -1,8 +1,8 @@
 #pragma once
 
 
-enum InputType {
-    None,
+enum class InputType {
+    None = 0,
     Keyboard,
     GamePadKey,
     GamePadAxis
