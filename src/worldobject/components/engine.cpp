@@ -2,6 +2,9 @@
 
 #include "utils/tostring.h"
 
+#include "worldobject/components/engineslot.h"
+#include "worldobject/worldobject.h"
+
 
 Engine::Engine(const std::string& key):
     Equipment(key),
@@ -31,11 +34,13 @@ void Engine::setState(const EngineState& state) {
 }
 
 Acceleration Engine::currentAcceleration() const {
-    return power().accelerationAt(m_state);
+    WorldObject* worldObject = m_engineSlot ? m_engineSlot->components()->worldObject() : nullptr;
+    return worldObject ?
+        Acceleration(power().accelerationAt(m_state) / worldObject->physics().mass()) :
+        Acceleration();
 }
 
 void Engine::setupTrail() {
-    std::cout << "lifetime of " << equipmentKey() << " is " << Property<float>(equipmentKey() + ".trail.lifetime").get() << std::endl;
     m_trailGenerator.setLifetime(Property<float>(equipmentKey() + ".trail.lifetime"));
 }
 
