@@ -58,7 +58,7 @@ public:
     void onScheduleForDeletion();
 
 
-    float collisionDamageFOV();
+    float collisionFieldOfDamage();
 
 protected:
     bool m_scheduledForDeletion;
@@ -74,5 +74,5 @@ protected:
     ObjectInfo m_objectInfo;
     Voxel* m_crucialVoxel;
 
-    float m_collisionDamageFOV;
+    float m_collisionFieldOfDamage;
 };

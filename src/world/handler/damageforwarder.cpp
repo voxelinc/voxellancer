@@ -32,8 +32,8 @@ void DamageForwarder::forwardDamageImpacts(std::list<DamageImpact> &dampedDeadly
 
             DamageImpact forwarded(m_currentWorldObject, 
                                     neighbour, 
-                                    dampedDeadlyDamageImpact.damageVec() * forwardFactor(dotProduct, dampedDeadlyDamageImpact.damageFOV(), neighbours.size()), 
-                                    dampedDeadlyDamageImpact.damageFOV());
+                                    dampedDeadlyDamageImpact.damageVec() * forwardFactor(dotProduct, dampedDeadlyDamageImpact.fieldOfDamage(), neighbours.size()), 
+                                    dampedDeadlyDamageImpact.fieldOfDamage());
             m_damageImpactAccumulator.parse(forwarded);
         }
     }
@@ -47,7 +47,7 @@ std::list<DamageImpact> DamageForwarder::forwardedDamageImpacts() {
     return m_damageImpactAccumulator.accumulatables();
 }
 
-float DamageForwarder::forwardFactor(float dotProduct, float fov, int neighbours) {
-    return glm::max(0.0f, (fov - std::acos(dotProduct)) / fov) / neighbours;
+float DamageForwarder::forwardFactor(float dotProduct, float fieldOfDamage, int neighbours) {
+    return glm::max(0.0f, (fieldOfDamage - std::acos(dotProduct)) / fieldOfDamage) / neighbours;
 }
 

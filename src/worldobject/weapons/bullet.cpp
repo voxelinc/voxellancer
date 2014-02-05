@@ -16,7 +16,7 @@ Bullet::Bullet(WorldObject* creator, float lifetime) :
 {
     ClusterCache::instance()->fillObject(this, "data/voxelcluster/bullet.csv");
 
-    m_collisionDamageFOV = glm::pi<float>() * 2;
+    m_collisionFieldOfDamage = glm::pi<float>() * 2;
 
     m_objectInfo.setName("Bullet");
     m_objectInfo.setShowOnHud(false);

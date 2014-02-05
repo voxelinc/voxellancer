@@ -21,7 +21,7 @@ Rocket::Rocket(glm::vec3 position, glm::quat orientation, const glm::vec3& initi
 {
     m_transform.setScale(0.8f);
 
-    m_collisionDamageFOV = std::numeric_limits<float>::max(); // equal damage all around
+    m_collisionFieldOfDamage = std::numeric_limits<float>::max(); // equal damage all around
 
     if (target) {
         m_target = target->handle();

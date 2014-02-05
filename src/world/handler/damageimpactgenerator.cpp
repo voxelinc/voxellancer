@@ -30,13 +30,13 @@ void DamageImpactGenerator::parse(std::list<WorldObjectCollision>& worldObjectCo
                 m_damageImpactAccumulator.parse(DamageImpact(voxelCollision.a().worldObject(),
                                                              voxelCollision.a().voxel(), 
                                                              (speedB - speedA) * (massPerImpactB),
-                                                             voxelCollision.b().worldObject()->collisionDamageFOV()));
+                                                             voxelCollision.b().worldObject()->collisionFieldOfDamage()));
             }
             if (!voxelCollision.b().worldObject()->scheduledForDeletion()) {
                 m_damageImpactAccumulator.parse(DamageImpact(voxelCollision.b().worldObject(),
                                                              voxelCollision.b().voxel(),
                                                              (speedA - speedB) * (massPerImpactA),
-                                                             voxelCollision.a().worldObject()->collisionDamageFOV()));
+                                                             voxelCollision.a().worldObject()->collisionFieldOfDamage()));
             }
         }
     }

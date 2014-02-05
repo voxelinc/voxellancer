@@ -23,6 +23,6 @@ protected:
 
     VoxelAccumulator<DamageImpact> m_damageImpactAccumulator;
 
-    float forwardFactor(float dotProduct, float fov, int neighbours);
+    float forwardFactor(float dotProduct, float fieldOfDamage, int neighbours);
 };
 
