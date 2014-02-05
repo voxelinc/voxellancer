@@ -9,6 +9,7 @@
 #include "worldobject/weapons/rocketlauncher.h"
 #include "ai/character.h"
 #include "ai/boardcomputer.h"
+#include "ai/formationlogic.h"
 #include "sound/sound.h"
 #include "collision/collisionfilter.h"
 
@@ -25,6 +26,7 @@ Ship::Ship(CollisionFilter* collisionFilter):
     prop_maxRotSpeed("ship.maxRotSpeed"),
     m_character(new Character(*this)),
     m_boardComputer(new BoardComputer(*this)),
+    m_formationLogic(new FormationLogic(*this)),
     m_shipHandle(Handle<Ship>(this)),
     m_targetObjectHandle(Handle<WorldObject>(nullptr))
 {
@@ -59,7 +61,6 @@ void Ship::update(float deltaSec) {
 void Ship::addHardpointVoxel(HardpointVoxel* voxel) {
     Hardpoint* point;
     //TODO: Adding the actual Launcher here is wrong, this is test code
-    //point = new Hardpoint(this, glm::vec3(voxel->gridCell()), new Gun());
     if (m_hardpoints.size() % 3 == 0) {
         point = new Hardpoint(this, voxel->gridCell(), std::make_shared<RocketLauncher>());
     } else {
@@ -155,6 +156,10 @@ Character* Ship::character() {
 
 BoardComputer* Ship::boardComputer() {
     return m_boardComputer.get();
+}
+
+FormationLogic* Ship::formationLogic() {
+    return m_formationLogic.get();
 }
 
 void Ship::setEngineSound(std::shared_ptr<Sound> sound) {
