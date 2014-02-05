@@ -124,10 +124,10 @@ void SplitDetector::visit(const glm::ivec3& p) {
 
 
 void SplitDetector::createSplitData(WorldObject* worldObject) {
-    m_splitDataList.resize(m_nextGroupId);
+    std::vector<std::shared_ptr<SplitData>> splitDataList;
     for (int i = 0; i < m_nextGroupId; i++)
     {
-        m_splitDataList[i] = new SplitData(worldObject);
+        splitDataList.push_back(std::make_shared<SplitData>(worldObject));
     }
 
     int crucialVoxelGroup = 0;
@@ -140,22 +140,26 @@ void SplitDetector::createSplitData(WorldObject* worldObject) {
     {
         if (v.voxel && v.groupId != crucialVoxelGroup) {
             assert(v.groupId != UNKNOWN);
-            m_splitDataList[v.groupId]->addVoxel(v.voxel);
+            splitDataList[v.groupId]->addVoxel(v.voxel);
         }
     }
 
     if (crucialVoxelGroup > 0) {
-        m_splitDataList.erase(m_splitDataList.begin() + crucialVoxelGroup);
+        splitDataList.erase(splitDataList.begin() + crucialVoxelGroup);
     } else {
         int biggestIndex = 0;
-        int biggestSize = m_splitDataList[0]->splitOffVoxels().size();
-        for (int i = 0; i < m_splitDataList.size(); i++) {
-            if (m_splitDataList[i]->splitOffVoxels().size() > biggestSize) {
+        int biggestSize = splitDataList[0]->splitOffVoxels().size();
+        for (int i = 0; i < splitDataList.size(); i++) {
+            if (splitDataList[i]->splitOffVoxels().size() > biggestSize) {
                 int biggestIndex = i;
-                int biggestSize = m_splitDataList[i]->splitOffVoxels().size();
+                int biggestSize = splitDataList[i]->splitOffVoxels().size();
             }
         }
-        m_splitDataList.erase(m_splitDataList.begin() + biggestIndex);
+        splitDataList.erase(splitDataList.begin() + biggestIndex);
+    }
+    
+    for (std::shared_ptr<SplitData> splitData : splitDataList) {
+        m_splitDataList.push_back(splitData);
     }
 }
 
@@ -168,14 +172,11 @@ SplitDetector::VoxelGroup* SplitDetector::voxelGroup(const glm::ivec3& pos) {
     return &m_voxelArray[address(pos)];
 }
 
-std::vector<SplitData*> &SplitDetector::splitDataList() {
+std::vector<std::shared_ptr<SplitData>> &SplitDetector::splitDataList() {
     return m_splitDataList;
 }
 
 void SplitDetector::clear() {
-    for(SplitData* split : m_splitDataList) {
-        delete split;
-    }
     m_splitDataList.clear();
 }
 

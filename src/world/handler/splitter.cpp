@@ -7,12 +7,12 @@
 #include "voxel/voxel.h"
 #include "worldobject/split.h"
 
-void Splitter::split(std::vector<SplitData*> &splits) {
+void Splitter::split(std::vector<std::shared_ptr<SplitData>> &splits) {
     std::unordered_set<WorldObject*> splittedWorldObjects;
 
     m_splitOffWorldObjects.clear();
 
-    for(SplitData *split : splits) {
+    for (std::shared_ptr<SplitData> split : splits) {
         WorldObject *worldObject = createWorldObjectFromSplitOff(split);
         m_splitOffWorldObjects.push_back(worldObject);
         splittedWorldObjects.insert(split->exWorldObject());
@@ -24,7 +24,7 @@ std::list<WorldObject*> &Splitter::splitOffWorldObjects() {
     return m_splitOffWorldObjects;
 }
 
-WorldObject *Splitter::createWorldObjectFromSplitOff(SplitData *split) {
+WorldObject *Splitter::createWorldObjectFromSplitOff(std::shared_ptr<SplitData> split) {
     WorldObject *worldObject;
     Transform transform = split->exWorldObject()->transform();
     transform.setCenter(transform.center()/* - glm::vec3(split->llf())*/);
@@ -46,7 +46,7 @@ WorldObject *Splitter::createWorldObjectFromSplitOff(SplitData *split) {
     return worldObject;
 }
 
-void Splitter::removeExtractedVoxelsFromEx(SplitData *split) {
+void Splitter::removeExtractedVoxelsFromEx(std::shared_ptr<SplitData> split) {
     for(Voxel *voxel : split->splitOffVoxels()) {
         split->exWorldObject()->removeVoxel(voxel);
     }

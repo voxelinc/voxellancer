@@ -1,4 +1,5 @@
 #include <iostream>
+#include <omp.h>
 
 #ifdef WIN32
 #include <windows.h>
@@ -48,6 +49,15 @@ static void checkVersion() {
     glow::info("core profile: %;", glow::Version::currentVersionIsInCoreProfile() ? "true" : "false");
     glow::info("GLSL version: %;", glow::getString(GL_SHADING_LANGUAGE_VERSION));
     glow::info("GL Versionstring: %;\n", glow::Version::versionString());
+}
+
+static void checkOpenMP() {
+    //omp_set_num_threads(4);
+#pragma omp parallel 
+    {
+#pragma omp master
+        glow::debug("OpenMP with %; threads ", omp_get_num_threads());
+    }
 }
 
 static void errorCallback(int error, const char* description) {
@@ -110,6 +120,7 @@ static void mainloop() {
     }
 }
 
+
 int main(int argc, char* argv[]) {
     CommandLineParser clParser;
     clParser.parse(argc, argv);
@@ -147,6 +158,7 @@ int main(int argc, char* argv[]) {
     setCallbacks(window);
 
     checkVersion();
+    checkOpenMP();
 
     glewExperimental = GL_TRUE;
     if (glewInit() != GLEW_OK) {

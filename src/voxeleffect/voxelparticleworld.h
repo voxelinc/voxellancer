@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <vector>
 #include <list>
 
 #include "glow/ref_ptr.h"
@@ -25,7 +26,8 @@ public:
 
 
 protected:
-    std::list<VoxelParticle*> m_particles;
+    std::vector<VoxelParticle*> m_particles;
+    std::vector<VoxelParticle*> m_tempParticles;
 
     int m_bufferSize;
 

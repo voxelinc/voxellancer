@@ -31,6 +31,7 @@ Starfield::Starfield(Player* player) :
     RenderPass("starfield"),
     m_player(player),
     m_time(),
+    m_lastUpdate(),
     m_starfieldAge("vfx.starfieldtime"),
     m_locations()
 {
@@ -41,12 +42,15 @@ Starfield::Starfield(Player* player) :
 void Starfield::update(float deltaSec) {
     m_time += deltaSec;
 
+    if (m_time - m_lastUpdate < 0.1) {
+        return;
+    }
+
     Star* starbuffer = (Star*) m_starBuffer->map(GL_READ_WRITE);
     glm::vec3 position = m_player->cameraPosition();
 
-    // only perform once per second if this is a performance problem
     for (int i = 0; i < STAR_COUNT; i++) {
-        starbuffer[i].brightness = glm::min(1.0f, starbuffer[i].brightness + deltaSec / STAR_FADE_IN_SEC);
+        starbuffer[i].brightness = glm::min(1.0f, starbuffer[i].brightness + (m_time - m_lastUpdate) / STAR_FADE_IN_SEC);
         while (starbuffer[i].pos.x - position.x < -FIELD_SIZE) {
             starbuffer[i].pos.x += 2 * FIELD_SIZE;
             starbuffer[i].brightness = 0;
@@ -72,6 +76,7 @@ void Starfield::update(float deltaSec) {
             starbuffer[i].brightness = 0;
         }
     }
+    m_lastUpdate = m_time;
 
     m_starBuffer->unmap();
 }
@@ -120,7 +125,7 @@ void Starfield::createAndSetupGeometry() {
     }
 
     m_starBuffer = new glow::Buffer(GL_ARRAY_BUFFER);
-    m_starBuffer->setData(stars);
+    m_starBuffer->setData(stars, GL_DYNAMIC_DRAW);
 
     m_vertexArrayObject = new glow::VertexArrayObject();
     createBinding(0, "v_vertex", offsetof(Star, pos), 3);

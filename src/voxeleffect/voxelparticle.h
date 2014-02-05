@@ -31,6 +31,7 @@ public:
 
     void update(float deltaSec);
 
+    void markAsDead();
 
 protected:
     Transform m_transform;
@@ -48,6 +49,8 @@ protected:
 
     float m_intersectionCheckCountdown;
     bool m_intersectionChecked;
+
+    bool m_dead;
 
     static Property<float>* s_intersectionCheckPeriod;
 };
