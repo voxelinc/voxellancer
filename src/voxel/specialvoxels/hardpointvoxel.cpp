@@ -22,6 +22,13 @@ void HardpointVoxel::addToObject(WorldObject* worldObject) {
     worldObject->components().addHardpoint(m_hardpoint);
 }
 
+float HardpointVoxel::emissiveness() const {
+    if(m_hardpoint->weapon()) {
+        return m_hardpoint->weapon()->emissiveness();
+    }
+    return Voxel::emissiveness();
+}
+
 void HardpointVoxel::onRemoval() {
     if (m_hardpoint) {
         m_hardpoint->onVoxelRemoval();

@@ -41,7 +41,7 @@ public:
 
     void loadCluster(const std::string& key);
 
-    virtual float emissiveness();
+    virtual float emissiveness() const;
 
 
 protected:

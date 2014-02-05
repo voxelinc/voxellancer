@@ -19,8 +19,6 @@ WorldObject* Projectile::creator() {
 void Projectile::setCreator(WorldObject* creator) {
     m_creator = creator;
 
-    std::cout << (int)collisionFilter().collisionFilterClass() << "  " << collisionFilter().collisionMask() << std::endl;
-
     CollisionFilterIgnoringCreator* newCollisionFilter = new CollisionFilterIgnoringCreator(
         this,
         m_creator,

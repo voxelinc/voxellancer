@@ -10,8 +10,7 @@ class VoxelTreeNode;
 class WorldObject;
 class Sphere;
 
-class Voxel
-{
+class Voxel {
 public:
     Voxel(const glm::ivec3& gridCell, uint32_t color = 0xFFFFFF, float mass = defaultMass(), float hp = defaultHp(), float emissiveness = 0);
     Voxel(const Voxel& other);
@@ -28,7 +27,7 @@ public:
     virtual void addToObject(WorldObject *object);
 
     uint32_t color() const;
-    float emissiveness() const;
+    virtual float emissiveness() const;
 
     float hp() const;
     void applyDamage(float deltaHp);

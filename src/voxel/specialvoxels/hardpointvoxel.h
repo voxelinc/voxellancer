@@ -11,6 +11,8 @@ public:
 
     virtual void addToObject(WorldObject* object) override;
 
+    virtual float emissiveness() const override;
+
     virtual void onRemoval() override;
     virtual void onDestruction() override;
 
