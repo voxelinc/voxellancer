@@ -17,7 +17,7 @@
 
 
 Rocket::Rocket(glm::vec3 position, glm::quat orientation, const glm::vec3& initialSpeed, float ejectSpeed, WorldObject* creator, WorldObject* target) :
-    Ship(new CollisionFilter(this, CollisionFilterClass::Rocket)),
+    Ship(new CollisionFilterIgnoringCreator(this, creator, CollisionFilterClass::Rocket)),
     m_creator(creator),
     m_target(nullptr)
 {
