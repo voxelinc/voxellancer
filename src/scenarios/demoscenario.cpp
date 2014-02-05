@@ -8,6 +8,7 @@
 #include "ai/basictasks/fighttask.h"
 #include "ai/basictasks/flytotask.h"
 #include "ai/basictasks/patrolwaypointstask.h"
+#include "ai/formationlogic.h"
 
 #include "resource/clustercache.h"
 
@@ -128,25 +129,41 @@ void DemoScenario::onKeyPressed(int key) {
 
 void DemoScenario::populateBattle(int numberOfEnemies1, int numberOfEnemies2) {
     World* world = World::instance();
+    Ship *first = nullptr;
     for (int e = 0; e < numberOfEnemies1; e++) {
         Ship *ship = new Ship();
-        float r = numberOfEnemies1 * 50.0f;
+        float r = numberOfEnemies1 * 20.0f;
         ship->move(RandVec3::rand(0.0f, r) + glm::vec3(-400, 0, -800));
         ship->objectInfo().setName("enemy1");
         ship->objectInfo().setShowOnHud(true);
         ship->objectInfo().setCanLockOn(true);
-        ClusterCache::instance()->fillObject(ship, "data/voxelcluster/eagle.csv");
+        ClusterCache::instance()->fillObject(ship, "data/voxelcluster/basicship.csv");
+        ship->setCharacter(new DummyCharacter(*ship, new PatrolWaypointsTask(*ship, 
+                                    { glm::vec3(-400, 0, -1200), glm::vec3(-700, 0, -1200), 
+                                        glm::vec3(-600, 0, -400) })));
+        if (first) {
+            ship->formationLogic()->joinFormation(first);
+            first = ship;
+        }
         world->god().scheduleSpawn(ship);
         m_fleet1.push_back(ship->handle());
     }
+    first = nullptr;
     for (int e = 0; e < numberOfEnemies2; e++) {
         Ship *ship = new Ship();
-        float r = numberOfEnemies2 * 50.0f;
+        float r = numberOfEnemies2 * 20.0f;
         ship->move(RandVec3::rand(0.0f, r) + glm::vec3(400, 0, -800));
         ship->objectInfo().setName("enemy2");
         ship->objectInfo().setShowOnHud(true);
         ship->objectInfo().setCanLockOn(true);
-        ClusterCache::instance()->fillObject(ship, "data/voxelcluster/eagle.csv");
+        ClusterCache::instance()->fillObject(ship, "data/voxelcluster/basicship.csv");
+        ship->setCharacter(new DummyCharacter(*ship, new PatrolWaypointsTask(*ship,
+                                    { glm::vec3(400, 0, -1200), glm::vec3(700, 0, -1200),
+                                        glm::vec3(600, 0, -400) })));
+        if (first) {
+            ship->formationLogic()->joinFormation(first);
+            first = ship;
+        }
         world->god().scheduleSpawn(ship);
         m_fleet2.push_back(ship->handle());
     }
