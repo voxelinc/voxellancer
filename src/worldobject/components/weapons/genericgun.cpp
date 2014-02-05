@@ -4,17 +4,13 @@
 
 
 GenericGun::GenericGun(const std::string& propertyPrefix):
+    Weapon(WeaponType::Gun, propertyPrefix),
+    GenericWeapon(WeaponType::Gun, propertyPrefix),
     Gun(propertyPrefix),
-    GenericEntity(propertyPrefix),
-    m_cooldownTime(propertyPrefix + ".general.cooldownTime"),
     m_bulletSpeed(Property<std::string>(propertyPrefix + ".general.bullet").get() + ".general.speed"),
     m_bulletLifetime(Property<std::string>(propertyPrefix + ".general.bullet").get() +  ".general.lifetime"),
     m_bulletName(Property<std::string>(propertyPrefix + ".general.bullet"))
 {
-}
-
-float GenericGun::cooldownTime() const {
-    return m_cooldownTime;
 }
 
 float GenericGun::bulletLifetime() const {

@@ -4,6 +4,8 @@
 
 #include "property/property.h"
 
+#include "display/rendering/visuals.h"
+
 
 class VoxelCluster;
 class VoxelTreeNode;
@@ -26,8 +28,7 @@ public:
     virtual void addToCluster(VoxelCluster *cluster);
     virtual void addToObject(WorldObject *object);
 
-    uint32_t color() const;
-    virtual float emissiveness() const;
+    virtual Visuals visuals() const;
 
     float hp() const;
     void applyDamage(float deltaHp);
@@ -43,8 +44,7 @@ public:
 protected:
     glm::ivec3 m_gridCell;
     VoxelTreeNode *m_voxelTreeNode;
-    uint32_t m_color;
-    float m_emissiveness;
+    Visuals m_visuals;
     float m_hp;
     float m_normalizedMass;
 

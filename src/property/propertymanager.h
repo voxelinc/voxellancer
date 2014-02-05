@@ -1,7 +1,8 @@
 #pragma once
 
-#include <memory>
 #include <list>
+#include <memory>
+#include <stdint.h>
 #include <string>
 
 #include <glm/glm.hpp>
@@ -45,6 +46,7 @@ protected:
 
     std::unique_ptr<PropertyCollection<float>> m_floatProperties;
     std::unique_ptr<PropertyCollection<int>> m_intProperties;
+    std::unique_ptr<PropertyCollection<uint32_t>> m_uint32Properties;
     std::unique_ptr<PropertyCollection<char>> m_charProperties;
     std::unique_ptr<PropertyCollection<bool>> m_boolProperties;
     std::unique_ptr<PropertyCollection<std::string>> m_stringProperties;

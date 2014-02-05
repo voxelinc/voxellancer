@@ -17,7 +17,8 @@ static regexns::regex line_regex() { return regexns::regex(R"(^([\w\.]*) *= *(.+
 static regexns::regex title_regex() { return regexns::regex(R"(^\[(\w+)\])"); }
 
 static regexns::regex float_regex() { return regexns::regex(R"(^[-+]?\d*\.?\d*$)"); }
-static regexns::regex int_regex() { return regexns::regex(R"(^([-+]?\d+)|(0x([0-9a-fA-F])+)$)"); } // stoi can also parse hex values
+static regexns::regex int_regex() { return regexns::regex(R"(^([-+]?\d+)|(0x([0-9a-fA-F]){1,8})$)"); } // stoi can also parse hex values
+static regexns::regex uint32_regex() { return regexns::regex(R"(^(\d+)|(0x([0-9a-fA-F]){1,8})$)"); } // stoi can also parse hex values
 static regexns::regex bool_regex() { return regexns::regex(R"(^(true|false)$)"); }
 static regexns::regex char_regex() { return regexns::regex(R"(^\w$)"); }
 static regexns::regex string_regex() { return regexns::regex(R"(^.*$)"); }
@@ -91,7 +92,8 @@ static InputMapping inputMappingConverter(const std::string &s) {
 
 PropertyManager::PropertyManager():
     m_floatProperties(new PropertyCollection<float>(float_regex(), [](std::string s) { return std::stof(s); })),
-    m_intProperties(new PropertyCollection<int>(int_regex(), [](std::string s) { return std::stoi(s, 0, 0); })), // base=0 allows adding 0x to parse hex
+    m_intProperties(new PropertyCollection<int>(int_regex(), [](std::string s) { return std::stoll(s, 0, 0); })), // base=0 allows adding 0x to parse hex
+    m_uint32Properties(new PropertyCollection<uint32_t>(uint32_regex(), [](std::string s) { return std::stoll(s, 0, 0); })), // base=0 allows adding 0x to parse hex
     m_charProperties(new PropertyCollection<char>(char_regex(), [](std::string s) { return s[0]; })),
     m_boolProperties(new PropertyCollection<bool>(bool_regex(), [](std::string s) { return s == "true" ? true : false; })),
     m_stringProperties(new PropertyCollection<std::string>(string_regex(), [](std::string s) { return s; })),
@@ -142,6 +144,7 @@ void PropertyManager::load(const std::string& file, const std::string& prefix) {
 
             if (m_floatProperties->update(key, value)) success++;
             if (m_intProperties->update(key, value)) success++;
+            if (m_uint32Properties->update(key, value)) success++;
             if (m_boolProperties->update(key, value)) success++;
             if (m_charProperties->update(key, value)) success++;
             if (m_stringProperties->update(key, value)) success++;
@@ -180,10 +183,16 @@ void PropertyManager::reset()
 
 PropertyManager* PropertyManager::s_instance;
 
+
 // any better idea or maybe generate these with macros?
 template <>
 PropertyCollection<int>* PropertyManager::getPropertyCollection() {
     return m_intProperties.get();
+}
+
+template <>
+PropertyCollection<uint32_t>* PropertyManager::getPropertyCollection() {
+    return m_uint32Properties.get();
 }
 
 template <>

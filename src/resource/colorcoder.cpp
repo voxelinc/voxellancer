@@ -17,7 +17,7 @@ ColorCoder::ColorCoder():
 }
 
 Voxel* ColorCoder::newCodedVoxel(const Voxel& voxel) {
-    uint32_t color = voxel.color();
+    uint32_t color = voxel.visuals().color();
     uint32_t prefixBits = (color & 0xFFFF00) >> 8;
     int index = color & 0x0000FF;
 

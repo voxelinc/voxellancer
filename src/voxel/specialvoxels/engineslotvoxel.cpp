@@ -22,12 +22,10 @@ void EngineSlotVoxel::addToObject(WorldObject* worldObject) {
     worldObject->components().addEngineSlot(m_engineSlot);
 }
 
-float EngineSlotVoxel::emissiveness() const {
-    if(m_engineSlot->engine()) {
-        return m_engineSlot->engine()->emissiveness();
-    } else {
-        return Voxel::emissiveness();
-    }
+Visuals EngineSlotVoxel::visuals() const {
+    return Visuals(
+        m_engineSlot->engine() ? m_engineSlot->engine()->visuals() : Voxel::visuals()
+    );
 }
 
 void EngineSlotVoxel::onRemoval() {

@@ -35,6 +35,7 @@ Acceleration Engine::currentAcceleration() const {
 }
 
 void Engine::setupTrail() {
+    std::cout << "lifetime of " << equipmentKey() << " is " << Property<float>(equipmentKey() + ".trail.lifetime").get() << std::endl;
     m_trailGenerator.setLifetime(Property<float>(equipmentKey() + ".trail.lifetime"));
 }
 

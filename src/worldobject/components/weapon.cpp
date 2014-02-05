@@ -1,6 +1,7 @@
 #include "weapon.h"
 
 #include <algorithm>
+#include <iostream>
 
 
 Weapon::Weapon(WeaponType type, const std::string& equipmentKey):

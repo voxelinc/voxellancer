@@ -8,14 +8,10 @@
 
 
 GenericRocketLauncher::GenericRocketLauncher(const std::string& propertyPrefix):
-    RocketLauncher(propertyPrefix),
-    GenericEntity(propertyPrefix),
-    m_cooldownTime(propertyPrefix + ".general.cooldownTime")
+    Weapon(WeaponType::RocketLauncher, propertyPrefix),
+    GenericWeapon(WeaponType::RocketLauncher, propertyPrefix),
+    RocketLauncher(propertyPrefix)
 {
-}
-
-float GenericRocketLauncher::cooldownTime() const {
-    return m_cooldownTime;
 }
 
 void GenericRocketLauncher::update(float deltaSec) {

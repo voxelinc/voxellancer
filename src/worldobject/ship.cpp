@@ -40,8 +40,6 @@ void Ship::update(float deltaSec) {
     m_character->update(deltaSec);
     m_boardComputer->update(deltaSec);
 
-    m_components.update(deltaSec);
-
 //    if (m_sound) {
 //        m_sound->setPosition(m_transform.applyTo(m_enginePos));
 //    }

@@ -3,6 +3,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 
+#include "display/rendering/visuals.h"
+
 #include "equipment.h"
 
 
@@ -17,6 +19,8 @@ enum class WeaponType {
 class Weapon: public Equipment {
 public:
     Weapon(WeaponType type, const std::string& equipmentKey);
+
+    virtual Visuals visuals() const = 0;
 
     Hardpoint* hardpoint();
     void setHardpoint(Hardpoint* hardpoint);

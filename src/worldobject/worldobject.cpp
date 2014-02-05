@@ -58,6 +58,8 @@ WorldObjectComponents& WorldObject::components() {
 }
 
 void WorldObject::update(float deltaSec) {
+    m_components.update(deltaSec);
+
     Acceleration localAcceleration = m_components.currentAcceleration();
 
     Acceleration globalAcceleration(

@@ -5,6 +5,7 @@
 #include "voxel/voxelcluster.h"
 
 #include "worldobject/components/hardpoint.h"
+#include "worldobject/components/weapon.h"
 #include "worldobject/worldobject.h"
 
 
@@ -12,7 +13,13 @@ HardpointVoxel::HardpointVoxel(const glm::ivec3& gridCell, int index):
     SpecialVoxel(gridCell, index, Property<int>("voxels.hardpoint.color"), Property<float>("voxels.hardpoint.mass"), Property<float>("voxels.hardpoint.hp")),
     m_hardpoint(nullptr)
 {
-    m_emissiveness = 0.35f;
+
+}
+
+Visuals HardpointVoxel::visuals() const {
+    return Visuals(
+        m_hardpoint->weapon() ? m_hardpoint->weapon()->visuals() : Voxel::visuals()
+    );
 }
 
 void HardpointVoxel::addToObject(WorldObject* worldObject) {
@@ -20,13 +27,6 @@ void HardpointVoxel::addToObject(WorldObject* worldObject) {
 
     m_hardpoint = new Hardpoint(&worldObject->components(), this);
     worldObject->components().addHardpoint(m_hardpoint);
-}
-
-float HardpointVoxel::emissiveness() const {
-    if(m_hardpoint->weapon()) {
-        return m_hardpoint->weapon()->emissiveness();
-    }
-    return Voxel::emissiveness();
 }
 
 void HardpointVoxel::onRemoval() {

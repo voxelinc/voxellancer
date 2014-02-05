@@ -4,6 +4,8 @@
 
 #include <glm/glm.hpp>
 
+#include "display/rendering/visuals.h"
+
 #include "voxeleffect/enginetrailgenerator.h"
 
 #include "enginepower.h"
@@ -16,6 +18,8 @@ class EngineSlot;
 class Engine: public Equipment {
 public:
     Engine(const std::string& equipmentKey);
+
+    virtual Visuals visuals() const = 0;
 
     EngineSlot* engineSlot();
     void setEngineSlot(EngineSlot* engineSlot);

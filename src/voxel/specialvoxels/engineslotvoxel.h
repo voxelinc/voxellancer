@@ -9,9 +9,9 @@ class EngineSlotVoxel: public SpecialVoxel {
 public:
     EngineSlotVoxel(const glm::ivec3& gridCell, int index);
 
-    virtual void addToObject(WorldObject* worldObject) override;
+    virtual Visuals visuals() const override;
 
-    virtual float emissiveness() const override;
+    virtual void addToObject(WorldObject* worldObject) override;
 
     virtual void onRemoval() override;
     virtual void onDestruction() override;

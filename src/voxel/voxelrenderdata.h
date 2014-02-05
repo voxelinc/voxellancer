@@ -20,7 +20,6 @@ class VoxelRenderData
 {
 public:
     VoxelRenderData(std::unordered_map<glm::ivec3, Voxel*> &voxel);
-    ~VoxelRenderData();
 
     void invalidate();
     int voxelCount();

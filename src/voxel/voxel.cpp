@@ -18,8 +18,7 @@ Property<float>* Voxel::s_defaultHp;
 Voxel::Voxel(const glm::ivec3& gridCell, uint32_t color, float normalizedMass, float hp, float emissiveness):
     m_gridCell(gridCell),
     m_voxelTreeNode(nullptr),
-    m_color(color),
-    m_emissiveness(emissiveness),
+    m_visuals(color, 0.0f),
     m_normalizedMass(normalizedMass),
     m_hp(hp)
 {
@@ -30,8 +29,9 @@ Voxel::Voxel(const glm::ivec3& gridCell, uint32_t color, float normalizedMass, f
 }
 
 Voxel::Voxel(const Voxel& other):
-    Voxel(other.gridCell(), other.color(), other.normalizedMass(), other.hp())
+    Voxel(other.gridCell(), other.visuals().color(), other.normalizedMass(), other.hp())
 {
+    m_visuals = other.visuals();
 }
 
 Voxel::~Voxel() {
@@ -62,12 +62,8 @@ void Voxel::setVoxelTreeNode(VoxelTreeNode* voxelTreeNode) {
     m_voxelTreeNode = voxelTreeNode;
 }
 
-uint32_t Voxel::color() const {
-    return m_color;
-}
-
-float Voxel::emissiveness() const {
-    return m_emissiveness;
+Visuals Voxel::visuals() const {
+    return m_visuals;
 }
 
 float Voxel::hp() const {
@@ -96,7 +92,8 @@ void Voxel::onDestruction() {
         generator.setOrientation(worldObject->transform().orientation());
         generator.setPosition(worldObject->transform().applyTo(glm::vec3(m_gridCell)));
         generator.setScale(worldObject->transform().scale() * 0.6f, 0.4f);
-        generator.setColor(m_color);
+        generator.setColor(visuals().color());
+        generator.setEmissiveness(visuals().emissiveness());
         generator.setForce(0.4f, 0.5f);
         generator.setSpawnProbability(0.5);
         generator.setLifetime(Property<float>("vfx.debrisLifetime"), 0.9f);

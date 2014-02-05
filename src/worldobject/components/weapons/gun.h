@@ -6,7 +6,7 @@
 #include "worldobject/components/weapon.h"
 
 
-class Gun: public Weapon {
+class Gun: virtual public Weapon {
 public:
     Gun(const std::string& equipmentKey);
 
