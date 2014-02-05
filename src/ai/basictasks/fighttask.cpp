@@ -1,6 +1,7 @@
 #include "fighttask.h"
 #include "utils/randfloat.h"
 #include "worldobject/ship.h"
+#include "ai/boardcomputer.h"
 
 FightTask::FightTask(Ship& ship, const std::vector<Handle<WorldObject>>& targets) :
     AiTask(ship),

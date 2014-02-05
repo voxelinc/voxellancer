@@ -5,7 +5,6 @@
 
 #include "worldobject.h"
 #include "property/property.h"
-#include "ai/boardcomputer.h"
 
 
 class World;
@@ -15,6 +14,7 @@ class Engine;
 class Character;
 class Sound;
 class FormationLogic;
+class BoardComputer;
 
 class Ship : public WorldObject {
 public:
@@ -52,6 +52,8 @@ public:
 
 
 protected:
+    Ship(CollisionFilter* collisionFilter);
+
     std::unique_ptr<Character> m_character;
     std::unique_ptr<BoardComputer> m_boardComputer;
     std::unique_ptr<FormationLogic> m_formationLogic;

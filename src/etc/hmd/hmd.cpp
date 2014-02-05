@@ -20,8 +20,12 @@ HMD::HMD(OVR::HMDDevice* hmdDevice):
 }
 
 HMD::~HMD() {
-    m_sensorDevice->Release();
-    m_hmdDevice->Release();
+    if (m_sensorDevice) {
+        m_sensorDevice->Release();
+    }
+    if (m_hmdDevice) {
+        m_hmdDevice->Release();
+    }
 }
 
 glm::quat HMD::orientation() {

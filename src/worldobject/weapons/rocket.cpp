@@ -13,19 +13,21 @@
 #include "resource/clustercache.h"
 #include "sound/soundmanager.h"
 #include "sound/sound.h"
+#include "collision/collisionfilterignoringcreator.h"
 
 
-Rocket::Rocket(glm::vec3 position, glm::quat orientation, const glm::vec3& initialSpeed, float ejectSpeed, WorldObject* target) :
-    Ship(),
+Rocket::Rocket(glm::vec3 position, glm::quat orientation, const glm::vec3& initialSpeed, float ejectSpeed, WorldObject* creator, WorldObject* target) :
+    Ship(new CollisionFilter(this, CollisionFilterClass::Rocket)),
+    m_creator(creator),
     m_target(nullptr)
 {
-    m_collisionFilterClass = CollisionFilterClass::Rocket;
-    setCollideableWith(CollisionFilterClass::Rocket, false);
+    m_collisionFilter->setCollideableWith(CollisionFilterClass::Rocket, false);
     m_transform.setScale(0.5f);
 
     m_lifetime = Property<float>("rocket.lifetime");;
     prop_maxSpeed = Property<float>("rocket.maxSpeed");
     prop_maxRotSpeed = Property<float>("rocket.maxRotSpeed");
+
     if (target) {
         m_target = target->handle();
     }
@@ -63,6 +65,7 @@ void Rocket::update(float deltaSec) {
     Ship::update(deltaSec);
 }
 
+
 void Rocket::onCollision(){
     m_sound->stop();
     SoundManager::current()->play("data/sound/102733__sarge4267__explosion3.ogg", m_transform.position());
@@ -79,7 +82,8 @@ void Rocket::spawnExplosion(){
     VoxelExplosionGenerator generator;
     generator.setPosition(m_transform.position());
     generator.setScale(m_transform.scale() / 3.0f);
-    generator.setColor(0xFF0000, 0.4f);
+    generator.setColor(0xFF0000);
+    generator.setEmissiveness(0.4f);
     generator.setCount(150);
     generator.setLifetime(1.0f, 0.2f);
     generator.setForce(1.5f);

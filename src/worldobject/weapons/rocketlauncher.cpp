@@ -3,17 +3,18 @@
 #include "world/god.h"
 #include "worldobject/hardpoint.h"
 #include "worldobject/ship.h"
+#include "rocket.h"
 
 RocketLauncher::RocketLauncher() :
     m_range("weapons.RocketLauncherRange"),
     m_cooldownTime("weapons.RocketLauncherCooldownTime"),
     m_speed("weapons.RocketLauncherEjectSpeed")
 {
-    Weapon::setCoolDownTime(m_cooldownTime);
+    setCoolDownTime(m_cooldownTime);
 }
 
 AimType RocketLauncher::aimType() {
-    return Object;
+    return AimType::Object;
 }
 
 float RocketLauncher::bulletSpeed() const {
@@ -30,7 +31,7 @@ void RocketLauncher::update(float deltaSec) {
 
 void RocketLauncher::shootAtObject(Hardpoint* source, WorldObject* target){
     if (canFire()) {
-        Rocket *r = new Rocket(source->position(), source->ship()->transform().orientation(), source->ship()->physics().speed(), m_speed, target);
+        Rocket *r = new Rocket(source->position(), source->ship()->transform().orientation(), source->ship()->physics().speed(), m_speed, source->ship(), target);
         World::instance()->god().scheduleSpawn(r);
 
         fired();

@@ -20,17 +20,12 @@
 #include "world/god.h"
 
 
-GameScenario::GameScenario() :
-    m_normandy(nullptr),
-    m_aimTester(nullptr)
+GameScenario::GameScenario(Game* game) :
+    BaseScenario(game)
 {
 }
 
-void GameScenario::populate(Game* game) {
-    glowutils::AutoTimer t("Initialize Game");
-
-    glow::debug("create world");
-    World* world = World::instance();
+void GameScenario::populateWorld() {
 
     glow::debug("Create WorldObjects");
     Ship *normandy = new Ship();
@@ -40,9 +35,11 @@ void GameScenario::populate(Game* game) {
     normandy->objectInfo().setShowOnHud(true);
     normandy->objectInfo().setCanLockOn(true);
     normandy->setEngineSound(SoundManager::current()->create("data/sound/Rocket Thrusters.ogg"));
-    world->god().scheduleSpawn(normandy);
+    m_world->god().scheduleSpawn(normandy);
     PatrolWaypointsTask* ntask = new PatrolWaypointsTask(*normandy,
-        std::list<glm::vec3>{ glm::vec3(400, 0, 200), glm::vec3(-400, 0, -400), glm::vec3(-600, 0, -400), glm::vec3(0, 100, -600), glm::vec3(-100, 150, -900) });
+        std::list<glm::vec3>{ glm::vec3(400, 0, 200), glm::vec3(-400, 0, -400),
+                                glm::vec3(-600, 0, -400), glm::vec3(0, 100, -600), 
+                                glm::vec3(-100, 150, -900) });
     normandy->setCharacter(new DummyCharacter(*normandy, ntask));
 
     int nmember_count = 4;
@@ -53,9 +50,11 @@ void GameScenario::populate(Game* game) {
         follower->objectInfo().setName("member");
         follower->objectInfo().setShowOnHud(true);
         follower->objectInfo().setCanLockOn(true);
-        world->god().scheduleSpawn(follower);
+        m_world->god().scheduleSpawn(follower);
         PatrolWaypointsTask* ta = new PatrolWaypointsTask(*follower,
-            std::list<glm::vec3>{ glm::vec3(400, 0, 200), glm::vec3(-400, 0, -400), glm::vec3(-600, 0, -400), glm::vec3(0, 100, -600), glm::vec3(-100, 150, -900) });
+            std::list<glm::vec3>{ glm::vec3(400, 0, 200), glm::vec3(-400, 0, -400),
+                                    glm::vec3(-600, 0, -400), glm::vec3(0, 100, -600), 
+                                    glm::vec3(-100, 150, -900) });
         follower->setCharacter(new DummyCharacter(*follower, ta));
         follower->formationLogic()->joinFormation(normandy);
     }
@@ -68,9 +67,10 @@ void GameScenario::populate(Game* game) {
     leader->objectInfo().setName("leader");
     leader->objectInfo().setShowOnHud(true);
     leader->objectInfo().setCanLockOn(true);
-    world->god().scheduleSpawn(leader);
+    m_world->god().scheduleSpawn(leader);
     PatrolWaypointsTask* ltask = new PatrolWaypointsTask(*leader,
-        std::list<glm::vec3>{ glm::vec3(500, 0, 500), glm::vec3(-500, 0, 500), glm::vec3(-500, 0, -500), glm::vec3(500, 0, -500) });
+        std::list<glm::vec3>{ glm::vec3(500, 0, 500), glm::vec3(-500, 0, 500), 
+                                glm::vec3(-500, 0, -500), glm::vec3(500, 0, -500) });
     leader->setCharacter(new DummyCharacter(*leader, ltask));
 
     int lmember_count = 2;
@@ -81,9 +81,10 @@ void GameScenario::populate(Game* game) {
         follower->objectInfo().setName("member");
         follower->objectInfo().setShowOnHud(true);
         follower->objectInfo().setCanLockOn(true);
-        world->god().scheduleSpawn(follower);
+        m_world->god().scheduleSpawn(follower);
         PatrolWaypointsTask* ta = new PatrolWaypointsTask(*follower,
-            std::list<glm::vec3>{ glm::vec3(500, 0, 500), glm::vec3(-500, 0, 500), glm::vec3(-500, 0, -500), glm::vec3(500, 0, -500) });
+            std::list<glm::vec3>{ glm::vec3(500, 0, 500), glm::vec3(-500, 0, 500), 
+                                    glm::vec3(-500, 0, -500), glm::vec3(500, 0, -500) });
         follower->setCharacter(new DummyCharacter(*follower, ta));
         follower->formationLogic()->joinFormation(leader);
     }
@@ -93,11 +94,11 @@ void GameScenario::populate(Game* game) {
     testCluster->setPosition(glm::vec3(0, 0, 10));
     testCluster->objectInfo().setName("basicship");
     testCluster->objectInfo().setShowOnHud(false);
-    world->god().scheduleSpawn(testCluster);
-    game->player().setShip(testCluster);
-    testCluster->setCollideableWith(CollisionFilterClass::Rocket, false);
+    m_world->god().scheduleSpawn(testCluster);
 
-    WorldObject *wall = new WorldObject(1);
+    m_game->player().setShip(testCluster);
+
+    WorldObject *wall = new WorldObject();
     wall->move(glm::vec3(-30, 0, -50));
     wall->rotate(glm::angleAxis(-90.f, glm::vec3(0, 1, 0)));
     for(int x = 0; x < 20; x++) {
@@ -110,7 +111,7 @@ void GameScenario::populate(Game* game) {
     wall->objectInfo().setName("Wall");
     wall->objectInfo().setShowOnHud(true);
     wall->objectInfo().setCanLockOn(true);
-    world->god().scheduleSpawn(wall);
+    m_world->god().scheduleSpawn(wall);
 
     glow::debug("Create Planet");
     WorldObject *planet = new WorldObject();
@@ -132,7 +133,7 @@ void GameScenario::populate(Game* game) {
     planet->objectInfo().setName("Planet");
     planet->objectInfo().setShowOnHud(true);
     planet->objectInfo().setCanLockOn(true);
-    world->god().scheduleSpawn(planet);
+    m_world->god().scheduleSpawn(planet);
 
     for(int e = 0; e < 15; e++) {
         WorldObject *enemy = new WorldObject();
@@ -149,24 +150,11 @@ void GameScenario::populate(Game* game) {
         enemy->objectInfo().setName("enemy");
         enemy->objectInfo().setShowOnHud(false);
         enemy->objectInfo().setCanLockOn(false);
-        world->god().scheduleSpawn(enemy);
+        m_world->god().scheduleSpawn(enemy);
 
     }
 
     glow::debug("Initial spawn");
-    world->god().spawn();
-}
-
-void GameScenario::update(float deltaSec) {
-    if(m_normandy.get()) {
-        Ship* normandy = m_normandy.get();
-        normandy->accelerate(glm::vec3(0, 0, -0.3f));
-        normandy->accelerateAngular(glm::vec3(0.1f, 0.05f, 0.0f));
-    }
-    if(m_aimTester.get()) {
-        Ship* aimTester = m_aimTester.get();
-        aimTester->accelerate(glm::vec3(0, 0, -0.4f));
-        aimTester->accelerateAngular(glm::vec3(0.0f, 0.0f, 0.4f));
-    }
+    m_world->god().spawn();
 }
 

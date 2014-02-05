@@ -2,12 +2,11 @@
 
 #include <iostream>
 
-#include <glow/Buffer.h>
-#include <glow/FrameBufferAttachment.h>
-#include <glow/TextureAttachment.h>
-#include <glow/VertexAttributeBinding.h>
+#include <glow/FrameBufferObject.h>
 
 #include "programs/blitprogram.h"
+#include "programs/monoblitprogram.h"
+#include "rendering/framebuffer.h"
 
 
 ScreenBlitter::ScreenBlitter():
@@ -19,11 +18,9 @@ void ScreenBlitter::setProgram(BlitProgram* blitProgram) {
     m_blitProgram = blitProgram;
 }
 
-void ScreenBlitter::blit(glow::FrameBufferObject& fbo, const Viewport& viewport) {
-    m_blitProgram->setSource(&fbo);
+void ScreenBlitter::blit(FrameBuffer& source, const Viewport& viewport) {
+    m_blitProgram->setSource(source.texture(0));
     m_blitProgram->setDestination(glow::FrameBufferObject::defaultFBO(), viewport);
     m_blitProgram->blit();
 }
-
-
 

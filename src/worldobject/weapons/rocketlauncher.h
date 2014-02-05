@@ -1,7 +1,8 @@
 #include <glm/glm.hpp>
+
 #include "weapon.h"
-#include "rocket.h"
-#include "resource/clustercache.h"
+#include "property/property.h"
+
 
 class RocketLauncher : public Weapon {
 public:

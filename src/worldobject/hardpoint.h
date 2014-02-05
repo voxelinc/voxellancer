@@ -1,17 +1,19 @@
 #pragma once
 
-#include "voxel/voxelcluster.h"
-#include "worldobject/weapons/weapon.h"
-#include "resource/clustercache.h"
+#include <memory>
+#include <glm/glm.hpp>
+
+#include "weapons/weapon.h"
 
 class Ship;
+class Weapon;
 
 class Hardpoint {
 public:
-    Hardpoint(Ship* ship, const glm::ivec3& positionInGrid, Weapon *weapon);
+    Hardpoint(Ship* ship, const glm::ivec3& positionInGrid, std::shared_ptr<Weapon> weapon);
     ~Hardpoint();
 
-    void installWeapon(Weapon *weapon);
+    void installWeapon(std::shared_ptr<Weapon> weapon);
     Weapon* weapon();
 
     glm::vec3 position(); // in world coordinates
@@ -28,5 +30,5 @@ public:
 private:
     Ship* m_ship;
     glm::vec3 m_positionInGrid;
-    Weapon* m_weapon;
+    std::shared_ptr<Weapon> m_weapon;
 };

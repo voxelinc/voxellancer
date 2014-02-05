@@ -1,4 +1,5 @@
 #include <iostream>
+#include <omp.h>
 
 #ifdef WIN32
 #include <windows.h>
@@ -26,8 +27,6 @@
 
 #include "geometry/viewport.h"
 
-#include "geometry/size.h"
-
 #include "display/stereorenderinfo.h"
 
 #include "ui/inputhandler.h"
@@ -52,6 +51,15 @@ static void checkVersion() {
     glow::info("GL Versionstring: %;\n", glow::Version::versionString());
 }
 
+static void checkOpenMP() {
+    //omp_set_num_threads(4);
+#pragma omp parallel 
+    {
+#pragma omp master
+        glow::debug("OpenMP with %; threads ", omp_get_num_threads());
+    }
+}
+
 static void errorCallback(int error, const char* description) {
     glow::warning(description);
 }
@@ -74,6 +82,9 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
     }
     if (key == GLFW_KEY_F6 && action == GLFW_PRESS) {
         PropertyManager::instance()->load("data/config.ini");
+    }
+    if (key >= GLFW_KEY_1 && key <= GLFW_KEY_9 && action == GLFW_PRESS) {
+        game->setOutputBuffer(key-GLFW_KEY_1);
     }
 
 	game->inputHandler().keyCallback(key, scancode, action, mods);
@@ -108,6 +119,7 @@ static void mainloop() {
         glfwPollEvents();
     }
 }
+
 
 int main(int argc, char* argv[]) {
     CommandLineParser clParser;
@@ -146,6 +158,7 @@ int main(int argc, char* argv[]) {
     setCallbacks(window);
 
     checkVersion();
+    checkOpenMP();
 
     glewExperimental = GL_TRUE;
     if (glewInit() != GLEW_OK) {
@@ -167,7 +180,8 @@ int main(int argc, char* argv[]) {
     glfwSwapInterval(1);
 #endif
 
-    //#define TRYCATCH
+//#define TRYCATCH
+
 #ifdef TRYCATCH
     try {
 #endif
