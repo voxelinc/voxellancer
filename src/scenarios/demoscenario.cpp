@@ -5,11 +5,9 @@
 #include <glowutils/AutoTimer.h>
 
 #include "ai/characters/dummycharacter.h"
-#include "ai/elevatedtasks/dummyelevatedtask.h"
-#include "ai/basictask.h"
 #include "ai/basictasks/fighttask.h"
 #include "ai/basictasks/flytotask.h"
-#include "ai/elevatedtasks/patrolwaypointstask.h"
+#include "ai/basictasks/patrolwaypointstask.h"
 
 #include "resource/clustercache.h"
 
@@ -85,7 +83,7 @@ void DemoScenario::createSingleEnemy(glm::vec3 positionToPlayer) {
     target->objectInfo().setName("enemy");
     target->objectInfo().setShowOnHud(true);
     target->objectInfo().setCanLockOn(true);
-    target->setCharacter(new DummyCharacter(*target, new DummyElevatedTask(*target, new FightTask(*target, {m_game->player().playerShip()->handle()}))));
+    target->setCharacter(new DummyCharacter(*target, new FightTask(*target, {m_game->player().playerShip()->handle()})));
     m_world->god().scheduleSpawn(target);
     m_game->player().playerShip()->setTargetObject(target);
 }
@@ -97,7 +95,7 @@ void DemoScenario::callInNormandy(glm::vec3 positionToPlayer) {
     target->objectInfo().setName("normandy");
     target->objectInfo().setShowOnHud(true);
     target->objectInfo().setCanLockOn(true);
-    target->setCharacter(new DummyCharacter(*target, new DummyElevatedTask(*target, new FightTask(*target, nonNormandies()))));
+    target->setCharacter(new DummyCharacter(*target, new FightTask(*target, nonNormandies())));
     m_world->god().scheduleSpawn(target);
 }
 
@@ -193,7 +191,7 @@ void DemoScenario::setTargets(const std::vector<Handle<WorldObject>>& fleet, con
             Ship* ship = dynamic_cast<Ship*>(shipHandle.get());
             if (ship) {
                 std::random_shuffle(enemyHandles.begin(), enemyHandles.end());
-                ship->setCharacter(new DummyCharacter(*ship, new DummyElevatedTask(*ship, new FightTask(*ship, enemyHandles))));
+                ship->setCharacter(new DummyCharacter(*ship, new FightTask(*ship, enemyHandles)));
             }
         }
     }
