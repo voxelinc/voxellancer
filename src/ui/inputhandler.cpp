@@ -167,7 +167,12 @@ void InputHandler::processMouseUpdate() {
 
     m_player->hud().crossHair().setActionActive(pressed);
 
-    placeCrossHair(x, y);
+    if(glfwJoystickPresent(GLFW_JOYSTICK_1)) {
+        /*Hack to center if gamepad is presentyy*/
+        m_player->hud().crossHair().pointToLocalPoint(glm::vec3(0, 0, -1));
+    } else {
+        placeCrossHair(x, y);
+    }
 
     if (pressed) {
         m_player->fire();
