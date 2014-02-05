@@ -33,7 +33,8 @@ void DemoScenario::populateWorld() {
     ClusterCache::instance()->fillObject(playerShip, "data/voxelcluster/basicship.csv");
     playerShip->setPosition(glm::vec3(0, 0, 10));
     playerShip->objectInfo().setName("basicship");
-    playerShip->objectInfo().setShowOnHud(false);
+    playerShip->objectInfo().setShowOnHud(true);
+    playerShip->objectInfo().setCanLockOn(true);
     m_world->god().scheduleSpawn(playerShip);
 
     m_game->player().setShip(playerShip);
@@ -91,6 +92,18 @@ void DemoScenario::createSingleEnemy(glm::vec3 positionToPlayer) {
     m_game->player().playerShip()->setTargetObject(target);
 }
 
+void DemoScenario::callInNormandy(glm::vec3 positionToPlayer) {
+    Ship *target = new Ship();
+    ClusterCache::instance()->fillObject(target, "data/voxelcluster/normandy.csv");
+    target->setPosition(m_game->player().playerShip()->transform().applyTo(positionToPlayer));
+    target->objectInfo().setName("normandy");
+    target->objectInfo().setShowOnHud(true);
+    target->objectInfo().setCanLockOn(true);
+    target->setCharacter(new DummyCharacter(*target, new DummyElevatedTask(*target, new FightTask(*target, nonNormandies()))));
+    m_world->god().scheduleSpawn(target);
+
+}
+
 void DemoScenario::onKeyPressed(int key) {
     switch (key) {
         case GLFW_KEY_F1:
@@ -104,6 +117,11 @@ void DemoScenario::onKeyPressed(int key) {
             break;
         case GLFW_KEY_F4:
             endBattle();
+            break;
+        case GLFW_KEY_F5:
+            callInNormandy(glm::vec3(0, 0, 200));
+            callInNormandy(glm::vec3(150, 0, 200));
+            callInNormandy(glm::vec3(-150, 0, 200));
             break;
         case GLFW_KEY_F8:
             turnBattleOnPlayer();
@@ -120,6 +138,8 @@ void DemoScenario::populateBattle(int numberOfEnemies1, int numberOfEnemies2) {
         float r = numberOfEnemies1 * 50.0f;
         ship->move(RandVec3::rand(0.0f, r) + glm::vec3(-400, 0, -800));
         ship->objectInfo().setName("enemy1");
+        ship->objectInfo().setShowOnHud(true);
+        ship->objectInfo().setCanLockOn(true);
         ClusterCache::instance()->fillObject(ship, "data/voxelcluster/eagle.csv");
         world->god().scheduleSpawn(ship);
         m_fleet1.push_back(ship->handle());
@@ -129,6 +149,8 @@ void DemoScenario::populateBattle(int numberOfEnemies1, int numberOfEnemies2) {
         float r = numberOfEnemies2 * 50.0f;
         ship->move(RandVec3::rand(0.0f, r) + glm::vec3(400, 0, -800));
         ship->objectInfo().setName("enemy2");
+        ship->objectInfo().setShowOnHud(true);
+        ship->objectInfo().setCanLockOn(true);
         ClusterCache::instance()->fillObject(ship, "data/voxelcluster/eagle.csv");
         world->god().scheduleSpawn(ship);
         m_fleet2.push_back(ship->handle());
@@ -179,3 +201,19 @@ void DemoScenario::setTargets(const std::vector<Handle<WorldObject>>& fleet, con
         }
     }
 }
+
+std::vector<Handle<WorldObject>> DemoScenario::nonNormandies() {
+    std::vector<Handle<WorldObject>> result;
+    for(Handle<WorldObject>& handle : m_fleet1) {
+        if(handle.valid()) {
+            result.push_back(handle);
+        }
+    }
+    for(Handle<WorldObject>& handle : m_fleet2) {
+        if(handle.valid()) {
+            result.push_back(handle);
+        }
+    }
+    return result;
+}
+

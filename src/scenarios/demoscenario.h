@@ -23,6 +23,7 @@ private:
     std::vector<Handle<WorldObject>> m_fleet1;
     std::vector<Handle<WorldObject>> m_fleet2;
 
+
     void createDummyTarget(glm::vec3 positionToPlayer);
     void createSingleEnemy(glm::vec3 positionToPlayer);
 
@@ -31,6 +32,8 @@ private:
     void startBattle();
     void endBattle();
     void turnBattleOnPlayer();
+    void callInNormandy(glm::vec3 positionToPlayer);
     void setTargets(const std::vector<Handle<WorldObject>>& fleet, const std::vector<Handle<WorldObject>>& enemies);
-
+    std::vector<Handle<WorldObject>> nonNormandies();
 };
+
