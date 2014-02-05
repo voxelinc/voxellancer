@@ -99,7 +99,7 @@ void InputHandler::resizeEvent(const unsigned int width, const unsigned int heig
 */
 void InputHandler::keyCallback(int key, int scancode, int action, int mods) {
     if (action == GLFW_PRESS) {
-        m_inputConfigurator->setLastPrimaryInput(InputMapping(InputType::Keyboard, key, 1));
+        m_inputConfigurator->setLastPrimaryInput(InputMapping(InputType::Keyboard, key, 1, 0.0f));
     } else {
         m_inputConfigurator->setLastPrimaryInput(InputMapping());
     }
@@ -169,7 +169,12 @@ void InputHandler::processMouseUpdate() {
 
     m_player->hud().crossHair().setActionActive(pressed);
 
-    placeCrossHair(x, y);
+    if(glfwJoystickPresent(GLFW_JOYSTICK_1)) {
+        /*Hack to center if gamepad is presentyy*/
+        m_player->hud().crossHair().pointToLocalPoint(glm::vec3(0, 0, -1));
+    } else {
+        placeCrossHair(x, y);
+    }
 
     if (pressed) {
         m_player->fire();
