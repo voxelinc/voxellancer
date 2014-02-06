@@ -63,6 +63,7 @@ go_bandit([](){
         World *world;
         PropertyManager::instance()->reset();
         PropertyManager::instance()->load("data/config.ini");
+        PropertyManager::instance()->load("data/voxels.ini", "voxels");
         SoundManager soundManager;
 
         before_each([&]() {

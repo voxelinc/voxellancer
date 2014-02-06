@@ -17,6 +17,7 @@ go_bandit([]() {
     describe("WorldTree", []() {
         PropertyManager::instance()->reset();
         PropertyManager::instance()->load("data/config.ini");
+        PropertyManager::instance()->load("data/voxels.ini", "voxels");
 
         WorldObject *dummy;
         WorldTree *worldTree;

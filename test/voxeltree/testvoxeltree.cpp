@@ -26,6 +26,7 @@ go_bandit([](){
 
         PropertyManager::instance()->reset();
         PropertyManager::instance()->load("data/config.ini");
+        PropertyManager::instance()->load("data/voxels.ini", "voxels");
 
         before_each([&]() {
             dummy = new WorldObject();
