@@ -150,7 +150,7 @@ static void loadWorldObjectConfigs() {
     PropertyManager::instance()->load("data/worldobjects/normandy.ini", "normandy");
     PropertyManager::instance()->load("data/worldobjects/gunbullet.ini", "gunbullet");
     PropertyManager::instance()->load("data/worldobjects/snowball.ini", "snowball");
-    PropertyManager::instance()->load("data/worldobjects/torpedo.ini", "torpedo");
+    PropertyManager::instance()->load("data/worldobjects/hornet.ini", "hornet");
 }
 
 /*
@@ -160,10 +160,10 @@ static void loadWorldObjectConfigs() {
 static void loadEquipmentConfigs() {
     PropertyManager::instance()->load("data/equipment/engines/enginemk1.ini", "enginemk1");
     PropertyManager::instance()->load("data/equipment/engines/piratethruster.ini", "piratethruster");
-    PropertyManager::instance()->load("data/equipment/engines/torpedothruster.ini", "torpedothruster");
+    PropertyManager::instance()->load("data/equipment/engines/rocketthrustermk1.ini", "rocketthrustermk1");
     PropertyManager::instance()->load("data/equipment/weapons/gun.ini", "gun");
     PropertyManager::instance()->load("data/equipment/weapons/snowcanon.ini", "snowcanon");
-    PropertyManager::instance()->load("data/equipment/weapons/torpedolauncher.ini", "torpedolauncher");
+    PropertyManager::instance()->load("data/equipment/weapons/hornetlauncher.ini", "hornetlauncher");
 }
 
 int main(int argc, char* argv[]) {

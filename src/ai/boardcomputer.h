@@ -18,6 +18,8 @@ class BoardComputer
 public:
     BoardComputer(Ship& ship);
 
+    const EngineState& engineState() const;
+
     void moveTo(const glm::vec3& position);
     void rotateTo(const glm::vec3& position, const glm::vec3& up = glm::vec3(0, 0, 0));
 

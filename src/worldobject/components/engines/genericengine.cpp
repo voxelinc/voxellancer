@@ -9,7 +9,6 @@ GenericEngine::GenericEngine(const std::string& propertyPrefix):
     m_color(propertyPrefix + ".visuals.color"),
     m_emissiveness(propertyPrefix + ".visuals.emissiveness")
 {
-    std::cout << "Engine: " << this << propertyPrefix << std::endl;
 }
 
 Visuals GenericEngine::visuals() const {

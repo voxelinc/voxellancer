@@ -6,6 +6,7 @@
 
 #include "worldobject/ship.h"
 #include "utils/randvec.h"
+#include "utils/tostring.h"
 #include "utils/geometryhelper.h"
 
 
@@ -17,6 +18,10 @@ BoardComputer::BoardComputer(Ship& ship) :
     m_ship(ship),
     m_overwriteEngineState(false)
 {
+}
+
+const EngineState& BoardComputer::engineState() const {
+    return m_engineState;
 }
 
 void BoardComputer::moveTo(const glm::vec3& position) {
