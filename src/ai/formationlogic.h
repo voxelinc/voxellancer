@@ -7,13 +7,12 @@
 
 class Ship;
 
-class FormationLogic
-{
+class FormationLogic {
 public:
     FormationLogic(Ship& ship);
     ~FormationLogic();
     Ship* ship();
-    
+
     void joinFormation(Ship* leader);
     void joinFormation(FormationLogic* leader);
     void leaveFormation();
@@ -23,6 +22,7 @@ public:
     bool inFormation();
 
     void onDestruction();
+
 
 protected:
     void onMemberJoin(FormationLogic* member);

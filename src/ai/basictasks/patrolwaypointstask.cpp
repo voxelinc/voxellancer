@@ -3,6 +3,7 @@
 #include "worldobject/ship.h"
 #include "ai/formationlogic.h"
 
+
 PatrolWaypointsTask::PatrolWaypointsTask(Ship& ship, std::list<glm::vec3> points) :
     AiTask(ship),
     m_points(points),
