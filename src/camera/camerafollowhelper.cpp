@@ -28,6 +28,12 @@ glm::vec3 CameraFollowHelper::followPosition() {
     sphere.setPosition(worldObject->transform().position());
     sphere.setRadius(worldObject->bounds().minimalGridAABB().diameter() * worldObject->transform().scale());
 
-    return sphere.position() + (worldObject->transform().orientation() * glm::vec3(0.0f, 0.6f, 1.5f)) * sphere.radius();
+    if (worldObject->bounds().minimalGridAABB().diameter() > 0) {
+        float sizeScaling = 1 + (5.0f / worldObject->bounds().minimalGridAABB().diameter());
+
+        return sphere.position() + (worldObject->transform().orientation() * glm::vec3(0.0f, 0.6f * sizeScaling, 1.5f * sizeScaling)) * sphere.radius();
+    } else {
+        return sphere.position();
+    }
 }
 
