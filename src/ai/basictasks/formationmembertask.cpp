@@ -19,3 +19,4 @@ void FormationMemberTask::update(float deltaSec) {
         m_flyTask.update(deltaSec);
     }
 }
+

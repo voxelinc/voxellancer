@@ -27,3 +27,4 @@ void PatrolWaypointsTask::update(float deltaSec) {
         m_flyTask.update(deltaSec);
     }
 }
+

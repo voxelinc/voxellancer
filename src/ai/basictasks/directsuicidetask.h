@@ -18,8 +18,8 @@ public:
 
     virtual void update(float deltaSec);
 
-protected:
 
+protected:
 	Handle<WorldObject> m_target;
 };
 

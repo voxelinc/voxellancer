@@ -31,3 +31,4 @@ void DirectSuicideTask::update(float deltaSec) {
         m_ship.boardComputer()->moveTo(m_ship.transform().position() + m_ship.transform().orientation() * (glm::vec3(0, 0, -100)), false);
     }
 }
+
