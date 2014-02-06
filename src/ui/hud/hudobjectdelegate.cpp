@@ -5,12 +5,13 @@
 #include "hud.h"
 #include "hudget.h"
 #include "objecthudget.h"
+#include "arrowhudget.h"
 
 
 HUDObjectDelegate::HUDObjectDelegate(HUD* hud, WorldObject* worldObject):
     m_hud(hud),
     m_worldObjectHandle(worldObject->handle()),
-    m_hudget(new ObjectHudget(m_hud, this))
+    m_hudget(new ArrowHudget(m_hud, this))
 {
 }
 
