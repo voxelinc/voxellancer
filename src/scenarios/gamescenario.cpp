@@ -8,7 +8,7 @@
 #include "ai/basictasks/flytotask.h"
 #include "ai/basictasks/patrolwaypointstask.h"
 #include "ai/basictasks/formationmembertask.h"
-#include "ai/formationlogic.h"
+#include "ai/squadlogic.h"
 
 #include "resource/clustercache.h"
 
@@ -56,7 +56,7 @@ void GameScenario::populateWorld() {
                                     glm::vec3(-600, 0, -400), glm::vec3(0, 100, -600), 
                                     glm::vec3(-100, 150, -900) });
         follower->setCharacter(new DummyCharacter(*follower, ta));
-        follower->formationLogic()->joinFormation(normandy);
+        follower->squadLogic()->joinFormation(normandy);
     }
 
 
@@ -86,7 +86,7 @@ void GameScenario::populateWorld() {
             std::list<glm::vec3>{ glm::vec3(500, 0, 500), glm::vec3(-500, 0, 500), 
                                     glm::vec3(-500, 0, -500), glm::vec3(500, 0, -500) });
         follower->setCharacter(new DummyCharacter(*follower, ta));
-        follower->formationLogic()->joinFormation(leader);
+        follower->squadLogic()->joinFormation(leader);
     }
 
     Ship *testCluster = new Ship();

@@ -1,7 +1,6 @@
 #include "dummycharacter.h"
 
 #include "ai/aitask.h"
-#include "ai/formationlogic.h"
 #include "worldobject/ship.h"
 
 DummyCharacter::DummyCharacter(Ship& ship, AiTask* task) :

@@ -1,29 +1,29 @@
-#include "formationlogic.h"
+#include "squadlogic.h"
 
 #include "worldobject/ship.h"
 #include "ai/character.h"
 
-FormationLogic::FormationLogic(Ship& ship) :
+SquadLogic::SquadLogic(Ship& ship) :
     m_ship(ship),
     m_leader(nullptr),
     m_members()
 {
 }
 
-FormationLogic::~FormationLogic() {
+SquadLogic::~SquadLogic() {
     onDestruction();
 }
 
-Ship* FormationLogic::ship() {
+Ship* SquadLogic::ship() {
     return &m_ship;
 }
 
-void FormationLogic::joinFormation(Ship* leader) {
+void SquadLogic::joinFormation(Ship* leader) {
     assert(leader);
-    joinFormation(leader->formationLogic());
+    joinFormation(leader->squadLogic());
 }
 
-void FormationLogic::joinFormation(FormationLogic* leader) {
+void SquadLogic::joinFormation(SquadLogic* leader) {
     assert(m_leader == nullptr);
     assert(leader);
     assert(leader != this);
@@ -31,37 +31,37 @@ void FormationLogic::joinFormation(FormationLogic* leader) {
     m_leader->onMemberJoin(this);
 }
 
-void FormationLogic::leaveFormation() {
+void SquadLogic::leaveFormation() {
     assert(m_leader);
     m_leader->onMemberLeave(this);
     m_leader = nullptr;
 }
 
-glm::vec3 FormationLogic::formationPosition() {
+glm::vec3 SquadLogic::formationPosition() {
     assert(m_leader);
     return m_leader->formationPositionFor(this);
 }
 
-glm::vec3 FormationLogic::formationUp() {
+glm::vec3 SquadLogic::formationUp() {
     assert(m_leader);
     return m_leader->ship()->transform().orientation() * glm::vec3(0, 1, 0);
 }
 
-bool FormationLogic::inFormation() {
+bool SquadLogic::inFormation() {
     return m_leader != nullptr;
 }
 
-void FormationLogic::onDestruction() {
+void SquadLogic::onDestruction() {
     if (inFormation()) {
         leaveFormation();
     }
     if (!m_members.empty()) {
-        std::list<FormationLogic*> newmembers;
+        std::list<SquadLogic*> newmembers;
 
         // choose new leader
-        FormationLogic* newleader = nullptr;
+        SquadLogic* newleader = nullptr;
         float leadermass = 0;
-        for (FormationLogic* member : m_members) {
+        for (SquadLogic* member : m_members) {
             float membermass = member->ship()->physics().mass();
             if (!newleader || membermass > leadermass) {
                 if (newleader) {
@@ -76,12 +76,12 @@ void FormationLogic::onDestruction() {
         
         // break up formation
         newleader->leaveFormation();
-        for (FormationLogic* member : newmembers) {
+        for (SquadLogic* member : newmembers) {
             member->leaveFormation();
         }
 
         // assign everyone to new leader
-        for (FormationLogic* member : newmembers) {
+        for (SquadLogic* member : newmembers) {
             if (member != newleader) {
                 member->joinFormation(newleader);
             }
@@ -89,19 +89,19 @@ void FormationLogic::onDestruction() {
     }
 }
 
-void FormationLogic::onMemberJoin(FormationLogic* member) {
+void SquadLogic::onMemberJoin(SquadLogic* member) {
     assert(m_leader == nullptr); // no stacking of formations
     m_members.push_back(member);
 }
 
-void FormationLogic::onMemberLeave(FormationLogic* member) {
-    std::vector<FormationLogic*>::iterator it = std::find(m_members.begin(), m_members.end(), member);
+void SquadLogic::onMemberLeave(SquadLogic* member) {
+    std::vector<SquadLogic*>::iterator it = std::find(m_members.begin(), m_members.end(), member);
     assert(it != m_members.end());
     m_members.erase(it);
 }
 
-glm::vec3 FormationLogic::formationPositionFor(FormationLogic* member) {
-    std::vector<FormationLogic*>::iterator it = std::find(m_members.begin(), m_members.end(), member);
+glm::vec3 SquadLogic::formationPositionFor(SquadLogic* member) {
+    std::vector<SquadLogic*>::iterator it = std::find(m_members.begin(), m_members.end(), member);
     assert(it != m_members.end());
     size_t position = it - m_members.begin();
     

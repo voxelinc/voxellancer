@@ -1,7 +1,7 @@
 #include "patrolwaypointstask.h"
 
 #include "worldobject/ship.h"
-#include "ai/formationlogic.h"
+#include "ai/squadlogic.h"
 
 PatrolWaypointsTask::PatrolWaypointsTask(Ship& ship, std::list<glm::vec3> points) :
     AiTask(ship),
@@ -13,7 +13,7 @@ PatrolWaypointsTask::PatrolWaypointsTask(Ship& ship, std::list<glm::vec3> points
 }
 
 void PatrolWaypointsTask::update(float deltaSec) {
-    if (m_ship.formationLogic()->inFormation()) {
+    if (m_ship.squadLogic()->inFormation()) {
         m_formationTask.update(deltaSec);
     } else {
         if (glm::length(*m_currentPoint - m_ship.transform().position()) < m_ship.bounds().sphere().radius()){

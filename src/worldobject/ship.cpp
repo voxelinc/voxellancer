@@ -9,7 +9,7 @@
 #include "worldobject/weapons/rocketlauncher.h"
 #include "ai/character.h"
 #include "ai/boardcomputer.h"
-#include "ai/formationlogic.h"
+#include "ai/squadlogic.h"
 #include "sound/sound.h"
 #include "collision/collisionfilter.h"
 
@@ -26,7 +26,7 @@ Ship::Ship(CollisionFilter* collisionFilter):
     prop_maxRotSpeed("ship.maxRotSpeed"),
     m_character(new Character(*this)),
     m_boardComputer(new BoardComputer(*this)),
-    m_formationLogic(new FormationLogic(*this)),
+    m_squadLogic(new SquadLogic(*this)),
     m_shipHandle(Handle<Ship>(this)),
     m_targetObjectHandle(Handle<WorldObject>(nullptr))
 {
@@ -158,8 +158,8 @@ BoardComputer* Ship::boardComputer() {
     return m_boardComputer.get();
 }
 
-FormationLogic* Ship::formationLogic() {
-    return m_formationLogic.get();
+SquadLogic* Ship::squadLogic() {
+    return m_squadLogic.get();
 }
 
 void Ship::setEngineSound(std::shared_ptr<Sound> sound) {
