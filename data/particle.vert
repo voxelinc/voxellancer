@@ -63,7 +63,7 @@ void main() {
 	f_color = color.xyz;
     f_emissiveness = emissiveness;
     modelposition = v_vertex;
-    f_normal  = v_normal;
+    f_normal = qtransform(particleOrientation, v_normal);
 
     gl_Position = viewProjection * vec4(qtransform(particleOrientation, v_vertex) * scale + particlePosition, 1.0);
 }
