@@ -2,14 +2,17 @@
 
 #include <vector>
 
+#include "basescenario.h"
+
+
 class Game;
 class Ship;
 
-class BattleScenario {
+class BattleScenario : public BaseScenario {
 public:
-    BattleScenario();
+    BattleScenario(Game* game);
 
-    void populate(Game* game);
+    virtual void populateWorld() override;
 
 private:
     void populateBattle(int numberOfEnemies1, int numberOfEnemies2);

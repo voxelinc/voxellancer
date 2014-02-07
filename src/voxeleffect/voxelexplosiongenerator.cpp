@@ -7,8 +7,9 @@
 #include "utils/randfloat.h"
 #include "utils/randvec.h"
 
-#include "voxelparticle.h"
+#include "voxelparticledata.h"
 #include "voxelparticleworld.h"
+
 
 VoxelExplosionGenerator::VoxelExplosionGenerator() :
     m_radius(0.5f),
@@ -34,17 +35,26 @@ void VoxelExplosionGenerator::setCount(int count) {
 void VoxelExplosionGenerator::spawn() {
     // spawn explosionSpawnCount voxels with color and scale at position within a sphere with radius with a speed of ~force in all directions modified by ~impactVector
     Transform transform;
-    transform.setScale(m_scale);
 
     for (int i = 0; i < m_count; i++) {
-        glm::vec3 randDirection = createDirectionalSpeed();
-        transform.setPosition(m_position + (m_radius * randDirection));
+        glm::vec3 directionalSpeed = createDirectionalSpeed();
 
-        VoxelParticle* particle = new VoxelParticle(transform, m_color, m_emissiveness, createLifetime());
-        particle->setAngularSpeed(createAngularSpeed(), m_particleDampening);
-        particle->setDirectionalSpeed(randDirection, m_particleAngularDampening);
+        transform.setScale(createScale());
+        transform.setPosition(m_position + (m_radius * glm::normalize(directionalSpeed)));
 
-        World::instance()->voxelParticleWorld().addParticle(particle);
+        Visuals visuals(m_color, m_emissiveness);
+        Speed speed(directionalSpeed, createAngularSpeed());
+
+        VoxelParticleSetup particleSetup(
+            transform,
+            visuals,
+            speed,
+            m_particleDampening,
+            m_particleAngularDampening,
+            createLifetime()
+        );
+
+        World::instance()->voxelParticleWorld().addParticle(particleSetup);
     }
 }
 

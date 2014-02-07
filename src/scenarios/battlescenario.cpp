@@ -19,11 +19,13 @@
 #include "utils/randvec.h"
 
 
-BattleScenario::BattleScenario() {
+BattleScenario::BattleScenario(Game* game):
+    BaseScenario(game)
+{
 
 }
 
-void BattleScenario::populate(Game* game) {
+void BattleScenario::populateWorld() {
     glowutils::AutoTimer t("Initialize Game");
 
 
@@ -39,7 +41,7 @@ void BattleScenario::populate(Game* game) {
     playerShip->objectInfo().setName("basicship");
     playerShip->objectInfo().setShowOnHud(false);
     world->god().scheduleSpawn(playerShip);
-    game->player().setShip(playerShip);
+    m_game->player().setShip(playerShip);
 
     // create enemy ai driven ship
     Ship *aitester = new Ship();

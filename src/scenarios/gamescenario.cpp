@@ -21,7 +21,7 @@
 
 
 GameScenario::GameScenario(Game* game) :
-BaseScenario(game)
+    BaseScenario(game)
 {
 }
 
@@ -39,10 +39,10 @@ void GameScenario::populateWorld() {
     // TODO: use these dummies to test BasicTasks
     PatrolWaypointsTask* ta = new PatrolWaypointsTask(
         *normandy,
-        std::list<glm::vec3>{ glm::vec3(400, 0, 200), glm::vec3(-400, 0, -400), glm::vec3(-600, 0, -400), 
+        std::list<glm::vec3>{ glm::vec3(400, 0, 200), glm::vec3(-400, 0, -400), glm::vec3(-600, 0, -400),
                               glm::vec3(0, 100, -600), glm::vec3(200, 150, -900) });
     normandy->setCharacter(new DummyCharacter(*normandy, ta));
-    
+
     Ship *follower = new Ship();
     ClusterCache::instance()->fillObject(follower, "data/voxelcluster/basicship.csv");
     follower->setPosition(glm::vec3(100, 0, -50));

@@ -8,7 +8,8 @@
 #include "utils/randfloat.h"
 #include "utils/randbool.h"
 
-#include "voxelparticle.h"
+#include "voxelparticledata.h"
+#include "voxelparticlesetup.h"
 #include "voxelparticleworld.h"
 
 
