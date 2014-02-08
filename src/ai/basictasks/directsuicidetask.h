@@ -12,14 +12,14 @@ class WorldObject;
 
 class DirectSuicideTask : public AiTask {
 public:
-	DirectSuicideTask(Ship& ship, WorldObject* target);
+    DirectSuicideTask(Ship& ship, WorldObject* target);
 
-	void setTarget(WorldObject* target);
+    void setTarget(WorldObject* target);
 
     virtual void update(float deltaSec);
 
 
 protected:
-	Handle<WorldObject> m_target;
+    Handle<WorldObject> m_target;
 };
 

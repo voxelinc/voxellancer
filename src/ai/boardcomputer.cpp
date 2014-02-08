@@ -18,13 +18,13 @@ BoardComputer::BoardComputer(Ship& ship) :
 {
 }
 
-void BoardComputer::moveTo(const glm::vec3& position, bool deaccelerate) {
+void BoardComputer::moveTo(const glm::vec3& position, bool deccelerate) {
     glm::vec3 projectedPosition = m_ship.physics().projectedTransformIn(1.0f).position();
     glm::vec3 delta = position - projectedPosition;
     float distance = glm::length(delta);
 
     if (distance > s_minActDistance) {
-        if (!deaccelerate && m_ship.physics().speed() != glm::vec3(0)) {
+        if (!deccelerate && m_ship.physics().speed() != glm::vec3(0)) {
             glm::vec3 currentPosition = m_ship.transform().position();
             float angleFromProjected = GeometryHelper::angleBetween(m_ship.physics().speed(), delta);
             float angleFromCurrent = GeometryHelper::angleBetween(m_ship.physics().speed(), position - currentPosition);

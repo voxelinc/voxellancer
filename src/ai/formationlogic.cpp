@@ -122,3 +122,14 @@ glm::vec3 FormationLogic::formationPositionFor(FormationLogic* member) {
         return m_ship.transform().position() + m_ship.physics().speed() + m_ship.transform().orientation() * (distance * glm::normalize(glm::vec3(-1, 0, 1)));
     }
 }
+
+glm::vec3 FormationLogic::calculateFormationPosition(FormationLogic* member, size_t position, bool rightWing)
+{
+    float distance = m_ship.bounds().sphere().radius();
+    for (int i = (rightWing?0:1); i < position; i += 2) {
+        distance += 2 * m_members[i]->ship()->bounds().sphere().radius() + 10;
+    }
+    distance += member->ship()->bounds().sphere().radius() + 10;
+    return m_ship.transform().position() + m_ship.physics().speed() + m_ship.transform().orientation() * (distance * glm::normalize(glm::vec3(1, 0, 1)));
+
+}
