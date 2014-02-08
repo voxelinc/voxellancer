@@ -17,6 +17,8 @@
 #include "voxelparticledata.h"
 #include "voxelparticlesetup.h"
 #include "voxelparticlerenderer.h"
+#include "voxelparticleexpirecheck.h"
+#include "voxelparticleintersectioncheck.h"
 
 
 
@@ -26,7 +28,11 @@ public:
 
     float time() const;
 
+    int particleDataCount() const;
+    VoxelParticleData* particleData(int index);
+
     void addParticle(const VoxelParticleSetup& particleSetup);
+    void removeParticle(int index);
 
     void update(float deltaSec);
     void draw(Camera& camera);
@@ -37,15 +43,12 @@ protected:
     bool m_initialized;
 
     VoxelParticleRenderer m_renderer;
+    VoxelParticleExpireCheck m_expireCheck;
+    VoxelParticleIntersectionCheck m_intersectionCheck;
 
     std::vector<VoxelParticleData> m_cpuParticleBuffer;
     std::stack<int> m_freeParticleBufferIndices;
 
-    Property<float> m_fullDeadCheckInterval;
-    int m_deadCheckIndex;
-
-    Property<float> m_fullIntersectionCheckInterval;
-    int m_intersectionCheckIndex;
 
 
     bool m_gpuParticleBufferInvalid;
@@ -55,12 +58,5 @@ protected:
     void setBufferSize(int bufferSize);
     void setParticleAt(const VoxelParticleData& particle, int bufferIndex);
     void updateGPUBuffers();
-
-    void performDeadChecks(float deltaSec);
-    void performIntersectionChecks(float deltaSec);
-
-    bool intersects(VoxelParticleData* particle);
-
-    void initialize();
 };
 

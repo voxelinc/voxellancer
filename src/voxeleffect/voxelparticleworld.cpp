@@ -30,19 +30,26 @@ VoxelParticleWorld::VoxelParticleWorld():
     m_time(0.0f),
     m_initialized(false),
     m_renderer(this),
+    m_expireCheck(this),
+    m_intersectionCheck(this),
     m_gpuParticleBufferInvalid(false),
     m_gpuParticleBufferInvalidBegin(0.0f),
-    m_gpuParticleBufferInvalidEnd(0.0f),
-    m_fullDeadCheckInterval("vfx.fullDeadCheckInterval"),
-    m_deadCheckIndex(0),
-    m_fullIntersectionCheckInterval("vfx.fullIntersectionCheckInterval"),
-    m_intersectionCheckIndex(0)
+    m_gpuParticleBufferInvalidEnd(0.0f)
 {
     setBufferSize(1024);
 }
 
 float VoxelParticleWorld::time() const {
     return m_time;
+}
+
+int VoxelParticleWorld::particleDataCount() const {
+    return m_cpuParticleBuffer.size();
+}
+
+VoxelParticleData* VoxelParticleWorld::particleData(int index) {
+    assert(index < m_cpuParticleBuffer.size());
+    return &m_cpuParticleBuffer[index];
 }
 
 void VoxelParticleWorld::addParticle(const VoxelParticleSetup& particleSetup) {
@@ -55,11 +62,19 @@ void VoxelParticleWorld::addParticle(const VoxelParticleSetup& particleSetup) {
     m_freeParticleBufferIndices.pop();
 }
 
+void VoxelParticleWorld::removeParticle(int index) {
+    assert(index < m_cpuParticleBuffer.size());
+
+    VoxelParticleData& particle = m_cpuParticleBuffer[index];
+    particle.dead = true;
+    m_freeParticleBufferIndices.push(index);
+}
+
 void VoxelParticleWorld::update(float deltaSec) {
     m_time += deltaSec;
 
-    performDeadChecks(deltaSec);
-    performIntersectionChecks(deltaSec);
+    m_expireCheck.update(deltaSec);
+    m_intersectionCheck.update(deltaSec);
 }
 
 void VoxelParticleWorld::draw(Camera& camera) {
@@ -106,68 +121,3 @@ void VoxelParticleWorld::updateGPUBuffers() {
     m_gpuParticleBufferInvalid = false;
 }
 
-void VoxelParticleWorld::performDeadChecks(float deltaSec) {
-    if(m_cpuParticleBuffer.empty()) {
-        return;
-    }
-
-    size_t checkCount = (deltaSec * m_cpuParticleBuffer.size()) / m_fullDeadCheckInterval;
-    checkCount = std::min(checkCount,  m_cpuParticleBuffer.size());
-
-    int lastParticle = ((m_deadCheckIndex + checkCount - 1) % m_cpuParticleBuffer.size());
-
-    for(;; m_deadCheckIndex = (m_deadCheckIndex + 1) % m_cpuParticleBuffer.size()) {
-        VoxelParticleData& particle = m_cpuParticleBuffer[m_deadCheckIndex];
-
-        if(particle.deathTime > m_time && !particle.dead) {
-            particle.dead = true;
-            m_freeParticleBufferIndices.push(m_deadCheckIndex);
-        }
-
-        if(m_deadCheckIndex == lastParticle) {
-            break;
-        }
-    }
-}
-
-void VoxelParticleWorld::performIntersectionChecks(float deltaSec) {
-    if(m_cpuParticleBuffer.empty()) {
-        return;
-    }
-
-    size_t checkCount = (deltaSec * m_cpuParticleBuffer.size()) / m_fullIntersectionCheckInterval;
-    checkCount = std::min(checkCount,  m_cpuParticleBuffer.size());
-
-    int lastParticle = ((m_intersectionCheckIndex + checkCount - 1) % m_cpuParticleBuffer.size());
-
-    for(;; m_intersectionCheckIndex = (m_intersectionCheckIndex + 1) % m_cpuParticleBuffer.size()) {
-        VoxelParticleData& particle = m_cpuParticleBuffer[m_intersectionCheckIndex];
-
-        if(intersects(&particle)) {
-            particle.dead = true;
-            m_freeParticleBufferIndices.push(m_intersectionCheckIndex);
-        }
-
-        if(m_intersectionCheckIndex == lastParticle) {
-            break;
-        }
-    }
-}
-
-bool VoxelParticleWorld::intersects(VoxelParticleData* particle) {
-	float timeDelta = m_time - particle->creationTime;
-    glm::vec3 position = particle->directionalSpeed * timeDelta + particle->creationPosition;
-
-    Point voxelPoint(position); // approximate a point
-    WorldTreeQuery query(&World::instance()->worldTree(), &voxelPoint);
-
-    for (WorldTreeGeode* geode : query.nearGeodes()) {
-        WorldObject* worldObject = geode->worldObject();
-        glm::ivec3 cell = glm::ivec3(worldObject->transform().inverseApplyTo(position));
-        if (worldObject->voxel(cell)) {
-            return true;
-        }
-    }
-
-    return false;
-}
