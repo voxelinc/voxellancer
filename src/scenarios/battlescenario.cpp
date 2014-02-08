@@ -53,7 +53,7 @@ void BattleScenario::populateWorld() {
     aitester->setCharacter(new DummyCharacter(*aitester, new DummyElevatedTask(*aitester, new FightTask(*aitester, {playerShip->handle()}))));
 
     // create two opposing enemy forces
-    populateBattle(4, 4);
+    populateBattle(10, 4);
 
     glow::debug("Initial spawn");
     world->god().spawn();
@@ -81,7 +81,7 @@ void BattleScenario::populateBattle(int numberOfEnemies1, int numberOfEnemies2) 
         ship->objectInfo().setName("enemy1");
         ship->objectInfo().setShowOnHud(true);
         ship->objectInfo().setCanLockOn(true);
-        ClusterCache::instance()->fillObject(ship, "data/voxelcluster/basicship.csv");
+        ClusterCache::instance()->fillObject(ship, "data/voxelcluster/unogunner.csv");
         world->god().scheduleSpawn(ship);
         fleet1.push_back(ship);
     }

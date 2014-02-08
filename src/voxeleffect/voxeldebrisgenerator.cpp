@@ -24,8 +24,6 @@ VoxelDebrisGenerator::VoxelDebrisGenerator() :
     m_density(2),
     m_spawnProbability(1.0f)
 {
-    m_particleDampening = Property<float>("physics.debrisDampening");
-    m_particleAngularDampening = Property<float>("physics.debrisAngularDampening");
     m_particleBaseForce = Property<float>("physics.debrisBaseForce");
     m_particleAngularBaseForce = Property<float>("physics.debrisAngularBaseForce");
 }
@@ -74,8 +72,6 @@ void VoxelDebrisGenerator::spawn() {
                     particleTransform,
                     visuals,
                     speed,
-                    m_particleDampening,
-                    m_particleAngularDampening,
                     createLifetime()
                 );
 

@@ -7,8 +7,7 @@
 
 class Transform;
 
-class VoxelDebrisGenerator : public VoxelParticleSpawnBase
-{
+class VoxelDebrisGenerator : public VoxelParticleSpawnBase {
 public:
     VoxelDebrisGenerator();
     virtual ~VoxelDebrisGenerator();
@@ -18,6 +17,7 @@ public:
     void setSpawnProbability(float spawnProbability);
 
     void spawn();
+
 
 protected:
     glm::quat m_orientation;

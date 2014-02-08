@@ -10,6 +10,7 @@ uniform float emissiveness;
 // cube data
 layout(location=0) in vec3 v_vertex;
 layout(location=1) in vec3 v_normal;
+
 // instance data
 layout(location=2) in vec3 v_position;
 layout(location=3) in vec4 v_color;
@@ -28,3 +29,4 @@ void main() {
     f_emissiveness = clamp(emissiveness + v_emissiveness, 0, 1);
     modelposition = v_vertex;
 }
+

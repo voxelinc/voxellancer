@@ -24,14 +24,9 @@ VoxelParticleSpawnBase::VoxelParticleSpawnBase() :
     m_color(0xFFFFFF),
     m_emissiveness(0.0f),
     m_impactVector(0, 0, 0),
-    m_particleDampening(0.0f),
-    m_particleAngularDampening(0.0f),
     m_particleBaseForce(1.0f),
     m_particleAngularBaseForce(1.0f)
 {
-}
-
-VoxelParticleSpawnBase::~VoxelParticleSpawnBase() {
 }
 
 void VoxelParticleSpawnBase::setPosition(const glm::vec3& position) {

@@ -6,11 +6,9 @@
 
 class Transform;
 
-class VoxelParticleSpawnBase
-{
+class VoxelParticleSpawnBase {
 public:
     VoxelParticleSpawnBase();
-    virtual ~VoxelParticleSpawnBase();
 
     void setPosition(const glm::vec3& position);
     void setOrientation(const glm::quat& orientation);
@@ -24,18 +22,21 @@ public:
 
 protected:
     glm::vec3 m_position;
+
     float m_scale;
     float m_scaleRandomization;
+
     float m_force;
     float m_forceRandomization;
+
     float m_lifetime;
     float m_lifetimeRandomization;
+
     int m_color;
     float m_emissiveness;
+
     glm::vec3 m_impactVector;
 
-    float m_particleDampening;
-    float m_particleAngularDampening;
     float m_particleBaseForce;
     float m_particleAngularBaseForce;
 

@@ -16,12 +16,15 @@
 
 #include "voxelparticledata.h"
 #include "voxelparticlesetup.h"
+#include "voxelparticlerenderer.h"
 
 
 
 class VoxelParticleWorld {
 public:
     VoxelParticleWorld();
+
+    float time() const;
 
     void addParticle(const VoxelParticleSetup& particleSetup);
 
@@ -31,14 +34,12 @@ public:
 
 protected:
     float m_time;
+    bool m_initialized;
+
+    VoxelParticleRenderer m_renderer;
 
     std::vector<VoxelParticleData> m_cpuParticleBuffer;
-    glow::ref_ptr<glow::Buffer> m_gpuParticleBuffer;
-
     std::stack<int> m_freeParticleBufferIndices;
-
-    glow::ref_ptr<glow::Program> m_program;
-    glow::ref_ptr<glow::VertexArrayObject> m_vertexArrayObject;
 
     Property<float> m_fullDeadCheckInterval;
     int m_deadCheckIndex;
@@ -46,26 +47,20 @@ protected:
     Property<float> m_fullIntersectionCheckInterval;
     int m_intersectionCheckIndex;
 
-    bool m_initialized;
 
     bool m_gpuParticleBufferInvalid;
     int m_gpuParticleBufferInvalidBegin;
     int m_gpuParticleBufferInvalidEnd;
 
-
-    void initialize();
-    void loadProgram();
-    void setupVertexAttributes();
-    void setupVertexAttribute(GLint offset, const std::string& name, int numPerVertex, GLenum type, GLboolean normalised, int bindingNum);
-    void setupVertexAttribDivisors();
-
     void setBufferSize(int bufferSize);
     void setParticleAt(const VoxelParticleData& particle, int bufferIndex);
-    void updateGPUBuffer();
+    void updateGPUBuffers();
 
     void performDeadChecks(float deltaSec);
     void performIntersectionChecks(float deltaSec);
 
     bool intersects(VoxelParticleData* particle);
+
+    void initialize();
 };
 

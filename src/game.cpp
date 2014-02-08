@@ -40,7 +40,7 @@ HMDManager& Game::hmdManager() {
 }
 
 void Game::update(float deltaSec) {
-    deltaSec = glm::min(0.1f, deltaSec);
+    deltaSec = glm::min(0.03f, deltaSec);
 
     m_viewer.update(deltaSec);
     World::instance()->update(deltaSec);

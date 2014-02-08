@@ -16,7 +16,7 @@
 */
 class VoxelParticleSetup {
 public:
-    VoxelParticleSetup(const Transform& transform, const Visuals& visuals, const Speed& speed, float directionalDampening, float angularDampening, float lifetime);
+    VoxelParticleSetup(const Transform& transform, const Visuals& visuals, const Speed& speed, float lifetime);
 
     VoxelParticleData toData(float timeSecs) const;
 
@@ -25,7 +25,5 @@ protected:
     Transform m_transform;
     Visuals m_visuals;
     Speed m_speed;
-    float m_directionalDampening;
-    float m_angularDampening;
     float m_lifetime;
 };
