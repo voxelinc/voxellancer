@@ -32,13 +32,13 @@ vec3 qtransform(vec4 q, vec3 v);
 vec4 quat(vec3 euler);
 
 void main() {
-	float timeDelta = time - creationTime;
+    float timeDelta = time - creationTime;
 
-	vec3 particlePosition = directionalSpeed * timeDelta + creationPosition;
-	vec3 particleEulers = angularSpeed * timeDelta + creationEulers;
-	vec4 particleOrientation = quat(particleEulers);
+    vec3 particlePosition = directionalSpeed * timeDelta + creationPosition;
+    vec3 particleEulers = angularSpeed * timeDelta + creationEulers;
+    vec4 particleOrientation = quat(particleEulers);
     f_remainingLifetime = deathTime - time;
-	f_color = color.xyz;
+    f_color = color.xyz;
     f_emissiveness = emissiveness;
     modelposition = v_vertex;
     f_normal = qtransform(particleOrientation, v_normal);
