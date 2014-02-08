@@ -39,8 +39,8 @@ bool WorldTreeQuery::areGeodesNear() {
     return result;
 }
 
-std::set<WorldTreeGeode*> WorldTreeQuery::nearGeodes() {
-    std::set<WorldTreeGeode*>  result;
+std::unordered_set<WorldTreeGeode*> WorldTreeQuery::nearGeodes() {
+    std::unordered_set<WorldTreeGeode*> result;
     m_queryInterrupted = false;
 
     query(getQueryRoot(), [&](WorldTreeGeode* geode) {

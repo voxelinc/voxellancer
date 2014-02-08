@@ -63,7 +63,7 @@ void BattleScenario::populateBattle(int numberOfEnemies1, int numberOfEnemies2) 
     std::vector<Ship*> fleet2;
     for (int e = 0; e < numberOfEnemies1; e++) {
         Ship *ship = new Ship();
-        float r = 200;
+        float r = 1000;
         ship->move(RandVec3::rand(0.0f, r) + glm::vec3(-200, 0, -200));
         ship->objectInfo().setName("enemy2");
         ship->objectInfo().setShowOnHud(true);
@@ -74,7 +74,7 @@ void BattleScenario::populateBattle(int numberOfEnemies1, int numberOfEnemies2) 
     }
     for (int e = 0; e < numberOfEnemies2; e++) {
         Ship *ship = new Ship();
-        float r = 200;
+        float r = 1000;
         ship->move(RandVec3::rand(0.0f, r) + glm::vec3(200, 0, -200));
         ship->objectInfo().setName("enemy1");
         ship->objectInfo().setShowOnHud(true);
