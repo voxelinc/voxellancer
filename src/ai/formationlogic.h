@@ -28,7 +28,7 @@ protected:
     void onMemberJoin(FormationLogic* member);
     void onMemberLeave(FormationLogic* member);
     glm::vec3 formationPositionFor(FormationLogic* member);
-    glm::vec3 calculateFormationPosition(FormationLogic* member, size_t position, bool rightWing);
+    glm::vec3 calculateFormationPosition(FormationLogic* member, int position);
 
     Ship& m_ship;
     FormationLogic* m_leader;
