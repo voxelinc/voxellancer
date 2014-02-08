@@ -31,7 +31,7 @@ glm::quat GeometryHelper::quatFromViewDirection(const glm::vec3& direction) {
     return glm::angleAxis(angle, glm::normalize(w));
 }
 
-WorldObject* GeometryHelper::closestObject(WorldObject& self, std::set<WorldObject*>* objects){
+WorldObject* GeometryHelper::closestObject(WorldObject& self, std::unordered_set<WorldObject*>* objects){
     WorldObject* closestObject = nullptr;
     float closestDistance = std::numeric_limits<float>::max();
 

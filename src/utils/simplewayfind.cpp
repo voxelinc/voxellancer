@@ -7,6 +7,7 @@
 #include "utils/geometryhelper.h"
 #include "collision/collisionfilter.h"
 
+
 glm::vec3 SimpleWayfind::calculateTravelPoint(WorldObject& object, glm::vec3 targetPoint) {
     //Wayfinding doesn't care about projectiles
     CollisionFilter filter(object.collisionFilter());
@@ -15,7 +16,7 @@ glm::vec3 SimpleWayfind::calculateTravelPoint(WorldObject& object, glm::vec3 tar
 
     //TODO: use #300
     Capsule capsule = Capsule(object.transform().position(), targetPoint - object.transform().position(), object.bounds().minimalGridSphere().radius() * object.transform().scale());
-    std::set<WorldObject*> obstacles = WorldTreeQuery(&World::instance()->worldTree(), &capsule, nullptr, &filter).intersectingWorldObjects();
+    std::unordered_set<WorldObject*> obstacles = WorldTreeQuery(&World::instance()->worldTree(), &capsule, nullptr, &filter).intersectingWorldObjects();
 
     if (!obstacles.empty()) {
         WorldObject* obstacle = GeometryHelper::closestObject(object, &obstacles);

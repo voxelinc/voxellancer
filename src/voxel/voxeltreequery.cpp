@@ -28,8 +28,8 @@ bool VoxelTreeQuery::areVoxelsIntersecting() {
     return result;
 }
 
-std::set<Voxel*> VoxelTreeQuery::intersectingVoxels() {
-    std::set<Voxel*> result;
+std::unordered_set<Voxel*> VoxelTreeQuery::intersectingVoxels() {
+    std::unordered_set<Voxel*> result;
     m_queryInterrupted = false;
 
     query(m_voxelTree->root(), [&](Voxel* voxel) {

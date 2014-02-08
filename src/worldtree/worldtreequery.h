@@ -24,9 +24,9 @@ public:
     std::unordered_set<WorldTreeGeode*> nearGeodes();
 
     bool areVoxelsIntersecting();
-    std::set<Voxel*> intersectingVoxels();
+    std::unordered_set<Voxel*> intersectingVoxels();
 
-    std::set<WorldObject*> intersectingWorldObjects();
+    std::unordered_set<WorldObject*> intersectingWorldObjects();
 
 
 protected:
