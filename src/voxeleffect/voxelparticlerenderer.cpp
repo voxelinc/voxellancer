@@ -66,8 +66,8 @@ void VoxelParticleRenderer::loadProgram() {
     m_program->attach(
         glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/shader/particle.vert"),
         glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/shader/particle.frag"),
-        glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/shader/common.frag"),
-        glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/shader/common.glsl")
+        glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/shader/voxel.frag"),
+        glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/shader/quaternion.glsl")
     );
 
     m_program->bindFragDataLocation(0, "fragColor");
