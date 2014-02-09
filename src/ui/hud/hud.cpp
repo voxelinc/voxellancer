@@ -130,19 +130,28 @@ void HUD::draw() {
 }
 
 void HUD::updateScanner(float deltaSec) {
-    m_scanner.update(deltaSec, m_player->playerShip());
+    if (m_player->playerShip()) {
+        m_scanner.update(deltaSec, m_player->playerShip());
 
-    for(WorldObject* worldObject : m_scanner.foundWorldObjects()) {
-        if(worldObject->objectInfo().showOnHud()) {
-            HUDObjectDelegate* objectDelgate = new HUDObjectDelegate(this, worldObject);
-            addObjectDelegate(objectDelgate);
+        for (WorldObject* worldObject : m_scanner.foundWorldObjects()) {
+            if (worldObject->objectInfo().showOnHud()) {
+                HUDObjectDelegate* objectDelgate = new HUDObjectDelegate(this, worldObject);
+                addObjectDelegate(objectDelgate);
+            }
         }
-    }
 
-    for(WorldObject* worldObject : m_scanner.lostWorldObjects()) {
-        HUDObjectDelegate* objectDelgate = objectDelegate(worldObject);
-        if(objectDelgate) {
-            removeObjectDelegate(objectDelgate);
+        for (WorldObject* worldObject : m_scanner.lostWorldObjects()) {
+            HUDObjectDelegate* objectDelgate = objectDelegate(worldObject);
+            if (objectDelgate) {
+                removeObjectDelegate(objectDelgate);
+            }
+        }
+    } else { // no player ship, clear all delegates
+        for (WorldObject* worldObject : m_scanner.worldObjects()) {
+            HUDObjectDelegate* objectDelgate = objectDelegate(worldObject);
+            if (objectDelgate) {
+                removeObjectDelegate(objectDelgate);
+            }
         }
     }
 }
