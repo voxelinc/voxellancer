@@ -6,8 +6,7 @@
 #include "physics/physics.h"
 #include "voxeleffect/voxelexplosiongenerator.h"
 #include "worldobject/ship.h"
-#include "ai/character.h" //ship holds a unique_ptr to a character and we inherit from it (C2338)
-#include "ai/characters/dummycharacter.h"
+#include "ai/character.h"
 #include "ai/basictasks/directsuicidetask.h"
 #include "ai/boardcomputer.h"
 #include "resource/clustercache.h"
@@ -49,7 +48,7 @@ Rocket::Rocket(glm::vec3 position, glm::quat orientation, const glm::vec3& initi
     m_objectInfo.setShowOnHud(false);
     m_objectInfo.setCanLockOn(false);
 
-    m_character.reset(new DummyCharacter(*this, new DirectSuicideTask(*this, target)));
+    m_character->setTask(std::make_shared<DirectSuicideTask>(*this, target));
 }
 
 void Rocket::update(float deltaSec) {
