@@ -18,7 +18,7 @@ layout(location = 3) out vec3 f_modelposition;
 
 
 void main() {
-    if(g_deathTime[0] < time) {
+    if(g_deathTime[0] > time) {
         for(int i; i < gl_in.length(); i++) {
             gl_Position = gl_in[i].gl_Position;
             f_normal = g_normal[i];
