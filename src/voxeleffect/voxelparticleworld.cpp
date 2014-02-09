@@ -57,7 +57,7 @@ void VoxelParticleWorld::update(float deltaSec) {
             voxelParticle->markAsDead();
         }
     }
-    
+
     for (VoxelParticle* particle : m_particles) {
         if (particle->isDead()) {
             delete particle;

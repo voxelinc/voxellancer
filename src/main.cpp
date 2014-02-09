@@ -53,7 +53,7 @@ static void checkVersion() {
 
 static void checkOpenMP() {
     //omp_set_num_threads(4);
-#pragma omp parallel 
+#pragma omp parallel
     {
 #pragma omp master
         glow::debug("OpenMP with %; threads ", omp_get_num_threads());
@@ -173,7 +173,7 @@ int main(int argc, char* argv[]) {
 #ifdef WIN32 // TODO: find a way to correctly detect debug extension in linux
     glow::debugmessageoutput::enable();
 #endif
- 
+
 #ifdef WIN32
     wglSwapIntervalEXT(1); // glfw doesn't work!?
 #else
@@ -188,7 +188,6 @@ int main(int argc, char* argv[]) {
         std::srand((unsigned int)time(NULL));
 
         game = new Game();
-        game->initialize();
 
         if(clParser.hmd()) {
             game->hmdManager().setupHMD();

@@ -34,11 +34,10 @@ void GameScenario::populateWorld() {
     normandy->objectInfo().setName("Normandy");
     normandy->objectInfo().setShowOnHud(true);
     normandy->objectInfo().setCanLockOn(true);
-    normandy->setEngineSound(SoundManager::current()->create("data/sound/Rocket Thrusters.ogg"));
     m_world->god().scheduleSpawn(normandy);
     PatrolWaypointsTask* ntask = new PatrolWaypointsTask(*normandy,
         std::list<glm::vec3>{ glm::vec3(400, 0, 200), glm::vec3(-400, 0, -400),
-                                glm::vec3(-600, 0, -400), glm::vec3(0, 100, -600), 
+                                glm::vec3(-600, 0, -400), glm::vec3(0, 100, -600),
                                 glm::vec3(-100, 150, -900) });
     normandy->setCharacter(new DummyCharacter(*normandy, ntask));
 
@@ -53,7 +52,7 @@ void GameScenario::populateWorld() {
         m_world->god().scheduleSpawn(follower);
         PatrolWaypointsTask* ta = new PatrolWaypointsTask(*follower,
             std::list<glm::vec3>{ glm::vec3(400, 0, 200), glm::vec3(-400, 0, -400),
-                                    glm::vec3(-600, 0, -400), glm::vec3(0, 100, -600), 
+                                    glm::vec3(-600, 0, -400), glm::vec3(0, 100, -600),
                                     glm::vec3(-100, 150, -900) });
         follower->setCharacter(new DummyCharacter(*follower, ta));
         follower->formationLogic()->joinFormation(normandy);
@@ -69,7 +68,7 @@ void GameScenario::populateWorld() {
     leader->objectInfo().setCanLockOn(true);
     m_world->god().scheduleSpawn(leader);
     PatrolWaypointsTask* ltask = new PatrolWaypointsTask(*leader,
-        std::list<glm::vec3>{ glm::vec3(500, 0, 500), glm::vec3(-500, 0, 500), 
+        std::list<glm::vec3>{ glm::vec3(500, 0, 500), glm::vec3(-500, 0, 500),
                                 glm::vec3(-500, 0, -500), glm::vec3(500, 0, -500) });
     leader->setCharacter(new DummyCharacter(*leader, ltask));
 
@@ -83,7 +82,7 @@ void GameScenario::populateWorld() {
         follower->objectInfo().setCanLockOn(true);
         m_world->god().scheduleSpawn(follower);
         PatrolWaypointsTask* ta = new PatrolWaypointsTask(*follower,
-            std::list<glm::vec3>{ glm::vec3(500, 0, 500), glm::vec3(-500, 0, 500), 
+            std::list<glm::vec3>{ glm::vec3(500, 0, 500), glm::vec3(-500, 0, 500),
                                     glm::vec3(-500, 0, -500), glm::vec3(500, 0, -500) });
         follower->setCharacter(new DummyCharacter(*follower, ta));
         follower->formationLogic()->joinFormation(leader);
