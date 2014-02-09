@@ -3,11 +3,12 @@
 
 class Ship;
 
-class ElevatedTask {
+class AiTask {
 public:
-    ElevatedTask(Ship& ship);
+    AiTask(Ship& ship);
 
     virtual void update(float deltaSec);
+    virtual bool isInProgress();
 
 protected:
     Ship& m_ship;

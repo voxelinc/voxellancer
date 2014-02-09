@@ -9,8 +9,8 @@
 #include "utils/geometryhelper.h"
 
 
-static const float s_minActDistance = 0.1f;
-static const float s_minActAngle = glm::radians(1.0f);
+static const float s_minActDistance = 0.5f;
+static const float s_minActAngle = glm::radians(5.0f);
 static const float s_minAutoUpAngle = glm::radians(10.0f);
 
 BoardComputer::BoardComputer(Ship& ship) :
@@ -18,14 +18,28 @@ BoardComputer::BoardComputer(Ship& ship) :
 {
 }
 
-void BoardComputer::moveTo(const glm::vec3& position) {
+void BoardComputer::moveTo(const glm::vec3& position, bool decelerate) {
     glm::vec3 projectedPosition = m_ship.physics().projectedTransformIn(1.0f).position();
     glm::vec3 delta = position - projectedPosition;
-
-    glm::vec3 direction = glm::inverse(m_ship.transform().orientation()) * glm::normalize(delta);
     float distance = glm::length(delta);
 
     if (distance > s_minActDistance) {
+        if (!decelerate && m_ship.physics().speed() != glm::vec3(0)) {
+            glm::vec3 currentPosition = m_ship.transform().position();
+            float angleFromProjected = GeometryHelper::angleBetween(m_ship.physics().speed(), delta);
+            float angleFromCurrent = GeometryHelper::angleBetween(m_ship.physics().speed(), position - currentPosition);
+
+            if (angleFromCurrent < glm::quarter_pi<float>() && angleFromProjected > glm::half_pi<float>()) {
+                // the projection is already past the target, but we don't want to deaccelerate
+                // instead, project the target from our current position to a sphere around our position
+                float projectionDistance = glm::length(projectedPosition - currentPosition);
+                glm::vec3 fakePosition = currentPosition + glm::normalize(position - currentPosition) * 1.5f * projectionDistance;
+
+                delta = fakePosition - projectedPosition;
+            }
+        }
+
+        glm::vec3 direction = glm::inverse(m_ship.transform().orientation()) * glm::normalize(delta);
         m_ship.accelerate(direction);
     }
 }
@@ -54,8 +68,10 @@ void BoardComputer::rotateUpTo(const glm::vec3& up) {
     glm::vec3 upDirection = glm::vec3(0, 1, 0);
     glm::vec3 newUpDirection = glm::inverse(m_ship.transform().orientation()) * glm::normalize(up);
     glm::quat upRotation = GeometryHelper::quatFromTo(upDirection, newUpDirection);
-    glm::vec3 euler = glm::eulerAngles(upRotation);
-    m_ship.accelerateAngular(glm::normalize(euler));
+    if (glm::abs(glm::angle(upRotation)) > s_minActAngle) {
+        glm::vec3 euler = glm::eulerAngles(upRotation);
+        m_ship.accelerateAngular(glm::normalize(euler) * 0.5f);
+    }
 }
 
 void BoardComputer::rotateUpAuto(const glm::quat& rotation) {
@@ -65,7 +81,7 @@ void BoardComputer::rotateUpAuto(const glm::quat& rotation) {
         glm::vec3 newUpDirection = glm::vec3(0, 0, 1) + (rotation * glm::vec3(0, 0, -1));
         glm::quat upRotation = GeometryHelper::quatFromTo(upDirection, newUpDirection);
         glm::vec3 euler = glm::eulerAngles(upRotation);
-        m_ship.accelerateAngular(glm::normalize(euler));
+        m_ship.accelerateAngular(glm::normalize(euler) * 0.5f);
     }
 }
 

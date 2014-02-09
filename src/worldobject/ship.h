@@ -13,6 +13,7 @@ class Hardpoint;
 class Engine;
 class Character;
 class Sound;
+class FormationLogic;
 class BoardComputer;
 
 class Ship : public WorldObject {
@@ -40,6 +41,7 @@ public:
     float minAimDistance();
     float maxAimDistance();
     BoardComputer* boardComputer();
+    FormationLogic* formationLogic();
 
     virtual void accelerate(const glm::vec3& direction) override;
     virtual void accelerateAngular(const glm::vec3& axis) override;
@@ -54,6 +56,7 @@ protected:
 
     std::unique_ptr<Character> m_character;
     std::unique_ptr<BoardComputer> m_boardComputer;
+    std::unique_ptr<FormationLogic> m_formationLogic;
     std::shared_ptr<Sound> m_sound;
     glm::vec3 m_enginePos;
 

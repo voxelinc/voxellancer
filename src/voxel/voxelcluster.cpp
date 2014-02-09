@@ -87,6 +87,14 @@ void VoxelCluster::move(const glm::vec3& vec3) {
     m_transform.move(vec3);
 }
 
+const glm::vec3& VoxelCluster::position() {
+    return m_transform.position();
+}
+
+const glm::quat& VoxelCluster::orientation() {
+    return m_transform.orientation();
+}
+
 void VoxelCluster::setOrientation(const glm::quat& orientation) {
     m_transform.setOrientation(orientation);
 }
