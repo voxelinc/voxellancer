@@ -25,7 +25,7 @@ glm::vec3 Aimer::aim() {
 
     WorldTreeQuery wordltreequery(&World::instance()->worldTree(), &m_ray, nullptr, &m_worldObject->collisionFilter());
 
-    std::set<Voxel*> intersectingVoxels = wordltreequery.intersectingVoxels();
+    std::unordered_set<Voxel*> intersectingVoxels = wordltreequery.intersectingVoxels();
 
     if(!intersectingVoxels.empty()) {
         return nearestTarget(intersectingVoxels);
@@ -35,7 +35,7 @@ glm::vec3 Aimer::aim() {
     }
 }
 
-glm::vec3 Aimer::nearestTarget(const std::set<Voxel*>& voxels) const {
+glm::vec3 Aimer::nearestTarget(const std::unordered_set<Voxel*>& voxels) const {
     Voxel* anyVoxel = *voxels.begin();
 
     float minDistance = distanceTo(anyVoxel);

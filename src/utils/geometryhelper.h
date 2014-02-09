@@ -1,6 +1,6 @@
 #pragma once
 
-#include <set>
+#include <unordered_set>
 
 #include "glm/glm.hpp"
 #include "glm/gtc/quaternion.hpp"
@@ -16,7 +16,7 @@ public:
     // Returns the quaternion from (0,0,-1) to dir
     static glm::quat quatFromViewDirection(const glm::vec3& dir);
     // Return the WorldObject from objects that is closest to self, measured position to position
-    static WorldObject* closestObject(WorldObject& self, std::set<WorldObject*>* objects);
+    static WorldObject* closestObject(WorldObject& self, std::unordered_set<WorldObject*>* objects);
 
 };
 

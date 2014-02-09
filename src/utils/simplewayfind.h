@@ -1,6 +1,6 @@
 #pragma once
 
-#include <set>
+#include <unordered_set>
 
 #include "glm/glm.hpp"
 #include "glm/gtc/quaternion.hpp"
@@ -8,7 +8,7 @@
 
 class WorldObject;
 
-// Very simple wayfinding algorithm. 
+// Very simple wayfinding algorithm.
 // Checks for an obstacle on the direct path to the target and aims next to it until the line is free again
 class SimpleWayfind {
 public:

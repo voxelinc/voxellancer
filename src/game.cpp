@@ -19,6 +19,7 @@ Game::Game():
     m_scenario(this)
 {
     m_scenario.load();
+
     m_viewer.setScene(&m_gameScene);
     m_viewer.setCameraHead(&m_player.cameraDolly().cameraHead());
 }
