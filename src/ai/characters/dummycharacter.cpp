@@ -1,8 +1,10 @@
 #include "dummycharacter.h"
 
-#include "ai/elevatedtask.h"
+#include "ai/aitask.h"
+#include "ai/formationlogic.h"
+#include "worldobject/ship.h"
 
-DummyCharacter::DummyCharacter(Ship& ship, ElevatedTask* task) :
+DummyCharacter::DummyCharacter(Ship& ship, AiTask* task) :
     Character(ship),
     m_task(task)
 {

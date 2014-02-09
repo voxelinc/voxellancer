@@ -2,13 +2,15 @@
 
 #include <glow/logging.h>
 
+#include "utils/glmisfinite.h"
+
 Transform::Transform(glm::vec3 center, float scale) :
     m_position(0),
     m_orientation(),
     m_center(center),
     m_scale(scale)
 {
-    assert(std::isfinite(center.x) && std::isfinite(center.y) && std::isfinite(center.z));
+    assert(std::isfinite(center));
 }
 
 Transform::Transform(const Transform& transform, const glm::vec3& positionDelta, const glm::quat& orientationDelta):
@@ -16,8 +18,8 @@ Transform::Transform(const Transform& transform, const glm::vec3& positionDelta,
 {
     moveWorld(positionDelta);
     rotate(orientationDelta);
-    assert(std::isfinite(m_center.x) && std::isfinite(m_center.y) && std::isfinite(m_center.z));
-    assert(std::isfinite(m_orientation.x) && std::isfinite(m_orientation.y) && std::isfinite(m_orientation.z) && std::isfinite(m_orientation.w));
+    assert(std::isfinite(m_center));
+    assert(std::isfinite(m_orientation));
 }
 
 Transform::~Transform() {
@@ -30,7 +32,7 @@ const glm::quat& Transform::orientation() const {
 
 void Transform::setOrientation(const glm::quat& quat){
     m_orientation = quat;
-    assert(std::isfinite(m_orientation.x) && std::isfinite(m_orientation.y) && std::isfinite(m_orientation.z) && std::isfinite(m_orientation.w));
+    assert(std::isfinite(m_orientation));
 }
 
 const glm::vec3 &Transform::position() const {
@@ -38,7 +40,7 @@ const glm::vec3 &Transform::position() const {
 }
 
 void Transform::setPosition(const glm::vec3& pos){
-    assert(std::isfinite(pos.x) && std::isfinite(pos.y) && std::isfinite(pos.z));
+    assert(std::isfinite(pos));
     m_position = pos;
 }
 
@@ -55,12 +57,12 @@ void Transform::moveWorld(const glm::vec3& dist) {
 // rotate around local axis
 void Transform::rotate(const glm::quat &qrot) {
     m_orientation = m_orientation * qrot;
-    assert(std::isfinite(m_orientation.x) && std::isfinite(m_orientation.y) && std::isfinite(m_orientation.z) && std::isfinite(m_orientation.w));
+    assert(std::isfinite(m_orientation));
 }
 
 void Transform::rotateWorld(const glm::quat &qrot) {
     m_orientation = qrot * m_orientation;
-    assert(std::isfinite(m_orientation.x) && std::isfinite(m_orientation.y) && std::isfinite(m_orientation.z) && std::isfinite(m_orientation.w));
+    assert(std::isfinite(m_orientation));
 }
 
 const glm::mat4 Transform::matrix() const {
@@ -90,7 +92,7 @@ const glm::vec3& Transform::center() const {
 }
 
 void Transform::setCenter(const glm::vec3& center) {
-    assert(std::isfinite(center.x) && std::isfinite(center.y) && std::isfinite(center.z));
+    assert(std::isfinite(center));
     m_center = center;
 }
 
