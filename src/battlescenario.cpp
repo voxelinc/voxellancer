@@ -36,6 +36,7 @@ void BattleScenario::populate(Game* game) {
     playerShip->setPosition(glm::vec3(0, 0, 10));
     playerShip->objectInfo().setName("basicship");
     playerShip->objectInfo().setShowOnHud(false);
+    playerShip->objectInfo().setCanLockOn(false);
     world->god().scheduleSpawn(playerShip);
     game->player().setShip(playerShip);
 
@@ -69,7 +70,7 @@ void BattleScenario::populateBattle(int numberOfEnemies1, int numberOfEnemies2) 
     std::vector<Ship*> fleet2;
     for (int e = 0; e < numberOfEnemies1; e++) {
         Ship *ship = new Ship();
-        float r = 1000;
+        float r = 400;
         ship->move(RandVec3::rand(0.0f, r) + glm::vec3(-200, 0, -200));
         ship->objectInfo().setName("enemy2");
         ship->objectInfo().setShowOnHud(true);
@@ -80,7 +81,7 @@ void BattleScenario::populateBattle(int numberOfEnemies1, int numberOfEnemies2) 
     }
     for (int e = 0; e < numberOfEnemies2; e++) {
         Ship *ship = new Ship();
-        float r = 1000;
+        float r = 400;
         ship->move(RandVec3::rand(0.0f, r) + glm::vec3(200, 0, -200));
         ship->objectInfo().setName("enemy1");
         ship->objectInfo().setShowOnHud(true);
