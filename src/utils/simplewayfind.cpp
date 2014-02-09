@@ -15,7 +15,7 @@ glm::vec3 SimpleWayfind::calculateTravelPoint(WorldObject& object, glm::vec3 tar
     filter.setCollideableWith(CollisionFilterClass::Rocket, false);
 
     Capsule capsule = Capsule(object.transform().position(), targetPoint - object.transform().position(), object.bounds().sphere().radius());
-    std::unordered_set<WorldObject*> obstacles = WorldTreeQuery(&World::instance()->worldTree(), &capsule, nullptr, &object.collisionFilter()).intersectingWorldObjects();
+    std::unordered_set<WorldObject*> obstacles = WorldTreeQuery(&World::instance()->worldTree(), &capsule, nullptr, &filter).intersectingWorldObjects();
 
     if (!obstacles.empty()) {
         WorldObject* obstacle = GeometryHelper::closestObject(object, &obstacles);
@@ -29,14 +29,14 @@ glm::vec3 SimpleWayfind::calculateTravelPoint(WorldObject& object, glm::vec3 tar
 
 glm::vec3 SimpleWayfind::calculateEvasionDirectionFor(WorldObject& self, WorldObject& obstacle, const glm::vec3& targetPoint) {
     // look at the boundingSphere and find out which direction is the shortest way around
-    glm::vec3 toTarget = targetPoint - self.transform().position();
-    glm::vec3 toObject = obstacle.transform().position() - self.transform().position();
+    glm::vec3 toTarget = targetPoint - self.position();
+    glm::vec3 toObject = obstacle.position() - self.position();
 
     float dotP = glm::dot(toTarget, toObject);
     float cosAlpha = dotP / (glm::length(toTarget) * glm::length(toObject));
 
-    glm::vec3 crossPoint = self.transform().position() + (glm::normalize(toTarget) * cosAlpha * glm::length(toObject));
-    return glm::normalize(crossPoint - obstacle.transform().position());
+    glm::vec3 crossPoint = self.position() + (glm::normalize(toTarget) * cosAlpha * glm::length(toObject));
+    return glm::normalize(crossPoint - obstacle.position());
 }
 
 glm::vec3 SimpleWayfind::calculateEvasionPointFor(WorldObject& self, WorldObject& obstacle, const glm::vec3& targetPoint) {
@@ -45,6 +45,6 @@ glm::vec3 SimpleWayfind::calculateEvasionPointFor(WorldObject& self, WorldObject
     // We will not actually get that far because the line of sight will most likely be free earlier
     float evasionDistance = (obstacle.bounds().sphere().radius()
         + self.bounds().sphere().radius()) * 2.f;
-    return obstacle.transform().position() + evasionDirection * evasionDistance;
+    return obstacle.position() + evasionDirection * evasionDistance;
 }
 
