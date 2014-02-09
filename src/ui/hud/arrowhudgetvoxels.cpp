@@ -36,7 +36,9 @@ ArrowHudget* ArrowHudgetVoxels::hudget() {
 
 void ArrowHudgetVoxels::draw() {
     calculateAngles();
-    m_arrow.transform().setPosition(m_hudget->worldPosition());
+    //m_hudget->setDirectionAngle(glm::radians(30.0f));
+    m_arrow.transform().setPosition(m_hudget->worldPosition(m_targetPoint));
+    //m_arrow.transform().setPosition(m_hudget->);
     m_arrow.transform().setOrientation(m_hudget->worldOrientation());
 
     VoxelRenderer::instance()->draw(&m_arrow);
@@ -48,26 +50,37 @@ void ArrowHudgetVoxels::calculateAngles() {
 
     glm::vec3 lookAt(0, 0, -1.0f);
 
-    glm::vec3 vecX(m_hudget->localDirection().x, 0, m_hudget->localDirection().z);
+    glm::vec3 vecX(m_hudget->localDirection().x, 0, glm::abs(m_hudget->localDirection().z)*-1.0f);
     glm::vec3 vecY(0, m_hudget->localDirection().y, m_hudget->localDirection().z);
 
     m_angleX = glm::degrees(glm::acos(glm::dot(vecX, lookAt) / (glm::length(vecX) * glm::length(lookAt))));
     m_angleY = glm::degrees(glm::acos(glm::dot(vecY, lookAt) / (glm::length(vecY) * glm::length(lookAt))));
 
-    if (m_angleX < maxAngleX)
-        return;
 
-    float lengthX = glm::length(m_hudget->localDirection());
+    m_targetPoint = m_hudget->localDirection();
+
+    if (m_angleX < maxAngleX && m_angleY < maxAngleY){
+        return;
+    }
+    if (m_angleX > maxAngleX){
+        glm::vec3 distanceX = glm::normalize(vecX) - lookAt;
+        distanceX *= maxAngleX / m_angleX;
+        glm::vec3 targetX = glm::normalize(lookAt + distanceX);
+        m_targetPoint.x = targetX.x;
+        m_targetPoint.z = targetX.z;
+    }
+    return;
+
     float lengthY = glm::length(m_hudget->localDirection());
 
-    glm::vec3 distanceX = glm::normalize(vecX) - lookAt;
     glm::vec3 distanceY = glm::normalize(vecY) - lookAt;
 
-    distanceX *= maxAngleX / m_angleX;
     distanceY *= maxAngleX / m_angleX;
 
-    glm::vec3 targetX = glm::normalize(lookAt + distanceX);
     glm::vec3 targetY = glm::normalize(lookAt + distanceY);
 
+    //glm::vec3 targetPoint(targetX.x, targetY.y, targetX.z);
+    //targetPoint = glm::normalize(targetPoint);
+    //m_targetPoint = targetPoint;
     printf("x: %f y: %f\r", m_angleX, m_angleY);
 }

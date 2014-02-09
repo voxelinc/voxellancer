@@ -21,6 +21,7 @@ protected:
     VoxelCluster m_arrow;
 
     float m_angleX, m_angleY;
+    glm::vec3 m_targetPoint;
 
     void calculateAngles();
 
