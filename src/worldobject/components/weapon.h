@@ -8,8 +8,9 @@
 #include "equipment.h"
 
 
-class WorldObject;
 class Hardpoint;
+class Projectile;
+class WorldObject;
 
 enum class WeaponType {
     Gun,

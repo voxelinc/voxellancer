@@ -24,5 +24,7 @@ public:
 protected:
     WorldObject* m_creator;
     float m_lifetime;
+
+    virtual void onLifetimeOver();
 };
 

@@ -6,8 +6,6 @@
 #include <glowutils/Timer.h>
 
 #include "ai/characters/dummycharacter.h"
-#include "ai/elevatedtasks/dummyelevatedtask.h"
-#include "ai/basictask.h"
 
 #include "resource/clustercache.h"
 

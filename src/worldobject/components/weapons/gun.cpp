@@ -39,13 +39,13 @@ void Gun::update(float deltaSec) {
 void Gun::setupBullet(Bullet* bullet, const glm::vec3& point) {
     Transform bulletTransform(bullet->transform());
 
-    glm::quat shipOrientation = hardpoint()->components()->worldObject()->transform().orientation();
-    glm::vec3 bulletDirection = glm::normalize(point - hardpoint()->voxel()->position());
+    glm::quat shipOrientation = m_hardpoint->components()->worldObject()->transform().orientation();
+    glm::vec3 bulletDirection = glm::normalize(point - m_hardpoint->voxel()->position());
     glm::vec3 hardpointDirection = shipOrientation * glm::vec3(0, 0, -1);
     glm::vec3 bulletUp = glm::cross(bulletDirection, hardpointDirection);
 
     //bulletTransform.setOrientation(Math::quatFromDir(bulletDirection));
-    bulletTransform.setOrientation(hardpoint()->components()->worldObject()->transform().orientation());
+    bulletTransform.setOrientation(m_hardpoint->components()->worldObject()->transform().orientation());
 
     if (bulletUp != glm::vec3(0)) {
         glm::vec3 rotationAxis = glm::normalize(bulletUp);
@@ -57,7 +57,7 @@ void Gun::setupBullet(Bullet* bullet, const glm::vec3& point) {
     //TODO: #300
     float bulletLength = bullet->bounds().minimalGridAABB().extent(ZAxis) * bullet->transform().scale();
     float spawnDistance = glm::root_two<float>() * bullet->transform().scale();
-    bulletTransform.setPosition(hardpoint()->voxel()->position() + bulletDirection * (bulletLength / 2.0f + spawnDistance));
+    bulletTransform.setPosition(m_hardpoint->voxel()->position() + bulletDirection * (bulletLength / 2.0f + spawnDistance));
 
     bullet->setTransform(bulletTransform);
 
@@ -66,5 +66,6 @@ void Gun::setupBullet(Bullet* bullet, const glm::vec3& point) {
         bulletTransform.orientation() * glm::vec3(0, 0, 5.0f)
     ));
 
-    bullet->setCreator(hardpoint()->components()->worldObject());
+    bullet->setCreator(m_hardpoint->components()->worldObject());
 }
+

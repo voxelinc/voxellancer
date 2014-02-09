@@ -39,8 +39,6 @@ public:
 
     VoxelRenderData* voxelRenderData();
 
-    void loadCluster(const std::string& key);
-
     virtual float emissiveness() const;
 
 

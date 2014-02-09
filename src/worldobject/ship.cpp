@@ -1,7 +1,8 @@
 #include "ship.h"
 
-#include "ai/character.h"
 #include "ai/boardcomputer.h"
+#include "ai/character.h"
+#include "ai/formationlogic.h"
 
 #include "collision/collisionfilter.h"
 
@@ -20,7 +21,8 @@ Ship::Ship():
 Ship::Ship(CollisionFilter* collisionFilter):
     WorldObject(collisionFilter),
     m_character(new Character(*this)),
-    m_boardComputer(new BoardComputer(*this)),
+    m_boardComputer(new BoardComputer(this)),
+    m_formationLogic(new FormationLogic(*this)),
     m_shipHandle(Handle<Ship>(this)),
     m_targetObjectHandle(Handle<WorldObject>(nullptr))
 {
@@ -68,6 +70,11 @@ Character* Ship::character() {
 BoardComputer* Ship::boardComputer() {
     return m_boardComputer.get();
 }
+
+FormationLogic* Ship::formationLogic() {
+    return m_formationLogic.get();
+}
+
 //
 //void Ship::setEngineSound(std::shared_ptr<Sound> sound) {
 //    m_sound = sound;
@@ -92,3 +99,5 @@ BoardComputer* Ship::boardComputer() {
 //        m_sound->stop();
 //    }
 //}
+
+

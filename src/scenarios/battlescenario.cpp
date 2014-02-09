@@ -5,8 +5,6 @@
 #include <glowutils/AutoTimer.h>
 
 #include "ai/characters/dummycharacter.h"
-#include "ai/elevatedtasks/dummyelevatedtask.h"
-#include "ai/basictask.h"
 #include "ai/basictasks/fighttask.h"
 
 #include "resource/clustercache.h"
@@ -52,6 +50,7 @@ void BattleScenario::populateWorld() {
     world->god().scheduleSpawn(playerShip);
 
     m_game->player().setShip(playerShip);
+
 
     populateBattle(4, 4);
 
@@ -110,7 +109,7 @@ void BattleScenario::spawnCapital(const std::vector<Ship*>& enemies) {
     for (Ship* enemy : enemies) {
         enemyHandles.push_back(enemy->handle());
     }
-    ship->setCharacter(new DummyCharacter(*ship, new DummyElevatedTask(*ship, new FightTask(*ship, enemyHandles))));
+    ship->setCharacter(new DummyCharacter(*ship, new FightTask(ship->boardComputer(), enemyHandles)));
     World::instance()->god().scheduleSpawn(ship);
 }
 
@@ -121,6 +120,7 @@ void BattleScenario::setTargets(const std::vector<Ship*>& fleet, const std::vect
     }
     for (Ship* ship : fleet) {
         std::random_shuffle(enemyHandles.begin(), enemyHandles.end());
-        ship->setCharacter(new DummyCharacter(*ship, new DummyElevatedTask(*ship, new FightTask(*ship, enemyHandles))));
+        ship->setCharacter(new DummyCharacter(*ship, new FightTask(ship->boardComputer(), enemyHandles)));
     }
 }
+

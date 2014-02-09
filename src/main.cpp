@@ -1,4 +1,5 @@
 #include <iostream>
+#include <omp.h>
 
 #ifdef WIN32
 #include <windows.h>
@@ -48,6 +49,15 @@ static void checkVersion() {
     glow::info("core profile: %;", glow::Version::currentVersionIsInCoreProfile() ? "true" : "false");
     glow::info("GLSL version: %;", glow::getString(GL_SHADING_LANGUAGE_VERSION));
     glow::info("GL Versionstring: %;\n", glow::Version::versionString());
+}
+
+static void checkOpenMP() {
+    //omp_set_num_threads(4);
+#pragma omp parallel
+    {
+#pragma omp master
+        glow::debug("OpenMP with %; threads ", omp_get_num_threads());
+    }
 }
 
 static void errorCallback(int error, const char* description) {
@@ -146,6 +156,7 @@ static void mainloop() {
 */
 static void loadWorldObjectConfigs() {
     PropertyManager::instance()->load("data/worldobjects/basicship.ini", "basicship");
+    PropertyManager::instance()->load("data/worldobjects/eagle.ini", "eagle");
     PropertyManager::instance()->load("data/worldobjects/specialbasicship.ini", "specialbasicship");
     PropertyManager::instance()->load("data/worldobjects/normandy.ini", "normandy");
     PropertyManager::instance()->load("data/worldobjects/gunbullet.ini", "gunbullet");
@@ -159,6 +170,7 @@ static void loadWorldObjectConfigs() {
 */
 static void loadEquipmentConfigs() {
     PropertyManager::instance()->load("data/equipment/engines/enginemk1.ini", "enginemk1");
+    PropertyManager::instance()->load("data/equipment/engines/superslowengine.ini", "superslowengine");
     PropertyManager::instance()->load("data/equipment/engines/piratethruster.ini", "piratethruster");
     PropertyManager::instance()->load("data/equipment/engines/rocketthrustermk1.ini", "rocketthrustermk1");
     PropertyManager::instance()->load("data/equipment/weapons/gun.ini", "gun");
@@ -195,6 +207,7 @@ int main(int argc, char* argv[]) {
     setCallbacks(window);
 
     checkVersion();
+    checkOpenMP();
 
     glewExperimental = GL_TRUE;
     if (glewInit() != GLEW_OK) {

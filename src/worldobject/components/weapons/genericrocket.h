@@ -16,5 +16,6 @@ public:
 
 protected:
     virtual void spawnExplosion() override;
+    virtual void onLifetimeOver() override;
 };
 

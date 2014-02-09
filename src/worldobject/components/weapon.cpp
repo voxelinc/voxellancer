@@ -3,6 +3,13 @@
 #include <algorithm>
 #include <iostream>
 
+#include "utils/geometryhelper.h"
+
+#include "voxel/specialvoxels/hardpointvoxel.h"
+
+#include "worldobject/components/hardpoint.h"
+#include "worldobject/components/weapons/projectile.h"
+
 
 Weapon::Weapon(WeaponType type, const std::string& equipmentKey):
     Equipment(equipmentKey),

@@ -25,7 +25,7 @@ static regexns::regex string_regex() { return regexns::regex(R"(^.*$)"); }
 static regexns::regex vec2_regex() { return regexns::regex(R"(^([-+]?\d*\.?\d*), ?([-+]?\d*\.?\d*)$)"); }
 static regexns::regex vec3_regex() { return regexns::regex(R"(^([-+]?\d*\.?\d*), ?([-+]?\d*\.?\d*), ?([-+]?\d*\.?\d*)$)"); }
 static regexns::regex vec4_regex() { return regexns::regex(R"(^([-+]?\d*\.?\d*), *([-+]?\d*\.?\d*), *([-+]?\d*\.?\d*), *([-+]?\d*\.?\d*)$)"); }
-static regexns::regex input_mapping_regex() { return regexns::regex(R"(^InputMapping\((\d+), ?(\d+), ?([-+]?\d*\.?\d*)\)$)"); }
+static regexns::regex input_mapping_regex() { return regexns::regex(R"(^InputMapping\((\d+), ?(\d+), ?([-+]?\d*\.?\d*), *([-+]?\d*\.?\d*)\)$)"); }
 static regexns::regex list_regex() { return regexns::regex(R"(^([a-zA-Z1-9]+)(, ?([a-zA-Z1-9]+))*$)"); }
 
 
@@ -84,9 +84,10 @@ static InputMapping inputMappingConverter(const std::string &s) {
 
     InputType type = static_cast<InputType>(std::stoi(matches[1]));
     int index = std::stoi(matches[2]);
-    float max_value = std::stof(matches[3]);
+    float maxValue = std::stof(matches[3]);
+    float idleValue = std::stof(matches[4]);
 
-    return InputMapping(type,index,max_value);
+    return InputMapping(type, index, maxValue, idleValue);
 }
 
 

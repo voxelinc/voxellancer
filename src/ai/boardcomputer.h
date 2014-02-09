@@ -10,27 +10,27 @@
 #include "worldobject/handle/handle.h"
 
 
-class Ship;
 class WorldObject;
 
-class BoardComputer
-{
+class BoardComputer {
 public:
-    BoardComputer(Ship& ship);
+    BoardComputer(WorldObject* worldObject);
+
+    WorldObject* worldObject();
 
     const EngineState& engineState() const;
 
-    void moveTo(const glm::vec3& position);
+    void moveTo(const glm::vec3& position, bool decelerate = true);
     void rotateTo(const glm::vec3& position, const glm::vec3& up = glm::vec3(0, 0, 0));
 
     void shootBullet(const std::vector<Handle<WorldObject>>& targets);
-    void shootRockets(Handle<WorldObject> target);
+    void shootRockets(Handle<WorldObject>& target);
 
     void update(float deltaSec);
 
 
 protected:
-    Ship& m_ship;
+    WorldObject* m_worldObject;
     EngineState m_engineState;
     bool m_overwriteEngineState;
 

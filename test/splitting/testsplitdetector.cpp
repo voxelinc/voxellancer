@@ -80,7 +80,7 @@ go_bandit([]() {
 
 
             // check if the split is the upper part of the voxel without the crucial voxel
-            SplitData* splitOff = detector.splitDataList().front();
+            std::shared_ptr<SplitData> splitOff = detector.splitDataList().front();
 
             AssertThat(splitOff->splitOffVoxels().size(), Equals(6));
 

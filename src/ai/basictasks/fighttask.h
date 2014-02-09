@@ -4,13 +4,12 @@
 #include <glm/glm.hpp>
 
 #include "worldobject/handle/handle.h"
-#include "ai/basictask.h"
+#include "ai/aitask.h"
 
 class Ship;
 class WorldObject;
 
-class FightTask : public BasicTask {
-
+class FightTask : public AiTask {
     enum State {
         IDLE,
         APPROACH,
@@ -19,7 +18,7 @@ class FightTask : public BasicTask {
     };
 
 public:
-    FightTask(Ship& ship, const std::vector<Handle<WorldObject>>& targets);
+    FightTask(BoardComputer* boardComputer, const std::vector<Handle<WorldObject>>& targets);
 
     virtual void update(float deltaSec);
     virtual void addTargets(const std::vector<Handle<WorldObject>>& targets);

@@ -44,6 +44,11 @@ void Projectile::update(float deltaSec) {
 
     if (m_lifetime <= 0.0f) {
         World::instance()->god().scheduleRemoval(this);
+        onLifetimeOver();
     }
+}
+
+void Projectile::onLifetimeOver() {
+
 }
 
