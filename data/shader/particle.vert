@@ -17,11 +17,11 @@ layout(location = 11) in float directinalDampening;
 layout(location = 12) in float angularDampening;
 
 // Output
-flat out vec3 g_normal;
-flat out float g_remainingLifetime;
-out vec3 g_color;
-out float g_emissiveness;
-out vec3 g_modelposition;
+layout(location = 0) out vec3 g_normal;
+layout(location = 1) out float g_deathTime;
+layout(location = 2) out vec3 g_color;
+layout(location = 3) out float g_emissiveness;
+layout(location = 4) out vec3 g_modelposition;
 
 
 // Uniforms
@@ -33,12 +33,11 @@ vec4 quat(vec3 euler);
 
 void main() {
     float timeDelta = time - creationTime;
-    g_remainingLifetime = deathTime - time;
+    g_deathTime = deathTime;
 
     vec3 particlePosition = directionalSpeed * timeDelta + creationPosition;
     vec3 particleEulers = angularSpeed * timeDelta + creationEulers;
     vec4 particleOrientation = quat(particleEulers);
-    g_remainingLifetime = deathTime - time;
     g_color = color.xyz;
     g_emissiveness = emissiveness;
     g_modelposition = v_vertex;
