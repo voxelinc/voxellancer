@@ -207,7 +207,7 @@ void InputHandler::processMouseUpdate() {
 }
 
 void InputHandler::processHMDUpdate() {
-    if(m_hmd) {
+    if (m_hmd) {
         m_player->cameraDolly().cameraHead().setRelativeOrientation(m_hmd->orientation());
     } else {
         m_player->cameraDolly().cameraHead().setRelativeOrientation(glm::quat());

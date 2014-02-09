@@ -13,7 +13,7 @@
 
 #include "worldobject/ship.h"
 
-#include "game.h"
+#include "gamestate/ingame.h"
 #include "world/world.h"
 #include "world/god.h"
 #include "utils/randvec.h"
@@ -23,7 +23,7 @@ BattleScenario::BattleScenario() {
 
 }
 
-void BattleScenario::populate(Game* game) {
+void BattleScenario::populate(InGame* inGame) {
     glowutils::AutoTimer t("Initialize Game");
 
 
@@ -39,7 +39,7 @@ void BattleScenario::populate(Game* game) {
     playerShip->objectInfo().setName("basicship");
     playerShip->objectInfo().setShowOnHud(false);
     world->god().scheduleSpawn(playerShip);
-    game->player().setShip(playerShip);
+    inGame->player().setShip(playerShip);
 
     // create enemy ai driven ship
     Ship *aitester = new Ship();

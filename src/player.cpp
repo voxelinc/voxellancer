@@ -4,13 +4,14 @@
 
 #include "worldobject/ship.h"
 
-#include "game.h"
+#include "gamestate/game.h"
+#include "gamestate/ingame.h"
 
 
-Player::Player(Game* game):
-    m_game(game),
+Player::Player(InGame* inGame):
+    m_inGame(inGame),
     m_playerShip(nullptr),
-    m_hud(this, &game->viewer())
+    m_hud(this, &m_inGame->game()->viewer())
 {
 
 }

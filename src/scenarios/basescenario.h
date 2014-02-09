@@ -1,17 +1,18 @@
 #pragma once
 
 class World;
-class Game;
+class InGame;
 
 class BaseScenario {
 public:
-    BaseScenario(Game* game);
+    BaseScenario(InGame* inGame);
 
     void load();
     void reset();
 
+
 protected:
-    Game* m_game;
+    InGame* m_inGame;
     World* m_world;
 
     virtual void createWorld();

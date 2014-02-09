@@ -1,5 +1,6 @@
 #include "viewer.h"
 
+#include <cassert>
 #include <iostream>
 
 #include "camera/camerahead.h"
@@ -28,11 +29,7 @@ Scene* Viewer::scene() {
 }
 
 void Viewer::setScene(Scene* scene) {
-    if (m_scene) {
-        m_scene->deactivate();
-    }
     m_scene = scene;
-    scene->activate();
 }
 
 void Viewer::setCameraHead(CameraHead* cameraHead) {
@@ -46,7 +43,7 @@ void Viewer::setViewport(const Viewport& viewport) {
     }
 }
 
-void Viewer::switchToMonoView() {;
+void Viewer::switchToMonoView() {
     m_view = std::unique_ptr<View>(new MonoView(m_viewport));
 }
 
@@ -55,6 +52,7 @@ void Viewer::switchToStereoView(const StereoRenderInfo& stereoRenderInfo) {
 }
 
 void Viewer::draw() {
+    assert(m_scene && m_cameraHead);
     m_view->draw(m_scene, m_cameraHead);
 }
 

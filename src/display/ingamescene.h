@@ -7,7 +7,7 @@
 #include "scene.h"
 
 
-class Game;
+class InGame;
 class VoxelRenderer;
 class HD3000Dummy;
 class SoundManager;
@@ -18,17 +18,15 @@ class Blitter;
 class RenderPipeline;
 class Player;
 
-class GameScene: public Scene {
+class InGameScene: public Scene {
 public:
-    GameScene(Game* game, Player* player);
-    ~GameScene();
+    InGameScene(InGame* inGame, Player* player);
+    ~InGameScene();
 
     void setPlayer(Player* player);
 
     virtual void draw(Camera* camera, glow::FrameBufferObject* target, EyeSide side = EyeSide::Left) override;
     virtual void update(float deltaSec) override;
-    virtual void activate() override;
-    virtual void deactivate() override;
 
     void setOutputBuffer(int i);
 
@@ -39,8 +37,7 @@ protected:
     std::unique_ptr<FrameBuffer> m_framebuffer;
     std::unique_ptr<HD3000Dummy> m_hd3000dummy;
     std::shared_ptr<VoxelRenderer> m_voxelRenderer;
-    std::shared_ptr<SoundManager> m_soundManager;
-    Game* m_game;
+    InGame* m_inGame;
     CameraHead* m_head;
     Player* m_player;
 

@@ -2,11 +2,11 @@
 
 #include "scenarios/basescenario.h"
 
-class Game;
+class InGame;
 
 class GameScenario : public BaseScenario {
 public:
-    GameScenario(Game* game);
+    GameScenario(InGame* inGame);
 
 protected:
     virtual void populateWorld() override;

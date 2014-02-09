@@ -1,10 +1,10 @@
-#include "gamescene.h"
+#include "ingamescene.h"
 
 #include "voxel/voxelrenderer.h"
 #include "voxeleffect/voxelparticleworld.h"
 #include "utils/hd3000dummy.h"
 #include "sound/soundmanager.h"
-#include "game.h"
+#include "gamestate/ingame.h"
 #include "rendering/framebuffer.h"
 #include "rendering/renderpipeline.h"
 #include "rendering/blitter.h"
@@ -16,11 +16,10 @@
 #include "rendering/buffernames.h"
 
 
-GameScene::GameScene(Game* game, Player* player):
-    m_game(game),
+InGameScene::InGameScene(InGame* inGame, Player* player):
+    m_inGame(inGame),
     m_voxelRenderer(VoxelRenderer::instance()),
     m_hd3000dummy(new HD3000Dummy()),
-    m_soundManager(new SoundManager()),
     m_blitter(new Blitter()),
     m_renderPipeline(RenderPipeline::getDefault(player)),
     m_framebuffer(new FrameBuffer(m_renderPipeline->bufferCount())),
@@ -29,9 +28,9 @@ GameScene::GameScene(Game* game, Player* player):
 {
 }
 
-GameScene::~GameScene() = default;
+InGameScene::~InGameScene() = default;
 
-void GameScene::draw(Camera* camera, glow::FrameBufferObject* target, EyeSide side) {
+void InGameScene::draw(Camera* camera, glow::FrameBufferObject* target, EyeSide side) {
     m_framebuffer->setResolution(camera->viewport());
     m_framebuffer->clear();
 
@@ -45,31 +44,22 @@ void GameScene::draw(Camera* camera, glow::FrameBufferObject* target, EyeSide si
     m_blitter->apply(*m_framebuffer, target);
 }
 
-void GameScene::activate() {
-    m_soundManager->activate();
-}
-
-void GameScene::deactivate() {
-    m_soundManager->deactivate();
-}
-
-void GameScene::update(float deltaSec) {
+void InGameScene::update(float deltaSec) {
     m_renderPipeline->update(deltaSec);
-    m_soundManager->setListener(m_player->cameraPosition(), m_player->cameraOrientation());
 }
 
-void GameScene::setOutputBuffer(int i) {
+void InGameScene::setOutputBuffer(int i) {
     m_currentOutputBuffer = glm::min(i, m_renderPipeline->bufferCount() - 1);
 }
 
-void GameScene::drawGame(Camera* camera) {
+void InGameScene::drawGame(Camera* camera) {
     World::instance()->skybox().draw(camera);
 
     m_voxelRenderer->prepareDraw(camera);
     for (WorldObject* worldObject : World::instance()->worldObjects()) {
         VoxelRenderer::instance()->draw(worldObject);
     }
-    m_game->player().hud().draw();
+    m_inGame->player().hud().draw();
     m_voxelRenderer->afterDraw();
 
     World::instance()->voxelParticleWorld().draw(*camera);

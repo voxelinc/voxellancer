@@ -66,7 +66,6 @@ go_bandit([](){
         SoundManager soundManager;
 
         before_each([&]() {
-            soundManager.activate();
             World::reset();
             world = World::instance();
         });
@@ -129,7 +128,7 @@ go_bandit([](){
 
         it("test global performance", [&]() {
             Ship *ship;
-            Ship *normandy;            
+            Ship *normandy;
             WorldObject *planet;
             {
                 glowutils::AutoTimer t("init perftest");

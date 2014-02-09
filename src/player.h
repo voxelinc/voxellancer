@@ -14,12 +14,11 @@
 class Camera;
 class CameraDolly;
 class HUD;
-
-class Game;
+class InGame;
 
 class Player {
 public:
-    Player(Game* game);
+    Player(InGame* inGame);
 
     void setShip(Ship *ship);
 
@@ -39,7 +38,7 @@ public:
 
 
 protected:
-    Game* m_game;
+    InGame* m_inGame;
     Handle<Ship> m_playerShip;
     CameraDolly m_cameraDolly;
     HUD m_hud;

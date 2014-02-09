@@ -31,7 +31,7 @@
 
 #include "ui/inputhandler.h"
 
-#include "game.h"
+#include "gamestate/game.h"
 
 
 static GLint MajorVersionRequire = 3;
@@ -53,7 +53,7 @@ static void checkVersion() {
 
 static void checkOpenMP() {
     //omp_set_num_threads(4);
-#pragma omp parallel 
+#pragma omp parallel
     {
 #pragma omp master
         glow::debug("OpenMP with %; threads ", omp_get_num_threads());
@@ -68,7 +68,7 @@ static void resizeCallback(GLFWwindow* window, int width, int height) {
     glow::info("Resizing viewport to %;x%;", width, height);
     if (width > 0 && height > 0) {
         glViewport(0, 0, width, height);
-        game->inputHandler().resizeEvent(width, height);
+//        game->inputHandler().resizeEvent(width, height);
         game->viewer().setViewport(Viewport(0, 0, width, height));
     }
 }
@@ -84,10 +84,10 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
         PropertyManager::instance()->load("data/config.ini");
     }
     if (key >= GLFW_KEY_1 && key <= GLFW_KEY_9 && action == GLFW_PRESS) {
-        game->setOutputBuffer(key-GLFW_KEY_1);
+//        game->setOutputBuffer(key-GLFW_KEY_1);
     }
 
-	game->inputHandler().keyCallback(key, scancode, action, mods);
+//	game->inputHandler().keyCallback(key, scancode, action, mods);
 }
 
 static void mouseButtonCallback(GLFWwindow* window, int Button, int Action, int mods) {
@@ -108,12 +108,14 @@ void setCallbacks(GLFWwindow* window) {
 static void mainloop() {
     glow::debug("Entering mainloop");
     double time = glfwGetTime();
+
+    game->start();
+
     while (!glfwWindowShouldClose(glfwGetCurrentContext())) {
         double delta = glfwGetTime() - time;
         time += delta;
 
         game->update(static_cast<float>(delta));
-        game->draw();
 
         glfwSwapBuffers(glfwGetCurrentContext());
         glfwPollEvents();
@@ -173,7 +175,7 @@ int main(int argc, char* argv[]) {
 #ifdef WIN32 // TODO: find a way to correctly detect debug extension in linux
     glow::debugmessageoutput::enable();
 #endif
- 
+
 #ifdef WIN32
     wglSwapIntervalEXT(1); // glfw doesn't work!?
 #else
@@ -188,7 +190,6 @@ int main(int argc, char* argv[]) {
         std::srand((unsigned int)time(NULL));
 
         game = new Game();
-        game->initialize();
 
         if(clParser.hmd()) {
             game->hmdManager().setupHMD();
@@ -200,7 +201,7 @@ int main(int argc, char* argv[]) {
 
         int width, height;
         glfwGetFramebufferSize(window, &width, &height);
-        game->inputHandler().resizeEvent(width, height);
+        //game->inputHandler().resizeEvent(width, height);
 
         mainloop();
 
