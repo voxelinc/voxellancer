@@ -28,6 +28,7 @@ protected:
     void onMemberJoin(SquadLogic* member);
     void onMemberLeave(SquadLogic* member);
     glm::vec3 formationPositionFor(SquadLogic* member);
+    glm::vec3 calculateFormationPosition(SquadLogic* member, int position);
 
     Ship& m_ship;
     SquadLogic* m_leader;

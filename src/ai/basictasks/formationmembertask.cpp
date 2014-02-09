@@ -3,6 +3,7 @@
 #include "worldobject/ship.h"
 #include "ai/squadlogic.h"
 
+
 FormationMemberTask::FormationMemberTask(Ship& ship, Ship* leader) :
     AiTask(ship),
     m_flyTask(ship)
@@ -18,3 +19,4 @@ void FormationMemberTask::update(float deltaSec) {
         m_flyTask.update(deltaSec);
     }
 }
+

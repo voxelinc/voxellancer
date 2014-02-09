@@ -17,6 +17,7 @@ public:
 
     virtual void update(float deltaSec) override;
 
+
 protected:
     FlyToTask m_flyTask;
 };

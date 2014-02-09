@@ -44,7 +44,7 @@ glm::vec3 SquadLogic::formationPosition() {
 
 glm::vec3 SquadLogic::formationUp() {
     assert(m_leader);
-    return m_leader->ship()->transform().orientation() * glm::vec3(0, 1, 0);
+    return m_leader->ship()->orientation() * glm::vec3(0, 1, 0);
 }
 
 bool SquadLogic::inFormation() {
@@ -105,20 +105,16 @@ glm::vec3 SquadLogic::formationPositionFor(SquadLogic* member) {
     assert(it != m_members.end());
     size_t position = it - m_members.begin();
     
-    // this algorithm can be indefinitely complex. for now, build two "wings"
-    if (position % 2 == 0) { //right wing
-        float distance = m_ship.bounds().sphere().radius();
-        for (int i = 0; i < position; i += 2) {
-            distance += 2 * m_members[i]->ship()->bounds().sphere().radius() + 10;
-        }
-        distance += member->ship()->bounds().sphere().radius() + 10;
-        return m_ship.transform().position() + m_ship.physics().speed() + m_ship.transform().orientation() * (distance * glm::normalize(glm::vec3(1, 0, 1)));
-    } else { // left wing
-        float distance = m_ship.bounds().sphere().radius();
-        for (int i = 1; i < position; i += 2) {
-            distance += 2 * m_members[i]->ship()->bounds().sphere().radius() + 10;
-        }
-        distance += member->ship()->bounds().sphere().radius() + 10;
-        return m_ship.transform().position() + m_ship.physics().speed() + m_ship.transform().orientation() * (distance * glm::normalize(glm::vec3(-1, 0, 1)));
+    return calculateFormationPosition(member, position);
+}
+
+glm::vec3 SquadLogic::calculateFormationPosition(SquadLogic* member, int position) {
+    float distance = m_ship.bounds().sphere().radius();
+    for (int i = (position%2); i < position; i += 2) {
+        distance += 2 * m_members[i]->ship()->bounds().sphere().radius() + 10;
     }
+    distance += member->ship()->bounds().sphere().radius() + 10;
+    glm::vec3 direction = position % 2 ? glm::vec3(1, 0, 1) : glm::vec3(-1, 0, 1);
+
+    return m_ship.position() + m_ship.physics().speed() + m_ship.orientation() * (distance * glm::normalize(direction));
 }

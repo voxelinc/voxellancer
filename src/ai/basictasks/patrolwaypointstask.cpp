@@ -3,6 +3,7 @@
 #include "worldobject/ship.h"
 #include "ai/squadlogic.h"
 
+
 PatrolWaypointsTask::PatrolWaypointsTask(Ship& ship, std::list<glm::vec3> points) :
     AiTask(ship),
     m_points(points),
@@ -16,7 +17,8 @@ void PatrolWaypointsTask::update(float deltaSec) {
     if (m_ship.squadLogic()->inFormation()) {
         m_formationTask.update(deltaSec);
     } else {
-        if (glm::length(*m_currentPoint - m_ship.transform().position()) < m_ship.bounds().sphere().radius()){
+        float distance = glm::length(*m_currentPoint - m_ship.transform().position());
+        if (distance < m_ship.bounds().sphere().radius()){
             m_currentPoint++;
             if (m_currentPoint == m_points.end()) {
                 m_currentPoint = m_points.begin();
@@ -26,3 +28,4 @@ void PatrolWaypointsTask::update(float deltaSec) {
         m_flyTask.update(deltaSec);
     }
 }
+
