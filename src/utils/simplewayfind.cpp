@@ -14,7 +14,7 @@ glm::vec3 SimpleWayfind::calculateTravelPoint(WorldObject& object, glm::vec3 tar
     filter.setCollideableWith(CollisionFilterClass::Rocket, false);
 
     Capsule capsule = Capsule(object.transform().position(), targetPoint - object.transform().position(), object.bounds().sphere().radius());
-    std::set<WorldObject*> obstacles = WorldTreeQuery(&World::instance()->worldTree(), &capsule, nullptr, &object.collisionFilter()).intersectingWorldObjects();
+    std::set<WorldObject*> obstacles = WorldTreeQuery(&World::instance()->worldTree(), &capsule, nullptr, &filter).intersectingWorldObjects();
 
     if (!obstacles.empty()) {
         WorldObject* obstacle = GeometryHelper::closestObject(object, &obstacles);
