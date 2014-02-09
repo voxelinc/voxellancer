@@ -33,8 +33,8 @@ VoxelParticleWorld::VoxelParticleWorld():
     m_expireCheck(this),
     m_intersectionCheck(this),
     m_gpuParticleBufferInvalid(false),
-    m_gpuParticleBufferInvalidBegin(0.0f),
-    m_gpuParticleBufferInvalidEnd(0.0f)
+    m_gpuParticleBufferInvalidBegin(0),
+    m_gpuParticleBufferInvalidEnd(0)
 {
     setBufferSize(1024);
 }

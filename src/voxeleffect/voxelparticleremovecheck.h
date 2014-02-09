@@ -1,7 +1,7 @@
 #pragma once
 
 
-class VoxelParticleData;
+struct VoxelParticleData;
 class VoxelParticleWorld;
 
 /*

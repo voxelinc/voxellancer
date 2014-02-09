@@ -6,7 +6,7 @@
 
 
 class VoxelParticleWorld;
-class VoxelParticleData;
+struct VoxelParticleData;
 
 
 /*

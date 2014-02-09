@@ -17,7 +17,7 @@ vec4 voxelFragmenNormalZ(vec3 normal);
 
 void main() {
     fragColor = voxelFragmentColor(f_color, f_emissiveness, f_normal, modelposition);
-    emissiveness = voxelFragmentEmissiveness(modelposition * f_color, f_emissiveness);
+    emissiveness = voxelFragmentEmissiveness(f_color, f_emissiveness);
     normalz = voxelFragmenNormalZ(f_normal);
 }
 
