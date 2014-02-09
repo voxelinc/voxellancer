@@ -2,7 +2,11 @@
 
 #include <algorithm>
 
+#include <glow/Buffer.h>
+#include <glow/Program.h>
 #include <glow/VertexAttributeBinding.h>
+#include <glow/VertexArrayObject.h>
+
 #include <glowutils/global.h>
 
 #include "camera/camera.h"
@@ -65,7 +69,7 @@ void VoxelParticleRenderer::draw(Camera& camera) {
 void VoxelParticleRenderer::loadProgram() {
     m_program->attach(
         glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/shader/particle.vert"),
-        glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/shader/particle.frag"),
+        glowutils::createShaderFromFile(GL_GEOMETRY_SHADER, "data/shader/particle.geom"),
         glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/shader/voxel.frag"),
         glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/shader/quaternion.glsl")
     );

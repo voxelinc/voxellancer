@@ -17,11 +17,11 @@ layout(location = 11) in float directinalDampening;
 layout(location = 12) in float angularDampening;
 
 // Output
-flat out vec3 f_normal;
-flat out float f_remainingLifetime;
-out vec3 f_color;
-out float f_emissiveness;
-out vec3 modelposition;
+flat out vec3 g_normal;
+flat out float g_remainingLifetime;
+out vec3 g_color;
+out float g_emissiveness;
+out vec3 g_modelposition;
 
 
 // Uniforms
@@ -33,15 +33,16 @@ vec4 quat(vec3 euler);
 
 void main() {
     float timeDelta = time - creationTime;
+    g_remainingLifetime = deathTime - time;
 
     vec3 particlePosition = directionalSpeed * timeDelta + creationPosition;
     vec3 particleEulers = angularSpeed * timeDelta + creationEulers;
     vec4 particleOrientation = quat(particleEulers);
-    f_remainingLifetime = deathTime - time;
-    f_color = color.xyz;
-    f_emissiveness = emissiveness;
-    modelposition = v_vertex;
-    f_normal = qtransform(particleOrientation, v_normal);
+    g_remainingLifetime = deathTime - time;
+    g_color = color.xyz;
+    g_emissiveness = emissiveness;
+    g_modelposition = v_vertex;
+    g_normal = qtransform(particleOrientation, v_normal);
 
     gl_Position = viewProjection * vec4(qtransform(particleOrientation, v_vertex) * scale + particlePosition, 1.0);
 }

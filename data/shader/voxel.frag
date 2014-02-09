@@ -2,6 +2,19 @@
 
 uniform float withBorder;
 
+layout(location = 0) out vec4 fragColor;
+layout(location = 1) out vec4 normalz;
+layout(location = 2) out vec4 emissiveness;
+
+flat in vec3 f_normal;
+in vec3 f_color;
+in float f_emissiveness;
+in vec3 modelposition;
+
+vec4 voxelFragmentColor(vec3 color, float emissiveness, vec3 normal, vec3 positionInVoxel);
+vec4 voxelFragmentEmissiveness(vec3 color, float emissiveness);
+vec4 voxelFragmenNormalZ(vec3 normal);
+
 const float borderWidth = 0.10;
 const float borderDarkness = 0.2;
 const float ambient = 0.3;
@@ -31,5 +44,12 @@ vec4 voxelFragmentEmissiveness(vec3 color, float emissiveness) {
 
 vec4 voxelFragmenNormalZ(vec3 normal) {
     vec3 n_normal = normalize(normal);
-    return vec4((n_normal+1)/2, gl_FragCoord.z);
+    return vec4((n_normal + 1.0) / 2.0, gl_FragCoord.z);
 }
+
+void main() {
+    fragColor = voxelFragmentColor(f_color, f_emissiveness, f_normal, modelposition);
+    emissiveness = voxelFragmentEmissiveness(modelposition * f_color, f_emissiveness);
+    normalz = voxelFragmenNormalZ(f_normal);
+}
+

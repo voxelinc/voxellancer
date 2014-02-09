@@ -2,14 +2,18 @@
 
 #include <string>
 
-#include <glow/Buffer.h>
-#include <glow/Program.h>
-#include <glow/VertexArrayObject.h>
+
 
 #include "voxelparticledata.h"
 
 #include "voxelmesh.h"
 
+
+namespace glow {
+    class Buffer;
+    class Program;
+    class VertexArrayObject;
+}
 
 class Camera;
 class VoxelParticleWorld;
