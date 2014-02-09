@@ -32,23 +32,24 @@ void VoxelParticleRemoveCheck::update(float deltaSec) {
     int checkCount = static_cast<int>((deltaSec * m_world->particleDataCount()) / m_interval);
     checkCount = std::min(checkCount, m_world->particleDataCount());
 
-    if(checkCount == 0) {
-        return;
+    int firstIndex = m_currentIndex;
+
+    std::vector<bool> deadParticles(checkCount, false);
+
+#pragma omp parallel for
+    for (int i = 0; i < checkCount; i++) {
+        int bufferIndex = (firstIndex + i) % m_world->particleDataCount();
+        VoxelParticleData* particle = m_world->particleData(bufferIndex);
+        deadParticles[i] = check(particle);
     }
 
-    int lastParticle = ((m_currentIndex + checkCount - 1) % m_world->particleDataCount());
-
-    while(true) {
-        VoxelParticleData* particle = m_world->particleData(m_currentIndex);
-
-        if (check(particle)) {
-            m_world->removeParticle(m_currentIndex);
+    for(int i = 0; i < checkCount; i++) {
+        if(deadParticles[i]) {
+            int bufferIndex = (firstIndex + i) % m_world->particleDataCount();
+            m_world->removeParticle(bufferIndex);
         }
-
-        if (m_currentIndex == lastParticle) {
-            break;
-        }
-
-        m_currentIndex = (m_currentIndex + 1) % m_world->particleDataCount();
     }
+
+    m_currentIndex = (m_currentIndex + checkCount) % m_world->particleDataCount();
 }
+
