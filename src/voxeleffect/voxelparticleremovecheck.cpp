@@ -29,7 +29,7 @@ void VoxelParticleRemoveCheck::update(float deltaSec) {
     // In case the datacount decreased
     m_currentIndex = std::min(m_currentIndex, m_world->particleDataCount());
 
-    int checkCount = (deltaSec * m_world->particleDataCount()) / m_interval;
+    int checkCount = static_cast<int>((deltaSec * m_world->particleDataCount()) / m_interval);
     checkCount = std::min(checkCount, m_world->particleDataCount());
 
     if(checkCount == 0) {
