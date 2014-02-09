@@ -5,10 +5,10 @@
 #include <glowutils/AutoTimer.h>
 
 #include "ai/characters/dummycharacter.h"
-#include "ai/elevatedtasks/dummyelevatedtask.h"
-#include "ai/basictask.h"
 #include "ai/basictasks/flytotask.h"
-#include "ai/elevatedtasks/patrolwaypointstask.h"
+#include "ai/basictasks/patrolwaypointstask.h"
+#include "ai/basictasks/formationmembertask.h"
+#include "ai/formationlogic.h"
 
 #include "resource/clustercache.h"
 
@@ -28,7 +28,7 @@ GameScenario::GameScenario(Game* game) :
 void GameScenario::populateWorld() {
 
     glow::debug("Create WorldObjects");
-    Ship* normandy = new Ship();
+    Ship *normandy = new Ship();
     ClusterCache::instance()->fillObject(normandy, "data/voxelcluster/normandy.csv");
     normandy->setPosition(glm::vec3(0, 0, -100));
     normandy->objectInfo().setName("Normandy");
@@ -36,24 +36,59 @@ void GameScenario::populateWorld() {
     normandy->objectInfo().setCanLockOn(true);
     //normandy->setEngineSound(SoundManager::current()->create("data/sound/Rocket Thrusters.ogg"));
     m_world->god().scheduleSpawn(normandy);
-    // TODO: use these dummies to test BasicTasks
-    PatrolWaypointsTask* ta = new PatrolWaypointsTask(
-        *normandy,
-        std::list<glm::vec3>{ glm::vec3(400, 0, 200), glm::vec3(-400, 0, -400), glm::vec3(-600, 0, -400),
-                              glm::vec3(0, 100, -600), glm::vec3(200, 150, -900) });
-    normandy->setCharacter(new DummyCharacter(*normandy, ta));
 
-    Ship *follower = new Ship();
-    ClusterCache::instance()->fillObject(follower, "data/voxelcluster/basicship.csv");
-    follower->setPosition(glm::vec3(100, 0, -50));
-    follower->objectInfo().setName("follower");
-    follower->objectInfo().setShowOnHud(true);
-    follower->objectInfo().setCanLockOn(true);
-    m_world->god().scheduleSpawn(follower);
-    FlyToTask* task = new FlyToTask(*follower);
-    task->setTargetPoint(glm::vec3(-100, 0, -50));
-    follower->setCharacter(
-        new DummyCharacter(*follower, new DummyElevatedTask(*follower, task)));
+    PatrolWaypointsTask* ntask = new PatrolWaypointsTask(*normandy,
+        std::list<glm::vec3>{ glm::vec3(400, 0, 200), glm::vec3(-400, 0, -400),
+                                glm::vec3(-600, 0, -400), glm::vec3(0, 100, -600),
+                                glm::vec3(-100, 150, -900) });
+    normandy->setCharacter(new DummyCharacter(*normandy, ntask));
+
+    int nmember_count = 4;
+    for (int i = 0; i < nmember_count; i++) {
+        Ship *follower = new Ship();
+        ClusterCache::instance()->fillObject(follower, "data/voxelcluster/basicship.csv");
+        follower->setPosition(glm::vec3(100 * (-nmember_count / 2.0f + i), 50, 0));
+        follower->objectInfo().setName("member");
+        follower->objectInfo().setShowOnHud(true);
+        follower->objectInfo().setCanLockOn(true);
+        m_world->god().scheduleSpawn(follower);
+        PatrolWaypointsTask* ta = new PatrolWaypointsTask(*follower,
+            std::list<glm::vec3>{ glm::vec3(400, 0, 200), glm::vec3(-400, 0, -400),
+                                    glm::vec3(-600, 0, -400), glm::vec3(0, 100, -600),
+                                    glm::vec3(-100, 150, -900) });
+        follower->setCharacter(new DummyCharacter(*follower, ta));
+        follower->formationLogic()->joinFormation(normandy);
+    }
+
+
+
+    Ship *leader = new Ship();
+    ClusterCache::instance()->fillObject(leader, "data/voxelcluster/eagle.csv");
+    leader->setPosition(glm::vec3(0, 200, -100));
+    leader->objectInfo().setName("leader");
+    leader->objectInfo().setShowOnHud(true);
+    leader->objectInfo().setCanLockOn(true);
+    m_world->god().scheduleSpawn(leader);
+    PatrolWaypointsTask* ltask = new PatrolWaypointsTask(*leader,
+        std::list<glm::vec3>{ glm::vec3(500, 0, 500), glm::vec3(-500, 0, 500),
+                                glm::vec3(-500, 0, -500), glm::vec3(500, 0, -500) });
+    leader->setCharacter(new DummyCharacter(*leader, ltask));
+
+    int lmember_count = 2;
+    for (int i = 0; i < lmember_count; i++) {
+        Ship *follower = new Ship();
+        ClusterCache::instance()->fillObject(follower, "data/voxelcluster/basicship.csv");
+        follower->setPosition(glm::vec3(100 * (-lmember_count / 2.0f + i), 200, 0));
+        follower->objectInfo().setName("member");
+        follower->objectInfo().setShowOnHud(true);
+        follower->objectInfo().setCanLockOn(true);
+        m_world->god().scheduleSpawn(follower);
+        PatrolWaypointsTask* ta = new PatrolWaypointsTask(*follower,
+            std::list<glm::vec3>{ glm::vec3(500, 0, 500), glm::vec3(-500, 0, 500),
+                                    glm::vec3(-500, 0, -500), glm::vec3(500, 0, -500) });
+        follower->setCharacter(new DummyCharacter(*follower, ta));
+        follower->formationLogic()->joinFormation(leader);
+    }
 
     Ship *testCluster = new Ship();
     ClusterCache::instance()->fillObject(testCluster, "data/voxelcluster/basicship.csv");

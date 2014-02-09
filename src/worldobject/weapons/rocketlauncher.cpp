@@ -8,8 +8,7 @@
 RocketLauncher::RocketLauncher() :
     m_range("weapons.RocketLauncherRange"),
     m_cooldownTime("weapons.RocketLauncherCooldownTime"),
-    m_speed("weapons.RocketLauncherSpeed"),
-    m_lifetime("weapons.RocketLauncherLifetime")
+    m_speed("weapons.RocketLauncherEjectSpeed")
 {
     setCoolDownTime(m_cooldownTime);
 }
@@ -32,7 +31,7 @@ void RocketLauncher::update(float deltaSec) {
 
 void RocketLauncher::shootAtObject(Hardpoint* source, WorldObject* target){
     if (canFire()) {
-        Rocket *r = new Rocket(source->position(), source->ship()->transform().orientation(), source->ship()->physics().speed(), m_speed, m_lifetime, source->ship(), target);
+        Rocket *r = new Rocket(source->position(), source->ship()->transform().orientation(), source->ship()->physics().speed(), m_speed, source->ship(), target);
         World::instance()->god().scheduleSpawn(r);
 
         fired();
