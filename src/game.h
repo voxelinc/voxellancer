@@ -9,10 +9,10 @@
 
 #include "ui/inputhandler.h"
 
-#include "battlescenario.h"
-#include "player.h"
 #include "scenarios/gamescenario.h"
+#include "scenarios/battlescenario.h"
 
+#include "player.h"
 
 class SoundManager;
 
@@ -24,8 +24,6 @@ public:
     Player& player();
     Viewer& viewer();
     HMDManager& hmdManager();
-
-    void initialize();
 
     void update(float deltaSec);
     void draw();

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <set>
+#include <unordered_set>
 
 #include "geometry/ray.h"
 
@@ -25,7 +25,7 @@ protected:
     Ray m_ray;
     Property<float> m_infityAimDistance;
 
-    glm::vec3 nearestTarget(const std::set<Voxel*>& voxels) const;
+    glm::vec3 nearestTarget(const std::unordered_set<Voxel*>& voxels) const;
     float distanceTo(Voxel* voxel) const;
     glm::vec3 infinity() const ;
 };
