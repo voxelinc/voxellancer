@@ -2,6 +2,7 @@
 
 #include <list>
 #include <vector>
+#include <memory>
 #include <limits>
 
 #include "world/helper/worldobjectmodification.h"
@@ -18,7 +19,7 @@ class SplitDetector
 public:
     void searchSplitOffs(std::list<WorldObjectModification>& worldObjectModifications);
 
-    std::vector<SplitData*> &splitDataList();
+    std::vector<std::shared_ptr<SplitData>> &splitDataList();
 
 protected:
     struct VoxelGroup {
@@ -27,7 +28,7 @@ protected:
         int groupId;
     };
     
-    std::vector<SplitData*> m_splitDataList;
+    std::vector<std::shared_ptr<SplitData>> m_splitDataList;
     std::vector<VoxelGroup> m_voxelArray;
     std::stack<glm::ivec3> m_stack;
     int m_xy;

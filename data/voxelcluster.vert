@@ -1,5 +1,4 @@
-#version 130
-#extension GL_ARB_draw_instanced : require
+#version 330
 
 uniform mat4 model;
 uniform mat4 view;
@@ -9,13 +8,12 @@ uniform mat4 viewProjection;
 uniform float emissiveness;
 
 // cube data
-in vec3 v_vertex;
-in vec3 v_normal;
-
+layout(location=0) in vec3 v_vertex;
+layout(location=1) in vec3 v_normal;
 // instance data
-in vec3 v_position;
-in vec4 v_color;
-in float v_emissiveness;
+layout(location=2) in vec3 v_position;
+layout(location=3) in vec4 v_color;
+layout(location=4) in float v_emissiveness;
 
 flat out vec3 f_normal;
 out vec3 f_color;

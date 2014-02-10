@@ -5,7 +5,7 @@
 
 
 float GeometryHelper::angleBetween(const glm::vec3& u, const glm::vec3& v) {
-    float angle = glm::acos(glm::clamp(glm::dot(glm::normalize(u), glm::normalize(v)), 0.0f, 1.0f));
+    float angle = glm::acos(glm::clamp(glm::dot(glm::normalize(u), glm::normalize(v)), -1.0f, 1.0f));
     assert(std::isfinite(angle));
     return angle;
 }
@@ -31,7 +31,7 @@ glm::quat GeometryHelper::quatFromViewDirection(const glm::vec3& direction) {
     return glm::angleAxis(angle, glm::normalize(w));
 }
 
-WorldObject* GeometryHelper::closestObject(WorldObject& self, std::set<WorldObject*>* objects){
+WorldObject* GeometryHelper::closestObject(WorldObject& self, std::unordered_set<WorldObject*>* objects){
     WorldObject* closestObject = nullptr;
     float closestDistance = std::numeric_limits<float>::max();
 

@@ -4,6 +4,8 @@
 #include <GL/glew.h>
 #include <GL/gl.h>
 
+#include <glow/FrameBufferObject.h>
+
 #include "camera/camera.h"
 #include "camera/camerahead.h"
 
@@ -44,6 +46,6 @@ void MonoView::draw(Scene* scene, CameraHead* cameraHead) {
     m_camera.setPosition(cameraHead->position());
     m_camera.setOrientation(cameraHead->orientation());
 
-    scene->draw(&m_camera);
+    scene->draw(&m_camera, glow::FrameBufferObject::defaultFBO());
 }
 

@@ -41,7 +41,7 @@ void Viewer::setCameraHead(CameraHead* cameraHead) {
 
 void Viewer::setViewport(const Viewport& viewport) {
     m_viewport = viewport;
-    if(m_view) {
+    if (m_view) {
         m_view->setViewport(viewport);
     }
 }

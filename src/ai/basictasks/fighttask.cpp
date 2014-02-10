@@ -1,10 +1,11 @@
 #include "fighttask.h"
 #include "utils/randfloat.h"
 #include "worldobject/ship.h"
+#include "ai/boardcomputer.h"
 
 FightTask::FightTask(Ship& ship, const std::vector<Handle<WorldObject>>& targets) :
-BasicTask(ship),
-m_targets(targets)
+    AiTask(ship),
+    m_targets(targets)
 {
     m_state = 0;
     m_maxFireDistance = m_ship.maxAimDistance();

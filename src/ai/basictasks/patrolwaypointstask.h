@@ -1,18 +1,18 @@
 #pragma once
 
-#include "ai/elevatedtask.h"
+#include "ai/aitask.h"
 
 #include <list>
 
 #include "glm/glm.hpp"
 
 #include "ai/basictasks/flytotask.h"
+#include "ai/basictasks/formationmembertask.h"
 
 
 class Ship;
-class BasicTask;
 
-class PatrolWaypointsTask : public ElevatedTask {
+class PatrolWaypointsTask : public AiTask {
 public:
     PatrolWaypointsTask(Ship& ship, std::list<glm::vec3> points);
 
@@ -20,6 +20,7 @@ public:
 
 protected:
     FlyToTask m_flyTask;
+    FormationMemberTask m_formationTask;
     std::list<glm::vec3> m_points;
     std::list<glm::vec3>::iterator m_currentPoint;
 };

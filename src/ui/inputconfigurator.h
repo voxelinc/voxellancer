@@ -31,6 +31,7 @@ public:
 private:
     std::vector<ActionKeyMapping*>* m_actions;
     SecondaryInputValues* m_secondaryInputValues;
+    std::vector<float> m_idleValues;
 
     HUD* m_hud;
 

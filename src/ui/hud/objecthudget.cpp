@@ -6,11 +6,8 @@
 
 #include "utils/geometryhelper.h"
 #include "hudobjectdelegate.h"
-
 #include "hud.h"
-#include "worldobject/ship.h"
-
-#include "player.h"
+#include "worldobject/worldobject.h"
 
 
 ObjectHudget::ObjectHudget(HUD* hud, HUDObjectDelegate* objectDelegate):

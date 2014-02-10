@@ -94,9 +94,19 @@ find_package(GLFW REQUIRED)
 find_package(SFML REQUIRED)
 find_package(BANDIT REQUIRED)
 find_package(LibOVR REQUIRED)
+find_package(OpenMP REQUIRED)
 
 if(REGEX_USE_BOOST)
 find_package(Boost REQUIRED regex)
+endif()
+
+if(OPENMP_FOUND)
+    message(STATUS "OpenMP found")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
+else()
+    message(WARNING "OpenMP not found")
 endif()
 
 set(GLOW_DIRECTORY glow)
@@ -142,14 +152,15 @@ list(REMOVE_ITEM SRC_FILES_EXCEPT_MAIN ${SRC_DIR}/main.cpp)
 file(GLOB_RECURSE SHADER_FILES
     "data/*.vert"
     "data/*.frag"
+    "data/*.geo"
 )
 
 source_group(${SHADER_GROUP} FILES ${SHADER_FILES})
 
 
-source_group_by_path(${SOURCE_DIR} "\\\\.h$|\\\\.hpp$"
+source_group_by_path_function(${SOURCE_DIR} "\\.h$|\\.hpp$"
     ${HEADER_GROUP} ${SRC_FILES})
-source_group_by_path(${SOURCE_DIR} "\\\\.cpp$|\\\\.c$|\\\\.inl$"
+source_group_by_path_function(${SOURCE_DIR} "\\.cpp$|\\.c$|\\.inl$"
     ${SOURCE_GROUP} ${SRC_FILES})
 
 add_executable(${target}
