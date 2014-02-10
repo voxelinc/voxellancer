@@ -10,7 +10,7 @@
 #include "voxel/voxelrenderer.h"
 
 #include "hud.h"
-#include "ArrowHudget.h"
+#include "arrowhudget.h"
 #include "voxel/voxelcluster.h"
 
 ArrowHudgetVoxels::ArrowHudgetVoxels(ArrowHudget* hudget) :
