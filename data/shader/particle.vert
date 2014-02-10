@@ -1,5 +1,4 @@
 #version 330
-#extension GL_ARB_separate_shader_objects : enable
 
 // Input
 layout(location = 0) in vec3 v_vertex;
@@ -18,11 +17,11 @@ layout(location = 11) in float directinalDampening;
 layout(location = 12) in float angularDampening;
 
 // Output
-layout(location = 0) out vec3 g_normal;
-layout(location = 1) out float g_deathTime;
-layout(location = 2) out vec3 g_color;
-layout(location = 3) out float g_emissiveness;
-layout(location = 4) out vec3 g_modelposition;
+out vec3 g_normal;
+out float g_deathTime;
+out vec3 g_color;
+out float g_emissiveness;
+out vec3 g_modelposition;
 
 
 // Uniforms

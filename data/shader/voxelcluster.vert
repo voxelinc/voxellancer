@@ -1,5 +1,4 @@
 #version 330
-#extension GL_ARB_separate_shader_objects : enable
 
 uniform mat4 model;
 uniform mat4 view;
@@ -16,10 +15,10 @@ layout(location = 2) in vec3 v_position;
 layout(location = 3) in vec4 v_color;
 layout(location = 4) in float v_emissiveness;
 
-layout(location = 0) flat out vec3 f_normal;
-layout(location = 1) out vec3 f_color;
-layout(location = 2) out float f_emissiveness;
-layout(location = 3) out vec3 f_modelposition;
+flat out vec3 f_normal;
+out vec3 f_color;
+out float f_emissiveness;
+out vec3 f_modelposition;
 
 void main() {
     gl_Position = viewProjection * model * (vec4(v_vertex + v_position, 1.0));
