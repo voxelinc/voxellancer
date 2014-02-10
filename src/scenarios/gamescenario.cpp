@@ -32,8 +32,8 @@ void GameScenario::populateWorld() {
     ClusterCache::instance()->fillObject(normandy, "data/voxelcluster/normandy.csv");
     normandy->setPosition(glm::vec3(0, 0, -100));
     normandy->objectInfo().setName("Normandy");
-    //normandy->objectInfo().setShowOnHud(true);
-    //normandy->objectInfo().setCanLockOn(true);
+    normandy->objectInfo().setShowOnHud(true);
+    normandy->objectInfo().setCanLockOn(true);
     normandy->setEngineSound(SoundManager::current()->create("data/sound/Rocket Thrusters.ogg"));
     m_world->god().scheduleSpawn(normandy);
     // TODO: use these dummies to test BasicTasks
@@ -47,8 +47,8 @@ void GameScenario::populateWorld() {
     ClusterCache::instance()->fillObject(follower, "data/voxelcluster/basicship.csv");
     follower->setPosition(glm::vec3(100, 0, -50));
     follower->objectInfo().setName("follower");
-    //follower->objectInfo().setShowOnHud(true);
-    //follower->objectInfo().setCanLockOn(true);
+    follower->objectInfo().setShowOnHud(true);
+    follower->objectInfo().setCanLockOn(true);
     m_world->god().scheduleSpawn(follower);
     FlyToTask* task = new FlyToTask(*follower);
     task->setTargetPoint(glm::vec3(-100, 0, -50));
@@ -97,8 +97,6 @@ void GameScenario::populateWorld() {
     }
     planet->setCrucialVoxel(glm::ivec3(middle));
     planet->objectInfo().setName("Planet");
-    //planet->objectInfo().setShowOnHud(true);
-    //planet->objectInfo().setCanLockOn(true);
     m_world->god().scheduleSpawn(planet);
 
     for(int e = 0; e < 15; e++) {

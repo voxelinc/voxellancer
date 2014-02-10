@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "voxel/voxelcluster.h"
+#include "property/property.h"
 
 class ArrowHudget;
 
@@ -20,10 +21,11 @@ protected:
     ArrowHudget* m_hudget;
     VoxelCluster m_arrow;
 
-    glm::vec3 m_targetPoint;
-    float angleToPlane(glm::vec3 planeNormal);
+    Property<float> prop_arrowDistance;
 
-    void calculateAngles();
+    glm::vec3 m_targetPoint;
+
+    bool findPoint();
 
 
 };

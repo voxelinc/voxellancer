@@ -17,12 +17,14 @@ public:
 
     HUD* hud();
     WorldObject* worldObject();
-    Hudget* hudget();
+    Hudget* objectHudget();
+    Hudget* arrowHudget();
 
 
 protected:
     HUD* m_hud;
     Handle<WorldObject> m_worldObjectHandle;
-    Hudget* m_hudget;
+    Hudget* m_objectHudget;
+    Hudget* m_arrowHudget;
 };
 

@@ -5,6 +5,8 @@
 
 #include "utils/geometryhelper.h"
 
+#include "resource/clustercache.h"
+
 #include "voxel/voxelrenderer.h"
 
 #include "hud.h"
@@ -13,19 +15,10 @@
 
 ArrowHudgetVoxels::ArrowHudgetVoxels(ArrowHudget* hudget) :
     m_hudget(hudget),
-    m_arrow(0.05f)
+    m_arrow(0.01f),
+    prop_arrowDistance("hud.arrowDistance")
 {
-    int edgeLength = 5;
-    m_arrow.addVoxel(new Voxel(glm::ivec3(0, 0, 0), 0xFF0000));
-    for (int i = 1; i < edgeLength; i++) {
-        m_arrow.addVoxel(new Voxel(glm::ivec3(i, 0, 0), 0xFF0000));
-        m_arrow.addVoxel(new Voxel(glm::ivec3(0, i, 0), 0xFF0000));
-    }
-    for (int i = 1; i < edgeLength - 1; i++) {
-        for (int j = 1; j < edgeLength - i; j++) {
-            m_arrow.addVoxel(new Voxel(glm::ivec3(i, j, 0), 0xFFFF00));
-        }
-    }
+    ClusterCache::instance()->fillCluster(&m_arrow, "data/hud/arrowXT.csv");
 }
 
 ArrowHudgetVoxels::~ArrowHudgetVoxels() {
@@ -36,53 +29,24 @@ ArrowHudget* ArrowHudgetVoxels::hudget() {
 }
 
 void ArrowHudgetVoxels::draw() {
-    calculateAngles();
+    if (!findPoint()) {
+        return;
+    }
+    m_arrow.transform().setOrientation(m_hudget->worldOrientation(m_targetPoint)*glm::angleAxis(glm::atan(m_targetPoint.x, m_targetPoint.y), glm::vec3(0, 0, -1)));
     m_arrow.transform().setPosition(m_hudget->worldPosition(m_targetPoint));
-    m_arrow.transform().setOrientation(m_hudget->worldOrientation());
-
     VoxelRenderer::instance()->draw(&m_arrow);
 }
 
-void ArrowHudgetVoxels::calculateAngles() {
-    float maxAngleX = glm::radians(40.0f);
-    float maxAngleY = glm::radians(25.0f);
-
-    float angleX = angleToPlane(glm::vec3(1.0f,0.0f,0.0f));
-    float angleY = angleToPlane(glm::vec3(0.0f, 1.0f, 0.0f));
-
-    m_targetPoint = m_hudget->localDirection();
-
-    if (angleX > maxAngleX) {
-        float angleDiff = maxAngleX - angleX;
-        if (m_hudget->localDirection().x < 0) {
-            angleDiff *= -1;
-        }
-        printf("x ");
-        //printf(" diffx = %f\n", glm::degrees(angleDiff));
-        glm::vec3 tmp = glm::axis(glm::angleAxis(angleDiff, glm::vec3(1.0f, 0.0f, 0.0f)));
-        float actualAngle = glm::angle(glm::angleAxis(angleDiff, glm::vec3(1.0f, 0.0f, 0.0f)));
-        //printf("x: %f y: %f z: %f \n", tmp.x, tmp.y, tmp.z);
-        //printf("angle: %f actual %f\n", angleDiff, actualAngle);
-        m_targetPoint = m_targetPoint *  glm::angleAxis(angleDiff, glm::vec3(0.0f, 1.0f, 0.0f));
+bool ArrowHudgetVoxels::findPoint() {
+    glm::vec3 lookat(0.0f, 0.0f, -1.0f);
+    glm::vec3 direction = m_hudget->localDirection();
+    direction.z = -glm::abs(direction.z);
+    glm::vec3 diff = direction - lookat;
+    if (glm::length(diff) < prop_arrowDistance.get() && m_hudget->localDirection().z < 0) {
+        return false;
     }
-    if (angleY > maxAngleY) {
-        printf("y ");
-        float angleDiff = maxAngleY - angleY;
-        if (m_hudget->localDirection().y > 0) {
-            angleDiff *= -1;
-        }
-        m_targetPoint = m_targetPoint * glm::angleAxis(angleDiff, glm::vec3(1.0f, 0.0f, 0.0f));
-    }
-    printf("\n");
-    return;
-
-}
-
-
-float ArrowHudgetVoxels::angleToPlane(glm::vec3 planeNormal) {
-    float angle = glm::asin(glm::abs(glm::dot(planeNormal, m_hudget->localDirection())) / glm::length(m_hudget->localDirection()));
-    if (m_hudget->localDirection().z > 0) {
-        angle = glm::radians(180.0f) - angle;
-    }
-    return angle;
+    diff = glm::normalize(diff);
+    glm::vec3 point = lookat + diff*prop_arrowDistance.get();
+    m_targetPoint = glm::normalize(point);
+    return true;
 }
