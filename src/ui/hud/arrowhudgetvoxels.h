@@ -20,8 +20,8 @@ protected:
     ArrowHudget* m_hudget;
     VoxelCluster m_arrow;
 
-    float m_angleX, m_angleY;
     glm::vec3 m_targetPoint;
+    float angleToPlane(glm::vec3 planeNormal);
 
     void calculateAngles();
 
