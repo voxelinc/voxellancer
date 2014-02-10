@@ -21,6 +21,8 @@
 #include "hudobjectdelegate.h"
 #include "objecthudget.h"
 
+#include "collision/collisionfilter.h"
+
 #include "player.h"
 
 
@@ -136,26 +138,18 @@ void HUD::draw() {
 
 void HUD::onClick(int button) {
     Ray toCrossHair = Ray::fromTo(m_player->cameraDolly().cameraHead().position(), m_crossHair.worldPosition());
-    WorldTreeQuery wordltreequery(&World::instance()->worldTree(), &toCrossHair, nullptr, nullptr);
-    ObjectHudget* first = nullptr;
-    for (Hudget* hudget : m_hudgets) {
-        if (hudget->isAt(toCrossHair)) {
-            // Aweful, must be changed
-            ObjectHudget* oHudget = dynamic_cast<ObjectHudget*>(hudget);
-            if (!oHudget) {
-                continue;
-            }
-            if (!first) {
-                first = oHudget;
-            } else {
-                if (glm::length(oHudget->objectDelegate()->worldObject()->transform().position() - m_player->playerShip()->transform().position()) < glm::length(first->objectDelegate()->worldObject()->transform().position() - m_player->playerShip()->transform().position())) {
-                    first = oHudget;
-                }
-            }
+    WorldTreeQuery wordltreequery(&World::instance()->worldTree(), &toCrossHair, nullptr, &m_player->playerShip()->collisionFilter());
+    WorldObject* first = nullptr;
+    for (WorldObject* worldObject : wordltreequery.intersectingWorldObjects()) {
+        if (!worldObject->objectInfo().showOnHud()) {
+            continue;
+        }
+        if (!first) {
+            first = worldObject;
         }
     }
     if (first) {
-        first->onClick();
+        m_player->playerShip()->setTargetObject(first);
     }
 }
 

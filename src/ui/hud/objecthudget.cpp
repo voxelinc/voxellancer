@@ -46,10 +46,6 @@ HUDObjectDelegate* ObjectHudget::objectDelegate() {
     return m_objectDelegate;
 }
 
-void ObjectHudget::onClick() {
-    hud()->player()->playerShip()->setTargetObject(m_objectDelegate->worldObject());
-}
-
 bool ObjectHudget::isAt(const Ray& ray) const {
     return ray.nearTo(m_objectDelegate->worldObject()->bounds().aabb());
     //return ray.intersects(Sphere(worldPosition(), 2.0f)); // needs to depend on hudget size
