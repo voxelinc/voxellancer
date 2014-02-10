@@ -13,6 +13,8 @@
 
 #include "world/world.h"
 
+#include "worldtree/worldtreequery.h"
+
 #include "worldobject/ship.h"
 
 #include "hudget.h"
@@ -134,6 +136,7 @@ void HUD::draw() {
 
 void HUD::onClick(int button) {
     Ray toCrossHair = Ray::fromTo(m_player->cameraDolly().cameraHead().position(), m_crossHair.worldPosition());
+    WorldTreeQuery wordltreequery(&World::instance()->worldTree(), &toCrossHair, nullptr, nullptr);
     ObjectHudget* first = nullptr;
     for (Hudget* hudget : m_hudgets) {
         if (hudget->isAt(toCrossHair)) {
