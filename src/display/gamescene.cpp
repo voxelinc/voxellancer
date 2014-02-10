@@ -16,7 +16,7 @@
 #include "rendering/buffernames.h"
 
 
-GameScene::GameScene(Game* game, Player* player):
+GameScene::GameScene(Game* game, Player* player) :
     m_game(game),
     m_voxelRenderer(VoxelRenderer::instance()),
     m_hd3000dummy(new HD3000Dummy()),
@@ -25,13 +25,15 @@ GameScene::GameScene(Game* game, Player* player):
     m_renderPipeline(RenderPipeline::getDefault(player)),
     m_framebuffer(new FrameBuffer(m_renderPipeline->bufferCount())),
     m_currentOutputBuffer(0),
-    m_player(player)
+    m_player(player),
+    m_defaultLightDir("vfx.lightdir")
 {
 }
 
 GameScene::~GameScene() = default;
 
 void GameScene::draw(Camera* camera, glow::FrameBufferObject* target, EyeSide side) {
+
     m_framebuffer->setResolution(camera->viewport());
     m_framebuffer->clear();
 
@@ -65,6 +67,7 @@ void GameScene::setOutputBuffer(int i) {
 void GameScene::drawGame(Camera* camera) {
     World::instance()->skybox().draw(camera);
 
+    m_voxelRenderer->program()->setUniform("lightdir", m_defaultLightDir.get());
     m_voxelRenderer->prepareDraw(camera);
     for (WorldObject* worldObject : World::instance()->worldObjects()) {
         VoxelRenderer::instance()->draw(worldObject);
