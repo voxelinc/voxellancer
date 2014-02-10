@@ -40,7 +40,10 @@ void VoxelParticleRemoveCheck::update(float deltaSec) {
     for (int i = 0; i < checkCount; i++) {
         int bufferIndex = (firstIndex + i) % m_world->particleDataCount();
         VoxelParticleData* particle = m_world->particleData(bufferIndex);
-        deadParticles[i] = check(particle);
+
+        if(!particle->dead) { // Needed, otherwise dead Particles might be free'd twice
+            deadParticles[i] = check(particle);
+        }
     }
 
     for(int i = 0; i < checkCount; i++) {

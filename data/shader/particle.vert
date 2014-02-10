@@ -1,4 +1,5 @@
 #version 330
+#extension GL_ARB_separate_shader_objects : enable
 
 // Input
 layout(location = 0) in vec3 v_vertex;
