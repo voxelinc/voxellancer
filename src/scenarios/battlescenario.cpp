@@ -17,11 +17,13 @@
 #include "utils/randvec.h"
 
 
-BattleScenario::BattleScenario() {
+BattleScenario::BattleScenario(Game* game):
+    BaseScenario(game)
+{
 
 }
 
-void BattleScenario::populate(Game* game) {
+void BattleScenario::populateWorld() {
     glowutils::AutoTimer t("Initialize Game");
 
 
@@ -36,8 +38,9 @@ void BattleScenario::populate(Game* game) {
     playerShip->setPosition(glm::vec3(0, 0, 10));
     playerShip->objectInfo().setName("basicship");
     playerShip->objectInfo().setShowOnHud(false);
+    playerShip->objectInfo().setCanLockOn(false);
     world->god().scheduleSpawn(playerShip);
-    game->player().setShip(playerShip);
+    m_game->player().setShip(playerShip);
 
     // create enemy ai driven ship
     Ship *aitester = new Ship();
@@ -47,6 +50,14 @@ void BattleScenario::populate(Game* game) {
     aitester->objectInfo().setShowOnHud(false);
     aitester->character()->setTask(std::make_shared<FightTask>(*aitester, std::vector<Handle<WorldObject>>{ playerShip->handle() }));
     //world->god().scheduleSpawn(aitester);
+
+    WorldObject* banner = new WorldObject();
+    ClusterCache::instance()->fillObject(banner, "data/voxelcluster/banner.csv");
+    banner->transform().setScale(30.0f);
+    banner->transform().move(glm::vec3(0, 0, -600));
+    banner->objectInfo().setShowOnHud(false);
+    banner->objectInfo().setCanLockOn(false);
+    world->god().scheduleSpawn(banner);
 
     // create two opposing enemy forces
     populateBattle(4, 4);
@@ -61,7 +72,7 @@ void BattleScenario::populateBattle(int numberOfEnemies1, int numberOfEnemies2) 
     std::vector<Ship*> fleet2;
     for (int e = 0; e < numberOfEnemies1; e++) {
         Ship *ship = new Ship();
-        float r = 200;
+        float r = 400;
         ship->move(RandVec3::rand(0.0f, r) + glm::vec3(-200, 0, -200));
         ship->objectInfo().setName("enemy2");
         ship->objectInfo().setShowOnHud(true);
@@ -72,7 +83,7 @@ void BattleScenario::populateBattle(int numberOfEnemies1, int numberOfEnemies2) 
     }
     for (int e = 0; e < numberOfEnemies2; e++) {
         Ship *ship = new Ship();
-        float r = 200;
+        float r = 400;
         ship->move(RandVec3::rand(0.0f, r) + glm::vec3(200, 0, -200));
         ship->objectInfo().setName("enemy1");
         ship->objectInfo().setShowOnHud(true);

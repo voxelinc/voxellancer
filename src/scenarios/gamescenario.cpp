@@ -41,7 +41,6 @@ void GameScenario::populateWorld() {
     normandy->objectInfo().setName("Normandy");
     normandy->objectInfo().setShowOnHud(true);
     normandy->objectInfo().setCanLockOn(true);
-    normandy->setEngineSound(SoundManager::current()->create("data/sound/Rocket Thrusters.ogg"));
     normandy->squadLogic()->joinSquad(squadA);
     m_world->god().scheduleSpawn(normandy);
 
