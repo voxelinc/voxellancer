@@ -6,14 +6,15 @@
 
 #include "camera/cameradolly.h"
 
-#include "ui/hud/hud.h"
 
 #include "worldobject/handle/handle.h"
 
+#include "ui/hud/hud.h"
+
+class HUD;
 
 class Camera;
 class CameraDolly;
-class HUD;
 
 class Game;
 
@@ -37,6 +38,8 @@ public:
     glm::vec3 cameraPosition();
     glm::quat cameraOrientation();
 
+    void selectTarget(bool next);
+
 
 protected:
     Game* m_game;
@@ -46,5 +49,11 @@ protected:
 
     glm::vec3 m_acceleration;
     glm::vec3 m_accelerationAngular;
+
+    template<typename IteratorType>
+    WorldObject* findNextTarget(IteratorType begin, IteratorType end);
+
+    std::function<bool(WorldObject*)> canLockOnPredicate();
+
 };
 

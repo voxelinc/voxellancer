@@ -20,7 +20,6 @@ ObjectHudget::ObjectHudget(HUD* hud, HUDObjectDelegate* objectDelegate):
 
 void ObjectHudget::update(float deltaSec) {
     WorldObject* worldObject = m_objectDelegate->worldObject();
-
     if(worldObject) {
         calculateOpeningAngle();
         pointToWorldPoint(worldObject->transform().position());
@@ -41,5 +40,14 @@ void ObjectHudget::calculateOpeningAngle() {
     alpha = std::max(alpha, 0.04f); // Hack, set minimum size
 
     m_voxels.setOpeningAngle(alpha);
+}
+
+HUDObjectDelegate* ObjectHudget::objectDelegate() {
+    return m_objectDelegate;
+}
+
+bool ObjectHudget::isAt(const Ray& ray) const {
+    return ray.nearTo(m_objectDelegate->worldObject()->bounds().aabb());
+    //return ray.intersects(Sphere(worldPosition(), 2.0f)); // needs to depend on hudget size
 }
 

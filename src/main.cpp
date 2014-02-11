@@ -90,8 +90,8 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
 	game->inputHandler().keyCallback(key, scancode, action, mods);
 }
 
-static void mouseButtonCallback(GLFWwindow* window, int Button, int Action, int mods) {
-
+static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
+    game->inputHandler().mouseButtonCallback(button, action, mods);
 }
 
 static void cursorPositionCallback(GLFWwindow* window, double x, double y) {

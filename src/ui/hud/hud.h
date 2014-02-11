@@ -18,6 +18,7 @@
 #include "aimhelperhudget.h"
 
 
+
 class Player;
 class Hudget;
 class WorldObject;
@@ -46,6 +47,8 @@ public:
     HUDObjectDelegate* objectDelegate(WorldObject* worldObject);
 
     void setCrossHairOffset(const glm::vec2& mousePosition);
+
+    void onClick(int button);
 
     void update(float deltaSec);
     void draw();
