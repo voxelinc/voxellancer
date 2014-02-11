@@ -9,7 +9,7 @@
     Base class for every Weapon that shoots rockets,
     i.e. projectiles that follow a target
 */
-class RocketLauncher: virtual public Weapon {
+class RocketLauncher: public Weapon {
 public:
     RocketLauncher(const std::string& equipmentKey);
 

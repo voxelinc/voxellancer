@@ -2,20 +2,30 @@
 
 #include <string>
 
-#include "utils/genericentity.h"
-
-#include "genericweapon.h"
 #include "rocketlauncher.h"
 
 
-class GenericRocketLauncher: public GenericWeapon, public RocketLauncher {
-public:
-    GenericRocketLauncher(const std::string& propertyPrefix);
+class Rocket;
 
-    virtual void update(float deltaSec) override;
+class GenericRocketLauncher: public RocketLauncher {
+public:
+    GenericRocketLauncher(const std::string& name);
+
+    virtual Visuals visuals() const override;
+    void setVisuals(const Visuals& visuals);
+
+    virtual float cooldownTime() const override;
+    void setCooldownTime(float cooldownTime);
+
+    const Rocket* rocketPrototype() const;
+    void setRocketPrototype(Rocket* rocketPrototype);
 
 
 protected:
+    float m_cooldownTime;
+    Visuals m_visuals;
+    std::unique_ptr<Rocket> m_rocketPrototype;
+
     virtual Rocket* createRocket() override;
 };
 

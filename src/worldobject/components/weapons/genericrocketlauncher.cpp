@@ -1,26 +1,42 @@
 #include "genericrocketlauncher.h"
 
-#include "resource/worldobjectfactory.h"
+#include "property/property.h"
 
-#include "worldobject/components/hardpoint.h"
-
-#include "genericrocket.h"
+#include "rocket.h"
 
 
-GenericRocketLauncher::GenericRocketLauncher(const std::string& propertyPrefix):
-    Weapon(WeaponType::RocketLauncher, propertyPrefix),
-    GenericWeapon(WeaponType::RocketLauncher, propertyPrefix),
-    RocketLauncher(propertyPrefix)
+GenericRocketLauncher::GenericRocketLauncher(const std::string& name):
+    RocketLauncher(name)
 {
 }
 
-void GenericRocketLauncher::update(float deltaSec) {
-    RocketLauncher::update(deltaSec);
+
+Visuals GenericRocketLauncher::visuals() const {
+    return m_visuals;
+}
+
+void GenericRocketLauncher::setVisuals(const Visuals& visuals) {
+    m_visuals = visuals;
+}
+
+float GenericRocketLauncher::cooldownTime() const {
+    return m_cooldownTime;
+}
+
+void GenericRocketLauncher::setCooldownTime(float cooldownTime) {
+    m_cooldownTime = cooldownTime;
+}
+
+const Rocket* GenericRocketLauncher::rocketPrototype() const {
+    return m_rocketPrototype.get();
+}
+
+void GenericRocketLauncher::setRocketPrototype(Rocket* rocketPrototype) {
+    m_rocketPrototype.reset(rocketPrototype);
 }
 
 Rocket* GenericRocketLauncher::createRocket() {
-    GenericRocket* rocket = new GenericRocket(Property<std::string>(propertyPrefix() + ".general.rocket"));
-    WorldObjectFactory().equipSomehow(rocket);
-    return rocket;
+    assert(m_rocketPrototype.get());
+//    return new Rocket(*m_rocketPrototype.get());
 }
 

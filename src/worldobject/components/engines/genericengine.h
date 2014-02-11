@@ -2,26 +2,26 @@
 
 #include "property/property.h"
 
-#include "utils/genericentity.h"
+#include "display/rendering/visuals.h"
 
 #include "worldobject/components/engine.h"
 
 
-class GenericEngine: public Engine, public GenericEntity {
+class GenericEngine: public Engine {
 public:
-    GenericEngine(const std::string& propertyPrefix);
+    GenericEngine(const std::string& equipmentKey);
 
-    virtual Visuals visuals() const;
+    virtual Visuals visuals() const override;
+    void setVisuals(const Visuals& visuals);
 
     virtual EnginePower power() const override;
+    void setPower(const EnginePower& power);
 
     virtual void update(float deltaSec) override;
 
 
 protected:
-    Property<glm::vec4> m_directionalAcceleration;
-    Property<glm::vec3> m_angularAcceleration;
-    Property<uint32_t> m_color;
-    Property<float> m_emissiveness;
+    EnginePower m_power;
+    Visuals m_visuals;
 };
 

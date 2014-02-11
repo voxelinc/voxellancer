@@ -1,27 +1,41 @@
 #pragma once
 
+#include <memory>
 #include <string>
 
-#include "property/property.h"
+#include "display/rendering/visuals.h"
 
-#include "utils/genericentity.h"
-
-#include "genericweapon.h"
+#include "bullet.h"
 #include "gun.h"
 
 
-class GenericGun: public GenericWeapon, public Gun {
+
+class GenericGun: public Gun {
 public:
-    GenericGun(const std::string& propertyPrefix);
+    GenericGun(const std::string& name);
 
     virtual float bulletLifetime() const override;
+    void setBulletLifetime(float bulletLifetime);
+
     virtual float bulletSpeed() const override;
+    void setBulletSpeed(float bulletSpeed);
+
+    virtual Visuals visuals() const override;
+    void setVisuals(const Visuals& visuals);
+
+    virtual float cooldownTime() const override;
+    void setCooldownTime(float cooldownTime);
+
+    const Bullet* bulletPrototype() const;
+    void setBulletPrototype(Bullet* bulletPrototype);
 
 
 protected:
-    Property<float> m_bulletSpeed;
-    Property<float> m_bulletLifetime;
-    Property<std::string> m_bulletName;
+    float m_bulletSpeed;
+    float m_bulletLifetime;
+    float m_cooldownTime;
+    Visuals m_visuals;
+    std::unique_ptr<Bullet> m_bulletPrototype;
 
     virtual Bullet* createBullet() override;
 };

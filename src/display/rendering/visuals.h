@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include <stdint.h>
 
 
@@ -18,6 +19,8 @@ public:
 	float emissiveness() const;
 	void setEmissiveness(float emissiveness);
 
+
+    static Visuals fromProperties(const std::string& prefix);
 
 
 protected:

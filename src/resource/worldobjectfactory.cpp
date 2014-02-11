@@ -10,7 +10,9 @@
 #include "worldobject/worldobject.h"
 
 #include "clustercache.h"
-#include "worldobjectequipmentfactory.h"
+#include "enginebuilder.h"
+#include "weaponbuilder.h"
+#include "worldobjectfactory.h"
 
 
 WorldObjectFactory::WorldObjectFactory() {
@@ -20,13 +22,13 @@ WorldObjectFactory::WorldObjectFactory() {
 void WorldObjectFactory::equipSomehow(WorldObject* worldObject) {
     for(Hardpoint* hardpoint : worldObject->components().hardpoints()) {
         if(!hardpoint->mountables().empty()) {
-            Weapon* weapon = WorldObjectEquipmentFactory().weapon(hardpoint->mountables().front());
+            Weapon* weapon = WeaponBuilder(hardpoint->mountables().front()).build();
             hardpoint->setWeapon(weapon);
         }
     }
     for(EngineSlot* engineSlot : worldObject->components().engineSlots()) {
         if(!engineSlot->mountables().empty()) {
-            Engine* engine = WorldObjectEquipmentFactory().engine(engineSlot->mountables().front());
+            Engine* engine = EngineBuilder(engineSlot->mountables().front()).build();
             engineSlot->setEngine(engine);
         }
     }
