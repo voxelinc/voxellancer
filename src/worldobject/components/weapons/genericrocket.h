@@ -2,16 +2,14 @@
 
 #include <string>
 
-#include "utils/genericentity.h"
-
 #include "worldobject/genericworldobject.h"
 
 #include "rocket.h"
 
 
-class GenericRocket: public GenericWorldObject, public Rocket {
+class GenericRocket: public Rocket {
 public:
-    GenericRocket(const std::string& propertyPrefix);
+    GenericRocket();
 
 
 protected:

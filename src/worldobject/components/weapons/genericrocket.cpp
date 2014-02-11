@@ -5,10 +5,8 @@
 #include "voxeleffect/voxelexplosiongenerator.h"
 
 
-GenericRocket::GenericRocket(const std::string& propertyPrefix):
-    GenericWorldObject(propertyPrefix)
+GenericRocket::GenericRocket()
 {
-    setLifetime(Property<float>(propertyPrefix + ".general.lifetime"));
 }
 
 void GenericRocket::onLifetimeOver() {

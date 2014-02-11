@@ -9,6 +9,7 @@
 
 #include "resource/clustercache.h"
 #include "resource/worldobjectfactory.h"
+#include "resource/worldobjectbuilder.h"
 
 #include "worldobject/components/hardpoint.h"
 #include "worldobject/components/engineslot.h"
@@ -44,7 +45,7 @@ void BattleScenario::populateWorld() {
 
     // create playership
 
-    Ship *playerShip = new GenericShip("specialbasicship");
+    Ship *playerShip = WorldObjectBuilder("specialbasicship").buildShip();
     WorldObjectFactory().equipSomehow(playerShip);
     playerShip->transform().setPosition(glm::vec3(0, 0, 10));
     world->god().scheduleSpawn(playerShip);
@@ -63,7 +64,7 @@ void BattleScenario::populateBattle(int numberOfEnemies1, int numberOfEnemies2) 
     std::vector<Ship*> fleet1;
     std::vector<Ship*> fleet2;
     for (int e = 0; e < numberOfEnemies1; e++) {
-        Ship *ship = new GenericShip("basicship");
+        Ship *ship = WorldObjectBuilder("basicship").buildShip();
         WorldObjectFactory().equipSomehow(ship);
 
         float r = 200;
@@ -76,7 +77,7 @@ void BattleScenario::populateBattle(int numberOfEnemies1, int numberOfEnemies2) 
         fleet2.push_back(ship);
     }
     for (int e = 0; e < numberOfEnemies2; e++) {
-        Ship *ship = new GenericShip("basicship");
+        Ship *ship = WorldObjectBuilder("basicship").buildShip();
 
         WorldObjectFactory().equipSomehow(ship);
 
@@ -97,7 +98,7 @@ void BattleScenario::populateBattle(int numberOfEnemies1, int numberOfEnemies2) 
 }
 
 void BattleScenario::spawnCapital(const std::vector<Ship*>& enemies) {
-    Ship *ship = new GenericShip("normandy");
+    Ship *ship = WorldObjectBuilder("normandy").buildShip();
   //  ship->setEngineSound(SoundManager::current()->create("data/sound/Rocket Thrusters.ogg"));
     ship->objectInfo().setShowOnHud(true);
     ship->objectInfo().setCanLockOn(true);

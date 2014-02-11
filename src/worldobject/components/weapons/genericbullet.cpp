@@ -5,15 +5,16 @@
 #include "voxeleffect/voxelexplosiongenerator.h"
 
 
-GenericBullet::GenericBullet(const std::string& propertyPrefix):
-    GenericWorldObject(propertyPrefix),
-    m_emissiveness(Property<float>(propertyPrefix + ".general.emissiveness", 0.0f))
+GenericBullet::GenericBullet()
 {
-    setLifetime(Property<float>(propertyPrefix + ".general.lifetime"));
 }
 
 float GenericBullet::emissiveness() const {
     return m_emissiveness;
+}
+
+void GenericBullet::setEmissiveness(float emissiveness) {
+    m_emissiveness = emissiveness;
 }
 
 void GenericBullet::spawnExplosion() {

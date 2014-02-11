@@ -12,6 +12,7 @@
 
 #include "resource/clustercache.h"
 #include "resource/worldobjectfactory.h"
+#include "resource/worldobjectbuilder.h"
 
 #include "worldobject/ship.h"
 #include "worldobject/components/engineslot.h"
@@ -30,7 +31,7 @@ GameScenario::GameScenario(Game* game) :
 }
 
 void GameScenario::populateWorld() {
-    Ship* normandy = new GenericShip("normandy");
+    Ship* normandy = WorldObjectBuilder("normandy").buildShip();
     WorldObjectFactory().equipSomehow(normandy);
     normandy->transform().setPosition(glm::vec3(0, 0, -100));
     normandy->objectInfo().setName("Normandy");
@@ -47,7 +48,7 @@ void GameScenario::populateWorld() {
 
     int nmember_count = 4;
     for (int i = 0; i < nmember_count; i++) {
-        Ship *follower = new GenericShip("basicship");
+        Ship *follower = WorldObjectBuilder("basicship").buildShip();
         WorldObjectFactory().equipSomehow(follower);
         follower->transform().setPosition(glm::vec3(100 * (-nmember_count / 2.0f + i), 50, 0));
         follower->objectInfo().setName("member");
@@ -64,7 +65,7 @@ void GameScenario::populateWorld() {
 
 
 
-    Ship *leader = new GenericShip("eagle");
+    Ship *leader = WorldObjectBuilder("eagle").buildShip();
     WorldObjectFactory().equipSomehow(leader);
     leader->transform().setPosition(glm::vec3(0, 200, -100));
     leader->objectInfo().setName("leader");
@@ -78,7 +79,7 @@ void GameScenario::populateWorld() {
 
     int lmember_count = 2;
     for (int i = 0; i < lmember_count; i++) {
-        Ship *follower = new GenericShip("basicship");
+        Ship *follower = WorldObjectBuilder("basicship").buildShip();
         WorldObjectFactory().equipSomehow(follower);
         follower->transform().setPosition(glm::vec3(100 * (-lmember_count / 2.0f + i), 200, 0));
         follower->objectInfo().setName("member");
@@ -92,7 +93,7 @@ void GameScenario::populateWorld() {
         follower->formationLogic()->joinFormation(leader);
     }
 
-    Ship *testCluster = new GenericShip("specialbasicship");
+    Ship *testCluster = WorldObjectBuilder("specialbasicship").buildShip();
     WorldObjectFactory().equipSomehow(testCluster);
     testCluster->transform().setPosition(glm::vec3(0, 0, 10));
     testCluster->objectInfo().setName("basicship");

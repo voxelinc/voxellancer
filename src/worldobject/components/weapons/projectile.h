@@ -8,7 +8,7 @@
         - doesn't collide with creator
         - destroyed after lifetime is over
 */
-class Projectile: virtual public WorldObject {
+class Projectile: public WorldObject {
 public:
     Projectile();
 

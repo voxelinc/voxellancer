@@ -6,8 +6,8 @@
 #include "genericworldobject.h"
 
 
-class GenericShip: public Ship, public GenericWorldObject {
+class GenericShip: public Ship {
 public:
-    GenericShip(const std::string& propertyPrefix);
+    GenericShip();
 };
 

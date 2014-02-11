@@ -2,23 +2,20 @@
 
 #include <string>
 
-#include "utils/genericentity.h"
-
-#include "worldobject/genericworldobject.h"
-
 #include "bullet.h"
 
 
 
-class GenericBullet: public GenericWorldObject, public Bullet {
+class GenericBullet: public Bullet {
 public:
-    GenericBullet(const std::string& propertyPrefix);
+    GenericBullet();
 
     virtual float emissiveness() const override;
+    void setEmissiveness(float emissiveness);
 
 
 protected:
-    Property<float> m_emissiveness;
+    float m_emissiveness;
 
     virtual void spawnExplosion() override;
 };
