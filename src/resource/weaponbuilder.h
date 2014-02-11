@@ -18,11 +18,11 @@ public:
 
     Weapon* build();
 
+    GenericGun* buildGenericGun();
+    GenericRocketLauncher* buildGenericRocketLauncher();
+
 
 protected:
     const std::string& m_name;
-
-    GenericGun* buildGenericGun();
-    GenericRocketLauncher* buildGenericRocketLauncher();
 };
 

@@ -12,7 +12,6 @@
 
 #include "resource/clustercache.h"
 #include "resource/worldobjectfactory.h"
-#include "resource/worldobjectequipmentfactory.h"
 
 #include "worldobject/ship.h"
 #include "worldobject/components/engineslot.h"
