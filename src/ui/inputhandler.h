@@ -92,7 +92,6 @@ protected:
     void retrieveInputValues();
 
     float m_currentTimePressed;
-    float m_maxClickTime;
 
     Property<float> prop_deadzoneMouse;
     Property<float> prop_deadzoneGamepad;
