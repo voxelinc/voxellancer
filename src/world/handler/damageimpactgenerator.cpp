@@ -14,12 +14,12 @@ void DamageImpactGenerator::parse(std::list<WorldObjectCollision>& worldObjectCo
         float massPerImpactA = worldObjectCollision.worldObjectA()->physics().mass() / worldObjectCollision.voxelCollisions().size();
         float massPerImpactB = worldObjectCollision.worldObjectB()->physics().mass() / worldObjectCollision.voxelCollisions().size();
 
-        WorldTransform targetTransformA(worldObjectCollision.worldObjectA()->transform(), 
-            worldObjectCollision.worldObjectA()->physics().speed(), 
+        Transform targetTransformA(worldObjectCollision.worldObjectA()->transform(),
+            worldObjectCollision.worldObjectA()->physics().speed(),
             glm::quat(worldObjectCollision.worldObjectA()->physics().angularSpeed()));
 
-        WorldTransform targetTransformB(worldObjectCollision.worldObjectB()->transform(), 
-            worldObjectCollision.worldObjectB()->physics().speed(), 
+        Transform targetTransformB(worldObjectCollision.worldObjectB()->transform(),
+            worldObjectCollision.worldObjectB()->physics().speed(),
             glm::quat(worldObjectCollision.worldObjectB()->physics().angularSpeed()));
 
         for(VoxelCollision& voxelCollision :  worldObjectCollision.voxelCollisions()) {
@@ -27,10 +27,16 @@ void DamageImpactGenerator::parse(std::list<WorldObjectCollision>& worldObjectCo
             glm::vec3 speedB = targetTransformB.applyTo(glm::vec3(voxelCollision.b().voxel()->gridCell())) - worldObjectCollision.worldObjectB()->transform().applyTo(glm::vec3(voxelCollision.b().voxel()->gridCell()));
 
             if (!voxelCollision.a().worldObject()->scheduledForDeletion()) {
-                m_damageImpactAccumulator.parse(DamageImpact(voxelCollision.a().worldObject(), voxelCollision.a().voxel(), (speedB - speedA) * (massPerImpactB)));
+                m_damageImpactAccumulator.parse(DamageImpact(voxelCollision.a().worldObject(),
+                                                             voxelCollision.a().voxel(), 
+                                                             (speedB - speedA) * (massPerImpactB),
+                                                             voxelCollision.b().worldObject()->collisionFieldOfDamage()));
             }
             if (!voxelCollision.b().worldObject()->scheduledForDeletion()) {
-                m_damageImpactAccumulator.parse(DamageImpact(voxelCollision.b().worldObject(), voxelCollision.b().voxel(), (speedA - speedB) * (massPerImpactA)));
+                m_damageImpactAccumulator.parse(DamageImpact(voxelCollision.b().worldObject(),
+                                                             voxelCollision.b().voxel(),
+                                                             (speedA - speedB) * (massPerImpactA),
+                                                             voxelCollision.a().worldObject()->collisionFieldOfDamage()));
             }
         }
     }

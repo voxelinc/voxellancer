@@ -12,7 +12,10 @@
 #include "voxelparticleworld.h"
 
 
-VoxelParticleSpawnBase::VoxelParticleSpawnBase() :
+VoxelParticleSpawnBase::VoxelParticleSpawnBase(char* dampeningName,
+                       char* angularDampeningName,
+                       char* baseForceName,
+                       char* angularBaseForceName) :
     m_position(0, 0, 0),
     m_scale(1.0f),
     m_scaleRandomization(0.0f),
@@ -21,12 +24,12 @@ VoxelParticleSpawnBase::VoxelParticleSpawnBase() :
     m_lifetime(1.0f),
     m_lifetimeRandomization(0.0f),
     m_color(0xFFFFFF),
-    m_colorEmissiveness(0.0f),
+    m_emissiveness(0.0f),
     m_impactVector(0, 0, 0),
-    m_particleDampening(0.0f),
-    m_particleAngularDampening(0.0f),
-    m_particleBaseForce(1.0f),
-    m_particleAngularBaseForce(1.0f)
+    m_particleDampening(dampeningName),
+    m_particleAngularDampening(angularDampeningName),
+    m_particleBaseForce(baseForceName),
+    m_particleAngularBaseForce(angularBaseForceName)
 {
 }
 
@@ -55,10 +58,14 @@ void VoxelParticleSpawnBase::setLifetime(float lifetime, float lifetimeRandomiza
     m_lifetimeRandomization = lifetimeRandomization;
 }
 
-void VoxelParticleSpawnBase::setColor(int color, float emissiveness) {
+void VoxelParticleSpawnBase::setColor(int color) {
     m_color = color;
-    m_colorEmissiveness = emissiveness;
 }
+
+void VoxelParticleSpawnBase::setEmissiveness(float emissiveness) {
+    m_emissiveness = emissiveness;
+}
+
 void VoxelParticleSpawnBase::setImpactVector(const glm::vec3& impactVector) {
     m_impactVector = impactVector;
 }
@@ -71,7 +78,7 @@ glm::vec3 VoxelParticleSpawnBase::createDirectionalSpeed() {
 }
 
 glm::vec3 VoxelParticleSpawnBase::createAngularSpeed() {
-    return RandVec3::randUnitVec() * RandFloat::randomize(m_force, m_forceRandomization) * m_particleAngularBaseForce;
+    return RandVec3::randUnitVec() * RandFloat::randomize(m_force, m_forceRandomization) * m_particleAngularBaseForce.get();
 }
 
 float VoxelParticleSpawnBase::createLifetime() {

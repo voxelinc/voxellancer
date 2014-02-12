@@ -6,33 +6,42 @@
 #include "worldobject.h"
 #include "property/property.h"
 
+
 class World;
 class God;
 class Hardpoint;
 class Engine;
 class Character;
 class Sound;
+class FormationLogic;
 class BoardComputer;
 
 class Ship : public WorldObject {
 public:
     Ship();
     virtual ~Ship();
+
     virtual void update(float deltaSec);
 
     virtual void addHardpointVoxel(HardpointVoxel* voxel);
     void removeHardpoint(Hardpoint* hardpoint);
+    const std::list<Hardpoint*> hardpoints() const;
+
     virtual void addEngineVoxel(EngineVoxel* voxel);
-    
+
     Handle<Ship> shipHandle();
 
     void removeEngine(Engine* engine);
 
     void setTargetObject(WorldObject* target);
     WorldObject* targetObject();
+
     void fireAtPoint(glm::vec3 target);
     void fireAtObject();
     float minAimDistance();
+    float maxAimDistance();
+    BoardComputer* boardComputer();
+    FormationLogic* formationLogic();
 
     virtual void accelerate(const glm::vec3& direction) override;
     virtual void accelerateAngular(const glm::vec3& axis) override;
@@ -40,10 +49,14 @@ public:
     void setCharacter(Character* character);
     Character* character();
     void setEngineSound(std::shared_ptr<Sound> sound);
-    
+
+
 protected:
+    Ship(CollisionFilter* collisionFilter);
+
     std::unique_ptr<Character> m_character;
     std::unique_ptr<BoardComputer> m_boardComputer;
+    std::unique_ptr<FormationLogic> m_formationLogic;
     std::shared_ptr<Sound> m_sound;
     glm::vec3 m_enginePos;
 

@@ -1,5 +1,6 @@
 #include "voxelparticleworld.h"
 
+#include <omp.h>
 #include <iostream>
 
 #include <glow/Shader.h>
@@ -29,7 +30,9 @@ struct ParticleData {
 VoxelParticleWorld::VoxelParticleWorld():
     m_initialized(false),
     m_bufferSize(0),
-    m_particles()
+    m_particles(),
+    m_tempParticles(),
+    m_defaultLightDir("vfx.lightdir")
 {
 
 }
@@ -45,18 +48,27 @@ void VoxelParticleWorld::addParticle(VoxelParticle* voxelParticle) {
 }
 
 void VoxelParticleWorld::update(float deltaSec) {
-    for (std::list<VoxelParticle*>::iterator iter = m_particles.begin(); iter != m_particles.end(); ) {
-        VoxelParticle* voxelParticle = *iter;
+#pragma omp parallel for
+    for (int i = 0; i < m_particles.size(); ++i) {
+        VoxelParticle* voxelParticle = m_particles[i];
 
         voxelParticle->update(deltaSec);
 
-        if (intersects(voxelParticle) || voxelParticle->isDead()) {
-            delete voxelParticle;
-            iter = m_particles.erase(iter);
-        } else {
-            ++iter;
+        if (voxelParticle->isDead() || intersects(voxelParticle)) {
+            voxelParticle->markAsDead();
         }
     }
+
+    for (VoxelParticle* particle : m_particles) {
+        if (particle->isDead()) {
+            delete particle;
+        } else {
+            m_tempParticles.push_back(particle);
+        }
+    }
+    std::swap(m_particles, m_tempParticles);
+    m_tempParticles.clear();
+
 }
 
 bool VoxelParticleWorld::intersects(VoxelParticle* voxelParticle) {
@@ -65,7 +77,7 @@ bool VoxelParticleWorld::intersects(VoxelParticle* voxelParticle) {
     }
     voxelParticle->intersectionCheckPerformed();
 
-    glm::vec3 position = voxelParticle->worldTransform().position();
+    glm::vec3 position = voxelParticle->transform().position();
     Point voxelSphere(position); // approximate a point
     WorldTreeQuery query(&World::instance()->worldTree(), &voxelSphere);
 
@@ -91,6 +103,7 @@ void VoxelParticleWorld::draw(Camera& camera) {
     updateBuffers();
 
     m_program->setUniform("viewProjection", camera.viewProjection());
+    m_program->setUniform("lightdir", m_defaultLightDir.get());
 
     m_program->use();
     m_vertexArrayObject->bind();
@@ -159,9 +172,9 @@ void VoxelParticleWorld::updateBuffers() {
     int i = 0;
     for (VoxelParticle* particle : m_particles) {
         particleData[i++] = ParticleData{
-            particle->worldTransform().position(),
-            particle->worldTransform().orientation(),
-            particle->worldTransform().scale(),
+            particle->transform().position(),
+            particle->transform().orientation(),
+            particle->transform().scale(),
             particle->color(),
             particle->emissiveness()
         };

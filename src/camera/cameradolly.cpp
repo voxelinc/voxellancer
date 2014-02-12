@@ -9,9 +9,6 @@ CameraDolly::CameraDolly():
 {
 }
 
-CameraDolly::~CameraDolly() {
-}
-
 CameraHead& CameraDolly::cameraHead() {
     return m_cameraHead;
 }

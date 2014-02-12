@@ -11,13 +11,13 @@
 #include "voxelparticleworld.h"
 
 VoxelExplosionGenerator::VoxelExplosionGenerator() :
+    VoxelParticleSpawnBase("physics.explosionDampening",
+                           "physics.explosionAngularDampening",
+                           "physics.explosionBaseForce",
+                           "physics.explosionAngularBaseForce"),
     m_radius(0.5f),
     m_count(10)
 {
-    m_particleDampening = Property<float>("physics.explosionDampening");
-    m_particleAngularDampening = Property<float>("physics.explosionAngularDampening");
-    m_particleBaseForce = Property<float>("physics.explosionBaseForce");
-    m_particleAngularBaseForce = Property<float>("physics.explosionAngularBaseForce");
 }
 
 VoxelExplosionGenerator::~VoxelExplosionGenerator() {
@@ -33,14 +33,14 @@ void VoxelExplosionGenerator::setCount(int count) {
 
 void VoxelExplosionGenerator::spawn() {
     // spawn explosionSpawnCount voxels with color and scale at position within a sphere with radius with a speed of ~force in all directions modified by ~impactVector
-    WorldTransform transform;
+    Transform transform;
     transform.setScale(m_scale);
 
     for (int i = 0; i < m_count; i++) {
         glm::vec3 randDirection = createDirectionalSpeed();
         transform.setPosition(m_position + (m_radius * randDirection));
 
-        VoxelParticle* particle = new VoxelParticle(transform, m_color, m_colorEmissiveness, createLifetime());
+        VoxelParticle* particle = new VoxelParticle(transform, m_color, m_emissiveness, createLifetime());
         particle->setAngularSpeed(createAngularSpeed(), m_particleDampening);
         particle->setDirectionalSpeed(randDirection, m_particleAngularDampening);
 

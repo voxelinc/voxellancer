@@ -3,14 +3,14 @@
 #include <cassert>
 
 #include "worldtreenode.h"
-
 #include "worldobject/worldobject.h"
+#include "collision/collisiondetector.h"
 
 
 WorldTreeGeode::WorldTreeGeode(WorldObject* worldObject) :
     m_worldObject(worldObject),
     m_containingNode(nullptr),
-    m_aabb(worldObject->aabb())
+    m_aabb(worldObject->bounds().aabb())
 {
     m_worldObject->collisionDetector().setGeode(this);
 }

@@ -11,6 +11,7 @@
 #include "worldobject/worldobject.h"
 #include "geometry/sphere.h"
 #include "voxel/voxeltree.h"
+#include "collisionfilter.h"
 
 
 CollisionDetector::CollisionDetector(WorldObject& worldObject) :
@@ -56,7 +57,7 @@ void CollisionDetector::updateGeode() {
     if(m_geode != nullptr) {
         assert(m_worldTree);
 
-        m_geode->setAABB(m_worldObject.aabb());
+        m_geode->setAABB(m_worldObject.bounds().aabb());
         m_worldTree->aabbChanged(m_geode);
     }
 }
@@ -66,15 +67,15 @@ std::list<VoxelCollision>& CollisionDetector::checkCollisions() {
 
     m_collisions.clear();
 
-    IAABB worldObjectAABB = m_worldObject.aabb();
-    std::set<WorldTreeGeode*> possibleColliders = WorldTreeQuery(m_worldTree, &worldObjectAABB, m_geode->containingNode(), &m_worldObject).nearGeodes();
+    IAABB worldObjectAABB = m_worldObject.bounds().aabb();
+    std::unordered_set<WorldTreeGeode*> possibleColliders = WorldTreeQuery(m_worldTree, &worldObjectAABB, m_geode->containingNode(), &m_worldObject.collisionFilter()).nearGeodes();
     possibleColliders.erase(m_geode);
 
     for (WorldTreeGeode* possibleCollider : possibleColliders) {
         assert(possibleCollider->worldObject() != nullptr);
         WorldObject* other = possibleCollider->worldObject();
 
-        assert(m_worldObject.isCollideableWith(other));
+        assert(m_worldObject.collisionFilter().isCollideableWith(&other->collisionFilter()));
         checkCollisions(m_voxelTree->root(), other->collisionDetector().voxelTree().root());
     }
 

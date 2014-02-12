@@ -7,13 +7,13 @@
 #include <glow/glow.h>
 
 #include "utils/tostring.h"
-#include "utils/aimhelper.h"
+#include "utils/aimer.h"
 
 #include "etc/windowmanager.h"
 
 #include "worldobject/worldobject.h"
 #include "player.h"
-#include "hud.h"
+#include "ui/hud/hud.h"
 #include "worldobject/ship.h"
 #include "camera/cameradolly.h"
 
@@ -43,7 +43,6 @@
 
 InputHandler::InputHandler(Player* player):
     m_player(player),
-
     m_hmd(nullptr),
 
     prop_deadzoneMouse("input.deadzoneMouse"),
@@ -100,7 +99,7 @@ void InputHandler::resizeEvent(const unsigned int width, const unsigned int heig
 */
 void InputHandler::keyCallback(int key, int scancode, int action, int mods) {
     if (action == GLFW_PRESS) {
-        m_inputConfigurator->setLastPrimaryInput(InputMapping(InputType::Keyboard, key, 1));
+        m_inputConfigurator->setLastPrimaryInput(InputMapping(InputType::Keyboard, key, 1, 0.0f));
     } else {
         m_inputConfigurator->setLastPrimaryInput(InputMapping());
     }
@@ -132,7 +131,9 @@ void InputHandler::keyCallback(int key, int scancode, int action, int mods) {
 void InputHandler::update(float deltaSec) {
     if (glfwGetWindowAttrib(glfwGetCurrentContext(), GLFW_FOCUSED)) {
         if (m_lastfocus) {
-            retrieveInputValues();
+            if (glfwJoystickPresent(GLFW_JOYSTICK_1)) {
+                retrieveInputValues();
+            }
             if (m_inputConfigurator->isConfiguring()) {
                 m_inputConfigurator->update();
             } else {
@@ -164,12 +165,19 @@ void InputHandler::processMouseUpdate() {
     double x, y;
     glfwGetCursorPos(glfwGetCurrentContext(), &x, &y);
 
-    placeCrossHair(x, y);
+    bool pressed = glfwGetMouseButton(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS;
 
-    if (glfwGetMouseButton(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
-        if (m_player->playerShip()) {
-            m_player->playerShip()->fireAtPoint(findTargetPoint());
-        }
+    m_player->hud().crossHair().setActionActive(pressed);
+
+    if(glfwJoystickPresent(GLFW_JOYSTICK_1)) {
+        /*Hack to center if gamepad is presentyy*/
+        m_player->hud().crossHair().pointToLocalPoint(glm::vec3(0, 0, -1));
+    } else {
+        placeCrossHair(x, y);
+    }
+
+    if (pressed) {
+        m_player->fire();
     }
 
     // spin
@@ -270,10 +278,10 @@ float InputHandler::getInputValue(InputMapping mapping) {
 }
 
 void InputHandler::processFireActions() {
+    m_player->hud().crossHair().setActionActive(getInputValue(&fireAction) > 0.001);
+
     if (getInputValue(&fireAction)) {
-        if (m_player->playerShip()) {
-            m_player->playerShip()->fireAtPoint(findTargetPoint());
-        }
+        m_player->fire();
     }
     if (getInputValue(&rocketAction)) {
         if (m_player->playerShip()) {
@@ -313,17 +321,6 @@ void InputHandler::processTargetSelectActions() {
     if (getInputValue(&selectPreviousAction)) {
         m_targetSelector->selectPreviousTarget();
     }
-}
-
-glm::vec3 InputHandler::findTargetPoint() {
-    glm::vec3 shootDirection(glm::normalize(m_player->hud().crossHair().position() - m_player->cameraPosition()));
-
-    Ray ray(
-        m_player->hud().crossHair().position(),
-        shootDirection
-    );
-
-    return AimHelper(m_player->playerShip(),ray).aim();
 }
 
 void InputHandler::placeCrossHair(double winX, double winY) {

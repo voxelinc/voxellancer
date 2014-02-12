@@ -11,7 +11,7 @@
 
 #include "voxel/voxel.h"
 
-#include "worldtransform.h"
+#include "geometry/transform.h"
 
 
 class VoxelTree;
@@ -44,7 +44,7 @@ public:
     const Grid3dAABB& gridAABB() const;
 
     Sphere& sphere();
-    Sphere& sphere(const WorldTransform& transform);
+    Sphere& sphere(const Transform& transform);
 
     bool active() const;
     void setActive(bool active);
@@ -62,7 +62,7 @@ protected:
     Grid3dAABB m_gridAABB;
 
     Sphere m_sphere;
-    WorldTransform m_cachedSphereTransform;
+    Transform m_cachedSphereTransform;
     bool m_sphereRadiusValid;
 
     bool m_active;
@@ -80,7 +80,7 @@ protected:
 
     VoxelTreeNode* cellSubnode(const glm::ivec3& cell);
 
-    void calculateSpherePosition(const WorldTransform& transform);
-    void calculateSphereRadius(const WorldTransform& transform);
+    void calculateSpherePosition(const Transform& transform);
+    void calculateSphereRadius(const Transform& transform);
 };
 

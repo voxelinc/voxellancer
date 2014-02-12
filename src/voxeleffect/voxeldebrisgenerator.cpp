@@ -13,14 +13,15 @@
 
 
 VoxelDebrisGenerator::VoxelDebrisGenerator() :
+    VoxelParticleSpawnBase("physics.debrisDampening",
+                           "physics.debrisAngularDampening",
+                           "physics.debrisBaseForce",
+                           "physics.debrisAngularBaseForce"),
     m_orientation(),
     m_density(2),
     m_spawnProbability(1.0f)
 {
-    m_particleDampening = Property<float>("physics.debrisDampening");
-    m_particleAngularDampening = Property<float>("physics.debrisAngularDampening");
-    m_particleBaseForce = Property<float>("physics.debrisBaseForce");
-    m_particleAngularBaseForce = Property<float>("physics.debrisAngularBaseForce");
+    
 }
 
 VoxelDebrisGenerator::~VoxelDebrisGenerator() {
@@ -40,8 +41,8 @@ void VoxelDebrisGenerator::setSpawnProbability(float spawnProbability) {
 }
 
 void VoxelDebrisGenerator::spawn() {
-    WorldTransform gridTransform;
-    WorldTransform particleTransform;
+    Transform gridTransform;
+    Transform particleTransform;
 
     gridTransform.setPosition(m_position);
     gridTransform.setOrientation(m_orientation);
@@ -60,7 +61,7 @@ void VoxelDebrisGenerator::spawn() {
                 particleTransform.setScale(createScale());
                 particleTransform.setPosition(gridTransform.applyTo(glm::vec3(x, y, z)));
 
-                VoxelParticle* particle = new VoxelParticle(particleTransform, m_color, m_colorEmissiveness, createLifetime());
+                VoxelParticle* particle = new VoxelParticle(particleTransform, m_color, m_emissiveness, createLifetime());
                 particle->setAngularSpeed(createAngularSpeed(), m_particleDampening);
                 particle->setDirectionalSpeed(createDirectionalSpeed(), m_particleAngularDampening);
 

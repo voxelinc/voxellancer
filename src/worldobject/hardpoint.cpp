@@ -1,8 +1,9 @@
 #include "hardpoint.h"
 
 #include "ship.h"
+#include "weapons/weapon.h"
 
-Hardpoint::Hardpoint(Ship* ship, const glm::ivec3& positionInGrid, Weapon *weapon) {
+Hardpoint::Hardpoint(Ship* ship, const glm::ivec3& positionInGrid, std::shared_ptr<Weapon> weapon) {
     assert(ship != nullptr);
     m_ship = ship;
     m_positionInGrid = glm::vec3(positionInGrid);
@@ -10,16 +11,16 @@ Hardpoint::Hardpoint(Ship* ship, const glm::ivec3& positionInGrid, Weapon *weapo
 }
 
 Hardpoint::~Hardpoint() {
-    delete m_weapon;
+
 }
 
-void Hardpoint::installWeapon(Weapon *launcher) {
+void Hardpoint::installWeapon(std::shared_ptr<Weapon> launcher) {
     m_weapon = launcher;
     m_weapon->setWorldObject(m_ship);
 }
 
 Weapon* Hardpoint::weapon() {
-    return m_weapon;
+    return m_weapon.get();
 }
 
 glm::vec3 Hardpoint::position() {

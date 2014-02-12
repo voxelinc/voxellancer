@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <vector>
 #include <list>
 
 #include "glow/ref_ptr.h"
@@ -9,6 +10,7 @@
 #include <glow/Buffer.h>
 
 #include "camera/camera.h"
+#include "property/property.h"
 
 
 class VoxelParticle;
@@ -25,7 +27,8 @@ public:
 
 
 protected:
-    std::list<VoxelParticle*> m_particles;
+    std::vector<VoxelParticle*> m_particles;
+    std::vector<VoxelParticle*> m_tempParticles;
 
     int m_bufferSize;
 
@@ -35,6 +38,7 @@ protected:
     glow::ref_ptr<glow::Buffer> m_particleDataBuffer;
 
     bool m_initialized;
+    Property<glm::vec3> m_defaultLightDir;
 
     void initialize();
     void loadProgram();

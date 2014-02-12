@@ -26,8 +26,9 @@ struct ActionKeyMapping {
         secondaryMapping(secondary),
         toggleAction(false),
         toggleStatus(false),
-        name(name) {
-};
+        name(name)
+    {
+    }
 
     ActionKeyMapping(char* primary, char* secondary, std::string name, bool toggleAction) :
         primaryMapping(primary),
@@ -35,7 +36,8 @@ struct ActionKeyMapping {
         toggleAction(toggleAction),
         toggleStatus(false),
         name(name)
-    {};
+    {
+    }
 };
 
 struct SecondaryInputValues {
@@ -113,6 +115,5 @@ protected:
     ActionKeyMapping selectNextAction;
     ActionKeyMapping selectPreviousAction;
 
-    glm::vec3 findTargetPoint();
     void placeCrossHair(double winX, double winY);
 };

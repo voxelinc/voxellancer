@@ -77,12 +77,12 @@ endif()
 
 # GET REPOSITORY VERSION
 # Add a revision file containing the git-head tag for cpack and install
-include(GetGitRevisionDescription)
-get_git_head_revision(GIT_REFSPEC GIT_SHA1)
+# include(GetGitRevisionDescription)
+# get_git_head_revision(GIT_REFSPEC GIT_SHA1)
 
 # Generate a shorter, googlelike variation for rev
-string(SUBSTRING ${GIT_SHA1} 0 12 GIT_REV)
-file(WRITE ${CMAKE_BINARY_DIR}/revision ${GIT_REV})
+# string(SUBSTRING ${GIT_SHA1} 0 12 GIT_REV)
+# file(WRITE ${CMAKE_BINARY_DIR}/revision ${GIT_REV})
 
 
 # DEPENDENCIES
@@ -94,9 +94,19 @@ find_package(GLFW REQUIRED)
 find_package(SFML REQUIRED)
 find_package(BANDIT REQUIRED)
 find_package(LibOVR REQUIRED)
+find_package(OpenMP REQUIRED)
 
 if(REGEX_USE_BOOST)
 find_package(Boost REQUIRED regex)
+endif()
+
+if(OPENMP_FOUND)
+    message(STATUS "OpenMP found")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
+else()
+    message(WARNING "OpenMP not found")
 endif()
 
 set(GLOW_DIRECTORY glow)
@@ -142,20 +152,23 @@ list(REMOVE_ITEM SRC_FILES_EXCEPT_MAIN ${SRC_DIR}/main.cpp)
 file(GLOB_RECURSE SHADER_FILES
     "data/*.vert"
     "data/*.frag"
+    "data/*.geo"
 )
 
 source_group(${SHADER_GROUP} FILES ${SHADER_FILES})
 
 
-source_group_by_path(${SOURCE_DIR} "\\\\.h$|\\\\.hpp$"
+source_group_by_path_function(${SOURCE_DIR} "\\.h$|\\.hpp$"
     ${HEADER_GROUP} ${SRC_FILES})
-source_group_by_path(${SOURCE_DIR} "\\\\.cpp$|\\\\.c$|\\\\.inl$"
+source_group_by_path_function(${SOURCE_DIR} "\\.cpp$|\\.c$|\\.inl$"
     ${SOURCE_GROUP} ${SRC_FILES})
 
 add_executable(${target}
     ${SRC_FILES}
     ${SHADER_FILES}
 )
+
+add_definitions(-DGLM_FORCE_RADIANS)
 
 set(LIBS_TO_LINK
     ${OPENGL_LIBRARIES}

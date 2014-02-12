@@ -3,7 +3,7 @@
 #include <functional>
 #include <cassert>
 
-#include "collision/collisionfilterable.h"
+#include "collision/collisionfilter.h"
 
 #include "worldtree/worldtree.h"
 #include "worldtree/worldtreenode.h"
@@ -13,10 +13,11 @@
 
 #include "voxel/voxel.h"
 #include "voxel/voxeltreequery.h"
+#include "collision/collisiondetector.h"
 
 
 
-WorldTreeQuery::WorldTreeQuery(WorldTree* worldTree, const AbstractShape* shape, WorldTreeNode* nodeHint, CollisionFilterable* collisionFilter):
+WorldTreeQuery::WorldTreeQuery(WorldTree* worldTree, const AbstractShape* shape, WorldTreeNode* nodeHint, CollisionFilter* collisionFilter):
     m_worldTree(worldTree),
     m_nodeHint(nodeHint),
     m_collisionFilter(collisionFilter),
@@ -38,8 +39,8 @@ bool WorldTreeQuery::areGeodesNear() {
     return result;
 }
 
-std::set<WorldTreeGeode*> WorldTreeQuery::nearGeodes() {
-    std::set<WorldTreeGeode*>  result;
+std::unordered_set<WorldTreeGeode*> WorldTreeQuery::nearGeodes() {
+    std::unordered_set<WorldTreeGeode*> result;
     m_queryInterrupted = false;
 
     query(getQueryRoot(), [&](WorldTreeGeode* geode) {
@@ -65,22 +66,21 @@ bool WorldTreeQuery::areVoxelsIntersecting() {
     return result;
 }
 
-std::set<Voxel*> WorldTreeQuery::intersectingVoxels() {
-    std::set<Voxel*> result;
+std::unordered_set<Voxel*> WorldTreeQuery::intersectingVoxels() {
+    std::unordered_set<Voxel*> result;
     m_queryInterrupted = false;
 
     query(getQueryRoot(), [&](WorldTreeGeode* geode) {
         VoxelTreeQuery voxelTreeQuery(&geode->worldObject()->collisionDetector().voxelTree(), m_shape);
-
-        std::set<Voxel*> subresult = voxelTreeQuery.intersectingVoxels();
+        std::unordered_set<Voxel*> subresult = voxelTreeQuery.intersectingVoxels();
         result.insert(subresult.begin(), subresult.end());
     });
 
     return result;
 }
 
-std::set<WorldObject*> WorldTreeQuery::intersectingWorldObjects() {
-    std::set<WorldObject*> result;
+std::unordered_set<WorldObject*> WorldTreeQuery::intersectingWorldObjects() {
+    std::unordered_set<WorldObject*> result;
     m_queryInterrupted = false;
 
     query(getQueryRoot(), [&](WorldTreeGeode* geode) {
@@ -124,7 +124,7 @@ void WorldTreeQuery::query(WorldTreeNode* node, std::function<void(WorldTreeGeod
             assert(geode->aabb().intersects(node->aabb()));
             assert(geode->worldObject() != nullptr);
 
-            if(m_collisionFilter == nullptr || m_collisionFilter->isCollideableWith(geode->worldObject())) {
+            if(m_collisionFilter == nullptr || m_collisionFilter->isCollideableWith(&geode->worldObject()->collisionFilter())) {
                 if(m_shape->nearTo(geode->aabb())) {
                     onGeodeInteraction(geode);
 

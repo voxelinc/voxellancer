@@ -15,6 +15,7 @@ public:
 
     T* get();
     T* operator->();
+    T* operator*();
 
     bool valid() const;
 

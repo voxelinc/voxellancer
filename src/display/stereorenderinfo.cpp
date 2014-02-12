@@ -40,7 +40,7 @@ StereoRenderInfo StereoRenderInfo::fromOVRInfo(const OVR::HMDInfo& hmdInfo) {
     stereoConfig.SetDistortionFitPointVP(-1.0f, 0.0f);
 
     result.m_distortionScale = stereoConfig.GetDistortionScale();
-    result.m_fovy = stereoConfig.GetYFOVDegrees();
+    result.m_fovy = glm::radians(stereoConfig.GetYFOVDegrees());
 
     return result;
 }
@@ -67,7 +67,7 @@ StereoRenderInfo StereoRenderInfo::dummy() {
     };
 
     result.m_distortionScale = 1.5;
-    result.m_fovy = 120.0f;
+    result.m_fovy = glm::radians(120.0f);
 
     return result;
 }
@@ -82,7 +82,8 @@ StereoRenderInfo::StereoRenderInfo():
     m_hResolution(0),
     m_vResolution(0),
     m_distortionScale(0.0f),
-    m_fovy(0.0f)
+    m_fovy(0.0f),
+    m_eyeZOffset("vr.eyeZOffset")
 {
 
 }
@@ -145,11 +146,11 @@ glm::vec2 StereoRenderInfo::rightEyeLensCenter() const {
 }
 
 glm::vec3 StereoRenderInfo::leftEyeOffset() const {
-    return glm::vec3(Metrics::toGameUnits(-m_interpupillaryDistance / 2.0f), 0.0f, 0.0f);
+    return glm::vec3(Metrics::instance()->toGameUnits(-m_interpupillaryDistance / 2.0f), 0.0f, Metrics::instance()->toGameUnits(m_eyeZOffset.get()));
 }
 
 glm::vec3 StereoRenderInfo::rightEyeOffset() const {
-    return glm::vec3(Metrics::toGameUnits(m_interpupillaryDistance / 2.0f), 0.0f, 0.0f);
+    return glm::vec3(Metrics::instance()->toGameUnits(m_interpupillaryDistance / 2.0f), 0.0f, Metrics::instance()->toGameUnits(m_eyeZOffset.get()));
 }
 
 glm::vec3 StereoRenderInfo::leftEyeProjectionOffset() const {

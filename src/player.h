@@ -10,15 +10,18 @@ class Camera;
 class CameraDolly;
 class HUD;
 
+class Game;
+
 class Player {
 public:
-    Player();
-    ~Player();
+    Player(Game* game);
 
     void setShip(Ship *ship);
 
     void move(const glm::vec3& direction);
     void rotate(const glm::vec3& direction);
+
+    void fire();
 
     void update(float deltaSec);
 
@@ -29,7 +32,9 @@ public:
     glm::vec3 cameraPosition();
     glm::quat cameraOrientation();
 
+
 protected:
+    Game* m_game;
     Handle<Ship> m_playerShip;
     std::unique_ptr<CameraDolly> m_cameraDolly;
     std::unique_ptr<HUD> m_hud;

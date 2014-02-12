@@ -4,7 +4,8 @@
 
 SplitData::SplitData(WorldObject* worldObject):
     m_exWorldObject(worldObject),
-    m_llf(std::numeric_limits<int>::max())
+    m_llf(std::numeric_limits<int>::max()),
+    m_splitOffVoxels()
 {
 
 }

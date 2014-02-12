@@ -7,13 +7,14 @@ Property<float>* VoxelParticle::s_intersectionCheckPeriod = nullptr;
 
 
 
-VoxelParticle::VoxelParticle(const WorldTransform& transform, int color, float emissiveness, float lifetime):
+VoxelParticle::VoxelParticle(const Transform& transform, int color, float emissiveness, float lifetime):
     m_transform(transform),
     m_color(color),
     m_emissiveness(emissiveness),
     m_lifetime(lifetime),
     m_directionalDampening(0.0f),
-    m_angularDampening(0.0f)
+    m_angularDampening(0.0f),
+    m_dead(false)
 {
     if (s_intersectionCheckPeriod == nullptr) {
         s_intersectionCheckPeriod = new Property<float>("vfx.particleIntersectionCheckPeriod");
@@ -26,11 +27,11 @@ VoxelParticle::VoxelParticle(const WorldTransform& transform, int color, float e
     }
 }
 
-const WorldTransform& VoxelParticle::worldTransform() const {
+const Transform& VoxelParticle::transform() const {
     return m_transform;
 }
 
-void VoxelParticle::setWorldTransform(const WorldTransform& transform) {
+void VoxelParticle::setTransform(const Transform& transform) {
     m_transform = transform;
 }
 
@@ -47,7 +48,11 @@ float VoxelParticle::lifetime() const {
 }
 
 bool VoxelParticle::isDead() const {
-    return m_lifetime == 0.0f;
+    return m_dead || m_lifetime == 0.0f;
+}
+
+void VoxelParticle::markAsDead() {
+    m_dead = true;
 }
 
 void VoxelParticle::setDirectionalSpeed(const glm::vec3& speed, float dampening) {
@@ -79,6 +84,5 @@ void VoxelParticle::update(float deltaSec) {
 
     m_intersectionCheckCountdown -= deltaSec;
 }
-
 
 
