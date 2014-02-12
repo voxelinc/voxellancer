@@ -7,6 +7,7 @@
 #include "voxel/voxeltree.h"
 
 #include "worldobject/worldobject.h"
+#include "voxel.h"
 
 
 static const int SUBNODE_COUNT = 8;

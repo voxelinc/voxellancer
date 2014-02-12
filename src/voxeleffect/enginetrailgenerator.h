@@ -1,11 +1,14 @@
 #pragma once
 
+#include <memory>
+
 #include <glm/glm.hpp>
 
 #include "property/property.h"
-#include "voxeleffect/voxelexplosiongenerator.h"
+
 
 class Engine;
+class VoxelExplosionGenerator;
 
 class EngineTrailGenerator
 {
@@ -19,17 +22,17 @@ public:
     void update(float deltaSec);
 
 protected:
-    glm::vec3 calculateSpawnPosition();
-    void spawnAt(glm::vec3 position);
-
     Engine* m_engine;
-    VoxelExplosionGenerator m_generator;
-    float m_spawnOffset;
+    std::unique_ptr<VoxelExplosionGenerator> m_generator;
 
     glm::vec3 m_lastPosition;
     bool m_lastValid;
     double m_timeSinceLastSpawn;
+    float m_spawnOffset;
 
     Property<float> prop_lifetime, prop_stepDistance, prop_idleTime;
+
+    glm::vec3 calculateSpawnPosition();
+    void spawnAt(glm::vec3 position);
 };
 

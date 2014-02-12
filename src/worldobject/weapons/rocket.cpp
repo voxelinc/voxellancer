@@ -15,6 +15,7 @@
 #include "sound/sound.h"
 #include "collision/collisionfilterignoringcreator.h"
 #include "ui/objectinfo.h"
+#include "voxel/voxelclusterbounds.h"
 
 
 Rocket::Rocket(glm::vec3 position, glm::quat orientation, const glm::vec3& initialSpeed, float ejectSpeed, WorldObject* creator, WorldObject* target) :

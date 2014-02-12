@@ -14,6 +14,7 @@
 #include "worldobject/worldobject.h"
 #include "collision/collisiondetector.h"
 #include "../bandit_extension/vec3helper.h"
+#include "voxel/voxel.h"
 
 using namespace bandit;
 

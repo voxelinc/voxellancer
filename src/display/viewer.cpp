@@ -20,7 +20,7 @@ Viewer::Viewer(const Viewport& viewport):
 }
 
 const View& Viewer::view() const {
-    return *m_view.get();
+    return *m_view;
 }
 
 Scene* Viewer::scene() {

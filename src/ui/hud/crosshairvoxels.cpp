@@ -9,6 +9,7 @@
 
 #include "crosshair.h"
 #include "hud.h"
+#include "voxel/voxel.h"
 
 
 class CrossHairElement: public VoxelCluster {

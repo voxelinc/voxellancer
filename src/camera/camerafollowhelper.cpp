@@ -5,6 +5,7 @@
 
 #include "geometry/sphere.h"
 #include "worldobject/worldobject.h"
+#include "voxel/voxelclusterbounds.h"
 
 
 CameraFollowHelper::CameraFollowHelper():

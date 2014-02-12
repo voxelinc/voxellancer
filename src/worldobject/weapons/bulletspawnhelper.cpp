@@ -11,6 +11,7 @@
 
 #include "bullet.h"
 #include "physics/physics.h"
+#include "voxel/voxelclusterbounds.h"
 
 
 BulletSpawnHelper::BulletSpawnHelper(Bullet* bullet, Hardpoint* hardpoint, float bulletSpeed, const glm::vec3& target):

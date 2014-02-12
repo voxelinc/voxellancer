@@ -142,8 +142,8 @@ void VoxelParticleWorld::loadProgram() {
 }
 
 void VoxelParticleWorld::setupVertexAttributes() {
-    VoxelRenderer::voxelMesh()->bindTo(m_program, m_vertexArrayObject, 0);
-
+    VoxelRenderer::voxelMesh().bindTo(m_program, m_vertexArrayObject, 0);
+    
     setupVertexAttribute(offsetof(ParticleData, position), "v_position", 3, GL_FLOAT, GL_FALSE, 2);
     setupVertexAttribute(offsetof(ParticleData, orientation), "v_orientation", 4, GL_FLOAT, GL_FALSE, 3);
     setupVertexAttribute(offsetof(ParticleData, scale), "v_scale", 1, GL_FLOAT, GL_FALSE, 4);

@@ -2,6 +2,7 @@
 
 #include "worldobject/ship.h"
 #include "ai/formationlogic.h"
+#include "voxel/voxelclusterbounds.h"
 
 
 PatrolWaypointsTask::PatrolWaypointsTask(Ship& ship, std::list<glm::vec3> points) :

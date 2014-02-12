@@ -6,15 +6,14 @@
 
 #include <glm/glm.hpp>
 
-#include "geometry/aabb.h"
 #include "geometry/transform.h"
 
 #include "utils/vec3hash.h"
-#include "voxelclusterbounds.h"
 
 
 class Voxel;
 class VoxelRenderData;
+class VoxelClusterBounds;
 
 class VoxelCluster {
 public:
@@ -51,8 +50,8 @@ public:
 protected:
     std::unordered_map<glm::ivec3, Voxel*> m_voxels;
     std::unique_ptr<VoxelRenderData> m_voxelRenderData;
+    std::unique_ptr<VoxelClusterBounds> m_bounds;
 
     Transform m_transform;
-    VoxelClusterBounds m_bounds;
 };
 

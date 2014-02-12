@@ -8,6 +8,7 @@
 #include "hudobjectdelegate.h"
 #include "hud.h"
 #include "worldobject/worldobject.h"
+#include "voxel/voxelclusterbounds.h"
 
 
 ObjectHudget::ObjectHudget(HUD* hud, HUDObjectDelegate* objectDelegate):

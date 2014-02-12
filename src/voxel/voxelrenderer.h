@@ -3,9 +3,6 @@
 
 #include <glow/ref_ptr.h>
 
-#include "voxeleffect/voxelmesh.h"
-
-
 namespace glow {
     class Texture;
     class Program;
@@ -15,6 +12,7 @@ namespace glow {
 
 class Camera;
 class VoxelCluster;
+class VoxelMesh;
 
 class VoxelRenderer {
 public:
@@ -26,11 +24,11 @@ public:
 
     static std::shared_ptr<VoxelRenderer> instance();
     static glow::Program* program();
-    static VoxelMesh* voxelMesh();
+    static VoxelMesh& voxelMesh();
 
 private:
     glow::ref_ptr<glow::Program> m_program;
-    VoxelMesh m_voxelMesh;
+    std::unique_ptr<VoxelMesh> m_voxelMesh;
     bool m_prepared;
 
     static std::weak_ptr<VoxelRenderer> s_instance;

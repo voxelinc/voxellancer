@@ -8,6 +8,7 @@
 #include "objecthudget.h"
 #include "geometry/transform.h"
 #include "voxel/voxelcluster.h"
+#include "voxel/voxel.h"
 
 
 class ObjectHudgetCorner: public VoxelCluster {

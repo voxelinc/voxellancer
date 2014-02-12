@@ -2,17 +2,18 @@
 
 #include <unordered_map>
 
-#include <glow/Texture.h>
+#include <GL/glew.h>
+
 #include <glow/ref_ptr.h>
 
 #include "utils/vec3hash.h"
-
 
 
 namespace glow {
     class Program;
     class VertexArrayObject;
     class Buffer;
+    class Texture;
 };
 class Voxel;
 

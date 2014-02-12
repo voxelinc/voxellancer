@@ -39,7 +39,7 @@ void VoxelRenderData::setupVertexAttributes() {
     m_vertexArrayObject = new glow::VertexArrayObject();
     m_voxelDataBuffer = new glow::Buffer(GL_ARRAY_BUFFER);
 
-    VoxelRenderer::voxelMesh()->bindTo(VoxelRenderer::program(), m_vertexArrayObject, 0);
+    VoxelRenderer::voxelMesh().bindTo(VoxelRenderer::program(), m_vertexArrayObject, 0);
     setupVertexAttribute(offsetof(VoxelData, position), "v_position", 3, GL_FLOAT, GL_FALSE, 2);
     setupVertexAttribute(offsetof(VoxelData, color), "v_color", GL_BGRA, GL_UNSIGNED_BYTE, GL_TRUE, 3);
     setupVertexAttribute(offsetof(VoxelData, emissiveness), "v_emissiveness", 1, GL_FLOAT, GL_FALSE, 4);

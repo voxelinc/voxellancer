@@ -1,4 +1,6 @@
 
+#include <glow/logging.h>
+
 #include "god.h"
 #include "collision/collisiondetector.h"
 #include "world.h"

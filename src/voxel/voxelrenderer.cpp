@@ -26,7 +26,7 @@ std::weak_ptr<VoxelRenderer> VoxelRenderer::s_instance;
 VoxelRenderer::VoxelRenderer() :
     m_program(0),
     m_prepared(false),
-    m_voxelMesh()
+    m_voxelMesh(new VoxelMesh())
 {
     glow::debug("Create Voxelrenderer");
     createAndSetupShaders();
@@ -87,9 +87,9 @@ glow::Program* VoxelRenderer::program() {
     return s_instance.lock()->m_program;
 }
 
-VoxelMesh* VoxelRenderer::voxelMesh() {
+VoxelMesh& VoxelRenderer::voxelMesh() {
     assert(!s_instance.expired());
-    return &s_instance.lock()->m_voxelMesh;
+    return *s_instance.lock()->m_voxelMesh;
 }
 
 std::shared_ptr<VoxelRenderer> VoxelRenderer::instance() {

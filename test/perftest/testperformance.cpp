@@ -19,6 +19,7 @@
 #include "voxel/voxel.h"
 #include "world/god.h"
 #include "sound/soundmanager.h"
+#include "ui/objectinfo.h"
 
 
 

@@ -9,6 +9,7 @@
 
 
 class HUD;
+class WorldObject;
 
 /*
     Hudget drawn where player-bullets and target

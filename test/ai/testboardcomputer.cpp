@@ -4,6 +4,7 @@
 
 #include "worldobject/ship.h"
 #include "ai/boardcomputer.h"
+#include "physics/physics.h"
 
 
 

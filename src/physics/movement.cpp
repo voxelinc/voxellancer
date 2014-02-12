@@ -11,6 +11,7 @@
 #include "worldtree/worldtreegeode.h"
 
 #include "utils/tostring.h"
+#include "voxel/voxelclusterbounds.h"
 
 
 static const float ATOMIC_DIRECTIONAL_STEP = 0.4f;

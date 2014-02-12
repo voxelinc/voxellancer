@@ -10,6 +10,7 @@
 #include "world/world.h"
 #include "world/god.h"
 #include "../bandit_extension/aabbhelper.h"
+#include "voxel/voxelclusterbounds.h"
 
 
 
