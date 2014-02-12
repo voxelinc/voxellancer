@@ -30,9 +30,6 @@ Ship::Ship(CollisionFilter* collisionFilter):
 }
 
 Ship::~Ship() {
-//    if (m_sound) {
-//        m_sound->stop();
-//    }
     m_shipHandle.invalidate();
 }
 
@@ -41,10 +38,6 @@ void Ship::update(float deltaSec) {
 
     m_character->update(deltaSec);
     m_boardComputer->update(deltaSec);
-
-//    if (m_sound) {
-//        m_sound->setPosition(m_transform.applyTo(m_enginePos));
-//    }
 }
 
 Handle<Ship> Ship::shipHandle() {
@@ -74,30 +67,5 @@ BoardComputer* Ship::boardComputer() {
 FormationLogic* Ship::formationLogic() {
     return m_formationLogic.get();
 }
-
-//
-//void Ship::setEngineSound(std::shared_ptr<Sound> sound) {
-//    m_sound = sound;
-//    sound->setLooping(true);
-//    sound->setPosition(m_transform.applyTo(m_enginePos));
-//    sound->play();
-//}
-//
-//void Ship::updateEnginePosition() {
-//    m_enginePos = glm::vec3(0);
-//    int engineCount = 0;
-//    for (EngineSlot* engineSlot : components().engineSlots()) {
-//        if(engineSlot->engine()) {
-//            m_enginePos += engineSlot->voxel()->gridCell();
-//            engineCount++;
-//        }
-//    }
-//
-//    if(engineCount > 0) {
-//        m_enginePos /= engineCount;
-//    } else {
-//        m_sound->stop();
-//    }
-//}
 
 

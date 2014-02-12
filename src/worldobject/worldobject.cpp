@@ -124,7 +124,7 @@ Handle<WorldObject>& WorldObject::handle() {
     return m_handle;
 }
 
-bool WorldObject::scheduledForDeletion() {
+bool WorldObject::scheduledForDeletion() const {
     return m_scheduledForDeletion;
 }
 
@@ -132,6 +132,11 @@ void WorldObject::onScheduleForDeletion() {
     m_scheduledForDeletion = true;
 }
 
-float WorldObject::collisionFieldOfDamage() {
+float WorldObject::collisionFieldOfDamage() const {
     return m_collisionFieldOfDamage;
 }
+
+void WorldObject::setCollisionFieldOfDamage(float collisionFieldOfDamage) {
+    m_collisionFieldOfDamage = collisionFieldOfDamage;
+}
+

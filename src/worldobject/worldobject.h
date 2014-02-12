@@ -50,11 +50,12 @@ public:
 
     Handle<WorldObject>& handle();
 
-    bool scheduledForDeletion();
+    bool scheduledForDeletion() const;
     void onScheduleForDeletion();
 
+    float collisionFieldOfDamage() const;
+    void setCollisionFieldOfDamage(float collisionFieldOfDamage);
 
-    float collisionFieldOfDamage();
 
 protected:
     std::unique_ptr<CollisionFilter> m_collisionFilter;
