@@ -28,7 +28,6 @@ void Player::setShip(Ship* ship) {
     m_cameraDolly.followWorldObject(ship);
 }
 
-
 void Player::update(float deltaSec) {
     m_cameraDolly.update(deltaSec);
     m_hud.update(deltaSec);

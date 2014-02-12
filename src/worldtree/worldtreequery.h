@@ -1,10 +1,12 @@
 #pragma once
 
-#include <set>
 #include <functional>
+#include <unordered_set>
+#include <set>
 
 #include "geometry/abstractshape.h"
 
+#include "worldtree/worldtreegeode.h"
 
 class Voxel;
 class WorldTree;
@@ -18,12 +20,13 @@ public:
     WorldTreeQuery(WorldTree* worldTree, const AbstractShape* shape, WorldTreeNode* nodeHint = nullptr, CollisionFilter* collisionFilter = nullptr);
 
     bool areGeodesNear();
-    std::set<WorldTreeGeode*> nearGeodes();
+
+    std::unordered_set<WorldTreeGeode*> nearGeodes();
 
     bool areVoxelsIntersecting();
-    std::set<Voxel*> intersectingVoxels();
+    std::unordered_set<Voxel*> intersectingVoxels();
 
-    std::set<WorldObject*> intersectingWorldObjects();
+    std::unordered_set<WorldObject*> intersectingWorldObjects();
 
 
 protected:
@@ -37,4 +40,3 @@ protected:
     WorldTreeNode* getQueryRoot(WorldTreeNode* node = nullptr) const;
     void query(WorldTreeNode* node, std::function<void(WorldTreeGeode*)> onGeodeInteraction);
 };
-

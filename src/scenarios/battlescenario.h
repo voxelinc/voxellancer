@@ -4,7 +4,6 @@
 
 #include "basescenario.h"
 
-
 class Game;
 class Ship;
 

@@ -1,6 +1,7 @@
 #include <bandit/bandit.h>
 
 #include <iostream>
+#include <unordered_set>
 
 #include "../bandit_extension/vec3helper.h"
 #include "worldtree/worldtree.h"
@@ -91,15 +92,15 @@ go_bandit([]() {
             worldTree->insert(c);
 
             aabb = AABB(glm::vec3(-100, -100, -100), glm::vec3(100, 100, 100));
-            std::set<WorldTreeGeode*> q1 = WorldTreeQuery(worldTree, &aabb).nearGeodes();
+            std::unordered_set<WorldTreeGeode*> q1 = WorldTreeQuery(worldTree, &aabb).nearGeodes();
             AssertThat(q1.size(), Equals(5));
 
             aabb = AABB(glm::vec3(-98, -98, -98), glm::vec3(100, 100, 100));
-            std::set<WorldTreeGeode*> q2 = WorldTreeQuery(worldTree, &aabb).nearGeodes();
+            std::unordered_set<WorldTreeGeode*> q2 = WorldTreeQuery(worldTree, &aabb).nearGeodes();
             AssertThat(q2.size(), Equals(4));
 
             aabb = AABB(glm::vec3(-45, 2, 4), glm::vec3(55, 25, 40));
-            std::set<WorldTreeGeode*> q3 = WorldTreeQuery(worldTree, &aabb).nearGeodes();
+            std::unordered_set<WorldTreeGeode*> q3 = WorldTreeQuery(worldTree, &aabb).nearGeodes();
             AssertThat(q3.size(), Equals(3));
         });
 
@@ -122,7 +123,7 @@ go_bandit([]() {
             worldTree->insert(a);
 
             aabb = AABB(glm::vec3(55, 25, 29), glm::vec3(56, 26, 36));
-            std::set<WorldTreeGeode*> q1 = WorldTreeQuery(worldTree, &aabb).nearGeodes();
+            std::unordered_set<WorldTreeGeode*> q1 = WorldTreeQuery(worldTree, &aabb).nearGeodes();
             AssertThat(q1.size(), Equals(1));
             AssertThat(q1.find(a) != q1.end(), Equals(true));
 
@@ -130,12 +131,12 @@ go_bandit([]() {
             worldTree->aabbChanged(a);
 
             aabb = AABB(glm::vec3(-9, 41, 31), glm::vec3(-8, 42, 32));
-            std::set<WorldTreeGeode*> q2 = WorldTreeQuery(worldTree, &aabb).nearGeodes();
+            std::unordered_set<WorldTreeGeode*> q2 = WorldTreeQuery(worldTree, &aabb).nearGeodes();
             AssertThat(q2.size(), Equals(1));
             AssertThat(q2.find(a) != q2.end(), Equals(true));
 
             aabb = AABB(glm::vec3(55, 25, 29), glm::vec3(56, 26, 36));
-            std::set<WorldTreeGeode*> q3 = WorldTreeQuery(worldTree, &aabb).nearGeodes();
+            std::unordered_set<WorldTreeGeode*> q3 = WorldTreeQuery(worldTree, &aabb).nearGeodes();
             AssertThat(q3.size(), Equals(0));
             AssertThat(q3.find(a) == q3.end(), Equals(true));
 

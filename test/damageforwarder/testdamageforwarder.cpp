@@ -50,7 +50,7 @@ go_bandit([]() {
         });
 
         it("Most basic test", [&] {
-            DamageImpact i(a, a->voxel(glm::ivec3(0, 0, 0)), glm::vec3(1, 0, 0));
+            DamageImpact i(a, a->voxel(glm::ivec3(0, 0, 0)), glm::vec3(1, 0, 0), glm::half_pi<float>());
 
             std::list<DamageImpact> impulses{i};
 
@@ -63,7 +63,7 @@ go_bandit([]() {
         });
 
         it("Negative direction test", [&] {
-            DamageImpact i(a, a->voxel(glm::ivec3(2, 0, 0)), glm::vec3(-2, 0, 0));
+            DamageImpact i(a, a->voxel(glm::ivec3(2, 0, 0)), glm::vec3(-2, 0, 0), glm::half_pi<float>());
 
             std::list<DamageImpact> impulses{i};
 
@@ -77,8 +77,8 @@ go_bandit([]() {
         });
 
         it("Z Axis Test", [&] {
-            DamageImpact i1(b, b->voxel(glm::ivec3(0, 0, 0)), glm::vec3(0, 0, 5));
-            DamageImpact i2(b, b->voxel(glm::ivec3(0, 0, 3)), glm::vec3(0, 0, -3));
+            DamageImpact i1(b, b->voxel(glm::ivec3(0, 0, 0)), glm::vec3(0, 0, 5), glm::half_pi<float>());
+            DamageImpact i2(b, b->voxel(glm::ivec3(0, 0, 3)), glm::vec3(0, 0, -3), glm::half_pi<float>());
 
             std::list<DamageImpact> impulses{i1, i2};
 
@@ -101,7 +101,7 @@ go_bandit([]() {
         });
 
         it("Forwarding from angle != perpendicular", [&] {
-            DamageImpact i(a, a->voxel(glm::ivec3(0, 0, 0)), glm::vec3(1, 1, 0));
+            DamageImpact i(a, a->voxel(glm::ivec3(0, 0, 0)), glm::vec3(1, 1, 0), glm::half_pi<float>());
 
             std::list<DamageImpact> impulses{i};
 

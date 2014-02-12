@@ -156,6 +156,7 @@ static void mainloop() {
 */
 static void loadWorldObjectConfigs() {
     PropertyManager::instance()->load("data/worldobjects/basicship.ini", "basicship");
+    PropertyManager::instance()->load("data/worldobjects/banner.ini", "banner");
     PropertyManager::instance()->load("data/worldobjects/eagle.ini", "eagle");
     PropertyManager::instance()->load("data/worldobjects/specialbasicship.ini", "specialbasicship");
     PropertyManager::instance()->load("data/worldobjects/normandy.ini", "normandy");
@@ -226,7 +227,6 @@ int main(int argc, char* argv[]) {
         loadEquipmentConfigs();
 
         game = new Game();
-        game->initialize();
 
         if(clParser.hmd()) {
             game->hmdManager().setupHMD();

@@ -26,9 +26,6 @@
 #include "game.h"
 #include "utils/randvec.h"
 
-
-
-
 BattleScenario::BattleScenario(Game* game):
     BaseScenario(game)
 {
@@ -43,16 +40,31 @@ void BattleScenario::populateWorld() {
 
     glow::debug("Create WorldObjects");
 
-    // create playership
 
-    Ship *playerShip = WorldObjectBuilder("specialbasicship").buildShip();
-    WorldObjectFactory().equipSomehow(playerShip);
+    Ship *playerShip = WorldObjectBuilder("basicship").buildShip();
     playerShip->transform().setPosition(glm::vec3(0, 0, 10));
+    playerShip->objectInfo().setName("basicship");
+    playerShip->objectInfo().setShowOnHud(false);
+    playerShip->objectInfo().setCanLockOn(false);
     world->god().scheduleSpawn(playerShip);
-
     m_game->player().setShip(playerShip);
 
+    // create enemy ai driven ship
+    Ship *aitester = WorldObjectBuilder("basicship").buildShip();
+    aitester->transform().setPosition(glm::vec3(0, 0, 10));
+    aitester->objectInfo().setName("basicship");
+    aitester->objectInfo().setShowOnHud(false);
+    //world->god().scheduleSpawn(aitester);
+    aitester->setCharacter(new DummyCharacter(*aitester, new FightTask(aitester->boardComputer(), {playerShip->handle()})));
 
+    WorldObject* banner = WorldObjectBuilder("basicship").buildWorldObject();
+    banner->transform().setScale(30.0f);
+    banner->transform().move(glm::vec3(0, 0, -600));
+    banner->objectInfo().setShowOnHud(false);
+    banner->objectInfo().setCanLockOn(false);
+    world->god().scheduleSpawn(banner);
+
+    // create two opposing enemy forces
     populateBattle(4, 4);
 
     glow::debug("Initial spawn");

@@ -54,6 +54,8 @@ public:
     void onScheduleForDeletion();
 
 
+    float collisionFieldOfDamage();
+
 protected:
     std::unique_ptr<CollisionFilter> m_collisionFilter;
     std::unique_ptr<CollisionDetector> m_collisionDetector;
@@ -66,6 +68,8 @@ protected:
     Voxel* m_crucialVoxel;
 
     bool m_scheduledForDeletion;
+
+    float m_collisionFieldOfDamage;
 
 
     WorldObject(CollisionFilter* collisionFilter, float scale = 1.0f);

@@ -18,6 +18,8 @@ Game::Game():
     m_hmdManager(this),
     m_scenario(this)
 {
+    m_scenario.load();
+
     m_viewer.setScene(&m_gameScene);
     m_viewer.setCameraHead(&m_player.cameraDolly().cameraHead());
 }
@@ -36,11 +38,6 @@ Viewer& Game::viewer() {
 
 HMDManager& Game::hmdManager() {
     return m_hmdManager;
-}
-
-void Game::initialize() {
-    assert(m_viewer.scene() == &m_gameScene);
-    m_scenario.load();
 }
 
 void Game::update(float deltaSec) {

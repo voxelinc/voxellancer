@@ -2,7 +2,7 @@
 
 #include <algorithm>
 #include <cassert>
-#include <set>
+#include <unordered_set>
 
 #include "geometry/sphere.h"
 
@@ -83,26 +83,30 @@ void WorldTreeScanner::update(float deltaSec, WorldObject* worldObject, const gl
 void WorldTreeScanner::scan(WorldObject* worldObject, const glm::vec3& position) {
     Sphere scanSphere(position, m_scanRadius);
 
-    std::set<WorldTreeGeode*> foundGeodes = WorldTreeQuery(m_worldTree, &scanSphere, worldObject->collisionDetector().geode()->containingNode(), &worldObject->collisionFilter()).nearGeodes();
+    WorldTreeQuery worldTreeQuery(m_worldTree, &scanSphere, worldObject->collisionDetector().geode()->containingNode(), &worldObject->collisionFilter());
+    std::unordered_set<WorldTreeGeode*> foundGeodes = worldTreeQuery.nearGeodes();
 
-    m_lostWorldObjects = m_worldObjects; // Re-Found objects are removed from this list
+    // Unordered sets for more performance
+    std::unordered_set<WorldObject*> lostWorldObjects(m_worldObjects.begin(), m_worldObjects.end()); // Re-Found objects are removed from this
+    std::unordered_set<WorldObject*> worldObjects(m_worldObjects.begin(), m_worldObjects.end()); // Re-Found objects are removed from this
 
-    for(std::set<WorldTreeGeode*>::iterator i = foundGeodes.begin(); i != foundGeodes.end(); ++i) {
-        WorldTreeGeode* foundGeode = *i;
+    for(WorldTreeGeode* foundGeode : foundGeodes) {
         WorldObject* foundWorldObject = foundGeode->worldObject();
-        
+
         if(!VoxelTreeQuery(&foundWorldObject->collisionDetector().voxelTree(), &scanSphere).areVoxelsIntersecting()) {
             continue;
         }
 
-        std::list<WorldObject*>::iterator j = std::find(m_worldObjects.begin(), m_worldObjects.end(), foundWorldObject);
+        std::unordered_set<WorldObject*>::iterator j = worldObjects.find(foundWorldObject);
 
-        if(j == m_worldObjects.end()) { // Object not yet found, add to newly found
+        if(j == worldObjects.end()) { // Object not yet found, add to newly found
             m_foundWorldObjects.push_back(foundWorldObject);
         } else { // object found again, thus wasn't lost
-            m_lostWorldObjects.remove(foundWorldObject);
+            lostWorldObjects.erase(foundWorldObject);
         }
     }
+
+    m_lostWorldObjects = std::list<WorldObject*>(lostWorldObjects.begin(), lostWorldObjects.end());
 
     for(WorldObject* worldObject : m_foundWorldObjects) {
         m_worldObjects.push_back(worldObject);
