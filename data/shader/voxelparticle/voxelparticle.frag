@@ -7,11 +7,11 @@ layout(location = 0) out vec4 fragColor;
 layout(location = 1) out vec4 normalz;
 layout(location = 2) out vec4 emissiveness;
 
-layout(location = 0) in vec3 f_color;
-layout(location = 1) in vec3 f_normal;
-layout(location = 2) in float f_deathTime;
-layout(location = 3) in float f_emissiveness;
-layout(location = 4) in vec3 f_modelposition;
+in vec3 f_color;
+in vec3 f_normal;
+in float f_deathTime;
+in float f_emissiveness;
+in vec3 f_modelposition;
 
 
 vec4 voxelFragmentColor(vec3 color, float emissiveness, vec3 normal, vec3 positionInVoxel);

@@ -10,15 +10,18 @@ uniform float emissiveness;
 // cube data
 layout(location = 0) in vec3 v_vertex;
 layout(location = 1) in vec3 v_normal;
+
 // instance data
 layout(location = 2) in vec3 v_position;
 layout(location = 3) in vec4 v_color;
 layout(location = 4) in float v_emissiveness;
 
-layout(location = 0) flat out vec3 f_normal;
-layout(location = 1) out vec3 f_color;
-layout(location = 2) out float f_emissiveness;
-layout(location = 3) out vec3 f_modelposition;
+
+flat out vec3 f_normal;
+out vec3 f_color;
+out float f_emissiveness;
+out vec3 f_modelposition;
+
 
 void main() {
     gl_Position = viewProjection * model * (vec4(v_vertex + v_position, 1.0));

@@ -6,10 +6,10 @@ layout(location = 0) out vec4 fragColor;
 layout(location = 1) out vec4 normalz;
 layout(location = 2) out vec4 emissiveness;
 
-layout(location = 0) flat in vec3 f_normal;
-layout(location = 1) in vec3 f_color;
-layout(location = 2) in float f_emissiveness;
-layout(location = 3) in vec3 f_modelposition;
+flat in vec3 f_normal;
+in vec3 f_color;
+in float f_emissiveness;
+in vec3 f_modelposition;
 
 
 vec4 voxelFragmentColor(vec3 color, float emissiveness, vec3 normal, vec3 positionInVoxel);

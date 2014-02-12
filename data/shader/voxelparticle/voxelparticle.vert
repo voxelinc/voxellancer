@@ -17,11 +17,11 @@ layout(location = 11) in float directinalDampening;
 layout(location = 12) in float angularDampening;
 
 // Output
-layout(location = 0) out vec3 f_color;
-layout(location = 1) out vec3 f_normal;
-layout(location = 2) out float f_deathTime;
-layout(location = 3) out float f_emissiveness;
-layout(location = 4) out vec3 f_modelposition;
+out vec3 f_color;
+out vec3 f_normal;
+out float f_deathTime;
+out float f_emissiveness;
+out vec3 f_modelposition;
 
 
 
