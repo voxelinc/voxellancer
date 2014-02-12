@@ -97,6 +97,8 @@ protected:
     Property<float> prop_deadzoneMouse;
     Property<float> prop_deadzoneGamepad;
 
+    Property<float> prop_maxClickTime;
+
     ActionKeyMapping fireAction;
     ActionKeyMapping rocketAction;
 
