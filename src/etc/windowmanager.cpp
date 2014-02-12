@@ -8,7 +8,7 @@
 #include <glowutils/FileRegistry.h>
 
 #include "geometry/size.h"
-
+#include "property/property.h"
 
 WindowManager* WindowManager::s_instance = nullptr;
 
@@ -37,8 +37,18 @@ float WindowManager::aspectRatio() const {
     return static_cast<float>(resolution().width()) / static_cast<float>(resolution().height());
 }
 
-void WindowManager::setWindowedResolution(const Size<int>& resolution) {
-    GLFWwindow* window = glfwCreateWindow(resolution.width(), resolution.height(), "Voxellancer", NULL, NULL);
+void WindowManager::initWindowed(int majorVersionRequire, int minorVersionRequire, const Size<int>* resolution, const Size<int>* position) {
+    m_majorVersionRequire = majorVersionRequire;
+    m_minorVersionRequire = minorVersionRequire;
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, m_majorVersionRequire);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, m_minorVersionRequire);
+
+    GLFWwindow* window;
+    if (resolution) {
+        window = glfwCreateWindow(resolution->width(), resolution->height(), "Voxellancer", NULL, NULL);
+    } else {
+        window = glfwCreateWindow(Property<int>("window.width"), Property<int>("window.height"), "Voxellancer", NULL, NULL);
+    }
 
     if (window == nullptr) {
         glfwTerminate();
@@ -47,15 +57,20 @@ void WindowManager::setWindowedResolution(const Size<int>& resolution) {
     }
 
     glfwMakeContextCurrent(window);
+    m_fullScreen = false;
+    if (position) {
+        glfwSetWindowPos(window, position->width(), position->height());
+    }
 
     for (ContextDependant* dependant : m_contextDependants) {
         dependant->afterContextRebuild();
     }
 }
 
-void WindowManager::setFullScreenResolution(int monitorIndex) {
+void WindowManager::initFullScreen(int majorVersionRequire, int minorVersionRequire, int monitorIndex) {
     std::vector<GLFWmonitor*> monitors = this->monitors();
     assert(monitors.size() > 0);
+    m_lastFullScreenMonitorIndex = monitorIndex;
 
     GLFWwindow* window;
     GLFWmonitor* monitor;
@@ -63,8 +78,7 @@ void WindowManager::setFullScreenResolution(int monitorIndex) {
     if(monitorIndex >= monitors.size()) {
         glow::info("Using primary monitor since specified monitor is not available");
         monitor = glfwGetPrimaryMonitor();
-    }
-    else {
+    } else {
         monitor = monitors[monitorIndex];
     }
     assert(monitor);
@@ -81,6 +95,7 @@ void WindowManager::setFullScreenResolution(int monitorIndex) {
     }
 
     glfwMakeContextCurrent(window);
+    m_fullScreen = true;
 
     for (ContextDependant* dependant : m_contextDependants) {
         dependant->afterContextRebuild();
@@ -95,11 +110,33 @@ void WindowManager::shutdown() {
 }
 
 bool WindowManager::fullScreen() const {
-    return false; // TODO
+    return m_fullScreen;
 }
 
-void WindowManager::setFullScreen(bool fullScreen) {
+void WindowManager::toggleFullScreen() {
+    if (fullScreen()) {
+        shutdown();
+        if (m_lastWindowedPos.width() == -1) {
+            initWindowed(m_majorVersionRequire, m_minorVersionRequire);
+        } else {
+            initWindowed(m_majorVersionRequire, m_minorVersionRequire, &m_lastWindowedSize, &m_lastWindowedPos);
+        }
+    } else {
+        int x, y;
+        glfwGetWindowPos(glfwGetCurrentContext(), &x, &y);
+        m_lastWindowedPos.setWidth(x);
+        m_lastWindowedPos.setHeight(y);
+        glfwGetWindowSize(glfwGetCurrentContext(), &x, &y);
+        m_lastWindowedSize.setWidth(x);
+        m_lastWindowedSize.setHeight(y);
 
+        shutdown();
+        if (m_lastFullScreenMonitorIndex == -1) {
+            initFullScreen(m_majorVersionRequire, m_minorVersionRequire);
+        } else {
+            initFullScreen(m_majorVersionRequire, m_minorVersionRequire, m_lastFullScreenMonitorIndex);
+        }
+    }
 }
 
 std::vector<GLFWmonitor*> WindowManager::monitors() const {
@@ -128,8 +165,14 @@ int WindowManager::currentMonitor() const {
     return -1;
 }
 
-WindowManager::WindowManager() : 
-    m_contextDependants()
+WindowManager::WindowManager() :
+    m_contextDependants(),
+    m_fullScreen(false),
+    m_majorVersionRequire(0),
+    m_minorVersionRequire(0),
+    m_lastWindowedPos(-1, -1),
+    m_lastWindowedSize(-1, -1),
+    m_lastFullScreenMonitorIndex(-1)
 {
 
 }

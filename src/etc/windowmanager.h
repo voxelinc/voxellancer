@@ -15,16 +15,15 @@ public:
 
     Size<int> resolution() const;
     Viewport viewport() const;
-
     float aspectRatio() const;
 
-    void setWindowedResolution(const Size<int>& resolution);
-    void setFullScreenResolution(int monitorIndex = 0);
-
-    void shutdown();
+    void initWindowed(int majorVersionRequire, int minorVersionRequire, const Size<int>* resolution = nullptr, const Size<int>* position = nullptr);
+    void initFullScreen(int majorVersionRequire, int minorVersionRequire, int monitorIndex = 0);
 
     bool fullScreen() const;
-    void setFullScreen(bool fullScreen);
+    void toggleFullScreen();
+
+    void shutdown();
 
     std::vector<GLFWmonitor*> monitors() const;
     int currentMonitor() const;
@@ -36,6 +35,12 @@ public:
 protected:
     static WindowManager* s_instance;
     std::list<ContextDependant*> m_contextDependants;
+    bool m_fullScreen;
+    int m_majorVersionRequire;
+    int m_minorVersionRequire;
+    int m_lastFullScreenMonitorIndex;
+    Size<int> m_lastWindowedPos;
+    Size<int> m_lastWindowedSize;
 
     WindowManager();
     Size<int> currentResolution(GLFWmonitor* monitor);
