@@ -1,11 +1,11 @@
 #version 330
 
 uniform float withBorder;
+uniform vec3 lightdir;
 
 const float borderWidth = 0.10;
 const float borderDarkness = 0.2;
 const float ambient = 0.3;
-const vec3 lightDirection = normalize(vec3(0.3f, 0.5f, 1.0f));
 
 vec4 voxelFragmentColor(vec3 color, float emissiveness, vec3 normal, vec3 positionInVoxel) {
     // modelposition is between -0.5 and 0.5
@@ -19,7 +19,7 @@ vec4 voxelFragmentColor(vec3 color, float emissiveness, vec3 normal, vec3 positi
     float border = smoothstep(1.0 - borderWidth, 1.0 - borderWidth + 0.01, borderDistance) * borderDarkness;
 
     vec3 n_normal = normalize(normal);
-    float diffuse = dot(n_normal, lightDirection);
+    float diffuse = dot(n_normal, lightdir);
     diffuse = max(0, diffuse) + ambient;
 
     return vec4(color * diffuse - vec3(border * float(withBorder)), 1.0);

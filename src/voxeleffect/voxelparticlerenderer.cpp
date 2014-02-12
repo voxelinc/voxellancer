@@ -19,7 +19,8 @@
 VoxelParticleRenderer::VoxelParticleRenderer(VoxelParticleEngine* engine):
     m_initialized(false),
     m_engine(engine),
-    m_bufferSize(0)
+    m_bufferSize(0),
+    m_defaultLightDir("vfx.lightdir")
 {
 
 }
@@ -56,6 +57,7 @@ void VoxelParticleRenderer::draw(Camera& camera) {
 
     m_program->setUniform("viewProjection", camera.viewProjection());
     m_program->setUniform("time", m_engine->time());
+    m_program->setUniform("lightdir", m_defaultLightDir.get());
 
     m_program->use();
 

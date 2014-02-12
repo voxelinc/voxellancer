@@ -50,7 +50,6 @@ protected:
     std::stack<int> m_freeParticleBufferIndices;
 
 
-
     bool m_gpuParticleBufferInvalid;
     int m_gpuParticleBufferInvalidBegin;
     int m_gpuParticleBufferInvalidEnd;
