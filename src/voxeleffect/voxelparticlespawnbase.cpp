@@ -13,7 +13,10 @@
 #include "voxelparticleworld.h"
 
 
-VoxelParticleSpawnBase::VoxelParticleSpawnBase() :
+VoxelParticleSpawnBase::VoxelParticleSpawnBase(char* dampeningName,
+                       char* angularDampeningName,
+                       char* baseForceName,
+                       char* angularBaseForceName) :
     m_position(0, 0, 0),
     m_scale(1.0f),
     m_scaleRandomization(0.0f),
@@ -24,8 +27,10 @@ VoxelParticleSpawnBase::VoxelParticleSpawnBase() :
     m_color(0xFFFFFF),
     m_emissiveness(0.0f),
     m_impactVector(0, 0, 0),
-    m_particleBaseForce(1.0f),
-    m_particleAngularBaseForce(1.0f)
+    m_particleDampening(dampeningName),
+    m_particleAngularDampening(angularDampeningName),
+    m_particleBaseForce(baseForceName),
+    m_particleAngularBaseForce(angularBaseForceName)
 {
 }
 
@@ -71,7 +76,7 @@ glm::vec3 VoxelParticleSpawnBase::createDirectionalSpeed() {
 }
 
 glm::vec3 VoxelParticleSpawnBase::createAngularSpeed() {
-    return RandVec3::randUnitVec() * RandFloat::randomize(m_force, m_forceRandomization) * m_particleAngularBaseForce;
+    return RandVec3::randUnitVec() * RandFloat::randomize(m_force, m_forceRandomization) * m_particleAngularBaseForce.get();
 }
 
 float VoxelParticleSpawnBase::createLifetime() {

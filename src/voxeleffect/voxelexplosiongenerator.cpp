@@ -12,11 +12,13 @@
 
 
 VoxelExplosionGenerator::VoxelExplosionGenerator() :
+    VoxelParticleSpawnBase("physics.explosionDampening",
+                           "physics.explosionAngularDampening",
+                           "physics.explosionBaseForce",
+                           "physics.explosionAngularBaseForce"),
     m_radius(0.5f),
     m_count(10)
 {
-    m_particleBaseForce = Property<float>("physics.explosionBaseForce");
-    m_particleAngularBaseForce = Property<float>("physics.explosionAngularBaseForce");
 }
 
 VoxelExplosionGenerator::~VoxelExplosionGenerator() {

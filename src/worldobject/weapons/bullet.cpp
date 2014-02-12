@@ -16,6 +16,8 @@ Bullet::Bullet(WorldObject* creator, float lifetime) :
 {
     ClusterCache::instance()->fillObject(this, "data/voxelcluster/bullet.csv");
 
+    m_collisionFieldOfDamage = glm::pi<float>() * 2;
+
     m_objectInfo.setName("Bullet");
     m_objectInfo.setShowOnHud(false);
     m_objectInfo.setCanLockOn(false);
@@ -53,8 +55,8 @@ void Bullet::spawnExplosion() {
     generator.setCount(16);
     generator.setColor(0xFF0000);
     generator.setEmissiveness(emissiveness());
-    generator.setForce(0.6f);
-    generator.setLifetime(0.7f, 0.2f);
+    generator.setForce(0.6f, 0.2f);
+    generator.setLifetime(0.5f, 0.2f);
     generator.spawn();
 }
 

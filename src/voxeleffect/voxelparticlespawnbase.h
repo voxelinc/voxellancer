@@ -21,6 +21,11 @@ public:
 
 
 protected:
+    VoxelParticleSpawnBase(char* dampeningName,
+                           char* angularDampeningName,
+                           char* baseForceName,
+                           char* angularBaseForceName);
+
     glm::vec3 m_position;
 
     float m_scale;
@@ -37,8 +42,10 @@ protected:
 
     glm::vec3 m_impactVector;
 
-    float m_particleBaseForce;
-    float m_particleAngularBaseForce;
+    Property<float> m_particleDampening;
+    Property<float> m_particleAngularDampening;
+    Property<float> m_particleBaseForce;
+    Property<float> m_particleAngularBaseForce;
 
 
     glm::vec3 createDirectionalSpeed();

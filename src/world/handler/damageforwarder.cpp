@@ -21,7 +21,7 @@ void DamageForwarder::forwardDamageImpacts(std::list<DamageImpact> &dampedDeadly
         Voxel *deadVoxel = dampedDeadlyDamageImpact.voxel();
 
         m_currentWorldObject = dampedDeadlyDamageImpact.worldObject();
-        VoxelNeighbourHelper nHelper(m_currentWorldObject, false);
+        VoxelNeighbourHelper nHelper(m_currentWorldObject, true);
         const std::vector<Voxel*>& neighbours = nHelper.neighbours(deadVoxel);
 
         for(Voxel *neighbour : neighbours) {
@@ -30,10 +30,11 @@ void DamageForwarder::forwardDamageImpacts(std::list<DamageImpact> &dampedDeadly
 
             float dotProduct = glm::dot(glm::normalize(damageImpactVec), glm::normalize(voxelVec));
 
-            if(dotProduct >= 0.0f) {
-                DamageImpact forwarded(m_currentWorldObject, neighbour, dampedDeadlyDamageImpact.damageVec() * forwardFactor(dotProduct));
-                m_damageImpactAccumulator.parse(forwarded);
-            }
+            DamageImpact forwarded(m_currentWorldObject, 
+                                    neighbour, 
+                                    dampedDeadlyDamageImpact.damageVec() * forwardFactor(dotProduct, dampedDeadlyDamageImpact.fieldOfDamage(), neighbours.size()), 
+                                    dampedDeadlyDamageImpact.fieldOfDamage());
+            m_damageImpactAccumulator.parse(forwarded);
         }
     }
 }
@@ -46,7 +47,7 @@ std::list<DamageImpact> DamageForwarder::forwardedDamageImpacts() {
     return m_damageImpactAccumulator.accumulatables();
 }
 
-float DamageForwarder::forwardFactor(float dotProduct) {
-    return (glm::half_pi<float>() - std::acos(dotProduct)) / glm::half_pi<float>();
+float DamageForwarder::forwardFactor(float dotProduct, float fieldOfDamage, int neighbours) {
+    return glm::max(0.0f, (fieldOfDamage - std::acos(dotProduct)) / fieldOfDamage) / neighbours;
 }
 
