@@ -180,3 +180,14 @@ void VoxelParticleWorld::updateBuffers() {
 
     m_particleDataBuffer->unmap();
 }
+
+void VoxelParticleWorld::beforeContextDestroy() {
+    m_vertexArrayObject = nullptr;
+    m_particleDataBuffer = nullptr;
+    m_program = nullptr;
+    // trigger re-init
+    m_initialized = false;
+}
+
+void VoxelParticleWorld::afterContextRebuild() {
+}

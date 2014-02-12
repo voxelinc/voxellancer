@@ -47,6 +47,10 @@ void WindowManager::setWindowedResolution(const Size<int>& resolution) {
     }
 
     glfwMakeContextCurrent(window);
+
+    for (ContextDependant* dependant : m_contextDependants) {
+        dependant->afterContextRebuild();
+    }
 }
 
 void WindowManager::setFullScreenResolution(int monitorIndex) {
@@ -77,9 +81,16 @@ void WindowManager::setFullScreenResolution(int monitorIndex) {
     }
 
     glfwMakeContextCurrent(window);
+
+    for (ContextDependant* dependant : m_contextDependants) {
+        dependant->afterContextRebuild();
+    }
 }
 
 void WindowManager::shutdown() {
+    for (ContextDependant* dependant : m_contextDependants) {
+        dependant->beforeContextDestroy();
+    }
     glfwDestroyWindow(glfwGetCurrentContext());
 }
 
@@ -117,7 +128,9 @@ int WindowManager::currentMonitor() const {
     return -1;
 }
 
-WindowManager::WindowManager() {
+WindowManager::WindowManager() : 
+    m_contextDependants()
+{
 
 }
 
@@ -125,4 +138,13 @@ Size<int> WindowManager::currentResolution(GLFWmonitor* monitor) {
     const GLFWvidmode* mode = glfwGetVideoMode(monitor);
 
     return Size<int>(mode->width, mode->height);
+}
+
+void WindowManager::registerContextDependant(ContextDependant* dependant) {
+    assert(std::find(m_contextDependants.begin(), m_contextDependants.end(), dependant) == m_contextDependants.end());
+    m_contextDependants.push_back(dependant);
+}
+
+void WindowManager::unRegisterContextDependant(ContextDependant* dependant) {
+    m_contextDependants.remove(dependant);
 }

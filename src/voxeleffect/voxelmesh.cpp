@@ -71,3 +71,11 @@ void VoxelMesh::bindTo(
     setupVertexAttribute(program, vao, "v_vertex", GL_FALSE, bindingIndex + 0, 0);
     setupVertexAttribute(program, vao, "v_normal", GL_TRUE,  bindingIndex + 1, sizeof(glm::vec3));
 }
+
+void VoxelMesh::beforeContextDestroy() {
+    m_vertexBuffer = nullptr;
+}
+
+void VoxelMesh::afterContextRebuild() {
+    initBuffer();
+}

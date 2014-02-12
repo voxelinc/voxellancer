@@ -10,11 +10,12 @@
 #include <glow/Buffer.h>
 
 #include "camera/camera.h"
+#include "etc/contextdependant.h"
 
 
 class VoxelParticle;
 
-class VoxelParticleWorld {
+class VoxelParticleWorld : public ContextDependant {
 public:
     VoxelParticleWorld();
     ~VoxelParticleWorld();
@@ -45,5 +46,8 @@ protected:
     void setBufferSize(int size);
     void updateBuffers();
     bool intersects(VoxelParticle* voxelParticle);
+
+    virtual void beforeContextDestroy() override;
+    virtual void afterContextRebuild() override;
 };
 

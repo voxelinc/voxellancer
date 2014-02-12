@@ -7,6 +7,8 @@
 
 #include <glm/glm.hpp>
 
+#include "etc/contextdependant.h"
+
 
 namespace glow {
     class Program;
@@ -15,7 +17,7 @@ namespace glow {
 };
 
 
-class VoxelMesh {
+class VoxelMesh : public ContextDependant {
 public:
     VoxelMesh();
     void bindTo(glow::Program* program,
@@ -27,4 +29,7 @@ protected:
 
     void setupVertexAttribute(glow::Program* program, glow::VertexArrayObject* vao, const std::string& name, GLboolean normalised, int bindingNum, GLint offset);
     void initBuffer();
+
+    virtual void beforeContextDestroy() override;
+    virtual void afterContextRebuild() override;
 };

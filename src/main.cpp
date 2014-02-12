@@ -73,9 +73,14 @@ static void resizeCallback(GLFWwindow* window, int width, int height) {
     }
 }
 
+static void switchFS();
+
 static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, GL_TRUE);
+    }
+    if (key == GLFW_KEY_F9 && action == GLFW_PRESS) {
+        switchFS();
     }
     if (key == GLFW_KEY_F5 && action == GLFW_PRESS) {
         glowutils::FileRegistry::instance().reloadAll();
@@ -120,6 +125,27 @@ static void mainloop() {
     }
 }
 
+bool fs = false;
+void switchFS() {
+    WindowManager::instance()->shutdown();
+
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, MajorVersionRequire);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, MinorVersionRequire);
+
+    /*if (!fs) {
+        WindowManager::instance()->setFullScreenResolution(1);
+        fs = true;
+    } else {*/
+        WindowManager::instance()->setWindowedResolution(Size<int>(Property<int>("window.width"), Property<int>("window.height")));
+        fs = false;
+    //}
+
+    GLFWwindow* window = glfwGetCurrentContext();
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+
+
+    setCallbacks(window);
+}
 
 int main(int argc, char* argv[]) {
     CommandLineParser clParser;

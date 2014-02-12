@@ -86,3 +86,14 @@ void Skybox::draw(Camera* camera){
 
     glEnable(GL_DEPTH_TEST);
 }
+
+void Skybox::beforeContextDestroy() {
+    m_vertexArrayObject = nullptr;
+    m_vertexBuffer = nullptr;
+    m_texture = nullptr;
+    m_shaderProgram = nullptr;
+}
+
+void Skybox::afterContextRebuild() {
+    initialize();
+}

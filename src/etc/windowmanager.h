@@ -1,7 +1,9 @@
 #pragma once
 
+#include <list>
 #include <vector>
 
+#include "etc/contextdependant.h"
 #include "geometry/size.h"
 #include "geometry/viewport.h"
 
@@ -27,9 +29,13 @@ public:
     std::vector<GLFWmonitor*> monitors() const;
     int currentMonitor() const;
 
+    void registerContextDependant(ContextDependant* dependant);
+    void unRegisterContextDependant(ContextDependant* dependant);
+
 
 protected:
     static WindowManager* s_instance;
+    std::list<ContextDependant*> m_contextDependants;
 
     WindowManager();
     Size<int> currentResolution(GLFWmonitor* monitor);
