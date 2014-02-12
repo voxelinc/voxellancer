@@ -16,7 +16,7 @@
 
 VoxelParticleIntersectionCheck::VoxelParticleIntersectionCheck(VoxelParticleWorld* world):
     VoxelParticleRemoveCheck(world),
-    m_fullDeadCheckInterval("vfx.fullDeadCheckInterval")
+    m_fullDeadCheckInterval("vfx.fullIntersectionCheckInterval")
 {
 }
 
@@ -47,7 +47,6 @@ bool VoxelParticleIntersectionCheck::check(VoxelParticleData* particleData) {
     } else {
         Sphere voxelSphere(position, particleData->scale / 2.0f); // approximate a sphere
         WorldTreeQuery query(&World::instance()->worldTree(), &voxelSphere);
-
         return query.areVoxelsIntersecting();
     }
     return false;
