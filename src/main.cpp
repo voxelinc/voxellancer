@@ -35,7 +35,7 @@
 
 
 static GLint MajorVersionRequire = 3;
-static GLint MinorVersionRequire = 1;
+static GLint MinorVersionRequire = 2;
 
 static Game* game;
 

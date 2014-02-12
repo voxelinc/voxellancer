@@ -24,6 +24,7 @@ layout(location = 3) out float f_emissiveness;
 layout(location = 4) out vec3 f_modelposition;
 
 
+
 // Uniforms
 uniform mat4 viewProjection;
 uniform float time;
