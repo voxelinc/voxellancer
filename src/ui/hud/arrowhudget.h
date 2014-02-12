@@ -16,11 +16,11 @@ public:
     virtual void update(float deltaSec) override;
     virtual void draw() override;
 
+    virtual void setTarget(bool target);
 
 protected:
     HUDObjectDelegate* m_objectDelegate;
     ArrowHudgetVoxels m_voxels;
 
-    //void calculateOpeningAngle();
 };
 

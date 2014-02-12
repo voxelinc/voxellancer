@@ -39,6 +39,7 @@ public:
     glm::quat cameraOrientation();
 
     void selectTarget(bool next);
+    void setTarget(WorldObject* target);
 
 
 protected:

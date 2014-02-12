@@ -88,10 +88,15 @@ glm::quat Player::cameraOrientation() {
 
 void Player::selectTarget(bool next) {
     if (next) {
-        playerShip()->setTargetObject(findNextTarget(World::instance()->worldObjects().begin(), World::instance()->worldObjects().end()));
+        setTarget(findNextTarget(World::instance()->worldObjects().begin(), World::instance()->worldObjects().end()));
     } else {
-        playerShip()->setTargetObject(findNextTarget(World::instance()->worldObjects().rbegin(), World::instance()->worldObjects().rend()));
+        setTarget(findNextTarget(World::instance()->worldObjects().rbegin(), World::instance()->worldObjects().rend()));
     }
+}
+
+void Player::setTarget(WorldObject* target) {
+    playerShip()->setTargetObject(target);
+    m_hud.setTargetHudget(target);
 }
 
 template<typename IteratorType>

@@ -5,6 +5,8 @@
 
 class HUD;
 class Hudget;
+class ObjectHudget;
+class ArrowHudget;
 class WorldObject;
 
 /*
@@ -19,12 +21,14 @@ public:
     WorldObject* worldObject();
     Hudget* objectHudget();
     Hudget* arrowHudget();
-
+    bool isTarget();
+    void setTarget(bool target);
 
 protected:
     HUD* m_hud;
     Handle<WorldObject> m_worldObjectHandle;
-    Hudget* m_objectHudget;
-    Hudget* m_arrowHudget;
+    ObjectHudget* m_objectHudget;
+    ArrowHudget* m_arrowHudget;
+    bool m_target;
 };
 

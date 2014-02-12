@@ -81,7 +81,7 @@ InputHandler::InputHandler(Player* player):
 
     retrieveInputValues();
     m_currentTimePressed = 0;
-    m_maxClickTime = 0.075f;
+    m_maxClickTime = 0.1f;
 }
 
 void InputHandler::setHMD(HMD* hmd) {

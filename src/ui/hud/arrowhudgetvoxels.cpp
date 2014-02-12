@@ -15,7 +15,7 @@
 
 ArrowHudgetVoxels::ArrowHudgetVoxels(ArrowHudget* hudget) :
     m_hudget(hudget),
-    m_arrow(0.01f),
+    m_arrow(0.025f),
     prop_arrowDistance("hud.arrowDistance")
 {
     ClusterCache::instance()->fillCluster(&m_arrow, "data/hud/arrowXT.csv");
@@ -29,12 +29,11 @@ ArrowHudget* ArrowHudgetVoxels::hudget() {
 }
 
 void ArrowHudgetVoxels::draw() {
-    if (!findPoint()) {
-        return;
+    if (findPoint()) {
+        m_arrow.transform().setOrientation(m_hudget->worldOrientation(m_targetPoint)*glm::angleAxis(glm::atan(m_targetPoint.x, m_targetPoint.y), glm::vec3(0, 0, -1)));
+        m_arrow.transform().setPosition(m_hudget->worldPosition(m_targetPoint));
+        VoxelRenderer::instance()->draw(&m_arrow);
     }
-    m_arrow.transform().setOrientation(m_hudget->worldOrientation(m_targetPoint)*glm::angleAxis(glm::atan(m_targetPoint.x, m_targetPoint.y), glm::vec3(0, 0, -1)));
-    m_arrow.transform().setPosition(m_hudget->worldPosition(m_targetPoint));
-    VoxelRenderer::instance()->draw(&m_arrow);
 }
 
 bool ArrowHudgetVoxels::findPoint() {
@@ -45,8 +44,17 @@ bool ArrowHudgetVoxels::findPoint() {
     if (glm::length(diff) < prop_arrowDistance.get() && m_hudget->localDirection().z < 0) {
         return false;
     }
-    diff = glm::normalize(diff);
-    glm::vec3 point = lookat + diff*prop_arrowDistance.get();
-    m_targetPoint = glm::normalize(point);
+    diff.z = 0;
+    diff = glm::normalize(diff)*prop_arrowDistance.get();
+    diff.z = -1;
+    m_targetPoint = diff;
     return true;
+}
+
+void ArrowHudgetVoxels::setTarget(bool target) {
+    if (target) {
+        m_arrow.transform().setScale(0.05f);
+    } else {
+        m_arrow.transform().setScale(0.025f);
+    }
 }

@@ -34,7 +34,8 @@ HUD::HUD(Player* player, Viewer* viewer):
     m_crossHair(this),
     m_aimHelper(this),
     m_sphere(glm::vec3(0, 0, 0), 5.0f),
-    m_scanner(&World::instance()->worldTree())
+    m_scanner(&World::instance()->worldTree()),
+    m_target(nullptr)
 {
     m_scanner.setScanRadius(1050.0f);
     m_hudgets.push_back(&m_crossHair);
@@ -151,7 +152,7 @@ void HUD::onClick(int button) {
         }
     }
     if (first) {
-        m_player->playerShip()->setTargetObject(first);
+        m_player->setTarget(first);
     }
 }
 
@@ -180,5 +181,13 @@ void HUD::updateScanner(float deltaSec) {
             }
         }
     }
+}
+
+void HUD::setTargetHudget(WorldObject* target) {
+    if (m_target) {
+        m_objectDelegates[m_target]->setTarget(false);
+    }
+    m_target = target;
+    m_objectDelegates[target]->setTarget(true);
 }
 

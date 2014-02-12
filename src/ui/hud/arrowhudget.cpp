@@ -30,3 +30,6 @@ void ArrowHudget::draw() {
     m_voxels.draw();
 }
 
+void ArrowHudget::setTarget(bool target) {
+    m_voxels.setTarget(target);
+}

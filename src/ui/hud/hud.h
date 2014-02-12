@@ -48,6 +48,8 @@ public:
 
     void setCrossHairOffset(const glm::vec2& mousePosition);
 
+    void setTargetHudget(WorldObject* target);
+
     void onClick(int button);
 
     void update(float deltaSec);
@@ -58,6 +60,7 @@ protected:
     Player* m_player;
     Viewer* m_viewer;
     Sphere m_sphere;
+    WorldObject* m_target;
 
     CrossHair m_crossHair;
     AimHelperHudget m_aimHelper;

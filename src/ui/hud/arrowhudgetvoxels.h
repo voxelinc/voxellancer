@@ -16,6 +16,8 @@ public:
 
     void draw();
 
+    void setTarget(bool target);
+
 
 protected:
     ArrowHudget* m_hudget;
