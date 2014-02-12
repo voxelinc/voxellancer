@@ -18,9 +18,9 @@ public:
     const View& view() const;
 
     Scene* scene();
-    void setScene(Scene* scene);
+    void setScene(Scene& scene);
 
-    void setCameraHead(CameraHead* cameraHead);
+    void setCameraHead(CameraHead& cameraHead);
     void setViewport(const Viewport& viewport);
 
     void switchToMonoView();

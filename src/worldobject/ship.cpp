@@ -12,6 +12,7 @@
 #include "ai/formationlogic.h"
 #include "sound/sound.h"
 #include "collision/collisionfilter.h"
+#include "physics/physics.h"
 
 
 Ship::Ship() : Ship(new CollisionFilter(this, CollisionFilterClass::Ship))
@@ -137,11 +138,11 @@ float Ship::maxAimDistance() { // is this needed ?!
 }
 
 void Ship::accelerate(const glm::vec3& direction) {
-    m_physics.accelerate(direction * prop_maxSpeed.get());
+    m_physics->accelerate(direction * prop_maxSpeed.get());
 }
 
 void Ship::accelerateAngular(const glm::vec3& axis) {
-    m_physics.accelerateAngular(axis * prop_maxRotSpeed.get());
+    m_physics->accelerateAngular(axis * prop_maxRotSpeed.get());
 }
 
 void Ship::setCharacter(Character* character) {

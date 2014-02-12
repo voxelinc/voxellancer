@@ -8,6 +8,8 @@
 #include "worldobject/handle/handle.h"
 #include "collision/collisiondetector.h"
 #include "collision/collisionfilter.h"
+#include "physics/physics.h"
+#include "ui/objectinfo.h"
 
 
 WorldObject::WorldObject() :
@@ -18,9 +20,9 @@ WorldObject::WorldObject() :
 
 WorldObject::WorldObject(CollisionFilter* collisionFilter, float scale) :
     VoxelCluster(scale),
-    m_physics(*this, scale),
+    m_physics(new Physics(*this, scale)),
     m_collisionDetector(new CollisionDetector(*this)),
-    m_objectInfo(),
+    m_objectInfo(new ObjectInfo()),
     m_crucialVoxel(nullptr),
     m_collisionFieldOfDamage(glm::half_pi<float>()),
     m_handle(Handle<WorldObject>(this)),
@@ -41,11 +43,11 @@ CollisionFilter& WorldObject::collisionFilter() {
 }
 
 Physics& WorldObject::physics() {
-    return m_physics;
+    return *m_physics;
 }
 
 ObjectInfo& WorldObject::objectInfo() {
-    return m_objectInfo;
+    return *m_objectInfo;
 }
 
 void WorldObject::update(float deltaSec) {
@@ -53,13 +55,13 @@ void WorldObject::update(float deltaSec) {
 }
 
 std::list<VoxelCollision>& WorldObject::performMovement(float deltaSec) {
-    return m_physics.move(deltaSec);
+    return m_physics->move(deltaSec);
 }
 
 void WorldObject::addVoxel(Voxel* voxel) {
     VoxelCluster::addVoxel(voxel);
 
-    m_physics.addVoxel(voxel);
+    m_physics->addVoxel(voxel);
     m_collisionDetector->addVoxel(voxel);
     m_collisionDetector->updateGeode();
 }
@@ -74,7 +76,7 @@ void WorldObject::removeVoxel(Voxel* voxel) {
     }
 
     m_collisionDetector->removeVoxel(voxel);
-    m_physics.removeVoxel(voxel);
+    m_physics->removeVoxel(voxel);
     VoxelCluster::removeVoxel(voxel);
 }
 
@@ -95,11 +97,11 @@ void WorldObject::addFuelVoxel(FuelVoxel* voxel) {
 }
 
 void WorldObject::accelerate(const glm::vec3& direction) {
-    m_physics.accelerate(direction);
+    m_physics->accelerate(direction);
 }
 
 void WorldObject::accelerateAngular(const glm::vec3& axis) {
-    m_physics.accelerateAngular(axis);
+    m_physics->accelerateAngular(axis);
 }
 
 void WorldObject::setCenterAndAdjustPosition(const glm::vec3& newCenter) {

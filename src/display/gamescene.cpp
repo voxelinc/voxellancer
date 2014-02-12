@@ -14,18 +14,19 @@
 #include "skybox.h"
 #include "worldobject/worldobject.h"
 #include "rendering/buffernames.h"
+#include "camera/camera.h"
 
 
-GameScene::GameScene(Game* game, Player* player) :
-    m_game(game),
+GameScene::GameScene(Game& game, Player& player) :
+    m_game(&game),
     m_voxelRenderer(VoxelRenderer::instance()),
     m_hd3000dummy(new HD3000Dummy()),
     m_soundManager(new SoundManager()),
     m_blitter(new Blitter()),
-    m_renderPipeline(RenderPipeline::getDefault(player)),
+    m_renderPipeline(RenderPipeline::getDefault(&player)),
     m_framebuffer(new FrameBuffer(m_renderPipeline->bufferCount())),
     m_currentOutputBuffer(0),
-    m_player(player),
+    m_player(&player),
     m_defaultLightDir("vfx.lightdir")
 {
 }

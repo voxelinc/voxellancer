@@ -8,6 +8,7 @@
 
 #include "worldtree/worldtree.h"
 #include "worldtree/worldtreequery.h"
+#include "worldtree/worldtreegeode.h"
 
 #include "utils/tostring.h"
 

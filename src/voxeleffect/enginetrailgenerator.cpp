@@ -4,6 +4,7 @@
 
 #include "worldobject/engine.h"
 #include "worldobject/ship.h"
+#include "physics/physics.h"
 
 
 EngineTrailGenerator::EngineTrailGenerator() :

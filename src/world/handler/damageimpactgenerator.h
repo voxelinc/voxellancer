@@ -3,9 +3,7 @@
 #include <list>
 
 #include "collision/worldobjectcollision.h"
-
 #include "world/helper/damageimpact.h"
-
 #include "world/helper/voxelaccumulator.h"
 
 

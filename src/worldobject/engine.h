@@ -1,11 +1,13 @@
 #pragma once
 
-#include "voxel/voxelcluster.h"
-#include "resource/clustercache.h"
-#include "voxeleffect/enginetrailgenerator.h"
+#include <memory>
+
+#include <glm/glm.hpp>
+
 
 class Ship;
 class EngineVoxel;
+class EngineTrailGenerator;
 
 class Engine {
 public:
@@ -20,8 +22,8 @@ public:
 
     void voxelRemoved();
 private:
-    Ship* m_ship;
+    std::unique_ptr<EngineTrailGenerator> m_generator;
     glm::vec3 m_positionInGrid;
-    EngineTrailGenerator m_generator;
+    Ship* m_ship;
     float m_cooldown;
 };

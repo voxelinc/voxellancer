@@ -5,6 +5,7 @@
 #include "utils/tostring.h"
 #include "collision/voxelcollision.h"
 #include "voxel/voxel.h"
+#include "physics/physics.h"
 
 
 void DamageImpactGenerator::parse(std::list<WorldObjectCollision>& worldObjectCollisions) {

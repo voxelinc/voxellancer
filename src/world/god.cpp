@@ -6,6 +6,7 @@
 #include "utils/tostring.h"
 
 #include "worldobject/worldobject.h"
+#include "ui/objectinfo.h"
 
 
 

@@ -4,16 +4,13 @@
 #include <unordered_set>
 #include <set>
 
-#include "geometry/abstractshape.h"
-
-#include "worldtree/worldtreegeode.h"
-
 class Voxel;
 class WorldTree;
 class WorldTreeNode;
 class WorldTreeGeode;
 class WorldObject;
 class CollisionFilter;
+class AbstractShape;
 
 class WorldTreeQuery {
 public:

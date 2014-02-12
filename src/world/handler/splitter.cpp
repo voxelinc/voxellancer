@@ -6,6 +6,8 @@
 
 #include "voxel/voxel.h"
 #include "worldobject/split.h"
+#include "physics/physics.h"
+#include "ui/objectinfo.h"
 
 void Splitter::split(std::vector<std::shared_ptr<SplitData>> &splits) {
     std::unordered_set<WorldObject*> splittedWorldObjects;

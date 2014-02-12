@@ -3,6 +3,7 @@
 #include "worldobject/ship.h"
 #include "ai/boardcomputer.h"
 #include "utils/geometryhelper.h"
+#include "physics/physics.h"
 
 
 DirectSuicideTask::DirectSuicideTask(Ship& ship, WorldObject* target) :

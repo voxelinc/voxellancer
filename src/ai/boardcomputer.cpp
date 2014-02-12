@@ -7,6 +7,7 @@
 #include "worldobject/ship.h"
 #include "utils/randvec.h"
 #include "utils/geometryhelper.h"
+#include "physics/physics.h"
 
 
 static const float s_minActDistance = 0.5f;

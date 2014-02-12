@@ -21,7 +21,7 @@ class Player;
 
 class GameScene: public Scene {
 public:
-    GameScene(Game* game, Player* player);
+    GameScene(Game& game, Player& player);
     ~GameScene();
 
     void setPlayer(Player* player);

@@ -6,8 +6,6 @@
 #include "voxel/voxelcluster.h"
 #include "handle/handle.h"
 
-#include "physics/physics.h"
-#include "ui/objectinfo.h"
 
 class CollisionDetector;
 class EngineVoxel;
@@ -15,6 +13,9 @@ class HardpointVoxel;
 class CockpitVoxel;
 class FuelVoxel;
 class CollisionFilter;
+class Physics;
+class ObjectInfo;
+class VoxelCollision;
 
 class WorldObject : public VoxelCluster
 {
@@ -67,11 +68,11 @@ protected:
 
     std::unique_ptr<CollisionFilter> m_collisionFilter;
     std::unique_ptr<CollisionDetector> m_collisionDetector;
-    Physics m_physics;
+    std::unique_ptr<Physics> m_physics;
+    std::unique_ptr<ObjectInfo> m_objectInfo;
 
     Handle<WorldObject> m_handle;
 
-    ObjectInfo m_objectInfo;
     Voxel* m_crucialVoxel;
 
     float m_collisionFieldOfDamage;

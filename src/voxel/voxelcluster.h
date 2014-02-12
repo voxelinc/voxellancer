@@ -10,6 +10,7 @@
 #include "geometry/transform.h"
 
 #include "utils/vec3hash.h"
+#include "voxelclusterbounds.h"
 
 
 class Voxel;

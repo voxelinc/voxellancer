@@ -14,6 +14,7 @@
 #include "sound/soundmanager.h"
 #include "sound/sound.h"
 #include "collision/collisionfilterignoringcreator.h"
+#include "ui/objectinfo.h"
 
 
 Rocket::Rocket(glm::vec3 position, glm::quat orientation, const glm::vec3& initialSpeed, float ejectSpeed, WorldObject* creator, WorldObject* target) :
@@ -45,11 +46,11 @@ Rocket::Rocket(glm::vec3 position, glm::quat orientation, const glm::vec3& initi
     float halfRocketLength = bounds().minimalGridAABB().axisMax(Axis::ZAxis) * m_transform.scale() / 2.0f;
     m_transform.setPosition(position + myOrientation * (halfRocketLength + glm::root_two<float>()));
 
-    m_physics.setSpeed(initialSpeed + myOrientation * ejectSpeed);
-
-    m_objectInfo.setName("Rocket");
-    m_objectInfo.setShowOnHud(false);
-    m_objectInfo.setCanLockOn(false);
+    m_physics->setSpeed(initialSpeed + myOrientation * ejectSpeed);
+    
+    m_objectInfo->setName("Rocket");
+    m_objectInfo->setShowOnHud(false);
+    m_objectInfo->setCanLockOn(false);
 
     m_character.reset(new DummyCharacter(*this, new DirectSuicideTask(*this, target)));
 }

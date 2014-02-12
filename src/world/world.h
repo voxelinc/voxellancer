@@ -4,7 +4,6 @@
 #include <list>
 
 
-
 class WorldLogic;
 class WorldTree;
 class God;

@@ -6,6 +6,9 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 
+#include <glow/Program.hpp>
+
+
 #include "etc/windowmanager.h"
 
 #include "utils/tostring.h"
@@ -20,28 +23,35 @@
 
 #include "player.h"
 #include "voxel/voxelrenderer.h"
-#include "glow/Program.h"
+#include "geometry/ray.h"
+#include "display/viewer.h"
+#include "crosshair.h"
+#include "worldtree/worldtreescanner.h"
+#include "aimhelperhudget.h"
+#include "ui/objectinfo.h"
 
 
 HUD::HUD(Player* player, Viewer* viewer):
     m_player(player),
     m_viewer(viewer),
-    m_crossHair(this),
-    m_aimHelper(this),
     m_sphere(glm::vec3(0, 0, 0), 5.0f),
-    m_scanner(&World::instance()->worldTree())
+    m_crossHair(new CrossHair(this)),
+    m_aimHelper(new AimHelperHudget(this)),
+    m_scanner(new WorldTreeScanner(&World::instance()->worldTree()))
 {
-    m_scanner.setScanRadius(1050.0f);
-    m_hudgets.push_back(&m_crossHair);
-    m_hudgets.push_back(&m_aimHelper);
+    m_scanner->setScanRadius(1050.0f);
+    m_hudgets.push_back(m_crossHair.get());
+    m_hudgets.push_back(m_aimHelper.get());
 }
+
+HUD::~HUD() = default;
 
 Player* HUD::player() {
     return m_player;
 }
 
 glm::vec3 HUD::centerOfView() const {
-    return m_player->cameraDolly().cameraHead().position();
+    return m_player->cameraPosition();
 }
 
 const Sphere& HUD::sphere() const {
@@ -49,19 +59,19 @@ const Sphere& HUD::sphere() const {
 }
 
 CrossHair& HUD::crossHair() {
-    return m_crossHair;
+    return *m_crossHair;
 }
 
 AimHelperHudget& HUD::aimHelper() {
-    return m_aimHelper;
+    return *m_aimHelper;
 }
 
 glm::vec3 HUD::position() const {
-    return m_player->cameraDolly().cameraHead().position() + m_player->cameraDolly().cameraHead().orientation() * m_sphere.position();
+    return m_player->cameraPosition() + m_player->cameraOrientation() * m_sphere.position();
 }
 
 glm::quat HUD::orientation() const {
-    return m_player->cameraDolly().cameraHead().orientation();
+    return m_player->cameraOrientation();
 }
 
 void HUD::addHudget(Hudget* hudget) {
@@ -97,8 +107,6 @@ HUDObjectDelegate* HUD::objectDelegate(WorldObject* worldObject) {
 }
 
 void HUD::setCrossHairOffset(const glm::vec2& mousePosition) {
-    CameraHead& cameraHead = m_player->cameraDolly().cameraHead();
-
     float fovy = m_viewer->view().fovy();
     float nearZ = m_viewer->view().zNear();
     float ar = m_viewer->view().aspectRatio();
@@ -108,17 +116,16 @@ void HUD::setCrossHairOffset(const glm::vec2& mousePosition) {
     float nearPlaneWidth = nearPlaneHeight * ar;
 
     glm::vec3 nearPlaneTarget = glm::vec3(mousePosition.x * nearPlaneWidth / 2.0f, mousePosition.y * nearPlaneHeight / 2.0f, -nearZ);
-
-    m_crossHair.pointToLocalPoint(nearPlaneTarget);
+    m_crossHair->pointToLocalPoint(nearPlaneTarget);
 }
 
 void HUD::update(float deltaSec) {
     updateScanner(deltaSec);
 
-    Ray toCrossHair = Ray::fromTo(m_player->cameraDolly().cameraHead().position(), m_crossHair.worldPosition());
+    Ray toCrossHair = Ray::fromTo(m_player->cameraPosition(), m_crossHair->worldPosition());
 
     for (Hudget* hudget : m_hudgets) {
-        hudget->pointerAt(toCrossHair, m_crossHair.actionActive());
+        hudget->pointerAt(toCrossHair, m_crossHair->actionActive());
         hudget->update(deltaSec);
     }
 }
@@ -139,23 +146,23 @@ void HUD::draw() {
 
 void HUD::updateScanner(float deltaSec) {
     if (m_player->playerShip()) {
-        m_scanner.update(deltaSec, m_player->playerShip());
+        m_scanner->update(deltaSec, m_player->playerShip());
 
-        for (WorldObject* worldObject : m_scanner.foundWorldObjects()) {
+        for (WorldObject* worldObject : m_scanner->foundWorldObjects()) {
             if (worldObject->objectInfo().showOnHud()) {
                 HUDObjectDelegate* objectDelgate = new HUDObjectDelegate(this, worldObject);
                 addObjectDelegate(objectDelgate);
             }
         }
 
-        for (WorldObject* worldObject : m_scanner.lostWorldObjects()) {
+        for (WorldObject* worldObject : m_scanner->lostWorldObjects()) {
             HUDObjectDelegate* objectDelgate = objectDelegate(worldObject);
             if (objectDelgate) {
                 removeObjectDelegate(objectDelgate);
             }
         }
     } else { // no player ship, clear all delegates
-        for (WorldObject* worldObject : m_scanner.worldObjects()) {
+        for (WorldObject* worldObject : m_scanner->worldObjects()) {
             HUDObjectDelegate* objectDelgate = objectDelegate(worldObject);
             if (objectDelgate) {
                 removeObjectDelegate(objectDelgate);

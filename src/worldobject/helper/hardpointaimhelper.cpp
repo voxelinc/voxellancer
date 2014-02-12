@@ -4,6 +4,7 @@
 
 #include "worldobject/hardpoint.h"
 #include "worldobject/worldobject.h"
+#include "physics/physics.h"
 
 
 HardpointAimHelper::HardpointAimHelper(Hardpoint* shooter, WorldObject* targetObject):

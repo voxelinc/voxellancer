@@ -15,6 +15,7 @@ class Game;
 class Player {
 public:
     Player(Game* game);
+    ~Player();
 
     void setShip(Ship *ship);
 

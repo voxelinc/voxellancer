@@ -4,6 +4,7 @@
 #include "worldobject/hardpoint.h"
 #include "worldobject/ship.h"
 #include "rocket.h"
+#include "physics/physics.h"
 
 RocketLauncher::RocketLauncher() :
     m_range("weapons.RocketLauncherRange"),
@@ -31,7 +32,7 @@ void RocketLauncher::update(float deltaSec) {
 
 void RocketLauncher::shootAtObject(Hardpoint* source, WorldObject* target){
     if (canFire()) {
-        Rocket *r = new Rocket(source->position(), source->ship()->transform().orientation(), source->ship()->physics().speed(), m_speed, source->ship(), target);
+        Rocket *r = new Rocket(source->position(), source->ship()->orientation(), source->ship()->physics().speed(), m_speed, source->ship(), target);
         World::instance()->god().scheduleSpawn(r);
 
         fired();

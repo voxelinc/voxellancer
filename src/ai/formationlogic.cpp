@@ -2,6 +2,7 @@
 
 #include "worldobject/ship.h"
 #include "ai/character.h"
+#include "physics/physics.h"
 
 FormationLogic::FormationLogic(Ship& ship) :
     m_ship(ship),

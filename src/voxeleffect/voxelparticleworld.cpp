@@ -4,6 +4,9 @@
 #include <iostream>
 
 #include <glow/Shader.h>
+#include <glow/Program.h>
+#include <glow/Buffer.h>
+#include <glow/VertexArrayObject.h>
 #include <glow/VertexAttributeBinding.h>
 #include <glowutils/global.h>
 
@@ -17,6 +20,7 @@
 #include "worldtree/worldtreegeode.h"
 #include "geometry/point.h"
 #include "utils/math.h"
+#include "camera/camera.h"
 
 
 struct ParticleData {

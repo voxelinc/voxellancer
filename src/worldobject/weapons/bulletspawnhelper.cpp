@@ -10,6 +10,7 @@
 #include "utils/geometryhelper.h"
 
 #include "bullet.h"
+#include "physics/physics.h"
 
 
 BulletSpawnHelper::BulletSpawnHelper(Bullet* bullet, Hardpoint* hardpoint, float bulletSpeed, const glm::vec3& target):

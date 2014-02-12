@@ -8,6 +8,8 @@
 #include "sound/sound.h"
 #include "sound/soundmanager.h"
 #include "collision/collisionfilterignoringcreator.h"
+#include "ui/objectinfo.h"
+#include "physics/physics.h"
 
 
 Bullet::Bullet(WorldObject* creator, float lifetime) :
@@ -17,16 +19,16 @@ Bullet::Bullet(WorldObject* creator, float lifetime) :
     ClusterCache::instance()->fillObject(this, "data/voxelcluster/bullet.csv");
 
     m_collisionFieldOfDamage = glm::pi<float>() * 2;
-
-    m_objectInfo.setName("Bullet");
-    m_objectInfo.setShowOnHud(false);
-    m_objectInfo.setCanLockOn(false);
+    
+    m_objectInfo->setName("Bullet");
+    m_objectInfo->setShowOnHud(false);
+    m_objectInfo->setCanLockOn(false);
 
     m_collisionFilter->setCollideableWith(CollisionFilterClass::Bullet, false);
-
-    m_physics.setAngularSpeed(glm::vec3(0.0f, 0.0f, 50));
-    m_physics.setDampening(0.0f);
-    m_physics.setAngularDampening(0.0f);
+    
+    m_physics->setAngularSpeed(glm::vec3(0.0f, 0.0f, 50));
+    m_physics->setDampening(0.0f);
+    m_physics->setAngularDampening(0.0f);
 }
 
 void Bullet::update(float deltaSec) {

@@ -15,6 +15,8 @@
 #include "world/world.h"
 #include "world/god.h"
 #include "utils/randvec.h"
+#include "player.h"
+#include "ui/objectinfo.h"
 
 
 BattleScenario::BattleScenario(Game* game):

@@ -4,16 +4,13 @@
 #include <vector>
 #include <list>
 
-#include "glow/ref_ptr.h"
-#include <glow/Program.h>
-#include <glow/VertexArrayObject.h>
-#include <glow/Buffer.h>
+#include <GL/glew.h>
 
-#include "camera/camera.h"
 #include "property/property.h"
 
 
 class VoxelParticle;
+class Camera;
 
 class VoxelParticleWorld {
 public:

@@ -17,7 +17,7 @@
 VoxelCluster::VoxelCluster(float scale):
     m_voxels(),
     m_bounds(this),
-    m_voxelRenderData(m_voxels),
+    m_voxelRenderData(new VoxelRenderData(m_voxels)),
     m_transform(glm::vec3(0), scale)
 {
 }
@@ -54,7 +54,7 @@ void VoxelCluster::addVoxel(Voxel* voxel) {
 
     m_voxels[voxel->gridCell()] = voxel;
     m_bounds.addVoxel(voxel);
-    m_voxelRenderData.invalidate();
+    m_voxelRenderData->invalidate();
 }
 
 void VoxelCluster::removeVoxel(Voxel* voxel) {
@@ -62,13 +62,13 @@ void VoxelCluster::removeVoxel(Voxel* voxel) {
 
     m_bounds.removeVoxel(voxel); // Needs to be done before removal from m_voxels
     m_voxels.erase(voxel->gridCell());
-    m_voxelRenderData.invalidate();
+    m_voxelRenderData->invalidate();
 
     delete voxel;
 }
 
 VoxelRenderData* VoxelCluster::voxelRenderData() {
-    return &m_voxelRenderData;
+    return m_voxelRenderData.get();
 }
 
 const std::unordered_map<glm::ivec3, Voxel*>& VoxelCluster::voxelMap() const {
