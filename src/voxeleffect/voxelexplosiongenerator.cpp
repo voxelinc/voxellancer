@@ -8,7 +8,7 @@
 #include "utils/randvec.h"
 
 #include "voxelparticledata.h"
-#include "voxelparticleworld.h"
+#include "voxelparticleengine.h"
 
 
 VoxelExplosionGenerator::VoxelExplosionGenerator() :
@@ -52,7 +52,7 @@ void VoxelExplosionGenerator::spawn() {
             createLifetime()
         );
 
-        World::instance()->voxelParticleWorld().addParticle(particleSetup);
+        World::instance()->voxelParticleEngine().addParticle(particleSetup);
     }
 }
 

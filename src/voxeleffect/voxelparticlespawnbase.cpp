@@ -10,7 +10,7 @@
 
 #include "voxelparticledata.h"
 #include "voxelparticlesetup.h"
-#include "voxelparticleworld.h"
+#include "voxelparticleengine.h"
 
 
 VoxelParticleSpawnBase::VoxelParticleSpawnBase(char* dampeningName,

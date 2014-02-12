@@ -2,7 +2,7 @@
 
 
 struct VoxelParticleData;
-class VoxelParticleWorld;
+class VoxelParticleEngine;
 
 /*
     Check that is guaranteed to be performed on every particle once in a
@@ -11,7 +11,7 @@ class VoxelParticleWorld;
 */
 class VoxelParticleRemoveCheck {
 public:
-    VoxelParticleRemoveCheck(VoxelParticleWorld* world);
+    VoxelParticleRemoveCheck(VoxelParticleEngine* world);
 
     float interval() const;
     void setInterval(float interval);
@@ -20,7 +20,7 @@ public:
 
 
 protected:
-    VoxelParticleWorld* m_world;
+    VoxelParticleEngine* m_world;
     float m_interval;
     int m_currentIndex;
 

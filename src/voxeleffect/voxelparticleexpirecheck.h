@@ -5,7 +5,7 @@
 #include "voxelparticleremovecheck.h"
 
 
-class VoxelParticleWorld;
+class VoxelParticleEngine;
 struct VoxelParticleData;
 
 
@@ -16,7 +16,7 @@ struct VoxelParticleData;
 */
 class VoxelParticleExpireCheck: public VoxelParticleRemoveCheck {
 public:
-    VoxelParticleExpireCheck(VoxelParticleWorld* world);
+    VoxelParticleExpireCheck(VoxelParticleEngine* engine);
 
     virtual void update(float deltaSec) override;
 

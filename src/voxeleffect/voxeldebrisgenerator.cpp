@@ -15,7 +15,7 @@
 #include "world/world.h"
 
 #include "voxelparticlesetup.h"
-#include "voxelparticleworld.h"
+#include "voxelparticleengine.h"
 
 
 
@@ -77,7 +77,7 @@ void VoxelDebrisGenerator::spawn() {
                     createLifetime()
                 );
 
-                World::instance()->voxelParticleWorld().addParticle(particleSetup);
+                World::instance()->voxelParticleEngine().addParticle(particleSetup);
             }
         }
     }

@@ -1,4 +1,4 @@
-#include "voxelparticleworld.h"
+#include "voxelparticleengine.h"
 
 #include <omp.h>
 #include <iostream>
@@ -26,7 +26,7 @@
 #include "voxelmesh.h"
 
 
-VoxelParticleWorld::VoxelParticleWorld():
+VoxelParticleEngine::VoxelParticleEngine():
     m_time(0.0f),
     m_initialized(false),
     m_renderer(this),
@@ -39,20 +39,20 @@ VoxelParticleWorld::VoxelParticleWorld():
     setBufferSize(1024);
 }
 
-float VoxelParticleWorld::time() const {
+float VoxelParticleEngine::time() const {
     return m_time;
 }
 
-int VoxelParticleWorld::particleDataCount() const {
+int VoxelParticleEngine::particleDataCount() const {
     return m_cpuParticleBuffer.size();
 }
 
-VoxelParticleData* VoxelParticleWorld::particleData(int index) {
+VoxelParticleData* VoxelParticleEngine::particleData(int index) {
     assert(index < m_cpuParticleBuffer.size());
     return &m_cpuParticleBuffer[index];
 }
 
-void VoxelParticleWorld::addParticle(const VoxelParticleSetup& particleSetup) {
+void VoxelParticleEngine::addParticle(const VoxelParticleSetup& particleSetup) {
     if(m_freeParticleBufferIndices.empty()) {
         setBufferSize(m_cpuParticleBuffer.size() * 2);
     }
@@ -62,7 +62,7 @@ void VoxelParticleWorld::addParticle(const VoxelParticleSetup& particleSetup) {
     m_freeParticleBufferIndices.pop();
 }
 
-void VoxelParticleWorld::removeParticle(int index) {
+void VoxelParticleEngine::removeParticle(int index) {
     assert(index < m_cpuParticleBuffer.size());
 
     VoxelParticleData& particle = m_cpuParticleBuffer[index];
@@ -70,14 +70,14 @@ void VoxelParticleWorld::removeParticle(int index) {
     m_freeParticleBufferIndices.push(index);
 }
 
-void VoxelParticleWorld::update(float deltaSec) {
+void VoxelParticleEngine::update(float deltaSec) {
     m_time += deltaSec;
 
     m_expireCheck.update(deltaSec);
     m_intersectionCheck.update(deltaSec);
 }
 
-void VoxelParticleWorld::draw(Camera& camera) {
+void VoxelParticleEngine::draw(Camera& camera) {
     if (m_gpuParticleBufferInvalid) {
         updateGPUBuffers();
     }
@@ -85,7 +85,7 @@ void VoxelParticleWorld::draw(Camera& camera) {
     m_renderer.draw(camera);
 }
 
-void VoxelParticleWorld::setParticleAt(const VoxelParticleData& particle, int bufferIndex) {
+void VoxelParticleEngine::setParticleAt(const VoxelParticleData& particle, int bufferIndex) {
     m_cpuParticleBuffer[bufferIndex] = particle;
 
     if(m_gpuParticleBufferInvalid) {
@@ -102,7 +102,7 @@ void VoxelParticleWorld::setParticleAt(const VoxelParticleData& particle, int bu
     }
 }
 
-void VoxelParticleWorld::setBufferSize(int bufferSize) {
+void VoxelParticleEngine::setBufferSize(int bufferSize) {
     for(int i = m_cpuParticleBuffer.size(); i < bufferSize; i++) {
         m_freeParticleBufferIndices.push(i);
     }
@@ -115,7 +115,7 @@ void VoxelParticleWorld::setBufferSize(int bufferSize) {
     m_gpuParticleBufferInvalidEnd = bufferSize - 1;
 }
 
-void VoxelParticleWorld::updateGPUBuffers() {
+void VoxelParticleEngine::updateGPUBuffers() {
     m_renderer.updateBuffer(m_gpuParticleBufferInvalidBegin, m_gpuParticleBufferInvalidEnd, &m_cpuParticleBuffer[m_gpuParticleBufferInvalidBegin]);
 
     m_gpuParticleBufferInvalid = false;

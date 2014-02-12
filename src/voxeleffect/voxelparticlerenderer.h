@@ -16,11 +16,11 @@ namespace glow {
 }
 
 class Camera;
-class VoxelParticleWorld;
+class VoxelParticleEngine;
 
 class VoxelParticleRenderer {
 public:
-    VoxelParticleRenderer(VoxelParticleWorld* world);
+    VoxelParticleRenderer(VoxelParticleEngine* engine);
 
     void updateBuffer(int begin, int end, VoxelParticleData* data);
 
@@ -31,7 +31,7 @@ protected:
     VoxelMesh m_voxelMesh;
 
     bool m_initialized;
-    VoxelParticleWorld* m_world;
+    VoxelParticleEngine* m_engine;
     int m_bufferSize;
 
     glow::ref_ptr<glow::Buffer> m_gpuParticleBuffer;

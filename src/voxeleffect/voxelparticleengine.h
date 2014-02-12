@@ -22,9 +22,9 @@
 
 
 
-class VoxelParticleWorld {
+class VoxelParticleEngine {
 public:
-    VoxelParticleWorld();
+    VoxelParticleEngine();
 
     float time() const;
 

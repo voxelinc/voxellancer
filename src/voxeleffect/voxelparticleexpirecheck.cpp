@@ -2,11 +2,11 @@
 
 #include "voxelparticledata.h"
 
-#include "voxelparticleworld.h"
+#include "voxelparticleengine.h"
 
 
-VoxelParticleExpireCheck::VoxelParticleExpireCheck(VoxelParticleWorld* world):
-    VoxelParticleRemoveCheck(world),
+VoxelParticleExpireCheck::VoxelParticleExpireCheck(VoxelParticleEngine* engine):
+    VoxelParticleRemoveCheck(engine),
     m_fullDeadCheckInterval("vfx.fullDeadCheckInterval")
 {
 }

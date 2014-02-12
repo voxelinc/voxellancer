@@ -12,10 +12,10 @@
 #include "worldtree/worldtreequery.h"
 
 #include "voxelparticledata.h"
-#include "voxelparticleworld.h"
+#include "voxelparticleengine.h"
 
-VoxelParticleIntersectionCheck::VoxelParticleIntersectionCheck(VoxelParticleWorld* world):
-    VoxelParticleRemoveCheck(world),
+VoxelParticleIntersectionCheck::VoxelParticleIntersectionCheck(VoxelParticleEngine* engine):
+    VoxelParticleRemoveCheck(engine),
     m_fullDeadCheckInterval("vfx.fullIntersectionCheckInterval")
 {
 }

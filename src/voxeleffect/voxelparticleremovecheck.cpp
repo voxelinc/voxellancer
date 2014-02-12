@@ -3,10 +3,10 @@
 #include <cassert>
 
 #include "voxelparticledata.h"
-#include "voxelparticleworld.h"
+#include "voxelparticleengine.h"
 
 
-VoxelParticleRemoveCheck::VoxelParticleRemoveCheck(VoxelParticleWorld* world):
+VoxelParticleRemoveCheck::VoxelParticleRemoveCheck(VoxelParticleEngine* world):
     m_world(world),
     m_currentIndex(0),
     m_interval(1.0f)
