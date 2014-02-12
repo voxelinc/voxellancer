@@ -8,7 +8,7 @@ layout(location = 1) out vec4 normalz;
 layout(location = 2) out vec4 emissiveness;
 
 in vec3 f_color;
-in vec3 f_normal;
+flat in vec3 f_normal;
 in float f_deathTime;
 in float f_emissiveness;
 in vec3 f_modelposition;

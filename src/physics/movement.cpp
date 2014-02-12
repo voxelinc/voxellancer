@@ -2,6 +2,8 @@
 
 #include <cassert>
 
+#include <glm/glm.hpp>
+
 #include "collision/collisiondetector.h"
 
 #include "worldobject/worldobject.h"
@@ -13,7 +15,7 @@
 
 
 static const float ATOMIC_DIRECTIONAL_STEP = 0.4f;
-static const float ATOMIC_ANGULAR_STEP = 30.0f;
+static const float ATOMIC_ANGULAR_STEP = glm::radians(30.0f);
 static const float MAX_STEPPED_DISTANCE = 1.2f;
 
 Movement::Movement(WorldObject& worldObject, const Transform& originalTransform, const Transform& targetTransform):

@@ -18,7 +18,7 @@ layout(location = 12) in float angularDampening;
 
 // Output
 out vec3 f_color;
-out vec3 f_normal;
+flat out vec3 f_normal;
 out float f_deathTime;
 out float f_emissiveness;
 out vec3 f_modelposition;
