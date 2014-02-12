@@ -1,12 +1,15 @@
 #include "hmdmanager.h"
 
-#include <glow/logging.h>
-
 #include <iostream>
+
+#include <OVR.h>
+
+#include <glow/logging.h>
 
 #include "game.h"
 #include "display/viewer.h"
 #include "ui/inputhandler.h"
+#include "hmd.h"
 
 
 HMDManager::HMDManager(Game* game):

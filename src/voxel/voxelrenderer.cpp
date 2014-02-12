@@ -32,12 +32,12 @@ VoxelRenderer::VoxelRenderer() :
     createAndSetupShaders();
 }
 
-void VoxelRenderer::prepareDraw(Camera * camera, bool withBorder) {
+void VoxelRenderer::prepareDraw(Camera& camera, bool withBorder) {
     glEnable(GL_DEPTH_TEST);
     
-    m_program->setUniform("projection", camera->projection());
-    m_program->setUniform("view", camera->view());
-    m_program->setUniform("viewProjection", camera->viewProjection());
+    m_program->setUniform("projection", camera.projection());
+    m_program->setUniform("view", camera.view());
+    m_program->setUniform("viewProjection", camera.viewProjection());
     m_program->setUniform("withBorder", (withBorder ? 1.0f : 0.0f));
 
     m_program->use();
@@ -48,11 +48,11 @@ void VoxelRenderer::prepareDraw(Camera * camera, bool withBorder) {
 }
 
 
-void VoxelRenderer::draw(VoxelCluster * worldObject) {
-    m_program->setUniform("model", worldObject->transform().matrix());
-    m_program->setUniform("emissiveness", worldObject->emissiveness());
+void VoxelRenderer::draw(VoxelCluster& worldObject) {
+    m_program->setUniform("model", worldObject.transform().matrix());
+    m_program->setUniform("emissiveness", worldObject.emissiveness());
 
-    VoxelRenderData* renderData = worldObject->voxelRenderData();
+    VoxelRenderData* renderData = worldObject.voxelRenderData();
 
     renderData->vertexArrayObject()->bind();
     glVertexAttribDivisor(m_program->getAttributeLocation("v_vertex"), 0);

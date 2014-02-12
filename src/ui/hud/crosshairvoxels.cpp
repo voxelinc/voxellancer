@@ -89,7 +89,7 @@ void CrossHairVoxels::draw() {
         element->transform().setPosition(m_crossHair->worldPosition() + (m_crossHair->worldOrientation() * element->relativeOrientation * glm::vec3(0, 0, -m_crossHair->hud()->sphere().radius())));
         element->transform().setOrientation(m_crossHair->worldOrientation() * element->relativeOrientation * glm::quat(glm::vec3(0, 0, element->zOrientation)));
 
-        VoxelRenderer::instance()->draw(element);
+        VoxelRenderer::instance()->draw(*element);
     }
 }
 

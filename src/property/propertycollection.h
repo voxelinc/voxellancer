@@ -1,9 +1,11 @@
 #pragma once
 #include <map>
-#include "def_regex.h"
 #include <functional>
 
 #include <glow/logging.h>
+
+#include "def_regex.h"
+
 
 template <class T>
 class Property;

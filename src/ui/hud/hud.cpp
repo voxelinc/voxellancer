@@ -29,6 +29,7 @@
 #include "worldtree/worldtreescanner.h"
 #include "aimhelperhudget.h"
 #include "ui/objectinfo.h"
+#include "display/view.h"
 
 
 HUD::HUD(Player* player, Viewer* viewer):

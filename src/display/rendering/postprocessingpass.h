@@ -1,10 +1,10 @@
 #pragma once
 
 #include <vector>
+#include <memory>
 #include <unordered_map>
 
 #include <glow/ref_ptr.h>
-#include <glow/Program.h>
 
 #include "renderpass.h"
 

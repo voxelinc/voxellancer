@@ -13,15 +13,18 @@
 #include "player.h"
 
 #include "hud.h"
+#include "aimhelperhudgetvoxels.h"
 
 
 AimHelperHudget::AimHelperHudget(HUD* hud):
     CircularHudget(hud, 0.2f),
-    m_voxels(this),
+    m_voxels(new AimHelperHudgetVoxels(this)),
     m_distanceRange(m_hud->sphere().radius() * 2, m_hud->sphere().radius() * 10)
 {
 
 }
+
+AimHelperHudget::~AimHelperHudget() = default;
 
 const glm::vec3& AimHelperHudget::targetPoint() const {
     return m_targetPoint;
@@ -55,7 +58,7 @@ void AimHelperHudget::update(float deltaSec) {
 }
 
 void AimHelperHudget::draw() {
-    m_voxels.draw();
+    m_voxels->draw();
 }
 
 void AimHelperHudget::calculateTargetPoint(WorldObject* targetObject) {

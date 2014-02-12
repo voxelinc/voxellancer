@@ -1,21 +1,20 @@
 #pragma once
 
+#include <memory>
+
 #include <glm/gtc/quaternion.hpp>
 
-#include "camera/camera.h"
-
-#include "utils/inertiafollower.h"
-
-#include "crosshairvoxels.h"
 #include "hudget.h"
 
 
 class HUD;
 class CameraHead;
+class CrossHairVoxels;
 
 class CrossHair: public Hudget {
 public:
     CrossHair(HUD* hud);
+    virtual ~CrossHair();
 
     /*
         True if the left mousebutton or the firebutton in the gamepad
@@ -30,6 +29,6 @@ public:
 
 protected:
     bool m_actionActive;
-    CrossHairVoxels m_voxels;
+    std::unique_ptr<CrossHairVoxels> m_voxels;
 };
 

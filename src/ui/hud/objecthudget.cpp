@@ -9,15 +9,18 @@
 #include "hud.h"
 #include "worldobject/worldobject.h"
 #include "voxel/voxelclusterbounds.h"
+#include "objecthudgetvoxels.h"
 
 
 ObjectHudget::ObjectHudget(HUD* hud, HUDObjectDelegate* objectDelegate):
     Hudget(hud),
     m_objectDelegate(objectDelegate),
-    m_voxels(this)
+    m_voxels(new ObjectHudgetVoxels(this))
 {
 
 }
+
+ObjectHudget::~ObjectHudget() = default;
 
 void ObjectHudget::update(float deltaSec) {
     WorldObject* worldObject = m_objectDelegate->worldObject();
@@ -29,7 +32,7 @@ void ObjectHudget::update(float deltaSec) {
 }
 
 void ObjectHudget::draw() {
-    m_voxels.draw();
+    m_voxels->draw();
 }
 
 void ObjectHudget::calculateOpeningAngle() {
@@ -41,6 +44,6 @@ void ObjectHudget::calculateOpeningAngle() {
 
     alpha = std::max(alpha, 0.04f); // Hack, set minimum size
 
-    m_voxels.setOpeningAngle(alpha);
+    m_voxels->setOpeningAngle(alpha);
 }
 

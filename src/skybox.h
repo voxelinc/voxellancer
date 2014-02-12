@@ -16,7 +16,7 @@ class Skybox {
 public:
     Skybox();
 
-    void draw(Camera *camera);
+    void draw(Camera& camera);
 
 protected:
     glow::ref_ptr<glow::Texture> m_texture;

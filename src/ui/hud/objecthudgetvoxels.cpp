@@ -39,7 +39,7 @@ public:
         transform().setPosition(objectHudget->worldPosition(direction));
         transform().setOrientation(objectHudget->worldOrientation(direction));
 
-        VoxelRenderer::instance()->draw(this);
+        VoxelRenderer::instance()->draw(*this);
     }
 
 

@@ -3,7 +3,7 @@
 #include <glm/glm.hpp>
 
 #include "voxel/voxelcluster.h"
-#include "geometry/transform.h"
+
 
 class Letter : public VoxelCluster {
 public:

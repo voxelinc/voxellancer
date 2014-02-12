@@ -19,6 +19,8 @@ Viewer::Viewer(const Viewport& viewport):
     switchToMonoView();
 }
 
+Viewer::~Viewer() = default;
+
 const View& Viewer::view() const {
     return *m_view;
 }

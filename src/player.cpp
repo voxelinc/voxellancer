@@ -11,6 +11,7 @@
 #include "ui/hud/aimhelperhudget.h"
 #include "ui/hud/crosshair.h"
 #include "physics/physics.h"
+#include "camera/camerahead.h"
 
 
 Player::Player(Game* game):
@@ -39,7 +40,7 @@ void Player::fire() {
         if(m_hud->aimHelper().hovered()) {
             targetPoint = m_hud->aimHelper().targetPoint();
         } else {
-            glm::vec3 shootDirection(glm::normalize(m_hud->crossHair().worldPosition() - m_cameraDolly->cameraHead().position()));
+            glm::vec3 shootDirection(glm::normalize(m_hud->crossHair().worldPosition() - cameraPosition()));
             Ray ray(m_hud->crossHair().worldPosition(), shootDirection);
             targetPoint = Aimer(playerShip(), ray).aim();
         }

@@ -4,12 +4,11 @@
 #include <memory>
 #include <glm/glm.hpp>
 
-#include "collision/voxelcollision.h"
 #include "property/property.h"
 #include "geometry/transform.h"
 #include "physics/impulse.h"
-
 #include "movement.h"
+#include "collision/voxelcollision.h"
 
 
 class WorldObject;

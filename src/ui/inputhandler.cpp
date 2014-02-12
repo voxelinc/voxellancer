@@ -1,5 +1,8 @@
 #include "inputhandler.h"
 
+#ifdef WIN32
+#include <windows.h>
+#endif
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
@@ -17,6 +20,11 @@
 #include "worldobject/ship.h"
 #include "camera/cameradolly.h"
 #include "hud/crosshair.h"
+#include "input/inputmapping.h"
+#include "etc/hmd/hmd.h"
+#include "inputconfigurator.h"
+#include "targetselector.h"
+#include "camera/camerahead.h"
 
 
 /*

@@ -3,6 +3,7 @@
 #include "resource/clustercache.h"
 #include "voxel/voxelrenderer.h"
 #include "letter.h"
+#include <algorithm>
 
 VoxelFont::VoxelFont():
     m_font3x5(),
@@ -78,7 +79,7 @@ void VoxelFont::drawString(std::string text, glm::vec3 position, FontSize size, 
         if (cl != nullptr){
             cl->setPosition(position + glm::vec3(intoffset + width * i, 0, 0));
             cl->setScale(scale);
-            VoxelRenderer::instance()->draw(cl);
+            VoxelRenderer::instance()->draw(*cl);
         }
     }
 }

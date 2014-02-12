@@ -16,8 +16,8 @@ class VoxelMesh;
 
 class VoxelRenderer {
 public:
-    void prepareDraw(Camera * camera, bool withBorder = true);
-    void draw(VoxelCluster * cluster);
+    void prepareDraw(Camera& camera, bool withBorder = true);
+    void draw(VoxelCluster& cluster);
     void afterDraw();
 
     bool prepared();

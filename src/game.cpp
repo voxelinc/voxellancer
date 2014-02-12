@@ -1,6 +1,8 @@
 #include "game.h"
 
-#include "GL/glew.h"
+#include <GL/glew.h>
+
+#include <glm/glm.hpp>
 
 #include "etc/windowmanager.h"
 
