@@ -25,6 +25,10 @@ protected:
     int m_currentIndex;
 
 
+    void performChecksParallel(int checkCount);
+    void performChecksSequential(int checkCount);
+
     virtual bool check(VoxelParticleData* particle) = 0;
+    virtual bool isParallel(int checkCount) = 0;
 };
 

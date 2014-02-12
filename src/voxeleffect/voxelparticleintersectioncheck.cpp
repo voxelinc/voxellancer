@@ -52,3 +52,12 @@ bool VoxelParticleIntersectionCheck::check(VoxelParticleData* particleData) {
     return false;
 }
 
+/*
+    Intersection tests are considered to be performance-heavy and to simplify it
+    they are always performed multithreaded.
+    Might be worth to test out a threshold here however.
+*/
+bool VoxelParticleIntersectionCheck::isParallel(int checkCount) {
+    return true;
+}
+

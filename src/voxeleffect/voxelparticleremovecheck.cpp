@@ -32,6 +32,16 @@ void VoxelParticleRemoveCheck::update(float deltaSec) {
     int checkCount = static_cast<int>((deltaSec * m_world->particleDataCount()) / m_interval);
     checkCount = std::min(checkCount, m_world->particleDataCount());
 
+    if (isParallel(checkCount)) {
+        performChecksParallel(checkCount);
+    } else {
+        performChecksSequential(checkCount);
+    }
+
+    m_currentIndex = (m_currentIndex + checkCount) % m_world->particleDataCount();
+}
+
+void VoxelParticleRemoveCheck::performChecksParallel(int checkCount) {
     int firstIndex = m_currentIndex;
 
     std::vector<bool> deadParticles(checkCount, false);
@@ -52,7 +62,19 @@ void VoxelParticleRemoveCheck::update(float deltaSec) {
             m_world->removeParticle(bufferIndex);
         }
     }
+}
 
-    m_currentIndex = (m_currentIndex + checkCount) % m_world->particleDataCount();
+void VoxelParticleRemoveCheck::performChecksSequential(int checkCount) {
+    int firstIndex = m_currentIndex;
+
+    for (int i = 0; i < checkCount; i++) {
+        int bufferIndex = (firstIndex + i) % m_world->particleDataCount();
+        VoxelParticleData* particle = m_world->particleData(bufferIndex);
+
+        if(!particle->dead && check(particle)) { // Needed, otherwise dead Particles might be free'd twice
+            m_world->removeParticle(bufferIndex);
+        }
+    }
+
 }
 
