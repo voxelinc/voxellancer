@@ -27,10 +27,16 @@ void DamageImpactGenerator::parse(std::list<WorldObjectCollision>& worldObjectCo
             glm::vec3 speedB = targetTransformB.applyTo(glm::vec3(voxelCollision.b().voxel()->gridCell())) - worldObjectCollision.worldObjectB()->transform().applyTo(glm::vec3(voxelCollision.b().voxel()->gridCell()));
 
             if (!voxelCollision.a().worldObject()->scheduledForDeletion()) {
-                m_damageImpactAccumulator.parse(DamageImpact(voxelCollision.a().worldObject(), voxelCollision.a().voxel(), (speedB - speedA) * (massPerImpactB)));
+                m_damageImpactAccumulator.parse(DamageImpact(voxelCollision.a().worldObject(),
+                                                             voxelCollision.a().voxel(), 
+                                                             (speedB - speedA) * (massPerImpactB),
+                                                             voxelCollision.b().worldObject()->collisionFieldOfDamage()));
             }
             if (!voxelCollision.b().worldObject()->scheduledForDeletion()) {
-                m_damageImpactAccumulator.parse(DamageImpact(voxelCollision.b().worldObject(), voxelCollision.b().voxel(), (speedA - speedB) * (massPerImpactA)));
+                m_damageImpactAccumulator.parse(DamageImpact(voxelCollision.b().worldObject(),
+                                                             voxelCollision.b().voxel(),
+                                                             (speedA - speedB) * (massPerImpactA),
+                                                             voxelCollision.a().worldObject()->collisionFieldOfDamage()));
             }
         }
     }
