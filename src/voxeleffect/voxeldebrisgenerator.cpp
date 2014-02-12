@@ -13,14 +13,14 @@
 
 
 VoxelDebrisGenerator::VoxelDebrisGenerator() :
+    VoxelParticleSpawnBase("physics.debrisDirectionalDampening",
+                           "physics.debrisAngularDampening",
+                           "physics.debrisBaseForce",
+                           "physics.debrisAngularBaseForce"),
     m_orientation(),
     m_density(2),
     m_spawnProbability(1.0f)
 {
-    m_particleDampening = Property<float>("physics.debrisDirectionalDampening");
-    m_particleAngularDampening = Property<float>("physics.debrisAngularDampening");
-    m_particleBaseForce = Property<float>("physics.debrisBaseForce");
-    m_particleAngularBaseForce = Property<float>("physics.debrisAngularBaseForce");
 }
 
 VoxelDebrisGenerator::~VoxelDebrisGenerator() {

@@ -8,5 +8,10 @@ T GeometryHelper::safeNormalize(const T& value) {
 		return value;
 	} else {
 		return glm::normalize(value);
-	}	
+	}
+}
+
+template <typename T>
+int GeometryHelper::sgn(T val) {
+    return (T(0) < val) - (val < T(0));
 }

@@ -11,7 +11,7 @@
 
 
 static const float s_minActDistance = 0.5f;
-static const float s_minActAngle = glm::radians(5.0f);
+static const float s_minActAngle = glm::radians(2.0f);
 static const float s_minAutoUpAngle = glm::radians(10.0f);
 
 BoardComputer::BoardComputer(WorldObject* worldObject) :
@@ -57,23 +57,28 @@ void BoardComputer::moveTo(const glm::vec3& position, bool decelerate) {
 }
 
 void BoardComputer::rotateTo(const glm::vec3& position, const glm::vec3& up) {
+    // A guess (hack) where the WorldObject will point to in one second, in the local coordinate-sys
     glm::quat projectedOrientation = glm::inverse(m_worldObject->transform().orientation()) * m_worldObject->physics().projectedTransformIn(1.0f).orientation();
+    glm::vec3 projectedDirection = projectedOrientation * glm::vec3(0, 0, -1);
 
-    glm::vec3 shipDirection = projectedOrientation * glm::vec3(0, 0, -1);
-    glm::vec3 targetDirection = glm::inverse(m_worldObject->transform().orientation()) * glm::normalize(position - m_worldObject->transform().position());
-    glm::quat rotation = GeometryHelper::quatFromTo(shipDirection, targetDirection);
+    // Direction to the target, in the local coordinate-sys
+    glm::vec3 targetDirection = glm::inverse(m_worldObject->transform().orientation()) * (position - m_worldObject->transform().position());
+
+    // The rotation that needs to be performed, in the local coordinate-sys
+    glm::quat rotation = GeometryHelper::quatFromTo(projectedDirection, targetDirection);
 
     if (glm::abs(glm::angle(rotation)) > s_minActAngle) {
         glm::vec3 euler = glm::eulerAngles(rotation);
+        euler = GeometryHelper::sgn(euler);
 
-        m_engineState.setAngular(glm::normalize(euler));
+        m_engineState.setAngular(euler);
     }
 
-    if (up != glm::vec3(0, 0, 0)){
-        rotateUpTo(up);
-    } else {
-        rotateUpAuto(rotation);
-    }
+//    if (up != glm::vec3(0, 0, 0)){
+//        rotateUpTo(up);
+//    } else {
+//        rotateUpAuto(rotation);
+//    }
 
     m_overwriteEngineState = true;
 }

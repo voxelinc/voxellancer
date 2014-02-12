@@ -1,6 +1,7 @@
 #version 330 
 
 uniform float withBorder;
+uniform vec3 lightdir;
 
 flat in vec3 f_normal;
 in vec3 f_color;
@@ -10,7 +11,7 @@ in vec3 modelposition;
 const float border_size = 0.10;
 const float border_darkness = 0.2;
 const float ambient = 0.3;
-const vec3 lightdir = normalize(vec3(0.3f, 0.5f, 1.0f));
+
 
 layout(location=0) out vec4 fragColor;
 layout(location=1) out vec4 normalz;
@@ -24,7 +25,7 @@ void main() {
     float border = smoothstep(1-border_size, 1-border_size + 0.01, border_dist) * border_darkness ;
 
     vec3 n_normal = normalize(f_normal);
-    float diffuse = dot(n_normal, lightdir);
+    float diffuse = dot(n_normal, normalize(lightdir));
     diffuse = max(0, diffuse) + ambient;
     
     fragColor = vec4(f_color * diffuse - vec3(border * withBorder), 1.0);

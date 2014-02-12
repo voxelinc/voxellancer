@@ -13,7 +13,7 @@
 class ObjectHudgetCorner: public VoxelCluster {
 public:
     ObjectHudgetCorner(ObjectHudgetVoxels* objectHudgetVoxels, const glm::ivec3& baseOffset):
-        VoxelCluster(0.05f),
+        VoxelCluster(0.02f),
         m_objectHudgetVoxels(objectHudgetVoxels),
         m_baseOffset(baseOffset)
     {
