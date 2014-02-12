@@ -2,6 +2,7 @@
 
 #include <iostream>
 
+#include "ai/aitask.h"
 #include "ai/basictasks/directsuicidetask.h"
 
 #include "collision/collisionfilter.h"
@@ -9,7 +10,8 @@
 #include "world/god.h"
 #include "world/world.h"
 
-#include "ai/aitask.h"
+#include "worldobject/components/engineslot.h"
+
 
 
 Rocket::Rocket():

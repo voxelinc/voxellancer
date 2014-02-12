@@ -20,11 +20,14 @@ public:
     const Rocket* rocketPrototype() const;
     void setRocketPrototype(Rocket* rocketPrototype);
 
+    const std::string& rocketName() const;
+    void setRocketName(const std::string& rocketName);
+
 
 protected:
     float m_cooldownTime;
     Visuals m_visuals;
-    std::unique_ptr<Rocket> m_rocketPrototype;
+    std::string m_rocketName;
 
     virtual Rocket* createRocket() override;
 };

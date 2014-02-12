@@ -2,6 +2,9 @@
 
 #include "property/property.h"
 
+#include "resource/worldobjectbuilder.h"
+#include "resource/worldobjectfactory.h"
+
 #include "rocket.h"
 
 
@@ -27,16 +30,17 @@ void GenericRocketLauncher::setCooldownTime(float cooldownTime) {
     m_cooldownTime = cooldownTime;
 }
 
-const Rocket* GenericRocketLauncher::rocketPrototype() const {
-    return m_rocketPrototype.get();
+const std::string& GenericRocketLauncher::rocketName() const {
+    return m_rocketName;
 }
 
-void GenericRocketLauncher::setRocketPrototype(Rocket* rocketPrototype) {
-    m_rocketPrototype.reset(rocketPrototype);
+void GenericRocketLauncher::setRocketName(const std::string& rocketName) {
+    m_rocketName = rocketName;
 }
 
 Rocket* GenericRocketLauncher::createRocket() {
-    assert(m_rocketPrototype.get());
-//    return new Rocket(*m_rocketPrototype.get());
+    Rocket* rocket = WorldObjectBuilder(m_rocketName).buildRocket();
+    WorldObjectFactory().equipSomehow(rocket);
+    return rocket;
 }
 

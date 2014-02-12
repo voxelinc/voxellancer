@@ -2,6 +2,8 @@
 
 #include <cassert>
 
+#include "resource/worldobjectbuilder.h"
+
 #include "genericbullet.h"
 
 
@@ -42,16 +44,15 @@ void GenericGun::setCooldownTime(float cooldownTime) {
     m_cooldownTime = cooldownTime;
 }
 
-const Bullet* GenericGun::bulletPrototype() const {
-    return m_bulletPrototype.get();
+const std::string& GenericGun::bulletName() const {
+    return m_bulletName;
 }
 
-void GenericGun::setBulletPrototype(Bullet* bulletPrototype) {
-    m_bulletPrototype.reset(bulletPrototype);
+void GenericGun::setBulletName(const std::string& bulletName) {
+    m_bulletName = bulletName;
 }
 
 Bullet* GenericGun::createBullet() {
-    assert(m_bulletPrototype.get());
-//    return new Bullet(*m_bulletPrototype.get());
+    return WorldObjectBuilder(m_bulletName).buildBullet();
 }
 

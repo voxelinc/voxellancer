@@ -26,8 +26,8 @@ public:
     virtual float cooldownTime() const override;
     void setCooldownTime(float cooldownTime);
 
-    const Bullet* bulletPrototype() const;
-    void setBulletPrototype(Bullet* bulletPrototype);
+    const std::string& bulletName() const;
+    void setBulletName(const std::string& bulletName);
 
 
 protected:
@@ -35,7 +35,7 @@ protected:
     float m_bulletLifetime;
     float m_cooldownTime;
     Visuals m_visuals;
-    std::unique_ptr<Bullet> m_bulletPrototype;
+    std::string m_bulletName;
 
     virtual Bullet* createBullet() override;
 };
