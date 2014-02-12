@@ -13,8 +13,8 @@ MonoBlitProgram::MonoBlitProgram() {
 }
 
 void MonoBlitProgram::initializeShaders() {
-    glow::Shader* vertShader = glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/shader/monoblit.vert");
-    glow::Shader* fragShader = glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/shader/monoblit.frag");
+    glow::Shader* vertShader = glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/shader/blit/monoblit.vert");
+    glow::Shader* fragShader = glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/shader/blit/monoblit.frag");
 
     bindAttributeLocation(ScreenQuad::VERTEX_ATTRIBUTE_LOCATION, "v_vertex");
 

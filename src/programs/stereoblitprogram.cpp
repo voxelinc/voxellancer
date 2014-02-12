@@ -44,8 +44,8 @@ void StereoBlitProgram::blit() {
 }
 
 void StereoBlitProgram::initializeShaders() {
-    glow::Shader* vertShader = glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/shader/stereoblit.vert");
-    glow::Shader* fragShader = glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/shader/stereoblit.frag");
+    glow::Shader* vertShader = glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/shader/blit/stereoblit.vert");
+    glow::Shader* fragShader = glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/shader/blit/stereoblit.frag");
 
     bindAttributeLocation(ScreenQuad::VERTEX_ATTRIBUTE_LOCATION, "v_vertex");
 
