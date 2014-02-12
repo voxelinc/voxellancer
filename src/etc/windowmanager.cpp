@@ -68,6 +68,11 @@ void WindowManager::initWindowed(int majorVersionRequire, int minorVersionRequir
 }
 
 void WindowManager::initFullScreen(int majorVersionRequire, int minorVersionRequire, int monitorIndex) {
+    m_majorVersionRequire = majorVersionRequire;
+    m_minorVersionRequire = minorVersionRequire;
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, m_majorVersionRequire);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, m_minorVersionRequire);
+
     std::vector<GLFWmonitor*> monitors = this->monitors();
     assert(monitors.size() > 0);
     m_lastFullScreenMonitorIndex = monitorIndex;
