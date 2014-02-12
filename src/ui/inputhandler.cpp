@@ -47,6 +47,7 @@ InputHandler::InputHandler(Player* player):
 
     prop_deadzoneMouse("input.deadzoneMouse"),
     prop_deadzoneGamepad("input.deadzoneGamepad"),
+    prop_maxClickTime("input.maxClickTime"),
 
     fireAction("input.mappingFirePrimary", "input.mappingFireSecondary", "Fire"),
     rocketAction("input.mappingRocketPrimary", "input.mappingRocketSecondary", "Launch Rockets"),
@@ -81,7 +82,7 @@ InputHandler::InputHandler(Player* player):
 
     retrieveInputValues();
     m_currentTimePressed = 0;
-    m_maxClickTime = 0.075f;
+    m_maxClickTime = prop_maxClickTime;
 }
 
 void InputHandler::setHMD(HMD* hmd) {
