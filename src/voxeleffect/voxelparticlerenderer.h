@@ -18,6 +18,10 @@ namespace glow {
 class Camera;
 class VoxelParticleEngine;
 
+/*
+    Component of a VoxelParticleEngine responsible for rendering the particles
+    It holds its own GPU-Buffer and receives updates for the particles by updateBuffer()
+*/
 class VoxelParticleRenderer {
 public:
     VoxelParticleRenderer(VoxelParticleEngine* engine);

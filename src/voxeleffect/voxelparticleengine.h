@@ -21,7 +21,10 @@
 #include "voxelparticleintersectioncheck.h"
 
 
-
+/*
+    Main class for managing and displaying the VoxelParticles of
+    a World.
+*/
 class VoxelParticleEngine {
 public:
     VoxelParticleEngine();
@@ -55,7 +58,7 @@ protected:
     int m_gpuParticleBufferInvalidEnd;
 
     void setBufferSize(int bufferSize);
-    void setParticleAt(const VoxelParticleData& particle, int bufferIndex);
-    void updateGPUBuffers();
+    void particleChanged(int bufferIndex);
+    void updateGPUBuffers(int begin, int end);
 };
 

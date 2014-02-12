@@ -58,7 +58,9 @@ void VoxelParticleEngine::addParticle(const VoxelParticleSetup& particleSetup) {
     }
 
     int bufferIndex = m_freeParticleBufferIndices.top();
-    setParticleAt(particleSetup.toData(m_time), bufferIndex);
+    m_cpuParticleBuffer[bufferIndex] = particleSetup.toData(m_time);
+    particleChanged(bufferIndex);
+
     m_freeParticleBufferIndices.pop();
 }
 
@@ -68,6 +70,8 @@ void VoxelParticleEngine::removeParticle(int index) {
     VoxelParticleData& particle = m_cpuParticleBuffer[index];
     particle.dead = true;
     m_freeParticleBufferIndices.push(index);
+
+    particleChanged(index);
 }
 
 void VoxelParticleEngine::update(float deltaSec) {
@@ -79,16 +83,17 @@ void VoxelParticleEngine::update(float deltaSec) {
 
 void VoxelParticleEngine::draw(Camera& camera) {
     if (m_gpuParticleBufferInvalid) {
-        updateGPUBuffers();
+        updateGPUBuffers(m_gpuParticleBufferInvalidBegin, m_gpuParticleBufferInvalidEnd);
     }
 
     m_renderer.draw(camera);
 }
 
-void VoxelParticleEngine::setParticleAt(const VoxelParticleData& particle, int bufferIndex) {
-    m_cpuParticleBuffer[bufferIndex] = particle;
+void VoxelParticleEngine::particleChanged(int bufferIndex) {
+    int oldInvalidBegin = m_gpuParticleBufferInvalidBegin;
+    int oldInvalidEnd = m_gpuParticleBufferInvalidEnd;
 
-    if(m_gpuParticleBufferInvalid) {
+    if (m_gpuParticleBufferInvalid) {
         if(bufferIndex < m_gpuParticleBufferInvalidBegin) {
             m_gpuParticleBufferInvalidBegin = bufferIndex;
         } else if (bufferIndex > m_gpuParticleBufferInvalidEnd) {
@@ -97,6 +102,16 @@ void VoxelParticleEngine::setParticleAt(const VoxelParticleData& particle, int b
 
     } else {
         m_gpuParticleBufferInvalid = true;
+        m_gpuParticleBufferInvalidBegin = bufferIndex;
+        m_gpuParticleBufferInvalidEnd = bufferIndex;
+    }
+
+    /*
+        If the range of particles gets too big, probably because of too many
+        particles between two free positions, push the old range to the gpu
+    */
+    if (m_gpuParticleBufferInvalidEnd - m_gpuParticleBufferInvalidBegin > 500) {
+        updateGPUBuffers(oldInvalidBegin, oldInvalidEnd);
         m_gpuParticleBufferInvalidBegin = bufferIndex;
         m_gpuParticleBufferInvalidEnd = bufferIndex;
     }
@@ -115,8 +130,12 @@ void VoxelParticleEngine::setBufferSize(int bufferSize) {
     m_gpuParticleBufferInvalidEnd = bufferSize - 1;
 }
 
-void VoxelParticleEngine::updateGPUBuffers() {
-    m_renderer.updateBuffer(m_gpuParticleBufferInvalidBegin, m_gpuParticleBufferInvalidEnd, &m_cpuParticleBuffer[m_gpuParticleBufferInvalidBegin]);
+
+/*
+    Update the GPU buffers of all components that use such
+*/
+void VoxelParticleEngine::updateGPUBuffers(int begin, int end) {
+    m_renderer.updateBuffer(begin, end, &m_cpuParticleBuffer[begin]);
 
     m_gpuParticleBufferInvalid = false;
 }
