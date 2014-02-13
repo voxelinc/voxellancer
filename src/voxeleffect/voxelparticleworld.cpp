@@ -44,10 +44,12 @@ VoxelParticleWorld::~VoxelParticleWorld() {
 }
 
 void VoxelParticleWorld::addParticle(VoxelParticle* voxelParticle) {
+    return; // Disabled for performancetesting
     m_particles.push_back(voxelParticle);
 }
 
 void VoxelParticleWorld::update(float deltaSec) {
+    return; // Disabled for performancetesting
 #pragma omp parallel for
     for (int i = 0; i < m_particles.size(); ++i) {
         VoxelParticle* voxelParticle = m_particles[i];
@@ -93,6 +95,8 @@ bool VoxelParticleWorld::intersects(VoxelParticle* voxelParticle) {
 }
 
 void VoxelParticleWorld::draw(Camera& camera) {
+    return; // Disabled for performancetesting
+
     if(!m_initialized) {
         initialize();
     }

@@ -16,7 +16,8 @@ DefaultRenderPipeline::DefaultRenderPipeline(Player* player) :
 }
 
 void DefaultRenderPipeline::setup() {
-    add(std::make_shared<Starfield>(m_player));
+    // Disabled for performancetesting
+    //add(std::make_shared<Starfield>(m_player));
     addBlurVertical();
     addBlurHorizontal();
     addFinalization();
