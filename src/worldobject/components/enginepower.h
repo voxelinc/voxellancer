@@ -6,7 +6,16 @@
 
 #include "enginestate.h"
 
+/*
+    Max acceleration per mass an engine - or mutiple engines accumulated -
+    are able to perform.
 
+    The glm::vec4 is coded like
+    x = max accel in -x and +x direction
+    y = max accel in -y and +y direction
+    z = max accel in -z direction
+    w = max accel in +z direction
+*/
 class EnginePower {
 public:
     EnginePower();
