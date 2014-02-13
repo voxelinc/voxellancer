@@ -3,17 +3,19 @@
 
 class TriggeredTransition;
 
+template<typename StateType>
 class Trigger {
 public:
-    Trigger(TriggeredTransition* transition = nullptr);
+    Trigger(TriggeredTransition<StateType>* transition = nullptr);
 
-    TriggeredTransition* transition();
-    void setTransition(TriggeredTransition* transition);
+    TriggeredTransition<StateType>* transition();
+    void setTransition(TriggeredTransition<StateType>* transition);
 
     void trigger();
 
 
 protected:
-    TriggeredTransition* m_transition;
+    TriggeredTransition<StateType>* m_transition;
 };
 
+#include "trigger.inl"

@@ -3,19 +3,18 @@
 #include <string>
 
 
-class State;
-
+template<typename StateType>
 class Transition {
 public:
-    Transition(State* from, State* to);
-    Transition(State* from, State* to, const std::string& name);
+    Transition(StateType* from, StateType* to);
+    Transition(StateType* from, StateType* to, const std::string& name);
     virtual ~Transition();
 
     const std::string& name() const;
     void setName(const std::string& name);
 
-    State* from();
-    State* to();
+    StateType* from();
+    StateType* to();
 
     virtual bool possible() const = 0;
 
@@ -23,8 +22,9 @@ public:
 
 
 protected:
-    State* m_from;
-    State* m_to;
+    StateType* m_from;
+    StateType* m_to;
     std::string m_name;
 };
 
+#include "transition.inl"

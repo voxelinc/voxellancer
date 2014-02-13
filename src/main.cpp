@@ -39,7 +39,7 @@ static GLint MinorVersionRequire = 1;
 
 static Game* game;
 
-static void checkVersion() {
+static void checkGLVersion() {
     glow::info("OpenGL Version Needed %;.%; (%;.%; Found)",
         MajorVersionRequire, MinorVersionRequire,
         glow::Version::currentMajorVersion(), glow::Version::currentMinorVersion());
@@ -98,7 +98,7 @@ static void cursorPositionCallback(GLFWwindow* window, double x, double y) {
 
 }
 
-void setCallbacks(GLFWwindow* window) {
+void setGlfwCallbacks(GLFWwindow* window) {
     glfwSetMouseButtonCallback(window, mouseButtonCallback);
     glfwSetCursorPosCallback(window, cursorPositionCallback);
     glfwSetKeyCallback(window, keyCallback);
@@ -157,9 +157,8 @@ int main(int argc, char* argv[]) {
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
 
-    setCallbacks(window);
-
-    checkVersion();
+    setGlfwCallbacks(window);
+    checkGLVersion();
     checkOpenMP();
 
     glewExperimental = GL_TRUE;

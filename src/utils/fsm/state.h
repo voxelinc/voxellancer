@@ -4,39 +4,40 @@
 #include <string>
 
 
-class Transition;
+template<typename StateType> class Transition;
 
+template<typename StateType>
 class State {
 public:
-    State(State* parent = nullptr);
-    State(const std::string& name, State* parent = nullptr);
+    State(State<StateType>* parent = nullptr);
+    State(const std::string& name, State<StateType>* parent = nullptr);
     virtual ~State();
 
     const std::string& name() const;
     void setName(const std::string& name);
 
-    State* parentState();
+    State<StateType>* parentState();
 
-    State* initialSubstate();
-    void setInitialSubstate(State* initialSubstate);
+    State<StateType>* initialSubstate();
+    void setInitialSubstate(State<StateType>* initialSubstate);
 
-    State* terminationSubstate();
-    void setTerminationSubstate(State* terminationSubstate);
+    State<StateType>* terminationSubstate();
+    void setTerminationSubstate(State<StateType>* terminationSubstate);
 
-    State* currentSubstate();
-    void setCurrentSubstate(State* substate);
+    State<StateType>* currentSubstate();
+    void setCurrentSubstate(State<StateType>* substate);
 
     void makeCurrent();
 
     bool finished() const;
 
-    std::list<State*>& substates();
-    void addSubstate(State* state);
-    void removeSubstate(State* state);
+    std::list<State<StateType>*>& substates();
+    void addSubstate(State<StateType>* state);
+    void removeSubstate(State<StateType>* state);
 
-    std::list<Transition*>& transitions();
-    void addTransition(Transition* transition);
-    void removeTransition(Transition* transition);
+    std::list<Transition<StateType>*>& transitions();
+    void addTransition(Transition<StateType>* transition);
+    void removeTransition(Transition<StateType>* transition);
 
     virtual void update(float deltaSec);
 
@@ -49,12 +50,13 @@ public:
 protected:
     std::string m_name;
 
-    State* m_parentState;
-    std::list<State*> m_substates;
-    std::list<Transition*> m_transitions;
+    State<StateType>* m_parentState;
+    std::list<State<StateType>*> m_substates;
+    std::list<Transition<StateType>*> m_transitions;
 
-    State* m_initialSubstate;
-    State* m_terminationSubstate;
-    State* m_currentSubstate;
+    State<StateType>* m_initialSubstate;
+    State<StateType>* m_terminationSubstate;
+    State<StateType>* m_currentSubstate;
 };
 
+#include "state.inl"

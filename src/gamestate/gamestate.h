@@ -14,7 +14,7 @@
     Base class for a State the game can be in - for example
     Menu, OptionsMenu, normal Gameplay or ingame menu
 */
-class GameState: public State {
+class GameState: public State<GameState> {
 public:
     GameState(const std::string& name, GameState* parentGameState);
 
