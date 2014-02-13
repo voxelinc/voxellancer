@@ -190,4 +190,5 @@ void VoxelParticleWorld::beforeContextDestroy() {
 }
 
 void VoxelParticleWorld::afterContextRebuild() {
+    // lazy init
 }

@@ -104,4 +104,5 @@ void VoxelRenderData::beforeContextDestroy() {
 }
 
 void VoxelRenderData::afterContextRebuild() {
+    // lazy init
 }
