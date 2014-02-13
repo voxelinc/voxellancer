@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 
 #include "scene.h"
+#include "property/property.h"
 
 
 class Game;
@@ -43,8 +44,8 @@ protected:
     CameraHead* m_head;
     Player* m_player;
 
+    Property<glm::vec3> m_defaultLightDir;
     int m_currentOutputBuffer;
-
     void drawGame(Camera* camera);
 };
 
