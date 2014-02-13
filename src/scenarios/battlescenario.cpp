@@ -60,7 +60,7 @@ void BattleScenario::populateWorld() {
     world->god().scheduleSpawn(banner);
 
     // create two opposing enemy forces
-    populateBattle(10,10);
+    populateBattle(4, 4);
 
     glow::debug("Initial spawn");
     world->god().spawn();
