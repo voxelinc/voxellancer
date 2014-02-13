@@ -3,6 +3,7 @@
 #include <set>
 
 #include "geometry/aabb.h"
+#include "geometry/gridaabb.h"
 #include "geometry/sphere.h"
 
 #include "voxelgridcmp.h"
@@ -18,7 +19,7 @@ public:
     void addVoxel(Voxel* voxel);
     void removeVoxel(Voxel* voxel);
 
-    const IAABB& minimalGridAABB();
+    const GridAABB& minimalGridAABB();
     const Sphere& minimalGridSphere();
 
     const IAABB& aabb();
@@ -41,7 +42,7 @@ protected:
 
 
 private:
-    IAABB m_minimalGridAABB;
+    GridAABB m_minimalGridAABB;
     bool m_minimalGridAABBValid;
 
     Sphere m_minimalGridSphere;

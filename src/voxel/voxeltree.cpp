@@ -9,7 +9,7 @@
 
 
 VoxelTree::VoxelTree(WorldObject* worldObject):
-    m_shadowRoot(new VoxelTreeNode(0, this, nullptr, Grid3dAABB(glm::ivec3(0, 0, 0), glm::ivec3(0, 0, 0)))),
+    m_shadowRoot(new VoxelTreeNode(0, this, nullptr, GridAABB(glm::ivec3(0, 0, 0), glm::ivec3(0, 0, 0)))),
     m_currentRoot(m_shadowRoot),
     m_worldObject(worldObject)
 {
@@ -30,7 +30,7 @@ void VoxelTree::insert(Voxel* voxel) {
         } else {
             assert(m_currentRoot == m_shadowRoot);
 
-            m_shadowRoot = new VoxelTreeNode(this, Grid3dAABB(glm::ivec3(0, 0, 0), m_shadowRoot->gridAABB().rub()*2 + glm::ivec3(1, 1, 1)), m_shadowRoot);
+            m_shadowRoot = new VoxelTreeNode(this, GridAABB(glm::ivec3(0, 0, 0), m_shadowRoot->gridAABB().rub()*2 + glm::ivec3(1, 1, 1)), m_shadowRoot);
             m_currentRoot = m_shadowRoot;
         }
     }

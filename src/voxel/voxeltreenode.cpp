@@ -11,7 +11,7 @@
 
 static const int SUBNODE_COUNT = 8;
 
-VoxelTreeNode::VoxelTreeNode(int octIndex, VoxelTree* voxelTree, VoxelTreeNode* parent, const Grid3dAABB& gridAABB) :
+VoxelTreeNode::VoxelTreeNode(int octIndex, VoxelTree* voxelTree, VoxelTreeNode* parent, const GridAABB& gridAABB) :
     m_octIndex(octIndex),
     m_voxelTree(voxelTree),
     m_parent(parent),
@@ -24,7 +24,7 @@ VoxelTreeNode::VoxelTreeNode(int octIndex, VoxelTree* voxelTree, VoxelTreeNode* 
     calculateSphereRadius(Transform());
 }
 
-VoxelTreeNode::VoxelTreeNode(VoxelTree* voxelTree, const Grid3dAABB &gridAABB, VoxelTreeNode* initialSubnode):
+VoxelTreeNode::VoxelTreeNode(VoxelTree* voxelTree, const GridAABB &gridAABB, VoxelTreeNode* initialSubnode):
     VoxelTreeNode(0, voxelTree, nullptr, gridAABB)
 {
     toGroup();
@@ -95,7 +95,7 @@ void VoxelTreeNode::setParent(VoxelTreeNode* parent) {
     m_parent = parent;
 }
 
-const Grid3dAABB& VoxelTreeNode::gridAABB() const {
+const GridAABB& VoxelTreeNode::gridAABB() const {
     return m_gridAABB;
 }
 
@@ -178,7 +178,7 @@ void VoxelTreeNode::toGroup() {
 
     for(int n = 0; n < SUBNODE_COUNT; n++) {
         glm::ivec3 llf = glm::ivec3(n % 2, n/2 % 2, n/4) * subnodeExtent + m_gridAABB.llf();
-        Grid3dAABB subnodeGridAABB(llf, llf + glm::ivec3(subnodeExtent - 1));
+        GridAABB subnodeGridAABB(llf, llf + glm::ivec3(subnodeExtent - 1));
 
         m_subnodes[n] = new VoxelTreeNode(n, m_voxelTree, this, subnodeGridAABB);
     }

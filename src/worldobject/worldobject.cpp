@@ -28,6 +28,7 @@ WorldObject::WorldObject(CollisionFilter* collisionFilter, float scale) :
     m_collisionFilter(collisionFilter)
 {
 }
+
 WorldObject::~WorldObject() {
      m_handle.invalidate();
 }
