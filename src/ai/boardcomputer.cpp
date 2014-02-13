@@ -4,6 +4,8 @@
 
 #include <glm/gtc/quaternion.hpp>
 
+#include "collision/collisionfilter.h"
+
 #include "worldobject/ship.h"
 #include "utils/randvec.h"
 #include "utils/tostring.h"
@@ -57,44 +59,50 @@ void BoardComputer::moveTo(const glm::vec3& position, bool decelerate) {
 }
 
 void BoardComputer::rotateTo(const glm::vec3& position, const glm::vec3& up) {
+    glm::vec3 accumulatedEuler;
+
     // A guess (hack) where the WorldObject will point to in one second, in the local coordinate-sys
-    glm::quat projectedOrientation = glm::inverse(m_worldObject->transform().orientation()) * m_worldObject->physics().projectedTransformIn(1.0f).orientation();
+    glm::quat projectedOrientation = glm::inverse(m_worldObject->transform().orientation()) * m_worldObject->physics().projectedTransformIn(0.2).orientation();
     glm::vec3 projectedDirection = projectedOrientation * glm::vec3(0, 0, -1);
 
     // Direction to the target, in the local coordinate-sys
-    glm::vec3 targetDirection = glm::inverse(m_worldObject->transform().orientation()) * (position - m_worldObject->transform().position());
+    glm::vec3 targetDirection = glm::inverse(m_worldObject->transform().orientation()) * glm::normalize(position - m_worldObject->transform().position());
 
     // The rotation that needs to be performed, in the local coordinate-sys
     glm::quat rotation = GeometryHelper::quatFromTo(projectedDirection, targetDirection);
 
-    if (glm::abs(glm::angle(rotation)) > s_minActAngle) {
-        glm::vec3 euler = glm::eulerAngles(rotation);
-        euler = GeometryHelper::sgn(euler);
 
-        m_engineState.setAngular(euler);
+    if (glm::abs(glm::angle(rotation)) > s_minActAngle) {
+        accumulatedEuler = glm::eulerAngles(rotation);
+
     }
 
-//    if (up != glm::vec3(0, 0, 0)){
-//        rotateUpTo(up);
-//    } else {
-//        rotateUpAuto(rotation);
-//    }
+    if (up != glm::vec3(0, 0, 0)){
+        accumulatedEuler += rotateUpTo(up);
+    } else {
+        accumulatedEuler += rotateUpAuto(rotation);
+    }
+
+    accumulatedEuler = GeometryHelper::sgn(accumulatedEuler);
+    m_engineState.setAngular(accumulatedEuler);
 
     m_overwriteEngineState = true;
 }
 
-void BoardComputer::rotateUpTo(const glm::vec3& up) {
+glm::vec3 BoardComputer::rotateUpTo(const glm::vec3& up) {
     glm::vec3 upDirection = glm::vec3(0, 1, 0);
     glm::vec3 newUpDirection = glm::inverse(m_worldObject->transform().orientation()) * glm::normalize(up);
     glm::quat upRotation = GeometryHelper::quatFromTo(upDirection, newUpDirection);
 
     if (glm::abs(glm::angle(upRotation)) > s_minActAngle) {
         glm::vec3 euler = glm::eulerAngles(upRotation);
-        m_engineState.setAngular(glm::normalize(euler) * 0.5f);
+        return (glm::normalize(euler) * 0.5f);
     }
+
+    return glm::vec3(0.0f);
 }
 
-void BoardComputer::rotateUpAuto(const glm::quat& rotation) {
+glm::vec3 BoardComputer::rotateUpAuto(const glm::quat& rotation) {
     //make it look naturally, e.g. up is to the "inside" of the rotation
     if (glm::abs(glm::angle(rotation)) > s_minAutoUpAngle) {
         glm::vec3 upDirection = glm::vec3(0, 1, 0);
@@ -102,8 +110,10 @@ void BoardComputer::rotateUpAuto(const glm::quat& rotation) {
         glm::quat upRotation = GeometryHelper::quatFromTo(upDirection, newUpDirection);
         glm::vec3 euler = glm::eulerAngles(upRotation);
 
-        m_engineState.setAngular(glm::normalize(euler) * 0.5f);
+        return (glm::normalize(euler) * 0.5f);
     }
+
+    return glm::vec3(0.0f);
 }
 
 void BoardComputer::shootBullet(const std::vector<Handle<WorldObject>>& targets) {

@@ -34,8 +34,9 @@ protected:
     EngineState m_engineState;
     bool m_overwriteEngineState;
 
-    void rotateUpTo(const glm::vec3& up);
-    void rotateUpAuto(const glm::quat& rotation);
+    /* Return the euler angles needed to adjust 'up' */
+    glm::vec3 rotateUpTo(const glm::vec3& up);
+    glm::vec3 rotateUpAuto(const glm::quat& rotation);
 };
 
 
