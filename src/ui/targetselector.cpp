@@ -40,6 +40,9 @@ WorldObject* TargetSelector::findNextTarget(IteratorType begin, IteratorType end
 
     if(newTarget == end) {
         newTarget = std::find_if(begin, searchBegin, canLockOnPredicate());
+        if(newTarget == searchBegin) {
+            return nullptr;
+        }
     }
 
     return newTarget != end ? *newTarget : nullptr;
