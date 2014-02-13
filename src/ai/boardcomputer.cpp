@@ -62,7 +62,7 @@ void BoardComputer::rotateTo(const glm::vec3& position, const glm::vec3& up) {
     glm::vec3 accumulatedEuler;
 
     // A guess (hack) where the WorldObject will point to in one second, in the local coordinate-sys
-    glm::quat projectedOrientation = glm::inverse(m_worldObject->transform().orientation()) * m_worldObject->physics().projectedTransformIn(0.2).orientation();
+    glm::quat projectedOrientation = glm::inverse(m_worldObject->transform().orientation()) * m_worldObject->physics().projectedTransformIn(0.1).orientation();
     glm::vec3 projectedDirection = projectedOrientation * glm::vec3(0, 0, -1);
 
     // Direction to the target, in the local coordinate-sys
