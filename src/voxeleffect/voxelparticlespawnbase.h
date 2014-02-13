@@ -8,8 +8,6 @@ class Transform;
 
 class VoxelParticleSpawnBase {
 public:
-    VoxelParticleSpawnBase();
-
     void setPosition(const glm::vec3& position);
     void setOrientation(const glm::quat& orientation);
     void setScale(float scale, float randomization = 0.0f);
