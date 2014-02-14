@@ -16,22 +16,26 @@ ObjectHudget::ObjectHudget(HUD* hud, HUDObjectDelegate* objectDelegate):
     m_objectVoxels(this),
     m_arrowVoxels(this)
 {
+    m_insideFov = false;
     fovx = glm::radians(42.5f);
     fovy = glm::radians(29.5f);
 }
 
 void ObjectHudget::update(float deltaSec) {
+    m_insideFov = isInsideFov();
     WorldObject* worldObject = m_objectDelegate->worldObject();
     if(worldObject) {
         calculateOpeningAngle();
         pointToWorldPoint(worldObject->transform().position());
     }
+    if (!m_insideFov) {
+        m_arrowVoxels.updateDirection(closestPointInsideFov());
+    }
 }
 
 void ObjectHudget::draw() {
     m_objectVoxels.draw();
-    if (!isInsideFov()) {
-        m_arrowVoxels.updateDirection(closestPointInsideFov());
+    if (!m_insideFov) {
         m_arrowVoxels.draw();
     }
 }

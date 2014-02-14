@@ -38,5 +38,6 @@ protected:
     void calculateOpeningAngle();
 
     bool m_targeted;
+    bool m_insideFov;
 };
 
