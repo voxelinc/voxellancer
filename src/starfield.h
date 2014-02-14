@@ -18,15 +18,14 @@ namespace glow {
     class Buffer;
 };
 
-class Camera;
 class Player;
 
 class Starfield : public RenderPass {
 public:
-    Starfield(Player* player);
+    Starfield();
 
-    virtual void update(float deltaSec) override;
-    virtual void apply(FrameBuffer& frameBuffer, Camera& camera, EyeSide side) override;
+    virtual void update(float deltaSec, const glm::vec3& cameraPosition);
+    virtual void apply(FrameBuffer& frameBuffer, const RenderMetaData& metadata) override;
 
 
 private:
@@ -36,7 +35,6 @@ private:
         glm::quat orientation;
     };
 
-    Player* m_player;
     std::deque<CameraLocation> m_locations[2];
     float m_time;
     float m_lastUpdate;

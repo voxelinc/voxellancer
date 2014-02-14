@@ -8,29 +8,25 @@
 
 
 RenderPipeline::RenderPipeline(const std::string& name):
-    RenderPass(name)
+    RenderPass(name),
+    m_initialized(false)
 {
 }
 
-void RenderPipeline::update(float deltaSec) {
-    for (auto& pass : m_passes) {
-        pass->update(deltaSec);
-    }
-}
-
-void RenderPipeline::apply(FrameBuffer& frameBuffer, Camera& camera, EyeSide side) {
-    if (m_passes.empty()) {
+void RenderPipeline::apply(FrameBuffer& frameBuffer, const RenderMetaData& metadata) {
+    if (!m_initialized) {
         glow::debug("Renderpipeline: intializing");
+        m_initialized = true;
         setup();
     }
 
     for (std::shared_ptr<RenderPass>& pass : m_passes) {
-        pass->apply(frameBuffer, camera, side);
+        pass->apply(frameBuffer, metadata);
     }
 }
 
-RenderPipeline* RenderPipeline::getDefault(Player* player) {
-    return new DefaultRenderPipeline(player);
+RenderPipeline* RenderPipeline::getDefault() {
+    return new DefaultRenderPipeline();
 }
 
 void RenderPipeline::add(std::shared_ptr<RenderPass> pass, int index) {
