@@ -83,7 +83,7 @@ go_bandit([](){
         });
 
         it("aabb resize on voxel add/remove", [&]() {
-            AssertThat(a->bounds().minimalGridAABB(), Equals(IAABB(glm::ivec3(0,0,0), glm::ivec3(0,0,0))));
+            AssertThat(a->bounds().minimalGridAABB(), Equals(GridAABB(glm::ivec3(0,0,0), glm::ivec3(0,0,0))));
 
             a->addVoxel(new Voxel(glm::ivec3(0, 0, 0))); AssertThat(a->bounds().minimalGridAABB(), Equals(IAABB(glm::ivec3(0,0,0), glm::ivec3(0,0,0))));
             a->addVoxel(new Voxel(glm::ivec3(3, 0, 0))); AssertThat(a->bounds().minimalGridAABB(), Equals(IAABB(glm::ivec3(0,0,0), glm::ivec3(3,0,0))));
