@@ -43,3 +43,6 @@ float GridAABB::diameter() const {
     return glm::length(m_rub - m_llf);
 }
 
+bool GridAABB::operator==(const GridAABB& other) {
+     return m_llf == other.llf() && m_rub == other.rub();
+}

@@ -28,6 +28,8 @@ public:
         Distance from LLF to RUB
     */
     float diameter() const;
+    
+    bool operator==(const GridAABB& other) const;
 
 
 protected:
