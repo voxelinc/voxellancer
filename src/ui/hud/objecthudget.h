@@ -5,6 +5,7 @@
 
 #include "hudget.h"
 #include "objecthudgetvoxels.h"
+#include "arrowhudgetvoxels.h"
 
 
 class HUDObjectDelegate;
@@ -20,11 +21,22 @@ public:
 
     HUDObjectDelegate* objectDelegate();
 
+    void setTargeted(bool targeted);
+    bool isTargeted();
+
 
 protected:
     HUDObjectDelegate* m_objectDelegate;
-    ObjectHudgetVoxels m_voxels;
+    ObjectHudgetVoxels m_objectVoxels;
+    ArrowHudgetVoxels m_arrowVoxels;
+
+    float fovy, fovx;
+
+    bool isInsideFov();
+    glm::vec3 closestPointInsideFov();
 
     void calculateOpeningAngle();
+
+    bool m_targeted;
 };
 

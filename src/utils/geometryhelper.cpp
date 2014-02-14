@@ -10,6 +10,12 @@ float GeometryHelper::angleBetween(const glm::vec3& u, const glm::vec3& v) {
     return angle;
 }
 
+float GeometryHelper::angleBetweenVectorPlane(const glm::vec3& u, const glm::vec3& v) {
+    float angle = glm::asin(glm::clamp(glm::abs(glm::dot(v, u)), -1.0f, 1.0f));
+    assert(std::isfinite(angle));
+    return angle;
+}
+
 glm::quat GeometryHelper::quatFromTo(const glm::vec3& u, const glm::vec3& v) {
     float angle = angleBetween(u, v);
     glm::vec3 w = glm::cross(u, v);

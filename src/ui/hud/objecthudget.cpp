@@ -13,9 +13,11 @@
 ObjectHudget::ObjectHudget(HUD* hud, HUDObjectDelegate* objectDelegate):
     Hudget(hud),
     m_objectDelegate(objectDelegate),
-    m_voxels(this)
+    m_objectVoxels(this),
+    m_arrowVoxels(this)
 {
-
+    fovx = glm::radians(42.5f);
+    fovy = glm::radians(29.5f);
 }
 
 void ObjectHudget::update(float deltaSec) {
@@ -27,7 +29,11 @@ void ObjectHudget::update(float deltaSec) {
 }
 
 void ObjectHudget::draw() {
-    m_voxels.draw();
+    m_objectVoxels.draw();
+    if (!isInsideFov()) {
+        m_arrowVoxels.updateDirection(closestPointInsideFov());
+        m_arrowVoxels.draw();
+    }
 }
 
 void ObjectHudget::calculateOpeningAngle() {
@@ -39,7 +45,7 @@ void ObjectHudget::calculateOpeningAngle() {
 
     alpha = std::max(alpha, 0.04f); // Hack, set minimum size
 
-    m_voxels.setOpeningAngle(alpha);
+    m_objectVoxels.setOpeningAngle(alpha);
 }
 
 HUDObjectDelegate* ObjectHudget::objectDelegate() {
@@ -49,5 +55,51 @@ HUDObjectDelegate* ObjectHudget::objectDelegate() {
 bool ObjectHudget::isAt(const Ray& ray) const {
     return ray.nearTo(m_objectDelegate->worldObject()->bounds().aabb());
     //return ray.intersects(Sphere(worldPosition(), 2.0f)); // needs to depend on hudget size
+}
+
+void ObjectHudget::setTargeted(bool targeted) {
+    m_arrowVoxels.setTarget(targeted);
+    m_targeted = targeted;
+}
+
+bool ObjectHudget::isTargeted() {
+    return m_targeted;
+}
+
+bool ObjectHudget::isInsideFov() {
+    if (GeometryHelper::angleBetweenVectorPlane(localDirection(), glm::vec3(0, 1, 0)) < fovy &&
+        GeometryHelper::angleBetweenVectorPlane(localDirection(), glm::vec3(1, 0, 0)) < fovx) {
+        return true;
+    } 
+    return false;
+}
+
+glm::vec3 ObjectHudget::closestPointInsideFov() {
+    glm::vec3 planeNormalX(glm::cos(fovx), 0, glm::cos(glm::radians(90.0f) - fovx));
+    glm::vec3 planeNormalY(0, glm::cos(fovy), glm::cos(glm::radians(90.0f) - fovy));
+    glm::vec3 planeDirection(glm::abs(localDirection().y), -glm::abs(localDirection().x), 0);
+
+    glm::vec3 intersectionX = glm::cross(planeNormalX, planeDirection);
+    glm::vec3 intersectionY = glm::cross(planeNormalY, planeDirection);
+    float angleX = GeometryHelper::angleBetween(intersectionX, glm::vec3(0, 0, -1));
+    float angleY = GeometryHelper::angleBetween(intersectionY, glm::vec3(0, 0, -1));
+
+    glm::vec3 pointInsideFov;
+
+    if (angleX < angleY) {
+        pointInsideFov = glm::normalize(intersectionX);
+    } else {
+        pointInsideFov = glm::normalize(intersectionY);
+    }
+    pointInsideFov.x = glm::abs(pointInsideFov.x);
+    pointInsideFov.y = glm::abs(pointInsideFov.y);
+    pointInsideFov.z = glm::abs(pointInsideFov.z)*-1;
+    if (localDirection().x < 0) {
+        pointInsideFov.x *= -1;
+    }
+    if (localDirection().y < 0) {
+        pointInsideFov.y *= -1;
+    }
+    return pointInsideFov;
 }
 

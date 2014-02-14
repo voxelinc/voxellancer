@@ -5,15 +5,13 @@
 #include "hud.h"
 #include "hudget.h"
 #include "objecthudget.h"
-#include "arrowhudget.h"
 
 
 HUDObjectDelegate::HUDObjectDelegate(HUD* hud, WorldObject* worldObject):
     m_hud(hud),
     m_worldObjectHandle(worldObject->handle()),
-    m_target(false),
-    m_objectHudget(new ObjectHudget(m_hud, this)),
-    m_arrowHudget(new ArrowHudget(m_hud, this))
+    m_targeted(false),
+    m_objectHudget(new ObjectHudget(m_hud, this))
 {
 }
 
@@ -29,15 +27,12 @@ Hudget* HUDObjectDelegate::objectHudget() {
     return m_objectHudget;
 }
 
-Hudget* HUDObjectDelegate::arrowHudget() {
-    return m_arrowHudget;
+
+bool HUDObjectDelegate::isTargeted() {
+    return m_targeted;
 }
 
-bool HUDObjectDelegate::isTarget() {
-    return m_target;
-}
-
-void HUDObjectDelegate::setTarget(bool target) {
-    m_arrowHudget->setTarget(target);
-    m_target = target;
+void HUDObjectDelegate::setTargeted(bool targeted) {
+    m_objectHudget->setTargeted(targeted);
+    m_targeted = targeted;
 }

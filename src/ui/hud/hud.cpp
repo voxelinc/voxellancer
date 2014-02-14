@@ -81,7 +81,6 @@ void HUD::removeHudget(Hudget* hudget) {
 void HUD::addObjectDelegate(HUDObjectDelegate* objectDelegate) {
     m_objectDelegates[objectDelegate->worldObject()] = objectDelegate;
     addHudget(objectDelegate->objectHudget());
-    addHudget(objectDelegate->arrowHudget());
 }
 
 void HUD::removeObjectDelegate(HUDObjectDelegate* objectDelegate) {
@@ -94,7 +93,6 @@ void HUD::removeObjectDelegate(HUDObjectDelegate* objectDelegate) {
     m_objectDelegates.erase(i);
 
     removeHudget(objectDelegate->objectHudget());
-    removeHudget(objectDelegate->arrowHudget());
 
     delete objectDelegate;
 }
@@ -185,9 +183,9 @@ void HUD::updateScanner(float deltaSec) {
 
 void HUD::setTargetHudget(WorldObject* target) {
     if (m_target) {
-        m_objectDelegates[m_target]->setTarget(false);
+        m_objectDelegates[m_target]->setTargeted(false);
     }
     m_target = target;
-    m_objectDelegates[target]->setTarget(true);
+    m_objectDelegates[target]->setTargeted(true);
 }
 

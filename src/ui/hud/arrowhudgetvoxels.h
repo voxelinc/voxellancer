@@ -5,22 +5,25 @@
 #include "voxel/voxelcluster.h"
 #include "property/property.h"
 
-class ArrowHudget;
+class ObjectHudget;
 
 class ArrowHudgetVoxels {
 public:
-    ArrowHudgetVoxels(ArrowHudget* hudget);
+    ArrowHudgetVoxels(ObjectHudget* hudget);
     ~ArrowHudgetVoxels();
 
-    ArrowHudget* hudget();
+    ObjectHudget* hudget();
 
     void draw();
 
     void setTarget(bool target);
 
+    void updateDirection(glm::vec3 direction);
+
+    bool findPointOnEdge();
 
 protected:
-    ArrowHudget* m_hudget;
+    ObjectHudget* m_hudget;
     VoxelCluster m_arrow;
 
     Property<float> prop_arrowDistance;
@@ -28,10 +31,10 @@ protected:
     glm::vec3 m_targetPoint;
 
     bool findPoint();
-    bool findPointOnEdge();
 
     float vectorAngleToPlane(glm::vec3 vector, glm::vec3 planeNormal);
     float vectorAngleToVector(glm::vec3 vector, glm::vec3 vector2);
+
 
 
 };
