@@ -9,7 +9,6 @@ class Transform;
 class VoxelParticleSpawnBase
 {
 public:
-    VoxelParticleSpawnBase();
     virtual ~VoxelParticleSpawnBase();
 
     void setPosition(const glm::vec3& position);
@@ -23,6 +22,11 @@ public:
 
 
 protected:
+    VoxelParticleSpawnBase(char* dampeningName,
+                           char* angularDampeningName,
+                           char* baseForceName,
+                           char* angularBaseForceName);
+
     glm::vec3 m_position;
     float m_scale;
     float m_scaleRandomization;
@@ -34,10 +38,10 @@ protected:
     float m_emissiveness;
     glm::vec3 m_impactVector;
 
-    float m_particleDampening;
-    float m_particleAngularDampening;
-    float m_particleBaseForce;
-    float m_particleAngularBaseForce;
+    Property<float> m_particleDampening;
+    Property<float> m_particleAngularDampening;
+    Property<float> m_particleBaseForce;
+    Property<float> m_particleAngularBaseForce;
 
 
     glm::vec3 createDirectionalSpeed();
