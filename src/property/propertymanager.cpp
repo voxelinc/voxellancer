@@ -93,8 +93,8 @@ static InputMapping inputMappingConverter(const std::string &s) {
 
 PropertyManager::PropertyManager():
     m_floatProperties(new PropertyCollection<float>(float_regex(), [](std::string s) { return std::stof(s); })),
-    m_intProperties(new PropertyCollection<int>(int_regex(), [](std::string s) { return std::stoll(s, 0, 0); })), // base=0 allows adding 0x to parse hex
-    m_uint32Properties(new PropertyCollection<uint32_t>(uint32_regex(), [](std::string s) { return std::stoll(s, 0, 0); })), // base=0 allows adding 0x to parse hex
+    m_intProperties(new PropertyCollection<int>(int_regex(), [](std::string s) { return std::stoi(s, nullptr, 0); })), // base=0 allows adding 0x to parse hex
+    m_uint32Properties(new PropertyCollection<uint32_t>(uint32_regex(), [](std::string s) { return std::stoul(s, nullptr, 0); })), // base=0 allows adding 0x to parse hex
     m_charProperties(new PropertyCollection<char>(char_regex(), [](std::string s) { return s[0]; })),
     m_boolProperties(new PropertyCollection<bool>(bool_regex(), [](std::string s) { return s == "true" ? true : false; })),
     m_stringProperties(new PropertyCollection<std::string>(string_regex(), [](std::string s) { return s; })),
