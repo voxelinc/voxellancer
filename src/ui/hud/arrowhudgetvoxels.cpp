@@ -19,6 +19,7 @@ ArrowHudgetVoxels::ArrowHudgetVoxels(ArrowHudget* hudget) :
     prop_arrowDistance("hud.arrowDistance")
 {
     ClusterCache::instance()->fillCluster(&m_arrow, "data/hud/arrowXT.csv");
+    m_arrow.transform().setCenter(glm::vec3(4, 0, 0));
 }
 
 ArrowHudgetVoxels::~ArrowHudgetVoxels() {
@@ -30,7 +31,6 @@ ArrowHudget* ArrowHudgetVoxels::hudget() {
 
 void ArrowHudgetVoxels::draw() {
     if (findPointOnEdge()) {
-        m_arrow.transform().setCenter(glm::vec3(4, 0, 0));
         m_arrow.transform().setPosition(m_hudget->worldPosition(m_targetPoint));
         m_arrow.transform().setOrientation(m_hudget->worldOrientation(m_targetPoint)*glm::angleAxis(glm::atan(m_targetPoint.x, m_targetPoint.y), glm::vec3(0, 0, -1)));
         VoxelRenderer::instance()->draw(&m_arrow);
