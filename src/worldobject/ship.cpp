@@ -1,14 +1,18 @@
 #include "ship.h"
 
 #include "ai/boardcomputer.h"
-#include "ai/character.h"
-#include "ai/formationlogic.h"
+
+#include "ai/squadlogic.h"
+
+#include "sound/sound.h"
 
 #include "collision/collisionfilter.h"
 
 #include "sound/sound.h"
 
 #include "voxel/specialvoxels/engineslotvoxel.h"
+
+#include "ai/character.h"
 
 #include "worldobject/components/engineslot.h"
 
@@ -22,7 +26,7 @@ Ship::Ship(CollisionFilter* collisionFilter):
     WorldObject(collisionFilter),
     m_character(new Character(*this)),
     m_boardComputer(new BoardComputer(this)),
-    m_formationLogic(new FormationLogic(*this)),
+    m_squadLogic(new SquadLogic(*this)),
     m_shipHandle(Handle<Ship>(this)),
     m_targetObjectHandle(Handle<WorldObject>(nullptr))
 {
@@ -64,8 +68,8 @@ BoardComputer* Ship::boardComputer() {
     return m_boardComputer.get();
 }
 
-FormationLogic* Ship::formationLogic() {
-    return m_formationLogic.get();
+SquadLogic* Ship::squadLogic() {
+    return m_squadLogic.get();
 }
 
 

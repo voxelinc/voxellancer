@@ -16,7 +16,7 @@ PostProcessingPass::PostProcessingPass(const std::string& name, std::shared_ptr<
     m_output(),
     m_inputMapping(),
     m_fragmentShader(""),
-    m_vertexShader("data/postprocessing/screenquad.vert")
+    m_vertexShader("data/shader/postprocessing/screenquad.vert")
 {
 }
 
@@ -65,7 +65,7 @@ void PostProcessingPass::initialize() {
     m_program = new glow::Program();
     glow::Shader* vertShader = glowutils::createShaderFromFile(GL_VERTEX_SHADER, m_vertexShader);
     glow::Shader* fragShader = glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, m_fragmentShader);
-    
+
     m_program->attach(vertShader, fragShader);
     m_program->link();
     CheckGLError();

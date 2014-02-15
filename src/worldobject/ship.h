@@ -14,7 +14,7 @@ class Hardpoint;
 class Engine;
 class Character;
 class Sound;
-class FormationLogic;
+class SquadLogic;
 class BoardComputer;
 
 class Ship: virtual public WorldObject {
@@ -30,7 +30,7 @@ public:
     WorldObject* targetObject();
 
     BoardComputer* boardComputer();
-    FormationLogic* formationLogic();
+    SquadLogic* squadLogic();
 
     void setCharacter(Character* character);
     Character* character();
@@ -44,7 +44,8 @@ protected:
 
     std::unique_ptr<Character> m_character;
     std::unique_ptr<BoardComputer> m_boardComputer;
-    std::unique_ptr<FormationLogic> m_formationLogic;
+
+    std::unique_ptr<SquadLogic> m_squadLogic;
 //    std::shared_ptr<Sound> m_sound;
 //    glm::vec3 m_enginePos;
 

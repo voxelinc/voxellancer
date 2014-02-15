@@ -1,7 +1,7 @@
 #include "gamescene.h"
 
 #include "voxel/voxelrenderer.h"
-#include "voxeleffect/voxelparticleworld.h"
+#include "voxeleffect/voxelparticleengine.h"
 #include "utils/hd3000dummy.h"
 #include "sound/soundmanager.h"
 #include "game.h"
@@ -78,7 +78,7 @@ void GameScene::drawGame(Camera* camera) {
     m_game->player().hud().draw();
     m_voxelRenderer->afterDraw();
 
-    World::instance()->voxelParticleWorld().draw(*camera);
+    World::instance()->voxelParticleEngine().draw(*camera);
 
     m_hd3000dummy->drawIfActive();
 }

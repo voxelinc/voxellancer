@@ -1,6 +1,5 @@
 #include "physics.h"
 
-#include <functional>
 #include <iostream>
 
 #include <glm/gtx/quaternion.hpp>

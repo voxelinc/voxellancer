@@ -5,7 +5,7 @@
 #include <glowutils/AutoTimer.h>
 #include <glowutils/Timer.h>
 
-#include "ai/characters/dummycharacter.h"
+#include "ai/character.h"
 
 #include "resource/clustercache.h"
 

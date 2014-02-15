@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include <unordered_map>
 
 
@@ -15,7 +17,7 @@ public:
 
 private:
     std::unordered_map<std::string, std::string> m_options;
-    
+
     bool isSet(const std::string& arg) const;
     void checkHelp();
 
