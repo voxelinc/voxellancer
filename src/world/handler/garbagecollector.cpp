@@ -2,7 +2,7 @@
 
 #include "worldobject/worldobject.h"
 
-void GarbageCollector::check(std::list<WorldObject*> &modifiedVoxelClusters) {
+void GarbageCollector::check(std::unordered_set<WorldObject*> &modifiedVoxelClusters) {
     m_garbageVoxelClusters.clear();
     for (WorldObject* object : modifiedVoxelClusters){
         if (object->voxelMap().size() == 0)

@@ -45,7 +45,7 @@ VoxelParticleEngine &World::voxelParticleEngine() {
     return *m_voxelParticleEngine;
 }
 
-std::list<WorldObject*> &World::worldObjects() {
+std::unordered_set<WorldObject*> &World::worldObjects() {
     return m_worldObjects;
 }
 

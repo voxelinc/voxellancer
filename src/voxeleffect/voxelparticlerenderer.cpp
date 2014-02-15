@@ -137,3 +137,15 @@ void VoxelParticleRenderer::setBufferSize(int bufferSize) {
     m_gpuParticleBuffer->setData(m_bufferSize * sizeof(VoxelParticleData), nullptr, GL_STREAM_DRAW);
 }
 
+
+void VoxelParticleRenderer::beforeContextDestroy() {
+    m_vertexArrayObject = nullptr;
+    m_gpuParticleBuffer = nullptr;
+    m_program = nullptr;
+    // trigger re-init
+    m_initialized = false;
+}
+
+void VoxelParticleRenderer::afterContextRebuild() {
+    // lazy init
+}
