@@ -31,7 +31,8 @@ VoxelParticleWorld::VoxelParticleWorld():
     m_initialized(false),
     m_bufferSize(0),
     m_particles(),
-    m_tempParticles()
+    m_tempParticles(),
+    m_defaultLightDir("vfx.lightdir")
 {
 
 }
@@ -102,6 +103,7 @@ void VoxelParticleWorld::draw(const Camera& camera) {
     updateBuffers();
 
     m_program->setUniform("viewProjection", camera.viewProjection());
+    m_program->setUniform("lightdir", m_defaultLightDir.get());
 
     m_program->use();
     m_vertexArrayObject->bind();

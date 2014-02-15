@@ -5,8 +5,6 @@
 #include <glowutils/AutoTimer.h>
 
 #include "ai/characters/dummycharacter.h"
-#include "ai/elevatedtasks/dummyelevatedtask.h"
-#include "ai/basictask.h"
 #include "ai/basictasks/fighttask.h"
 
 #include "resource/clustercache.h"
@@ -19,11 +17,13 @@
 #include "utils/randvec.h"
 
 
-BattleScenario::BattleScenario() {
+BattleScenario::BattleScenario(GamePlay* gamePlay):
+    BaseScenario(gamePlay)
+{
 
 }
 
-void BattleScenario::populate(GamePlay* inGame) {
+void BattleScenario::populateWorld() {
     glowutils::AutoTimer t("Initialize Game");
 
 
@@ -38,8 +38,10 @@ void BattleScenario::populate(GamePlay* inGame) {
     playerShip->setPosition(glm::vec3(0, 0, 10));
     playerShip->objectInfo().setName("basicship");
     playerShip->objectInfo().setShowOnHud(false);
+    playerShip->objectInfo().setCanLockOn(false);
     world->god().scheduleSpawn(playerShip);
-    inGame->player().setShip(playerShip);
+
+    m_gamePlay->player().setShip(playerShip);
 
     // create enemy ai driven ship
     Ship *aitester = new Ship();
@@ -48,7 +50,15 @@ void BattleScenario::populate(GamePlay* inGame) {
     aitester->objectInfo().setName("basicship");
     aitester->objectInfo().setShowOnHud(false);
     //world->god().scheduleSpawn(aitester);
-    aitester->setCharacter(new DummyCharacter(*aitester, new DummyElevatedTask(*aitester, new FightTask(*aitester, {playerShip->handle()}))));
+    aitester->setCharacter(new DummyCharacter(*aitester, new FightTask(*aitester, {playerShip->handle()})));
+
+    WorldObject* banner = new WorldObject();
+    ClusterCache::instance()->fillObject(banner, "data/voxelcluster/banner.csv");
+    banner->transform().setScale(30.0f);
+    banner->transform().move(glm::vec3(0, 0, -600));
+    banner->objectInfo().setShowOnHud(false);
+    banner->objectInfo().setCanLockOn(false);
+    world->god().scheduleSpawn(banner);
 
     // create two opposing enemy forces
     populateBattle(4, 4);
@@ -63,7 +73,7 @@ void BattleScenario::populateBattle(int numberOfEnemies1, int numberOfEnemies2) 
     std::vector<Ship*> fleet2;
     for (int e = 0; e < numberOfEnemies1; e++) {
         Ship *ship = new Ship();
-        float r = 200;
+        float r = 400;
         ship->move(RandVec3::rand(0.0f, r) + glm::vec3(-200, 0, -200));
         ship->objectInfo().setName("enemy2");
         ship->objectInfo().setShowOnHud(true);
@@ -74,7 +84,7 @@ void BattleScenario::populateBattle(int numberOfEnemies1, int numberOfEnemies2) 
     }
     for (int e = 0; e < numberOfEnemies2; e++) {
         Ship *ship = new Ship();
-        float r = 200;
+        float r = 400;
         ship->move(RandVec3::rand(0.0f, r) + glm::vec3(200, 0, -200));
         ship->objectInfo().setName("enemy1");
         ship->objectInfo().setShowOnHud(true);
@@ -94,6 +104,6 @@ void BattleScenario::setTargets(const std::vector<Ship*>& fleet, const std::vect
     }
     for (Ship* ship : fleet) {
         std::random_shuffle(enemyHandles.begin(), enemyHandles.end());
-        ship->setCharacter(new DummyCharacter(*ship, new DummyElevatedTask(*ship, new FightTask(*ship, enemyHandles))));
+        ship->setCharacter(new DummyCharacter(*ship, new FightTask(*ship, enemyHandles)));
     }
 }

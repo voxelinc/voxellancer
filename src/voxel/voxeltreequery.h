@@ -1,6 +1,6 @@
 #pragma once
 
-#include <set>
+#include <unordered_set>
 #include <functional>
 
 #include "geometry/abstractshape.h"
@@ -15,7 +15,7 @@ public:
     VoxelTreeQuery(VoxelTree* voxelTree, const AbstractShape* shape);
 
     bool areVoxelsIntersecting();
-    std::set<Voxel*> intersectingVoxels();
+    std::unordered_set<Voxel*> intersectingVoxels();
 
 
 protected:

@@ -24,7 +24,8 @@ GamePlayScene::GamePlayScene(GamePlay* inGame, Player* player):
     m_renderPipeline(RenderPipeline::getDefault(player)),
     m_framebuffer(new FrameBuffer(m_renderPipeline->bufferCount())),
     m_currentOutputBuffer(0),
-    m_player(player)
+    m_player(player),
+    m_defaultLightDir("vfx.lightdir")
 {
 }
 
@@ -32,6 +33,7 @@ GamePlayScene::~GamePlayScene() = default;
 
 void GamePlayScene::draw(const Camera& camera, glow::FrameBufferObject* target, EyeSide side) const {
     m_framebuffer->setResolution(camera.viewport());
+
     m_framebuffer->clear();
 
     // the pipeline should expect color in 1, normals in 2 and emissiveness in 3
@@ -55,7 +57,9 @@ void GamePlayScene::setOutputBuffer(int i) {
 void GamePlayScene::drawGame(const Camera& camera) const {
     World::instance()->skybox().draw(camera);
 
-    m_voxelRenderer->prepareDraw(&camera);
+    m_voxelRenderer->program()->setUniform("lightdir", m_defaultLightDir.get());
+    m_voxelRenderer->prepareDraw(camera);
+
     for (WorldObject* worldObject : World::instance()->worldObjects()) {
         VoxelRenderer::instance()->draw(worldObject);
     }

@@ -18,7 +18,7 @@ class VoxelCluster;
 
 class VoxelRenderer {
 public:
-    void prepareDraw(const Camera* camera, bool withBorder = true);
+    void prepareDraw(const Camera& camera, bool withBorder = true);
     void draw(VoxelCluster* cluster);
     void afterDraw();
 

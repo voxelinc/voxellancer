@@ -10,6 +10,7 @@
 #include <glow/Buffer.h>
 
 #include "camera/camera.h"
+#include "property/property.h"
 
 
 class VoxelParticle;
@@ -37,6 +38,7 @@ protected:
     glow::ref_ptr<glow::Buffer> m_particleDataBuffer;
 
     bool m_initialized;
+    Property<glm::vec3> m_defaultLightDir;
 
     void initialize();
     void loadProgram();

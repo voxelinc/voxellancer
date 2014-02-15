@@ -2,6 +2,8 @@
 
 #include <cassert>
 
+#include "utils/glmisfinite.h"
+
 #include "geometry/aabb.h"
 
 
@@ -17,7 +19,7 @@ Sphere::Sphere(const glm::vec3 &position, float radius):
     m_radius(radius)
 {
     assert(radius >= 0 && std::isfinite(radius));
-    assert(std::isfinite(position.x) && std::isfinite(position.y) && std::isfinite(position.z));
+    assert(std::isfinite(position));
 }
 
 Sphere::~Sphere() {
@@ -39,7 +41,7 @@ const glm::vec3 &Sphere::position() const {
 }
 
 void Sphere::setPosition(const glm::vec3 &position) {
-    assert(std::isfinite(position.x) && std::isfinite(position.x) && std::isfinite(position.x));
+    assert(std::isfinite(position));
     m_position = position;
 }
 

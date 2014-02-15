@@ -6,8 +6,6 @@
 #include <glowutils/Timer.h>
 
 #include "ai/characters/dummycharacter.h"
-#include "ai/elevatedtasks/dummyelevatedtask.h"
-#include "ai/basictask.h"
 
 #include "resource/clustercache.h"
 
@@ -15,8 +13,9 @@
 #include "sound/soundmanager.h"
 #include "world/world.h"
 
-BaseScenario::BaseScenario(GamePlay* inGame) :
-    m_inGame(inGame)
+
+BaseScenario::BaseScenario(GamePlay* gamePlay) :
+    m_gamePlay(gamePlay)
 {
 }
 

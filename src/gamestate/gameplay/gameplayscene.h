@@ -6,6 +6,9 @@
 
 #include "display/scene.h"
 
+#include "property/property.h"
+
+
 
 class GamePlay;
 class VoxelRenderer;
@@ -41,7 +44,9 @@ protected:
     CameraHead* m_head;
     Player* m_player;
 
+    Property<glm::vec3> m_defaultLightDir;
     int m_currentOutputBuffer;
+
 
     void drawGame(const Camera& camera) const;
 };

@@ -4,16 +4,16 @@
 
 
 class Ship;
-class ElevatedTask;
+class AiTask;
 
 class DummyCharacter : public Character {
 public:
-    DummyCharacter(Ship& ship, ElevatedTask* task);
+    DummyCharacter(Ship& ship, AiTask* task);
     
     virtual void update(float deltaSec);
 
 protected:
-    ElevatedTask* m_task;
+    AiTask* m_task;
 
 };
 

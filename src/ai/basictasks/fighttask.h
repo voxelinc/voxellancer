@@ -4,12 +4,12 @@
 #include <glm/glm.hpp>
 
 #include "worldobject/handle/handle.h"
-#include "ai/basictask.h"
+#include "ai/aitask.h"
 
 class Ship;
 class WorldObject;
 
-class FightTask : public BasicTask {
+class FightTask : public AiTask {
 
     enum StateTemplate {
         IDLE,

@@ -68,13 +68,13 @@ std::list<VoxelCollision>& CollisionDetector::checkCollisions() {
     m_collisions.clear();
 
     IAABB worldObjectAABB = m_worldObject.bounds().aabb();
-    std::set<WorldTreeGeode*> possibleColliders = WorldTreeQuery(m_worldTree, &worldObjectAABB, m_geode->containingNode(), &m_worldObject.collisionFilter()).nearGeodes();
+    std::unordered_set<WorldTreeGeode*> possibleColliders = WorldTreeQuery(m_worldTree, &worldObjectAABB, m_geode->containingNode(), &m_worldObject.collisionFilter()).nearGeodes();
     possibleColliders.erase(m_geode);
 
     for (WorldTreeGeode* possibleCollider : possibleColliders) {
         assert(possibleCollider->worldObject() != nullptr);
         WorldObject* other = possibleCollider->worldObject();
-        
+
         assert(m_worldObject.collisionFilter().isCollideableWith(&other->collisionFilter()));
         checkCollisions(m_voxelTree->root(), other->collisionDetector().voxelTree().root());
     }
