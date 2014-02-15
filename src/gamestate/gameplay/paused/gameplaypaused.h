@@ -1,10 +1,11 @@
 #pragma once
 
+#include "gamestate/gamestate.h"
+
 #include "utils/fsm/trigger.h"
 
-#include "ui/gameplaymaininput.h"
+#include "gamestate/gameplay/main/gameplaymaininput.h"
 
-#include "gamestate.h"
 
 
 class GamePlay;

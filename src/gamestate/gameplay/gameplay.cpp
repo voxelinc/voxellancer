@@ -1,13 +1,13 @@
 #include "gameplay.h"
 
+#include "gamestate/game.h"
+#include "gamestate/gameplay/main/gameplaymain.h"
+#include "gamestate/gameplay/paused/gameplaypaused.h"
+
 #include "utils/fsm/trigger.h"
 #include "utils/fsm/triggeredtransition.h"
 
 #include "world/world.h"
-
-#include "game.h"
-#include "gameplaymain.h"
-#include "gameplaypaused.h"
 
 
 GamePlay::GamePlay(Game* game):

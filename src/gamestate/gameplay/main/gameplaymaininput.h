@@ -6,12 +6,13 @@
 
 #include "gamestate/gamestate.h"
 
+#include "ui/inputconfigurator.h"
+
 #include "utils/fsm/trigger.h"
 
 #include "property/property.h"
 
-#include "inputconfigurator.h"
-#include "targetselector.h"
+#include "ui/targetselector.h"
 
 
 class WorldObject;

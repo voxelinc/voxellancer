@@ -1,6 +1,6 @@
 #pragma once
 
-#include "display/gameplayscene.h"
+#include "gamestate/gamestate.h"
 
 #include "scenarios/gamescenario.h"
 
@@ -8,7 +8,8 @@
 
 #include "player.h"
 
-#include "gamestate.h"
+#include "gameplayscene.h"
+
 
 
 

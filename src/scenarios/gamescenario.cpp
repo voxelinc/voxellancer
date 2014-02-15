@@ -14,7 +14,7 @@
 
 #include "worldobject/ship.h"
 #include "sound/soundmanager.h"
-#include "gamestate/gameplay.h"
+#include "gamestate/gameplay/gameplay.h"
 #include "world/world.h"
 #include "voxel/voxel.h"
 #include "world/god.h"

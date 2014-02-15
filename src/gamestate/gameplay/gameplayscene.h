@@ -4,7 +4,7 @@
 
 #include <glm/glm.hpp>
 
-#include "scene.h"
+#include "display/scene.h"
 
 
 class GamePlay;

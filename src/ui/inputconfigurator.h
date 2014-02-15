@@ -5,7 +5,8 @@
 #include "input/inputmapping.h"
 #include "property/property.h"
 
-#include "gameplaymaininput.h"
+#include "gamestate/gameplay/main/gameplaymaininput.h"
+
 
 struct ActionKeyMapping;
 struct SecondaryInputValues;

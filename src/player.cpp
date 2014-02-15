@@ -5,7 +5,7 @@
 #include "worldobject/ship.h"
 
 #include "gamestate/game.h"
-#include "gamestate/gameplay.h"
+#include "gamestate/gameplay/gameplay.h"
 
 
 Player::Player(GamePlay* inGame):

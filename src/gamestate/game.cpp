@@ -4,7 +4,7 @@
 
 #include "etc/windowmanager.h"
 
-#include "gameplay.h"
+#include "gamestate/gameplay/gameplay.h"
 
 
 Game::Game():

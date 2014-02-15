@@ -5,8 +5,8 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-#include "game.h"
-#include "gameplay.h"
+#include "gamestate/game.h"
+#include "gamestate/gameplay/gameplay.h"
 
 
 GamePlayPaused::GamePlayPaused(GamePlay* gamePlay):

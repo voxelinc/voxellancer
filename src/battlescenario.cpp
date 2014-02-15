@@ -13,7 +13,7 @@
 
 #include "worldobject/ship.h"
 
-#include "gamestate/gameplay.h"
+#include "gamestate/gameplay/gameplay.h"
 #include "world/world.h"
 #include "world/god.h"
 #include "utils/randvec.h"

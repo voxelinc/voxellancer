@@ -4,16 +4,16 @@
 #include "voxeleffect/voxelparticleworld.h"
 #include "utils/hd3000dummy.h"
 #include "sound/soundmanager.h"
-#include "gamestate/gameplay.h"
-#include "rendering/framebuffer.h"
-#include "rendering/renderpipeline.h"
-#include "rendering/blitter.h"
+#include "gamestate/gameplay/gameplay.h"
+#include "display/rendering/framebuffer.h"
+#include "display/rendering/renderpipeline.h"
+#include "display/rendering/blitter.h"
+#include "display/rendering/buffernames.h"
 #include "player.h"
 #include "ui/hud/hud.h"
 #include "world/world.h"
 #include "skybox.h"
 #include "worldobject/worldobject.h"
-#include "rendering/buffernames.h"
 
 
 GamePlayScene::GamePlayScene(GamePlay* inGame, Player* player):

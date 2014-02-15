@@ -29,7 +29,7 @@
 
 #include "display/stereorenderinfo.h"
 
-#include "ui/gameplaymaininput.h"
+#include "gamestate/gameplay/main/gameplaymaininput.h"
 
 #include "gamestate/game.h"
 
@@ -99,7 +99,9 @@ static void cursorPositionCallback(GLFWwindow* window, double x, double y) {
 }
 
 void setGlfwCallbacks(GLFWwindow* window) {
-    glfwSetMouseButtonCallback(window, mouseButtonCallback);
+    glfwSetMouseButtonCallback(window, [&] (GLFWwindow* window, int Button, int Action, int mods) {
+        mouseButtonCallback(window, Button, Action, mods);
+    });
     glfwSetCursorPosCallback(window, cursorPositionCallback);
     glfwSetKeyCallback(window, keyCallback);
     glfwSetWindowSizeCallback(window, resizeCallback);
@@ -108,8 +110,6 @@ void setGlfwCallbacks(GLFWwindow* window) {
 static void mainloop() {
     glow::debug("Entering mainloop");
     double time = glfwGetTime();
-
-    game->start();
 
     while (!glfwWindowShouldClose(glfwGetCurrentContext())) {
         double delta = glfwGetTime() - time;

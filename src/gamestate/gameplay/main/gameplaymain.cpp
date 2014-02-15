@@ -2,12 +2,13 @@
 
 #include <iostream>
 
+#include "gamestate/game.h"
+#include "gamestate/gameplay/gameplay.h"
+
 #include "world/world.h"
 
 #include "player.h"
 
-#include "game.h"
-#include "gameplay.h"
 
 
 GamePlayMain::GamePlayMain(GamePlay* gamePlay):
