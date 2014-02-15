@@ -13,7 +13,6 @@ class VoxelRenderer;
 class HD3000Dummy;
 class SoundManager;
 class CameraHead;
-class MonoBlitProgram;
 class FrameBuffer;
 class Blitter;
 class RenderPipeline;

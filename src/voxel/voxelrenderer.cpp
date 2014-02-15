@@ -104,3 +104,11 @@ std::shared_ptr<VoxelRenderer> VoxelRenderer::instance() {
     }
 }
 
+void VoxelRenderer::beforeContextDestroy() {
+    m_program = nullptr;
+    m_prepared = false;
+}
+
+void VoxelRenderer::afterContextRebuild() {
+    createAndSetupShaders();
+}

@@ -9,6 +9,7 @@
 
 #include "property/property.h"
 #include "display/rendering/renderpass.h"
+#include "etc/contextdependant.h"
 
 
 namespace glow {
@@ -21,7 +22,7 @@ namespace glow {
 class Camera;
 class Player;
 
-class Starfield : public RenderPass {
+class Starfield : public RenderPass, public ContextDependant {
 public:
     Starfield(Player* player);
 
@@ -29,7 +30,7 @@ public:
     virtual void apply(FrameBuffer& frameBuffer, Camera& camera, EyeSide side) override;
 
 
-private:
+protected:
     struct CameraLocation {
         float time;
         glm::vec3 position;
@@ -49,6 +50,9 @@ private:
 
     void createAndSetupShaders();
     void createAndSetupGeometry();
+
+    virtual void beforeContextDestroy() override;
+    virtual void afterContextRebuild() override;
 
     void createBinding(int index, std::string name, int offset, int size);
 

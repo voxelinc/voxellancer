@@ -94,3 +94,15 @@ glow::VertexArrayObject* VoxelRenderData::vertexArrayObject() {
         updateBuffer();
     return m_vertexArrayObject;
 }
+
+void VoxelRenderData::beforeContextDestroy() {
+    m_vertexArrayObject = nullptr;
+    m_voxelDataBuffer = nullptr;
+    // trigger a setup on next update
+    m_isDirty = true;
+    m_bufferSize = 0;
+}
+
+void VoxelRenderData::afterContextRebuild() {
+    // lazy init
+}

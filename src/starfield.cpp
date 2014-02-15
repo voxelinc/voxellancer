@@ -15,6 +15,7 @@
 #include "display/rendering/framebuffer.h"
 #include "display/rendering/buffernames.h"
 #include "utils/randvec.h"
+#include "etc/contextdependant.h"
 
 
 static int STAR_COUNT = 1000;
@@ -185,3 +186,13 @@ void Starfield::cleanUp(int side) {
     }
 }
 
+void Starfield::beforeContextDestroy() {
+    m_vertexArrayObject = nullptr;
+    m_starBuffer = nullptr;
+    m_shaderProgram = nullptr;
+}
+
+void Starfield::afterContextRebuild() {
+    createAndSetupShaders();
+    createAndSetupGeometry();
+}

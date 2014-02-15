@@ -2,10 +2,10 @@
 
 #include <string>
 
+#include "etc/contextdependant.h"
 #include "property/property.h"
 
 #include "voxelparticledata.h"
-
 #include "voxelmesh.h"
 
 
@@ -22,7 +22,7 @@ class VoxelParticleEngine;
     Component of a VoxelParticleEngine responsible for rendering the particles
     It holds its own GPU-Buffer and receives updates for the particles by updateBuffer()
 */
-class VoxelParticleRenderer {
+class VoxelParticleRenderer :  public ContextDependant {
 public:
     VoxelParticleRenderer(VoxelParticleEngine* engine);
 
@@ -51,5 +51,8 @@ protected:
     void setupVertexAttribute(GLint offset, const std::string& name, int numPerVertex, GLenum type, GLboolean normalised, int bindingNum);
     void setupVertexAttribDivisors();
     void setBufferSize(int bufferSize);
+
+    virtual void beforeContextDestroy() override;
+    virtual void afterContextRebuild() override;
 };
 

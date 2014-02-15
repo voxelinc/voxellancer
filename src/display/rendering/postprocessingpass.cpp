@@ -70,3 +70,11 @@ void PostProcessingPass::initialize() {
     m_program->link();
     CheckGLError();
 }
+
+void PostProcessingPass::beforeContextDestroy() {
+    m_program = nullptr;
+}
+
+void PostProcessingPass::afterContextRebuild() {
+    initialize();
+}

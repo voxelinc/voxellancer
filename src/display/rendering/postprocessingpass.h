@@ -7,6 +7,7 @@
 #include <glow/Program.h>
 
 #include "renderpass.h"
+#include "etc/contextdependant.h"
 
 
 namespace glow {
@@ -16,7 +17,7 @@ namespace glow {
 class FrameBuffer;
 class ScreenQuad;
 
-class PostProcessingPass : public RenderPass {
+class PostProcessingPass : public RenderPass, public ContextDependant {
 public:
     PostProcessingPass(const std::string& name, std::shared_ptr<ScreenQuad> quad);
 
@@ -43,6 +44,8 @@ protected:
 
 
     void initialize();
+    virtual void beforeContextDestroy() override;
+    virtual void afterContextRebuild() override;
 };
 
 #include "postprocessingpass.inl"

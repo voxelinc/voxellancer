@@ -76,3 +76,10 @@ void VoxelMesh::initialize() {
     m_initialized = true;
 }
 
+void VoxelMesh::beforeContextDestroy() {
+    m_vertexBuffer = nullptr;
+    m_initialized = false;
+}
+
+void VoxelMesh::afterContextRebuild() {
+}

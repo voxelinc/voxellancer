@@ -14,13 +14,15 @@ TargetSelector::TargetSelector(Player *player):
 }
 
 void TargetSelector::selectNextTarget() {
-    std::list<WorldObject*>& worldObjects = World::instance()->worldObjects();
+    std::unordered_set<WorldObject*>& worldObjects = World::instance()->worldObjects();
     m_player->playerShip()->setTargetObject(findNextTarget(worldObjects.begin(), worldObjects.end()));
 }
 
 void TargetSelector::selectPreviousTarget() {
-    std::list<WorldObject*>& worldObjects = World::instance()->worldObjects();
-    m_player->playerShip()->setTargetObject(findNextTarget(worldObjects.rbegin(), worldObjects.rend()));
+    std::unordered_set<WorldObject*>& worldObjects = World::instance()->worldObjects();
+    // HACK: unordered sets don't have reverse iterators (on linux)
+    // since this algorithm has to be improved anyway, for the moment previous will also go forward
+    m_player->playerShip()->setTargetObject(findNextTarget(worldObjects.begin(), worldObjects.end()));
 }
 
 template<typename IteratorType>
