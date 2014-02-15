@@ -20,6 +20,14 @@ namespace glow {
 
 class Player;
 
+/*
+   Renders a starfield around the camera. 
+   Old camera positions/orientations are stored in order to stretch the
+   Stars on movement. As stereorendering renders twice per frame
+   with slightly different cameras, the Starfield needs to know which
+   side is drawn currently. 
+   http://chrdw.de/uploads/Eyeside.pdf
+*/
 class Starfield : public RenderPass {
 public:
     Starfield();

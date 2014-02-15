@@ -8,8 +8,10 @@
 class FrameBuffer;
 class Camera;
 
-// a step that adds something to the current frame
-// can be postprocessing, geometry or any other effect
+/* 
+   a step that adds something to the current frame
+   can be postprocessing, geometry or any other effect
+*/
 class RenderPass {
 public:
     RenderPass(const std::string& name);

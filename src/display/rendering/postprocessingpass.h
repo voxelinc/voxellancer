@@ -16,8 +16,10 @@ namespace glow {
 class FrameBuffer;
 class ScreenQuad;
 
-// a configurable RenderPass for a shader that reads and
-// writes on a framebuffer and has no further gamelogic
+/* 
+   a configurable RenderPass for a shader that reads and
+   writes on a framebuffer and has no further gamelogic
+*/
 class PostProcessingPass : public RenderPass {
 public:
     PostProcessingPass(const std::string& name, std::shared_ptr<ScreenQuad> quad);
