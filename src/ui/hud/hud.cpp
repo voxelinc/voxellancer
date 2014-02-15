@@ -6,8 +6,6 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 
-#include "etc/windowmanager.h"
-
 #include "utils/tostring.h"
 #include "utils/geometryhelper.h"
 

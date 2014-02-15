@@ -22,7 +22,7 @@
 #include <glowutils/global.h>
 #include <glowutils/FileRegistry.h>
 
-#include "etc/windowmanager.h"
+#include "etc/contextprovider.h"
 #include "etc/cli/commandlineparser.h"
 
 #include "geometry/viewport.h"
@@ -73,9 +73,16 @@ static void resizeCallback(GLFWwindow* window, int width, int height) {
     }
 }
 
+static void toggleFullScreen();
+
 static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, GL_TRUE);
+    }
+    if ((key == GLFW_KEY_ENTER && action == GLFW_PRESS) &&
+        ((glfwGetKey(window, GLFW_KEY_LEFT_ALT) == GLFW_PRESS) || 
+        (glfwGetKey(window, GLFW_KEY_RIGHT_ALT) == GLFW_PRESS))) {
+        toggleFullScreen();
     }
     if (key == GLFW_KEY_F5 && action == GLFW_PRESS) {
         glowutils::FileRegistry::instance().reloadAll();
@@ -90,17 +97,7 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
 	game->inputHandler().keyCallback(key, scancode, action, mods);
 }
 
-static void mouseButtonCallback(GLFWwindow* window, int Button, int Action, int mods) {
-
-}
-
-static void cursorPositionCallback(GLFWwindow* window, double x, double y) {
-
-}
-
 void setCallbacks(GLFWwindow* window) {
-    glfwSetMouseButtonCallback(window, mouseButtonCallback);
-    glfwSetCursorPosCallback(window, cursorPositionCallback);
     glfwSetKeyCallback(window, keyCallback);
     glfwSetWindowSizeCallback(window, resizeCallback);
 }
@@ -120,6 +117,19 @@ static void mainloop() {
     }
 }
 
+void toggleFullScreen() {
+    ContextProvider::instance()->toggleFullScreen();
+
+    GLFWwindow* window = glfwGetCurrentContext();
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+
+    setCallbacks(window);
+
+    // not checking version etc again
+
+    Size<int> res = ContextProvider::instance()->resolution();
+    resizeCallback(window, res.width(), res.height());
+}
 
 int main(int argc, char* argv[]) {
     CommandLineParser clParser;
@@ -134,11 +144,6 @@ int main(int argc, char* argv[]) {
 
     glfwSetErrorCallback(errorCallback);
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, MajorVersionRequire);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, MinorVersionRequire);
-    //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-
 #if defined(NDEBUG)
     glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_FALSE);
 #else
@@ -146,14 +151,13 @@ int main(int argc, char* argv[]) {
 #endif
 
     if(clParser.fullScreen()) {
-        WindowManager::instance()->setFullScreenResolution(1);
+        ContextProvider::instance()->initFullScreen(MajorVersionRequire, MinorVersionRequire, 1);
     } else {
-        WindowManager::instance()->setWindowedResolution(Size<int>(Property<int>("window.width"), Property<int>("window.height")));
+        ContextProvider::instance()->initWindowed(MajorVersionRequire, MinorVersionRequire);
     }
 
     GLFWwindow* window = glfwGetCurrentContext();
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-
 
     setCallbacks(window);
 
@@ -215,7 +219,7 @@ int main(int argc, char* argv[]) {
 #endif
 
     delete game;
-    WindowManager::instance()->shutdown();
+    ContextProvider::instance()->shutdown();
     glfwTerminate();
     OVR::System::Destroy();
 

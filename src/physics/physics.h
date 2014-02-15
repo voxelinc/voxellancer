@@ -18,7 +18,6 @@ class Transform;
 class Physics {
 public:
     Physics(WorldObject& worldObject, float scale);
-    virtual ~Physics();
 
     float dampening();
     void setDampening(float dampening);

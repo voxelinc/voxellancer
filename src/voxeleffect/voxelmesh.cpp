@@ -22,33 +22,9 @@ static const glm::vec3 back(0, 0, 1);
 static const glm::vec3 dummy(0, 0, 0);
 
 
-VoxelMesh::VoxelMesh()
+VoxelMesh::VoxelMesh():
+    m_initialized(false)
 {
-    initBuffer();
-}
-
-
-
-void VoxelMesh::initBuffer() {
-    glow::Array<glm::vec3> array{
-        rub, dummy,
-        lub, dummy,
-        rlb, back,
-        llb, back,
-        llf, bottom,
-        lub, left,
-        luf, left,
-        rub, top,
-        ruf, top,
-        rlb, right,
-        rlf, right,
-        llf, bottom,
-        ruf, front,
-        luf, front
-    };
-
-    m_vertexBuffer = new glow::Buffer(GL_ARRAY_BUFFER);
-    m_vertexBuffer->setData(array);
 }
 
 void VoxelMesh::setupVertexAttribute(glow::Program* program, glow::VertexArrayObject* vao, const std::string& name, GLboolean normalised, int bindingNum, GLint offset) {
@@ -68,6 +44,42 @@ void VoxelMesh::bindTo(
     glow::VertexArrayObject* vao,
     int bindingIndex)
 {
+    if(!m_initialized) {
+        initialize();
+    }
+
     setupVertexAttribute(program, vao, "v_vertex", GL_FALSE, bindingIndex + 0, 0);
     setupVertexAttribute(program, vao, "v_normal", GL_TRUE,  bindingIndex + 1, sizeof(glm::vec3));
+}
+
+void VoxelMesh::initialize() {
+    glow::Array<glm::vec3> array{
+        rub, dummy,
+        lub, dummy,
+        rlb, back,
+        llb, back,
+        llf, bottom,
+        lub, left,
+        luf, left,
+        rub, top,
+        ruf, top,
+        rlb, right,
+        rlf, right,
+        llf, bottom,
+        ruf, front,
+        luf, front
+    };
+
+    m_vertexBuffer = new glow::Buffer(GL_ARRAY_BUFFER);
+    m_vertexBuffer->setData(array);
+
+    m_initialized = true;
+}
+
+void VoxelMesh::beforeContextDestroy() {
+    m_vertexBuffer = nullptr;
+    m_initialized = false;
+}
+
+void VoxelMesh::afterContextRebuild() {
 }

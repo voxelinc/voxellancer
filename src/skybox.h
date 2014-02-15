@@ -7,9 +7,9 @@
 #include "glow/Buffer.h"
 
 #include "camera/camera.h"
+#include "etc/contextdependant.h"
 
-
-class Skybox {
+class Skybox : public ContextDependant {
 public:
     Skybox();
 
@@ -22,6 +22,7 @@ protected:
     glow::ref_ptr<glow::Buffer> m_vertexBuffer;
 
     void initialize();
-
+    virtual void beforeContextDestroy() override;
+    virtual void afterContextRebuild() override;
 };
 

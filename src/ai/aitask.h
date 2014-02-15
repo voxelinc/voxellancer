@@ -13,4 +13,3 @@ public:
 protected:
     Ship& m_ship;
 };
-

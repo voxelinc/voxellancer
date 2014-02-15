@@ -8,8 +8,9 @@
 #include "utils/randfloat.h"
 #include "utils/randbool.h"
 
-#include "voxelparticle.h"
-#include "voxelparticleworld.h"
+#include "voxelparticledata.h"
+#include "voxelparticlesetup.h"
+#include "voxelparticleengine.h"
 
 
 VoxelParticleSpawnBase::VoxelParticleSpawnBase(char* dampeningName,
@@ -31,9 +32,6 @@ VoxelParticleSpawnBase::VoxelParticleSpawnBase(char* dampeningName,
     m_particleBaseForce(baseForceName),
     m_particleAngularBaseForce(angularBaseForceName)
 {
-}
-
-VoxelParticleSpawnBase::~VoxelParticleSpawnBase() {
 }
 
 void VoxelParticleSpawnBase::setPosition(const glm::vec3& position) {

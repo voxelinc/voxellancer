@@ -38,3 +38,11 @@ void ScreenQuad::initialize() {
     m_vertexArrayObject->enable(VERTEX_ATTRIBUTE_LOCATION);
 }
 
+void ScreenQuad::beforeContextDestroy() {
+    m_vertexArrayObject = nullptr;
+    m_vertexBuffer = nullptr;
+}
+
+void ScreenQuad::afterContextRebuild() {
+    initialize();
+}

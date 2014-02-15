@@ -9,6 +9,7 @@
 
 #include "property/property.h"
 #include "display/rendering/renderpass.h"
+#include "etc/contextdependant.h"
 
 
 namespace glow {
@@ -18,7 +19,7 @@ namespace glow {
     class Buffer;
 };
 
-class Player;
+
 
 /*
    Renders a starfield around the camera. 
@@ -28,7 +29,7 @@ class Player;
    side is drawn currently. 
    http://chrdw.de/uploads/Eyeside.pdf
 */
-class Starfield : public RenderPass {
+class Starfield : public RenderPass, public ContextDependant {
 public:
     Starfield();
 
@@ -36,7 +37,7 @@ public:
     virtual void apply(FrameBuffer& frameBuffer, const RenderMetaData& metadata) override;
 
 
-private:
+protected:
     struct CameraLocation {
         float time;
         glm::vec3 position;
@@ -55,6 +56,9 @@ private:
 
     void createAndSetupShaders();
     void createAndSetupGeometry();
+
+    virtual void beforeContextDestroy() override;
+    virtual void afterContextRebuild() override;
 
     void createBinding(int index, std::string name, int offset, int size);
 

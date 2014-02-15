@@ -4,11 +4,12 @@
 
 #include <glowutils/AutoTimer.h>
 
-#include "ai/characters/dummycharacter.h"
+#include "ai/character.h"
 #include "ai/basictasks/flytotask.h"
-#include "ai/basictasks/patrolwaypointstask.h"
+#include "ai/grouptasks/patrolwaypointstask.h"
 #include "ai/basictasks/formationmembertask.h"
-#include "ai/formationlogic.h"
+#include "ai/squadlogic.h"
+#include "ai/squad.h"
 
 #include "resource/clustercache.h"
 
@@ -28,19 +29,21 @@ GameScenario::GameScenario(Game* game) :
 void GameScenario::populateWorld() {
 
     glow::debug("Create WorldObjects");
+    std::shared_ptr<Squad> squadA = std::make_shared<Squad>();
+    squadA->setTask(std::make_shared<PatrolWaypointsTask>(*squadA,
+        std::list<glm::vec3>{ glm::vec3(400, 0, 200), glm::vec3(-400, 0, -400),
+        glm::vec3(-600, 0, -400), glm::vec3(0, 100, -600),
+        glm::vec3(-100, 150, -900) }));
+
     Ship *normandy = new Ship();
     ClusterCache::instance()->fillObject(normandy, "data/voxelcluster/normandy.csv");
     normandy->setPosition(glm::vec3(0, 0, -100));
     normandy->objectInfo().setName("Normandy");
     normandy->objectInfo().setShowOnHud(true);
     normandy->objectInfo().setCanLockOn(true);
+    normandy->squadLogic()->joinSquad(squadA);
     m_world->god().scheduleSpawn(normandy);
-    PatrolWaypointsTask* ntask = new PatrolWaypointsTask(*normandy,
-        std::list<glm::vec3>{ glm::vec3(400, 0, 200), glm::vec3(-400, 0, -400),
-                                glm::vec3(-600, 0, -400), glm::vec3(0, 100, -600),
-                                glm::vec3(-100, 150, -900) });
-    normandy->setCharacter(new DummyCharacter(*normandy, ntask));
-
+    
     int nmember_count = 4;
     for (int i = 0; i < nmember_count; i++) {
         Ship *follower = new Ship();
@@ -49,16 +52,15 @@ void GameScenario::populateWorld() {
         follower->objectInfo().setName("member");
         follower->objectInfo().setShowOnHud(true);
         follower->objectInfo().setCanLockOn(true);
+        follower->squadLogic()->joinSquad(squadA);
         m_world->god().scheduleSpawn(follower);
-        PatrolWaypointsTask* ta = new PatrolWaypointsTask(*follower,
-            std::list<glm::vec3>{ glm::vec3(400, 0, 200), glm::vec3(-400, 0, -400),
-                                    glm::vec3(-600, 0, -400), glm::vec3(0, 100, -600),
-                                    glm::vec3(-100, 150, -900) });
-        follower->setCharacter(new DummyCharacter(*follower, ta));
-        follower->formationLogic()->joinFormation(normandy);
     }
 
 
+    std::shared_ptr<Squad> squadB = std::make_shared<Squad>();
+    squadB->setTask(std::make_shared<PatrolWaypointsTask>(*squadB,
+        std::list<glm::vec3>{ glm::vec3(500, 0, 500), glm::vec3(-500, 0, 500),
+        glm::vec3(-500, 0, -500), glm::vec3(500, 0, -500) }));
 
     Ship *leader = new Ship();
     ClusterCache::instance()->fillObject(leader, "data/voxelcluster/eagle.csv");
@@ -66,11 +68,8 @@ void GameScenario::populateWorld() {
     leader->objectInfo().setName("leader");
     leader->objectInfo().setShowOnHud(true);
     leader->objectInfo().setCanLockOn(true);
+    leader->squadLogic()->joinSquad(squadB);
     m_world->god().scheduleSpawn(leader);
-    PatrolWaypointsTask* ltask = new PatrolWaypointsTask(*leader,
-        std::list<glm::vec3>{ glm::vec3(500, 0, 500), glm::vec3(-500, 0, 500),
-                                glm::vec3(-500, 0, -500), glm::vec3(500, 0, -500) });
-    leader->setCharacter(new DummyCharacter(*leader, ltask));
 
     int lmember_count = 2;
     for (int i = 0; i < lmember_count; i++) {
@@ -80,12 +79,8 @@ void GameScenario::populateWorld() {
         follower->objectInfo().setName("member");
         follower->objectInfo().setShowOnHud(true);
         follower->objectInfo().setCanLockOn(true);
+        follower->squadLogic()->joinSquadOf(leader);
         m_world->god().scheduleSpawn(follower);
-        PatrolWaypointsTask* ta = new PatrolWaypointsTask(*follower,
-            std::list<glm::vec3>{ glm::vec3(500, 0, 500), glm::vec3(-500, 0, 500),
-                                    glm::vec3(-500, 0, -500), glm::vec3(500, 0, -500) });
-        follower->setCharacter(new DummyCharacter(*follower, ta));
-        follower->formationLogic()->joinFormation(leader);
     }
 
     Ship *testCluster = new Ship();

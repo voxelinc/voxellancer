@@ -14,6 +14,7 @@
 #include "display/rendering/framebuffer.h"
 #include "display/rendering/buffernames.h"
 #include "utils/randvec.h"
+#include "etc/contextdependant.h"
 
 
 static int STAR_COUNT = 1000;
@@ -107,9 +108,9 @@ void Starfield::apply(FrameBuffer& frameBuffer, const RenderMetaData& metadata) 
 }
 
 void Starfield::createAndSetupShaders() {
-    glow::Shader* vertexShader = glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/starfield/starfield.vert");
-    glow::Shader* geometryShader = glowutils::createShaderFromFile(GL_GEOMETRY_SHADER, "data/starfield/starfield.geo");
-    glow::Shader* fragmentShader = glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/starfield/starfield.frag");
+    glow::Shader* vertexShader = glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/shader/starfield/starfield.vert");
+    glow::Shader* geometryShader = glowutils::createShaderFromFile(GL_GEOMETRY_SHADER, "data/shader/starfield/starfield.geo");
+    glow::Shader* fragmentShader = glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/shader/starfield/starfield.frag");
 
     m_shaderProgram = new glow::Program();
     m_shaderProgram->attach(vertexShader, geometryShader, fragmentShader);
@@ -183,3 +184,13 @@ void Starfield::cleanUp(int side) {
     }
 }
 
+void Starfield::beforeContextDestroy() {
+    m_vertexArrayObject = nullptr;
+    m_starBuffer = nullptr;
+    m_shaderProgram = nullptr;
+}
+
+void Starfield::afterContextRebuild() {
+    createAndSetupShaders();
+    createAndSetupGeometry();
+}

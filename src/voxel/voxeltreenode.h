@@ -7,7 +7,7 @@
 
 #include "geometry/sphere.h"
 #include "geometry/ray.h"
-#include "geometry/grid3daabb.h"
+#include "geometry/gridaabb.h"
 
 #include "voxel/voxel.h"
 
@@ -19,8 +19,8 @@ class VoxelTree;
 class VoxelTreeNode
 {
 public:
-    VoxelTreeNode(int octIndex, VoxelTree* voxelTree, VoxelTreeNode *parent, const Grid3dAABB& gridAABB);
-    VoxelTreeNode(VoxelTree* voxelTree, const Grid3dAABB& gridAABB, VoxelTreeNode* initialSubnode);
+    VoxelTreeNode(int octIndex, VoxelTree* voxelTree, VoxelTreeNode *parent, const GridAABB& gridAABB);
+    VoxelTreeNode(VoxelTree* voxelTree, const GridAABB& gridAABB, VoxelTreeNode* initialSubnode);
     ~VoxelTreeNode();
 
     int octIndex() const;
@@ -41,7 +41,7 @@ public:
     VoxelTreeNode* parent();
     void setParent(VoxelTreeNode* parent);
 
-    const Grid3dAABB& gridAABB() const;
+    const GridAABB& gridAABB() const;
 
     Sphere& sphere();
     Sphere& sphere(const Transform& transform);
@@ -59,7 +59,7 @@ protected:
     VoxelTreeNode* m_parent;
     VoxelTree* m_voxelTree;
 
-    Grid3dAABB m_gridAABB;
+    GridAABB m_gridAABB;
 
     Sphere m_sphere;
     Transform m_cachedSphereTransform;
