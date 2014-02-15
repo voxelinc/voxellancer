@@ -11,7 +11,7 @@ Blitter::Blitter() :
 {
     setInputMapping({ { "source", 0 } });
     setOutput({ 0 });
-    setFragmentShader("data/postprocessing/blit.frag");
+    setFragmentShader("data/shader/postprocessing/blit.frag");
 }
 
 void Blitter::apply(FrameBuffer& frameBuffer, glow::FrameBufferObject* target) {

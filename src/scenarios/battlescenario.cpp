@@ -72,7 +72,7 @@ void BattleScenario::populateBattle(int numberOfEnemies1, int numberOfEnemies2) 
     std::vector<Ship*> fleet2;
     for (int e = 0; e < numberOfEnemies1; e++) {
         Ship *ship = new Ship();
-        float r = 400;
+        float r = 600;
         ship->move(RandVec3::rand(0.0f, r) + glm::vec3(-200, 0, -200));
         ship->objectInfo().setName("enemy2");
         ship->objectInfo().setShowOnHud(true);
@@ -83,12 +83,12 @@ void BattleScenario::populateBattle(int numberOfEnemies1, int numberOfEnemies2) 
     }
     for (int e = 0; e < numberOfEnemies2; e++) {
         Ship *ship = new Ship();
-        float r = 400;
+        float r = 600;
         ship->move(RandVec3::rand(0.0f, r) + glm::vec3(200, 0, -200));
         ship->objectInfo().setName("enemy1");
         ship->objectInfo().setShowOnHud(true);
         ship->objectInfo().setCanLockOn(true);
-        ClusterCache::instance()->fillObject(ship, "data/voxelcluster/basicship.csv");
+        ClusterCache::instance()->fillObject(ship, "data/voxelcluster/unogunner.csv");
         world->god().scheduleSpawn(ship);
         fleet1.push_back(ship);
     }
