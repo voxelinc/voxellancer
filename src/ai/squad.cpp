@@ -22,6 +22,12 @@ void Squad::setLeader(Ship* leader) {
     if (m_leader) { // old leader becomes normal member
         onMemberJoin(m_leader);
     }
+    std::vector<Ship*>::iterator it = std::find(m_members.begin(), m_members.end(), leader);
+    if (it != m_members.end()) { // if leader was member, remove him
+        m_members.erase(it);
+        if (m_task)
+            m_task->onMemberLeave(leader);
+    }
 
     m_leader = leader;
     if (m_task) {
@@ -65,6 +71,8 @@ void Squad::onMemberLeave(Ship* member) {
         std::vector<Ship*>::iterator it = std::find(m_members.begin(), m_members.end(), member);
         assert(it != m_members.end());
         m_members.erase(it);
+        if (m_task)
+            m_task->onMemberLeave(member);
     }
 }
 
