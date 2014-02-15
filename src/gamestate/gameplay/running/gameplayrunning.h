@@ -1,22 +1,24 @@
 #pragma once
 
+#include <memory>
+
 #include "gamestate/gamestate.h"
 
 #include "sound/soundmanager.h"
 
 #include "utils/fsm/trigger.h"
 
-#include "gameplaymaininput.h"
 
 
 
 class GamePlay;
+class GamePlayRunningInput;
 
-class GamePlayMain: public GameState {
+class GamePlayRunning: public GameState {
 public:
-    GamePlayMain(GamePlay* gamePlay);
+    GamePlayRunning(GamePlay* gamePlay);
 
-    GamePlayMainInput& inputHandler();
+    GamePlayRunningInput& input();
 
     void setPauseTrigger(const Trigger<GameState>& pauseTrigger);
 
@@ -29,6 +31,6 @@ public:
 protected:
     GamePlay* m_gamePlay;
 
-    GamePlayMainInput m_inputHandler;
+    std::unique_ptr<GamePlayRunningInput> m_input;
 };
 

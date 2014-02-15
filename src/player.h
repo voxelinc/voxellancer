@@ -30,7 +30,10 @@ public:
     void update(float deltaSec);
 
     Ship* playerShip();
+
+    CameraDolly& cameraDolly();
     const CameraDolly& cameraDolly() const;
+
     HUD& hud();
 
     glm::vec3 cameraPosition();

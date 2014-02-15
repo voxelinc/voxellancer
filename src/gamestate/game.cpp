@@ -9,11 +9,15 @@
 
 Game::Game():
     GameState("Game", nullptr),
-    m_hmdManager(this),
+    m_hmdManager(HMDManager::instance()),
     m_viewer(Viewport(0, 0, WindowManager::instance()->resolution().width(), WindowManager::instance()->resolution().height())),
     m_gamePlay(new GamePlay(this))
 {
     setInitialSubstate(m_gamePlay);
+}
+
+GamePlay& Game::gamePlay() {
+    return *m_gamePlay;
 }
 
 const Scene& Game::scene() const {
@@ -27,7 +31,7 @@ const CameraHead& Game::cameraHead() const {
 }
 
 HMDManager& Game::hmdManager() {
-    return m_hmdManager;
+    return *m_hmdManager;
 }
 
 Viewer& Game::viewer() {

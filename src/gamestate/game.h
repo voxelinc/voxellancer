@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "etc/hmd/hmdmanager.h"
 
 #include "gamestate.h"
@@ -15,6 +17,8 @@ class Game: public GameState {
 public:
     Game();
 
+    GamePlay& gamePlay();
+
     virtual const Scene& scene() const override;
     virtual const CameraHead& cameraHead() const override;
 
@@ -27,7 +31,7 @@ public:
 
 
 protected:
-    HMDManager m_hmdManager;
+    std::shared_ptr<HMDManager> m_hmdManager;
     Viewer m_viewer;
 
     GamePlay* m_gamePlay;

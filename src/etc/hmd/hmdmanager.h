@@ -1,25 +1,32 @@
 #pragma once
 
+#include <memory>
+
 #include <OVR.h>
 
 #include "hmd.h"
 
 
-class Game;
+class Viewer;
 
 class HMDManager {
 public:
-    HMDManager(Game* game);
+    static std::shared_ptr<HMDManager> instance();
+
     ~HMDManager();
 
-    void setupHMD();
+    void setupHMD(Viewer& viewer);
 
     HMD* hmd();
 
 
 protected:
-    Game* m_game;
+    static std::weak_ptr<HMDManager> s_instance;
+
     HMD* m_hmd;
     OVR::DeviceManager* m_deviceManager;
+
+
+    HMDManager();
 };
 

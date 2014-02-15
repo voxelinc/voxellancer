@@ -12,16 +12,25 @@
 
 
 
-
 class Game;
-class GamePlayMain;
+class GamePlayRunning;
 class GamePlayPaused;
 
+
+/*
+    State that is active whenever the the game is actually played and not
+    in some menustate etc.
+*/
 class GamePlay: public GameState {
 public:
     GamePlay(Game* game);
 
     Game* game();
+
+    GamePlayScene& scene();
+
+    GamePlayRunning& running();
+    GamePlayPaused& paused();
 
     virtual const Scene& scene() const override;
     virtual const CameraHead& cameraHead() const override;
@@ -38,7 +47,7 @@ public:
 protected:
     Game* m_game;
 
-    GamePlayMain* m_mainState;
+    GamePlayRunning* m_runningState;
     GamePlayPaused* m_pausedState;
 
     GamePlayScene m_scene;

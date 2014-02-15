@@ -29,7 +29,9 @@
 
 #include "display/stereorenderinfo.h"
 
-#include "gamestate/gameplay/main/gameplaymaininput.h"
+#include "gamestate/gameplay/gameplay.h"
+#include "gamestate/gameplay/running/gameplayrunning.h"
+#include "gamestate/gameplay/running/gameplayrunninginput.h"
 
 #include "gamestate/game.h"
 
@@ -84,10 +86,10 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
         PropertyManager::instance()->load("data/config.ini");
     }
     if (key >= GLFW_KEY_1 && key <= GLFW_KEY_9 && action == GLFW_PRESS) {
-//        game->setOutputBuffer(key-GLFW_KEY_1);
+        game->gamePlay().scene().setOutputBuffer(key-GLFW_KEY_1);
     }
 
-//	game->inputHandler().keyCallback(key, scancode, action, mods);
+	game->gamePlay().running().input().keyCallback(key, scancode, action, mods);
 }
 
 static void mouseButtonCallback(GLFWwindow* window, int Button, int Action, int mods) {
@@ -192,7 +194,7 @@ int main(int argc, char* argv[]) {
         game = new Game();
 
         if(clParser.hmd()) {
-            game->hmdManager().setupHMD();
+            game->hmdManager().setupHMD(game->viewer());
         } else {
             if(clParser.stereoView()) {
                 game->viewer().switchToStereoView(StereoRenderInfo::dummy());

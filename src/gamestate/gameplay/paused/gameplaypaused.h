@@ -4,7 +4,7 @@
 
 #include "utils/fsm/trigger.h"
 
-#include "gamestate/gameplay/main/gameplaymaininput.h"
+#include "gamestate/gameplay/running/gameplayrunning.h"
 
 
 

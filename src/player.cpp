@@ -69,6 +69,10 @@ Ship* Player::playerShip() {
     return m_playerShip.get();
 }
 
+CameraDolly& Player::cameraDolly() {
+    return m_cameraDolly;
+}
+
 const CameraDolly& Player::cameraDolly() const {
     return m_cameraDolly;
 }

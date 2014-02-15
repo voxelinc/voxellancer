@@ -2,11 +2,7 @@
 
 #include <vector>
 
-#include "etc/hmd/hmd.h"
-
-#include "gamestate/gamestate.h"
-
-#include "ui/inputconfigurator.h"
+#include "input/inputmapping.h""
 
 #include "utils/fsm/trigger.h"
 
@@ -17,7 +13,9 @@
 
 class WorldObject;
 class InputConfigurator;
+class GameState;
 class HUD;
+class HMD;
 
 struct ActionKeyMapping {
     Property<InputMapping> primaryMapping;
@@ -53,13 +51,11 @@ struct SecondaryInputValues {
     SecondaryInputValues();
 };
 
-class GamePlayMainInput {
+class GamePlayRunningInput {
 public:
-    GamePlayMainInput(Player *player);
+    GamePlayRunningInput(Player *player);
 
     void setPauseTrigger(const Trigger<GameState>& pauseTrigger);
-
-    void setHMD(HMD* hmd);
 
 	void resizeEvent(const unsigned int width, const unsigned int height);
 	void keyCallback(int key, int scancode, int action, int mods);
@@ -68,7 +64,6 @@ public:
 
 protected:
     Player* m_player;
-    HMD* m_hmd;
     TargetSelector* m_targetSelector;
     InputConfigurator* m_inputConfigurator;
     SecondaryInputValues m_secondaryInputValues;

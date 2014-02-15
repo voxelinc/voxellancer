@@ -1,4 +1,4 @@
-#include "gameplaymaininput.h"
+#include "gameplayrunninginput.h"
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -6,11 +6,17 @@
 #include <glm/glm.hpp>
 #include <glow/glow.h>
 
+#include "etc/windowmanager.h"
+#include "etc/hmd/hmd.h"
+#include "etc/hmd/hmdmanager.h"
+
+#include "gamestate/gamestate.h"
+
+
 #include "utils/tostring.h"
 #include "utils/aimer.h"
 
-#include "etc/windowmanager.h"
-
+#include "ui/inputconfigurator.h"
 #include "worldobject/worldobject.h"
 #include "player.h"
 #include "ui/hud/hud.h"
@@ -41,9 +47,8 @@
 * B9: right stick
 */
 
-GamePlayMainInput::GamePlayMainInput(Player* player):
+GamePlayRunningInput::GamePlayRunningInput(Player* player):
     m_player(player),
-    m_hmd(nullptr),
 
     prop_deadzoneMouse("input.deadzoneMouse"),
     prop_deadzoneGamepad("input.deadzoneGamepad"),
@@ -85,15 +90,11 @@ GamePlayMainInput::GamePlayMainInput(Player* player):
     retrieveInputValues();
 }
 
-void GamePlayMainInput::setPauseTrigger(const Trigger<GameState>& pauseTrigger) {
+void GamePlayRunningInput::setPauseTrigger(const Trigger<GameState>& pauseTrigger) {
     m_pauseTrigger = pauseTrigger;
 }
 
-void GamePlayMainInput::setHMD(HMD* hmd) {
-    m_hmd = hmd;
-}
-
-void GamePlayMainInput::resizeEvent(const unsigned int width, const unsigned int height){
+void GamePlayRunningInput::resizeEvent(const unsigned int width, const unsigned int height){
 	m_lastfocus = false; // through window resize everything becomes scrambled
 }
 
@@ -101,7 +102,7 @@ void GamePlayMainInput::resizeEvent(const unsigned int width, const unsigned int
 *    Check here for single-time key-presses, that you do not want fired multiple times, e.g. toggles
 *    This only applies for menu events etc, for action events set the toggleAction attribute to true
 */
-void GamePlayMainInput::keyCallback(int key, int scancode, int action, int mods) {
+void GamePlayRunningInput::keyCallback(int key, int scancode, int action, int mods) {
     if (action == GLFW_PRESS) {
         m_inputConfigurator->setLastPrimaryInput(InputMapping(InputType::Keyboard, key, 1, 0.0f));
     } else {
@@ -132,7 +133,7 @@ void GamePlayMainInput::keyCallback(int key, int scancode, int action, int mods)
 /*
 *Check here for every-frame events, e.g. view & movement controls
 */
-void GamePlayMainInput::update(float deltaSec) {
+void GamePlayRunningInput::update(float deltaSec) {
     if (glfwGetWindowAttrib(glfwGetCurrentContext(), GLFW_FOCUSED)) {
         if (m_lastfocus) {
             if(glfwGetKey(glfwGetCurrentContext(),GLFW_KEY_P) == GLFW_PRESS) {
@@ -155,21 +156,21 @@ void GamePlayMainInput::update(float deltaSec) {
     m_lastfocus = glfwGetWindowAttrib(glfwGetCurrentContext(), GLFW_FOCUSED);
 }
 
-void GamePlayMainInput::retrieveInputValues() {
+void GamePlayRunningInput::retrieveInputValues() {
     m_secondaryInputValues.buttonCnt = 0;
     m_secondaryInputValues.axisCnt = 0;
     m_secondaryInputValues.buttonValues = glfwGetJoystickButtons(GLFW_JOYSTICK_1, &m_secondaryInputValues.buttonCnt);
     m_secondaryInputValues.axisValues = glfwGetJoystickAxes(GLFW_JOYSTICK_1, &m_secondaryInputValues.axisCnt);
 }
 
-void GamePlayMainInput::processUpdate() {
+void GamePlayRunningInput::processUpdate() {
     processFireActions();
     processMoveActions();
     processRotateActions();
     processTargetSelectActions();
 }
 
-void GamePlayMainInput::processMouseUpdate() {
+void GamePlayRunningInput::processMouseUpdate() {
     // mouse handling
     double x, y;
     glfwGetCursorPos(glfwGetCurrentContext(), &x, &y);
@@ -215,15 +216,15 @@ void GamePlayMainInput::processMouseUpdate() {
     }
 }
 
-void GamePlayMainInput::processHMDUpdate() {
-//    if (m_hmd) {
-//        m_player->cameraDolly().cameraHead().setRelativeOrientation(m_hmd->orientation());
-//    } else {
-//        m_player->cameraDolly().cameraHead().setRelativeOrientation(glm::quat());
-//    }
+void GamePlayRunningInput::processHMDUpdate() {
+    if (HMDManager::instance()->hmd()) {
+        m_player->cameraDolly().setHeadOrientation(HMDManager::instance()->hmd()->orientation());
+    } else {
+        m_player->cameraDolly().setHeadOrientation(glm::quat());
+    }
 }
 
-void GamePlayMainInput::addActionsToVector() {
+void GamePlayRunningInput::addActionsToVector() {
     m_actions.push_back(&fireAction);
     m_actions.push_back(&rocketAction);
     m_actions.push_back(&moveLeftAction);
@@ -240,7 +241,7 @@ void GamePlayMainInput::addActionsToVector() {
     m_actions.push_back(&selectPreviousAction);
 }
 
-float GamePlayMainInput::getInputValue(ActionKeyMapping* action) {
+float GamePlayRunningInput::getInputValue(ActionKeyMapping* action) {
     float inputValue = glm::max(getInputValue(action->primaryMapping.get()), getInputValue(action->secondaryMapping.get()));
     if (action->toggleAction) {
         if (inputValue) {
@@ -255,7 +256,7 @@ float GamePlayMainInput::getInputValue(ActionKeyMapping* action) {
     return inputValue;
 }
 
-float GamePlayMainInput::getInputValue(InputMapping mapping) {
+float GamePlayRunningInput::getInputValue(InputMapping mapping) {
     switch (mapping.type()) {
         case InputType::None:
             return 0;
@@ -286,7 +287,7 @@ float GamePlayMainInput::getInputValue(InputMapping mapping) {
     }
 }
 
-void GamePlayMainInput::processFireActions() {
+void GamePlayRunningInput::processFireActions() {
     m_player->hud().crossHair().setActionActive(getInputValue(&fireAction) > 0.001);
 
     if (getInputValue(&fireAction)) {
@@ -299,14 +300,14 @@ void GamePlayMainInput::processFireActions() {
     }
 }
 
-void GamePlayMainInput::processMoveActions() {
+void GamePlayRunningInput::processMoveActions() {
     m_player->move(glm::vec3(-getInputValue(&moveLeftAction), 0, 0));
     m_player->move(glm::vec3(getInputValue(&moveRightAction), 0, 0));
     m_player->move(glm::vec3(0, 0, -getInputValue(&moveForwardAction)));
     m_player->move(glm::vec3(0, 0, getInputValue(&moveBackwardAction)));
 }
 
-void GamePlayMainInput::processRotateActions() {
+void GamePlayRunningInput::processRotateActions() {
     glm::vec3 rot = glm::vec3(0);
     rot.x = getInputValue(&rotateUpAction)
         - getInputValue(&rotateDownAction);
@@ -323,7 +324,7 @@ void GamePlayMainInput::processRotateActions() {
     m_player->rotate(rot);
 }
 
-void GamePlayMainInput::processTargetSelectActions() {
+void GamePlayRunningInput::processTargetSelectActions() {
     if (getInputValue(&selectNextAction)) {
         m_targetSelector->selectNextTarget();
     }
@@ -332,7 +333,7 @@ void GamePlayMainInput::processTargetSelectActions() {
     }
 }
 
-void GamePlayMainInput::placeCrossHair(double winX, double winY) {
+void GamePlayRunningInput::placeCrossHair(double winX, double winY) {
     int width, height;
     glfwGetWindowSize(glfwGetCurrentContext(), &width, &height);
     m_player->hud().setCrossHairOffset(glm::vec2((winX - (width/2))/(width/2), -(winY - (height/2))/(height/2)));

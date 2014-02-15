@@ -1,4 +1,4 @@
-#include "gameplaymain.h"
+#include "gameplayrunning.h"
 
 #include <iostream>
 
@@ -9,28 +9,29 @@
 
 #include "player.h"
 
+#include "gameplayrunninginput.h"
 
 
-GamePlayMain::GamePlayMain(GamePlay* gamePlay):
+GamePlayRunning::GamePlayRunning(GamePlay* gamePlay):
     GameState("GamePlay Main", gamePlay),
     m_gamePlay(gamePlay),
-    m_inputHandler(&gamePlay->player())
+    m_input(new GamePlayRunningInput(&gamePlay->player()))
 {
 
 }
 
-GamePlayMainInput& GamePlayMain::inputHandler() {
-    return m_inputHandler;
+GamePlayRunningInput& GamePlayRunning::input() {
+    return *m_input;
 }
 
-void GamePlayMain::setPauseTrigger(const Trigger<GameState>& pauseTrigger) {
-    m_inputHandler.setPauseTrigger(pauseTrigger);
+void GamePlayRunning::setPauseTrigger(const Trigger<GameState>& pauseTrigger) {
+    m_input->setPauseTrigger(pauseTrigger);
 }
 
-void GamePlayMain::update(float deltaSec) {
+void GamePlayRunning::update(float deltaSec) {
     GameState::update(deltaSec);
 
-    m_inputHandler.update(deltaSec);
+    m_input->update(deltaSec);
 
     World::instance()->update(deltaSec);
 
@@ -39,13 +40,12 @@ void GamePlayMain::update(float deltaSec) {
     m_gamePlay->soundManager().setListener(m_gamePlay->player().cameraPosition(), m_gamePlay->player().cameraOrientation());
 }
 
-void GamePlayMain::onEntered() {
+void GamePlayRunning::onEntered() {
     GameState::onEntered();
-    m_inputHandler.setHMD(m_gamePlay->game()->hmdManager().hmd());
     m_gamePlay->soundManager().activate();
 }
 
-void GamePlayMain::onLeft() {
+void GamePlayRunning::onLeft() {
     GameState::onLeft();
     m_gamePlay->soundManager().deactivate();
 }

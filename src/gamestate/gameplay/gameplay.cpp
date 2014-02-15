@@ -1,7 +1,7 @@
 #include "gameplay.h"
 
 #include "gamestate/game.h"
-#include "gamestate/gameplay/main/gameplaymain.h"
+#include "gamestate/gameplay/running/gameplayrunning.h"
 #include "gamestate/gameplay/paused/gameplaypaused.h"
 
 #include "utils/fsm/trigger.h"
@@ -13,21 +13,33 @@
 GamePlay::GamePlay(Game* game):
     GameState("In Game", game),
     m_game(game),
-    m_mainState(new GamePlayMain(this)),
+    m_runningState(new GamePlayRunning(this)),
     m_pausedState(new GamePlayPaused(this)),
     m_player(this),
     m_scene(this, &m_player),
     m_soundManager(new SoundManager()),
     m_scenario(this)
 {
-    setInitialSubstate(m_mainState);
+    setInitialSubstate(m_runningState);
 
-    m_mainState->setPauseTrigger(Trigger<GameState>(new TriggeredTransition<GameState>(m_mainState, m_pausedState)));
-    m_pausedState->setContinueTrigger(Trigger<GameState>(new TriggeredTransition<GameState>(m_pausedState, m_mainState)));
+    m_runningState->setPauseTrigger(Trigger<GameState>(new TriggeredTransition<GameState>(m_runningState, m_pausedState)));
+    m_pausedState->setContinueTrigger(Trigger<GameState>(new TriggeredTransition<GameState>(m_pausedState, m_runningState)));
 }
 
 Game* GamePlay::game() {
     return m_game;
+}
+
+GamePlayScene& GamePlay::scene() {
+    return m_scene;
+}
+
+GamePlayRunning& GamePlay::running() {
+    return *m_runningState;
+}
+
+GamePlayPaused& GamePlay::paused() {
+    return *m_pausedState;
 }
 
 const Scene& GamePlay::scene() const {
