@@ -39,7 +39,7 @@ const glm::detail::tvec3<T> &TAABB<T>::llf() const {
 }
 
 template<typename T>
-void TAABB<T>::setLlf(const glm::detail::tvec3<T> &llf) {
+void TAABB<T>::setLLF(const glm::detail::tvec3<T> &llf) {
     assert(llf.x <= m_rub.x && llf.y <= m_rub.y && llf.z <= m_rub.z);
     m_llf = llf;
 }
@@ -50,7 +50,7 @@ const glm::detail::tvec3<T> &TAABB<T>::rub() const {
 }
 
 template<typename T>
-void TAABB<T>::setRub(const glm::detail::tvec3<T> &rub) {
+void TAABB<T>::setRUB(const glm::detail::tvec3<T> &rub) {
     assert(m_llf.x <= rub.x && m_llf.y <= rub.y && m_llf.z <= rub.z);
     m_rub = rub;
 }

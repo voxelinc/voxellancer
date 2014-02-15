@@ -19,10 +19,10 @@ public:
     template<typename OtherT> TAABB(const TAABB<OtherT>& other);
 
     inline const glm::detail::tvec3<T> &llf() const;
-    inline void setLlf(const glm::detail::tvec3<T> &llf);
+    inline void setLLF(const glm::detail::tvec3<T> &llf);
 
     inline const glm::detail::tvec3<T> &rub() const;
-    inline void setRub(const glm::detail::tvec3<T> &rub);
+    inline void setRUB(const glm::detail::tvec3<T> &rub);
 
     T axisMin(Axis axis) const;
     T axisMax(Axis axis) const;
