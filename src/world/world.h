@@ -1,7 +1,7 @@
 #pragma once
 
 #include <memory>
-#include <list>
+#include <unordered_set>
 
 
 
@@ -23,7 +23,7 @@ public:
     God &god();
     WorldTree &worldTree();
     VoxelParticleWorld& voxelParticleWorld();
-    std::list<WorldObject*> &worldObjects();
+    std::unordered_set<WorldObject*> &worldObjects();
 
     void update(float deltaSecs);
 
@@ -43,7 +43,7 @@ protected:
     std::unique_ptr<God> m_god;
     std::unique_ptr<VoxelParticleWorld> m_voxelParticleWorld;
 
-    std::list<WorldObject*> m_worldObjects;
+    std::unordered_set<WorldObject*> m_worldObjects;
 
 };
 

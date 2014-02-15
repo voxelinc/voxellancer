@@ -14,12 +14,12 @@ TargetSelector::TargetSelector(Player *player):
 }
 
 void TargetSelector::selectNextTarget() {
-    std::list<WorldObject*>& worldObjects = World::instance()->worldObjects();
+    std::unordered_set<WorldObject*>& worldObjects = World::instance()->worldObjects();
     m_player->playerShip()->setTargetObject(findNextTarget(worldObjects.begin(), worldObjects.end()));
 }
 
 void TargetSelector::selectPreviousTarget() {
-    std::list<WorldObject*>& worldObjects = World::instance()->worldObjects();
+    std::unordered_set<WorldObject*>& worldObjects = World::instance()->worldObjects();
     m_player->playerShip()->setTargetObject(findNextTarget(worldObjects.rbegin(), worldObjects.rend()));
 }
 
