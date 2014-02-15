@@ -40,7 +40,7 @@ int GridAABB::extent(Axis axis) const {
 }
 
 float GridAABB::diameter() const {
-    return glm::length(m_rub - m_llf);
+    return glm::length(glm::vec3(m_rub - m_llf));
 }
 
 bool GridAABB::operator==(const GridAABB& other) const {
