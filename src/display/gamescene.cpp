@@ -14,6 +14,7 @@
 #include "skybox.h"
 #include "worldobject/worldobject.h"
 #include "rendering/buffernames.h"
+#include "starfield.h"
 
 
 GameScene::GameScene(Game* game, Player* player) :
@@ -21,14 +22,15 @@ GameScene::GameScene(Game* game, Player* player) :
     m_voxelRenderer(VoxelRenderer::instance()),
     m_hd3000dummy(new HD3000Dummy()),
     m_soundManager(new SoundManager()),
-    m_blitter(new Blitter()),
-    m_renderPipeline(RenderPipeline::getDefault(player)),
+    m_outputBlitter(new Blitter()),
+    m_renderPipeline(RenderPipeline::getDefault()),
+    m_starField(std::make_shared<Starfield>()),
     m_framebuffer(new FrameBuffer(m_renderPipeline->bufferCount())),
     m_currentOutputBuffer(0),
     m_player(player),
     m_defaultLightDir("vfx.lightdir")
 {
-
+    m_renderPipeline->add(m_starField, 0);
 }
 
 GameScene::~GameScene() = default;
@@ -38,14 +40,14 @@ void GameScene::draw(Camera* camera, glow::FrameBufferObject* target, EyeSide si
     m_framebuffer->setResolution(camera->viewport());
     m_framebuffer->clear();
 
-    // the pipeline should expect color in 1, normals in 2 and emissiveness in 3
-    m_framebuffer->setDrawBuffers({ BufferNames::Color, BufferNames::NormalZ, BufferNames::Emissisiveness });
     drawGame(camera);
 
-    m_renderPipeline->apply(*m_framebuffer, *camera, side);
+    RenderMetaData metadata(camera, side);
+    m_renderPipeline->apply(*m_framebuffer, metadata);
 
-    m_blitter->setInputMapping({ { "source", m_currentOutputBuffer } });
-    m_blitter->apply(*m_framebuffer, target);
+    // transfer rendered image to target framebuffer
+    m_outputBlitter->setInputMapping({ { "source", m_currentOutputBuffer } });
+    m_outputBlitter->apply(*m_framebuffer, target);
 }
 
 void GameScene::activate() {
@@ -57,9 +59,8 @@ void GameScene::deactivate() {
 }
 
 void GameScene::update(float deltaSec) {
-    m_renderPipeline->update(deltaSec);
-
     CameraHead& cameraHead = m_player->cameraDolly().cameraHead();
+    m_starField->update(deltaSec, cameraHead.position());
     m_soundManager->setListener(cameraHead.position(), cameraHead.orientation());
 }
 
@@ -68,6 +69,8 @@ void GameScene::setOutputBuffer(int i) {
 }
 
 void GameScene::drawGame(Camera* camera) {
+    m_framebuffer->setDrawBuffers({ BufferNames::Color, BufferNames::NormalZ, BufferNames::Emissisiveness });
+
     World::instance()->skybox().draw(camera);
 
     m_voxelRenderer->program()->setUniform("lightdir", m_defaultLightDir.get());

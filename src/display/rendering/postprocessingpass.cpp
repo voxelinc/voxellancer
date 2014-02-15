@@ -33,11 +33,7 @@ void PostProcessingPass::beforeDraw(FrameBuffer& frameBuffer) {
     m_program->setUniform("viewport", frameBuffer.resolution()); frameBuffer.bind();
 }
 
-void PostProcessingPass::update(float deltaSec) {
-
-}
-
-void PostProcessingPass::apply(FrameBuffer& frameBuffer, Camera& camera, EyeSide side) {
+void PostProcessingPass::apply(FrameBuffer& frameBuffer, const RenderMetaData& metadata) {
     if (!m_program) {
         initialize();
     }
