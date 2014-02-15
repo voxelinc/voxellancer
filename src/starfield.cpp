@@ -110,9 +110,9 @@ void Starfield::apply(FrameBuffer& frameBuffer, Camera& camera, EyeSide eyeside)
 }
 
 void Starfield::createAndSetupShaders() {
-    glow::Shader* vertexShader = glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/starfield/starfield.vert");
-    glow::Shader* geometryShader = glowutils::createShaderFromFile(GL_GEOMETRY_SHADER, "data/starfield/starfield.geo");
-    glow::Shader* fragmentShader = glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/starfield/starfield.frag");
+    glow::Shader* vertexShader = glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/shader/starfield/starfield.vert");
+    glow::Shader* geometryShader = glowutils::createShaderFromFile(GL_GEOMETRY_SHADER, "data/shader/starfield/starfield.geo");
+    glow::Shader* fragmentShader = glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/shader/starfield/starfield.frag");
 
     m_shaderProgram = new glow::Program();
     m_shaderProgram->attach(vertexShader, geometryShader, fragmentShader);

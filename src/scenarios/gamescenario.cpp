@@ -35,6 +35,7 @@ void GameScenario::populateWorld() {
     normandy->objectInfo().setShowOnHud(true);
     normandy->objectInfo().setCanLockOn(true);
     m_world->god().scheduleSpawn(normandy);
+
     PatrolWaypointsTask* ntask = new PatrolWaypointsTask(*normandy,
         std::list<glm::vec3>{ glm::vec3(400, 0, 200), glm::vec3(-400, 0, -400),
                                 glm::vec3(-600, 0, -400), glm::vec3(0, 100, -600),
