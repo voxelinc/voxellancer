@@ -7,8 +7,6 @@
 
 #include "camera/camerahead.h"
 
-#include "etc/windowmanager.h"
-
 #include "scene.h"
 #include "rendering/framebuffer.h"
 #include "stereorenderinfo.h"

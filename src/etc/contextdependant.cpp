@@ -1,12 +1,12 @@
 #include "contextdependant.h"
 
-#include "etc/windowmanager.h"
+#include "etc/contextprovider.h"
 
 ContextDependant::ContextDependant() {
-    WindowManager::instance()->registerContextDependant(this);
+    ContextProvider::instance()->registerContextDependant(this);
 }
 
 ContextDependant::~ContextDependant() {
-    WindowManager::instance()->unRegisterContextDependant(this);
+    ContextProvider::instance()->unregisterContextDependant(this);
 
 }

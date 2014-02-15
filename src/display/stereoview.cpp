@@ -8,8 +8,6 @@
 #include "camera/camera.h"
 #include "camera/camerahead.h"
 
-#include "etc/windowmanager.h"
-
 #include "display/scene.h"
 #include "display/stereorenderinfo.h"
 

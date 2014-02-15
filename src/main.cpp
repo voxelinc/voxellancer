@@ -22,7 +22,7 @@
 #include <glowutils/global.h>
 #include <glowutils/FileRegistry.h>
 
-#include "etc/windowmanager.h"
+#include "etc/contextprovider.h"
 #include "etc/cli/commandlineparser.h"
 
 #include "geometry/viewport.h"
@@ -118,7 +118,7 @@ static void mainloop() {
 }
 
 void toggleFullScreen() {
-    WindowManager::instance()->toggleFullScreen();
+    ContextProvider::instance()->toggleFullScreen();
 
     GLFWwindow* window = glfwGetCurrentContext();
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
@@ -127,7 +127,7 @@ void toggleFullScreen() {
 
     // not checking version etc again
 
-    Size<int> res = WindowManager::instance()->resolution();
+    Size<int> res = ContextProvider::instance()->resolution();
     resizeCallback(window, res.width(), res.height());
 }
 
@@ -151,9 +151,9 @@ int main(int argc, char* argv[]) {
 #endif
 
     if(clParser.fullScreen()) {
-        WindowManager::instance()->initFullScreen(MajorVersionRequire, MinorVersionRequire, 1);
+        ContextProvider::instance()->initFullScreen(MajorVersionRequire, MinorVersionRequire, 1);
     } else {
-        WindowManager::instance()->initWindowed(MajorVersionRequire, MinorVersionRequire);
+        ContextProvider::instance()->initWindowed(MajorVersionRequire, MinorVersionRequire);
     }
 
     GLFWwindow* window = glfwGetCurrentContext();
@@ -219,7 +219,7 @@ int main(int argc, char* argv[]) {
 #endif
 
     delete game;
-    WindowManager::instance()->shutdown();
+    ContextProvider::instance()->shutdown();
     glfwTerminate();
     OVR::System::Destroy();
 

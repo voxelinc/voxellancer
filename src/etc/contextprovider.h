@@ -1,6 +1,6 @@
 #pragma once
 
-#include <list>
+#include <unordered_set>
 #include <vector>
 
 #include "etc/contextdependant.h"
@@ -9,9 +9,9 @@
 
 struct GLFWmonitor;
 
-class WindowManager {
+class ContextProvider {
 public:
-    static WindowManager* instance();
+    static ContextProvider* instance();
 
     Size<int> resolution() const;
     Viewport viewport() const;
@@ -29,12 +29,12 @@ public:
     int currentMonitor() const;
 
     void registerContextDependant(ContextDependant* dependant);
-    void unRegisterContextDependant(ContextDependant* dependant);
+    void unregisterContextDependant(ContextDependant* dependant);
 
 
 protected:
-    static WindowManager* s_instance;
-    std::list<ContextDependant*> m_contextDependants;
+    static ContextProvider* s_instance;
+    std::unordered_set<ContextDependant*> m_contextDependants;
     bool m_fullScreen;
     int m_majorVersionRequire;
     int m_minorVersionRequire;
@@ -42,7 +42,7 @@ protected:
     Size<int> m_lastWindowedPos;
     Size<int> m_lastWindowedSize;
 
-    WindowManager();
+    ContextProvider();
     Size<int> currentResolution(GLFWmonitor* monitor);
 };
 

@@ -1,4 +1,4 @@
-#include "windowmanager.h"
+#include "contextprovider.h"
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -10,17 +10,17 @@
 #include "geometry/size.h"
 #include "property/property.h"
 
-WindowManager* WindowManager::s_instance = nullptr;
+ContextProvider* ContextProvider::s_instance = nullptr;
 
 
-WindowManager* WindowManager::instance() {
+ContextProvider* ContextProvider::instance() {
     if(s_instance == nullptr) {
-        s_instance = new WindowManager();
+        s_instance = new ContextProvider();
     }
     return s_instance;
 }
 
-Size<int> WindowManager::resolution() const {
+Size<int> ContextProvider::resolution() const {
     int width;
     int height;
 
@@ -29,15 +29,15 @@ Size<int> WindowManager::resolution() const {
     return Size<int>(width, height);
 }
 
-Viewport WindowManager::viewport() const {
+Viewport ContextProvider::viewport() const {
     return Viewport(0, 0, resolution().width(), resolution().height());
 }
 
-float WindowManager::aspectRatio() const {
+float ContextProvider::aspectRatio() const {
     return static_cast<float>(resolution().width()) / static_cast<float>(resolution().height());
 }
 
-void WindowManager::initWindowed(int majorVersionRequire, int minorVersionRequire, const Size<int>* resolution, const Size<int>* position) {
+void ContextProvider::initWindowed(int majorVersionRequire, int minorVersionRequire, const Size<int>* resolution, const Size<int>* position) {
     m_majorVersionRequire = majorVersionRequire;
     m_minorVersionRequire = minorVersionRequire;
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, m_majorVersionRequire);
@@ -67,7 +67,7 @@ void WindowManager::initWindowed(int majorVersionRequire, int minorVersionRequir
     }
 }
 
-void WindowManager::initFullScreen(int majorVersionRequire, int minorVersionRequire, int monitorIndex) {
+void ContextProvider::initFullScreen(int majorVersionRequire, int minorVersionRequire, int monitorIndex) {
     m_majorVersionRequire = majorVersionRequire;
     m_minorVersionRequire = minorVersionRequire;
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, m_majorVersionRequire);
@@ -107,18 +107,18 @@ void WindowManager::initFullScreen(int majorVersionRequire, int minorVersionRequ
     }
 }
 
-void WindowManager::shutdown() {
+void ContextProvider::shutdown() {
     for (ContextDependant* dependant : m_contextDependants) {
         dependant->beforeContextDestroy();
     }
     glfwDestroyWindow(glfwGetCurrentContext());
 }
 
-bool WindowManager::fullScreen() const {
+bool ContextProvider::fullScreen() const {
     return m_fullScreen;
 }
 
-void WindowManager::toggleFullScreen() {
+void ContextProvider::toggleFullScreen() {
     if (fullScreen()) {
         shutdown();
         if (m_lastWindowedPos.width() == -1) {
@@ -144,7 +144,7 @@ void WindowManager::toggleFullScreen() {
     }
 }
 
-std::vector<GLFWmonitor*> WindowManager::monitors() const {
+std::vector<GLFWmonitor*> ContextProvider::monitors() const {
     std::vector<GLFWmonitor*> result;
 
     int monitorCount;
@@ -157,7 +157,7 @@ std::vector<GLFWmonitor*> WindowManager::monitors() const {
     return result;
 }
 
-int WindowManager::currentMonitor() const {
+int ContextProvider::currentMonitor() const {
     std::vector<GLFWmonitor*> monitors = this->monitors();
 
     for(int m = 0; m < monitors.size(); m++) {
@@ -170,7 +170,7 @@ int WindowManager::currentMonitor() const {
     return -1;
 }
 
-WindowManager::WindowManager() :
+ContextProvider::ContextProvider() :
     m_contextDependants(),
     m_fullScreen(false),
     m_majorVersionRequire(0),
@@ -182,17 +182,17 @@ WindowManager::WindowManager() :
 
 }
 
-Size<int> WindowManager::currentResolution(GLFWmonitor* monitor) {
+Size<int> ContextProvider::currentResolution(GLFWmonitor* monitor) {
     const GLFWvidmode* mode = glfwGetVideoMode(monitor);
 
     return Size<int>(mode->width, mode->height);
 }
 
-void WindowManager::registerContextDependant(ContextDependant* dependant) {
+void ContextProvider::registerContextDependant(ContextDependant* dependant) {
     assert(std::find(m_contextDependants.begin(), m_contextDependants.end(), dependant) == m_contextDependants.end());
-    m_contextDependants.push_back(dependant);
+    m_contextDependants.insert(dependant);
 }
 
-void WindowManager::unRegisterContextDependant(ContextDependant* dependant) {
-    m_contextDependants.remove(dependant);
+void ContextProvider::unregisterContextDependant(ContextDependant* dependant) {
+    m_contextDependants.erase(dependant);
 }
