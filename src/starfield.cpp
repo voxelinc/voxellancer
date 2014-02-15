@@ -11,7 +11,6 @@
 
 #include "player.h"
 #include "utils/randfloat.h"
-#include "camera/camera.h"
 #include "display/rendering/framebuffer.h"
 #include "display/rendering/buffernames.h"
 #include "utils/randvec.h"
@@ -28,9 +27,8 @@ struct Star {
     float size;
 };
 
-Starfield::Starfield(Player* player) :
+Starfield::Starfield() :
     RenderPass("starfield"),
-    m_player(player),
     m_time(),
     m_lastUpdate(),
     m_starfieldAge("vfx.starfieldtime"),
@@ -40,7 +38,7 @@ Starfield::Starfield(Player* player) :
     createAndSetupGeometry();
 }
 
-void Starfield::update(float deltaSec) {
+void Starfield::update(float deltaSec, const glm::vec3& cameraPosition) {
     m_time += deltaSec;
 
     if (m_time - m_lastUpdate < 0.1) {
@@ -48,7 +46,7 @@ void Starfield::update(float deltaSec) {
     }
 
     Star* starbuffer = (Star*) m_starBuffer->map(GL_READ_WRITE);
-    glm::vec3 position = m_player->cameraPosition();
+    glm::vec3 position = cameraPosition;
 
     for (int i = 0; i < STAR_COUNT; i++) {
         starbuffer[i].brightness = glm::min(1.0f, starbuffer[i].brightness + (m_time - m_lastUpdate) / STAR_FADE_IN_SEC);
@@ -82,10 +80,10 @@ void Starfield::update(float deltaSec) {
     m_starBuffer->unmap();
 }
 
-void Starfield::apply(FrameBuffer& frameBuffer, Camera& camera, EyeSide eyeside) {
-    int side = eyeside == EyeSide::Left ? 0 : 1;
+void Starfield::apply(FrameBuffer& frameBuffer, const RenderMetaData& metadata) {
+    int side = (metadata.eyeside() == EyeSide::Right);
 
-    addLocation(camera, side);
+    addLocation(*metadata.camera(), side);
     cleanUp(side);
 
     glDisable(GL_CULL_FACE);
@@ -96,8 +94,8 @@ void Starfield::apply(FrameBuffer& frameBuffer, Camera& camera, EyeSide eyeside)
 
     frameBuffer.setDrawBuffers({ BufferNames::Color, BufferNames::Emissisiveness });
 
-    glm::mat4 m1 = camera.viewProjection();
-    glm::mat4 m2 = getMatrixFromPast(camera, side);
+    glm::mat4 m1 = metadata.camera()->viewProjection();
+    glm::mat4 m2 = getMatrixFromPast(*metadata.camera(), side);
 
     m_shaderProgram->setUniform("viewProjection", m1);
     m_shaderProgram->setUniform("oldViewProjection", m2);

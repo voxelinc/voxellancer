@@ -19,15 +19,22 @@ namespace glow {
     class Buffer;
 };
 
-class Camera;
-class Player;
 
+
+/*
+   Renders a starfield around the camera. 
+   Old camera positions/orientations are stored in order to stretch the
+   Stars on movement. As stereorendering renders twice per frame
+   with slightly different cameras, the Starfield needs to know which
+   side is drawn currently. 
+   http://chrdw.de/uploads/Eyeside.pdf
+*/
 class Starfield : public RenderPass, public ContextDependant {
 public:
-    Starfield(Player* player);
+    Starfield();
 
-    virtual void update(float deltaSec) override;
-    virtual void apply(FrameBuffer& frameBuffer, Camera& camera, EyeSide side) override;
+    virtual void update(float deltaSec, const glm::vec3& cameraPosition);
+    virtual void apply(FrameBuffer& frameBuffer, const RenderMetaData& metadata) override;
 
 
 protected:
@@ -37,7 +44,6 @@ protected:
         glm::quat orientation;
     };
 
-    Player* m_player;
     std::deque<CameraLocation> m_locations[2];
     float m_time;
     float m_lastUpdate;
