@@ -80,9 +80,9 @@ void Starfield::update(float deltaSec, const glm::vec3& cameraPosition) {
 }
 
 void Starfield::apply(FrameBuffer& frameBuffer, const RenderMetaData& metadata) {
-    int side = (metadata.eyeside == EyeSide::Right);
+    int side = (metadata.eyeside() == EyeSide::Right);
 
-    addLocation(*metadata.camera, side);
+    addLocation(*metadata.camera(), side);
     cleanUp(side);
 
     glDisable(GL_CULL_FACE);
@@ -93,8 +93,8 @@ void Starfield::apply(FrameBuffer& frameBuffer, const RenderMetaData& metadata) 
 
     frameBuffer.setDrawBuffers({ BufferNames::Color, BufferNames::Emissisiveness });
 
-    glm::mat4 m1 = metadata.camera->viewProjection();
-    glm::mat4 m2 = getMatrixFromPast(*metadata.camera, side);
+    glm::mat4 m1 = metadata.camera()->viewProjection();
+    glm::mat4 m2 = getMatrixFromPast(*metadata.camera(), side);
 
     m_shaderProgram->setUniform("viewProjection", m1);
     m_shaderProgram->setUniform("oldViewProjection", m2);

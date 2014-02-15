@@ -42,7 +42,7 @@ void GameScene::draw(Camera* camera, glow::FrameBufferObject* target, EyeSide si
 
     drawGame(camera);
 
-    RenderMetaData metadata{ camera, side };
+    RenderMetaData metadata(camera, side);
     m_renderPipeline->apply(*m_framebuffer, metadata);
     
     // transfer rendered image to target framebuffer

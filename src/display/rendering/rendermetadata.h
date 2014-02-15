@@ -6,7 +6,14 @@
 class Camera;
 
 // metadata that is passed to a renderpass
-struct RenderMetaData {
-    Camera* camera;
-    EyeSide eyeside;
+class RenderMetaData {
+public:
+    RenderMetaData(Camera* camera, EyeSide eyeside);
+
+    Camera* camera() const;
+    EyeSide eyeside() const;
+
+private:
+    Camera* m_camera;
+    EyeSide m_eyeside;
 };
