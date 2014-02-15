@@ -19,6 +19,8 @@
 #include "hudobjectdelegate.h"
 
 #include "player.h"
+#include "voxel/voxelrenderer.h"
+#include "glow/Program.h"
 
 
 HUD::HUD(Player* player, Viewer* viewer):
@@ -122,11 +124,17 @@ void HUD::update(float deltaSec) {
 }
 
 void HUD::draw() {
+    glow::Uniform<glm::vec3>* lightuniform = VoxelRenderer::instance()->program()->getUniform<glm::vec3>("lightdir");
+    glm::vec3 oldLightdir = lightuniform->value();
+    lightuniform->set(m_player->cameraOrientation() * glm::vec3(0,0,1));
+
     for (Hudget* hudget : m_hudgets) {
         if (hudget->visible()) {
             hudget->draw();
         }
     }
+
+    lightuniform->set(oldLightdir);
 }
 
 void HUD::updateScanner(float deltaSec) {

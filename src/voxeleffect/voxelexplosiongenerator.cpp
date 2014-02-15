@@ -7,17 +7,18 @@
 #include "utils/randfloat.h"
 #include "utils/randvec.h"
 
-#include "voxelparticle.h"
-#include "voxelparticleworld.h"
+#include "voxelparticledata.h"
+#include "voxelparticleengine.h"
+
 
 VoxelExplosionGenerator::VoxelExplosionGenerator() :
+    VoxelParticleSpawnBase("physics.explosionDampening",
+                           "physics.explosionAngularDampening",
+                           "physics.explosionBaseForce",
+                           "physics.explosionAngularBaseForce"),
     m_radius(0.5f),
     m_count(10)
 {
-    m_particleDampening = Property<float>("physics.explosionDampening");
-    m_particleAngularDampening = Property<float>("physics.explosionAngularDampening");
-    m_particleBaseForce = Property<float>("physics.explosionBaseForce");
-    m_particleAngularBaseForce = Property<float>("physics.explosionAngularBaseForce");
 }
 
 VoxelExplosionGenerator::~VoxelExplosionGenerator() {
@@ -34,17 +35,24 @@ void VoxelExplosionGenerator::setCount(int count) {
 void VoxelExplosionGenerator::spawn() {
     // spawn explosionSpawnCount voxels with color and scale at position within a sphere with radius with a speed of ~force in all directions modified by ~impactVector
     Transform transform;
-    transform.setScale(m_scale);
 
     for (int i = 0; i < m_count; i++) {
-        glm::vec3 randDirection = createDirectionalSpeed();
-        transform.setPosition(m_position + (m_radius * randDirection));
+        glm::vec3 directionalSpeed = createDirectionalSpeed();
 
-        VoxelParticle* particle = new VoxelParticle(transform, m_color, m_emissiveness, createLifetime());
-        particle->setAngularSpeed(createAngularSpeed(), m_particleDampening);
-        particle->setDirectionalSpeed(randDirection, m_particleAngularDampening);
+        transform.setScale(createScale());
+        transform.setPosition(m_position + (m_radius * glm::normalize(directionalSpeed)));
 
-        World::instance()->voxelParticleWorld().addParticle(particle);
+        Visuals visuals(m_color, m_emissiveness);
+        Speed speed(directionalSpeed, createAngularSpeed());
+
+        VoxelParticleSetup particleSetup(
+            transform,
+            visuals,
+            speed,
+            createLifetime()
+        );
+
+        World::instance()->voxelParticleEngine().addParticle(particleSetup);
     }
 }
 

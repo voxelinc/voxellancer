@@ -21,7 +21,7 @@ std::shared_ptr<AiTask> Character::task() {
 }
 
 void Character::update(float deltaSec) {
-    if (m_ship.squadLogic()->isSquadLeader()) {
+    if (m_ship.squadLogic()->isSquadLeader() && m_ship.squadLogic()->squad()->task().get()) {
         m_ship.squadLogic()->squad()->task()->update(deltaSec);
     }
     if (m_task.get()) {

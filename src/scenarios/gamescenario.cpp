@@ -43,8 +43,7 @@ void GameScenario::populateWorld() {
     normandy->objectInfo().setCanLockOn(true);
     normandy->squadLogic()->joinSquad(squadA);
     m_world->god().scheduleSpawn(normandy);
-
-
+    
     int nmember_count = 4;
     for (int i = 0; i < nmember_count; i++) {
         Ship *follower = new Ship();

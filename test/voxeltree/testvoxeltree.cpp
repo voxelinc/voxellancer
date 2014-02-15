@@ -45,7 +45,7 @@ go_bandit([](){
             Voxel v(glm::ivec3(0, 0, 0));
             tree->insert(&v);
 
-            AssertThat(tree->root()->gridAABB(), Equals(Grid3dAABB(glm::ivec3(0,0,0), glm::ivec3(0, 0, 0))));
+            AssertThat(tree->root()->gridAABB(), Equals(GridAABB(glm::ivec3(0,0,0), glm::ivec3(0, 0, 0))));
         });
 
         it("simple insert", [&]() {
@@ -56,19 +56,19 @@ go_bandit([](){
 
             tree->insert(&v1);
             AssertThat(tree->root()->subnodes().size(), Equals(1));
-            AssertThat(tree->root()->gridAABB(), Equals(Grid3dAABB(glm::ivec3(0,0,0), glm::ivec3(1, 1, 1))));
+            AssertThat(tree->root()->gridAABB(), Equals(GridAABB(glm::ivec3(0,0,0), glm::ivec3(1, 1, 1))));
 
             tree->insert(&v2);
             AssertThat(tree->root()->subnodes().size(), Equals(2));
-            AssertThat(tree->root()->gridAABB(), Equals(Grid3dAABB(glm::ivec3(0,0,0), glm::ivec3(3, 3, 3))));
+            AssertThat(tree->root()->gridAABB(), Equals(GridAABB(glm::ivec3(0,0,0), glm::ivec3(3, 3, 3))));
 
             tree->insert(&v3);
             AssertThat(tree->root()->subnodes().size(), Equals(2));
-            AssertThat(tree->root()->gridAABB(), Equals(Grid3dAABB(glm::ivec3(0,0,0), glm::ivec3(15, 15, 15))));
+            AssertThat(tree->root()->gridAABB(), Equals(GridAABB(glm::ivec3(0,0,0), glm::ivec3(15, 15, 15))));
 
             tree->insert(&v4);
             AssertThat(tree->root()->subnodes().size(), Equals(3));
-            AssertThat(tree->root()->gridAABB(), Equals(Grid3dAABB(glm::ivec3(0,0,0), glm::ivec3(15, 15, 15))));
+            AssertThat(tree->root()->gridAABB(), Equals(GridAABB(glm::ivec3(0,0,0), glm::ivec3(15, 15, 15))));
         });
 
         it("is moved when the transform moves", [&]() {
