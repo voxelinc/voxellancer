@@ -21,10 +21,10 @@ public:
     void rotateZ(float rot);
     void setOrientation(glm::quat quat);
 
-    const glm::mat4 view();
-    const glm::mat4 viewInverted();
-    const glm::quat orientation();
-    const glm::vec3 position();
+    const glm::mat4& view() const;
+    const glm::mat4& viewInverted() const;
+    const glm::quat& orientation() const;
+    const glm::vec3& position() const;
 
     /* Projection from glow::Camera */
 
@@ -44,9 +44,10 @@ public:
 
     float aspectRatio() const;
 
-    const glm::mat4 projection();
+    const glm::mat4& projection() const;
 
-    const glm::mat4 viewProjection();
+    const glm::mat4& viewProjection() const;
+
 
 protected:
     void viewDirty();

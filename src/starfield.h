@@ -26,7 +26,7 @@ public:
     Starfield(Player* player);
 
     virtual void update(float deltaSec) override;
-    virtual void apply(FrameBuffer& frameBuffer, Camera& camera, EyeSide side) override;
+    virtual void apply(FrameBuffer& frameBuffer, const Camera& camera, EyeSide side) override;
 
 
 private:
@@ -52,7 +52,7 @@ private:
 
     void createBinding(int index, std::string name, int offset, int size);
 
-    void addLocation(Camera& camera, int side);
-    glm::mat4 getMatrixFromPast(Camera& camera, int side);
+    void addLocation(const Camera& camera, int side);
+    glm::mat4 getMatrixFromPast(const Camera& camera, int side);
     void cleanUp(int side);
 };

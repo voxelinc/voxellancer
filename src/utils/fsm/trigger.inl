@@ -1,5 +1,7 @@
 #include "trigger.h"
 
+#include <iostream>
+
 #include "triggeredtransition.h"
 
 
@@ -10,7 +12,7 @@ Trigger<StateType>::Trigger(TriggeredTransition<StateType>* transition):
 }
 
 template<typename StateType>
-TriggeredTransition* Trigger<StateType>::transition() {
+TriggeredTransition<StateType>* Trigger<StateType>::transition() {
     return m_transition;
 }
 

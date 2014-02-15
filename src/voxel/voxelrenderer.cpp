@@ -32,9 +32,9 @@ VoxelRenderer::VoxelRenderer() :
     createAndSetupShaders();
 }
 
-void VoxelRenderer::prepareDraw(Camera * camera, bool withBorder) {
+void VoxelRenderer::prepareDraw(const Camera* camera, bool withBorder) {
     glEnable(GL_DEPTH_TEST);
-    
+
     m_program->setUniform("projection", camera->projection());
     m_program->setUniform("view", camera->view());
     m_program->setUniform("viewProjection", camera->viewProjection());
@@ -46,7 +46,6 @@ void VoxelRenderer::prepareDraw(Camera * camera, bool withBorder) {
 
     m_prepared = true;
 }
-
 
 void VoxelRenderer::draw(VoxelCluster * worldObject) {
     m_program->setUniform("model", worldObject->transform().matrix());

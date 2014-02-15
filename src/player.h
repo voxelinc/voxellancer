@@ -14,11 +14,11 @@
 class Camera;
 class CameraDolly;
 class HUD;
-class InGame;
+class GamePlay;
 
 class Player {
 public:
-    Player(InGame* inGame);
+    Player(GamePlay* inGame);
 
     void setShip(Ship *ship);
 
@@ -30,7 +30,7 @@ public:
     void update(float deltaSec);
 
     Ship* playerShip();
-    CameraDolly& cameraDolly();
+    const CameraDolly& cameraDolly() const;
     HUD& hud();
 
     glm::vec3 cameraPosition();
@@ -38,7 +38,7 @@ public:
 
 
 protected:
-    InGame* m_inGame;
+    GamePlay* m_inGame;
     Handle<Ship> m_playerShip;
     CameraDolly m_cameraDolly;
     HUD m_hud;

@@ -57,7 +57,7 @@ void VoxelParticleWorld::update(float deltaSec) {
             voxelParticle->markAsDead();
         }
     }
-    
+
     for (VoxelParticle* particle : m_particles) {
         if (particle->isDead()) {
             delete particle;
@@ -91,7 +91,7 @@ bool VoxelParticleWorld::intersects(VoxelParticle* voxelParticle) {
     return false;
 }
 
-void VoxelParticleWorld::draw(Camera& camera) {
+void VoxelParticleWorld::draw(const Camera& camera) {
     if(!m_initialized) {
         initialize();
     }

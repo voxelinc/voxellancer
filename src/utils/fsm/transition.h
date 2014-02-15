@@ -3,6 +3,13 @@
 #include <string>
 
 
+/*
+    Abstract base class for a transition from one state to another. Derived
+    classes need to implement possible().
+    Transitions register themself at from. to isn't informed it's "target" of a transition.
+    Note that Transitions can go from any State to any other State, no matter which
+    State they are nested in.
+*/
 template<typename StateType>
 class Transition {
 public:

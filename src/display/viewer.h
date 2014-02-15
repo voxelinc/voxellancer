@@ -17,23 +17,18 @@ public:
 
     const View& view() const;
 
-    Scene* scene();
-    void setScene(Scene* scene);
-
-    void setCameraHead(CameraHead* cameraHead);
     void setViewport(const Viewport& viewport);
 
     void switchToMonoView();
     void switchToStereoView(const StereoRenderInfo& stereoRenderInfo);
 
-    void draw();
     void update(float deltaSec);
+
+    void draw(const Scene& scene, const CameraHead& cameraHead);
 
 
 protected:
-    Scene* m_scene;
     std::unique_ptr<View> m_view;
-    CameraHead* m_cameraHead;
     Viewport m_viewport;
 };
 

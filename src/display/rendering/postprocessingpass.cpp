@@ -37,7 +37,7 @@ void PostProcessingPass::update(float deltaSec) {
 
 }
 
-void PostProcessingPass::apply(FrameBuffer& frameBuffer, Camera& camera, EyeSide side) {
+void PostProcessingPass::apply(FrameBuffer& frameBuffer, const Camera& camera, EyeSide side) {
     if (!m_program) {
         initialize();
     }
@@ -65,8 +65,9 @@ void PostProcessingPass::initialize() {
     m_program = new glow::Program();
     glow::Shader* vertShader = glowutils::createShaderFromFile(GL_VERTEX_SHADER, m_vertexShader);
     glow::Shader* fragShader = glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, m_fragmentShader);
-    
+
     m_program->attach(vertShader, fragShader);
     m_program->link();
     CheckGLError();
 }
+

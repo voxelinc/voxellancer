@@ -9,7 +9,7 @@ CameraDolly::CameraDolly():
 {
 }
 
-CameraHead& CameraDolly::cameraHead() {
+const CameraHead& CameraDolly::cameraHead() const {
     return m_cameraHead;
 }
 

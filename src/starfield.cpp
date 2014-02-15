@@ -81,7 +81,7 @@ void Starfield::update(float deltaSec) {
     m_starBuffer->unmap();
 }
 
-void Starfield::apply(FrameBuffer& frameBuffer, Camera& camera, EyeSide eyeside) {
+void Starfield::apply(FrameBuffer& frameBuffer, const Camera& camera, EyeSide eyeside) {
     int side = eyeside == EyeSide::Left ? 0 : 1;
 
     addLocation(camera, side);
@@ -142,12 +142,12 @@ void Starfield::createBinding(int index, std::string name, int offset, int size)
     m_vertexArrayObject->enable(location);
 }
 
-void Starfield::addLocation(Camera& camera, int side) {
+void Starfield::addLocation(const Camera& camera, int side) {
     CameraLocation location = CameraLocation{ m_time, camera.position(), camera.orientation() };
     m_locations[side].push_back(location);
 }
 
-glm::mat4 Starfield::getMatrixFromPast(Camera& camera, int side) {
+glm::mat4 Starfield::getMatrixFromPast(const Camera& camera, int side) {
     float past = m_time - m_starfieldAge;
 
     CameraLocation before = m_locations[side].back();

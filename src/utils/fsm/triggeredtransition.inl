@@ -2,14 +2,15 @@
 
 
 template<typename StateType>
-TriggeredTransition<StateType>::TriggeredTransition(State<StateType>* from, State<StateType>* to):
-    Transition(from, to)
+TriggeredTransition<StateType>::TriggeredTransition(StateType* from, StateType* to):
+    TriggeredTransition(from, to, "Unnamed triggered transition")
 {
 }
 
 template<typename StateType>
-TriggeredTransition<StateType>::TriggeredTransition(State<StateType>* from, State<StateType>* to, const std::string& name):
-    Transition(from, to, name)
+TriggeredTransition<StateType>::TriggeredTransition(StateType* from, StateType* to, const std::string& name):
+    Transition<StateType>(from, to, name),
+    m_triggered(false)
 {
 }
 
@@ -23,3 +24,7 @@ void TriggeredTransition<StateType>::trigger() {
     m_triggered = true;
 }
 
+template<typename StateType>
+void TriggeredTransition<StateType>::onPerformed() {
+    m_triggered = false;
+}

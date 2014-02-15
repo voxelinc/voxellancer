@@ -1,10 +1,10 @@
-#include "ingamescene.h"
+#include "gameplayscene.h"
 
 #include "voxel/voxelrenderer.h"
 #include "voxeleffect/voxelparticleworld.h"
 #include "utils/hd3000dummy.h"
 #include "sound/soundmanager.h"
-#include "gamestate/ingame.h"
+#include "gamestate/gameplay.h"
 #include "rendering/framebuffer.h"
 #include "rendering/renderpipeline.h"
 #include "rendering/blitter.h"
@@ -16,7 +16,7 @@
 #include "rendering/buffernames.h"
 
 
-InGameScene::InGameScene(InGame* inGame, Player* player):
+GamePlayScene::GamePlayScene(GamePlay* inGame, Player* player):
     m_inGame(inGame),
     m_voxelRenderer(VoxelRenderer::instance()),
     m_hd3000dummy(new HD3000Dummy()),
@@ -28,41 +28,41 @@ InGameScene::InGameScene(InGame* inGame, Player* player):
 {
 }
 
-InGameScene::~InGameScene() = default;
+GamePlayScene::~GamePlayScene() = default;
 
-void InGameScene::draw(Camera* camera, glow::FrameBufferObject* target, EyeSide side) {
-    m_framebuffer->setResolution(camera->viewport());
+void GamePlayScene::draw(const Camera& camera, glow::FrameBufferObject* target, EyeSide side) const {
+    m_framebuffer->setResolution(camera.viewport());
     m_framebuffer->clear();
 
     // the pipeline should expect color in 1, normals in 2 and emissiveness in 3
     m_framebuffer->setDrawBuffers({ BufferNames::Color, BufferNames::NormalZ, BufferNames::Emissisiveness });
     drawGame(camera);
 
-    m_renderPipeline->apply(*m_framebuffer, *camera, side);
+    m_renderPipeline->apply(*m_framebuffer, camera, side);
 
     m_blitter->setInputMapping({ { "source", m_currentOutputBuffer } });
     m_blitter->apply(*m_framebuffer, target);
 }
 
-void InGameScene::update(float deltaSec) {
+void GamePlayScene::update(float deltaSec) {
     m_renderPipeline->update(deltaSec);
 }
 
-void InGameScene::setOutputBuffer(int i) {
+void GamePlayScene::setOutputBuffer(int i) {
     m_currentOutputBuffer = glm::min(i, m_renderPipeline->bufferCount() - 1);
 }
 
-void InGameScene::drawGame(Camera* camera) {
+void GamePlayScene::drawGame(const Camera& camera) const {
     World::instance()->skybox().draw(camera);
 
-    m_voxelRenderer->prepareDraw(camera);
+    m_voxelRenderer->prepareDraw(&camera);
     for (WorldObject* worldObject : World::instance()->worldObjects()) {
         VoxelRenderer::instance()->draw(worldObject);
     }
     m_inGame->player().hud().draw();
     m_voxelRenderer->afterDraw();
 
-    World::instance()->voxelParticleWorld().draw(*camera);
+    World::instance()->voxelParticleWorld().draw(camera);
 
     m_hd3000dummy->drawIfActive();
 }

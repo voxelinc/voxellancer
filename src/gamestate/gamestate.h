@@ -7,26 +7,28 @@
 
 #include "sound/soundmanager.h"
 
-#include "utils/fsm/state.h"
+#include "utils/fsm/statetemplate.h"
 
 
 /*
     Base class for a State the game can be in - for example
     Menu, OptionsMenu, normal Gameplay or ingame menu
-*/
-class GameState: public State<GameState> {
-public:
-    GameState(const std::string& name, GameState* parentGameState);
 
-    GameState* parentGameState();
+    A GameState has to provide a Scene and a CameraHead so
+    that it can be displayed by the Viewer of Game. Per default
+    these 2 return their parents Scene and CameraHead so that GameStates
+    can be arbirtarily nested
+*/
+class GameState: public StateTemplate<GameState> {
+public:
+    GameState(const std::string& name, GameState* parent);
+
+    virtual const Scene& scene() const;
+    virtual const CameraHead& cameraHead() const;
 
     virtual void update(float deltaSec) override;
 
     virtual void onEntered() override;
     virtual void onLeft() override;
-
-
-protected:
-    GameState* m_parentGameState;
 };
 

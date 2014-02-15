@@ -14,7 +14,7 @@ Skybox::Skybox() :
     m_vertexArrayObject(0),
     m_vertexBuffer(0)
 {
-    
+
 }
 
 void Skybox::initialize() {
@@ -35,7 +35,7 @@ void Skybox::initialize() {
     m_texture->setParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     m_texture->setParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     m_texture->setParameter(GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-    
+
     /* Shaders */
     glow::Shader* vertexShader = glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/skybox/skybox.vert");
     glow::Shader* fragmentShader = glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/skybox/skybox.frag");
@@ -68,7 +68,7 @@ void Skybox::initialize() {
     m_vertexArrayObject->enable(a_vertex);
 }
 
-void Skybox::draw(Camera* camera){
+void Skybox::draw(const Camera& camera){
     if (!m_texture) {
         initialize();
     }
@@ -76,7 +76,7 @@ void Skybox::draw(Camera* camera){
 
     m_texture->bind();
     // we don't use camera->viewInverted() because the skybox does not travel with the camera
-    m_shaderProgram->setUniform("viewProjectionInverted", glm::mat4_cast(camera->orientation())*glm::inverse(camera->projection()));
+    m_shaderProgram->setUniform("viewProjectionInverted", glm::mat4_cast(camera.orientation())*glm::inverse(camera.projection()));
     m_shaderProgram->use();
 
     m_vertexArrayObject->drawArrays(GL_TRIANGLE_FAN, 0, 4);

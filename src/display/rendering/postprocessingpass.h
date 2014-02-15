@@ -21,7 +21,7 @@ public:
     PostProcessingPass(const std::string& name, std::shared_ptr<ScreenQuad> quad);
 
     virtual void update(float deltaSec) override;
-    virtual void apply(FrameBuffer& frameBuffer, Camera& camera, EyeSide side) override;
+    virtual void apply(FrameBuffer& frameBuffer, const Camera& camera, EyeSide side) override;
     void beforeDraw(FrameBuffer& frameBuffer);
 
     void setInputMapping(const std::unordered_map<std::string, int>& inputMapping);

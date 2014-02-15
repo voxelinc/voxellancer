@@ -2,14 +2,14 @@
 
 #include <vector>
 
-class InGame;
+class GamePlay;
 class Ship;
 
 class BattleScenario {
 public:
     BattleScenario();
 
-    void populate(InGame* inGame);
+    void populate(GamePlay* inGame);
 
 
 private:

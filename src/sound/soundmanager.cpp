@@ -1,5 +1,7 @@
 #include "soundmanager.h"
 
+#include <iostream>
+
 #include <SFML/Audio.hpp>
 
 #include <glow/logging.h>

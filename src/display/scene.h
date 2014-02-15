@@ -13,7 +13,7 @@ class Viewport;
 
 class Scene {
 public:
-    virtual void draw(Camera* camera, glow::FrameBufferObject* destination, EyeSide side = EyeSide::Left) = 0;
+    virtual void draw(const Camera& camera, glow::FrameBufferObject* destination, EyeSide side = EyeSide::Left) const = 0;
     virtual void update(float deltaSec) = 0;
 };
 

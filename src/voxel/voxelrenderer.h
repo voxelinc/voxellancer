@@ -18,8 +18,8 @@ class VoxelCluster;
 
 class VoxelRenderer {
 public:
-    void prepareDraw(Camera * camera, bool withBorder = true);
-    void draw(VoxelCluster * cluster);
+    void prepareDraw(const Camera* camera, bool withBorder = true);
+    void draw(VoxelCluster* cluster);
     void afterDraw();
 
     bool prepared();
@@ -27,6 +27,7 @@ public:
     static std::shared_ptr<VoxelRenderer> instance();
     static glow::Program* program();
     static VoxelMesh* voxelMesh();
+
 
 private:
     glow::ref_ptr<glow::Program> m_program;

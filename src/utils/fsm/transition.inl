@@ -1,13 +1,9 @@
 #pragma once
 
-#include "state.h"
-
 
 template<typename StateType>
 Transition<StateType>::Transition(StateType* from, StateType* to):
-    m_from(from),
-    m_to(to),
-    m_name("Unnamed transition")
+    Transition(from, to, "Unnamed transition")
 {
 }
 
@@ -17,6 +13,7 @@ Transition<StateType>::Transition(StateType* from, StateType* to, const std::str
     m_to(to),
     m_name(name)
 {
+    m_from->addTransition(this);
 }
 
 template<typename StateType>

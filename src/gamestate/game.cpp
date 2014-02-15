@@ -4,16 +4,26 @@
 
 #include "etc/windowmanager.h"
 
-#include "ingame.h"
+#include "gameplay.h"
 
 
 Game::Game():
     GameState("Game", nullptr),
     m_hmdManager(this),
     m_viewer(Viewport(0, 0, WindowManager::instance()->resolution().width(), WindowManager::instance()->resolution().height())),
-    m_inGame(new InGame(this))
+    m_gamePlay(new GamePlay(this))
 {
-    setInitialSubstate(m_inGame);
+    setInitialSubstate(m_gamePlay);
+}
+
+const Scene& Game::scene() const {
+    assert(currentSubstate());
+    return currentSubstate()->scene();
+}
+
+const CameraHead& Game::cameraHead() const {
+    assert(currentSubstate());
+    return currentSubstate()->cameraHead();
 }
 
 HMDManager& Game::hmdManager() {
@@ -30,12 +40,9 @@ void Game::update(float deltaSec) {
     GameState::update(deltaSec);
 
     m_viewer.update(deltaSec);
+}
 
-    glFrontFace(GL_CCW);
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
-    glClear(GL_DEPTH_BUFFER_BIT);
-
-    m_viewer.draw();
+void Game::draw() {
+    m_viewer.draw(scene(), cameraHead());
 }
 

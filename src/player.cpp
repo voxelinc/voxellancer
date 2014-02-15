@@ -5,10 +5,10 @@
 #include "worldobject/ship.h"
 
 #include "gamestate/game.h"
-#include "gamestate/ingame.h"
+#include "gamestate/gameplay.h"
 
 
-Player::Player(InGame* inGame):
+Player::Player(GamePlay* inGame):
     m_inGame(inGame),
     m_playerShip(nullptr),
     m_hud(this, &m_inGame->game()->viewer())
@@ -69,7 +69,7 @@ Ship* Player::playerShip() {
     return m_playerShip.get();
 }
 
-CameraDolly& Player::cameraDolly() {
+const CameraDolly& Player::cameraDolly() const {
     return m_cameraDolly;
 }
 

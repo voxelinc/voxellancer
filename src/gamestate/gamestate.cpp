@@ -1,26 +1,32 @@
 #include "gamestate.h"
 
+#include <cassert>
 
-GameState::GameState(const std::string& name, GameState* parentGameState):
-    State(name, parentGameState),
-    m_parentGameState(parentGameState)
+
+GameState::GameState(const std::string& name, GameState* parent):
+    StateTemplate(name, this, parent)
 {
 }
 
-GameState* GameState::parentGameState() {
-    return m_parentGameState;
+const Scene& GameState::scene() const {
+    assert(parentState());
+    return parentState()->scene();
+}
+
+const CameraHead& GameState::cameraHead() const {
+    return parentState()->cameraHead();
 }
 
 void GameState::update(float deltaSec) {
-    State::update(deltaSec);
+    StateTemplate::update(deltaSec);
 }
 
 void GameState::onEntered() {
-    State::onEntered();
+    StateTemplate::onEntered();
 }
 
 void GameState::onLeft() {
-    State::onLeft();
+    StateTemplate::onLeft();
 }
 
 

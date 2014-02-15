@@ -27,7 +27,7 @@ public:
 
     void setViewportResolution(const glm::ivec2& viewportResolution);
 
-    void draw(Scene* scene, CameraHead* cameraHead);
+    void draw(const Scene& scene, const CameraHead& cameraHead);
 
 
 protected:

@@ -11,7 +11,7 @@ class WorldObject;
 
 class FightTask : public BasicTask {
 
-    enum State {
+    enum StateTemplate {
         IDLE,
         APPROACH,
         ENGAGE,

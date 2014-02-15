@@ -15,7 +15,7 @@
 #include "sound/soundmanager.h"
 #include "world/world.h"
 
-BaseScenario::BaseScenario(InGame* inGame) :
+BaseScenario::BaseScenario(GamePlay* inGame) :
     m_inGame(inGame)
 {
 }

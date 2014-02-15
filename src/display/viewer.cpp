@@ -13,27 +13,13 @@
 
 Viewer::Viewer(const Viewport& viewport):
     m_view(nullptr),
-    m_cameraHead(nullptr),
-    m_viewport(viewport),
-    m_scene(nullptr)
+    m_viewport(viewport)
 {
     switchToMonoView();
 }
 
 const View& Viewer::view() const {
     return *m_view.get();
-}
-
-Scene* Viewer::scene() {
-    return m_scene;
-}
-
-void Viewer::setScene(Scene* scene) {
-    m_scene = scene;
-}
-
-void Viewer::setCameraHead(CameraHead* cameraHead) {
-    m_cameraHead = cameraHead;
 }
 
 void Viewer::setViewport(const Viewport& viewport) {
@@ -51,12 +37,16 @@ void Viewer::switchToStereoView(const StereoRenderInfo& stereoRenderInfo) {
     m_view = std::unique_ptr<View>(new StereoView(m_viewport, stereoRenderInfo));
 }
 
-void Viewer::draw() {
-    assert(m_scene && m_cameraHead);
-    m_view->draw(m_scene, m_cameraHead);
+void Viewer::draw(const Scene& scene, const CameraHead& cameraHead) {
+    glFrontFace(GL_CCW);
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
+    glClear(GL_DEPTH_BUFFER_BIT);
+
+    m_view->draw(scene, cameraHead);
 }
 
 void Viewer::update(float deltaSec) {
-    m_scene->update(deltaSec);
+
 }
 

@@ -95,8 +95,6 @@ HUDObjectDelegate* HUD::objectDelegate(WorldObject* worldObject) {
 }
 
 void HUD::setCrossHairOffset(const glm::vec2& mousePosition) {
-    CameraHead& cameraHead = m_player->cameraDolly().cameraHead();
-
     float fovy = m_viewer->view().fovy();
     float nearZ = m_viewer->view().zNear();
     float ar = m_viewer->view().aspectRatio();

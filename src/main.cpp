@@ -29,7 +29,7 @@
 
 #include "display/stereorenderinfo.h"
 
-#include "ui/inputhandler.h"
+#include "ui/gameplaymaininput.h"
 
 #include "gamestate/game.h"
 
@@ -116,6 +116,7 @@ static void mainloop() {
         time += delta;
 
         game->update(static_cast<float>(delta));
+        game->draw();
 
         glfwSwapBuffers(glfwGetCurrentContext());
         glfwPollEvents();

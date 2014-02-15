@@ -18,7 +18,7 @@ void RenderPipeline::update(float deltaSec) {
     }
 }
 
-void RenderPipeline::apply(FrameBuffer& frameBuffer, Camera& camera, EyeSide side) {
+void RenderPipeline::apply(FrameBuffer& frameBuffer, const Camera& camera, EyeSide side) {
     if (m_passes.empty()) {
         glow::debug("Renderpipeline: intializing");
         setup();
@@ -53,3 +53,4 @@ void RenderPipeline::insertAfter(std::shared_ptr<RenderPass> pass, const std::st
     }
     assert(false); // pass not found
 }
+

@@ -22,7 +22,7 @@ public:
     void addParticle(VoxelParticle* voxelParticle);
 
     void update(float deltaSec);
-    void draw(Camera& camera);
+    void draw(const Camera& camera);
 
 
 protected:

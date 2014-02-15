@@ -4,6 +4,10 @@
 
 #include "etc/hmd/hmd.h"
 
+#include "gamestate/gamestate.h"
+
+#include "utils/fsm/trigger.h"
+
 #include "property/property.h"
 
 #include "inputconfigurator.h"
@@ -48,9 +52,11 @@ struct SecondaryInputValues {
     SecondaryInputValues();
 };
 
-class InputHandler {
+class GamePlayMainInput {
 public:
-    InputHandler(Player *player);
+    GamePlayMainInput(Player *player);
+
+    void setPauseTrigger(const Trigger<GameState>& pauseTrigger);
 
     void setHMD(HMD* hmd);
 
@@ -114,6 +120,8 @@ protected:
 
     ActionKeyMapping selectNextAction;
     ActionKeyMapping selectPreviousAction;
+
+    Trigger<GameState> m_pauseTrigger;
 
     void placeCrossHair(double winX, double winY);
 };

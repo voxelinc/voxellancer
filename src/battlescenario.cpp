@@ -13,7 +13,7 @@
 
 #include "worldobject/ship.h"
 
-#include "gamestate/ingame.h"
+#include "gamestate/gameplay.h"
 #include "world/world.h"
 #include "world/god.h"
 #include "utils/randvec.h"
@@ -23,7 +23,7 @@ BattleScenario::BattleScenario() {
 
 }
 
-void BattleScenario::populate(InGame* inGame) {
+void BattleScenario::populate(GamePlay* inGame) {
     glowutils::AutoTimer t("Initialize Game");
 
 
