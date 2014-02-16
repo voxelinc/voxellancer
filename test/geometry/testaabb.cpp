@@ -14,6 +14,7 @@ go_bandit([](){
     describe("AABB", [](){
         PropertyManager::instance()->reset();
         PropertyManager::instance()->load("data/config.ini");
+        PropertyManager::instance()->load("data/voxels.ini", "voxels");
 
         before_each([&](){
         });

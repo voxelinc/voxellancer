@@ -177,7 +177,9 @@ void InputHandler::processMouseUpdate() {
     }
 
     if (pressed) {
-        m_player->fire();
+        if (m_player->ship()) {
+            m_player->fire();
+        }
     }
 
     // spin
@@ -281,20 +283,25 @@ void InputHandler::processFireActions() {
     m_player->hud().crossHair().setActionActive(getInputValue(&fireAction) > 0.001);
 
     if (getInputValue(&fireAction)) {
-        m_player->fire();
+        if (m_player->ship()) {
+            m_player->fire();
+        }
     }
     if (getInputValue(&rocketAction)) {
-        if (m_player->playerShip()) {
-            m_player->playerShip()->fireAtObject();
+        if (m_player->ship() && m_player->ship()->targetObject()) {
+            m_player->ship()->components().fireAtObject(m_player->ship()->targetObject());
         }
     }
 }
 
 void InputHandler::processMoveActions() {
-    m_player->move(glm::vec3(-getInputValue(&moveLeftAction), 0, 0));
-    m_player->move(glm::vec3(getInputValue(&moveRightAction), 0, 0));
-    m_player->move(glm::vec3(0, 0, -getInputValue(&moveForwardAction)));
-    m_player->move(glm::vec3(0, 0, getInputValue(&moveBackwardAction)));
+    glm::vec3 direction(
+        getInputValue(&moveRightAction) - getInputValue(&moveLeftAction),
+        0,
+        getInputValue(&moveBackwardAction) - getInputValue(&moveForwardAction)
+    );
+
+    m_player->move(direction);
 }
 
 void InputHandler::processRotateActions() {
@@ -308,8 +315,8 @@ void InputHandler::processRotateActions() {
     if (glm::length(rot) < prop_deadzoneGamepad) {
         rot = glm::vec3(0);
     }
-    if (glm::length(rot) > 1) {
-        rot = glm::normalize(rot);
+    if(glm::length(rot) > 0.0f) {
+        rot = glm::normalize(rot); // Rot... in... I knew there would be some shitty metalsong called like that http://www.youtube.com/watch?v=TWaEDmFoNnc
     }
     m_player->rotate(rot);
 }

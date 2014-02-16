@@ -1,17 +1,15 @@
 #pragma once
 
-#include "voxel/voxel.h"
+#include "voxel/specialvoxel.h"
 
-class FuelVoxel : public Voxel {
+
+class FuelVoxel: public SpecialVoxel {
 public:
-    FuelVoxel(const glm::ivec3& gridCell, int color = 0xFFFFFF, float mass = 1.0f, float hp = 1.0f);
-    ~FuelVoxel();
+    FuelVoxel(const glm::ivec3& gridCell, int index);
 
-    virtual void addToObject(WorldObject* object) override;
+    virtual void addToObject(WorldObject* worldObject) override;
 
     virtual void onRemoval() override;
     virtual void onDestruction() override;
-
-protected:
-    WorldObject* m_worldObject;
 };
+

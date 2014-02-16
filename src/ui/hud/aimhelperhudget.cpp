@@ -6,9 +6,9 @@
 #include "utils/tostring.h"
 
 #include "worldobject/ship.h"
-#include "worldobject/hardpoint.h"
+#include "worldobject/components/hardpoint.h"
 #include "worldobject/helper/hardpointaimhelper.h"
-#include "worldobject/weapons/weapon.h"
+#include "worldobject/components/weapon.h"
 
 #include "player.h"
 
@@ -28,7 +28,7 @@ const glm::vec3& AimHelperHudget::targetPoint() const {
 }
 
 void AimHelperHudget::update(float deltaSec) {
-    Ship* ship = m_hud->player()->playerShip();
+    Ship* ship = m_hud->player()->ship();
 
     if(!ship) {
         setVisible(false);
@@ -60,7 +60,7 @@ void AimHelperHudget::draw() {
 
 void AimHelperHudget::calculateTargetPoint(WorldObject* targetObject) {
     int hitableHardpointCount = 0;
-    Ship* ship = m_hud->player()->playerShip();
+    Ship* ship = m_hud->player()->ship();
 
     if(!ship) {
         return;
@@ -68,8 +68,11 @@ void AimHelperHudget::calculateTargetPoint(WorldObject* targetObject) {
 
     m_targetPoint = glm::vec3(0.0f, 0.0f, 0.0f);
 
-    for(Hardpoint* hardpoint : ship->hardpoints()) {
-        if (hardpoint->weapon()->aimType() != AimType::Point) {
+    for(Hardpoint* hardpoint : ship->components().hardpoints()) {
+        if(!hardpoint->weapon()) {
+            continue;
+        }
+        if(hardpoint->weapon()->type() != WeaponType::Gun) {
             continue;
         }
 

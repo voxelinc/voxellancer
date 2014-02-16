@@ -20,7 +20,7 @@ PatrolWaypointsTask::PatrolWaypointsTask(Squad& squad, std::list<glm::vec3> poin
 
 void PatrolWaypointsTask::update(float deltaSec) {
     if (m_squad.leader()) {
-        float distance = glm::length(*m_currentPoint - m_squad.leader()->position());
+        float distance = glm::length(*m_currentPoint - m_squad.leader()->transform().position());
         if (distance < m_squad.leader()->bounds().sphere().radius()){
             m_currentPoint++;
             if (m_currentPoint == m_points.end()) {
@@ -33,7 +33,7 @@ void PatrolWaypointsTask::update(float deltaSec) {
 }
 
 void PatrolWaypointsTask::onNewLeader(Ship* leader) {
-    m_leaderFlyTask = std::make_shared<FlyToTask>(*leader);
+    m_leaderFlyTask = std::make_shared<FlyToTask>(leader->boardComputer());
     leader->character()->setTask(m_leaderFlyTask);
 }
 

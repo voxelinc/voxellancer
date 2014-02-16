@@ -6,12 +6,12 @@
 #include "ai/aitask.h"
 
 
-class Ship;
+class BoardComputer;
 class WorldObject;
 
 class FlyToTask : public AiTask {
 public:
-    FlyToTask(Ship& ship);
+    FlyToTask(BoardComputer* boardComputer);
 
     void setTargetPoint(const glm::vec3& point, const glm::vec3& up = glm::vec3(0,0,0));
 

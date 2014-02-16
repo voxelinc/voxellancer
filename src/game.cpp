@@ -61,3 +61,4 @@ void Game::draw() {
 void Game::setOutputBuffer(int i) {
     m_gameScene.setOutputBuffer(i);
 }
+

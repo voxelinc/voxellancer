@@ -44,7 +44,7 @@ void GameScene::draw(Camera* camera, glow::FrameBufferObject* target, EyeSide si
 
     RenderMetaData metadata(camera, side);
     m_renderPipeline->apply(*m_framebuffer, metadata);
-    
+
     // transfer rendered image to target framebuffer
     m_outputBlitter->setInputMapping({ { "source", m_currentOutputBuffer } });
     m_outputBlitter->apply(*m_framebuffer, target);
@@ -59,8 +59,9 @@ void GameScene::deactivate() {
 }
 
 void GameScene::update(float deltaSec) {
-    m_starField->update(deltaSec, m_player->cameraPosition());
-    m_soundManager->setListener(m_player->cameraPosition(), m_player->cameraOrientation());
+    CameraHead& cameraHead = m_player->cameraDolly().cameraHead();
+    m_starField->update(deltaSec, cameraHead.position());
+    m_soundManager->setListener(cameraHead.position(), cameraHead.orientation());
 }
 
 void GameScene::setOutputBuffer(int i) {
@@ -69,7 +70,7 @@ void GameScene::setOutputBuffer(int i) {
 
 void GameScene::drawGame(Camera* camera) {
     m_framebuffer->setDrawBuffers({ BufferNames::Color, BufferNames::NormalZ, BufferNames::Emissisiveness });
-    
+
     World::instance()->skybox().draw(camera);
 
     m_voxelRenderer->program()->setUniform("lightdir", m_defaultLightDir.get());

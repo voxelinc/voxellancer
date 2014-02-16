@@ -6,6 +6,8 @@
 #include "voxel/voxelcluster.h"
 #include "voxel/voxel.h"
 
+#include <cassert>
+
 
 ClusterLoader::ClusterLoader()
 {
@@ -15,11 +17,14 @@ ClusterLoader::ClusterLoader()
 void ClusterLoader::load(const std::string &filename, std::vector<Voxel*> *list){
 	m_inputStream = new std::ifstream(filename, std::ios::in | std::ios::binary);
 
-	if (m_inputStream->fail())
+	if (m_inputStream->fail()) {
 		throw std::runtime_error("file " + std::string(filename) + " not found");
+    }
 
 	std::vector<std::string> filenameParts;
 	splitStr(filename, '.', filenameParts);
+	assert(filenameParts.size() > 1);
+
 	std::string extension = filenameParts[1];
 	if (extension.compare("csv") == 0)
 		loadCsv(list);

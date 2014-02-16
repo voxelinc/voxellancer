@@ -8,31 +8,46 @@
 #include "ai/basictasks/fighttask.h"
 
 #include "resource/clustercache.h"
+#include "resource/worldobjectfactory.h"
+#include "resource/worldobjectbuilder.h"
 
+#include "worldobject/components/hardpoint.h"
+#include "worldobject/components/engineslot.h"
+#include "worldobject/components/engine.h"
+#include "worldobject/components/weapon.h"
+#include "worldobject/components/weapons/gun.h"
 #include "worldobject/ship.h"
 
-#include "game.h"
+#include "sound/soundmanager.h"
+
 #include "world/world.h"
 #include "world/god.h"
+
+#include "game.h"
 #include "utils/randvec.h"
+
+#include "scripting/scriptengine.h"
+#include "scripting/gameplayscript.h"
 
 
 ScriptedScenario::ScriptedScenario(Game* game, const std::string& path):
     BaseScenario(game),
-    m_script(path)
+    m_script(new GamePlayScript(World::instance()))
 {
-
+    m_script->load(path);
 }
 
+ScriptedScenario::~ScriptedScenario() = default;
+
 void ScriptedScenario::populateWorld() {
-    Ship *playerShip = new Ship();
-    ClusterCache::instance()->fillObject(playerShip, "data/voxelcluster/basicship.csv");
-    playerShip->setPosition(glm::vec3(0, 0, 10));
+    Ship *playerShip = WorldObjectBuilder("basicship").buildShip();
+    playerShip->transform().setPosition(glm::vec3(0, 0, 10));
     playerShip->objectInfo().setName("basicship");
     playerShip->objectInfo().setShowOnHud(false);
     playerShip->objectInfo().setCanLockOn(false);
-    world->god().scheduleSpawn(playerShip);
+    m_world->god().scheduleSpawn(playerShip);
     m_game->player().setShip(playerShip);
 
-    m_world->startScript(m_script);
+
+    m_world->scriptEngine().startScript(m_script.get());
 }

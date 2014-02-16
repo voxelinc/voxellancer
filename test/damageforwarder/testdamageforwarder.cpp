@@ -20,6 +20,7 @@ go_bandit([]() {
 
         PropertyManager::instance()->reset();
         PropertyManager::instance()->load("data/config.ini");
+        PropertyManager::instance()->load("data/voxels.ini", "voxels");
 
         before_each([&] {
             world = new World();
@@ -31,7 +32,7 @@ go_bandit([]() {
             a->addVoxel(new Voxel(glm::ivec3(1, 0, 0)));
             a->addVoxel(new Voxel(glm::ivec3(2, 0, 0)));
 
-            b->setPosition(glm::vec3(4, 0, 0));
+            b->transform().setPosition(glm::vec3(4, 0, 0));
             b->addVoxel(new Voxel(glm::ivec3(0, 0, 0)));
             b->addVoxel(new Voxel(glm::ivec3(0, 0, 1)));
             b->addVoxel(new Voxel(glm::ivec3(0, 0, 2)));

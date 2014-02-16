@@ -20,5 +20,6 @@ public:
 
 protected:
     FlyToTask m_flyTask;
+    Ship& m_ship;
 };
 
