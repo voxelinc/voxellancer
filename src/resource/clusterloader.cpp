@@ -15,22 +15,22 @@ ClusterLoader::ClusterLoader()
 }
 
 void ClusterLoader::load(const std::string &filename, std::vector<Voxel*> *list){
-	m_inputStream = new std::ifstream(filename, std::ios::in | std::ios::binary);
+    m_inputStream = new std::ifstream(filename, std::ios::in | std::ios::binary);
 
-	if (m_inputStream->fail()) {
-		throw std::runtime_error("file " + std::string(filename) + " not found");
+    if (m_inputStream->fail()) {
+        throw std::runtime_error("file " + std::string(filename) + " not found");
     }
 
-	std::vector<std::string> filenameParts;
-	splitStr(filename, '.', filenameParts);
-	assert(filenameParts.size() > 1);
+    std::vector<std::string> filenameParts;
+    splitStr(filename, '.', filenameParts);
+    assert(filenameParts.size() > 1);
 
-	std::string extension = filenameParts[1];
-	if (extension.compare("csv") == 0)
-		loadCsv(list);
-	else if (extension.compare("zox") == 0)
-		loadZox(list);
-
+    std::string extension = filenameParts[1];
+    if (extension.compare("csv") == 0) {
+        loadCsv(list);
+    } else if (extension.compare("zox") == 0) {
+        loadZox(list);
+    }
 }
 
 void ClusterLoader::loadCsv(std::vector<Voxel*> *list){

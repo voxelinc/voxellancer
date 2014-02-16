@@ -20,11 +20,11 @@ void PropertyManager::unregisterProperty(Property<T>* prop) {
 
 template<typename T>
 T PropertyManager::get(const std::string& name) {
-    return getPropertyCollection<T>(nullptr)->get(name);
+    return getPropertyCollection<T>()->get(name);
 }
 
 template<typename T>
 T PropertyManager::get(const std::string& name, const T& defaultValue) {
-    return getPropertyCollection<T>(nullptr)->get(name, defaultValue);
+    return getPropertyCollection<T>()->get(name, defaultValue);
 }
 

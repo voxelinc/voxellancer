@@ -1,10 +1,13 @@
 #pragma once
 
+#include <string>
+
 #include <glm/glm.hpp>
 
 #include "geometry/acceleration.h"
 
 #include "enginestate.h"
+
 
 /*
     Max acceleration per mass an engine - or mutiple engines accumulated -
@@ -30,6 +33,9 @@ public:
     Acceleration accelerationAt(const EngineState& engineState);
 
     EnginePower& operator+=(const EnginePower& other);
+
+
+    static EnginePower fromProperties(const std::string& prefix);
 
 
 protected:

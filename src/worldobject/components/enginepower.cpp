@@ -1,5 +1,7 @@
 #include "enginepower.h"
 
+#include "property/propertymanager.h"
+
 
 EnginePower::EnginePower():
     EnginePower(glm::vec4(0.0f), glm::vec3(0.0f))
@@ -40,3 +42,11 @@ EnginePower& EnginePower::operator+=(const EnginePower& other) {
     m_angular += other.angular();
     return *this;
 }
+
+EnginePower EnginePower::fromProperties(const std::string& prefix) {
+    return EnginePower(
+        PropertyManager::instance()->get<glm::vec4>(prefix + ".directionalAcceleration"),
+        PropertyManager::instance()->get<glm::vec3>(prefix + ".angularAcceleration")
+    );
+}
+
