@@ -37,7 +37,5 @@ protected:
     float vectorAngleToPlane(glm::vec3 vector, glm::vec3 planeNormal);
     float vectorAngleToVector(glm::vec3 vector, glm::vec3 vector2);
 
-
-
 };
 

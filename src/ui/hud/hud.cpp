@@ -156,19 +156,6 @@ void HUD::onClick(int button) {
             return;
         }
     }
-    /*WorldTreeQuery wordltreequery(&World::instance()->worldTree(), &toCrossHair, nullptr, &m_player->playerShip()->collisionFilter());
-    WorldObject* first = nullptr;
-    for (WorldObject* worldObject : wordltreequery.intersectingWorldObjects()) {
-        if (!worldObject->objectInfo().showOnHud()) {
-            continue;
-        }
-        if (!first) {
-            first = worldObject;
-        }
-    }
-    if (first) {
-        m_player->setTarget(first);
-    }*/
 }
 
 void HUD::updateScanner(float deltaSec) {
@@ -206,3 +193,6 @@ void HUD::setTargetHudget(WorldObject* target) {
     m_objectDelegates[target]->setTargeted(true);
 }
 
+Viewer* HUD::viewer() const {
+    return m_viewer;
+}

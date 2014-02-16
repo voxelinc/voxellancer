@@ -18,8 +18,8 @@ ObjectHudget::ObjectHudget(HUD* hud, HUDObjectDelegate* objectDelegate):
     m_arrowVoxels(this)
 {
     m_insideFov = false;
-    fovx = glm::radians(42.5f);
-    fovy = glm::radians(29.5f);
+    fovy = hud->viewer()->view().fovy() / 2;
+    fovx = fovy*hud->viewer()->view().aspectRatio()*0.88f;
 }
 
 void ObjectHudget::update(float deltaSec) {

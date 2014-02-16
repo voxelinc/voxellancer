@@ -55,6 +55,8 @@ public:
     void update(float deltaSec);
     void draw();
 
+    Viewer* viewer() const;
+
 
 protected:
     Player* m_player;
