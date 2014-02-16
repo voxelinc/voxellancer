@@ -47,6 +47,7 @@ InputHandler::InputHandler(Player* player):
 
     prop_deadzoneMouse("input.deadzoneMouse"),
     prop_deadzoneGamepad("input.deadzoneGamepad"),
+    prop_maxClickTime("input.maxClickTime"),
 
     fireAction("input.mappingFirePrimary", "input.mappingFireSecondary", "Fire"),
     rocketAction("input.mappingRocketPrimary", "input.mappingRocketSecondary", "Launch Rockets"),
@@ -126,7 +127,7 @@ void InputHandler::keyCallback(int key, int scancode, int action, int mods) {
 
 void InputHandler::mouseButtonCallback(int button, int action, int mods) {
     if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_RELEASE) {
-        if (m_currentTimePressed > 0 && m_currentTimePressed < m_maxClickTime) {
+        if (m_currentTimePressed > 0 && m_currentTimePressed < prop_maxClickTime) {
             m_player->hud().onClick(GLFW_MOUSE_BUTTON_RIGHT);
         } else {
         }
@@ -201,7 +202,7 @@ void InputHandler::processMouseUpdate(float deltaSec) {
     }
 
 
-    if (m_mouseControl || glfwGetMouseButton(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS &&  m_maxClickTime < m_currentTimePressed) {
+    if (m_mouseControl || glfwGetMouseButton(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS &&  prop_maxClickTime < m_currentTimePressed) {
         glm::vec3 rot;
         x = WindowManager::instance()->resolution().width() / 2 - (int)floor(x);
         y = WindowManager::instance()->resolution().height() / 2 - (int)floor(y);
