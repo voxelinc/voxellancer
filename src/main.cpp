@@ -80,7 +80,7 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
         glfwSetWindowShouldClose(window, GL_TRUE);
     }
     if ((key == GLFW_KEY_ENTER && action == GLFW_PRESS) &&
-        ((glfwGetKey(window, GLFW_KEY_LEFT_ALT) == GLFW_PRESS) || 
+        ((glfwGetKey(window, GLFW_KEY_LEFT_ALT) == GLFW_PRESS) ||
         (glfwGetKey(window, GLFW_KEY_RIGHT_ALT) == GLFW_PRESS))) {
         toggleFullScreen();
     }

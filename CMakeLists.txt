@@ -95,6 +95,7 @@ find_package(SFML REQUIRED)
 find_package(BANDIT REQUIRED)
 find_package(LibOVR REQUIRED)
 find_package(OpenMP REQUIRED)
+find_package(Lua52 REQUIRED)
 
 if(REGEX_USE_BOOST)
 find_package(Boost REQUIRED regex)
@@ -123,6 +124,7 @@ include_directories(
     ${SFML_INCLUDE_DIR}
     ${BANDIT_INCLUDE_DIR}
     ${LIBOVR_INCLUDE_DIRS}
+    ${LUA52_INCLUDE_DIR}
 )
 
 
@@ -177,6 +179,7 @@ set(LIBS_TO_LINK
     ${SFML_LIBRARIES}
     ${Boost_LIBRARIES}
     ${LIBOVR_LIBRARIES}
+    ${LUA52_LIBRARY}
     glow
     glowutils
     ${LIBS_TO_LINK}

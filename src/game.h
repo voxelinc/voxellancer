@@ -9,6 +9,7 @@
 
 #include "ui/inputhandler.h"
 
+#include "scenarios/scriptedscenario.h"
 #include "scenarios/gamescenario.h"
 #include "scenarios/battlescenario.h"
 
@@ -36,7 +37,7 @@ private:
     InputHandler m_inputHandler;
     Viewer m_viewer;
     GameScene m_gameScene;
-    BattleScenario m_scenario;
+    ScriptScenario m_scenario;
     HMDManager m_hmdManager;
 };
 
