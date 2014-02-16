@@ -6,12 +6,12 @@
 
 #include "camera/cameradolly.h"
 
-
 #include "worldobject/handle/handle.h"
 
 #include "ui/hud/hud.h"
 
-class HUD;
+
+class TargetSelector;
 
 class Camera;
 class CameraDolly;
@@ -47,6 +47,7 @@ protected:
     Handle<Ship> m_playerShip;
     CameraDolly m_cameraDolly;
     HUD m_hud;
+    TargetSelector* m_targetSelector;
 
     glm::vec3 m_acceleration;
     glm::vec3 m_accelerationAngular;

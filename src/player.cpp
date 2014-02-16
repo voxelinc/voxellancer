@@ -5,16 +5,19 @@
 #include "worldobject/ship.h"
 #include "world/world.h"
 
+#include "ui/targetselector.h"
+
 #include "game.h"
+
 
 
 
 Player::Player(Game* game):
     m_game(game),
     m_playerShip(nullptr),
-    m_hud(this, &game->viewer())
+    m_hud(this, &game->viewer()),
+    m_targetSelector(new TargetSelector(this))
 {
-
 }
 
 void Player::move(const glm::vec3& direction) {
@@ -87,43 +90,10 @@ glm::quat Player::cameraOrientation() {
 }
 
 void Player::selectTarget(bool next) {
-    if (next) {
-        setTarget(findNextTarget(World::instance()->worldObjects().begin(), World::instance()->worldObjects().end()));
-    } else {
-        setTarget(findNextTarget(World::instance()->worldObjects().rbegin(), World::instance()->worldObjects().rend()));
-    }
+    m_targetSelector->selectTarget(next);
 }
 
 void Player::setTarget(WorldObject* target) {
     playerShip()->setTargetObject(target);
     m_hud.setTargetHudget(target);
 }
-
-template<typename IteratorType>
-WorldObject* Player::findNextTarget(IteratorType begin, IteratorType end) {
-    if (!playerShip()) {
-        return nullptr;
-    }
-
-    IteratorType searchBegin = begin;
-
-    if (playerShip()->targetObject() != nullptr) {
-        searchBegin = std::find(begin, end, playerShip()->targetObject());
-        searchBegin++;
-    }
-
-    IteratorType newTarget = std::find_if(searchBegin, end, canLockOnPredicate());
-
-    if (newTarget == end) {
-        newTarget = std::find_if(begin, searchBegin, canLockOnPredicate());
-    }
-
-    return newTarget != end ? *newTarget : nullptr;
-}
-
-std::function<bool(WorldObject*)> Player::canLockOnPredicate() {
-    return [](WorldObject* worldObject) {
-        return worldObject->objectInfo().canLockOn();
-    };
-}
-
