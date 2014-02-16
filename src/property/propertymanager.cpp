@@ -124,7 +124,7 @@ void PropertyManager::load(const std::string& file, const std::string& prefix) {
         glow::info("PropertyManager: Loading %; with prefix '%;'", file, prefix);
     }
 
-    std::string keyPrefix = prefix.empty() ? std::string() : prefix + std::string(".");
+    std::string keyPrefix = prefix.empty() ? "" : prefix + ".";
 
     while (std::getline(input, line)) {
         regexns::smatch matches;
