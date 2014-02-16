@@ -41,7 +41,8 @@ void BattleScenario::populateWorld() {
     glow::debug("Create WorldObjects");
 
 
-    Ship *playerShip = WorldObjectBuilder("basicship").buildShip();
+    Ship *playerShip = WorldObjectBuilder("specialbasicship").buildShip();
+    WorldObjectFactory().equipSomehow(playerShip);
     playerShip->transform().setPosition(glm::vec3(0, 0, 10));
     playerShip->objectInfo().setName("basicship");
     playerShip->objectInfo().setShowOnHud(false);
@@ -51,6 +52,7 @@ void BattleScenario::populateWorld() {
 
     // create enemy ai driven ship
     Ship *aitester = WorldObjectBuilder("basicship").buildShip();
+    WorldObjectFactory().equipSomehow(aitester);
     aitester->transform().setPosition(glm::vec3(0, 0, 10));
     aitester->objectInfo().setName("basicship");
     aitester->objectInfo().setShowOnHud(false);
@@ -58,7 +60,8 @@ void BattleScenario::populateWorld() {
     //world->god().scheduleSpawn(aitester);
 
 
-    WorldObject* banner = WorldObjectBuilder("basicship").buildWorldObject();
+    WorldObject* banner = WorldObjectBuilder("banner").buildWorldObject();
+    WorldObjectFactory().equipSomehow(banner);
     banner->transform().setScale(30.0f);
     banner->transform().move(glm::vec3(0, 0, -600));
     banner->objectInfo().setShowOnHud(false);
@@ -78,6 +81,7 @@ void BattleScenario::populateBattle(int numberOfEnemies1, int numberOfEnemies2) 
     std::vector<Ship*> fleet2;
     for (int e = 0; e < numberOfEnemies1; e++) {
         Ship *ship = WorldObjectBuilder("basicship").buildShip();
+        WorldObjectFactory().equipSomehow(ship);
         float r = 600;
         ship->transform().move(RandVec3::rand(0.0f, r) + glm::vec3(-200, 0, -200));
 
@@ -90,6 +94,7 @@ void BattleScenario::populateBattle(int numberOfEnemies1, int numberOfEnemies2) 
     }
     for (int e = 0; e < numberOfEnemies2; e++) {
         Ship *ship = WorldObjectBuilder("basicship").buildShip();
+        WorldObjectFactory().equipSomehow(ship);
         float r = 600;
         ship->transform().move(RandVec3::rand(0.0f, r) + glm::vec3(200, 0, -200));
         ship->objectInfo().setName("enemy1");
@@ -107,6 +112,7 @@ void BattleScenario::populateBattle(int numberOfEnemies1, int numberOfEnemies2) 
 
 void BattleScenario::spawnCapital(const std::vector<Ship*>& enemies) {
     Ship *ship = WorldObjectBuilder("normandy").buildShip();
+    WorldObjectFactory().equipSomehow(ship);
   //  ship->setEngineSound(SoundManager::current()->create("data/sound/Rocket Thrusters.ogg"));
     ship->objectInfo().setShowOnHud(true);
     ship->objectInfo().setCanLockOn(true);
