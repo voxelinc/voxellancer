@@ -8,6 +8,7 @@
 #include "hudobjectdelegate.h"
 #include "hud.h"
 #include "worldobject/worldobject.h"
+#include "player.h"
 
 
 ObjectHudget::ObjectHudget(HUD* hud, HUDObjectDelegate* objectDelegate):
@@ -57,9 +58,12 @@ HUDObjectDelegate* ObjectHudget::objectDelegate() {
 }
 
 bool ObjectHudget::isAt(const Ray& ray) const {
-    return ray.nearTo(m_objectDelegate->worldObject()->bounds().aabb());
-    //return ray.intersects(Sphere(worldPosition(), 2.0f)); // needs to depend on hudget size
+    if (!m_insideFov) {
+        return m_arrowVoxels.isAt(ray) || m_objectVoxels.isAt(ray);
+    }
+    return m_objectVoxels.isAt(ray);
 }
+
 
 void ObjectHudget::setTargeted(bool targeted) {
     m_arrowVoxels.setTarget(targeted);
@@ -107,3 +111,6 @@ glm::vec3 ObjectHudget::closestPointInsideFov() {
     return pointInsideFov;
 }
 
+void ObjectHudget::onClick(int button) {
+    m_hud->player()->setTarget(m_objectDelegate->worldObject());
+}

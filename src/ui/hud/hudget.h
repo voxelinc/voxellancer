@@ -33,8 +33,8 @@ public:
     virtual void onClick(int button);
 
     /*
-        Shall return true when the Clickable is under a
-        pointer at quat orientation
+    Shall return true when the Clickable is under a
+    pointer at quat orientation
     */
     virtual bool isAt(const Ray& ray) const;
 

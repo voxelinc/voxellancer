@@ -19,6 +19,8 @@ public:
 
     virtual bool isAt(const Ray& ray) const override;
 
+    virtual void onClick(int button) override;
+
     HUDObjectDelegate* objectDelegate();
 
     void setTargeted(bool targeted);
@@ -31,7 +33,6 @@ protected:
     ArrowHudgetVoxels m_arrowVoxels;
 
     float fovy, fovx;
-
     bool isInsideFov();
     glm::vec3 closestPointInsideFov();
 

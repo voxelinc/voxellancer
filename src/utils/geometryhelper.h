@@ -10,6 +10,8 @@ class WorldObject;
 class GeometryHelper {
 public:
     // Returns the angle between u and v
+    static glm::vec3 plane(const glm::vec3& p, const glm::vec3& q, const glm::vec3& r);
+    // Returns the angle between u and v
     static float angleBetween(const glm::vec3& u, const glm::vec3& v);
     // Returns the angle between vector u and plane with normal v
     static float angleBetweenVectorPlane(const glm::vec3& u, const glm::vec3& v);

@@ -147,7 +147,16 @@ void HUD::draw() {
 
 void HUD::onClick(int button) {
     Ray toCrossHair = Ray::fromTo(m_player->cameraDolly().cameraHead().position(), m_crossHair.worldPosition());
-    WorldTreeQuery wordltreequery(&World::instance()->worldTree(), &toCrossHair, nullptr, &m_player->playerShip()->collisionFilter());
+    for (Hudget* hudget : m_hudgets) {
+        if (hudget->isAt(toCrossHair) && hudget != &m_crossHair) {
+            if (!dynamic_cast<ObjectHudget*>(hudget)) {
+                continue; // TODO implement HUD Spheres and use them to distinguish hud elements
+            }
+            hudget->onClick(button);
+            return;
+        }
+    }
+    /*WorldTreeQuery wordltreequery(&World::instance()->worldTree(), &toCrossHair, nullptr, &m_player->playerShip()->collisionFilter());
     WorldObject* first = nullptr;
     for (WorldObject* worldObject : wordltreequery.intersectingWorldObjects()) {
         if (!worldObject->objectInfo().showOnHud()) {
@@ -159,7 +168,7 @@ void HUD::onClick(int button) {
     }
     if (first) {
         m_player->setTarget(first);
-    }
+    }*/
 }
 
 void HUD::updateScanner(float deltaSec) {

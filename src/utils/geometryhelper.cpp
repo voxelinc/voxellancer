@@ -4,6 +4,10 @@
 #include "worldobject/worldobject.h"
 
 
+glm::vec3 GeometryHelper::plane(const glm::vec3& p, const glm::vec3& q, const glm::vec3& r) {
+    return glm::cross(q - p, r - p);
+}
+
 float GeometryHelper::angleBetween(const glm::vec3& u, const glm::vec3& v) {
     float angle = glm::acos(glm::clamp(glm::dot(glm::normalize(u), glm::normalize(v)), -1.0f, 1.0f));
     assert(std::isfinite(angle));

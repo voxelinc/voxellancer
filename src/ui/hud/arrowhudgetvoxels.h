@@ -22,9 +22,11 @@ public:
 
     bool findPointOnEdge();
 
+    virtual bool isAt(const Ray& ray) const;
+
 protected:
     ObjectHudget* m_hudget;
-    VoxelCluster m_arrow;
+    mutable VoxelCluster m_arrow;
 
     Property<float> prop_arrowDistance;
 

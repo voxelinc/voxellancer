@@ -2,7 +2,7 @@
 
 #include <vector>
 
-
+class Ray;
 class ObjectHudget;
 class ObjectHudgetCorner;
 
@@ -18,13 +18,15 @@ public:
 
     void draw();
 
+    bool isAt(const Ray& ray) const;
+
 
 protected:
     ObjectHudget* m_hudget;
     ObjectHudgetCorner* m_lu;
+    ObjectHudgetCorner* m_rb;
     ObjectHudgetCorner* m_lb;
     ObjectHudgetCorner* m_ru;
-    ObjectHudgetCorner* m_rb;
     float m_openingAngle;
 
     void setupCorners();

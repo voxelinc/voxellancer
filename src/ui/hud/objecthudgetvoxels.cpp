@@ -1,13 +1,18 @@
 #include "objecthudgetvoxels.h"
 
 #include <glm/gtx/quaternion.hpp>
+#include <glm/gtx/intersect.hpp>
 
 #include "utils/geometryhelper.h"
 
 #include "voxel/voxelrenderer.h"
 
+#include "geometry/ray.h"
+
 #include "hud.h"
 #include "objecthudget.h"
+
+
 
 
 class ObjectHudgetCorner: public VoxelCluster {
@@ -86,5 +91,15 @@ void ObjectHudgetVoxels::setupCorners() {
     m_lb = new ObjectHudgetCorner(this, glm::ivec3(-1, -1, 0));
     m_ru = new ObjectHudgetCorner(this, glm::ivec3(1, 1, 0));
     m_rb = new ObjectHudgetCorner(this, glm::ivec3(1, -1, 0));
+}
+
+
+
+bool ObjectHudgetVoxels::isAt(const Ray& ray) const {
+    glm::vec3 intersectionPoint;
+    bool isAt = false;
+    isAt |= glm::intersectRayTriangle<glm::vec3>(ray.origin(), ray.direction(), m_rb->position(), m_lb->position(), m_lu->position(), intersectionPoint);
+    isAt |= glm::intersectRayTriangle<glm::vec3>(ray.origin(), ray.direction(), m_ru->position(), m_lb->position(), m_lu->position(), intersectionPoint);
+    return isAt;
 }
 

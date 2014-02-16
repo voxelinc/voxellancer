@@ -61,3 +61,7 @@ void ArrowHudgetVoxels::setTarget(bool target) {
         m_arrow.transform().setScale(0.025f);
     }
 }
+
+bool ArrowHudgetVoxels::isAt(const Ray& ray) const {
+    return ray.intersects(m_arrow.bounds().sphere());
+}
