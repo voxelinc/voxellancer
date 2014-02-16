@@ -34,15 +34,21 @@ public:
 
 protected:
     static ContextProvider* s_instance;
+
     std::unordered_set<ContextDependant*> m_contextDependants;
+
     bool m_fullScreen;
+
     int m_majorVersionRequire;
     int m_minorVersionRequire;
     int m_lastFullScreenMonitorIndex;
+
     Size<int> m_lastWindowedPos;
     Size<int> m_lastWindowedSize;
 
+
     ContextProvider();
     Size<int> currentResolution(GLFWmonitor* monitor);
+    void setWindowHints();
 };
 

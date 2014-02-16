@@ -6,10 +6,10 @@
 
 #include "collision/collisionfilter.h"
 
-#include "worldobject/ship.h"
 #include "utils/randvec.h"
-#include "utils/tostring.h"
 #include "utils/geometryhelper.h"
+
+#include "worldobject/ship.h"
 
 
 static const float s_minActDistance = 0.5f;

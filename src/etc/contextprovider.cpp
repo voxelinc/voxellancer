@@ -8,7 +8,9 @@
 #include <glowutils/FileRegistry.h>
 
 #include "geometry/size.h"
+
 #include "property/property.h"
+
 
 ContextProvider* ContextProvider::s_instance = nullptr;
 
@@ -40,8 +42,8 @@ float ContextProvider::aspectRatio() const {
 void ContextProvider::initWindowed(int majorVersionRequire, int minorVersionRequire, const Size<int>* resolution, const Size<int>* position) {
     m_majorVersionRequire = majorVersionRequire;
     m_minorVersionRequire = minorVersionRequire;
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, m_majorVersionRequire);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, m_minorVersionRequire);
+
+    setWindowHints();
 
     GLFWwindow* window;
     if (resolution) {
@@ -70,8 +72,8 @@ void ContextProvider::initWindowed(int majorVersionRequire, int minorVersionRequ
 void ContextProvider::initFullScreen(int majorVersionRequire, int minorVersionRequire, int monitorIndex) {
     m_majorVersionRequire = majorVersionRequire;
     m_minorVersionRequire = minorVersionRequire;
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, m_majorVersionRequire);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, m_minorVersionRequire);
+
+    setWindowHints();
 
     std::vector<GLFWmonitor*> monitors = this->monitors();
     assert(monitors.size() > 0);
@@ -170,17 +172,6 @@ int ContextProvider::currentMonitor() const {
     return -1;
 }
 
-ContextProvider::ContextProvider() :
-    m_contextDependants(),
-    m_fullScreen(false),
-    m_majorVersionRequire(0),
-    m_minorVersionRequire(0),
-    m_lastWindowedPos(-1, -1),
-    m_lastWindowedSize(-1, -1),
-    m_lastFullScreenMonitorIndex(-1)
-{
-
-}
 
 Size<int> ContextProvider::currentResolution(GLFWmonitor* monitor) {
     const GLFWvidmode* mode = glfwGetVideoMode(monitor);
@@ -196,3 +187,25 @@ void ContextProvider::registerContextDependant(ContextDependant* dependant) {
 void ContextProvider::unregisterContextDependant(ContextDependant* dependant) {
     m_contextDependants.erase(dependant);
 }
+
+ContextProvider::ContextProvider() :
+    m_contextDependants(),
+    m_fullScreen(false),
+    m_majorVersionRequire(0),
+    m_minorVersionRequire(0),
+    m_lastWindowedPos(-1, -1),
+    m_lastWindowedSize(-1, -1),
+    m_lastFullScreenMonitorIndex(-1)
+{
+}
+
+void ContextProvider::setWindowHints() {
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, m_majorVersionRequire);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, m_minorVersionRequire);
+#if defined(NDEBUG)
+    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_FALSE);
+#else
+    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
+#endif
+}
+

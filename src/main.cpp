@@ -102,19 +102,6 @@ void setCallbacks(GLFWwindow* window) {
     glfwSetWindowSizeCallback(window, resizeCallback);
 }
 
-static void configureOpenGLContext() {
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, MajorVersionRequire);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, MinorVersionRequire);
-    //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-
-#if defined(NDEBUG)
-    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_FALSE);
-#else
-    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
-#endif
-}
-
 static void miscSettings() {
     OVR::System::Init(OVR::Log::ConfigureDefaultLog(OVR::LogMask_All));
 
@@ -203,8 +190,6 @@ int main(int argc, char* argv[]) {
     }
 
     glfwSetErrorCallback(errorCallback);
-
-    configureOpenGLContext();
 
     if(clParser.fullScreen()) {
         ContextProvider::instance()->initFullScreen(MajorVersionRequire, MinorVersionRequire, 1);
