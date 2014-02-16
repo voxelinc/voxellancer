@@ -19,8 +19,9 @@
 #include "voxel/voxel.h"
 
 
-Physics::Physics(WorldObject& worldObject, float scale) :
-    m_dampening(glm::vec3(Property<float>("physics.globalDirectionalDampening")), glm::vec3(Property<float>("physics.globalAngularDampening"))),
+Physics::Physics(WorldObject& worldObject, float scale):
+    m_directionalDampening(Property<float>("physics.globalDirectionalDampening")),
+    m_angularDampening(Property<float>("physics.globalAngularDampening")),
     m_mass(0),
     m_accumulatedMassVec(0.0f, 0.0f, 0.0f),
     m_worldObject(worldObject)
@@ -28,12 +29,20 @@ Physics::Physics(WorldObject& worldObject, float scale) :
     m_massScaleFactor = glm::pow(scale, 3.f);
 }
 
-const Acceleration& Physics::dampening() const {
-    return m_dampening;
+float Physics::directionalDampening() const {
+    return m_directionalDampening;
 }
 
-void Physics::setDampening(const Acceleration& dampening) {
-    m_dampening = dampening;
+void Physics::setDirectionalDampening(float directionalDampening) {
+    m_directionalDampening = directionalDampening;
+}
+
+float Physics::angularDampening() const {
+    return m_angularDampening;
+}
+
+void Physics::setAngularDampening(float angularDampening) {
+    m_angularDampening = angularDampening;
 }
 
 const Speed& Physics::speed() const {
@@ -90,10 +99,10 @@ void Physics::updateSpeed(float deltaSec) {
     glm::vec3 directional(m_speed.directional());
     glm::vec3 angular(m_speed.angular());
 
-    directional *= (1.0f - m_dampening.directional() * deltaSec);
+    directional *= (1.0f - m_directionalDampening * deltaSec);
     directional += m_acceleration.directional() * deltaSec;
 
-    angular *= (1.0f - m_dampening.angular() * deltaSec);
+    angular *= (1.0f - m_angularDampening * deltaSec);
     angular += m_acceleration.angular() * deltaSec;
 
     m_speed = Speed(directional, angular);

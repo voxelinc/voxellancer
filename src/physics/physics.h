@@ -24,8 +24,11 @@ class Physics {
 public:
     Physics(WorldObject& worldObject, float scale);
 
-    const Acceleration& dampening() const;
-    void setDampening(const Acceleration& dampening);
+    float directionalDampening() const;
+    void setDirectionalDampening(float directionalDampening);
+
+    float angularDampening() const;
+    void setAngularDampening(float angularDampening);
 
     const Speed& speed() const;
     void setSpeed(const Speed& speed);
@@ -51,13 +54,17 @@ protected:
     WorldObject& m_worldObject;
 
     Speed m_speed;
+
     Acceleration m_acceleration;
-    Acceleration m_dampening;
+
+    float m_directionalDampening;
+    float m_angularDampening;
 
     float m_mass;
-    std::list<VoxelCollision> m_collisions;
-    glm::vec3 m_accumulatedMassVec;
+    glm::vec3 m_accumulatedMassVec; // For fast recalc of center of mass on voxel addition/removal
     float m_massScaleFactor;
+
+    std::list<VoxelCollision> m_collisions;
 
     void alterCell(Voxel* voxel, bool isAdd);
 };

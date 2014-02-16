@@ -15,7 +15,8 @@ Bullet::Bullet():
     m_objectInfo.setShowOnHud(false);
     m_objectInfo.setCanLockOn(false);
 
-    m_physics.setDampening(Acceleration(glm::vec3(0.0f), glm::vec3(0.0f)));
+    m_physics.setDirectionalDampening(0.0f);
+    m_physics.setAngularDampening(0.0f);
 }
 
 void Bullet::update(float deltaSec) {

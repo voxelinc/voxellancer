@@ -133,6 +133,7 @@ void ContextProvider::toggleFullScreen() {
         glfwGetWindowPos(glfwGetCurrentContext(), &x, &y);
         m_lastWindowedPos.setWidth(x);
         m_lastWindowedPos.setHeight(y);
+
         glfwGetWindowSize(glfwGetCurrentContext(), &x, &y);
         m_lastWindowedSize.setWidth(x);
         m_lastWindowedSize.setHeight(y);
