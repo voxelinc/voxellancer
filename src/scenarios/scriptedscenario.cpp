@@ -32,7 +32,7 @@
 
 ScriptedScenario::ScriptedScenario(Game* game, const std::string& path):
     BaseScenario(game),
-    m_script(new GamePlayScript(World::instance()))
+    m_script(new GamePlayScript(&World::instance()->scriptEngine()))
 {
     m_script->load(path);
 }
@@ -40,14 +40,14 @@ ScriptedScenario::ScriptedScenario(Game* game, const std::string& path):
 ScriptedScenario::~ScriptedScenario() = default;
 
 void ScriptedScenario::populateWorld() {
-    Ship *playerShip = WorldObjectBuilder("basicship").buildShip();
+    Ship *playerShip = WorldObjectBuilder("specialbasicship").buildShip();
+    WorldObjectFactory().equipSomehow(playerShip);
     playerShip->transform().setPosition(glm::vec3(0, 0, 10));
     playerShip->objectInfo().setName("basicship");
     playerShip->objectInfo().setShowOnHud(false);
     playerShip->objectInfo().setCanLockOn(false);
     m_world->god().scheduleSpawn(playerShip);
     m_game->player().setShip(playerShip);
-
 
     m_world->scriptEngine().startScript(m_script.get());
 }

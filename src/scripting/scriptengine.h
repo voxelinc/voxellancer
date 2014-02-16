@@ -3,6 +3,9 @@
 #include <list>
 #include <memory>
 
+#include "utils/timer.h"
+#include "utils/timermanager.h"
+
 
 class World;
 class GamePlayScript;
@@ -19,11 +22,15 @@ public:
 
     void startScript(GamePlayScript* script);
 
+    void registerTimer(Timer *timer);
+
     void update(float deltaSec);
 
 
 protected:
     World* m_world;
     std::list<GamePlayScript*> m_scripts;
+
+    TimerManager m_timerManager;
 };
 

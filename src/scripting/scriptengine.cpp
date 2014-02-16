@@ -13,6 +13,11 @@ void ScriptEngine::startScript(GamePlayScript* script) {
     script->start();
 }
 
-void ScriptEngine::update(float deltaSec) {
-
+void ScriptEngine::registerTimer(Timer *timer) {
+    m_timerManager.registerTimer(timer);
 }
+
+void ScriptEngine::update(float deltaSec) {
+    m_timerManager.update(deltaSec);
+}
+
