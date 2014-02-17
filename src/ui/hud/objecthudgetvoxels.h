@@ -4,7 +4,10 @@
 
 
 class ObjectHudget;
-class ObjectHudgetCorner;
+
+namespace {
+    class ObjectHudgetCorner;
+}
 
 class ObjectHudgetVoxels {
 public:
@@ -12,6 +15,8 @@ public:
     ~ObjectHudgetVoxels();
 
     ObjectHudget* hudget();
+
+    void setTargetHightlight(bool targetHightlight);
 
     float openingAngle() const;
     void setOpeningAngle(float openingAngle);
@@ -21,11 +26,14 @@ public:
 
 protected:
     ObjectHudget* m_hudget;
-    ObjectHudgetCorner* m_lu;
-    ObjectHudgetCorner* m_lb;
-    ObjectHudgetCorner* m_ru;
-    ObjectHudgetCorner* m_rb;
+
+    ObjectHudgetCorner* m_lu[2];
+    ObjectHudgetCorner* m_lb[2];
+    ObjectHudgetCorner* m_ru[2];
+    ObjectHudgetCorner* m_rb[2];
+
     float m_openingAngle;
+    bool m_targetHightlight;
 
     void setupCorners();
 };

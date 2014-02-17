@@ -39,9 +39,11 @@ void Gun::update(float deltaSec) {
 void Gun::setupBullet(Bullet* bullet, const glm::vec3& point) {
     Transform bulletTransform(bullet->transform());
 
-    glm::quat shipOrientation = m_hardpoint->components()->worldObject()->transform().orientation();
+    WorldObject* firingWorldObject = m_hardpoint->components()->worldObject();
+
+    glm::quat wordlObjectOrientation = firingWorldObject->transform().orientation();
     glm::vec3 bulletDirection = glm::normalize(point - m_hardpoint->voxel()->position());
-    glm::vec3 hardpointDirection = shipOrientation * glm::vec3(0, 0, -1);
+    glm::vec3 hardpointDirection = wordlObjectOrientation * glm::vec3(0, 0, -1);
     glm::vec3 bulletUp = glm::cross(bulletDirection, hardpointDirection);
 
     //bulletTransform.setOrientation(Math::quatFromDir(bulletDirection));
@@ -61,7 +63,7 @@ void Gun::setupBullet(Bullet* bullet, const glm::vec3& point) {
     bullet->setTransform(bulletTransform);
 
     bullet->physics().setSpeed(Speed(
-        bulletDirection * bulletSpeed(),
+        bulletDirection * bulletSpeed() + firingWorldObject->physics().speed().directional(),
         bulletTransform.orientation() * glm::vec3(0, 0, 5.0f)
     ));
 

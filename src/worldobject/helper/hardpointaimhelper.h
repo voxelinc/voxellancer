@@ -4,6 +4,7 @@
 
 
 class Hardpoint;
+class Vpxel;
 class WorldObject;
 
 /*
@@ -34,7 +35,7 @@ protected:
 
     bool m_aimed;
 
-    glm::vec3 m_shooterPosition;
+    glm::vec3 m_hardpointPosition;
 
     glm::vec3 m_targetPosition;
     glm::vec3 m_targetSpeed;
@@ -50,5 +51,6 @@ protected:
 
     float bulletTravelTime(const glm::vec3& point);
     glm::vec3 targetPositionIn(float deltaSec);
+    float bulletSpeedInDirection(const glm::vec3& direction);
 };
 

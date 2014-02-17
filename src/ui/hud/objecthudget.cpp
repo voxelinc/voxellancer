@@ -5,9 +5,14 @@
 #include <glm/glm.hpp>
 
 #include "utils/geometryhelper.h"
+
+#include "worldobject/worldobject.h"
+#include "worldobject/ship.h"
+
+#include "player.h"
+
 #include "hudobjectdelegate.h"
 #include "hud.h"
-#include "worldobject/worldobject.h"
 
 
 ObjectHudget::ObjectHudget(HUD* hud, HUDObjectDelegate* objectDelegate):
@@ -18,13 +23,26 @@ ObjectHudget::ObjectHudget(HUD* hud, HUDObjectDelegate* objectDelegate):
 
 }
 
+bool ObjectHudget::isTarget() const {
+
+}
+
 void ObjectHudget::update(float deltaSec) {
+    bool targetHighlight = false;
     WorldObject* worldObject = m_objectDelegate->worldObject();
 
     if(worldObject) {
         calculateOpeningAngle();
         pointToWorldPoint(worldObject->transform().position());
+
+        if(m_hud->player()->ship()) {
+            if(worldObject == m_hud->player()->ship()->targetObject()) {
+                targetHighlight = true;
+            }
+        }
     }
+
+    m_voxels.setTargetHightlight(targetHighlight);
 }
 
 void ObjectHudget::draw() {
