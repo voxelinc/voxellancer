@@ -48,7 +48,8 @@ public:
 
     void setCrossHairOffset(const glm::vec2& mousePosition);
 
-    void setTargetHudget(WorldObject* target);
+    void setTarget(WorldObject* target);
+    WorldObject* target();
 
     void onClick(int button);
 

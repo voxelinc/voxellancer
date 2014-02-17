@@ -16,7 +16,7 @@ public:
 
     void draw();
 
-    void setTarget(bool target);
+    void setTargeted(bool targeted);
 
     void updateDirection(glm::vec3 direction);
 

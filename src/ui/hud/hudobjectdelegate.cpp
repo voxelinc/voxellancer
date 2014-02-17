@@ -10,7 +10,6 @@
 HUDObjectDelegate::HUDObjectDelegate(HUD* hud, WorldObject* worldObject):
     m_hud(hud),
     m_worldObjectHandle(worldObject->handle()),
-    m_targeted(false),
     m_objectHudget(new ObjectHudget(m_hud, this))
 {
 }
@@ -25,16 +24,4 @@ WorldObject* HUDObjectDelegate::worldObject() {
 
 Hudget* HUDObjectDelegate::objectHudget() {
     return m_objectHudget;
-}
-
-
-bool HUDObjectDelegate::isTargeted() {
-    return m_targeted;
-}
-
-void HUDObjectDelegate::setTargeted(bool targeted) {
-    if (m_worldObjectHandle.valid()) {
-        m_objectHudget->setTargeted(targeted);
-    }
-    m_targeted = targeted;
 }

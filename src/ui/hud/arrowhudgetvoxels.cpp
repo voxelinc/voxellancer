@@ -54,8 +54,8 @@ void ArrowHudgetVoxels::updateDirection(glm::vec3 direction) {
     m_arrow.transform().setOrientation(m_hudget->worldOrientation(direction)*glm::angleAxis(glm::atan(direction.x, direction.y), glm::vec3(0, 0, -1)));
 }
 
-void ArrowHudgetVoxels::setTarget(bool target) {
-    if (target) {
+void ArrowHudgetVoxels::setTargeted(bool targeted) {
+    if (targeted) {
         m_arrow.transform().setScale(0.05f);
     } else {
         m_arrow.transform().setScale(0.025f);

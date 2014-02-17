@@ -23,6 +23,7 @@ ObjectHudget::ObjectHudget(HUD* hud, HUDObjectDelegate* objectDelegate):
 }
 
 void ObjectHudget::update(float deltaSec) {
+    updateTargeted();
     m_insideFov = isInsideFov();
     WorldObject* worldObject = m_objectDelegate->worldObject();
     if(worldObject) {
@@ -64,16 +65,6 @@ bool ObjectHudget::isAt(const Ray& ray) const {
     return m_objectVoxels.isAt(ray);
 }
 
-
-void ObjectHudget::setTargeted(bool targeted) {
-    m_arrowVoxels.setTarget(targeted);
-    m_targeted = targeted;
-}
-
-bool ObjectHudget::isTargeted() {
-    return m_targeted;
-}
-
 bool ObjectHudget::isInsideFov() {
     if (GeometryHelper::angleBetweenVectorPlane(localDirection(), glm::vec3(0, 1, 0)) < fovy &&
         GeometryHelper::angleBetweenVectorPlane(localDirection(), glm::vec3(1, 0, 0)) < fovx) {
@@ -113,4 +104,12 @@ glm::vec3 ObjectHudget::closestPointInsideFov() {
 
 void ObjectHudget::onClick(int button) {
     m_hud->player()->setTarget(m_objectDelegate->worldObject());
+}
+
+void ObjectHudget::updateTargeted() {
+    bool currentlyTargeted = m_hud->target() == m_objectDelegate->worldObject();
+    if (m_targeted != currentlyTargeted) {
+        m_targeted = currentlyTargeted;
+        m_arrowVoxels.setTargeted(m_targeted);
+    }
 }

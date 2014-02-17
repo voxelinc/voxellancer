@@ -23,22 +23,22 @@ public:
 
     HUDObjectDelegate* objectDelegate();
 
-    void setTargeted(bool targeted);
-    bool isTargeted();
-
 
 protected:
     HUDObjectDelegate* m_objectDelegate;
     ObjectHudgetVoxels m_objectVoxels;
     ArrowHudgetVoxels m_arrowVoxels;
 
+    bool m_targeted;
+    void updateTargeted();
+
+    bool m_insideFov;
     float fovy, fovx;
+
     bool isInsideFov();
     glm::vec3 closestPointInsideFov();
 
     void calculateOpeningAngle();
 
-    bool m_targeted;
-    bool m_insideFov;
 };
 

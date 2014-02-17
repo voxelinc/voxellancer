@@ -95,5 +95,5 @@ void Player::selectTarget(bool next) {
 
 void Player::setTarget(WorldObject* target) {
     playerShip()->setTargetObject(target);
-    m_hud.setTargetHudget(target);
+    m_hud.setTarget(target);
 }

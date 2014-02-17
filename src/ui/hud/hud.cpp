@@ -183,12 +183,12 @@ void HUD::updateScanner(float deltaSec) {
     }
 }
 
-void HUD::setTargetHudget(WorldObject* target) {
-    if (m_target) {
-        m_objectDelegates[m_target]->setTargeted(false);
-    }
+void HUD::setTarget(WorldObject* target) {
     m_target = target;
-    m_objectDelegates[target]->setTargeted(true);
+}
+
+WorldObject* HUD::target() {
+    return m_target;
 }
 
 Viewer* HUD::viewer() const {

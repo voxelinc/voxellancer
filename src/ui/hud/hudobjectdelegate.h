@@ -19,13 +19,10 @@ public:
     HUD* hud();
     WorldObject* worldObject();
     Hudget* objectHudget();
-    bool isTargeted();
-    void setTargeted(bool targeted);
 
 protected:
     HUD* m_hud;
     Handle<WorldObject> m_worldObjectHandle;
     ObjectHudget* m_objectHudget;
-    bool m_targeted;
 };
 
