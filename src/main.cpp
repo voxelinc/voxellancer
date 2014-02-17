@@ -104,6 +104,7 @@ static void mouseButtonCallback(GLFWwindow* window, int button, int action, int 
 void setCallbacks(GLFWwindow* window) {
     glfwSetKeyCallback(window, keyCallback);
     glfwSetWindowSizeCallback(window, resizeCallback);
+    glfwSetMouseButtonCallback(window, mouseButtonCallback);
 }
 
 static void mainloop() {

@@ -33,6 +33,8 @@ bool HUDObjectDelegate::isTargeted() {
 }
 
 void HUDObjectDelegate::setTargeted(bool targeted) {
-    m_objectHudget->setTargeted(targeted);
+    if (m_worldObjectHandle.valid()) {
+        m_objectHudget->setTargeted(targeted);
+    }
     m_targeted = targeted;
 }
