@@ -1,6 +1,7 @@
 #include "worldobjectbuilder.h"
 
 #include <cassert>
+#include <type_traits>
 
 #include <glow/logging.h>
 
@@ -64,6 +65,25 @@ Ship* WorldObjectBuilder::buildShip() {
 
 WorldObject* WorldObjectBuilder::buildWorldObject() {
     GenericWorldObject* worldObject = newWorldObject<GenericWorldObject>();
+    return worldObject;
+}
+
+template<typename WorldObjectType>
+WorldObjectType* WorldObjectBuilder::newWorldObject() {
+    static_assert(std::is_base_of<WorldObject, WorldObjectType>::value, "WorldObjectType needs to be derived from WorldObject");
+
+	WorldObjectType* worldObject = new WorldObjectType();
+
+	setupVoxelCluster(worldObject);
+    setupComponents(worldObject->components());
+
+    std::string collisionFieldOfDamageProperty = m_name + ".general.collisionFieldOfDamage";
+    if (Property<std::string>(collisionFieldOfDamageProperty, "").get() == "inf") {
+        worldObject->setCollisionFieldOfDamage(std::numeric_limits<float>::max());
+    } else {
+        worldObject->setCollisionFieldOfDamage(Property<float>(collisionFieldOfDamageProperty, glm::pi<float>() * 2));
+    }
+
     return worldObject;
 }
 

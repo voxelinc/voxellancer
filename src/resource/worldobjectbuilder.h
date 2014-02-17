@@ -37,4 +37,3 @@ protected:
     void setupEngineSlots(WorldObjectComponents& components);
 };
 
-#include "worldobjectbuilder.inl"
