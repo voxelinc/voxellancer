@@ -45,8 +45,8 @@ EnginePower& EnginePower::operator+=(const EnginePower& other) {
 
 EnginePower EnginePower::fromProperties(const std::string& prefix) {
     return EnginePower(
-        PropertyManager::instance()->get<glm::vec4>(prefix + ".directionalAcceleration"),
-        PropertyManager::instance()->get<glm::vec3>(prefix + ".angularAcceleration")
+        Property<glm::vec4>::get(prefix + ".directionalAcceleration"),
+        Property<glm::vec3>::get(prefix + ".angularAcceleration")
     );
 }
 
