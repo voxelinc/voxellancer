@@ -17,6 +17,8 @@
 #include "worldobject/worldobject.h"
 
 #include "clustercache.h"
+#include "enginebuilder.h"
+#include "weaponbuilder.h"
 
 
 WorldObjectBuilder::WorldObjectBuilder(const std::string& name):
@@ -84,7 +86,24 @@ WorldObjectType* WorldObjectBuilder::newWorldObject() {
         worldObject->setCollisionFieldOfDamage(Property<float>(collisionFieldOfDamageProperty, glm::pi<float>() * 2));
     }
 
+    equipSomehow(worldObject);
+
     return worldObject;
+}
+
+void WorldObjectBuilder::equipSomehow(WorldObject* worldObject) {
+    for(Hardpoint* hardpoint : worldObject->components().hardpoints()) {
+        if(!hardpoint->mountables().empty()) {
+            Weapon* weapon = WeaponBuilder(hardpoint->mountables().front()).build();
+            hardpoint->setWeapon(weapon);
+        }
+    }
+    for(EngineSlot* engineSlot : worldObject->components().engineSlots()) {
+        if(!engineSlot->mountables().empty()) {
+            Engine* engine = EngineBuilder(engineSlot->mountables().front()).build();
+            engineSlot->setEngine(engine);
+        }
+    }
 }
 
 void WorldObjectBuilder::setupVoxelCluster(WorldObject* worldObject) {

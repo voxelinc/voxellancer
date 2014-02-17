@@ -40,7 +40,6 @@ void GenericRocketLauncher::setRocketName(const std::string& rocketName) {
 
 Rocket* GenericRocketLauncher::createRocket() {
     Rocket* rocket = WorldObjectBuilder(m_rocketName).buildRocket();
-    WorldObjectFactory().equipSomehow(rocket);
     return rocket;
 }
 
