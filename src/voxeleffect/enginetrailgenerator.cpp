@@ -68,7 +68,7 @@ void EngineTrailGenerator::spawnTrail() {
     m_stepRest += std::fmod(stepCount, 1.0f);
 
     stepCount += static_cast<int>(m_stepRest);
-    m_stepRest -= static_cast<int>(m_stepRest);
+    m_stepRest -= glm::floor(m_stepRest);
 
     for (int i = 0; i < stepCount; i++){
         currentPosition += step;
