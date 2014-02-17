@@ -1,6 +1,6 @@
 #include "game.h"
 
-#include "etc/windowmanager.h"
+#include "etc/contextprovider.h"
 
 #include "sound/soundmanager.h"
 #include "world/world.h"
@@ -13,7 +13,7 @@ class Ship;
 Game::Game():
     m_player(this),
     m_inputHandler(&m_player),
-    m_viewer(Viewport(0, 0, WindowManager::instance()->resolution().width(), WindowManager::instance()->resolution().height())),
+    m_viewer(Viewport(0, 0, ContextProvider::instance()->resolution().width(), ContextProvider::instance()->resolution().height())),
     m_gameScene(this, &m_player),
     m_hmdManager(this),
     m_scenario(this)
@@ -41,7 +41,7 @@ HMDManager& Game::hmdManager() {
 }
 
 void Game::update(float deltaSec) {
-    deltaSec = glm::min(0.1f, deltaSec);
+    deltaSec = glm::min(0.03f, deltaSec);
 
     m_viewer.update(deltaSec);
     World::instance()->update(deltaSec);

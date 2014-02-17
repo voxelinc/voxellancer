@@ -7,6 +7,7 @@
 #include <glow/Program.h>
 
 #include "renderpass.h"
+#include "etc/contextdependant.h"
 
 
 namespace glow {
@@ -16,12 +17,15 @@ namespace glow {
 class FrameBuffer;
 class ScreenQuad;
 
-class PostProcessingPass : public RenderPass {
+/* 
+   a configurable RenderPass for a shader that reads and
+   writes on a framebuffer and has no further gamelogic
+*/
+class PostProcessingPass : public RenderPass, public ContextDependant {
 public:
     PostProcessingPass(const std::string& name, std::shared_ptr<ScreenQuad> quad);
 
-    virtual void update(float deltaSec) override;
-    virtual void apply(FrameBuffer& frameBuffer, Camera& camera, EyeSide side) override;
+    virtual void apply(FrameBuffer& frameBuffer, const RenderMetaData& metadata) override;
     void beforeDraw(FrameBuffer& frameBuffer);
 
     void setInputMapping(const std::unordered_map<std::string, int>& inputMapping);
@@ -43,6 +47,8 @@ protected:
 
 
     void initialize();
+    virtual void beforeContextDestroy() override;
+    virtual void afterContextRebuild() override;
 };
 
 #include "postprocessingpass.inl"

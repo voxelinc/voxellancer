@@ -34,7 +34,7 @@ VoxelRenderer::VoxelRenderer() :
 
 void VoxelRenderer::prepareDraw(Camera * camera, bool withBorder) {
     glEnable(GL_DEPTH_TEST);
-    
+
     m_program->setUniform("projection", camera->projection());
     m_program->setUniform("view", camera->view());
     m_program->setUniform("viewProjection", camera->viewProjection());
@@ -75,11 +75,13 @@ bool VoxelRenderer::prepared() {
 }
 
 void VoxelRenderer::createAndSetupShaders() {
-    glow::Shader * vertexShader = glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/voxelcluster.vert");
-    glow::Shader * fragmentShader = glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/voxel.frag");
-
     m_program = new glow::Program();
-    m_program->attach(vertexShader, fragmentShader);
+    m_program->attach(
+        glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/shader/voxelcluster/voxelcluster.vert"),
+        glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/shader/voxelcluster/voxelcluster.frag"),
+        glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/shader/lib/voxel.frag")
+    );
+
 }
 
 glow::Program* VoxelRenderer::program() {
@@ -102,3 +104,11 @@ std::shared_ptr<VoxelRenderer> VoxelRenderer::instance() {
     }
 }
 
+void VoxelRenderer::beforeContextDestroy() {
+    m_program = nullptr;
+    m_prepared = false;
+}
+
+void VoxelRenderer::afterContextRebuild() {
+    createAndSetupShaders();
+}

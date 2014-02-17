@@ -2,6 +2,8 @@
 
 #include <cassert>
 
+#include <glm/glm.hpp>
+
 #include "collision/collisiondetector.h"
 
 #include "worldobject/worldobject.h"
@@ -13,7 +15,7 @@
 
 
 static const float ATOMIC_DIRECTIONAL_STEP = 0.4f;
-static const float ATOMIC_ANGULAR_STEP = 30.0f;
+static const float ATOMIC_ANGULAR_STEP = glm::radians(30.0f);
 static const float MAX_STEPPED_DISTANCE = 1.2f;
 
 Movement::Movement(WorldObject& worldObject, const Transform& originalTransform, const Transform& targetTransform):
@@ -35,18 +37,16 @@ bool Movement::perform() {
     IAABB phaseAABB = m_worldObject.bounds().aabb(m_originalTransform).united(m_worldObject.bounds().aabb(m_targetTransform));
     WorldTreeNode* nodeHint = m_worldObject.collisionDetector().geode()->containingNode();
 
-    if(WorldTreeQuery(m_collisionDetector.worldTree(), &phaseAABB, nodeHint, &m_worldObject.collisionFilter()).areGeodesNear()) {
+    if (WorldTreeQuery(m_collisionDetector.worldTree(), &phaseAABB, nodeHint, &m_worldObject.collisionFilter()).areGeodesNear()) {
         glm::vec3 directionalStep = m_targetTransform.position() - m_originalTransform.position();
         m_distance = glm::length(directionalStep);
 
-        if(m_distance > MAX_STEPPED_DISTANCE) {
+        if (m_distance > MAX_STEPPED_DISTANCE) {
             return performSplitted();
-        }
-        else {
+        } else {
             return performStepped();
         }
-    }
-    else {
+    } else {
         m_worldObject.updateTransformAndGeode(m_targetTransform.position(), m_targetTransform.orientation());
 
         return true;
@@ -62,10 +62,9 @@ bool Movement::performSplitted() {
     Movement left(m_worldObject, m_originalTransform, pivotTransform);
     Movement right(m_worldObject, pivotTransform, m_targetTransform);
 
-    if(left.perform()) {
+    if (left.perform()) {
         return right.perform();
-    }
-    else {
+    } else {
         return false;
     }
 }
@@ -81,7 +80,7 @@ bool Movement::performStepped() {
 
         const std::list<VoxelCollision>& collisions = m_collisionDetector.checkCollisions();
 
-        if(!collisions.empty()) {
+        if (!collisions.empty()) {
             m_worldObject.updateTransformAndGeode(oldTransform.position(), oldTransform.orientation());
             return false;
         }

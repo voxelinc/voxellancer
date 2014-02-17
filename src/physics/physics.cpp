@@ -1,6 +1,5 @@
 #include "physics.h"
 
-#include <functional>
 #include <iostream>
 
 #include <glm/gtx/quaternion.hpp>
@@ -32,9 +31,6 @@ Physics::Physics(WorldObject& worldObject, float scale) :
     m_worldObject(worldObject)
 {
     m_massScaleFactor = glm::pow(scale, 3.f);
-}
-
-Physics::~Physics() {
 }
 
 float Physics::dampening() {

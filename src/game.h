@@ -36,7 +36,7 @@ private:
     InputHandler m_inputHandler;
     Viewer m_viewer;
     GameScene m_gameScene;
-    GameScenario m_scenario;
+    BattleScenario m_scenario;
     HMDManager m_hmdManager;
 };
 

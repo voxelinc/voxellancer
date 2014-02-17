@@ -4,7 +4,7 @@
 
 #include <glowutils/AutoTimer.h>
 
-#include "ai/characters/dummycharacter.h"
+#include "ai/character.h"
 #include "ai/basictasks/fighttask.h"
 
 #include "resource/clustercache.h"
@@ -48,8 +48,8 @@ void BattleScenario::populateWorld() {
     aitester->setPosition(glm::vec3(0, 0, 10));
     aitester->objectInfo().setName("basicship");
     aitester->objectInfo().setShowOnHud(false);
+    aitester->character()->setTask(std::make_shared<FightTask>(*aitester, std::vector<Handle<WorldObject>>{ playerShip->handle() }));
     //world->god().scheduleSpawn(aitester);
-    aitester->setCharacter(new DummyCharacter(*aitester, new FightTask(*aitester, {playerShip->handle()})));
 
     WorldObject* banner = new WorldObject();
     ClusterCache::instance()->fillObject(banner, "data/voxelcluster/banner.csv");
@@ -60,7 +60,7 @@ void BattleScenario::populateWorld() {
     world->god().scheduleSpawn(banner);
 
     // create two opposing enemy forces
-    populateBattle(4, 4);
+    populateBattle(1, 1);
 
     glow::debug("Initial spawn");
     world->god().spawn();
@@ -72,7 +72,7 @@ void BattleScenario::populateBattle(int numberOfEnemies1, int numberOfEnemies2) 
     std::vector<Ship*> fleet2;
     for (int e = 0; e < numberOfEnemies1; e++) {
         Ship *ship = new Ship();
-        float r = 400;
+        float r = 600;
         ship->move(RandVec3::rand(0.0f, r) + glm::vec3(-200, 0, -200));
         ship->objectInfo().setName("enemy2");
         ship->objectInfo().setShowOnHud(true);
@@ -83,12 +83,12 @@ void BattleScenario::populateBattle(int numberOfEnemies1, int numberOfEnemies2) 
     }
     for (int e = 0; e < numberOfEnemies2; e++) {
         Ship *ship = new Ship();
-        float r = 400;
+        float r = 600;
         ship->move(RandVec3::rand(0.0f, r) + glm::vec3(200, 0, -200));
         ship->objectInfo().setName("enemy1");
         ship->objectInfo().setShowOnHud(true);
         ship->objectInfo().setCanLockOn(true);
-        ClusterCache::instance()->fillObject(ship, "data/voxelcluster/basicship.csv");
+        ClusterCache::instance()->fillObject(ship, "data/voxelcluster/unogunner.csv");
         world->god().scheduleSpawn(ship);
         fleet1.push_back(ship);
     }
@@ -103,6 +103,6 @@ void BattleScenario::setTargets(const std::vector<Ship*>& fleet, const std::vect
     }
     for (Ship* ship : fleet) {
         std::random_shuffle(enemyHandles.begin(), enemyHandles.end());
-        ship->setCharacter(new DummyCharacter(*ship, new FightTask(*ship, enemyHandles)));
+        ship->character()->setTask(std::make_shared<FightTask>(*ship, enemyHandles));
     }
 }
