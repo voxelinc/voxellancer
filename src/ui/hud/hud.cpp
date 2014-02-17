@@ -72,7 +72,8 @@ void HUD::removeHudget(Hudget* hudget) {
 
 void HUD::addObjectDelegate(HUDObjectDelegate* objectDelegate) {
     m_objectDelegates[objectDelegate->worldObject()] = objectDelegate;
-    addHudget(objectDelegate->hudget());
+    addHudget(objectDelegate->objectHudget());
+    addHudget(objectDelegate->arrowHudget());
 }
 
 void HUD::removeObjectDelegate(HUDObjectDelegate* objectDelegate) {
@@ -84,7 +85,8 @@ void HUD::removeObjectDelegate(HUDObjectDelegate* objectDelegate) {
     assert(i != m_objectDelegates.end());
     m_objectDelegates.erase(i);
 
-    removeHudget(objectDelegate->hudget());
+    removeHudget(objectDelegate->objectHudget());
+    removeHudget(objectDelegate->arrowHudget());
 
     delete objectDelegate;
 }
