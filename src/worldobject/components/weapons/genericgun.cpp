@@ -1,7 +1,5 @@
 #include "genericgun.h"
 
-#include <cassert>
-
 #include "resource/worldobjectbuilder.h"
 
 #include "genericbullet.h"

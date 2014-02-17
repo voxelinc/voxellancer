@@ -54,7 +54,6 @@ void Gun::setupBullet(Bullet* bullet, const glm::vec3& point) {
         bulletTransform.rotateWorld(bulletOrientation); //then rotate towards target
     }
 
-    //TODO: #300
     float bulletLength = bullet->bounds().minimalGridAABB().extent(ZAxis) * bullet->transform().scale();
     float spawnDistance = glm::root_two<float>() * bullet->transform().scale();
     bulletTransform.setPosition(m_hardpoint->voxel()->position() + bulletDirection * (bulletLength / 2.0f + spawnDistance));
