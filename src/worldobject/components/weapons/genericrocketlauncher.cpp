@@ -3,7 +3,6 @@
 #include "property/property.h"
 
 #include "resource/worldobjectbuilder.h"
-#include "resource/worldobjectfactory.h"
 
 #include "rocket.h"
 

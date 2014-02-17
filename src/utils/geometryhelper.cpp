@@ -45,9 +45,3 @@ WorldObject* GeometryHelper::closestObject(WorldObject& self, std::unordered_set
     }
     return closestObject;
 }
-
-glm::vec3 GeometryHelper::sgn(glm::vec3 v) {
-    return glm::vec3(sgn(v.x), sgn(v.y), sgn(v.z));
-}
-
-
