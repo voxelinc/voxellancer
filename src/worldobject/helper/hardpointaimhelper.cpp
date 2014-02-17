@@ -23,8 +23,9 @@ HardpointAimHelper::HardpointAimHelper(Hardpoint* hardpoint, WorldObject* target
 
     m_shooterPosition = m_hardpoint->voxel()->position();
     m_targetPosition = m_targetObject->transform().position();
-    m_bulletSpeed = gun.bulletSpeed();
     m_targetSpeed = m_targetObject->physics().speed().directional();
+    m_bulletSpeed = gun.bulletSpeed();
+    m_bulletLifetime = gun.bulletLifetime();
 }
 
 void HardpointAimHelper::aim() {
@@ -34,9 +35,14 @@ void HardpointAimHelper::aim() {
     m_point = m_targetPosition;
 
     do {
-        float timeDelta = bulletTravelTime(m_point);
-        offset = glm::length(targetPositionIn(timeDelta) - m_point);
-        m_point = targetPositionIn(timeDelta);
+        float travelTime = bulletTravelTime(m_point);
+        if(travelTime > m_bulletLifetime) {
+            m_hitable = false;
+            return;
+        }
+
+        offset = glm::length(targetPositionIn(travelTime) - m_point);
+        m_point = targetPositionIn(travelTime);
 
         iterations++;
         if(iterations > 20) {

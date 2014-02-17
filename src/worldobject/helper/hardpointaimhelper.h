@@ -7,8 +7,8 @@ class Hardpoint;
 class WorldObject;
 
 /*
-    Identifies the direction a hardpoint must shoot to hit a worldObject
-    given the movement of this other WorldObject doesn't change too
+    Identifies the direction a hardpoint must shoot to hit a moving WorldObject
+    given the direction and the speed of this other WorldObject doesn't change too
     much
 */
 class HardpointAimHelper {
@@ -35,9 +35,12 @@ protected:
     bool m_aimed;
 
     glm::vec3 m_shooterPosition;
+
     glm::vec3 m_targetPosition;
-    float m_bulletSpeed;
     glm::vec3 m_targetSpeed;
+
+    float m_bulletSpeed;
+    float m_bulletLifetime;
 
     bool m_hitable;
 
