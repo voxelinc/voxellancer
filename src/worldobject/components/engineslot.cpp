@@ -27,11 +27,11 @@ void EngineSlot::setDirection(const glm::vec3& direction) {
     m_direction = direction;
 }
 
-Engine* EngineSlot::engine() {
+const std::shared_ptr<Engine>& EngineSlot::engine() {
     return m_engine;
 }
 
-void EngineSlot::setEngine(Engine* engine) {
+void EngineSlot::setEngine(const std::shared_ptr<Engine>& engine) {
     assert(mountable(engine->equipmentKey()));
     m_engine = engine;
     m_engine->setEngineSlot(this);

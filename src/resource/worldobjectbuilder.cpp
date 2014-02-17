@@ -7,8 +7,10 @@
 
 #include "property/property.h"
 
+#include "worldobject/components/engine.h"
 #include "worldobject/components/engineslot.h"
 #include "worldobject/components/hardpoint.h"
+#include "worldobject/components/weapon.h"
 #include "worldobject/components/weapons/genericbullet.h"
 #include "worldobject/components/weapons/genericrocket.h"
 #include "worldobject/genericship.h"
@@ -95,13 +97,13 @@ void WorldObjectBuilder::equipSomehow(WorldObject* worldObject) {
     for(Hardpoint* hardpoint : worldObject->components().hardpoints()) {
         if(!hardpoint->mountables().empty()) {
             Weapon* weapon = WeaponBuilder(hardpoint->mountables().front()).build();
-            hardpoint->setWeapon(weapon);
+            hardpoint->setWeapon(std::shared_ptr<Weapon>(weapon));
         }
     }
     for(EngineSlot* engineSlot : worldObject->components().engineSlots()) {
         if(!engineSlot->mountables().empty()) {
             Engine* engine = EngineBuilder(engineSlot->mountables().front()).build();
-            engineSlot->setEngine(engine);
+            engineSlot->setEngine(std::shared_ptr<Engine>(engine));
         }
     }
 }

@@ -19,11 +19,11 @@ HardpointVoxel* Hardpoint::voxel() {
     return m_voxel;
 }
 
-Weapon* Hardpoint::weapon() {
+const std::shared_ptr<Weapon>& Hardpoint::weapon() {
     return m_weapon;
 }
 
-void Hardpoint::setWeapon(Weapon* weapon) {
+void Hardpoint::setWeapon(const std::shared_ptr<Weapon>& weapon) {
     m_weapon = weapon;
     m_weapon->setHardpoint(this);
 }
