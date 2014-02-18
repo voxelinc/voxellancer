@@ -5,6 +5,7 @@
 #include "voxel/voxelcluster.h"
 #include "property/property.h"
 
+
 class ObjectHudget;
 
 class ArrowHudgetVoxels {
@@ -24,6 +25,7 @@ public:
 
     virtual bool isAt(const Ray& ray) const;
 
+
 protected:
     ObjectHudget* m_hudget;
     mutable VoxelCluster m_arrow;
@@ -32,10 +34,10 @@ protected:
 
     glm::vec3 m_targetPoint;
 
+
     bool findPoint();
 
     float vectorAngleToPlane(glm::vec3 vector, glm::vec3 planeNormal);
     float vectorAngleToVector(glm::vec3 vector, glm::vec3 vector2);
-
 };
 
