@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 
@@ -8,6 +9,9 @@
 
 #include "ui/hud/hud.h"
 
+#include "worldobject/handle/handle.h"
+
+#include "worldobject/components/enginestate.h"
 #include "worldobject/handle/handle.h"
 
 
@@ -21,30 +25,26 @@ class Player {
 public:
     Player(Game* game);
 
+    Ship* ship();
     void setShip(Ship *ship);
-
-    void move(const glm::vec3& direction);
-    void rotate(const glm::vec3& direction);
-
-    void fire();
 
     void update(float deltaSec);
 
-    Ship* playerShip();
     CameraDolly& cameraDolly();
     HUD& hud();
 
-    glm::vec3 cameraPosition();
-    glm::quat cameraOrientation();
+    void fire();
+
+    void move(const glm::vec3& vec);
+    void rotate(const glm::vec3& euler);
+
 
 
 protected:
     Game* m_game;
-    Handle<Ship> m_playerShip;
+    Handle<Ship> m_ship;
     CameraDolly m_cameraDolly;
     HUD m_hud;
-
-    glm::vec3 m_acceleration;
-    glm::vec3 m_accelerationAngular;
+    EngineState m_engineState;
 };
 

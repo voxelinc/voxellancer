@@ -5,13 +5,3 @@ Letter::Letter(float scale):
 {
 
 }
-
-void Letter::setCenter(glm::vec3 center) {
-    m_transform.setCenter(center);
-}
-
-void Letter::setScale(float scale) {
-    m_transform.setScale(scale);
-}
-
-

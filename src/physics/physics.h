@@ -5,8 +5,13 @@
 #include <glm/glm.hpp>
 
 #include "collision/voxelcollision.h"
-#include "property/property.h"
+
 #include "geometry/transform.h"
+#include "geometry/speed.h"
+#include "geometry/acceleration.h"
+
+#include "property/property.h"
+
 #include "physics/impulse.h"
 
 #include "movement.h"
@@ -19,23 +24,17 @@ class Physics {
 public:
     Physics(WorldObject& worldObject, float scale);
 
-    float dampening();
-    void setDampening(float dampening);
+    float directionalDampening() const;
+    void setDirectionalDampening(float directionalDampening);
 
-    float angularDampening();
+    float angularDampening() const;
     void setAngularDampening(float angularDampening);
 
-    const glm::vec3& speed() const;
-    void setSpeed(const glm::vec3& speed);
+    const Speed& speed() const;
+    void setSpeed(const Speed& speed);
 
-    const glm::vec3& angularSpeed() const;
-    void setAngularSpeed(const glm::vec3& angularSpeed);
-
-    void accelerate(const glm::vec3& direction);
-    const glm::vec3& acceleration() const;
-
-    void accelerateAngular(const glm::vec3& axis);
-    const glm::vec3& angularAcceleration() const;
+    const Acceleration& acceleration() const;
+    void setAcceleration(const Acceleration& acceleration);
 
     float mass() const;
 
@@ -54,19 +53,18 @@ protected:
 protected:
     WorldObject& m_worldObject;
 
-    glm::vec3 m_speed;
-    glm::vec3 m_angularSpeed;
+    Speed m_speed;
 
-    glm::vec3 m_acceleration;
-    glm::vec3 m_angularAcceleration;
+    Acceleration m_acceleration;
 
-    float m_dampening;
+    float m_directionalDampening;
     float m_angularDampening;
 
     float m_mass;
-    std::list<VoxelCollision> m_collisions;
-    glm::vec3 m_accumulatedMassVec;
+    glm::vec3 m_accumulatedMassVec; // For fast recalc of center of mass on voxel addition/removal
     float m_massScaleFactor;
+
+    std::list<VoxelCollision> m_collisions;
 
     void alterCell(Voxel* voxel, bool isAdd);
 };

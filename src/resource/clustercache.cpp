@@ -38,21 +38,21 @@ void ClusterCache::fillObject(WorldObject *worldObject, const std::string& filen
     assert(worldObject != nullptr);
     std::vector<Voxel*> *source = getOrCreate(filename);
 
-    for (Voxel *voxel : *source) {
+    for (Voxel* voxel : *source) {
         Voxel* clonedVoxel = m_colorCoder.newCodedVoxel(*voxel);
         clonedVoxel->addToObject(worldObject);
     }
 }
 
-
-std::vector<Voxel*> * ClusterCache::getOrCreate(const std::string& filename) {
+std::vector<Voxel*>* ClusterCache::getOrCreate(const std::string& filename) {
     std::map<std::string, std::vector<Voxel*>*>::iterator item = m_items.find(filename);
 
     if (item == m_items.end()) { //load if not loaded yet
-        auto source = new std::vector<Voxel*>();
+        std::vector<Voxel*>* source = new std::vector<Voxel*>();
         m_loader.load(filename, source);
         m_items[filename] = source;
         return source;
+    } else {
+        return item->second;
     }
-    return item->second;
 }

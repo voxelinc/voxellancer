@@ -100,13 +100,13 @@ glm::vec3 Squad::formationPositionFor(Ship* member) {
     std::vector<Ship*>::iterator it = std::find(m_members.begin(), m_members.end(), member);
     assert(it != m_members.end());
     size_t position = it - m_members.begin();
-    
+
     return calculateFormationPosition(member, position);
 }
 
 glm::vec3 Squad::formationUpFor(Ship* member) {
     assert(m_leader); // no position without a leader
-    return m_leader->orientation() * glm::vec3(0, 1, 0);
+    return m_leader->transform().orientation() * glm::vec3(0, 1, 0);
 }
 
 glm::vec3 Squad::calculateFormationPosition(Ship* member, int position) {
@@ -117,5 +117,5 @@ glm::vec3 Squad::calculateFormationPosition(Ship* member, int position) {
     }
     distance += member->bounds().sphere().radius() + 10;
     glm::vec3 direction = position % 2 ? glm::vec3(1, 0, 1) : glm::vec3(-1, 0, 1);
-    return m_leader->position() + m_leader->physics().speed() + m_leader->orientation() * (distance * glm::normalize(direction));
+    return m_leader->transform().position() + m_leader->physics().speed().directional() + m_leader->transform().orientation() * (distance * glm::normalize(direction));
 }

@@ -1,6 +1,9 @@
 #include "player.h"
 
 #include "utils/aimer.h"
+#include "utils/tostring.h"
+
+#include "camera/cameradolly.h"
 
 #include "worldobject/ship.h"
 
@@ -9,38 +12,19 @@
 
 Player::Player(Game* game):
     m_game(game),
-    m_playerShip(nullptr),
-    m_hud(this, &game->viewer())
+    m_hud(this, &game->viewer()),
+    m_ship(nullptr)
 {
 
 }
 
-void Player::move(const glm::vec3& direction) {
-    m_acceleration += direction;
-}
-
-void Player::rotate(const glm::vec3& direction) {
-    m_accelerationAngular += direction;
-}
-
-void Player::fire() {
-    if(playerShip()) {
-        glm::vec3 targetPoint;
-
-        if(m_hud.aimHelper().hovered()) {
-            targetPoint = m_hud.aimHelper().targetPoint();
-        } else {
-            glm::vec3 shootDirection(glm::normalize(m_hud.crossHair().worldPosition() - m_cameraDolly.cameraHead().position()));
-            Ray ray(m_hud.crossHair().worldPosition(), shootDirection);
-            targetPoint = Aimer(playerShip(), ray).aim();
-        }
-
-        playerShip()->fireAtPoint(targetPoint);
-    }
+Ship* Player::ship() {
+    return m_ship.get();
 }
 
 void Player::setShip(Ship* ship) {
-    m_playerShip = ship->shipHandle();
+    m_ship = ship->shipHandle();
+    m_ship->objectInfo().setShowOnHud(false);
     m_cameraDolly.followWorldObject(ship);
 }
 
@@ -48,24 +32,9 @@ void Player::update(float deltaSec) {
     m_cameraDolly.update(deltaSec);
     m_hud.update(deltaSec);
 
-    if (Ship* playerShip = m_playerShip.get()) {
-        if (m_acceleration != glm::vec3(0)) {
-            m_acceleration = glm::normalize(m_acceleration);
-        }
-        playerShip->accelerate(m_acceleration);
-
-        if (m_accelerationAngular == glm::vec3(0)) { // dampen rotation
-            m_accelerationAngular = playerShip->physics().angularSpeed();
-            m_accelerationAngular *= -1.5f;
-        }
-        playerShip->accelerateAngular(m_accelerationAngular);
+    if (Ship* ship = m_ship.get()) {
+        ship->components().setEngineState(m_engineState);
     }
-    m_acceleration = glm::vec3(0);
-    m_accelerationAngular = glm::vec3(0);
-}
-
-Ship* Player::playerShip() {
-    return m_playerShip.get();
 }
 
 CameraDolly& Player::cameraDolly() {
@@ -76,12 +45,27 @@ HUD& Player::hud() {
     return m_hud;
 }
 
-glm::vec3 Player::cameraPosition() {
-    return m_cameraDolly.cameraHead().position();
+void Player::fire() {
+    if(ship()) {
+        glm::vec3 targetPoint;
+
+        if(m_hud.aimHelper().hovered()) {
+            targetPoint = m_hud.aimHelper().targetPoint();
+        } else {
+            glm::vec3 shootDirection(glm::normalize(m_hud.crossHair().worldPosition() - m_cameraDolly.cameraHead().position()));
+            Ray ray(m_hud.crossHair().worldPosition(), shootDirection);
+            targetPoint = Aimer(ship(), ray).aim();
+        }
+
+        ship()->components().fireAtPoint(targetPoint);
+    }
 }
 
-glm::quat Player::cameraOrientation() {
-    return m_cameraDolly.cameraHead().orientation();
+void Player::move(const glm::vec3& vec) {
+    m_engineState.setDirectional(vec);
 }
 
+void Player::rotate(const glm::vec3& euler) {
+    m_engineState.setAngular(euler);
+}
 

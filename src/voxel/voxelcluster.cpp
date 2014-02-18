@@ -9,7 +9,10 @@
 #include <glow/ChangeListener.h>
 #include <glow/logging.h>
 
+#include "resource/clustercache.h"
+
 #include "utils/tostring.h"
+
 #include "voxelrenderdata.h"
 #include "voxel.h"
 
@@ -33,10 +36,6 @@ VoxelClusterBounds& VoxelCluster::bounds() {
 }
 
 Transform& VoxelCluster::transform() {
-    return m_transform;
-}
-
-const Transform& VoxelCluster::transform() const {
     return m_transform;
 }
 
@@ -79,31 +78,7 @@ int VoxelCluster::voxelCount() const {
     return m_voxels.size();
 }
 
-void VoxelCluster::rotate(const glm::quat& rotation) {
-    m_transform.rotate(rotation);
-}
-
-void VoxelCluster::move(const glm::vec3& vec3) {
-    m_transform.move(vec3);
-}
-
-const glm::vec3& VoxelCluster::position() {
-    return m_transform.position();
-}
-
-const glm::quat& VoxelCluster::orientation() {
-    return m_transform.orientation();
-}
-
-void VoxelCluster::setOrientation(const glm::quat& orientation) {
-    m_transform.setOrientation(orientation);
-}
-
-void VoxelCluster::setPosition(const glm::vec3& pos) {
-    m_transform.setPosition(pos);
-}
-
-float VoxelCluster::emissiveness() {
+float VoxelCluster::emissiveness() const {
     return 0.0f;
 }
 

@@ -12,7 +12,7 @@
 
 
 VoxelExplosionGenerator::VoxelExplosionGenerator() :
-    VoxelParticleSpawnBase("physics.explosionDampening",
+    VoxelParticleSpawnBase("physics.explosionDirectionalDampening",
                            "physics.explosionAngularDampening",
                            "physics.explosionBaseForce",
                            "physics.explosionAngularBaseForce"),

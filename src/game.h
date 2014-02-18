@@ -14,6 +14,7 @@
 
 #include "player.h"
 
+
 class SoundManager;
 
 class Game {
@@ -36,7 +37,7 @@ private:
     InputHandler m_inputHandler;
     Viewer m_viewer;
     GameScene m_gameScene;
-    BattleScenario m_scenario;
+    GameScenario m_scenario;
     HMDManager m_hmdManager;
 };
 

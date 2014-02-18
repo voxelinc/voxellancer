@@ -10,6 +10,7 @@ go_bandit([]() {
     describe("ClusterLoader", []() {
         PropertyManager::instance()->reset();
         PropertyManager::instance()->load("data/config.ini");
+        PropertyManager::instance()->load("data/voxels.ini", "voxels");
 
         it("loads simple csv", [&]() {
 

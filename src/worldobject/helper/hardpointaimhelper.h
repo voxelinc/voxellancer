@@ -13,7 +13,7 @@ class WorldObject;
 */
 class HardpointAimHelper {
 public:
-    HardpointAimHelper(Hardpoint* shooter, WorldObject* targetObject);
+    HardpointAimHelper(Hardpoint* hardpoint, WorldObject* targetObject);
 
     void aim();
 
@@ -29,7 +29,7 @@ public:
 
 
 protected:
-    Hardpoint* m_shooter;
+    Hardpoint* m_hardpoint;
     WorldObject* m_targetObject;
 
     bool m_aimed;
