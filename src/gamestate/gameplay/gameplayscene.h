@@ -28,7 +28,7 @@ public:
 
     void setPlayer(Player* player);
 
-    virtual void draw(const Camera& camera, glow::FrameBufferObject* target, EyeSide side = EyeSide::Left) const override;
+    virtual void draw(const Camera& camera, glow::FrameBufferObject* target, EyeSide side = EyeSide::None) const override;
     virtual void update(float deltaSec) override;
 
     void setOutputBuffer(int i);

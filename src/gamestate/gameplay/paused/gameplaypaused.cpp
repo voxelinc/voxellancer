@@ -1,9 +1,10 @@
 #include "gameplaypaused.h"
 
-#include <iostream>
-
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
+#ifdef WIN32
+#include <windows.h>
+#endif
+#include "GL/glew.h"
+#include "GLFW/glfw3.h"
 
 #include "gamestate/game.h"
 #include "gamestate/gameplay/gameplay.h"

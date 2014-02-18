@@ -1,7 +1,5 @@
 #include "gameplayrunning.h"
 
-#include <iostream>
-
 #include "gamestate/game.h"
 #include "gamestate/gameplay/gameplay.h"
 

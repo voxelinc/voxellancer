@@ -1,18 +1,18 @@
 #include "gameplayrunninginput.h"
 
+#ifdef WIN32
+#include <windows.h>
+#endif
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
 #include <glm/glm.hpp>
-#include <glow/glow.h>
 
 #include "etc/contextprovider.h"
 #include "etc/hmd/hmd.h"
 #include "etc/hmd/hmdmanager.h"
 
 #include "gamestate/gamestate.h"
-
-
 
 #include "utils/tostring.h"
 #include "utils/aimer.h"

@@ -4,7 +4,6 @@
 
 #include "gamestate/gamestate.h"
 
-#include "sound/soundmanager.h"
 
 #include "utils/fsm/trigger.h"
 

@@ -5,6 +5,7 @@
 #include "etc/hmd/hmdmanager.h"
 
 #include "gamestate.h"
+#include "display/viewer.h"
 
 
 class GamePlay;

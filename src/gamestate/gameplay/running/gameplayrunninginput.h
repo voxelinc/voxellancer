@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "input/inputmapping.h""
+#include "input/inputmapping.h"
 
 #include "utils/fsm/trigger.h"
 
