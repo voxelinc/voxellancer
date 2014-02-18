@@ -63,7 +63,7 @@ void Gun::setupBullet(Bullet* bullet, const glm::vec3& point) {
     bullet->setTransform(bulletTransform);
 
     bullet->physics().setSpeed(Speed(
-        bulletDirection * bulletSpeed() + firingWorldObject->physics().speed().directional(),
+        bulletDirection * bulletSpeed() /*+ firingWorldObject->physics().speed().directional()*/,
         bulletTransform.orientation() * glm::vec3(0, 0, 5.0f)
     ));
 

@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include <glm/glm.hpp>
+
 #include "utils/geometryhelper.h"
 #include "utils/tostring.h"
 
@@ -18,7 +20,9 @@
 AimHelperHudget::AimHelperHudget(HUD* hud):
     CircularHudget(hud, 0.25f),
     m_voxels(this),
-    m_distanceRange(m_hud->sphere().radius() * 2, m_hud->sphere().radius() * 10)
+    m_distanceRange(m_hud->sphere().radius() * 2, m_hud->sphere().radius() * 10),
+    m_lastTargetWorldObject(nullptr),
+    m_lastVisible(false)
 {
 
 }
@@ -44,7 +48,13 @@ void AimHelperHudget::update(float deltaSec) {
 
     calculateTargetPoint(targetObject);
 
-    pointToWorldPoint(m_targetPoint);
+    if (m_lastTargetWorldObject == targetObject && m_lastVisible) {
+        m_smoothTargetPoint = glm::mix(m_smoothTargetPoint, m_targetPoint, 5.0f * deltaSec);
+    } else {
+        m_smoothTargetPoint = m_targetPoint;
+    }
+
+    pointToWorldPoint(m_smoothTargetPoint);
     setRelativeDistance(1.0f);
 
     if (hovered()) {
@@ -52,6 +62,9 @@ void AimHelperHudget::update(float deltaSec) {
     } else {
         setDirectionAngle(0.0f);
     }
+
+    m_lastTargetWorldObject = targetObject;
+    m_lastVisible = visible();
 }
 
 void AimHelperHudget::draw() {
