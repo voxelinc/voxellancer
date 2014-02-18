@@ -78,7 +78,8 @@ void VoxelParticleEngine::update(float deltaSec) {
     m_time += deltaSec;
 
     m_expireCheck.update(deltaSec);
-    m_intersectionCheck.update(deltaSec);
+    // Disabled until #394 is solved
+    //m_intersectionCheck.update(deltaSec);
 }
 
 void VoxelParticleEngine::draw(Camera& camera) {
@@ -110,7 +111,7 @@ void VoxelParticleEngine::particleChanged(int bufferIndex) {
         If the range of particles gets too big, probably because of too many
         particles between two free positions, push the old range to the gpu
     */
-    if (m_gpuParticleBufferInvalidEnd - m_gpuParticleBufferInvalidBegin > 500) {
+    if (m_gpuParticleBufferInvalidEnd - m_gpuParticleBufferInvalidBegin > 512) {
         updateGPUBuffers(oldInvalidBegin, oldInvalidEnd);
         m_gpuParticleBufferInvalidBegin = bufferIndex;
         m_gpuParticleBufferInvalidEnd = bufferIndex;
@@ -129,7 +130,6 @@ void VoxelParticleEngine::setBufferSize(int bufferSize) {
     m_gpuParticleBufferInvalidBegin = 0;
     m_gpuParticleBufferInvalidEnd = bufferSize - 1;
 }
-
 
 /*
     Update the GPU buffers of all components that use such
