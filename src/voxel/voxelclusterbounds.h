@@ -3,6 +3,7 @@
 #include <set>
 
 #include "geometry/aabb.h"
+#include "geometry/gridaabb.h"
 #include "geometry/sphere.h"
 
 #include "voxelgridcmp.h"
@@ -11,6 +12,16 @@
 class Voxel;
 class VoxelCluster;
 
+/*
+    This class stores and calculates bound-informations of
+    a voxelcluster. It is optimized for speed which means:
+
+    * The gridAABB uses sorted sets on each axis to be able to recalc fast on voxel addition or removal
+    * The aabb is only recalculated if the cluster or the passed transform changes, since it is very likely that
+        the same transform will be queried multiple times during e.g. Worldtreequeries and collisiondetection
+    * The aabb is stored in an I(nteger)AABB because it is only an estimation anyway and calculation on integers
+        are faster than on float AND this function is queried quite frequently
+*/
 class VoxelClusterBounds {
 public:
     VoxelClusterBounds(VoxelCluster* voxelCluster);
@@ -18,9 +29,13 @@ public:
     void addVoxel(Voxel* voxel);
     void removeVoxel(Voxel* voxel);
 
-    const IAABB& minimalGridAABB();
+    const GridAABB& minimalGridAABB();
     const Sphere& minimalGridSphere();
 
+    /*
+        The aabb is stored in an I(nteger)AABB because it is only an estimation anyway and calculation on integers
+        are faster than on float AND this function is queried quite frequently
+    */
     const IAABB& aabb();
     IAABB aabb(const Transform& transform);
 
@@ -41,7 +56,7 @@ protected:
 
 
 private:
-    IAABB m_minimalGridAABB;
+    GridAABB m_minimalGridAABB;
     bool m_minimalGridAABBValid;
 
     Sphere m_minimalGridSphere;

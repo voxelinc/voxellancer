@@ -3,6 +3,7 @@
 
 #include <glow/ref_ptr.h>
 
+#include "etc/contextdependant.h"
 #include "voxeleffect/voxelmesh.h"
 
 
@@ -16,7 +17,7 @@ namespace glow {
 class Camera;
 class VoxelCluster;
 
-class VoxelRenderer {
+class VoxelRenderer : public ContextDependant {
 public:
     void prepareDraw(const Camera& camera, bool withBorder = true);
     void draw(VoxelCluster* cluster);
@@ -29,7 +30,7 @@ public:
     static VoxelMesh* voxelMesh();
 
 
-private:
+protected:
     glow::ref_ptr<glow::Program> m_program;
     VoxelMesh m_voxelMesh;
     bool m_prepared;
@@ -38,5 +39,7 @@ private:
 
     VoxelRenderer();
     void createAndSetupShaders();
+    virtual void beforeContextDestroy() override;
+    virtual void afterContextRebuild() override;
 };
 

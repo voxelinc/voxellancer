@@ -6,13 +6,15 @@
 
 #include <glow/ref_ptr.h>
 
+#include "etc/contextdependant.h"
+
 
 namespace glow {
     class FrameBufferObject;
     class Texture;
 }
 
-class FrameBuffer {
+class FrameBuffer : public ContextDependant {
 public:
     FrameBuffer(int colorAttachments = 1, bool depthAttachment = true);
 
@@ -37,4 +39,6 @@ protected:
     glow::ref_ptr<glow::FrameBufferObject> m_fbo;
 
     void setupFBO();
+    virtual void beforeContextDestroy() override;
+    virtual void afterContextRebuild() override;
 };

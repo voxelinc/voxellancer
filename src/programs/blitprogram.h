@@ -5,6 +5,7 @@
 #include <glow/Program.h>
 
 #include "geometry/viewport.h"
+#include "etc/contextdependant.h"
 
 namespace glow {
     class FrameBufferObject;
@@ -13,7 +14,7 @@ namespace glow {
 
 class ScreenQuad;
 
-class BlitProgram: protected glow::Program {
+class BlitProgram : public ContextDependant, protected glow::Program {
 public:
     const GLint TEXTURE_LOCATION = 0;
 
@@ -36,6 +37,9 @@ protected:
     virtual void initializeShaders() = 0;
     
     template<typename T> void setUniform(const std::string& name, const T& value);
+
+    virtual void beforeContextDestroy() override;
+    virtual void afterContextRebuild() override;
 };
 
 

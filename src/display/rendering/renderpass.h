@@ -2,21 +2,22 @@
 
 #include <string>
 
-#include "display/eyeside.h"
+#include "rendermetadata.h"
 
 
 class FrameBuffer;
 class Camera;
 
+/*
+   a step that adds something to the current frame
+   can be postprocessing, geometry or any other effect
+*/
 class RenderPass {
 public:
     RenderPass(const std::string& name);
 
+    virtual void apply(FrameBuffer& frameBuffer, const RenderMetaData& metadata) = 0;
     const std::string& name() const;
-
-    virtual void update(float deltaSec) = 0;
-
-    virtual void apply(FrameBuffer& frameBuffer, const Camera& camera, EyeSide side) = 0;
 
 
 protected:

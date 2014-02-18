@@ -6,11 +6,12 @@
 #include <glm/glm.hpp>
 #include <glow/glow.h>
 
-#include "etc/windowmanager.h"
+#include "etc/contextprovider.h"
 #include "etc/hmd/hmd.h"
 #include "etc/hmd/hmdmanager.h"
 
 #include "gamestate/gamestate.h"
+
 
 
 #include "utils/tostring.h"
@@ -80,7 +81,7 @@ GamePlayRunningInput::GamePlayRunningInput(Player* player):
 {
     addActionsToVector();
 
-    m_cursorMaxDistance = glm::min(WindowManager::instance()->resolution().width(), WindowManager::instance()->resolution().height()) / 2;
+    m_cursorMaxDistance = glm::min(ContextProvider::instance()->resolution().width(), ContextProvider::instance()->resolution().height()) / 2;
 
     m_mouseControl = false;
     m_lastfocus = glfwGetWindowAttrib(glfwGetCurrentContext(), GLFW_FOCUSED);
@@ -198,8 +199,8 @@ void GamePlayRunningInput::processMouseUpdate() {
 
     if (m_mouseControl || glfwGetMouseButton(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS) {
         glm::vec3 rot;
-        x = WindowManager::instance()->resolution().width() / 2 - (int)floor(x);
-        y = WindowManager::instance()->resolution().height() / 2 - (int)floor(y);
+        x = ContextProvider::instance()->resolution().width() / 2 - (int)floor(x);
+        y = ContextProvider::instance()->resolution().height() / 2 - (int)floor(y);
         x = glm::min((double)m_cursorMaxDistance, x);
         y = glm::min((double)m_cursorMaxDistance, y);
         rot = glm::vec3(y, x, 0);

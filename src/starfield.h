@@ -9,6 +9,7 @@
 
 #include "property/property.h"
 #include "display/rendering/renderpass.h"
+#include "etc/contextdependant.h"
 
 
 namespace glow {
@@ -18,25 +19,31 @@ namespace glow {
     class Buffer;
 };
 
-class Camera;
-class Player;
 
-class Starfield : public RenderPass {
+
+/*
+   Renders a starfield around the camera.
+   Old camera positions/orientations are stored in order to stretch the
+   Stars on movement. As stereorendering renders twice per frame
+   with slightly different cameras, the Starfield needs to know which
+   side is drawn currently.
+   http://chrdw.de/uploads/Eyeside.pdf
+*/
+class Starfield : public RenderPass, public ContextDependant {
 public:
-    Starfield(Player* player);
+    Starfield();
 
-    virtual void update(float deltaSec) override;
-    virtual void apply(FrameBuffer& frameBuffer, const Camera& camera, EyeSide side) override;
+    virtual void update(float deltaSec, const glm::vec3& cameraPosition);
+    virtual void apply(FrameBuffer& frameBuffer, const RenderMetaData& metadata) override;
 
 
-private:
+protected:
     struct CameraLocation {
         float time;
         glm::vec3 position;
         glm::quat orientation;
     };
 
-    Player* m_player;
     std::deque<CameraLocation> m_locations[2];
     float m_time;
     float m_lastUpdate;
@@ -50,9 +57,13 @@ private:
     void createAndSetupShaders();
     void createAndSetupGeometry();
 
+    virtual void beforeContextDestroy() override;
+    virtual void afterContextRebuild() override;
+
     void createBinding(int index, std::string name, int offset, int size);
 
     void addLocation(const Camera& camera, int side);
     glm::mat4 getMatrixFromPast(const Camera& camera, int side);
     void cleanUp(int side);
 };
+

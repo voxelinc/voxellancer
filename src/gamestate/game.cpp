@@ -2,7 +2,7 @@
 
 #include <GL/glew.h>
 
-#include "etc/windowmanager.h"
+#include "etc/contextprovider.h"
 
 #include "gamestate/gameplay/gameplay.h"
 
@@ -10,7 +10,7 @@
 Game::Game():
     GameState("Game", nullptr),
     m_hmdManager(HMDManager::instance()),
-    m_viewer(Viewport(0, 0, WindowManager::instance()->resolution().width(), WindowManager::instance()->resolution().height())),
+    m_viewer(Viewport(0, 0, ContextProvider::instance()->resolution().width(), ContextProvider::instance()->resolution().height())),
     m_gamePlay(new GamePlay(this))
 {
     setInitialSubstate(m_gamePlay);
@@ -39,7 +39,7 @@ Viewer& Game::viewer() {
 }
 
 void Game::update(float deltaSec) {
-    deltaSec = glm::min(0.1f, deltaSec);
+    deltaSec = glm::min(0.03f, deltaSec);
 
     GameState::update(deltaSec);
 

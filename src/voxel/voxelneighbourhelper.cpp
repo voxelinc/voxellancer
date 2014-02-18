@@ -1,7 +1,5 @@
 #include "voxelneighbourhelper.h"
 
-#include "geometry/grid3daabb.h"
-
 #include "voxelcluster.h"
 #include "voxel.h"
 

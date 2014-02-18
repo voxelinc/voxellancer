@@ -16,7 +16,7 @@
 
 
 AimHelperHudget::AimHelperHudget(HUD* hud):
-    CircularHudget(hud, 0.2f),
+    CircularHudget(hud, 0.25f),
     m_voxels(this),
     m_distanceRange(m_hud->sphere().radius() * 2, m_hud->sphere().radius() * 10)
 {

@@ -84,5 +84,11 @@ const glm::ivec2& FrameBuffer::resolution() {
     return m_resolution;
 }
 
+void FrameBuffer::beforeContextDestroy() {
+    m_fbo = nullptr;
+}
 
-
+void FrameBuffer::afterContextRebuild() {
+    m_fbo = new glow::FrameBufferObject();
+    setupFBO();
+}
