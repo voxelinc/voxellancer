@@ -10,7 +10,7 @@ template<typename StateType> class Transition;
     This class is a template for State-classes inside a FiniteStateMachine.
 
     It s designed to be derived like: class ActualState: StateTemplate<ActualState> {...};
-    This way you can nest states as you wish and still maintain the interface for the Substates
+    This way you can nest states as you wish and still maintain the interface for the SubStates
     that you specify in ActualState (see GameState for a usage-example)
 */
 template<typename StateType>
@@ -29,17 +29,17 @@ public:
     StateType* parentState();
     const StateType* parentState() const;
 
-    StateType* initialSubstate();
-    const StateType* initialSubstate() const;
-    void setInitialSubstate(StateType* initialSubstate);
+    StateType* initialSubState();
+    const StateType* initialSubState() const;
+    void setInitialSubState(StateType* initialSubState);
 
-    StateType* terminationSubstate();
-    const StateType* terminationSubstate() const;
-    void setTerminationSubstate(StateType* terminationSubstate);
+    StateType* terminationSubState();
+    const StateType* terminationSubState() const;
+    void setTerminationSubState(StateType* terminationSubState);
 
-    StateType* currentSubstate();
-    const StateType* currentSubstate() const;
-    void setCurrentSubstate(StateType* substate);
+    StateType* currentSubState();
+    const StateType* currentSubState() const;
+    void setCurrentSubState(StateType* substate);
 
     /*
         Make this State the current substate of its parent, calling onEntered() on every state
@@ -51,8 +51,8 @@ public:
 
     std::list<StateType*>& substates();
     const std::list<StateType*>& substates() const;
-    void addSubstate(StateType* state);
-    void removeSubstate(StateType* state);
+    void addSubState(StateType* state);
+    void removeSubState(StateType* state);
 
     std::list<Transition<StateType>*>& transitions();
     const std::list<Transition<StateType>*>& transitions() const;
@@ -60,19 +60,19 @@ public:
     void removeTransition(Transition<StateType>* transition);
 
     /*
-        Performs a Transition from the currentSubstate, if such is
+        Performs a Transition from the currentSubState, if such is
         possible()
     */
     virtual void update(float deltaSec);
 
     /*
-        Overrideable method that is called whenever a state or any of its substates become to be currentSubstate
+        Overrideable method that is called whenever a state or any of its substates become to be currentSubState
         This happens recursively up to the root-state
     */
     virtual void onEntered();
 
     /*
-        Overrideable method that is called whenever a state ceases to be currentSubstate
+        Overrideable method that is called whenever a state ceases to be currentSubState
         This happens recursively up to the root-state
     */
     virtual void onLeft();
@@ -86,9 +86,9 @@ protected:
     std::list<StateType*> m_substates;
     std::list<Transition<StateType>*> m_transitions;
 
-    StateType* m_initialSubstate;
-    StateType* m_terminationSubstate;
-    StateType* m_currentSubstate;
+    StateType* m_initialSubState;
+    StateType* m_terminationSubState;
+    StateType* m_currentSubState;
 };
 
 #include "statetemplate.inl"

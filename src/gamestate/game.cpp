@@ -13,7 +13,7 @@ Game::Game():
     m_viewer(Viewport(0, 0, ContextProvider::instance()->resolution().width(), ContextProvider::instance()->resolution().height())),
     m_gamePlay(new GamePlay(this))
 {
-    setInitialSubstate(m_gamePlay);
+    setInitialSubState(m_gamePlay);
 }
 
 GamePlay& Game::gamePlay() {
@@ -21,13 +21,13 @@ GamePlay& Game::gamePlay() {
 }
 
 const Scene& Game::scene() const {
-    assert(currentSubstate());
-    return currentSubstate()->scene();
+    assert(currentSubState());
+    return currentSubState()->scene();
 }
 
 const CameraHead& Game::cameraHead() const {
-    assert(currentSubstate());
-    return currentSubstate()->cameraHead();
+    assert(currentSubState());
+    return currentSubState()->cameraHead();
 }
 
 HMDManager& Game::hmdManager() {

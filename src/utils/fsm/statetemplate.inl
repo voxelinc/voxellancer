@@ -17,12 +17,12 @@ StateTemplate<StateType>::StateTemplate(const std::string& name, StateType* self
     m_name(name),
     m_self(self),
     m_parentState(parentState),
-    m_initialSubstate(nullptr),
-    m_terminationSubstate(nullptr),
-    m_currentSubstate(nullptr)
+    m_initialSubState(nullptr),
+    m_terminationSubState(nullptr),
+    m_currentSubState(nullptr)
 {
     if (m_parentState) {
-        m_parentState->addSubstate(m_self);
+        m_parentState->addSubState(m_self);
     }
 }
 
@@ -68,55 +68,55 @@ const StateType* StateTemplate<StateType>::parentState() const {
 }
 
 template<typename StateType>
-StateType* StateTemplate<StateType>::initialSubstate() {
-    return m_initialSubstate;
+StateType* StateTemplate<StateType>::initialSubState() {
+    return m_initialSubState;
 }
 
 template<typename StateType>
-const StateType* StateTemplate<StateType>::initialSubstate() const {
-    return m_initialSubstate;
+const StateType* StateTemplate<StateType>::initialSubState() const {
+    return m_initialSubState;
 }
 
 template<typename StateType>
-void StateTemplate<StateType>::setInitialSubstate(StateType* initialSubstate) {
-    m_initialSubstate = initialSubstate;
+void StateTemplate<StateType>::setInitialSubState(StateType* initialSubState) {
+    m_initialSubState = initialSubState;
 }
 
 template<typename StateType>
-StateType* StateTemplate<StateType>::terminationSubstate() {
-    return m_terminationSubstate;
+StateType* StateTemplate<StateType>::terminationSubState() {
+    return m_terminationSubState;
 }
 
 template<typename StateType>
-const StateType* StateTemplate<StateType>::terminationSubstate() const {
-    return m_terminationSubstate;
+const StateType* StateTemplate<StateType>::terminationSubState() const {
+    return m_terminationSubState;
 }
 
 template<typename StateType>
-void StateTemplate<StateType>::setTerminationSubstate(StateType* terminationSubstate) {
-    m_terminationSubstate = terminationSubstate;
+void StateTemplate<StateType>::setTerminationSubState(StateType* terminationSubState) {
+    m_terminationSubState = terminationSubState;
 }
 
 template<typename StateType>
-StateType* StateTemplate<StateType>::currentSubstate() {
-    return m_currentSubstate;
+StateType* StateTemplate<StateType>::currentSubState() {
+    return m_currentSubState;
 }
 
 template<typename StateType>
-const StateType* StateTemplate<StateType>::currentSubstate() const {
-    return m_currentSubstate;
+const StateType* StateTemplate<StateType>::currentSubState() const {
+    return m_currentSubState;
 }
 
 template<typename StateType>
-void StateTemplate<StateType>::setCurrentSubstate(StateType* currentSubstate) {
-    m_currentSubstate = currentSubstate;
+void StateTemplate<StateType>::setCurrentSubState(StateType* currentSubState) {
+    m_currentSubState = currentSubState;
 }
 
 template<typename StateType>
 void StateTemplate<StateType>::makeCurrent() {
     if (m_parentState) {
-        if (m_parentState->currentSubstate() != m_self) {
-            m_parentState->setCurrentSubstate(m_self);
+        if (m_parentState->currentSubState() != m_self) {
+            m_parentState->setCurrentSubState(m_self);
             m_parentState->makeCurrent();
             onEntered();
         }
@@ -125,7 +125,7 @@ void StateTemplate<StateType>::makeCurrent() {
 
 template<typename StateType>
 bool StateTemplate<StateType>::finished() const {
-    return m_terminationSubstate == m_currentSubstate;
+    return m_terminationSubState == m_currentSubState;
 }
 
 template<typename StateType>
@@ -139,12 +139,12 @@ const std::list<StateType*>& StateTemplate<StateType>::substates() const {
 }
 
 template<typename StateType>
-void StateTemplate<StateType>::addSubstate(StateType* state) {
+void StateTemplate<StateType>::addSubState(StateType* state) {
     m_substates.push_back(state);
 }
 
 template<typename StateType>
-void StateTemplate<StateType>::removeSubstate(StateType* state) {
+void StateTemplate<StateType>::removeSubState(StateType* state) {
     assert(state->parentState() == m_self);
 
     m_substates.remove(state);
@@ -176,24 +176,24 @@ void StateTemplate<StateType>::removeTransition(Transition<StateType>* transitio
 
 template<typename StateType>
 void StateTemplate<StateType>::update(float deltaSec) {
-    if (m_currentSubstate) {
-        for (Transition<StateType>* transition : m_currentSubstate->transitions()) {
+    if (m_currentSubState) {
+        for (Transition<StateType>* transition : m_currentSubState->transitions()) {
             if (transition->possible()) {
-                m_currentSubstate->onLeft();
-                m_currentSubstate = nullptr;
+                m_currentSubState->onLeft();
+                m_currentSubState = nullptr;
                 transition->to()->makeCurrent();
 
                 transition->onPerformed();
             }
         }
     } else {
-    	if (m_initialSubstate) {
-			m_initialSubstate->makeCurrent();
+    	if (m_initialSubState) {
+			m_initialSubState->makeCurrent();
 		}
     }
 
-    if (m_currentSubstate) {
-        m_currentSubstate->update(deltaSec);
+    if (m_currentSubState) {
+        m_currentSubState->update(deltaSec);
     }
 }
 

@@ -20,7 +20,7 @@ GamePlay::GamePlay(Game* game):
     m_soundManager(new SoundManager()),
     m_scenario(this)
 {
-    setInitialSubstate(m_runningState);
+    setInitialSubState(m_runningState);
 
     m_runningState->setPauseTrigger(Trigger<GameState>(new TriggeredTransition<GameState>(m_runningState, m_pausedState)));
     m_pausedState->setContinueTrigger(Trigger<GameState>(new TriggeredTransition<GameState>(m_pausedState, m_runningState)));
