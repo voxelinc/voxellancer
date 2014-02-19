@@ -7,6 +7,7 @@
 #include "worldobject/components/weapon.h"
 #include "worldobject/components/weapons/genericgun.h"
 #include "worldobject/components/weapons/genericrocketlauncher.h"
+#include "property/property.h"
 
 
 WeaponBuilder::WeaponBuilder(const std::string& name):

@@ -6,6 +6,7 @@
 class Equipment {
 public:
     Equipment(const std::string& equipmentKey);
+    virtual ~Equipment();
 
     const std::string& equipmentKey() const;
 

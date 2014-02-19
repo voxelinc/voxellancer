@@ -25,6 +25,7 @@
 #include "inputconfigurator.h"
 #include "targetselector.h"
 #include "camera/camerahead.h"
+#include "worldobject/worldobjectcomponents.h"
 
 
 /*

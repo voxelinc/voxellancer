@@ -21,6 +21,7 @@
 #include "clustercache.h"
 #include "enginebuilder.h"
 #include "weaponbuilder.h"
+#include "worldobject/worldobjectcomponents.h"
 
 
 WorldObjectBuilder::WorldObjectBuilder(const std::string& name):
@@ -41,8 +42,9 @@ WorldObject* WorldObjectBuilder::build() {
         return buildWorldObject();
     } else {
         glow::fatal("Unknown WorldObject-Type '%;'", type);
+        assert(0); // Never to be reached
     }
-    assert(0); // Never to be reached
+    return nullptr;
 }
 
 Bullet* WorldObjectBuilder::buildBullet() {

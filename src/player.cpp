@@ -15,12 +15,15 @@
 #include "ui/hud/crosshair.h"
 #include "physics/physics.h"
 #include "camera/camerahead.h"
+#include "ui/objectinfo.h"
+#include "worldobject/worldobjectcomponents.h"
 
 
 Player::Player(Game* game):
     m_game(game),
-    m_hud(this, &game->viewer()),
-    m_ship(nullptr)
+    m_hud(new HUD(this, &game->viewer())),
+    m_ship(nullptr),
+    m_cameraDolly(new CameraDolly())
 {
     
 }
@@ -50,6 +53,10 @@ CameraDolly& Player::cameraDolly() {
     return *m_cameraDolly;
 }
 
+CameraHead& Player::cameraHead() {
+    return m_cameraDolly->cameraHead();
+}
+
 HUD& Player::hud() {
     return *m_hud;
 }
@@ -58,11 +65,11 @@ void Player::fire() {
     if(ship()) {
         glm::vec3 targetPoint;
 
-        if(m_hud.aimHelper().hovered()) {
-            targetPoint = m_hud.aimHelper().targetPoint();
+        if(m_hud->aimHelper().hovered()) {
+            targetPoint = m_hud->aimHelper().targetPoint();
         } else {
-            glm::vec3 shootDirection(glm::normalize(m_hud.crossHair().worldPosition() - m_cameraDolly.cameraHead().position()));
-            Ray ray(m_hud.crossHair().worldPosition(), shootDirection);
+            glm::vec3 shootDirection(glm::normalize(m_hud->crossHair().worldPosition() - cameraHead().position()));
+            Ray ray(m_hud->crossHair().worldPosition(), shootDirection);
             targetPoint = Aimer(ship(), ray).aim();
         }
 

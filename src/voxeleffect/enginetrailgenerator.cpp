@@ -8,6 +8,9 @@
 #include "worldobject/components/engine.h"
 #include "worldobject/components/engineslot.h"
 #include "worldobject/worldobject.h"
+#include "voxelexplosiongenerator.h"
+#include "physics/physics.h"
+#include "worldobject/worldobjectcomponents.h"
 
 
 EngineTrailGenerator::EngineTrailGenerator(Engine* engine) :
@@ -22,15 +25,17 @@ EngineTrailGenerator::EngineTrailGenerator(Engine* engine) :
 {
     assert(engine != nullptr);
 
-    m_generator.setColor(0x6666FF);
-    m_generator.setEmissiveness(0.4f);
-    m_generator.setCount(8);
-    m_generator.setForce(0.10f, 0.3f);
-    m_generator.setLifetime(1.0f, 0.1f);
+    m_generator->setColor(0x6666FF);
+    m_generator->setEmissiveness(0.4f);
+    m_generator->setCount(8);
+    m_generator->setForce(0.10f, 0.3f);
+    m_generator->setLifetime(1.0f, 0.1f);
 }
 
+EngineTrailGenerator::~EngineTrailGenerator() = default;
+
 void EngineTrailGenerator::setLifetime(float lifetime) {
-    m_generator.setLifetime(lifetime, 0.1f);
+    m_generator->setLifetime(lifetime, 0.1f);
 }
 
 void EngineTrailGenerator::update(float deltaSec) {
@@ -100,7 +105,7 @@ void EngineTrailGenerator::spawnAt(glm::vec3 position) {
 void EngineTrailGenerator::updateTrailSettings() {
     WorldObject* worldObject = m_engine->engineSlot()->components()->worldObject();
 
-    m_generator.setScale(worldObject->transform().scale() / 15.0f);
-    m_generator.setRadius(worldObject->transform().scale() * 0.3f);
+    m_generator->setScale(worldObject->transform().scale() / 15.0f);
+    m_generator->setRadius(worldObject->transform().scale() * 0.3f);
 }
 

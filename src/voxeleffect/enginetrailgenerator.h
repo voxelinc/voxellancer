@@ -8,11 +8,13 @@
 
 class Engine;
 class WorldObject;
+class VoxelExplosionGenerator;
 
 class EngineTrailGenerator
 {
 public:
     EngineTrailGenerator(Engine* engine);
+    virtual ~EngineTrailGenerator();
 
     void setLifetime(float lifetime);
 

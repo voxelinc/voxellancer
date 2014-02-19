@@ -10,6 +10,8 @@
 #include "worldobject/handle/handle.h"
 #include "physics/physics.h"
 #include "ui/objectinfo.h"
+#include "voxel/voxel.h"
+#include "worldobjectcomponents.h"
 
 
 WorldObject::WorldObject():
@@ -22,8 +24,8 @@ WorldObject::WorldObject(CollisionFilter* collisionFilter, float scale):
     VoxelCluster(scale),
     m_physics(new Physics(*this, scale)),
     m_collisionDetector(new CollisionDetector(*this)),
-    m_objectInfo(),
-    m_components(this),
+    m_objectInfo(new ObjectInfo()),
+    m_components(new WorldObjectComponents(this)),
     m_crucialVoxel(nullptr),
     m_collisionFieldOfDamage(glm::half_pi<float>()),
     m_handle(Handle<WorldObject>(this)),
@@ -57,20 +59,20 @@ ObjectInfo& WorldObject::objectInfo() {
 }
 
 WorldObjectComponents& WorldObject::components() {
-    return m_components;
+    return *m_components;
 }
 
 void WorldObject::update(float deltaSec) {
-    m_components.update(deltaSec);
+    m_components->update(deltaSec);
 
-    Acceleration localAcceleration = m_components.currentAcceleration();
+    Acceleration localAcceleration = m_components->currentAcceleration();
 
     Acceleration globalAcceleration(
         m_transform.orientation() * localAcceleration.directional(),
         m_transform.orientation() * localAcceleration.angular()
     );
 
-    m_physics.setAcceleration(globalAcceleration);
+    m_physics->setAcceleration(globalAcceleration);
 }
 
 void WorldObject::addVoxel(Voxel* voxel) {
@@ -78,7 +80,7 @@ void WorldObject::addVoxel(Voxel* voxel) {
 
     VoxelCluster::addVoxel(voxel);
 
-    m_physics.addVoxel(voxel);
+    m_physics->addVoxel(voxel);
 
     m_collisionDetector->addVoxel(voxel);
     m_collisionDetector->updateGeode();
@@ -94,7 +96,7 @@ void WorldObject::removeVoxel(Voxel* voxel) {
     }
 
     m_collisionDetector->removeVoxel(voxel);
-    m_physics.removeVoxel(voxel);
+    m_physics->removeVoxel(voxel);
 
     VoxelCluster::removeVoxel(voxel);
 }

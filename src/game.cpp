@@ -1,5 +1,7 @@
 #include "game.h"
 
+#include <GL/glew.h>
+
 #include <glm/glm.hpp>
 
 #include "etc/contextprovider.h"
@@ -17,12 +19,12 @@
 class Ship;
 
 Game::Game():
-    m_player(this),
-    m_inputHandler(&m_player),
-    m_viewer(Viewport(0, 0, ContextProvider::instance()->resolution().width(), ContextProvider::instance()->resolution().height())),
-    m_gameScene(this, &m_player),
-    m_hmdManager(this),
-    m_scenario(this)
+    m_player(new Player(this)),
+    m_inputHandler(new InputHandler(*m_player)),
+    m_viewer(new Viewer(Viewport(0, 0, ContextProvider::instance()->resolution().width(), ContextProvider::instance()->resolution().height()))),
+    m_gameScene(new GameScene(*this, *m_player)),
+    m_hmdManager(new HMDManager(this)),
+    m_scenario(new GameScenario(this))
 {
     m_scenario->load();
 

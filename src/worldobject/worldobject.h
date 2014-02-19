@@ -17,7 +17,7 @@ class CollisionFilter;
 class Physics;
 class ObjectInfo;
 class VoxelCollision;
-
+class WorldObjectComponents;
 
 class WorldObject : public VoxelCluster {
 public:

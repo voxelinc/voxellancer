@@ -25,7 +25,7 @@ public:
 
     void setPlayer(Player* player);
 
-    virtual void draw(Camera* camera, glow::FrameBufferObject* target, EyeSide side = EyeSide::None) override;
+    virtual void draw(Camera& camera, glow::FrameBufferObject* target, EyeSide side = EyeSide::None) override;
     virtual void update(float deltaSec) override;
     virtual void activate() override;
     virtual void deactivate() override;

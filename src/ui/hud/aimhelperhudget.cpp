@@ -14,6 +14,7 @@
 
 #include "hud.h"
 #include "aimhelperhudgetvoxels.h"
+#include "worldobject/worldobjectcomponents.h"
 
 
 AimHelperHudget::AimHelperHudget(HUD* hud):

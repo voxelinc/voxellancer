@@ -32,7 +32,7 @@ void StereoView::initialize() {
     m_stereoBlitProgram.reset(new StereoBlitProgram());
     m_stereoBlitProgram->setDistortionKs(m_distortionKs);
     m_stereoBlitProgram->setDistortionScale(m_distortionScale);
-    m_screenBlitter.setProgram(*m_stereoBlitProgram);
+    m_screenBlitter->setProgram(*m_stereoBlitProgram);
 }
 
 void StereoView::setViewport(const Viewport& viewport) {

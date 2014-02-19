@@ -4,7 +4,6 @@
 #include <memory>
 #include <glm/glm.hpp>
 
-
 #include "geometry/transform.h"
 #include "geometry/speed.h"
 #include "geometry/acceleration.h"
@@ -14,6 +13,8 @@
 
 class WorldObject;
 class Transform;
+class Voxel;
+class VoxelCollision;
 
 class Physics {
 public:
@@ -42,14 +43,8 @@ public:
 
 
 protected:
-    virtual void updateSpeed(float deltaSec);
-
-
-protected:
     WorldObject& m_worldObject;
-
     Speed m_speed;
-
     Acceleration m_acceleration;
 
     float m_directionalDampening;
@@ -59,8 +54,7 @@ protected:
     glm::vec3 m_accumulatedMassVec; // For fast recalc of center of mass on voxel addition/removal
     float m_massScaleFactor;
 
-    std::list<VoxelCollision> m_collisions;
-
-    void alterCell(Voxel* voxel, bool isAdd);
+    void voxelChanged(Voxel* voxel, bool isAdd);
+    virtual void updateSpeed(float deltaSec);
 };
 

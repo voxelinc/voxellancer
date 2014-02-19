@@ -6,10 +6,12 @@
 #include <glm/gtc/quaternion.hpp>
 
 #include "worldobject/handle/handle.h"
+#include "worldobject/components/enginestate.h"
 
 
 class Camera;
 class CameraDolly;
+class CameraHead;
 class HUD;
 
 class Game;
@@ -25,6 +27,7 @@ public:
     void update(float deltaSec);
 
     CameraDolly& cameraDolly();
+    CameraHead& cameraHead();
     HUD& hud();
 
     void fire();

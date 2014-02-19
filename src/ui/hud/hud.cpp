@@ -27,6 +27,7 @@
 #include "aimhelperhudget.h"
 #include "ui/objectinfo.h"
 #include "display/view.h"
+#include "camera/camerahead.h"
 
 
 HUD::HUD(Player* player, Viewer* viewer):
@@ -49,7 +50,7 @@ Player* HUD::player() {
 }
 
 glm::vec3 HUD::centerOfView() const {
-    return m_player->cameraPosition();
+    return m_player->cameraHead().position();
 }
 
 const Sphere& HUD::sphere() const {
@@ -65,11 +66,11 @@ AimHelperHudget& HUD::aimHelper() {
 }
 
 glm::vec3 HUD::position() const {
-    return m_player->cameraPosition() + m_player->cameraOrientation() * m_sphere.position();
+    return m_player->cameraHead().position() + m_player->cameraHead().orientation() * m_sphere.position();
 }
 
 glm::quat HUD::orientation() const {
-    return m_player->cameraOrientation();
+    return m_player->cameraHead().orientation();
 }
 
 void HUD::addHudget(Hudget* hudget) {
@@ -120,7 +121,7 @@ void HUD::setCrossHairOffset(const glm::vec2& mousePosition) {
 void HUD::update(float deltaSec) {
     updateScanner(deltaSec);
 
-    Ray toCrossHair = Ray::fromTo(m_player->cameraPosition(), m_crossHair->worldPosition());
+    Ray toCrossHair = Ray::fromTo(m_player->cameraHead().position(), m_crossHair->worldPosition());
 
     for (Hudget* hudget : m_hudgets) {
         hudget->pointerAt(toCrossHair, m_crossHair->actionActive());
@@ -131,7 +132,7 @@ void HUD::update(float deltaSec) {
 void HUD::draw() {
     glow::Uniform<glm::vec3>* lightuniform = VoxelRenderer::instance()->program()->getUniform<glm::vec3>("lightdir");
     glm::vec3 oldLightdir = lightuniform->value();
-    lightuniform->set(m_player->cameraDolly().cameraHead().orientation() * glm::vec3(0,0,1));
+    lightuniform->set(m_player->cameraHead().orientation() * glm::vec3(0,0,1));
 
     for (Hudget* hudget : m_hudgets) {
         if (hudget->visible()) {
@@ -143,12 +144,8 @@ void HUD::draw() {
 }
 
 void HUD::updateScanner(float deltaSec) {
-    if (m_player->playerShip()) {
-        m_scanner.update(deltaSec, m_player->playerShip());
-    if (m_player->playerShip()) {
-        m_scanner->update(deltaSec, m_player->playerShip());
     if (m_player->ship()) {
-        m_scanner.update(deltaSec, m_player->ship());
+        m_scanner->update(deltaSec, m_player->ship());
 
         for (WorldObject* worldObject : m_scanner->foundWorldObjects()) {
             if (worldObject->objectInfo().showOnHud()) {

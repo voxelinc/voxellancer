@@ -1,7 +1,6 @@
 #include "gamescene.h"
 
 #include "voxel/voxelrenderer.h"
-#include "voxeleffect/voxelparticleworld.h"
 #include "sound/soundmanager.h"
 #include "game.h"
 #include "rendering/framebuffer.h"
@@ -14,7 +13,9 @@
 #include "worldobject/worldobject.h"
 #include "rendering/buffernames.h"
 #include "camera/camera.h"
-#include "starfield.h"
+#include "rendering/starfield.h"
+#include "camera/camerahead.h"
+#include "voxeleffect/voxelparticleengine.h"
 
 
 GameScene::GameScene(Game& game, Player& player) :
@@ -41,7 +42,7 @@ void GameScene::draw(Camera& camera, glow::FrameBufferObject* target, EyeSide si
 
     drawGame(camera);
 
-    RenderMetaData metadata(camera, side);
+    RenderMetaData metadata(&camera, side);
     m_renderPipeline->apply(*m_framebuffer, metadata);
 
     // transfer rendered image to target framebuffer
@@ -58,16 +59,15 @@ void GameScene::deactivate() {
 }
 
 void GameScene::update(float deltaSec) {
-    CameraHead& cameraHead = m_player->cameraDolly().cameraHead();
-    m_starField->update(deltaSec, cameraHead.position());
-    m_soundManager->setListener(cameraHead.position(), cameraHead.orientation());
+    m_starField->update(deltaSec, m_player->cameraHead().position());
+    m_soundManager->setListener(m_player->cameraHead().position(), m_player->cameraHead().orientation());
 }
 
 void GameScene::setOutputBuffer(int i) {
     m_currentOutputBuffer = glm::min(i, m_renderPipeline->bufferCount() - 1);
 }
 
-void GameScene::drawGame(Camera* camera) {
+void GameScene::drawGame(Camera& camera) {
     m_framebuffer->setDrawBuffers({ BufferNames::Color, BufferNames::NormalZ, BufferNames::Emissisiveness });
 
     World::instance()->skybox().draw(camera);
@@ -80,7 +80,7 @@ void GameScene::drawGame(Camera* camera) {
     m_game->player().hud().draw();
     m_voxelRenderer->afterDraw();
 
-    World::instance()->voxelParticleEngine().draw(*camera);
+    World::instance()->voxelParticleEngine().draw(camera);
 
 }
 
