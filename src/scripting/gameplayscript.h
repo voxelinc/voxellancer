@@ -23,8 +23,8 @@ protected:
     int m_shipHandleIncrementor;
     std::map<int, Ship*> m_shipHandles;
 
-    int m_squadHandleIncrementor;
-    std::map<int, std::shared_ptr<Squad>> m_squadHandles;
+//    int m_squadHandleIncrementor;
+//    std::map<int, std::shared_ptr<Squad>> m_squadHandles;
 
 
     int apiCreateShip(std::string name);

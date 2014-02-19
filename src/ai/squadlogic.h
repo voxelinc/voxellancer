@@ -15,7 +15,7 @@ public:
     SquadLogic(Ship& ship);
     ~SquadLogic();
     Ship* ship();
-    
+
     void joinSquadOf(Ship* leader);
     void joinSquad(std::shared_ptr<Squad> squad);
     void leaveSquad();
@@ -25,6 +25,7 @@ public:
 
     glm::vec3 formationPosition();
     glm::vec3 formationUp();
+
 
 protected:
     Ship& m_ship;

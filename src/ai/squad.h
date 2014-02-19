@@ -22,8 +22,10 @@ public:
 
     const std::vector<Ship*>& members();
 
+
 protected:
     friend class SquadLogic;
+
     // Interface for SquadLogic
     void onMemberJoin(Ship* member);
     void onMemberLeave(Ship* member);
