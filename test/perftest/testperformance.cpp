@@ -8,18 +8,22 @@
 
 #include <glowutils/AutoTimer.h>
 
+#include "test/bandit_extension/vec3helper.h"
+
+#include "geometry/acceleration.h"
+#include "ui/objectinfo.h"
 #include "utils/tostring.h"
+#include "physics/physics.h"
+#include "resource/clustercache.h"
+#include "sound/soundmanager.h"
+#include "voxel/voxel.h"
 #include "world/world.h"
 #include "worldobject/worldobject.h"
-#include "../bandit_extension/vec3helper.h"
 #include "worldobject/ship.h"
-#include "resource/clustercache.h"
 #include "world/handler/splitdetector.h"
 #include "world/helper/worldobjectmodification.h"
-#include "voxel/voxel.h"
 #include "world/god.h"
-#include "sound/soundmanager.h"
-#include "ui/objectinfo.h"
+#include "worldobject/worldobjectcomponents.h"
 
 
 
