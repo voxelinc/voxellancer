@@ -2,6 +2,7 @@
 
 #include <glow/ref_ptr.h>
 
+#include "etc/contextdependant.h"
 
 namespace glow {
     class Texture;
@@ -12,7 +13,7 @@ namespace glow {
 
 class Camera;
 
-class Skybox {
+class Skybox : public ContextDependant {
 public:
     Skybox();
 
@@ -25,6 +26,7 @@ protected:
     glow::ref_ptr<glow::Buffer> m_vertexBuffer;
 
     void initialize();
-
+    virtual void beforeContextDestroy() override;
+    virtual void afterContextRebuild() override;
 };
 

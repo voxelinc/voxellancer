@@ -6,32 +6,34 @@
 
 #include "property/property.h"
 
-
 class Engine;
-class VoxelExplosionGenerator;
+class WorldObject;
 
 class EngineTrailGenerator
 {
 public:
-    EngineTrailGenerator();
-    virtual ~EngineTrailGenerator();
+    EngineTrailGenerator(Engine* engine);
 
-    void setEngine(Engine* engine);
-    void setFrequency(float frequency);
+    void setLifetime(float lifetime);
 
     void update(float deltaSec);
+
 
 protected:
     Engine* m_engine;
     std::unique_ptr<VoxelExplosionGenerator> m_generator;
 
-    glm::vec3 m_lastPosition;
+    glm::vec3 m_lastSpawnPoint;
     bool m_lastValid;
+    float m_stepRest;
     double m_timeSinceLastSpawn;
     float m_spawnOffset;
 
-    Property<float> prop_lifetime, prop_stepDistance, prop_idleTime;
+    Property<float> prop_stepDistance;
+    Property<float> prop_idleTime;
 
+    void spawnTrail();
+    void updateTrailSettings();
     glm::vec3 calculateSpawnPosition();
     void spawnAt(glm::vec3 position);
 };

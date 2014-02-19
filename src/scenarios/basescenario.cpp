@@ -5,7 +5,7 @@
 #include <glowutils/AutoTimer.h>
 #include <glowutils/Timer.h>
 
-#include "ai/characters/dummycharacter.h"
+#include "ai/character.h"
 
 #include "resource/clustercache.h"
 
@@ -13,8 +13,9 @@
 #include "sound/soundmanager.h"
 #include "world/world.h"
 
-BaseScenario::BaseScenario(Game* game) :
-    m_game(game) 
+
+BaseScenario::BaseScenario(Game* game):
+    m_game(game)
 {
 }
 
@@ -23,7 +24,7 @@ void BaseScenario::clear() {
 }
 
 void BaseScenario::load() {
-    { 
+    {
         glowutils::AutoTimer timer("Creating World took");
         m_world = World::instance();
     }

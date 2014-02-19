@@ -8,9 +8,6 @@
 
 #include <glow/Program.hpp>
 
-
-#include "etc/windowmanager.h"
-
 #include "utils/tostring.h"
 #include "utils/geometryhelper.h"
 
@@ -134,7 +131,7 @@ void HUD::update(float deltaSec) {
 void HUD::draw() {
     glow::Uniform<glm::vec3>* lightuniform = VoxelRenderer::instance()->program()->getUniform<glm::vec3>("lightdir");
     glm::vec3 oldLightdir = lightuniform->value();
-    lightuniform->set(m_player->cameraOrientation() * glm::vec3(0,0,1));
+    lightuniform->set(m_player->cameraDolly().cameraHead().orientation() * glm::vec3(0,0,1));
 
     for (Hudget* hudget : m_hudgets) {
         if (hudget->visible()) {
@@ -147,7 +144,11 @@ void HUD::draw() {
 
 void HUD::updateScanner(float deltaSec) {
     if (m_player->playerShip()) {
+        m_scanner.update(deltaSec, m_player->playerShip());
+    if (m_player->playerShip()) {
         m_scanner->update(deltaSec, m_player->playerShip());
+    if (m_player->ship()) {
+        m_scanner.update(deltaSec, m_player->ship());
 
         for (WorldObject* worldObject : m_scanner->foundWorldObjects()) {
             if (worldObject->objectInfo().showOnHud()) {

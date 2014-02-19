@@ -11,8 +11,6 @@
 
 #include "geometry/viewport.h"
 
-#include "etc/windowmanager.h"
-
 #include "display/scene.h"
 
 

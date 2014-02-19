@@ -1,28 +1,29 @@
 #include "worldobject.h"
 
-#include "utils/tostring.h"
-#include "voxel/specialvoxels/enginevoxel.h"
-#include "voxel/specialvoxels/hardpointvoxel.h"
-#include "voxel/specialvoxels/cockpitvoxel.h"
-#include "voxel/specialvoxels/fuelvoxel.h"
-#include "worldobject/handle/handle.h"
 #include "collision/collisiondetector.h"
 #include "collision/collisionfilter.h"
+
+#include "resource/clustercache.h"
+
+#include "utils/tostring.h"
+
+#include "worldobject/handle/handle.h"
 #include "physics/physics.h"
 #include "ui/objectinfo.h"
 
 
-WorldObject::WorldObject() :
-    WorldObject(new CollisionFilter(this,CollisionFilterClass::Other))
+WorldObject::WorldObject():
+    WorldObject(new CollisionFilter(this,CollisionFilterClass::Other), 1.0f)
 {
 
 }
 
-WorldObject::WorldObject(CollisionFilter* collisionFilter, float scale) :
+WorldObject::WorldObject(CollisionFilter* collisionFilter, float scale):
     VoxelCluster(scale),
     m_physics(new Physics(*this, scale)),
     m_collisionDetector(new CollisionDetector(*this)),
-    m_objectInfo(new ObjectInfo()),
+    m_objectInfo(),
+    m_components(this),
     m_crucialVoxel(nullptr),
     m_collisionFieldOfDamage(glm::half_pi<float>()),
     m_handle(Handle<WorldObject>(this)),
@@ -30,6 +31,7 @@ WorldObject::WorldObject(CollisionFilter* collisionFilter, float scale) :
     m_collisionFilter(collisionFilter)
 {
 }
+
 WorldObject::~WorldObject() {
      m_handle.invalidate();
 }
@@ -42,6 +44,10 @@ CollisionFilter& WorldObject::collisionFilter() {
     return *m_collisionFilter;
 }
 
+void WorldObject::setCollisionFilter(CollisionFilter* collisionFilter) {
+    m_collisionFilter.reset(collisionFilter);
+}
+
 Physics& WorldObject::physics() {
     return *m_physics;
 }
@@ -50,24 +56,36 @@ ObjectInfo& WorldObject::objectInfo() {
     return *m_objectInfo;
 }
 
-void WorldObject::update(float deltaSec) {
-
+WorldObjectComponents& WorldObject::components() {
+    return m_components;
 }
 
-std::list<VoxelCollision>& WorldObject::performMovement(float deltaSec) {
-    return m_physics->move(deltaSec);
+void WorldObject::update(float deltaSec) {
+    m_components.update(deltaSec);
+
+    Acceleration localAcceleration = m_components.currentAcceleration();
+
+    Acceleration globalAcceleration(
+        m_transform.orientation() * localAcceleration.directional(),
+        m_transform.orientation() * localAcceleration.angular()
+    );
+
+    m_physics.setAcceleration(globalAcceleration);
 }
 
 void WorldObject::addVoxel(Voxel* voxel) {
+    assert(voxel);
+
     VoxelCluster::addVoxel(voxel);
 
-    m_physics->addVoxel(voxel);
+    m_physics.addVoxel(voxel);
+
     m_collisionDetector->addVoxel(voxel);
     m_collisionDetector->updateGeode();
 }
 
 void WorldObject::removeVoxel(Voxel* voxel) {
-    assert(voxel != nullptr);
+    assert(voxel);
 
     voxel->onRemoval();
 
@@ -76,45 +94,19 @@ void WorldObject::removeVoxel(Voxel* voxel) {
     }
 
     m_collisionDetector->removeVoxel(voxel);
-    m_physics->removeVoxel(voxel);
+    m_physics.removeVoxel(voxel);
+
     VoxelCluster::removeVoxel(voxel);
 }
 
-void WorldObject::addEngineVoxel(EngineVoxel* voxel) {
-    addVoxel(voxel);
-}
-
-void WorldObject::addHardpointVoxel(HardpointVoxel* voxel) {
-    addVoxel(voxel);
-}
-
-void WorldObject::addCockpitVoxel(CockpitVoxel* voxel) {
-    addVoxel(voxel);
-}
-
-void WorldObject::addFuelVoxel(FuelVoxel* voxel) {
-    addVoxel(voxel);
-}
-
-void WorldObject::accelerate(const glm::vec3& direction) {
-    m_physics->accelerate(direction);
-}
-
-void WorldObject::accelerateAngular(const glm::vec3& axis) {
-    m_physics->accelerateAngular(axis);
-}
-
-void WorldObject::setCenterAndAdjustPosition(const glm::vec3& newCenter) {
-    m_transform.setCenterAndAdjustPosition(newCenter);
-}
-
 void WorldObject::updateTransformAndGeode(const glm::vec3& position, const glm::quat& orientation) {
-    setOrientation(orientation);
-    setPosition(position);
+    transform().setOrientation(orientation);
+    transform().setPosition(position);
+
     m_collisionDetector->updateGeode();
 }
 
-Voxel *WorldObject::crucialVoxel() {
+Voxel* WorldObject::crucialVoxel() {
     return m_crucialVoxel;
 }
 
@@ -134,7 +126,7 @@ Handle<WorldObject>& WorldObject::handle() {
     return m_handle;
 }
 
-bool WorldObject::scheduledForDeletion() {
+bool WorldObject::scheduledForDeletion() const {
     return m_scheduledForDeletion;
 }
 
@@ -142,6 +134,11 @@ void WorldObject::onScheduleForDeletion() {
     m_scheduledForDeletion = true;
 }
 
-float WorldObject::collisionFieldOfDamage() {
+float WorldObject::collisionFieldOfDamage() const {
     return m_collisionFieldOfDamage;
 }
+
+void WorldObject::setCollisionFieldOfDamage(float collisionFieldOfDamage) {
+    m_collisionFieldOfDamage = collisionFieldOfDamage;
+}
+

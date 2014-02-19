@@ -1,9 +1,10 @@
 #include "voxelfont.h"
 
+#include <algorithm>
+
 #include "resource/clustercache.h"
 #include "voxel/voxelrenderer.h"
 #include "letter.h"
-#include <algorithm>
 
 VoxelFont::VoxelFont():
     m_font3x5(),
@@ -38,7 +39,7 @@ void VoxelFont::loadFont(const std::string& identifier, glm::vec3 offset, std::m
 void VoxelFont::loadChar(const std::string& filename, glm::vec3 offset, const char index, std::map<char, std::unique_ptr<Letter>> *map){
     std::unique_ptr<Letter> element(new Letter(1.0));
     ClusterCache::instance()->fillCluster(element.get(), filename);
-    element->setCenter(offset);
+    element->transform().setCenter(offset);
     (*map)[index] = move(element);
 }
 
@@ -77,8 +78,8 @@ void VoxelFont::drawString(std::string text, glm::vec3 position, FontSize size, 
     for (int i = 0; i < text.length(); i++){
         Letter *cl = (*source)[text[i]].get();
         if (cl != nullptr){
-            cl->setPosition(position + glm::vec3(intoffset + width * i, 0, 0));
-            cl->setScale(scale);
+            cl->transform().setPosition(position + glm::vec3(intoffset + width * i, 0, 0));
+            cl->transform().setScale(scale);
             VoxelRenderer::instance()->draw(*cl);
         }
     }

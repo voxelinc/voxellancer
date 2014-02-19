@@ -23,7 +23,6 @@ public:
     VoxelClusterBounds& bounds();
 
     Transform& transform();
-    const Transform& transform() const;
     void setTransform(const Transform& transform);
 
     Voxel* voxel(const glm::ivec3& position);
@@ -36,15 +35,7 @@ public:
 
     VoxelRenderData* voxelRenderData();
 
-    const glm::vec3& position();
-    const glm::quat& orientation();
-    void setOrientation(const glm::quat& orientation);
-    void setPosition(const glm::vec3& pos);
-
-    void rotate(const glm::quat& param1);
-    void move(const glm::vec3& vec3);
-
-    virtual float emissiveness();
+    virtual float emissiveness() const;
 
 
 protected:

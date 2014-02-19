@@ -12,7 +12,7 @@
 #include "utils/tostring.h"
 #include "utils/aimer.h"
 
-#include "etc/windowmanager.h"
+#include "etc/contextprovider.h"
 
 #include "worldobject/worldobject.h"
 #include "player.h"
@@ -84,7 +84,7 @@ InputHandler::InputHandler(Player& player):
 {
     addActionsToVector();
 
-    m_cursorMaxDistance = glm::min(WindowManager::instance()->resolution().width(), WindowManager::instance()->resolution().height()) / 2;
+    m_cursorMaxDistance = glm::min(ContextProvider::instance()->resolution().width(), ContextProvider::instance()->resolution().height()) / 2;
 
     m_mouseControl = false;
     m_lastfocus = glfwGetWindowAttrib(glfwGetCurrentContext(), GLFW_FOCUSED);
@@ -186,7 +186,9 @@ void InputHandler::processMouseUpdate() {
     }
 
     if (pressed) {
-        m_player->fire();
+        if (m_player->ship()) {
+            m_player->fire();
+        }
     }
 
     // spin
@@ -197,8 +199,8 @@ void InputHandler::processMouseUpdate() {
 
     if (m_mouseControl || glfwGetMouseButton(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS) {
         glm::vec3 rot;
-        x = WindowManager::instance()->resolution().width() / 2 - (int)floor(x);
-        y = WindowManager::instance()->resolution().height() / 2 - (int)floor(y);
+        x = ContextProvider::instance()->resolution().width() / 2 - (int)floor(x);
+        y = ContextProvider::instance()->resolution().height() / 2 - (int)floor(y);
         x = glm::min((double)m_cursorMaxDistance, x);
         y = glm::min((double)m_cursorMaxDistance, y);
         rot = glm::vec3(y, x, 0);
@@ -290,36 +292,44 @@ void InputHandler::processFireActions() {
     m_player->hud().crossHair().setActionActive(getInputValue(&fireAction) > 0.001);
 
     if (getInputValue(&fireAction)) {
-        m_player->fire();
+        if (m_player->ship()) {
+            m_player->fire();
+        }
     }
     if (getInputValue(&rocketAction)) {
-        if (m_player->playerShip()) {
-            m_player->playerShip()->fireAtObject();
+        if (m_player->ship() && m_player->ship()->targetObject()) {
+            m_player->ship()->components().fireAtObject(m_player->ship()->targetObject());
         }
     }
 }
 
 void InputHandler::processMoveActions() {
-    m_player->move(glm::vec3(-getInputValue(&moveLeftAction), 0, 0));
-    m_player->move(glm::vec3(getInputValue(&moveRightAction), 0, 0));
-    m_player->move(glm::vec3(0, 0, -getInputValue(&moveForwardAction)));
-    m_player->move(glm::vec3(0, 0, getInputValue(&moveBackwardAction)));
+    glm::vec3 direction(
+        getInputValue(&moveRightAction) - getInputValue(&moveLeftAction),
+        0,
+        getInputValue(&moveBackwardAction) - getInputValue(&moveForwardAction)
+    );
+
+    m_player->move(direction);
 }
 
 void InputHandler::processRotateActions() {
     glm::vec3 rot = glm::vec3(0);
+
     rot.x = getInputValue(&rotateUpAction)
         - getInputValue(&rotateDownAction);
     rot.y = getInputValue(&rotateLeftAction)
         - getInputValue(&rotateRightAction);
     rot.z = -getInputValue(&rotateClockwiseAction)
         + getInputValue(&rotateCClockwiseAction);
+
     if (glm::length(rot) < prop_deadzoneGamepad) {
         rot = glm::vec3(0);
     }
-    if (glm::length(rot) > 1) {
+    if(glm::length(rot) > 1.0f) {
         rot = glm::normalize(rot);
     }
+
     m_player->rotate(rot);
 }
 

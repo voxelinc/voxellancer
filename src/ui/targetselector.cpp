@@ -15,25 +15,27 @@ TargetSelector::TargetSelector(Player& player):
 }
 
 void TargetSelector::selectNextTarget() {
-    std::list<WorldObject*>& worldObjects = World::instance()->worldObjects();
-    m_player->playerShip()->setTargetObject(findNextTarget(worldObjects.begin(), worldObjects.end()));
+    std::unordered_set<WorldObject*>& worldObjects = World::instance()->worldObjects();
+    m_player->ship()->setTargetObject(findNextTarget(worldObjects.begin(), worldObjects.end()));
 }
 
 void TargetSelector::selectPreviousTarget() {
-    std::list<WorldObject*>& worldObjects = World::instance()->worldObjects();
-    m_player->playerShip()->setTargetObject(findNextTarget(worldObjects.rbegin(), worldObjects.rend()));
+    std::unordered_set<WorldObject*>& worldObjects = World::instance()->worldObjects();
+    // HACK: unordered sets don't have reverse iterators (on linux)
+    // since this algorithm has to be improved anyway, for the moment previous will also go forward
+    m_player->ship()->setTargetObject(findNextTarget(worldObjects.begin(), worldObjects.end()));
 }
 
 template<typename IteratorType>
 WorldObject* TargetSelector::findNextTarget(IteratorType begin, IteratorType end) {
-    if (!m_player->playerShip()) {
+    if (!m_player->ship()) {
         return nullptr;
     }
 
     IteratorType searchBegin = begin;
 
-    if (m_player->playerShip()->targetObject() != nullptr) {
-        searchBegin = std::find(begin, end, m_player->playerShip()->targetObject());
+    if (m_player->ship()->targetObject() != nullptr) {
+        searchBegin = std::find(begin, end, m_player->ship()->targetObject());
         searchBegin++;
     }
 
@@ -41,6 +43,9 @@ WorldObject* TargetSelector::findNextTarget(IteratorType begin, IteratorType end
 
     if(newTarget == end) {
         newTarget = std::find_if(begin, searchBegin, canLockOnPredicate());
+        if(newTarget == searchBegin) {
+            return nullptr;
+        }
     }
 
     return newTarget != end ? *newTarget : nullptr;

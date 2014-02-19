@@ -8,7 +8,7 @@
 #include "geometry/size.h"
 #include "geometry/viewport.h"
 
-#include "etc/windowmanager.h"
+#include "etc/contextprovider.h"
 
 #include "utils/metrics.h"
 
@@ -34,7 +34,7 @@ StereoRenderInfo StereoRenderInfo::fromOVRInfo(const OVR::HMDInfo& hmdInfo) {
 
     OVR::Util::Render::StereoConfig stereoConfig;
 
-    Size<int> resolution(WindowManager::instance()->resolution());
+    Size<int> resolution(ContextProvider::instance()->resolution());
 
     stereoConfig.SetFullViewport(OVR::Util::Render::Viewport(0, 0, resolution.width(), resolution.height()));
     stereoConfig.SetHMDInfo(hmdInfo);
@@ -50,7 +50,7 @@ StereoRenderInfo StereoRenderInfo::fromOVRInfo(const OVR::HMDInfo& hmdInfo) {
 StereoRenderInfo StereoRenderInfo::dummy() {
     StereoRenderInfo result;
 
-    Size<int> resolution(WindowManager::instance()->resolution());
+    Size<int> resolution(ContextProvider::instance()->resolution());
 
     result.m_hScreenSize = 0.15f;
     result.m_vScreenSize = 0.06f;

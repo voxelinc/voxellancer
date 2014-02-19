@@ -1,14 +1,14 @@
 #pragma once
 
 #include <memory>
-#include <list>
+#include <unordered_set>
 
 
 class WorldLogic;
 class WorldTree;
 class God;
 class WorldObject;
-class VoxelParticleWorld;
+class VoxelParticleEngine;
 class Skybox;
 
 class World
@@ -21,8 +21,8 @@ public:
     WorldLogic &worldLogic();
     God &god();
     WorldTree &worldTree();
-    VoxelParticleWorld& voxelParticleWorld();
-    std::list<WorldObject*> &worldObjects();
+    VoxelParticleEngine& voxelParticleEngine();
+    std::unordered_set<WorldObject*> &worldObjects();
 
     void update(float deltaSecs);
 
@@ -40,9 +40,9 @@ protected:
     std::unique_ptr<WorldTree> m_worldTree;
     std::unique_ptr<WorldLogic> m_worldLogic;
     std::unique_ptr<God> m_god;
-    std::unique_ptr<VoxelParticleWorld> m_voxelParticleWorld;
+    std::unique_ptr<VoxelParticleEngine> m_voxelParticleEngine;
 
-    std::list<WorldObject*> m_worldObjects;
+    std::unordered_set<WorldObject*> m_worldObjects;
 
 };
 

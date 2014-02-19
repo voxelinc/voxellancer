@@ -2,18 +2,25 @@
 
 #include <ctime>
 
-#include "world/god.h"
-#include "world/world.h"
+#include "geometry/speed.h"
+#include "geometry/acceleration.h"
+
 #include "utils/randvec.h"
 #include "utils/randfloat.h"
 #include "utils/randbool.h"
 
-#include "voxelparticle.h"
-#include "voxelparticleworld.h"
+#include "display/rendering/visuals.h"
+
+#include "world/god.h"
+#include "world/world.h"
+
+#include "voxelparticlesetup.h"
+#include "voxelparticleengine.h"
+
 
 
 VoxelDebrisGenerator::VoxelDebrisGenerator() :
-    VoxelParticleSpawnBase("physics.debrisDampening",
+    VoxelParticleSpawnBase("physics.debrisDirectionalDampening",
                            "physics.debrisAngularDampening",
                            "physics.debrisBaseForce",
                            "physics.debrisAngularBaseForce"),
@@ -21,7 +28,6 @@ VoxelDebrisGenerator::VoxelDebrisGenerator() :
     m_density(2),
     m_spawnProbability(1.0f)
 {
-    
 }
 
 VoxelDebrisGenerator::~VoxelDebrisGenerator() {
@@ -61,11 +67,17 @@ void VoxelDebrisGenerator::spawn() {
                 particleTransform.setScale(createScale());
                 particleTransform.setPosition(gridTransform.applyTo(glm::vec3(x, y, z)));
 
-                VoxelParticle* particle = new VoxelParticle(particleTransform, m_color, m_emissiveness, createLifetime());
-                particle->setAngularSpeed(createAngularSpeed(), m_particleDampening);
-                particle->setDirectionalSpeed(createDirectionalSpeed(), m_particleAngularDampening);
+                Visuals visuals(m_color, m_emissiveness);
+                Speed speed(createDirectionalSpeed(), createAngularSpeed());
 
-                World::instance()->voxelParticleWorld().addParticle(particle);
+                VoxelParticleSetup particleSetup(
+                    particleTransform,
+                    visuals,
+                    speed,
+                    createLifetime()
+                );
+
+                World::instance()->voxelParticleEngine().addParticle(particleSetup);
             }
         }
     }

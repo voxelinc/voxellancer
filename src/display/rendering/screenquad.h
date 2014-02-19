@@ -4,6 +4,8 @@
 
 #include <glow/ref_ptr.h>
 
+#include "etc/contextdependant.h"
+
 
 namespace glow {
     class VertexArrayObject;
@@ -12,7 +14,7 @@ namespace glow {
 
 class Camera;
 
-class ScreenQuad {
+class ScreenQuad : public ContextDependant {
 public:
     static const int VERTEX_ATTRIBUTE_LOCATION = 0;
 
@@ -26,5 +28,7 @@ protected:
     glow::ref_ptr<glow::Buffer> m_vertexBuffer;
 
     void initialize();
+    void beforeContextDestroy() override;
+    void afterContextRebuild() override;
 };
 

@@ -14,6 +14,7 @@
 
 
 
+
 using namespace bandit;
 
 
@@ -25,6 +26,7 @@ go_bandit([](){
 
         PropertyManager::instance()->reset();
         PropertyManager::instance()->load("data/config.ini");
+        PropertyManager::instance()->load("data/voxels.ini", "voxels");
 
         before_each([&](){
             world = new World();
@@ -40,7 +42,7 @@ go_bandit([](){
 
          //   AssertThat(d->checkCollisions().size(), Equals(1));
 
-            b->move(glm::vec3(2, 0, 0));
+            b->transform().move(glm::vec3(2, 0, 0));
 
          //   AssertThat(d->checkCollisions().size(), Equals(0));
         });
@@ -60,11 +62,11 @@ go_bandit([](){
 
           //  AssertThat(d->checkCollisions().size(), IsGreaterThan(0));
 
-            b->move(glm::vec3(2, 0, 0));
+            b->transform().move(glm::vec3(2, 0, 0));
             b->collisionDetector().updateGeode();
         //    AssertThat(d->checkCollisions().size(), IsGreaterThan(0));
 
-            b->move(glm::vec3(0, -2, 0));
+            b->transform().move(glm::vec3(0, -2, 0));
             b->collisionDetector().updateGeode();
            // AssertThat(d->checkCollisions().size(), Equals(0));
         });
@@ -73,26 +75,26 @@ go_bandit([](){
         it("aabb shrinkLeft", [&]() {
             a->addVoxel(new Voxel(glm::ivec3(0, 0, 0)));
             a->addVoxel(new Voxel(glm::ivec3(1, 0, 0)));
-            AssertThat(a->bounds().minimalGridAABB(), Equals(IAABB(glm::ivec3(0,0,0), glm::ivec3(1,0,0))));
+            AssertThat(a->bounds().minimalGridAABB(), Equals(GridAABB(glm::ivec3(0,0,0), glm::ivec3(1,0,0))));
 
             a->removeVoxel(a->voxel(glm::ivec3(0, 0, 0)));
-            AssertThat(a->bounds().minimalGridAABB(), Equals(IAABB(glm::ivec3(1,0,0), glm::ivec3(1,0,0))));
+            AssertThat(a->bounds().minimalGridAABB(), Equals(GridAABB(glm::ivec3(1,0,0), glm::ivec3(1,0,0))));
 
             a->removeVoxel(a->voxel(glm::ivec3(1, 0, 0)));
-            AssertThat(a->bounds().minimalGridAABB(), Equals(IAABB(glm::ivec3(0,0,0), glm::ivec3(0,0,0))));
+            AssertThat(a->bounds().minimalGridAABB(), Equals(GridAABB(glm::ivec3(0,0,0), glm::ivec3(0,0,0))));
 
         });
 
         it("aabb resize on voxel add/remove", [&]() {
-            AssertThat(a->bounds().minimalGridAABB(), Equals(IAABB(glm::ivec3(0,0,0), glm::ivec3(0,0,0))));
+            AssertThat(a->bounds().minimalGridAABB(), Equals(GridAABB(glm::ivec3(0,0,0), glm::ivec3(0,0,0))));
 
-            a->addVoxel(new Voxel(glm::ivec3(0, 0, 0))); AssertThat(a->bounds().minimalGridAABB(), Equals(IAABB(glm::ivec3(0,0,0), glm::ivec3(0,0,0))));
-            a->addVoxel(new Voxel(glm::ivec3(3, 0, 0))); AssertThat(a->bounds().minimalGridAABB(), Equals(IAABB(glm::ivec3(0,0,0), glm::ivec3(3,0,0))));
-            a->addVoxel(new Voxel(glm::ivec3(2, 0, 0))); AssertThat(a->bounds().minimalGridAABB(), Equals(IAABB(glm::ivec3(0,0,0), glm::ivec3(3,0,0))));
-            a->addVoxel(new Voxel(glm::ivec3(1, 0, 0))); AssertThat(a->bounds().minimalGridAABB(), Equals(IAABB(glm::ivec3(0,0,0), glm::ivec3(3,0,0))));
+            a->addVoxel(new Voxel(glm::ivec3(0, 0, 0))); AssertThat(a->bounds().minimalGridAABB(), Equals(GridAABB(glm::ivec3(0,0,0), glm::ivec3(0,0,0))));
+            a->addVoxel(new Voxel(glm::ivec3(3, 0, 0))); AssertThat(a->bounds().minimalGridAABB(), Equals(GridAABB(glm::ivec3(0,0,0), glm::ivec3(3,0,0))));
+            a->addVoxel(new Voxel(glm::ivec3(2, 0, 0))); AssertThat(a->bounds().minimalGridAABB(), Equals(GridAABB(glm::ivec3(0,0,0), glm::ivec3(3,0,0))));
+            a->addVoxel(new Voxel(glm::ivec3(1, 0, 0))); AssertThat(a->bounds().minimalGridAABB(), Equals(GridAABB(glm::ivec3(0,0,0), glm::ivec3(3,0,0))));
 
-            a->removeVoxel(a->voxel(glm::ivec3(2, 0, 0))); AssertThat(a->bounds().minimalGridAABB(), Equals(IAABB(glm::ivec3(0,0,0), glm::ivec3(3,0,0))));
-            a->removeVoxel(a->voxel(glm::ivec3(3, 0, 0))); AssertThat(a->bounds().minimalGridAABB(), Equals(IAABB(glm::ivec3(0,0,0), glm::ivec3(1,0,0))));
+            a->removeVoxel(a->voxel(glm::ivec3(2, 0, 0))); AssertThat(a->bounds().minimalGridAABB(), Equals(GridAABB(glm::ivec3(0,0,0), glm::ivec3(3,0,0))));
+            a->removeVoxel(a->voxel(glm::ivec3(3, 0, 0))); AssertThat(a->bounds().minimalGridAABB(), Equals(GridAABB(glm::ivec3(0,0,0), glm::ivec3(1,0,0))));
 
         });
     });

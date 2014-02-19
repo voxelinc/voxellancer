@@ -10,6 +10,7 @@ public:
     void load();
     void reset();
 
+
 protected:
     Game* m_game;
     World* m_world;

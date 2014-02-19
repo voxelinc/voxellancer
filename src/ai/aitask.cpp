@@ -1,9 +1,13 @@
 #include "aitask.h"
 
 
-AiTask::AiTask(Ship& ship) :
-    m_ship(ship)
+AiTask::AiTask(BoardComputer* boardComputer) :
+    m_boardComputer(boardComputer)
 {
+}
+
+BoardComputer* AiTask::boardComputer() {
+    return m_boardComputer;
 }
 
 void AiTask::update(float deltaSec) {
@@ -13,3 +17,4 @@ void AiTask::update(float deltaSec) {
 bool AiTask::isInProgress() {
     return true;
 }
+

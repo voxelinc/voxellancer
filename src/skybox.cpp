@@ -19,19 +19,19 @@ Skybox::Skybox() :
     m_vertexArrayObject(0),
     m_vertexBuffer(0)
 {
-    
+
 }
 
 void Skybox::initialize() {
     /* Texture */
     m_texture = new glow::Texture(GL_TEXTURE_CUBE_MAP);
     if (!DdsTexture::loadImageCube(m_texture,
-        "data/skybox/nebula_1024_right1.dds",
-        "data/skybox/nebula_1024_left2.dds",
-        "data/skybox/nebula_1024_top3.dds",
-        "data/skybox/nebula_1024_bottom4.dds",
-        "data/skybox/nebula_1024_front5.dds",
-        "data/skybox/nebula_1024_back6.dds")) {
+        "data/gfx/skybox/nebula_1024_right1.dds",
+        "data/gfx/skybox/nebula_1024_left2.dds",
+        "data/gfx/skybox/nebula_1024_top3.dds",
+        "data/gfx/skybox/nebula_1024_bottom4.dds",
+        "data/gfx/skybox/nebula_1024_front5.dds",
+        "data/gfx/skybox/nebula_1024_back6.dds")) {
         throw std::runtime_error("Skybox textures not found. Check working directory?");
     }
     m_texture->setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -40,10 +40,10 @@ void Skybox::initialize() {
     m_texture->setParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     m_texture->setParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     m_texture->setParameter(GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-    
+
     /* Shaders */
-    glow::Shader* vertexShader = glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/skybox/skybox.vert");
-    glow::Shader* fragmentShader = glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/skybox/skybox.frag");
+    glow::Shader* vertexShader = glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/shader/skybox/skybox.vert");
+    glow::Shader* fragmentShader = glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/shader/skybox/skybox.frag");
 
     m_shaderProgram = new glow::Program();
     m_shaderProgram->attach(vertexShader, fragmentShader);
@@ -90,4 +90,15 @@ void Skybox::draw(Camera& camera){
     m_texture->unbind();
 
     glEnable(GL_DEPTH_TEST);
+}
+
+void Skybox::beforeContextDestroy() {
+    m_vertexArrayObject = nullptr;
+    m_vertexBuffer = nullptr;
+    m_texture = nullptr;
+    m_shaderProgram = nullptr;
+}
+
+void Skybox::afterContextRebuild() {
+    initialize();
 }

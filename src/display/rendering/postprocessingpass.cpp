@@ -15,8 +15,8 @@ PostProcessingPass::PostProcessingPass(const std::string& name, std::shared_ptr<
     m_program(nullptr),
     m_output(),
     m_inputMapping(),
-    m_fragmentShader(""),
-    m_vertexShader("data/postprocessing/screenquad.vert")
+    m_fragmentShader(),
+    m_vertexShader("data/shader/postprocessing/screenquad.vert")
 {
 }
 
@@ -33,11 +33,7 @@ void PostProcessingPass::beforeDraw(FrameBuffer& frameBuffer) {
     m_program->setUniform("viewport", frameBuffer.resolution()); frameBuffer.bind();
 }
 
-void PostProcessingPass::update(float deltaSec) {
-
-}
-
-void PostProcessingPass::apply(FrameBuffer& frameBuffer, Camera& camera, EyeSide side) {
+void PostProcessingPass::apply(FrameBuffer& frameBuffer, const RenderMetaData& metadata) {
     if (!m_program) {
         initialize();
     }
@@ -63,10 +59,27 @@ void PostProcessingPass::setFragmentShader(const std::string& fragmentShader) {
 
 void PostProcessingPass::initialize() {
     m_program = new glow::Program();
+    
     glow::Shader* vertShader = glowutils::createShaderFromFile(GL_VERTEX_SHADER, m_vertexShader);
     glow::Shader* fragShader = glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, m_fragmentShader);
-    
+
     m_program->attach(vertShader, fragShader);
     m_program->link();
     CheckGLError();
+}
+
+void PostProcessingPass::beforeContextDestroy() {
+    m_program = nullptr;
+}
+
+void PostProcessingPass::afterContextRebuild() {
+    initialize();
+    restoreUniforms();
+}
+
+void PostProcessingPass::restoreUniforms() {
+    for (auto pair : m_uniforms) {
+        glow::ref_ptr<glow::AbstractUniform> uniform = pair.second;
+        m_program->addUniform(uniform);
+    }
 }

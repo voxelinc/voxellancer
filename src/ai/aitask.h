@@ -1,16 +1,20 @@
 #pragma once
 
 
-class Ship;
+class BoardComputer;
+class WorldObject;
 
 class AiTask {
 public:
-    AiTask(Ship& ship);
+    AiTask(BoardComputer* boardComputer);
+
+    BoardComputer* boardComputer();
 
     virtual void update(float deltaSec);
     virtual bool isInProgress();
 
+
 protected:
-    Ship& m_ship;
+    BoardComputer* m_boardComputer;
 };
 

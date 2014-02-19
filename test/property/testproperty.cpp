@@ -34,7 +34,8 @@ go_bandit([](){
 
         it("should load", [&]() {
             PropertyManager::instance()->load("test/property/test.ini");
-    
+            PropertyManager::instance()->load("data/voxels.ini", "voxels");
+
             Property<int> iSize("player.size");
             Property<float> fProp("player.size");
             Property<float> fProp2("player.height");
@@ -43,7 +44,7 @@ go_bandit([](){
             Property<char> cProp("section.forward");
             Property<bool> bProp2("player.is_true");
             Property<glm::vec3> v3Prop("player.pos");
-    
+
             AssertThat(iSize.get(), Equals(1));
             AssertThat(fProp.get(), Equals(1));
             AssertThat(fProp2.get(), EqualsWithDelta(4.51, 0.01));

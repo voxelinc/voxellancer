@@ -3,6 +3,9 @@
 
 #include <glow/ref_ptr.h>
 
+#include "etc/contextdependant.h"
+
+
 namespace glow {
     class Texture;
     class Program;
@@ -14,7 +17,7 @@ class Camera;
 class VoxelCluster;
 class VoxelMesh;
 
-class VoxelRenderer {
+class VoxelRenderer : public ContextDependant {
 public:
     void prepareDraw(Camera& camera, bool withBorder = true);
     void draw(VoxelCluster& cluster);
@@ -26,7 +29,8 @@ public:
     static glow::Program* program();
     static VoxelMesh& voxelMesh();
 
-private:
+
+protected:
     glow::ref_ptr<glow::Program> m_program;
     std::unique_ptr<VoxelMesh> m_voxelMesh;
     bool m_prepared;
@@ -35,5 +39,7 @@ private:
 
     VoxelRenderer();
     void createAndSetupShaders();
+    virtual void beforeContextDestroy() override;
+    virtual void afterContextRebuild() override;
 };
 

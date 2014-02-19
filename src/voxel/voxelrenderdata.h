@@ -7,7 +7,7 @@
 #include <glow/ref_ptr.h>
 
 #include "utils/vec3hash.h"
-
+#include "etc/contextdependant.h"
 
 namespace glow {
     class Program;
@@ -17,18 +17,16 @@ namespace glow {
 };
 class Voxel;
 
-class VoxelRenderData
-{
+class VoxelRenderData : public ContextDependant {
 public:
     VoxelRenderData(std::unordered_map<glm::ivec3, Voxel*> &voxel);
-    ~VoxelRenderData();
 
     void invalidate();
     int voxelCount();
 
     glow::VertexArrayObject* vertexArrayObject();
 
-private:
+protected:
     std::unordered_map<glm::ivec3, Voxel*> &m_voxel;
     bool m_isDirty;
     int m_bufferSize;
@@ -40,5 +38,7 @@ private:
     void setupVertexAttributes();
     void setupVertexAttribute(GLint offset, const std::string& name, int numPerVertex, GLenum type, GLboolean normalised, int bindingNum);
 
+    virtual void beforeContextDestroy() override;
+    virtual void afterContextRebuild() override;
 };
 

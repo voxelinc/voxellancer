@@ -22,7 +22,7 @@
 #include <glowutils/global.h>
 #include <glowutils/FileRegistry.h>
 
-#include "etc/windowmanager.h"
+#include "etc/contextprovider.h"
 #include "etc/cli/commandlineparser.h"
 
 #include "geometry/viewport.h"
@@ -75,9 +75,16 @@ static void resizeCallback(GLFWwindow* window, int width, int height) {
     }
 }
 
+static void toggleFullScreen();
+
 static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, GL_TRUE);
+    }
+    if ((key == GLFW_KEY_ENTER && action == GLFW_PRESS) &&
+        ((glfwGetKey(window, GLFW_KEY_LEFT_ALT) == GLFW_PRESS) ||
+        (glfwGetKey(window, GLFW_KEY_RIGHT_ALT) == GLFW_PRESS))) {
+        toggleFullScreen();
     }
     if (key == GLFW_KEY_F5 && action == GLFW_PRESS) {
         glowutils::FileRegistry::instance().reloadAll();
@@ -92,19 +99,26 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
 	game->inputHandler().keyCallback(key, scancode, action, mods);
 }
 
-static void mouseButtonCallback(GLFWwindow* window, int Button, int Action, int mods) {
-
-}
-
-static void cursorPositionCallback(GLFWwindow* window, double x, double y) {
-
-}
-
 void setCallbacks(GLFWwindow* window) {
-    glfwSetMouseButtonCallback(window, mouseButtonCallback);
-    glfwSetCursorPosCallback(window, cursorPositionCallback);
     glfwSetKeyCallback(window, keyCallback);
     glfwSetWindowSizeCallback(window, resizeCallback);
+}
+
+static void miscSettings() {
+    OVR::System::Init(OVR::Log::ConfigureDefaultLog(OVR::LogMask_All));
+
+    glClearColor(0.0f, 0.0f, 0.3f, 1.0f);
+
+#ifdef WIN32 // TODO: find a way to correctly detect debug extension in linux
+    glow::debugmessageoutput::enable();
+#endif
+
+#ifdef WIN32
+    wglSwapIntervalEXT(1); // glfw doesn't work!?
+#else
+    glfwSwapInterval(1);
+#endif
+    std::srand((unsigned int)time(NULL));
 }
 
 static void mainloop() {
@@ -122,40 +136,71 @@ static void mainloop() {
     }
 }
 
+/*
+    At some day, modding-capabilities in mind, this shoul be done by polling the
+    appropriate dirs
+*/
+static void loadWorldObjectConfigs() {
+    PropertyManager::instance()->load("data/worldobjects/basicship.ini", "basicship");
+    PropertyManager::instance()->load("data/worldobjects/banner.ini", "banner");
+    PropertyManager::instance()->load("data/worldobjects/eagle.ini", "eagle");
+    PropertyManager::instance()->load("data/worldobjects/specialbasicship.ini", "specialbasicship");
+    PropertyManager::instance()->load("data/worldobjects/normandy.ini", "normandy");
+    PropertyManager::instance()->load("data/worldobjects/gunbullet.ini", "gunbullet");
+    PropertyManager::instance()->load("data/worldobjects/snowball.ini", "snowball");
+    PropertyManager::instance()->load("data/worldobjects/hornet.ini", "hornet");
+}
+
+/*
+    At some day, modding-capabilities in mind, this shoul be done by polling the
+    appropriate dirs
+*/
+static void loadEquipmentConfigs() {
+    PropertyManager::instance()->load("data/equipment/engines/enginemk1.ini", "enginemk1");
+    PropertyManager::instance()->load("data/equipment/engines/superslowengine.ini", "superslowengine");
+    PropertyManager::instance()->load("data/equipment/engines/piratethruster.ini", "piratethruster");
+    PropertyManager::instance()->load("data/equipment/engines/rocketthrustermk1.ini", "rocketthrustermk1");
+    PropertyManager::instance()->load("data/equipment/weapons/gun.ini", "gun");
+    PropertyManager::instance()->load("data/equipment/weapons/snowcanon.ini", "snowcanon");
+    PropertyManager::instance()->load("data/equipment/weapons/hornetlauncher.ini", "hornetlauncher");
+}
+
+void toggleFullScreen() {
+    ContextProvider::instance()->toggleFullScreen();
+
+    GLFWwindow* window = glfwGetCurrentContext();
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+
+    setCallbacks(window);
+
+    // not checking version etc again
+
+    Size<int> res = ContextProvider::instance()->resolution();
+    resizeCallback(window, res.width(), res.height());
+}
 
 int main(int argc, char* argv[]) {
     CommandLineParser clParser;
     clParser.parse(argc, argv);
 
     PropertyManager::instance()->load("data/config.ini");
+    PropertyManager::instance()->load("data/voxels.ini", "voxels");
 
     if (!glfwInit()) {
-        glow::fatal("Could not init glfw");
+        glow::fatal("Could not init GLFW");
         exit(-1);
     }
 
     glfwSetErrorCallback(errorCallback);
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, MajorVersionRequire);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, MinorVersionRequire);
-    //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-
-#if defined(NDEBUG)
-    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_FALSE);
-#else
-    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
-#endif
-
     if(clParser.fullScreen()) {
-        WindowManager::instance()->setFullScreenResolution(1);
+        ContextProvider::instance()->initFullScreen(MajorVersionRequire, MinorVersionRequire, 1);
     } else {
-        WindowManager::instance()->setWindowedResolution(Size<int>(Property<int>("window.width"), Property<int>("window.height")));
+        ContextProvider::instance()->initWindowed(MajorVersionRequire, MinorVersionRequire);
     }
 
     GLFWwindow* window = glfwGetCurrentContext();
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-
 
     setCallbacks(window);
 
@@ -168,26 +213,15 @@ int main(int argc, char* argv[]) {
     }
     CheckGLError();
 
-    OVR::System::Init(OVR::Log::ConfigureDefaultLog(OVR::LogMask_All));
-
-    glClearColor(0.0f, 0.0f, 0.3f, 1.0f);
-
-#ifdef WIN32 // TODO: find a way to correctly detect debug extension in linux
-    glow::debugmessageoutput::enable();
-#endif
-
-#ifdef WIN32
-    wglSwapIntervalEXT(1); // glfw doesn't work!?
-#else
-    glfwSwapInterval(1);
-#endif
+    miscSettings();
 
 //#define TRYCATCH
 
 #ifdef TRYCATCH
     try {
 #endif
-        std::srand((unsigned int)time(NULL));
+        loadWorldObjectConfigs();
+        loadEquipmentConfigs();
 
         game = new Game();
 
@@ -217,7 +251,7 @@ int main(int argc, char* argv[]) {
 #endif
 
     delete game;
-    WindowManager::instance()->shutdown();
+    ContextProvider::instance()->shutdown();
     glfwTerminate();
     OVR::System::Destroy();
 

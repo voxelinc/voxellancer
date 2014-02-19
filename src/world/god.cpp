@@ -76,7 +76,7 @@ void God::spawn() {
             continue;
         }
 
-        m_world.worldObjects().push_back(worldObject);
+        m_world.worldObjects().insert(worldObject);
     }
     m_scheduledSpawns.clear();
 }
@@ -84,7 +84,7 @@ void God::spawn() {
 void God::remove() {
     for (WorldObject* worldObject : m_scheduledRemovals) {
         m_world.worldTree().remove(worldObject->collisionDetector().geode());
-        m_world.worldObjects().remove(worldObject);
+        m_world.worldObjects().erase(worldObject);
         delete worldObject;
     }
     m_scheduledRemovals.clear();

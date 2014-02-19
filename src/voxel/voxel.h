@@ -4,14 +4,15 @@
 
 #include "property/property.h"
 
+#include "display/rendering/visuals.h"
+
 
 class VoxelCluster;
 class VoxelTreeNode;
 class WorldObject;
 class Sphere;
 
-class Voxel
-{
+class Voxel {
 public:
     Voxel(const glm::ivec3& gridCell, uint32_t color = 0xFFFFFF, float mass = defaultMass(), float hp = defaultHp(), float emissiveness = 0);
     Voxel(const Voxel& other);
@@ -27,8 +28,7 @@ public:
     virtual void addToCluster(VoxelCluster *cluster);
     virtual void addToObject(WorldObject *object);
 
-    uint32_t color() const;
-    float emissiveness() const;
+    virtual Visuals visuals() const;
 
     float hp() const;
     void applyDamage(float deltaHp);
@@ -44,8 +44,7 @@ public:
 protected:
     glm::ivec3 m_gridCell;
     VoxelTreeNode *m_voxelTreeNode;
-    uint32_t m_color;
-    float m_emissiveness;
+    Visuals m_visuals;
     float m_hp;
     float m_normalizedMass;
 

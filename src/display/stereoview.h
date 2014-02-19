@@ -3,6 +3,7 @@
 #include <memory>
 
 #include "view.h"
+#include "etc/contextdependant.h"
 
 
 class StereoViewEye;
@@ -11,7 +12,7 @@ class StereoBlitProgram;
 class ViewPort;
 class StereoRenderInfo;
 
-class StereoView: public View {
+class StereoView: public View, public ContextDependant {
 public:
     StereoView(const Viewport& viewport, const StereoRenderInfo& stereoRenderInfo);
 
@@ -32,5 +33,12 @@ protected:
 
     glm::vec2 m_leftEyeLensCenter;
     glm::vec2 m_rightEyeLensCenter;
+    std::vector<float> m_distortionKs;
+    float m_distortionScale;
+
+    void initialize();
+
+    virtual void beforeContextDestroy() override;
+    virtual void afterContextRebuild() override;
 };
 

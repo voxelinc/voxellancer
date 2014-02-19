@@ -16,22 +16,19 @@
 #include "voxel.h"
 
 
-
-struct VoxelData {
-    glm::vec3 position;
-    uint32_t color;
-    float emissiveness;
-};
+namespace {
+    struct VoxelData {
+        glm::vec3 position;
+        uint32_t color;
+        float emissiveness;
+    };
+}
 
 VoxelRenderData::VoxelRenderData(std::unordered_map<glm::ivec3, Voxel*> &voxel) :
     m_voxel(voxel),
     m_isDirty(true),
     m_bufferSize(0)
 {
-
-}
-
-VoxelRenderData::~VoxelRenderData() {
 
 }
 
@@ -61,6 +58,10 @@ void VoxelRenderData::updateBuffer() {
         setupVertexAttributes();
     }
 
+    if (m_voxel.empty()) {
+        return;
+    }
+
     if (m_bufferSize < m_voxel.size() || m_bufferSize > m_voxel.size() * 2) {
         m_voxelDataBuffer->setData(m_voxel.size() * sizeof(VoxelData), nullptr, GL_DYNAMIC_DRAW);
         m_bufferSize = m_voxel.size();
@@ -73,7 +74,7 @@ void VoxelRenderData::updateBuffer() {
     for (auto pair : m_voxel) {
         Voxel *voxel = pair.second;
         assert(voxel != nullptr);
-        voxelData[i++] = VoxelData{ glm::vec3(voxel->gridCell()), voxel->color(), voxel->emissiveness() };
+        voxelData[i++] = VoxelData{ glm::vec3(voxel->gridCell()), voxel->visuals().color(), voxel->visuals().emissiveness() };
     }
 
     m_voxelDataBuffer->unmap();
@@ -90,7 +91,20 @@ void VoxelRenderData::invalidate() {
 }
 
 glow::VertexArrayObject* VoxelRenderData::vertexArrayObject() {
-    if (m_isDirty)
+    if (m_isDirty) {
         updateBuffer();
+    }
     return m_vertexArrayObject;
+}
+
+void VoxelRenderData::beforeContextDestroy() {
+    m_vertexArrayObject = nullptr;
+    m_voxelDataBuffer = nullptr;
+    // trigger a setup on next update
+    m_isDirty = true;
+    m_bufferSize = 0;
+}
+
+void VoxelRenderData::afterContextRebuild() {
+    // lazy init
 }

@@ -50,3 +50,10 @@ void BlitProgram::initialize() {
     initializeShaders();
 }
 
+void BlitProgram::beforeContextDestroy() {
+    assert(false); // This class is a glow::Program and has to be rebuilt on context switch
+    // Make the class holding this member a ContextDependant and delete this member before the context is destroyed
+}
+
+void BlitProgram::afterContextRebuild() {
+}

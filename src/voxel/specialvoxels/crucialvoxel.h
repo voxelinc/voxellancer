@@ -1,17 +1,14 @@
 #pragma once
 
-#include "voxel/voxel.h"
+#include "voxel/specialvoxel.h"
 
-class CrucialVoxel : public Voxel {
+
+class CrucialVoxel: public SpecialVoxel {
 public:
-    CrucialVoxel(const glm::ivec3& gridCell, int color = 0xFFFFFF, float mass = 1.0f, float hp = 1.0f);
-    ~CrucialVoxel();
+    CrucialVoxel(const glm::ivec3& gridCell, int index);
 
-    virtual void addToObject(WorldObject* object);
+    virtual void addToObject(WorldObject* worldObject);
 
-    virtual void onRemoval(); 
+    virtual void onRemoval();
     virtual void onDestruction();
-
-protected:
-    WorldObject* m_worldObject;
 };
