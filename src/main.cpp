@@ -147,6 +147,8 @@ static void loadWorldObjectConfigs() {
     PropertyManager::instance()->load("data/worldobjects/gunbullet.ini", "gunbullet");
     PropertyManager::instance()->load("data/worldobjects/snowball.ini", "snowball");
     PropertyManager::instance()->load("data/worldobjects/hornet.ini", "hornet");
+    PropertyManager::instance()->load("data/worldobjects/mox.ini", "mox");
+    PropertyManager::instance()->load("data/worldobjects/pulselaser_bullet.ini", "pulselaser_bullet");
 }
 
 /*
@@ -158,9 +160,11 @@ static void loadEquipmentConfigs() {
     PropertyManager::instance()->load("data/equipment/engines/superslowengine.ini", "superslowengine");
     PropertyManager::instance()->load("data/equipment/engines/piratethruster.ini", "piratethruster");
     PropertyManager::instance()->load("data/equipment/engines/rocketthrustermk1.ini", "rocketthrustermk1");
+    PropertyManager::instance()->load("data/equipment/engines/mginemk1.ini", "mginemk1");
     PropertyManager::instance()->load("data/equipment/weapons/gun.ini", "gun");
     PropertyManager::instance()->load("data/equipment/weapons/snowcanon.ini", "snowcanon");
     PropertyManager::instance()->load("data/equipment/weapons/hornetlauncher.ini", "hornetlauncher");
+    PropertyManager::instance()->load("data/equipment/weapons/pulselaser.ini", "pulselaser");
 }
 
 void toggleFullScreen() {
