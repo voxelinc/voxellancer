@@ -200,7 +200,7 @@ set_target_properties(${target}
     DEBUG_POSTFIX "d${DEBUG_POSTFIX}"
 )
 
-set(BINARIES ${GLEW_BINARY} ${GLFW_BINARY} ${SFML_BINARIES})
+set(BINARIES ${GLEW_BINARY} ${GLFW_BINARY} ${SFML_BINARIES} ${LUA52_BINARY})
 
 if(WIN32)
     foreach( binary ${BINARIES})
