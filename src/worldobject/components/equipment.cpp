@@ -5,6 +5,8 @@ Equipment::Equipment(const std::string& equipmentKey):
 {
 }
 
+Equipment::~Equipment() = default;
+
 const std::string& Equipment::equipmentKey() const {
     return m_equipmentKey;
 }

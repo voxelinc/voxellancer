@@ -3,15 +3,9 @@
 #include <list>
 #include <memory>
 
-#include "physics/physics.h"
-
-#include "ui/objectinfo.h"
-
 #include "voxel/voxelcluster.h"
-
 #include "worldobject/handle/handle.h"
 
-#include "worldobjectcomponents.h"
 
 
 class CollisionDetector;
@@ -20,7 +14,10 @@ class HardpointVoxel;
 class CockpitVoxel;
 class FuelVoxel;
 class CollisionFilter;
-
+class Physics;
+class ObjectInfo;
+class VoxelCollision;
+class WorldObjectComponents;
 
 class WorldObject : public VoxelCluster {
 public:
@@ -60,18 +57,14 @@ public:
 protected:
     std::unique_ptr<CollisionFilter> m_collisionFilter;
     std::unique_ptr<CollisionDetector> m_collisionDetector;
-    Physics m_physics;
-    ObjectInfo m_objectInfo;
-    WorldObjectComponents m_components;
+    std::unique_ptr<Physics> m_physics;
+    std::unique_ptr<ObjectInfo> m_objectInfo;
+    std::unique_ptr<WorldObjectComponents> m_components;
 
     Handle<WorldObject> m_handle;
-
     Voxel* m_crucialVoxel;
-
     bool m_scheduledForDeletion;
-
     float m_collisionFieldOfDamage;
-
 
     WorldObject(CollisionFilter* collisionFilter, float scale = 1.0f);
 };

@@ -2,8 +2,9 @@
 
 #include <unordered_set>
 
-#include "glm/glm.hpp"
-#include "glm/gtc/quaternion.hpp"
+#include <glm/glm.hpp>
+#include <glm/gtc/quaternion.hpp>
+
 
 class WorldObject;
 
@@ -20,11 +21,6 @@ public:
 
     // Return the WorldObject from objects that is closest to self, measured position to position
     static WorldObject* closestObject(WorldObject& self, std::unordered_set<WorldObject*>* objects);
-
-    template <typename T>
-    static int sgn(T val);
-
-    static glm::vec3 sgn(glm::vec3 v);
 
     // Normalize, and return value again if glm::length(value) is 0
     template<typename T>

@@ -4,28 +4,27 @@
 #include <memory>
 #include <glm/glm.hpp>
 
-#include "collision/voxelcollision.h"
-
 #include "geometry/transform.h"
 #include "geometry/speed.h"
 #include "geometry/acceleration.h"
 
 #include "property/property.h"
 
-#include "physics/impulse.h"
-
-#include "movement.h"
-
 
 class WorldObject;
 class Transform;
+class Voxel;
+class VoxelCollision;
 
 class Physics {
 public:
     Physics(WorldObject& worldObject, float scale);
 
-    const Acceleration& dampening() const;
-    void setDampening(const Acceleration& dampening);
+    float directionalDampening() const;
+    void setDirectionalDampening(float directionalDampening);
+
+    float angularDampening() const;
+    void setAngularDampening(float angularDampening);
 
     const Speed& speed() const;
     void setSpeed(const Speed& speed);
@@ -44,21 +43,18 @@ public:
 
 
 protected:
-    virtual void updateSpeed(float deltaSec);
-
-
-protected:
     WorldObject& m_worldObject;
-
     Speed m_speed;
     Acceleration m_acceleration;
-    Acceleration m_dampening;
+
+    float m_directionalDampening;
+    float m_angularDampening;
 
     float m_mass;
-    std::list<VoxelCollision> m_collisions;
-    glm::vec3 m_accumulatedMassVec;
+    glm::vec3 m_accumulatedMassVec; // For fast recalc of center of mass on voxel addition/removal
     float m_massScaleFactor;
 
-    void alterCell(Voxel* voxel, bool isAdd);
+    void voxelChanged(Voxel* voxel, bool isAdd);
+    virtual void updateSpeed(float deltaSec);
 };
 

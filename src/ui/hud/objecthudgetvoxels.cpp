@@ -3,11 +3,12 @@
 #include <glm/gtx/quaternion.hpp>
 
 #include "utils/geometryhelper.h"
-
 #include "voxel/voxelrenderer.h"
-
 #include "hud.h"
 #include "objecthudget.h"
+#include "geometry/transform.h"
+#include "voxel/voxelcluster.h"
+#include "voxel/voxel.h"
 
 
 class ObjectHudgetCorner: public VoxelCluster {
@@ -38,7 +39,7 @@ public:
         transform().setPosition(objectHudget->worldPosition(direction));
         transform().setOrientation(objectHudget->worldOrientation(direction));
 
-        VoxelRenderer::instance()->draw(this);
+        VoxelRenderer::instance()->draw(*this);
     }
 
 

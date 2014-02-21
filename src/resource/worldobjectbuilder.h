@@ -25,6 +25,7 @@ public:
     WorldObject* buildWorldObject();
 
 
+
 protected:
     std::string m_name;
 
@@ -35,6 +36,12 @@ protected:
     void setupComponents(WorldObjectComponents& components);
     void setupHardpoints(WorldObjectComponents& components);
     void setupEngineSlots(WorldObjectComponents& components);
+
+
+    /*
+        Little hack method that ensures all hardpoints and engine-points are equipped
+        with something
+    */
+    void equipSomehow(WorldObject* worldObject);
 };
 
-#include "worldobjectbuilder.inl"

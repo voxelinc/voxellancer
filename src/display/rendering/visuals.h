@@ -10,21 +10,21 @@
 */
 class Visuals {
 public:
-	Visuals();
-	Visuals(uint32_t color, float emissiveness);
+    Visuals();
+    Visuals(uint32_t color, float emissiveness);
 
-	uint32_t color() const;
-	void setColor(uint32_t color);
+    uint32_t color() const;
+    void setColor(uint32_t color);
 
-	float emissiveness() const;
-	void setEmissiveness(float emissiveness);
+    float emissiveness() const;
+    void setEmissiveness(float emissiveness);
 
 
     static Visuals fromProperties(const std::string& prefix);
 
 
 protected:
-	uint32_t m_color;
-	float m_emissiveness;
+    uint32_t m_color;
+    float m_emissiveness;
 };
 

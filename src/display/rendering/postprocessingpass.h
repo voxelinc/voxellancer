@@ -1,10 +1,10 @@
 #pragma once
 
 #include <vector>
+#include <memory>
 #include <unordered_map>
 
 #include <glow/ref_ptr.h>
-#include <glow/Program.h>
 
 #include "renderpass.h"
 #include "etc/contextdependant.h"
@@ -12,6 +12,7 @@
 
 namespace glow {
     class Program;
+    class AbstractUniform;
 }
 
 class FrameBuffer;
@@ -37,6 +38,7 @@ public:
 
 
 protected:
+    std::unordered_map<std::string, glow::ref_ptr<glow::AbstractUniform>> m_uniforms;
     glow::ref_ptr<glow::Program> m_program;
     std::shared_ptr<ScreenQuad> m_quad;
 
@@ -45,8 +47,8 @@ protected:
     std::string m_fragmentShader;
     std::string m_vertexShader;
 
-
     void initialize();
+    void restoreUniforms();
     virtual void beforeContextDestroy() override;
     virtual void afterContextRebuild() override;
 };

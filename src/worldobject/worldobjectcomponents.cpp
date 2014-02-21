@@ -94,14 +94,9 @@ std::list<Hardpoint*>& WorldObjectComponents::hardpoints() {
 
 void WorldObjectComponents::fireAtPoint(const glm::vec3& point) {
     for (Hardpoint* hardpoint : m_hardpoints) {
-        if(!hardpoint->weapon()) {
-            continue;
-        }
-        if (hardpoint->weapon()->type() == WeaponType::Gun) {
-            Gun* gun = dynamic_cast<Gun*>(hardpoint->weapon());
-            assert(gun);
-
-            gun->fireAtPoint(point);
+        if (hardpoint->weapon() && hardpoint->weapon()->type() == WeaponType::Gun) {
+            Gun& gun = dynamic_cast<Gun&>(*hardpoint->weapon().get());
+            gun.fireAtPoint(point);
         }
     }
 }
@@ -114,10 +109,8 @@ void WorldObjectComponents::fireAtObject(WorldObject* worldObject) {
             continue;
         }
         if (hardpoint->weapon()->type() == WeaponType::RocketLauncher) {
-            RocketLauncher* rocketLauncher = dynamic_cast<RocketLauncher*>(hardpoint->weapon());
-            assert(rocketLauncher);
-
-            rocketLauncher->fireAtObject(worldObject);
+            RocketLauncher& rocketLauncher = dynamic_cast<RocketLauncher&>(*hardpoint->weapon());
+            rocketLauncher.fireAtObject(worldObject);
         }
     }
 }

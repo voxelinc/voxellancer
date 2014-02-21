@@ -15,7 +15,7 @@ PostProcessingPass::PostProcessingPass(const std::string& name, std::shared_ptr<
     m_program(nullptr),
     m_output(),
     m_inputMapping(),
-    m_fragmentShader(""),
+    m_fragmentShader(),
     m_vertexShader("data/shader/postprocessing/screenquad.vert")
 {
 }
@@ -59,6 +59,7 @@ void PostProcessingPass::setFragmentShader(const std::string& fragmentShader) {
 
 void PostProcessingPass::initialize() {
     m_program = new glow::Program();
+    
     glow::Shader* vertShader = glowutils::createShaderFromFile(GL_VERTEX_SHADER, m_vertexShader);
     glow::Shader* fragShader = glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, m_fragmentShader);
 
@@ -73,4 +74,12 @@ void PostProcessingPass::beforeContextDestroy() {
 
 void PostProcessingPass::afterContextRebuild() {
     initialize();
+    restoreUniforms();
+}
+
+void PostProcessingPass::restoreUniforms() {
+    for (auto pair : m_uniforms) {
+        glow::ref_ptr<glow::AbstractUniform> uniform = pair.second;
+        m_program->addUniform(uniform);
+    }
 }

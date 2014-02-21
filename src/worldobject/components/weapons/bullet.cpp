@@ -4,6 +4,8 @@
 
 #include "world/god.h"
 #include "world/world.h"
+#include "ui/objectinfo.h"
+#include "physics/physics.h"
 
 
 Bullet::Bullet():
@@ -12,10 +14,11 @@ Bullet::Bullet():
     collisionFilter().setCollisionFilterClass(CollisionFilterClass::Bullet);
     collisionFilter().setCollideableWith(CollisionFilterClass::Bullet, false);
 
-    m_objectInfo.setShowOnHud(false);
-    m_objectInfo.setCanLockOn(false);
+    m_objectInfo->setShowOnHud(false);
+    m_objectInfo->setCanLockOn(false);
 
-    m_physics.setDampening(Acceleration(glm::vec3(0.0f), glm::vec3(0.0f)));
+    m_physics->setDirectionalDampening(0.0f);
+    m_physics->setAngularDampening(0.0f);
 }
 
 void Bullet::update(float deltaSec) {

@@ -32,6 +32,8 @@
 #include "ui/inputhandler.h"
 
 #include "game.h"
+#include "display/viewer.h"
+#include "etc/hmd/hmdmanager.h"
 
 
 static GLint MajorVersionRequire = 3;
@@ -100,19 +102,6 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
 void setCallbacks(GLFWwindow* window) {
     glfwSetKeyCallback(window, keyCallback);
     glfwSetWindowSizeCallback(window, resizeCallback);
-}
-
-static void configureOpenGLContext() {
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, MajorVersionRequire);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, MinorVersionRequire);
-    //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-
-#if defined(NDEBUG)
-    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_FALSE);
-#else
-    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
-#endif
 }
 
 static void miscSettings() {
@@ -203,8 +192,6 @@ int main(int argc, char* argv[]) {
     }
 
     glfwSetErrorCallback(errorCallback);
-
-    configureOpenGLContext();
 
     if(clParser.fullScreen()) {
         ContextProvider::instance()->initFullScreen(MajorVersionRequire, MinorVersionRequire, 1);

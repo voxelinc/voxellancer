@@ -10,6 +10,7 @@
 #include "worldobject/worldobject.h"
 #include "geometry/line.h"
 #include "voxel/voxel.h"
+#include "worldtree/worldtreegeode.h"
 
 
 using namespace bandit;

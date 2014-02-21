@@ -6,10 +6,12 @@
 
 #include "collision/collisionfilter.h"
 
-#include "worldobject/ship.h"
 #include "utils/randvec.h"
-#include "utils/tostring.h"
 #include "utils/geometryhelper.h"
+#include "physics/physics.h"
+
+#include "worldobject/ship.h"
+#include "worldobject/worldobjectcomponents.h"
 
 
 static const float s_minActDistance = 0.5f;
@@ -83,7 +85,7 @@ void BoardComputer::rotateTo(const glm::vec3& position, const glm::vec3& up) {
         accumulatedEuler += rotateUpAuto(rotation);
     }
 
-    accumulatedEuler = GeometryHelper::sgn(accumulatedEuler);
+    accumulatedEuler = glm::sign(accumulatedEuler);
     m_engineState.setAngular(accumulatedEuler);
 
     m_overwriteEngineState = true;

@@ -33,8 +33,8 @@ void Visuals::setEmissiveness(float emissiveness) {
 
 Visuals Visuals::fromProperties(const std::string& prefix) {
     return Visuals(
-        Property<uint32_t>(prefix + ".color"),
-        Property<float>(prefix + ".emissiveness")
+        Property<uint32_t>::get(prefix + ".color"),
+        Property<float>::get(prefix + ".emissiveness")
     );
 }
 

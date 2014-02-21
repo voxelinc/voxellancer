@@ -5,12 +5,12 @@
 #include <map>
 
 #include "collision/voxelcollision.h"
-#include "collision/worldobjectcollision.h"
 
 #include "physics/impulse.h"
 
 
 class Voxel;
+class VoxelCollision;
 
 class ImpulseAccumulator
 {

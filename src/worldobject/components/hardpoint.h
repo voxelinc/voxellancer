@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include <glm/glm.hpp>
 
 #include "worldobjectslot.h"
@@ -18,8 +20,8 @@ public:
 
     HardpointVoxel* voxel();
 
-    Weapon* weapon();
-    void setWeapon(Weapon* weapon);
+    const std::shared_ptr<Weapon>& weapon();
+    void setWeapon(const std::shared_ptr<Weapon>& weapon);
 
     const glm::vec3& direction() const;
     void setDirection(const glm::vec3& direction);
@@ -34,7 +36,7 @@ public:
 
 protected:
     HardpointVoxel* m_voxel;
-    Weapon* m_weapon;
+    std::shared_ptr<Weapon> m_weapon;
 
     glm::vec3 m_direction;
     glm::vec2 m_fieldOfAim;

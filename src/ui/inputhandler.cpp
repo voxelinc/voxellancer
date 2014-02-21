@@ -1,5 +1,8 @@
 #include "inputhandler.h"
 
+#ifdef WIN32
+#include <windows.h>
+#endif
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
@@ -16,6 +19,13 @@
 #include "ui/hud/hud.h"
 #include "worldobject/ship.h"
 #include "camera/cameradolly.h"
+#include "hud/crosshair.h"
+#include "input/inputmapping.h"
+#include "etc/hmd/hmd.h"
+#include "inputconfigurator.h"
+#include "targetselector.h"
+#include "camera/camerahead.h"
+#include "worldobject/worldobjectcomponents.h"
 
 
 /*
@@ -41,8 +51,8 @@
 * B9: right stick
 */
 
-InputHandler::InputHandler(Player* player):
-    m_player(player),
+InputHandler::InputHandler(Player& player):
+    m_player(&player),
     m_hmd(nullptr),
 
     prop_deadzoneMouse("input.deadzoneMouse"),
@@ -85,8 +95,8 @@ InputHandler::InputHandler(Player* player):
     retrieveInputValues();
 }
 
-void InputHandler::setHMD(HMD* hmd) {
-    m_hmd = hmd;
+void InputHandler::setHMD(HMD& hmd) {
+    m_hmd = &hmd;
 }
 
 void InputHandler::resizeEvent(const unsigned int width, const unsigned int height){
@@ -306,18 +316,21 @@ void InputHandler::processMoveActions() {
 
 void InputHandler::processRotateActions() {
     glm::vec3 rot = glm::vec3(0);
+
     rot.x = getInputValue(&rotateUpAction)
         - getInputValue(&rotateDownAction);
     rot.y = getInputValue(&rotateLeftAction)
         - getInputValue(&rotateRightAction);
     rot.z = -getInputValue(&rotateClockwiseAction)
         + getInputValue(&rotateCClockwiseAction);
+
     if (glm::length(rot) < prop_deadzoneGamepad) {
         rot = glm::vec3(0);
     }
-    if(glm::length(rot) > 0.0f) {
-        rot = glm::normalize(rot); // Rot... in... I knew there would be some shitty metalsong called like that http://www.youtube.com/watch?v=TWaEDmFoNnc
+    if(glm::length(rot) > 1.0f) {
+        rot = glm::normalize(rot);
     }
+
     m_player->rotate(rot);
 }
 

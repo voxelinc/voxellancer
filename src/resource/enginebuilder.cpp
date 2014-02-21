@@ -19,11 +19,7 @@ Engine* EngineBuilder::build() {
     GenericEngine* genericEngine = new GenericEngine(m_name);
 
     genericEngine->setVisuals(Visuals::fromProperties(m_name + ".visuals"));
-
-    genericEngine->setPower(EnginePower(
-        Property<glm::vec4>(m_name + ".general.directionalAcceleration"),
-        Property<glm::vec3>(m_name + ".general.angularAcceleration")
-    ));
+    genericEngine->setPower(EnginePower::fromProperties(m_name  + ".general"));
 
     return genericEngine;
 }

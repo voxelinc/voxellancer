@@ -1,14 +1,17 @@
 #pragma once
 
+#include <memory>
+
 #include <glm/glm.hpp>
 
 #include "geometry/range.h"
 
-#include "aimhelperhudgetvoxels.h"
 #include "circularhudget.h"
 
 
 class HUD;
+class WorldObject;
+class AimHelperHudgetVoxels;
 
 /*
     Hudget drawn where player-bullets and target
@@ -18,6 +21,7 @@ class HUD;
 class AimHelperHudget: public CircularHudget {
 public:
     AimHelperHudget(HUD* hud);
+    virtual ~AimHelperHudget();
 
     const glm::vec3& targetPoint() const;
 
@@ -26,7 +30,7 @@ public:
 
 
 protected:
-    AimHelperHudgetVoxels m_voxels;
+    std::unique_ptr<AimHelperHudgetVoxels> m_voxels;
     glm::vec3 m_targetPoint;
     Range m_distanceRange;
 

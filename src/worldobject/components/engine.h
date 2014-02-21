@@ -1,12 +1,11 @@
 #pragma once
 
+#include <memory>
 #include <string>
 
 #include <glm/glm.hpp>
 
 #include "display/rendering/visuals.h"
-
-#include "voxeleffect/enginetrailgenerator.h"
 
 #include "enginepower.h"
 #include "enginestate.h"
@@ -14,10 +13,12 @@
 
 
 class EngineSlot;
+class EngineTrailGenerator;
 
 class Engine: public Equipment {
 public:
     Engine(const std::string& equipmentKey);
+    virtual ~Engine();
 
     virtual Visuals visuals() const = 0;
 
@@ -35,9 +36,9 @@ public:
 
 
 private:
+    std::unique_ptr<EngineTrailGenerator> m_trailGenerator;
     EngineSlot* m_engineSlot;
     EngineState m_state;
-    EngineTrailGenerator m_trailGenerator;
 
     void setupTrail();
 };

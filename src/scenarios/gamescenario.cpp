@@ -12,7 +12,6 @@
 #include "ai/squad.h"
 
 #include "resource/clustercache.h"
-#include "resource/worldobjectfactory.h"
 #include "resource/worldobjectbuilder.h"
 
 #include "worldobject/ship.h"
@@ -24,6 +23,8 @@
 #include "world/world.h"
 #include "voxel/voxel.h"
 #include "world/god.h"
+#include "player.h"
+#include "ui/objectinfo.h"
 
 
 GameScenario::GameScenario(Game* game) :
@@ -40,7 +41,6 @@ void GameScenario::populateWorld() {
         glm::vec3(-100, 150, -900) }));
 
     Ship* normandy = WorldObjectBuilder("normandy").buildShip();
-    WorldObjectFactory().equipSomehow(normandy);
     normandy->transform().setPosition(glm::vec3(0, 0, -100));
     normandy->objectInfo().setName("Normandy");
     normandy->objectInfo().setShowOnHud(true);
@@ -51,7 +51,6 @@ void GameScenario::populateWorld() {
     int nmember_count = 4;
     for (int i = 0; i < nmember_count; i++) {
         Ship *follower = WorldObjectBuilder("basicship").buildShip();
-        WorldObjectFactory().equipSomehow(follower);
         follower->transform().setPosition(glm::vec3(100 * (-nmember_count / 2.0f + i), 50, 0));
         follower->objectInfo().setName("member");
         follower->objectInfo().setShowOnHud(true);
@@ -67,7 +66,6 @@ void GameScenario::populateWorld() {
         glm::vec3(-500, 0, -500), glm::vec3(500, 0, -500) }));
 
     Ship *leader = WorldObjectBuilder("eagle").buildShip();
-    WorldObjectFactory().equipSomehow(leader);
     leader->transform().setPosition(glm::vec3(0, 200, -100));
     leader->objectInfo().setName("leader");
     leader->objectInfo().setShowOnHud(true);
@@ -78,7 +76,6 @@ void GameScenario::populateWorld() {
     int lmember_count = 2;
     for (int i = 0; i < lmember_count; i++) {
         Ship *follower = WorldObjectBuilder("basicship").buildShip();
-        WorldObjectFactory().equipSomehow(follower);
         follower->transform().setPosition(glm::vec3(100 * (-lmember_count / 2.0f + i), 200, 0));
         follower->objectInfo().setName("member");
         follower->objectInfo().setShowOnHud(true);
@@ -88,7 +85,6 @@ void GameScenario::populateWorld() {
     }
 
     Ship *testCluster = WorldObjectBuilder("specialbasicship").buildShip();
-    WorldObjectFactory().equipSomehow(testCluster);
     testCluster->transform().setPosition(glm::vec3(0, 0, 10));
     testCluster->objectInfo().setName("basicship");
     testCluster->objectInfo().setShowOnHud(false);

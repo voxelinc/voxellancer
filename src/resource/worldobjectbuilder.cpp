@@ -1,13 +1,16 @@
 #include "worldobjectbuilder.h"
 
 #include <cassert>
+#include <type_traits>
 
 #include <glow/logging.h>
 
 #include "property/property.h"
 
+#include "worldobject/components/engine.h"
 #include "worldobject/components/engineslot.h"
 #include "worldobject/components/hardpoint.h"
+#include "worldobject/components/weapon.h"
 #include "worldobject/components/weapons/genericbullet.h"
 #include "worldobject/components/weapons/genericrocket.h"
 #include "worldobject/genericship.h"
@@ -16,6 +19,9 @@
 #include "worldobject/worldobject.h"
 
 #include "clustercache.h"
+#include "enginebuilder.h"
+#include "weaponbuilder.h"
+#include "worldobject/worldobjectcomponents.h"
 
 
 WorldObjectBuilder::WorldObjectBuilder(const std::string& name):
@@ -66,6 +72,42 @@ Ship* WorldObjectBuilder::buildShip() {
 WorldObject* WorldObjectBuilder::buildWorldObject() {
     GenericWorldObject* worldObject = newWorldObject<GenericWorldObject>();
     return worldObject;
+}
+
+template<typename WorldObjectType>
+WorldObjectType* WorldObjectBuilder::newWorldObject() {
+    static_assert(std::is_base_of<WorldObject, WorldObjectType>::value, "WorldObjectType needs to be derived from WorldObject");
+
+	WorldObjectType* worldObject = new WorldObjectType();
+
+	setupVoxelCluster(worldObject);
+    setupComponents(worldObject->components());
+
+    std::string collisionFieldOfDamageProperty = m_name + ".general.collisionFieldOfDamage";
+    if (Property<std::string>(collisionFieldOfDamageProperty, "").get() == "inf") {
+        worldObject->setCollisionFieldOfDamage(std::numeric_limits<float>::max());
+    } else {
+        worldObject->setCollisionFieldOfDamage(Property<float>(collisionFieldOfDamageProperty, glm::pi<float>() * 2));
+    }
+
+    equipSomehow(worldObject);
+
+    return worldObject;
+}
+
+void WorldObjectBuilder::equipSomehow(WorldObject* worldObject) {
+    for(Hardpoint* hardpoint : worldObject->components().hardpoints()) {
+        if(!hardpoint->mountables().empty()) {
+            Weapon* weapon = WeaponBuilder(hardpoint->mountables().front()).build();
+            hardpoint->setWeapon(std::shared_ptr<Weapon>(weapon));
+        }
+    }
+    for(EngineSlot* engineSlot : worldObject->components().engineSlots()) {
+        if(!engineSlot->mountables().empty()) {
+            Engine* engine = EngineBuilder(engineSlot->mountables().front()).build();
+            engineSlot->setEngine(std::shared_ptr<Engine>(engine));
+        }
+    }
 }
 
 void WorldObjectBuilder::setupVoxelCluster(WorldObject* worldObject) {

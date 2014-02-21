@@ -13,15 +13,19 @@
 #include "player.h"
 
 #include "hud.h"
+#include "aimhelperhudgetvoxels.h"
+#include "worldobject/worldobjectcomponents.h"
 
 
 AimHelperHudget::AimHelperHudget(HUD* hud):
     CircularHudget(hud, 0.25f),
-    m_voxels(this),
+    m_voxels(new AimHelperHudgetVoxels(this)),
     m_distanceRange(m_hud->sphere().radius() * 2, m_hud->sphere().radius() * 10)
 {
 
 }
+
+AimHelperHudget::~AimHelperHudget() = default;
 
 const glm::vec3& AimHelperHudget::targetPoint() const {
     return m_targetPoint;
@@ -30,7 +34,7 @@ const glm::vec3& AimHelperHudget::targetPoint() const {
 void AimHelperHudget::update(float deltaSec) {
     Ship* ship = m_hud->player()->ship();
 
-    if(!ship) {
+    if (!ship) {
         setVisible(false);
         return;
     }
@@ -47,7 +51,7 @@ void AimHelperHudget::update(float deltaSec) {
     pointToWorldPoint(m_targetPoint);
     setRelativeDistance(1.0f);
 
-    if(hovered()) {
+    if (hovered()) {
         setDirectionAngle(directionAngle() + 12.0f * deltaSec);
     } else {
         setDirectionAngle(0.0f);
@@ -55,37 +59,37 @@ void AimHelperHudget::update(float deltaSec) {
 }
 
 void AimHelperHudget::draw() {
-    m_voxels.draw();
+    m_voxels->draw();
 }
 
 void AimHelperHudget::calculateTargetPoint(WorldObject* targetObject) {
     int hitableHardpointCount = 0;
     Ship* ship = m_hud->player()->ship();
 
-    if(!ship) {
+    if (!ship) {
         return;
     }
 
     m_targetPoint = glm::vec3(0.0f, 0.0f, 0.0f);
 
     for(Hardpoint* hardpoint : ship->components().hardpoints()) {
-        if(!hardpoint->weapon()) {
+        if (!hardpoint->weapon()) {
             continue;
         }
-        if(hardpoint->weapon()->type() != WeaponType::Gun) {
+        if (hardpoint->weapon()->type() != WeaponType::Gun) {
             continue;
         }
 
         HardpointAimHelper aimHelper(hardpoint, targetObject);
         aimHelper.aim();
 
-        if(aimHelper.isHitable()) {
+        if (aimHelper.isHitable()) {
             m_targetPoint += aimHelper.point();
             hitableHardpointCount++;
         }
     }
 
-    if(hitableHardpointCount > 0) {
+    if (hitableHardpointCount > 0) {
         setVisible(true);
         m_targetPoint /= hitableHardpointCount;
     } else {

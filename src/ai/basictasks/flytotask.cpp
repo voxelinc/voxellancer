@@ -17,7 +17,7 @@ void FlyToTask::setTargetPoint(const glm::vec3& point, const glm::vec3& up) {
 }
 
 void FlyToTask::update(float deltaSec) {
-	glm::vec3 currentTargetPoint = SimpleWayfind::calculateTravelPoint(*boardComputer()->worldObject(), m_targetPoint);
+    glm::vec3 currentTargetPoint = SimpleWayfind::calculateTravelPoint(*boardComputer()->worldObject(), m_targetPoint);
     boardComputer()->rotateTo(currentTargetPoint, m_targetUp);
     boardComputer()->moveTo(currentTargetPoint);
 }

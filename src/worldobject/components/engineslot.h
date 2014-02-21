@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include <glm/glm.hpp>
 
 #include "worldobjectslot.h"
@@ -21,8 +23,8 @@ public:
     const glm::vec3& direction();
     void setDirection(const glm::vec3& direction);
 
-    Engine* engine();
-    void setEngine(Engine* engine);
+    const std::shared_ptr<Engine>& engine();
+    void setEngine(const std::shared_ptr<Engine>& engine);
 
     void update(float deltaSec);
 
@@ -31,8 +33,8 @@ public:
 
 protected:
     EngineSlotVoxel* m_voxel;
-    glm::vec3 m_direction;
+    std::shared_ptr<Engine> m_engine;
 
-    Engine* m_engine;
+    glm::vec3 m_direction;
 };
 

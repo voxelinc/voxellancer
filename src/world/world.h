@@ -4,7 +4,6 @@
 #include <unordered_set>
 
 
-
 class WorldLogic;
 class WorldTree;
 class God;
