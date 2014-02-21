@@ -8,7 +8,6 @@
 #include "ai/basictasks/fighttask.h"
 
 #include "resource/clustercache.h"
-#include "resource/worldobjectfactory.h"
 #include "resource/worldobjectbuilder.h"
 
 #include "worldobject/components/hardpoint.h"
@@ -23,7 +22,9 @@
 #include "world/world.h"
 #include "world/god.h"
 
+#include "player.h"
 #include "game.h"
+#include "ui/objectinfo.h"
 #include "utils/randvec.h"
 
 #include "scripting/scriptengine.h"
@@ -41,7 +42,6 @@ ScriptedScenario::~ScriptedScenario() = default;
 
 void ScriptedScenario::populateWorld() {
     Ship *playerShip = WorldObjectBuilder("specialbasicship").buildShip();
-    WorldObjectFactory().equipSomehow(playerShip);
     playerShip->transform().setPosition(glm::vec3(0, 0, 10));
     playerShip->objectInfo().setName("basicship");
     playerShip->objectInfo().setShowOnHud(false);

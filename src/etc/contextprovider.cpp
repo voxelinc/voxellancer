@@ -181,7 +181,7 @@ Size<int> ContextProvider::currentResolution(GLFWmonitor* monitor) {
 }
 
 void ContextProvider::registerContextDependant(ContextDependant* dependant) {
-    assert(std::find(m_contextDependants.begin(), m_contextDependants.end(), dependant) == m_contextDependants.end());
+    assert(m_contextDependants.count(dependant) == 0);
     m_contextDependants.insert(dependant);
 }
 

@@ -2,11 +2,12 @@
 
 #include <iostream>
 
-#include "resource/worldobjectfactory.h"
 #include "resource/worldobjectbuilder.h"
 
 #include "scripting/elematelua/luawrapper.h"
 #include "scripting/scriptengine.h"
+
+#include "ui/objectinfo.h"
 
 #include "utils/singleshottimer.h"
 #include "utils/loopingtimer.h"
@@ -47,7 +48,6 @@ void GamePlayScript::load(const std::string& path) {
 
 int GamePlayScript::apiCreateShip(std::string name) {
     Ship *ship = WorldObjectBuilder(name).buildShip();
-    WorldObjectFactory().equipSomehow(ship);
     ship->objectInfo().setShowOnHud(true);
     ship->objectInfo().setCanLockOn(true);
 
