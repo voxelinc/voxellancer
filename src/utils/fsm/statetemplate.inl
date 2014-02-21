@@ -1,7 +1,8 @@
 #pragma once
 
 #include <cassert>
-#include <iostream>
+
+#include <glow/logging.h>
 
 #include "transition.h"
 
@@ -199,11 +200,11 @@ void StateTemplate<StateType>::update(float deltaSec) {
 
 template<typename StateType>
 void StateTemplate<StateType>::onEntered() {
-    std::cout << "ENTERING: " << m_name << std::endl;
+    glow::debug("ENTERING: %;", m_name);
 }
 
 template<typename StateType>
 void StateTemplate<StateType>::onLeft() {
-    std::cout << "LEAVING: " << m_name << std::endl;
+    glow::debug("LEAVING: %;", m_name);
 }
 
