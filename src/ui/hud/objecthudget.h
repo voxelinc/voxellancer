@@ -1,17 +1,19 @@
 #pragma once
 
+#include <memory>
+
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 
 #include "hudget.h"
-#include "objecthudgetvoxels.h"
 
-
+class ObjectHudgetVoxels;
 class HUDObjectDelegate;
 
 class ObjectHudget: public Hudget {
 public:
     ObjectHudget(HUD* hud, HUDObjectDelegate* objectDelegate);
+    virtual ~ObjectHudget();
 
     virtual void update(float deltaSec) override;
     virtual void draw() override;
@@ -19,7 +21,7 @@ public:
 
 protected:
     HUDObjectDelegate* m_objectDelegate;
-    ObjectHudgetVoxels m_voxels;
+    std::unique_ptr<ObjectHudgetVoxels> m_voxels;
 
     void calculateOpeningAngle();
 };

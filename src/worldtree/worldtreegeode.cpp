@@ -5,6 +5,7 @@
 #include "worldtreenode.h"
 #include "worldobject/worldobject.h"
 #include "collision/collisiondetector.h"
+#include "voxel/voxelclusterbounds.h"
 
 
 WorldTreeGeode::WorldTreeGeode(WorldObject* worldObject) :

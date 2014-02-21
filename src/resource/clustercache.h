@@ -6,30 +6,31 @@
 #include <map>
 #include <vector>
 
-#include "clusterloader.h"
-#include "colorcoder.h"
 
 class Voxel;
+class VoxelCluster;
 class WorldObject;
+class ColorCoder;
+class ClusterLoader;
 
 class ClusterCache {
 
 public:
     ClusterCache();
     virtual ~ClusterCache();
-    
-    void fillObject(WorldObject *worldObject, const std::string& filename);
-    void fillCluster(VoxelCluster *cluster, const std::string& filename);
+
+    void fillObject(WorldObject* worldObject, const std::string& filename);
+    void fillCluster(VoxelCluster* cluster, const std::string& filename);
 
     static ClusterCache *instance();
+
 
 protected:
     std::vector<Voxel*> * getOrCreate(const std::string& filename);
 
-
     std::map<std::string, std::vector<Voxel*>*> m_items;
-    ClusterLoader m_loader;
-    ColorCoder m_colorCoder;
+    std::unique_ptr<ClusterLoader> m_loader;
+    std::unique_ptr<ColorCoder> m_colorCoder;
 
     static ClusterCache *s_instance;
 };

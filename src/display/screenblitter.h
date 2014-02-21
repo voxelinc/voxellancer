@@ -16,7 +16,7 @@ class ScreenBlitter {
 public:
     ScreenBlitter();
 
-    void setProgram(BlitProgram* blitProgram);
+    void setProgram(BlitProgram& blitProgram);
 
     void blit(FrameBuffer& source, const Viewport& viewport);
 

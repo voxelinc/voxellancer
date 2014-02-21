@@ -7,7 +7,7 @@ class Player;
 
 class TargetSelector {
 public:
-    TargetSelector(Player *player);
+    TargetSelector(Player& player);
 
     void selectNextTarget();
     void selectPreviousTarget();

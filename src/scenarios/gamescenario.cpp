@@ -12,13 +12,19 @@
 #include "ai/squad.h"
 
 #include "resource/clustercache.h"
+#include "resource/worldobjectbuilder.h"
 
 #include "worldobject/ship.h"
+#include "worldobject/components/engineslot.h"
+#include "worldobject/components/hardpoint.h"
+#include "worldobject/components/weapons/gun.h"
 #include "sound/soundmanager.h"
 #include "gamestate/gameplay/gameplay.h"
 #include "world/world.h"
 #include "voxel/voxel.h"
 #include "world/god.h"
+#include "player.h"
+#include "ui/objectinfo.h"
 
 
 GameScenario::GameScenario(GamePlay* inGame):
@@ -27,7 +33,6 @@ GameScenario::GameScenario(GamePlay* inGame):
 }
 
 void GameScenario::populateWorld() {
-
     glow::debug("Create WorldObjects");
     std::shared_ptr<Squad> squadA = std::make_shared<Squad>();
     squadA->setTask(std::make_shared<PatrolWaypointsTask>(*squadA,
@@ -35,9 +40,8 @@ void GameScenario::populateWorld() {
         glm::vec3(-600, 0, -400), glm::vec3(0, 100, -600),
         glm::vec3(-100, 150, -900) }));
 
-    Ship *normandy = new Ship();
-    ClusterCache::instance()->fillObject(normandy, "data/voxelcluster/normandy.csv");
-    normandy->setPosition(glm::vec3(0, 0, -100));
+    Ship* normandy = WorldObjectBuilder("normandy").buildShip();
+    normandy->transform().setPosition(glm::vec3(0, 0, -100));
     normandy->objectInfo().setName("Normandy");
     normandy->objectInfo().setShowOnHud(true);
     normandy->objectInfo().setCanLockOn(true);
@@ -46,9 +50,8 @@ void GameScenario::populateWorld() {
 
     int nmember_count = 4;
     for (int i = 0; i < nmember_count; i++) {
-        Ship *follower = new Ship();
-        ClusterCache::instance()->fillObject(follower, "data/voxelcluster/basicship.csv");
-        follower->setPosition(glm::vec3(100 * (-nmember_count / 2.0f + i), 50, 0));
+        Ship *follower = WorldObjectBuilder("basicship").buildShip();
+        follower->transform().setPosition(glm::vec3(100 * (-nmember_count / 2.0f + i), 50, 0));
         follower->objectInfo().setName("member");
         follower->objectInfo().setShowOnHud(true);
         follower->objectInfo().setCanLockOn(true);
@@ -62,9 +65,8 @@ void GameScenario::populateWorld() {
         std::list<glm::vec3>{ glm::vec3(500, 0, 500), glm::vec3(-500, 0, 500),
         glm::vec3(-500, 0, -500), glm::vec3(500, 0, -500) }));
 
-    Ship *leader = new Ship();
-    ClusterCache::instance()->fillObject(leader, "data/voxelcluster/eagle.csv");
-    leader->setPosition(glm::vec3(0, 200, -100));
+    Ship *leader = WorldObjectBuilder("eagle").buildShip();
+    leader->transform().setPosition(glm::vec3(0, 200, -100));
     leader->objectInfo().setName("leader");
     leader->objectInfo().setShowOnHud(true);
     leader->objectInfo().setCanLockOn(true);
@@ -73,9 +75,8 @@ void GameScenario::populateWorld() {
 
     int lmember_count = 2;
     for (int i = 0; i < lmember_count; i++) {
-        Ship *follower = new Ship();
-        ClusterCache::instance()->fillObject(follower, "data/voxelcluster/basicship.csv");
-        follower->setPosition(glm::vec3(100 * (-lmember_count / 2.0f + i), 200, 0));
+        Ship *follower = WorldObjectBuilder("basicship").buildShip();
+        follower->transform().setPosition(glm::vec3(100 * (-lmember_count / 2.0f + i), 200, 0));
         follower->objectInfo().setName("member");
         follower->objectInfo().setShowOnHud(true);
         follower->objectInfo().setCanLockOn(true);
@@ -83,9 +84,8 @@ void GameScenario::populateWorld() {
         m_world->god().scheduleSpawn(follower);
     }
 
-    Ship *testCluster = new Ship();
-    ClusterCache::instance()->fillObject(testCluster, "data/voxelcluster/basicship.csv");
-    testCluster->setPosition(glm::vec3(0, 0, 10));
+    Ship *testCluster = WorldObjectBuilder("specialbasicship").buildShip();
+    testCluster->transform().setPosition(glm::vec3(0, 0, 10));
     testCluster->objectInfo().setName("basicship");
     testCluster->objectInfo().setShowOnHud(false);
     m_world->god().scheduleSpawn(testCluster);
@@ -93,8 +93,8 @@ void GameScenario::populateWorld() {
     m_gamePlay->player().setShip(testCluster);
 
     WorldObject *wall = new WorldObject();
-    wall->move(glm::vec3(-30, 0, -50));
-    wall->rotate(glm::angleAxis(-90.f, glm::vec3(0, 1, 0)));
+    wall->transform().move(glm::vec3(-30, 0, -50));
+    wall->transform().rotate(glm::angleAxis(-90.f, glm::vec3(0, 1, 0)));
     for(int x = 0; x < 20; x++) {
         for(int y = 0; y < 15; y++) {
             for(int z = 0; z < 3; z++) {
@@ -109,7 +109,7 @@ void GameScenario::populateWorld() {
 
     glow::debug("Create Planet");
     WorldObject *planet = new WorldObject();
-    planet->move(glm::vec3(20, 10, -30));
+    planet->transform().move(glm::vec3(20, 10, -30));
     int diameter = 24;
     glm::vec3 middle(diameter/2, diameter/2, diameter/2);
     for(int x = 0; x < diameter; x++) {
@@ -132,7 +132,7 @@ void GameScenario::populateWorld() {
     for(int e = 0; e < 15; e++) {
         WorldObject *enemy = new WorldObject();
         int r = 80;
-        enemy->move(glm::vec3(-80 + rand()%r-r/2,rand()%r-r/2,-20 + rand()%r-r/2));
+        enemy->transform().move(glm::vec3(-80 + rand()%r-r/2,rand()%r-r/2,-20 + rand()%r-r/2));
 
         for(int x = 0; x < 4; x++) {
             for(int y = 0; y < 2; y++) {

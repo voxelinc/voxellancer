@@ -1,8 +1,8 @@
 #include "gameplayscene.h"
 
+#include "camera/camera.h"
+#include "camera/camerahead.h"
 #include "voxel/voxelrenderer.h"
-#include "voxeleffect/voxelparticleengine.h"
-#include "utils/hd3000dummy.h"
 #include "sound/soundmanager.h"
 #include "gamestate/gameplay/gameplay.h"
 #include "display/rendering/framebuffer.h"
@@ -10,17 +10,16 @@
 #include "display/rendering/blitter.h"
 #include "display/rendering/buffernames.h"
 #include "player.h"
+#include "rendering/starfield.h"
 #include "ui/hud/hud.h"
 #include "world/world.h"
 #include "skybox.h"
+#include "voxeleffect/voxelparticleengine.h"
 #include "worldobject/worldobject.h"
-#include "starfield.h"
-
 
 GamePlayScene::GamePlayScene(GamePlay* gamePlay, Player* player):
     m_gamePlay(gamePlay),
     m_voxelRenderer(VoxelRenderer::instance()),
-    m_hd3000dummy(new HD3000Dummy()),
     m_outputBlitter(new Blitter()),
     m_renderPipeline(RenderPipeline::getDefault()),
     m_starField(std::make_shared<Starfield>()),
@@ -36,12 +35,11 @@ GamePlayScene::~GamePlayScene() = default;
 
 void GamePlayScene::draw(const Camera& camera, glow::FrameBufferObject* target, EyeSide side) const {
     m_framebuffer->setResolution(camera.viewport());
-
     m_framebuffer->clear();
 
     drawGame(camera);
 
-    RenderMetaData metadata(camera, side);
+    RenderMetaData metadata(&camera, side);
     m_renderPipeline->apply(*m_framebuffer, metadata);
 
     // transfer rendered image to target framebuffer
@@ -66,13 +64,12 @@ void GamePlayScene::drawGame(const Camera& camera) const {
     m_voxelRenderer->prepareDraw(camera);
 
     for (WorldObject* worldObject : World::instance()->worldObjects()) {
-        VoxelRenderer::instance()->draw(worldObject);
+        VoxelRenderer::instance()->draw(*worldObject);
     }
     m_gamePlay->player().hud().draw();
     m_voxelRenderer->afterDraw();
 
     World::instance()->voxelParticleEngine().draw(camera);
 
-    m_hd3000dummy->drawIfActive();
 }
 

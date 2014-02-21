@@ -2,14 +2,19 @@
 
 #include <memory>
 
-#include <OVR.h>
-
-#include <glow/ref_ptr.h>
-
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 
+#include <glow/ref_ptr.h>
+
 #include "display/stereorenderinfo.h"
+
+
+namespace OVR {
+    class HMDDevice;
+    class SensorDevice;
+    class SensorFusion;
+}
 
 class HMD {
 public:
@@ -22,9 +27,9 @@ public:
 
 
 protected:
+    std::unique_ptr<OVR::SensorFusion> m_sensorFusion;
     OVR::HMDDevice* m_hmdDevice;
     OVR::SensorDevice* m_sensorDevice;
-    OVR::SensorFusion m_sensorFusion;
 
     StereoRenderInfo m_stereoRenderInfo;
 };

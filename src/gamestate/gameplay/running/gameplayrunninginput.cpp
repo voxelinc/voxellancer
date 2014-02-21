@@ -17,12 +17,19 @@
 #include "utils/tostring.h"
 #include "utils/aimer.h"
 
-#include "ui/inputconfigurator.h"
+#include "camera/camerahead.h"
+#include "camera/cameradolly.h"
+#include "etc/hmd/hmd.h"
+#include "hud/crosshair.h"
+#include "input/inputmapping.h"
+#include "inputconfigurator.h"
 #include "worldobject/worldobject.h"
+#include "worldobject/worldobjectcomponents.h"
+#include "worldobject/ship.h"
 #include "player.h"
 #include "ui/hud/hud.h"
-#include "worldobject/ship.h"
-#include "camera/cameradolly.h"
+#include "ui/inputconfigurator.h"
+#include "targetselector.h"
 
 
 /*
@@ -188,7 +195,9 @@ void GamePlayRunningInput::processMouseUpdate() {
     }
 
     if (pressed) {
-        m_player->fire();
+        if (m_player->ship()) {
+            m_player->fire();
+        }
     }
 
     // spin
@@ -292,36 +301,44 @@ void GamePlayRunningInput::processFireActions() {
     m_player->hud().crossHair().setActionActive(getInputValue(&fireAction) > 0.001);
 
     if (getInputValue(&fireAction)) {
-        m_player->fire();
+        if (m_player->ship()) {
+            m_player->fire();
+        }
     }
     if (getInputValue(&rocketAction)) {
-        if (m_player->playerShip()) {
-            m_player->playerShip()->fireAtObject();
+        if (m_player->ship() && m_player->ship()->targetObject()) {
+            m_player->ship()->components().fireAtObject(m_player->ship()->targetObject());
         }
     }
 }
 
 void GamePlayRunningInput::processMoveActions() {
-    m_player->move(glm::vec3(-getInputValue(&moveLeftAction), 0, 0));
-    m_player->move(glm::vec3(getInputValue(&moveRightAction), 0, 0));
-    m_player->move(glm::vec3(0, 0, -getInputValue(&moveForwardAction)));
-    m_player->move(glm::vec3(0, 0, getInputValue(&moveBackwardAction)));
+    glm::vec3 direction(
+        getInputValue(&moveRightAction) - getInputValue(&moveLeftAction),
+        0,
+        getInputValue(&moveBackwardAction) - getInputValue(&moveForwardAction)
+    );
+
+    m_player->move(direction);
 }
 
 void GamePlayRunningInput::processRotateActions() {
     glm::vec3 rot = glm::vec3(0);
+
     rot.x = getInputValue(&rotateUpAction)
         - getInputValue(&rotateDownAction);
     rot.y = getInputValue(&rotateLeftAction)
         - getInputValue(&rotateRightAction);
     rot.z = -getInputValue(&rotateClockwiseAction)
         + getInputValue(&rotateCClockwiseAction);
+
     if (glm::length(rot) < prop_deadzoneGamepad) {
         rot = glm::vec3(0);
     }
-    if (glm::length(rot) > 1) {
+    if(glm::length(rot) > 1.0f) {
         rot = glm::normalize(rot);
     }
+
     m_player->rotate(rot);
 }
 

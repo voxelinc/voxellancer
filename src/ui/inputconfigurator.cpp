@@ -1,6 +1,5 @@
 #include "inputconfigurator.h"
 
-#include <glow/logging.hpp>
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -8,6 +7,7 @@
 #include <glow/logging.hpp>
 
 #include "ui/hud/hud.h"
+#include "inputhandler.h"
 
 #include "gamestate/gameplay/running/gameplayrunninginput.h"
 

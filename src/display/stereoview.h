@@ -3,17 +3,15 @@
 #include <memory>
 #include <vector>
 
-#include <glow/Buffer.h>
-#include <glow/FrameBufferObject.h>
-#include <glow/RenderBufferObject.h>
-
-#include "programs/stereoblitprogram.h"
+#include "view.h"
 #include "etc/contextdependant.h"
 
-#include "view.h"
-#include "stereovieweye.h"
-#include "screenblitter.h"
 
+class StereoViewEye;
+class ScreenBlitter;
+class StereoBlitProgram;
+class ViewPort;
+class StereoRenderInfo;
 
 class StereoView: public View, public ContextDependant {
 public:
@@ -29,9 +27,9 @@ public:
 
 
 protected:
-    StereoViewEye m_leftEye;
-    StereoViewEye m_rightEye;
-    ScreenBlitter m_screenBlitter;
+    std::unique_ptr<StereoViewEye> m_leftEye;
+    std::unique_ptr<StereoViewEye> m_rightEye;
+    std::unique_ptr<ScreenBlitter> m_screenBlitter;
     std::unique_ptr<StereoBlitProgram> m_stereoBlitProgram;
 
     glm::vec2 m_leftEyeLensCenter;

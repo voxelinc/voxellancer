@@ -11,6 +11,7 @@
 
 #include "worldtree/worldtreequery.h"
 #include "collision/collisionfilter.h"
+#include "voxel/voxel.h"
 
 
 Aimer::Aimer(WorldObject* worldObject, const Ray& ray):

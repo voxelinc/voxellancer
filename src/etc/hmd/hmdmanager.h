@@ -2,12 +2,13 @@
 
 #include <memory>
 
-#include <OVR.h>
 
-#include "hmd.h"
-
+namespace OVR {
+    class DeviceManager;
+}
 
 class Viewer;
+class HMD;
 
 class HMDManager {
 public:

@@ -1,12 +1,13 @@
 #include "hmdmanager.h"
 
+#include <OVR.h>
+
 #include <glow/logging.h>
 
-#include <iostream>
-
 #include "display/viewer.h"
-
 #include "gamestate/game.h"
+#include "hmd.h"
+#include "ui/inputhandler.h"
 
 
 std::weak_ptr<HMDManager> HMDManager::s_instance;

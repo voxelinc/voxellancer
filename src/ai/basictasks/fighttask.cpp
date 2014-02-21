@@ -2,13 +2,15 @@
 #include "utils/randfloat.h"
 #include "worldobject/ship.h"
 #include "ai/boardcomputer.h"
+#include "voxel/voxelclusterbounds.h"
 
-FightTask::FightTask(Ship& ship, const std::vector<Handle<WorldObject>>& targets) :
-    AiTask(ship),
+
+FightTask::FightTask(BoardComputer* boardComputer, const std::vector<Handle<WorldObject>>& targets) :
+    AiTask(boardComputer),
     m_targets(targets)
 {
-    m_state = 0;
-    m_maxFireDistance = m_ship.maxAimDistance();
+    m_state = IDLE;
+    m_maxFireDistance = 150.0f;
     m_maxRocketDistance = 200.0f;
     m_minEnemyDistance = 100.0f;
     m_stateChanged = false;
@@ -18,38 +20,40 @@ void FightTask::update(float deltaSec) {
     updateTargets();
     updateState();
 
+    WorldObject* worldObject = boardComputer()->worldObject();
+
     switch (m_state) {
         case IDLE:
             return;
         case APPROACH:
             if (angleToTarget() > 45.0f) {
-                m_ship.boardComputer();
-                m_ship.boardComputer()->rotateTo(m_primaryTarget->transform().position());
+                boardComputer();
+                boardComputer()->rotateTo(m_primaryTarget->transform().position());
             } else {
-                m_ship.boardComputer()->rotateTo(m_primaryTarget->transform().position());
-                m_ship.boardComputer()->moveTo(m_primaryTarget->transform().position());
+                boardComputer()->rotateTo(m_primaryTarget->transform().position());
+                boardComputer()->moveTo(m_primaryTarget->transform().position());
             }
-            m_ship.boardComputer()->shootBullet(m_targets);
+            boardComputer()->shootBullet(m_targets);
             break;
         case ENGAGE:
             if (angleToTarget() > 45.0f) {
-                m_ship.boardComputer()->moveTo(m_ship.transform().position() + glm::vec3(0, 0, -1)*m_ship.transform().orientation());
-                m_ship.boardComputer()->rotateTo(m_primaryTarget->transform().position());
+                boardComputer()->moveTo(worldObject->transform().position() + glm::vec3(0, 0, -1) * worldObject->transform().orientation());
+                boardComputer()->rotateTo(m_primaryTarget->transform().position());
             } else {
-                m_ship.boardComputer()->rotateTo(m_primaryTarget->transform().position());
-                m_ship.boardComputer()->moveTo(m_primaryTarget->transform().position());
+                boardComputer()->rotateTo(m_primaryTarget->transform().position());
+                boardComputer()->moveTo(m_primaryTarget->transform().position());
                 if (angleToTarget() < 15.0f && targetDistance() < m_maxRocketDistance) {
-                    m_ship.boardComputer()->shootRockets(m_primaryTarget->handle());
+                    boardComputer()->shootRockets(m_primaryTarget->handle());
                 }
             }
             if (targetDistance() < m_maxFireDistance) {
-                m_ship.boardComputer()->shootBullet(m_targets);
+                boardComputer()->shootBullet(m_targets);
             }
             break;
         case EVADE:
-            m_ship.boardComputer()->rotateTo(m_positionBehindTarget);
-            m_ship.boardComputer()->moveTo(m_positionBehindTarget);
-            m_ship.boardComputer()->shootBullet(m_targets);
+            boardComputer()->rotateTo(m_positionBehindTarget);
+            boardComputer()->moveTo(m_positionBehindTarget);
+            boardComputer()->shootBullet(m_targets);
             break;
     }
 }
@@ -132,18 +136,21 @@ void FightTask::updateState() {
 }
 
 float FightTask::targetDistance() {
-    return glm::length(m_ship.transform().position() - m_primaryTarget->transform().position()) - m_ship.bounds().minimalGridSphere().radius() * m_ship.transform().scale() - m_primaryTarget->bounds().minimalGridSphere().radius() * m_primaryTarget->transform().scale();
+    WorldObject* worldObject = boardComputer()->worldObject();
+    return glm::length(worldObject->transform().position() - m_primaryTarget->transform().position()) - worldObject->bounds().minimalGridSphere().radius() * worldObject->transform().scale() - m_primaryTarget->bounds().minimalGridSphere().radius() * m_primaryTarget->transform().scale();
 }
 
 float FightTask::pointDistance(glm::vec3 point) {
-    return glm::length(m_ship.transform().position() - point) - m_ship.bounds().minimalGridSphere().radius() * m_ship.transform().scale();
+    WorldObject* worldObject = boardComputer()->worldObject();
+    return glm::length(worldObject->transform().position() - point) - worldObject->bounds().minimalGridSphere().radius() * worldObject->transform().scale();
 }
 
 glm::vec3 FightTask::findRandomEvasionPoint() {
+    WorldObject* worldObject = boardComputer()->worldObject();
     glm::vec3 point = glm::vec3(RandFloat::rand(-0.25f, 0.25), RandFloat::rand(-0.25f, 0.25), -1);
     point *= 3 * m_minEnemyDistance;
-    point = point * m_ship.transform().orientation();
-    point += m_ship.transform().position();
+    point = point * worldObject->transform().orientation();
+    point += worldObject->transform().position();
     return point;
 }
 
@@ -153,9 +160,11 @@ void FightTask::setState(int newState) {
 }
 
 float FightTask::angleToTarget() {
+    WorldObject* worldObject = boardComputer()->worldObject();
     glm::vec3 shipDirection = glm::vec3(0, 0, -1);
-    glm::vec3 targetDirection = glm::inverse(m_ship.transform().orientation()) * glm::normalize(m_primaryTarget->transform().position() - m_ship.transform().position());
+    glm::vec3 targetDirection = glm::inverse(worldObject->transform().orientation()) * glm::normalize(m_primaryTarget->transform().position() - worldObject->transform().position());
     float angle = glm::acos(glm::clamp(glm::dot(glm::normalize(shipDirection), glm::normalize(targetDirection)), 0.0f, 1.0f));
     assert(std::isfinite(angle));
     return glm::degrees(angle);
 }
+

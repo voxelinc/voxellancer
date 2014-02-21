@@ -4,16 +4,15 @@
 
 #include "geometry/viewport.h"
 
-#include "view.h"
-
-
 class CameraHead;
 class Scene;
 class StereoRenderInfo;
+class View;
 
 class Viewer {
 public:
     Viewer(const Viewport& viewport);
+    ~Viewer();
 
     const View& view() const;
 

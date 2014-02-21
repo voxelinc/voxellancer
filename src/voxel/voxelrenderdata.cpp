@@ -16,12 +16,13 @@
 #include "voxel.h"
 
 
-
-struct VoxelData {
-    glm::vec3 position;
-    uint32_t color;
-    float emissiveness;
-};
+namespace {
+    struct VoxelData {
+        glm::vec3 position;
+        uint32_t color;
+        float emissiveness;
+    };
+}
 
 VoxelRenderData::VoxelRenderData(std::unordered_map<glm::ivec3, Voxel*> &voxel) :
     m_voxel(voxel),
@@ -31,15 +32,11 @@ VoxelRenderData::VoxelRenderData(std::unordered_map<glm::ivec3, Voxel*> &voxel) 
 
 }
 
-VoxelRenderData::~VoxelRenderData() {
-
-}
-
 void VoxelRenderData::setupVertexAttributes() {
     m_vertexArrayObject = new glow::VertexArrayObject();
     m_voxelDataBuffer = new glow::Buffer(GL_ARRAY_BUFFER);
 
-    VoxelRenderer::voxelMesh()->bindTo(VoxelRenderer::program(), m_vertexArrayObject, 0);
+    VoxelRenderer::voxelMesh().bindTo(VoxelRenderer::program(), m_vertexArrayObject, 0);
     setupVertexAttribute(offsetof(VoxelData, position), "v_position", 3, GL_FLOAT, GL_FALSE, 2);
     setupVertexAttribute(offsetof(VoxelData, color), "v_color", GL_BGRA, GL_UNSIGNED_BYTE, GL_TRUE, 3);
     setupVertexAttribute(offsetof(VoxelData, emissiveness), "v_emissiveness", 1, GL_FLOAT, GL_FALSE, 4);
@@ -61,6 +58,10 @@ void VoxelRenderData::updateBuffer() {
         setupVertexAttributes();
     }
 
+    if (m_voxel.empty()) {
+        return;
+    }
+
     if (m_bufferSize < m_voxel.size() || m_bufferSize > m_voxel.size() * 2) {
         m_voxelDataBuffer->setData(m_voxel.size() * sizeof(VoxelData), nullptr, GL_DYNAMIC_DRAW);
         m_bufferSize = m_voxel.size();
@@ -73,7 +74,7 @@ void VoxelRenderData::updateBuffer() {
     for (auto pair : m_voxel) {
         Voxel *voxel = pair.second;
         assert(voxel != nullptr);
-        voxelData[i++] = VoxelData{ glm::vec3(voxel->gridCell()), voxel->color(), voxel->emissiveness() };
+        voxelData[i++] = VoxelData{ glm::vec3(voxel->gridCell()), voxel->visuals().color(), voxel->visuals().emissiveness() };
     }
 
     m_voxelDataBuffer->unmap();
@@ -90,8 +91,9 @@ void VoxelRenderData::invalidate() {
 }
 
 glow::VertexArrayObject* VoxelRenderData::vertexArrayObject() {
-    if (m_isDirty)
+    if (m_isDirty) {
         updateBuffer();
+    }
     return m_vertexArrayObject;
 }
 

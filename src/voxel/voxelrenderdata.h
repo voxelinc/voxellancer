@@ -2,24 +2,24 @@
 
 #include <unordered_map>
 
-#include <glow/Texture.h>
+#include <GL/glew.h>
+
 #include <glow/ref_ptr.h>
 
 #include "utils/vec3hash.h"
 #include "etc/contextdependant.h"
 
-
 namespace glow {
     class Program;
     class VertexArrayObject;
     class Buffer;
+    class Texture;
 };
 class Voxel;
 
 class VoxelRenderData : public ContextDependant {
 public:
     VoxelRenderData(std::unordered_map<glm::ivec3, Voxel*> &voxel);
-    ~VoxelRenderData();
 
     void invalidate();
     int voxelCount();

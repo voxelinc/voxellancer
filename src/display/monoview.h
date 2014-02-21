@@ -1,11 +1,12 @@
 #pragma once
 
-#include "camera/camera.h"
+#include <memory>
 
 #include "view.h"
 
 
 class Scene;
+class Camera;
 class CameraHead;
 
 class MonoView: public View {
@@ -22,6 +23,6 @@ public:
 
 
 protected:
-    Camera m_camera;
+    std::unique_ptr<Camera> m_camera;
 };
 

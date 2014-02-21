@@ -14,7 +14,9 @@ public:
 
 private:
     virtual void populateWorld() override;
+
     void populateBattle(int numberOfEnemies1, int numberOfEnemies2);
     void setTargets(const std::vector<Ship*>& fleet, const std::vector<Ship*>& enemies);
+    void spawnCapital(const std::vector<Ship*>& enemies);
 };
 

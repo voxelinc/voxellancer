@@ -16,6 +16,7 @@ go_bandit([](){
     describe("Transform", [](){
         PropertyManager::instance()->reset();
         PropertyManager::instance()->load("data/config.ini");
+        PropertyManager::instance()->load("data/voxels.ini", "voxels");
 
         before_each([&]() {
 
