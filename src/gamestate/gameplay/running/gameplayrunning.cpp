@@ -2,11 +2,12 @@
 
 #include "gamestate/game.h"
 #include "gamestate/gameplay/gameplay.h"
+#include "gameplayrunninginput.h"
 
 #include "camera/camerahead.h"
 #include "world/world.h"
 #include "player.h"
-#include "gameplayrunninginput.h"
+#include "sound/soundmanager.h"
 
 
 GamePlayRunning::GamePlayRunning(GamePlay* gamePlay):

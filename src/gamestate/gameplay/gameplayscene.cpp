@@ -17,7 +17,7 @@
 #include "worldobject/worldobject.h"
 #include "display/rendering/starfield.h"
 
-GamePlayScene::GamePlayScene(GamePlay* gamePlay, Player* player):
+GamePlayScene::GamePlayScene(GamePlay* gamePlay, Player& player):
     m_gamePlay(gamePlay),
     m_voxelRenderer(VoxelRenderer::instance()),
     m_outputBlitter(new Blitter()),
@@ -25,7 +25,7 @@ GamePlayScene::GamePlayScene(GamePlay* gamePlay, Player* player):
     m_starField(std::make_shared<Starfield>()),
     m_framebuffer(new FrameBuffer(m_renderPipeline->bufferCount())),
     m_currentOutputBuffer(0),
-    m_player(player),
+    m_player(&player),
     m_defaultLightDir("vfx.lightdir")
 {
     m_renderPipeline->add(m_starField, 0);

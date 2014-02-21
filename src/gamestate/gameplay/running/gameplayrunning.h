@@ -4,10 +4,7 @@
 
 #include "gamestate/gamestate.h"
 
-
 #include "utils/fsm/trigger.h"
-
-
 
 
 class GamePlay;

@@ -23,17 +23,19 @@
 #include <glowutils/FileRegistry.h>
 
 #include "etc/contextprovider.h"
+#include "etc/hmd/hmdmanager.h"
 #include "etc/cli/commandlineparser.h"
 
-#include "geometry/viewport.h"
-
 #include "display/stereorenderinfo.h"
+#include "display/viewer.h"
+
+#include "geometry/viewport.h"
 
 #include "gamestate/gameplay/gameplay.h"
 #include "gamestate/gameplay/running/gameplayrunning.h"
 #include "gamestate/gameplay/running/gameplayrunninginput.h"
-
 #include "gamestate/game.h"
+#include "gamestate/gameplay/gameplayscene.h"
 
 
 static GLint MajorVersionRequire = 3;

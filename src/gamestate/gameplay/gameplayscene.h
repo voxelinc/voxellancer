@@ -22,7 +22,7 @@ class Starfield;
 
 class GamePlayScene: public Scene {
 public:
-    GamePlayScene(GamePlay* gamePlay, Player* player);
+    GamePlayScene(GamePlay* gamePlay, Player& player);
     ~GamePlayScene();
 
     void setPlayer(Player* player);
