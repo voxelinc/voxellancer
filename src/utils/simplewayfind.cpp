@@ -6,6 +6,7 @@
 #include "worldobject/worldobject.h"
 #include "utils/geometryhelper.h"
 #include "collision/collisionfilter.h"
+#include "voxel/voxelclusterbounds.h"
 
 
 glm::vec3 SimpleWayfind::calculateTravelPoint(WorldObject& object, glm::vec3 targetPoint) {

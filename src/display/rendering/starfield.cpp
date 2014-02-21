@@ -15,6 +15,7 @@
 #include "display/rendering/buffernames.h"
 #include "utils/randvec.h"
 #include "etc/contextdependant.h"
+#include "camera/camera.h"
 
 
 static int STAR_COUNT = 1000;

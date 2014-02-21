@@ -1,20 +1,22 @@
 #pragma once
 
-#include "voxel/voxelcluster.h"
+#include <memory>
 
 
 class AimHelperHudget;
+class VoxelCluster;
 
 class AimHelperHudgetVoxels {
 public:
     AimHelperHudgetVoxels(AimHelperHudget* aimHelperHudget);
+    ~AimHelperHudgetVoxels();
 
     void draw();
 
 
 protected:
     AimHelperHudget* m_aimHelperHudget;
-    VoxelCluster m_dot;
-    VoxelCluster m_circle;
+    std::unique_ptr<VoxelCluster> m_dot;
+    std::unique_ptr<VoxelCluster> m_circle;
 };
 

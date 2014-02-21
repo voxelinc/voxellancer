@@ -6,26 +6,24 @@
 #include <set>
 #include <vector>
 
-#include "display/viewer.h"
-
 #include "geometry/sphere.h"
 
 #include "property/property.h"
-
-#include "worldtree/worldtreescanner.h"
-
-#include "crosshair.h"
-#include "aimhelperhudget.h"
 
 
 class Player;
 class Hudget;
 class WorldObject;
 class HUDObjectDelegate;
+class AimHelperHudget;
+class Viewer;
+class WorldTreeScanner;
+class CrossHair;
 
 class HUD {
 public:
     HUD(Player* player, Viewer* viewer);
+    ~HUD();
 
     Player* player();
     const Sphere& sphere() const;
@@ -56,14 +54,13 @@ protected:
     Viewer* m_viewer;
     Sphere m_sphere;
 
-    CrossHair m_crossHair;
-    AimHelperHudget m_aimHelper;
+    std::unique_ptr<AimHelperHudget> m_aimHelper;
+    std::unique_ptr<CrossHair> m_crossHair;
+    std::unique_ptr<WorldTreeScanner> m_scanner;
 
     std::list<Hudget*> m_hudgets;
 
-    WorldTreeScanner m_scanner;
     std::map<WorldObject*, HUDObjectDelegate*> m_objectDelegates;
-
 
     void updateScanner(float deltaSec);
 };

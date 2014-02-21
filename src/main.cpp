@@ -32,6 +32,8 @@
 #include "ui/inputhandler.h"
 
 #include "game.h"
+#include "display/viewer.h"
+#include "etc/hmd/hmdmanager.h"
 
 
 static GLint MajorVersionRequire = 3;

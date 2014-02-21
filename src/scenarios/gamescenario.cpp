@@ -23,6 +23,8 @@
 #include "world/world.h"
 #include "voxel/voxel.h"
 #include "world/god.h"
+#include "player.h"
+#include "ui/objectinfo.h"
 
 
 GameScenario::GameScenario(Game* game) :

@@ -1,5 +1,7 @@
 #include "voxelfont.h"
 
+#include <algorithm>
+
 #include "resource/clustercache.h"
 #include "voxel/voxelrenderer.h"
 #include "letter.h"
@@ -78,7 +80,7 @@ void VoxelFont::drawString(std::string text, glm::vec3 position, FontSize size, 
         if (cl != nullptr){
             cl->transform().setPosition(position + glm::vec3(intoffset + width * i, 0, 0));
             cl->transform().setScale(scale);
-            VoxelRenderer::instance()->draw(cl);
+            VoxelRenderer::instance()->draw(*cl);
         }
     }
 }

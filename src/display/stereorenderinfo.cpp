@@ -3,6 +3,8 @@
 #include <cassert>
 #include <iostream>
 
+#include <OVR.h>
+
 #include "geometry/size.h"
 #include "geometry/viewport.h"
 

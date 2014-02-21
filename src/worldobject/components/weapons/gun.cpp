@@ -5,14 +5,17 @@
 #include "sound/sound.h"
 #include "sound/soundmanager.h"
 
-#include "voxel/specialvoxels/hardpointvoxel.h"
 
 #include "world/world.h"
 #include "world/god.h"
 
+#include "voxel/specialvoxels/hardpointvoxel.h"
+#include "worldobject/worldobjectcomponents.h"
 #include "worldobject/components/hardpoint.h"
 
 #include "bullet.h"
+#include "physics/physics.h"
+#include "voxel/voxelclusterbounds.h"
 
 
 Gun::Gun(const std::string& equipmentKey):
@@ -55,7 +58,7 @@ void Gun::setupBullet(Bullet* bullet, const glm::vec3& point) {
         glm::quat bulletOrientation = glm::angleAxis(-angle, rotationAxis);
         bulletTransform.rotateWorld(bulletOrientation); //then rotate towards target
     }
-
+    
     float bulletLength = bullet->bounds().minimalGridAABB().extent(ZAxis) * bullet->transform().scale();
     float spawnDistance = glm::root_two<float>() * bullet->transform().scale();
     bulletTransform.setPosition(m_hardpoint->voxel()->position() + bulletDirection * (bulletLength / 2.0f + spawnDistance));

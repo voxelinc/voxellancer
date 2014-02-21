@@ -15,12 +15,13 @@
 
 #include "voxelrenderdata.h"
 #include "voxel.h"
+#include "voxelclusterbounds.h"
 
 
 VoxelCluster::VoxelCluster(float scale):
     m_voxels(),
-    m_bounds(this),
-    m_voxelRenderData(m_voxels),
+    m_bounds(new VoxelClusterBounds(this)),
+    m_voxelRenderData(new VoxelRenderData(m_voxels)),
     m_transform(glm::vec3(0), scale)
 {
 }
@@ -32,7 +33,7 @@ VoxelCluster::~VoxelCluster() {
 }
 
 VoxelClusterBounds& VoxelCluster::bounds() {
-    return m_bounds;
+    return *m_bounds;
 }
 
 Transform& VoxelCluster::transform() {
@@ -52,22 +53,22 @@ void VoxelCluster::addVoxel(Voxel* voxel) {
     assert(m_voxels[voxel->gridCell()] == nullptr);
 
     m_voxels[voxel->gridCell()] = voxel;
-    m_bounds.addVoxel(voxel);
-    m_voxelRenderData.invalidate();
+    m_bounds->addVoxel(voxel);
+    m_voxelRenderData->invalidate();
 }
 
 void VoxelCluster::removeVoxel(Voxel* voxel) {
     assert(voxel != nullptr);
 
-    m_bounds.removeVoxel(voxel); // Needs to be done before removal from m_voxels
+    m_bounds->removeVoxel(voxel); // Needs to be done before removal from m_voxels
     m_voxels.erase(voxel->gridCell());
-    m_voxelRenderData.invalidate();
+    m_voxelRenderData->invalidate();
 
     delete voxel;
 }
 
 VoxelRenderData* VoxelCluster::voxelRenderData() {
-    return &m_voxelRenderData;
+    return m_voxelRenderData.get();
 }
 
 const std::unordered_map<glm::ivec3, Voxel*>& VoxelCluster::voxelMap() const {

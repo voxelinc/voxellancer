@@ -26,18 +26,18 @@ std::weak_ptr<VoxelRenderer> VoxelRenderer::s_instance;
 VoxelRenderer::VoxelRenderer() :
     m_program(0),
     m_prepared(false),
-    m_voxelMesh()
+    m_voxelMesh(new VoxelMesh())
 {
     glow::debug("Create Voxelrenderer");
     createAndSetupShaders();
 }
 
-void VoxelRenderer::prepareDraw(Camera * camera, bool withBorder) {
+void VoxelRenderer::prepareDraw(Camera& camera, bool withBorder) {
     glEnable(GL_DEPTH_TEST);
 
-    m_program->setUniform("projection", camera->projection());
-    m_program->setUniform("view", camera->view());
-    m_program->setUniform("viewProjection", camera->viewProjection());
+    m_program->setUniform("projection", camera.projection());
+    m_program->setUniform("view", camera.view());
+    m_program->setUniform("viewProjection", camera.viewProjection());
     m_program->setUniform("withBorder", (withBorder ? 1.0f : 0.0f));
 
     m_program->use();
@@ -48,11 +48,11 @@ void VoxelRenderer::prepareDraw(Camera * camera, bool withBorder) {
 }
 
 
-void VoxelRenderer::draw(VoxelCluster * worldObject) {
-    m_program->setUniform("model", worldObject->transform().matrix());
-    m_program->setUniform("emissiveness", worldObject->emissiveness());
+void VoxelRenderer::draw(VoxelCluster& worldObject) {
+    m_program->setUniform("model", worldObject.transform().matrix());
+    m_program->setUniform("emissiveness", worldObject.emissiveness());
 
-    VoxelRenderData* renderData = worldObject->voxelRenderData();
+    VoxelRenderData* renderData = worldObject.voxelRenderData();
 
     renderData->vertexArrayObject()->bind();
     glVertexAttribDivisor(m_program->getAttributeLocation("v_vertex"), 0);
@@ -89,9 +89,9 @@ glow::Program* VoxelRenderer::program() {
     return s_instance.lock()->m_program;
 }
 
-VoxelMesh* VoxelRenderer::voxelMesh() {
+VoxelMesh& VoxelRenderer::voxelMesh() {
     assert(!s_instance.expired());
-    return &s_instance.lock()->m_voxelMesh;
+    return *s_instance.lock()->m_voxelMesh;
 }
 
 std::shared_ptr<VoxelRenderer> VoxelRenderer::instance() {

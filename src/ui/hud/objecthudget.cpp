@@ -13,19 +13,19 @@
 
 #include "hudobjectdelegate.h"
 #include "hud.h"
+#include "voxel/voxelclusterbounds.h"
+#include "objecthudgetvoxels.h"
 
 
 ObjectHudget::ObjectHudget(HUD* hud, HUDObjectDelegate* objectDelegate):
     Hudget(hud),
     m_objectDelegate(objectDelegate),
-    m_voxels(this)
+    m_voxels(new ObjectHudgetVoxels(this))
 {
 
 }
 
-bool ObjectHudget::isTarget() const {
-
-}
+ObjectHudget::~ObjectHudget() = default;
 
 void ObjectHudget::update(float deltaSec) {
     bool targetHighlight = false;
@@ -46,7 +46,7 @@ void ObjectHudget::update(float deltaSec) {
 }
 
 void ObjectHudget::draw() {
-    m_voxels.draw();
+    m_voxels->draw();
 }
 
 void ObjectHudget::calculateOpeningAngle() {
@@ -58,6 +58,6 @@ void ObjectHudget::calculateOpeningAngle() {
 
     alpha = std::max(alpha, 0.04f); // Hack, set minimum size
 
-    m_voxels.setOpeningAngle(alpha);
+    m_voxels->setOpeningAngle(alpha);
 }
 

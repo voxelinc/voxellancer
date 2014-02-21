@@ -5,6 +5,7 @@
 #include "ai/squad.h"
 #include "ai/character.h"
 #include "ai/basictasks/formationmembertask.h"
+#include "voxel/voxelclusterbounds.h"
 
 
 PatrolWaypointsTask::PatrolWaypointsTask(Squad& squad, std::list<glm::vec3> points) :

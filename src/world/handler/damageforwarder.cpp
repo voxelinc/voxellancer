@@ -11,6 +11,7 @@
 #include "utils/tostring.h"
 
 #include "worldobject/worldobject.h"
+#include "voxel/voxel.h"
 
 
 
