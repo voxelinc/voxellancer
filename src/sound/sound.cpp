@@ -8,60 +8,86 @@ Sound::Sound(const sf::SoundBuffer& sound) :
 {
 }
 
+Sound::Sound():
+    m_sound(nullptr)
+{
+}
+
 Sound::~Sound() = default;
 
 Sound::Status Sound::status() {
+    if (!m_sound) {
+        return Status::Disabled;
+    }
     switch (m_sound->getStatus()) {
         case sf::SoundSource::Playing:
-            return Playing;
+            return Status::Playing;
         case sf::SoundSource::Paused:
-            return Paused;
+            return Status::Paused;
         case sf::SoundSource::Stopped:
-            return Stopped;
+            return Status::Stopped;
         default:
-            return Stopped;
+            return Status::Stopped;
     }
 }
 
 void Sound::play() {
-    m_sound->play();
+    if (m_sound) {
+        m_sound->play();
+    }
 }
 
 void Sound::stop() {
-    m_sound->stop();
+    if (m_sound) {
+        m_sound->stop();
+    }
 }
 
 void Sound::pause() {
-    m_sound->pause();
+    if (m_sound) {
+        m_sound->pause();
+    }
 }
 
 Sound* Sound::setPosition(const glm::vec3& p) {
-    m_sound->setPosition(sf::Vector3f(p.x, p.y, p.z));
+    if (m_sound) {
+        m_sound->setPosition(sf::Vector3f(p.x, p.y, p.z));
+    }
     return this;
 }
 
 Sound* Sound::setAttenuation(float attenuation) {
-    m_sound->setAttenuation(attenuation);
+    if (m_sound) {
+        m_sound->setAttenuation(attenuation);
+    }
     return this;
 }
 
 Sound* Sound::setVolume(float volume) {
-    m_sound->setVolume(volume);
+    if (m_sound) {
+        m_sound->setVolume(volume);
+    }
     return this;
 }
 
 Sound* Sound::setLooping(bool loop) {
-    m_sound->setLoop(loop);
+    if (m_sound) {
+        m_sound->setLoop(loop);
+    }
     return this;
 }
 
 Sound* Sound::setRelativeToListener(bool relative) {
-    m_sound->setRelativeToListener(relative);
+    if (m_sound) {
+        m_sound->setRelativeToListener(relative);
+    }
     return this;
 }
 
 Sound* Sound::setMinDistance(float distance) {
-    m_sound->setMinDistance(distance);
+    if (m_sound) {
+        m_sound->setMinDistance(distance);
+    }
     return this;
 }
 

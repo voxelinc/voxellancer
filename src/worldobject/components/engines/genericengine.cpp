@@ -1,6 +1,5 @@
 #include "genericengine.h"
 
-
 GenericEngine::GenericEngine(const std::string& equipmentKey):
     Engine(equipmentKey)
 {
@@ -20,7 +19,6 @@ const SoundProps& GenericEngine::engineSound() const {
 
 void GenericEngine::setEngineSound(const SoundProps& engineSound) {
     m_engineSound = engineSound;
-    assert(false); // todo
 }
 
 EnginePower GenericEngine::power() const {
@@ -34,4 +32,3 @@ void GenericEngine::setPower(const EnginePower& power) {
 void GenericEngine::update(float deltaSec) {
     Engine::update(deltaSec);
 }
-

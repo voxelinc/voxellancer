@@ -11,10 +11,11 @@ namespace sf {
 
 class Sound {
 public:
-    enum Status {
-        Paused, Playing, Stopped
+    enum class Status {
+        Paused, Playing, Stopped, Disabled
     };
 
+    Sound();
     Sound(const sf::SoundBuffer& sound);
     ~Sound();
 

@@ -32,6 +32,9 @@ void SoundManager::setListener(const glm::vec3& p, const glm::quat& orientation)
 }
 
 std::shared_ptr<Sound> SoundManager::play(std::string soundFile, const glm::vec3& position, bool relative) {
+    if (soundFile == "null") {
+        return std::make_shared<Sound>();
+    }
     std::shared_ptr<Sound> sound = create(soundFile);
     sound->setPosition(position)->setRelativeToListener(relative)->play();
     return sound;
@@ -50,7 +53,7 @@ std::shared_ptr<Sound> SoundManager::create(std::string soundFile) {
     // sounds don't work with more than one channel!
     assert(buffer->getChannelCount() == 1);
 
-    std::shared_ptr<Sound> sound(new Sound(*buffer));
+    std::shared_ptr<Sound> sound(std::make_shared<Sound>(*buffer));
     sound->setAttenuation(0.1f);
     sound->setMinDistance(5.0f);
     m_sounds.push_back(sound);
@@ -77,7 +80,7 @@ void SoundManager::cleanUp()
     }
     for (std::list<std::shared_ptr<Sound>>::iterator iter = m_sounds.begin(); iter != m_sounds.end();)
     {
-        if ((*iter)->status() == Sound::Stopped) {
+        if ((*iter)->status() == Sound::Status::Stopped) {
             iter = m_sounds.erase(iter);
         } else {
             ++iter;
@@ -96,7 +99,7 @@ void SoundManager::activate() {
     s_current = this;
     
     for (std::shared_ptr<Sound>& sound : m_sounds) {
-        if (sound->status() == Sound::Paused) {
+        if (sound->status() == Sound::Status::Paused) {
             sound->play();
         }
     }
@@ -110,7 +113,7 @@ void SoundManager::deactivate() {
     cleanUp();
 
     for (std::shared_ptr<Sound>& sound : m_sounds) {
-        if (sound->status() == Sound::Playing) {
+        if (sound->status() == Sound::Status::Playing) {
             sound->pause();
         }
     }
