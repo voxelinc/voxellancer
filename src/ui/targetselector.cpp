@@ -5,10 +5,11 @@
 #include "player.h"
 #include "worldobject/ship.h"
 #include "world/world.h"
+#include "objectinfo.h"
 
 
-TargetSelector::TargetSelector(Player *player):
-    m_player(player)
+TargetSelector::TargetSelector(Player& player):
+    m_player(&player)
 {
 
 }
