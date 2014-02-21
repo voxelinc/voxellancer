@@ -6,6 +6,7 @@
 #include "worldlogic.h"
 #include "worldobject/worldobject.h"
 #include "skybox.h"
+#include "scripting/scriptengine.h"
 
 #include "god.h"
 
@@ -17,7 +18,8 @@ World::World():
     m_worldLogic(new WorldLogic(*this)),
     m_worldTree(new WorldTree()),
     m_god(new God(*this)),
-    m_voxelParticleEngine(new VoxelParticleEngine())
+    m_voxelParticleEngine(new VoxelParticleEngine()),
+    m_scriptEngine(new ScriptEngine(this))
 {
 }
 
@@ -45,6 +47,10 @@ VoxelParticleEngine &World::voxelParticleEngine() {
     return *m_voxelParticleEngine;
 }
 
+ScriptEngine& World::scriptEngine() {
+    return *m_scriptEngine;
+}
+
 std::unordered_set<WorldObject*> &World::worldObjects() {
     return m_worldObjects;
 }
@@ -54,6 +60,7 @@ void World::update(float deltaSecs) {
 
     m_worldLogic->update(deltaSecs);
     m_voxelParticleEngine->update(deltaSecs);
+    m_scriptEngine->update(deltaSecs);
 
     for (WorldObject *worldObject : m_worldObjects) {
         worldObject->update(deltaSecs);

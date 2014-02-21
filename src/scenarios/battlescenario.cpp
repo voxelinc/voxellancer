@@ -27,6 +27,7 @@
 #include "player.h"
 #include "ui/objectinfo.h"
 
+
 BattleScenario::BattleScenario(Game* game):
     BaseScenario(game)
 {

@@ -10,6 +10,7 @@ class God;
 class WorldObject;
 class VoxelParticleEngine;
 class Skybox;
+class ScriptEngine;
 
 class World
 {
@@ -22,6 +23,9 @@ public:
     God &god();
     WorldTree &worldTree();
     VoxelParticleEngine& voxelParticleEngine();
+    ScriptEngine& scriptEngine();
+
+
     std::unordered_set<WorldObject*> &worldObjects();
 
     void update(float deltaSecs);
@@ -41,6 +45,7 @@ protected:
     std::unique_ptr<WorldLogic> m_worldLogic;
     std::unique_ptr<God> m_god;
     std::unique_ptr<VoxelParticleEngine> m_voxelParticleEngine;
+    std::unique_ptr<ScriptEngine> m_scriptEngine;
 
     std::unordered_set<WorldObject*> m_worldObjects;
 
