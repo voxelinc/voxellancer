@@ -4,6 +4,8 @@
 
 #include "bullet.h"
 
+#include "sound/SoundProps.h"
+
 
 
 class GenericBullet: public Bullet {
@@ -13,10 +15,13 @@ public:
     virtual float emissiveness() const override;
     void setEmissiveness(float emissiveness);
 
+    const SoundProps& hitSound() const override;
+    void setHitSound(SoundProps hitSound);
+    
 
 protected:
     float m_emissiveness;
-
+    SoundProps m_hitSound;
     virtual void spawnExplosion() override;
 };
 

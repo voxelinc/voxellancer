@@ -70,17 +70,15 @@ go_bandit([](){
         });
 
         it("should work before load", [&]() {
-            // suppress property not found debug info
-            glow::setVerbosityLevel(glow::LogMessage::Fatal);
 
-            Property<int> iSize("player.size");
+            Property<int> iSize("player.size", 0);
             AssertThat(iSize.get(), Equals(0));
-            Property<float> fProp("player.size");
-            Property<float> fProp2("player.height");
-            Property<std::string> sProp1("player.name");
-            Property<std::string> sProp2("section.name");
-            Property<char> cProp("section.forward");
-            Property<bool> bProp2("player.is_true");
+            Property<float> fProp("player.size", 0);
+            Property<float> fProp2("player.height", 0);
+            Property<std::string> sProp1("player.name", "");
+            Property<std::string> sProp2("section.name", "");
+            Property<char> cProp("section.forward", ' ');
+            Property<bool> bProp2("player.is_true", false);
 
             PropertyManager::instance()->load("test/property/test.ini");
 
@@ -92,7 +90,6 @@ go_bandit([](){
             AssertThat(cProp.get(), Equals('w'));
             AssertThat(bProp2.get(), Equals(true));
 
-            glow::setVerbosityLevel(glow::LogMessage::Debug);
         });
 
         it("should reload", [&]() {

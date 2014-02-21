@@ -3,15 +3,16 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 
+#include "voxel/voxelclusterbounds.h"
 #include "voxel/specialvoxels/hardpointvoxel.h"
 
+#include "worldobject/worldobjectcomponents.h"
 #include "worldobject/components/hardpoint.h"
 
 #include "world/world.h"
 #include "world/god.h"
 #include "physics/physics.h"
-#include "voxel/voxelclusterbounds.h"
-#include "../../worldobjectcomponents.h"
+#include "sound/soundmanager.h"
 
 
 RocketLauncher::RocketLauncher(const std::string& equipmentKey):
@@ -38,12 +39,15 @@ void RocketLauncher::setupRocket(Rocket* rocket, WorldObject* target) {
     WorldObject* worldObject = hardpoint()->components()->worldObject();
     glm::quat shipOrientation = worldObject->transform().orientation();
     float rocketLength = rocket->bounds().minimalGridAABB().extent(ZAxis) * rocket->transform().scale();
+    glm::vec3 rocketPosition = hardpoint()->voxel()->position() + shipOrientation * glm::vec3(0, 0, -rocketLength / 2.0f);
 
     rocket->transform().setOrientation(shipOrientation);
-    rocket->transform().setPosition(hardpoint()->voxel()->position() + shipOrientation * glm::vec3(0, 0, -rocketLength / 2.0f));
+    rocket->transform().setPosition(rocketPosition);
 
     rocket->setCreator(worldObject);
     rocket->setTarget(target);
+    rocket->setSound(SoundManager::current()->play(rocketSound(), rocketPosition));
+    rocket->setExplosionSound(explosionSound());
 
     rocket->physics().setSpeed(worldObject->physics().speed());
 }

@@ -3,6 +3,7 @@
 #include "property/property.h"
 
 #include "voxeleffect/voxelexplosiongenerator.h"
+#include "sound/soundmanager.h"
 
 
 GenericRocket::GenericRocket()
@@ -26,4 +27,3 @@ void GenericRocket::spawnExplosion() {
 
     generator.spawn();
 }
-

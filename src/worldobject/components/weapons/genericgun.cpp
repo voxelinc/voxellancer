@@ -26,13 +26,23 @@ void GenericGun::setBulletSpeed(float bulletSpeed) {
     m_bulletSpeed = bulletSpeed;
 }
 
-Visuals GenericGun::visuals() const {
+const Visuals& GenericGun::visuals() const {
     return m_visuals;
 }
 
 void GenericGun::setVisuals(const Visuals& visuals) {
     m_visuals = visuals;
 }
+
+const SoundProps& GenericGun::fireSound() const {
+    return m_fireSound;
+}
+
+void GenericGun::setFireSound(const SoundProps& fireSound) {
+    m_fireSound = fireSound;
+}
+
+
 
 float GenericGun::cooldownTime() const {
     return m_cooldownTime;

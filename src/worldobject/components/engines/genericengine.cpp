@@ -6,12 +6,21 @@ GenericEngine::GenericEngine(const std::string& equipmentKey):
 {
 }
 
-Visuals GenericEngine::visuals() const {
+const Visuals& GenericEngine::visuals() const {
     return m_visuals;
 }
 
 void GenericEngine::setVisuals(const Visuals& visuals) {
     m_visuals = visuals;
+}
+
+const SoundProps& GenericEngine::engineSound() const {
+    return m_engineSound;
+}
+
+void GenericEngine::setEngineSound(const SoundProps& engineSound) {
+    m_engineSound = engineSound;
+    assert(false); // todo
 }
 
 EnginePower GenericEngine::power() const {

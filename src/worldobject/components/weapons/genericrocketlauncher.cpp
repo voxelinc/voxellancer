@@ -12,13 +12,28 @@ GenericRocketLauncher::GenericRocketLauncher(const std::string& name):
 {
 }
 
-
-Visuals GenericRocketLauncher::visuals() const {
+const Visuals& GenericRocketLauncher::visuals() const {
     return m_visuals;
 }
 
 void GenericRocketLauncher::setVisuals(const Visuals& visuals) {
     m_visuals = visuals;
+}
+
+const SoundProps& GenericRocketLauncher::rocketSound() const {
+    return m_rocketSound;
+}
+
+void GenericRocketLauncher::setRocketSound(const SoundProps& rocketSound) {
+    m_rocketSound = rocketSound;
+}
+
+const SoundProps& GenericRocketLauncher::explosionSound() const {
+    return m_explosionSound;
+}
+
+void GenericRocketLauncher::setExplosionSound(const SoundProps& explosionSound) {
+    m_explosionSound = explosionSound;
 }
 
 float GenericRocketLauncher::cooldownTime() const {
@@ -41,4 +56,5 @@ Rocket* GenericRocketLauncher::createRocket() {
     Rocket* rocket = WorldObjectBuilder(m_rocketName).buildRocket();
     return rocket;
 }
+
 

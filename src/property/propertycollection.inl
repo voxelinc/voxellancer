@@ -22,13 +22,13 @@ T PropertyCollection<T>::get(const std::string& name) const {
     if (iter != m_values.end()) {
         return iter->second;
     } else {
-        glow::debug("PropertyCollection: could not find a value for %;", name);
+        glow::debug("PropertyCollection: could not get %;", name);
         return T();
     }
 }
 
 template<typename T>
-T PropertyCollection<T>::get(const std::string& name, const std::string& defaultValue) const {
+T PropertyCollection<T>::get(const std::string& name, const T& defaultValue) const {
     auto iter = m_values.find(name);
     if (iter != m_values.end()) {
         return iter->second;

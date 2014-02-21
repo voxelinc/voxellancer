@@ -6,6 +6,7 @@
 
 #include "rocket.h"
 
+class SoundProps;
 
 class GenericRocket: public Rocket {
 public:

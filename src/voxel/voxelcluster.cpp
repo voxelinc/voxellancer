@@ -44,6 +44,14 @@ void VoxelCluster::setTransform(const Transform& transform) {
     m_transform = transform;
 }
 
+const glm::vec3& VoxelCluster::position() {
+    return m_transform.position();
+}
+
+const glm::quat& VoxelCluster::orientation() {
+    return m_transform.orientation();
+}
+
 Voxel* VoxelCluster::voxel(const glm::ivec3& position) {
     std::unordered_map<glm::ivec3, Voxel*>::iterator i = m_voxels.find(position);
     return i == m_voxels.end() ? nullptr : i->second;

@@ -29,8 +29,8 @@ void Gun::fireAtPoint(const glm::vec3& point) {
         setupBullet(bullet, point);
 
         World::instance()->god().scheduleSpawn(bullet);
-        SoundManager::current()->play("data/sound/laser.ogg", hardpoint()->voxel()->position())->setVolume(3);
-
+        SoundManager::current()->play(fireSound(), hardpoint()->voxel()->position());
+        
         onFired();
     }
 }

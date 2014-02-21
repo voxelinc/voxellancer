@@ -5,8 +5,6 @@
 
 #include <glm/glm.hpp>
 
-#include "display/rendering/visuals.h"
-
 #include "enginepower.h"
 #include "enginestate.h"
 #include "equipment.h"
@@ -14,13 +12,17 @@
 
 class EngineSlot;
 class EngineTrailGenerator;
+class Visuals;
+class SoundProps;
 
 class Engine: public Equipment {
 public:
     Engine(const std::string& equipmentKey);
     virtual ~Engine();
 
-    virtual Visuals visuals() const = 0;
+    virtual const Visuals& visuals() const = 0;
+
+    virtual const SoundProps& engineSound() const = 0;
 
     EngineSlot* engineSlot();
     void setEngineSlot(EngineSlot* engineSlot);

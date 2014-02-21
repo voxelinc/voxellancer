@@ -3,6 +3,8 @@
 #include <string>
 
 #include "rocketlauncher.h"
+#include "display/rendering/visuals.h"
+#include "sound/SoundProps.h"
 
 
 class Rocket;
@@ -11,8 +13,14 @@ class GenericRocketLauncher: public RocketLauncher {
 public:
     GenericRocketLauncher(const std::string& name);
 
-    virtual Visuals visuals() const override;
+    virtual const Visuals& visuals() const override;
     void setVisuals(const Visuals& visuals);
+
+    virtual const SoundProps& rocketSound() const override;
+    void setRocketSound(const SoundProps& rocketSound);
+
+    virtual const SoundProps& explosionSound() const override;
+    void setExplosionSound(const SoundProps& explosionSound);
 
     virtual float cooldownTime() const override;
     void setCooldownTime(float cooldownTime);
@@ -26,9 +34,10 @@ public:
 
 protected:
     float m_cooldownTime;
+    SoundProps m_rocketSound;
+    SoundProps m_explosionSound;
     Visuals m_visuals;
     std::string m_rocketName;
-
     virtual Rocket* createRocket() override;
 };
 
