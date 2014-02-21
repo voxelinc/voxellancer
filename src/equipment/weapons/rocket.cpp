@@ -10,7 +10,7 @@
 #include "world/god.h"
 #include "world/world.h"
 
-#include "worldobject/components/engineslot.h"
+#include "equipment/engineslot.h"
 
 
 

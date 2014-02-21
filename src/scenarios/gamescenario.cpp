@@ -15,9 +15,9 @@
 #include "resource/worldobjectbuilder.h"
 
 #include "worldobject/ship.h"
-#include "worldobject/components/engineslot.h"
-#include "worldobject/components/hardpoint.h"
-#include "worldobject/components/weapons/gun.h"
+#include "equipment/engineslot.h"
+#include "equipment/hardpoint.h"
+#include "equipment/weapons/gun.h"
 #include "sound/soundmanager.h"
 #include "game.h"
 #include "world/world.h"

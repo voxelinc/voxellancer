@@ -14,7 +14,7 @@
 
 #include "ai/character.h"
 
-#include "worldobject/components/engineslot.h"
+#include "equipment/engineslot.h"
 
 
 Ship::Ship():

@@ -2,7 +2,7 @@
 
 #include "utils/tostring.h"
 
-#include "worldobject/components/engineslot.h"
+#include "equipment/engineslot.h"
 #include "worldobject/worldobject.h"
 
 

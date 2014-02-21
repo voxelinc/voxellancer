@@ -4,9 +4,9 @@
 
 #include <glow/logging.h>
 
-#include "worldobject/components/weapon.h"
-#include "worldobject/components/weapons/genericgun.h"
-#include "worldobject/components/weapons/genericrocketlauncher.h"
+#include "equipment/weapon.h"
+#include "equipment/weapons/genericgun.h"
+#include "equipment/weapons/genericrocketlauncher.h"
 
 
 WeaponBuilder::WeaponBuilder(const std::string& name):

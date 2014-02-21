@@ -5,8 +5,8 @@
 
 #include "voxel/specialvoxels/engineslotvoxel.h"
 
-#include "worldobject/components/engine.h"
-#include "worldobject/components/engineslot.h"
+#include "equipment/engine.h"
+#include "equipment/engineslot.h"
 #include "worldobject/worldobject.h"
 
 

@@ -5,7 +5,7 @@
 
 #include "voxel/specialvoxels/hardpointvoxel.h"
 
-#include "worldobject/components/hardpoint.h"
+#include "equipment/hardpoint.h"
 
 #include "world/world.h"
 #include "world/god.h"

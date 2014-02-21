@@ -11,7 +11,7 @@
 
 #include "worldobject/handle/handle.h"
 
-#include "worldobject/components/enginestate.h"
+#include "equipment/enginestate.h"
 #include "worldobject/handle/handle.h"
 
 
