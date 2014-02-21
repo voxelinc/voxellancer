@@ -9,6 +9,7 @@
 #include "worldobject/components/enginestate.h"
 
 
+class Aimer;
 class Camera;
 class CameraDolly;
 class CameraHead;
@@ -42,6 +43,7 @@ protected:
     Handle<Ship> m_ship;
     std::unique_ptr<CameraDolly> m_cameraDolly;
     std::unique_ptr<HUD> m_hud;
+    std::unique_ptr<Aimer> m_aimer;
     EngineState m_engineState;
 };
 
