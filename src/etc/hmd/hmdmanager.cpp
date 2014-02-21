@@ -7,7 +7,6 @@
 #include "display/viewer.h"
 #include "gamestate/game.h"
 #include "hmd.h"
-#include "ui/inputhandler.h"
 
 
 std::weak_ptr<HMDManager> HMDManager::s_instance;

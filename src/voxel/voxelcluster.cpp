@@ -67,7 +67,7 @@ void VoxelCluster::removeVoxel(Voxel* voxel) {
     delete voxel;
 }
 
-VoxelRenderData* VoxelCluster::voxelRenderData() {
+VoxelRenderData* VoxelCluster::voxelRenderData(){
     return m_voxelRenderData.get();
 }
 

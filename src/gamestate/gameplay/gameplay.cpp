@@ -47,7 +47,7 @@ const Scene& GamePlay::scene() const {
 }
 
 const CameraHead& GamePlay::cameraHead() const {
-    return m_player.cameraDolly().cameraHead();
+    return m_player.cameraHead();
 }
 
 Player& GamePlay::player() {

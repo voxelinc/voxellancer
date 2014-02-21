@@ -7,7 +7,6 @@
 #include <glow/logging.hpp>
 
 #include "ui/hud/hud.h"
-#include "inputhandler.h"
 
 #include "gamestate/gameplay/running/gameplayrunninginput.h"
 

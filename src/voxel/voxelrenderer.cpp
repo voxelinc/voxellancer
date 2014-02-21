@@ -47,11 +47,11 @@ void VoxelRenderer::prepareDraw(const Camera& camera, bool withBorder) {
     m_prepared = true;
 }
 
-void VoxelRenderer::draw(VoxelCluster& worldObject) {
-    m_program->setUniform("model", worldObject.transform().matrix());
-    m_program->setUniform("emissiveness", worldObject.emissiveness());
+void VoxelRenderer::draw(VoxelCluster& cluster) {
+    m_program->setUniform("model", cluster.transform().matrix());
+    m_program->setUniform("emissiveness", cluster.emissiveness());
 
-    VoxelRenderData* renderData = worldObject.voxelRenderData();
+    VoxelRenderData* renderData = cluster.voxelRenderData();
 
     renderData->vertexArrayObject()->bind();
     glVertexAttribDivisor(m_program->getAttributeLocation("v_vertex"), 0);

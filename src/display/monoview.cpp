@@ -41,9 +41,9 @@ float MonoView::aspectRatio() const {
 void MonoView::draw(const Scene& scene, const CameraHead& cameraHead) {
     glViewport(m_viewport.x(), m_viewport.y(), m_viewport.width(), m_viewport.height());
 
-    m_camera->setPosition(cameraHead->position());
-    m_camera->setOrientation(cameraHead->orientation());
+    m_camera->setPosition(cameraHead.position());
+    m_camera->setOrientation(cameraHead.orientation());
 
-    scene->draw(*m_camera, glow::FrameBufferObject::defaultFBO());
+    scene.draw(*m_camera, glow::FrameBufferObject::defaultFBO());
 }
 

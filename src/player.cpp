@@ -11,7 +11,8 @@
 #include "camera/cameradolly.h"
 #include "camera/camerahead.h"
 #include "gamestate/game.h"
-#include "gamestate/gameplay/gameplay.h"#include "ui/hud/hud.h"
+#include "gamestate/gameplay/gameplay.h"
+#include "ui/hud/hud.h"
 #include "ui/hud/hudget.h"
 #include "ui/hud/aimhelperhudget.h"
 #include "ui/hud/crosshair.h"
@@ -23,7 +24,7 @@
 Player::Player(GamePlay* inGame):
     m_inGame(inGame),
     m_ship(nullptr),
-    m_hud(this, &m_inGame->game()->viewer())
+    m_hud(new HUD(this, &m_inGame->game()->viewer())),
     m_cameraDolly(new CameraDolly())
 {
     
@@ -58,8 +59,8 @@ CameraHead& Player::cameraHead() {
     return m_cameraDolly->cameraHead();
 }
 
-const CameraDolly& Player::cameraDolly() const {
-    return m_cameraDolly;
+const CameraHead& Player::cameraHead() const {
+    return m_cameraDolly->cameraHead();
 }
 
 HUD& Player::hud() {

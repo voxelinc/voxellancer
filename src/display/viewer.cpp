@@ -1,10 +1,10 @@
 #include "viewer.h"
 
 #include <cassert>
-#include <iostream>
+
+#include <GL/glew.h>
 
 #include "camera/camerahead.h"
-
 #include "scene.h"
 #include "stereorenderinfo.h"
 #include "monoview.h"

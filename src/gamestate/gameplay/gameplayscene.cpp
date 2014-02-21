@@ -10,12 +10,12 @@
 #include "display/rendering/blitter.h"
 #include "display/rendering/buffernames.h"
 #include "player.h"
-#include "rendering/starfield.h"
 #include "ui/hud/hud.h"
 #include "world/world.h"
 #include "skybox.h"
 #include "voxeleffect/voxelparticleengine.h"
 #include "worldobject/worldobject.h"
+#include "display/rendering/starfield.h"
 
 GamePlayScene::GamePlayScene(GamePlay* gamePlay, Player* player):
     m_gamePlay(gamePlay),
@@ -39,7 +39,7 @@ void GamePlayScene::draw(const Camera& camera, glow::FrameBufferObject* target, 
 
     drawGame(camera);
 
-    RenderMetaData metadata(&camera, side);
+    RenderMetaData metadata(camera, side);
     m_renderPipeline->apply(*m_framebuffer, metadata);
 
     // transfer rendered image to target framebuffer
@@ -48,7 +48,7 @@ void GamePlayScene::draw(const Camera& camera, glow::FrameBufferObject* target, 
 }
 
 void GamePlayScene::update(float deltaSec) {
-    m_starField->update(deltaSec, m_player->cameraPosition());
+    m_starField->update(deltaSec, m_player->cameraHead().position());
 }
 
 void GamePlayScene::setOutputBuffer(int i) {

@@ -4,13 +4,10 @@
 
 #include "input/inputmapping.h"
 
+#include "ui/actionkeymapping.h"
 #include "utils/fsm/trigger.h"
 
 #include "property/property.h"
-#include "actionkeymapping.h"
-
-#include "inputconfigurator.h"
-#include "targetselector.h"
 
 
 class WorldObject;
@@ -19,6 +16,7 @@ class GameState;
 class HUD;
 class HMD;
 class Player;
+class TargetSelector;
 
 class GamePlayRunningInput {
 public:

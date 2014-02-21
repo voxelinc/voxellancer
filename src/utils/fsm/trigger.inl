@@ -1,7 +1,5 @@
 #include "trigger.h"
 
-#include <iostream>
-
 #include "triggeredtransition.h"
 
 

@@ -3,10 +3,9 @@
 #include "gamestate/game.h"
 #include "gamestate/gameplay/gameplay.h"
 
+#include "camera/camerahead.h"
 #include "world/world.h"
-
 #include "player.h"
-
 #include "gameplayrunninginput.h"
 
 
@@ -35,7 +34,7 @@ void GamePlayRunning::update(float deltaSec) {
 
     m_gamePlay->player().update(deltaSec);
 
-    m_gamePlay->soundManager().setListener(m_gamePlay->player().cameraPosition(), m_gamePlay->player().cameraOrientation());
+    m_gamePlay->soundManager().setListener(m_gamePlay->player().cameraHead().position(), m_gamePlay->player().cameraHead().orientation());
 }
 
 void GamePlayRunning::onEntered() {

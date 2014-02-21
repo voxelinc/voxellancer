@@ -20,16 +20,15 @@
 #include "camera/camerahead.h"
 #include "camera/cameradolly.h"
 #include "etc/hmd/hmd.h"
-#include "hud/crosshair.h"
 #include "input/inputmapping.h"
-#include "inputconfigurator.h"
 #include "worldobject/worldobject.h"
 #include "worldobject/worldobjectcomponents.h"
 #include "worldobject/ship.h"
 #include "player.h"
 #include "ui/hud/hud.h"
 #include "ui/inputconfigurator.h"
-#include "targetselector.h"
+#include "ui/targetselector.h"
+#include "ui/hud/crosshair.h"
 
 
 /*
@@ -84,7 +83,7 @@ GamePlayRunningInput::GamePlayRunningInput(Player* player):
 
     m_inputConfigurator(new InputConfigurator(&m_actions, &m_secondaryInputValues, &prop_deadzoneGamepad, &m_player->hud())),
 
-    m_targetSelector(new TargetSelector(player))
+    m_targetSelector(new TargetSelector(*player))
 {
     addActionsToVector();
 
