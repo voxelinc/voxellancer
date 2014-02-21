@@ -42,7 +42,7 @@ void ObjectHudget::update(float deltaSec) {
         }
     }
 
-    m_voxels.setTargetHightlight(targetHighlight);
+    m_voxels->setTargetHightlight(targetHighlight);
 }
 
 void ObjectHudget::draw() {

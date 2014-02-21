@@ -15,7 +15,7 @@ namespace {
     class ObjectHudgetCorner: public VoxelCluster {
     public:
         ObjectHudgetCorner(ObjectHudgetVoxels* objectHudgetVoxels, const glm::ivec3& baseOffset, bool targetHightlight):
-            VoxelCluster(targetHightlight ? 0.04 : 0.02f),
+            VoxelCluster(targetHightlight ? 0.04f : 0.02f),
             m_objectHudgetVoxels(objectHudgetVoxels),
             m_baseOffset(baseOffset)
         {
@@ -62,10 +62,14 @@ ObjectHudgetVoxels::ObjectHudgetVoxels(ObjectHudget* hudget):
 }
 
 ObjectHudgetVoxels::~ObjectHudgetVoxels() {
-    delete[] m_lu;
-    delete[] m_lb;
-    delete[] m_ru;
-    delete[] m_rb;
+    delete m_lu[0];
+    delete m_lb[0];
+    delete m_ru[0];
+    delete m_rb[0];
+    delete m_lu[1];
+    delete m_lb[1];
+    delete m_ru[1];
+    delete m_rb[1];
 }
 
 ObjectHudget* ObjectHudgetVoxels::hudget() {
