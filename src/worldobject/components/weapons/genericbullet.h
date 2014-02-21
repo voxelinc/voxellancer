@@ -4,7 +4,7 @@
 
 #include "bullet.h"
 
-#include "sound/SoundProps.h"
+#include "sound/soundprops.h"
 
 
 

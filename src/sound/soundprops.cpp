@@ -1,4 +1,4 @@
-#include "SoundProps.h"
+#include "soundprops.h"
 
 #include "property/property.h"
 

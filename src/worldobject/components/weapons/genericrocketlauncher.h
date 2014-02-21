@@ -4,7 +4,7 @@
 
 #include "rocketlauncher.h"
 #include "display/rendering/visuals.h"
-#include "sound/SoundProps.h"
+#include "sound/soundprops.h"
 
 
 class Rocket;

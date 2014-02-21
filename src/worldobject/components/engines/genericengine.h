@@ -3,7 +3,7 @@
 #include "property/property.h"
 
 #include "display/rendering/visuals.h"
-#include "sound/SoundProps.h"
+#include "sound/soundprops.h"
 
 #include "worldobject/components/engine.h"
 
