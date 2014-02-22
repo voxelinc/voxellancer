@@ -298,7 +298,7 @@ void InputHandler::processFireActions() {
         }
     }
     if (getInputValue(&rocketAction)) {
-        if (m_player->ship() && m_player->ship()->targetObject()) {
+        if (m_player->ship()) {
             m_player->ship()->components().fireAtObject(m_player->ship()->targetObject());
         }
     }

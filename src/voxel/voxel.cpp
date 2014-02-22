@@ -7,9 +7,9 @@
 #include "glow/logging.hpp"
 
 #include "worldobject/worldobject.h"
+#include "voxel/voxeltree.h"
 #include "voxel/voxeltreenode.h"
 #include "voxeleffect/voxeldebrisgenerator.h"
-#include "voxeltree.h"
 
 
 Property<float>* Voxel::s_defaultMass;
@@ -72,6 +72,10 @@ float Voxel::hp() const {
 
 void Voxel::applyDamage(float deltaHp) {
     m_hp = std::max(m_hp - deltaHp, 0.0f);
+}
+
+float Voxel::destructionDamage() {
+    return 0;
 }
 
 float Voxel::normalizedMass() const {
