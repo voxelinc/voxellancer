@@ -102,8 +102,6 @@ void WorldObjectComponents::fireAtPoint(const glm::vec3& point) {
 }
 
 void WorldObjectComponents::fireAtObject(WorldObject* worldObject) {
-    assert(worldObject);
-
     for (Hardpoint* hardpoint : m_hardpoints) {
         if(!hardpoint->weapon()) {
             continue;
