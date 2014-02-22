@@ -35,9 +35,6 @@ public:
     void setCharacter(Character* character);
     Character* character();
 
-//    void setEngineSound(std::shared_ptr<Sound> sound);
-
-
 
 protected:
     Ship(CollisionFilter* collisionFilter);
@@ -46,8 +43,6 @@ protected:
     std::unique_ptr<BoardComputer> m_boardComputer;
 
     std::unique_ptr<SquadLogic> m_squadLogic;
-//    std::shared_ptr<Sound> m_sound;
-//    glm::vec3 m_enginePos;
 
     Handle<Ship> m_shipHandle;
     Handle<WorldObject> m_targetObjectHandle;
