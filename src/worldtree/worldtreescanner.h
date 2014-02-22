@@ -10,7 +10,7 @@ class WorldObject;
 
 class WorldTreeScanner {
 public:
-    WorldTreeScanner(WorldTree* worldTree);
+    WorldTreeScanner();
 
     float scanInterval() const;
     void setScanInterval(float scanInterval);
@@ -31,9 +31,6 @@ public:
 
 
 protected:
-    WorldTree* m_worldTree;
-    WorldObject* m_worldObject;
-
     float m_scanInterval;
     float m_scanCountdown;
 
