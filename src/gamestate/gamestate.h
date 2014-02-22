@@ -3,12 +3,10 @@
 #include <memory>
 #include <string>
 
-#include "display/viewer.h"
+#include "utils/statemachine/statetemplate.h"
 
-#include "sound/soundmanager.h"
-
-#include "utils/fsm/statetemplate.h"
-
+class CameraHead;
+class Scene;
 
 /*
     Base class for a State the game can be in - for example

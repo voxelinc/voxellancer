@@ -4,11 +4,7 @@
 
 #include "gamestate/gamestate.h"
 
-#include "sound/soundmanager.h"
-
-#include "utils/fsm/trigger.h"
-
-
+#include "utils/statemachine/keytrigger.h"
 
 
 class GamePlay;
@@ -20,7 +16,7 @@ public:
 
     GamePlayRunningInput& input();
 
-    void setPauseTrigger(const Trigger<GameState>& pauseTrigger);
+    Trigger& pauseTrigger();
 
     virtual void update(float deltaSec) override;
 
@@ -30,6 +26,7 @@ public:
 
 protected:
     GamePlay* m_gamePlay;
+    KeyTrigger m_pauseTrigger;
 
     std::unique_ptr<GamePlayRunningInput> m_input;
 };

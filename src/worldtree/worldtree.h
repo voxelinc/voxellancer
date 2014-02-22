@@ -5,10 +5,10 @@
 
 #include "geometry/aabb.h"
 
-#include "worldtreenode.h"
 
-
+class WorldTreeNode;
 class WorldObject;
+class WorldTreeGeode;
 
 class WorldTree
 {

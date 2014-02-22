@@ -1,5 +1,7 @@
 #include "geometry/transform.h"
 
+#include <glm/gtx/transform.hpp>
+
 #include <glow/logging.h>
 
 #include "utils/glmisfinite.h"

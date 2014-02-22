@@ -1,27 +1,27 @@
 #include "cockpitvoxel.h"
 
+#include "property/property.h"
+
 #include "voxel/voxelcluster.h"
+
 #include "worldobject/worldobject.h"
 
-CockpitVoxel::CockpitVoxel(const glm::ivec3& gridCell, int color, float mass, float hp) :
-    Voxel(gridCell, color, mass, hp),
-    m_worldObject(nullptr)
+
+CockpitVoxel::CockpitVoxel(const glm::ivec3& gridCell, int index):
+    SpecialVoxel(gridCell, index, Property<int>("voxels.cockpit.color"), Property<float>("voxels.cockpit.mass"), Property<float>("voxels.cockpit.hp"))
 {
 }
 
-CockpitVoxel::~CockpitVoxel() {
+void CockpitVoxel::addToObject(WorldObject* worldObject) {
+    Voxel::addToObject(worldObject);
 }
 
-void CockpitVoxel::addToObject(WorldObject *object){
-    m_worldObject = object;
-    object->addCockpitVoxel(this);
-}
-
-void CockpitVoxel::onRemoval(){
+void CockpitVoxel::onRemoval() {
     //TODO: Tell my cockpit I'm gone
 }
 
-void CockpitVoxel::onDestruction(){
+void CockpitVoxel::onDestruction() {
     Voxel::onDestruction();
     // Spawn dead pilot
 }
+

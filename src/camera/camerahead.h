@@ -4,8 +4,6 @@
 
 #include <glm/gtx/quaternion.hpp>
 
-#include "geometry/viewport.h"
-
 
 class HUD;
 class CameraDolly;

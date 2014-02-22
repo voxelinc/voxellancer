@@ -1,12 +1,15 @@
 #include "directsuicidetask.h"
 
-#include "worldobject/ship.h"
 #include "ai/boardcomputer.h"
+
 #include "utils/geometryhelper.h"
+#include "physics/physics.h"
+
+#include "worldobject/worldobject.h"
 
 
-DirectSuicideTask::DirectSuicideTask(Ship& ship, WorldObject* target) :
-	AiTask(ship),
+DirectSuicideTask::DirectSuicideTask(BoardComputer* boardComputer, WorldObject* target) :
+	AiTask(boardComputer),
 	m_target(target ? target->handle() : Handle<WorldObject>(nullptr))
 {
 }
@@ -16,19 +19,22 @@ void DirectSuicideTask::setTarget(WorldObject* target) {
 }
 
 void DirectSuicideTask::update(float deltaSec) {
+    WorldObject* worldObject = boardComputer()->worldObject();
+
     if (m_target.valid()) {
         glm::vec3 targetPoint = m_target->physics().projectedTransformIn(0.1f).position();
-        m_ship.boardComputer()->rotateTo(targetPoint);
-        glm::vec3 targetDirection = glm::inverse(m_ship.transform().orientation()) * (targetPoint - m_ship.transform().position());
+        boardComputer()->rotateTo(targetPoint);
+        glm::vec3 targetDirection = glm::inverse(worldObject->transform().orientation()) * (targetPoint - worldObject->transform().position());
         float angle = GeometryHelper::angleBetween(glm::vec3(0, 0, -1), targetDirection);
 
         if (angle < glm::radians(15.0f)) {
-            m_ship.boardComputer()->moveTo(targetPoint, false);
+            boardComputer()->moveTo(targetPoint, false);
         } else {
-            m_ship.boardComputer()->moveTo(m_ship.transform().position() + m_ship.transform().orientation() * (glm::vec3(0, 0, -70)), true);
+            boardComputer()->moveTo(worldObject->transform().position() + worldObject->transform().orientation() * (glm::vec3(0, 0, -70)), true);
         }
     } else {
-        m_ship.boardComputer()->moveTo(m_ship.transform().position() + m_ship.transform().orientation() * (glm::vec3(0, 0, -100)), false);
+        boardComputer()->moveTo(worldObject->transform().position() + worldObject->transform().orientation() * (glm::vec3(0, 0, -100)), false);
     }
 }
+
 

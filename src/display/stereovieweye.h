@@ -4,7 +4,6 @@
 
 #include <glm/glm.hpp>
 
-#include "camera/camera.h"
 #include "eyeside.h"
 
 namespace glow {
@@ -12,6 +11,7 @@ namespace glow {
 }
 
 class Scene;
+class Camera;
 class CameraHead;
 class StereoRenderInfo;
 class FrameBuffer;
@@ -34,10 +34,9 @@ protected:
     glm::vec3 m_offset;
     EyeSide m_side;
 
-    Camera m_camera;
-
     float m_distortionScale;
     glm::ivec2 m_textureSize;
+    std::unique_ptr<Camera> m_camera;
     std::unique_ptr<FrameBuffer> m_fbo;
 };
 

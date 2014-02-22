@@ -5,9 +5,11 @@
 
 
 FormationMemberTask::FormationMemberTask(Ship& ship) :
-    AiTask(ship),
-    m_flyTask(ship)
+    AiTask(ship.boardComputer()),
+    m_ship(ship),
+    m_flyTask(ship.boardComputer())
 {
+
 }
 
 void FormationMemberTask::update(float deltaSec) {

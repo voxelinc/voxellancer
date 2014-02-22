@@ -20,7 +20,7 @@
 
 
 VoxelDebrisGenerator::VoxelDebrisGenerator() :
-    VoxelParticleSpawnBase("physics.debrisDampening",
+    VoxelParticleSpawnBase("physics.debrisDirectionalDampening",
                            "physics.debrisAngularDampening",
                            "physics.debrisBaseForce",
                            "physics.debrisAngularBaseForce"),

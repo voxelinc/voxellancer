@@ -3,27 +3,32 @@
 #include "gamestate/game.h"
 #include "gamestate/gameplay/running/gameplayrunning.h"
 #include "gamestate/gameplay/paused/gameplaypaused.h"
+#include "gameplayscene.h"
 
-#include "utils/fsm/trigger.h"
-#include "utils/fsm/triggeredtransition.h"
+#include "player.h"
+
+#include "utils/statemachine/trigger.h"
+#include "utils/statemachine/triggeredtransition.h"
 
 #include "world/world.h"
+#include "scenarios/gamescenario.h"
+#include "sound/soundmanager.h"
 
 
 GamePlay::GamePlay(Game* game):
     GameState("In Game", game),
     m_game(game),
+    m_player(new Player(this)),
     m_runningState(new GamePlayRunning(this)),
     m_pausedState(new GamePlayPaused(this)),
-    m_player(this),
-    m_scene(this, &m_player),
+    m_scene(new GamePlayScene(this, *m_player)),
     m_soundManager(new SoundManager()),
-    m_scenario(this)
+    m_scenario(new GameScenario(this))
 {
     setInitialSubState(m_runningState);
 
-    m_runningState->setPauseTrigger(Trigger<GameState>(new TriggeredTransition<GameState>(m_runningState, m_pausedState)));
-    m_pausedState->setContinueTrigger(Trigger<GameState>(new TriggeredTransition<GameState>(m_pausedState, m_runningState)));
+    m_runningState->pauseTrigger().setTarget(new TriggeredTransition<GameState>(m_runningState, m_pausedState));
+    m_pausedState->continueTrigger().setTarget(new TriggeredTransition<GameState>(m_pausedState, m_runningState));
 }
 
 Game* GamePlay::game() {
@@ -31,7 +36,7 @@ Game* GamePlay::game() {
 }
 
 GamePlayScene& GamePlay::scene() {
-    return m_scene;
+    return *m_scene;
 }
 
 GamePlayRunning& GamePlay::running() {
@@ -43,15 +48,15 @@ GamePlayPaused& GamePlay::paused() {
 }
 
 const Scene& GamePlay::scene() const {
-    return m_scene;
+    return *m_scene;
 }
 
 const CameraHead& GamePlay::cameraHead() const {
-    return m_player.cameraDolly().cameraHead();
+    return m_player->cameraHead();
 }
 
 Player& GamePlay::player() {
-    return m_player;
+    return *m_player;
 }
 
 SoundManager& GamePlay::soundManager() {
@@ -60,13 +65,13 @@ SoundManager& GamePlay::soundManager() {
 
 void GamePlay::update(float deltaSec) {
     GameState::update(deltaSec);
-    m_scene.update(deltaSec);
+    m_scene->update(deltaSec);
 }
 
 void GamePlay::onEntered() {
     GameState::onEntered();
 
-    m_scenario.load();
+    m_scenario->load();
 }
 
 void GamePlay::onLeft() {

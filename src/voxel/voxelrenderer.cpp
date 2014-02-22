@@ -26,7 +26,7 @@ std::weak_ptr<VoxelRenderer> VoxelRenderer::s_instance;
 VoxelRenderer::VoxelRenderer() :
     m_program(0),
     m_prepared(false),
-    m_voxelMesh()
+    m_voxelMesh(new VoxelMesh())
 {
     glow::debug("Create Voxelrenderer");
     createAndSetupShaders();
@@ -47,11 +47,11 @@ void VoxelRenderer::prepareDraw(const Camera& camera, bool withBorder) {
     m_prepared = true;
 }
 
-void VoxelRenderer::draw(VoxelCluster * worldObject) {
-    m_program->setUniform("model", worldObject->transform().matrix());
-    m_program->setUniform("emissiveness", worldObject->emissiveness());
+void VoxelRenderer::draw(VoxelCluster& cluster) {
+    m_program->setUniform("model", cluster.transform().matrix());
+    m_program->setUniform("emissiveness", cluster.emissiveness());
 
-    VoxelRenderData* renderData = worldObject->voxelRenderData();
+    VoxelRenderData* renderData = cluster.voxelRenderData();
 
     renderData->vertexArrayObject()->bind();
     glVertexAttribDivisor(m_program->getAttributeLocation("v_vertex"), 0);
@@ -88,9 +88,9 @@ glow::Program* VoxelRenderer::program() {
     return s_instance.lock()->m_program;
 }
 
-VoxelMesh* VoxelRenderer::voxelMesh() {
+VoxelMesh& VoxelRenderer::voxelMesh() {
     assert(!s_instance.expired());
-    return &s_instance.lock()->m_voxelMesh;
+    return *s_instance.lock()->m_voxelMesh;
 }
 
 std::shared_ptr<VoxelRenderer> VoxelRenderer::instance() {

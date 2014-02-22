@@ -23,17 +23,19 @@
 #include <glowutils/FileRegistry.h>
 
 #include "etc/contextprovider.h"
+#include "etc/hmd/hmdmanager.h"
 #include "etc/cli/commandlineparser.h"
 
-#include "geometry/viewport.h"
-
 #include "display/stereorenderinfo.h"
+#include "display/viewer.h"
+
+#include "geometry/viewport.h"
 
 #include "gamestate/gameplay/gameplay.h"
 #include "gamestate/gameplay/running/gameplayrunning.h"
 #include "gamestate/gameplay/running/gameplayrunninginput.h"
-
 #include "gamestate/game.h"
+#include "gamestate/gameplay/gameplayscene.h"
 
 
 static GLint MajorVersionRequire = 3;
@@ -104,6 +106,23 @@ void setGLFWCallbacks(GLFWwindow* window) {
     glfwSetWindowSizeCallback(window, resizeCallback);
 }
 
+static void miscSettings() {
+    OVR::System::Init(OVR::Log::ConfigureDefaultLog(OVR::LogMask_All));
+
+    glClearColor(0.0f, 0.0f, 0.3f, 1.0f);
+
+#ifdef WIN32 // TODO: find a way to correctly detect debug extension in linux
+    glow::debugmessageoutput::enable();
+#endif
+
+#ifdef WIN32
+    wglSwapIntervalEXT(1); // glfw doesn't work!?
+#else
+    glfwSwapInterval(1);
+#endif
+    std::srand((unsigned int)time(NULL));
+}
+
 static void mainloop() {
     glow::debug("Entering mainloop");
     double time = glfwGetTime();
@@ -118,6 +137,35 @@ static void mainloop() {
         glfwSwapBuffers(glfwGetCurrentContext());
         glfwPollEvents();
     }
+}
+
+/*
+    At some day, modding-capabilities in mind, this shoul be done by polling the
+    appropriate dirs
+*/
+static void loadWorldObjectConfigs() {
+    PropertyManager::instance()->load("data/worldobjects/basicship.ini", "basicship");
+    PropertyManager::instance()->load("data/worldobjects/banner.ini", "banner");
+    PropertyManager::instance()->load("data/worldobjects/eagle.ini", "eagle");
+    PropertyManager::instance()->load("data/worldobjects/specialbasicship.ini", "specialbasicship");
+    PropertyManager::instance()->load("data/worldobjects/normandy.ini", "normandy");
+    PropertyManager::instance()->load("data/worldobjects/gunbullet.ini", "gunbullet");
+    PropertyManager::instance()->load("data/worldobjects/snowball.ini", "snowball");
+    PropertyManager::instance()->load("data/worldobjects/hornet.ini", "hornet");
+}
+
+/*
+    At some day, modding-capabilities in mind, this shoul be done by polling the
+    appropriate dirs
+*/
+static void loadEquipmentConfigs() {
+    PropertyManager::instance()->load("data/equipment/engines/enginemk1.ini", "enginemk1");
+    PropertyManager::instance()->load("data/equipment/engines/superslowengine.ini", "superslowengine");
+    PropertyManager::instance()->load("data/equipment/engines/piratethruster.ini", "piratethruster");
+    PropertyManager::instance()->load("data/equipment/engines/rocketthrustermk1.ini", "rocketthrustermk1");
+    PropertyManager::instance()->load("data/equipment/weapons/gun.ini", "gun");
+    PropertyManager::instance()->load("data/equipment/weapons/snowcanon.ini", "snowcanon");
+    PropertyManager::instance()->load("data/equipment/weapons/hornetlauncher.ini", "hornetlauncher");
 }
 
 void toggleFullScreen() {
@@ -139,19 +187,14 @@ int main(int argc, char* argv[]) {
     clParser.parse(argc, argv);
 
     PropertyManager::instance()->load("data/config.ini");
+    PropertyManager::instance()->load("data/voxels.ini", "voxels");
 
     if (!glfwInit()) {
-        glow::fatal("Could not init glfw");
+        glow::fatal("Could not init GLFW");
         exit(-1);
     }
 
     glfwSetErrorCallback(errorCallback);
-
-#if defined(NDEBUG)
-    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_FALSE);
-#else
-    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
-#endif
 
     if(clParser.fullScreen()) {
         ContextProvider::instance()->initFullScreen(MajorVersionRequire, MinorVersionRequire, 1);
@@ -173,26 +216,15 @@ int main(int argc, char* argv[]) {
     }
     CheckGLError();
 
-    OVR::System::Init(OVR::Log::ConfigureDefaultLog(OVR::LogMask_All));
-
-    glClearColor(0.0f, 0.0f, 0.3f, 1.0f);
-
-#ifdef WIN32 // TODO: find a way to correctly detect debug extension in linux
-    glow::debugmessageoutput::enable();
-#endif
-
-#ifdef WIN32
-    wglSwapIntervalEXT(1); // glfw doesn't work!?
-#else
-    glfwSwapInterval(1);
-#endif
+    miscSettings();
 
 //#define TRYCATCH
 
 #ifdef TRYCATCH
     try {
 #endif
-        std::srand((unsigned int)time(NULL));
+        loadWorldObjectConfigs();
+        loadEquipmentConfigs();
 
         game = new Game();
 

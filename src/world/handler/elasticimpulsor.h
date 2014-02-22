@@ -3,7 +3,6 @@
 #include <list>
 
 #include "physics/impulse.h"
-
 #include "property/property.h"
 
 

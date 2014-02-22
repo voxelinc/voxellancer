@@ -1,21 +1,17 @@
 #pragma once
 
+#include <memory>
+
 #include "gamestate/gamestate.h"
-
-#include "scenarios/gamescenario.h"
-
-#include "sound/soundmanager.h"
-
-#include "player.h"
-
-#include "gameplayscene.h"
-
 
 
 class Game;
 class GamePlayRunning;
 class GamePlayPaused;
-
+class GamePlayScene;
+class GameScenario;
+class Player;
+class SoundManager;
 
 /*
     State that is active whenever the the game is actually played and not
@@ -47,12 +43,12 @@ public:
 protected:
     Game* m_game;
 
+    std::unique_ptr<Player> m_player;
+    std::unique_ptr<GamePlayScene> m_scene;
+    std::unique_ptr<GameScenario> m_scenario;
+    std::shared_ptr<SoundManager> m_soundManager;
+
     GamePlayRunning* m_runningState;
     GamePlayPaused* m_pausedState;
-
-    GamePlayScene m_scene;
-    Player m_player;
-    GameScenario m_scenario;
-    std::shared_ptr<SoundManager> m_soundManager;
 };
 

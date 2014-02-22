@@ -2,11 +2,16 @@
 
 #include <iostream>
 #include <stdexcept>
+
+#include <glow/Program.hpp>
+#include <glow/VertexArrayObject.h>
+#include <glow/Buffer.h>
 #include <glow/Shader.h>
 #include <glow/VertexAttributeBinding.h>
 #include <glowutils/global.h>
 
 #include "resource/ddstexture.h"
+#include "camera/camera.h"
 
 Skybox::Skybox() :
     m_texture(0),

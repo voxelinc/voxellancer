@@ -1,5 +1,7 @@
 #include "visuals.h"
 
+#include "property/property.h"
+
 
 Visuals::Visuals():
     m_color(0xFF0080FF), // You are urged to alter this.
@@ -27,5 +29,12 @@ float Visuals::emissiveness() const {
 
 void Visuals::setEmissiveness(float emissiveness) {
     m_emissiveness = emissiveness;
+}
+
+Visuals Visuals::fromProperties(const std::string& prefix) {
+    return Visuals(
+        Property<uint32_t>::get(prefix + ".color"),
+        Property<float>::get(prefix + ".emissiveness")
+    );
 }
 

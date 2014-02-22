@@ -12,6 +12,7 @@
 #include "geometry/sphere.h"
 #include "voxel/voxeltree.h"
 #include "collisionfilter.h"
+#include "voxel/voxelclusterbounds.h"
 
 
 CollisionDetector::CollisionDetector(WorldObject& worldObject) :

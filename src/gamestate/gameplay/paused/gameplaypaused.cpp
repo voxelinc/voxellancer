@@ -1,9 +1,10 @@
 #include "gameplaypaused.h"
 
-#include <iostream>
-
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
+#ifdef WIN32
+#include <windows.h>
+#endif
+#include "GL/glew.h"
+#include "GLFW/glfw3.h"
 
 #include "gamestate/game.h"
 #include "gamestate/gameplay/gameplay.h"
@@ -11,21 +12,19 @@
 
 GamePlayPaused::GamePlayPaused(GamePlay* gamePlay):
     GameState("GamePlay Paused", gamePlay),
-    m_gamePlay(gamePlay)
+    m_gamePlay(gamePlay),
+    m_continueTrigger(GLFW_KEY_P)
 {
 
 }
 
-void GamePlayPaused::setContinueTrigger(const Trigger<GameState>& continueTrigger) {
-    m_continueTrigger = continueTrigger;
+Trigger& GamePlayPaused::continueTrigger() {
+    return m_continueTrigger;
 }
 
 void GamePlayPaused::update(float deltaSec) {
     GameState::update(deltaSec);
-
-    if(glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_C) == GLFW_PRESS) {
-        m_continueTrigger.trigger();
-    }
+    m_continueTrigger.update(deltaSec);
 }
 
 void GamePlayPaused::onEntered() {

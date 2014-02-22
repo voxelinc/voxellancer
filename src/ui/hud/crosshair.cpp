@@ -4,14 +4,17 @@
 #include "camera/cameradolly.h"
 
 #include "hud.h"
+#include "crosshairvoxels.h"
 
 
 CrossHair::CrossHair(HUD* hud):
     Hudget(hud),
-    m_voxels(this)
+    m_voxels(new CrossHairVoxels(this))
 {
 
 }
+
+CrossHair::~CrossHair() = default;
 
 bool CrossHair::actionActive() const {
     return m_actionActive;
@@ -26,6 +29,7 @@ void CrossHair::update(float deltaSec) {
 }
 
 void CrossHair::draw() {
-    m_voxels.draw();
+    m_voxels->draw();
 }
+
 

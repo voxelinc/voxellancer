@@ -2,12 +2,12 @@
 
 #include <memory>
 
-#include "etc/hmd/hmdmanager.h"
-
 #include "gamestate.h"
 
 
 class GamePlay;
+class HMDManager;
+class Viewer;
 
 /*
     Mainstate of the Game, entered once when libraries and context are setup
@@ -16,6 +16,7 @@ class GamePlay;
 class Game: public GameState {
 public:
     Game();
+    ~Game();
 
     GamePlay& gamePlay();
 
@@ -32,7 +33,7 @@ public:
 
 protected:
     std::shared_ptr<HMDManager> m_hmdManager;
-    Viewer m_viewer;
+    std::unique_ptr<Viewer> m_viewer;
 
     GamePlay* m_gamePlay;
 };

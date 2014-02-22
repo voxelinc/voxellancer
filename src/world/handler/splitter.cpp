@@ -6,6 +6,8 @@
 
 #include "voxel/voxel.h"
 #include "worldobject/split.h"
+#include "physics/physics.h"
+#include "ui/objectinfo.h"
 
 void Splitter::split(std::vector<std::shared_ptr<SplitData>> &splits) {
     std::unordered_set<WorldObject*> splittedWorldObjects;
@@ -36,10 +38,9 @@ WorldObject *Splitter::createWorldObjectFromSplitOff(std::shared_ptr<SplitData> 
     worldObject->objectInfo().setShowOnHud(false);
 
     worldObject->physics().setSpeed(worldObject->physics().speed());
-    worldObject->physics().setAngularSpeed(worldObject->physics().angularSpeed());
 
     for(Voxel *voxel : split->splitOffVoxels()) {
-        Voxel *voxelClone = new Voxel(voxel->gridCell()/*-split->llf()*/, voxel->color(), voxel->normalizedMass(), voxel->hp());
+        Voxel *voxelClone = new Voxel(*voxel);
         worldObject->addVoxel(voxelClone);
     }
 

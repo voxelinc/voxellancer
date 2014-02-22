@@ -2,10 +2,7 @@
 
 #include "gamestate/gamestate.h"
 
-#include "utils/fsm/trigger.h"
-
-#include "gamestate/gameplay/running/gameplayrunning.h"
-
+#include "utils/statemachine/keytrigger.h"
 
 
 class GamePlay;
@@ -14,7 +11,7 @@ class GamePlayPaused: public GameState {
 public:
     GamePlayPaused(GamePlay* gamePlay);
 
-    void setContinueTrigger(const Trigger<GameState>& continueTrigger);
+    Trigger& continueTrigger();
 
     virtual void update(float deltaSec) override;
 
@@ -25,6 +22,6 @@ public:
 protected:
     GamePlay* m_gamePlay;
 
-    Trigger<GameState> m_continueTrigger;
+    KeyTrigger m_continueTrigger;
 };
 

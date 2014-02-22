@@ -1,10 +1,10 @@
 #include "viewer.h"
 
 #include <cassert>
-#include <iostream>
+
+#include <GL/glew.h>
 
 #include "camera/camerahead.h"
-
 #include "scene.h"
 #include "stereorenderinfo.h"
 #include "monoview.h"
@@ -18,8 +18,10 @@ Viewer::Viewer(const Viewport& viewport):
     switchToMonoView();
 }
 
+Viewer::~Viewer() = default;
+
 const View& Viewer::view() const {
-    return *m_view.get();
+    return *m_view;
 }
 
 void Viewer::setViewport(const Viewport& viewport) {

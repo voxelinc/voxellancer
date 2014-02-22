@@ -2,8 +2,9 @@
 
 #include <string>
 
+#include <GL/glew.h>
+
 #include <glow/ref_ptr.h>
-#include <glow/Array.h>
 
 #include <glm/glm.hpp>
 
