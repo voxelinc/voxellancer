@@ -16,7 +16,7 @@ class VoxelCluster;
     This class stores and calculates bound-informations of
     a voxelcluster. It is optimized for speed which means:
 
-    * The gridAABB uses sorted sets on each axis to be able to recalc fast on voxel addition or removal
+    * It uses sorted sets on each axis to be able to recalc the GridAABBB fast on voxel addition or removal
     * The aabb is only recalculated if the cluster or the passed transform changes, since it is very likely that
         the same transform will be queried multiple times during e.g. Worldtreequeries and collisiondetection
     * The aabb is stored in an I(nteger)AABB because it is only an estimation anyway and calculation on integers
@@ -41,6 +41,7 @@ public:
 
     const Sphere& sphere();
     Sphere sphere(const Transform& transform);
+
 
 
 protected:
