@@ -6,6 +6,8 @@
 #include <mutex>
 #include <atomic>
 
+#include <iostream>
+
 template<typename T>
 class ThreadPool {
 public:
@@ -27,17 +29,19 @@ protected:
     std::condition_variable m_stopSignal;
     std::mutex m_lock;
 
-    std::atomic_int m_index;
     int m_endIndex;
     int m_chunksize;
+    std::atomic_int m_index;
+
     bool m_exit;
+    bool m_running;
     std::atomic_int m_runningWorkers;
 
 };
 template<typename T>
 ThreadPool<T>::~ThreadPool() {
     m_exit = true;
-    m_runningWorkers = m_worker.size();
+    m_running = true;
     m_startSignal.notify_all();
     for (std::thread& thread : m_worker) {
         thread.join();
@@ -50,6 +54,7 @@ ThreadPool<T>::ThreadPool(std::function<void(T&)> function, int chunksize) :
     m_worker(2),
     m_function(function),
     m_tasks(nullptr),
+    m_running(false),
     m_exit(false)
 {
     m_runningWorkers = 0;
@@ -69,7 +74,7 @@ void ThreadPool<T>::map(std::vector<T>& vector, int start, int end) {
     m_index = start;
     m_endIndex = end;
 
-    m_runningWorkers = m_worker.size();
+    m_running = true;
     m_startSignal.notify_all();
 
     std::mutex m;
@@ -81,11 +86,14 @@ template<typename T>
 void ThreadPool<T>::worker() {
     while (true) {
         std::unique_lock<std::mutex> lk(m_lock);
-        m_startSignal.wait(lk, [&] { return m_runningWorkers == m_worker.size(); });
-        lk.unlock(); // wait locks the mutex but the workers shouldn't wait on each other
+        m_startSignal.wait(lk, [&] { return m_running; });
         if (m_exit) {
+            std::cout << "exit " << std::this_thread::get_id() << std::endl;
             return;
         }
+        m_runningWorkers++;
+        lk.unlock();
+        std::cout << "work " << std::this_thread::get_id() << std::endl;
 
         int task;
         while ((task = getTask()) >= 0) {
@@ -93,10 +101,17 @@ void ThreadPool<T>::worker() {
                 m_function((*m_tasks)[i]);
             }
         }
-
+        std::cout << "finishing " << std::this_thread::get_id() << std::endl;
+        
+        lk.lock();
+        std::cout << "finish " << std::this_thread::get_id() << std::endl;
+        m_running = false;
+        std::cout << "c " << m_runningWorkers << std::endl;
         if (--m_runningWorkers == 0) {
+            std::cout << "notify " << std::this_thread::get_id() << std::endl;
             m_stopSignal.notify_all();
         }
+        lk.unlock();
     }
 }
 

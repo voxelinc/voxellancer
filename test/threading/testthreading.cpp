@@ -2,6 +2,7 @@
 
 #include <thread>
 #include <chrono>
+#include <iostream>
 
 #include "utils/threadpool.h"
 
@@ -30,11 +31,12 @@ go_bandit([]() {
             for (int i = 0; i < ints.size(); i++) {
                 AssertThat(ints[i], Equals(1));
             }
-            
+            std::cout << "1" << std::endl;
             pool.map(ints);
             for (int i = 0; i < ints.size(); i++) {
                 AssertThat(ints[i], Equals(2));
             }
+            std::cout << "2" << std::endl;
         });
 
     });
