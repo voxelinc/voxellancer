@@ -65,11 +65,11 @@ void GameScenario::populateWorld() {
 
     std::shared_ptr<Squad> squadB = std::make_shared<Squad>();
     squadB->setTask(std::make_shared<PatrolWaypointsTask>(*squadB,
-        std::list<glm::vec3>{ glm::vec3(500, 0, 500), glm::vec3(-500, 0, 500),
-        glm::vec3(-500, 0, -500), glm::vec3(500, 0, -500) }));
+        std::list<glm::vec3>{ glm::vec3(500, 0, 500), glm::vec3(500, 0, -500),
+        glm::vec3(-500, 0, -500), glm::vec3(-500, 0, 500) }));
 
     Ship *leader = WorldObjectBuilder("eagle").buildShip();
-    leader->transform().setPosition(glm::vec3(0, 200, -100));
+    leader->transform().setPosition(glm::vec3(0, 200, 500));
     leader->character()->setFaction(2);
     leader->objectInfo().setName("leader");
     leader->objectInfo().setShowOnHud(true);
@@ -81,7 +81,7 @@ void GameScenario::populateWorld() {
     for (int i = 0; i < lmember_count; i++) {
         Ship *follower = WorldObjectBuilder("basicship").buildShip();
         follower->character()->setFaction(2);
-        follower->transform().setPosition(glm::vec3(100 * (-lmember_count / 2.0f + i), 200, 0));
+        follower->transform().setPosition(glm::vec3(100 * (-lmember_count / 2.0f + i), 200, 500));
         follower->objectInfo().setName("member");
         follower->objectInfo().setShowOnHud(true);
         follower->objectInfo().setCanLockOn(true);
