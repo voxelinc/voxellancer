@@ -14,9 +14,6 @@ public:
     PropertyDirectory();
     PropertyDirectory(const std::string& path);
 
-    const std::string& path() const;
-    void setPath(const std::string& path);
-
     void read();
 
 
