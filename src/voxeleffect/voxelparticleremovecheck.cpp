@@ -39,7 +39,8 @@ void VoxelParticleRemoveCheck::update(float deltaSec) {
 
 void VoxelParticleRemoveCheck::performChecks(int checkCount) {
     int firstIndex = m_currentIndex;
-    glow::debug("check %; %;", firstIndex, checkCount);
+
+    // glow::debug("check %; %;", firstIndex, checkCount);
     if (m_multithreaded.get()) {
         m_threadPool->map([&](VoxelParticleData& p) { check(p); }, m_particleEngine->particleDataVector(), firstIndex, firstIndex + checkCount);
     } else {

@@ -6,7 +6,10 @@ ThreadPool<T>::ThreadPool(int threadcount, int chunksize) :
     m_chunksize(chunksize),
     m_worker(threadcount),
     m_tasks(nullptr),
-    m_exit(false)
+    m_exit(false),
+    m_running(),
+    m_runningWorkers(),
+    m_index()
 {
     m_running = false;
     m_runningWorkers = 0;
@@ -41,9 +44,7 @@ void ThreadPool<T>::map(std::function<void(T&)> function, std::vector<T>& data, 
     m_endIndex = end;
 
     m_running = true;
-    //while (m_running && m_runningWorkers == 0) {
-        m_startSignal.notify_all();
-    //}
+    m_startSignal.notify_all();
     
     std::mutex m;
     std::unique_lock<std::mutex> lock(m);
@@ -60,6 +61,8 @@ void ThreadPool<T>::worker() {
         }
         m_runningWorkers++;
         lock.unlock();
+        
+        // std::cout << "work" << std::this_thread::get_id() << std::endl;
 
         int task;
         while ((task = getTask()) >= 0) {
