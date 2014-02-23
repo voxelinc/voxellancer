@@ -6,17 +6,12 @@
 
 
 VoxelParticleExpireCheck::VoxelParticleExpireCheck(VoxelParticleEngine* engine):
-    VoxelParticleRemoveCheck(engine),
-    m_fullDeadCheckInterval("vfx.fullDeadCheckInterval")
+m_particleEngine(engine)
 {
 }
 
-void VoxelParticleExpireCheck::update(float deltaSec) {
-    setInterval(m_fullDeadCheckInterval);
-    VoxelParticleRemoveCheck::update(deltaSec);
-}
 
-bool VoxelParticleExpireCheck::check(VoxelParticleData* particleData) {
-	return particleData->deathTime <= m_world->time();
+bool VoxelParticleExpireCheck::isDead(const VoxelParticleData& particleData) {
+	return particleData.deathTime <= m_particleEngine->time();
 }
 

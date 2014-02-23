@@ -14,16 +14,20 @@
 #include "utils/math.h"
 
 #include "voxelparticleengine.h"
+#include "voxelmesh.h"
 
 
 VoxelParticleRenderer::VoxelParticleRenderer(VoxelParticleEngine* engine):
     m_initialized(false),
     m_engine(engine),
     m_bufferSize(0),
+    m_voxelMesh(new VoxelMesh()),
     m_defaultLightDir("vfx.lightdir")
 {
 
 }
+
+VoxelParticleRenderer::~VoxelParticleRenderer() = default;
 
 void VoxelParticleRenderer::updateBuffer(int begin, int end, VoxelParticleData* data) {
     if (!m_initialized) {
@@ -36,14 +40,8 @@ void VoxelParticleRenderer::updateBuffer(int begin, int end, VoxelParticleData* 
 
     int byteCount = (end - begin + 1) * sizeof(VoxelParticleData);
 
-    VoxelParticleData* mappedBuffer = static_cast<VoxelParticleData*>(m_gpuParticleBuffer->mapRange(
-        begin * sizeof(VoxelParticleData),
-        byteCount,
-        GL_MAP_WRITE_BIT
-    ));
-    assert(mappedBuffer);
-    memcpy(mappedBuffer, data, byteCount);
-    m_gpuParticleBuffer->unmap();
+    m_gpuParticleBuffer->setSubData(begin * sizeof(VoxelParticleData), byteCount, data);
+
 }
 
 void VoxelParticleRenderer::draw(Camera& camera) {
@@ -81,7 +79,7 @@ void VoxelParticleRenderer::loadProgram() {
 }
 
 void VoxelParticleRenderer::setupVertexAttributes() {
-    m_voxelMesh.bindTo(m_program, m_vertexArrayObject, 0);
+    m_voxelMesh->bindTo(m_program, m_vertexArrayObject, 0);
 
     int b = 2;
 
@@ -149,3 +147,4 @@ void VoxelParticleRenderer::beforeContextDestroy() {
 void VoxelParticleRenderer::afterContextRebuild() {
     // lazy init
 }
+

@@ -2,8 +2,7 @@
 
 #include "property/property.h"
 
-#include "voxelparticleremovecheck.h"
-
+#include "voxelparticlechecker.h"
 
 class VoxelParticleEngine;
 struct VoxelParticleData;
@@ -12,16 +11,14 @@ struct VoxelParticleData;
 /*
     Regular check that removes particles that intersect with WorldObjects
 */
-class VoxelParticleIntersectionCheck: public VoxelParticleRemoveCheck {
+class VoxelParticleIntersectionCheck: public VoxelParticleChecker {
 public:
     VoxelParticleIntersectionCheck(VoxelParticleEngine* engine);
 
-    virtual void update(float deltaSec) override;
-
+    virtual bool isDead(const VoxelParticleData& particle) override;
 
 protected:
-    Property<float> m_fullDeadCheckInterval;
+    VoxelParticleEngine* m_particleEngine;
 
-    virtual bool check(VoxelParticleData* particleData) override;
 };
 

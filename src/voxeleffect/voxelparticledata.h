@@ -6,15 +6,18 @@
 #include <stdint.h>
 
 
+
 struct VoxelParticleData {
+    enum class Status { Removed, Alive, Dead };
+
     VoxelParticleData():
-        dead(true),
-        deathTime(0.0f) // The particle never lived
+        status(Status::Removed),
+        deathTime(0.0f)
     {
     }
 
     // Extra attribute, not necessarily used by the shader
-    bool dead;
+    Status status;
 
     glm::vec3 creationPosition;
     glm::vec3 creationEulers;

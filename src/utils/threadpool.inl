@@ -26,14 +26,14 @@ ThreadPool<T>::~ThreadPool() {
 }
 
 template<typename T>
-void ThreadPool<T>::map(std::function<void(T&)> function, std::vector<T>& vector) {
-    map(function, vector, 0, vector.size());
+void ThreadPool<T>::map(std::function<void(T&)> function, std::vector<T>& data) {
+    map(function, data, 0, data.size());
 }
 
 template<typename T>
-void ThreadPool<T>::map(std::function<void(T&)> function, std::vector<T>& vector, int start, int end) {
+void ThreadPool<T>::map(std::function<void(T&)> function, std::vector<T>& data, int start, int end) {
     m_function = function;
-    m_tasks = &vector;
+    m_tasks = &data;
     m_index = start;
     m_endIndex = end;
 
@@ -64,7 +64,7 @@ void ThreadPool<T>::worker() {
         while ((task = getTask()) >= 0) {
             int end = std::min(task + m_chunksize, m_endIndex);
             for (int i = task; i < end; i++) {
-                m_function((*m_tasks)[i]);
+                m_function((*m_tasks)[i % m_tasks->size()]);
             }
         }
 

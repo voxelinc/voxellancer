@@ -6,6 +6,7 @@
 #include <glm/gtc/quaternion.hpp>
 
 #include <glow/ref_ptr.h>
+#include <glow/Array.h>
 
 #include "property/property.h"
 #include "display/rendering/renderpass.h"
@@ -19,6 +20,11 @@ namespace glow {
     class Buffer;
 };
 
+struct Star {
+    glm::vec3 pos;
+    float brightness;
+    float size;
+};
 
 
 /*
@@ -51,7 +57,8 @@ protected:
 
     glow::ref_ptr<glow::Program> m_shaderProgram;
     glow::ref_ptr<glow::VertexArrayObject> m_vertexArrayObject;
-    glow::ref_ptr<glow::Buffer> m_starBuffer;
+    glow::ref_ptr<glow::Buffer> m_gpuBuffer;
+    glow::Array<Star> m_cpuBuffer;
 
 
     void createAndSetupShaders();

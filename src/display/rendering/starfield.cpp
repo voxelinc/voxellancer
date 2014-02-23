@@ -22,18 +22,14 @@ static int STAR_COUNT = 1000;
 static float FIELD_SIZE = 300.0f;
 static float STAR_FADE_IN_SEC = 2.0f;
 
-struct Star {
-    glm::vec3 pos;
-    float brightness;
-    float size;
-};
 
 Starfield::Starfield() :
     RenderPass("starfield"),
     m_time(),
     m_lastUpdate(),
     m_starfieldAge("vfx.starfieldtime"),
-    m_locations()
+    m_locations(),
+    m_cpuBuffer()
 {
     createAndSetupShaders();
     createAndSetupGeometry();
@@ -46,39 +42,38 @@ void Starfield::update(float deltaSec, const glm::vec3& cameraPosition) {
         return;
     }
 
-    Star* starbuffer = (Star*) m_starBuffer->map(GL_READ_WRITE);
     glm::vec3 position = cameraPosition;
 
     for (int i = 0; i < STAR_COUNT; i++) {
-        starbuffer[i].brightness = glm::min(1.0f, starbuffer[i].brightness + (m_time - m_lastUpdate) / STAR_FADE_IN_SEC);
-        while (starbuffer[i].pos.x - position.x < -FIELD_SIZE) {
-            starbuffer[i].pos.x += 2 * FIELD_SIZE;
-            starbuffer[i].brightness = 0;
+        m_cpuBuffer[i].brightness = glm::min(1.0f, m_cpuBuffer[i].brightness + (m_time - m_lastUpdate) / STAR_FADE_IN_SEC);
+        while (m_cpuBuffer[i].pos.x - position.x < -FIELD_SIZE) {
+            m_cpuBuffer[i].pos.x += 2 * FIELD_SIZE;
+            m_cpuBuffer[i].brightness = 0;
         }
-        while (starbuffer[i].pos.x - position.x > FIELD_SIZE) {
-            starbuffer[i].pos.x -= 2 * FIELD_SIZE;
-            starbuffer[i].brightness = 0;
+        while (m_cpuBuffer[i].pos.x - position.x > FIELD_SIZE) {
+            m_cpuBuffer[i].pos.x -= 2 * FIELD_SIZE;
+            m_cpuBuffer[i].brightness = 0;
         }
-        while (starbuffer[i].pos.y - position.y < -FIELD_SIZE) {
-            starbuffer[i].pos.y += 2 * FIELD_SIZE;
-            starbuffer[i].brightness = 0;
+        while (m_cpuBuffer[i].pos.y - position.y < -FIELD_SIZE) {
+            m_cpuBuffer[i].pos.y += 2 * FIELD_SIZE;
+            m_cpuBuffer[i].brightness = 0;
         }
-        while (starbuffer[i].pos.y - position.y > FIELD_SIZE) {
-            starbuffer[i].pos.y -= 2 * FIELD_SIZE;
-            starbuffer[i].brightness = 0;
+        while (m_cpuBuffer[i].pos.y - position.y > FIELD_SIZE) {
+            m_cpuBuffer[i].pos.y -= 2 * FIELD_SIZE;
+            m_cpuBuffer[i].brightness = 0;
         }
-        while (starbuffer[i].pos.z - position.z < -FIELD_SIZE) {
-            starbuffer[i].pos.z += 2 * FIELD_SIZE;
-            starbuffer[i].brightness = 0;
+        while (m_cpuBuffer[i].pos.z - position.z < -FIELD_SIZE) {
+            m_cpuBuffer[i].pos.z += 2 * FIELD_SIZE;
+            m_cpuBuffer[i].brightness = 0;
         }
-        while (starbuffer[i].pos.z - position.z > FIELD_SIZE) {
-            starbuffer[i].pos.z -= 2 * FIELD_SIZE;
-            starbuffer[i].brightness = 0;
+        while (m_cpuBuffer[i].pos.z - position.z > FIELD_SIZE) {
+            m_cpuBuffer[i].pos.z -= 2 * FIELD_SIZE;
+            m_cpuBuffer[i].brightness = 0;
         }
     }
     m_lastUpdate = m_time;
 
-    m_starBuffer->unmap();
+    m_gpuBuffer->setData(m_cpuBuffer, GL_STREAM_DRAW);
 }
 
 void Starfield::apply(FrameBuffer& frameBuffer, const RenderMetaData& metadata) {
@@ -119,13 +114,12 @@ void Starfield::createAndSetupShaders() {
 }
 
 void Starfield::createAndSetupGeometry() {
-    glow::Array<Star> stars;
     for (int i = 0; i < STAR_COUNT; i++) {
-        stars.push_back(Star{ RandVec3::rand(-FIELD_SIZE, FIELD_SIZE), 0.0f, RandFloat::rand(0.5f, 1.5f) });
+        m_cpuBuffer.push_back(Star{ RandVec3::rand(-FIELD_SIZE, FIELD_SIZE), 0.0f, RandFloat::rand(0.5f, 1.5f) });
     }
 
-    m_starBuffer = new glow::Buffer(GL_ARRAY_BUFFER);
-    m_starBuffer->setData(stars, GL_DYNAMIC_DRAW);
+    m_gpuBuffer = new glow::Buffer(GL_ARRAY_BUFFER);
+    m_gpuBuffer->setData(m_cpuBuffer, GL_STREAM_DRAW);
 
     m_vertexArrayObject = new glow::VertexArrayObject();
     createBinding(0, "v_vertex", offsetof(Star, pos), 3);
@@ -137,7 +131,7 @@ void Starfield::createBinding(int index, std::string name, int offset, int size)
     glow::VertexAttributeBinding* binding = m_vertexArrayObject->binding(index);
     GLint location = m_shaderProgram->getAttributeLocation(name);
     binding->setAttribute(location);
-    binding->setBuffer(m_starBuffer, 0, sizeof(Star));
+    binding->setBuffer(m_gpuBuffer, 0, sizeof(Star));
     binding->setFormat(size, GL_FLOAT, GL_FALSE, offset);
     m_vertexArrayObject->enable(location);
 }
@@ -187,7 +181,7 @@ void Starfield::cleanUp(int side) {
 
 void Starfield::beforeContextDestroy() {
     m_vertexArrayObject = nullptr;
-    m_starBuffer = nullptr;
+    m_gpuBuffer = nullptr;
     m_shaderProgram = nullptr;
 }
 

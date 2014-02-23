@@ -2,12 +2,12 @@
 
 #include <ctime>
 
-#include "world/god.h"
 #include "world/world.h"
 #include "utils/randfloat.h"
 #include "utils/randvec.h"
 
 #include "voxelparticledata.h"
+#include "voxelparticlesetup.h"
 #include "voxelparticleengine.h"
 
 

@@ -8,14 +8,14 @@
 
 template<typename T>
 
-
 class ThreadPool {
 public:
     ThreadPool(int threadcount = 4, int chunksize = 100);
     ~ThreadPool();
 
-    void map(std::function<void(T&)> function, std::vector<T>& vector);
-    void map(std::function<void(T&)> function, std::vector<T>& vector, int start, int end);
+    // calls a function for every element in data 
+    void map(std::function<void(T&)> function, std::vector<T>& data);
+    void map(std::function<void(T&)> function, std::vector<T>& data, int start, int end);
 
 protected:
     void worker();

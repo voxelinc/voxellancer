@@ -1,8 +1,12 @@
 #pragma once
 
+#include <memory>
+#include <list>
+
 
 struct VoxelParticleData;
 class VoxelParticleEngine;
+class VoxelParticleChecker;
 
 /*
     Check that is guaranteed to be performed on every particle once in a
@@ -13,6 +17,8 @@ class VoxelParticleRemoveCheck {
 public:
     VoxelParticleRemoveCheck(VoxelParticleEngine* world);
 
+    void addCheck(std::shared_ptr<VoxelParticleChecker> checker);
+
     float interval() const;
     void setInterval(float interval);
 
@@ -20,12 +26,12 @@ public:
 
 
 protected:
-    VoxelParticleEngine* m_world;
+    VoxelParticleEngine* m_particleEngine;
+    std::list<std::shared_ptr<VoxelParticleChecker>> m_checker;
     float m_interval;
     int m_currentIndex;
 
     void performChecks(int checkCount);
-
-    virtual bool check(VoxelParticleData* particle) = 0;
+    void check(VoxelParticleData& particle);
 };
 

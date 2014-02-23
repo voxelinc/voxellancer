@@ -11,10 +11,10 @@
 
 #include "display/rendering/visuals.h"
 
-#include "world/god.h"
-#include "world/world.h"
-
 #include "voxelparticleengine.h"
+#include "voxelparticlesetup.h"
+
+#include "world/world.h"
 
 
 
