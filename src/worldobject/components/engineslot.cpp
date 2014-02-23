@@ -43,7 +43,3 @@ void EngineSlot::update(float deltaSec) {
     }
 }
 
-void EngineSlot::onVoxelRemoval() {
-    m_components->removeEngineSlot(this);
-}
-

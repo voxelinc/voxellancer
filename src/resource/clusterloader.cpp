@@ -9,7 +9,9 @@
 #include <cassert>
 
 
-ClusterLoader::ClusterLoader()
+ClusterLoader::ClusterLoader():
+    m_inputStream(nullptr),
+    m_dimensions(0,0,0)
 {
 
 }
@@ -55,13 +57,13 @@ void ClusterLoader::readZox(std::string &content, std::vector<Voxel*> *list){
 	int end = content.find(",");
 	int frameCount = stoi(content.substr(begin + 11, end - (begin + 11)));
 	int currentFrame = 0;
-	int position = 0;
+
 	std::string frame, voxelString;
 	std::vector<std::string> voxelStrings;
-	unsigned int color;
+	
 	while (currentFrame < frameCount){
 		frame = "\"frame" + std::to_string(currentFrame + 1) + "\": [";
-		position = content.find(frame) + frame.size();
+		int position = content.find(frame) + frame.size();
 		while (content.at(position) == '['){
 			end = content.find_first_of("]", position + 1);
 			voxelString = content.substr(position + 1, end - (position + 1));
@@ -69,8 +71,8 @@ void ClusterLoader::readZox(std::string &content, std::vector<Voxel*> *list){
 			voxelStrings.clear();
 			splitStr(voxelString, ',', voxelStrings);
 			std::string str = &(voxelStrings[3])[1];
-			color = stoul(str);
-            color = color >> 8; //shift out the alpha part we don't use
+			uint32_t color = stoul(str);
+            color >>= 8; //shift out the alpha part we don't use
             list->push_back(new Voxel(glm::ivec3(stoi(voxelStrings[0]), std::stoi(&(voxelStrings[1])[1]), std::stoi(&(voxelStrings[2])[1])), color));
 		}
 		currentFrame++;
@@ -85,9 +87,9 @@ void ClusterLoader::readDimensionsCsv(){
 	std::vector<std::string> subStrings;
 	splitStr(line, ',', subStrings);
 
-	x = stoi(subStrings[0]);
-	y = stoi(subStrings[1])-1;
-	z = stoi(subStrings[2]);
+	m_dimensions.x = stoi(subStrings[0]);
+    m_dimensions.y = stoi(subStrings[1]) - 1;
+    m_dimensions.z = stoi(subStrings[2]);
 }
 
 void ClusterLoader::readCsv(std::vector<Voxel*> *list){
@@ -95,15 +97,15 @@ void ClusterLoader::readCsv(std::vector<Voxel*> *list){
     glm::ivec3 cell(0, 0, 0);
 	std::string line;
 	std::vector<std::string> voxelStrings;
-	cell.y = y;
+	cell.y = m_dimensions.y;
 	while (cell.y > -1){
 		cell.z = 0;
-		while (cell.z < z){
+		while (cell.z < m_dimensions.z){
 			cell.x = 0;
 			getline(*m_inputStream, line);
 			voxelStrings.clear();
 			splitStr(line, ',', voxelStrings);
-			while (cell.x < x){
+			while (cell.x < m_dimensions.x){
 				red = stoi(voxelStrings[cell.x].substr(1, 2), NULL, 16);
 				green = stoi(voxelStrings[cell.x].substr(3, 2), NULL, 16);
 				blue = stoi(voxelStrings[cell.x].substr(5, 2), NULL, 16);

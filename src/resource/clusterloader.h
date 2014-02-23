@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+#include <glm/glm.hpp>
+
 class Voxel;
 class VoxelCluster;
 
@@ -23,5 +25,5 @@ private:
 
 private:
 	std::ifstream* m_inputStream;
-	int x, y, z;
+	glm::ivec3 m_dimensions;
 };

@@ -192,12 +192,6 @@ void InputHandler::processMouseUpdate() {
         }
     }
 
-    // spin
-    float rel = 20;
-    double dis = 0;
-    float angX = 0;
-    float angY = 0;
-
     if (m_mouseControl || glfwGetMouseButton(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS) {
         glm::vec3 rot;
         x = ContextProvider::instance()->resolution().width() / 2 - (int)floor(x);

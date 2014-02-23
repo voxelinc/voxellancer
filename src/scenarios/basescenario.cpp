@@ -15,7 +15,8 @@
 
 
 BaseScenario::BaseScenario(Game* game):
-    m_game(game)
+    m_game(game),
+    m_world(nullptr)
 {
 }
 

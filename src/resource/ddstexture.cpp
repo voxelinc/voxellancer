@@ -68,7 +68,6 @@ bool DdsTexture::loadImage2d(glow::Texture * texture, std::string path, GLenum t
     /* close the file pointer */
     file.close();
 
-    unsigned int components = (fourCC == FOURCC_DXT1) ? 3 : 4;
     unsigned int format;
     switch (fourCC)
     {

@@ -20,7 +20,11 @@ WorldTreeScanner::WorldTreeScanner(WorldTree* worldTree):
     m_worldTree(worldTree),
     m_scanInterval(0.0f),
     m_scanCountdown(0.0f),
-    m_scanRadius(0.0f)
+    m_scanRadius(0.0f),
+    m_worldObjects(),
+    m_foundWorldObjects(),
+    m_lostWorldObjects(),
+    m_worldObject(nullptr)
 {
 
 }

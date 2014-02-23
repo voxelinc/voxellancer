@@ -102,7 +102,6 @@ void CollisionDetector::checkCollisions(VoxelTreeNode* nodeA, VoxelTreeNode* nod
             }
         }
         else {
-            std::vector<VoxelTreeNode*> subnodes;
             VoxelTreeNode *nodeToSplit;
             VoxelTreeNode *otherNode;
 

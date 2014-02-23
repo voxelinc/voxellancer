@@ -14,7 +14,8 @@
 Weapon::Weapon(WeaponType type, const std::string& equipmentKey):
     Equipment(equipmentKey),
     m_type(type),
-    m_cooldown(0.0f)
+    m_cooldown(0.0f),
+    m_hardpoint(nullptr)
 {
 }
 

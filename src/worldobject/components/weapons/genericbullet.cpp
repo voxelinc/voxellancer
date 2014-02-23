@@ -5,7 +5,8 @@
 #include "voxeleffect/voxelexplosiongenerator.h"
 
 
-GenericBullet::GenericBullet()
+GenericBullet::GenericBullet():
+    m_emissiveness(0.0f)
 {
 }
 

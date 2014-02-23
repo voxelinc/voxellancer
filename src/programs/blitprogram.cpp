@@ -11,7 +11,9 @@
 
 BlitProgram::BlitProgram():
     m_initialized(false),
-    m_quad(new ScreenQuad())
+    m_quad(new ScreenQuad()),
+	m_source(nullptr),
+	m_destinationFBO(nullptr)
 {
 }
 
