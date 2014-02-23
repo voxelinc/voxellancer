@@ -3,6 +3,11 @@
 #include <memory>
 #include <list>
 
+#include "property/property.h"
+
+
+template<typename T>
+class ThreadPool;
 
 struct VoxelParticleData;
 class VoxelParticleEngine;
@@ -16,6 +21,7 @@ class VoxelParticleChecker;
 class VoxelParticleRemoveCheck {
 public:
     VoxelParticleRemoveCheck(VoxelParticleEngine* world);
+    ~VoxelParticleRemoveCheck();
 
     void addCheck(std::shared_ptr<VoxelParticleChecker> checker);
 
@@ -28,7 +34,11 @@ public:
 protected:
     VoxelParticleEngine* m_particleEngine;
     std::list<std::shared_ptr<VoxelParticleChecker>> m_checker;
-    float m_interval;
+    std::unique_ptr<ThreadPool<VoxelParticleData>> m_threadPool;
+    
+    Property<float> m_interval;
+    Property<bool> m_multithreaded;
+    
     int m_currentIndex;
 
     void performChecks(int checkCount);

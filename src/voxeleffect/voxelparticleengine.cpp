@@ -112,3 +112,7 @@ void VoxelParticleEngine::updateGPUBuffers(int begin, int end) {
     m_gpuParticleBufferInvalid = false;
 }
 
+std::vector<VoxelParticleData>& VoxelParticleEngine::particleDataVector() {
+    return m_cpuParticleBuffer;
+}
+

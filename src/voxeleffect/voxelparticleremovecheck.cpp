@@ -2,6 +2,8 @@
 
 #include <cassert>
 
+#include "utils/threadpool.h"
+
 #include "voxelparticledata.h"
 #include "voxelparticleengine.h"
 #include "voxelparticlechecker.h"
@@ -10,19 +12,15 @@
 VoxelParticleRemoveCheck::VoxelParticleRemoveCheck(VoxelParticleEngine* world):
     m_particleEngine(world),
     m_currentIndex(0),
-    m_interval(1.0f)
+    m_interval("particle.checkinterval"),
+    m_multithreaded("particle.multithreaded"),
+    m_threadPool(new ThreadPool<VoxelParticleData>(4))
 {
 
 }
 
-float VoxelParticleRemoveCheck::interval() const {
-    return m_interval;
-}
+VoxelParticleRemoveCheck::~VoxelParticleRemoveCheck() = default;
 
-void VoxelParticleRemoveCheck::setInterval(float interval) {
-    assert(interval > 0.0f);
-    m_interval = interval;
-}
 
 void VoxelParticleRemoveCheck::update(float deltaSec) {
     assert(m_interval > 0.0f);
@@ -41,15 +39,21 @@ void VoxelParticleRemoveCheck::update(float deltaSec) {
 
 void VoxelParticleRemoveCheck::performChecks(int checkCount) {
     int firstIndex = m_currentIndex;
-
-    for (int i = firstIndex; i < firstIndex + checkCount; i++) {
-        VoxelParticleData* particle = m_particleEngine->particleData(i % m_particleEngine->particleDataCount());
-        check(*particle);
+    glow::debug("check %; %;", firstIndex, checkCount);
+    if (m_multithreaded.get()) {
+        m_threadPool->map([&](VoxelParticleData& p) { check(p); }, m_particleEngine->particleDataVector(), firstIndex, firstIndex + checkCount);
+    } else {
+        for (int i = firstIndex; i < firstIndex + checkCount; i++) {
+            int index = i % m_particleEngine->particleDataCount();
+            VoxelParticleData* particle = m_particleEngine->particleData(index);
+            check(*particle);
+        }
     }
 
     for (int i = firstIndex; i < firstIndex + checkCount; i++) {
-        if (m_particleEngine->particleData(i % m_particleEngine->particleDataCount())->status == VoxelParticleData::Status::Dead) {
-            m_particleEngine->removeParticle(i % m_particleEngine->particleDataCount());
+        int index = i % m_particleEngine->particleDataCount();
+        if (m_particleEngine->particleData(index)->status == VoxelParticleData::Status::Dead) {
+            m_particleEngine->removeParticle(index);
         }
     }
 }
@@ -70,3 +74,4 @@ void VoxelParticleRemoveCheck::check(VoxelParticleData& particle) {
 void VoxelParticleRemoveCheck::addCheck(std::shared_ptr<VoxelParticleChecker> checker) {
     m_checker.push_back(checker);
 }
+

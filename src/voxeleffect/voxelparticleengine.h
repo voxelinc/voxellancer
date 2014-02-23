@@ -27,6 +27,7 @@ public:
 
     int particleDataCount() const;
     VoxelParticleData* particleData(int index);
+    std::vector<VoxelParticleData>& particleDataVector();
 
     void addParticle(const VoxelParticleSetup& particleSetup);
     void removeParticle(int index);

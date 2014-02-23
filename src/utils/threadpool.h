@@ -7,7 +7,6 @@
 #include <atomic>
 
 template<typename T>
-
 class ThreadPool {
 public:
     ThreadPool(int threadcount = 4, int chunksize = 100);
@@ -34,7 +33,7 @@ protected:
     std::atomic_int m_index;
 
     bool m_exit;
-    bool m_running;
+    std::atomic_bool m_running;
     std::atomic_int m_runningWorkers;
 
 };
