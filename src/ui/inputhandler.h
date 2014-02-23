@@ -79,8 +79,10 @@ protected:
     ActionKeyMapping selectNextAction;
     ActionKeyMapping selectPreviousAction;
 
-    glm::vec3 m_moveUpdate, m_rotateUpdate;
-    bool m_fireUpdate, m_rocketUpdate;
+    glm::vec3 m_moveUpdate;
+    glm::vec3 m_rotateUpdate;
+    bool m_fireUpdate;
+    bool m_rocketUpdate;
 
     void placeCrossHair(double winX, double winY);
 };
