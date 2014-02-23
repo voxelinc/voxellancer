@@ -9,10 +9,11 @@
 template<typename T>
 class ThreadPool {
 public:
-    ThreadPool(std::function<void(T&)> function);
+    ThreadPool(std::function<void(T&)> function, int chunksize = 100);
     ~ThreadPool();
 
     void map(std::vector<T>& vector);
+    void map(std::vector<T>& vector, int start, int end);
 
 protected:
     void worker();
@@ -22,35 +23,37 @@ protected:
     std::function<void(T&)> m_function;
 
     std::vector<std::thread> m_worker;
-    std::condition_variable m_startsignal;
-    std::condition_variable m_stopsignal;
+    std::condition_variable m_startSignal;
+    std::condition_variable m_stopSignal;
     std::mutex m_lock;
 
-    int m_index;
+    std::atomic_int m_index;
+    int m_endIndex;
     int m_chunksize;
     bool m_exit;
-    std::atomic_int m_running;
+    std::atomic_int m_runningWorkers;
 
 };
-
 template<typename T>
 ThreadPool<T>::~ThreadPool() {
-    m_running = m_worker.size();
-    m_startsignal.notify_all();
-    for (std::thread& thread: m_worker) {
+    std::cout << "exit " << std::endl;
+    m_exit = true;
+    m_runningWorkers = m_worker.size();
+    m_startSignal.notify_all();
+    for (std::thread& thread : m_worker) {
         thread.join();
     }
 }
 
 template<typename T>
-ThreadPool<T>::ThreadPool(std::function<void(T&)> function) :
-    m_chunksize(100),
+ThreadPool<T>::ThreadPool(std::function<void(T&)> function, int chunksize) :
+    m_chunksize(chunksize),
     m_worker(2),
     m_function(function),
     m_tasks(nullptr),
     m_exit(false)
 {
-    m_running = 0;
+    m_runningWorkers = 0;
     for (int i = 0; i < m_worker.size(); i++) {
         m_worker[i] = std::thread(&ThreadPool<T>::worker, this);
     }
@@ -58,46 +61,53 @@ ThreadPool<T>::ThreadPool(std::function<void(T&)> function) :
 
 template<typename T>
 void ThreadPool<T>::map(std::vector<T>& vector) {
-    m_tasks = &vector;
-    m_index = 0;
-    
-    m_running = m_worker.size();
-    m_startsignal.notify_all();
+    map(vector, 0, vector.size());
+}
 
-    std::unique_lock<std::mutex> lk(m_lock);
-    m_stopsignal.wait(lk, [&] { return m_running == 0; });
+template<typename T>
+void ThreadPool<T>::map(std::vector<T>& vector, int start, int end) {
+    m_tasks = &vector;
+    m_index = start;
+    m_endIndex = end;
+
+    m_runningWorkers = m_worker.size();
+    m_startSignal.notify_all();
+
+    std::mutex m;
+    std::unique_lock<std::mutex> lk(m);
+    m_stopSignal.wait(lk);
 }
 
 template<typename T>
 void ThreadPool<T>::worker() {
-    std::unique_lock<std::mutex> lk(m_lock);
-
     while (true) {
-        m_startsignal.wait(lk, [&] { return m_running > 0; });
+        std::unique_lock<std::mutex> lk(m_lock);
+        m_startSignal.wait(lk, [&] { return m_runningWorkers == m_worker.size(); });
+        lk.unlock(); // wait locks the mutex but the workers shouldn't wait on each other
         if (m_exit) {
             return;
         }
+
         int task;
-        while (task = getTask() >= 0) {
+        while ((task = getTask()) >= 0) {
             for (int i = task; i < task + m_chunksize; i++) {
                 m_function((*m_tasks)[i]);
             }
         }
-        m_running--;
-        m_stopsignal.notify_all();
+
+        if (--m_runningWorkers == 0) {
+            m_stopSignal.notify_all();
+        }
     }
 }
 
 template<typename T>
 int ThreadPool<T>::getTask() {
-    m_lock.lock();
-    int index = m_index;
-    m_index += m_chunksize;
-    m_lock.unlock();
+    // get current value and increment
+    int index = m_index.fetch_add(m_chunksize);
 
-    if (index >= m_tasks->size()) {
+    if (index >= m_endIndex) {
         return -1;
     }
     return index;
 }
-

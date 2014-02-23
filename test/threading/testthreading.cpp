@@ -1,5 +1,8 @@
 #include <bandit/bandit.h>
 
+#include <thread>
+#include <chrono>
+
 #include "utils/threadpool.h"
 
 
@@ -26,6 +29,11 @@ go_bandit([]() {
             pool.map(ints);
             for (int i = 0; i < ints.size(); i++) {
                 AssertThat(ints[i], Equals(1));
+            }
+            
+            pool.map(ints);
+            for (int i = 0; i < ints.size(); i++) {
+                AssertThat(ints[i], Equals(2));
             }
         });
 
