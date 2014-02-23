@@ -2,12 +2,21 @@
 
 #include "propertymanager.h"
 
+
 template <class T>
-Property<T>::Property(char * name) :
+Property<T>::Property(const std::string& name):
     m_name(name),
     m_value()
 {
     PropertyManager::instance()->registerProperty(this);
+}
+
+template <class T>
+Property<T>::Property(const std::string& name, const T& defaultValue):
+    m_name(name),
+    m_value()
+{
+    PropertyManager::instance()->registerProperty(this, defaultValue);
 }
 
 template <class T>
@@ -16,7 +25,7 @@ Property<T>::~Property() {
 }
 
 template <class T>
-const char* Property<T>::name() const {
+const std::string& Property<T>::name() const {
     return m_name;
 }
 
@@ -26,7 +35,7 @@ T Property<T>::get() const {
 }
 
 template <class T>
-void Property<T>::set(T value) {
+void Property<T>::set(const T& value) {
     m_value = value;
 }
 
@@ -41,7 +50,7 @@ T* Property<T>::operator->() {
 }
 
 template <class T>
-T Property<T>::get(const char* name) {
-    return PropertyManager::instance()->get<float>(name);
+T Property<T>::get(const std::string& name) {
+    return PropertyManager::instance()->get<T>(name);
 }
 

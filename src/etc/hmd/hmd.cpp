@@ -3,14 +3,18 @@
 #include <cassert>
 #include <iostream>
 
+#include <OVR.h>
+
 
 HMD::HMD(OVR::HMDDevice* hmdDevice):
-    m_hmdDevice(hmdDevice)
+    m_hmdDevice(hmdDevice),
+    m_sensorFusion(new OVR::SensorFusion())
+
 {
     m_sensorDevice = m_hmdDevice->GetSensor();
 
     if(m_sensorDevice) {
-        m_sensorFusion.AttachToSensor(m_sensorDevice);
+        m_sensorFusion->AttachToSensor(m_sensorDevice);
     }
 
     OVR::HMDInfo ovrInfo;
@@ -29,7 +33,7 @@ HMD::~HMD() {
 }
 
 glm::quat HMD::orientation() {
-    OVR::Quatf ovrOrientation = m_sensorFusion.GetOrientation();
+    OVR::Quatf ovrOrientation = m_sensorFusion->GetOrientation();
     
     return glm::quat(ovrOrientation.w, ovrOrientation.x, ovrOrientation.y, ovrOrientation.z);
 }

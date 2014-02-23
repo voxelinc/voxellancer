@@ -4,9 +4,11 @@
 #include <set>
 #include <vector>
 
-#include "worldtreegeode.h"
 #include "geometry/aabb.h"
 
+
+class WorldTreeGeode;
+class WorldTreeNode;
 
 class WorldTreeNode
 {

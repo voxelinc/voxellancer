@@ -2,6 +2,7 @@
 
 #include <memory>
 
+
 class WorldObject;
 class Ship;
 
@@ -21,7 +22,8 @@ public:
 
     void invalidate();
 
-protected:   
+
+protected:
     std::shared_ptr<HandleImpl<T>> m_impl;
 };
 

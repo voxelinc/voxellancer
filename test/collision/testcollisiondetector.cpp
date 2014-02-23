@@ -10,6 +10,8 @@
 #include "world/world.h"
 #include "world/god.h"
 #include "../bandit_extension/aabbhelper.h"
+#include "voxel/voxelclusterbounds.h"
+
 
 
 
@@ -24,6 +26,7 @@ go_bandit([](){
 
         PropertyManager::instance()->reset();
         PropertyManager::instance()->load("data/config.ini");
+        PropertyManager::instance()->load("data/voxels.ini", "voxels");
 
         before_each([&](){
             world = new World();
@@ -39,7 +42,7 @@ go_bandit([](){
 
          //   AssertThat(d->checkCollisions().size(), Equals(1));
 
-            b->move(glm::vec3(2, 0, 0));
+            b->transform().move(glm::vec3(2, 0, 0));
 
          //   AssertThat(d->checkCollisions().size(), Equals(0));
         });
@@ -59,11 +62,11 @@ go_bandit([](){
 
           //  AssertThat(d->checkCollisions().size(), IsGreaterThan(0));
 
-            b->move(glm::vec3(2, 0, 0));
+            b->transform().move(glm::vec3(2, 0, 0));
             b->collisionDetector().updateGeode();
         //    AssertThat(d->checkCollisions().size(), IsGreaterThan(0));
 
-            b->move(glm::vec3(0, -2, 0));
+            b->transform().move(glm::vec3(0, -2, 0));
             b->collisionDetector().updateGeode();
            // AssertThat(d->checkCollisions().size(), Equals(0));
         });

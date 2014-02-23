@@ -7,12 +7,12 @@
 #include "worldobject/handle/handle.h"
 
 
-class Ship;
+class BoardComputer;
 class WorldObject;
 
 class DirectSuicideTask : public AiTask {
 public:
-    DirectSuicideTask(Ship& ship, WorldObject* target);
+    DirectSuicideTask(BoardComputer* boardComputer, WorldObject* target);
 
     void setTarget(WorldObject* target);
 
