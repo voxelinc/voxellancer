@@ -42,6 +42,7 @@ protected:
 
     void processUpdate();
     void processMouseUpdate();
+    void applyUpdates();
     void processHMDUpdate();
 
     void processFireActions();
@@ -77,6 +78,9 @@ protected:
 
     ActionKeyMapping selectNextAction;
     ActionKeyMapping selectPreviousAction;
+
+    glm::vec3 m_moveUpdate, m_rotateUpdate;
+    bool m_fireUpdate, m_rocketUpdate;
 
     void placeCrossHair(double winX, double winY);
 };
