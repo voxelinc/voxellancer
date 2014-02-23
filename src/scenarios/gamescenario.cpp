@@ -7,7 +7,7 @@
 #include "ai/character.h"
 #include "ai/basictasks/flytotask.h"
 #include "ai/grouptasks/patrolwaypointstask.h"
-#include "ai/grouptasks/DefendAreatask.h"
+#include "ai/grouptasks/defendareatask.h"
 #include "ai/basictasks/formationmembertask.h"
 #include "ai/squadlogic.h"
 #include "ai/squad.h"
