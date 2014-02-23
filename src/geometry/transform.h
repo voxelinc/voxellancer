@@ -2,7 +2,7 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
-#include <glm/gtx/transform.hpp>
+
 
 /* General Object in our 3D world with position and orientation
 */

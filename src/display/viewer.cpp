@@ -19,24 +19,26 @@ Viewer::Viewer(const Viewport& viewport):
     switchToMonoView();
 }
 
+Viewer::~Viewer() = default;
+
 const View& Viewer::view() const {
-    return *m_view.get();
+    return *m_view;
 }
 
 Scene* Viewer::scene() {
     return m_scene;
 }
 
-void Viewer::setScene(Scene* scene) {
+void Viewer::setScene(Scene& scene) {
     if (m_scene) {
         m_scene->deactivate();
     }
-    m_scene = scene;
-    scene->activate();
+    m_scene = &scene;
+    scene.activate();
 }
 
-void Viewer::setCameraHead(CameraHead* cameraHead) {
-    m_cameraHead = cameraHead;
+void Viewer::setCameraHead(CameraHead& cameraHead) {
+    m_cameraHead = &cameraHead;
 }
 
 void Viewer::setViewport(const Viewport& viewport) {

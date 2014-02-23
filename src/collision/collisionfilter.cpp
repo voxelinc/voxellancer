@@ -14,6 +14,10 @@ CollisionFilterClass CollisionFilter::collisionFilterClass() const {
     return m_collisionFilterClass;
 }
 
+void CollisionFilter::setCollisionFilterClass(CollisionFilterClass collisionFilterClass) {
+    m_collisionFilterClass = collisionFilterClass;
+}
+
 uint32_t CollisionFilter::collisionMask() const {
     return m_collisionMask;
 }

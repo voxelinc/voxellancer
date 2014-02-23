@@ -6,14 +6,10 @@
 #include <glm/glm.hpp>
 
 #include "geometry/sphere.h"
-#include "geometry/ray.h"
 #include "geometry/gridaabb.h"
 
-#include "voxel/voxel.h"
 
-#include "geometry/transform.h"
-
-
+class Voxel;
 class VoxelTree;
 
 class VoxelTreeNode

@@ -4,7 +4,9 @@
 #include <fstream>
 #include <string.h>
 
-#include "glow/logging.h"
+#include <glow/logging.h>
+#include <glow/Texture.h>
+
 
 bool DdsTexture::loadImage2d(glow::Texture * texture, std::string path){
     assert(texture->target() != GL_TEXTURE_CUBE_MAP);

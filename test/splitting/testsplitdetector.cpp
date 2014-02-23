@@ -17,6 +17,7 @@ go_bandit([]() {
     describe("Splitdetector and Splitter", []() {
         PropertyManager::instance()->reset();
         PropertyManager::instance()->load("data/config.ini");
+        PropertyManager::instance()->load("data/voxels.ini", "voxels");
 
         WorldObject* w = nullptr;
         SplitDetector detector;

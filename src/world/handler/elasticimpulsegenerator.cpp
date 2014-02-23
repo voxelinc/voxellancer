@@ -8,6 +8,7 @@
 #include "utils/tostring.h"
 #include "collision/voxelcollision.h"
 #include "voxel/voxel.h"
+#include "physics/physics.h"
 
 
 void ElasticImpulseGenerator::parse(std::list<WorldObjectCollision>& worldObjectCollisions) {
@@ -33,8 +34,8 @@ std::list<Impulse>& ElasticImpulseGenerator::worldObjectImpulses() {
 
 void ElasticImpulseGenerator::generateImpulse(VoxelCollisionParticipant &from, VoxelCollisionParticipant &to) {
     Transform targetTransformFrom(from.worldObject()->transform(),
-        from.worldObject()->physics().speed(),
-        glm::quat(from.worldObject()->physics().angularSpeed()));
+        from.worldObject()->physics().speed().directional(),
+        glm::quat(from.worldObject()->physics().speed().angular()));
 
     glm::vec3 speed = targetTransformFrom.applyTo(
         glm::vec3(from.voxel()->gridCell())) -

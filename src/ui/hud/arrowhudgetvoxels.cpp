@@ -12,6 +12,7 @@
 
 #include "hud.h"
 #include "objecthudget.h"
+#include "voxel/voxelclusterbounds.h"
 
 
 ArrowHudgetVoxels::ArrowHudgetVoxels(ObjectHudget* hudget) :
@@ -31,7 +32,7 @@ ObjectHudget* ArrowHudgetVoxels::hudget() {
 }
 
 void ArrowHudgetVoxels::draw() {
-    VoxelRenderer::instance()->draw(&m_arrow);
+    VoxelRenderer::instance()->draw(m_arrow);
 }
 
 bool ArrowHudgetVoxels::findPoint() {

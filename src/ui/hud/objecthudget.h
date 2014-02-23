@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 
@@ -8,11 +10,15 @@
 #include "arrowhudgetvoxels.h"
 
 
+class ObjectHudgetVoxels;
 class HUDObjectDelegate;
 
 class ObjectHudget: public Hudget {
 public:
     ObjectHudget(HUD* hud, HUDObjectDelegate* objectDelegate);
+    virtual ~ObjectHudget();
+
+    bool isTarget() const;
 
     virtual void update(float deltaSec) override;
     virtual void draw() override;

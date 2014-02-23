@@ -2,57 +2,24 @@
 
 #include <vector>
 
-#include "etc/hmd/hmd.h"
-
 #include "property/property.h"
-
 #include "inputconfigurator.h"
+#include "actionkeymapping.h"
 
 
 class Player;
 class WorldObject;
 class InputConfigurator;
 class HUD;
-
-struct ActionKeyMapping {
-    Property<InputMapping> primaryMapping;
-    Property<InputMapping> secondaryMapping;
-    bool toggleAction;
-    bool toggleStatus;
-    std::string name;
-
-    ActionKeyMapping(char* primary, char* secondary, std::string name) :
-        primaryMapping(primary),
-        secondaryMapping(secondary),
-        toggleAction(false),
-        toggleStatus(false),
-        name(name)
-    {
-    }
-
-    ActionKeyMapping(char* primary, char* secondary, std::string name, bool toggleAction) :
-        primaryMapping(primary),
-        secondaryMapping(secondary),
-        toggleAction(toggleAction),
-        toggleStatus(false),
-        name(name)
-    {
-    }
-};
-
-struct SecondaryInputValues {
-    int buttonCnt, axisCnt;
-    const unsigned char *buttonValues;
-    const float *axisValues;
-
-    SecondaryInputValues();
-};
+class HMD;
+class TargetSelector;
+class Player;
 
 class InputHandler {
 public:
-    InputHandler(Player *player);
+    InputHandler(Player& player);
 
-    void setHMD(HMD* hmd);
+    void setHMD(HMD& hmd);
 
     void resizeEvent(const unsigned int width, const unsigned int height);
     void keyCallback(int key, int scancode, int action, int mods);
@@ -86,9 +53,7 @@ protected:
     float getInputValue(InputMapping mapping);
 
     void addActionsToVector();
-
     void setupJoystickControls();
-
     void retrieveInputValues();
 
     float m_currentTimePressed;

@@ -4,10 +4,9 @@
 #include <memory>
 
 #include "voxel/voxelcluster.h"
-#include "handle/handle.h"
+#include "worldobject/handle/handle.h"
 
-#include "physics/physics.h"
-#include "ui/objectinfo.h"
+
 
 class CollisionDetector;
 class EngineVoxel;
@@ -15,37 +14,31 @@ class HardpointVoxel;
 class CockpitVoxel;
 class FuelVoxel;
 class CollisionFilter;
+class Physics;
+class ObjectInfo;
+class VoxelCollision;
+class WorldObjectComponents;
 
-class WorldObject : public VoxelCluster
-{
+class WorldObject : public VoxelCluster {
 public:
     WorldObject();
     virtual ~WorldObject();
 
     CollisionFilter& collisionFilter();
+    void setCollisionFilter(CollisionFilter* collisionFilter);
+
     CollisionDetector& collisionDetector();
     Physics& physics();
     ObjectInfo& objectInfo();
+    WorldObjectComponents& components();
 
     virtual void update(float deltaSec);
-
-    std::list<VoxelCollision>& performMovement(float deltaSec);
 
     virtual void addVoxel(Voxel* voxel) override;
     virtual void removeVoxel(Voxel* voxel) override;
 
-    virtual void addEngineVoxel(EngineVoxel* voxel);
-    virtual void addHardpointVoxel(HardpointVoxel* voxel);
-    virtual void addCockpitVoxel(CockpitVoxel* voxel);
-    virtual void addFuelVoxel(FuelVoxel* voxel);
-
-    Voxel *crucialVoxel();
+    Voxel* crucialVoxel();
     void setCrucialVoxel(const glm::ivec3& cell);
-
-    virtual void accelerate(const glm::vec3& direction);
-    virtual void accelerateAngular(const glm::vec3& axis);
-
-    void setCenterAndAdjustPosition(const glm::vec3& newCenter);
 
     void updateTransformAndGeode(const glm::vec3& position, const glm::quat& orientation);
 
@@ -54,25 +47,25 @@ public:
 
     Handle<WorldObject>& handle();
 
-    bool scheduledForDeletion();
+    bool scheduledForDeletion() const;
     void onScheduleForDeletion();
 
+    float collisionFieldOfDamage() const;
+    void setCollisionFieldOfDamage(float collisionFieldOfDamage);
 
-    float collisionFieldOfDamage();
 
 protected:
-    bool m_scheduledForDeletion;
-
-    WorldObject(CollisionFilter* collisionFilter, float scale=1.0f);
-
     std::unique_ptr<CollisionFilter> m_collisionFilter;
     std::unique_ptr<CollisionDetector> m_collisionDetector;
-    Physics m_physics;
+    std::unique_ptr<Physics> m_physics;
+    std::unique_ptr<ObjectInfo> m_objectInfo;
+    std::unique_ptr<WorldObjectComponents> m_components;
 
     Handle<WorldObject> m_handle;
-
-    ObjectInfo m_objectInfo;
     Voxel* m_crucialVoxel;
-
+    bool m_scheduledForDeletion;
     float m_collisionFieldOfDamage;
+
+    WorldObject(CollisionFilter* collisionFilter, float scale = 1.0f);
 };
+

@@ -4,16 +4,17 @@
 
 
 class Hardpoint;
+class Vpxel;
 class WorldObject;
 
 /*
-    Identifies the direction a hardpoint must shoot to hit a worldObject
-    given the movement of this other WorldObject doesn't change too
+    Identifies the direction a hardpoint must shoot to hit a moving WorldObject
+    given the direction and the speed of this other WorldObject doesn't change too
     much
 */
 class HardpointAimHelper {
 public:
-    HardpointAimHelper(Hardpoint* shooter, WorldObject* targetObject);
+    HardpointAimHelper(Hardpoint* hardpoint, WorldObject* targetObject);
 
     void aim();
 
@@ -29,15 +30,18 @@ public:
 
 
 protected:
-    Hardpoint* m_shooter;
+    Hardpoint* m_hardpoint;
     WorldObject* m_targetObject;
 
     bool m_aimed;
 
-    glm::vec3 m_shooterPosition;
+    glm::vec3 m_hardpointPosition;
+
     glm::vec3 m_targetPosition;
-    float m_bulletSpeed;
     glm::vec3 m_targetSpeed;
+
+    float m_bulletSpeed;
+    float m_bulletLifetime;
 
     bool m_hitable;
 
@@ -47,5 +51,6 @@ protected:
 
     float bulletTravelTime(const glm::vec3& point);
     glm::vec3 targetPositionIn(float deltaSec);
+    float bulletSpeedInDirection(const glm::vec3& direction);
 };
 

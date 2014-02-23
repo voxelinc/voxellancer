@@ -5,10 +5,18 @@
 #include <glm/glm.hpp>
 
 #include "utils/geometryhelper.h"
+
+#include "worldobject/worldobject.h"
+#include "worldobject/ship.h"
+
+#include "player.h"
+
 #include "hudobjectdelegate.h"
 #include "hud.h"
-#include "worldobject/worldobject.h"
-#include "player.h"
+#include "voxel/voxelclusterbounds.h"
+#include "objecthudgetvoxels.h"
+#include "display/viewer.h"
+#include "display/view.h"
 
 
 ObjectHudget::ObjectHudget(HUD* hud, HUDObjectDelegate* objectDelegate):
@@ -20,18 +28,28 @@ ObjectHudget::ObjectHudget(HUD* hud, HUDObjectDelegate* objectDelegate):
     m_insideFov = false;
 }
 
+ObjectHudget::~ObjectHudget() = default;
+
 void ObjectHudget::update(float deltaSec) {
     updateTargeted();
     updateFov();
     m_insideFov = isInsideFov();
+    bool targetHighlight = false;
     WorldObject* worldObject = m_objectDelegate->worldObject();
     if(worldObject) {
         calculateOpeningAngle();
         pointToWorldPoint(worldObject->transform().position());
+
+        if(m_hud->player()->ship()) {
+            if(worldObject == m_hud->player()->ship()->targetObject()) {
+                targetHighlight = true;
+            }
+        }
     }
     if (!m_insideFov) {
         m_arrowVoxels.updateDirection(closestPointInsideFov());
     }
+    m_objectVoxels.setTargetHightlight(targetHighlight);
 }
 
 void ObjectHudget::draw() {
@@ -39,6 +57,7 @@ void ObjectHudget::draw() {
     if (!m_insideFov) {
         m_arrowVoxels.draw();
     }
+
 }
 
 void ObjectHudget::calculateOpeningAngle() {

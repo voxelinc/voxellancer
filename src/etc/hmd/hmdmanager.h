@@ -1,11 +1,11 @@
 #pragma once
 
-#include <OVR.h>
-
-#include "hmd.h"
-
+namespace OVR {
+    class DeviceManager;
+}
 
 class Game;
+class HMD;
 
 class HMDManager {
 public:

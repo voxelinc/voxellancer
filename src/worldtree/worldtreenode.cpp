@@ -7,6 +7,7 @@
 #include "utils/tostring.h"
 #include "voxel/voxel.h"
 #include "worldobject/worldobject.h"
+#include "worldtreegeode.h"
 
 
 static const int SUBNODE_COUNT = 8;

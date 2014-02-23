@@ -7,6 +7,7 @@
 
 
 class ObjectHudget;
+class Ray;
 
 class ArrowHudgetVoxels {
 public:

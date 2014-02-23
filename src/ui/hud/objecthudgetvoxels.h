@@ -1,10 +1,12 @@
 #pragma once
 
+#include <memory>
 #include <vector>
 
 class Ray;
 class ObjectHudget;
-class ObjectHudgetCorner;
+class ObjectHudgetCornerVoxels;
+
 
 class ObjectHudgetVoxels {
 public:
@@ -12,6 +14,8 @@ public:
     ~ObjectHudgetVoxels();
 
     ObjectHudget* hudget();
+
+    void setTargetHightlight(bool targetHightlight);
 
     float openingAngle() const;
     void setOpeningAngle(float openingAngle);
@@ -23,11 +27,13 @@ public:
 
 protected:
     ObjectHudget* m_hudget;
-    ObjectHudgetCorner* m_lu;
-    ObjectHudgetCorner* m_rb;
-    ObjectHudgetCorner* m_lb;
-    ObjectHudgetCorner* m_ru;
+    std::unique_ptr<ObjectHudgetCornerVoxels> m_lu[2];
+    std::unique_ptr<ObjectHudgetCornerVoxels> m_lb[2];
+    std::unique_ptr<ObjectHudgetCornerVoxels> m_ru[2];
+    std::unique_ptr<ObjectHudgetCornerVoxels> m_rb[2];
+
     float m_openingAngle;
+    bool m_targetHightlight;
 
     void setupCorners();
 };

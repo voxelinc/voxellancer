@@ -38,6 +38,7 @@ glm::quat GeometryHelper::quatFromViewDirection(const glm::vec3& direction) {
     if (w == glm::vec3(0)) {
         w = RandVec3::randUnitVec();
     }
+
     return glm::angleAxis(angle, glm::normalize(w));
 }
 
@@ -54,4 +55,3 @@ WorldObject* GeometryHelper::closestObject(WorldObject& self, std::unordered_set
     }
     return closestObject;
 }
-

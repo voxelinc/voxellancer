@@ -2,23 +2,19 @@
 
 #include <memory>
 
-#include "etc/hmd/hmdmanager.h"
-
-#include "display/viewer.h"
-#include "display/gamescene.h"
-
-#include "ui/inputhandler.h"
-
-#include "scenarios/gamescenario.h"
-#include "scenarios/battlescenario.h"
-
-#include "player.h"
 
 class SoundManager;
+class Player;
+class InputHandler;
+class Viewer;
+class GameScene;
+class GameScenario;
+class HMDManager;
 
 class Game {
 public:
     Game();
+    ~Game();
 
     InputHandler& inputHandler();
     Player& player();
@@ -32,11 +28,11 @@ public:
 
 
 private:
-    Player m_player;
-    InputHandler m_inputHandler;
-    Viewer m_viewer;
-    GameScene m_gameScene;
-    GameScenario m_scenario;
-    HMDManager m_hmdManager;
+    std::unique_ptr<Viewer> m_viewer;
+    std::unique_ptr<Player> m_player;
+    std::unique_ptr<InputHandler> m_inputHandler;
+    std::unique_ptr<GameScene> m_gameScene;
+    std::unique_ptr<GameScenario> m_scenario;
+    std::unique_ptr<HMDManager> m_hmdManager;
 };
 

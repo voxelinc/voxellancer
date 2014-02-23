@@ -2,12 +2,14 @@
 
 #include <vector>
 
-#include <OVR.h>
-
 #include <glm/glm.hpp>
 
 #include "property/property.h"
 
+
+namespace OVR {
+    class HMDInfo;
+}
 
 class StereoRenderInfo {
 public:

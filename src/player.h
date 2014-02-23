@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 
@@ -10,33 +11,36 @@
 
 #include "ui/hud/hud.h"
 
+#include "worldobject/handle/handle.h"
+#include "worldobject/components/enginestate.h"
 
 class TargetSelector;
 
 class Camera;
-class CameraDolly;
+class CameraHead;
+class HUD;
 
 class Game;
 
 class Player {
 public:
     Player(Game* game);
+    ~Player();
 
+    Ship* ship();
     void setShip(Ship *ship);
-
-    void move(const glm::vec3& direction);
-    void rotate(const glm::vec3& direction);
-
-    void fire();
 
     void update(float deltaSec);
 
-    Ship* playerShip();
     CameraDolly& cameraDolly();
+    CameraHead& cameraHead();
     HUD& hud();
 
-    glm::vec3 cameraPosition();
-    glm::quat cameraOrientation();
+    void fire();
+
+    void move(const glm::vec3& vec);
+    void rotate(const glm::vec3& euler);
+
 
     void selectTarget(bool next);
     void setTarget(WorldObject* target);
@@ -44,17 +48,10 @@ public:
 
 protected:
     Game* m_game;
-    Handle<Ship> m_playerShip;
-    CameraDolly m_cameraDolly;
-    HUD m_hud;
-    TargetSelector* m_targetSelector;
-
-    glm::vec3 m_acceleration;
-    glm::vec3 m_accelerationAngular;
-
-    template<typename IteratorType>
-    WorldObject* findNextTarget(IteratorType begin, IteratorType end);
-
-    std::function<bool(WorldObject*)> canLockOnPredicate();
+    Handle<Ship> m_ship;
+    std::unique_ptr<CameraDolly> m_cameraDolly;
+    std::unique_ptr<HUD> m_hud;
+    std::unique_ptr<TargetSelector> m_targetSelector;
+    EngineState m_engineState;
 };
 

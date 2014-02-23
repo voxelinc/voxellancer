@@ -1,35 +1,42 @@
 #pragma once
 
+#include <memory>
+
 #include <glm/glm.hpp>
 
 #include "property/property.h"
-#include "voxeleffect/voxelexplosiongenerator.h"
 
 class Engine;
+class WorldObject;
+class VoxelExplosionGenerator;
 
 class EngineTrailGenerator
 {
 public:
-    EngineTrailGenerator();
+    EngineTrailGenerator(Engine* engine);
     virtual ~EngineTrailGenerator();
 
-    void setEngine(Engine* engine);
-    void setFrequency(float frequency);
+    void setLifetime(float lifetime);
 
     void update(float deltaSec);
 
-protected:
-    glm::vec3 calculateSpawnPosition();
-    void spawnAt(glm::vec3 position);
 
+protected:
     Engine* m_engine;
-    VoxelExplosionGenerator m_generator;
+    std::unique_ptr<VoxelExplosionGenerator> m_generator;
+
+    glm::vec3 m_lastSpawnPoint;
+    bool m_lastValid;
+    float m_stepRest;
+    double m_timeSinceLastSpawn;
     float m_spawnOffset;
 
-    glm::vec3 m_lastPosition;
-    bool m_lastValid;
-    double m_timeSinceLastSpawn;
+    Property<float> prop_stepDistance;
+    Property<float> prop_idleTime;
 
-    Property<float> prop_lifetime, prop_stepDistance, prop_idleTime;
+    void spawnTrail();
+    void updateTrailSettings();
+    glm::vec3 calculateSpawnPosition();
+    void spawnAt(glm::vec3 position);
 };
 

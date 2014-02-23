@@ -7,6 +7,8 @@
 #include "worldobject/worldobject.h"
 #include "voxel/voxel.h"
 #include "voxel/voxeltreenode.h"
+#include "voxel/voxelclusterbounds.h"
+#include "physics/physics.h"
 
 
 using namespace bandit;
@@ -16,7 +18,7 @@ go_bandit([](){
     describe("AABB", [](){
         PropertyManager::instance()->reset();
         PropertyManager::instance()->load("data/config.ini");
-
+        PropertyManager::instance()->load("data/voxels.ini", "voxels");
 
         before_each([&](){
         });
@@ -32,7 +34,7 @@ go_bandit([](){
             AssertThat(a.bounds().aabb().contains(glm::vec3(4.49, 0, 0)), Equals(true));
             AssertThat(a.transform().position(), EqualsWithDelta(glm::vec3(2, 0, 0), glm::vec3(0.01, 0.01, 0.01)));
 
-            a.setPosition(glm::vec3(7, 0, 0));
+            a.transform().setPosition(glm::vec3(7, 0, 0));
             AssertThat(a.bounds().aabb().contains(glm::vec3(9.49, 0, 0)), Equals(true));
         });
 

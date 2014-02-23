@@ -2,23 +2,32 @@
 
 #include <iostream>
 
-#include "worldobject/hardpoint.h"
+#include "voxel/specialvoxels/hardpointvoxel.h"
+
+#include "worldobject/components/weapon.h"
+#include "worldobject/components/hardpoint.h"
+#include "worldobject/components/weapons/gun.h"
 #include "worldobject/worldobject.h"
+#include "physics/physics.h"
 
 
-HardpointAimHelper::HardpointAimHelper(Hardpoint* shooter, WorldObject* targetObject):
-    m_shooter(shooter),
+HardpointAimHelper::HardpointAimHelper(Hardpoint* hardpoint, WorldObject* targetObject):
+    m_hardpoint(hardpoint),
     m_targetObject(targetObject),
     m_bulletSpeed(0.0f),
     m_hitable(false),
     m_aimed(false)
 {
-    assert(m_shooter->weapon());
+    assert(m_hardpoint->weapon());
 
-    m_shooterPosition = m_shooter->position();
+    Gun& gun = dynamic_cast<Gun&>(*m_hardpoint->weapon().get());
+
+    m_hardpointPosition = m_hardpoint->voxel()->position();
+
     m_targetPosition = m_targetObject->transform().position();
-    m_bulletSpeed = m_shooter->weapon()->bulletSpeed();
-    m_targetSpeed = m_targetObject->physics().speed();
+    m_targetSpeed = m_targetObject->physics().speed().directional();
+    m_bulletSpeed = gun.bulletSpeed();
+    m_bulletLifetime = gun.bulletLifetime();
 }
 
 void HardpointAimHelper::aim() {
@@ -28,9 +37,14 @@ void HardpointAimHelper::aim() {
     m_point = m_targetPosition;
 
     do {
-        float timeDelta = bulletTravelTime(m_point);
-        offset = glm::length(targetPositionIn(timeDelta) - m_point);
-        m_point = targetPositionIn(timeDelta);
+        float travelTime = bulletTravelTime(m_point);
+        if(travelTime > m_bulletLifetime) {
+            m_hitable = false;
+            return;
+        }
+
+        offset = glm::length(targetPositionIn(travelTime) - m_point);
+        m_point = targetPositionIn(travelTime);
 
         iterations++;
         if(iterations > 20) {
@@ -40,7 +54,7 @@ void HardpointAimHelper::aim() {
     } while(offset > 0.1f);
 
     m_hitable = true;
-    m_direction = glm::normalize(m_point - m_shooterPosition);
+    m_direction = glm::normalize(m_point - m_hardpointPosition);
 
     m_aimed = true;
 }
@@ -67,11 +81,11 @@ const glm::vec3& HardpointAimHelper::point() {
 }
 
 float HardpointAimHelper::bulletTravelTime(const glm::vec3& point) {
-    float distance = glm::length(point - m_shooterPosition);
+    float distance = glm::length(point - m_hardpointPosition);
     return distance / m_bulletSpeed;
 }
 
 glm::vec3 HardpointAimHelper::targetPositionIn(float deltaSec) {
-    return m_targetObject->transform().position() + m_targetObject->physics().speed() * deltaSec;
+    return m_targetObject->transform().position() + m_targetObject->physics().speed().directional() * deltaSec;
 }
 
