@@ -36,7 +36,6 @@ protected:
 };
 template<typename T>
 ThreadPool<T>::~ThreadPool() {
-    std::cout << "exit " << std::endl;
     m_exit = true;
     m_runningWorkers = m_worker.size();
     m_startSignal.notify_all();
