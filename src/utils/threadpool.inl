@@ -9,6 +9,7 @@ ThreadPool<T>::ThreadPool(int threadcount, int chunksize) :
     m_exit(false),
     m_running(),
     m_runningWorkers(),
+    m_mutex(),
     m_index()
 {
     m_running = false;

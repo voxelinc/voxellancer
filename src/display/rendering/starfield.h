@@ -52,7 +52,6 @@ protected:
 
     std::deque<CameraLocation> m_locations[2];
     float m_time;
-    float m_lastUpdate;
     Property<float> m_starfieldAge;
 
     glow::ref_ptr<glow::Program> m_shaderProgram;

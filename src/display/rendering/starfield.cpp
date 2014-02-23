@@ -18,15 +18,14 @@
 #include "camera/camera.h"
 
 
-static int STAR_COUNT = 1000;
-static float FIELD_SIZE = 300.0f;
-static float STAR_FADE_IN_SEC = 2.0f;
+const static int STAR_COUNT = 200;
+const static float FIELD_SIZE = 150.0f;
+const static float STAR_FADE_IN_SEC = 2.0f;
 
 
 Starfield::Starfield() :
     RenderPass("starfield"),
     m_time(),
-    m_lastUpdate(),
     m_starfieldAge("vfx.starfieldtime"),
     m_locations(),
     m_cpuBuffer()
@@ -38,14 +37,10 @@ Starfield::Starfield() :
 void Starfield::update(float deltaSec, const glm::vec3& cameraPosition) {
     m_time += deltaSec;
 
-    if (m_time - m_lastUpdate < 0.1) {
-        return;
-    }
-
     glm::vec3 position = cameraPosition;
 
     for (int i = 0; i < STAR_COUNT; i++) {
-        m_cpuBuffer[i].brightness = glm::min(1.0f, m_cpuBuffer[i].brightness + (m_time - m_lastUpdate) / STAR_FADE_IN_SEC);
+        m_cpuBuffer[i].brightness = glm::min(1.0f, m_cpuBuffer[i].brightness + deltaSec / STAR_FADE_IN_SEC);
         while (m_cpuBuffer[i].pos.x - position.x < -FIELD_SIZE) {
             m_cpuBuffer[i].pos.x += 2 * FIELD_SIZE;
             m_cpuBuffer[i].brightness = 0;
@@ -71,7 +66,6 @@ void Starfield::update(float deltaSec, const glm::vec3& cameraPosition) {
             m_cpuBuffer[i].brightness = 0;
         }
     }
-    m_lastUpdate = m_time;
 
     m_gpuBuffer->setData(m_cpuBuffer, GL_STREAM_DRAW);
 }
