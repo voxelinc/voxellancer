@@ -1,7 +1,5 @@
 #include "voxelparticlerenderer.h"
 
-#include <algorithm>
-
 #include <glow/Buffer.h>
 #include <glow/Program.h>
 #include <glow/VertexAttributeBinding.h>
