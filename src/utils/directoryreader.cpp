@@ -1,11 +1,13 @@
 #include "directoryreader.h"
 
 #include <iostream>
+#include <dirent.h>
 
-#include <tinydir.h>
+#include <glow/logging.h>
 
 
-DirectoryReader::DirectoryReader()
+
+DirectoryReader::DirectoryReader():
     DirectoryReader("")
 {
 
@@ -27,28 +29,29 @@ void DirectoryReader::setPath(const std::string& path) {
 
 std::list<std::string> DirectoryReader::read() const {
     std::list<std::string> files;
+    std::string pathBase;
 
-    tinydir_dir directory;
-
-    if (tinydir_open(&directory, m_path.c_str())) {
-        glow::critical("Failed to read directory '%;'", m_path);
+    if (m_path[m_path.size() - 1] == '/') {
+        pathBase = m_path;
+    } else {
+        pathBase = m_path + "/";
     }
 
-    std::cout << "Reading " << m_path << std::endl
 
-    for (size_t i = 0; i < directory.n_files; i++) {
-        tindir_file file;
-
-        if (tinydir_readfile_n(&directory, &file, i)) {
-            glow::critical("Failed to read entity %; in directory '%;'", i, m_path);
-        }
-
-        if (file.is_reg) {
-            files.push_back(file.name);
-        }
-
+    DIR* directory = opendir(pathBase.c_str());
+    if (directory == nullptr) {
+        glow::critical("Failed to read directory '%;'", pathBase);
+        return files; // In case glow::critical is replaced by non-exiting method
     }
 
-    tinydir_close(&directory);
+    for (struct dirent* entity = readdir(directory); entity != nullptr; entity = readdir(directory)) {
+        if (entity->d_type == DT_REG) {
+            files.push_back(pathBase + entity->d_name);
+        }
+    }
+
+    closedir(directory);
+
+    return files;
 }
 

@@ -2,6 +2,9 @@
 
 #include "utils/directoryreader.h"
 
+#include "def_regex.h"
+#include "propertymanager.h"
+
 
 PropertyDirectory::PropertyDirectory():
     PropertyDirectory("")
@@ -25,9 +28,17 @@ void PropertyDirectory::setPath(const std::string& path) {
 void PropertyDirectory::read() {
     std::list<std::string> files = DirectoryReader(m_path).read();
 
-    for (std::string& file : files) {
+    regexns::regex iniRegex(R"(^.*?/?([a-zA-Z0-9_-]*)\.([a-zA-Z0-9_-]*)$)");
 
-        PropertyManager::instance()->load(file, prefix);
+    for (std::string& file : files) {
+        regexns::smatch matches;
+        regexns::regex_match(file, matches, iniRegex);
+
+        assert(matches.size() > 1);
+
+        std::string basename = matches[1];
+        PropertyManager::instance()->load(file, basename);
     }
 }
+
 
