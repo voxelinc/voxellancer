@@ -56,6 +56,5 @@ protected:
     WorldObject* findNextTarget(IteratorType begin, IteratorType end);
 
     std::function<bool(WorldObject*)> canLockOnPredicate();
-
 };
 

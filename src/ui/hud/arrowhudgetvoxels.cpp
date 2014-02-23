@@ -7,12 +7,12 @@
 
 #include "resource/clustercache.h"
 
+#include "voxel/voxelcluster.h"
 #include "voxel/voxelrenderer.h"
 
 #include "hud.h"
 #include "objecthudget.h"
-#include "voxel/voxelcluster.h"
-#include "utils/geometryhelper.h"
+
 
 ArrowHudgetVoxels::ArrowHudgetVoxels(ObjectHudget* hudget) :
     m_hudget(hudget),
