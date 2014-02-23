@@ -27,7 +27,7 @@ void PropertyDirectory::read() {
         regexns::smatch matches;
         regexns::regex_match(file, matches, iniRegex);
 
-        if (matches.size() > 0) {
+        if (matches.size() > 1) {
             std::string basename = matches[1];
             PropertyManager::instance()->load(file, basename);
         }

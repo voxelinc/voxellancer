@@ -1,6 +1,7 @@
 #include "directoryreader.h"
 
 #include <iostream>
+#include <stdexcept>
 
 #ifdef WIN32
 #include <windows.h>
@@ -50,13 +51,13 @@ std::list<std::string> DirectoryReader::read() const {
         while (FindNextFile(hFind, &findfiledata) != 0);
     } else {
         glow::critical("Failed to read directory '%;'", pathBase);
-        throw "Directory not found!";
+        throw std::runtime_error(std::string("Directory '" + pathBase + "' not found!"));
     }
 #else
     DIR* directory = opendir(pathBase.c_str());
     if (directory == nullptr) {
         glow::critical("Failed to read directory '%;'", pathBase);
-        throw "Directory not found!";
+        throw std::runtime_error(std::string("Directory '" + pathBase + "' not found!"));
     }
 
     for (struct dirent* entity = readdir(directory); entity != nullptr; entity = readdir(directory)) {
