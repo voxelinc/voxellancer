@@ -38,7 +38,7 @@ void ContextProvider::setRequiredGLVersion(int majorVersionRequire, int minorVer
 }
 
 void ContextProvider::initWindowed() {
-    initWindowed(Size<int>(PropertyManager::instance()->get<int>("window.width"), PropertyManager::instance()->get<int>("window.height")));
+    initWindowed(Size<int>(Property<int>::get("window.width"), Property<int>::get("window.height")));
 }
 
 void ContextProvider::initWindowed(const Size<int>& resolution) {
