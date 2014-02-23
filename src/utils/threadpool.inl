@@ -54,7 +54,7 @@ template<typename T>
 void ThreadPool<T>::worker() {
     while (true) {
         std::unique_lock<std::mutex> lock(m_mutex);
-        m_startSignal.wait(lock, [&] { return m_running; });
+        m_startSignal.wait(lock, [&] { return m_running == true; });
         if (m_exit) {
             return;
         }
