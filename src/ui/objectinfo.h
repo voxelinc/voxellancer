@@ -4,6 +4,7 @@
 
 #include <glm/glm.hpp>
 
+
 class ObjectInfo  {
 public:
     ObjectInfo();

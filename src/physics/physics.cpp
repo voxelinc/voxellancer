@@ -17,6 +17,7 @@
 
 #include "utils/tostring.h"
 #include "voxel/voxel.h"
+#include "movement.h"
 
 
 Physics::Physics(WorldObject& worldObject, float scale):
@@ -88,11 +89,11 @@ std::list<VoxelCollision> &Physics::move(float deltaSec) {
 }
 
 void Physics::addVoxel(Voxel* voxel) {
-    alterCell(voxel, true);
+    voxelChanged(voxel, true);
 }
 
 void Physics::removeVoxel(Voxel* voxel) {
-    alterCell(voxel, false);
+    voxelChanged(voxel, false);
 }
 
 void Physics::updateSpeed(float deltaSec) {
@@ -110,7 +111,7 @@ void Physics::updateSpeed(float deltaSec) {
     m_acceleration.clear();
 }
 
-void Physics::alterCell(Voxel* voxel, bool isAdd) {
+void Physics::voxelChanged(Voxel* voxel, bool isAdd) {
     float scaledVoxelMass = voxel->normalizedMass() * m_massScaleFactor;
     if (!isAdd) {
         scaledVoxelMass *= -1;

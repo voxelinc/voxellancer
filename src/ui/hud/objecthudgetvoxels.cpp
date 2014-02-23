@@ -3,11 +3,10 @@
 #include <glm/gtx/quaternion.hpp>
 
 #include "utils/geometryhelper.h"
-
 #include "voxel/voxelrenderer.h"
-
 #include "hud.h"
 #include "objecthudget.h"
+
 #include "objecthudgetcornervoxels.h"
 
 
@@ -20,7 +19,6 @@ ObjectHudgetVoxels::ObjectHudgetVoxels(ObjectHudget* hudget):
 }
 
 ObjectHudgetVoxels::~ObjectHudgetVoxels() {
-
 }
 
 ObjectHudget* ObjectHudgetVoxels::hudget() {

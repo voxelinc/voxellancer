@@ -2,9 +2,8 @@
 
 #include <list>
 
-#include "worldobject/components/enginepower.h"
-#include "worldobject/components/enginestate.h"
-
+#include "components/enginestate.h"
+#include "components/enginepower.h"
 
 class EngineSlot;
 class Hardpoint;

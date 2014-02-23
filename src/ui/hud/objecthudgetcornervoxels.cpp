@@ -2,6 +2,7 @@
 
 #include "utils/geometryhelper.h"
 
+#include "voxel/voxel.h"
 #include "voxel/voxelrenderer.h"
 
 #include "objecthudget.h"
@@ -34,5 +35,6 @@ void ObjectHudgetCornerVoxels::draw() {
     transform().setPosition(objectHudget->worldPosition(direction));
     transform().setOrientation(objectHudget->worldOrientation(direction));
 
-    VoxelRenderer::instance()->draw(this);
+    VoxelRenderer::instance()->draw(*this);
 }
+

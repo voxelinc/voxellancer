@@ -1,7 +1,13 @@
 #pragma once
 #include <string>
 
-#include <glow/Texture.h>
+#include <GL/glew.h>
+
+
+namespace glow {
+    class Texture;
+}
+
 
 class DdsTexture
 {

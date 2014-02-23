@@ -8,6 +8,7 @@
 #include "voxel/voxelneighbourhelper.h"
 
 #include "worldobject/worldobject.h"
+#include "voxel/voxelclusterbounds.h"
 
 
 static const int FIRST_GROUP = 0;

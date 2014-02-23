@@ -1,19 +1,12 @@
 #include "ship.h"
 
 #include "ai/boardcomputer.h"
-
 #include "ai/squadlogic.h"
-
-#include "sound/sound.h"
-
-#include "collision/collisionfilter.h"
-
-#include "sound/sound.h"
-
-#include "voxel/specialvoxels/engineslotvoxel.h"
-
 #include "ai/character.h"
-
+#include "collision/collisionfilter.h"
+#include "physics/physics.h"
+#include "sound/sound.h"
+#include "voxel/specialvoxels/engineslotvoxel.h"
 #include "worldobject/components/engineslot.h"
 
 

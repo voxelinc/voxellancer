@@ -9,6 +9,9 @@
 
 #include "world/world.h"
 #include "world/god.h"
+#include "physics/physics.h"
+#include "voxel/voxelclusterbounds.h"
+#include "../../worldobjectcomponents.h"
 
 
 RocketLauncher::RocketLauncher(const std::string& equipmentKey):

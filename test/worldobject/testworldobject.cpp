@@ -7,6 +7,8 @@
 #include "worldobject/worldobject.h"
 #include "voxel/voxel.h"
 #include "voxel/voxeltreenode.h"
+#include "voxel/voxelclusterbounds.h"
+#include "physics/physics.h"
 
 
 using namespace bandit;

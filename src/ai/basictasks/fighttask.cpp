@@ -2,6 +2,7 @@
 #include "utils/randfloat.h"
 #include "worldobject/ship.h"
 #include "ai/boardcomputer.h"
+#include "voxel/voxelclusterbounds.h"
 
 
 FightTask::FightTask(BoardComputer* boardComputer, const std::vector<Handle<WorldObject>>& targets) :

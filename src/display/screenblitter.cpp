@@ -14,8 +14,8 @@ ScreenBlitter::ScreenBlitter():
 {
 }
 
-void ScreenBlitter::setProgram(BlitProgram* blitProgram) {
-    m_blitProgram = blitProgram;
+void ScreenBlitter::setProgram(BlitProgram& blitProgram) {
+    m_blitProgram = &blitProgram;
 }
 
 void ScreenBlitter::blit(FrameBuffer& source, const Viewport& viewport) {
