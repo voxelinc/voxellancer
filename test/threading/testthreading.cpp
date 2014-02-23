@@ -1,9 +1,5 @@
 #include <bandit/bandit.h>
 
-#include <thread>
-#include <chrono>
-#include <iostream>
-
 #include "utils/threadpool.h"
 
 
@@ -17,7 +13,6 @@ void increment(int& i) {
 go_bandit([]() {
     describe("ThreadPool", []() {
 
-
         before_each([&]() {
         });
 
@@ -25,18 +20,24 @@ go_bandit([]() {
         });
 
         it("can work on an array", [&]() {
-            ThreadPool<int> pool(increment);
+            ThreadPool<int> pool;
             std::vector<int> ints(10000);
-            pool.map(ints);
+
+            pool.map(increment, ints);
             for (int i = 0; i < ints.size(); i++) {
                 AssertThat(ints[i], Equals(1));
             }
-            std::cout << "1" << std::endl;
-            pool.map(ints);
-            for (int i = 0; i < ints.size(); i++) {
+
+            pool.map(increment, ints, 1452, 4586);
+            for (int i = 0; i < 1452; i++) {
+                AssertThat(ints[i], Equals(1));
+            }
+            for (int i = 1452; i < 4586; i++) {
                 AssertThat(ints[i], Equals(2));
             }
-            std::cout << "2" << std::endl;
+            for (int i = 4586; i < ints.size(); i++) {
+                AssertThat(ints[i], Equals(1));
+            }
         });
 
     });
