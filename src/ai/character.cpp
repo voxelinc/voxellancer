@@ -8,7 +8,15 @@
 
 Character::Character(Ship& ship) :
     m_ship(ship),
-    m_task(nullptr)
+    m_task(nullptr),
+    m_faction(0)
+{
+}
+
+Character::Character(Ship& ship, int faction) :
+    m_ship(ship),
+    m_task(nullptr),
+    m_faction(faction)
 {
 }
 
@@ -27,4 +35,12 @@ void Character::update(float deltaSec) {
     if (m_task.get()) {
         m_task->update(deltaSec);
     }
+}
+
+int Character::faction() {
+    return m_faction;
+}
+
+void Character::setFaction(int faction) {
+    m_faction = faction;
 }

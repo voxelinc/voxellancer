@@ -7,6 +7,7 @@
 #include "ai/character.h"
 #include "ai/basictasks/flytotask.h"
 #include "ai/grouptasks/patrolwaypointstask.h"
+#include "ai/grouptasks/DefendAreatask.h"
 #include "ai/basictasks/formationmembertask.h"
 #include "ai/squadlogic.h"
 #include "ai/squad.h"
@@ -35,12 +36,13 @@ GameScenario::GameScenario(Game* game) :
 void GameScenario::populateWorld() {
     glow::debug("Create WorldObjects");
     std::shared_ptr<Squad> squadA = std::make_shared<Squad>();
-    squadA->setTask(std::make_shared<PatrolWaypointsTask>(*squadA,
+    squadA->setTask(std::make_shared<DefendAreaTask>(*squadA,
         std::list<glm::vec3>{ glm::vec3(400, 0, 200), glm::vec3(-400, 0, -400),
         glm::vec3(-600, 0, -400), glm::vec3(0, 100, -600),
-        glm::vec3(-100, 150, -900) }));
+        glm::vec3(-100, 150, -900) },500.0f));
 
     Ship* normandy = WorldObjectBuilder("normandy").buildShip();
+    normandy->character()->setFaction(1);
     normandy->transform().setPosition(glm::vec3(0, 0, -100));
     normandy->objectInfo().setName("Normandy");
     normandy->objectInfo().setShowOnHud(true);
@@ -52,6 +54,7 @@ void GameScenario::populateWorld() {
     for (int i = 0; i < nmember_count; i++) {
         Ship *follower = WorldObjectBuilder("basicship").buildShip();
         follower->transform().setPosition(glm::vec3(100 * (-nmember_count / 2.0f + i), 50, 0));
+        follower->character()->setFaction(1);
         follower->objectInfo().setName("member");
         follower->objectInfo().setShowOnHud(true);
         follower->objectInfo().setCanLockOn(true);
@@ -67,6 +70,7 @@ void GameScenario::populateWorld() {
 
     Ship *leader = WorldObjectBuilder("eagle").buildShip();
     leader->transform().setPosition(glm::vec3(0, 200, -100));
+    leader->character()->setFaction(2);
     leader->objectInfo().setName("leader");
     leader->objectInfo().setShowOnHud(true);
     leader->objectInfo().setCanLockOn(true);
@@ -76,6 +80,7 @@ void GameScenario::populateWorld() {
     int lmember_count = 2;
     for (int i = 0; i < lmember_count; i++) {
         Ship *follower = WorldObjectBuilder("basicship").buildShip();
+        follower->character()->setFaction(2);
         follower->transform().setPosition(glm::vec3(100 * (-lmember_count / 2.0f + i), 200, 0));
         follower->objectInfo().setName("member");
         follower->objectInfo().setShowOnHud(true);
@@ -85,6 +90,7 @@ void GameScenario::populateWorld() {
     }
 
     Ship *testCluster = WorldObjectBuilder("specialbasicship").buildShip();
+    testCluster->character()->setFaction(0);
     testCluster->transform().setPosition(glm::vec3(0, 0, 10));
     testCluster->objectInfo().setName("basicship");
     testCluster->objectInfo().setShowOnHud(false);
