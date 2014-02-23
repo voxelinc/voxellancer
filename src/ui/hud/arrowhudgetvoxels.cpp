@@ -20,7 +20,7 @@ ArrowHudgetVoxels::ArrowHudgetVoxels(ObjectHudget* hudget) :
     prop_arrowDistance("hud.arrowDistance")
 {
     ClusterCache::instance()->fillCluster(&m_arrow, "data/hud/arrowXT.csv");
-    m_arrow.transform().setCenter(glm::vec3(4, 7, 0));
+    m_arrow.transform().setCenter(glm::vec3(3, 6, 0));
 }
 
 ArrowHudgetVoxels::~ArrowHudgetVoxels() {
