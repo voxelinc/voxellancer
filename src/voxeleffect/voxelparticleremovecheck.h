@@ -24,11 +24,8 @@ protected:
     float m_interval;
     int m_currentIndex;
 
-
-    void performChecksParallel(int checkCount);
-    void performChecksSequential(int checkCount);
+    void performChecks(int checkCount);
 
     virtual bool check(VoxelParticleData* particle) = 0;
-    virtual bool isParallel(int checkCount) = 0;
 };
 

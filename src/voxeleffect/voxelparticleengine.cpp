@@ -48,7 +48,6 @@ int VoxelParticleEngine::particleDataCount() const {
 }
 
 VoxelParticleData* VoxelParticleEngine::particleData(int index) {
-    assert(index < m_cpuParticleBuffer.size());
     return &m_cpuParticleBuffer[index];
 }
 

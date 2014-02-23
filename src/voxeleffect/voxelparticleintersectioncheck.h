@@ -23,6 +23,5 @@ protected:
     Property<float> m_fullDeadCheckInterval;
 
     virtual bool check(VoxelParticleData* particleData) override;
-    virtual bool isParallel(int checkCount) override;
 };
 

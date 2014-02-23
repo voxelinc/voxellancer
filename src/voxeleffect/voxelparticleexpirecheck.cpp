@@ -20,10 +20,3 @@ bool VoxelParticleExpireCheck::check(VoxelParticleData* particleData) {
 	return particleData->deathTime <= m_world->time();
 }
 
-/*
-    Always single threaded as these are pretty fast
-*/
-bool VoxelParticleExpireCheck::isParallel(int checkCount) {
-    return false;
-}
-

@@ -14,7 +14,6 @@
 #include "world/god.h"
 #include "world/world.h"
 
-#include "voxelparticlesetup.h"
 #include "voxelparticleengine.h"
 
 

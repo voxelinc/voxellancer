@@ -18,6 +18,7 @@ if(${OPTION_CREATE_SUB_TEST})
     add_subdirectory(worldobject)
     add_subdirectory(worldtransform)
     add_subdirectory(splitting)
+    add_subdirectory(threading)
 endif()
 
 add_subdirectory(perftest)
