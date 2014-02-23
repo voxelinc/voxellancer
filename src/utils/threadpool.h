@@ -27,7 +27,7 @@ protected:
     std::vector<std::thread> m_worker;
     std::condition_variable m_startSignal;
     std::condition_variable m_stopSignal;
-    std::mutex m_lock;
+    std::mutex m_mutex;
 
     int m_endIndex;
     int m_chunksize;
@@ -55,7 +55,7 @@ ThreadPool<T>::ThreadPool(std::function<void(T&)> function, int chunksize) :
     m_function(function),
     m_tasks(nullptr),
     m_running(false),
-    m_exit(false)
+    m_exit(false) 
 {
     m_runningWorkers = 0;
     for (int i = 0; i < m_worker.size(); i++) {
@@ -78,22 +78,24 @@ void ThreadPool<T>::map(std::vector<T>& vector, int start, int end) {
     m_startSignal.notify_all();
 
     std::mutex m;
-    std::unique_lock<std::mutex> lk(m);
-    m_stopSignal.wait(lk);
+    std::unique_lock<std::mutex> lock(m);
+    m_stopSignal.wait(lock);
 }
 
 template<typename T>
 void ThreadPool<T>::worker() {
     while (true) {
-        std::unique_lock<std::mutex> lk(m_lock);
-        m_startSignal.wait(lk, [&] { return m_running; });
+        std::unique_lock<std::mutex> lock(m_mutex);
+        m_startSignal.wait(lock, [&] { return m_running; });
         if (m_exit) {
             std::cout << "exit " << std::this_thread::get_id() << std::endl;
             return;
         }
         m_runningWorkers++;
-        lk.unlock();
+        lock.unlock(); 
+        
         std::cout << "work " << std::this_thread::get_id() << std::endl;
+        std::this_thread::sleep_for(std::chrono::seconds(1));
 
         int task;
         while ((task = getTask()) >= 0) {
@@ -101,17 +103,13 @@ void ThreadPool<T>::worker() {
                 m_function((*m_tasks)[i]);
             }
         }
-        std::cout << "finishing " << std::this_thread::get_id() << std::endl;
-        
-        lk.lock();
+
+        lock.lock();
         std::cout << "finish " << std::this_thread::get_id() << std::endl;
         m_running = false;
-        std::cout << "c " << m_runningWorkers << std::endl;
         if (--m_runningWorkers == 0) {
-            std::cout << "notify " << std::this_thread::get_id() << std::endl;
             m_stopSignal.notify_all();
         }
-        lk.unlock();
     }
 }
 
