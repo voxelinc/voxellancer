@@ -14,6 +14,8 @@ public:
     Script();
     ~Script();
 
+    bool started() const;
+
     virtual void load(const std::string& path);
 
     void start();
@@ -21,5 +23,6 @@ public:
 
 protected:
     std::unique_ptr<LuaWrapper> m_lua;
+    bool m_started;
 };
 

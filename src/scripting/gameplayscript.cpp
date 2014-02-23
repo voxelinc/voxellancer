@@ -37,13 +37,13 @@ void GamePlayScript::load(const std::string& path) {
     Script::load(path);
 
     m_lua->Register("playerShip", std::function<int()>([&] () {
-       return 0;
+       return apiPlayerShip();
     }));
     m_lua->Register("createShip", std::function<int(std::string)>([&] (std::string name) {
         return apiCreateShip(name);
     }));
     m_lua->Register("spawn", std::function<int(int)>([&] (int handle) {
-        return apiSpawnShip(handle);
+        return apiSpawn(handle);
     }));
     m_lua->Register("setPosition", std::function<int(int, float, float, float)>([&] (int handle, float x, float y, float z) {
         return apiSetPosition(handle, x, y, z);
@@ -60,39 +60,33 @@ void GamePlayScript::load(const std::string& path) {
 
 }
 
+int GamePlayScript::apiPlayerShip() {
+    return m_scriptEngine->getWorldObjectHandle(m_game->player().ship());
+}
+
 int GamePlayScript::apiCreateShip(const std::string& name) {
     Ship *ship = WorldObjectBuilder(name).buildShip();
     ship->objectInfo().setShowOnHud(true);
     ship->objectInfo().setCanLockOn(true);
 
-    m_shipHandles[m_shipHandleIncrementor++] = ship;
-
-    return m_shipHandleIncrementor - 1;
+    return m_scriptEngine->registerWorldObject(ship);
 }
 
-int GamePlayScript::apiSpawnShip(int handle) {
-    std::map<int, Ship*>::iterator i = m_shipHandles.find(handle);
+int GamePlayScript::apiSpawn(int handle) {
+    WorldObject* worldObject = m_scriptEngine->getWorldObject(handle);
 
-    if (i != m_shipHandles.end()) {
-        Ship* ship = i->second;
-        World::instance()->god().scheduleSpawn(ship);
-    } else {
-        glow::info("No such ship handle '%;'", handle);
+    if (worldObject) {
+        World::instance()->god().scheduleSpawn(worldObject);
     }
-
-    return 0;
+    return -1;
 }
 
 int GamePlayScript::apiSetPosition(int handle, float x, float y, float z) {
-    std::map<int, Ship*>::iterator i = m_shipHandles.find(handle);
+    WorldObject* worldObject = m_scriptEngine->getWorldObject(handle);
 
-    if (i != m_shipHandles.end()) {
-        Ship* ship = i->second;
-        ship->transform().setPosition(glm::vec3(x, y, z));
-    } else {
-        glow::info("No such ship handle '%;'", handle);
+    if (worldObject) {
+        worldObject->transform().setPosition(glm::vec3(x, y, z));
     }
-
     return 0;
 }
 
@@ -111,8 +105,7 @@ int GamePlayScript::apiCreateLoopingTimer(const std::string& callback, float del
 }
 
 int GamePlayScript::apiOnAABBEntered(int handle, glm::vec3 llf, glm::vec3 urb, const std::string& callback) {
-    WorldObject* worldObject = getWorldObject(handle);
-
+    WorldObject* worldObject = m_scriptEngine->getWorldObject(handle);
     if (worldObject) {
         return m_scriptEngine->registerEventPoll(new AABBEnteredPoll(worldObject, AABB(llf, urb), [=] {
             m_lua->call(callback, handle);
@@ -120,10 +113,6 @@ int GamePlayScript::apiOnAABBEntered(int handle, glm::vec3 llf, glm::vec3 urb, c
     } else {
         return -1;
     }
-}
-
-WorldObject* GamePlayScript::getWorldObject(int handle) {
-    return handle ? m_shipHandles[handle] : m_game->player().ship();
 }
 
 

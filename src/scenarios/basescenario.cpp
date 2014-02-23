@@ -10,7 +10,9 @@
 #include "resource/clustercache.h"
 
 #include "worldobject/ship.h"
+#include "scripting/scriptengine.h"
 #include "sound/soundmanager.h"
+#include "world/god.h"
 #include "world/world.h"
 
 
@@ -31,6 +33,8 @@ void BaseScenario::load() {
     {
         glowutils::AutoTimer timer("Populating World took");
         populateWorld();
+        m_world->god().spawn();
+        m_world->scriptEngine().start();
     }
 }
 

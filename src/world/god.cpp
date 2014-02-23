@@ -1,15 +1,18 @@
+#include "god.h"
 
 #include <glow/logging.h>
 
-#include "god.h"
 #include "collision/collisiondetector.h"
-#include "world.h"
-#include "worldtree/worldtree.h"
-#include "utils/tostring.h"
 
-#include "worldobject/worldobject.h"
+#include "scripting/scriptengine.h"
+
 #include "ui/objectinfo.h"
 
+#include "worldtree/worldtree.h"
+
+#include "worldobject/worldobject.h"
+
+#include "world.h"
 
 
 God::God(World & world):
@@ -77,6 +80,7 @@ void God::spawn() {
         }
 
         m_world.worldObjects().insert(worldObject);
+        m_world.scriptEngine().addWorldObject(worldObject);
     }
     m_scheduledSpawns.clear();
 }
@@ -85,6 +89,7 @@ void God::remove() {
     for (WorldObject* worldObject : m_scheduledRemovals) {
         m_world.worldTree().remove(worldObject->collisionDetector().geode());
         m_world.worldObjects().erase(worldObject);
+        m_world.scriptEngine().removeWorldObject(worldObject);
         delete worldObject;
     }
     m_scheduledRemovals.clear();

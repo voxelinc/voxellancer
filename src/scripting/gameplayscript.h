@@ -32,8 +32,9 @@ protected:
 //    std::map<int, std::shared_ptr<Squad>> m_squadHandles;
 
 
+    int apiPlayerShip();
     int apiCreateShip(const std::string& name);
-    int apiSpawnShip(int handle);
+    int apiSpawn(int handle);
     int apiSetPosition(int handle, float x, float y, float z);
     int apiCreateSingleShotTimer(const std::string& callback, float delta);
     int apiCreateLoopingTimer(const std::string& callback, float delta);
