@@ -1,14 +1,18 @@
 #pragma once
 
 #include <list>
+#include <map>
 #include <memory>
 
 #include "utils/timer.h"
 #include "utils/timermanager.h"
 
+#include "scripting/polls/eventpoll.h"
 
-class World;
+
+class EventPoll;
 class GamePlayScript;
+class World;
 
 
 /*
@@ -24,12 +28,18 @@ public:
 
     void registerTimer(Timer *timer);
 
+    int registerEventPoll(EventPoll* eventPoll);
+    void unregisterEventPoll(int handle);
+
     void update(float deltaSec);
 
 
 protected:
     World* m_world;
     std::list<GamePlayScript*> m_scripts;
+
+    std::map<int, std::unique_ptr<EventPoll>> m_eventPolls;
+    int m_eventPollHandleIncrementor;
 
     TimerManager m_timerManager;
 };

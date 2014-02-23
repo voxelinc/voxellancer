@@ -7,6 +7,8 @@
 #include <list>
 #include <memory>
 
+#include <glm/glm.hpp>
+
 #include "luawrapperfunction.h"
 
 
@@ -42,11 +44,18 @@ protected:
     void push() const;
     void push(const std::string & value) const;
     void push(const char * value) const;
-    void push(const int value) const;
+    void push(const int8_t value) const;
+    void push(const uint8_t value) const;
+    void push(const int16_t value) const;
+    void push(const uint16_t value) const;
+    void push(const int32_t value) const;
+    void push(const uint32_t value) const;
+    void push(const int64_t value) const;
+    void push(const uint64_t value) const;
     void push(const float value) const;
     void push(const double value) const;
-    void push(const unsigned long value) const;
     void push(const bool value) const;
+    void push(const glm::vec3 & value) const;
 
     template <typename T> T fetch(const int index) const;
 

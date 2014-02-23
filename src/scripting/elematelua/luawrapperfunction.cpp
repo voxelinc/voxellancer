@@ -1,6 +1,10 @@
 #include "luawrapperfunction.h"
 
-#include <lua5.2/lua.hpp>
+#include <lua.hpp>
+
+#include <glow/logging.h>
+
+#include <glm/glm.hpp>
 
 
 namespace Lua
@@ -72,6 +76,33 @@ namespace Luaw
     template <>
     std::string _check_get<std::string>(lua_State * state, const int index) {
         return luaL_checkstring(state, index);
+    }
+
+    template <>
+    glm::vec3 _check_get<glm::vec3>(lua_State * state, const int index) {
+        if (!lua_istable(state, index)) {
+            glow::critical("LuaWrapper: Return value is not a table. (Expected table containing a vec3)");
+            return glm::vec3();
+        }
+
+        glm::vec3 v;
+        int v_index = 0;
+        lua_pushnil(state);
+        while (lua_next(state, index) != 0) {
+            if (!lua_isnumber(state, -1))
+                glow::critical("LuaWrapper: Return table value is not number, while trying to read a vec3.");
+            else
+                if (v_index < 3)   // only try to copy the value into the vector if size table has not more than 3 entries
+                    v[v_index] = static_cast<float>(lua_tonumber(state, -1));
+            ++v_index;
+            lua_pop(state, 1);
+            if (v_index > 3) {
+                glow::critical("LuaWrapper: Return table larger than expected, while trying to read a vec3.");
+                break;
+            }
+        }
+
+        return v;
     }
 
     void _push(lua_State * /*state*/)

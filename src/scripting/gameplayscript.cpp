@@ -2,9 +2,12 @@
 
 #include <iostream>
 
+#include "geometry/aabb.h"
+
 #include "resource/worldobjectbuilder.h"
 
 #include "scripting/elematelua/luawrapper.h"
+#include "scripting/polls/aabbenteredpoll.h"
 #include "scripting/scriptengine.h"
 
 #include "ui/objectinfo.h"
@@ -17,9 +20,13 @@
 
 #include "worldobject/ship.h"
 
+#include "game.h"
+#include "player.h"
 
-GamePlayScript::GamePlayScript(ScriptEngine* scriptEngine):
+
+GamePlayScript::GamePlayScript(Game* game, ScriptEngine* scriptEngine):
     Script(),
+    m_game(game),
     m_scriptEngine(scriptEngine),
     m_shipHandleIncrementor(0)
 {
@@ -29,24 +36,31 @@ GamePlayScript::GamePlayScript(ScriptEngine* scriptEngine):
 void GamePlayScript::load(const std::string& path) {
     Script::load(path);
 
+    m_lua->Register("playerShip", std::function<int()>([&] () {
+       return 0;
+    }));
     m_lua->Register("createShip", std::function<int(std::string)>([&] (std::string name) {
         return apiCreateShip(name);
     }));
-    m_lua->Register("spawnShip", std::function<int(int)>([&] (int handle) {
+    m_lua->Register("spawn", std::function<int(int)>([&] (int handle) {
         return apiSpawnShip(handle);
     }));
     m_lua->Register("setPosition", std::function<int(int, float, float, float)>([&] (int handle, float x, float y, float z) {
         return apiSetPosition(handle, x, y, z);
     }));
-    m_lua->Register("createSingleShotTimer", std::function<int(std::string, float)>([&] (std::string function, float delta) {
-        return apiCreateSingleShotTimer(function, delta);
+    m_lua->Register("createSingleShotTimer", std::function<int(std::string, float)>([&] (std::string callback, float delta) {
+        return apiCreateSingleShotTimer(callback, delta);
     }));
-     m_lua->Register("createLoopingTimer", std::function<int(std::string, float)>([&] (std::string function, float delta) {
-        return apiCreateLoopingTimer(function, delta);
+    m_lua->Register("createLoopingTimer", std::function<int(std::string, float)>([&] (std::string callback, float delta) {
+        return apiCreateLoopingTimer(callback, delta);
     }));
+    m_lua->Register("onAABBEntered", std::function<int(int, float, float, float, float, float, float, std::string)>([&] (int handle, float x1, float y1, float z1, float x2, float y2, float z2, std::string callback) {
+        return apiOnAABBEntered(handle, glm::vec3(x1, y1, z1), glm::vec3(x2, y2, z2), callback);
+    }));
+
 }
 
-int GamePlayScript::apiCreateShip(std::string name) {
+int GamePlayScript::apiCreateShip(const std::string& name) {
     Ship *ship = WorldObjectBuilder(name).buildShip();
     ship->objectInfo().setShowOnHud(true);
     ship->objectInfo().setCanLockOn(true);
@@ -82,18 +96,34 @@ int GamePlayScript::apiSetPosition(int handle, float x, float y, float z) {
     return 0;
 }
 
-int GamePlayScript::apiCreateSingleShotTimer(std::string function, float delta) {
+int GamePlayScript::apiCreateSingleShotTimer(const std::string& callback, float delta) {
     m_scriptEngine->registerTimer(new SingleShotTimer(delta, [=] {
-        m_lua->call(function);
+        m_lua->call(callback);
     } ));
     return 0;
 }
 
-int GamePlayScript::apiCreateLoopingTimer(std::string function, float delta) {
+int GamePlayScript::apiCreateLoopingTimer(const std::string& callback, float delta) {
     m_scriptEngine->registerTimer(new LoopingTimer(delta, [=] {
-        m_lua->call(function);
+        m_lua->call(callback);
     } ));
     return 0;
+}
+
+int GamePlayScript::apiOnAABBEntered(int handle, glm::vec3 llf, glm::vec3 urb, const std::string& callback) {
+    WorldObject* worldObject = getWorldObject(handle);
+
+    if (worldObject) {
+        return m_scriptEngine->registerEventPoll(new AABBEnteredPoll(worldObject, AABB(llf, urb), [=] {
+            m_lua->call(callback, handle);
+        }));
+    } else {
+        return -1;
+    }
+}
+
+WorldObject* GamePlayScript::getWorldObject(int handle) {
+    return handle ? m_shipHandles[handle] : m_game->player().ship();
 }
 
 

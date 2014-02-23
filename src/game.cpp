@@ -25,7 +25,7 @@ Game::Game():
     m_viewer(new Viewer(Viewport(0, 0, ContextProvider::instance()->resolution().width(), ContextProvider::instance()->resolution().height()))),
     m_gameScene(new GameScene(*this, *m_player)),
     m_hmdManager(new HMDManager(this)),
-    m_scenario(new ScriptedScenario(this, "data/scripts/scenarios/minimal.lua"))
+    m_scenario(new ScriptedScenario(this, "data/scripts/scenarios/areaenter.lua"))
 {
     m_scenario->load();
 
