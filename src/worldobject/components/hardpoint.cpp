@@ -1,5 +1,7 @@
 #include "hardpoint.h"
 
+#include "utils/geometryhelper.h"
+
 #include "voxel/specialvoxels/hardpointvoxel.h"
 
 #include "worldobject/worldobjectcomponents.h"
@@ -36,12 +38,22 @@ void Hardpoint::setDirection(const glm::vec3& direction) {
     m_direction = direction;
 }
 
-const glm::vec2& Hardpoint::fieldOfAim() const {
+float Hardpoint::fieldOfAim() const {
     return m_fieldOfAim;
 }
 
-void Hardpoint::setFieldOfAim(const glm::vec2& fieldOfAim) {
+void Hardpoint::setFieldOfAim(float fieldOfAim) {
     m_fieldOfAim = fieldOfAim;
+}
+
+bool Hardpoint::inFieldOfAim(const glm::vec3& point) {
+    if (!voxel()) {
+        return false;
+    }
+
+    glm::vec3 requiredDirection = point - voxel()->position();
+
+    return GeometryHelper::angleBetween(requiredDirection, m_direction) <= m_fieldOfAim;
 }
 
 void Hardpoint::update(float deltaSec) {

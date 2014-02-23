@@ -24,7 +24,7 @@ Gun::Gun(const std::string& equipmentKey):
 }
 
 void Gun::fireAtPoint(const glm::vec3& point) {
-    if (canFire()) {
+    if (canFire() && hardpoint()->inFieldOfAim(point)) {
         Bullet *bullet = createBullet();
         setupBullet(bullet, point);
 
@@ -58,7 +58,7 @@ void Gun::setupBullet(Bullet* bullet, const glm::vec3& point) {
         glm::quat bulletOrientation = glm::angleAxis(-angle, rotationAxis);
         bulletTransform.rotateWorld(bulletOrientation); //then rotate towards target
     }
-    
+
     float bulletLength = bullet->bounds().minimalGridAABB().extent(ZAxis) * bullet->transform().scale();
     float spawnDistance = glm::root_two<float>() * bullet->transform().scale();
     bulletTransform.setPosition(m_hardpoint->voxel()->position() + bulletDirection * (bulletLength / 2.0f + spawnDistance));
