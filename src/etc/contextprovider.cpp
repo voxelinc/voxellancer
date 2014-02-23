@@ -14,6 +14,16 @@
 
 ContextProvider* ContextProvider::s_instance = nullptr;
 
+ContextProvider::ContextProvider() :
+    m_contextDependants(),
+    m_fullScreen(false),
+    m_majorVersionRequire(0),
+    m_minorVersionRequire(0),
+    m_lastWindowedPos(-1, -1),
+    m_lastWindowedSize(-1, -1),
+    m_lastFullScreenMonitorIndex(-1)
+{
+}
 
 ContextProvider* ContextProvider::instance() {
     if(s_instance == nullptr) {
@@ -22,35 +32,22 @@ ContextProvider* ContextProvider::instance() {
     return s_instance;
 }
 
-Size<int> ContextProvider::resolution() const {
-    int width;
-    int height;
-
-    glfwGetWindowSize(glfwGetCurrentContext(), &width, &height);
-
-    return Size<int>(width, height);
-}
-
-Viewport ContextProvider::viewport() const {
-    return Viewport(0, 0, resolution().width(), resolution().height());
-}
-
-float ContextProvider::aspectRatio() const {
-    return static_cast<float>(resolution().width()) / static_cast<float>(resolution().height());
-}
-
-void ContextProvider::initWindowed(int majorVersionRequire, int minorVersionRequire, const Size<int>* resolution, const Size<int>* position) {
+void ContextProvider::setRequiredGLVersion(int majorVersionRequire, int minorVersionRequire) {
     m_majorVersionRequire = majorVersionRequire;
     m_minorVersionRequire = minorVersionRequire;
+}
+
+void ContextProvider::initWindowed() {
+    initWindowed(Size<int>(PropertyManager::instance()->get<int>("window.width"), PropertyManager::instance()->get<int>("window.height")));
+}
+
+void ContextProvider::initWindowed(const Size<int>& resolution) {
+    assert(m_majorVersionRequire != 0); //must call setRequiredGLVersion()
 
     setWindowHints();
 
     GLFWwindow* window;
-    if (resolution) {
-        window = glfwCreateWindow(resolution->width(), resolution->height(), "Voxellancer", NULL, NULL);
-    } else {
-        window = glfwCreateWindow(Property<int>("window.width"), Property<int>("window.height"), "Voxellancer", NULL, NULL);
-    }
+    window = glfwCreateWindow(resolution.width(), resolution.height(), "Voxellancer", NULL, NULL);
 
     if (window == nullptr) {
         glfwTerminate();
@@ -60,18 +57,19 @@ void ContextProvider::initWindowed(int majorVersionRequire, int minorVersionRequ
 
     glfwMakeContextCurrent(window);
     m_fullScreen = false;
-    if (position) {
-        glfwSetWindowPos(window, position->width(), position->height());
-    }
 
     for (ContextDependant* dependant : m_contextDependants) {
         dependant->afterContextRebuild();
     }
 }
 
-void ContextProvider::initFullScreen(int majorVersionRequire, int minorVersionRequire, int monitorIndex) {
-    m_majorVersionRequire = majorVersionRequire;
-    m_minorVersionRequire = minorVersionRequire;
+void ContextProvider::initWindowed(const Size<int>& resolution, const Size<int>& position) {
+    initWindowed(resolution);
+    glfwSetWindowPos(glfwGetCurrentContext(), position.width(), position.height());
+}
+
+void ContextProvider::initFullScreen(int monitorIndex) {
+    assert(m_majorVersionRequire != 0); //must call setRequiredGLVersion()
 
     setWindowHints();
 
@@ -82,7 +80,7 @@ void ContextProvider::initFullScreen(int majorVersionRequire, int minorVersionRe
     GLFWwindow* window;
     GLFWmonitor* monitor;
 
-    if(monitorIndex >= monitors.size()) {
+    if (monitorIndex >= monitors.size()) {
         glow::info("Using primary monitor since specified monitor is not available");
         monitor = glfwGetPrimaryMonitor();
     } else {
@@ -109,24 +107,13 @@ void ContextProvider::initFullScreen(int majorVersionRequire, int minorVersionRe
     }
 }
 
-void ContextProvider::shutdown() {
-    for (ContextDependant* dependant : m_contextDependants) {
-        dependant->beforeContextDestroy();
-    }
-    glfwDestroyWindow(glfwGetCurrentContext());
-}
-
-bool ContextProvider::fullScreen() const {
-    return m_fullScreen;
-}
-
 void ContextProvider::toggleFullScreen() {
     if (fullScreen()) {
         shutdown();
         if (m_lastWindowedPos.width() == -1) {
-            initWindowed(m_majorVersionRequire, m_minorVersionRequire);
+            initWindowed();
         } else {
-            initWindowed(m_majorVersionRequire, m_minorVersionRequire, &m_lastWindowedSize, &m_lastWindowedPos);
+            initWindowed(m_lastWindowedSize, m_lastWindowedPos);
         }
     } else {
         int x, y;
@@ -140,11 +127,40 @@ void ContextProvider::toggleFullScreen() {
 
         shutdown();
         if (m_lastFullScreenMonitorIndex == -1) {
-            initFullScreen(m_majorVersionRequire, m_minorVersionRequire);
+            initFullScreen();
         } else {
-            initFullScreen(m_majorVersionRequire, m_minorVersionRequire, m_lastFullScreenMonitorIndex);
+            initFullScreen(m_lastFullScreenMonitorIndex);
         }
     }
+}
+
+void ContextProvider::shutdown() {
+    for (ContextDependant* dependant : m_contextDependants) {
+        dependant->beforeContextDestroy();
+    }
+    glfwDestroyWindow(glfwGetCurrentContext());
+}
+
+
+bool ContextProvider::fullScreen() const {
+    return m_fullScreen;
+}
+
+Size<int> ContextProvider::resolution() const {
+    int width;
+    int height;
+
+    glfwGetWindowSize(glfwGetCurrentContext(), &width, &height);
+
+    return Size<int>(width, height);
+}
+
+Viewport ContextProvider::viewport() const {
+    return Viewport(0, 0, resolution().width(), resolution().height());
+}
+
+float ContextProvider::aspectRatio() const {
+    return static_cast<float>(resolution().width()) / static_cast<float>(resolution().height());
 }
 
 std::vector<GLFWmonitor*> ContextProvider::monitors() const {
@@ -173,13 +189,6 @@ int ContextProvider::currentMonitor() const {
     return -1;
 }
 
-
-Size<int> ContextProvider::currentResolution(GLFWmonitor* monitor) {
-    const GLFWvidmode* mode = glfwGetVideoMode(monitor);
-
-    return Size<int>(mode->width, mode->height);
-}
-
 void ContextProvider::registerContextDependant(ContextDependant* dependant) {
     assert(std::find(m_contextDependants.begin(), m_contextDependants.end(), dependant) == m_contextDependants.end());
     m_contextDependants.insert(dependant);
@@ -189,15 +198,10 @@ void ContextProvider::unregisterContextDependant(ContextDependant* dependant) {
     m_contextDependants.erase(dependant);
 }
 
-ContextProvider::ContextProvider() :
-    m_contextDependants(),
-    m_fullScreen(false),
-    m_majorVersionRequire(0),
-    m_minorVersionRequire(0),
-    m_lastWindowedPos(-1, -1),
-    m_lastWindowedSize(-1, -1),
-    m_lastFullScreenMonitorIndex(-1)
-{
+Size<int> ContextProvider::currentResolution(GLFWmonitor* monitor) {
+    const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+
+    return Size<int>(mode->width, mode->height);
 }
 
 void ContextProvider::setWindowHints() {
