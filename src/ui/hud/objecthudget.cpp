@@ -18,12 +18,11 @@ ObjectHudget::ObjectHudget(HUD* hud, HUDObjectDelegate* objectDelegate):
     m_arrowVoxels(this)
 {
     m_insideFov = false;
-    fovy = hud->viewer()->view().fovy() / 2;
-    fovx = fovy*hud->viewer()->view().aspectRatio()*0.88f;
 }
 
 void ObjectHudget::update(float deltaSec) {
     updateTargeted();
+    updateFov();
     m_insideFov = isInsideFov();
     WorldObject* worldObject = m_objectDelegate->worldObject();
     if(worldObject) {
@@ -66,16 +65,16 @@ bool ObjectHudget::isAt(const Ray& ray) const {
 }
 
 bool ObjectHudget::isInsideFov() {
-    if (GeometryHelper::angleBetweenVectorPlane(localDirection(), glm::vec3(0, 1, 0)) < fovy &&
-        GeometryHelper::angleBetweenVectorPlane(localDirection(), glm::vec3(1, 0, 0)) < fovx) {
+    if (GeometryHelper::angleBetweenVectorPlane(localDirection(), glm::vec3(0, 1, 0)) < m_fovy &&
+        GeometryHelper::angleBetweenVectorPlane(localDirection(), glm::vec3(1, 0, 0)) < m_fovx) {
         return true;
     } 
     return false;
 }
 
 glm::vec3 ObjectHudget::closestPointInsideFov() {
-    glm::vec3 planeNormalX(glm::cos(fovx), 0, glm::cos(glm::radians(90.0f) - fovx));
-    glm::vec3 planeNormalY(0, glm::cos(fovy), glm::cos(glm::radians(90.0f) - fovy));
+    glm::vec3 planeNormalX(glm::cos(m_fovx), 0, glm::cos(glm::radians(90.0f) - m_fovx));
+    glm::vec3 planeNormalY(0, glm::cos(m_fovy), glm::cos(glm::radians(90.0f) - m_fovy));
     glm::vec3 planeDirection(glm::abs(localDirection().y), -glm::abs(localDirection().x), 0);
 
     glm::vec3 intersectionX = glm::cross(planeNormalX, planeDirection);
@@ -112,4 +111,9 @@ void ObjectHudget::updateTargeted() {
         m_targeted = currentlyTargeted;
         m_arrowVoxels.setTargeted(m_targeted);
     }
+}
+
+void ObjectHudget::updateFov() {
+    m_fovy = m_hud->fovy()*0.97f;
+    m_fovx = m_fovy * m_hud->viewer()->view().aspectRatio() * 0.88f;
 }

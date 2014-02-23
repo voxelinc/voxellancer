@@ -33,12 +33,13 @@ protected:
     void updateTargeted();
 
     bool m_insideFov;
-    float fovy, fovx;
+    float m_fovy, m_fovx;
 
     bool isInsideFov();
     glm::vec3 closestPointInsideFov();
 
     void calculateOpeningAngle();
 
+    void updateFov();
 };
 

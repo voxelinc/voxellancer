@@ -58,12 +58,16 @@ public:
 
     Viewer* viewer() const;
 
+    float fovy() const;
+    float fovx() const;
 
 protected:
     Player* m_player;
     Viewer* m_viewer;
     Sphere m_sphere;
     WorldObject* m_target;
+
+    float m_fovy, m_fovx;
 
     CrossHair m_crossHair;
     AimHelperHudget m_aimHelper;
@@ -75,5 +79,6 @@ protected:
 
 
     void updateScanner(float deltaSec);
+    void updateFov();
 };
 

@@ -39,7 +39,7 @@ HUD::HUD(Player* player, Viewer* viewer):
 {
     m_scanner.setScanRadius(1050.0f);
     m_hudgets.push_back(&m_crossHair);
-    m_hudgets.push_back(&m_aimHelper);
+    m_hudgets.push_back(&m_aimHelper); 
 }
 
 Player* HUD::player() {
@@ -119,6 +119,7 @@ void HUD::setCrossHairOffset(const glm::vec2& mousePosition) {
 }
 
 void HUD::update(float deltaSec) {
+    updateFov();
     updateScanner(deltaSec);
 
     Ray toCrossHair = Ray::fromTo(m_player->cameraDolly().cameraHead().position(), m_crossHair.worldPosition());
@@ -193,4 +194,17 @@ WorldObject* HUD::target() {
 
 Viewer* HUD::viewer() const {
     return m_viewer;
+}
+
+void HUD::updateFov() {
+    m_fovy = m_viewer->view().fovy() / 2;
+    m_fovx = m_fovy*m_viewer->view().aspectRatio();
+}
+
+float HUD::fovy() const {
+    return m_fovy;
+}
+
+float HUD::fovx() const {
+    return m_fovx;
 }
