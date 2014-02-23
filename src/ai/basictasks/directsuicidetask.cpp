@@ -3,6 +3,7 @@
 #include "ai/boardcomputer.h"
 
 #include "utils/geometryhelper.h"
+#include "physics/physics.h"
 
 #include "worldobject/worldobject.h"
 

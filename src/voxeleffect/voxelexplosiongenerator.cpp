@@ -21,8 +21,7 @@ VoxelExplosionGenerator::VoxelExplosionGenerator() :
 {
 }
 
-VoxelExplosionGenerator::~VoxelExplosionGenerator() {
-}
+VoxelExplosionGenerator::~VoxelExplosionGenerator() = default;
 
 void VoxelExplosionGenerator::setRadius(float radius){
     m_radius = radius;

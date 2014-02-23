@@ -3,12 +3,10 @@
 #include <unordered_set>
 #include <functional>
 
-#include "geometry/abstractshape.h"
-
-
 class Voxel;
 class VoxelTree;
 class VoxelTreeNode;
+class AbstractShape;
 
 class VoxelTreeQuery {
 public:

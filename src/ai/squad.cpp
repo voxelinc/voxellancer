@@ -2,6 +2,8 @@
 
 #include "worldobject/ship.h"
 #include "ai/aigrouptask.h"
+#include "physics/physics.h"
+#include "voxel/voxelclusterbounds.h"
 
 Squad::Squad(Ship* leader) :
     m_leader(leader),

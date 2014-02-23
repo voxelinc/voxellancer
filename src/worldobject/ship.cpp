@@ -1,20 +1,10 @@
 #include "ship.h"
 
 #include "ai/boardcomputer.h"
-
+#include "ai/character.h"
 #include "ai/squadlogic.h"
 
-#include "sound/sound.h"
-
 #include "collision/collisionfilter.h"
-
-#include "sound/sound.h"
-
-#include "voxel/specialvoxels/engineslotvoxel.h"
-
-#include "ai/character.h"
-
-#include "equipment/engineslot.h"
 
 
 Ship::Ship():

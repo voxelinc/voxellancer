@@ -5,18 +5,14 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 
-#include "camera/cameradolly.h"
-
-#include "ui/hud/hud.h"
-
-#include "worldobject/handle/handle.h"
-
 #include "equipment/enginestate.h"
+
 #include "worldobject/handle/handle.h"
 
 
 class Camera;
 class CameraDolly;
+class CameraHead;
 class HUD;
 
 class Game;
@@ -24,6 +20,7 @@ class Game;
 class Player {
 public:
     Player(Game* game);
+    ~Player();
 
     Ship* ship();
     void setShip(Ship *ship);
@@ -31,6 +28,7 @@ public:
     void update(float deltaSec);
 
     CameraDolly& cameraDolly();
+    CameraHead& cameraHead();
     HUD& hud();
 
     void fire();
@@ -43,8 +41,8 @@ public:
 protected:
     Game* m_game;
     Handle<Ship> m_ship;
-    CameraDolly m_cameraDolly;
-    HUD m_hud;
+    std::unique_ptr<CameraDolly> m_cameraDolly;
+    std::unique_ptr<HUD> m_hud;
     EngineState m_engineState;
 };
 

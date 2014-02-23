@@ -8,6 +8,7 @@
 #include "equipment/hardpoint.h"
 #include "equipment/weapons/gun.h"
 #include "worldobject/worldobject.h"
+#include "physics/physics.h"
 
 
 HardpointAimHelper::HardpointAimHelper(Hardpoint* hardpoint, WorldObject* targetObject):

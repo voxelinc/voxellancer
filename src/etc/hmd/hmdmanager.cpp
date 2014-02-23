@@ -1,10 +1,15 @@
 #include "hmdmanager.h"
 
-#include <glow/logging.h>
-
 #include <iostream>
 
+#include <OVR.h>
+
+#include <glow/logging.h>
+
 #include "game.h"
+#include "display/viewer.h"
+#include "ui/inputhandler.h"
+#include "hmd.h"
 
 
 HMDManager::HMDManager(Game* game):
@@ -25,7 +30,7 @@ void HMDManager::setupHMD() {
 
     if(m_hmd) {
         m_game->viewer().switchToStereoView(m_hmd->stereoRenderInfo());
-        m_game->inputHandler().setHMD(m_hmd);
+        m_game->inputHandler().setHMD(*m_hmd);
     } else {
         glow::warning("Failed to setup HMD. No Oculus Rift connected?");
     }

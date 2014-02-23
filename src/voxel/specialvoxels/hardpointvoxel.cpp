@@ -7,6 +7,7 @@
 #include "equipment/hardpoint.h"
 #include "equipment/weapon.h"
 #include "worldobject/worldobject.h"
+#include "worldobject/worldobjectcomponents.h"
 
 
 HardpointVoxel::HardpointVoxel(const glm::ivec3& gridCell, int index):

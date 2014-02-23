@@ -3,9 +3,14 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 
+#include "equipment/hardpoint.h"
+
+#include "physics/physics.h"
+
+#include "voxel/voxelclusterbounds.h"
 #include "voxel/specialvoxels/hardpointvoxel.h"
 
-#include "equipment/hardpoint.h"
+#include "worldobject/worldobjectcomponents.h"
 
 #include "world/world.h"
 #include "world/god.h"

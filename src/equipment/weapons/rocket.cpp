@@ -7,11 +7,14 @@
 
 #include "collision/collisionfilter.h"
 
-#include "world/god.h"
-#include "world/world.h"
-
 #include "equipment/engineslot.h"
 
+#include "ui/objectinfo.h"
+
+#include "worldobject/worldobjectcomponents.h"
+
+#include "world/god.h"
+#include "world/world.h"
 
 
 Rocket::Rocket():
@@ -23,8 +26,8 @@ Rocket::Rocket():
     collisionFilter().setCollisionFilterClass(CollisionFilterClass::Rocket);
     collisionFilter().setCollideableWith(CollisionFilterClass::Rocket, false);
 
-    m_objectInfo.setShowOnHud(false);
-    m_objectInfo.setCanLockOn(false);
+    m_objectInfo->setShowOnHud(false);
+    m_objectInfo->setCanLockOn(false);
 }
 
 WorldObject* Rocket::target() {

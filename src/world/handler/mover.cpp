@@ -3,6 +3,7 @@
 #include "world/god.h"
 #include "world/world.h"
 #include "worldobject/worldobject.h"
+#include "physics/physics.h"
 
 
 void Mover::moveWorldObjects(float deltaSec) {

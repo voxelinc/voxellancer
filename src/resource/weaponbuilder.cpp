@@ -8,6 +8,8 @@
 #include "equipment/weapons/genericgun.h"
 #include "equipment/weapons/genericrocketlauncher.h"
 
+#include "property/property.h"
+
 
 WeaponBuilder::WeaponBuilder(const std::string& name):
     m_name(name)
@@ -43,8 +45,6 @@ GenericGun* WeaponBuilder::buildGenericGun() {
     gun->setCooldownTime(Property<float>(m_name + ".general.cooldownTime"));
     gun->setBulletName(bulletName);
 
-//    void setBulletPrototype(Bullet* bulletPrototype);
-
     return gun;
 }
 
@@ -54,8 +54,6 @@ GenericRocketLauncher* WeaponBuilder::buildGenericRocketLauncher() {
     rocketLauncher->setVisuals(Visuals::fromProperties(m_name + ".visuals"));
     rocketLauncher->setCooldownTime(Property<float>(m_name + ".general.cooldownTime"));
     rocketLauncher->setRocketName(Property<std::string>(m_name + ".general.rocket"));
-
-//    void setBulletPrototype(Bullet* bulletPrototype);
 
     return rocketLauncher;
 }
