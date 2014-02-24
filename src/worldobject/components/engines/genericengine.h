@@ -15,7 +15,7 @@ public:
     virtual const Visuals& visuals() const override;
     void setVisuals(const Visuals& visuals);
 
-    virtual const SoundProps& engineSound() const override;
+    virtual const SoundProps& sound() const override;
     void setEngineSound(const SoundProps& engineSound);
 
     virtual EnginePower power() const override;

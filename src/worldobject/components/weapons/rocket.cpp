@@ -45,10 +45,6 @@ void Rocket::setTarget(WorldObject* targetObject) {
     }
 }
 
-void Rocket::setSound(std::shared_ptr<Sound> sound) {
-    m_sound = sound;
-}
-
 void Rocket::update(float deltaSec) {
     Projectile::update(deltaSec);
 
@@ -61,12 +57,9 @@ void Rocket::update(float deltaSec) {
             glm::vec3(0, 0, 0)
         ));
     }
-
-    m_sound->setPosition(position());
 }
 
 void Rocket::onCollision() {
-    m_sound->stop();
     SoundManager::current()->play(explosionSound(), position());
 
     World::instance()->god().scheduleRemoval(this);

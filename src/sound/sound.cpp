@@ -65,7 +65,7 @@ Sound* Sound::setAttenuation(float attenuation) {
 
 Sound* Sound::setVolume(float volume) {
     if (m_sound) {
-        m_sound->setVolume(volume);
+        m_sound->setVolume(volume * 100);
     }
     return this;
 }

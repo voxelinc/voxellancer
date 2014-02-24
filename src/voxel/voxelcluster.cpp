@@ -44,11 +44,11 @@ void VoxelCluster::setTransform(const Transform& transform) {
     m_transform = transform;
 }
 
-const glm::vec3& VoxelCluster::position() {
+const glm::vec3& VoxelCluster::position() const {
     return m_transform.position();
 }
 
-const glm::quat& VoxelCluster::orientation() {
+const glm::quat& VoxelCluster::orientation() const {
     return m_transform.orientation();
 }
 

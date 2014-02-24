@@ -22,7 +22,7 @@ public:
     virtual ~Engine();
 
     virtual const Visuals& visuals() const = 0;
-    virtual const SoundProps& engineSound() const = 0;
+    virtual const SoundProps& sound() const = 0;
     
     EngineSlot* engineSlot();
     void setEngineSlot(EngineSlot* engineSlot);

@@ -20,22 +20,6 @@ void GenericRocketLauncher::setVisuals(const Visuals& visuals) {
     m_visuals = visuals;
 }
 
-const SoundProps& GenericRocketLauncher::rocketSound() const {
-    return m_rocketSound;
-}
-
-void GenericRocketLauncher::setRocketSound(const SoundProps& rocketSound) {
-    m_rocketSound = rocketSound;
-}
-
-const SoundProps& GenericRocketLauncher::explosionSound() const {
-    return m_explosionSound;
-}
-
-void GenericRocketLauncher::setExplosionSound(const SoundProps& explosionSound) {
-    m_explosionSound = explosionSound;
-}
-
 float GenericRocketLauncher::cooldownTime() const {
     return m_cooldownTime;
 }

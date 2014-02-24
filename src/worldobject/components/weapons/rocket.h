@@ -25,8 +25,6 @@ public:
     WorldObject* target();
     void setTarget(WorldObject* targetObject);
     
-    void setSound(std::shared_ptr<Sound> sound);
-    
     const SoundProps& explosionSound();
     void setExplosionSound(const SoundProps& soundProps);
 
@@ -40,7 +38,6 @@ protected:
     Handle<WorldObject> m_targetHandle;
     BoardComputer m_boardComputer;
     std::unique_ptr<AiTask> m_aiTask;
-    std::shared_ptr<Sound> m_sound;
     SoundProps m_explosionSound;
 
     virtual void spawnExplosion() = 0;

@@ -16,12 +16,6 @@ public:
     virtual const Visuals& visuals() const override;
     void setVisuals(const Visuals& visuals);
 
-    virtual const SoundProps& rocketSound() const override;
-    void setRocketSound(const SoundProps& rocketSound);
-
-    virtual const SoundProps& explosionSound() const override;
-    void setExplosionSound(const SoundProps& explosionSound);
-
     virtual float cooldownTime() const override;
     void setCooldownTime(float cooldownTime);
 

@@ -54,8 +54,6 @@ GenericRocketLauncher* WeaponBuilder::buildGenericRocketLauncher() {
     GenericRocketLauncher* rocketLauncher = new GenericRocketLauncher(m_name);
 
     rocketLauncher->setVisuals(Visuals::fromProperties(m_name + ".visuals"));
-    rocketLauncher->setRocketSound(SoundProps::fromProperties(m_name + ".sound"));
-    rocketLauncher->setExplosionSound(SoundProps::fromProperties(m_name + ".explosionSound"));
     rocketLauncher->setCooldownTime(Property<float>(m_name + ".general.cooldownTime"));
     rocketLauncher->setRocketName(Property<std::string>(m_name + ".general.rocket"));
 //    void setBulletPrototype(Bullet* bulletPrototype);

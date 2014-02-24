@@ -13,9 +13,6 @@ class RocketLauncher: public Weapon {
 public:
     RocketLauncher(const std::string& equipmentKey);
 
-    virtual const SoundProps& rocketSound() const = 0;
-    virtual const SoundProps& explosionSound() const = 0;
-
     virtual void fireAtObject(WorldObject* target);
 
     virtual void update(float deltaSec) override;

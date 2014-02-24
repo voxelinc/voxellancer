@@ -46,8 +46,6 @@ void RocketLauncher::setupRocket(Rocket* rocket, WorldObject* target) {
 
     rocket->setCreator(worldObject);
     rocket->setTarget(target);
-    rocket->setSound(SoundManager::current()->play(rocketSound(), rocketPosition));
-    rocket->setExplosionSound(explosionSound());
 
     rocket->physics().setSpeed(worldObject->physics().speed());
 }

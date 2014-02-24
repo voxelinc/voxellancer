@@ -13,7 +13,7 @@ void GenericEngine::setVisuals(const Visuals& visuals) {
     m_visuals = visuals;
 }
 
-const SoundProps& GenericEngine::engineSound() const {
+const SoundProps& GenericEngine::sound() const {
     return m_engineSound;
 }
 

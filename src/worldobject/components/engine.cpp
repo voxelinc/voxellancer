@@ -37,9 +37,7 @@ void Engine::setEngineSlot(EngineSlot* engineSlot) {
 
 void Engine::update(float deltaSec) {
     if (!m_sound) {
-        m_sound = SoundManager::current()->play(engineSound(), engineSlot()->voxel()->position());
-        m_sound->setLooping(true);
-        m_sound->setAttenuation(2.0f); // fade out engines twice as fast
+        m_sound = SoundManager::current()->play(sound(), engineSlot()->voxel()->position());
     }
     m_sound->setPosition(engineSlot()->voxel()->position());
 

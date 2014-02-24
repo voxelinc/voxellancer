@@ -43,6 +43,8 @@ std::shared_ptr<Sound> SoundManager::play(std::string soundFile, const glm::vec3
 std::shared_ptr<Sound> SoundManager::play(const SoundProps& soundProps, const glm::vec3& position, bool relative) {
     std::shared_ptr<Sound> sound = play(soundProps.sound(), position, relative);
     sound->setVolume(soundProps.volume());
+    sound->setLooping(soundProps.looping());
+    sound->setAttenuation(soundProps.attenuation());
     return sound;
 }
 

@@ -42,8 +42,6 @@ void GenericGun::setFireSound(const SoundProps& fireSound) {
     m_fireSound = fireSound;
 }
 
-
-
 float GenericGun::cooldownTime() const {
     return m_cooldownTime;
 }
