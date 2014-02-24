@@ -25,5 +25,7 @@ protected:
     const Player* m_player;
     Property<float> m_maxCheckDistance;
 
+    bool isFarAway(const glm::vec3& position);
+    bool isBehindPlayer(const glm::vec3& position);
 };
 

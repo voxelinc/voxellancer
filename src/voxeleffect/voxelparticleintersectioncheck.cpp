@@ -28,7 +28,7 @@ bool VoxelParticleIntersectionCheck::isDead(const VoxelParticleData& particleDat
     glm::vec3 position = particleData.directionalSpeed * timeDelta + particleData.creationPosition;
 
     assert(m_player);
-    if (glm::length(position - m_player->cameraHead().position()) > m_maxCheckDistance) {
+    if (isFarAway(position) || isBehindPlayer(position)) {
         return false;
     }
 
@@ -48,4 +48,16 @@ bool VoxelParticleIntersectionCheck::isDead(const VoxelParticleData& particleDat
 
 void VoxelParticleIntersectionCheck::setPlayer(const Player& player) {
     m_player = &player;
+}
+
+bool VoxelParticleIntersectionCheck::isFarAway(const glm::vec3& position) {
+    float distance = glm::length(position - m_player->cameraHead().position());
+    return distance > m_maxCheckDistance;
+}
+
+bool VoxelParticleIntersectionCheck::isBehindPlayer(const glm::vec3& position) {
+    // maybe even extend to frustum check
+    glm::vec3 playerToParticle = position - m_player->cameraHead().position();
+    glm::vec3 inCameraCoord = glm::inverse(m_player->cameraHead().orientation()) * playerToParticle;
+    return inCameraCoord.z > 0;
 }

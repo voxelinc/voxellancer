@@ -34,8 +34,7 @@ public:
 
     void move(const glm::vec3& vec);
     void rotate(const glm::vec3& euler);
-
-
+    
 
 protected:
     Game* m_game;
