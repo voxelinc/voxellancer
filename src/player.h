@@ -24,19 +24,19 @@ public:
     void setShip(Ship *ship);
 
     void update(float deltaSec);
-    
+
     CameraDolly& cameraDolly();
     CameraHead& cameraHead();
     const CameraHead& cameraHead() const;
 
     HUD& hud();
-    
+
     void fire();
     void move(const glm::vec3& vec);
     void rotate(const glm::vec3& euler);
 
 protected:
-    GamePlay* m_inGame;
+    GamePlay* m_gamePlay;
     Handle<Ship> m_ship;
     std::unique_ptr<CameraDolly> m_cameraDolly;
     std::unique_ptr<HUD> m_hud;

@@ -27,8 +27,8 @@
 #include "ui/objectinfo.h"
 
 
-GameScenario::GameScenario(GamePlay* inGame):
-    BaseScenario(inGame)
+GameScenario::GameScenario(GamePlay* gamePlay):
+    BaseScenario(gamePlay)
 {
 }
 

@@ -21,13 +21,13 @@
 #include "worldobject/worldobjectcomponents.h"
 
 
-Player::Player(GamePlay* inGame):
-    m_inGame(inGame),
+Player::Player(GamePlay* gamePlay):
+    m_gamePlay(gamePlay),
     m_ship(nullptr),
-    m_hud(new HUD(this, &m_inGame->game()->viewer())),
+    m_hud(new HUD(this, &m_gamePlay->game()->viewer())),
     m_cameraDolly(new CameraDolly())
 {
-    
+
 }
 
 Player::~Player() = default;
