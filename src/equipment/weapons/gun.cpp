@@ -2,20 +2,19 @@
 
 #include "utils/geometryhelper.h"
 
-#include "sound/sound.h"
-#include "sound/soundmanager.h"
+#include "equipment/hardpoint.h"
 
+#include "physics/physics.h"
+
+#include "voxel/voxelclusterbounds.h"
+#include "voxel/specialvoxels/hardpointvoxel.h"
+
+#include "worldobject/worldobjectcomponents.h"
 
 #include "world/world.h"
 #include "world/god.h"
 
-#include "voxel/specialvoxels/hardpointvoxel.h"
-#include "worldobject/worldobjectcomponents.h"
-#include "worldobject/components/hardpoint.h"
-
 #include "bullet.h"
-#include "physics/physics.h"
-#include "voxel/voxelclusterbounds.h"
 
 
 Gun::Gun(const std::string& equipmentKey):
@@ -29,7 +28,6 @@ void Gun::fireAtPoint(const glm::vec3& point) {
         setupBullet(bullet, point);
 
         World::instance()->god().scheduleSpawn(bullet);
-        SoundManager::current()->play("data/sound/laser.ogg", hardpoint()->voxel()->position())->setVolume(3);
 
         onFired();
     }

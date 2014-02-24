@@ -7,12 +7,12 @@
 
 #include "property/property.h"
 
-#include "worldobject/components/engine.h"
-#include "worldobject/components/engineslot.h"
-#include "worldobject/components/hardpoint.h"
-#include "worldobject/components/weapon.h"
-#include "worldobject/components/weapons/genericbullet.h"
-#include "worldobject/components/weapons/genericrocket.h"
+#include "equipment/engine.h"
+#include "equipment/engineslot.h"
+#include "equipment/hardpoint.h"
+#include "equipment/weapon.h"
+#include "equipment/weapons/genericbullet.h"
+#include "equipment/weapons/genericrocket.h"
 #include "worldobject/genericship.h"
 #include "worldobject/genericworldobject.h"
 #include "worldobject/ship.h"

@@ -10,7 +10,7 @@
 
 
 ObjectHudgetCornerVoxels::ObjectHudgetCornerVoxels(ObjectHudgetVoxels* objectHudgetVoxels, const glm::ivec3& baseOffset, bool targetHightlight):
-    VoxelCluster(targetHightlight ? 0.04 : 0.02f),
+    VoxelCluster(targetHightlight ? 0.04f : 0.02f),
     m_objectHudgetVoxels(objectHudgetVoxels),
     m_baseOffset(baseOffset)
 {
