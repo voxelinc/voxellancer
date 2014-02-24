@@ -27,10 +27,9 @@ go_bandit([](){
 
             AssertThat(files.size(), Equals(3));
 
-
-            AssertThat(std::find(files.begin(), files.end(), pathBase + "/ab_-c.txt"), !Equals(files.end()));
-            AssertThat(std::find(files.begin(), files.end(), pathBase + "/awesometestrly"), !Equals(files.end()));
-            AssertThat(std::find(files.begin(), files.end(), pathBase + "/lulz.mp3"), !Equals(files.end()));
+            AssertThat(files, Contains(pathBase + "/ab_-c.txt"));
+            AssertThat(files, Contains(pathBase + "/awesometestrly"));
+            AssertThat(files, Contains(pathBase + "/lulz.mp3"));
         });
 
         it("doesn't care about slash at the end", [&]() {
@@ -40,9 +39,10 @@ go_bandit([](){
             std::list<std::string> files = r.read();
 
             AssertThat(files.size(), Equals(3));
-            AssertThat(std::find(files.begin(), files.end(), pathBase + "ab_-c.txt"), !Equals(files.end()));
-            AssertThat(std::find(files.begin(), files.end(), pathBase + "awesometestrly"), !Equals(files.end()));
-            AssertThat(std::find(files.begin(), files.end(), pathBase + "lulz.mp3"), !Equals(files.end()));
+
+            AssertThat(files, Contains(pathBase + "ab_-c.txt"));
+            AssertThat(files, Contains(pathBase + "awesometestrly"));
+            AssertThat(files, Contains(pathBase + "lulz.mp3"));
         });
     });
 });
