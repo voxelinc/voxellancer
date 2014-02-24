@@ -42,7 +42,7 @@ public:
     void setCurrentSubState(StateType* substate);
 
     /*
-        Returns this or direct child containing &descendant
+        Returns direct child containing &descendant
         Returns nullptr if &descendant is no descendant of this
     */
     StateType* pathToDescendant(StateType* descendant);
