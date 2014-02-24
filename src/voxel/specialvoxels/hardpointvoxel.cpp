@@ -25,14 +25,14 @@ Visuals HardpointVoxel::visuals() const {
 
 void HardpointVoxel::addToObject(WorldObject* worldObject) {
     Voxel::addToObject(worldObject);
-
-    m_hardpoint = new Hardpoint(&worldObject->components(), this);
+    assert(m_hardpoint == nullptr);
+    m_hardpoint = std::make_shared<Hardpoint>(&worldObject->components(), this);
     worldObject->components().addHardpoint(m_hardpoint);
 }
 
 void HardpointVoxel::onRemoval() {
     if (m_hardpoint) {
-        m_hardpoint->onVoxelRemoval();
+        m_hardpoint->components()->removeHardpoint(m_hardpoint);
         m_hardpoint = nullptr;
     }
     Voxel::onRemoval();

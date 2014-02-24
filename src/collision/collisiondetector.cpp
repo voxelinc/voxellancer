@@ -102,7 +102,6 @@ void CollisionDetector::checkCollisions(VoxelTreeNode* nodeA, WorldObject* objec
             }
         }
         else {
-            std::vector<VoxelTreeNode*> subnodes;
             std::pair<VoxelTreeNode*, WorldObject*> nodeToSplit;
             std::pair<VoxelTreeNode*, WorldObject*> otherNode;
 

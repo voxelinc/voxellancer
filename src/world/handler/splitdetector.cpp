@@ -152,8 +152,8 @@ void SplitDetector::createSplitData(WorldObject* worldObject) {
         int biggestSize = splitDataList[0]->splitOffVoxels().size();
         for (int i = 0; i < splitDataList.size(); i++) {
             if (splitDataList[i]->splitOffVoxels().size() > biggestSize) {
-                int biggestIndex = i;
-                int biggestSize = splitDataList[i]->splitOffVoxels().size();
+                biggestIndex = i;
+                biggestSize = splitDataList[i]->splitOffVoxels().size();
             }
         }
         splitDataList.erase(splitDataList.begin() + biggestIndex);

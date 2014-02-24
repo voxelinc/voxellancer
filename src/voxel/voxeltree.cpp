@@ -17,7 +17,7 @@ VoxelTree::VoxelTree(WorldObject* worldObject):
 
 VoxelTree::~VoxelTree() {
     delete m_shadowRoot;
-}
+};
 
 VoxelTreeNode* VoxelTree::root() {
     return m_currentRoot;

@@ -58,7 +58,6 @@ protected:
 
     Sphere m_sphere;
     Transform m_cachedSphereTransform;
-    bool m_sphereRadiusValid;
 
     bool m_active;
 

@@ -31,9 +31,6 @@ public:
 
     void update(float deltaSec);
 
-    void onVoxelRemoval();
-
-
 protected:
     HardpointVoxel* m_voxel;
     std::shared_ptr<Weapon> m_weapon;

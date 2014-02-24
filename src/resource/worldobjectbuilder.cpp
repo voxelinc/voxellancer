@@ -80,9 +80,9 @@ template<typename WorldObjectType>
 WorldObjectType* WorldObjectBuilder::makeWorldObject() {
     static_assert(std::is_base_of<WorldObject, WorldObjectType>::value, "WorldObjectType needs to be derived from WorldObject");
 
-	WorldObjectType* worldObject = new WorldObjectType();
+    WorldObjectType* worldObject = new WorldObjectType();
 
-	setupVoxelCluster(worldObject);
+    setupVoxelCluster(worldObject);
     setupComponents(worldObject->components());
 
     std::string collisionFieldOfDamageProperty = m_name + ".general.collisionFieldOfDamage";
@@ -98,13 +98,13 @@ WorldObjectType* WorldObjectBuilder::makeWorldObject() {
 }
 
 void WorldObjectBuilder::equipSomehow(WorldObject* worldObject) {
-    for(Hardpoint* hardpoint : worldObject->components().hardpoints()) {
+    for (std::shared_ptr<Hardpoint> hardpoint : worldObject->components().hardpoints()) {
         if(!hardpoint->mountables().empty()) {
             Weapon* weapon = WeaponBuilder(hardpoint->mountables().front()).build();
             hardpoint->setWeapon(std::shared_ptr<Weapon>(weapon));
         }
     }
-    for(EngineSlot* engineSlot : worldObject->components().engineSlots()) {
+    for (std::shared_ptr<EngineSlot> engineSlot : worldObject->components().engineSlots()) {
         if(!engineSlot->mountables().empty()) {
             Engine* engine = EngineBuilder(engineSlot->mountables().front()).build();
             engineSlot->setEngine(std::shared_ptr<Engine>(engine));
@@ -126,7 +126,7 @@ void WorldObjectBuilder::setupComponents(WorldObjectComponents& components) {
 }
 
 void WorldObjectBuilder::setupHardpoints(WorldObjectComponents& components) {
-    for(Hardpoint* hardpoint : components.hardpoints()) {
+    for (std::shared_ptr<Hardpoint> hardpoint : components.hardpoints()) {
         std::string prefix = m_name + ".hardpoint" + std::to_string(hardpoint->index()) + ".";
 
         hardpoint->setDirection(Property<glm::vec3>(prefix + "direction"));
@@ -140,7 +140,7 @@ void WorldObjectBuilder::setupHardpoints(WorldObjectComponents& components) {
 }
 
 void WorldObjectBuilder::setupEngineSlots(WorldObjectComponents& components) {
-    for(EngineSlot* engineSlot : components.engineSlots()) {
+    for (std::shared_ptr<EngineSlot> engineSlot : components.engineSlots()) {
         std::string prefix = m_name + ".engineslot" + std::to_string(engineSlot->index()) + ".";
 
         engineSlot->setDirection(Property<glm::vec3>(prefix + "direction"));

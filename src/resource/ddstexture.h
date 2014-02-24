@@ -12,10 +12,10 @@ namespace glow {
 class DdsTexture
 {
 public:
-	static bool loadImage2d(glow::Texture * texture, std::string path);
+    static bool loadImage2d(glow::Texture * texture, std::string path);
 
-	static bool loadImageCube(glow::Texture * texture, std::string pathXp, std::string pathXn,
-		std::string pathYp, std::string pathYn, std::string pathZp, std::string pathZn);
+    static bool loadImageCube(glow::Texture * texture, std::string pathXp, std::string pathXn,
+        std::string pathYp, std::string pathYn, std::string pathZp, std::string pathZn);
 
 private:
     static bool loadImage2d(glow::Texture * texture, std::string path, GLenum target);

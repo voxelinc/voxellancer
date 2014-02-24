@@ -28,9 +28,6 @@ public:
 
     void update(float deltaSec);
 
-    void onVoxelRemoval();
-
-
 protected:
     EngineSlotVoxel* m_voxel;
     std::shared_ptr<Engine> m_engine;

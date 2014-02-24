@@ -6,7 +6,10 @@
 
 
 GenericGun::GenericGun(const std::string& name):
-    Gun(name)
+    Gun(name),
+    m_bulletSpeed(100),
+    m_bulletLifetime(100),
+    m_cooldownTime(0)
 {
 }
 

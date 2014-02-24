@@ -18,8 +18,7 @@ EngineSlotVoxel::EngineSlotVoxel(const glm::ivec3& gridCell, int index):
 
 void EngineSlotVoxel::addToObject(WorldObject* worldObject) {
     Voxel::addToObject(worldObject);
-
-    m_engineSlot = new EngineSlot(&worldObject->components(), this);
+    m_engineSlot = std::make_shared<EngineSlot>(&worldObject->components(), this);
     worldObject->components().addEngineSlot(m_engineSlot);
 }
 
@@ -31,7 +30,7 @@ Visuals EngineSlotVoxel::visuals() const {
 
 void EngineSlotVoxel::onRemoval() {
     if (m_engineSlot){
-        m_engineSlot->onVoxelRemoval();
+        m_engineSlot->components()->removeEngineSlot(m_engineSlot);
         m_engineSlot = nullptr;
     }
     Voxel::onRemoval();
