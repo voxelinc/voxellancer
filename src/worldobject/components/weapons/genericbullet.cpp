@@ -21,7 +21,7 @@ const SoundProps& GenericBullet::hitSound() const {
     return m_hitSound;
 }
 
-void GenericBullet::setHitSound(SoundProps hitSound) {
+void GenericBullet::setHitSound(const SoundProps& hitSound) {
     m_hitSound = hitSound;
 }
 
