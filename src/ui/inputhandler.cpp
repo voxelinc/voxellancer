@@ -109,9 +109,9 @@ void InputHandler::resizeEvent(const unsigned int width, const unsigned int heig
 */
 void InputHandler::keyCallback(int key, int scancode, int action, int mods) {
     if (action == GLFW_PRESS) {
-        m_inputConfigurator->setLastPrimaryInput(InputMapping(InputType::Keyboard, key, 1, 0.0f));
+        m_inputConfigurator->setLastInput(InputMapping(InputType::Keyboard, key, 1, 0.0f),true);
     } else {
-        m_inputConfigurator->setLastPrimaryInput(InputMapping());
+        m_inputConfigurator->setLastInput(InputMapping(),true);
     }
 
     if(action == GLFW_PRESS) {
@@ -124,7 +124,7 @@ void InputHandler::keyCallback(int key, int scancode, int action, int mods) {
 
             case GLFW_KEY_F11:
                 m_inputConfigurator->startConfiguration(true);
-                m_inputConfigurator->setLastPrimaryInput(InputMapping());
+                m_inputConfigurator->setLastInput(InputMapping(),true);
             break;
 
             case GLFW_KEY_SPACE:
@@ -244,15 +244,15 @@ void InputHandler::addActionsToVector() {
 }
 
 float InputHandler::getInputValue(ActionKeyMapping* action) {
-    float inputValue = glm::max(getInputValue(action->primaryMapping.get()), getInputValue(action->secondaryMapping.get()));
-    if (action->toggleAction) {
+    float inputValue = glm::max(getInputValue(action->mapping(true)), getInputValue(action->mapping(false)));
+    if (action->toggleAction()) {
         if (inputValue) {
-            if (action->toggleStatus) {
+            if (action->toggleStatus()) {
                 inputValue = 0;
             }
-            action->toggleStatus = true;
+            action->setToggleStatus(true);
         } else {
-            action->toggleStatus = false;
+            action->setToggleStatus(false);
         }
     }
     return inputValue;

@@ -6,7 +6,7 @@
 #include "property/property.h"
 
 
-struct ActionKeyMapping;
+class ActionKeyMapping;
 struct SecondaryInputValues;
 
 class HUD;
@@ -23,8 +23,9 @@ public:
 
     void setSecondaryInputValues(SecondaryInputValues* values);
 
-    void setLastPrimaryInput(InputMapping lastInput);
-    void setLastSecondaryInput(InputMapping lastInput);
+    void setLastInput(InputMapping lastInput, bool primary);
+
+    InputMapping lastInput(bool primary);
 
 
 private:
@@ -39,22 +40,25 @@ private:
 
 
     bool setActionInputMapping(ActionKeyMapping* action, bool primary);
-    bool isLastPrimaryInputValid();
-    bool isLastSecondaryInputValid();
+    bool isLastInputValid(bool primary);
 
-    bool isSecondaryInput();
-    bool isPrimaryInput();
+    bool isKeyPressed(bool primary);
 
-    void setupPrimaryControls();
-    void setupSecondaryControls();
+    void setupControls(bool primary);
+
+    void updateConfiguration(bool primary);
 
     InputMapping lastPrimaryInput;
     InputMapping lastSecondaryInput;
 
-    int secondaryConfigurationState;
-    int primaryConfigurationState;
+    int m_secondaryConfigurationState;
+    int m_primaryConfigurationState;
 
-    bool beginningKeyConfiguration = true;
-    bool displayedKeyPressedWarning = false;
-    bool displayedInstructions = false;
+    int configurationState(bool primary);
+    void incrementConfigurationState(bool primary);
+    void setConfigurationState(int state, bool primary);
+
+    bool m_beginningKeyConfiguration = true;
+    bool m_displayedKeyPressedWarning = false;
+    bool m_displayedInstructions = false;
 };

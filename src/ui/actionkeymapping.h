@@ -6,30 +6,26 @@
 #include "input/inputmapping.h"
 
 
-struct ActionKeyMapping {
-    Property<InputMapping> primaryMapping;
-    Property<InputMapping> secondaryMapping;
-    bool toggleAction;
-    bool toggleStatus;
-    std::string name;
+class ActionKeyMapping {
+public:
+    ActionKeyMapping(char* primary, char* secondary, std::string name);
+    ActionKeyMapping(char* primary, char* secondary, std::string name, bool toggleAction);
 
-    ActionKeyMapping(char* primary, char* secondary, std::string name) :
-        primaryMapping(primary),
-        secondaryMapping(secondary),
-        toggleAction(false),
-        toggleStatus(false),
-        name(name)
-    {
-    }
+    InputMapping mapping(bool primary);
+    void setMapping(InputMapping mapping, bool primary);
 
-    ActionKeyMapping(char* primary, char* secondary, std::string name, bool toggleAction) :
-        primaryMapping(primary),
-        secondaryMapping(secondary),
-        toggleAction(toggleAction),
-        toggleStatus(false),
-        name(name)
-    {
-    }
+    std::string name();
+    bool toggleAction();
+    bool toggleStatus();
+
+    void setToggleStatus(bool status);
+
+protected:
+    Property<InputMapping> m_primaryMapping;
+    Property<InputMapping> m_secondaryMapping;
+    bool m_toggleAction;
+    bool m_toggleStatus;
+    std::string m_name;
 };
 
 struct SecondaryInputValues {
