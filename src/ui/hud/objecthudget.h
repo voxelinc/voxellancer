@@ -15,6 +15,8 @@ public:
     ObjectHudget(HUD* hud, HUDObjectDelegate* objectDelegate);
     virtual ~ObjectHudget();
 
+    bool isTarget() const;
+
     virtual void update(float deltaSec) override;
     virtual void draw() override;
 

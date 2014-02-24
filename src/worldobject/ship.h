@@ -17,7 +17,7 @@ class Sound;
 class SquadLogic;
 class BoardComputer;
 
-class Ship: virtual public WorldObject {
+class Ship: public WorldObject {
 public:
     Ship();
     virtual ~Ship();
