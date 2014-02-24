@@ -44,9 +44,9 @@ void Gun::setupBullet(Bullet* bullet, const glm::vec3& point) {
 
     WorldObject* firingWorldObject = m_hardpoint->components()->worldObject();
 
-    glm::quat wordlObjectOrientation = firingWorldObject->transform().orientation();
+    glm::quat worldObjectOrientation = firingWorldObject->transform().orientation();
     glm::vec3 bulletDirection = glm::normalize(point - m_hardpoint->voxel()->position());
-    glm::vec3 hardpointDirection = wordlObjectOrientation * glm::vec3(0, 0, -1);
+    glm::vec3 hardpointDirection = worldObjectOrientation * glm::vec3(0, 0, -1);
     glm::vec3 bulletUp = glm::cross(bulletDirection, hardpointDirection);
 
     //bulletTransform.setOrientation(Math::quatFromDir(bulletDirection));
