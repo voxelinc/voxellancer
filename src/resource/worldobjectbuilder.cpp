@@ -128,7 +128,7 @@ void WorldObjectBuilder::setupHardpoints(WorldObjectComponents& components) {
         std::string prefix = m_name + ".hardpoint" + std::to_string(hardpoint->index()) + ".";
 
         hardpoint->setDirection(Property<glm::vec3>(prefix + "direction"));
-        hardpoint->setFieldOfAim(Property<float>(prefix + "fieldOfAim"));
+        hardpoint->setFieldOfAim(glm::radians<float>(Property<float>(prefix + "fieldOfAim")));
 
         std::list<std::string> mountableWeapons = Property<std::list<std::string>>(prefix + "mountable");
         for(std::string& weapon : mountableWeapons) {

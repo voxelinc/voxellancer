@@ -13,7 +13,8 @@
 Hardpoint::Hardpoint(WorldObjectComponents* components, HardpointVoxel* voxel):
     WorldObjectSlot(components, voxel->index()),
     m_voxel(voxel),
-    m_weapon(nullptr)
+    m_weapon(nullptr),
+    m_direction(0, 0, -1)
 {
 }
 
@@ -35,7 +36,8 @@ const glm::vec3& Hardpoint::direction() const {
 }
 
 void Hardpoint::setDirection(const glm::vec3& direction) {
-    m_direction = direction;
+    assert(glm::length(direction) > 0);
+    m_direction = glm::normalize(direction);
 }
 
 float Hardpoint::fieldOfAim() const {
