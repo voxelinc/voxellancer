@@ -68,5 +68,6 @@ protected:
     float m_collisionFieldOfDamage;
 
     WorldObject(CollisionFilter* collisionFilter, float scale = 1.0f);
+    WorldObject(WorldObject* prototype);
 };
 

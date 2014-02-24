@@ -12,7 +12,7 @@
 
 
 class Voxel;
-class VoxelRenderData;
+class IVoxelRenderData;
 class VoxelClusterBounds;
 
 class VoxelCluster {
@@ -37,16 +37,18 @@ public:
     const std::unordered_map<glm::ivec3, Voxel*>& voxelMap() const;
     int voxelCount() const;
 
-    VoxelRenderData* voxelRenderData();
+    IVoxelRenderData& voxelRenderData();
 
     virtual float emissiveness() const;
 
 
 protected:
     std::unordered_map<glm::ivec3, Voxel*> m_voxels;
-    std::unique_ptr<VoxelRenderData> m_voxelRenderData;
+    std::unique_ptr<IVoxelRenderData> m_voxelRenderData;
     std::unique_ptr<VoxelClusterBounds> m_bounds;
 
     Transform m_transform;
+
+    VoxelCluster(VoxelCluster* prototype);
 };
 

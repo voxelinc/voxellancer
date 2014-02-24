@@ -52,15 +52,15 @@ void VoxelRenderer::draw(VoxelCluster& worldObject) {
     m_program->setUniform("model", worldObject.transform().matrix());
     m_program->setUniform("emissiveness", worldObject.emissiveness());
 
-    VoxelRenderData* renderData = worldObject.voxelRenderData();
+    IVoxelRenderData& renderData = worldObject.voxelRenderData();
 
-    renderData->vertexArrayObject()->bind();
+    renderData.vertexArrayObject()->bind();
     glVertexAttribDivisor(m_program->getAttributeLocation("v_vertex"), 0);
     glVertexAttribDivisor(m_program->getAttributeLocation("v_normal"), 0);
     glVertexAttribDivisor(m_program->getAttributeLocation("v_position"), 1);
     glVertexAttribDivisor(m_program->getAttributeLocation("v_color"), 1);
     glVertexAttribDivisor(m_program->getAttributeLocation("v_emissiveness"), 1);
-    renderData->vertexArrayObject()->drawArraysInstanced(GL_TRIANGLE_STRIP, 0, 14, renderData->voxelCount());
+    renderData.vertexArrayObject()->drawArraysInstanced(GL_TRIANGLE_STRIP, 0, 14, renderData.voxelCount());
 }
 
 

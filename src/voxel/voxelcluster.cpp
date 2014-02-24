@@ -26,6 +26,15 @@ VoxelCluster::VoxelCluster(float scale):
 {
 }
 
+VoxelCluster::VoxelCluster(VoxelCluster* prototype):
+    m_voxels(),
+    m_bounds(new VoxelClusterBounds(prototype->bounds())),
+    m_voxelRenderData(new InstancedVoxelRenderData(prototype->voxelRenderData())),
+    m_transform(prototype->transform())
+{
+    assert(!prototype->voxelRenderData().isInstanced());
+}
+
 VoxelCluster::~VoxelCluster() {
     for (auto& element : m_voxels) {
         delete element.second;
@@ -57,11 +66,13 @@ const glm::quat& VoxelCluster::orientation() const {
 }
 
 Voxel* VoxelCluster::voxel(const glm::ivec3& position) {
+    assert(!m_voxelRenderData->isInstanced());
     std::unordered_map<glm::ivec3, Voxel*>::iterator i = m_voxels.find(position);
     return i == m_voxels.end() ? nullptr : i->second;
 }
 
 void VoxelCluster::addVoxel(Voxel* voxel) {
+    assert(!m_voxelRenderData->isInstanced());
     assert(m_voxels[voxel->gridCell()] == nullptr);
 
     m_voxels[voxel->gridCell()] = voxel;
@@ -70,6 +81,7 @@ void VoxelCluster::addVoxel(Voxel* voxel) {
 }
 
 void VoxelCluster::removeVoxel(Voxel* voxel) {
+    assert(!m_voxelRenderData->isInstanced());
     assert(voxel != nullptr);
 
     m_bounds->removeVoxel(voxel); // Needs to be done before removal from m_voxels
@@ -79,15 +91,17 @@ void VoxelCluster::removeVoxel(Voxel* voxel) {
     delete voxel;
 }
 
-VoxelRenderData* VoxelCluster::voxelRenderData() {
-    return m_voxelRenderData.get();
+IVoxelRenderData& VoxelCluster::voxelRenderData() {
+    return *m_voxelRenderData;
 }
 
 const std::unordered_map<glm::ivec3, Voxel*>& VoxelCluster::voxelMap() const {
+    assert(!m_voxelRenderData->isInstanced());
     return m_voxels;
 }
 
 int VoxelCluster::voxelCount() const {
+    assert(!m_voxelRenderData->isInstanced());
     return m_voxels.size();
 }
 

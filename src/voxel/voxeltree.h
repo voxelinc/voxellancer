@@ -17,11 +17,9 @@ public:
     virtual VoxelTreeNode* root() = 0;
 };
 
-class VoxelTree;
-
 class InstancedVoxelTree : public IVoxelTree {
 public:
-    InstancedVoxelTree(const VoxelTree& prototype);
+    InstancedVoxelTree(const IVoxelTree& prototype);
 
     virtual void insert(Voxel* voxel) override; // ignore
     virtual void remove(Voxel* voxel) override; // ignore
@@ -31,7 +29,7 @@ public:
     virtual VoxelTreeNode* root() override;
 
 protected:
-    const VoxelTree& m_voxelTree;
+    const IVoxelTree& m_voxelTree;
 };
 
 class VoxelTree : public IVoxelTree {

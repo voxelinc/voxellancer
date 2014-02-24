@@ -2,7 +2,7 @@
 
 #include <unordered_set>
 
-#include "geometry/raTy.h"
+#include "geometry/ray.h"
 
 #include "property/property.h"
 

@@ -23,7 +23,7 @@ WorldObject::WorldObject():
 
 }
 
-WorldObject::WorldObject(CollisionFilter* collisionFilter, float scale):
+WorldObject::WorldObject(CollisionFilter* collisionFilter, float scale) :
     VoxelCluster(scale),
     m_physics(new Physics(*this, scale)),
     m_collisionDetector(new CollisionDetector(*this, std::make_shared<VoxelTree>(this))),
@@ -35,6 +35,21 @@ WorldObject::WorldObject(CollisionFilter* collisionFilter, float scale):
     m_scheduledForDeletion(false),
     m_collisionFilter(collisionFilter)
 {
+}
+
+WorldObject::WorldObject(WorldObject* prototype):
+    VoxelCluster(prototype),
+    m_physics(new Physics(*this, prototype->transform().scale())),
+    m_collisionDetector(new CollisionDetector(*this, std::make_shared<InstancedVoxelTree>(prototype->collisionDetector().voxelTree()))),
+    m_objectInfo(new ObjectInfo(prototype->objectInfo())),
+    m_components(new WorldObjectComponents(this)),
+    m_crucialVoxel(nullptr),
+    m_collisionFieldOfDamage(glm::half_pi<float>()),
+    m_handle(Handle<WorldObject>(this)),
+    m_scheduledForDeletion(false),
+    m_collisionFilter(new CollisionFilter(this, prototype->collisionFilter().collisionFilterClass(), prototype->collisionFilter().collisionMask()))
+{
+
 }
 
 WorldObject::~WorldObject() {
