@@ -76,7 +76,7 @@ void VoxelDebrisGenerator::spawn() {
                     createLifetime()
                 );
 
-                World::instance()->voxelParticleEngine().addParticle(particleSetup);
+                World::instance()->particleEngine().addParticle(particleSetup);
             }
         }
     }

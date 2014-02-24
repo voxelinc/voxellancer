@@ -14,14 +14,23 @@
 #include "voxelparticledata.h"
 #include "voxelparticleengine.h"
 
-VoxelParticleIntersectionCheck::VoxelParticleIntersectionCheck(VoxelParticleEngine* engine):
-    m_particleEngine(engine)
+#include "player.h"
+#include "camera/camerahead.h"
+
+VoxelParticleIntersectionCheck::VoxelParticleIntersectionCheck(const VoxelParticleEngine& engine) :
+    m_particleEngine(engine),
+    m_maxCheckDistance("particle.maxIntersectionCheckDistance")
 {
 }
 
 bool VoxelParticleIntersectionCheck::isDead(const VoxelParticleData& particleData) {
-	float timeDelta = m_particleEngine->time() - particleData.creationTime;
+	float timeDelta = m_particleEngine.time() - particleData.creationTime;
     glm::vec3 position = particleData.directionalSpeed * timeDelta + particleData.creationPosition;
+
+    assert(m_player);
+    if (glm::length(position - m_player->cameraHead().position()) > m_maxCheckDistance) {
+        return false;
+    }
 
     Point voxelPoint(position); // approximate as point
     WorldTreeQuery query(&World::instance()->worldTree(), &voxelPoint);
@@ -35,4 +44,8 @@ bool VoxelParticleIntersectionCheck::isDead(const VoxelParticleData& particleDat
     }
 
     return false;
+}
+
+void VoxelParticleIntersectionCheck::setPlayer(const Player& player) {
+    m_player = &player;
 }

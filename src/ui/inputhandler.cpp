@@ -12,21 +12,21 @@
 #include "utils/tostring.h"
 #include "utils/aimer.h"
 
+#include "etc/hmd/hmd.h"
 #include "etc/contextprovider.h"
 
+#include "worldobject/worldobjectcomponents.h"
 #include "worldobject/worldobject.h"
+
+#include "input/inputmapping.h"
+#include "inputconfigurator.h"
+
+#include "camera/camerahead.h"
+#include "targetselector.h"
 #include "player.h"
+#include "hud/crosshair.h"
 #include "ui/hud/hud.h"
 #include "worldobject/ship.h"
-#include "camera/cameradolly.h"
-#include "hud/crosshair.h"
-#include "input/inputmapping.h"
-#include "etc/hmd/hmd.h"
-#include "inputconfigurator.h"
-#include "targetselector.h"
-#include "camera/camerahead.h"
-#include "worldobject/worldobjectcomponents.h"
-
 
 /*
 * 360 gamepad assignment: (direction given for positive values)
@@ -220,9 +220,9 @@ void InputHandler::processMouseUpdate() {
 
 void InputHandler::processHMDUpdate() {
     if(m_hmd) {
-        m_player->cameraDolly().cameraHead().setRelativeOrientation(m_hmd->orientation());
+        m_player->cameraHead().setRelativeOrientation(m_hmd->orientation());
     } else {
-        m_player->cameraDolly().cameraHead().setRelativeOrientation(glm::quat());
+        m_player->cameraHead().setRelativeOrientation(glm::quat());
     }
 }
 

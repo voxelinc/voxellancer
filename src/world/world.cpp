@@ -17,7 +17,7 @@ World::World():
     m_worldLogic(new WorldLogic(*this)),
     m_worldTree(new WorldTree()),
     m_god(new God(*this)),
-    m_voxelParticleEngine(new VoxelParticleEngine())
+    m_particleEngine(new VoxelParticleEngine())
 {
 }
 
@@ -41,8 +41,8 @@ WorldTree &World::worldTree() {
     return *m_worldTree;
 }
 
-VoxelParticleEngine &World::voxelParticleEngine() {
-    return *m_voxelParticleEngine;
+VoxelParticleEngine &World::particleEngine() {
+    return *m_particleEngine;
 }
 
 std::unordered_set<WorldObject*> &World::worldObjects() {
@@ -53,7 +53,7 @@ void World::update(float deltaSecs) {
     m_deltaSec = deltaSecs;
 
     m_worldLogic->update(deltaSecs);
-    m_voxelParticleEngine->update(deltaSecs);
+    m_particleEngine->update(deltaSecs);
 
     for (WorldObject *worldObject : m_worldObjects) {
         worldObject->update(deltaSecs);

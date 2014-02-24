@@ -19,6 +19,7 @@
 
 #include "ui/inputhandler.h"
 #include "sound/soundmanager.h"
+#include "voxeleffect/voxelparticleengine.h"
 
 
 class Ship;
@@ -35,6 +36,7 @@ Game::Game():
 
     m_viewer->setScene(*m_gameScene);
     m_viewer->setCameraHead(m_player->cameraHead());
+    World::instance()->particleEngine().setPlayer(*m_player);
 }
 
 Game::~Game() = default;

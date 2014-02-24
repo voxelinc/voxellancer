@@ -80,7 +80,7 @@ void GameScene::drawGame(Camera& camera) {
     m_game->player().hud().draw();
     m_voxelRenderer->afterDraw();
 
-    World::instance()->voxelParticleEngine().draw(camera);
+    World::instance()->particleEngine().draw(camera);
 
 }
 

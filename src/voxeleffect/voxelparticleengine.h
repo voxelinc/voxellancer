@@ -8,11 +8,12 @@
 
 #include "property/property.h"
 
+class Player;
 class Camera;
 struct VoxelParticleData;
 class VoxelParticleSetup;
 class VoxelParticleRenderer;
-class VoxelParticleRemoveCheck;
+class VoxelParticleRemover;
 
 /*
     Main class for managing and displaying the VoxelParticles of
@@ -29,6 +30,8 @@ public:
     VoxelParticleData* particleData(int index);
     std::vector<VoxelParticleData>& particleDataVector();
 
+    void setPlayer(const Player& m_player);
+
     void addParticle(const VoxelParticleSetup& particleSetup);
     void removeParticle(int index);
 
@@ -41,7 +44,7 @@ protected:
     bool m_initialized;
 
     std::unique_ptr<VoxelParticleRenderer> m_renderer;
-    std::unique_ptr<VoxelParticleRemoveCheck> m_removeCheck;
+    std::unique_ptr<VoxelParticleRemover> m_remover;
 
     std::vector<VoxelParticleData> m_cpuParticleBuffer;
     std::stack<int> m_freeParticleBufferIndices;

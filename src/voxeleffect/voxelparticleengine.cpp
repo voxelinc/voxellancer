@@ -2,23 +2,25 @@
 
 #include "voxelparticledata.h"
 #include "voxelparticlerenderer.h"
+#include "voxelparticleremover.h"
 #include "voxelparticleremovecheck.h"
 #include "voxelparticleintersectioncheck.h"
 #include "voxelparticleexpirecheck.h"
 #include "voxelparticlesetup.h"
+#include "world/world.h"
 
 
 VoxelParticleEngine::VoxelParticleEngine():
     m_time(0.0f),
     m_initialized(false),
     m_renderer(new VoxelParticleRenderer(this)),
-    m_removeCheck(new VoxelParticleRemoveCheck(this)),
+    m_remover(new VoxelParticleRemover(this)),
     m_gpuParticleBufferInvalid(false),
     m_gpuParticleBufferInvalidBegin(0),
     m_gpuParticleBufferInvalidEnd(0)
 {
-    m_removeCheck->addCheck(std::make_shared<VoxelParticleExpireCheck>(this));
-    m_removeCheck->addCheck(std::make_shared<VoxelParticleIntersectionCheck>(this));
+    m_remover->addCheck(std::make_shared<VoxelParticleExpireCheck>(*this));
+    m_remover->addCheck(std::make_shared<VoxelParticleIntersectionCheck>(*this));
     setBufferSize(1024);
 }
 
@@ -60,7 +62,7 @@ void VoxelParticleEngine::removeParticle(int index) {
 
 void VoxelParticleEngine::update(float deltaSec) {
     m_time += deltaSec;
-    m_removeCheck->update(deltaSec);
+    m_remover->update(deltaSec);
 }
 
 void VoxelParticleEngine::draw(Camera& camera) {
@@ -114,5 +116,9 @@ void VoxelParticleEngine::updateGPUBuffers(int begin, int end) {
 
 std::vector<VoxelParticleData>& VoxelParticleEngine::particleDataVector() {
     return m_cpuParticleBuffer;
+}
+
+void VoxelParticleEngine::setPlayer(const Player& m_player) {
+    m_remover->setPlayer(m_player);
 }
 

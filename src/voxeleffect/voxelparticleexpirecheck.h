@@ -1,7 +1,7 @@
 #pragma once
 
 #include "property/property.h"
-#include "voxelparticlechecker.h"
+#include "voxelparticleremovecheck.h"
 
 
 class VoxelParticleEngine;
@@ -13,13 +13,13 @@ struct VoxelParticleData;
     Please note that the shader only draws particles that life, so performing this check
     over a long interval doesn't harm here.
 */
-class VoxelParticleExpireCheck: public VoxelParticleChecker {
+class VoxelParticleExpireCheck: public VoxelParticleRemoveCheck {
 public:
-    VoxelParticleExpireCheck(VoxelParticleEngine* engine);
+    VoxelParticleExpireCheck(const VoxelParticleEngine& engine);
 
     virtual bool isDead(const VoxelParticleData& particle) override;
 
 protected:
-    VoxelParticleEngine* m_particleEngine;
+    const VoxelParticleEngine& m_particleEngine;
 };
 

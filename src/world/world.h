@@ -21,7 +21,7 @@ public:
     WorldLogic &worldLogic();
     God &god();
     WorldTree &worldTree();
-    VoxelParticleEngine& voxelParticleEngine();
+    VoxelParticleEngine& particleEngine();
     std::unordered_set<WorldObject*> &worldObjects();
 
     void update(float deltaSecs);
@@ -40,7 +40,7 @@ protected:
     std::unique_ptr<WorldTree> m_worldTree;
     std::unique_ptr<WorldLogic> m_worldLogic;
     std::unique_ptr<God> m_god;
-    std::unique_ptr<VoxelParticleEngine> m_voxelParticleEngine;
+    std::unique_ptr<VoxelParticleEngine> m_particleEngine;
 
     std::unordered_set<WorldObject*> m_worldObjects;
 

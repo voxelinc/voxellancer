@@ -49,11 +49,11 @@ void Player::update(float deltaSec) {
     }
 }
 
-CameraDolly& Player::cameraDolly() {
-    return *m_cameraDolly;
+CameraHead& Player::cameraHead() {
+    return m_cameraDolly->cameraHead();
 }
 
-CameraHead& Player::cameraHead() {
+const CameraHead& Player::cameraHead() const {
     return m_cameraDolly->cameraHead();
 }
 
