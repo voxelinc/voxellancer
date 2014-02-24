@@ -4,7 +4,7 @@
 
 #include "display/rendering/visuals.h"
 
-#include "worldobject/components/engine.h"
+#include "equipment/engine.h"
 
 
 class GenericEngine: public Engine {
