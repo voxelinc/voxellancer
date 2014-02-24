@@ -109,22 +109,22 @@ void InputHandler::resizeEvent(const unsigned int width, const unsigned int heig
 */
 void InputHandler::keyCallback(int key, int scancode, int action, int mods) {
     if (action == GLFW_PRESS) {
-        m_inputConfigurator->setLastInput(InputMapping(InputType::Keyboard, key, 1, 0.0f),true);
+        m_inputConfigurator->setLastInput(InputMapping(InputType::Keyboard, key, 1, 0.0f), InputClass::Primary);
     } else {
-        m_inputConfigurator->setLastInput(InputMapping(),true);
+        m_inputConfigurator->setLastInput(InputMapping(), InputClass::Primary);
     }
 
     if(action == GLFW_PRESS) {
         switch(key) {
             case GLFW_KEY_F10:
                 if (glfwJoystickPresent(GLFW_JOYSTICK_1)) {
-                    m_inputConfigurator->startConfiguration(false);
+                    m_inputConfigurator->startConfiguration(InputClass::Secondary);
                 }
             break;
 
             case GLFW_KEY_F11:
-                m_inputConfigurator->startConfiguration(true);
-                m_inputConfigurator->setLastInput(InputMapping(),true);
+                m_inputConfigurator->startConfiguration(InputClass::Primary);
+                m_inputConfigurator->setLastInput(InputMapping(), InputClass::Primary);
             break;
 
             case GLFW_KEY_SPACE:
@@ -244,7 +244,7 @@ void InputHandler::addActionsToVector() {
 }
 
 float InputHandler::getInputValue(ActionKeyMapping* action) {
-    float inputValue = glm::max(getInputValue(action->mapping(true)), getInputValue(action->mapping(false)));
+    float inputValue = glm::max(getInputValue(action->mapping(InputClass::Primary)), getInputValue(action->mapping(InputClass::Secondary)));
     if (action->toggleAction()) {
         if (inputValue) {
             if (action->toggleStatus()) {

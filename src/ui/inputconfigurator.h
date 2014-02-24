@@ -15,7 +15,7 @@ class InputConfigurator {
 public:
     InputConfigurator(std::vector<ActionKeyMapping*>* actions, SecondaryInputValues *secondaryInputValues, Property<float>* deadzone, HUD* hud);
 
-    void startConfiguration(bool primary);
+    void startConfiguration(InputClass inputClass);
     bool isConfiguring();
     void update();
 
@@ -23,9 +23,9 @@ public:
 
     void setSecondaryInputValues(SecondaryInputValues* values);
 
-    void setLastInput(InputMapping lastInput, bool primary);
+    void setLastInput(InputMapping lastInput, InputClass inputClass);
 
-    InputMapping lastInput(bool primary);
+    InputMapping lastInput(InputClass inputClass);
 
 
 private:
@@ -39,14 +39,14 @@ private:
     Property<float>* prop_deadzoneGamepad;
 
 
-    bool setActionInputMapping(ActionKeyMapping* action, bool primary);
-    bool isLastInputValid(bool primary);
+    bool setActionInputMapping(ActionKeyMapping* action, InputClass inputClass);
+    bool isLastInputValid(InputClass inputClass);
 
-    bool isKeyPressed(bool primary);
+    bool isKeyPressed(InputClass inputClass);
 
-    void setupControls(bool primary);
+    void setupControls(InputClass inputClass);
 
-    void updateConfiguration(bool primary);
+    void updateConfiguration(InputClass inputClass);
 
     InputMapping lastPrimaryInput;
     InputMapping lastSecondaryInput;
@@ -54,9 +54,9 @@ private:
     int m_secondaryConfigurationState;
     int m_primaryConfigurationState;
 
-    int configurationState(bool primary);
-    void incrementConfigurationState(bool primary);
-    void setConfigurationState(int state, bool primary);
+    int configurationState(InputClass inputClass);
+    void incrementConfigurationState(InputClass inputClass);
+    void setConfigurationState(int state, InputClass inputClass);
 
     bool m_beginningKeyConfiguration = true;
     bool m_displayedKeyPressedWarning = false;
