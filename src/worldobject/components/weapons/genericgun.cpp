@@ -34,11 +34,11 @@ void GenericGun::setVisuals(const Visuals& visuals) {
     m_visuals = visuals;
 }
 
-const SoundProps& GenericGun::fireSound() const {
+const SoundProperties& GenericGun::fireSound() const {
     return m_fireSound;
 }
 
-void GenericGun::setFireSound(const SoundProps& fireSound) {
+void GenericGun::setFireSound(const SoundProperties& fireSound) {
     m_fireSound = fireSound;
 }
 

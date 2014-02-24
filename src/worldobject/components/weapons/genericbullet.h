@@ -4,7 +4,7 @@
 
 #include "bullet.h"
 
-#include "sound/soundprops.h"
+#include "sound/soundproperties.h"
 
 
 
@@ -15,13 +15,13 @@ public:
     virtual float emissiveness() const override;
     void setEmissiveness(float emissiveness);
 
-    virtual const SoundProps& hitSound() const override;
-    void setHitSound(const SoundProps& hitSound);
+    virtual const SoundProperties& hitSound() const override;
+    void setHitSound(const SoundProperties& hitSound);
     
 
 protected:
     float m_emissiveness;
-    SoundProps m_hitSound;
+    SoundProperties m_hitSound;
     virtual void spawnExplosion() override;
 };
 

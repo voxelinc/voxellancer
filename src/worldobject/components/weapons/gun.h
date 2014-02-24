@@ -5,14 +5,14 @@
 #include "worldobject/components/weapon.h"
 
 
-class SoundProps;
+class SoundProperties;
 class Bullet;
 
 class Gun: public Weapon {
 public:
     Gun(const std::string& equipmentKey);
 
-    virtual const SoundProps& fireSound() const = 0;
+    virtual const SoundProperties& fireSound() const = 0;
     
     virtual float bulletLifetime() const = 0;
     virtual float bulletSpeed() const = 0;

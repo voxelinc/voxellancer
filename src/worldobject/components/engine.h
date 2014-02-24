@@ -13,7 +13,7 @@
 class EngineSlot;
 class EngineTrailGenerator;
 class Visuals;
-class SoundProps;
+class SoundProperties;
 class Sound;
 
 class Engine: public Equipment {
@@ -22,7 +22,7 @@ public:
     virtual ~Engine();
 
     virtual const Visuals& visuals() const = 0;
-    virtual const SoundProps& sound() const = 0;
+    virtual const SoundProperties& sound() const = 0;
     
     EngineSlot* engineSlot();
     void setEngineSlot(EngineSlot* engineSlot);

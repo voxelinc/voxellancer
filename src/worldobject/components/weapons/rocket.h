@@ -9,7 +9,7 @@
 #include "worldobject/handle/handle.h"
 
 #include "projectile.h"
-#include "sound/soundprops.h"
+#include "sound/soundproperties.h"
 
 
 class Sound;
@@ -25,8 +25,8 @@ public:
     WorldObject* target();
     void setTarget(WorldObject* targetObject);
     
-    const SoundProps& explosionSound();
-    void setExplosionSound(const SoundProps& soundProps);
+    const SoundProperties& explosionSound();
+    void setExplosionSound(const SoundProperties& soundProps);
 
     virtual void update(float deltaSec) override;
 
@@ -38,7 +38,7 @@ protected:
     Handle<WorldObject> m_targetHandle;
     BoardComputer m_boardComputer;
     std::unique_ptr<AiTask> m_aiTask;
-    SoundProps m_explosionSound;
+    SoundProperties m_explosionSound;
 
     virtual void spawnExplosion() = 0;
 };

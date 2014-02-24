@@ -3,7 +3,7 @@
 #include "projectile.h"
 
 
-class SoundProps;
+class SoundProperties;
 
 /*
     Base class for every Projectile that flies with a constant undamped speed
@@ -13,7 +13,7 @@ class Bullet: public Projectile {
 public:
     Bullet();
 
-    virtual const SoundProps& hitSound() const = 0;
+    virtual const SoundProperties& hitSound() const = 0;
 
     virtual void update(float deltaSec) override;
 

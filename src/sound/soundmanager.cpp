@@ -5,7 +5,7 @@
 #include <glow/logging.h>
 
 #include "sound.h"
-#include "soundprops.h"
+#include "soundproperties.h"
 
 
 SoundManager* SoundManager::s_current;
@@ -40,7 +40,7 @@ std::shared_ptr<Sound> SoundManager::play(std::string soundFile, const glm::vec3
     return sound;
 }
 
-std::shared_ptr<Sound> SoundManager::play(const SoundProps& soundProps, const glm::vec3& position, bool relative) {
+std::shared_ptr<Sound> SoundManager::play(const SoundProperties& soundProps, const glm::vec3& position, bool relative) {
     std::shared_ptr<Sound> sound = play(soundProps.sound(), position, relative);
     sound->setVolume(soundProps.volume());
     sound->setLooping(soundProps.looping());

@@ -4,7 +4,7 @@
 
 #include "rocketlauncher.h"
 #include "display/rendering/visuals.h"
-#include "sound/soundprops.h"
+#include "sound/soundproperties.h"
 
 
 class Rocket;
@@ -28,8 +28,8 @@ public:
 
 protected:
     float m_cooldownTime;
-    SoundProps m_rocketSound;
-    SoundProps m_explosionSound;
+    SoundProperties m_rocketSound;
+    SoundProperties m_explosionSound;
     Visuals m_visuals;
     std::string m_rocketName;
     virtual Rocket* createRocket() override;

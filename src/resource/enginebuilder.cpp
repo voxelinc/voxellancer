@@ -20,7 +20,7 @@ Engine* EngineBuilder::build() {
 
     genericEngine->setVisuals(Visuals::fromProperties(m_name + ".visuals"));
     genericEngine->setPower(EnginePower::fromProperties(m_name  + ".general"));
-    genericEngine->setEngineSound(SoundProps::fromProperties(m_name + ".sound"));
+    genericEngine->setEngineSound(SoundProperties::fromProperties(m_name + ".sound"));
 
     return genericEngine;
 }

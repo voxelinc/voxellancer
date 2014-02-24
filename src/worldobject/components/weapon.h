@@ -10,7 +10,7 @@ class Hardpoint;
 class Projectile;
 class WorldObject;
 class Visuals;
-class SoundProps;
+class SoundProperties;
 
 enum class WeaponType {
     Gun,

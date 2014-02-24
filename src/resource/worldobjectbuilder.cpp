@@ -52,7 +52,7 @@ Bullet* WorldObjectBuilder::buildBullet() {
 
     bullet->setEmissiveness(Property<float>(m_name + ".general.emissiveness", 0.0f));
     bullet->setLifetime(Property<float>(m_name + ".general.lifetime"));
-    bullet->setHitSound(SoundProps::fromProperties(m_name + ".hitsound"));
+    bullet->setHitSound(SoundProperties::fromProperties(m_name + ".hitsound"));
 
     return bullet;
 }
@@ -61,7 +61,7 @@ Rocket* WorldObjectBuilder::buildRocket() {
     GenericRocket* rocket = makeWorldObject<GenericRocket>();
 
     rocket->setLifetime(Property<float>(m_name + ".general.lifetime"));
-    rocket->setExplosionSound(SoundProps::fromProperties(m_name + ".explosionsound"));
+    rocket->setExplosionSound(SoundProperties::fromProperties(m_name + ".explosionsound"));
 
     return rocket;
 }

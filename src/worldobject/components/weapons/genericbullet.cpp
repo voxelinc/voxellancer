@@ -17,11 +17,11 @@ void GenericBullet::setEmissiveness(float emissiveness) {
     m_emissiveness = emissiveness;
 }
 
-const SoundProps& GenericBullet::hitSound() const {
+const SoundProperties& GenericBullet::hitSound() const {
     return m_hitSound;
 }
 
-void GenericBullet::setHitSound(const SoundProps& hitSound) {
+void GenericBullet::setHitSound(const SoundProperties& hitSound) {
     m_hitSound = hitSound;
 }
 

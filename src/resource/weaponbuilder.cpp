@@ -41,7 +41,7 @@ GenericGun* WeaponBuilder::buildGenericGun() {
     gun->setBulletLifetime(Property<float>(bulletName + ".general.lifetime"));
     gun->setBulletSpeed(Property<float>(bulletName + ".general.speed"));
     gun->setVisuals(Visuals::fromProperties(m_name + ".visuals"));
-    gun->setFireSound(SoundProps::fromProperties(m_name + ".sound"));
+    gun->setFireSound(SoundProperties::fromProperties(m_name + ".sound"));
     gun->setCooldownTime(Property<float>(m_name + ".general.cooldownTime"));
     gun->setBulletName(bulletName);
 

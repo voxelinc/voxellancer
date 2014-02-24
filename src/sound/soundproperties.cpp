@@ -1,9 +1,9 @@
-#include "soundprops.h"
+#include "soundproperties.h"
 
 #include "property/property.h"
 
 
-SoundProps::SoundProps(const std::string& sound, float volume, float attenuation, bool repeating):
+SoundProperties::SoundProperties(const std::string& sound, float volume, float attenuation, bool repeating):
     m_sound(sound),
     m_volume(volume),
     m_attenuation(attenuation),
@@ -12,24 +12,24 @@ SoundProps::SoundProps(const std::string& sound, float volume, float attenuation
 
 }
 
-const std::string& SoundProps::sound() const {
+const std::string& SoundProperties::sound() const {
     return m_sound;
 }
 
-const float SoundProps::volume() const {
+const float SoundProperties::volume() const {
     return m_volume;
 }
 
-const float SoundProps::attenuation() const {
+const float SoundProperties::attenuation() const {
     return m_attenuation;
 }
 
-const bool SoundProps::looping() const {
+const bool SoundProperties::looping() const {
     return m_looping;
 }
 
-SoundProps SoundProps::fromProperties(std::string prefix) {
-    return SoundProps(
+SoundProperties SoundProperties::fromProperties(std::string prefix) {
+    return SoundProperties(
             Property<std::string>::get(prefix + ".name"),
             Property<float>::get(prefix + ".volume", 1.0f),
             Property<float>::get(prefix + ".attenuation", 1.0f),

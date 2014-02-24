@@ -2,17 +2,17 @@
 
 #include <string>
 
-class SoundProps {
+class SoundProperties {
 public:
-    SoundProps() = default;
-    SoundProps(const std::string& sound, float volume, float attenuation, bool repeating);
+    SoundProperties() = default;
+    SoundProperties(const std::string& sound, float volume, float attenuation, bool repeating);
 
     const std::string& sound() const;
     const float volume() const;
     const float attenuation() const;
     const bool looping() const;
 
-    static SoundProps fromProperties(std::string prefix);
+    static SoundProperties fromProperties(std::string prefix);
 
 protected:
     std::string m_sound;

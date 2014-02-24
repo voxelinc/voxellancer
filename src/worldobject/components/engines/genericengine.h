@@ -3,7 +3,7 @@
 #include "property/property.h"
 
 #include "display/rendering/visuals.h"
-#include "sound/soundprops.h"
+#include "sound/soundproperties.h"
 
 #include "worldobject/components/engine.h"
 
@@ -15,8 +15,8 @@ public:
     virtual const Visuals& visuals() const override;
     void setVisuals(const Visuals& visuals);
 
-    virtual const SoundProps& sound() const override;
-    void setEngineSound(const SoundProps& engineSound);
+    virtual const SoundProperties& sound() const override;
+    void setEngineSound(const SoundProperties& engineSound);
 
     virtual EnginePower power() const override;
     void setPower(const EnginePower& power);
@@ -27,6 +27,6 @@ public:
 protected:
     EnginePower m_power;
     Visuals m_visuals;
-    SoundProps m_engineSound;
+    SoundProperties m_engineSound;
 };
 

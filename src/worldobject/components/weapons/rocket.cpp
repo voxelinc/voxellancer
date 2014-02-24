@@ -70,10 +70,10 @@ void Rocket::onSpawnFail() {
     spawnExplosion();
 }
 
-const SoundProps& Rocket::explosionSound() {
+const SoundProperties& Rocket::explosionSound() {
     return m_explosionSound;
 }
 
-void Rocket::setExplosionSound(const SoundProps& soundProps) {
+void Rocket::setExplosionSound(const SoundProperties& soundProps) {
     m_explosionSound = soundProps;
 }
