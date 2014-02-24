@@ -5,8 +5,13 @@
 #include "worldobject/worldobjectcomponents.h"
 #include "worldobject/components/engineslot.h"
 #include "worldobject/worldobject.h"
+
 #include "physics/physics.h"
 #include "voxeleffect/enginetrailgenerator.h"
+#include "voxel/specialvoxels/engineslotvoxel.h"
+
+#include "sound/sound.h"
+#include "sound/soundmanager.h"
 
 
 Engine::Engine(const std::string& key):
@@ -16,7 +21,11 @@ Engine::Engine(const std::string& key):
     setupTrail();
 }
 
-Engine::~Engine() = default;
+Engine::~Engine() {
+    if (m_sound) {
+        m_sound->stop();
+    }
+}
 
 EngineSlot* Engine::engineSlot() {
     return m_engineSlot;
@@ -27,6 +36,11 @@ void Engine::setEngineSlot(EngineSlot* engineSlot) {
 }
 
 void Engine::update(float deltaSec) {
+    if (!m_sound) {
+        m_sound = SoundManager::current()->play(sound(), engineSlot()->voxel()->position());
+    }
+    m_sound->setPosition(engineSlot()->voxel()->position());
+
     m_trailGenerator->update(deltaSec);
 }
 

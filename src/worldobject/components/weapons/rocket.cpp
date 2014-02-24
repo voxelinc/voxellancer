@@ -10,9 +10,11 @@
 #include "world/god.h"
 #include "world/world.h"
 
+#include "worldobject/worldobjectcomponents.h"
 #include "worldobject/components/engineslot.h"
 #include "ui/objectinfo.h"
-#include "../../worldobjectcomponents.h"
+#include "sound/sound.h"
+#include "sound/soundmanager.h"
 
 
 
@@ -58,6 +60,8 @@ void Rocket::update(float deltaSec) {
 }
 
 void Rocket::onCollision() {
+    SoundManager::current()->play(explosionSound(), position());
+
     World::instance()->god().scheduleRemoval(this);
     spawnExplosion();
 }
@@ -66,4 +70,10 @@ void Rocket::onSpawnFail() {
     spawnExplosion();
 }
 
+const SoundProperties& Rocket::explosionSound() {
+    return m_explosionSound;
+}
 
+void Rocket::setExplosionSound(const SoundProperties& soundProps) {
+    m_explosionSound = soundProps;
+}

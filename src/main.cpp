@@ -157,6 +157,7 @@ static void loadWorldObjectConfigs() {
 */
 static void loadEquipmentConfigs() {
     PropertyManager::instance()->load("data/equipment/engines/enginemk1.ini", "enginemk1");
+    PropertyManager::instance()->load("data/equipment/engines/loudengine.ini", "loudengine");
     PropertyManager::instance()->load("data/equipment/engines/superslowengine.ini", "superslowengine");
     PropertyManager::instance()->load("data/equipment/engines/piratethruster.ini", "piratethruster");
     PropertyManager::instance()->load("data/equipment/engines/rocketthrustermk1.ini", "rocketthrustermk1");

@@ -9,8 +9,10 @@
 #include "worldobject/handle/handle.h"
 
 #include "projectile.h"
+#include "sound/soundproperties.h"
 
 
+class Sound;
 
 /*
     Base class for Projectiles that follow a target and attempt to crush into it.
@@ -22,6 +24,9 @@ public:
 
     WorldObject* target();
     void setTarget(WorldObject* targetObject);
+    
+    const SoundProperties& explosionSound();
+    void setExplosionSound(const SoundProperties& soundProps);
 
     virtual void update(float deltaSec) override;
 
@@ -33,6 +38,7 @@ protected:
     Handle<WorldObject> m_targetHandle;
     BoardComputer m_boardComputer;
     std::unique_ptr<AiTask> m_aiTask;
+    SoundProperties m_explosionSound;
 
     virtual void spawnExplosion() = 0;
 };
