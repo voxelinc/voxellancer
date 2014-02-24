@@ -16,21 +16,11 @@ WorldTreeGeode::WorldTreeGeode(WorldObject* worldObject) :
     m_worldObject->collisionDetector().setGeode(this);
 }
 
-WorldTreeGeode::~WorldTreeGeode() {
-
-}
-
 WorldObject* WorldTreeGeode::worldObject() {
     return m_worldObject;
 }
 
-const WorldObject* WorldTreeGeode::worldObject() const {
-    return m_worldObject;
-}
-
-void WorldTreeGeode::setWorldObject(WorldObject* worldObject) {
-    m_worldObject = worldObject;
-}
+WorldTreeGeode::~WorldTreeGeode() = default;
 
 WorldTreeNode* WorldTreeGeode::containingNode() {
     return m_containingNode;
@@ -64,4 +54,3 @@ void WorldTreeGeode::addIntersectingLeaf(WorldTreeNode* leaf) {
 void WorldTreeGeode::removeIntersectingLeaf(WorldTreeNode* leaf) {
     m_intersectingLeafs.remove(leaf);
 }
-

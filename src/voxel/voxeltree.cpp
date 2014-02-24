@@ -52,3 +52,7 @@ WorldObject* VoxelTree::worldObject() {
     return m_worldObject;
 }
 
+bool VoxelTree::isInstanced() {
+    return false;
+}
+

@@ -39,7 +39,6 @@ public:
 
     const GridAABB& gridAABB() const;
 
-    Sphere& sphere();
     Sphere& sphere(const Transform& transform);
 
     bool active() const;

@@ -40,6 +40,10 @@ Transform& VoxelCluster::transform() {
     return m_transform;
 }
 
+const Transform& VoxelCluster::transform() const {
+    return m_transform;
+}
+
 void VoxelCluster::setTransform(const Transform& transform) {
     m_transform = transform;
 }

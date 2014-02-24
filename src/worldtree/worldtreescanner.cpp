@@ -93,7 +93,7 @@ void WorldTreeScanner::scan(WorldObject* worldObject, const glm::vec3& position)
     for(WorldTreeGeode* foundGeode : foundGeodes) {
         WorldObject* foundWorldObject = foundGeode->worldObject();
 
-        if(!VoxelTreeQuery(&foundWorldObject->collisionDetector().voxelTree(), &scanSphere).areVoxelsIntersecting()) {
+        if (!VoxelTreeQuery(foundWorldObject, &foundWorldObject->collisionDetector().voxelTree(), &scanSphere).areVoxelsIntersecting()) {
             continue;
         }
 

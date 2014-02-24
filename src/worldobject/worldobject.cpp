@@ -10,8 +10,11 @@
 #include "worldobject/handle/handle.h"
 #include "physics/physics.h"
 #include "ui/objectinfo.h"
-#include "voxel/voxel.h"
 #include "worldobjectcomponents.h"
+
+#include "voxel/voxel.h"
+#include "voxel/voxeltree.h"
+#include "voxel/voxelrenderdata.h"
 
 
 WorldObject::WorldObject():
@@ -23,7 +26,7 @@ WorldObject::WorldObject():
 WorldObject::WorldObject(CollisionFilter* collisionFilter, float scale):
     VoxelCluster(scale),
     m_physics(new Physics(*this, scale)),
-    m_collisionDetector(new CollisionDetector(*this)),
+    m_collisionDetector(new CollisionDetector(*this, std::make_shared<VoxelTree>(this))),
     m_objectInfo(new ObjectInfo()),
     m_components(new WorldObjectComponents(this)),
     m_crucialVoxel(nullptr),
@@ -142,5 +145,10 @@ float WorldObject::collisionFieldOfDamage() const {
 
 void WorldObject::setCollisionFieldOfDamage(float collisionFieldOfDamage) {
     m_collisionFieldOfDamage = collisionFieldOfDamage;
+}
+
+bool WorldObject::isInstanced() {
+    assert(m_collisionDetector->voxelTree().isInstanced() == m_voxelRenderData->isInstanced());
+    return m_voxelRenderData->isInstanced();
 }
 

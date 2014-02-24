@@ -5,18 +5,46 @@ class Voxel;
 class WorldObject;
 class VoxelTreeNode;
 
-class VoxelTree {
+class IVoxelTree {
+public:
+
+    virtual void insert(Voxel* voxel) = 0;
+    virtual void remove(Voxel* voxel) = 0;
+
+    virtual bool isInstanced() = 0;
+
+    virtual VoxelTreeNode* root() = 0;
+};
+
+class VoxelTree;
+
+class InstancedVoxelTree : public IVoxelTree {
+public:
+    InstancedVoxelTree(const VoxelTree& prototype);
+
+    virtual void insert(Voxel* voxel) override; // ignore
+    virtual void remove(Voxel* voxel) override; // ignore
+
+    virtual bool isInstanced() override;
+
+    virtual VoxelTreeNode* root() override;
+
+protected:
+    const VoxelTree& m_voxelTree;
+};
+
+class VoxelTree : public IVoxelTree {
 public:
     VoxelTree(WorldObject* worldObject);
-    ~VoxelTree();
+    virtual ~VoxelTree();
 
-    VoxelTreeNode* root();
+    virtual void insert(Voxel* voxel) override;
+    virtual void remove(Voxel* voxel) override;
 
-    void insert(Voxel* voxel);
-    void remove(Voxel* voxel);
-
+    virtual bool isInstanced();
+    
+    virtual VoxelTreeNode* root() override;
     WorldObject* worldObject();
-
 
 protected:
     VoxelTreeNode* m_shadowRoot;

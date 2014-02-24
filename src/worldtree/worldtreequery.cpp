@@ -55,7 +55,7 @@ bool WorldTreeQuery::areVoxelsIntersecting() {
     m_queryInterrupted = false;
 
     query(getQueryRoot(), [&](WorldTreeGeode* geode) {
-        VoxelTreeQuery voxelTreeQuery(&geode->worldObject()->collisionDetector().voxelTree(), m_shape);
+        VoxelTreeQuery voxelTreeQuery(geode->worldObject(), &geode->worldObject()->collisionDetector().voxelTree(), m_shape);
 
         if(voxelTreeQuery.areVoxelsIntersecting()) {
             result = true;
@@ -71,7 +71,7 @@ std::unordered_set<Voxel*> WorldTreeQuery::intersectingVoxels() {
     m_queryInterrupted = false;
 
     query(getQueryRoot(), [&](WorldTreeGeode* geode) {
-        VoxelTreeQuery voxelTreeQuery(&geode->worldObject()->collisionDetector().voxelTree(), m_shape);
+        VoxelTreeQuery voxelTreeQuery(geode->worldObject(), &geode->worldObject()->collisionDetector().voxelTree(), m_shape);
         std::unordered_set<Voxel*> subresult = voxelTreeQuery.intersectingVoxels();
         result.insert(subresult.begin(), subresult.end());
     });
@@ -84,7 +84,7 @@ std::unordered_set<WorldObject*> WorldTreeQuery::intersectingWorldObjects() {
     m_queryInterrupted = false;
 
     query(getQueryRoot(), [&](WorldTreeGeode* geode) {
-        VoxelTreeQuery voxelTreeQuery(&geode->worldObject()->collisionDetector().voxelTree(), m_shape);
+        VoxelTreeQuery voxelTreeQuery(geode->worldObject(), &geode->worldObject()->collisionDetector().voxelTree(), m_shape);
 
         bool hasIntersectingVoxels = voxelTreeQuery.areVoxelsIntersecting();
         if(hasIntersectingVoxels) {

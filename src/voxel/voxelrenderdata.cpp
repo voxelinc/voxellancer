@@ -108,3 +108,7 @@ void VoxelRenderData::beforeContextDestroy() {
 void VoxelRenderData::afterContextRebuild() {
     // lazy init
 }
+
+bool VoxelRenderData::isInstanced() {
+    return false;
+}

@@ -100,11 +100,6 @@ const GridAABB& VoxelTreeNode::gridAABB() const {
     return m_gridAABB;
 }
 
-Sphere& VoxelTreeNode::sphere() {
-    assert(m_voxelTree->worldObject());
-    return sphere(m_voxelTree->worldObject()->transform());
-}
-
 Sphere& VoxelTreeNode::sphere(const Transform& transform) {
     if (transform.position() != m_cachedSphereTransform.position() ||
         transform.orientation() != m_cachedSphereTransform.orientation() ||

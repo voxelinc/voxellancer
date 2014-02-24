@@ -4,20 +4,23 @@
 #include <functional>
 
 class Voxel;
+class IVoxelTree;
 class VoxelTree;
 class VoxelTreeNode;
 class AbstractShape;
+class WorldObject;
 
 class VoxelTreeQuery {
 public:
-    VoxelTreeQuery(VoxelTree* voxelTree, const AbstractShape* shape);
+    VoxelTreeQuery(const WorldObject* worldObject, IVoxelTree* voxelTree, const AbstractShape* shape);
 
     bool areVoxelsIntersecting();
     std::unordered_set<Voxel*> intersectingVoxels();
 
 
 protected:
-    VoxelTree* m_voxelTree;
+    const WorldObject* m_worldObject;
+    IVoxelTree* m_voxelTree;
     const AbstractShape* m_shape;
     bool m_queryInterrupted;
 

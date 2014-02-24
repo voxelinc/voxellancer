@@ -53,6 +53,7 @@ public:
     float collisionFieldOfDamage() const;
     void setCollisionFieldOfDamage(float collisionFieldOfDamage);
 
+    bool isInstanced();
 
 protected:
     std::unique_ptr<CollisionFilter> m_collisionFilter;

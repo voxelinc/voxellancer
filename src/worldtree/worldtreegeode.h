@@ -15,8 +15,6 @@ public:
     virtual ~WorldTreeGeode();
 
     WorldObject* worldObject();
-    const WorldObject* worldObject() const;
-    void setWorldObject(WorldObject* worldObject);
 
     WorldTreeNode* containingNode();
     const WorldTreeNode* containingNode() const;
@@ -28,7 +26,6 @@ public:
     std::list<WorldTreeNode*>& intersectingLeafs();
     void addIntersectingLeaf(WorldTreeNode* leaf);
     void removeIntersectingLeaf(WorldTreeNode* leaf);
-
 
 protected:
     WorldObject* m_worldObject;

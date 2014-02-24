@@ -13,13 +13,14 @@ class WorldTreeGeode;
 class WorldObject;
 class Sphere;
 class VoxelTree;
+class IVoxelTree;
 class VoxelTreeNode;
 
 // this class contains datastructures for collision detection
 class CollisionDetector
 {
 public:
-    CollisionDetector(WorldObject& worldObject);
+    CollisionDetector(WorldObject& worldObject, std::shared_ptr<IVoxelTree>);
     ~CollisionDetector();
 
     void addVoxel(Voxel* voxel);
@@ -36,19 +37,19 @@ public:
     void setWorldTree(WorldTree* worldTree);
     WorldTree* worldTree();
 
-    VoxelTree& voxelTree();
+    IVoxelTree& voxelTree();
 
     void updateGeode();
 
 
 protected:
-    std::unique_ptr<VoxelTree> m_voxelTree;
+    std::shared_ptr<IVoxelTree> m_voxelTree;
     WorldObject& m_worldObject;
     WorldTreeGeode* m_geode;
     WorldTree* m_worldTree;
     std::list<VoxelCollision> m_collisions;
 
-    void checkCollisions(VoxelTreeNode* nodeA, VoxelTreeNode* nodeB);
+    void checkCollisions(VoxelTreeNode* nodeA, WorldObject* objectA, VoxelTreeNode* nodeB, WorldObject* objectB);
     const Sphere& getOrCreateSphere(VoxelTreeNode* node);
 };
 

@@ -7,8 +7,11 @@
 #include "voxel/voxeltreenode.h"
 #include "utils/tostring.h"
 
+#include "worldobject/worldobject.h"
+#include "geometry/transform.h"
 
-VoxelTreeQuery::VoxelTreeQuery(VoxelTree* voxelTree, const AbstractShape* shape):
+VoxelTreeQuery::VoxelTreeQuery(const WorldObject* worldObject, IVoxelTree* voxelTree, const AbstractShape* shape):
+    m_worldObject(worldObject),
     m_voxelTree(voxelTree),
     m_shape(shape),
     m_queryInterrupted(false)
@@ -41,7 +44,7 @@ std::unordered_set<Voxel*> VoxelTreeQuery::intersectingVoxels() {
 
 void VoxelTreeQuery::query(VoxelTreeNode* node, std::function<void(Voxel*)> onVoxelIntersection) {
     if (node->isLeaf()) {
-        if(node->isVoxel() && m_shape->intersects(node->sphere())) {
+        if(node->isVoxel() && m_shape->intersects(node->sphere(m_worldObject->transform()))) {
             onVoxelIntersection(node->voxel());
 
             if(m_queryInterrupted) {
@@ -50,7 +53,7 @@ void VoxelTreeQuery::query(VoxelTreeNode* node, std::function<void(Voxel*)> onVo
         }
     } else {
         for (VoxelTreeNode* subnode : node->subnodes()) {
-            if (m_shape->intersects(subnode->sphere())) {
+            if (m_shape->intersects(subnode->sphere(m_worldObject->transform()))) {
                 query(subnode, onVoxelIntersection);
 
                 if(m_queryInterrupted) {

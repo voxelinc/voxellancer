@@ -15,8 +15,8 @@
 #include "voxel/voxelclusterbounds.h"
 
 
-CollisionDetector::CollisionDetector(WorldObject& worldObject) :
-    m_voxelTree(new VoxelTree(&worldObject)),
+CollisionDetector::CollisionDetector(WorldObject& worldObject, std::shared_ptr<IVoxelTree> voxelTree) :
+    m_voxelTree(voxelTree),
     m_worldTree(nullptr),
     m_geode(nullptr),
     m_worldObject(worldObject)
@@ -34,7 +34,7 @@ void CollisionDetector::removeVoxel(Voxel* voxel) {
     m_voxelTree->remove(voxel);
 }
 
-VoxelTree& CollisionDetector::voxelTree() {
+IVoxelTree& CollisionDetector::voxelTree() {
     return *m_voxelTree;
 }
 
@@ -77,7 +77,7 @@ std::list<VoxelCollision>& CollisionDetector::checkCollisions() {
         WorldObject* other = possibleCollider->worldObject();
 
         assert(m_worldObject.collisionFilter().isCollideableWith(&other->collisionFilter()));
-        checkCollisions(m_voxelTree->root(), other->collisionDetector().voxelTree().root());
+        checkCollisions(m_voxelTree->root(), &m_worldObject, other->collisionDetector().voxelTree().root(), other);
     }
 
     return m_collisions;
@@ -91,38 +91,38 @@ void CollisionDetector::reset() {
     m_collisions.clear();
 }
 
-void CollisionDetector::checkCollisions(VoxelTreeNode* nodeA, VoxelTreeNode* nodeB) {
-    const Sphere& sphereA = nodeA->sphere();
-    const Sphere& sphereB = nodeB->sphere();
+void CollisionDetector::checkCollisions(VoxelTreeNode* nodeA, WorldObject* objectA, VoxelTreeNode* nodeB, WorldObject* objectB) {
+    const Sphere& sphereA = nodeA->sphere(objectA->transform());
+    const Sphere& sphereB = nodeB->sphere(objectB->transform());
 
     if (sphereA.intersects(sphereB)) {
         if (nodeA->isLeaf() && nodeB->isLeaf()) {
             if(nodeA->isVoxel() && nodeB->isVoxel()) {
-                m_collisions.push_back(VoxelCollision(VoxelCollisionParticipant(nodeA->voxelTree()->worldObject(), nodeA->voxel()), VoxelCollisionParticipant(nodeB->voxelTree()->worldObject(), nodeB->voxel())));
+                m_collisions.push_back(VoxelCollision(VoxelCollisionParticipant(objectA, nodeA->voxel()), VoxelCollisionParticipant(objectB, nodeB->voxel())));
             }
         }
         else {
             std::vector<VoxelTreeNode*> subnodes;
-            VoxelTreeNode *nodeToSplit;
-            VoxelTreeNode *otherNode;
+            std::pair<VoxelTreeNode*, WorldObject*> nodeToSplit;
+            std::pair<VoxelTreeNode*, WorldObject*> otherNode;
 
             assert(!nodeA->isLeaf() || !nodeB->isLeaf());
 
             if(sphereA.radius() < sphereB.radius()) {
-                otherNode = nodeA;
-                nodeToSplit = nodeB;
+                otherNode = { nodeA, objectA };
+                nodeToSplit = { nodeB, objectB };
             }
             else {
-                otherNode = nodeB;
-                nodeToSplit = nodeA;
+                otherNode = { nodeB, objectB };
+                nodeToSplit = { nodeA, objectA };
             }
 
-            if(nodeToSplit->isLeaf()) {
+            if(nodeToSplit.first->isLeaf()) {
                 std::swap(nodeToSplit, otherNode);
             }
 
-            for(VoxelTreeNode* subnode : nodeToSplit->subnodes()) {
-                checkCollisions(subnode, otherNode);
+            for(VoxelTreeNode* subnode : nodeToSplit.first->subnodes()) {
+                checkCollisions(subnode, nodeToSplit.second, otherNode.first, otherNode.second);
             }
         }
     }

@@ -23,6 +23,7 @@ public:
     VoxelClusterBounds& bounds();
 
     Transform& transform();
+    const Transform& transform() const;
     void setTransform(const Transform& transform);
 
     Voxel* voxel(const glm::ivec3& position);

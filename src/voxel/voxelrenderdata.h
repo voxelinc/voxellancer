@@ -17,14 +17,41 @@ namespace glow {
 };
 class Voxel;
 
-class VoxelRenderData : public ContextDependant {
+class IVoxelRenderData {
+public:
+    virtual void invalidate() = 0;
+    virtual int voxelCount() = 0;
+    virtual bool isInstanced() = 0;
+
+    virtual glow::VertexArrayObject* vertexArrayObject() = 0;
+};
+
+class VoxelRenderData;
+
+class InstancedVoxelRenderData : public IVoxelRenderData {
+public:
+    InstancedVoxelRenderData(const VoxelRenderData& prototype);
+
+    virtual void invalidate() override; // throws assertion or just do nothing
+    virtual int voxelCount() override;
+    virtual bool isInstanced() override;
+
+    virtual glow::VertexArrayObject* vertexArrayObject() override;
+
+protected:
+    const VoxelRenderData& m_prototype;
+
+};
+
+class VoxelRenderData : public IVoxelRenderData, ContextDependant {
 public:
     VoxelRenderData(std::unordered_map<glm::ivec3, Voxel*> &voxel);
 
-    void invalidate();
-    int voxelCount();
+    virtual void invalidate() override;
+    virtual int voxelCount() override;
+    virtual bool isInstanced() override;
 
-    glow::VertexArrayObject* vertexArrayObject();
+    virtual glow::VertexArrayObject* vertexArrayObject() override;
 
 protected:
     std::unordered_map<glm::ivec3, Voxel*> &m_voxel;
