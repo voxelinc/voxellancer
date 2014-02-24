@@ -45,35 +45,17 @@ void Rocket::setTarget(WorldObject* targetObject) {
     }
 }
 
+
 void Rocket::update(float deltaSec) {
     Projectile::update(deltaSec);
 
-    if (m_aiTask.get()) {
+    if (m_aiTask) {
         m_aiTask->update(deltaSec);
         m_boardComputer.update(deltaSec);
     } else {
         components().setEngineState(EngineState(
             glm::vec3(0, 0, -1),
             glm::vec3(0, 0, 0)
-        ));
+            ));
     }
-}
-
-void Rocket::onCollision() {
-    SoundManager::current()->play(explosionSound(), position());
-
-    World::instance()->god().scheduleRemoval(this);
-    spawnExplosion();
-}
-
-void Rocket::onSpawnFail() {
-    spawnExplosion();
-}
-
-const SoundProperties& Rocket::explosionSound() {
-    return m_explosionSound;
-}
-
-void Rocket::setExplosionSound(const SoundProperties& soundProps) {
-    m_explosionSound = soundProps;
 }

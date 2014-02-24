@@ -36,15 +36,15 @@ std::shared_ptr<Sound> SoundManager::play(std::string soundFile, const glm::vec3
         return std::make_shared<Sound>();
     }
     std::shared_ptr<Sound> sound = create(soundFile);
-    sound->setPosition(position)->setRelativeToListener(relative)->play();
+    sound->setPosition(position).setRelativeToListener(relative).play();
     return sound;
 }
 
-std::shared_ptr<Sound> SoundManager::play(const SoundProperties& soundProps, const glm::vec3& position, bool relative) {
-    std::shared_ptr<Sound> sound = play(soundProps.sound(), position, relative);
-    sound->setVolume(soundProps.volume());
-    sound->setLooping(soundProps.looping());
-    sound->setAttenuation(soundProps.attenuation());
+std::shared_ptr<Sound> SoundManager::play(const SoundProperties& soundProperties, const glm::vec3& position, bool relative) {
+    std::shared_ptr<Sound> sound = play(soundProperties.sound(), position, relative);
+    sound->setVolume(soundProperties.volume());
+    sound->setLooping(soundProperties.looping());
+    sound->setAttenuation(soundProperties.attenuation());
     return sound;
 }
 

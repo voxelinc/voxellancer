@@ -61,7 +61,7 @@ Rocket* WorldObjectBuilder::buildRocket() {
     GenericRocket* rocket = makeWorldObject<GenericRocket>();
 
     rocket->setLifetime(Property<float>(m_name + ".general.lifetime"));
-    rocket->setExplosionSound(SoundProperties::fromProperties(m_name + ".explosionsound"));
+    rocket->setHitSound(SoundProperties::fromProperties(m_name + ".explosionsound"));
 
     return rocket;
 }

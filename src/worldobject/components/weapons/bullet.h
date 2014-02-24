@@ -13,15 +13,9 @@ class Bullet: public Projectile {
 public:
     Bullet();
 
-    virtual const SoundProperties& hitSound() const = 0;
-
     virtual void update(float deltaSec) override;
 
-    virtual void onCollision() override;
-    virtual void onSpawnFail() override;
-
-
 protected:
-    virtual void spawnExplosion() = 0;
+
 };
 

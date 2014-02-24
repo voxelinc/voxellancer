@@ -18,7 +18,6 @@ public:
     virtual const SoundProperties& hitSound() const override;
     void setHitSound(const SoundProperties& hitSound);
     
-
 protected:
     float m_emissiveness;
     SoundProperties m_hitSound;

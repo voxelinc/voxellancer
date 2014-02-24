@@ -12,8 +12,12 @@ class GenericRocket: public Rocket {
 public:
     GenericRocket();
 
+    virtual const SoundProperties& hitSound() const override;
+    void setHitSound(const SoundProperties& hitSound);
 
 protected:
+    SoundProperties m_hitSound;
+
     virtual void spawnExplosion() override;
     virtual void onLifetimeOver() override;
 };

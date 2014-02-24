@@ -28,7 +28,7 @@ const bool SoundProperties::looping() const {
     return m_looping;
 }
 
-SoundProperties SoundProperties::fromProperties(std::string prefix) {
+SoundProperties SoundProperties::fromProperties(const std::string& prefix) {
     return SoundProperties(
             Property<std::string>::get(prefix + ".name"),
             Property<float>::get(prefix + ".volume", 1.0f),

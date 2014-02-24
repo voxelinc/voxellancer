@@ -25,21 +25,13 @@ public:
     WorldObject* target();
     void setTarget(WorldObject* targetObject);
     
-    const SoundProperties& explosionSound();
-    void setExplosionSound(const SoundProperties& soundProps);
-
     virtual void update(float deltaSec) override;
-
-    virtual void onCollision() override;
-    virtual void onSpawnFail() override;
 
 
 protected:
     Handle<WorldObject> m_targetHandle;
     BoardComputer m_boardComputer;
     std::unique_ptr<AiTask> m_aiTask;
-    SoundProperties m_explosionSound;
 
-    virtual void spawnExplosion() = 0;
 };
 

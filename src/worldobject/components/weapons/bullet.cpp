@@ -26,13 +26,3 @@ void Bullet::update(float deltaSec) {
     Projectile::update(deltaSec);
 }
 
-void Bullet::onCollision() {
-    SoundManager::current()->play(hitSound(), position());
-    World::instance()->god().scheduleRemoval(this);
-    spawnExplosion();
-}
-
-void Bullet::onSpawnFail() {
-    spawnExplosion();
-}
-
