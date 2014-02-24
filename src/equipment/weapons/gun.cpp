@@ -23,7 +23,7 @@ Gun::Gun(const std::string& equipmentKey):
 }
 
 void Gun::fireAtPoint(const glm::vec3& point) {
-    if (canFire()) {
+    if (canFire() && hardpoint()->inFieldOfAim(point)) {
         Bullet *bullet = createBullet();
         setupBullet(bullet, point);
 
