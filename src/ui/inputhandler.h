@@ -19,9 +19,9 @@ public:
 
     void setHMD(HMD& hmd);
 
-	void resizeEvent(const unsigned int width, const unsigned int height);
-	void keyCallback(int key, int scancode, int action, int mods);
-	void update(float deltaSec);
+    void resizeEvent(const unsigned int width, const unsigned int height);
+    void keyCallback(int key, int scancode, int action, int mods);
+    void update(float deltaSec);
 
 
 protected:

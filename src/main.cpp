@@ -96,7 +96,7 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
         game->setOutputBuffer(key-GLFW_KEY_1);
     }
 
-	game->inputHandler().keyCallback(key, scancode, action, mods);
+    game->inputHandler().keyCallback(key, scancode, action, mods);
 }
 
 void setCallbacks(GLFWwindow* window) {

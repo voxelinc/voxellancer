@@ -100,7 +100,7 @@ void InputHandler::setHMD(HMD& hmd) {
 }
 
 void InputHandler::resizeEvent(const unsigned int width, const unsigned int height){
-	m_lastfocus = false; // through window resize everything becomes scrambled
+    m_lastfocus = false; // through window resize everything becomes scrambled
 }
 
 /*

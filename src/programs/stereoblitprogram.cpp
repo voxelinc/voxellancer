@@ -11,7 +11,7 @@
 
 
 StereoBlitProgram::StereoBlitProgram():
-	m_distortionScale(1.0f)
+    m_distortionScale(1.0f)
 {
 
 }

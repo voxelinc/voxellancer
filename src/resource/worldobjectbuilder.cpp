@@ -78,9 +78,9 @@ template<typename WorldObjectType>
 WorldObjectType* WorldObjectBuilder::newWorldObject() {
     static_assert(std::is_base_of<WorldObject, WorldObjectType>::value, "WorldObjectType needs to be derived from WorldObject");
 
-	WorldObjectType* worldObject = new WorldObjectType();
+    WorldObjectType* worldObject = new WorldObjectType();
 
-	setupVoxelCluster(worldObject);
+    setupVoxelCluster(worldObject);
     setupComponents(worldObject->components());
 
     std::string collisionFieldOfDamageProperty = m_name + ".general.collisionFieldOfDamage";
