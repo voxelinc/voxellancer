@@ -13,6 +13,7 @@ class WorldObjectComponents;
 
 /*
     Slot into which interchangeable weapons may be mounted
+    direction and fieldOfAim form a cone in which the hardpoint can fire its weapons
 */
 class Hardpoint: public WorldObjectSlot {
 public:
@@ -26,8 +27,10 @@ public:
     const glm::vec3& direction() const;
     void setDirection(const glm::vec3& direction);
 
-    const glm::vec2& fieldOfAim() const;
-    void setFieldOfAim(const glm::vec2& fieldOfAim);
+    float fieldOfAim() const;
+    void setFieldOfAim(float fieldOfAim);
+
+    bool inFieldOfAim(const glm::vec3& point);
 
     void update(float deltaSec);
 
@@ -39,6 +42,6 @@ protected:
     std::shared_ptr<Weapon> m_weapon;
 
     glm::vec3 m_direction;
-    glm::vec2 m_fieldOfAim;
+    float m_fieldOfAim;
 };
 

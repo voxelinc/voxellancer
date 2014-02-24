@@ -5,8 +5,9 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 
+#include "equipment/enginestate.h"
+
 #include "worldobject/handle/handle.h"
-#include "worldobject/components/enginestate.h"
 
 
 class Camera;

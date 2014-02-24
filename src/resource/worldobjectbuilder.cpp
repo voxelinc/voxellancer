@@ -7,12 +7,12 @@
 
 #include "property/property.h"
 
-#include "worldobject/components/engine.h"
-#include "worldobject/components/engineslot.h"
-#include "worldobject/components/hardpoint.h"
-#include "worldobject/components/weapon.h"
-#include "worldobject/components/weapons/genericbullet.h"
-#include "worldobject/components/weapons/genericrocket.h"
+#include "equipment/engine.h"
+#include "equipment/engineslot.h"
+#include "equipment/hardpoint.h"
+#include "equipment/weapon.h"
+#include "equipment/weapons/genericbullet.h"
+#include "equipment/weapons/genericrocket.h"
 #include "worldobject/genericship.h"
 #include "worldobject/genericworldobject.h"
 #include "worldobject/ship.h"
@@ -128,7 +128,7 @@ void WorldObjectBuilder::setupHardpoints(WorldObjectComponents& components) {
         std::string prefix = m_name + ".hardpoint" + std::to_string(hardpoint->index()) + ".";
 
         hardpoint->setDirection(Property<glm::vec3>(prefix + "direction"));
-        hardpoint->setFieldOfAim(Property<glm::vec2>(prefix + "fieldOfAim"));
+        hardpoint->setFieldOfAim(glm::radians<float>(Property<float>(prefix + "fieldOfAim")));
 
         std::list<std::string> mountableWeapons = Property<std::list<std::string>>(prefix + "mountable");
         for(std::string& weapon : mountableWeapons) {
