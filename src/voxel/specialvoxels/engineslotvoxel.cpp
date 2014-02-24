@@ -24,7 +24,7 @@ void EngineSlotVoxel::addToObject(WorldObject* worldObject) {
 
 Visuals EngineSlotVoxel::visuals() const {
     return Visuals(
-        m_engineSlot->engine() ? m_engineSlot->engine()->visuals() : Voxel::visuals()
+        m_engineSlot->engine() ? m_engineSlot->engine()->visuals() : SpecialVoxel::visuals()
     );
 }
 
@@ -33,10 +33,10 @@ void EngineSlotVoxel::onRemoval() {
         m_engineSlot->components()->removeEngineSlot(m_engineSlot);
         m_engineSlot = nullptr;
     }
-    Voxel::onRemoval();
+    SpecialVoxel::onRemoval();
 }
 
-void EngineSlotVoxel::onDestruction() {
-    Voxel::onDestruction();
+void EngineSlotVoxel::onDestruction(const WorldObject* owner) {
+    SpecialVoxel::onDestruction(owner);
 }
 

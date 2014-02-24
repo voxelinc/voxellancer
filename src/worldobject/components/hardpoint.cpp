@@ -9,14 +9,9 @@
 
 
 Hardpoint::Hardpoint(WorldObjectComponents* components, HardpointVoxel* voxel):
-    WorldObjectSlot(components, voxel->index()),
-    m_voxel(voxel),
+    WorldObjectSlot(components, voxel, voxel->index()),
     m_weapon(nullptr)
 {
-}
-
-HardpointVoxel* Hardpoint::voxel() {
-    return m_voxel;
 }
 
 const std::shared_ptr<Weapon>& Hardpoint::weapon() {

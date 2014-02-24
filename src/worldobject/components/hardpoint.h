@@ -28,11 +28,10 @@ public:
 
     const glm::vec2& fieldOfAim() const;
     void setFieldOfAim(const glm::vec2& fieldOfAim);
-
+    
     void update(float deltaSec);
 
 protected:
-    HardpointVoxel* m_voxel;
     std::shared_ptr<Weapon> m_weapon;
 
     glm::vec3 m_direction;

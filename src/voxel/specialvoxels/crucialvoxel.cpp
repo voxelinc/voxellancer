@@ -15,7 +15,7 @@ CrucialVoxel::CrucialVoxel(const glm::ivec3& gridCell, int index):
 void CrucialVoxel::addToObject(WorldObject* worldObject){
     assert(worldObject->crucialVoxel() == nullptr);
 
-    Voxel::addToObject(worldObject);
+    SpecialVoxel::addToObject(worldObject);
     worldObject->setCrucialVoxel(m_gridCell);
 }
 
@@ -23,7 +23,7 @@ void CrucialVoxel::onRemoval(){
     //TODO: Destroy ship / make wreckage?
 }
 
-void CrucialVoxel::onDestruction(){
-    Voxel::onDestruction();
+void CrucialVoxel::onDestruction(const WorldObject* owner) {
+    SpecialVoxel::onDestruction(owner);
 }
 

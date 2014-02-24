@@ -80,6 +80,7 @@ void WorldObject::update(float deltaSec) {
 
 void WorldObject::addVoxel(Voxel* voxel) {
     assert(voxel);
+    assert(!isInstanced());
 
     VoxelCluster::addVoxel(voxel);
 
@@ -91,6 +92,7 @@ void WorldObject::addVoxel(Voxel* voxel) {
 
 void WorldObject::removeVoxel(Voxel* voxel) {
     assert(voxel);
+    assert(!isInstanced());
 
     voxel->onRemoval();
 

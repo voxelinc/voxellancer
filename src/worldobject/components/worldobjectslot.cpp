@@ -1,9 +1,11 @@
 #include "worldobjectslot.h"
 
-#include <iostream>
+#include "worldobject/worldobjectcomponents.h"
+#include "worldobject/worldobject.h"
+#include "voxel/specialvoxel.h"
 
-
-WorldObjectSlot::WorldObjectSlot(WorldObjectComponents* components, int index):
+WorldObjectSlot::WorldObjectSlot(WorldObjectComponents* components, SpecialVoxel* specialVoxel, int index) :
+    m_voxel(specialVoxel),
     m_components(components),
     m_index(index)
 {
@@ -35,5 +37,9 @@ WorldObjectComponents* WorldObjectSlot::components() {
 
 int WorldObjectSlot::index() const {
     return m_index;
+}
+
+glm::vec3 WorldObjectSlot::position() {
+    return m_voxel->position(m_components->worldObject()->transform());
 }
 

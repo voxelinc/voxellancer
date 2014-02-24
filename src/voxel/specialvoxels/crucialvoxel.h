@@ -10,5 +10,5 @@ public:
     virtual void addToObject(WorldObject* worldObject);
 
     virtual void onRemoval();
-    virtual void onDestruction();
+    virtual void onDestruction(const WorldObject* owner);
 };

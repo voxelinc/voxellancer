@@ -17,7 +17,7 @@ Property<float>* Voxel::s_defaultHp;
 
 Voxel::Voxel(const glm::ivec3& gridCell, uint32_t color, float normalizedMass, float hp, float emissiveness):
     m_gridCell(gridCell),
-    m_voxelTreeNode(nullptr),
+    //m_voxelTreeNode(nullptr),
     m_visuals(color, 0.0f),
     m_normalizedMass(normalizedMass),
     m_hp(hp)
@@ -41,9 +41,8 @@ const glm::ivec3& Voxel::gridCell() const {
     return m_gridCell;
 }
 
-glm::vec3 Voxel::position() const {
-    assert(m_voxelTreeNode);
-    return m_voxelTreeNode->voxelTree()->worldObject()->transform().applyTo(glm::vec3(m_gridCell));
+glm::vec3 Voxel::position(const Transform& transform) const {
+    return transform.applyTo(glm::vec3(m_gridCell));
 }
 
 void Voxel::addToCluster(VoxelCluster *cluster) {
@@ -82,21 +81,17 @@ void Voxel::onRemoval() {
 
 }
 
-void Voxel::onDestruction() {
-    assert(m_voxelTreeNode);
-
-    WorldObject* worldObject = m_voxelTreeNode->voxelTree()->worldObject();
-
-    if (m_voxelTreeNode && worldObject) {
+void Voxel::onDestruction(const WorldObject* owner) {
+    if (owner) {
         VoxelDebrisGenerator generator;
-        generator.setOrientation(worldObject->transform().orientation());
-        generator.setPosition(worldObject->transform().applyTo(glm::vec3(m_gridCell)));
-        generator.setScale(worldObject->transform().scale() * 0.6f, 0.4f);
+        generator.setOrientation(owner->transform().orientation());
+        generator.setPosition(owner->transform().applyTo(glm::vec3(m_gridCell)));
+        generator.setScale(owner->transform().scale() * 0.6f, 0.4f);
         generator.setColor(visuals().color());
         generator.setEmissiveness(visuals().emissiveness());
         generator.setForce(0.4f, 0.5f);
         generator.setSpawnProbability(0.5);
-        generator.setLifetime(Property<float>("vfx.debrisLifetime"), 0.9f);
+        generator.setLifetime(Property<float>::get("vfx.debrisLifetime"), 0.9f);
         generator.spawn();
     }
 }

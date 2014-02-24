@@ -39,7 +39,7 @@ void RocketLauncher::setupRocket(Rocket* rocket, WorldObject* target) {
     WorldObject* worldObject = hardpoint()->components()->worldObject();
     glm::quat shipOrientation = worldObject->transform().orientation();
     float rocketLength = rocket->bounds().minimalGridAABB().extent(ZAxis) * rocket->transform().scale();
-    glm::vec3 rocketPosition = hardpoint()->voxel()->position() + shipOrientation * glm::vec3(0, 0, -rocketLength / 2.0f);
+    glm::vec3 rocketPosition = hardpoint()->position() + shipOrientation * glm::vec3(0, 0, -rocketLength / 2.0f);
 
     rocket->transform().setOrientation(shipOrientation);
     rocket->transform().setPosition(rocketPosition);

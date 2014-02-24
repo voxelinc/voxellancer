@@ -47,7 +47,7 @@ public:
     /*
         Set relative state on all installed engines,
         the value returned by engineState() is the last set and doesn't react on
-        possible indivdual changes of engines;
+        possible individual changes of engines;
     */
     const EngineState& engineState() const;
     void setEngineState(const EngineState& engineState);
@@ -75,8 +75,7 @@ public:
         Update all components
     */
     void update(float deltaSec);
-
-
+    
 
 protected:
     WorldObject* m_worldObject;

@@ -11,6 +11,7 @@ class VoxelCluster;
 class VoxelTreeNode;
 class WorldObject;
 class Sphere;
+class Transform;
 
 class Voxel {
 public:
@@ -19,10 +20,9 @@ public:
     virtual ~Voxel();
 
     const glm::ivec3 &gridCell() const;
+    glm::vec3 position(const Transform& transform) const;
 
-    glm::vec3 position() const;
-
-    VoxelTreeNode *voxelTreeNode();
+    VoxelTreeNode *Voxel::voxelTreeNode();
     void setVoxelTreeNode(VoxelTreeNode* voxelTreeNode);
 
     virtual void addToCluster(VoxelCluster *cluster);
@@ -37,9 +37,7 @@ public:
 
     // These hooks apply only for WorldObjects and do not need to be called by pqure VoxelClusters
     virtual void onRemoval();
-    virtual void onDestruction();
-
-
+    virtual void onDestruction(const WorldObject* owner);
 
 protected:
     glm::ivec3 m_gridCell;
@@ -53,5 +51,6 @@ protected:
 
     static float defaultMass();
     static float defaultHp();
+
 };
 

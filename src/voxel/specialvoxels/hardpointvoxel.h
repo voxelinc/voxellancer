@@ -16,7 +16,7 @@ public:
     virtual void addToObject(WorldObject* object) override;
 
     virtual void onRemoval() override;
-    virtual void onDestruction() override;
+    virtual void onDestruction(const WorldObject* owner) override;
 
 
 protected:

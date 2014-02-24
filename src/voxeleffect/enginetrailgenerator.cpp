@@ -83,7 +83,7 @@ void EngineTrailGenerator::spawnTrail() {
 
 glm::vec3 EngineTrailGenerator::calculateSpawnPosition() {
     WorldObject* worldObject = m_engine->engineSlot()->components()->worldObject();
-    return m_engine->engineSlot()->voxel()->position() + worldObject->transform().orientation() * glm::vec3(0, 0, m_spawnOffset);
+    return m_engine->engineSlot()->position() + worldObject->transform().orientation() * glm::vec3(0, 0, m_spawnOffset);
 }
 
 void EngineTrailGenerator::spawnAt(glm::vec3 position) {

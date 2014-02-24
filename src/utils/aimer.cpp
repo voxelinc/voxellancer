@@ -1,6 +1,11 @@
 #include "aimer.h"
 
+#include <limits>
+
 #include <glm/glm.hpp>
+
+#include "collision/collisiondetector.h"
+#include "collision/collisionfilter.h"
 
 #include "voxel/voxeltree.h"
 #include "voxel/voxeltreenode.h"
@@ -8,10 +13,10 @@
 #include "world/world.h"
 
 #include "worldobject/worldobject.h"
-
 #include "worldtree/worldtreequery.h"
-#include "collision/collisionfilter.h"
+
 #include "voxel/voxel.h"
+#include "voxel/voxeltreequery.h"
 
 
 Aimer::Aimer(WorldObject* worldObject, const Ray& ray):
@@ -26,36 +31,56 @@ glm::vec3 Aimer::aim() {
 
     WorldTreeQuery wordltreequery(&World::instance()->worldTree(), &m_ray, nullptr, &m_worldObject->collisionFilter());
 
-    std::unordered_set<Voxel*> intersectingVoxels = wordltreequery.intersectingVoxels();
+    std::unordered_set<WorldObject*> intersectingWorldObjects = wordltreequery.intersectingWorldObjects();
 
-    if(!intersectingVoxels.empty()) {
-        return nearestTarget(intersectingVoxels);
+    if(!intersectingWorldObjects.empty()) {
+        return nearestTarget(intersectingWorldObjects);
     }
     else {
         return infinity();
     }
 }
 
-glm::vec3 Aimer::nearestTarget(const std::unordered_set<Voxel*>& voxels) const {
-    Voxel* anyVoxel = *voxels.begin();
-
-    float minDistance = distanceTo(anyVoxel);
-    glm::vec3 targetPoint = anyVoxel->position();
-
-    for(Voxel* voxel : voxels) {
-        float distance = distanceTo(voxel);
-
+glm::vec3 Aimer::nearestTarget(const std::unordered_set<WorldObject*>& worldObjects) const {
+    WorldObject* nearest = nullptr;
+    float minDistance = std::numeric_limits<float>::max();
+    
+    for(WorldObject* worldObject : worldObjects) {
+        float distance = glm::length(worldObject->position() - m_ray.origin());
         if(distance < minDistance) {
-            targetPoint = voxel->position();
+            nearest = worldObject;
             minDistance = distance;
         }
     }
 
+    glm::vec3 targetPoint = nearestVoxel(nearest);
+    
     return targetPoint;
 }
 
-float Aimer::distanceTo(Voxel* voxel) const {
-    return glm::length(voxel->position() - m_ray.origin());
+glm::vec3 Aimer::nearestVoxel(WorldObject* object) const {
+    VoxelTreeQuery voxelTreeQuery(object, &object->collisionDetector().voxelTree(), &m_ray);
+    auto voxels = voxelTreeQuery.intersectingVoxels();
+
+    Voxel* nearest = nullptr;
+    float minDistance = std::numeric_limits<float>::max();
+
+    for (Voxel* voxel : voxels) {
+        float distance = distanceTo(voxel, object);
+        if (distance < minDistance) {
+            nearest = voxel;
+            minDistance = distance;
+        }
+    }
+
+    glm::vec3 targetPoint = nearest->position(object->transform());
+
+    return targetPoint;
+}
+
+
+float Aimer::distanceTo(Voxel* voxel, WorldObject* owner) const {
+    return glm::length(voxel->position(owner->transform()) - m_ray.origin());
 }
 
 glm::vec3 Aimer::infinity() const {

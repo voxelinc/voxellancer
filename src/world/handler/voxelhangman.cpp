@@ -9,7 +9,7 @@
 void VoxelHangman::applyOnDestructionHooks(std::list<DamageImpact> &deadlyDamageImpacts) {
     for(DamageImpact& damageImpact : deadlyDamageImpacts) {
         assert(damageImpact.voxel() != nullptr);
-        damageImpact.voxel()->onDestruction();
+        damageImpact.voxel()->onDestruction(damageImpact.worldObject());
     }
 }
 

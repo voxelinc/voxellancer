@@ -37,9 +37,9 @@ void Engine::setEngineSlot(EngineSlot* engineSlot) {
 
 void Engine::update(float deltaSec) {
     if (!m_sound) {
-        m_sound = SoundManager::current()->play(sound(), engineSlot()->voxel()->position());
+        m_sound = SoundManager::current()->play(sound(), engineSlot()->position());
     }
-    m_sound->setPosition(engineSlot()->voxel()->position());
+    m_sound->setPosition(engineSlot()->position());
 
     m_trailGenerator->update(deltaSec);
 }

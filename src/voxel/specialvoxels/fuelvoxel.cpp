@@ -13,15 +13,15 @@ FuelVoxel::FuelVoxel(const glm::ivec3& gridCell, int index):
 }
 
 void FuelVoxel::addToObject(WorldObject* worldObject) {
-    Voxel::addToObject(worldObject);
+    SpecialVoxel::addToObject(worldObject);
 }
 
 void FuelVoxel::onRemoval() {
 
 }
 
-void FuelVoxel::onDestruction() {
+void FuelVoxel::onDestruction(const WorldObject* owner) {
     //TODO: explode more than default
-    Voxel::onDestruction();
+    SpecialVoxel::onDestruction(owner);
 }
 

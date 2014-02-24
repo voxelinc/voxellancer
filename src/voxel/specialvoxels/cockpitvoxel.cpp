@@ -13,15 +13,15 @@ CockpitVoxel::CockpitVoxel(const glm::ivec3& gridCell, int index):
 }
 
 void CockpitVoxel::addToObject(WorldObject* worldObject) {
-    Voxel::addToObject(worldObject);
+    SpecialVoxel::addToObject(worldObject);
 }
 
 void CockpitVoxel::onRemoval() {
     //TODO: Tell my cockpit I'm gone
 }
 
-void CockpitVoxel::onDestruction() {
-    Voxel::onDestruction();
+void CockpitVoxel::onDestruction(const WorldObject* owner) {
+    SpecialVoxel::onDestruction(owner);
     // Spawn dead pilot
 }
 

@@ -4,7 +4,9 @@
 #include <list>
 #include <string>
 
+#include <glm/glm.hpp>
 
+class SpecialVoxel;
 class WorldObjectComponents;
 
 /*
@@ -13,9 +15,11 @@ class WorldObjectComponents;
 */
 class WorldObjectSlot {
 public:
-    WorldObjectSlot(WorldObjectComponents* components, int index);
+    WorldObjectSlot(WorldObjectComponents* components, SpecialVoxel* specialVoxel, int index);
 
     std::list<std::string> mountables() const;
+
+    glm::vec3 position();
 
     bool mountable(const std::string& name) const;
     void setMountable(const std::string& name, bool mountable);
@@ -28,6 +32,7 @@ public:
 protected:
     WorldObjectComponents* m_components;
     std::map<std::string, bool> m_mountables;
+    SpecialVoxel* m_voxel;
     int m_index;
 };
 

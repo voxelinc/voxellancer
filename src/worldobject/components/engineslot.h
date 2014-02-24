@@ -18,8 +18,6 @@ class EngineSlot: public WorldObjectSlot {
 public:
     EngineSlot(WorldObjectComponents* components, EngineSlotVoxel* voxel);
 
-    EngineSlotVoxel* voxel();
-
     const glm::vec3& direction();
     void setDirection(const glm::vec3& direction);
 
@@ -29,7 +27,6 @@ public:
     void update(float deltaSec);
 
 protected:
-    EngineSlotVoxel* m_voxel;
     std::shared_ptr<Engine> m_engine;
 
     glm::vec3 m_direction;

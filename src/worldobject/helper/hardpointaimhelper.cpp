@@ -22,7 +22,7 @@ HardpointAimHelper::HardpointAimHelper(Hardpoint* hardpoint, WorldObject* target
 
     Gun& gun = dynamic_cast<Gun&>(*m_hardpoint->weapon().get());
 
-    m_hardpointPosition = m_hardpoint->voxel()->position();
+    m_hardpointPosition = m_hardpoint->position();
 
     m_targetPosition = m_targetObject->transform().position();
     m_targetSpeed = m_targetObject->physics().speed().directional();

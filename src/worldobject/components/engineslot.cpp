@@ -9,14 +9,9 @@
 
 
 EngineSlot::EngineSlot(WorldObjectComponents* components, EngineSlotVoxel* voxel):
-    WorldObjectSlot(components, voxel->index()),
-    m_voxel(voxel),
+    WorldObjectSlot(components, voxel, voxel->index()),
     m_engine(nullptr)
 {
-}
-
-EngineSlotVoxel* EngineSlot::voxel() {
-    return m_voxel;
 }
 
 const glm::vec3& EngineSlot::direction() {

@@ -19,12 +19,12 @@ HardpointVoxel::HardpointVoxel(const glm::ivec3& gridCell, int index):
 
 Visuals HardpointVoxel::visuals() const {
     return Visuals(
-        m_hardpoint->weapon() ? m_hardpoint->weapon()->visuals() : Voxel::visuals()
+        m_hardpoint->weapon() ? m_hardpoint->weapon()->visuals() : SpecialVoxel::visuals()
     );
 }
 
 void HardpointVoxel::addToObject(WorldObject* worldObject) {
-    Voxel::addToObject(worldObject);
+    SpecialVoxel::addToObject(worldObject);
     assert(m_hardpoint == nullptr);
     m_hardpoint = std::make_shared<Hardpoint>(&worldObject->components(), this);
     worldObject->components().addHardpoint(m_hardpoint);
@@ -35,11 +35,11 @@ void HardpointVoxel::onRemoval() {
         m_hardpoint->components()->removeHardpoint(m_hardpoint);
         m_hardpoint = nullptr;
     }
-    Voxel::onRemoval();
+    SpecialVoxel::onRemoval();
 }
 
-void HardpointVoxel::onDestruction() {
+void HardpointVoxel::onDestruction(const WorldObject* owner) {
     //Drop Ammo?
-    Voxel::onDestruction();
+    SpecialVoxel::onDestruction(owner);
 }
 
