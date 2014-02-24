@@ -29,7 +29,7 @@ StateTemplate<StateType>::StateTemplate(const std::string& name, StateType* self
 
 template<typename StateType>
 StateTemplate<StateType>::~StateTemplate() {
-    for (StateType* substate : m_substates) {
+    for (StateType* substate : m_subStates) {
         delete substate;
     }
 
@@ -114,14 +114,19 @@ void StateTemplate<StateType>::setCurrentSubState(StateType* currentSubState) {
 }
 
 template<typename StateType>
-void StateTemplate<StateType>::makeCurrent() {
-    if (m_parentState) {
-        if (m_parentState->currentSubState() != m_self) {
-            m_parentState->setCurrentSubState(m_self);
-            m_parentState->makeCurrent();
-            onEntered();
+StateType* StateTemplate<StateType>::pathToDescendant(StateType* descendant) {
+    for(StateType* subState : m_subStates) {
+        if (subState == descendant) {
+            return subState;
+        }
+
+        StateType* next = subState->pathToDescendant(descendant);
+        if (next) {
+            return next;
         }
     }
+
+    return nullptr;
 }
 
 template<typename StateType>
@@ -131,24 +136,24 @@ bool StateTemplate<StateType>::finished() const {
 
 template<typename StateType>
 std::list<StateType*>& StateTemplate<StateType>::substates() {
-    return m_substates;
+    return m_subStates;
 }
 
 template<typename StateType>
 const std::list<StateType*>& StateTemplate<StateType>::substates() const {
-    return m_substates;
+    return m_subStates;
 }
 
 template<typename StateType>
 void StateTemplate<StateType>::addSubState(StateType* state) {
-    m_substates.push_back(state);
+    m_subStates.push_back(state);
 }
 
 template<typename StateType>
 void StateTemplate<StateType>::removeSubState(StateType* state) {
     assert(state->parentState() == m_self);
 
-    m_substates.remove(state);
+    m_subStates.remove(state);
     delete state;
 }
 
@@ -180,21 +185,38 @@ void StateTemplate<StateType>::update(float deltaSec) {
     if (m_currentSubState) {
         for (Transition<StateType>* transition : m_currentSubState->transitions()) {
             if (transition->isPossible()) {
-                m_currentSubState->onLeft();
-                m_currentSubState = nullptr;
-                transition->to()->makeCurrent();
-
+                transit(transition->from(), transition->to());
                 transition->onPerformed();
             }
         }
     } else {
     	if (m_initialSubState) {
-			m_initialSubState->makeCurrent();
+            m_currentSubState = m_initialSubState;
+            m_currentSubState->onEntered();
 		}
     }
 
     if (m_currentSubState) {
         m_currentSubState->update(deltaSec);
+    }
+}
+
+template<typename StateType>
+void StateTemplate<StateType>::transit(StateType* position, StateType* target) {
+    StateType* next = position->pathToDescendant(target);
+
+    if(next) {
+        m_currentSubState = next;
+        m_currentSubState->onEntered();
+    } else {
+        m_currentSubState = nullptr;
+        position->onLeft();
+        next = position->parentState();
+        assert(next);
+    }
+
+    if (next != target) {
+        transit(next, target);
     }
 }
 

@@ -2,7 +2,7 @@
 
 
 KeyTrigger::KeyTrigger():
-    KeyTrigger(-1)
+    KeyTrigger(GLFW_KEY_UNKNOWN)
 {
 
 }
@@ -20,7 +20,7 @@ int KeyTrigger::key() const {
 
 void KeyTrigger::setKey(int glfwKey) {
     if (m_glfwKey != glfwKey) {
-        m_lastState = -1;
+        m_lastState = GLFW_PRESS;
     }
 
     m_glfwKey = glfwKey;
@@ -29,19 +29,11 @@ void KeyTrigger::setKey(int glfwKey) {
 void KeyTrigger::update(float deltaSec) {
     Trigger::update(deltaSec);
 
-    if (m_glfwKey < 0) {
-        return;
-    }
+    int currentState = glfwGetKey(glfwGetCurrentContext(), m_glfwKey);
 
-    if (m_lastState < 0) {
-        m_lastState = glfwGetKey(glfwGetCurrentContext(), m_glfwKey);
-    } else {
-        int currentState = glfwGetKey(glfwGetCurrentContext(), m_glfwKey);
-
-        if (m_lastState == GLFW_RELEASE && currentState == GLFW_PRESS) {
-            trigger();
-        }
-        m_lastState = currentState;
+    if (m_lastState == GLFW_RELEASE && currentState == GLFW_PRESS) {
+        trigger();
     }
+    m_lastState = currentState;
 }
 

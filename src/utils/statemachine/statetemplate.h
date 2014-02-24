@@ -42,10 +42,10 @@ public:
     void setCurrentSubState(StateType* substate);
 
     /*
-        Make this State the current substate of its parent, calling onEntered() on every state
-        up to the root.
+        Returns this or direct child containing &descendant
+        Returns nullptr if &descendant is no descendant of this
     */
-    void makeCurrent();
+    StateType* pathToDescendant(StateType* descendant);
 
     bool finished() const;
 
@@ -83,12 +83,15 @@ protected:
 
     StateType* m_self;
     StateType* m_parentState;
-    std::list<StateType*> m_substates;
+    std::list<StateType*> m_subStates;
     std::list<Transition<StateType>*> m_transitions;
 
     StateType* m_initialSubState;
     StateType* m_finalSubState;
     StateType* m_currentSubState;
+
+
+    void transit(StateType* position, StateType* target);
 };
 
 #include "statetemplate.inl"
