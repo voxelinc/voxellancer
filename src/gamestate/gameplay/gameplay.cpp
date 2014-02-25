@@ -5,14 +5,19 @@
 #include "gamestate/gameplay/paused/gameplaypaused.h"
 #include "gameplayscene.h"
 
-#include "player.h"
-
 #include "utils/statemachine/trigger.h"
 #include "utils/statemachine/triggeredtransition.h"
 
-#include "world/world.h"
+#include "scenarios/basescenario.h"
+#include "scenarios/battlescenario.h"
 #include "scenarios/gamescenario.h"
+
 #include "sound/soundmanager.h"
+
+#include "world/world.h"
+
+#include "player.h"
+
 
 
 GamePlay::GamePlay(Game* game):
@@ -61,6 +66,21 @@ Player& GamePlay::player() {
 
 SoundManager& GamePlay::soundManager() {
     return *m_soundManager;
+}
+
+void GamePlay::loadScenario(int i) {
+    m_scenario->clear();
+    switch (i){
+    case 0:
+        m_scenario.reset(new GameScenario(this));
+        break;
+    case 1:
+        m_scenario.reset(new BattleScenario(this));
+        break;
+    default:
+        m_scenario.reset(new BaseScenario(this));
+    }
+    m_scenario->load();
 }
 
 void GamePlay::update(float deltaSec) {

@@ -1,30 +1,30 @@
 #include "player.h"
 
-#include "utils/aimer.h"
-#include "utils/tostring.h"
-
-#include "camera/cameradolly.h"
-
-#include "worldobject/ship.h"
-
-
 #include "camera/cameradolly.h"
 #include "camera/camerahead.h"
+
 #include "gamestate/game.h"
 #include "gamestate/gameplay/gameplay.h"
+
 #include "ui/hud/hud.h"
 #include "ui/hud/hudget.h"
 #include "ui/hud/aimhelperhudget.h"
 #include "ui/hud/crosshair.h"
 #include "ui/objectinfo.h"
+
+#include "utils/aimer.h"
+
 #include "physics/physics.h"
+
+#include "worldobject/ship.h"ŔŔ
 #include "worldobject/worldobjectcomponents.h"
 
 
 Player::Player(GamePlay* gamePlay):
     m_gamePlay(gamePlay),
+    m_aimer(new Aimer(nullptr)),
+    m_hud(new HUD(this, &gamePlay->game()->viewer())),
     m_ship(nullptr),
-    m_hud(new HUD(this, &m_gamePlay->game()->viewer())),
     m_cameraDolly(new CameraDolly())
 {
 
@@ -40,11 +40,13 @@ void Player::setShip(Ship* ship) {
     m_ship = ship->shipHandle();
     m_ship->objectInfo().setShowOnHud(false);
     m_cameraDolly->followWorldObject(ship);
+    m_aimer->setWorldObject(ship);
 }
 
 void Player::update(float deltaSec) {
     m_cameraDolly->update(deltaSec);
     m_hud->update(deltaSec);
+    m_aimer->update(deltaSec);
 
     if (Ship* ship = m_ship.get()) {
         ship->components().setEngineState(m_engineState);
@@ -56,10 +58,6 @@ CameraDolly& Player::cameraDolly() {
 }
 
 CameraHead& Player::cameraHead() {
-    return m_cameraDolly->cameraHead();
-}
-
-const CameraHead& Player::cameraHead() const {
     return m_cameraDolly->cameraHead();
 }
 
@@ -76,7 +74,7 @@ void Player::fire() {
         } else {
             glm::vec3 shootDirection(glm::normalize(m_hud->crossHair().worldPosition() - cameraHead().position()));
             Ray ray(m_hud->crossHair().worldPosition(), shootDirection);
-            targetPoint = Aimer(ship(), ray).aim();
+            targetPoint = m_aimer->aim(ray);
         }
 
         ship()->components().fireAtPoint(targetPoint);

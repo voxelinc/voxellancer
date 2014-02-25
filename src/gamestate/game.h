@@ -27,7 +27,6 @@ public:
     Viewer& viewer();
 
     virtual void update(float deltaSec) override;
-
     void draw();
 
 

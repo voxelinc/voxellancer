@@ -83,3 +83,11 @@ float VoxelCluster::emissiveness() const {
     return 0.0f;
 }
 
+const glm::vec3& VoxelCluster::position() {
+    return m_transform.position();
+}
+
+const glm::quat& VoxelCluster::orientation() {
+    return m_transform.orientation();
+}
+

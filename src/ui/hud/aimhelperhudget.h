@@ -23,6 +23,10 @@ public:
     AimHelperHudget(HUD* hud);
     virtual ~AimHelperHudget();
 
+    /*
+        The point the player should shoot at to hit
+        his current enemy
+    */
     const glm::vec3& targetPoint() const;
 
     virtual void update(float deltaSec) override;
@@ -31,7 +35,13 @@ public:
 
 protected:
     std::unique_ptr<AimHelperHudgetVoxels> m_voxels;
+
     glm::vec3 m_targetPoint;
+    glm::vec3 m_smoothTargetPoint;
+
+    WorldObject* m_lastTargetWorldObject;
+    bool m_lastVisible;
+
     Range m_distanceRange;
 
     void calculateTargetPoint(WorldObject* targetObject);

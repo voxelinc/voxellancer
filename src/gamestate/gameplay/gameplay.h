@@ -5,11 +5,11 @@
 #include "gamestate/gamestate.h"
 
 
+class BaseScenario;
 class Game;
 class GamePlayRunning;
 class GamePlayPaused;
 class GamePlayScene;
-class GameScenario;
 class Player;
 class SoundManager;
 
@@ -34,6 +34,8 @@ public:
     Player& player();
     SoundManager& soundManager();
 
+    void loadScenario(int i);
+
     virtual void update(float deltaSec) override;
 
     virtual void onEntered() override;
@@ -45,7 +47,7 @@ protected:
 
     std::unique_ptr<Player> m_player;
     std::unique_ptr<GamePlayScene> m_scene;
-    std::unique_ptr<GameScenario> m_scenario;
+    std::unique_ptr<BaseScenario> m_scenario;
     std::shared_ptr<SoundManager> m_soundManager;
 
     GamePlayRunning* m_runningState;
