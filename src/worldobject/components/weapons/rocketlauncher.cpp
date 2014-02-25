@@ -12,6 +12,7 @@
 #include "physics/physics.h"
 #include "voxel/voxelclusterbounds.h"
 #include "../../worldobjectcomponents.h"
+#include "utils/geometryhelper.h"
 
 
 RocketLauncher::RocketLauncher(const std::string& equipmentKey):
@@ -36,11 +37,11 @@ void RocketLauncher::update(float deltaSec) {
 
 void RocketLauncher::setupRocket(Rocket* rocket, WorldObject* target) {
     WorldObject* worldObject = hardpoint()->components()->worldObject();
-    glm::quat shipOrientation = worldObject->transform().orientation();
+    glm::quat launchOrientation = worldObject->transform().orientation() * GeometryHelper::quatFromViewDirection(hardpoint()->direction());
     float rocketLength = rocket->bounds().minimalGridAABB().extent(ZAxis) * rocket->transform().scale();
 
-    rocket->transform().setOrientation(shipOrientation);
-    rocket->transform().setPosition(hardpoint()->voxel()->position() + shipOrientation * glm::vec3(0, 0, -rocketLength / 2.0f));
+    rocket->transform().setOrientation(launchOrientation);
+    rocket->transform().setPosition(hardpoint()->voxel()->position() + launchOrientation * glm::vec3(0, 0, -rocketLength / 2.0f));
 
     rocket->setCreator(worldObject);
     rocket->setTarget(target);

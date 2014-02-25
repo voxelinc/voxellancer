@@ -149,6 +149,7 @@ static void loadWorldObjectConfigs() {
     PropertyManager::instance()->load("data/worldobjects/eagle.ini", "eagle");
     PropertyManager::instance()->load("data/worldobjects/specialbasicship.ini", "specialbasicship");
     PropertyManager::instance()->load("data/worldobjects/normandy.ini", "normandy");
+    PropertyManager::instance()->load("data/worldobjects/daedalus.ini", "daedalus");
     PropertyManager::instance()->load("data/worldobjects/gunbullet.ini", "gunbullet");
     PropertyManager::instance()->load("data/worldobjects/snowball.ini", "snowball");
     PropertyManager::instance()->load("data/worldobjects/hornet.ini", "hornet");
