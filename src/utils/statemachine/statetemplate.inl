@@ -114,22 +114,6 @@ void StateTemplate<StateType>::setCurrentSubState(StateType* currentSubState) {
 }
 
 template<typename StateType>
-StateType* StateTemplate<StateType>::pathToDescendant(StateType* descendant) {
-    for(StateType* subState : m_subStates) {
-        if (subState == descendant) {
-            return subState;
-        }
-
-        StateType* next = subState->pathToDescendant(descendant);
-        if (next) {
-            return next;
-        }
-    }
-
-    return nullptr;
-}
-
-template<typename StateType>
 bool StateTemplate<StateType>::finished() const {
     return m_finalSubState == m_currentSubState;
 }
@@ -185,7 +169,7 @@ void StateTemplate<StateType>::update(float deltaSec) {
     if (m_currentSubState) {
         for (Transition<StateType>* transition : m_currentSubState->transitions()) {
             if (transition->isPossible()) {
-                transit(transition->from(), transition->to());
+                transit(transition->to());
                 transition->onPerformed();
             }
         }
@@ -202,22 +186,44 @@ void StateTemplate<StateType>::update(float deltaSec) {
 }
 
 template<typename StateType>
-void StateTemplate<StateType>::transit(StateType* position, StateType* target) {
-    StateType* next = position->pathToDescendant(target);
+StateType* StateTemplate<StateType>::pathToDescendant(StateType* descendant) {
+    for(StateType* subState : m_subStates) {
+        if (subState == descendant) {
+            return m_self;
+        }
 
-    if(next) {
-        m_currentSubState = next;
+        StateType* next = subState->pathToDescendant(descendant);
+        if (next) {
+            return next;
+        }
+    }
+
+    return nullptr;
+}
+
+template<typename StateType>
+void StateTemplate<StateType>::transit(StateType* target) {
+    StateType* nextState = pathToDescendant(target);
+
+    if (nextState == m_self) {
+        return;
+    }
+
+    if (m_currentSubState && nextState != m_currentSubState) {
+        m_currentSubState->onLeft();
+    }
+
+    if (nextState) {
+        m_currentSubState = nextState;
         m_currentSubState->onEntered();
+        m_currentSubState->transit(target);
     } else {
         m_currentSubState = nullptr;
-        position->onLeft();
-        next = position->parentState();
-        assert(next);
+        onLeft();
+        assert(m_parentState);
+        m_parentState->transit(target);
     }
 
-    if (next != target) {
-        transit(next, target);
-    }
 }
 
 template<typename StateType>

@@ -41,12 +41,6 @@ public:
     const StateType* currentSubState() const;
     void setCurrentSubState(StateType* substate);
 
-    /*
-        Returns direct child containing &descendant
-        Returns nullptr if &descendant is no descendant of this
-    */
-    StateType* pathToDescendant(StateType* descendant);
-
     bool finished() const;
 
     std::list<StateType*>& substates();
@@ -91,7 +85,18 @@ protected:
     StateType* m_currentSubState;
 
 
-    void transit(StateType* position, StateType* target);
+    /*
+        Returns direct substate having &descendant as a descendant
+        Returns m_self if  descendant is substate of this
+        Returns nullptr if &descendant is no descendant of  this
+    */
+    StateType* pathToDescendant(StateType* descendant);
+
+    /*
+        Ensures the graph of m_currentSubState points from the root to targt
+        calls onLeft() on every state left and onEntered() on every entered
+    */
+    void transit(StateType* target);
 };
 
 #include "statetemplate.inl"
