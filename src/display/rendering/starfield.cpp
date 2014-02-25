@@ -41,6 +41,7 @@ void Starfield::update(float deltaSec, const glm::vec3& cameraPosition) {
     glm::vec3 position = cameraPosition;
 
     if (m_starCount != m_cpuBuffer.size() || m_fieldRadius != m_oldFieldRadius) {
+        glow::debug("starfield rebuild");
         createAndSetupGeometry(); // property changed
     }
 
