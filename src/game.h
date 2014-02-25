@@ -8,7 +8,7 @@ class Player;
 class InputHandler;
 class Viewer;
 class GameScene;
-class GameScenario;
+class BaseScenario;
 class HMDManager;
 
 class Game {
@@ -25,6 +25,7 @@ public:
     void draw();
 
     void setOutputBuffer(int i);
+    void loadScenario(int i);
 
 
 private:
@@ -32,7 +33,7 @@ private:
     std::unique_ptr<Player> m_player;
     std::unique_ptr<InputHandler> m_inputHandler;
     std::unique_ptr<GameScene> m_gameScene;
-    std::unique_ptr<GameScenario> m_scenario;
+    std::unique_ptr<BaseScenario> m_scenario;
     std::unique_ptr<HMDManager> m_hmdManager;
 };
 

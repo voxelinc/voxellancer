@@ -43,7 +43,7 @@ HUD::HUD(Player* player, Viewer* viewer):
     m_sphere(glm::vec3(0, 0, 0), 5.0f),
     m_crossHair(new CrossHair(this)),
     m_aimHelper(new AimHelperHudget(this)),
-    m_scanner(new WorldTreeScanner(&World::instance()->worldTree())),
+    m_scanner(new WorldTreeScanner())
     m_target(nullptr)
 {
     m_scanner->setScanRadius(1050.0f);
