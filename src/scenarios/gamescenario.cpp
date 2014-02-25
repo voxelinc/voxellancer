@@ -11,7 +11,6 @@
 #include "ai/squadlogic.h"
 #include "ai/squad.h"
 
-#include "resource/clustercache.h"
 #include "resource/worldobjectbuilder.h"
 
 #include "worldobject/ship.h"
