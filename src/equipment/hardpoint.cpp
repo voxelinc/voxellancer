@@ -60,7 +60,7 @@ bool Hardpoint::inFieldOfAim(const glm::vec3& point) {
     }
 
     glm::vec3 requiredWorldDirection = point - voxel()->position();
-    glm::vec3 requiredLocalDirection = worldObject->transform().inverseApplyTo(requiredWorldDirection);
+    glm::vec3 requiredLocalDirection = glm::inverse(worldObject->orientation()) * requiredWorldDirection;
 
     return GeometryHelper::angleBetween(requiredLocalDirection, m_direction) <= m_fieldOfAim;
 }
