@@ -84,8 +84,12 @@ bool ObjectHudget::isAt(const Ray& ray) const {
 }
 
 bool ObjectHudget::isInsideFov() {
-    if (GeometryHelper::angleBetweenVectorPlane(localDirection(), glm::vec3(0, 1, 0)) < m_fovy &&
-        GeometryHelper::angleBetweenVectorPlane(localDirection(), glm::vec3(1, 0, 0)) < m_fovx) {
+    float angleCorrection = 0.0f;
+    if (localDirection().z > 0) {
+        angleCorrection = glm::radians(90.0f); //angle between vector and plane is always <= 90 deg, adding 90 deg for targets behind player
+    }
+    if (GeometryHelper::angleBetweenVectorPlane(localDirection(), glm::vec3(0, 1, 0)) + angleCorrection < m_fovy &&
+        GeometryHelper::angleBetweenVectorPlane(localDirection(), glm::vec3(1, 0, 0)) + angleCorrection < m_fovx) {
         return true;
     } 
     return false;
