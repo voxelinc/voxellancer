@@ -21,10 +21,10 @@ public:
     virtual void setup() override;
     virtual int bufferCount() override;
 
+    void addFXAA();
     void addEmissivenessBlurVertical();
     void addEmissivenessBlurHorizontal();
     void addFinalization();
-
 
 protected:
     std::shared_ptr<ScreenQuad> m_quad;

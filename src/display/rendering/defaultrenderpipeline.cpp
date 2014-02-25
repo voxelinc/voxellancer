@@ -14,9 +14,18 @@ DefaultRenderPipeline::DefaultRenderPipeline() :
 }
 
 void DefaultRenderPipeline::setup() {
+    addFXAA();
     addEmissivenessBlurVertical();
     addEmissivenessBlurHorizontal();
     addFinalization();
+}
+
+void DefaultRenderPipeline::addFXAA() {
+    auto pass = std::make_shared<PostProcessingPass>("fxaa", m_quad);
+    pass->setInputMapping({ { "source", BufferNames::Color } });
+    pass->setOutput({ BufferNames::FXAA });
+    pass->setFragmentShader("data/shader/postprocessing/fxaa.frag");
+    add(pass);
 }
 
 void DefaultRenderPipeline::addEmissivenessBlurVertical() {
