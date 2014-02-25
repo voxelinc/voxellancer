@@ -80,7 +80,14 @@ InputHandler::InputHandler(Player& player):
     m_secondaryInputValues(),
     m_actions(),
 
-    m_inputConfigurator(new InputConfigurator(&m_actions, &m_secondaryInputValues, &prop_deadzoneGamepad, &m_player->hud()))
+    m_inputConfigurator(new InputConfigurator(&m_actions, &m_secondaryInputValues, &prop_deadzoneGamepad, &m_player->hud())),
+
+    m_targetSelector(new TargetSelector(player)),
+
+    m_fireUpdate(false),
+    m_rocketUpdate(false),
+    m_moveUpdate(0),
+    m_rotateUpdate(0)
 {
     addActionsToVector();
 
@@ -159,12 +166,42 @@ void InputHandler::update(float deltaSec) {
             } else {
                 processUpdate();
                 processMouseUpdate(deltaSec);
+                applyUpdates();
                 processHMDUpdate();
             }
         }
     }
     m_lastfocus = glfwGetWindowAttrib(glfwGetCurrentContext(), GLFW_FOCUSED);
 }
+
+void InputHandler::applyUpdates() {
+    // some actions can be triggered in different ways or multiple times
+    // especially those done by the mouse
+    // collect them and apply them here
+
+    if (m_fireUpdate){
+        m_player->fire(); // fire checks for existence of ship
+    }
+    m_fireUpdate = false;
+
+    if (m_rocketUpdate && m_player->ship()) {
+        m_player->ship()->components().fireAtObject(m_player->ship()->targetObject());
+    }
+    m_rocketUpdate = false;
+
+    if (glm::length(m_moveUpdate) > 1.0f) {
+        m_moveUpdate = glm::normalize(m_moveUpdate);
+    }
+    m_player->move(m_moveUpdate);
+    m_moveUpdate = glm::vec3(0);
+
+    if (glm::length(m_rotateUpdate) > 1.0f) {
+        m_rotateUpdate = glm::normalize(m_rotateUpdate);
+    }
+    m_player->rotate(m_rotateUpdate);
+    m_rotateUpdate = glm::vec3(0);
+}
+
 
 void InputHandler::retrieveInputValues() {
     m_secondaryInputValues.buttonCnt = 0;
@@ -190,16 +227,14 @@ void InputHandler::processMouseUpdate(float deltaSec) {
     m_player->hud().crossHair().setActionActive(pressed);
 
     if(glfwJoystickPresent(GLFW_JOYSTICK_1)) {
-        /*Hack to center if gamepad is presentyy*/
+        /*Hack to center if gamepad is present */
         m_player->hud().crossHair().pointToLocalPoint(glm::vec3(0, 0, -1));
     } else {
         placeCrossHair(x, y);
     }
 
     if (pressed) {
-        if (m_player->ship()) {
-            m_player->fire();
-        }
+        m_fireUpdate = true;
     }
 
     // spin
@@ -225,10 +260,7 @@ void InputHandler::processMouseUpdate(float deltaSec) {
         if (glm::length(rot) < prop_deadzoneMouse) {
             rot = glm::vec3(0);
         }
-        if (glm::length(rot) > 1) {
-            rot = glm::normalize(rot);
-        }
-        m_player->rotate(rot);
+        m_rotateUpdate += rot;
 
     }
 }
@@ -308,14 +340,10 @@ void InputHandler::processFireActions() {
     m_player->hud().crossHair().setActionActive(getInputValue(&fireAction) > 0.001);
 
     if (getInputValue(&fireAction)) {
-        if (m_player->ship()) {
-            m_player->fire();
-        }
+        m_fireUpdate = true;
     }
     if (getInputValue(&rocketAction)) {
-        if (m_player->ship() && m_player->ship()->targetObject()) {
-            m_player->ship()->components().fireAtObject(m_player->ship()->targetObject());
-        }
+        m_rocketUpdate = true;
     }
 }
 
@@ -326,7 +354,7 @@ void InputHandler::processMoveActions() {
         getInputValue(&moveBackwardAction) - getInputValue(&moveForwardAction)
     );
 
-    m_player->move(direction);
+    m_moveUpdate = direction;
 }
 
 void InputHandler::processRotateActions() {
@@ -342,11 +370,8 @@ void InputHandler::processRotateActions() {
     if (glm::length(rot) < prop_deadzoneGamepad) {
         rot = glm::vec3(0);
     }
-    if(glm::length(rot) > 1.0f) {
-        rot = glm::normalize(rot);
-    }
 
-    m_player->rotate(rot);
+    m_rotateUpdate += rot;
 }
 
 void InputHandler::processTargetSelectActions() {

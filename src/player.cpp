@@ -22,6 +22,7 @@
 
 Player::Player(Game* game):
     m_game(game),
+    m_aimer(new Aimer(nullptr)),
     m_hud(new HUD(this, &game->viewer())),
     m_ship(nullptr),
     m_cameraDolly(new CameraDolly())
@@ -39,11 +40,13 @@ void Player::setShip(Ship* ship) {
     m_ship = ship->shipHandle();
     m_ship->objectInfo().setShowOnHud(false);
     m_cameraDolly->followWorldObject(ship);
+    m_aimer->setWorldObject(ship);
 }
 
 void Player::update(float deltaSec) {
     m_cameraDolly->update(deltaSec);
     m_hud->update(deltaSec);
+    m_aimer->update(deltaSec);
 
     if (Ship* ship = m_ship.get()) {
         ship->components().setEngineState(m_engineState);
@@ -71,7 +74,7 @@ void Player::fire() {
         } else {
             glm::vec3 shootDirection(glm::normalize(m_hud->crossHair().worldPosition() - cameraHead().position()));
             Ray ray(m_hud->crossHair().worldPosition(), shootDirection);
-            targetPoint = Aimer(ship(), ray).aim();
+            targetPoint = m_aimer->aim(ray);
         }
 
         ship()->components().fireAtPoint(targetPoint);

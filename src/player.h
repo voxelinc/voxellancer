@@ -5,17 +5,13 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 
-#include "camera/cameradolly.h"
+#include "equipment/enginestate.h"
 
 #include "worldobject/handle/handle.h"
-
-#include "ui/hud/hud.h"
-
-#include "worldobject/handle/handle.h"
-#include "worldobject/components/enginestate.h"
 
 class TargetSelector;
 
+class Aimer;
 class Camera;
 class CameraHead;
 class HUD;
@@ -51,7 +47,11 @@ protected:
     Handle<Ship> m_ship;
     std::unique_ptr<CameraDolly> m_cameraDolly;
     std::unique_ptr<HUD> m_hud;
+<<<<<<< HEAD
     std::unique_ptr<TargetSelector> m_targetSelector;
+=======
+    std::unique_ptr<Aimer> m_aimer;
+>>>>>>> 855a1b81abe9dc148dcad2c397726779289a22f9
     EngineState m_engineState;
 };
 
