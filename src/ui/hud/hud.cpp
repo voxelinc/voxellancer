@@ -43,7 +43,8 @@ HUD::HUD(Player* player, Viewer* viewer):
     m_sphere(glm::vec3(0, 0, 0), 5.0f),
     m_crossHair(new CrossHair(this)),
     m_aimHelper(new AimHelperHudget(this)),
-    m_scanner(new WorldTreeScanner(&World::instance()->worldTree()))
+    m_scanner(new WorldTreeScanner(&World::instance()->worldTree())),
+    m_target(nullptr)
 {
     m_scanner->setScanRadius(1050.0f);
     m_hudgets.push_back(m_crossHair.get());
@@ -192,11 +193,11 @@ void HUD::updateScanner(float deltaSec) {
 }
 
 void HUD::setTarget(WorldObject* target) {
-    m_target = target;
+    m_target = target->handle();
 }
 
 WorldObject* HUD::target() {
-    return m_target;
+    return m_target.get();
 }
 
 Viewer* HUD::viewer() const {
@@ -205,7 +206,7 @@ Viewer* HUD::viewer() const {
 
 void HUD::updateFov() {
     m_fovy = m_viewer->view().fovy() / 2;
-    m_fovx = m_fovy*m_viewer->view().aspectRatio();
+    m_fovx = glm::atan(glm::tan(m_fovy)*m_viewer->view().aspectRatio());
 }
 
 float HUD::fovy() const {

@@ -23,7 +23,8 @@ Player::Player(Game* game):
     m_aimer(new Aimer(nullptr)),
     m_hud(new HUD(this, &game->viewer())),
     m_ship(nullptr),
-    m_cameraDolly(new CameraDolly())
+    m_cameraDolly(new CameraDolly()),
+    m_targetSelector(new TargetSelector(this))
 {
     
 }

@@ -138,5 +138,5 @@ void ObjectHudget::updateTargeted() {
 
 void ObjectHudget::updateFov() {
     m_fovy = m_hud->fovy()*0.97f;
-    m_fovx = m_fovy * m_hud->viewer()->view().aspectRatio() * 0.88f;
+    m_fovx = m_hud->fovx()*0.98f;
 }
