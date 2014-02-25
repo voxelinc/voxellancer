@@ -2,11 +2,14 @@
 
 #include "utils/tostring.h"
 
-#include "worldobject/worldobjectcomponents.h"
-#include "worldobject/components/engineslot.h"
-#include "worldobject/worldobject.h"
+#include "equipment/engineslot.h"
+
 #include "physics/physics.h"
+
 #include "voxeleffect/enginetrailgenerator.h"
+
+#include "worldobject/worldobject.h"
+#include "worldobject/worldobjectcomponents.h"
 
 
 Engine::Engine(const std::string& key):
