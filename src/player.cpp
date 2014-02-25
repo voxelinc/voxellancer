@@ -3,18 +3,16 @@
 #include "utils/aimer.h"
 #include "utils/tostring.h"
 
-#include "camera/cameradolly.h"
-
 #include "worldobject/ship.h"
 
 #include "game.h"
-#include "camera/cameradolly.h"
 #include "ui/hud/hud.h"
 #include "ui/hud/hudget.h"
 #include "ui/hud/aimhelperhudget.h"
 #include "ui/hud/crosshair.h"
 #include "physics/physics.h"
 #include "camera/camerahead.h"
+#include "camera/cameradolly.h"
 #include "ui/objectinfo.h"
 #include "worldobject/worldobjectcomponents.h"
 #include "ui/targetselector.h"

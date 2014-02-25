@@ -81,9 +81,6 @@ InputHandler::InputHandler(Player& player):
     m_actions(),
 
     m_inputConfigurator(new InputConfigurator(&m_actions, &m_secondaryInputValues, &prop_deadzoneGamepad, &m_player->hud())),
-
-    m_targetSelector(new TargetSelector(player)),
-
     m_fireUpdate(false),
     m_rocketUpdate(false),
     m_moveUpdate(0),

@@ -12,7 +12,6 @@ class WorldObject;
 class InputConfigurator;
 class HUD;
 class HMD;
-class TargetSelector;
 class Player;
 
 class InputHandler {

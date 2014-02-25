@@ -15,6 +15,7 @@ class Aimer;
 class Camera;
 class CameraHead;
 class HUD;
+class CameraDolly;
 
 class Game;
 
@@ -28,8 +29,8 @@ public:
 
     void update(float deltaSec);
 
-    CameraDolly& cameraDolly();
     CameraHead& cameraHead();
+    CameraDolly& cameraDolly();
     HUD& hud();
 
     void fire();
@@ -47,11 +48,8 @@ protected:
     Handle<Ship> m_ship;
     std::unique_ptr<CameraDolly> m_cameraDolly;
     std::unique_ptr<HUD> m_hud;
-<<<<<<< HEAD
     std::unique_ptr<TargetSelector> m_targetSelector;
-=======
     std::unique_ptr<Aimer> m_aimer;
->>>>>>> 855a1b81abe9dc148dcad2c397726779289a22f9
     EngineState m_engineState;
 };
 

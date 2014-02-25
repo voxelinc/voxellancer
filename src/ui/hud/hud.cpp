@@ -152,7 +152,7 @@ void HUD::draw() {
 }
 
 void HUD::onClick(int button) {
-    Ray toCrossHair = Ray::fromTo(m_player->cameraDolly().cameraHead().position(), m_crossHair.get()->worldPosition());
+    Ray toCrossHair = Ray::fromTo(m_player->cameraHead().position(), m_crossHair.get()->worldPosition());
     for (Hudget* hudget : m_hudgets) {
         if (hudget->isAt(toCrossHair) && hudget != m_crossHair.get()) {
             if (!dynamic_cast<ObjectHudget*>(hudget)) {
