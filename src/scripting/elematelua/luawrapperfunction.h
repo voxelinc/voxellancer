@@ -8,6 +8,8 @@
 #include <tuple>
 #include <functional>
 
+#include <glm/glm.hpp>
+
 
 struct lua_State;
 
@@ -54,6 +56,7 @@ namespace Luaw
     void _push(lua_State * state, float &&value);
     void _push(lua_State * state, double &&value);
     void _push(lua_State * state, std::string &&value);
+    void _push(lua_State * state, glm::vec3 &&value);
 
     template <typename Return, typename... Args, std::size_t... N>
     Return _lift(std::function<Return(Args...)> function, std::tuple<Args...> args, _indices<N...>)

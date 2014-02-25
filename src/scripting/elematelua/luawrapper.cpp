@@ -4,7 +4,7 @@
 
 #include <glow/logging.h>
 
-#include "lua.hpp"
+#include "lua5.2/lua.hpp"
 
 
 std::list<LuaWrapper *> LuaWrapper::s_instances;

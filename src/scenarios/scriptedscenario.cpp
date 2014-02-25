@@ -7,14 +7,15 @@
 #include "ai/character.h"
 #include "ai/basictasks/fighttask.h"
 
+#include "equipment/hardpoint.h"
+#include "equipment/engineslot.h"
+#include "equipment/engine.h"
+#include "equipment/weapon.h"
+#include "equipment/weapons/gun.h"
+
 #include "resource/clustercache.h"
 #include "resource/worldobjectbuilder.h"
 
-#include "worldobject/components/hardpoint.h"
-#include "worldobject/components/engineslot.h"
-#include "worldobject/components/engine.h"
-#include "worldobject/components/weapon.h"
-#include "worldobject/components/weapons/gun.h"
 #include "worldobject/ship.h"
 
 #include "sound/soundmanager.h"

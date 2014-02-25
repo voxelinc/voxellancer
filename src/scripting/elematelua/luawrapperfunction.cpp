@@ -1,6 +1,6 @@
 #include "luawrapperfunction.h"
 
-#include <lua.hpp>
+#include <lua5.2/lua.hpp>
 
 #include <glow/logging.h>
 
@@ -142,5 +142,16 @@ namespace Luaw
     void _push(lua_State * state, std::string && value)
     {
         lua_pushlstring(state, value.c_str(), value.size());
+    }
+
+    void _push(lua_State * state, glm::vec3 && value)
+    {
+        lua_newtable(state);
+        lua_pushnumber(state, value.x);
+        lua_setfield(state, -2, "x");
+        lua_pushnumber(state, value.y);
+        lua_setfield(state, -2, "y");
+        lua_pushnumber(state, value.z);
+        lua_setfield(state, -2, "z");
     }
 }

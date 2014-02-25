@@ -2,6 +2,9 @@
 
 #include <iostream>
 
+#include <glm/glm.hpp>
+#include <glm/gtx/quaternion.hpp>
+
 #include "geometry/aabb.h"
 
 #include "resource/worldobjectbuilder.h"
@@ -27,8 +30,7 @@
 GamePlayScript::GamePlayScript(Game* game, ScriptEngine* scriptEngine):
     Script(),
     m_game(game),
-    m_scriptEngine(scriptEngine),
-    m_shipHandleIncrementor(0)
+    m_scriptEngine(scriptEngine)
 {
 
 }
@@ -47,6 +49,15 @@ void GamePlayScript::load(const std::string& path) {
     }));
     m_lua->Register("setPosition", std::function<int(int, float, float, float)>([&] (int handle, float x, float y, float z) {
         return apiSetPosition(handle, x, y, z);
+    }));
+    m_lua->Register("setOrientation", std::function<int(int, float, float, float)>([&] (int handle, float x, float y, float z) {
+        return apiSetOrientation(handle, x, y, z);
+    }));
+    m_lua->Register("position", std::function<glm::vec3(int)>([&] (int handle) {
+        return apiPosition(handle);
+    }));
+    m_lua->Register("orientation", std::function<glm::vec3(int)>([&] (int handle) {
+        return apiOrientation(handle);
     }));
     m_lua->Register("createSingleShotTimer", std::function<int(std::string, float)>([&] (std::string callback, float delta) {
         return apiCreateSingleShotTimer(callback, delta);
@@ -88,6 +99,33 @@ int GamePlayScript::apiSetPosition(int handle, float x, float y, float z) {
         worldObject->transform().setPosition(glm::vec3(x, y, z));
     }
     return 0;
+}
+
+int GamePlayScript::apiSetOrientation(int handle, float x, float y, float z) {
+    WorldObject* worldObject = m_scriptEngine->getWorldObject(handle);
+
+    if (worldObject) {
+        worldObject->transform().setOrientation(glm::quat(glm::vec3(x, y, z)));
+    }
+    return 0;
+}
+
+glm::vec3 GamePlayScript::apiPosition(int handle) {
+    WorldObject* worldObject = m_scriptEngine->getWorldObject(handle);
+
+    if (worldObject) {
+        return worldObject->transform().position();
+    }
+    return glm::vec3(0.0f);
+}
+
+glm::vec3 GamePlayScript::apiOrientation(int handle) {
+    WorldObject* worldObject = m_scriptEngine->getWorldObject(handle);
+
+    if (worldObject) {
+        return glm::eulerAngles(worldObject->transform().orientation());
+    }
+    return glm::vec3(0.0f);
 }
 
 int GamePlayScript::apiCreateSingleShotTimer(const std::string& callback, float delta) {
