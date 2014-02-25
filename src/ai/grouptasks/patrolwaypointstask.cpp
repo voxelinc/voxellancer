@@ -19,6 +19,11 @@ PatrolWaypointsTask::PatrolWaypointsTask(Squad& squad, std::list<glm::vec3> poin
     }
 }
 
+void PatrolWaypointsTask::appendWaypoint(const glm::vec3& point) {
+    // Valid, see http://stackoverflow.com/questions/6230350/keeping-stdlist-iterators-valid-through-insertion
+    m_points.push_back(point);
+}
+
 void PatrolWaypointsTask::update(float deltaSec) {
     if (m_squad.leader()) {
         float distance = glm::length(*m_currentPoint - m_squad.leader()->transform().position());

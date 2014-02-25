@@ -13,9 +13,12 @@ class Squad;
 
 class PatrolWaypointsTask : public AiGroupTask {
 public:
-    PatrolWaypointsTask(Squad& squad, std::list<glm::vec3> points);
+    PatrolWaypointsTask(Squad& squad, std::list<glm::vec3> points = std::list<glm::vec3>());
+
+    void appendWaypoint(const glm::vec3& point);
 
     virtual void update(float deltaSec) override;
+
 
 protected:
     virtual void onNewLeader(Ship* leader) override;
