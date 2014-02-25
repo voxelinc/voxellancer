@@ -2,6 +2,7 @@
 #include <string>
 #include <map>
 #include <memory>
+#include <vector>
 
 #include <glm/glm.hpp>
 
@@ -23,6 +24,8 @@ class VoxelFont {
 public:
     VoxelFont();
     ~VoxelFont();
+
+    void getLetters(std::string text, FontSize size, std::vector<Letter*>* letters);
 
     // renderer must be prepared
     void drawString(std::string text, glm::vec3 position, FontSize size = s3x5, float scale = 1.f, FontAlign align = aLeft);

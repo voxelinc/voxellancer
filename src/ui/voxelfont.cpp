@@ -84,3 +84,21 @@ void VoxelFont::drawString(std::string text, glm::vec3 position, FontSize size, 
         }
     }
 }
+
+
+void VoxelFont::getLetters(std::string text, FontSize size, std::vector<Letter*>* letters) {
+    std::transform(text.begin(), text.end(), text.begin(), ::toupper);
+    std::map<char, std::unique_ptr<Letter>> *source;
+    switch (size) {
+        case s5x7:
+            source = &m_font5x7;
+            break;
+        case s3x5:
+        default:
+            source = &m_font3x5;
+            break;
+    }
+    for (int i = 0; i < text.length(); i++) {
+        letters->push_back((*source)[text[i]].get());
+    }
+}
