@@ -6,10 +6,11 @@
 #include "hudget.h"
 
 class VoxelFont;
+class TextFieldHudget;
 
 class TextFieldHudgetVoxels{
 public:
-    TextFieldHudgetVoxels();
+    TextFieldHudgetVoxels(TextFieldHudget* textFieldHudget);
 
     void setContent(std::string content);
 
@@ -17,8 +18,9 @@ public:
     void draw();
 
 protected:
+    TextFieldHudget* m_textFieldHudget;
     std::string m_content;
-    std::unique_ptr<VoxelFont> m_voxelFont;
+    VoxelFont* m_voxelFont;
     //std::unique_ptr<TextFieldHudgetVoxels> m_voxels;
 };
 

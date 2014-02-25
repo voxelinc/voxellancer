@@ -10,6 +10,7 @@ VoxelFont::VoxelFont():
     m_font3x5(),
     m_font5x7()
 {
+    m_letters = std::vector<Letter*>();
     loadFont("3x5", glm::vec3(1, 2, 0), &m_font3x5);
     loadFont("5x7", glm::vec3(2, 3, 0), &m_font5x7);
 }
@@ -44,40 +45,40 @@ void VoxelFont::loadChar(const std::string& filename, glm::vec3 offset, const ch
 }
 
 
-void VoxelFont::drawString(std::string text, glm::vec3 position, FontSize size, float scale, FontAlign align){
+void VoxelFont::drawString(std::string text, glm::vec3 position, FontSize size, float scale, FontAlign align) {
     assert(VoxelRenderer::instance()->prepared());
 
     std::transform(text.begin(), text.end(), text.begin(), ::toupper);
     std::map<char, std::unique_ptr<Letter>> *source;
     float width;
     float intoffset;
-    switch (size){
-    case s5x7:
-        source = &m_font5x7;
-        width = 7 * scale;
-        break;
-    case s3x5:
-    default:
-        source = &m_font3x5;
-        width = 5 * scale;
-        break;
+    switch (size) {
+        case s5x7:
+            source = &m_font5x7;
+            width = 7 * scale;
+            break;
+        case s3x5:
+        default:
+            source = &m_font3x5;
+            width = 5 * scale;
+            break;
     }
-    switch (align){
-    case aRight:
-        intoffset = -1.f * (text.length() - 1) * width;
-        break;
-    case aCenter:
-        intoffset = -1.f * ((text.length() - 1) / 2.0f) * width;
-        break;
-    case aLeft:
-    default:
-        intoffset = 0;
-        break;
+    switch (align) {
+        case aRight:
+            intoffset = -1.f * (text.length() - 1) * width;
+            break;
+        case aCenter:
+            intoffset = -1.f * ((text.length() - 1) / 2.0f) * width;
+            break;
+        case aLeft:
+        default:
+            intoffset = 0;
+            break;
     }
 
-    for (int i = 0; i < text.length(); i++){
+    for (int i = 0; i < text.length(); i++) {
         Letter *cl = (*source)[text[i]].get();
-        if (cl != nullptr){
+        if (cl != nullptr) {
             cl->transform().setPosition(position + glm::vec3(intoffset + width * i, 0, 0));
             cl->transform().setScale(scale);
             VoxelRenderer::instance()->draw(*cl);
@@ -85,20 +86,84 @@ void VoxelFont::drawString(std::string text, glm::vec3 position, FontSize size, 
     }
 }
 
+void VoxelFont::drawString(std::string text, glm::vec3 position, glm::quat orientation, FontSize size, float scale, FontAlign align) {
+    assert(VoxelRenderer::instance()->prepared());
 
-void VoxelFont::getLetters(std::string text, FontSize size, std::vector<Letter*>* letters) {
     std::transform(text.begin(), text.end(), text.begin(), ::toupper);
     std::map<char, std::unique_ptr<Letter>> *source;
+    float width;
+    float intoffset;
     switch (size) {
         case s5x7:
             source = &m_font5x7;
+            width = 7 * scale;
             break;
         case s3x5:
         default:
             source = &m_font3x5;
+            width = 5 * scale;
+            break;
+    }
+    switch (align) {
+        case aRight:
+            intoffset = -1.f * (text.length() - 1) * width;
+            break;
+        case aCenter:
+            intoffset = -1.f * ((text.length() - 1) / 2.0f) * width;
+            break;
+        case aLeft:
+        default:
+            intoffset = 0;
+            break;
+    }
+
+    for (int i = 0; i < text.length(); i++) {
+        Letter *cl = (*source)[text[i]].get();
+        if (cl != nullptr) {
+            cl->transform().setPosition(position + glm::vec3(intoffset + width * i, 0, 0)*orientation);
+            //cl->transform().setOrientation(orientation);
+            cl->transform().setScale(scale);
+            VoxelRenderer::instance()->draw(*cl);
+        }
+    }
+}
+
+
+std::vector<Letter*> VoxelFont::letters(std::string text, FontSize size, float scale, FontAlign align) {
+    std::transform(text.begin(), text.end(), text.begin(), ::toupper);
+    std::map<char, std::unique_ptr<Letter>> *source;
+    float width;
+    float intoffset;
+    switch (size) {
+        case s5x7:
+            source = &m_font5x7;
+            width = 7 * scale;
+            break;
+        case s3x5:
+        default:
+            source = &m_font3x5;
+            width = 5 * scale;
+            break;
+    }
+    switch (align) {
+        case aRight:
+            intoffset = -1.f * (text.length() - 1) * width;
+            break;
+        case aCenter:
+            intoffset = -1.f * ((text.length() - 1) / 2.0f) * width;
+            break;
+        case aLeft:
+        default:
+            intoffset = 0;
             break;
     }
     for (int i = 0; i < text.length(); i++) {
-        letters->push_back((*source)[text[i]].get());
+        Letter *cl = (*source)[text[i]].get();
+        if (cl != nullptr) {
+            cl->transform().setPosition(glm::vec3(0,0,-1) + glm::vec3(intoffset + width * i, 0, 0));
+            cl->transform().setScale(scale);
+        }
+        m_letters.push_back(cl);
     }
+    return m_letters;
 }

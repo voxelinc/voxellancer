@@ -19,6 +19,7 @@ class AimHelperHudget;
 class Viewer;
 class WorldTreeScanner;
 class CrossHair;
+class TextFieldHudget;
 
 class HUD {
 public:
@@ -48,6 +49,7 @@ public:
     void update(float deltaSec);
     void draw();
 
+    glm::vec3 applyTo(const glm::vec3 &vertex) const;
 
 protected:
     Player* m_player;
@@ -57,6 +59,7 @@ protected:
     std::unique_ptr<AimHelperHudget> m_aimHelper;
     std::unique_ptr<CrossHair> m_crossHair;
     std::unique_ptr<WorldTreeScanner> m_scanner;
+    std::unique_ptr<TextFieldHudget> m_textfield;
 
     std::list<Hudget*> m_hudgets;
 

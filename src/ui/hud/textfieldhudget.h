@@ -20,6 +20,6 @@ public:
 
 protected:
     std::string m_content;
-    //std::unique_ptr<TextFieldHudgetVoxels> m_voxels;
+    std::unique_ptr<TextFieldHudgetVoxels> m_voxels;
 };
 

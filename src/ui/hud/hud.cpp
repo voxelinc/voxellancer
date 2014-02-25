@@ -12,6 +12,7 @@
 #include "utils/geometryhelper.h"
 
 #include "world/world.h"
+#include <string>
 
 #include "worldobject/ship.h"
 
@@ -28,6 +29,7 @@
 #include "ui/objectinfo.h"
 #include "display/view.h"
 #include "camera/camerahead.h"
+#include "textfieldhudget.h"
 
 
 HUD::HUD(Player* player, Viewer* viewer):
@@ -36,11 +38,14 @@ HUD::HUD(Player* player, Viewer* viewer):
     m_sphere(glm::vec3(0, 0, 0), 5.0f),
     m_crossHair(new CrossHair(this)),
     m_aimHelper(new AimHelperHudget(this)),
-    m_scanner(new WorldTreeScanner(&World::instance()->worldTree()))
+    m_scanner(new WorldTreeScanner(&World::instance()->worldTree())),
+    m_textfield(new TextFieldHudget(this, 20))
 {
     m_scanner->setScanRadius(1050.0f);
     m_hudgets.push_back(m_crossHair.get());
     m_hudgets.push_back(m_aimHelper.get());
+    m_hudgets.push_back(m_textfield.get());
+    m_textfield->setContent("testes");
 }
 
 HUD::~HUD() = default;
@@ -170,3 +175,6 @@ void HUD::updateScanner(float deltaSec) {
     }
 }
 
+glm::vec3 HUD::applyTo(const glm::vec3 &vertex) const {
+    return position() + (orientation() * vertex);
+}
