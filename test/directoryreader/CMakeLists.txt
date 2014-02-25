@@ -1,0 +1,1 @@
+make_test(test_directoryreader testdirectoryreader.cpp)

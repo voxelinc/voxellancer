@@ -14,36 +14,48 @@
 #include "voxel/voxel.h"
 
 
-Aimer::Aimer(WorldObject* worldObject, const Ray& ray):
+Aimer::Aimer(WorldObject* worldObject) :
     m_worldObject(worldObject),
-    m_ray(ray),
-    m_infityAimDistance("general.inifinityAimDistance")
+    m_infityAimDistance("general.infinityAimDistance"),
+    m_infityAimInterpolation("general.infinityAimInterpolation")
 {
 }
 
-glm::vec3 Aimer::aim() {
+void Aimer::update(float deltaSec) {
+    float interpolation = deltaSec * 0.3f;
+    m_lastDistance = interpolation * m_infityAimDistance + (1 - interpolation) * m_lastDistance;
+}
+
+void Aimer::setWorldObject(WorldObject* worldObject) {
+    m_worldObject = worldObject;
+}
+
+glm::vec3 Aimer::aim(const Ray& ray) {
+    assert(m_worldObject);
     glm::vec3 targetPoint;
 
-    WorldTreeQuery wordltreequery(&World::instance()->worldTree(), &m_ray, nullptr, &m_worldObject->collisionFilter());
+    WorldTreeQuery wordltreequery(&World::instance()->worldTree(), &ray, nullptr, &m_worldObject->collisionFilter());
 
     std::unordered_set<Voxel*> intersectingVoxels = wordltreequery.intersectingVoxels();
 
     if(!intersectingVoxels.empty()) {
-        return nearestTarget(intersectingVoxels);
+        targetPoint = nearestTarget(intersectingVoxels, ray.origin());
+    } else {
+        targetPoint = infinity(ray);
     }
-    else {
-        return infinity();
-    }
+    
+    m_lastDistance = glm::length(ray.origin() - targetPoint);
+    return targetPoint;
 }
 
-glm::vec3 Aimer::nearestTarget(const std::unordered_set<Voxel*>& voxels) const {
+glm::vec3 Aimer::nearestTarget(const std::unordered_set<Voxel*>& voxels, const glm::vec3& origin) const {
     Voxel* anyVoxel = *voxels.begin();
 
-    float minDistance = distanceTo(anyVoxel);
+    float minDistance = distanceTo(anyVoxel, origin);
     glm::vec3 targetPoint = anyVoxel->position();
 
     for(Voxel* voxel : voxels) {
-        float distance = distanceTo(voxel);
+        float distance = distanceTo(voxel, origin);
 
         if(distance < minDistance) {
             targetPoint = voxel->position();
@@ -54,11 +66,11 @@ glm::vec3 Aimer::nearestTarget(const std::unordered_set<Voxel*>& voxels) const {
     return targetPoint;
 }
 
-float Aimer::distanceTo(Voxel* voxel) const {
-    return glm::length(voxel->position() - m_ray.origin());
+float Aimer::distanceTo(Voxel* voxel, const glm::vec3& origin) const {
+    return glm::length(voxel->position() - origin);
 }
 
-glm::vec3 Aimer::infinity() const {
-    return m_ray.origin() + m_ray.direction() * m_infityAimDistance.get();
+glm::vec3 Aimer::infinity(const Ray& ray) const {
+    return ray.origin() + ray.direction() * m_lastDistance;
 }
 

@@ -10,5 +10,7 @@ public:
 
 protected:
     virtual void populateWorld() override;
+
+    void createArmada();
 };
 
