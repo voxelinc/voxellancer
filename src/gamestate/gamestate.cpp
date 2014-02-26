@@ -4,29 +4,34 @@
 
 
 GameState::GameState(const std::string& name, GameState* parent):
-    StateTemplate(name, this, parent)
+    State(name, parent),
+    m_parentGameState(parent)
 {
+}
+
+GameState* GameState::parentGameState() {
+    return m_parentGameState;
 }
 
 const Scene& GameState::scene() const {
     assert(parentState());
-    return parentState()->scene();
+    return m_parentGameState->scene();
 }
 
 const CameraHead& GameState::cameraHead() const {
-    return parentState()->cameraHead();
+    return m_parentGameState->cameraHead();
 }
 
 void GameState::update(float deltaSec) {
-    StateTemplate::update(deltaSec);
+    State::update(deltaSec);
 }
 
 void GameState::onEntered() {
-    StateTemplate::onEntered();
+    State::onEntered();
 }
 
 void GameState::onLeft() {
-    StateTemplate::onLeft();
+    State::onLeft();
 }
 
 

@@ -3,6 +3,8 @@
 #include <string>
 
 
+class State;
+
 /*
     Abstract base class for a transition from one state to another. Derived
     classes need to implement isPossible(). The actual transition is performed by the update() of
@@ -10,18 +12,17 @@
     Transitions register themself at from, no need to call addTransition() on the State. to isn't informed it's "target" of a transition.
     Note that Transitions can go from any State to any other State, no matter which State they are nested in.
 */
-template<typename StateType>
 class Transition {
 public:
-    Transition(StateType* from, StateType* to);
-    Transition(StateType* from, StateType* to, const std::string& name);
+    Transition(State* from, State* to);
+    Transition(State* from, State* to, const std::string& name);
     virtual ~Transition();
 
     const std::string& name() const;
     void setName(const std::string& name);
 
-    StateType* from();
-    StateType* to();
+    State* from();
+    State* to();
 
     virtual bool isPossible() const = 0;
 
@@ -29,9 +30,8 @@ public:
 
 
 protected:
-    StateType* m_from;
-    StateType* m_to;
+    State* m_from;
+    State* m_to;
     std::string m_name;
 };
 
-#include "transition.inl"

@@ -25,12 +25,14 @@ GamePlay& Game::gamePlay() {
 
 const Scene& Game::scene() const {
     assert(currentSubState());
-    return currentSubState()->scene();
+    const GameState* subState = dynamic_cast<const GameState*>(currentSubState());
+    return subState->scene();
 }
 
 const CameraHead& Game::cameraHead() const {
     assert(currentSubState());
-    return currentSubState()->cameraHead();
+    const GameState* subState = dynamic_cast<const GameState*>(currentSubState());
+    return subState->cameraHead();
 }
 
 HMDManager& Game::hmdManager() {

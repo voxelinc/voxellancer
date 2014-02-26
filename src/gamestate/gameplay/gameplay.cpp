@@ -32,8 +32,8 @@ GamePlay::GamePlay(Game* game):
 {
     setInitialSubState(m_runningState);
 
-    m_runningState->pauseTrigger().setTarget(new TriggeredTransition<GameState>(m_runningState, m_pausedState));
-    m_pausedState->continueTrigger().setTarget(new TriggeredTransition<GameState>(m_pausedState, m_runningState));
+    m_runningState->pauseTrigger().setTarget(new TriggeredTransition(m_runningState, m_pausedState));
+    m_pausedState->continueTrigger().setTarget(new TriggeredTransition(m_pausedState, m_runningState));
 }
 
 Game* GamePlay::game() {

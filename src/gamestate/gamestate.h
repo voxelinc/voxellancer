@@ -3,7 +3,7 @@
 #include <memory>
 #include <string>
 
-#include "utils/statemachine/statetemplate.h"
+#include "utils/statemachine/state.h"
 
 class CameraHead;
 class Scene;
@@ -17,9 +17,11 @@ class Scene;
     these 2 return their parents Scene and CameraHead so that GameStates
     can be arbirtarily nested
 */
-class GameState: public StateTemplate<GameState> {
+class GameState: public State {
 public:
     GameState(const std::string& name, GameState* parent);
+
+    GameState* parentGameState();
 
     virtual const Scene& scene() const;
     virtual const CameraHead& cameraHead() const;
@@ -28,5 +30,9 @@ public:
 
     virtual void onEntered() override;
     virtual void onLeft() override;
+
+
+protected:
+    GameState* m_parentGameState;
 };
 
