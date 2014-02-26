@@ -50,4 +50,7 @@ void Hardpoint::update(float deltaSec) {
     }
 }
 
+void Hardpoint::onVoxelRemoval() {
+    m_components->removeHardpoint(this);
+}
 

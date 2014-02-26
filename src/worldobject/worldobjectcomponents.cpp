@@ -23,8 +23,8 @@ void WorldObjectComponents::addEngineSlot(std::shared_ptr<EngineSlot> engineSlot
     m_engineSlots.push_back(engineSlot);
 }
 
-void WorldObjectComponents::removeEngineSlot(std::shared_ptr<EngineSlot> engineSlot) {
-    m_engineSlots.remove(engineSlot);
+void WorldObjectComponents::removeEngineSlot(const EngineSlot* engineSlot) {
+    m_engineSlots.remove_if([&](std::shared_ptr<EngineSlot> slot) { return slot.get() == engineSlot; });
 }
 
 std::shared_ptr<EngineSlot> WorldObjectComponents::engineSlot(int index) {
@@ -77,8 +77,8 @@ void WorldObjectComponents::addHardpoint(std::shared_ptr<Hardpoint> hardpoint) {
     m_hardpoints.push_back(hardpoint);
 }
 
-void WorldObjectComponents::removeHardpoint(std::shared_ptr<Hardpoint> hardpoint) {
-    m_hardpoints.remove(hardpoint);
+void WorldObjectComponents::removeHardpoint(const Hardpoint* hardpoint) {
+    m_hardpoints.remove_if([&](std::shared_ptr<Hardpoint> hp) { return hp.get() == hardpoint; });
 }
 
 std::shared_ptr<Hardpoint> WorldObjectComponents::hardpoint(int index) {

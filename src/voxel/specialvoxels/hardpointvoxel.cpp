@@ -32,7 +32,7 @@ void HardpointVoxel::addToObject(WorldObject* worldObject) {
 
 void HardpointVoxel::onRemoval() {
     if (m_hardpoint) {
-        m_hardpoint->components()->removeHardpoint(m_hardpoint);
+        m_hardpoint->onVoxelRemoval();
         m_hardpoint = nullptr;
     }
     Voxel::onRemoval();

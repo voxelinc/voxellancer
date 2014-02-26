@@ -30,7 +30,7 @@ Visuals EngineSlotVoxel::visuals() const {
 
 void EngineSlotVoxel::onRemoval() {
     if (m_engineSlot){
-        m_engineSlot->components()->removeEngineSlot(m_engineSlot);
+        m_engineSlot->onVoxelRemoval();
         m_engineSlot = nullptr;
     }
     Voxel::onRemoval();
