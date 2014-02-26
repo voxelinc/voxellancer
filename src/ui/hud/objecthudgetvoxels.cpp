@@ -1,9 +1,13 @@
 #include "objecthudgetvoxels.h"
 
 #include <glm/gtx/quaternion.hpp>
+#include <glm/gtx/intersect.hpp>
 
 #include "utils/geometryhelper.h"
 #include "voxel/voxelrenderer.h"
+
+#include "geometry/ray.h"
+
 #include "hud.h"
 #include "objecthudget.h"
 
@@ -56,5 +60,15 @@ void ObjectHudgetVoxels::setupCorners() {
     m_lb[1].reset(new ObjectHudgetCornerVoxels(this, glm::ivec3(-1, -1, 0), true));
     m_ru[1].reset(new ObjectHudgetCornerVoxels(this, glm::ivec3(1, 1, 0), true));
     m_rb[1].reset(new ObjectHudgetCornerVoxels(this, glm::ivec3(1, -1, 0), true));
+}
+
+
+
+bool ObjectHudgetVoxels::isAt(const Ray& ray) const {
+    glm::vec3 intersectionPoint;
+    bool isAt = false;
+    isAt |= glm::intersectRayTriangle<glm::vec3>(ray.origin(), ray.direction(), m_rb->get()->transform().position(), m_lb->get()->transform().position(), m_lu->get()->transform().position(), intersectionPoint);
+    isAt |= glm::intersectRayTriangle<glm::vec3>(ray.origin(), ray.direction(), m_ru->get()->transform().position(), m_lb->get()->transform().position(), m_lu->get()->transform().position(), intersectionPoint);
+    return isAt;
 }
 

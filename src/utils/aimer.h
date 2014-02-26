@@ -15,18 +15,21 @@ class WorldObject;
 */
 class Aimer {
 public:
-    Aimer(WorldObject* worldObject, const Ray& ray);
+    Aimer(WorldObject* worldObject);
+    void update(float deltaSec);
 
-    glm::vec3 aim();
+    glm::vec3 aim(const Ray& ray);
 
-
+    void setWorldObject(WorldObject* worldObject);
+    
 protected:
     WorldObject* m_worldObject;
-    Ray m_ray;
     Property<float> m_infityAimDistance;
+    Property<float> m_infityAimInterpolation;
+    float m_lastDistance;
 
-    glm::vec3 nearestTarget(const std::unordered_set<Voxel*>& voxels) const;
-    float distanceTo(Voxel* voxel) const;
-    glm::vec3 infinity() const ;
+    glm::vec3 nearestTarget(const std::unordered_set<Voxel*>& voxels, const glm::vec3& origin) const;
+    float distanceTo(Voxel* voxel, const glm::vec3& origin) const;
+    glm::vec3 infinity(const Ray& ray) const;
 };
 

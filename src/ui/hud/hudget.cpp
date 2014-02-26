@@ -123,3 +123,6 @@ glm::quat Hudget::worldOrientation(const glm::vec3& localVector) const {
     return m_hud->orientation() * GeometryHelper::quatFromViewDirection(localVector * m_hud->sphere().radius()) * glm::quat(glm::vec3(0.0f, 0.0f, m_directionAngle));
 }
 
+void Hudget::onClick(int button) {
+}
+

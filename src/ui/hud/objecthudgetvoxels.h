@@ -3,7 +3,7 @@
 #include <memory>
 #include <vector>
 
-
+class Ray;
 class ObjectHudget;
 class ObjectHudgetCornerVoxels;
 
@@ -22,10 +22,11 @@ public:
 
     void draw();
 
+    bool isAt(const Ray& ray) const;
+
 
 protected:
     ObjectHudget* m_hudget;
-
     std::unique_ptr<ObjectHudgetCornerVoxels> m_lu[2];
     std::unique_ptr<ObjectHudgetCornerVoxels> m_lb[2];
     std::unique_ptr<ObjectHudgetCornerVoxels> m_ru[2];

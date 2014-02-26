@@ -14,10 +14,15 @@
 #include "world/world.h"
 #include <string>
 
+#include "worldtree/worldtreequery.h"
+
 #include "worldobject/ship.h"
 
 #include "hudget.h"
 #include "hudobjectdelegate.h"
+#include "objecthudget.h"
+
+#include "collision/collisionfilter.h"
 
 #include "player.h"
 #include "voxel/voxelrenderer.h"
@@ -32,14 +37,17 @@
 #include "textfieldhudget.h"
 
 
+
+
 HUD::HUD(Player* player, Viewer* viewer):
     m_player(player),
     m_viewer(viewer),
     m_sphere(glm::vec3(0, 0, 0), 5.0f),
     m_crossHair(new CrossHair(this)),
     m_aimHelper(new AimHelperHudget(this)),
-    m_scanner(new WorldTreeScanner(&World::instance()->worldTree())),
+    m_scanner(new WorldTreeScanner()),
     m_textfield(new TextFieldHudget(this, 20))
+    m_target(nullptr)
 {
     m_scanner->setScanRadius(1050.0f);
     m_hudgets.push_back(m_crossHair.get());
@@ -88,7 +96,7 @@ void HUD::removeHudget(Hudget* hudget) {
 
 void HUD::addObjectDelegate(HUDObjectDelegate* objectDelegate) {
     m_objectDelegates[objectDelegate->worldObject()] = objectDelegate;
-    addHudget(objectDelegate->hudget());
+    addHudget(objectDelegate->objectHudget());
 }
 
 void HUD::removeObjectDelegate(HUDObjectDelegate* objectDelegate) {
@@ -100,7 +108,7 @@ void HUD::removeObjectDelegate(HUDObjectDelegate* objectDelegate) {
     assert(i != m_objectDelegates.end());
     m_objectDelegates.erase(i);
 
-    removeHudget(objectDelegate->hudget());
+    removeHudget(objectDelegate->objectHudget());
 
     delete objectDelegate;
 }
@@ -124,6 +132,7 @@ void HUD::setCrossHairOffset(const glm::vec2& mousePosition) {
 }
 
 void HUD::update(float deltaSec) {
+    updateFov();
     updateScanner(deltaSec);
 
     Ray toCrossHair = Ray::fromTo(m_player->cameraHead().position(), m_crossHair->worldPosition());
@@ -146,6 +155,19 @@ void HUD::draw() {
     }
 
     lightuniform->set(oldLightdir);
+}
+
+void HUD::onClick(int button) {
+    Ray toCrossHair = Ray::fromTo(m_player->cameraHead().position(), m_crossHair.get()->worldPosition());
+    for (Hudget* hudget : m_hudgets) {
+        if (hudget->isAt(toCrossHair) && hudget != m_crossHair.get()) {
+            if (!dynamic_cast<ObjectHudget*>(hudget)) {
+                continue; // TODO implement HUD Spheres and use them to distinguish hud elements
+            }
+            hudget->onClick(button);
+            return;
+        }
+    }
 }
 
 void HUD::updateScanner(float deltaSec) {
@@ -177,4 +199,29 @@ void HUD::updateScanner(float deltaSec) {
 
 glm::vec3 HUD::applyTo(const glm::vec3 &vertex) const {
     return position() + (orientation() * vertex);
+}
+
+void HUD::setTarget(WorldObject* target) {
+    m_target = target->handle();
+}
+
+WorldObject* HUD::target() {
+    return m_target.get();
+}
+
+Viewer* HUD::viewer() const {
+    return m_viewer;
+}
+
+void HUD::updateFov() {
+    m_fovy = m_viewer->view().fovy() / 2;
+    m_fovx = glm::atan(glm::tan(m_fovy)*m_viewer->view().aspectRatio());
+}
+
+float HUD::fovy() const {
+    return m_fovy;
+}
+
+float HUD::fovx() const {
+    return m_fovx;
 }

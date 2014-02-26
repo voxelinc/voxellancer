@@ -4,6 +4,7 @@
 
 #include "voxel/specialvoxels/hardpointvoxel.h"
 
+#include "worldobject/worldobject.h"
 #include "worldobject/worldobjectcomponents.h"
 
 #include "weapon.h"
@@ -53,9 +54,15 @@ bool Hardpoint::inFieldOfAim(const glm::vec3& point) {
         return false;
     }
 
-    glm::vec3 requiredDirection = point - voxel()->position();
+    WorldObject* worldObject = m_components->worldObject();
+    if(!worldObject) {
+        return false;
+    }
 
-    return GeometryHelper::angleBetween(requiredDirection, m_direction) <= m_fieldOfAim;
+    glm::vec3 requiredWorldDirection = point - voxel()->position();
+    glm::vec3 requiredLocalDirection = glm::inverse(worldObject->orientation()) * requiredWorldDirection;
+
+    return GeometryHelper::angleBetween(requiredLocalDirection, m_direction) <= m_fieldOfAim;
 }
 
 void Hardpoint::update(float deltaSec) {

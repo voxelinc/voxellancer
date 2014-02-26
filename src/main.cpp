@@ -95,15 +95,23 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
         PropertyManager::instance()->load("data/config.ini");
     }
     if (key >= GLFW_KEY_1 && key <= GLFW_KEY_9 && action == GLFW_PRESS) {
-        game->setOutputBuffer(key-GLFW_KEY_1);
+        game->setOutputBuffer(key - GLFW_KEY_1);
+    }
+    if (key >= GLFW_KEY_F1 && key <= GLFW_KEY_F4 && action == GLFW_PRESS) {
+        game->loadScenario(key - GLFW_KEY_F1);
     }
 
 	game->inputHandler().keyCallback(key, scancode, action, mods);
 }
 
+static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
+    game->inputHandler().mouseButtonCallback(button, action, mods);
+}
+
 void setCallbacks(GLFWwindow* window) {
     glfwSetKeyCallback(window, keyCallback);
     glfwSetWindowSizeCallback(window, resizeCallback);
+    glfwSetMouseButtonCallback(window, mouseButtonCallback);
 }
 
 static void miscSettings() {
