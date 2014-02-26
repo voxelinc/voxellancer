@@ -5,20 +5,31 @@
 
 
 class Faction;
+class FactionRelation;
+class PlayerFaction;
+class PirateFaction;
+class PoliceFaction;
 
 class FactionMatrix {
 public:
     FactionMatrix();
     ~FactionMatrix();
 
-    FactionRelation* getRelationBetween(Faction* factionA, Faction* factionB);
+    PirateFaction* pirateFaction();
+    PoliceFaction* policeFaction();
+    PlayerFaction* playerFaction();
+
+    FactionRelation& getRelationBetween(Faction* factionA, Faction* factionB);
 
 
 protected:
     std::list<std::unique_ptr<Faction>> m_factions;
     std::list<std::unique_ptr<FactionRelation>> m_relations;
 
+    PlayerFaction* m_playerFaction;
+    PirateFaction* m_pirateFaction;
+    PoliceFaction* m_policeFaction;
 
-    void setupFactions();
+    void setupFactionRelations();
 };
 

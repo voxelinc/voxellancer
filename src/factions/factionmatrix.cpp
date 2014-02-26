@@ -1,16 +1,39 @@
-#include "factionmatrix.h
+#include "factionmatrix.h"
 
+#include <cassert>
+
+#include "factionmatrix.h"
+#include "factionrelation.h"
 #include "playerfaction.h"
 #include "piratefaction.h"
 #include "policefaction.h"
 
 
-FactionMatrix::FactionMatrix()
+FactionMatrix::FactionMatrix():
+    m_playerFaction(new PlayerFaction(this)),
+    m_pirateFaction(new PirateFaction(this)),
+    m_policeFaction(new PoliceFaction(this))
 {
-    setupFactions();
+    m_factions.push_back(std::unique_ptr<Faction>(m_playerFaction));
+    m_factions.push_back(std::unique_ptr<Faction>(m_pirateFaction));
+    m_factions.push_back(std::unique_ptr<Faction>(m_policeFaction));
+
+    setupFactionRelations();
 }
 
 FactionMatrix::~FactionMatrix() = default;
+
+PirateFaction* FactionMatrix::pirateFaction() {
+    return m_pirateFaction;
+}
+
+PoliceFaction* FactionMatrix::policeFaction() {
+    return m_policeFaction;
+}
+
+PlayerFaction* FactionMatrix::playerFaction() {
+    return m_playerFaction;
+}
 
 FactionRelation& FactionMatrix::getRelationBetween(Faction* factionA, Faction* factionB) {
     for(std::unique_ptr<FactionRelation>& relation : m_relations) {
@@ -23,20 +46,8 @@ FactionRelation& FactionMatrix::getRelationBetween(Faction* factionA, Faction* f
     assert(0);
 }
 
-void FactionMatrix::setupFactions() {
-    PlayerFaction* playerFaction = new PlayerFaction(this);
-    PirateFaction* pirateFaction = new PirateFaction(this);
-    PoliceFaction* policeFaction = new PoliceFaction(this);
-
-    FactionRelation* playerPiratesRelation(playerFaction, pirateFaction, -20.0f);
-    FactionRelation* playerPoliceRelation(playerFaction, policeFaction, 10.0f);
-    FactionRelation* piratePoliceRelation(policeFaction, pirateFaction, -50.0f);
-
-    m_factions.push_back(playerfaction);
-    m_factions.push_back(pirateFaction);
-    m_factions.push_back(policeFaction);
-
-    m_relations.push_back(playerPiratesRelation);
-    m_relations.push_back(playerPoliceRelation);
-    m_relations.push_back(piratePoliceRelation);
+void FactionMatrix::setupFactionRelations() {
+    m_relations.push_back(std::unique_ptr<FactionRelation>(new FactionRelation(m_playerFaction, m_pirateFaction, -20.0f)));
+    m_relations.push_back(std::unique_ptr<FactionRelation>(new FactionRelation(m_playerFaction, m_policeFaction, 10.0f)));
+    m_relations.push_back(std::unique_ptr<FactionRelation>(new FactionRelation(m_policeFaction, m_pirateFaction, -50.0f)));
 }

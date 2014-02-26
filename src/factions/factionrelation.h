@@ -6,7 +6,7 @@
 class Faction;
 
 enum class FactionRelationType {
-    Enemy,
+    Enemy = 0,
     NegativeNeutral,
     Neutral,
     PositiveNeutral,
@@ -25,7 +25,7 @@ public:
 
     FactionRelationType type() const;
 
-    std::stirng typeName() const;
+    static std::string typeName(FactionRelationType type);
 
 
 protected:

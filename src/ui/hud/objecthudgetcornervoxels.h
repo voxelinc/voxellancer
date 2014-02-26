@@ -9,7 +9,7 @@ class ObjectHudgetVoxels;
 
 class ObjectHudgetCornerVoxels: public VoxelCluster {
 public:
-    ObjectHudgetCornerVoxels(ObjectHudgetVoxels* objectHudgetVoxels, const glm::ivec3& baseOffset, bool targetHightlight);
+    ObjectHudgetCornerVoxels(ObjectHudgetVoxels* objectHudgetVoxels, const glm::ivec3& baseOffset, uint32_t baseColor, bool targetHightlight);
 
     void draw();
 
