@@ -16,7 +16,7 @@
 
 #include "physics/physics.h"
 
-#include "worldobject/ship.h"ŔŔ
+#include "worldobject/ship.h"
 #include "worldobject/worldobjectcomponents.h"
 
 
