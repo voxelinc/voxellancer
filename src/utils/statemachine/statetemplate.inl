@@ -205,10 +205,6 @@ template<typename StateType>
 void StateTemplate<StateType>::transit(StateType* target) {
     StateType* nextState = pathToDescendant(target);
 
-    if (nextState == m_self) {
-        return;
-    }
-
     if (m_currentSubState && nextState != m_currentSubState) {
         m_currentSubState->onLeft();
     }
@@ -216,7 +212,11 @@ void StateTemplate<StateType>::transit(StateType* target) {
     if (nextState) {
         m_currentSubState = nextState;
         m_currentSubState->onEntered();
-        m_currentSubState->transit(target);
+        if (nextState == m_self) {
+            return;
+        } else {
+            m_currentSubState->transit(target);
+        }
     } else {
         m_currentSubState = nullptr;
         onLeft();
