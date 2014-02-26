@@ -111,7 +111,7 @@ void InputConfigurator::updateConfiguration(InputClass inputClass) {
 
 void InputConfigurator::setupControls(InputClass inputClass) {
     if (!m_displayedInstructions) {
-        glow::info("Please press Key for action: %;", m_actions->at(m_primaryConfigurationState)->name());
+        glow::info("Please press Key for action: %;", m_actions->at(configurationState(inputClass))->name());
         m_displayedInstructions = true;
     }
     if (m_beginningKeyConfiguration) {
@@ -132,7 +132,7 @@ void InputConfigurator::setupControls(InputClass inputClass) {
     setLastInput(InputMapping(), inputClass);
     incrementConfigurationState(inputClass);
     if (configurationState(inputClass) >= m_actions->size()) {
-        glow::info("Joystick setup complete");
+        glow::info("Setup complete");
         setConfigurationState(-1, inputClass);
     }
     m_beginningKeyConfiguration = true;
