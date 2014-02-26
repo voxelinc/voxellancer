@@ -120,8 +120,8 @@ void VoxelFont::drawString(std::string text, glm::vec3 position, glm::quat orien
     for (int i = 0; i < text.length(); i++) {
         Letter *cl = (*source)[text[i]].get();
         if (cl != nullptr) {
-            cl->transform().setPosition(position + glm::vec3(intoffset + width * i, 0, 0)*orientation);
-            //cl->transform().setOrientation(orientation);
+            cl->transform().setPosition(position + orientation*glm::vec3(intoffset + width * i, 0, 0));
+            cl->transform().setOrientation(orientation);
             cl->transform().setScale(scale);
             VoxelRenderer::instance()->draw(*cl);
         }

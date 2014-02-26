@@ -11,16 +11,18 @@ class TextFieldHudget;
 class TextFieldHudgetVoxels{
 public:
     TextFieldHudgetVoxels(TextFieldHudget* textFieldHudget);
+    TextFieldHudgetVoxels(TextFieldHudget* textFieldHudget, std::string content);
 
     void setContent(std::string content);
 
     void update(float deltaSec);
     void draw();
 
+    virtual bool isAt(const Ray& ray) const;
+
 protected:
     TextFieldHudget* m_textFieldHudget;
     std::string m_content;
     VoxelFont* m_voxelFont;
-    //std::unique_ptr<TextFieldHudgetVoxels> m_voxels;
 };
 

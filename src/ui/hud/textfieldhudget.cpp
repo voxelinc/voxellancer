@@ -24,3 +24,8 @@ void TextFieldHudget::setContent(std::string content) {
     m_content = content;
     m_voxels->setContent(content);
 }
+
+
+bool TextFieldHudget::isAt(const Ray& ray) const {
+    return m_voxels->isAt(ray);
+}
