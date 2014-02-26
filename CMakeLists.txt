@@ -96,6 +96,7 @@ find_package(BANDIT REQUIRED)
 find_package(LibOVR REQUIRED)
 find_package(OpenMP REQUIRED)
 find_package(Lua52 REQUIRED)
+find_package(Selene REQUIRED)
 
 if(REGEX_USE_BOOST)
 find_package(Boost REQUIRED regex)
@@ -125,6 +126,7 @@ include_directories(
     ${BANDIT_INCLUDE_DIR}
     ${LIBOVR_INCLUDE_DIRS}
     ${LUA52_INCLUDE_DIR}
+    ${SELENE_INCLUDE_DIR}
 )
 
 

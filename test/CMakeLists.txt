@@ -18,6 +18,7 @@ if(${OPTION_CREATE_SUB_TEST})
     add_subdirectory(loader)
     add_subdirectory(worldobject)
     add_subdirectory(worldtransform)
+    add_subdirectory(selene)
     add_subdirectory(splitting)
 endif()
 

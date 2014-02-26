@@ -4,6 +4,8 @@
 #include <memory>
 #include <unordered_map>
 
+#include <selene.h>
+
 #include "utils/timer.h"
 #include "utils/timermanager.h"
 
