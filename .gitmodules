@@ -1,3 +1,6 @@
 [submodule "lib/glow"]
 	path = lib/glow
 	url = https://github.com/voxelinc/glow.git
+[submodule "lib/selene"]
+	path = lib/selene
+	url = https://github.com/voxelinc/Selene.git
