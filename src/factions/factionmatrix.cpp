@@ -36,14 +36,16 @@ PlayerFaction* FactionMatrix::playerFaction() {
 }
 
 FactionRelation& FactionMatrix::getRelationBetween(Faction* factionA, Faction* factionB) {
-    for(std::unique_ptr<FactionRelation>& relation : m_relations) {
+    FactionRelation* found = nullptr;
+
+    for (std::unique_ptr<FactionRelation>& relation : m_relations) {
         if (relation->factionA() == factionA && relation->factionB() == factionB ||
-            relation->factionB() == factionA && relation->factionA() == factionB)
-        {
-            return *relation.get();
+            relation->factionB() == factionA && relation->factionA() == factionB) {
+            found = relation.get();
         }
     }
-    assert(0);
+    assert(found);
+    return *found;
 }
 
 void FactionMatrix::setupFactionRelations() {
