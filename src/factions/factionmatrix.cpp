@@ -35,19 +35,14 @@ PlayerFaction* FactionMatrix::playerFaction() {
     return m_playerFaction;
 }
 
-FactionRelation& FactionMatrix::getRelationBetween(Faction* factionA, Faction* factionB) {
-    for(std::unique_ptr<FactionRelation>& relation : m_relations) {
-        if (relation->factionA() == factionA && relation->factionB() == factionB ||
-            relation->factionB() == factionA && relation->factionA() == factionB)
-        {
-            return *relation.get();
-        }
-    }
-    assert(0);
+void FactionMatrix::setupFactionRelations() {
+    addFactionRelation(std::make_shared<FactionRelation>(m_playerFaction, m_pirateFaction, -20.0f));
+    addFactionRelation(std::make_shared<FactionRelation>(m_playerFaction, m_policeFaction, 10.0f));
+    addFactionRelation(std::make_shared<FactionRelation>(m_policeFaction, m_pirateFaction, -50.0f));
 }
 
-void FactionMatrix::setupFactionRelations() {
-    m_relations.push_back(std::unique_ptr<FactionRelation>(new FactionRelation(m_playerFaction, m_pirateFaction, -20.0f)));
-    m_relations.push_back(std::unique_ptr<FactionRelation>(new FactionRelation(m_playerFaction, m_policeFaction, 10.0f)));
-    m_relations.push_back(std::unique_ptr<FactionRelation>(new FactionRelation(m_policeFaction, m_pirateFaction, -50.0f)));
+void FactionMatrix::addFactionRelation(std::shared_ptr<FactionRelation> relation) {
+    relation->factionA()->setRelation(relation);
+    relation->factionB()->setRelation(relation);
 }
+

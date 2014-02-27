@@ -10,7 +10,6 @@ FactionRelation::FactionRelation(Faction* factionA, Faction* factionB, float fri
     m_factionB(factionB),
     m_friendliness(friendliness)
 {
-
 }
 
 Faction* FactionRelation::factionA() {

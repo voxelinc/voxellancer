@@ -54,7 +54,7 @@ void ObjectHudget::update(float deltaSec) {
                 Faction* faction = ship->character()->faction();
 
                 if (faction) {
-                    relationType = World::instance()->factionMatrix().getRelationBetween(faction, World::instance()->factionMatrix().playerFaction()).type();
+                    relationType = faction->relation(World::instance()->factionMatrix().playerFaction())->type();
                 }
             }
         }
