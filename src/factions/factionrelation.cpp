@@ -41,9 +41,7 @@ FactionRelationType FactionRelation::type() const {
     if (m_friendliness <= 30.0f) {
         return FactionRelationType::PositiveNeutral;
     }
-    if (m_friendliness > 30.0f) {
-        return FactionRelationType::Friend;
-    }
+    return FactionRelationType::Friend;
 }
 
 std::string FactionRelation::typeName(FactionRelationType type) {
@@ -55,5 +53,6 @@ std::string FactionRelation::typeName(FactionRelationType type) {
         case FactionRelationType::Friend: return "Friend";
         default: assert(0);
     }
+    return "";
 }
 
