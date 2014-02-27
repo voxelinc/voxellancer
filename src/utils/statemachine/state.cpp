@@ -1,6 +1,7 @@
 #include "state.h"
 
 #include <cassert>
+#include <iostream>
 
 #include <glow/logging.h>
 
@@ -101,10 +102,21 @@ const std::list<State*>& State::substates() const {
 
 void State::addSubState(State* state) {
     m_subStates.push_back(state);
+
+    if (!m_initialSubState) {
+        m_initialSubState = state;
+    }
 }
 
 void State::removeSubState(State* state) {
     assert(state->parentState() == this);
+
+    if (m_initialSubState == state) {
+        m_initialSubState = nullptr;
+    }
+    if (m_finalSubState == state) {
+        m_finalSubState = nullptr;
+    }
 
     m_subStates.remove(state);
     delete state;
@@ -131,6 +143,13 @@ void State::removeTransition(Transition* transition) {
 }
 
 void State::update(float deltaSec) {
+    if (!m_currentSubState) {
+        if (m_initialSubState) {
+            m_currentSubState = m_initialSubState;
+            m_currentSubState->onEntered();
+		}
+    }
+
     if (m_currentSubState) {
         for (Transition* transition : m_currentSubState->transitions()) {
             if (transition->isPossible()) {
@@ -138,11 +157,6 @@ void State::update(float deltaSec) {
                 transition->onPerformed();
             }
         }
-    } else {
-    	if (m_initialSubState) {
-            m_currentSubState = m_initialSubState;
-            m_currentSubState->onEntered();
-		}
     }
 
     if (m_currentSubState) {
@@ -158,7 +172,7 @@ State* State::pathToDescendant(State* descendant) {
 
         State* next = subState->pathToDescendant(descendant);
         if (next) {
-            return next;
+            return subState;
         }
     }
 
@@ -184,7 +198,6 @@ void State::transit(State* target) {
         }
     } else { // Going up the tree
         m_currentSubState = nullptr;
-        onLeft();
         assert(m_parentState);
         m_parentState->transit(target);
     }

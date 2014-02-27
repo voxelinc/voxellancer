@@ -15,7 +15,6 @@ Transition::Transition(State* from, State* to, const std::string& name):
     m_to(to),
     m_name(name)
 {
-    assert(m_from->parentState() == m_to->parentState()); // Untested code in State::transit. Test it and remove this assert
     m_from->addTransition(this);
 }
 
