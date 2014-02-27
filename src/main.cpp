@@ -170,10 +170,11 @@ int main(int argc, char* argv[]) {
 
     glfwSetErrorCallback(errorCallback);
 
+    ContextProvider::instance()->setRequiredGLVersion(MajorVersionRequire, MinorVersionRequire);
     if(clParser.fullScreen()) {
-        ContextProvider::instance()->initFullScreen(MajorVersionRequire, MinorVersionRequire, 1);
+        ContextProvider::instance()->initFullScreen(1);
     } else {
-        ContextProvider::instance()->initWindowed(MajorVersionRequire, MinorVersionRequire);
+        ContextProvider::instance()->initWindowed();
     }
 
     GLFWwindow* window = glfwGetCurrentContext();
