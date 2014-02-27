@@ -119,6 +119,7 @@ const std::list<Transition*>& State::transitions() const {
 }
 
 void State::addTransition(Transition* transition) {
+    assert(this == transition->from());
     m_transitions.push_back(transition);
 }
 
@@ -149,7 +150,6 @@ void State::update(float deltaSec) {
     }
 }
 
-
 State* State::pathToDescendant(State* descendant) {
     for(State* subState : m_subStates) {
         if (subState == descendant) {
@@ -165,12 +165,11 @@ State* State::pathToDescendant(State* descendant) {
     return nullptr;
 }
 
-
 void State::transit(State* target) {
     State* nextState = pathToDescendant(target);
 
     if (m_currentSubState && nextState != m_currentSubState) { // If the current substate is left
-        m_currentSubState->onLeft();
+        m_currentSubState->leave();
     }
 
     if (nextState) { // Going down the tree or staying on the same level
@@ -189,16 +188,20 @@ void State::transit(State* target) {
         assert(m_parentState);
         m_parentState->transit(target);
     }
-
 }
-
 
 void State::onEntered() {
     glow::debug("ENTERING: %;", m_name);
 }
 
-
 void State::onLeft() {
     glow::debug("LEAVING: %;", m_name);
+}
+
+void State::leave() {
+    if (m_currentSubState) {
+        m_currentSubState->leave();
+    }
+    onLeft();
 }
 

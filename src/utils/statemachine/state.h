@@ -90,5 +90,7 @@ protected:
         calls onLeft() on every state left and onEntered() on every entered
     */
     void transit(State* target);
+
+    void leave();
 };
 

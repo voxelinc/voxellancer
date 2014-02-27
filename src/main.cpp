@@ -72,7 +72,7 @@ static void resizeCallback(GLFWwindow* window, int width, int height) {
     glow::info("Resizing viewport to %;x%;", width, height);
     if (width > 0 && height > 0) {
         glViewport(0, 0, width, height);
-//        game->inputHandler().resizeEvent(width, height);
+        game->gamePlay().running().input().resizeEvent(width, height);
         game->viewer().setViewport(Viewport(0, 0, width, height));
     }
 }
