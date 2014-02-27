@@ -75,6 +75,7 @@ World *World::instance() {
 
 void World::reset() {
     glow::warning("world reset!");
+    delete s_instance;
     s_instance = nullptr;
 }
 

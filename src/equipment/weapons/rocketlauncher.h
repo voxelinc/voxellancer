@@ -1,6 +1,6 @@
 #pragma once
 
-#include "worldobject/components/weapon.h"
+#include "equipment/weapon.h"
 
 #include "rocket.h"
 

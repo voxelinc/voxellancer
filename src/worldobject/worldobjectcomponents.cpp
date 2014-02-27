@@ -2,12 +2,12 @@
 
 #include <algorithm>
 
-#include "worldobject/components/engineslot.h"
-#include "worldobject/components/engine.h"
-#include "worldobject/components/hardpoint.h"
-#include "worldobject/components/weapon.h"
-#include "worldobject/components/weapons/gun.h"
-#include "worldobject/components/weapons/rocketlauncher.h"
+#include "equipment/engineslot.h"
+#include "equipment/engine.h"
+#include "equipment/hardpoint.h"
+#include "equipment/weapon.h"
+#include "equipment/weapons/gun.h"
+#include "equipment/weapons/rocketlauncher.h"
 
 
 WorldObjectComponents::WorldObjectComponents(WorldObject* worldObject):

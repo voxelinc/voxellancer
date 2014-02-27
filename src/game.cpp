@@ -13,6 +13,7 @@
 #include "display/viewer.h"
 #include "display/gamescene.h"
 #include "scenarios/gamescenario.h"
+#include "scenarios/battlescenario.h"
 #include "etc/hmd/hmdmanager.h"
 
 
@@ -72,3 +73,17 @@ void Game::setOutputBuffer(int i) {
     m_gameScene->setOutputBuffer(i);
 }
 
+void Game::loadScenario(int i) {
+    m_scenario->clear();
+    switch (i){
+    case 0:
+        m_scenario.reset(new GameScenario(this));
+        break;
+    case 1:
+        m_scenario.reset(new BattleScenario(this));
+        break;
+    default:
+        m_scenario.reset(new BaseScenario(this));
+    }
+    m_scenario->load();
+}

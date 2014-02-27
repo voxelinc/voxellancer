@@ -11,13 +11,12 @@
 #include "ai/squadlogic.h"
 #include "ai/squad.h"
 
-#include "resource/clustercache.h"
 #include "resource/worldobjectbuilder.h"
 
 #include "worldobject/ship.h"
-#include "worldobject/components/engineslot.h"
-#include "worldobject/components/hardpoint.h"
-#include "worldobject/components/weapons/gun.h"
+#include "equipment/engineslot.h"
+#include "equipment/hardpoint.h"
+#include "equipment/weapons/gun.h"
 #include "sound/soundmanager.h"
 #include "game.h"
 #include "world/world.h"
@@ -34,6 +33,10 @@ GameScenario::GameScenario(Game* game) :
 
 void GameScenario::populateWorld() {
     glow::debug("Create WorldObjects");
+
+    createArmada();
+
+
     std::shared_ptr<Squad> squadA = std::make_shared<Squad>();
     squadA->setTask(std::make_shared<PatrolWaypointsTask>(*squadA,
         std::list<glm::vec3>{ glm::vec3(400, 0, 200), glm::vec3(-400, 0, -400),
@@ -84,7 +87,7 @@ void GameScenario::populateWorld() {
         m_world->god().scheduleSpawn(follower);
     }
 
-    Ship *testCluster = WorldObjectBuilder("specialbasicship").buildShip();
+    Ship *testCluster = WorldObjectBuilder("mox").buildShip();
     testCluster->transform().setPosition(glm::vec3(0, 0, 10));
     testCluster->objectInfo().setName("basicship");
     testCluster->objectInfo().setShowOnHud(false);
@@ -150,5 +153,35 @@ void GameScenario::populateWorld() {
 
     glow::debug("Initial spawn");
     m_world->god().spawn();
+}
+
+void GameScenario::createArmada() {
+    std::shared_ptr<Squad> armada = std::make_shared<Squad>();
+    armada->setTask(std::make_shared<PatrolWaypointsTask>(*armada,
+        std::list<glm::vec3>{
+            glm::vec3(900, 0, 0),
+            glm::vec3(1500, 0, 0),
+            glm::vec3(1400, 500, 0),
+        }));
+
+    Ship* chief = WorldObjectBuilder("normandy").buildShip();
+    chief->transform().setPosition(glm::vec3(700, 0, 0));
+    chief->objectInfo().setName("Normandy");
+    chief->objectInfo().setShowOnHud(true);
+    chief->objectInfo().setCanLockOn(true);
+    chief->squadLogic()->joinSquad(armada);
+    m_world->god().scheduleSpawn(chief);
+
+    int memberCount = 12;
+    for (int i = 0; i < memberCount; i++) {
+        Ship *follower = i < 6 ? WorldObjectBuilder("mox").buildShip() : WorldObjectBuilder("basicship").buildShip();
+        follower->transform().setPosition(glm::vec3(700, 50* (-memberCount / 2.0f + i), 0));
+        follower->objectInfo().setName("member");
+        follower->objectInfo().setShowOnHud(true);
+        follower->objectInfo().setCanLockOn(true);
+        follower->squadLogic()->joinSquad(armada);
+        m_world->god().scheduleSpawn(follower);
+    }
+
 }
 

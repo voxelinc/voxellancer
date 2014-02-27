@@ -3,7 +3,7 @@
 #include <glm/glm.hpp>
 
 #include "bullet.h"
-#include "worldobject/components/weapon.h"
+#include "equipment/weapon.h"
 
 
 class Gun: public Weapon {

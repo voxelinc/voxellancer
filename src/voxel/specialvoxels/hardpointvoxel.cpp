@@ -4,8 +4,8 @@
 
 #include "voxel/voxelcluster.h"
 
-#include "worldobject/components/hardpoint.h"
-#include "worldobject/components/weapon.h"
+#include "equipment/hardpoint.h"
+#include "equipment/weapon.h"
 #include "worldobject/worldobject.h"
 #include "worldobject/worldobjectcomponents.h"
 
