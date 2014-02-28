@@ -84,7 +84,7 @@ const std::list<WorldTreeGeode*>& WorldTreeNode::geodes() const {
     return m_geodes;
 }
 
-const std::list<WorldTreeNode*>& WorldTreeNode::subnodes() const {
+const std::list<WorldTreeNode*>& WorldTreeNode::activeSubnodes() const {
     return m_activeSubnodes;
 }
 

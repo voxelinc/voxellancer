@@ -7,6 +7,7 @@
 
 class VoxelParticleEngine;
 struct VoxelParticleData;
+class WorldTreeNode;
 
 
 /*
@@ -22,7 +23,10 @@ public:
 protected:
     Property<float> m_fullDeadCheckInterval;
 
-    virtual bool check(VoxelParticleData* particleData) override;
+
+    virtual bool check(VoxelParticleData* particle) override;
     virtual bool isParallel(int checkCount) override;
+
+    void setWorldTreeNode(VoxelParticleData* particle, WorldTreeNode* worldTreeNode);
 };
 

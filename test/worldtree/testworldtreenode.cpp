@@ -47,23 +47,23 @@ go_bandit([]() {
 
             worldTree->insert(b);
             AssertThat(worldTree->root()->geodes().size(), Equals(1));
-            AssertThat(worldTree->root()->subnodes().size(), Equals(0));
+            AssertThat(worldTree->root()->activeSubnodes().size(), Equals(0));
             AssertThat(b->containingNode(), Equals(worldTree->root()));
 
             worldTree->insert(a);
             AssertThat(worldTree->root()->geodes().size(), Equals(2));
-            AssertThat(worldTree->root()->subnodes().size(), Equals(0));
+            AssertThat(worldTree->root()->activeSubnodes().size(), Equals(0));
 
             int oldWidth = worldTree->root()->aabb().extent(XAxis);
 
             worldTree->insert(c);
             AssertThat(worldTree->root()->geodes().size(), Equals(0));
-            AssertThat(worldTree->root()->subnodes().size(), Equals(2));
+            AssertThat(worldTree->root()->activeSubnodes().size(), Equals(2));
             AssertThat(worldTree->root()->aabb().extent(XAxis), Equals(oldWidth*2));
 
             worldTree->insert(d);
             AssertThat(worldTree->root()->geodes().size(), Equals(0));
-            AssertThat(worldTree->root()->subnodes().size(), Equals(2));
+            AssertThat(worldTree->root()->activeSubnodes().size(), Equals(2));
         });
 
         it("can detect geodes in an AABB", [&]() {

@@ -25,19 +25,22 @@ public:
 
     std::unordered_set<WorldObject*> intersectingWorldObjects();
 
-    WorldTreeNode* queryRoot();
+    /*
+        The last visited node, can be used as a hint for the next query with a similar
+        shape
+    */
+    WorldTreeNode* lastNode();
 
 
 protected:
     WorldTree* m_worldTree;
     WorldTreeNode* m_nodeHint;
     WorldTreeNode* m_startNode;
-    WorldTreeNode* m_queryRoot;
+    WorldTreeNode* m_lastNode;
     CollisionFilter* m_collisionFilter;
     const AbstractShape* m_shape;
     bool m_queryInterrupted;
 
-    WorldTreeNode* getQueryRoot();
-    WorldTreeNode* getQueryRoot(WorldTreeNode* node) const;
-    void query(WorldTreeNode* node, std::function<void(WorldTreeGeode*)> onGeodeInteraction);
+    WorldTreeNode* getQueryRoot(WorldTreeNode* node = nullptr) const;
+    void query(WorldTreeNode* node, const std::function<void(WorldTreeGeode*)>& onGeodeInteraction);
 };

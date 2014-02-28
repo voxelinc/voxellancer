@@ -10,12 +10,16 @@
 class WorldTreeGeode;
 class WorldTreeNode;
 
-class WorldTreeNode
-{
+/*
+    Octreenode inside the worldtree
+*/
+class WorldTreeNode {
 public:
     WorldTreeNode(int octIndex, WorldTreeNode* parent, const IAABB &aabb);
     WorldTreeNode(const IAABB &aabb, WorldTreeNode* initialSubnode);
     virtual ~WorldTreeNode();
+
+    void clear();
 
     int octIndex() const;
     void setOctIndex(int octIndex);
@@ -30,7 +34,7 @@ public:
     void setActive(bool active);
 
     const std::list<WorldTreeGeode*>& geodes() const;
-    const std::list<WorldTreeNode*>& subnodes() const;
+    const std::list<WorldTreeNode*>& activeSubnodes() const;
 
     bool isLeaf() const;
     bool isEmpty() const;
@@ -46,6 +50,7 @@ protected:
     static const int MAX_GEODES = 4;
 
     WorldTreeNode* m_parent;
+
     IAABB m_aabb;
     int m_octIndex;
     float m_extent;
@@ -54,6 +59,7 @@ protected:
     std::list<WorldTreeGeode*> m_geodes;
     std::vector<WorldTreeNode*> m_subnodes;
     std::list<WorldTreeNode*> m_activeSubnodes;
+
 
     void toGroup(WorldTreeNode* initialSubnode = nullptr);
 

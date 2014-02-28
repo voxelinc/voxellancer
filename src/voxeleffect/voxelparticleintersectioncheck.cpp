@@ -9,10 +9,12 @@
 #include "worldobject/worldobject.h"
 
 #include "worldtree/worldtreegeode.h"
+#include "worldtree/worldtreenode.h"
 #include "worldtree/worldtreequery.h"
 
 #include "voxelparticledata.h"
 #include "voxelparticleengine.h"
+
 
 VoxelParticleIntersectionCheck::VoxelParticleIntersectionCheck(VoxelParticleEngine* engine):
     VoxelParticleRemoveCheck(engine),
@@ -29,34 +31,35 @@ void VoxelParticleIntersectionCheck::update(float deltaSec) {
     This check roughly distinguishes between small and big particles and removes the former
     faster, the later more accurate
 */
-bool VoxelParticleIntersectionCheck::check(VoxelParticleData* particleData) {
-	float timeDelta = m_world->time() - particleData->creationTime;
-    glm::vec3 position = particleData->directionalSpeed * timeDelta + particleData->creationPosition;
+bool VoxelParticleIntersectionCheck::check(VoxelParticleData* particle) {
+	float timeDelta = m_engine->time() - particle->creationTime;
+    glm::vec3 position = particle->directionalSpeed * timeDelta + particle->creationPosition;
 
-    if (particleData->scale <= 1.0f) {
+    if (particle->scale <= 1.0f) {
         Point voxelPoint(position); // approximate a point
-        WorldTreeQuery query(&World::instance()->worldTree(), &voxelPoint, particleData->worldTreeNode);
+        WorldTreeQuery query(&World::instance()->worldTree(), &voxelPoint, particle->worldTreeNode);
 
-        for (WorldTreeGeode* geode : query.nearGeodes()) {
+        std::unordered_set<WorldTreeGeode*> nearGeodes(query.nearGeodes());
+      //  particle->worldTreeNode = query.lastNode();
+
+        for (WorldTreeGeode* geode : nearGeodes) {
             WorldObject* worldObject = geode->worldObject();
             glm::ivec3 cell = glm::ivec3(worldObject->transform().inverseApplyTo(position));
             if (worldObject->voxel(cell)) {
                 return true;
             }
         }
-
-        particleData->worldTreeNode = query.queryRoot();//std::cout << particleData->worldTreeNode << std::endl;
+        return false;
     } else {
-        Sphere voxelSphere(position, particleData->scale / 2.0f); // approximate a sphere
+        Sphere voxelSphere(position, particle->scale / 2.0f); // approximate a sphere
 
-        WorldTreeQuery query(&World::instance()->worldTree(), &voxelSphere, particleData->worldTreeNode);
+        WorldTreeQuery query(&World::instance()->worldTree(), &voxelSphere, particle->worldTreeNode);
+
         bool intersections = query.areVoxelsIntersecting();
-
-        particleData->worldTreeNode = query.queryRoot();
+     //   particle->worldTreeNode = query.lastNode();
 
         return intersections;
     }
-    return false;
 }
 
 /*
@@ -67,4 +70,3 @@ bool VoxelParticleIntersectionCheck::check(VoxelParticleData* particleData) {
 bool VoxelParticleIntersectionCheck::isParallel(int checkCount) {
     return true;
 }
-
