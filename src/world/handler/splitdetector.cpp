@@ -117,8 +117,6 @@ void SplitDetector::visit(const glm::ivec3& p) {
     if (v->voxel == nullptr || v->groupId != UNKNOWN) {
         return;
     }
-    static int counter;
-    counter++;
     v->groupId = VISITED;
     m_stack.push(p);
 }
@@ -126,39 +124,37 @@ void SplitDetector::visit(const glm::ivec3& p) {
 
 void SplitDetector::createSplitData(WorldObject* worldObject) {
     std::vector<std::shared_ptr<SplitData>> splitDataList;
-    for (int i = 0; i < m_nextGroupId; i++)
-    {
+    for (int i = 0; i < m_nextGroupId; i++) {
         splitDataList.push_back(std::make_shared<SplitData>(worldObject));
     }
 
-    int crucialVoxelGroup = 0;
+    int crucialVoxelGroup = UNKNOWN;
     Voxel* v = worldObject->crucialVoxel();
     if (v) {
         crucialVoxelGroup = m_voxelArray[address(v->gridCell() - m_llf)].groupId;
     }
 
-    for (const VoxelGroup& v : m_voxelArray)
-    {
+    for (const VoxelGroup& v : m_voxelArray) {
         if (v.voxel && v.groupId != crucialVoxelGroup) {
             assert(v.groupId != UNKNOWN);
             splitDataList[v.groupId]->addVoxel(v.voxel);
         }
     }
 
-    if (crucialVoxelGroup > 0) {
+    if (crucialVoxelGroup != UNKNOWN) {
         splitDataList.erase(splitDataList.begin() + crucialVoxelGroup);
     } else {
         int biggestIndex = 0;
-        int biggestSize = splitDataList[0]->splitOffVoxels().size();
+        int biggestSize = 0;
         for (int i = 0; i < splitDataList.size(); i++) {
             if (splitDataList[i]->splitOffVoxels().size() > biggestSize) {
-                int biggestIndex = i;
-                int biggestSize = splitDataList[i]->splitOffVoxels().size();
+                biggestIndex = i;
+                biggestSize = splitDataList[i]->splitOffVoxels().size();
             }
         }
         splitDataList.erase(splitDataList.begin() + biggestIndex);
     }
-    
+
     for (std::shared_ptr<SplitData> splitData : splitDataList) {
         m_splitDataList.push_back(splitData);
     }

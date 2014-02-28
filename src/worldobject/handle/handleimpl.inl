@@ -15,6 +15,11 @@ T* HandleImpl<T>::get() {
 }
 
 template<class T>
+const T* HandleImpl<T>::get() const {
+    return m_object;
+}
+
+template<class T>
 bool HandleImpl<T>::valid() const {
     return m_object != nullptr;
 }

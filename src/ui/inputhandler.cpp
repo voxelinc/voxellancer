@@ -105,7 +105,7 @@ void InputHandler::setHMD(HMD& hmd) {
 }
 
 void InputHandler::resizeEvent(const unsigned int width, const unsigned int height){
-	m_lastfocus = false; // through window resize everything becomes scrambled
+    m_lastfocus = false; // through window resize everything becomes scrambled
 }
 
 /*
@@ -224,12 +224,6 @@ void InputHandler::processMouseUpdate() {
     if (pressed) {
         m_fireUpdate = true;
     }
-
-    // spin
-    float rel = 20;
-    double dis = 0;
-    float angX = 0;
-    float angY = 0;
 
     if (m_mouseControl || glfwGetMouseButton(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS) {
         glm::vec3 rot;

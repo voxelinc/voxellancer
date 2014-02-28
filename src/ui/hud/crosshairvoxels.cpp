@@ -15,7 +15,8 @@
 class CrossHairElement: public VoxelCluster {
 public:
     CrossHairElement():
-        VoxelCluster(0.08f)
+        VoxelCluster(0.08f),
+        zOrientation(0.0f)
     {
     };
 

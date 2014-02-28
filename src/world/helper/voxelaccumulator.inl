@@ -29,7 +29,7 @@ void VoxelAccumulator<Accumulatable>::parse(const std::list<Accumulatable> &accu
 }
 
 template<typename Accumulatable>
-void VoxelAccumulator<Accumulatable>::dontAffect(const std::list<Voxel*> voxels) {
+void VoxelAccumulator<Accumulatable>::dontAffect(const std::list<Voxel*>& voxels) {
     std::set<const Voxel*> dontAffectSet(voxels.begin(), voxels.end());
 
     for(auto i = m_voxelAccumulatableMap.begin(); i != m_voxelAccumulatableMap.end();) {

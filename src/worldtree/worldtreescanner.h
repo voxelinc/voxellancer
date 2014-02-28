@@ -18,10 +18,9 @@ public:
     float scanRadius() const;
     void setScanRadius(float scanRadius);
 
-    std::list<WorldObject*> worldObjects();
-
-    std::list<WorldObject*> foundWorldObjects();
-    std::list<WorldObject*> lostWorldObjects();
+    const std::list<WorldObject*>& worldObjects();
+    const std::list<WorldObject*>& foundWorldObjects();
+    const std::list<WorldObject*>& lostWorldObjects();
 
     void update(float deltaSec, WorldObject* worldObject);
     void update(float deltaSec, const glm::vec3& position);
