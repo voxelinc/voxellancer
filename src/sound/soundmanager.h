@@ -31,6 +31,7 @@ public:
 
     static SoundManager* current();
 
+
 protected:
     std::unordered_map<std::string, sf::SoundBuffer*> m_buffer;
     std::list<std::shared_ptr<Sound>> m_sounds;
@@ -41,3 +42,4 @@ protected:
 
     static SoundManager* s_current;
 };
+
