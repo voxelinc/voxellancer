@@ -17,8 +17,6 @@ public:
     WorldTreeNode(const IAABB &aabb, WorldTreeNode* initialSubnode);
     virtual ~WorldTreeNode();
 
-    void clear();
-
     int octIndex() const;
     void setOctIndex(int octIndex);
 
@@ -61,5 +59,7 @@ protected:
 
     void subnodeActivated(WorldTreeNode* subnode);
     void subnodeDeactivated(WorldTreeNode* subnode);
+
+    void createSubnodes(WorldTreeNode* initialSubnode);
 };
 

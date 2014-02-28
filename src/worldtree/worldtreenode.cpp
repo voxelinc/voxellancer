@@ -37,19 +37,6 @@ WorldTreeNode::~WorldTreeNode() {
     }
 }
 
-void WorldTreeNode::clear() {
-    assert(m_geodes.empty());
-    assert(m_activeSubnodes.empty());
-    assert(!m_active);
-
-    for (WorldTreeNode* subnode : m_subnodes) {
-        delete subnode;
-    }
-
-    m_subnodes.clear();
-    m_activeSubnodes.clear();
-}
-
 int WorldTreeNode::octIndex() const {
     return m_octIndex;
 }
@@ -103,7 +90,7 @@ const std::list<WorldTreeNode*>& WorldTreeNode::subnodes() const {
 
 bool WorldTreeNode::isLeaf() const {
     assert(!m_subnodes.empty() || m_activeSubnodes.empty());
-    return m_subnodes.empty();
+    return m_activeSubnodes.empty();
 }
 
 bool WorldTreeNode::isEmpty() const {
@@ -123,11 +110,6 @@ void WorldTreeNode::insert(WorldTreeGeode* geode) {
 
     if (m_aabb.contains(geode->aabb())) {
         geode->setContainingNode(this);
-    }
-
-    if(!m_active) {
-        clear();
-        assert(isLeaf());
     }
 
     if (isLeaf()) {
@@ -177,7 +159,38 @@ void WorldTreeNode::remove(WorldTreeGeode* geode) {
 void WorldTreeNode::toGroup(WorldTreeNode* initialSubnode) {
     assert(isLeaf());
 
-    int subnodeExtent = static_cast<int>(m_extent / 2.0f);
+    if (m_subnodes.empty()) {
+        createSubnodes(initialSubnode);
+    }
+    assert(m_subnodes.size() == SUBNODE_COUNT);
+
+    for(int n = 0; n < SUBNODE_COUNT; n++) {
+        for (WorldTreeGeode* geode : m_geodes) {
+            if(geode->aabb().intersects(m_subnodes[n]->aabb())) {
+                m_subnodes[n]->insert(geode);
+            }
+            geode->removeIntersectingLeaf(this);
+        }
+    }
+
+    m_geodes.clear();
+}
+
+void WorldTreeNode::subnodeActivated(WorldTreeNode* subnode) {
+    m_activeSubnodes.push_back(subnode);
+    setActive(true);
+}
+
+void WorldTreeNode::subnodeDeactivated(WorldTreeNode* subnode) {
+    m_activeSubnodes.remove(subnode);
+
+    if(m_activeSubnodes.empty()) {
+        setActive(false);
+    }
+}
+
+void WorldTreeNode::createSubnodes(WorldTreeNode* initialSubnode) {
+ int subnodeExtent = static_cast<int>(m_extent / 2.0f);
 
     m_subnodes.resize(SUBNODE_COUNT);
 
@@ -194,32 +207,7 @@ void WorldTreeNode::toGroup(WorldTreeNode* initialSubnode) {
         } else {
             m_subnodes[n] = new WorldTreeNode(n, this, subnodeAABB);
         }
-
-        for (WorldTreeGeode* geode : m_geodes) {
-            if(geode->aabb().intersects(m_subnodes[n]->aabb())) {
-                m_subnodes[n]->insert(geode);
-            }
-        }
     }
 
-    for (WorldTreeGeode* geode : m_geodes) {
-        geode->removeIntersectingLeaf(this);
-    }
-    m_geodes.clear();
-
-    assert(!isLeaf());
-}
-
-void WorldTreeNode::subnodeActivated(WorldTreeNode* subnode) {
-    m_activeSubnodes.push_back(subnode);
-    setActive(true);
-}
-
-void WorldTreeNode::subnodeDeactivated(WorldTreeNode* subnode) {
-    m_activeSubnodes.remove(subnode);
-
-    if(m_activeSubnodes.empty()) {
-        setActive(false);
-    }
 }
 

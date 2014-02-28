@@ -95,6 +95,15 @@ std::unordered_set<WorldObject*> WorldTreeQuery::intersectingWorldObjects() {
     return result;
 }
 
+WorldTreeNode* WorldTreeQuery::queryRoot() {
+    return m_queryRoot;
+}
+
+WorldTreeNode* WorldTreeQuery::getQueryRoot() {
+    m_queryRoot = getQueryRoot(nullptr);
+    return m_queryRoot;
+}
+
 WorldTreeNode* WorldTreeQuery::getQueryRoot(WorldTreeNode* node) const {
     if(node == nullptr) {
         node = m_nodeHint;

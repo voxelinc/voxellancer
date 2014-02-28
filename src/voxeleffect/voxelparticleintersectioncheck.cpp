@@ -35,7 +35,7 @@ bool VoxelParticleIntersectionCheck::check(VoxelParticleData* particleData) {
 
     if (particleData->scale <= 1.0f) {
         Point voxelPoint(position); // approximate a point
-        WorldTreeQuery query(&World::instance()->worldTree(), &voxelPoint);
+        WorldTreeQuery query(&World::instance()->worldTree(), &voxelPoint, particleData->worldTreeNode);
 
         for (WorldTreeGeode* geode : query.nearGeodes()) {
             WorldObject* worldObject = geode->worldObject();
@@ -44,10 +44,17 @@ bool VoxelParticleIntersectionCheck::check(VoxelParticleData* particleData) {
                 return true;
             }
         }
+
+        particleData->worldTreeNode = query.queryRoot();//std::cout << particleData->worldTreeNode << std::endl;
     } else {
         Sphere voxelSphere(position, particleData->scale / 2.0f); // approximate a sphere
-        WorldTreeQuery query(&World::instance()->worldTree(), &voxelSphere);
-        return query.areVoxelsIntersecting();
+
+        WorldTreeQuery query(&World::instance()->worldTree(), &voxelSphere, particleData->worldTreeNode);
+        bool intersections = query.areVoxelsIntersecting();
+
+        particleData->worldTreeNode = query.queryRoot();
+
+        return intersections;
     }
     return false;
 }
