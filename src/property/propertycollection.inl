@@ -22,7 +22,7 @@ T PropertyCollection<T>::get(const std::string& name) const {
     if (iter != m_values.end()) {
         return iter->second;
     } else {
-        glow::debug("PropertyCollection: could not get %;", name);
+        glow::debug("PropertyCollection: could not find a '%;' value for %;", typeid(T).name(), name);
         return T();
     }
 }
@@ -68,7 +68,7 @@ void PropertyCollection<T>::registerProperty(Property<T>* prop) {
     if (iter != m_values.end()) {
         prop->set(iter->second);
     } else {
-        glow::debug("PropertyCollection: could not find a value for %;", prop->name());
+        glow::debug("PropertyCollection: could not find a '%;' value for %;", typeid(T).name(), prop->name());
     }
 }
 

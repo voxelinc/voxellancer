@@ -10,7 +10,9 @@
 #include "display/rendering/screenquad.h"
 
 
-StereoBlitProgram::StereoBlitProgram() {
+StereoBlitProgram::StereoBlitProgram():
+    m_distortionScale(1.0f)
+{
 
 }
 

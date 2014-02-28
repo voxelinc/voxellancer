@@ -4,8 +4,8 @@
 
 #include "voxel/voxelcluster.h"
 
-#include "worldobject/components/engine.h"
-#include "worldobject/components/engineslot.h"
+#include "equipment/engine.h"
+#include "equipment/engineslot.h"
 #include "worldobject/worldobject.h"
 #include "worldobject/worldobjectcomponents.h"
 
@@ -18,8 +18,7 @@ EngineSlotVoxel::EngineSlotVoxel(const glm::ivec3& gridCell, int index):
 
 void EngineSlotVoxel::addToObject(WorldObject* worldObject) {
     Voxel::addToObject(worldObject);
-
-    m_engineSlot = new EngineSlot(&worldObject->components(), this);
+    m_engineSlot = std::make_shared<EngineSlot>(&worldObject->components(), this);
     worldObject->components().addEngineSlot(m_engineSlot);
 }
 

@@ -29,6 +29,8 @@
 
 #include "display/stereorenderinfo.h"
 
+#include "property/propertydirectory.h"
+
 #include "ui/inputhandler.h"
 
 #include "game.h"
@@ -93,10 +95,13 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
         PropertyManager::instance()->load("data/config.ini");
     }
     if (key >= GLFW_KEY_1 && key <= GLFW_KEY_9 && action == GLFW_PRESS) {
-        game->setOutputBuffer(key-GLFW_KEY_1);
+        game->setOutputBuffer(key - GLFW_KEY_1);
+    }
+    if (key >= GLFW_KEY_F1 && key <= GLFW_KEY_F4 && action == GLFW_PRESS) {
+        game->loadScenario(key - GLFW_KEY_F1);
     }
 
-	game->inputHandler().keyCallback(key, scancode, action, mods);
+    game->inputHandler().keyCallback(key, scancode, action, mods);
 }
 
 void setCallbacks(GLFWwindow* window) {
@@ -136,36 +141,6 @@ static void mainloop() {
     }
 }
 
-/*
-    At some day, modding-capabilities in mind, this shoul be done by polling the
-    appropriate dirs
-*/
-static void loadWorldObjectConfigs() {
-    PropertyManager::instance()->load("data/worldobjects/basicship.ini", "basicship");
-    PropertyManager::instance()->load("data/worldobjects/banner.ini", "banner");
-    PropertyManager::instance()->load("data/worldobjects/eagle.ini", "eagle");
-    PropertyManager::instance()->load("data/worldobjects/specialbasicship.ini", "specialbasicship");
-    PropertyManager::instance()->load("data/worldobjects/normandy.ini", "normandy");
-    PropertyManager::instance()->load("data/worldobjects/gunbullet.ini", "gunbullet");
-    PropertyManager::instance()->load("data/worldobjects/snowball.ini", "snowball");
-    PropertyManager::instance()->load("data/worldobjects/hornet.ini", "hornet");
-}
-
-/*
-    At some day, modding-capabilities in mind, this shoul be done by polling the
-    appropriate dirs
-*/
-static void loadEquipmentConfigs() {
-    PropertyManager::instance()->load("data/equipment/engines/enginemk1.ini", "enginemk1");
-    PropertyManager::instance()->load("data/equipment/engines/loudengine.ini", "loudengine");
-    PropertyManager::instance()->load("data/equipment/engines/superslowengine.ini", "superslowengine");
-    PropertyManager::instance()->load("data/equipment/engines/piratethruster.ini", "piratethruster");
-    PropertyManager::instance()->load("data/equipment/engines/rocketthrustermk1.ini", "rocketthrustermk1");
-    PropertyManager::instance()->load("data/equipment/weapons/gun.ini", "gun");
-    PropertyManager::instance()->load("data/equipment/weapons/snowcanon.ini", "snowcanon");
-    PropertyManager::instance()->load("data/equipment/weapons/hornetlauncher.ini", "hornetlauncher");
-}
-
 void toggleFullScreen() {
     ContextProvider::instance()->toggleFullScreen();
 
@@ -194,10 +169,11 @@ int main(int argc, char* argv[]) {
 
     glfwSetErrorCallback(errorCallback);
 
+    ContextProvider::instance()->setRequiredGLVersion(MajorVersionRequire, MinorVersionRequire);
     if(clParser.fullScreen()) {
-        ContextProvider::instance()->initFullScreen(MajorVersionRequire, MinorVersionRequire, 1);
+        ContextProvider::instance()->initFullScreen(1);
     } else {
-        ContextProvider::instance()->initWindowed(MajorVersionRequire, MinorVersionRequire);
+        ContextProvider::instance()->initWindowed();
     }
 
     GLFWwindow* window = glfwGetCurrentContext();
@@ -221,8 +197,9 @@ int main(int argc, char* argv[]) {
 #ifdef TRYCATCH
     try {
 #endif
-        loadWorldObjectConfigs();
-        loadEquipmentConfigs();
+        PropertyDirectory("data/worldobjects").read();
+        PropertyDirectory("data/equipment/engines").read();
+        PropertyDirectory("data/equipment/weapons").read();
 
         game = new Game();
 

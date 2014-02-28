@@ -4,8 +4,8 @@
 
 #include "voxel/voxelcluster.h"
 
-#include "worldobject/components/hardpoint.h"
-#include "worldobject/components/weapon.h"
+#include "equipment/hardpoint.h"
+#include "equipment/weapon.h"
 #include "worldobject/worldobject.h"
 #include "worldobject/worldobjectcomponents.h"
 
@@ -25,8 +25,8 @@ Visuals HardpointVoxel::visuals() const {
 
 void HardpointVoxel::addToObject(WorldObject* worldObject) {
     Voxel::addToObject(worldObject);
-
-    m_hardpoint = new Hardpoint(&worldObject->components(), this);
+    assert(m_hardpoint == nullptr);
+    m_hardpoint = std::make_shared<Hardpoint>(&worldObject->components(), this);
     worldObject->components().addHardpoint(m_hardpoint);
 }
 

@@ -14,18 +14,18 @@ bool DdsTexture::loadImage2d(glow::Texture * texture, std::string path){
 }
 
 bool DdsTexture::loadImageCube(glow::Texture * texture, std::string pathXp, std::string pathXn,
-	std::string pathYp, std::string pathYn, std::string pathZp, std::string pathZn){
+    std::string pathYp, std::string pathYn, std::string pathZp, std::string pathZn){
     assert(texture->target() == GL_TEXTURE_CUBE_MAP);
 
-	/* load all six textures */
-	if (!loadImage2d(texture, pathXp, GL_TEXTURE_CUBE_MAP_POSITIVE_X)) return false;
-	if (!loadImage2d(texture, pathXn, GL_TEXTURE_CUBE_MAP_NEGATIVE_X)) return false;
-	if (!loadImage2d(texture, pathYp, GL_TEXTURE_CUBE_MAP_POSITIVE_Y)) return false;
-	if (!loadImage2d(texture, pathYn, GL_TEXTURE_CUBE_MAP_NEGATIVE_Y)) return false;
-	if (!loadImage2d(texture, pathZp, GL_TEXTURE_CUBE_MAP_POSITIVE_Z)) return false;
-	if (!loadImage2d(texture, pathZn, GL_TEXTURE_CUBE_MAP_NEGATIVE_Z)) return false;
+    /* load all six textures */
+    if (!loadImage2d(texture, pathXp, GL_TEXTURE_CUBE_MAP_POSITIVE_X)) return false;
+    if (!loadImage2d(texture, pathXn, GL_TEXTURE_CUBE_MAP_NEGATIVE_X)) return false;
+    if (!loadImage2d(texture, pathYp, GL_TEXTURE_CUBE_MAP_POSITIVE_Y)) return false;
+    if (!loadImage2d(texture, pathYn, GL_TEXTURE_CUBE_MAP_NEGATIVE_Y)) return false;
+    if (!loadImage2d(texture, pathZp, GL_TEXTURE_CUBE_MAP_POSITIVE_Z)) return false;
+    if (!loadImage2d(texture, pathZn, GL_TEXTURE_CUBE_MAP_NEGATIVE_Z)) return false;
 
-	return true;
+    return true;
 }
 
 bool DdsTexture::loadImage2d(glow::Texture * texture, std::string path, GLenum target)
@@ -68,7 +68,6 @@ bool DdsTexture::loadImage2d(glow::Texture * texture, std::string path, GLenum t
     /* close the file pointer */
     file.close();
 
-    unsigned int components = (fourCC == FOURCC_DXT1) ? 3 : 4;
     unsigned int format;
     switch (fourCC)
     {
@@ -83,7 +82,7 @@ bool DdsTexture::loadImage2d(glow::Texture * texture, std::string path, GLenum t
         break;
     default:
         delete[] buffer;
-		glow::critical("DdsTexture: not a supported dds format: %", path);
+        glow::critical("DdsTexture: not a supported dds format: %", path);
         return false;
     }
     

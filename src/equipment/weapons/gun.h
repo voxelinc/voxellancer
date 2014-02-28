@@ -2,7 +2,7 @@
 
 #include <glm/glm.hpp>
 
-#include "worldobject/components/weapon.h"
+#include "equipment/weapon.h"
 
 
 class SoundProperties;

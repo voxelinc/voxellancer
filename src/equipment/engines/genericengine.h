@@ -5,7 +5,7 @@
 #include "display/rendering/visuals.h"
 #include "sound/soundproperties.h"
 
-#include "worldobject/components/engine.h"
+#include "equipment/engine.h"
 
 
 class GenericEngine: public Engine {

@@ -19,9 +19,9 @@ public:
 
     void setHMD(HMD& hmd);
 
-	void resizeEvent(const unsigned int width, const unsigned int height);
-	void keyCallback(int key, int scancode, int action, int mods);
-	void update(float deltaSec);
+    void resizeEvent(const unsigned int width, const unsigned int height);
+    void keyCallback(int key, int scancode, int action, int mods);
+    void update(float deltaSec);
 
 
 protected:
@@ -42,6 +42,7 @@ protected:
 
     void processUpdate();
     void processMouseUpdate();
+    void applyUpdates();
     void processHMDUpdate();
 
     void processFireActions();
@@ -77,6 +78,11 @@ protected:
 
     ActionKeyMapping selectNextAction;
     ActionKeyMapping selectPreviousAction;
+
+    glm::vec3 m_moveUpdate;
+    glm::vec3 m_rotateUpdate;
+    bool m_fireUpdate;
+    bool m_rocketUpdate;
 
     void placeCrossHair(double winX, double winY);
 };

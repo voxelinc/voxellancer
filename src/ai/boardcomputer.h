@@ -6,7 +6,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 
-#include "worldobject/components/enginestate.h"
+#include "equipment/enginestate.h"
 #include "worldobject/handle/handle.h"
 
 

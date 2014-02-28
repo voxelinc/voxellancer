@@ -7,14 +7,15 @@
 
 #include "voxel/specialvoxels/hardpointvoxel.h"
 
-#include "worldobject/components/hardpoint.h"
-#include "worldobject/components/weapons/projectile.h"
+#include "equipment/hardpoint.h"
+#include "equipment/weapons/projectile.h"
 
 
 Weapon::Weapon(WeaponType type, const std::string& equipmentKey):
     Equipment(equipmentKey),
     m_type(type),
-    m_cooldown(0.0f)
+    m_cooldown(0.0f),
+    m_hardpoint(nullptr)
 {
 }
 

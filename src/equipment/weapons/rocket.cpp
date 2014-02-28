@@ -7,15 +7,17 @@
 
 #include "collision/collisionfilter.h"
 
-#include "world/god.h"
-#include "world/world.h"
+#include "equipment/engineslot.h"
 
-#include "worldobject/worldobjectcomponents.h"
-#include "worldobject/components/engineslot.h"
-#include "ui/objectinfo.h"
 #include "sound/sound.h"
 #include "sound/soundmanager.h"
 
+#include "ui/objectinfo.h"
+
+#include "worldobject/worldobjectcomponents.h"
+
+#include "world/god.h"
+#include "world/world.h"
 
 
 Rocket::Rocket():

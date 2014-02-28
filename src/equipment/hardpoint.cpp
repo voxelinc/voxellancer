@@ -1,7 +1,10 @@
 #include "hardpoint.h"
 
+#include "utils/geometryhelper.h"
+
 #include "voxel/specialvoxels/hardpointvoxel.h"
 
+#include "worldobject/worldobject.h"
 #include "worldobject/worldobjectcomponents.h"
 
 #include "weapon.h"
@@ -11,7 +14,8 @@
 Hardpoint::Hardpoint(WorldObjectComponents* components, HardpointVoxel* voxel):
     WorldObjectSlot(components, voxel->index()),
     m_voxel(voxel),
-    m_weapon(nullptr)
+    m_weapon(nullptr),
+    m_direction(0, 0, -1)
 {
 }
 
@@ -33,15 +37,32 @@ const glm::vec3& Hardpoint::direction() const {
 }
 
 void Hardpoint::setDirection(const glm::vec3& direction) {
-    m_direction = direction;
+    assert(glm::length(direction) > 0);
+    m_direction = glm::normalize(direction);
 }
 
-const glm::vec2& Hardpoint::fieldOfAim() const {
+float Hardpoint::fieldOfAim() const {
     return m_fieldOfAim;
 }
 
-void Hardpoint::setFieldOfAim(const glm::vec2& fieldOfAim) {
+void Hardpoint::setFieldOfAim(float fieldOfAim) {
     m_fieldOfAim = fieldOfAim;
+}
+
+bool Hardpoint::inFieldOfAim(const glm::vec3& point) {
+    if (!voxel()) {
+        return false;
+    }
+
+    WorldObject* worldObject = m_components->worldObject();
+    if(!worldObject) {
+        return false;
+    }
+
+    glm::vec3 requiredWorldDirection = point - voxel()->position();
+    glm::vec3 requiredLocalDirection = glm::inverse(worldObject->orientation()) * requiredWorldDirection;
+
+    return GeometryHelper::angleBetween(requiredLocalDirection, m_direction) <= m_fieldOfAim;
 }
 
 void Hardpoint::update(float deltaSec) {

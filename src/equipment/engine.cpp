@@ -2,11 +2,6 @@
 
 #include "utils/tostring.h"
 
-#include "worldobject/worldobjectcomponents.h"
-#include "worldobject/components/engineslot.h"
-#include "worldobject/worldobject.h"
-
-#include "physics/physics.h"
 #include "voxeleffect/enginetrailgenerator.h"
 #include "voxel/specialvoxels/engineslotvoxel.h"
 
