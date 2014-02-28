@@ -4,6 +4,30 @@
 #include "voxel.h"
 
 
+std::vector<glm::ivec3> VoxelNeighbourHelper::s_directNeighbours({
+    glm::ivec3(-1, 0, 0),
+    glm::ivec3(+1, 0, 0),
+    glm::ivec3(0, -1, 0),
+    glm::ivec3(0, +1, 0),
+    glm::ivec3(0, 0, -1),
+    glm::ivec3(0, 0, +1)
+});
+
+std::vector<glm::ivec3> VoxelNeighbourHelper::s_indirectNeighbours({
+    glm::ivec3(-1, -1, 0),
+    glm::ivec3(-1, +1, 0),
+    glm::ivec3(+1, +1, 0),
+    glm::ivec3(+1, -1, 0),
+    glm::ivec3(-1, 0, -1),
+    glm::ivec3(-1, 0, +1),
+    glm::ivec3(+1, 0, +1),
+    glm::ivec3(+1, 0, -1),
+    glm::ivec3(0, -1, -1),
+    glm::ivec3(0, -1, +1),
+    glm::ivec3(0, +1, +1),
+    glm::ivec3(0, +1, -1)
+});
+
 VoxelNeighbourHelper::VoxelNeighbourHelper(VoxelCluster* voxelCluster, bool includeDiagonals):
     m_voxelCluster(voxelCluster),
     m_includeDiagonals(includeDiagonals),
@@ -43,6 +67,19 @@ const std::vector<Voxel*>& VoxelNeighbourHelper::neighbours(const glm::ivec3& po
     }
 
     return m_neighbours;
+}
+
+bool VoxelNeighbourHelper::hasNeighbour(const glm::ivec3& pos) {
+    for (const glm::ivec3& offset : s_directNeighbours) {
+        if (m_voxelCluster->voxel(pos + offset)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool VoxelNeighbourHelper::hasNeighbour(const Voxel* voxel) {
+    return hasNeighbour(voxel->gridCell());
 }
 
 void VoxelNeighbourHelper::considerNeighbour(const glm::ivec3& pos, const glm::ivec3 &offset) {

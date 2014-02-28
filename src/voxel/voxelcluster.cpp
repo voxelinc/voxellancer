@@ -13,14 +13,16 @@
 
 #include "utils/tostring.h"
 
-#include "voxelrenderdata.h"
 #include "voxel.h"
 #include "voxelclusterbounds.h"
+#include "voxelrenderdata.h"
+#include "voxelgraveyard.h"
 
 
 VoxelCluster::VoxelCluster(float scale):
     m_voxels(),
     m_bounds(new VoxelClusterBounds(this)),
+    m_graveyard(new VoxelGraveyard(this)),
     m_voxelRenderData(new VoxelRenderData(m_voxels)),
     m_transform(glm::vec3(0), scale)
 {
@@ -34,6 +36,10 @@ VoxelCluster::~VoxelCluster() {
 
 VoxelClusterBounds& VoxelCluster::bounds() {
     return *m_bounds;
+}
+
+VoxelGraveyard& VoxelCluster::graveyard() {
+    return *m_graveyard;
 }
 
 Transform& VoxelCluster::transform() {

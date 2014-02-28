@@ -11,9 +11,11 @@
 #include "utils/vec3hash.h"
 
 
+
 class Voxel;
 class VoxelRenderData;
 class VoxelClusterBounds;
+class VoxelGraveyard;
 
 class VoxelCluster {
 public:
@@ -21,6 +23,7 @@ public:
     virtual ~VoxelCluster();
 
     VoxelClusterBounds& bounds();
+    VoxelGraveyard& graveyard();
 
     Transform& transform();
     void setTransform(const Transform& transform);
@@ -45,6 +48,7 @@ protected:
     std::unordered_map<glm::ivec3, Voxel*> m_voxels;
     std::unique_ptr<VoxelRenderData> m_voxelRenderData;
     std::unique_ptr<VoxelClusterBounds> m_bounds;
+    std::unique_ptr<VoxelGraveyard> m_graveyard;
 
     Transform m_transform;
 };
