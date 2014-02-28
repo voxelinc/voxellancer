@@ -4,6 +4,7 @@
 
 #include "world/god.h"
 #include "world/world.h"
+#include "sound/soundmanager.h"
 
 
 Projectile::Projectile():
@@ -52,3 +53,13 @@ void Projectile::onLifetimeOver() {
 
 }
 
+void Projectile::onCollision() {
+    SoundManager::current()->play(hitSound(), position());
+
+    World::instance()->god().scheduleRemoval(this);
+    spawnExplosion();
+}
+
+void Projectile::onSpawnFail() {
+    spawnExplosion();
+}

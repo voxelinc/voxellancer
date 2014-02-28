@@ -54,3 +54,8 @@ T Property<T>::get(const std::string& name) {
     return PropertyManager::instance()->get<T>(name);
 }
 
+template <class T>
+T Property<T>::get(const std::string& name, const T& defaultvalue) {
+    return PropertyManager::instance()->get<T>(name, defaultvalue);
+
+}
