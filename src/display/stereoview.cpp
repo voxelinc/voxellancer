@@ -54,7 +54,7 @@ float StereoView::aspectRatio() const {
     return m_leftEye->camera().aspectRatio();
 }
 
-void StereoView::draw(Scene* scene, CameraHead* cameraHead) {
+void StereoView::draw(const Scene& scene, const CameraHead& cameraHead) {
     m_leftEye->draw(scene, cameraHead);
     m_rightEye->draw(scene, cameraHead);
 

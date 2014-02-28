@@ -19,7 +19,7 @@ class VoxelMesh;
 
 class VoxelRenderer : public ContextDependant {
 public:
-    void prepareDraw(Camera& camera, bool withBorder = true);
+    void prepareDraw(const Camera& camera, bool withBorder = true);
     void draw(VoxelCluster& cluster);
     void afterDraw();
 

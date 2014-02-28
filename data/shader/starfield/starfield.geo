@@ -12,7 +12,7 @@ in float g_size[1];
 out vec2 f_uv;
 out float f_brightness;
 
-const float sizeFactor = 0.2;
+uniform float sizeFactor;
 
 void main(void) {
     float size = g_size[0] * sizeFactor;

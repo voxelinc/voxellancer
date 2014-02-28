@@ -20,6 +20,6 @@ public:
 
 
 protected:
-    Hardpoint* m_hardpoint;
+    std::shared_ptr<Hardpoint> m_hardpoint;
 };
 

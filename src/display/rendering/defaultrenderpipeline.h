@@ -28,6 +28,5 @@ public:
 
 protected:
     std::shared_ptr<ScreenQuad> m_quad;
-    Camera* m_camera;
 };
 

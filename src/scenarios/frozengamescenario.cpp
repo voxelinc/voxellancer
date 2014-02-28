@@ -19,7 +19,7 @@
 #include "equipment/hardpoint.h"
 #include "equipment/weapons/gun.h"
 #include "sound/soundmanager.h"
-#include "game.h"
+#include "gamestate/gameplay/gameplay.h"
 #include "world/world.h"
 #include "voxel/voxel.h"
 #include "world/god.h"
@@ -27,8 +27,8 @@
 #include "ui/objectinfo.h"
 
 
-FrozenGameScenario::FrozenGameScenario(Game* game) :
-    BaseScenario(game)
+FrozenGameScenario::FrozenGameScenario(GamePlay* inGame) :
+    BaseScenario(inGame)
 {
 }
 
@@ -83,7 +83,7 @@ void FrozenGameScenario::populateWorld() {
     testCluster->objectInfo().setShowOnHud(false);
     m_world->god().scheduleSpawn(testCluster);
 
-    m_game->player().setShip(testCluster);
+    m_gamePlay->player().setShip(testCluster);
 
     WorldObject *wall = new WorldObject();
     wall->transform().move(glm::vec3(-30, 0, -50));

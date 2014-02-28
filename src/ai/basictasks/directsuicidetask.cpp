@@ -9,8 +9,8 @@
 
 
 DirectSuicideTask::DirectSuicideTask(BoardComputer* boardComputer, WorldObject* target) :
-	AiTask(boardComputer),
-	m_target(target ? target->handle() : Handle<WorldObject>(nullptr))
+    AiTask(boardComputer),
+    m_target(target ? target->handle() : Handle<WorldObject>(nullptr))
 {
 }
 
