@@ -13,7 +13,7 @@
 
 
 // some string, some spaces, equals, some spaces, some string, maybe a comment
-static regexns::regex line_regex() { return regexns::regex(R"(^([\w\.]*) *= *(.+?)( *#.*)?$)"); }
+static regexns::regex line_regex() { return regexns::regex(R"(^([\w\.]*) *= *(.+?) *(#.*)?$)"); }
 static regexns::regex title_regex() { return regexns::regex(R"(^\[(\w+)\])"); }
 
 static regexns::regex float_regex() { return regexns::regex(R"(^[-+]?\d*\.?\d*$)"); }
@@ -121,7 +121,7 @@ void PropertyManager::load(const std::string& file, const std::string& prefix) {
         glow::fatal("PropertyManager: could not open %;", file);
         throw std::runtime_error("Critical configuration file not readable");
     } else {
-        glow::info("PropertyManager: Loading %; with prefix '%;'", file, prefix);
+        //glow::info("PropertyManager: Loading %; with prefix '%;'", file, prefix);
     }
 
     std::string keyPrefix = prefix.empty() ? "" : prefix + ".";

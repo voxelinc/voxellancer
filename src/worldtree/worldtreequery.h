@@ -35,7 +35,6 @@ public:
 protected:
     WorldTree* m_worldTree;
     WorldTreeNode* m_nodeHint;
-    WorldTreeNode* m_startNode;
     WorldTreeNode* m_lastNode;
     CollisionFilter* m_collisionFilter;
     const AbstractShape* m_shape;
