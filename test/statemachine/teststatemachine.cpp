@@ -17,9 +17,21 @@
 
 using namespace bandit;
 
+std::string enterLeaveLog;
+
 class TestState : public State {
 public:
     TestState(const std::string& name, State* parent): State(name, parent) {
+    }
+
+    virtual void onLeft() override {
+        State::onLeft();
+        enterLeaveLog += "l" + name();
+    }
+
+    virtual void onEntered() override {
+        State::onEntered();
+        enterLeaveLog += "e" + name();
     }
 };
 
@@ -88,6 +100,7 @@ go_bandit([]() {
 
         after_each([&]() {
             delete machine;
+            enterLeaveLog.clear();
         });
 
         it("basic state", [&]() {
@@ -102,6 +115,7 @@ go_bandit([]() {
             machine->update(1.0f);
             AssertThat(machine->currentSubState(), Equals(c));
             AssertThat(c->currentSubState(), Equals(f));
+            AssertThat(enterLeaveLog, Equals("eBlBeCeF"));
         });
 
         it("basic transition", [&]() {
@@ -114,6 +128,7 @@ go_bandit([]() {
             AssertThat(machine->currentSubState(), Equals(b));
             AssertThat(b->currentSubState(), Equals(e));
             AssertThat(e->currentSubState(), Equals(g));
+            AssertThat(enterLeaveLog, Equals("eBlBeCeFlFlCeBeEeG"));
         });
     });
 });
