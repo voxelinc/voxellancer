@@ -87,7 +87,7 @@ void AimHelperHudget::calculateTargetPoint(WorldObject* targetObject) {
 
     m_targetPoint = glm::vec3(0.0f, 0.0f, 0.0f);
 
-    for(Hardpoint* hardpoint : ship->components().hardpoints()) {
+    for (std::shared_ptr<Hardpoint> hardpoint : ship->components().hardpoints()) {
         if (!hardpoint->weapon()) {
             continue;
         }
@@ -95,7 +95,7 @@ void AimHelperHudget::calculateTargetPoint(WorldObject* targetObject) {
             continue;
         }
 
-        HardpointAimHelper aimHelper(hardpoint, targetObject);
+        HardpointAimHelper aimHelper(hardpoint.get(), targetObject);
         aimHelper.aim();
 
         if (aimHelper.isHitable()) {

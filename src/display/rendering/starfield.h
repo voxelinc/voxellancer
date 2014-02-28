@@ -6,6 +6,7 @@
 #include <glm/gtc/quaternion.hpp>
 
 #include <glow/ref_ptr.h>
+#include <glow/Array.h>
 
 #include "property/property.h"
 #include "display/rendering/renderpass.h"
@@ -38,6 +39,11 @@ public:
 
 
 protected:
+    struct StarData {
+        glm::vec3 pos;
+        float brightness;
+        float size;
+    };
     struct CameraLocation {
         float time;
         glm::vec3 position;
@@ -46,13 +52,16 @@ protected:
 
     std::deque<CameraLocation> m_locations[2];
     float m_time;
-    float m_lastUpdate;
     Property<float> m_starfieldAge;
+    Property<float> m_starSize;
+    Property<int> m_starCount;
+    Property<float> m_fieldRadius;
+    float m_oldFieldRadius;
 
     glow::ref_ptr<glow::Program> m_shaderProgram;
     glow::ref_ptr<glow::VertexArrayObject> m_vertexArrayObject;
-    glow::ref_ptr<glow::Buffer> m_starBuffer;
-
+    glow::ref_ptr<glow::Buffer> m_gpuBuffer;
+    glow::Array<StarData> m_cpuBuffer;
 
     void createAndSetupShaders();
     void createAndSetupGeometry();

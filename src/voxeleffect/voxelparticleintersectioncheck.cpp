@@ -30,7 +30,7 @@ void VoxelParticleIntersectionCheck::update(float deltaSec) {
     faster, the later more accurate
 */
 bool VoxelParticleIntersectionCheck::check(VoxelParticleData* particleData) {
-	float timeDelta = m_world->time() - particleData->creationTime;
+    float timeDelta = m_world->time() - particleData->creationTime;
     glm::vec3 position = particleData->directionalSpeed * timeDelta + particleData->creationPosition;
 
     if (particleData->scale <= 1.0f) {

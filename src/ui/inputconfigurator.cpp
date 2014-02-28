@@ -21,23 +21,6 @@ InputConfigurator::InputConfigurator(std::vector<ActionKeyMapping*>* actions, Se
     secondaryConfigurationState = -1;
 }
 
-bool InputConfigurator::setActionInputMapping(ActionKeyMapping* action, bool primary) {
-    if (primary) {
-        if (isLastPrimaryInputValid()) {
-            action->primaryMapping.set(lastPrimaryInput);
-            lastPrimaryInput = InputMapping();
-            return true;
-        }
-    } else {
-        if (isLastSecondaryInputValid()) {
-            action->secondaryMapping.set(lastSecondaryInput);
-            lastSecondaryInput = InputMapping();
-            return true;
-        }
-    }
-    return false;
-}
-
 bool InputConfigurator::isSecondaryInput() {
     bool valid = false;
 

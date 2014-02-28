@@ -41,7 +41,6 @@ protected:
     std::shared_ptr<Starfield> m_starField;
 
     GamePlay* m_gamePlay;
-    CameraHead* m_head;
     Player* m_player;
 
     Property<glm::vec3> m_defaultLightDir;

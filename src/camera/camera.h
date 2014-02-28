@@ -7,8 +7,8 @@
 /* Represents the camera. matrix thus is the view matrix for all other objects */
 class Camera : protected Transform { //protected so we don't have matrix, because we want view
 public:
-	Camera(int viewportWidth, int viewportHeight);
-	virtual ~Camera();
+    Camera(int viewportWidth, int viewportHeight);
+    virtual ~Camera();
 
     /* Overwrite WorldObject functions for performance:
     *  WorldObject recalculates the matrix on every read access,

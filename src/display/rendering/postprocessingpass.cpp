@@ -23,7 +23,7 @@ PostProcessingPass::PostProcessingPass(const std::string& name, std::shared_ptr<
 void PostProcessingPass::beforeDraw(FrameBuffer& frameBuffer) {
     frameBuffer.setDrawBuffers(m_output);
     int i = 0;
-    for (std::pair<std::string, int> mapping : m_inputMapping) {
+    for (const std::pair<std::string, int>& mapping : m_inputMapping) {
         glActiveTexture(GL_TEXTURE0 + i);
         m_program->setUniform<GLint>(mapping.first, i);
         frameBuffer.texture(mapping.second)->bind();
@@ -78,7 +78,7 @@ void PostProcessingPass::afterContextRebuild() {
 }
 
 void PostProcessingPass::restoreUniforms() {
-    for (auto pair : m_uniforms) {
+    for (auto& pair : m_uniforms) {
         glow::ref_ptr<glow::AbstractUniform> uniform = pair.second;
         m_program->addUniform(uniform);
     }
