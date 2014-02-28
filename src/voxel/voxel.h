@@ -32,7 +32,7 @@ public:
 
     float hp() const;
     void applyDamage(float deltaHp);
-    virtual float destructionDamage();
+    virtual float damageForwardingDestructionDamage();
 
     float normalizedMass() const;
 

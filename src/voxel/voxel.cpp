@@ -74,7 +74,7 @@ void Voxel::applyDamage(float deltaHp) {
     m_hp = std::max(m_hp - deltaHp, 0.0f);
 }
 
-float Voxel::destructionDamage() {
+float Voxel::damageForwardingDestructionDamage() {
     return 0;
 }
 

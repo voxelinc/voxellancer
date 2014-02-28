@@ -20,7 +20,7 @@ void FuelVoxel::addToObject(WorldObject* worldObject) {
     Voxel::addToObject(worldObject);
 }
 
-float FuelVoxel::destructionDamage() {
+float FuelVoxel::damageForwardingDestructionDamage() {
     return 100.0f;
 }
 
