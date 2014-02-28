@@ -8,6 +8,8 @@
 
 #include "physics/physics.h"
 
+#include "sound/soundmanager.h"
+
 #include "voxel/voxelclusterbounds.h"
 #include "voxel/specialvoxels/hardpointvoxel.h"
 

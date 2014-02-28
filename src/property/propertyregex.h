@@ -3,9 +3,9 @@
 #include "def_regex.h"
 
 
-// some string, some spaces, equals, some spaces, some string, maybe a comment
-static regexns::regex line_regex() { return regexns::regex(R"(^([\w\.]*) *= *(.+?)( *#.*)?$)"); }
-static regexns::regex title_regex() { return regexns::regex(R"(^\[(\w+)\])"); }
+// some string, some spaces, equals, some spaces, some string, some spaces, maybe a comment
+static regexns::regex line_regex() { return regexns::regex(R"(^([\w\.]*) *= *(.+?) *(?:#.*)?$)"); }
+static regexns::regex title_regex() { return regexns::regex(R"(^\[(\w+)\] *(?:#.*)?)"); }
 
 static regexns::regex float_regex() { return regexns::regex(R"(^[-+]?\d*\.?\d*$)"); }
 static regexns::regex int_regex() { return regexns::regex(R"(^([-+]?\d+)$)"); }

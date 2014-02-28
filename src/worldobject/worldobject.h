@@ -7,7 +7,6 @@
 #include "worldobject/handle/handle.h"
 
 
-
 class CollisionDetector;
 class EngineVoxel;
 class HardpointVoxel;

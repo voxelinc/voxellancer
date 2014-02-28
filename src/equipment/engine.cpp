@@ -1,12 +1,20 @@
 #include "engine.h"
 
-#include "utils/tostring.h"
+#include "equipment/engineslot.h"
 
-#include "voxeleffect/enginetrailgenerator.h"
-#include "voxel/specialvoxels/engineslotvoxel.h"
+#include "physics/physics.h"
+
+#include "utils/tostring.h"
 
 #include "sound/sound.h"
 #include "sound/soundmanager.h"
+
+#include "voxel/voxel.h"
+#include "voxeleffect/enginetrailgenerator.h"
+#include "voxel/specialvoxels/engineslotvoxel.h"
+
+#include "worldobject/worldobjectcomponents.h"
+#include "worldobject/worldobject.h"
 
 
 Engine::Engine(const std::string& key):
