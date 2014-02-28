@@ -63,8 +63,7 @@ sf::SoundBuffer* SoundManager::obtain(std::string soundFile) {
     return buffer;
 }
 
-void SoundManager::cleanUp()
-{
+void SoundManager::cleanUp() {
     if (m_nextCleanup++ < CLEANUP_PERIOD) {
         return;
     }
@@ -87,7 +86,7 @@ SoundManager* SoundManager::current() {
 void SoundManager::activate() {
     assert(s_current == nullptr);
     s_current = this;
-    
+
     for (std::shared_ptr<Sound>& sound : m_sounds) {
         if (sound->status() == Sound::Paused) {
             sound->play();

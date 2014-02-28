@@ -18,7 +18,7 @@ namespace glow {
 class FrameBuffer;
 class ScreenQuad;
 
-/* 
+/*
    a configurable RenderPass for a shader that reads and
    writes on a framebuffer and has no further gamelogic
 */
@@ -27,10 +27,12 @@ public:
     PostProcessingPass(const std::string& name, std::shared_ptr<ScreenQuad> quad);
 
     virtual void apply(FrameBuffer& frameBuffer, const RenderMetaData& metadata) override;
+
     void beforeDraw(FrameBuffer& frameBuffer);
 
     void setInputMapping(const std::unordered_map<std::string, int>& inputMapping);
     void setOutput(const std::vector<int>& output);
+
     void setFragmentShader(const std::string& output);
 
     template<typename T>
