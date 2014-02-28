@@ -87,7 +87,7 @@ void GameScenario::populateWorld() {
         m_world->god().scheduleSpawn(follower);
     }
 
-    Ship *testCluster = WorldObjectBuilder("mox").buildShip();
+    Ship *testCluster = WorldObjectBuilder("moy").buildShip();
     testCluster->transform().setPosition(glm::vec3(0, 0, 10));
     testCluster->objectInfo().setName("basicship");
     testCluster->objectInfo().setShowOnHud(false);
@@ -164,7 +164,7 @@ void GameScenario::createArmada() {
             glm::vec3(1400, 500, 0),
         }));
 
-    Ship* chief = WorldObjectBuilder("normandy").buildShip();
+    Ship* chief = WorldObjectBuilder("moy").buildShip();
     chief->transform().setPosition(glm::vec3(700, 0, 0));
     chief->objectInfo().setName("Normandy");
     chief->objectInfo().setShowOnHud(true);
