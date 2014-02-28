@@ -16,18 +16,18 @@
 #include "equipment/weapons/gun.h"
 #include "worldobject/ship.h"
 
+#include "gamestate/gameplay/gameplay.h"
 #include "sound/soundmanager.h"
 
 #include "world/world.h"
 #include "world/god.h"
 
-#include "game.h"
 #include "utils/randvec.h"
 #include "player.h"
 #include "ui/objectinfo.h"
 
-BattleScenario::BattleScenario(Game* game):
-    BaseScenario(game)
+BattleScenario::BattleScenario(GamePlay* gamePlay):
+    BaseScenario(gamePlay)
 {
 
 }
@@ -41,8 +41,9 @@ void BattleScenario::populateWorld() {
     playerShip->objectInfo().setName("basicship");
     playerShip->objectInfo().setShowOnHud(false);
     playerShip->objectInfo().setCanLockOn(false);
+
     m_world->god().scheduleSpawn(playerShip);
-    m_game->player().setShip(playerShip);
+    m_gamePlay->player().setShip(playerShip);
 
     // create enemy ai driven ship
     Ship *aitester = WorldObjectBuilder("basicship").buildShip();

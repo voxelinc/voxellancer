@@ -6,10 +6,10 @@
 
 
 Camera::Camera(int viewportWidth, int viewportHeight):
-	m_fovy(glm::radians(60.f)),
-	m_aspect(1.f),
-	m_zNear(1),
-	m_zFar(9999)
+    m_fovy(glm::radians(60.f)),
+    m_aspect(1.f),
+    m_zNear(1),
+    m_zFar(9999)
 {
     setViewport(glm::ivec2(viewportWidth, viewportHeight));
 }
@@ -21,7 +21,7 @@ Camera::~Camera(){
 void Camera::viewDirty() {
     m_view = glm::mat4_cast(glm::inverse(m_orientation)) * glm::translate(-m_position);
     m_viewProjection = m_projection * m_view;
-} 
+}
 
 void Camera::projectionDirty() {
     m_projection = glm::perspective(m_fovy, m_aspect, m_zNear, m_zFar);
@@ -59,19 +59,19 @@ void Camera::setOrientation(glm::quat quat){
     viewDirty();
 }
 
-const glm::mat4 Camera::view(){
+const glm::mat4& Camera::view()  const{
     return m_view;
 }
 
-const glm::mat4 Camera::viewInverted(){
+const glm::mat4& Camera::viewInverted() const {
     return glm::inverse(m_view);
 }
 
-const glm::quat Camera::orientation(){
+const glm::quat& Camera::orientation() const {
     return Transform::orientation();
 }
 
-const glm::vec3 Camera::position() {
+const glm::vec3& Camera::position() const {
     return m_position;
 }
 
@@ -145,10 +145,10 @@ float Camera::aspectRatio() const {
     return m_aspect;
 }
 
-const glm::mat4 Camera::projection() {
+const glm::mat4& Camera::projection() const {
     return m_projection;
 }
 
-const glm::mat4 Camera::viewProjection() {
+const glm::mat4& Camera::viewProjection() const {
     return m_viewProjection;
 }

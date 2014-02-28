@@ -17,7 +17,8 @@ World::World():
     m_worldLogic(new WorldLogic(*this)),
     m_worldTree(new WorldTree()),
     m_god(new God(*this)),
-    m_voxelParticleEngine(new VoxelParticleEngine())
+    m_voxelParticleEngine(new VoxelParticleEngine()),
+    m_deltaSec(0.0f)
 {
 }
 
