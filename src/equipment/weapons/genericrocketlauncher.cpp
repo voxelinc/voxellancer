@@ -8,7 +8,8 @@
 
 
 GenericRocketLauncher::GenericRocketLauncher(const std::string& name):
-    RocketLauncher(name)
+    RocketLauncher(name),
+    m_cooldownTime(0)
 {
 }
 

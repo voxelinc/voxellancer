@@ -101,7 +101,7 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
         game->loadScenario(key - GLFW_KEY_F1);
     }
 
-	game->inputHandler().keyCallback(key, scancode, action, mods);
+    game->inputHandler().keyCallback(key, scancode, action, mods);
 }
 
 void setCallbacks(GLFWwindow* window) {
@@ -169,10 +169,11 @@ int main(int argc, char* argv[]) {
 
     glfwSetErrorCallback(errorCallback);
 
+    ContextProvider::instance()->setRequiredGLVersion(MajorVersionRequire, MinorVersionRequire);
     if(clParser.fullScreen()) {
-        ContextProvider::instance()->initFullScreen(MajorVersionRequire, MinorVersionRequire, 1);
+        ContextProvider::instance()->initFullScreen(1);
     } else {
-        ContextProvider::instance()->initWindowed(MajorVersionRequire, MinorVersionRequire);
+        ContextProvider::instance()->initWindowed();
     }
 
     GLFWwindow* window = glfwGetCurrentContext();

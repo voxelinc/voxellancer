@@ -21,7 +21,8 @@ World::World():
     m_worldTree(new WorldTree()),
     m_god(new God(*this)),
     m_voxelParticleEngine(new VoxelParticleEngine()),
-    m_factionMatrix(new FactionMatrix())
+    m_factionMatrix(new FactionMatrix()),
+    m_deltaSec(0.0f)
 {
 }
 
