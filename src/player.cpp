@@ -65,10 +65,6 @@ CameraHead& Player::cameraHead() {
     return m_cameraDolly->cameraHead();
 }
 
-const CameraHead& Player::cameraHead() const {
-    return m_cameraDolly->cameraHead();
-}
-
 HUD& Player::hud() {
     return *m_hud;
 }

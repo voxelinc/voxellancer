@@ -18,8 +18,9 @@
 
 
 
-VoxelDebrisGenerator::VoxelDebrisGenerator() :
-    VoxelParticleSpawnBase("physics.debrisDirectionalDampening",
+VoxelDebrisGenerator::VoxelDebrisGenerator(const VoxelCluster* creator) :
+    VoxelParticleSpawnBase(creator,
+                           "physics.debrisDirectionalDampening",
                            "physics.debrisAngularDampening",
                            "physics.debrisBaseForce",
                            "physics.debrisAngularBaseForce"),
@@ -76,7 +77,7 @@ void VoxelDebrisGenerator::spawn() {
                     createLifetime()
                 );
 
-                World::instance()->particleEngine().addParticle(particleSetup);
+                World::instance()->particleEngine().addParticle(particleSetup, m_creator);
             }
         }
     }

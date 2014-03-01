@@ -1,3 +1,5 @@
 #include "voxelparticleremovecheck.h"
 
-void VoxelParticleRemoveCheck::setPlayer(const Player& player) { }
+void VoxelParticleRemoveCheck::setPlayer(Player& player) { }
+
+void VoxelParticleRemoveCheck::beforeCheck() { }

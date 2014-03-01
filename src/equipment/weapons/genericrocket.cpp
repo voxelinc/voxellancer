@@ -23,7 +23,7 @@ void GenericRocket::onLifetimeOver() {
 }
 
 void GenericRocket::spawnExplosion() {
-    VoxelExplosionGenerator generator;
+    VoxelExplosionGenerator generator(this);
 
     generator.setPosition(m_transform.position());
     generator.setScale(m_transform.scale() / 3.0f);

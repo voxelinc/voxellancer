@@ -11,8 +11,9 @@
 #include "voxelparticleengine.h"
 
 
-VoxelExplosionGenerator::VoxelExplosionGenerator() :
-    VoxelParticleSpawnBase("physics.explosionDirectionalDampening",
+VoxelExplosionGenerator::VoxelExplosionGenerator(const VoxelCluster* creator) :
+    VoxelParticleSpawnBase(creator,
+                           "physics.explosionDirectionalDampening",
                            "physics.explosionAngularDampening",
                            "physics.explosionBaseForce",
                            "physics.explosionAngularBaseForce"),
@@ -51,7 +52,7 @@ void VoxelExplosionGenerator::spawn() {
             createLifetime()
         );
 
-        World::instance()->particleEngine().addParticle(particleSetup);
+        World::instance()->particleEngine().addParticle(particleSetup, m_creator);
     }
 }
 

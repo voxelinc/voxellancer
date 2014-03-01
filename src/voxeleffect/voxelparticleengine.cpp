@@ -8,6 +8,7 @@
 #include "particlechecks/voxelparticleremovecheck.h"
 #include "particlechecks/voxelparticleintersectioncheck.h"
 #include "particlechecks/voxelparticleexpirecheck.h"
+#include "particlechecks/voxelparticlefuturecheck.h"
 
 #include "world/world.h"
 
@@ -40,14 +41,19 @@ VoxelParticleData* VoxelParticleEngine::particleData(int index) {
     return &m_cpuParticleBuffer[index];
 }
 
-void VoxelParticleEngine::addParticle(const VoxelParticleSetup& particleSetup) {
+void VoxelParticleEngine::addParticle(const VoxelParticleSetup& particleSetup, const VoxelCluster* creator) {
+    VoxelParticleData particle = particleSetup.toData(m_time);
+
+    if (creator != nullptr && VoxelParticleFutureCheck::intersectsIn(particle, 0.5f, *creator)) {
+        return;
+    }
 
     if(m_freeParticleBufferIndices.empty()) {
         setBufferSize(m_cpuParticleBuffer.size() * 2);
     }
 
     int bufferIndex = m_freeParticleBufferIndices.top();
-    m_cpuParticleBuffer[bufferIndex] = particleSetup.toData(m_time);
+    m_cpuParticleBuffer[bufferIndex] = particle;
     particleChanged(bufferIndex);
 
     m_freeParticleBufferIndices.pop();
@@ -57,9 +63,9 @@ void VoxelParticleEngine::removeParticle(int index) {
     assert(index < m_cpuParticleBuffer.size());
 
     VoxelParticleData& particle = m_cpuParticleBuffer[index];
-    //particle.status = VoxelParticleData::Status::Removed;
-    //m_freeParticleBufferIndices.push(index);
-    particle.color = 0xff0000;
+    particle.status = VoxelParticleData::Status::Removed;
+    m_freeParticleBufferIndices.push(index);
+    //particle.color = 0xff00ff;
 
     particleChanged(index);
 }
@@ -132,7 +138,7 @@ std::vector<VoxelParticleData>& VoxelParticleEngine::particleDataVector() {
     return m_cpuParticleBuffer;
 }
 
-void VoxelParticleEngine::setPlayer(const Player& m_player) {
+void VoxelParticleEngine::setPlayer(Player& m_player) {
     m_remover->setPlayer(m_player);
 }
 

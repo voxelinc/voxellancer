@@ -27,7 +27,7 @@ void GenericBullet::setHitSound(const SoundProperties& hitSound) {
 }
 
 void GenericBullet::spawnExplosion() {
-    VoxelExplosionGenerator generator;
+    VoxelExplosionGenerator generator(this);
 
     generator.setPosition(m_transform.position());
     generator.setRadius(m_transform.scale());

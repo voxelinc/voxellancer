@@ -14,13 +14,15 @@
 
 #include "sound/soundmanager.h"
 
+#include "voxeleffect/voxelparticleengine.h"
+
 #include "world/world.h"
 
 #include "player.h"
 
 
 
-GamePlay::GamePlay(Game* game):
+GamePlay::GamePlay(Game* game) :
     GameState("In Game", game),
     m_game(game),
     m_player(new Player(this)),
@@ -34,6 +36,7 @@ GamePlay::GamePlay(Game* game):
 
     m_runningState->pauseTrigger().setTarget(new TriggeredTransition(m_runningState, m_pausedState));
     m_pausedState->continueTrigger().setTarget(new TriggeredTransition(m_pausedState, m_runningState));
+    World::instance()->particleEngine().setPlayer(*m_player);
 }
 
 Game* GamePlay::game() {

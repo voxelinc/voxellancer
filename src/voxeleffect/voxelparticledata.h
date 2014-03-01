@@ -5,8 +5,6 @@
 #include <iostream>
 #include <stdint.h>
 
-
-
 struct VoxelParticleData {
     enum class Status { Removed, Alive, Dead };
 

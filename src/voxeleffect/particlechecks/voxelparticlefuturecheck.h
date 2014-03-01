@@ -1,9 +1,10 @@
 #pragma once
 
-class VoxelParticleData;
+class VoxelCluster;
+struct VoxelParticleData;
 
 class VoxelParticleFutureCheck {
 public:
-    bool intersectsIn(const VoxelParticleData& particle, float secs);
+    static bool intersectsIn(const VoxelParticleData& particle, float futureSecs, const VoxelCluster& against);
 
 };

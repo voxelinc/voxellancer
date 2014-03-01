@@ -4,6 +4,8 @@
 
 #include "voxelparticleremovecheck.h"
 
+#include "geometry/sphere.h"
+
 class Player;
 class VoxelParticleEngine;
 struct VoxelParticleData;
@@ -18,14 +20,15 @@ public:
 
     virtual bool isDead(const VoxelParticleData& particle) override;
 
-    virtual void setPlayer(const Player& player) override;
+    virtual void setPlayer(Player& player) override;
 
 protected:
     const VoxelParticleEngine& m_particleEngine;
-    const Player* m_player;
+    Player* m_player;
+    Sphere m_Sphere;
     Property<float> m_maxCheckDistance;
 
-    bool isFarAway(const glm::vec3& position);
-    bool isBehindPlayer(const glm::vec3& position);
+    virtual void beforeCheck();
+
 };
 

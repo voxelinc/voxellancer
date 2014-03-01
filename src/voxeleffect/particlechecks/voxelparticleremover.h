@@ -26,7 +26,7 @@ public:
 
     void addCheck(std::shared_ptr<VoxelParticleRemoveCheck> checker);
 
-    void setPlayer(const Player& player);
+    void setPlayer(Player& player);
 
     float interval() const;
     void setInterval(float interval);
@@ -36,7 +36,7 @@ public:
 
 protected:
     VoxelParticleEngine* m_particleEngine;
-    std::list<std::shared_ptr<VoxelParticleRemoveCheck>> m_checker;
+    std::vector<std::shared_ptr<VoxelParticleRemoveCheck>> m_checker;
     std::unique_ptr<ThreadPool<VoxelParticleData>> m_threadPool;
     
     Property<float> m_interval;
@@ -46,5 +46,6 @@ protected:
 
     void performChecks(int checkCount);
     bool isDead(VoxelParticleData& particle);
+    void beforeCheck();
 };
 

@@ -13,7 +13,7 @@ class VoxelExplosionGenerator;
 class EngineTrailGenerator
 {
 public:
-    EngineTrailGenerator(Engine* engine);
+    EngineTrailGenerator(Engine& engine, const WorldObject& creator);
     virtual ~EngineTrailGenerator();
 
     void setLifetime(float lifetime);
@@ -22,7 +22,8 @@ public:
 
 
 protected:
-    Engine* m_engine;
+    const WorldObject& m_creator;
+    const Engine& m_engine;
     std::unique_ptr<VoxelExplosionGenerator> m_generator;
 
     glm::vec3 m_lastSpawnPoint;
@@ -33,7 +34,6 @@ protected:
 
     Property<float> prop_stepDistance;
     Property<float> prop_idleTime;
-
     void spawnTrail();
     void updateTrailSettings();
     glm::vec3 calculateSpawnPosition();

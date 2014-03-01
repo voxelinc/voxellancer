@@ -18,7 +18,7 @@ class EngineSlot: public WorldObjectSlot {
 public:
     EngineSlot(WorldObjectComponents* components, EngineSlotVoxel* voxel);
 
-    EngineSlotVoxel* voxel();
+    const EngineSlotVoxel* voxel() const;
 
     const glm::vec3& direction();
     void setDirection(const glm::vec3& direction);

@@ -13,10 +13,13 @@
 #include "voxelparticleengine.h"
 
 
-VoxelParticleSpawnBase::VoxelParticleSpawnBase(char* dampeningName,
-                       char* angularDampeningName,
-                       char* baseForceName,
-                       char* angularBaseForceName) :
+VoxelParticleSpawnBase::VoxelParticleSpawnBase(
+    const VoxelCluster* creator, 
+    char* dampeningName,
+    char* angularDampeningName, 
+    char* baseForceName,
+    char* angularBaseForceName):
+    m_creator(creator),
     m_position(0, 0, 0),
     m_scale(1.0f),
     m_scaleRandomization(0.0f),

@@ -28,7 +28,6 @@ public:
     void update(float deltaSec);
 
     CameraHead& cameraHead();
-    const CameraHead& cameraHead() const;
 
     HUD& hud();
 

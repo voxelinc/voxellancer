@@ -21,6 +21,7 @@ public:
     void setMountable(const std::string& name, bool mountable);
 
     WorldObjectComponents* components();
+    const WorldObjectComponents* components() const;
 
     int index() const;
 

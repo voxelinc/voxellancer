@@ -32,6 +32,7 @@ void VoxelParticleRemover::update(float deltaSec) {
     int checkCount = static_cast<int>((deltaSec * m_particleEngine->particleDataCount()) / m_interval);
     checkCount = std::min(checkCount, m_particleEngine->particleDataCount());
 
+    beforeCheck();
     performChecks(checkCount);
     
     m_currentIndex = (m_currentIndex + checkCount) % m_particleEngine->particleDataCount();
@@ -81,9 +82,14 @@ void VoxelParticleRemover::addCheck(std::shared_ptr<VoxelParticleRemoveCheck> ch
     m_checker.push_back(checker);
 }
 
-void VoxelParticleRemover::setPlayer(const Player& player) {
+void VoxelParticleRemover::setPlayer(Player& player) {
     for (std::shared_ptr<VoxelParticleRemoveCheck>& checker : m_checker) {
         checker->setPlayer(player);
     }
 }
 
+void VoxelParticleRemover::beforeCheck() {
+    for (std::shared_ptr<VoxelParticleRemoveCheck>& checker : m_checker) {
+        checker->beforeCheck();
+    }
+}

@@ -20,7 +20,7 @@ World::World():
     m_worldLogic(new WorldLogic(*this)),
     m_worldTree(new WorldTree()),
     m_god(new God(*this)),
-    m_particleEngine(new VoxelParticleEngine())
+    m_particleEngine(new VoxelParticleEngine()),
     m_factionMatrix(new FactionMatrix()),
     m_deltaSec(0.0f)
 {
