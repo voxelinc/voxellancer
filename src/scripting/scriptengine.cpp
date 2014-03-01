@@ -44,7 +44,7 @@ void ScriptEngine::stop() {
 void ScriptEngine::registerScriptable(Scriptable* scriptable) {
     m_handles.resize(m_handleKeyIncrementor + 1);
 
-    IScriptHandle* scriptHandle;
+    IScriptHandle* scriptHandle = nullptr;
     switch(scriptable->scriptableType()) {
         case ScriptableType::WorldObject:
             scriptHandle = new ScriptHandle<WorldObject>(dynamic_cast<WorldObject*>(scriptable));
@@ -52,11 +52,17 @@ void ScriptEngine::registerScriptable(Scriptable* scriptable) {
         default:
             assert(0);
     }
-    m_handles[m_handleKeyIncrementor++].reset(scriptHandle);
+    m_handles[m_handleKeyIncrementor].reset(scriptHandle);
+
+    scriptable->setScriptKey(m_handleKeyIncrementor);
+
+    m_handleKeyIncrementor++;
 }
 
 void ScriptEngine::unregisterScriptable(Scriptable* scriptable) {
-    m_handles[scriptable->scriptKey()]->invalidate();
+    if (scriptable->scriptKey() > 0) {
+        m_handles[scriptable->scriptKey()]->invalidate();
+    }
 }
 
 
