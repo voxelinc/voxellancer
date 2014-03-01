@@ -19,26 +19,36 @@
 #include "voxel/voxeltreequery.h"
 
 
-Aimer::Aimer(WorldObject* worldObject, const Ray& ray):
+Aimer::Aimer(WorldObject* worldObject) :
     m_worldObject(worldObject),
-    m_ray(ray),
-    m_infityAimDistance("general.inifinityAimDistance")
+    m_infityAimDistance("general.infinityAimDistance"),
+    m_infityAimInterpolation("general.infinityAimInterpolation")
 {
 }
 
-glm::vec3 Aimer::aim() {
+void Aimer::update(float deltaSec) {
+    float interpolation = deltaSec * 0.3f;
+    m_lastDistance = interpolation * m_infityAimDistance + (1 - interpolation) * m_lastDistance;
+}
+
+void Aimer::setWorldObject(WorldObject* worldObject) {
+    m_worldObject = worldObject;
+}
+
+glm::vec3 Aimer::aim(const Ray& ray) {
+    assert(m_worldObject);
     glm::vec3 targetPoint;
 
-    WorldTreeQuery wordltreequery(&World::instance()->worldTree(), &m_ray, nullptr, &m_worldObject->collisionFilter());
+    WorldTreeQuery wordltreequery(&World::instance()->worldTree(), &ray, nullptr, &m_worldObject->collisionFilter());
 
     std::unordered_set<WorldObject*> intersectingWorldObjects = wordltreequery.intersectingWorldObjects();
 
     if(!intersectingWorldObjects.empty()) {
-        return nearestTarget(intersectingWorldObjects);
+        targetPoint =  nearestTarget(intersectingWorldObjects, ray.origin());
     }
-    else {
-        return infinity();
-    }
+    
+    m_lastDistance = glm::length(ray.origin() - targetPoint);
+    return targetPoint;
 }
 
 glm::vec3 Aimer::nearestTarget(const std::unordered_set<WorldObject*>& worldObjects) const {
@@ -65,6 +75,7 @@ glm::vec3 Aimer::nearestVoxel(WorldObject* object) const {
     Voxel* nearest = nullptr;
     float minDistance = std::numeric_limits<float>::max();
 
+
     for (Voxel* voxel : voxels) {
         float distance = distanceTo(voxel, object);
         if (distance < minDistance) {
@@ -83,7 +94,5 @@ float Aimer::distanceTo(Voxel* voxel, WorldObject* owner) const {
     return glm::length(voxel->position(owner->transform()) - m_ray.origin());
 }
 
-glm::vec3 Aimer::infinity() const {
-    return m_ray.origin() + m_ray.direction() * m_infityAimDistance.get();
 }
 

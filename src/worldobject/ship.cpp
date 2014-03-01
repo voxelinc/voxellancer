@@ -1,13 +1,10 @@
 #include "ship.h"
 
 #include "ai/boardcomputer.h"
-#include "ai/squadlogic.h"
 #include "ai/character.h"
+#include "ai/squadlogic.h"
+
 #include "collision/collisionfilter.h"
-#include "physics/physics.h"
-#include "sound/sound.h"
-#include "voxel/specialvoxels/engineslotvoxel.h"
-#include "worldobject/components/engineslot.h"
 
 
 Ship::Ship():
@@ -17,7 +14,7 @@ Ship::Ship():
 
 Ship::Ship(CollisionFilter* collisionFilter):
     WorldObject(collisionFilter),
-    m_character(new Character(*this)),
+    m_character(new Character(*this, nullptr)),
     m_boardComputer(new BoardComputer(this)),
     m_squadLogic(new SquadLogic(*this)),
     m_shipHandle(Handle<Ship>(this)),

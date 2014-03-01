@@ -3,8 +3,9 @@
 #include <list>
 #include <memory>
 
-#include "components/enginestate.h"
-#include "components/enginepower.h"
+#include "equipment/enginepower.h"
+#include "equipment/enginestate.h"
+
 
 class EngineSlot;
 class Hardpoint;
@@ -25,7 +26,7 @@ public:
     WorldObject* worldObject();
 
     void addEngineSlot(std::shared_ptr<EngineSlot> engineSlot);
-    void removeEngineSlot(std::shared_ptr<EngineSlot> engineSlot);
+    void removeEngineSlot(const EngineSlot* engineSlot);
 
     /*
         Access EngineSlots either by index in the model or all of them
@@ -54,7 +55,7 @@ public:
 
 
     void addHardpoint(std::shared_ptr<Hardpoint> hardpoint);
-    void removeHardpoint(std::shared_ptr<Hardpoint> hardpoint);
+    void removeHardpoint(const Hardpoint* hardpoint);
 
     /*
         Access Hardpoints either by index in the model or all of them

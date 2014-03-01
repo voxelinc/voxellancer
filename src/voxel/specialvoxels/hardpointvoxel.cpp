@@ -4,14 +4,14 @@
 
 #include "voxel/voxelcluster.h"
 
-#include "worldobject/components/hardpoint.h"
-#include "worldobject/components/weapon.h"
+#include "equipment/hardpoint.h"
+#include "equipment/weapon.h"
 #include "worldobject/worldobject.h"
 #include "worldobject/worldobjectcomponents.h"
 
 
 HardpointVoxel::HardpointVoxel(const glm::ivec3& gridCell, int index):
-    SpecialVoxel(gridCell, index, Property<uint32_t>("voxels.hardpoint.color"), Property<float>("voxels.hardpoint.mass"), Property<float>("voxels.hardpoint.hp")),
+    SpecialVoxel(gridCell, index, Property<uint32_t>::get("voxels.hardpoint.color"), Property<float>::get("voxels.hardpoint.mass"), Property<float>::get("voxels.hardpoint.hp")),
     m_hardpoint(nullptr)
 {
 
@@ -32,7 +32,7 @@ void HardpointVoxel::addToObject(WorldObject* worldObject) {
 
 void HardpointVoxel::onRemoval() {
     if (m_hardpoint) {
-        m_hardpoint->components()->removeHardpoint(m_hardpoint);
+        m_hardpoint->onVoxelRemoval();
         m_hardpoint = nullptr;
     }
     SpecialVoxel::onRemoval();

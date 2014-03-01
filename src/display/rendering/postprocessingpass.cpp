@@ -59,7 +59,7 @@ void PostProcessingPass::setFragmentShader(const std::string& fragmentShader) {
 
 void PostProcessingPass::initialize() {
     m_program = new glow::Program();
-    
+
     glow::Shader* vertShader = glowutils::createShaderFromFile(GL_VERTEX_SHADER, m_vertexShader);
     glow::Shader* fragShader = glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, m_fragmentShader);
 

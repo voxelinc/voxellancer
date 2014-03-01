@@ -4,9 +4,10 @@
 
 #include <glow/logging.h>
 
-#include "worldobject/components/weapon.h"
-#include "worldobject/components/weapons/genericgun.h"
-#include "worldobject/components/weapons/genericrocketlauncher.h"
+#include "equipment/weapon.h"
+#include "equipment/weapons/genericgun.h"
+#include "equipment/weapons/genericrocketlauncher.h"
+
 #include "property/property.h"
 
 
@@ -45,8 +46,6 @@ GenericGun* WeaponBuilder::buildGenericGun() {
     gun->setCooldownTime(Property<float>(m_name + ".general.cooldownTime"));
     gun->setBulletName(bulletName);
 
-//    void setBulletPrototype(Bullet* bulletPrototype);
-
     return gun;
 }
 
@@ -56,8 +55,6 @@ GenericRocketLauncher* WeaponBuilder::buildGenericRocketLauncher() {
     rocketLauncher->setVisuals(Visuals::fromProperties(m_name + ".visuals"));
     rocketLauncher->setCooldownTime(Property<float>(m_name + ".general.cooldownTime"));
     rocketLauncher->setRocketName(Property<std::string>(m_name + ".general.rocket"));
-//    void setBulletPrototype(Bullet* bulletPrototype);
-
     return rocketLauncher;
 }
 

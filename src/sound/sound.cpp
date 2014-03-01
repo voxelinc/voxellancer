@@ -49,45 +49,45 @@ void Sound::pause() {
     }
 }
 
-Sound* Sound::setPosition(const glm::vec3& p) {
+Sound& Sound::setPosition(const glm::vec3& p) {
     if (m_sound) {
         m_sound->setPosition(sf::Vector3f(p.x, p.y, p.z));
     }
-    return this;
+    return *this;
 }
 
-Sound* Sound::setAttenuation(float attenuation) {
+Sound& Sound::setAttenuation(float attenuation) {
     if (m_sound) {
         m_sound->setAttenuation(attenuation);
     }
-    return this;
+    return *this;
 }
 
-Sound* Sound::setVolume(float volume) {
+Sound& Sound::setVolume(float volume) {
     if (m_sound) {
         m_sound->setVolume(volume * 100);
     }
-    return this;
+    return *this;
 }
 
-Sound* Sound::setLooping(bool loop) {
+Sound& Sound::setLooping(bool loop) {
     if (m_sound) {
         m_sound->setLoop(loop);
     }
-    return this;
+    return *this;
 }
 
-Sound* Sound::setRelativeToListener(bool relative) {
+Sound& Sound::setRelativeToListener(bool relative) {
     if (m_sound) {
         m_sound->setRelativeToListener(relative);
     }
-    return this;
+    return *this;
 }
 
-Sound* Sound::setMinDistance(float distance) {
+Sound& Sound::setMinDistance(float distance) {
     if (m_sound) {
         m_sound->setMinDistance(distance);
     }
-    return this;
+    return *this;
 }
 

@@ -4,9 +4,9 @@
 
 #include "voxel/specialvoxels/hardpointvoxel.h"
 
-#include "worldobject/components/weapon.h"
-#include "worldobject/components/hardpoint.h"
-#include "worldobject/components/weapons/gun.h"
+#include "equipment/weapon.h"
+#include "equipment/hardpoint.h"
+#include "equipment/weapons/gun.h"
 #include "worldobject/worldobject.h"
 #include "physics/physics.h"
 

@@ -73,7 +73,7 @@ void Skybox::initialize() {
     m_vertexArrayObject->enable(a_vertex);
 }
 
-void Skybox::draw(Camera& camera){
+void Skybox::draw(const Camera& camera){
     if (!m_texture) {
         initialize();
     }

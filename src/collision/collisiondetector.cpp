@@ -97,30 +97,29 @@ void CollisionDetector::checkCollisions(VoxelTreeNode* nodeA, WorldObject* objec
 
     if (sphereA.intersects(sphereB)) {
         if (nodeA->isLeaf() && nodeB->isLeaf()) {
-            if(nodeA->isVoxel() && nodeB->isVoxel()) {
+            if (nodeA->isVoxel() && nodeB->isVoxel()) {
                 m_collisions.push_back(VoxelCollision(VoxelCollisionParticipant(objectA, nodeA->voxel()), VoxelCollisionParticipant(objectB, nodeB->voxel())));
             }
-        }
-        else {
+        } else {
             std::pair<VoxelTreeNode*, WorldObject*> nodeToSplit;
             std::pair<VoxelTreeNode*, WorldObject*> otherNode;
 
             assert(!nodeA->isLeaf() || !nodeB->isLeaf());
 
-            if(sphereA.radius() < sphereB.radius()) {
+            if (sphereA.radius() < sphereB.radius()) {
                 otherNode = { nodeA, objectA };
                 nodeToSplit = { nodeB, objectB };
-            }
-            else {
+            } else {
                 otherNode = { nodeB, objectB };
                 nodeToSplit = { nodeA, objectA };
             }
 
-            if(nodeToSplit.first->isLeaf()) {
+            if (nodeToSplit.first->isLeaf()) {
                 std::swap(nodeToSplit, otherNode);
             }
 
-            for(VoxelTreeNode* subnode : nodeToSplit.first->subnodes()) {
+
+            for (VoxelTreeNode* subnode : nodeToSplit.first->subnodes()) {
                 checkCollisions(subnode, nodeToSplit.second, otherNode.first, otherNode.second);
             }
         }

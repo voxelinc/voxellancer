@@ -12,7 +12,7 @@ public:
     const float attenuation() const;
     const bool looping() const;
 
-    static SoundProperties fromProperties(std::string prefix);
+    static SoundProperties fromProperties(const std::string& prefix);
 
 protected:
     std::string m_sound;

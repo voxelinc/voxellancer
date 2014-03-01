@@ -4,14 +4,14 @@
 
 #include "voxel/voxelcluster.h"
 
-#include "worldobject/components/engine.h"
-#include "worldobject/components/engineslot.h"
+#include "equipment/engine.h"
+#include "equipment/engineslot.h"
 #include "worldobject/worldobject.h"
 #include "worldobject/worldobjectcomponents.h"
 
 
 EngineSlotVoxel::EngineSlotVoxel(const glm::ivec3& gridCell, int index):
-    SpecialVoxel(gridCell, index, Property<uint32_t>("voxels.engineSlot.color"), Property<float>("voxels.engineSlot.mass"), Property<float>("voxels.engineSlot.hp")),
+    SpecialVoxel(gridCell, index, Property<uint32_t>::get("voxels.engineSlot.color"), Property<float>::get("voxels.engineSlot.mass"), Property<float>::get("voxels.engineSlot.hp")),
     m_engineSlot(nullptr)
 {
 }
@@ -30,7 +30,7 @@ Visuals EngineSlotVoxel::visuals() const {
 
 void EngineSlotVoxel::onRemoval() {
     if (m_engineSlot){
-        m_engineSlot->components()->removeEngineSlot(m_engineSlot);
+        m_engineSlot->onVoxelRemoval();
         m_engineSlot = nullptr;
     }
     SpecialVoxel::onRemoval();

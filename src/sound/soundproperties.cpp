@@ -3,11 +3,11 @@
 #include "property/property.h"
 
 
-SoundProperties::SoundProperties(const std::string& sound, float volume, float attenuation, bool repeating):
+SoundProperties::SoundProperties(const std::string& sound, float volume, float attenuation, bool looping):
     m_sound(sound),
     m_volume(volume),
     m_attenuation(attenuation),
-    m_looping(repeating)
+    m_looping(looping)
 {
 
 }
@@ -28,7 +28,7 @@ const bool SoundProperties::looping() const {
     return m_looping;
 }
 
-SoundProperties SoundProperties::fromProperties(std::string prefix) {
+SoundProperties SoundProperties::fromProperties(const std::string& prefix) {
     return SoundProperties(
             Property<std::string>::get(prefix + ".name"),
             Property<float>::get(prefix + ".volume", 1.0f),

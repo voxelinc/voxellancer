@@ -25,12 +25,12 @@ public:
     void stop();
     void pause();
 
-    Sound* setPosition(const glm::vec3& position);
-    Sound* setVolume(float volume);
-    Sound* setAttenuation(float attenuation);
-    Sound* setLooping(bool loop);
-    Sound* setRelativeToListener(bool relative);
-    Sound* setMinDistance(float distance);
+    Sound& setPosition(const glm::vec3& position);
+    Sound& setVolume(float volume);
+    Sound& setAttenuation(float attenuation);
+    Sound& setLooping(bool loop);
+    Sound& setRelativeToListener(bool relative);
+    Sound& setMinDistance(float distance);
 
 protected:
     std::unique_ptr<sf::Sound> m_sound;

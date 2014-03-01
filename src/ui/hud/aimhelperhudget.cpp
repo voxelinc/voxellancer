@@ -8,10 +8,12 @@
 #include "utils/tostring.h"
 
 #include "worldobject/ship.h"
-#include "worldobject/components/hardpoint.h"
-#include "worldobject/helper/hardpointaimhelper.h"
-#include "worldobject/components/weapon.h"
+
+#include "equipment/weapon.h"
+#include "equipment/hardpoint.h"
+
 #include "worldobject/worldobjectcomponents.h"
+#include "worldobject/helper/hardpointaimhelper.h"
 
 #include "player.h"
 
