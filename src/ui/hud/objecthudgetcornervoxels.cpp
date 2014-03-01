@@ -9,12 +9,12 @@
 #include "objecthudgetvoxels.h"
 
 
-ObjectHudgetCornerVoxels::ObjectHudgetCornerVoxels(ObjectHudgetVoxels* objectHudgetVoxels, const glm::ivec3& baseOffset, bool targetHightlight):
+ObjectHudgetCornerVoxels::ObjectHudgetCornerVoxels(ObjectHudgetVoxels* objectHudgetVoxels, const glm::ivec3& baseOffset, uint32_t baseColor, bool targetHightlight):
     VoxelCluster(targetHightlight ? 0.04f : 0.02f),
     m_objectHudgetVoxels(objectHudgetVoxels),
     m_baseOffset(baseOffset)
 {
-    int color = targetHightlight ? 0x99CCFF : 0x66AAFF;
+    int color = baseColor;// * (targetHightlight ? 1.5 : 0);
 
     int edgeLength = 3;
     addVoxel(new Voxel(glm::ivec3(edgeLength, edgeLength, 0), color));
