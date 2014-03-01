@@ -15,12 +15,11 @@ class Camera;
 class CameraDolly;
 class CameraHead;
 class HUD;
-
-class Game;
+class GamePlay;
 
 class Player {
 public:
-    Player(Game* game);
+    Player(GamePlay* gamePlay);
     ~Player();
 
     Ship* ship();
@@ -30,16 +29,17 @@ public:
 
     CameraHead& cameraHead();
     const CameraHead& cameraHead() const;
+
     HUD& hud();
 
     void fire();
 
     void move(const glm::vec3& vec);
     void rotate(const glm::vec3& euler);
-    
+
 
 protected:
-    Game* m_game;
+    GamePlay* m_gamePlay;
     Handle<Ship> m_ship;
     std::unique_ptr<CameraDolly> m_cameraDolly;
     std::unique_ptr<HUD> m_hud;

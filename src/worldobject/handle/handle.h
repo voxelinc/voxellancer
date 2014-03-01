@@ -15,6 +15,7 @@ public:
     explicit Handle(T* object);
 
     T* get();
+    const T* get() const;
     T* operator->();
     T* operator*();
 

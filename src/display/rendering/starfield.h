@@ -23,11 +23,11 @@ namespace glow {
 
 
 /*
-   Renders a starfield around the camera. 
+   Renders a starfield around the camera.
    Old camera positions/orientations are stored in order to stretch the
    Stars on movement. As stereorendering renders twice per frame
    with slightly different cameras, the Starfield needs to know which
-   side is drawn currently. 
+   side is drawn currently.
    http://chrdw.de/uploads/Eyeside.pdf
 */
 class Starfield : public RenderPass, public ContextDependant {
@@ -71,7 +71,8 @@ protected:
 
     void createBinding(int index, std::string name, int offset, int size);
 
-    void addLocation(Camera& camera, int side);
-    glm::mat4 getMatrixFromPast(Camera& camera, int side);
+    void addLocation(const Camera& camera, int side);
+    glm::mat4 getMatrixFromPast(const Camera& camera, int side);
     void cleanUp(int side);
 };
+

@@ -9,7 +9,8 @@
 
 CrossHair::CrossHair(HUD* hud):
     Hudget(hud),
-    m_voxels(new CrossHairVoxels(this))
+    m_voxels(new CrossHairVoxels(this)),
+    m_actionActive(false)
 {
 
 }

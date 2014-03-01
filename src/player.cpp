@@ -1,32 +1,40 @@
 #include "player.h"
 
-#include "utils/aimer.h"
-#include "utils/tostring.h"
+#include "ai/character.h"
 
 #include "camera/cameradolly.h"
+#include "camera/camerahead.h"
 
-#include "worldobject/ship.h"
+#include "factions/factionmatrix.h"
+#include "factions/playerfaction.h"
 
-#include "game.h"
-#include "camera/cameradolly.h"
+#include "gamestate/game.h"
+#include "gamestate/gameplay/gameplay.h"
+
 #include "ui/hud/hud.h"
 #include "ui/hud/hudget.h"
 #include "ui/hud/aimhelperhudget.h"
 #include "ui/hud/crosshair.h"
-#include "physics/physics.h"
-#include "camera/camerahead.h"
 #include "ui/objectinfo.h"
+
+#include "utils/aimer.h"
+
+#include "physics/physics.h"
+
+#include "world/world.h"
+
+#include "worldobject/ship.h"
 #include "worldobject/worldobjectcomponents.h"
 
 
-Player::Player(Game* game):
-    m_game(game),
+Player::Player(GamePlay* gamePlay):
+    m_gamePlay(gamePlay),
     m_aimer(new Aimer(nullptr)),
-    m_hud(new HUD(this, &game->viewer())),
+    m_hud(new HUD(this, &gamePlay->game()->viewer())),
     m_ship(nullptr),
     m_cameraDolly(new CameraDolly())
 {
-    
+
 }
 
 Player::~Player() = default;
@@ -37,6 +45,7 @@ Ship* Player::ship() {
 
 void Player::setShip(Ship* ship) {
     m_ship = ship->shipHandle();
+    m_ship->character()->setFaction(World::instance()->factionMatrix().playerFaction());
     m_ship->objectInfo().setShowOnHud(false);
     m_cameraDolly->followWorldObject(ship);
     m_aimer->setWorldObject(ship);

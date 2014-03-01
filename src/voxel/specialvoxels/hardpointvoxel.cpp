@@ -11,7 +11,7 @@
 
 
 HardpointVoxel::HardpointVoxel(const glm::ivec3& gridCell, int index):
-    SpecialVoxel(gridCell, index, Property<int>("voxels.hardpoint.color"), Property<float>("voxels.hardpoint.mass"), Property<float>("voxels.hardpoint.hp")),
+    SpecialVoxel(gridCell, index, Property<uint32_t>::get("voxels.hardpoint.color"), Property<float>::get("voxels.hardpoint.mass"), Property<float>::get("voxels.hardpoint.hp")),
     m_hardpoint(nullptr)
 {
 
@@ -25,8 +25,8 @@ Visuals HardpointVoxel::visuals() const {
 
 void HardpointVoxel::addToObject(WorldObject* worldObject) {
     Voxel::addToObject(worldObject);
-
-    m_hardpoint = new Hardpoint(&worldObject->components(), this);
+    assert(m_hardpoint == nullptr);
+    m_hardpoint = std::make_shared<Hardpoint>(&worldObject->components(), this);
     worldObject->components().addHardpoint(m_hardpoint);
 }
 

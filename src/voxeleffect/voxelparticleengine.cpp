@@ -69,7 +69,7 @@ void VoxelParticleEngine::update(float deltaSec) {
     m_remover->update(deltaSec);
 }
 
-void VoxelParticleEngine::draw(Camera& camera) {
+void VoxelParticleEngine::draw(const Camera& camera) {
     if (m_gpuParticleBufferInvalid) {
         updateGPUBuffers(m_gpuParticleBufferInvalidBegin, m_gpuParticleBufferInvalidEnd);
     }

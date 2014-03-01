@@ -42,7 +42,7 @@ void VoxelParticleRenderer::updateBuffer(int begin, int end, VoxelParticleData* 
 
 }
 
-void VoxelParticleRenderer::draw(Camera& camera) {
+void VoxelParticleRenderer::draw(const Camera& camera) {
     if (!m_initialized) {
         initialize();
     }

@@ -19,7 +19,7 @@ public:
 
     void parse(const std::list<Impulse> &impulses);
 
-    void dontImpulse(const std::list<Voxel*> voxels);
+    void dontImpulse(const std::list<Voxel*>& voxels);
 
     std::list<Impulse>& impulses();
 

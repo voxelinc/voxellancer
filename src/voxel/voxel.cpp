@@ -43,7 +43,7 @@ const glm::ivec3& Voxel::gridCell() const {
 
 glm::vec3 Voxel::position() const {
     assert(m_voxelTreeNode);
-    return m_voxelTreeNode->voxelTree()->worldObject()->transform().applyTo(static_cast<glm::vec3>(m_gridCell));
+    return m_voxelTreeNode->voxelTree()->worldObject()->transform().applyTo(glm::vec3(m_gridCell));
 }
 
 void Voxel::addToCluster(VoxelCluster *cluster) {

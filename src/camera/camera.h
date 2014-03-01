@@ -7,8 +7,8 @@
 /* Represents the camera. matrix thus is the view matrix for all other objects */
 class Camera : protected Transform { //protected so we don't have matrix, because we want view
 public:
-	Camera(int viewportWidth, int viewportHeight);
-	virtual ~Camera();
+    Camera(int viewportWidth, int viewportHeight);
+    virtual ~Camera();
 
     /* Overwrite WorldObject functions for performance:
     *  WorldObject recalculates the matrix on every read access,
@@ -22,10 +22,10 @@ public:
     void rotateZ(float rot);
     void setOrientation(glm::quat quat);
 
-    const glm::mat4 view();
-    const glm::mat4 viewInverted();
-    const glm::quat orientation();
-    const glm::vec3 position();
+    const glm::mat4& view() const;
+    const glm::mat4& viewInverted() const;
+    const glm::quat& orientation() const;
+    const glm::vec3& position() const;
 
     /* Projection from glow::Camera */
 
@@ -45,9 +45,10 @@ public:
 
     float aspectRatio() const;
 
-    const glm::mat4 projection();
+    const glm::mat4& projection() const;
 
-    const glm::mat4 viewProjection();
+    const glm::mat4& viewProjection() const;
+
 
 protected:
     void viewDirty();

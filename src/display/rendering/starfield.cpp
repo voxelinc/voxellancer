@@ -41,6 +41,7 @@ void Starfield::update(float deltaSec, const glm::vec3& cameraPosition) {
     glm::vec3 position = cameraPosition;
 
     if (m_starCount != m_cpuBuffer.size() || m_fieldRadius != m_oldFieldRadius) {
+        glow::debug("starfield rebuild");
         createAndSetupGeometry(); // property changed
     }
 
@@ -81,7 +82,7 @@ void Starfield::apply(FrameBuffer& frameBuffer, const RenderMetaData& metadata) 
     }
     int side = (metadata.eyeside() == EyeSide::Right);
 
-    addLocation(*metadata.camera(), side);
+    addLocation(metadata.camera(), side);
     cleanUp(side);
 
     glDisable(GL_CULL_FACE);
@@ -92,8 +93,8 @@ void Starfield::apply(FrameBuffer& frameBuffer, const RenderMetaData& metadata) 
 
     frameBuffer.setDrawBuffers({ BufferNames::Color, BufferNames::Emissisiveness });
 
-    glm::mat4 m1 = metadata.camera()->viewProjection();
-    glm::mat4 m2 = getMatrixFromPast(*metadata.camera(), side);
+    glm::mat4 m1 = metadata.camera().viewProjection();
+    glm::mat4 m2 = getMatrixFromPast(metadata.camera(), side);
 
     m_shaderProgram->setUniform("viewProjection", m1);
     m_shaderProgram->setUniform("oldViewProjection", m2);
@@ -142,12 +143,12 @@ void Starfield::createBinding(int index, std::string name, int offset, int size)
     m_vertexArrayObject->enable(location);
 }
 
-void Starfield::addLocation(Camera& camera, int side) {
+void Starfield::addLocation(const Camera& camera, int side) {
     CameraLocation location = CameraLocation{ m_time, camera.position(), camera.orientation() };
     m_locations[side].push_back(location);
 }
 
-glm::mat4 Starfield::getMatrixFromPast(Camera& camera, int side) {
+glm::mat4 Starfield::getMatrixFromPast(const Camera& camera, int side) {
     float past = m_time - m_starfieldAge;
 
     CameraLocation before = m_locations[side].back();
@@ -195,3 +196,4 @@ void Starfield::afterContextRebuild() {
     createAndSetupShaders();
     createAndSetupGeometry();
 }
+
