@@ -3,10 +3,19 @@
 #include "property/property.h"
 
 #include "voxeleffect/voxelexplosiongenerator.h"
+#include "sound/soundmanager.h"
 
 
 GenericRocket::GenericRocket()
 {
+}
+
+const SoundProperties& GenericRocket::hitSound() const {
+    return m_hitSound;
+}
+
+void GenericRocket::setHitSound(const SoundProperties& hitSound) {
+    m_hitSound = hitSound;
 }
 
 void GenericRocket::onLifetimeOver() {
@@ -26,4 +35,3 @@ void GenericRocket::spawnExplosion() {
 
     generator.spawn();
 }
-

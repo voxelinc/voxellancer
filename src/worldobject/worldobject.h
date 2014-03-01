@@ -3,12 +3,11 @@
 #include <list>
 #include <memory>
 
-#include "scriping/scriptable.h
+#include "scripting/scriptable.h"
 
 #include "utils/handle/handle.h"
 
 #include "voxel/voxelcluster.h"
-
 
 class CollisionDetector;
 class EngineVoxel;
@@ -21,10 +20,21 @@ class ObjectInfo;
 class VoxelCollision;
 class WorldObjectComponents;
 
+enum class WorldObjectType {
+    WorldObject = 1 << 0,
+    Ship        = 1 << 1,
+    Bullet      = 1 << 2,
+    Rocket      = 1 << 3,
+    Other       = 1 << 4
+};
+
 class WorldObject : public VoxelCluster, public Scriptable {
 public:
     WorldObject();
     virtual ~WorldObject();
+
+    virtual WorldObjectType objectType() const;
+    virtual ScriptableType scriptableType() const override;
 
     CollisionFilter& collisionFilter();
     void setCollisionFilter(CollisionFilter* collisionFilter);

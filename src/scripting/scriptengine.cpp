@@ -5,7 +5,11 @@
 
 #include <glow/logging.h>
 
-#include "scripting/gameplayscript.h"
+#include "worldobject/worldobject.h"
+
+#include "gameplayscript.h"
+#include "scriptable.h"
+#include "scripthandle.h"
 
 
 ScriptEngine::ScriptEngine(World* world):
@@ -41,14 +45,14 @@ void ScriptEngine::registerScriptable(Scriptable* scriptable) {
     m_handles.resize(m_handleKeyIncrementor + 1);
 
     IScriptHandle* scriptHandle;
-    switch(scriptable->type()) {
+    switch(scriptable->scriptableType()) {
         case ScriptableType::WorldObject:
             scriptHandle = new ScriptHandle<WorldObject>(dynamic_cast<WorldObject*>(scriptable));
         break;
         default:
             assert(0);
     }
-    m_handles[m_handleKeyIncrementor++] = scriptHandle;
+    m_handles[m_handleKeyIncrementor++].reset(scriptHandle);
 }
 
 void ScriptEngine::unregisterScriptable(Scriptable* scriptable) {
@@ -119,10 +123,10 @@ void ScriptEngine::unregisterScriptable(Scriptable* scriptable) {
 //}
 
 void ScriptEngine::update(float deltaSec) {
-    m_timerManager.update(deltaSec);
+//    m_timerManager.update(deltaSec);
 
-    for(std::pair<const int, std::unique_ptr<EventPoll>>& pair : m_eventPolls) {
-        pair.second->update(deltaSec);
-    }
+//    for(std::pair<const int, std::unique_ptr<EventPoll>>& pair : m_eventPolls) {
+//        pair.second->update(deltaSec);
+//    }
 }
 

@@ -15,7 +15,7 @@
 
 
 WorldObject::WorldObject():
-    WorldObject(new CollisionFilter(this,CollisionFilterClass::Other), 1.0f)
+    WorldObject(new CollisionFilter(this), 1.0f)
 {
 
 }
@@ -36,6 +36,14 @@ WorldObject::WorldObject(CollisionFilter* collisionFilter, float scale):
 
 WorldObject::~WorldObject() {
      m_handle.invalidate();
+}
+
+WorldObjectType WorldObject::objectType() const {
+    return WorldObjectType::WorldObject;
+}
+
+ScriptableType WorldObject::scriptableType() const {
+    return ScriptableType::WorldObject;
 }
 
 CollisionDetector& WorldObject::collisionDetector() {

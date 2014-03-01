@@ -10,8 +10,10 @@
 #include "worldobject/worldobject.h"
 
 #include "projectile.h"
+#include "sound/soundproperties.h"
 
 
+class Sound;
 
 /*
     Base class for Projectiles that follow a target and attempt to crush into it.
@@ -21,13 +23,12 @@ class Rocket: public Projectile {
 public:
     Rocket();
 
+    virtual WorldObjectType objectType() const override;
+
     WorldObject* target();
     void setTarget(WorldObject* targetObject);
 
     virtual void update(float deltaSec) override;
-
-    virtual void onCollision() override;
-    virtual void onSpawnFail() override;
 
 
 protected:
@@ -35,6 +36,5 @@ protected:
     BoardComputer m_boardComputer;
     std::unique_ptr<AiTask> m_aiTask;
 
-    virtual void spawnExplosion() = 0;
 };
 

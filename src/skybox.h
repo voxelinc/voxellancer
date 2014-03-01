@@ -17,7 +17,8 @@ class Skybox : public ContextDependant {
 public:
     Skybox();
 
-    void draw(Camera& camera);
+    void draw(const Camera& camera);
+
 
 protected:
     glow::ref_ptr<glow::Texture> m_texture;

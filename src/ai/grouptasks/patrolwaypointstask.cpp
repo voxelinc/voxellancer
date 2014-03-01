@@ -28,7 +28,7 @@ void PatrolWaypointsTask::update(float deltaSec) {
     if (m_squad.leader()) {
         float distance = glm::length(*m_currentPoint - m_squad.leader()->transform().position());
         if (distance < m_squad.leader()->bounds().sphere().radius()){
-            m_currentPoint++;
+            ++m_currentPoint;
             if (m_currentPoint == m_points.end()) {
                 m_currentPoint = m_points.begin();
             }

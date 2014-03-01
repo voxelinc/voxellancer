@@ -15,7 +15,7 @@
 #include "world.h"
 
 
-God::God(World & world):
+God::God(World& world):
     m_world(world)
 {
 }
@@ -24,7 +24,7 @@ God::~God() {
 
 }
 
-void God::scheduleSpawn(WorldObject *worldObject) {
+void God::scheduleSpawn(WorldObject* worldObject) {
     assert(worldObject->collisionDetector().geode() == nullptr);
     assert(worldObject->collisionDetector().worldTree() == nullptr);
     m_scheduledSpawns.push_back(worldObject);
@@ -44,12 +44,13 @@ const std::list<WorldObject*>& God::scheduledSpawns(){
     return m_scheduledSpawns;
 }
 
-void God::scheduleRemoval(WorldObject *worldObject) {
+void God::scheduleRemoval(WorldObject* worldObject) {
     assert(worldObject->collisionDetector().geode() != nullptr);
     assert(worldObject->collisionDetector().worldTree() == &m_world.worldTree());
     for (WorldObject* scheduled : m_scheduledRemovals){
-        if (scheduled == worldObject)
+        if (scheduled == worldObject) {
             return;
+        }
     }
     m_scheduledRemovals.push_back(worldObject);
     worldObject->onScheduleForDeletion();
@@ -71,7 +72,7 @@ void God::spawn() {
 
         std::list<VoxelCollision> collisions = worldObject->collisionDetector().checkCollisions();
 
-        if (collisions.size() > 0){
+        if (!collisions.empty()){
             World::instance()->worldTree().remove(worldObject->collisionDetector().geode());
             glow::warning("Failed to spawn %;", worldObject->objectInfo().name());
             worldObject->onSpawnFail();
@@ -79,8 +80,7 @@ void God::spawn() {
             continue;
         }
 
-        m_world.worldObjects().insert(worldObject);
-        m_world.scriptEngine().addWorldObject(worldObject);
+        m_world.addWorldObject(worldObject);
     }
     m_scheduledSpawns.clear();
 }
@@ -88,8 +88,7 @@ void God::spawn() {
 void God::remove() {
     for (WorldObject* worldObject : m_scheduledRemovals) {
         m_world.worldTree().remove(worldObject->collisionDetector().geode());
-        m_world.worldObjects().erase(worldObject);
-        m_world.scriptEngine().removeWorldObject(worldObject);
+        m_world.removeWorldObject(worldObject);
         delete worldObject;
     }
     m_scheduledRemovals.clear();

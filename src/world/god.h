@@ -5,8 +5,12 @@
 class WorldObject;
 class World;
 
-class God
-{
+/*
+    Responsible for safely inserting object into the World, preventing overlappings
+    * to spawn an object, first call scheduleSpawn() and then spawn()
+    * to remove an object, first call scheduleRemoval and then remove()
+*/
+class God {
 public:
     God(World& world);
     virtual ~God();

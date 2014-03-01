@@ -5,6 +5,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 
+#include "gamestate/gameplay/gameplay.h"
+
 #include "geometry/aabb.h"
 
 #include "resource/worldobjectbuilder.h"
@@ -23,13 +25,12 @@
 
 #include "worldobject/ship.h"
 
-#include "game.h"
 #include "player.h"
 
 
-GamePlayScript::GamePlayScript(Game* game, ScriptEngine* scriptEngine):
+GamePlayScript::GamePlayScript(GamePlay* gamePlay, ScriptEngine* scriptEngine):
     Script(),
-    m_game(game),
+    m_gamePlay(gamePlay),
     m_scriptEngine(scriptEngine)
 {
 
@@ -38,7 +39,7 @@ GamePlayScript::GamePlayScript(Game* game, ScriptEngine* scriptEngine):
 void GamePlayScript::load(const std::string& path) {
     Script::load(path);
 
-    m_lua->Register("playerShip", std::function<int()>([&] () {
+  /*  m_lua->Register("playerShip", std::function<int()>([&] () {
        return apiPlayerShip();
     }));
     m_lua->Register("createShip", std::function<int(std::string)>([&] (std::string name) {
@@ -68,9 +69,9 @@ void GamePlayScript::load(const std::string& path) {
     m_lua->Register("onAABBEntered", std::function<int(int, float, float, float, float, float, float, std::string)>([&] (int handle, float x1, float y1, float z1, float x2, float y2, float z2, std::string callback) {
         return apiOnAABBEntered(handle, glm::vec3(x1, y1, z1), glm::vec3(x2, y2, z2), callback);
     }));
-
+*/
 }
-
+/*
 int GamePlayScript::apiPlayerShip() {
     return m_scriptEngine->getWorldObjectHandle(m_game->player().ship());
 }
@@ -153,4 +154,4 @@ int GamePlayScript::apiOnAABBEntered(int handle, glm::vec3 llf, glm::vec3 urb, c
     }
 }
 
-
+*/

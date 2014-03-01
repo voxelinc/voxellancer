@@ -17,12 +17,27 @@ T* Handle<T>::get() {
 }
 
 template<class T>
+const T* Handle<T>::get() const {
+    return m_impl->get();
+}
+
+template<class T>
 T* Handle<T>::operator->() {
     return m_impl->get();
 }
 
 template<class T>
+const T* Handle<T>::operator->() const {
+    return m_impl->get();
+}
+
+template<class T>
 T* Handle<T>::operator*() {
+    return m_impl->get();
+}
+
+template<class T>
+const T* Handle<T>::operator*() const {
     return m_impl->get();
 }
 

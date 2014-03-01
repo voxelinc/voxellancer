@@ -1,7 +1,7 @@
 #include "collisionfilterignoringcreator.h"
 
-CollisionFilterIgnoringCreator::CollisionFilterIgnoringCreator(WorldObject* owner, WorldObject* creator, CollisionFilterClass collisionFilterClass, uint32_t collisionMask):
-    CollisionFilter(owner, collisionFilterClass, collisionMask),
+CollisionFilterIgnoringCreator::CollisionFilterIgnoringCreator(WorldObject* owner, WorldObject* creator, uint32_t collisionMask):
+    CollisionFilter(owner, collisionMask),
     m_creator(creator)
 {
 

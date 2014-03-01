@@ -13,6 +13,8 @@
 #include "equipment/weapon.h"
 #include "equipment/weapons/gun.h"
 
+#include "gamestate/gameplay/gameplay.h"
+
 #include "resource/clustercache.h"
 #include "resource/worldobjectbuilder.h"
 
@@ -24,7 +26,6 @@
 #include "world/god.h"
 
 #include "player.h"
-#include "game.h"
 #include "ui/objectinfo.h"
 #include "utils/randvec.h"
 
@@ -32,9 +33,9 @@
 #include "scripting/gameplayscript.h"
 
 
-ScriptedScenario::ScriptedScenario(Game* game, const std::string& path):
-    BaseScenario(game),
-    m_script(new GamePlayScript(game, &World::instance()->scriptEngine()))
+ScriptedScenario::ScriptedScenario(GamePlay* gamePlay, const std::string& path):
+    BaseScenario(gamePlay),
+    m_script(new GamePlayScript(gamePlay, &World::instance()->scriptEngine()))
 {
     m_script->load(path);
 }
@@ -48,7 +49,7 @@ void ScriptedScenario::populateWorld() {
     playerShip->objectInfo().setShowOnHud(false);
     playerShip->objectInfo().setCanLockOn(false);
     m_world->god().scheduleSpawn(playerShip);
-    m_game->player().setShip(playerShip);
+    m_gamePlay->player().setShip(playerShip);
 
     m_world->scriptEngine().addScript(m_script.get());
 }

@@ -11,15 +11,14 @@
 
 
 EngineSlotVoxel::EngineSlotVoxel(const glm::ivec3& gridCell, int index):
-    SpecialVoxel(gridCell, index, Property<int>("voxels.engineSlot.color"), Property<float>("voxels.engineSlot.mass"), Property<float>("voxels.engineSlot.hp")),
+    SpecialVoxel(gridCell, index, Property<uint32_t>::get("voxels.engineSlot.color"), Property<float>::get("voxels.engineSlot.mass"), Property<float>::get("voxels.engineSlot.hp")),
     m_engineSlot(nullptr)
 {
 }
 
 void EngineSlotVoxel::addToObject(WorldObject* worldObject) {
     Voxel::addToObject(worldObject);
-
-    m_engineSlot = new EngineSlot(&worldObject->components(), this);
+    m_engineSlot = std::make_shared<EngineSlot>(&worldObject->components(), this);
     worldObject->components().addEngineSlot(m_engineSlot);
 }
 

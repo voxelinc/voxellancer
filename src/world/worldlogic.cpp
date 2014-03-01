@@ -52,7 +52,7 @@ void WorldLogic::update(float deltaSecs) {
 void WorldLogic::damageForwardLoop(std::list<DamageImpact> damageImpacts) {
     m_damager.reset();
 
-    while(damageImpacts.size() > 0) {
+    while(!damageImpacts.empty()) {
 
         m_damager.applyDamages(damageImpacts);
 

@@ -5,9 +5,9 @@ class Scriptable;
 
 class IScriptHandle {
 public:
-    virtual bool valid() = 0;
+    virtual bool valid() const = 0;
+    virtual void invalidate() = 0;
 
-
-
-    virtual Scritable* scriptable() = 0;
+    virtual Scriptable* scriptable() = 0;
 };
+

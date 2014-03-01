@@ -2,31 +2,33 @@
 
 #include <vector>
 
+#include "input/inputmapping.h"
+
+#include "ui/actionkeymapping.h"
+#include "utils/statemachine/trigger.h"
+
 #include "property/property.h"
-#include "actionkeymapping.h"
 
 
 class WorldObject;
 class InputConfigurator;
+class GameState;
 class HUD;
 class HMD;
-class TargetSelector;
 class Player;
+class TargetSelector;
 
-class InputHandler {
+class GamePlayRunningInput {
 public:
-    InputHandler(Player& player);
+    GamePlayRunningInput(Player *player);
 
-    void setHMD(HMD& hmd);
-
-	void resizeEvent(const unsigned int width, const unsigned int height);
-	void keyCallback(int key, int scancode, int action, int mods);
-	void update(float deltaSec);
+    void resizeEvent(const unsigned int width, const unsigned int height);
+    void keyCallback(int key, int scancode, int action, int mods);
+    void update(float deltaSec);
 
 
 protected:
     Player* m_player;
-    HMD* m_hmd;
     TargetSelector* m_targetSelector;
     InputConfigurator* m_inputConfigurator;
     SecondaryInputValues m_secondaryInputValues;
@@ -42,6 +44,7 @@ protected:
 
     void processUpdate();
     void processMouseUpdate();
+    void applyUpdates();
     void processHMDUpdate();
 
     void processFireActions();
@@ -77,6 +80,11 @@ protected:
 
     ActionKeyMapping selectNextAction;
     ActionKeyMapping selectPreviousAction;
+
+    glm::vec3 m_moveUpdate;
+    glm::vec3 m_rotateUpdate;
+    bool m_fireUpdate;
+    bool m_rocketUpdate;
 
     void placeCrossHair(double winX, double winY);
 };

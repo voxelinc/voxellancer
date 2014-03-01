@@ -8,12 +8,12 @@
 
 
 GenericRocketLauncher::GenericRocketLauncher(const std::string& name):
-    RocketLauncher(name)
+    RocketLauncher(name),
+    m_cooldownTime(0)
 {
 }
 
-
-Visuals GenericRocketLauncher::visuals() const {
+const Visuals& GenericRocketLauncher::visuals() const {
     return m_visuals;
 }
 
@@ -41,4 +41,5 @@ Rocket* GenericRocketLauncher::createRocket() {
     Rocket* rocket = WorldObjectBuilder(m_rocketName).buildRocket();
     return rocket;
 }
+
 

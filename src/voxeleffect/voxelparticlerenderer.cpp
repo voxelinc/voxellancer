@@ -46,7 +46,7 @@ void VoxelParticleRenderer::updateBuffer(int begin, int end, VoxelParticleData* 
     m_gpuParticleBuffer->unmap();
 }
 
-void VoxelParticleRenderer::draw(Camera& camera) {
+void VoxelParticleRenderer::draw(const Camera& camera) {
     if (!m_initialized) {
         initialize();
     }

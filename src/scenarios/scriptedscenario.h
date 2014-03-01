@@ -9,12 +9,12 @@
 
 
 class World;
-class Game;
+class GamePlay;
 class GamePlayScript;
 
 class ScriptedScenario: public BaseScenario {
 public:
-    ScriptedScenario(Game* game, const std::string& path);
+    ScriptedScenario(GamePlay* gamePlay, const std::string& path);
     virtual ~ScriptedScenario();
 
 

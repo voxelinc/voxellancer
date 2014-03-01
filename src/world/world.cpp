@@ -1,13 +1,18 @@
 #include "world.h"
 
+#include "factions/factionmatrix.h"
+
 #include "voxeleffect/voxelparticleengine.h"
 
 #include "worldtree/worldtree.h"
-#include "worldlogic.h"
+
+#include "worldobject/ship.h"
 #include "worldobject/worldobject.h"
+
 #include "skybox.h"
 #include "scripting/scriptengine.h"
 
+#include "worldlogic.h"
 #include "god.h"
 
 
@@ -19,7 +24,8 @@ World::World():
     m_worldTree(new WorldTree()),
     m_god(new God(*this)),
     m_voxelParticleEngine(new VoxelParticleEngine()),
-    m_scriptEngine(new ScriptEngine(this))
+    m_scriptEngine(new ScriptEngine(this)),
+    m_factionMatrix(new FactionMatrix())
 {
 }
 
@@ -51,8 +57,16 @@ ScriptEngine& World::scriptEngine() {
     return *m_scriptEngine;
 }
 
+FactionMatrix &World::factionMatrix() {
+    return *m_factionMatrix;
+}
+
 std::unordered_set<WorldObject*> &World::worldObjects() {
     return m_worldObjects;
+}
+
+std::unordered_set<Ship*> &World::ships() {
+    return m_ships;
 }
 
 void World::update(float deltaSecs) {
@@ -81,6 +95,31 @@ World *World::instance() {
 
 void World::reset() {
     glow::warning("world reset!");
+    delete s_instance;
     s_instance = nullptr;
+}
+
+void World::addWorldObject(WorldObject* worldObject) {
+    m_worldObjects.insert(worldObject);
+
+    switch(worldObject->objectType()) {
+        case WorldObjectType::Ship:
+            m_ships.insert(static_cast<Ship*>(worldObject));
+        break;
+    }
+
+    m_scriptEngine->registerScriptable(worldObject);
+}
+
+void World::removeWorldObject(WorldObject* worldObject) {
+    m_worldObjects.erase(worldObject);
+
+    switch(worldObject->objectType()) {
+        case WorldObjectType::Ship:
+            m_ships.erase(static_cast<Ship*>(worldObject));
+        break;
+    }
+
+    m_scriptEngine->unregisterScriptable(worldObject);
 }
 

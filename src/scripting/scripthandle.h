@@ -1,17 +1,26 @@
 #pragma once
 
+#include <type_traits>
+
 #include "utils/handle/handle.h"
 
 
-template<typename ScriptHandleType>
+template<typename T>
 class ScriptHandle: public IScriptHandle {
 public:
-    ScriptHandle();
+    static_assert(std::is_base_of<Scriptable, T>::value, "ScriptHandle can only hold Scriptable derivates");
+
+    ScriptHandle(T* scriptable);
+
+    virtual bool valid() const override;
+    virtual void invalidate() override;
 
     virtual Scriptable* scriptable() override;
 
 
 protected:
-    Handle<ScriptHandleType> m_handle;
+    Handle<T> m_handle;
 };
 
+
+#include "scripthandle.inl"

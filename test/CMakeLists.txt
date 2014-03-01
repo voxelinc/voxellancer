@@ -20,6 +20,7 @@ if(${OPTION_CREATE_SUB_TEST})
     add_subdirectory(worldtransform)
     add_subdirectory(selene)
     add_subdirectory(splitting)
+    add_subdirectory(statemachine)
 endif()
 
 add_subdirectory(perftest)

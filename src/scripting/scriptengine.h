@@ -1,6 +1,6 @@
 #pragma once
 
-#include <list>
+#include <vector>
 #include <memory>
 #include <unordered_map>
 
@@ -9,7 +9,7 @@
 
 #include "scripting/polls/eventpoll.h"
 
-#include "worldobjectscripthandle.h"
+#include "iscripthandle.h"
 
 
 class EventPoll;
@@ -86,13 +86,13 @@ protected:
 
 
 
-    std::unordered_map<int, std::unique_ptr<EventPoll>> m_eventPolls;
+    /*std::unordered_map<int, std::unique_ptr<EventPoll>> m_eventPolls;
     int m_eventPollHandleIncrementor;
 
     std::unordered_map<int, std::shared_ptr<WorldObjectScriptHandle>> m_handle2WorldObjectHandle;
     std::unordered_map<WorldObject*, std::shared_ptr<WorldObjectScriptHandle>> m_worldObject2WorldObjectHandle;
     int m_worldObjectHandleIncrementor;
 
-    TimerManager m_timerManager;
+    TimerManager m_timerManager;*/
 };
 

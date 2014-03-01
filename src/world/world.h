@@ -4,16 +4,17 @@
 #include <unordered_set>
 
 
-class WorldLogic;
-class WorldTree;
+class FactionMatrix;
 class God;
-class WorldObject;
-class VoxelParticleEngine;
+class Ship;
 class Skybox;
 class ScriptEngine;
+class VoxelParticleEngine;
+class WorldObject;
+class WorldLogic;
+class WorldTree;
 
-class World
-{
+class World {
 public:
     World();
     virtual ~World();
@@ -24,9 +25,10 @@ public:
     WorldTree &worldTree();
     VoxelParticleEngine& voxelParticleEngine();
     ScriptEngine& scriptEngine();
-
+    FactionMatrix& factionMatrix();
 
     std::unordered_set<WorldObject*> &worldObjects();
+    std::unordered_set<Ship*> &ships();
 
     void update(float deltaSecs);
 
@@ -34,6 +36,14 @@ public:
 
     static World *instance();
     static void reset();
+
+
+protected:
+    friend class God;
+
+    void addWorldObject(WorldObject* worldObject);
+    void removeWorldObject(WorldObject* worldObject);
+
 
 protected:
     static World *s_instance;
@@ -46,8 +56,10 @@ protected:
     std::unique_ptr<God> m_god;
     std::unique_ptr<VoxelParticleEngine> m_voxelParticleEngine;
     std::unique_ptr<ScriptEngine> m_scriptEngine;
+    std::unique_ptr<FactionMatrix> m_factionMatrix;
 
     std::unordered_set<WorldObject*> m_worldObjects;
+    std::unordered_set<Ship*> m_ships;
 
 };
 
