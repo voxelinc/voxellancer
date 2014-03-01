@@ -21,21 +21,8 @@ God::~God() {
 
 }
 
-void God::scheduleSpawn(WorldObject* worldObject) {
-    assert(worldObject->collisionDetector().geode() == nullptr);
-    assert(worldObject->collisionDetector().worldTree() == nullptr);
-    worldObject->setSpawnState(SpawnState::SpawnScheduled);
-    m_scheduledSpawns.push_back(worldObject);
-}
-
-void God::scheduleSpawns(const std::list<WorldObject*> &spawns) {
-    for (WorldObject* worldObject : spawns){
-        scheduleSpawn(worldObject);
-    }
-}
-
-const std::list<WorldObject*>& God::scheduledSpawns(){
-    return m_scheduledSpawns;
+void God::scheduleSpawn(SpawnRequest spawnRequest) {
+    m_spawnRequests.push_back(spawnRequest);
 }
 
 void God::scheduleRemoval(WorldObject* worldObject) {
@@ -56,27 +43,29 @@ void God::scheduleRemovals(const std::list<WorldObject*> &removals) {
     }
 }
 
-const std::list<WorldObject*>& God::scheduledRemovals(){
-    return m_scheduledRemovals;
-}
-
 void God::spawn() {
-    for (WorldObject* worldObject : m_scheduledSpawns) {
-        m_world.worldTree().insert(worldObject);
+    for (SpawnRequest& spawnRequest : m_spawnRequests) {
+        for (WorldObject* worldObject : spawnRequest.worldObjects()) {
+            m_world.worldTree().insert(worldObject);
 
-        std::list<VoxelCollision> collisions = worldObject->collisionDetector().checkCollisions();
+            std::list<VoxelCollision> collisions = worldObject->collisionDetector().checkCollisions();
 
-        if (!collisions.empty()){
-            World::instance()->worldTree().remove(worldObject->collisionDetector().geode());
-            glow::warning("Failed to spawn %;", worldObject->objectInfo().name());
-            worldObject->setSpawnState(SpawnState::Rejected);
-            worldObject->onSpawnFail();
-        } else {
-            worldObject->setSpawnState(SpawnState::Spawned);
-            m_world.addWorldObject(worldObject);
+            if (!collisions.empty()){
+                World::instance()->worldTree().remove(worldObject->collisionDetector().geode());
+                glow::warning("Failed to spawn %;", worldObject->objectInfo().name());
+                worldObject->setSpawnState(SpawnState::Rejected);
+                worldObject->onSpawnFail();
+
+                if (spawnRequest.deleteOnRejection()) {
+                    delete worldObject;
+                }
+            } else {
+                worldObject->setSpawnState(SpawnState::Spawned);
+                m_world.addWorldObject(worldObject);
+            }
         }
     }
-    m_scheduledSpawns.clear();
+    m_spawnRequests.clear();
 }
 
 void God::remove() {
