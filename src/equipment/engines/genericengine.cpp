@@ -1,17 +1,24 @@
 #include "genericengine.h"
 
-
 GenericEngine::GenericEngine(const std::string& equipmentKey):
     Engine(equipmentKey)
 {
 }
 
-Visuals GenericEngine::visuals() const {
+const Visuals& GenericEngine::visuals() const {
     return m_visuals;
 }
 
 void GenericEngine::setVisuals(const Visuals& visuals) {
     m_visuals = visuals;
+}
+
+const SoundProperties& GenericEngine::sound() const {
+    return m_engineSound;
+}
+
+void GenericEngine::setEngineSound(const SoundProperties& engineSound) {
+    m_engineSound = engineSound;
 }
 
 EnginePower GenericEngine::power() const {
@@ -25,4 +32,3 @@ void GenericEngine::setPower(const EnginePower& power) {
 void GenericEngine::update(float deltaSec) {
     Engine::update(deltaSec);
 }
-

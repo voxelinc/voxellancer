@@ -28,7 +28,7 @@ public:
     void set(const std::string& key, const T& value);
 
     T get(const std::string& name) const;
-    T get(const std::string& name, const std::string& defaultValue) const;
+    T get(const std::string& name, const T& defaultValue) const;
 
 
 private:

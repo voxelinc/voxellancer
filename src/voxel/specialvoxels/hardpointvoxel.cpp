@@ -11,7 +11,7 @@
 
 
 HardpointVoxel::HardpointVoxel(const glm::ivec3& gridCell, int index):
-    SpecialVoxel(gridCell, index, Property<int>("voxels.hardpoint.color"), Property<float>("voxels.hardpoint.mass"), Property<float>("voxels.hardpoint.hp")),
+    SpecialVoxel(gridCell, index, Property<uint32_t>::get("voxels.hardpoint.color"), Property<float>::get("voxels.hardpoint.mass"), Property<float>::get("voxels.hardpoint.hp")),
     m_hardpoint(nullptr)
 {
 

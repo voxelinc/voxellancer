@@ -8,6 +8,9 @@
 #include "factions/factionmatrix.h"
 #include "factions/playerfaction.h"
 
+#include "gamestate/game.h"
+#include "gamestate/gameplay/gameplay.h"
+
 #include "ui/hud/hud.h"
 #include "ui/hud/hudget.h"
 #include "ui/hud/aimhelperhudget.h"
@@ -15,7 +18,6 @@
 #include "ui/objectinfo.h"
 
 #include "utils/aimer.h"
-#include "utils/tostring.h"
 
 #include "physics/physics.h"
 
@@ -24,13 +26,11 @@
 #include "worldobject/ship.h"
 #include "worldobject/worldobjectcomponents.h"
 
-#include "game.h"
 
-
-Player::Player(Game* game):
-    m_game(game),
+Player::Player(GamePlay* gamePlay):
+    m_gamePlay(gamePlay),
     m_aimer(new Aimer(nullptr)),
-    m_hud(new HUD(this, &game->viewer())),
+    m_hud(new HUD(this, &gamePlay->game()->viewer())),
     m_ship(nullptr),
     m_cameraDolly(new CameraDolly())
 {

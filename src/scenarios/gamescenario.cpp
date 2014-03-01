@@ -23,7 +23,7 @@
 
 #include "worldobject/ship.h"
 #include "sound/soundmanager.h"
-#include "game.h"
+#include "gamestate/gameplay/gameplay.h"
 #include "world/world.h"
 #include "voxel/voxel.h"
 #include "world/god.h"
@@ -31,8 +31,8 @@
 #include "ui/objectinfo.h"
 
 
-GameScenario::GameScenario(Game* game) :
-    BaseScenario(game)
+GameScenario::GameScenario(GamePlay* gamePlay):
+    BaseScenario(gamePlay)
 {
 }
 
@@ -100,7 +100,7 @@ void GameScenario::populateWorld() {
     testCluster->objectInfo().setShowOnHud(false);
     m_world->god().scheduleSpawn(testCluster);
 
-    m_game->player().setShip(testCluster);
+    m_gamePlay->player().setShip(testCluster);
 
     WorldObject *wall = new WorldObject();
     wall->transform().move(glm::vec3(-30, 0, -50));
