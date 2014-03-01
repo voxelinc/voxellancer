@@ -27,6 +27,10 @@ Ship::~Ship() {
     m_shipHandle.invalidate();
 }
 
+WorldObjectType Ship::objectType() const {
+    return WorldObjectType::Ship;
+}
+
 void Ship::update(float deltaSec) {
     WorldObject::update(deltaSec);
 

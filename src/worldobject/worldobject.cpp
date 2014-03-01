@@ -38,6 +38,10 @@ WorldObject::~WorldObject() {
      m_handle.invalidate();
 }
 
+WorldObjectType WorldObject::objectType() const {
+    return WorldObjectType::WorldObject;
+}
+
 CollisionDetector& WorldObject::collisionDetector() {
     return *m_collisionDetector;
 }

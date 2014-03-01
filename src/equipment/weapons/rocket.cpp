@@ -33,6 +33,10 @@ Rocket::Rocket():
     m_objectInfo->setCanLockOn(false);
 }
 
+WorldObjectType Rocket::objectType() const {
+    return WorldObjectType::Rocket;
+}
+
 WorldObject* Rocket::target() {
     return m_targetHandle.get();
 }

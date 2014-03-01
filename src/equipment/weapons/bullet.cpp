@@ -22,6 +22,11 @@ Bullet::Bullet():
     m_physics->setAngularDampening(0.0f);
 }
 
+
+WorldObjectType Bullet::objectType() const {
+    return WorldObjectType::Bullet;
+}
+
 void Bullet::update(float deltaSec) {
     Projectile::update(deltaSec);
 }
