@@ -3,10 +3,11 @@
 #include <list>
 #include <memory>
 
+#include "scriping/scriptable.h
+
 #include "utils/handle/handle.h"
 
 #include "voxel/voxelcluster.h"
-
 
 
 class CollisionDetector;
@@ -20,7 +21,7 @@ class ObjectInfo;
 class VoxelCollision;
 class WorldObjectComponents;
 
-class WorldObject : public VoxelCluster {
+class WorldObject : public VoxelCluster, public Scriptable {
 public:
     WorldObject();
     virtual ~WorldObject();
