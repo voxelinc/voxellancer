@@ -18,6 +18,14 @@ class ObjectInfo;
 class VoxelCollision;
 class WorldObjectComponents;
 
+enum class SpawnState {
+    None,
+    SpawnScheduled,
+    Spawned,
+    Rejected,
+    RemovalScheduled,
+};
+
 enum class WorldObjectType {
     WorldObject = 1 << 0,
     Ship        = 1 << 1,
@@ -32,6 +40,9 @@ public:
     virtual ~WorldObject();
 
     virtual WorldObjectType objectType() const;
+
+    SpawnState spawnState() const;
+    void setSpawnState(SpawnState spawnState);
 
     CollisionFilter& collisionFilter();
     void setCollisionFilter(CollisionFilter* collisionFilter);
@@ -56,9 +67,6 @@ public:
 
     Handle<WorldObject>& handle();
 
-    bool scheduledForDeletion() const;
-    void onScheduleForDeletion();
-
     float collisionFieldOfDamage() const;
     void setCollisionFieldOfDamage(float collisionFieldOfDamage);
 
@@ -72,8 +80,8 @@ protected:
 
     Handle<WorldObject> m_handle;
     Voxel* m_crucialVoxel;
-    bool m_scheduledForDeletion;
     float m_collisionFieldOfDamage;
+    SpawnState m_spawnState;
 
     WorldObject(CollisionFilter* collisionFilter, float scale = 1.0f);
 };
