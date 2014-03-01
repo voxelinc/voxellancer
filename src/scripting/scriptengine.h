@@ -42,6 +42,9 @@ public:
     */
     void stop();
 
+    void registerScriptable(Scriptable* scriptable);
+    void unregisterScriptable(Scriptable* scriptable);
+
 //    void registerTimer(Timer *timer);
 //
 //    /*
@@ -63,19 +66,25 @@ public:
 //        Called by God
 //    */
 //    void removeWorldObject(WorldObject* worldObject);
-
-
-    int registerEventPoll(EventPoll* eventPoll);
-    void unregisterEventPoll(int handle);
+//
+//    int registerEventPoll(EventPoll* eventPoll);
+//    void unregisterEventPoll(int handle);
 
     void update(float deltaSec);
 
 
 protected:
     World* m_world;
+    int m_handleKeyIncrementor;
     std::list<std::unique_ptr<GamePlayScript>> m_scripts;
 
     bool m_running;
+
+    std::vector<std::unique_ptr<IScriptHandle>> m_handles;
+
+
+
+
 
     std::unordered_map<int, std::unique_ptr<EventPoll>> m_eventPolls;
     int m_eventPollHandleIncrementor;
