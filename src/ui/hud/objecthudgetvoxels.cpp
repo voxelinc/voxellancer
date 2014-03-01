@@ -62,8 +62,6 @@ void ObjectHudgetVoxels::setupCorners() {
     m_rb[1].reset(new ObjectHudgetCornerVoxels(this, glm::ivec3(1, -1, 0), true));
 }
 
-
-
 bool ObjectHudgetVoxels::isAt(const Ray& ray) const {
     return GeometryHelper::intersectRectangle(&ray, m_lu->get()->position(), m_ru->get()->position(), m_rb->get()->position(), m_lb->get()->position());
 }

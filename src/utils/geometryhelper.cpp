@@ -4,7 +4,13 @@
 #include "worldobject/worldobject.h"
 #include "geometry/ray.h"
 
-bool GeometryHelper::intersectRectangle(const Ray* ray, const glm::vec3 p, const glm::vec3 q, const glm::vec3 r, const glm::vec3 s, glm::vec3& intersection = glm::vec3(0)) {
+
+bool GeometryHelper::intersectRectangle(const Ray* ray, const glm::vec3& p, const glm::vec3& q, const glm::vec3& r, const glm::vec3& s) {
+    glm::vec3 intersectionDummy;
+    return intersectRectangle(ray, p, q, r, s, intersectionDummy);
+}
+
+bool GeometryHelper::intersectRectangle(const Ray* ray, const glm::vec3& p, const glm::vec3& q, const glm::vec3& r, const glm::vec3& s, glm::vec3& intersection) {
     if (glm::intersectRayTriangle<glm::vec3>(ray->origin(), ray->direction(), p, r, s, intersection)) {
         return true;
     }
