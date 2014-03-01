@@ -10,7 +10,8 @@ ThreadPool<T>::ThreadPool(int threadcount, int chunksize) :
     m_startWorkers(),
     m_stoppedWorkers(),
     m_mutex(),
-    m_index()
+    m_currentIndex(),
+    m_endIndex()
 {
     m_startWorkers = 0;
     m_stoppedWorkers = m_workers.size();
