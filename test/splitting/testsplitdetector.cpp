@@ -78,7 +78,6 @@ go_bandit([]() {
 
             AssertThat(detector.splitDataList().size(), Equals(1));
 
-
             // check if the split is the upper part of the voxel without the crucial voxel
             std::shared_ptr<SplitData> splitOff = detector.splitDataList().front();
 
@@ -90,9 +89,8 @@ go_bandit([]() {
         });
 
 
-        it("works with destroyed crucial voxels", [&]() {
+        it("detection works with destroyed crucial voxels", [&]() {
             WorldObjectModification modification(w);
-
 
             modification.removedVoxel(voxels[1]->gridCell());
             w->removeVoxel(voxels[1]);

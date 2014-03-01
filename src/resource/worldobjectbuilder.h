@@ -30,7 +30,7 @@ protected:
     std::string m_name;
 
     template<typename WorldObjectType>
-    WorldObjectType* newWorldObject();
+    WorldObjectType* makeWorldObject();
 
     void setupVoxelCluster(WorldObject* worldObject);
     void setupComponents(WorldObjectComponents& components);

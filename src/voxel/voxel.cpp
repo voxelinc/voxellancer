@@ -7,9 +7,9 @@
 #include "glow/logging.hpp"
 
 #include "worldobject/worldobject.h"
+#include "voxel/voxeltree.h"
 #include "voxel/voxeltreenode.h"
 #include "voxeleffect/voxeldebrisgenerator.h"
-#include "voxeltree.h"
 
 
 Property<float>* Voxel::s_defaultMass;
@@ -43,7 +43,7 @@ const glm::ivec3& Voxel::gridCell() const {
 
 glm::vec3 Voxel::position() const {
     assert(m_voxelTreeNode);
-    return m_voxelTreeNode->voxelTree()->worldObject()->transform().applyTo(static_cast<glm::vec3>(m_gridCell));
+    return m_voxelTreeNode->voxelTree()->worldObject()->transform().applyTo(glm::vec3(m_gridCell));
 }
 
 void Voxel::addToCluster(VoxelCluster *cluster) {
@@ -72,6 +72,10 @@ float Voxel::hp() const {
 
 void Voxel::applyDamage(float deltaHp) {
     m_hp = std::max(m_hp - deltaHp, 0.0f);
+}
+
+float Voxel::damageForwardingDestructionDamage() {
+    return 0;
 }
 
 float Voxel::normalizedMass() const {

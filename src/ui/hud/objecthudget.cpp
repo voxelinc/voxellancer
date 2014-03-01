@@ -4,7 +4,15 @@
 
 #include <glm/glm.hpp>
 
+#include "ai/character.h"
+
+#include "factions/factionrelation.h"
+#include "factions/factionmatrix.h"
+#include "factions/playerfaction.h"
+
 #include "utils/geometryhelper.h"
+
+#include "world/world.h"
 
 #include "worldobject/worldobject.h"
 #include "worldobject/ship.h"
@@ -38,6 +46,7 @@ void ObjectHudget::update(float deltaSec) {
     updateFov();
     m_insideFov = isInsideFov();
     bool targetHighlight = false;
+    FactionRelationType relationType = FactionRelationType::Neutral;
     WorldObject* worldObject = m_objectDelegate->worldObject();
     if(worldObject) {
         calculateOpeningAngle();
@@ -47,12 +56,22 @@ void ObjectHudget::update(float deltaSec) {
             if(worldObject == m_hud->player()->ship()->targetObject()) {
                 targetHighlight = true;
             }
+            // TODO: Replace the following two lines with proper WorldObjectType mechanism
+            Ship* ship = dynamic_cast<Ship*>(worldObject);
+            if (ship) {
+                Faction* faction = ship->character()->faction();
+
+                if (faction) {
+                    relationType = faction->relationTo(World::instance()->factionMatrix().playerFaction())->type();
+                }
+            }
         }
     }
     if (!m_insideFov) {
         m_arrowVoxels->updateDirection(closestPointInsideFov());
     }
     m_objectVoxels->setTargetHightlight(targetHighlight);
+    m_objectVoxels->setRelationType(relationType);
 }
 
 void ObjectHudget::draw() {

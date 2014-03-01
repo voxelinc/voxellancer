@@ -6,7 +6,10 @@
 
 
 GenericGun::GenericGun(const std::string& name):
-    Gun(name)
+    Gun(name),
+    m_bulletSpeed(100),
+    m_bulletLifetime(100),
+    m_cooldownTime(0)
 {
 }
 
@@ -26,12 +29,20 @@ void GenericGun::setBulletSpeed(float bulletSpeed) {
     m_bulletSpeed = bulletSpeed;
 }
 
-Visuals GenericGun::visuals() const {
+const Visuals& GenericGun::visuals() const {
     return m_visuals;
 }
 
 void GenericGun::setVisuals(const Visuals& visuals) {
     m_visuals = visuals;
+}
+
+const SoundProperties& GenericGun::fireSound() const {
+    return m_fireSound;
+}
+
+void GenericGun::setFireSound(const SoundProperties& fireSound) {
+    m_fireSound = fireSound;
 }
 
 float GenericGun::cooldownTime() const {

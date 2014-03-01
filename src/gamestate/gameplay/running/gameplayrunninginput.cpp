@@ -1,4 +1,4 @@
-#include "inputhandler.h"
+#include "gameplayrunninginput.h"
 
 #ifdef WIN32
 #include <windows.h>
@@ -7,25 +7,28 @@
 #include <GLFW/glfw3.h>
 
 #include <glm/glm.hpp>
-#include <glow/glow.h>
+
+#include "etc/contextprovider.h"
+#include "etc/hmd/hmd.h"
+#include "etc/hmd/hmdmanager.h"
+
+#include "gamestate/gamestate.h"
 
 #include "utils/tostring.h"
 #include "utils/aimer.h"
 
-#include "etc/contextprovider.h"
-
+#include "camera/camerahead.h"
+#include "camera/cameradolly.h"
+#include "etc/hmd/hmd.h"
+#include "input/inputmapping.h"
 #include "worldobject/worldobject.h"
+#include "worldobject/worldobjectcomponents.h"
+#include "worldobject/ship.h"
 #include "player.h"
 #include "ui/hud/hud.h"
-#include "worldobject/ship.h"
-#include "camera/cameradolly.h"
-#include "hud/crosshair.h"
-#include "input/inputmapping.h"
-#include "etc/hmd/hmd.h"
-#include "inputconfigurator.h"
-#include "targetselector.h"
-#include "camera/camerahead.h"
-#include "worldobject/worldobjectcomponents.h"
+#include "ui/inputconfigurator.h"
+#include "ui/targetselector.h"
+#include "ui/hud/crosshair.h"
 
 
 /*
@@ -51,9 +54,8 @@
 * B9: right stick
 */
 
-InputHandler::InputHandler(Player& player):
-    m_player(&player),
-    m_hmd(nullptr),
+GamePlayRunningInput::GamePlayRunningInput(Player* player):
+    m_player(player),
 
     prop_deadzoneMouse("input.deadzoneMouse"),
     prop_deadzoneGamepad("input.deadzoneGamepad"),
@@ -81,6 +83,7 @@ InputHandler::InputHandler(Player& player):
     m_actions(),
 
     m_inputConfigurator(new InputConfigurator(&m_actions, &m_secondaryInputValues, &prop_deadzoneGamepad, &m_player->hud())),
+
     m_fireUpdate(false),
     m_rocketUpdate(false),
     m_moveUpdate(0),
@@ -98,10 +101,6 @@ InputHandler::InputHandler(Player& player):
     m_currentTimePressed = 0;
 }
 
-void InputHandler::setHMD(HMD& hmd) {
-    m_hmd = &hmd;
-}
-
 void InputHandler::resizeEvent(const unsigned int width, const unsigned int height){
 	m_lastfocus = false; // through window resize everything becomes scrambled
 }
@@ -110,7 +109,7 @@ void InputHandler::resizeEvent(const unsigned int width, const unsigned int heig
 *    Check here for single-time key-presses, that you do not want fired multiple times, e.g. toggles
 *    This only applies for menu events etc, for action events set the toggleAction attribute to true
 */
-void InputHandler::keyCallback(int key, int scancode, int action, int mods) {
+void GamePlayRunningInput::keyCallback(int key, int scancode, int action, int mods) {
     if (action == GLFW_PRESS) {
         m_inputConfigurator->setLastPrimaryInput(InputMapping(InputType::Keyboard, key, 1, 0.0f));
     } else {
@@ -152,7 +151,7 @@ void InputHandler::mouseButtonCallback(int button, int action, int mods) {
 /*
 *Check here for every-frame events, e.g. view & movement controls
 */
-void InputHandler::update(float deltaSec) {
+void GamePlayRunningInput::update(float deltaSec) {
     if (glfwGetWindowAttrib(glfwGetCurrentContext(), GLFW_FOCUSED)) {
         if (m_lastfocus) {
             if (glfwJoystickPresent(GLFW_JOYSTICK_1)) {
@@ -171,7 +170,8 @@ void InputHandler::update(float deltaSec) {
     m_lastfocus = glfwGetWindowAttrib(glfwGetCurrentContext(), GLFW_FOCUSED);
 }
 
-void InputHandler::applyUpdates() {
+
+void GamePlayRunningInput::applyUpdates() {
     // some actions can be triggered in different ways or multiple times
     // especially those done by the mouse
     // collect them and apply them here
@@ -200,21 +200,21 @@ void InputHandler::applyUpdates() {
 }
 
 
-void InputHandler::retrieveInputValues() {
+void GamePlayRunningInput::retrieveInputValues() {
     m_secondaryInputValues.buttonCnt = 0;
     m_secondaryInputValues.axisCnt = 0;
     m_secondaryInputValues.buttonValues = glfwGetJoystickButtons(GLFW_JOYSTICK_1, &m_secondaryInputValues.buttonCnt);
     m_secondaryInputValues.axisValues = glfwGetJoystickAxes(GLFW_JOYSTICK_1, &m_secondaryInputValues.axisCnt);
 }
 
-void InputHandler::processUpdate() {
+void GamePlayRunningInput::processUpdate() {
     processFireActions();
     processMoveActions();
     processRotateActions();
     processTargetSelectActions();
 }
 
-void InputHandler::processMouseUpdate(float deltaSec) {
+void GamePlayRunningInput::processMouseUpdate() {
     // mouse handling
     double x, y;
     glfwGetCursorPos(glfwGetCurrentContext(), &x, &y);
@@ -234,16 +234,9 @@ void InputHandler::processMouseUpdate(float deltaSec) {
         m_fireUpdate = true;
     }
 
-    // spin
-    float rel = 20;
-    double dis = 0;
-    float angX = 0;
-    float angY = 0;
-
     if (glfwGetMouseButton(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS){
         m_currentTimePressed += deltaSec;
     }
-
 
     if (m_mouseControl || glfwGetMouseButton(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS &&  prop_maxClickTime < m_currentTimePressed) {
         glm::vec3 rot;
@@ -262,15 +255,15 @@ void InputHandler::processMouseUpdate(float deltaSec) {
     }
 }
 
-void InputHandler::processHMDUpdate() {
-    if(m_hmd) {
-        m_player->cameraDolly().cameraHead().setRelativeOrientation(m_hmd->orientation());
+void GamePlayRunningInput::processHMDUpdate() {
+    if (HMDManager::instance()->hmd()) {
+        m_player->cameraDolly().setHeadOrientation(HMDManager::instance()->hmd()->orientation());
     } else {
-        m_player->cameraDolly().cameraHead().setRelativeOrientation(glm::quat());
+        m_player->cameraDolly().setHeadOrientation(glm::quat());
     }
 }
 
-void InputHandler::addActionsToVector() {
+void GamePlayRunningInput::addActionsToVector() {
     m_actions.push_back(&fireAction);
     m_actions.push_back(&rocketAction);
     m_actions.push_back(&moveLeftAction);
@@ -287,7 +280,7 @@ void InputHandler::addActionsToVector() {
     m_actions.push_back(&selectPreviousAction);
 }
 
-float InputHandler::getInputValue(ActionKeyMapping* action) {
+float GamePlayRunningInput::getInputValue(ActionKeyMapping* action) {
     float inputValue = glm::max(getInputValue(action->primaryMapping.get()), getInputValue(action->secondaryMapping.get()));
     if (action->toggleAction) {
         if (inputValue) {
@@ -302,7 +295,7 @@ float InputHandler::getInputValue(ActionKeyMapping* action) {
     return inputValue;
 }
 
-float InputHandler::getInputValue(InputMapping mapping) {
+float GamePlayRunningInput::getInputValue(InputMapping mapping) {
     switch (mapping.type()) {
         case InputType::None:
             return 0;
@@ -333,7 +326,7 @@ float InputHandler::getInputValue(InputMapping mapping) {
     }
 }
 
-void InputHandler::processFireActions() {
+void GamePlayRunningInput::processFireActions() {
     m_player->hud().crossHair().setActionActive(getInputValue(&fireAction) > 0.001);
 
     if (getInputValue(&fireAction)) {
@@ -344,7 +337,7 @@ void InputHandler::processFireActions() {
     }
 }
 
-void InputHandler::processMoveActions() {
+void GamePlayRunningInput::processMoveActions() {
     glm::vec3 direction(
         getInputValue(&moveRightAction) - getInputValue(&moveLeftAction),
         0,
@@ -354,7 +347,7 @@ void InputHandler::processMoveActions() {
     m_moveUpdate = direction;
 }
 
-void InputHandler::processRotateActions() {
+void GamePlayRunningInput::processRotateActions() {
     glm::vec3 rot = glm::vec3(0);
 
     rot.x = getInputValue(&rotateUpAction)
@@ -371,7 +364,7 @@ void InputHandler::processRotateActions() {
     m_rotateUpdate += rot;
 }
 
-void InputHandler::processTargetSelectActions() {
+void GamePlayRunningInput::processTargetSelectActions() {
     if (getInputValue(&selectNextAction)) {
         m_player->selectTarget(true);
     }
@@ -380,7 +373,7 @@ void InputHandler::processTargetSelectActions() {
     }
 }
 
-void InputHandler::placeCrossHair(double winX, double winY) {
+void GamePlayRunningInput::placeCrossHair(double winX, double winY) {
     int width, height;
     glfwGetWindowSize(glfwGetCurrentContext(), &width, &height);
     m_player->hud().setCrossHairOffset(glm::vec2((winX - (width/2))/(width/2), -(winY - (height/2))/(height/2)));
@@ -392,3 +385,4 @@ SecondaryInputValues::SecondaryInputValues() {
     buttonValues = glfwGetJoystickButtons(GLFW_JOYSTICK_1, &buttonCnt);
     axisValues = glfwGetJoystickAxes(GLFW_JOYSTICK_1, &axisCnt);
 }
+

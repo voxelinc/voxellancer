@@ -7,7 +7,8 @@
 
 FightTask::FightTask(BoardComputer* boardComputer, const std::vector<Handle<WorldObject>>& targets) :
     AiTask(boardComputer),
-    m_targets(targets)
+    m_targets(targets),
+    m_primaryTarget(nullptr)
 {
     m_state = IDLE;
     m_maxFireDistance = 150.0f;

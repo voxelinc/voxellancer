@@ -1,10 +1,13 @@
 #include "world.h"
 
+#include "factions/factionmatrix.h"
+
 #include "voxeleffect/voxelparticleengine.h"
 
 #include "worldtree/worldtree.h"
 #include "worldlogic.h"
 #include "worldobject/worldobject.h"
+
 #include "skybox.h"
 
 #include "god.h"
@@ -17,7 +20,9 @@ World::World():
     m_worldLogic(new WorldLogic(*this)),
     m_worldTree(new WorldTree()),
     m_god(new God(*this)),
-    m_voxelParticleEngine(new VoxelParticleEngine())
+    m_voxelParticleEngine(new VoxelParticleEngine()),
+    m_factionMatrix(new FactionMatrix()),
+    m_deltaSec(0.0f)
 {
 }
 
@@ -43,6 +48,10 @@ WorldTree &World::worldTree() {
 
 VoxelParticleEngine &World::voxelParticleEngine() {
     return *m_voxelParticleEngine;
+}
+
+FactionMatrix &World::factionMatrix() {
+    return *m_factionMatrix;
 }
 
 std::unordered_set<WorldObject*> &World::worldObjects() {

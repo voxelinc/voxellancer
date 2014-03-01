@@ -15,6 +15,9 @@ public:
     ~CameraDolly();
 
     CameraHead& cameraHead();
+    const CameraHead& cameraHead() const;
+
+    void setHeadOrientation(const glm::quat& orientation);
 
     void followWorldObject(WorldObject* m_followWorldObject);
 

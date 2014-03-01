@@ -17,7 +17,8 @@
 ObjectHudgetVoxels::ObjectHudgetVoxels(ObjectHudget* hudget):
     m_hudget(hudget),
     m_openingAngle(0.0f),
-    m_targetHightlight(false)
+    m_targetHightlight(false),
+    m_relationType(FactionRelationType::Neutral)
 {
     setupCorners();
 }
@@ -33,6 +34,10 @@ void ObjectHudgetVoxels::setTargetHightlight(bool targetHightlight) {
     m_targetHightlight = targetHightlight;
 }
 
+void ObjectHudgetVoxels::setRelationType(FactionRelationType relationType) {
+    m_relationType = relationType;
+}
+
 float ObjectHudgetVoxels::openingAngle() const {
     return m_openingAngle;
 }
@@ -42,7 +47,7 @@ void ObjectHudgetVoxels::setOpeningAngle(float openingAngle) {
 }
 
 void ObjectHudgetVoxels::draw() {
-    int index = m_targetHightlight ? 1 : 0;
+    int index = 2 * ((int)m_relationType) + (m_targetHightlight ? 1 : 0) ;
 
     m_lu[index]->draw();
     m_lb[index]->draw();
@@ -51,15 +56,23 @@ void ObjectHudgetVoxels::draw() {
 }
 
 void ObjectHudgetVoxels::setupCorners() {
-    m_lu[0].reset(new ObjectHudgetCornerVoxels(this, glm::ivec3(-1, 1, 0), false));
-    m_lb[0].reset(new ObjectHudgetCornerVoxels(this, glm::ivec3(-1, -1, 0), false));
-    m_ru[0].reset(new ObjectHudgetCornerVoxels(this, glm::ivec3(1, 1, 0), false));
-    m_rb[0].reset(new ObjectHudgetCornerVoxels(this, glm::ivec3(1, -1, 0), false));
+    addCornerSet(0, 0xFF0000);
+    addCornerSet(1, 0xCC6600);
+    addCornerSet(2, 0x66AAFF);
+    addCornerSet(3, 0x33AA00);
+    addCornerSet(4, 0x11CC00);
+}
 
-    m_lu[1].reset(new ObjectHudgetCornerVoxels(this, glm::ivec3(-1, 1, 0), true));
-    m_lb[1].reset(new ObjectHudgetCornerVoxels(this, glm::ivec3(-1, -1, 0), true));
-    m_ru[1].reset(new ObjectHudgetCornerVoxels(this, glm::ivec3(1, 1, 0), true));
-    m_rb[1].reset(new ObjectHudgetCornerVoxels(this, glm::ivec3(1, -1, 0), true));
+void ObjectHudgetVoxels::addCornerSet(int index, uint32_t color) {
+    m_lu[index*2].reset(new ObjectHudgetCornerVoxels(this, glm::ivec3(-1, 1, 0), color, false));
+    m_lb[index*2].reset(new ObjectHudgetCornerVoxels(this, glm::ivec3(-1, -1, 0), color, false));
+    m_ru[index*2].reset(new ObjectHudgetCornerVoxels(this, glm::ivec3(1, 1, 0), color, false));
+    m_rb[index*2].reset(new ObjectHudgetCornerVoxels(this, glm::ivec3(1, -1, 0), color, false));
+
+    m_lu[index*2+1].reset(new ObjectHudgetCornerVoxels(this, glm::ivec3(-1, 1, 0), color, true));
+    m_lb[index*2+1].reset(new ObjectHudgetCornerVoxels(this, glm::ivec3(-1, -1, 0), color, true));
+    m_ru[index*2+1].reset(new ObjectHudgetCornerVoxels(this, glm::ivec3(1, 1, 0), color, true));
+    m_rb[index*2+1].reset(new ObjectHudgetCornerVoxels(this, glm::ivec3(1, -1, 0), color, true));
 }
 
 bool ObjectHudgetVoxels::isAt(const Ray& ray) const {

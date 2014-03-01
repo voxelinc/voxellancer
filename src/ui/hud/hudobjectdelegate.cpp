@@ -22,6 +22,6 @@ WorldObject* HUDObjectDelegate::worldObject() {
     return m_worldObjectHandle.get();
 }
 
-Hudget* HUDObjectDelegate::objectHudget() {
-    return m_objectHudget;
+Hudget& HUDObjectDelegate::hudget() {
+    return *m_hudget;
 }

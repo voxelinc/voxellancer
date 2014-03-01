@@ -18,11 +18,11 @@ public:
 
     HUD* hud();
     WorldObject* worldObject();
-    Hudget* objectHudget();
+    Hudget& hudget();
 
 protected:
     HUD* m_hud;
     Handle<WorldObject> m_worldObjectHandle;
-    ObjectHudget* m_objectHudget;
+    std::unique_ptr<Hudget> m_hudget;
 };
 
