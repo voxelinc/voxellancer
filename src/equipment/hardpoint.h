@@ -19,8 +19,6 @@ class Hardpoint: public WorldObjectSlot {
 public:
     Hardpoint(WorldObjectComponents* components, HardpointVoxel* voxel);
 
-    HardpointVoxel* voxel();
-
     const std::shared_ptr<Weapon>& weapon();
     void setWeapon(const std::shared_ptr<Weapon>& weapon);
 

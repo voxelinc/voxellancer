@@ -15,7 +15,7 @@ class WorldObjectComponents;
 */
 class WorldObjectSlot {
 public:
-    WorldObjectSlot(WorldObjectComponents* components, SpecialVoxel* specialVoxel, int index);
+    WorldObjectSlot(WorldObjectComponents* components, const SpecialVoxel* specialVoxel, int index);
 
     std::list<std::string> mountables() const;
 
@@ -32,7 +32,7 @@ public:
 protected:
     WorldObjectComponents* m_components;
     std::map<std::string, bool> m_mountables;
-    SpecialVoxel* m_voxel;
+    const SpecialVoxel* m_voxel;
     int m_index;
 };
 

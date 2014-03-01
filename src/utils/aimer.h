@@ -28,9 +28,8 @@ protected:
     Property<float> m_infityAimInterpolation;
     float m_lastDistance;
 
-
-    glm::vec3 nearestTarget(const std::unordered_set<WorldObject*>& voxels, const glm::vec3& origin) const;
-    glm::vec3 nearestVoxel(WorldObject* nearest) const;
+    glm::vec3 nearestTarget(const std::unordered_set<WorldObject*>& voxels, const Ray& ray) const;
+    glm::vec3 nearestVoxel(WorldObject* nearest, const Ray& ray) const;
 
     float distanceTo(Voxel* voxel, WorldObject* owner, const glm::vec3& origin) const;
     glm::vec3 infinity(const Ray& ray) const;
