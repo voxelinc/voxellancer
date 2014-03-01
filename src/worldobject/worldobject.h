@@ -19,11 +19,11 @@ class VoxelCollision;
 class WorldObjectComponents;
 
 enum class WorldObjectType {
-    WorldObject,
-    Ship,
-    Bullet,
-    Rocket,
-    Other
+    WorldObject = 1 << 0,
+    Ship        = 1 << 1,
+    Bullet      = 1 << 2,
+    Rocket      = 1 << 3,
+    Other       = 1 << 4
 };
 
 class WorldObject : public VoxelCluster {

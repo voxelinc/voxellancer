@@ -12,8 +12,7 @@
 Bullet::Bullet():
     Projectile()
 {
-    collisionFilter().setCollisionFilterClass(CollisionFilterClass::Bullet);
-    collisionFilter().setCollideableWith(CollisionFilterClass::Bullet, false);
+    collisionFilter().setCollideableWith(WorldObjectType::Bullet, false);
 
     m_objectInfo->setShowOnHud(false);
     m_objectInfo->setCanLockOn(false);

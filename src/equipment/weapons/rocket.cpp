@@ -26,8 +26,7 @@ Rocket::Rocket():
     m_boardComputer(this),
     m_aiTask(nullptr)
 {
-    collisionFilter().setCollisionFilterClass(CollisionFilterClass::Rocket);
-    collisionFilter().setCollideableWith(CollisionFilterClass::Rocket, false);
+    collisionFilter().setCollideableWith(WorldObjectType::Rocket, false);
 
     m_objectInfo->setShowOnHud(false);
     m_objectInfo->setCanLockOn(false);

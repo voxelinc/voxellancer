@@ -15,7 +15,7 @@
 
 
 WorldObject::WorldObject():
-    WorldObject(new CollisionFilter(this,CollisionFilterClass::Other), 1.0f)
+    WorldObject(new CollisionFilter(this), 1.0f)
 {
 
 }

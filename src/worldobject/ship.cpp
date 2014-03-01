@@ -8,7 +8,7 @@
 
 
 Ship::Ship():
-    Ship(new CollisionFilter(this, CollisionFilterClass::Ship))
+    Ship(new CollisionFilter(this))
 {
 }
 
