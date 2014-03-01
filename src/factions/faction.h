@@ -15,7 +15,7 @@ public:
     const std::string& key() const;
     const std::string& printName() const;
 
-    std::shared_ptr<FactionRelation>& relation(Faction* faction);
+    std::shared_ptr<FactionRelation>& relationTo(Faction* faction);
     void setRelation(std::shared_ptr<FactionRelation>& relation);
 
 

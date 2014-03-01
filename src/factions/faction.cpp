@@ -21,7 +21,7 @@ const std::string& Faction::printName() const {
     return m_printName;
 }
 
-std::shared_ptr<FactionRelation>& Faction::relation(Faction* faction) {
+std::shared_ptr<FactionRelation>& Faction::relationTo(Faction* faction) {
     decltype(m_relations)::iterator i = m_relations.find(faction);
     assert(i != m_relations.end());
     return i->second;
