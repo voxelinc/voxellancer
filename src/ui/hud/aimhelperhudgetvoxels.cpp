@@ -1,7 +1,7 @@
 #include "aimhelperhudgetvoxels.h"
 
 #include "voxel/voxel.h"
-#include "voxel/voxelrenderer.h"
+#include "voxel/renderer/voxelrenderer.h"
 
 #include "aimhelperhudget.h"
 #include "voxel/voxelcluster.h"

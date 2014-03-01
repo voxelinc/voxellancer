@@ -40,8 +40,6 @@ public:
     glm::vec3 applyTo(const glm::vec3 &vertex) const;
     glm::vec3 inverseApplyTo(const glm::vec3 &vertex) const;
 
-
-
 protected:
     glm::vec3 m_position;
     glm::quat m_orientation;

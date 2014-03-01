@@ -19,7 +19,7 @@
 #include "hudobjectdelegate.h"
 
 #include "player.h"
-#include "voxel/voxelrenderer.h"
+#include "voxel/renderer/voxelrenderer.h"
 #include "geometry/ray.h"
 #include "display/viewer.h"
 #include "crosshair.h"
@@ -129,9 +129,8 @@ void HUD::update(float deltaSec) {
 }
 
 void HUD::draw() {
-    glow::Uniform<glm::vec3>* lightuniform = VoxelRenderer::instance()->program()->getUniform<glm::vec3>("lightdir");
-    glm::vec3 oldLightdir = lightuniform->value();
-    lightuniform->set(m_player->cameraHead().orientation() * glm::vec3(0,0,1));
+    glm::vec3 oldLightdir = VoxelRenderer::instance()->getLightDir();
+    VoxelRenderer::instance()->setLightDir(m_player->cameraHead().orientation() * glm::vec3(0, 0, 1));
 
     for (Hudget* hudget : m_hudgets) {
         if (hudget->visible()) {
@@ -139,7 +138,7 @@ void HUD::draw() {
         }
     }
 
-    lightuniform->set(oldLightdir);
+    VoxelRenderer::instance()->setLightDir(oldLightdir);
 }
 
 void HUD::updateScanner(float deltaSec) {

@@ -4,7 +4,7 @@
 #include "worldobject/worldobject.h"
 #include "voxel/specialvoxel.h"
 
-WorldObjectSlot::WorldObjectSlot(WorldObjectComponents* components, SpecialVoxel* specialVoxel, int index) :
+WorldObjectSlot::WorldObjectSlot(WorldObjectComponents* components, const SpecialVoxel* specialVoxel, int index) :
     m_voxel(specialVoxel),
     m_components(components),
     m_index(index)

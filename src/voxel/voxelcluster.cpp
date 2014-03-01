@@ -109,3 +109,7 @@ float VoxelCluster::emissiveness() const {
     return 0.0f;
 }
 
+bool VoxelCluster::isInstanced() {
+    return voxelRenderData().isInstanced();
+}
+

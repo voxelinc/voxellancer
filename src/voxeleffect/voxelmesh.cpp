@@ -27,9 +27,8 @@ VoxelMesh::VoxelMesh():
 {
 }
 
-void VoxelMesh::setupVertexAttribute(glow::Program* program, glow::VertexArrayObject* vao, const std::string& name, GLboolean normalised, int bindingNum, GLint offset) {
+void VoxelMesh::setupVertexAttribute(GLint location, glow::VertexArrayObject* vao, const std::string& name, GLboolean normalised, int bindingNum, GLint offset) {
     glow::VertexAttributeBinding* binding = vao->binding(bindingNum);
-    GLint location = program->getAttributeLocation(name);
     assert(location >= 0);
 
     binding->setAttribute(location);
@@ -40,16 +39,18 @@ void VoxelMesh::setupVertexAttribute(glow::Program* program, glow::VertexArrayOb
 }
 
 void VoxelMesh::bindTo(
-    glow::Program* program,
-    glow::VertexArrayObject* vao,
-    int bindingIndex)
+    GLint v_vectexLocation,
+    GLint v_normalLocation,
+    int vertexBindingIndex,
+    int normalBindingIndex,
+    glow::VertexArrayObject* vao)
 {
     if(!m_initialized) {
         initialize();
     }
 
-    setupVertexAttribute(program, vao, "v_vertex", GL_FALSE, bindingIndex + 0, 0);
-    setupVertexAttribute(program, vao, "v_normal", GL_TRUE,  bindingIndex + 1, sizeof(glm::vec3));
+    setupVertexAttribute(v_vectexLocation, vao, "v_vertex", GL_FALSE, vertexBindingIndex, 0);
+    setupVertexAttribute(v_normalLocation, vao, "v_normal", GL_TRUE, normalBindingIndex, sizeof(glm::vec3));
 }
 
 void VoxelMesh::initialize() {

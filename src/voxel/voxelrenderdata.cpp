@@ -12,7 +12,7 @@
 
 #include "voxelcluster.h"
 #include "voxeleffect/voxelmesh.h"
-#include "voxelrenderer.h"
+#include "renderer/voxelrenderer.h"
 #include "voxel.h"
 
 
@@ -36,7 +36,10 @@ void VoxelRenderData::setupVertexAttributes() {
     m_vertexArrayObject = new glow::VertexArrayObject();
     m_voxelDataBuffer = new glow::Buffer(GL_ARRAY_BUFFER);
 
-    VoxelRenderer::voxelMesh().bindTo(VoxelRenderer::program(), m_vertexArrayObject, 0);
+    int vertexLocation = VoxelRenderer::instance()->getAttributeLocation("v_vertex");
+    int normalLocation = VoxelRenderer::instance()->getAttributeLocation("v_normal");
+    VoxelRenderer::voxelMesh().bindTo(vertexLocation, normalLocation, 0, 1, m_vertexArrayObject);
+
     setupVertexAttribute(offsetof(VoxelData, position), "v_position", 3, GL_FLOAT, GL_FALSE, 2);
     setupVertexAttribute(offsetof(VoxelData, color), "v_color", GL_BGRA, GL_UNSIGNED_BYTE, GL_TRUE, 3);
     setupVertexAttribute(offsetof(VoxelData, emissiveness), "v_emissiveness", 1, GL_FLOAT, GL_FALSE, 4);
@@ -44,7 +47,7 @@ void VoxelRenderData::setupVertexAttributes() {
 
 void VoxelRenderData::setupVertexAttribute(GLint offset, const std::string& name, int numPerVertex, GLenum type, GLboolean normalised, int bindingNum) {
     glow::VertexAttributeBinding* binding = m_vertexArrayObject->binding(bindingNum);
-    GLint location = VoxelRenderer::program()->getAttributeLocation(name);
+    GLint location = VoxelRenderer::instance()->getAttributeLocation(name);
 
     binding->setAttribute(location);
     binding->setBuffer(m_voxelDataBuffer, 0, sizeof(VoxelData));
@@ -111,4 +114,26 @@ void VoxelRenderData::afterContextRebuild() {
 
 bool VoxelRenderData::isInstanced() {
     return false;
+}
+
+InstancedVoxelRenderData::InstancedVoxelRenderData(IVoxelRenderData& prototype):
+    m_prototype(prototype)
+{
+    assert(!m_prototype.isInstanced());
+}
+
+void InstancedVoxelRenderData::invalidate() {
+    m_prototype.invalidate();
+}
+
+int InstancedVoxelRenderData::voxelCount() {
+    return m_prototype.voxelCount();
+}
+
+bool InstancedVoxelRenderData::isInstanced() {
+    return true;
+}
+
+glow::VertexArrayObject* InstancedVoxelRenderData::vertexArrayObject() {
+    return m_prototype.vertexArrayObject();
 }

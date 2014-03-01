@@ -13,7 +13,7 @@
 
 #include "utils/math.h"
 
-#include "voxel/voxelrenderer.h"
+#include "voxel/renderer/voxelrenderer.h"
 
 #include "world/world.h"
 

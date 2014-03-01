@@ -31,7 +31,7 @@ class VoxelRenderData;
 
 class InstancedVoxelRenderData : public IVoxelRenderData {
 public:
-    InstancedVoxelRenderData(const IVoxelRenderData& prototype);
+    InstancedVoxelRenderData(IVoxelRenderData& prototype);
 
     virtual void invalidate() override; // throws assertion or just do nothing
     virtual int voxelCount() override;
@@ -40,7 +40,7 @@ public:
     virtual glow::VertexArrayObject* vertexArrayObject() override;
 
 protected:
-    const VoxelRenderData& m_prototype;
+    IVoxelRenderData& m_prototype;
 
 };
 

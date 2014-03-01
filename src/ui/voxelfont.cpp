@@ -3,7 +3,7 @@
 #include <algorithm>
 
 #include "resource/clustercache.h"
-#include "voxel/voxelrenderer.h"
+#include "voxel/renderer/voxelrenderer.h"
 #include "letter.h"
 
 VoxelFont::VoxelFont():
@@ -45,8 +45,6 @@ void VoxelFont::loadChar(const std::string& filename, glm::vec3 offset, const ch
 
 
 void VoxelFont::drawString(std::string text, glm::vec3 position, FontSize size, float scale, FontAlign align){
-    assert(VoxelRenderer::instance()->prepared());
-
     std::transform(text.begin(), text.end(), text.begin(), ::toupper);
     std::map<char, std::unique_ptr<Letter>> *source;
     float width;

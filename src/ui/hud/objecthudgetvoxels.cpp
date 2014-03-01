@@ -3,7 +3,7 @@
 #include <glm/gtx/quaternion.hpp>
 
 #include "utils/geometryhelper.h"
-#include "voxel/voxelrenderer.h"
+#include "voxel/renderer/voxelrenderer.h"
 #include "hud.h"
 #include "objecthudget.h"
 

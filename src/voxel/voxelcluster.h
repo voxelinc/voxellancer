@@ -41,6 +41,7 @@ public:
 
     virtual float emissiveness() const;
 
+    bool isInstanced();
 
 protected:
     std::unordered_map<glm::ivec3, Voxel*> m_voxels;

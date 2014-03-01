@@ -81,9 +81,11 @@ void VoxelParticleRenderer::loadProgram() {
 }
 
 void VoxelParticleRenderer::setupVertexAttributes() {
-    m_voxelMesh.bindTo(m_program, m_vertexArrayObject, 0);
-
-    int b = 2;
+    int b = 0;
+    
+    int vertexLocation = m_program->getAttributeLocation("v_vertex");
+    int normalLocation = m_program->getAttributeLocation("v_normal");
+    m_voxelMesh.bindTo(vertexLocation, normalLocation, b++, b++, m_vertexArrayObject);
 
     setupVertexAttribute(offsetof(VoxelParticleData, creationPosition), "creationPosition", 3, GL_FLOAT, GL_FALSE, b++);
     setupVertexAttribute(offsetof(VoxelParticleData, creationEulers), "creationEulers", 3, GL_FLOAT, GL_FALSE, b++);

@@ -56,3 +56,25 @@ bool VoxelTree::isInstanced() {
     return false;
 }
 
+
+InstancedVoxelTree::InstancedVoxelTree(IVoxelTree& prototype):
+    m_prototype(prototype)
+{
+
+}
+
+void InstancedVoxelTree::insert(Voxel* voxel) {
+    assert(0);
+}
+
+void InstancedVoxelTree::remove(Voxel* voxel) {
+    assert(0);
+}
+
+bool InstancedVoxelTree::isInstanced() {
+    return true;
+}
+
+VoxelTreeNode* InstancedVoxelTree::root() {
+    return m_prototype.root();
+}

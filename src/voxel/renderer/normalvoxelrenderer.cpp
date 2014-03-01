@@ -1,3 +1,5 @@
+#include "normalvoxelrenderer.h"
+
 #include <glow/Array.h>
 #include <glow/Shader.h>
 #include <glow/Texture.h>
@@ -13,26 +15,21 @@
 
 #include "camera/camera.h"
 
-#include "voxel/voxelrenderer.h"
 #include "voxel/voxelcluster.h"
 
 #include "voxeleffect/voxelmesh.h"
-#include "voxelrenderdata.h"
+#include "voxel/voxelrenderdata.h"
 
 
-std::weak_ptr<VoxelRenderer> VoxelRenderer::s_instance;
 
-
-VoxelRenderer::VoxelRenderer() :
-    m_program(0),
-    m_prepared(false),
-    m_voxelMesh(new VoxelMesh())
+NormalVoxelRenderer::NormalVoxelRenderer() :
+    m_program(0)
 {
     glow::debug("Create Voxelrenderer");
     createAndSetupShaders();
 }
 
-void VoxelRenderer::prepareDraw(const Camera& camera, bool withBorder) {
+void NormalVoxelRenderer::prepareDraw(const Camera& camera, bool withBorder) {
     glEnable(GL_DEPTH_TEST);
 
     m_program->setUniform("projection", camera.projection());
@@ -43,11 +40,9 @@ void VoxelRenderer::prepareDraw(const Camera& camera, bool withBorder) {
     m_program->use();
 
     glProvokingVertex(GL_LAST_VERTEX_CONVENTION);
-
-    m_prepared = true;
 }
 
-void VoxelRenderer::draw(VoxelCluster& cluster) {
+void NormalVoxelRenderer::draw(VoxelCluster& cluster) {
     m_program->setUniform("model", cluster.transform().matrix());
     m_program->setUniform("emissiveness", cluster.emissiveness());
 
@@ -64,17 +59,12 @@ void VoxelRenderer::draw(VoxelCluster& cluster) {
 }
 
 
-void VoxelRenderer::afterDraw() {
+void NormalVoxelRenderer::afterDraw() {
     glActiveTexture(GL_TEXTURE0);
     m_program->release();
-    m_prepared = false;
 }
 
-bool VoxelRenderer::prepared() {
-    return m_prepared;
-}
-
-void VoxelRenderer::createAndSetupShaders() {
+void NormalVoxelRenderer::createAndSetupShaders() {
     m_program = new glow::Program();
     m_program->attach(
         glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/shader/voxelcluster/voxelcluster.vert"),
@@ -84,31 +74,14 @@ void VoxelRenderer::createAndSetupShaders() {
 
 }
 
-glow::Program* VoxelRenderer::program() {
-    assert(!s_instance.expired());
-    return s_instance.lock()->m_program;
-}
-
-VoxelMesh& VoxelRenderer::voxelMesh() {
-    assert(!s_instance.expired());
-    return *s_instance.lock()->m_voxelMesh;
-}
-
-std::shared_ptr<VoxelRenderer> VoxelRenderer::instance() {
-    if (std::shared_ptr<VoxelRenderer> renderer = s_instance.lock()) {
-        return renderer;
-    } else {
-        renderer = std::shared_ptr<VoxelRenderer>(new VoxelRenderer());
-        s_instance = renderer;
-        return renderer;
-    }
-}
-
-void VoxelRenderer::beforeContextDestroy() {
+void NormalVoxelRenderer::beforeContextDestroy() {
     m_program = nullptr;
-    m_prepared = false;
 }
 
-void VoxelRenderer::afterContextRebuild() {
+void NormalVoxelRenderer::afterContextRebuild() {
     createAndSetupShaders();
+}
+
+glow::Program* NormalVoxelRenderer::program() {
+    return m_program.get();
 }

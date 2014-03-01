@@ -3,7 +3,7 @@
 #include "utils/geometryhelper.h"
 
 #include "voxel/voxel.h"
-#include "voxel/voxelrenderer.h"
+#include "voxel/renderer/voxelrenderer.h"
 
 #include "objecthudget.h"
 #include "objecthudgetvoxels.h"

@@ -23,8 +23,6 @@ out float f_deathTime;
 out float f_emissiveness;
 out vec3 f_modelposition;
 
-
-
 // Uniforms
 uniform mat4 viewProjection;
 uniform float time;

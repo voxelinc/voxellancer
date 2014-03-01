@@ -135,9 +135,9 @@ void ContextProvider::toggleFullScreen() {
 }
 
 void ContextProvider::shutdown() {
-    for (ContextDependant* dependant : m_contextDependants) {
-        dependant->beforeContextDestroy();
-    }
+    //for (ContextDependant* dependant : m_contextDependants) {
+    //    dependant->beforeContextDestroy();
+    //}
     glfwDestroyWindow(glfwGetCurrentContext());
 }
 

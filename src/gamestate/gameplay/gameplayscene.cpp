@@ -2,7 +2,7 @@
 
 #include "camera/camera.h"
 #include "camera/camerahead.h"
-#include "voxel/voxelrenderer.h"
+#include "voxel/renderer/voxelrenderer.h"
 #include "sound/soundmanager.h"
 #include "gamestate/gameplay/gameplay.h"
 #include "display/rendering/framebuffer.h"
@@ -60,7 +60,7 @@ void GamePlayScene::drawGame(const Camera& camera) const {
 
     World::instance()->skybox().draw(camera);
 
-    m_voxelRenderer->program()->setUniform("lightdir", m_defaultLightDir.get());
+    m_voxelRenderer->instance()->setLightDir(m_defaultLightDir.get());
     m_voxelRenderer->prepareDraw(camera);
 
     for (WorldObject* worldObject : World::instance()->worldObjects()) {

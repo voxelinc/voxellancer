@@ -165,7 +165,7 @@ void WorldObject::setCollisionFieldOfDamage(float collisionFieldOfDamage) {
 }
 
 bool WorldObject::isInstanced() {
-    assert(m_collisionDetector->voxelTree().isInstanced() == m_voxelRenderData->isInstanced());
-    return m_voxelRenderData->isInstanced();
+    assert(m_collisionDetector->voxelTree().isInstanced() == VoxelCluster::isInstanced());
+    return VoxelCluster::isInstanced();
 }
 

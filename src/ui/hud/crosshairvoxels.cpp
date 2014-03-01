@@ -5,7 +5,7 @@
 
 #include "utils/randfloat.h"
 
-#include "voxel/voxelrenderer.h"
+#include "voxel/renderer/voxelrenderer.h"
 
 #include "crosshair.h"
 #include "hud.h"
