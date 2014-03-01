@@ -1,9 +1,11 @@
 #pragma once
 
 #include <list>
+#include <memory>
 
-#include "components/enginestate.h"
-#include "components/enginepower.h"
+#include "equipment/enginepower.h"
+#include "equipment/enginestate.h"
+
 
 class EngineSlot;
 class Hardpoint;
@@ -23,15 +25,15 @@ public:
 
     WorldObject* worldObject();
 
-    void addEngineSlot(EngineSlot* engineSlot);
-    void removeEngineSlot(EngineSlot* engineSlot);
+    void addEngineSlot(std::shared_ptr<EngineSlot> engineSlot);
+    void removeEngineSlot(const EngineSlot* engineSlot);
 
     /*
         Access EngineSlots either by index in the model or all of them
         at a time
     */
-    EngineSlot* engineSlot(int index);
-    std::list<EngineSlot*>& engineSlots();
+    std::shared_ptr<EngineSlot> engineSlot(int index);
+    std::list<std::shared_ptr<EngineSlot>>& engineSlots();
 
     /*
         Poll all installed engines for accumulated power
@@ -52,15 +54,15 @@ public:
     void setEngineState(const EngineState& engineState);
 
 
-    void addHardpoint(Hardpoint* hardpoint);
-    void removeHardpoint(Hardpoint* hardpoint);
+    void addHardpoint(std::shared_ptr<Hardpoint> hardpoint);
+    void removeHardpoint(const Hardpoint* hardpoint);
 
     /*
         Access Hardpoints either by index in the model or all of them
         at a time
     */
-    Hardpoint* hardpoint(int index);
-    std::list<Hardpoint*>& hardpoints();
+    std::shared_ptr<Hardpoint> hardpoint(int index);
+    std::list<std::shared_ptr<Hardpoint>>& hardpoints();
 
     /*
         Fire all installed weapons either at a point or a WorldObject
@@ -80,8 +82,8 @@ public:
 protected:
     WorldObject* m_worldObject;
 
-    std::list<EngineSlot*> m_engineSlots;
-    std::list<Hardpoint*> m_hardpoints;
+    std::list<std::shared_ptr<EngineSlot>> m_engineSlots;
+    std::list<std::shared_ptr<Hardpoint>> m_hardpoints;
 
     EngineState m_engineState;
 };

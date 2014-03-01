@@ -6,65 +6,32 @@
 #include "voxel/voxelrenderer.h"
 #include "hud.h"
 #include "objecthudget.h"
-#include "geometry/transform.h"
-#include "voxel/voxelcluster.h"
-#include "voxel/voxel.h"
 
-
-class ObjectHudgetCorner: public VoxelCluster {
-public:
-    ObjectHudgetCorner(ObjectHudgetVoxels* objectHudgetVoxels, const glm::ivec3& baseOffset):
-        VoxelCluster(0.02f),
-        m_objectHudgetVoxels(objectHudgetVoxels),
-        m_baseOffset(baseOffset)
-    {
-        int color = 0x66AAFF;
-
-        int edgeLength = 3;
-        addVoxel(new Voxel(glm::ivec3(edgeLength, edgeLength, 0), color));
-        transform().setCenter(glm::vec3(edgeLength, edgeLength, 0));
-
-        for(int i = 1; i < edgeLength; i++) {
-            addVoxel(new Voxel(glm::ivec3(-baseOffset.x * i + edgeLength, edgeLength, 0), color));
-            addVoxel(new Voxel(glm::ivec3(edgeLength, baseOffset.y * i + edgeLength, 0), color));
-        }
-    }
-
-    void draw() {
-        ObjectHudget* objectHudget = m_objectHudgetVoxels->hudget();
-
-        glm::vec3 euler = glm::vec3(-m_baseOffset.y, -m_baseOffset.x, 0) * (m_objectHudgetVoxels->openingAngle());
-        glm::vec3 direction = GeometryHelper::quatFromViewDirection(objectHudget->localDirection()) * glm::quat(euler) * glm::vec3(0, 0, -1);
-
-        transform().setPosition(objectHudget->worldPosition(direction));
-        transform().setOrientation(objectHudget->worldOrientation(direction));
-
-        VoxelRenderer::instance()->draw(*this);
-    }
-
-
-protected:
-    ObjectHudgetVoxels* m_objectHudgetVoxels;
-    glm::ivec3 m_baseOffset;
-};
+#include "objecthudgetcornervoxels.h"
 
 
 ObjectHudgetVoxels::ObjectHudgetVoxels(ObjectHudget* hudget):
     m_hudget(hudget),
-    m_openingAngle(0.0f)
+    m_openingAngle(0.0f),
+    m_targetHightlight(false),
+    m_relationType(FactionRelationType::Neutral)
 {
     setupCorners();
 }
 
 ObjectHudgetVoxels::~ObjectHudgetVoxels() {
-    delete m_lu;
-    delete m_lb;
-    delete m_ru;
-    delete m_rb;
 }
 
 ObjectHudget* ObjectHudgetVoxels::hudget() {
     return m_hudget;
+}
+
+void ObjectHudgetVoxels::setTargetHightlight(bool targetHightlight) {
+    m_targetHightlight = targetHightlight;
+}
+
+void ObjectHudgetVoxels::setRelationType(FactionRelationType relationType) {
+    m_relationType = relationType;
 }
 
 float ObjectHudgetVoxels::openingAngle() const {
@@ -76,16 +43,31 @@ void ObjectHudgetVoxels::setOpeningAngle(float openingAngle) {
 }
 
 void ObjectHudgetVoxels::draw() {
-    m_lu->draw();
-    m_lb->draw();
-    m_ru->draw();
-    m_rb->draw();
+    int index = 2 * ((int)m_relationType) + (m_targetHightlight ? 1 : 0) ;
+
+    m_lu[index]->draw();
+    m_lb[index]->draw();
+    m_ru[index]->draw();
+    m_rb[index]->draw();
 }
 
 void ObjectHudgetVoxels::setupCorners() {
-    m_lu = new ObjectHudgetCorner(this, glm::ivec3(-1, 1, 0));
-    m_lb = new ObjectHudgetCorner(this, glm::ivec3(-1, -1, 0));
-    m_ru = new ObjectHudgetCorner(this, glm::ivec3(1, 1, 0));
-    m_rb = new ObjectHudgetCorner(this, glm::ivec3(1, -1, 0));
+    addCornerSet(0, 0xFF0000);
+    addCornerSet(1, 0xCC6600);
+    addCornerSet(2, 0x66AAFF);
+    addCornerSet(3, 0x33AA00);
+    addCornerSet(4, 0x11CC00);
+}
+
+void ObjectHudgetVoxels::addCornerSet(int index, uint32_t color) {
+    m_lu[index*2].reset(new ObjectHudgetCornerVoxels(this, glm::ivec3(-1, 1, 0), color, false));
+    m_lb[index*2].reset(new ObjectHudgetCornerVoxels(this, glm::ivec3(-1, -1, 0), color, false));
+    m_ru[index*2].reset(new ObjectHudgetCornerVoxels(this, glm::ivec3(1, 1, 0), color, false));
+    m_rb[index*2].reset(new ObjectHudgetCornerVoxels(this, glm::ivec3(1, -1, 0), color, false));
+
+    m_lu[index*2+1].reset(new ObjectHudgetCornerVoxels(this, glm::ivec3(-1, 1, 0), color, true));
+    m_lb[index*2+1].reset(new ObjectHudgetCornerVoxels(this, glm::ivec3(-1, -1, 0), color, true));
+    m_ru[index*2+1].reset(new ObjectHudgetCornerVoxels(this, glm::ivec3(1, 1, 0), color, true));
+    m_rb[index*2+1].reset(new ObjectHudgetCornerVoxels(this, glm::ivec3(1, -1, 0), color, true));
 }
 

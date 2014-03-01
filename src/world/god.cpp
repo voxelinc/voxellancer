@@ -68,7 +68,7 @@ void God::spawn() {
 
         std::list<VoxelCollision> collisions = worldObject->collisionDetector().checkCollisions();
 
-        if (collisions.size() > 0){
+        if (!collisions.empty()){
             World::instance()->worldTree().remove(worldObject->collisionDetector().geode());
             glow::warning("Failed to spawn %;", worldObject->objectInfo().name());
             worldObject->onSpawnFail();

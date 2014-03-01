@@ -8,7 +8,7 @@
 class FrameBuffer;
 class Camera;
 
-/* 
+/*
    a step that adds something to the current frame
    can be postprocessing, geometry or any other effect
 */
@@ -22,5 +22,5 @@ public:
 
 protected:
     std::string m_name;
-
 };
+

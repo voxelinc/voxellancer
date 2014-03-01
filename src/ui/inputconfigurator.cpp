@@ -7,7 +7,8 @@
 #include <glow/logging.hpp>
 
 #include "ui/hud/hud.h"
-#include "inputhandler.h"
+
+#include "gamestate/gameplay/running/gameplayrunninginput.h"
 
 
 InputConfigurator::InputConfigurator(std::vector<ActionKeyMapping*>* actions, SecondaryInputValues *secondaryInputValues, Property<float>* deadzone, HUD* hud):
@@ -18,23 +19,6 @@ InputConfigurator::InputConfigurator(std::vector<ActionKeyMapping*>* actions, Se
     prop_deadzoneGamepad = deadzone;
     primaryConfigurationState = -1;
     secondaryConfigurationState = -1;
-}
-
-bool InputConfigurator::setActionInputMapping(ActionKeyMapping* action, bool primary) {
-    if (primary) {
-        if (isLastPrimaryInputValid()) {
-            action->primaryMapping.set(lastPrimaryInput);
-            lastPrimaryInput = InputMapping();
-            return true;
-        }
-    } else {
-        if (isLastSecondaryInputValid()) {
-            action->secondaryMapping.set(lastSecondaryInput);
-            lastSecondaryInput = InputMapping();
-            return true;
-        }
-    }
-    return false;
 }
 
 bool InputConfigurator::isSecondaryInput() {

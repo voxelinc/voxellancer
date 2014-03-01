@@ -8,7 +8,7 @@
 
 
 CockpitVoxel::CockpitVoxel(const glm::ivec3& gridCell, int index):
-    SpecialVoxel(gridCell, index, Property<int>("voxels.cockpit.color"), Property<float>("voxels.cockpit.mass"), Property<float>("voxels.cockpit.hp"))
+    SpecialVoxel(gridCell, index, Property<uint32_t>::get("voxels.cockpit.color"), Property<float>::get("voxels.cockpit.mass"), Property<float>::get("voxels.cockpit.hp"))
 {
 }
 

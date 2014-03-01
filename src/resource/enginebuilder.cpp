@@ -2,8 +2,8 @@
 
 #include "property/property.h"
 
-#include "worldobject/components/engine.h"
-#include "worldobject/components/engines/genericengine.h"
+#include "equipment/engine.h"
+#include "equipment/engines/genericengine.h"
 
 
 EngineBuilder::EngineBuilder(const std::string& name):
@@ -20,6 +20,7 @@ Engine* EngineBuilder::build() {
 
     genericEngine->setVisuals(Visuals::fromProperties(m_name + ".visuals"));
     genericEngine->setPower(EnginePower::fromProperties(m_name  + ".general"));
+    genericEngine->setEngineSound(SoundProperties::fromProperties(m_name + ".sound"));
 
     return genericEngine;
 }

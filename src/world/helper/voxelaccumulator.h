@@ -12,8 +12,8 @@ class VoxelAccumulator
 public:
     void clear();
     void parse(const Accumulatable& accumulatable);
-    void parse(const std::list<Accumulatable> &accumulatables);
-    void dontAffect(const std::list<Voxel*> voxels);
+    void parse(const std::list<Accumulatable>& accumulatables);
+    void dontAffect(const std::list<Voxel*>& voxels);
 
     std::list<Accumulatable>& accumulatables();
 

@@ -4,10 +4,23 @@
 
 #include <glm/glm.hpp>
 
+#include "ai/character.h"
+
+#include "factions/factionrelation.h"
+#include "factions/factionmatrix.h"
+#include "factions/playerfaction.h"
+
 #include "utils/geometryhelper.h"
+
+#include "world/world.h"
+
+#include "worldobject/worldobject.h"
+#include "worldobject/ship.h"
+
+#include "player.h"
+
 #include "hudobjectdelegate.h"
 #include "hud.h"
-#include "worldobject/worldobject.h"
 #include "voxel/voxelclusterbounds.h"
 #include "objecthudgetvoxels.h"
 
@@ -23,12 +36,32 @@ ObjectHudget::ObjectHudget(HUD* hud, HUDObjectDelegate* objectDelegate):
 ObjectHudget::~ObjectHudget() = default;
 
 void ObjectHudget::update(float deltaSec) {
+    bool targetHighlight = false;
+    FactionRelationType relationType = FactionRelationType::Neutral;
     WorldObject* worldObject = m_objectDelegate->worldObject();
 
     if(worldObject) {
         calculateOpeningAngle();
         pointToWorldPoint(worldObject->transform().position());
+
+        if(m_hud->player()->ship()) {
+            if(worldObject == m_hud->player()->ship()->targetObject()) {
+                targetHighlight = true;
+            }
+            // TODO: Replace the following two lines with proper WorldObjectType mechanism
+            Ship* ship = dynamic_cast<Ship*>(worldObject);
+            if (ship) {
+                Faction* faction = ship->character()->faction();
+
+                if (faction) {
+                    relationType = faction->relationTo(World::instance()->factionMatrix().playerFaction())->type();
+                }
+            }
+        }
     }
+
+    m_voxels->setTargetHightlight(targetHighlight);
+    m_voxels->setRelationType(relationType);
 }
 
 void ObjectHudget::draw() {

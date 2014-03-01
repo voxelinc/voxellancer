@@ -25,7 +25,7 @@ void ImpulseAccumulator::parse(const std::list<Impulse> &impulses) {
     }
 }
 
-void ImpulseAccumulator::dontImpulse(const std::list<Voxel*> voxels) {
+void ImpulseAccumulator::dontImpulse(const std::list<Voxel*>& voxels) {
     std::set<const Voxel*> dontImpulseSet(voxels.begin(), voxels.end());
 
     for(auto i = m_voxelImpulseMap.begin(); i != m_voxelImpulseMap.end();) {
