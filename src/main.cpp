@@ -149,8 +149,11 @@ static void loadWorldObjectConfigs() {
     PropertyManager::instance()->load("data/worldobjects/eagle.ini", "eagle");
     PropertyManager::instance()->load("data/worldobjects/specialbasicship.ini", "specialbasicship");
     PropertyManager::instance()->load("data/worldobjects/normandy.ini", "normandy");
-    PropertyManager::instance()->load("data/worldobjects/daedalus.ini", "daedalus");
+    PropertyManager::instance()->load("data/worldobjects/bc304.ini", "bc304");
+    PropertyManager::instance()->load("data/worldobjects/f301.ini", "f301");
+    PropertyManager::instance()->load("data/worldobjects/f302.ini", "f302");
     PropertyManager::instance()->load("data/worldobjects/gunbullet.ini", "gunbullet");
+    PropertyManager::instance()->load("data/worldobjects/railgunbullet.ini", "railgunbullet");
     PropertyManager::instance()->load("data/worldobjects/snowball.ini", "snowball");
     PropertyManager::instance()->load("data/worldobjects/hornet.ini", "hornet");
 }
@@ -165,6 +168,7 @@ static void loadEquipmentConfigs() {
     PropertyManager::instance()->load("data/equipment/engines/piratethruster.ini", "piratethruster");
     PropertyManager::instance()->load("data/equipment/engines/rocketthrustermk1.ini", "rocketthrustermk1");
     PropertyManager::instance()->load("data/equipment/weapons/gun.ini", "gun");
+    PropertyManager::instance()->load("data/equipment/weapons/railgun.ini", "railgun");
     PropertyManager::instance()->load("data/equipment/weapons/snowcanon.ini", "snowcanon");
     PropertyManager::instance()->load("data/equipment/weapons/hornetlauncher.ini", "hornetlauncher");
 }
