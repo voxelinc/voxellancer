@@ -2,12 +2,14 @@
 
 #include <cassert>
 
+#include "worldtree/worldtreenode.h"
+
 #include "voxelparticledata.h"
 #include "voxelparticleengine.h"
 
 
-VoxelParticleRemoveCheck::VoxelParticleRemoveCheck(VoxelParticleEngine* world):
-    m_world(world),
+VoxelParticleRemoveCheck::VoxelParticleRemoveCheck(VoxelParticleEngine* engine):
+    m_engine(engine),
     m_currentIndex(0),
     m_interval(1.0f)
 {
@@ -27,10 +29,10 @@ void VoxelParticleRemoveCheck::update(float deltaSec) {
     assert(m_interval > 0.0f);
 
     // In case the datacount decreased
-    m_currentIndex = std::min(m_currentIndex, m_world->particleDataCount());
+    m_currentIndex = std::min(m_currentIndex, m_engine->particleDataCount());
 
-    int checkCount = static_cast<int>((deltaSec * m_world->particleDataCount()) / m_interval);
-    checkCount = std::min(checkCount, m_world->particleDataCount());
+    int checkCount = static_cast<int>((deltaSec * m_engine->particleDataCount()) / m_interval);
+    checkCount = std::min(checkCount, m_engine->particleDataCount());
 
     if (isParallel(checkCount)) {
         performChecksParallel(checkCount);
@@ -38,7 +40,7 @@ void VoxelParticleRemoveCheck::update(float deltaSec) {
         performChecksSequential(checkCount);
     }
 
-    m_currentIndex = (m_currentIndex + checkCount) % m_world->particleDataCount();
+    m_currentIndex = (m_currentIndex + checkCount) % m_engine->particleDataCount();
 }
 
 void VoxelParticleRemoveCheck::performChecksParallel(int checkCount) {
@@ -48,8 +50,8 @@ void VoxelParticleRemoveCheck::performChecksParallel(int checkCount) {
 
 #pragma omp parallel for
     for (int i = 0; i < checkCount; i++) {
-        int bufferIndex = (firstIndex + i) % m_world->particleDataCount();
-        VoxelParticleData* particle = m_world->particleData(bufferIndex);
+        int bufferIndex = (firstIndex + i) % m_engine->particleDataCount();
+        VoxelParticleData* particle = m_engine->particleData(bufferIndex);
 
         if(!particle->dead) { // Needed, otherwise dead Particles might be free'd twice
             deadParticles[i] = check(particle);
@@ -58,8 +60,8 @@ void VoxelParticleRemoveCheck::performChecksParallel(int checkCount) {
 
     for(int i = 0; i < checkCount; i++) {
         if(deadParticles[i]) {
-            int bufferIndex = (firstIndex + i) % m_world->particleDataCount();
-            m_world->removeParticle(bufferIndex);
+            int bufferIndex = (firstIndex + i) % m_engine->particleDataCount();
+            m_engine->removeParticle(bufferIndex);
         }
     }
 }
@@ -68,13 +70,12 @@ void VoxelParticleRemoveCheck::performChecksSequential(int checkCount) {
     int firstIndex = m_currentIndex;
 
     for (int i = 0; i < checkCount; i++) {
-        int bufferIndex = (firstIndex + i) % m_world->particleDataCount();
-        VoxelParticleData* particle = m_world->particleData(bufferIndex);
+        int bufferIndex = (firstIndex + i) % m_engine->particleDataCount();
+        VoxelParticleData* particle = m_engine->particleData(bufferIndex);
 
         if(!particle->dead && check(particle)) { // Needed, otherwise dead Particles might be free'd twice
-            m_world->removeParticle(bufferIndex);
+            m_engine->removeParticle(bufferIndex);
         }
     }
-
 }
 

@@ -6,15 +6,19 @@
 #include <stdint.h>
 
 
+class WorldTreeNode;
+
 struct VoxelParticleData {
     VoxelParticleData():
         dead(true),
+        worldTreeNode(nullptr),
         deathTime(0.0f) // The particle never lived
     {
     }
 
-    // Extra attribute, not necessarily used by the shader
+    // Extra attributes, not necessarily used by the shader
     bool dead;
+    WorldTreeNode* worldTreeNode;
 
     glm::vec3 creationPosition;
     glm::vec3 creationEulers;

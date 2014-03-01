@@ -11,7 +11,7 @@ class VoxelParticleEngine;
 */
 class VoxelParticleRemoveCheck {
 public:
-    VoxelParticleRemoveCheck(VoxelParticleEngine* world);
+    VoxelParticleRemoveCheck(VoxelParticleEngine* engine);
 
     float interval() const;
     void setInterval(float interval);
@@ -20,7 +20,7 @@ public:
 
 
 protected:
-    VoxelParticleEngine* m_world;
+    VoxelParticleEngine* m_engine;
     float m_interval;
     int m_currentIndex;
 

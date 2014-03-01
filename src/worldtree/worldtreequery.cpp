@@ -22,7 +22,8 @@ WorldTreeQuery::WorldTreeQuery(WorldTree* worldTree, const AbstractShape* shape,
     m_nodeHint(nodeHint),
     m_collisionFilter(collisionFilter),
     m_shape(shape),
-    m_queryInterrupted(false)
+    m_queryInterrupted(false),
+    m_lastNode(nullptr)
 {
 
 }
@@ -95,6 +96,10 @@ std::unordered_set<WorldObject*> WorldTreeQuery::intersectingWorldObjects() {
     return result;
 }
 
+WorldTreeNode* WorldTreeQuery::lastNode() {
+    return m_lastNode;
+}
+
 WorldTreeNode* WorldTreeQuery::getQueryRoot(WorldTreeNode* node) const {
     if(node == nullptr) {
         node = m_nodeHint;
@@ -117,9 +122,10 @@ WorldTreeNode* WorldTreeQuery::getQueryRoot(WorldTreeNode* node) const {
     }
 }
 
-void WorldTreeQuery::query(WorldTreeNode* node, std::function<void(WorldTreeGeode*)> onGeodeInteraction) {
+void WorldTreeQuery::query(WorldTreeNode* node, const std::function<void(WorldTreeGeode*)>& onGeodeInteraction) {
+    m_lastNode = node;
+
     if(node->isLeaf()) {
-        assert(!node->geodes().empty());
         for(WorldTreeGeode* geode : node->geodes()) {
             assert(geode->aabb().intersects(node->aabb()));
             assert(geode->worldObject() != nullptr);
@@ -136,7 +142,7 @@ void WorldTreeQuery::query(WorldTreeNode* node, std::function<void(WorldTreeGeod
         }
     }
     else {
-        for(WorldTreeNode* subnode : node->subnodes()) {
+        for(WorldTreeNode* subnode : node->activeSubnodes()) {
             if(m_shape->nearTo(subnode->aabb())) {
                 query(subnode, onGeodeInteraction);
 

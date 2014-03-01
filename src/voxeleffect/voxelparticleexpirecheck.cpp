@@ -17,7 +17,7 @@ void VoxelParticleExpireCheck::update(float deltaSec) {
 }
 
 bool VoxelParticleExpireCheck::check(VoxelParticleData* particleData) {
-    return particleData->deathTime <= m_world->time();
+	return particleData->deathTime <= m_engine->time();
 }
 
 /*
