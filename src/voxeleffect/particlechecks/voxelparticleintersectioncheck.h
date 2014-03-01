@@ -26,7 +26,6 @@ protected:
     const VoxelParticleEngine& m_particleEngine;
     Player* m_player;
     Sphere m_Sphere;
-    Property<float> m_maxCheckDistance;
 
     virtual void beforeCheck();
 

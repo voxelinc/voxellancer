@@ -37,7 +37,8 @@ GamePlay::GamePlay(Game* game) :
     m_runningState->pauseTrigger().setTarget(new TriggeredTransition(m_runningState, m_pausedState));
     m_pausedState->continueTrigger().setTarget(new TriggeredTransition(m_pausedState, m_runningState));
     World::instance()->particleEngine().setPlayer(*m_player);
-}
+}    
+
 
 Game* GamePlay::game() {
     return m_game;
@@ -84,6 +85,7 @@ void GamePlay::loadScenario(int i) {
         m_scenario.reset(new BaseScenario(this));
     }
     m_scenario->load();
+    World::instance()->particleEngine().setPlayer(*m_player);
 }
 
 void GamePlay::update(float deltaSec) {

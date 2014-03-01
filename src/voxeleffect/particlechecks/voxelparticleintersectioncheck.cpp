@@ -21,7 +21,6 @@
 
 VoxelParticleIntersectionCheck::VoxelParticleIntersectionCheck(const VoxelParticleEngine& engine) :
     m_particleEngine(engine),
-    m_maxCheckDistance("particle.maxIntersectionCheckDistance"),
     m_player(nullptr)
 {
 }

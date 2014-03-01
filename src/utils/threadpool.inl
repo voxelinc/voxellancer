@@ -4,27 +4,26 @@
 template<typename T>
 ThreadPool<T>::ThreadPool(int threadcount, int chunksize) :
     m_chunksize(chunksize),
-    m_worker(threadcount),
+    m_workers(threadcount),
     m_tasks(nullptr),
     m_exit(false),
-    m_running(),
-    m_runningWorkers(),
+    m_startWorkers(),
+    m_stoppedWorkers(),
     m_mutex(),
     m_index()
 {
-    m_running = false;
-    m_runningWorkers = 0;
-    for (int i = 0; i < m_worker.size(); i++) {
-        m_worker[i] = std::thread(&ThreadPool<T>::worker, this);
+    m_startWorkers = 0;
+    m_stoppedWorkers = m_workers.size();
+    for (int i = 0; i < m_workers.size(); i++) {
+        m_workers[i] = std::thread(&ThreadPool<T>::worker, this);
     }
 }
 
 template<typename T>
 ThreadPool<T>::~ThreadPool() {
     m_exit = true;
-    m_running = true;
-    m_startSignal.notify_all();
-    for (std::thread& thread : m_worker) {
+    startWorkers();
+    for (std::thread& thread : m_workers) {
         thread.join();
     }
 }
@@ -41,29 +40,38 @@ void ThreadPool<T>::map(std::function<void(T&)> function, std::vector<T>& data, 
     }
     m_function = function;
     m_tasks = &data;
-    m_index = start;
+    m_currentIndex = start;
     m_endIndex = end;
 
-    m_running = true;
-    m_startSignal.notify_all();
-    
+    startWorkers();
+
     std::mutex m;
     std::unique_lock<std::mutex> lock(m);
-    m_stopSignal.wait(lock);
+    m_stopSignal.wait(lock); // wait for workers to finish
+}
+
+template<typename T>
+void ThreadPool<T>::startWorkers() {
+    assert(m_stoppedWorkers == m_workers.size());
+    assert(m_startWorkers == 0);
+    m_stoppedWorkers = 0;
+    m_startWorkers = m_workers.size();
+    m_startSignal.notify_all();
 }
 
 template<typename T>
 void ThreadPool<T>::worker() {
     while (true) {
         std::unique_lock<std::mutex> lock(m_mutex);
-        m_startSignal.wait(lock, [&] { return m_running == true; });
+        m_startSignal.wait(lock, [&] { return m_startWorkers > 0; });
         if (m_exit) {
             return;
         }
-        m_runningWorkers++;
+        m_startWorkers--;
         lock.unlock();
         
-        // std::cout << "work" << std::this_thread::get_id() << std::endl;
+        //std::cout << "work" << std::this_thread::get_id() << std::endl;
+        //std::this_thread::sleep_for(std::chrono::seconds(1));
 
         int task;
         while ((task = getTask()) >= 0) {
@@ -74,8 +82,7 @@ void ThreadPool<T>::worker() {
         }
 
         lock.lock();
-        m_running = false;
-        if (--m_runningWorkers == 0) {
+        if (++m_stoppedWorkers == m_workers.size()) {
             m_stopSignal.notify_one();
         }
     }
@@ -83,8 +90,8 @@ void ThreadPool<T>::worker() {
 
 template<typename T>
 int ThreadPool<T>::getTask() {
-    // get current value and increment
-    int index = m_index.fetch_add(m_chunksize);
+    // get current value and increment by chunksize
+    int index = m_currentIndex.fetch_add(m_chunksize);
 
     if (index >= m_endIndex) {
         return -1;
