@@ -6,6 +6,7 @@
 #include "world/world.h"
 #include "ui/objectinfo.h"
 #include "physics/physics.h"
+#include "sound/soundmanager.h"
 
 
 Bullet::Bullet():
@@ -23,14 +24,5 @@ Bullet::Bullet():
 
 void Bullet::update(float deltaSec) {
     Projectile::update(deltaSec);
-}
-
-void Bullet::onCollision() {
-    World::instance()->god().scheduleRemoval(this);
-    spawnExplosion();
-}
-
-void Bullet::onSpawnFail() {
-    spawnExplosion();
 }
 

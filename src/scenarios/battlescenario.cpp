@@ -102,7 +102,6 @@ void BattleScenario::populateBattle(int numberOfEnemies1, int numberOfEnemies2) 
 
 void BattleScenario::spawnCapital(const std::vector<Ship*>& enemies) {
     Ship *ship = WorldObjectBuilder("normandy").buildShip();
-  //  ship->setEngineSound(SoundManager::current()->create("data/sound/Rocket Thrusters.ogg"));
     ship->objectInfo().setShowOnHud(true);
     ship->objectInfo().setCanLockOn(true);
 

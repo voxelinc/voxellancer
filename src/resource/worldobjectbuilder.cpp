@@ -48,34 +48,36 @@ WorldObject* WorldObjectBuilder::build() {
 }
 
 Bullet* WorldObjectBuilder::buildBullet() {
-    GenericBullet* bullet = newWorldObject<GenericBullet>();
+    GenericBullet* bullet = makeWorldObject<GenericBullet>();
 
     bullet->setEmissiveness(Property<float>(m_name + ".general.emissiveness", 0.0f));
     bullet->setLifetime(Property<float>(m_name + ".general.lifetime"));
+    bullet->setHitSound(SoundProperties::fromProperties(m_name + ".hitsound"));
 
     return bullet;
 }
 
 Rocket* WorldObjectBuilder::buildRocket() {
-    GenericRocket* rocket = newWorldObject<GenericRocket>();
+    GenericRocket* rocket = makeWorldObject<GenericRocket>();
 
     rocket->setLifetime(Property<float>(m_name + ".general.lifetime"));
+    rocket->setHitSound(SoundProperties::fromProperties(m_name + ".explosionsound"));
 
     return rocket;
 }
 
 Ship* WorldObjectBuilder::buildShip() {
-    GenericShip* ship = newWorldObject<GenericShip>();
+    GenericShip* ship = makeWorldObject<GenericShip>();
     return ship;
 }
 
 WorldObject* WorldObjectBuilder::buildWorldObject() {
-    GenericWorldObject* worldObject = newWorldObject<GenericWorldObject>();
+    GenericWorldObject* worldObject = makeWorldObject<GenericWorldObject>();
     return worldObject;
 }
 
 template<typename WorldObjectType>
-WorldObjectType* WorldObjectBuilder::newWorldObject() {
+WorldObjectType* WorldObjectBuilder::makeWorldObject() {
     static_assert(std::is_base_of<WorldObject, WorldObjectType>::value, "WorldObjectType needs to be derived from WorldObject");
 
     WorldObjectType* worldObject = new WorldObjectType();

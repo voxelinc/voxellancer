@@ -12,7 +12,7 @@
 
 
 FuelVoxel::FuelVoxel(const glm::ivec3& gridCell, int index):
-    SpecialVoxel(gridCell, index, Property<int>("voxels.fuel.color"), Property<float>("voxels.fuel.mass"), Property<float>("voxels.fuel.hp"))
+    SpecialVoxel(gridCell, index, Property<uint32_t>::get("voxels.fuel.color"), Property<float>::get("voxels.fuel.mass"), Property<float>::get("voxels.fuel.hp"))
 {
 }
 
