@@ -6,12 +6,11 @@
 #include <glm/gtx/quaternion.hpp>
 
 #include "hudget.h"
-#include "objecthudgetvoxels.h"
-#include "arrowhudgetvoxels.h"
 
 
 class ObjectHudgetVoxels;
 class HUDObjectDelegate;
+class ArrowHudgetVoxels;
 
 class ObjectHudget: public Hudget {
 public:
@@ -30,8 +29,8 @@ public:
 
 protected:
     HUDObjectDelegate* m_objectDelegate;
-    ObjectHudgetVoxels m_objectVoxels;
-    ArrowHudgetVoxels m_arrowVoxels;
+    std::unique_ptr<ObjectHudgetVoxels> m_objectVoxels;
+    std::unique_ptr<ArrowHudgetVoxels> m_arrowVoxels;
 
     bool m_targeted;
     void updateTargeted();

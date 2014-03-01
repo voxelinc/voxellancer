@@ -2,10 +2,23 @@
 
 #include "randvec.h"
 #include "worldobject/worldobject.h"
+#include "geometry/ray.h"
 
+bool GeometryHelper::intersectRectangle(const Ray* ray, const glm::vec3 p, const glm::vec3 q, const glm::vec3 r, const glm::vec3 s, glm::vec3& intersection = glm::vec3(0)) {
+    if (glm::intersectRayTriangle<glm::vec3>(ray->origin(), ray->direction(), p, r, s, intersection)) {
+        return true;
+    }
+    if (glm::intersectRayTriangle<glm::vec3>(ray->origin(), ray->direction(), p, q, r, intersection)) {
+        return true;
+    }
+    return false;
+
+}
 
 glm::vec3 GeometryHelper::plane(const glm::vec3& p, const glm::vec3& q, const glm::vec3& r) {
-    return glm::cross(q - p, r - p);
+    glm::vec3 plane = glm::cross(q - p, r - p);
+    assert(std::isfinite(plane.x) && std::isfinite(plane.y) && std::isfinite(plane.z));
+    return plane;
 }
 
 float GeometryHelper::angleBetween(const glm::vec3& u, const glm::vec3& v) {

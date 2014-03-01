@@ -65,10 +65,6 @@ void ObjectHudgetVoxels::setupCorners() {
 
 
 bool ObjectHudgetVoxels::isAt(const Ray& ray) const {
-    glm::vec3 intersectionPoint;
-    bool isAt = false;
-    isAt |= glm::intersectRayTriangle<glm::vec3>(ray.origin(), ray.direction(), m_rb->get()->transform().position(), m_lb->get()->transform().position(), m_lu->get()->transform().position(), intersectionPoint);
-    isAt |= glm::intersectRayTriangle<glm::vec3>(ray.origin(), ray.direction(), m_ru->get()->transform().position(), m_lb->get()->transform().position(), m_lu->get()->transform().position(), intersectionPoint);
-    return isAt;
+    return GeometryHelper::intersectRectangle(&ray, m_lu->get()->position(), m_ru->get()->position(), m_rb->get()->position(), m_lb->get()->position());
 }
 

@@ -14,7 +14,10 @@
 #include "hudobjectdelegate.h"
 #include "hud.h"
 #include "voxel/voxelclusterbounds.h"
+#include "hudobjectdelegate.h"
 #include "objecthudgetvoxels.h"
+#include "arrowhudgetvoxels.h"
+
 #include "display/viewer.h"
 #include "display/view.h"
 
@@ -22,8 +25,8 @@
 ObjectHudget::ObjectHudget(HUD* hud, HUDObjectDelegate* objectDelegate):
     Hudget(hud),
     m_objectDelegate(objectDelegate),
-    m_objectVoxels(this),
-    m_arrowVoxels(this)
+    m_objectVoxels(new ObjectHudgetVoxels(this)),
+    m_arrowVoxels(new ArrowHudgetVoxels(this))
 {
     m_insideFov = false;
 }
@@ -47,15 +50,15 @@ void ObjectHudget::update(float deltaSec) {
         }
     }
     if (!m_insideFov) {
-        m_arrowVoxels.updateDirection(closestPointInsideFov());
+        m_arrowVoxels->updateDirection(closestPointInsideFov());
     }
-    m_objectVoxels.setTargetHightlight(targetHighlight);
+    m_objectVoxels->setTargetHightlight(targetHighlight);
 }
 
 void ObjectHudget::draw() {
-    m_objectVoxels.draw();
+    m_objectVoxels->draw();
     if (!m_insideFov) {
-        m_arrowVoxels.draw();
+        m_arrowVoxels->draw();
     }
 
 }
@@ -69,7 +72,7 @@ void ObjectHudget::calculateOpeningAngle() {
 
     alpha = std::max(alpha, 0.04f); // Hack, set minimum size
 
-    m_objectVoxels.setOpeningAngle(alpha);
+    m_objectVoxels->setOpeningAngle(alpha);
 }
 
 HUDObjectDelegate* ObjectHudget::objectDelegate() {
@@ -78,9 +81,9 @@ HUDObjectDelegate* ObjectHudget::objectDelegate() {
 
 bool ObjectHudget::isAt(const Ray& ray) const {
     if (!m_insideFov) {
-        return m_arrowVoxels.isAt(ray) || m_objectVoxels.isAt(ray);
+        return m_arrowVoxels->isAt(ray) || m_objectVoxels->isAt(ray);
     }
-    return m_objectVoxels.isAt(ray);
+    return m_objectVoxels->isAt(ray);
 }
 
 bool ObjectHudget::isInsideFov() {
@@ -132,7 +135,7 @@ void ObjectHudget::updateTargeted() {
     bool currentlyTargeted = m_hud->target() == m_objectDelegate->worldObject();
     if (m_targeted != currentlyTargeted) {
         m_targeted = currentlyTargeted;
-        m_arrowVoxels.setTargeted(m_targeted);
+        m_arrowVoxels->setTargeted(m_targeted);
     }
 }
 
