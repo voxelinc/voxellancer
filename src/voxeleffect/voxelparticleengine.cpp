@@ -2,11 +2,13 @@
 
 #include "voxelparticledata.h"
 #include "voxelparticlerenderer.h"
-#include "voxelparticleremover.h"
-#include "voxelparticleremovecheck.h"
-#include "voxelparticleintersectioncheck.h"
-#include "voxelparticleexpirecheck.h"
 #include "voxelparticlesetup.h"
+
+#include "particlechecks/voxelparticleremover.h"
+#include "particlechecks/voxelparticleremovecheck.h"
+#include "particlechecks/voxelparticleintersectioncheck.h"
+#include "particlechecks/voxelparticleexpirecheck.h"
+
 #include "world/world.h"
 
 
@@ -39,6 +41,7 @@ VoxelParticleData* VoxelParticleEngine::particleData(int index) {
 }
 
 void VoxelParticleEngine::addParticle(const VoxelParticleSetup& particleSetup) {
+
     if(m_freeParticleBufferIndices.empty()) {
         setBufferSize(m_cpuParticleBuffer.size() * 2);
     }
@@ -54,8 +57,9 @@ void VoxelParticleEngine::removeParticle(int index) {
     assert(index < m_cpuParticleBuffer.size());
 
     VoxelParticleData& particle = m_cpuParticleBuffer[index];
-    particle.status = VoxelParticleData::Status::Removed;
-    m_freeParticleBufferIndices.push(index);
+    //particle.status = VoxelParticleData::Status::Removed;
+    //m_freeParticleBufferIndices.push(index);
+    particle.color = 0xff0000;
 
     particleChanged(index);
 }

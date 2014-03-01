@@ -45,6 +45,6 @@ protected:
     int m_currentIndex;
 
     void performChecks(int checkCount);
-    void check(VoxelParticleData& particle);
+    bool isDead(VoxelParticleData& particle);
 };
 

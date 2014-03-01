@@ -1,8 +1,7 @@
 #include "voxelparticleexpirecheck.h"
 
-#include "voxelparticledata.h"
-
-#include "voxelparticleengine.h"
+#include "voxeleffect/voxelparticledata.h"
+#include "voxeleffect/voxelparticleengine.h"
 
 
 VoxelParticleExpireCheck::VoxelParticleExpireCheck(const VoxelParticleEngine& engine):

@@ -4,8 +4,9 @@
 
 #include "utils/threadpool.h"
 
-#include "voxelparticledata.h"
-#include "voxelparticleengine.h"
+#include "voxeleffect/voxelparticledata.h"
+#include "voxeleffect/voxelparticleengine.h"
+
 #include "voxelparticleremovecheck.h"
 
 
@@ -42,34 +43,38 @@ void VoxelParticleRemover::performChecks(int checkCount) {
 
     // glow::debug("check %; %;", firstIndex, checkCount);
     if (m_multithreaded.get()) {
-        m_threadPool->map([&](VoxelParticleData& p) { check(p); }, m_particleEngine->particleDataVector(), firstIndex, firstIndex + checkCount);
+        m_threadPool->map([&](VoxelParticleData& p) { isDead(p); }, m_particleEngine->particleDataVector(), firstIndex, firstIndex + checkCount);
+
+        for (int i = firstIndex; i < firstIndex + checkCount; i++) {
+            int index = i % m_particleEngine->particleDataCount();
+            if (m_particleEngine->particleData(index)->status == VoxelParticleData::Status::Dead) {
+                m_particleEngine->removeParticle(index);
+            }
+        }
     } else {
         for (int i = firstIndex; i < firstIndex + checkCount; i++) {
             int index = i % m_particleEngine->particleDataCount();
             VoxelParticleData* particle = m_particleEngine->particleData(index);
-            check(*particle);
+            if (isDead(*particle)) {
+                m_particleEngine->removeParticle(index);
+            }
         }
-    }
 
-    for (int i = firstIndex; i < firstIndex + checkCount; i++) {
-        int index = i % m_particleEngine->particleDataCount();
-        if (m_particleEngine->particleData(index)->status == VoxelParticleData::Status::Dead) {
-            m_particleEngine->removeParticle(index);
-        }
     }
 }
 
-void VoxelParticleRemover::check(VoxelParticleData& particle) {
+bool VoxelParticleRemover::isDead(VoxelParticleData& particle) {
     if (particle.status != VoxelParticleData::Status::Alive) {
-        return;
+        return false;
     }
 
     for (std::shared_ptr<VoxelParticleRemoveCheck>& checker : m_checker) {
         if (checker->isDead(particle)) {
             particle.status = VoxelParticleData::Status::Dead;
-            return;
+            return true;
         }
     }
+    return false;
 }
 
 void VoxelParticleRemover::addCheck(std::shared_ptr<VoxelParticleRemoveCheck> checker) {
