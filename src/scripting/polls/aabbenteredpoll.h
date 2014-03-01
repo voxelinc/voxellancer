@@ -4,7 +4,7 @@
 
 #include "geometry/aabb.h"
 
-#include "worldobject/handle/handle.h"
+#include "utils/handle/handle.h"
 
 #include "eventpoll.h"
 

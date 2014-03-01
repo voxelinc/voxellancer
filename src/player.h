@@ -7,7 +7,7 @@
 
 #include "equipment/enginestate.h"
 
-#include "worldobject/handle/handle.h"
+#include "utils/handle/handle.h"
 
 
 class Camera;

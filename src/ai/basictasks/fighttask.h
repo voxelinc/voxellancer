@@ -3,8 +3,10 @@
 #include <vector>
 #include <glm/glm.hpp>
 
-#include "worldobject/handle/handle.h"
 #include "ai/aitask.h"
+
+#include "utils/handle/handle.h"
+
 
 class Ship;
 class WorldObject;

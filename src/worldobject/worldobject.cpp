@@ -7,7 +7,7 @@
 
 #include "utils/tostring.h"
 
-#include "worldobject/handle/handle.h"
+#include "utils/handle/handle.h"
 #include "physics/physics.h"
 #include "ui/objectinfo.h"
 #include "voxel/voxel.h"

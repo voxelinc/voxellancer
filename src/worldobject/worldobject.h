@@ -3,8 +3,9 @@
 #include <list>
 #include <memory>
 
+#include "utils/handle/handle.h"
+
 #include "voxel/voxelcluster.h"
-#include "worldobject/handle/handle.h"
 
 
 

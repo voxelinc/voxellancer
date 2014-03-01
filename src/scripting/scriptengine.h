@@ -4,8 +4,6 @@
 #include <memory>
 #include <unordered_map>
 
-#include <selene.h>
-
 #include "utils/timer.h"
 #include "utils/timermanager.h"
 
@@ -40,31 +38,31 @@ public:
     void start();
 
     /*
-        Stops the ScriptEngine continuing to update after start is called again.
+        Stops the ScriptEngine, continuing to update after start is called again.
     */
     void stop();
 
-    void registerTimer(Timer *timer);
-
-    /*
-        Registers a worldObject and returns a key to access the worldObject from
-        a script
-    */
-    int registerWorldObject(WorldObject* worldObject);
-
-    WorldObject* getWorldObject(int handle);
-    int getWorldObjectHandle(WorldObject* worldObject);
-
-    /*
-        Adds the WorldObject (checking if it was previously added via registerWorldObject()
-        Called by God
-    */
-    void addWorldObject(WorldObject* worldObject);
-
-    /*
-        Called by God
-    */
-    void removeWorldObject(WorldObject* worldObject);
+//    void registerTimer(Timer *timer);
+//
+//    /*
+//        Registers a worldObject and returns a key to access the worldObject from
+//        a script
+//    */
+//    int registerWorldObject(WorldObject* worldObject);
+//
+//    WorldObject* getWorldObject(int handle);
+//    int getWorldObjectHandle(WorldObject* worldObject);
+//
+//    /*
+//        Adds the WorldObject (checking if it was previously added via registerWorldObject()
+//        Called by God
+//    */
+//    void addWorldObject(WorldObject* worldObject);
+//
+//    /*
+//        Called by God
+//    */
+//    void removeWorldObject(WorldObject* worldObject);
 
 
     int registerEventPoll(EventPoll* eventPoll);

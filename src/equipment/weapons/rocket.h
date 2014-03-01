@@ -5,8 +5,9 @@
 #include "ai/aitask.h"
 #include "ai/boardcomputer.h"
 
+#include "utils/handle/handle.h"
+
 #include "worldobject/worldobject.h"
-#include "worldobject/handle/handle.h"
 
 #include "projectile.h"
 
