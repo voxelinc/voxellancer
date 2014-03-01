@@ -39,7 +39,7 @@ WorldObject::~WorldObject() {
 }
 
 WorldObjectType WorldObject::objectType() const {
-    return WorldObjectType::WorldObject;
+    return WorldObjectType::Other;
 }
 
 CollisionDetector& WorldObject::collisionDetector() {
