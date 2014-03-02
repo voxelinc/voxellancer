@@ -17,3 +17,4 @@ void Scriptable::setScriptKey(int key) {
     assert(m_key < 0);
     m_key = key;
 }
+

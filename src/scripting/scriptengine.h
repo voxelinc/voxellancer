@@ -45,6 +45,9 @@ public:
     void registerScriptable(Scriptable* scriptable);
     void unregisterScriptable(Scriptable* scriptable);
 
+    Scriptable* getScriptable(int key);
+    WorldObject* getWorldObject(int key);
+
 //    void registerTimer(Timer *timer);
 //
 //    /*
@@ -75,15 +78,12 @@ public:
 
 protected:
     World* m_world;
-    int m_handleKeyIncrementor;
+
     std::list<std::unique_ptr<GamePlayScript>> m_scripts;
-
-    bool m_running;
-
     std::vector<std::unique_ptr<IScriptHandle>> m_handles;
 
-
-
+    int m_handleKeyIncrementor;
+    bool m_running;
 
 
     /*std::unordered_map<int, std::unique_ptr<EventPoll>> m_eventPolls;

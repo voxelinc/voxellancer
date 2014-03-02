@@ -6,6 +6,8 @@
 
 #include "collision/collisionfilter.h"
 
+#include "ui/objectinfo.h"
+
 
 Ship::Ship():
     Ship(new CollisionFilter(this))
@@ -20,7 +22,8 @@ Ship::Ship(CollisionFilter* collisionFilter):
     m_shipHandle(Handle<Ship>(this)),
     m_targetObjectHandle(Handle<WorldObject>(nullptr))
 {
-
+    m_objectInfo->setShowOnHud(true);
+    m_objectInfo->setCanLockOn(true);
 }
 
 Ship::~Ship() {
@@ -29,6 +32,10 @@ Ship::~Ship() {
 
 WorldObjectType Ship::objectType() const {
     return WorldObjectType::Ship;
+}
+
+ScriptableType Ship::scriptableType() const {
+    return ScriptableType::Ship;
 }
 
 void Ship::update(float deltaSec) {

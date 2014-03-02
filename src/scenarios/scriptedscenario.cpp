@@ -45,7 +45,7 @@ ScriptedScenario::~ScriptedScenario() = default;
 void ScriptedScenario::populateWorld() {
     Ship *playerShip = WorldObjectBuilder("mox").buildShip();
     playerShip->transform().setPosition(glm::vec3(0, 0, 10));
-    playerShip->objectInfo().setName("basicship");
+    playerShip->objectInfo().setName("mox");
     playerShip->objectInfo().setShowOnHud(false);
     playerShip->objectInfo().setCanLockOn(false);
     m_world->god().scheduleSpawn(playerShip);

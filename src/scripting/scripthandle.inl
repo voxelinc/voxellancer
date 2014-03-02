@@ -19,6 +19,6 @@ void ScriptHandle<T>::invalidate() {
 
 template<typename T>
 Scriptable* ScriptHandle<T>::scriptable() {
-
+    return m_handle.get();
 }
 

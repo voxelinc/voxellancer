@@ -12,6 +12,7 @@
 #include "scenarios/battlescenario.h"
 #include "scenarios/gamescenario.h"
 #include "scenarios/frozengamescenario.h"
+#include "scenarios/scriptedscenario.h"
 
 #include "sound/soundmanager.h"
 
@@ -29,7 +30,7 @@ GamePlay::GamePlay(Game* game):
     m_pausedState(new GamePlayPaused(this)),
     m_scene(new GamePlayScene(this, *m_player)),
     m_soundManager(new SoundManager()),
-    m_scenario(new GameScenario(this))
+    m_scenario(new ScriptedScenario(this, "data/scripts/scenarios/spawntest.lua"))
 {
     setInitialSubState(m_runningState);
 

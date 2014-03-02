@@ -5,6 +5,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 
+#include <glow/logging.h>
+
 #include "gamestate/gameplay/gameplay.h"
 
 #include "geometry/aabb.h"
@@ -39,29 +41,29 @@ GamePlayScript::GamePlayScript(GamePlay* gamePlay, ScriptEngine* scriptEngine):
 void GamePlayScript::load(const std::string& path) {
     Script::load(path);
 
-  /*  m_lua->Register("playerShip", std::function<int()>([&] () {
+   m_lua->Register("playerShip", std::function<int()>([&] () {
        return apiPlayerShip();
     }));
     m_lua->Register("createShip", std::function<int(std::string)>([&] (std::string name) {
         return apiCreateShip(name);
     }));
-    m_lua->Register("spawn", std::function<int(int)>([&] (int handle) {
-        return apiSpawn(handle);
+    m_lua->Register("spawn", std::function<bool(int)>([&] (int key) {
+        return apiSpawn(key);
     }));
-    m_lua->Register("setPosition", std::function<int(int, float, float, float)>([&] (int handle, float x, float y, float z) {
-        return apiSetPosition(handle, x, y, z);
+    m_lua->Register("setPosition", std::function<int(int, float, float, float)>([&] (int key, float x, float y, float z) {
+        return apiSetPosition(key, x, y, z);
     }));
-    m_lua->Register("setOrientation", std::function<int(int, float, float, float)>([&] (int handle, float x, float y, float z) {
-        return apiSetOrientation(handle, x, y, z);
+    m_lua->Register("setOrientation", std::function<int(int, float, float, float)>([&] (int key, float x, float y, float z) {
+        return apiSetOrientation(key, x, y, z);
     }));
-    m_lua->Register("position", std::function<glm::vec3(int)>([&] (int handle) {
-        return apiPosition(handle);
+    m_lua->Register("position", std::function<glm::vec3(int)>([&] (int key) {
+        return apiPosition(key);
     }));
-    m_lua->Register("orientation", std::function<glm::vec3(int)>([&] (int handle) {
-        return apiOrientation(handle);
+    m_lua->Register("orientation", std::function<glm::vec3(int)>([&] (int key) {
+        return apiOrientation(key);
     }));
-    m_lua->Register("createSingleShotTimer", std::function<int(std::string, float)>([&] (std::string callback, float delta) {
-        return apiCreateSingleShotTimer(callback, delta);
+  /*   m_lua->Register("createSingleShotTimer", std::function<int(std::string, float)>([&] (std::string callback, float delta) {
+       return apiCreateSingleShotTimer(callback, delta);
     }));
     m_lua->Register("createLoopingTimer", std::function<int(std::string, float)>([&] (std::string callback, float delta) {
         return apiCreateLoopingTimer(callback, delta);
@@ -71,30 +73,38 @@ void GamePlayScript::load(const std::string& path) {
     }));
 */
 }
-/*
+
 int GamePlayScript::apiPlayerShip() {
-    return m_scriptEngine->getWorldObjectHandle(m_game->player().ship());
+    return m_gamePlay->player().ship()->scriptKey();
 }
 
 int GamePlayScript::apiCreateShip(const std::string& name) {
-    Ship *ship = WorldObjectBuilder(name).buildShip();
-    ship->objectInfo().setShowOnHud(true);
-    ship->objectInfo().setCanLockOn(true);
+    Ship* ship = WorldObjectBuilder(name).buildShip();
 
-    return m_scriptEngine->registerWorldObject(ship);
+    if (ship) {
+        m_scriptEngine->registerScriptable(ship);
+        return ship->scriptKey();
+    } else {
+        glow::warning("ScriptEngine: Couldn't create ship '%;'", name);
+        return -1;
+    }
 }
 
-int GamePlayScript::apiSpawn(int handle) {
-    WorldObject* worldObject = m_scriptEngine->getWorldObject(handle);
+bool GamePlayScript::apiSpawn(int key) {
+    WorldObject* worldObject = m_scriptEngine->getWorldObject(key);
 
     if (worldObject) {
-        World::instance()->god().scheduleSpawn(worldObject);
+        World::instance()->god().scheduleSpawn(SpawnRequest(worldObject, false));
+        World::instance()->god().spawn();
+
+        return worldObject->spawnState() == SpawnState::Spawned;
     }
-    return -1;
+
+    return false;
 }
 
-int GamePlayScript::apiSetPosition(int handle, float x, float y, float z) {
-    WorldObject* worldObject = m_scriptEngine->getWorldObject(handle);
+int GamePlayScript::apiSetPosition(int key, float x, float y, float z) {
+    WorldObject* worldObject = m_scriptEngine->getWorldObject(key);
 
     if (worldObject) {
         worldObject->transform().setPosition(glm::vec3(x, y, z));
@@ -102,8 +112,9 @@ int GamePlayScript::apiSetPosition(int handle, float x, float y, float z) {
     return 0;
 }
 
-int GamePlayScript::apiSetOrientation(int handle, float x, float y, float z) {
-    WorldObject* worldObject = m_scriptEngine->getWorldObject(handle);
+
+int GamePlayScript::apiSetOrientation(int key, float x, float y, float z) {
+    WorldObject* worldObject = m_scriptEngine->getWorldObject(key);
 
     if (worldObject) {
         worldObject->transform().setOrientation(glm::quat(glm::vec3(x, y, z)));
@@ -111,8 +122,8 @@ int GamePlayScript::apiSetOrientation(int handle, float x, float y, float z) {
     return 0;
 }
 
-glm::vec3 GamePlayScript::apiPosition(int handle) {
-    WorldObject* worldObject = m_scriptEngine->getWorldObject(handle);
+glm::vec3 GamePlayScript::apiPosition(int key) {
+    WorldObject* worldObject = m_scriptEngine->getWorldObject(key);
 
     if (worldObject) {
         return worldObject->transform().position();
@@ -120,8 +131,8 @@ glm::vec3 GamePlayScript::apiPosition(int handle) {
     return glm::vec3(0.0f);
 }
 
-glm::vec3 GamePlayScript::apiOrientation(int handle) {
-    WorldObject* worldObject = m_scriptEngine->getWorldObject(handle);
+glm::vec3 GamePlayScript::apiOrientation(int key) {
+    WorldObject* worldObject = m_scriptEngine->getWorldObject(key);
 
     if (worldObject) {
         return glm::eulerAngles(worldObject->transform().orientation());
@@ -129,6 +140,7 @@ glm::vec3 GamePlayScript::apiOrientation(int handle) {
     return glm::vec3(0.0f);
 }
 
+/*
 int GamePlayScript::apiCreateSingleShotTimer(const std::string& callback, float delta) {
     m_scriptEngine->registerTimer(new SingleShotTimer(delta, [=] {
         m_lua->call(callback);

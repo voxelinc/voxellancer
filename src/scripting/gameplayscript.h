@@ -28,16 +28,16 @@ protected:
     /*
         API for gameplayscripts below
     */
-  /*  int apiPlayerShip();
+   int apiPlayerShip();
 
     int apiCreateShip(const std::string& name);
-    int apiSpawn(int handle);
+    bool apiSpawn(int key);
 
-    int apiSetPosition(int handle, float x, float y, float z);
-    int apiSetOrientation(int handle, float x, float y, float z);
-    glm::vec3 apiPosition(int handle);
-    glm::vec3 apiOrientation(int handle);
-
+    int apiSetPosition(int key, float x, float y, float z);
+    int apiSetOrientation(int key, float x, float y, float z);
+    glm::vec3 apiPosition(int key);
+    glm::vec3 apiOrientation(int key);
+/*
     int apiCreateSingleShotTimer(const std::string& callback, float delta);
     int apiCreateLoopingTimer(const std::string& callback, float delta);
 

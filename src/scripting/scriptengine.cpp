@@ -5,6 +5,7 @@
 
 #include <glow/logging.h>
 
+#include "worldobject/ship.h"
 #include "worldobject/worldobject.h"
 
 #include "gameplayscript.h"
@@ -42,12 +43,20 @@ void ScriptEngine::stop() {
 }
 
 void ScriptEngine::registerScriptable(Scriptable* scriptable) {
+    if (scriptable->scriptKey() > 0) {
+        // This is legit indeed and happens when an object is created by a script
+        return;
+    }
+
     m_handles.resize(m_handleKeyIncrementor + 1);
 
     IScriptHandle* scriptHandle = nullptr;
     switch(scriptable->scriptableType()) {
         case ScriptableType::WorldObject:
             scriptHandle = new ScriptHandle<WorldObject>(dynamic_cast<WorldObject*>(scriptable));
+        break;
+        case ScriptableType::Ship:
+            scriptHandle = new ScriptHandle<Ship>(dynamic_cast<Ship*>(scriptable));
         break;
         default:
             assert(0);
@@ -62,6 +71,35 @@ void ScriptEngine::registerScriptable(Scriptable* scriptable) {
 void ScriptEngine::unregisterScriptable(Scriptable* scriptable) {
     if (scriptable->scriptKey() > 0) {
         m_handles[scriptable->scriptKey()]->invalidate();
+    }
+}
+
+Scriptable* ScriptEngine::getScriptable(int key) {
+    if (key < 0 || key >= m_handles.size()) {
+        glow::warning("ScriptEngine: script-key '%;' is not valid", key);
+        return nullptr;
+    } else {
+        Scriptable* scriptable = m_handles[key]->scriptable();
+        if (!scriptable) {
+            glow::warning("ScriptEngine: the script-key '%;' points to a removed object, next time check with valid()", key);
+            return nullptr;
+        } else {
+            return scriptable;
+        }
+    }
+}
+
+WorldObject* ScriptEngine::getWorldObject(int key) {
+    Scriptable* scriptable = getScriptable(key);
+    if (!scriptable) {
+        return nullptr;
+    }
+
+    if (scriptable->scriptableType() == ScriptableType::WorldObject || scriptable->scriptableType() == ScriptableType::Ship) {
+        return static_cast<WorldObject*>(scriptable);
+    } else {
+        glow::warning("ScriptEngine: script-key '%;' of type '%;' is no WorldObject", key, static_cast<int>(scriptable->scriptableType()));
+        return nullptr;
     }
 }
 
