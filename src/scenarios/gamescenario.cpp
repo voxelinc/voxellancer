@@ -84,7 +84,7 @@ void GameScenario::populateWorld() {
 
     int lmember_count = 2;
     for (int i = 0; i < lmember_count; i++) {
-        Ship *follower = WorldObjectBuilder("basicship").buildShip();
+        Ship *follower = WorldObjectBuilder("f301").buildShip();
         follower->character()->setFaction(World::instance()->factionMatrix().pirateFaction());
         follower->transform().setPosition(glm::vec3(100 * (-lmember_count / 2.0f + i), 200, 0));
         follower->objectInfo().setName("member");

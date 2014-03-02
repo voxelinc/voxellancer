@@ -3,7 +3,14 @@
 #include "propertyregex.h"
 
 
-glm::vec2 PropertyConverter::vec2Converter(const std::string &s) {
+float PropertyConverter::floatConverter(const std::string& s) {
+    if (s.length() > 4 && s.substr(s.length() - 4, 4) == " DEG")
+        return glm::radians(std::stof(s.substr(0, s.length() - 4)));
+    else
+        return std::stof(s);
+}
+
+glm::vec2 PropertyConverter::vec2Converter(const std::string& s) {
     regexns::smatch matches;
     regexns::regex_match(s, matches, vec2_regex());
 
@@ -13,7 +20,7 @@ glm::vec2 PropertyConverter::vec2Converter(const std::string &s) {
     return glm::vec2(x, y);
 }
 
-glm::vec3 PropertyConverter::vec3Converter(const std::string &s) {
+glm::vec3 PropertyConverter::vec3Converter(const std::string& s) {
     regexns::smatch matches;
     regexns::regex_match(s, matches, vec3_regex());
 
@@ -24,7 +31,7 @@ glm::vec3 PropertyConverter::vec3Converter(const std::string &s) {
     return glm::vec3(x, y, z);
 }
 
-glm::vec4 PropertyConverter::vec4Converter(const std::string &s) {
+glm::vec4 PropertyConverter::vec4Converter(const std::string& s) {
     regexns::smatch matches;
     regexns::regex_match(s, matches, vec4_regex());
 
@@ -36,7 +43,7 @@ glm::vec4 PropertyConverter::vec4Converter(const std::string &s) {
     return glm::vec4(x, y, z, w);
 }
 
-std::list<std::string> PropertyConverter::listConverter(const std::string &s) {
+std::list<std::string> PropertyConverter::listConverter(const std::string& s) {
     regexns::smatch matches;
     regexns::regex_match(s, matches, list_regex());
     std::list<std::string> result;
@@ -52,7 +59,7 @@ std::list<std::string> PropertyConverter::listConverter(const std::string &s) {
     return result;
 }
 
-InputMapping PropertyConverter::inputMappingConverter(const std::string &s) {
+InputMapping PropertyConverter::inputMappingConverter(const std::string& s) {
     regexns::smatch matches;
     regexns::regex_match(s, matches, input_mapping_regex());
 

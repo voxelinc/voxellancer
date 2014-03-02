@@ -15,7 +15,7 @@
 
 
 PropertyManager::PropertyManager():
-    m_floatProperties(new PropertyCollection<float>(float_regex(), [](std::string s) { return std::stof(s); })),
+    m_floatProperties(new PropertyCollection<float>(float_regex(), PropertyConverter::floatConverter)),
     m_intProperties(new PropertyCollection<int>(int_regex(), [](std::string s) { return std::stoi(s, nullptr, 0); })), // base=0 allows adding 0x to parse hex
     m_uint32Properties(new PropertyCollection<uint32_t>(uint32_regex(), [](std::string s) { return std::stoul(s, nullptr, 0); })), // base=0 allows adding 0x to parse hex
     m_charProperties(new PropertyCollection<char>(char_regex(), [](std::string s) { return s[0]; })),
