@@ -70,8 +70,10 @@ void ObjectHudget::update(float deltaSec) {
     if (!m_insideFov) {
         m_arrowVoxels->updateDirection(closestPointInsideFov());
     }
+
     m_objectVoxels->setTargetHightlight(targetHighlight);
     m_objectVoxels->setRelationType(relationType);
+    m_objectVoxels->update(deltaSec);
 }
 
 void ObjectHudget::draw() {

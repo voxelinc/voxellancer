@@ -23,7 +23,6 @@ void Projectile::setCreator(WorldObject* creator) {
     CollisionFilterIgnoringCreator* newCollisionFilter = new CollisionFilterIgnoringCreator(
         this,
         m_creator,
-        collisionFilter().collisionFilterClass(),
         collisionFilter().collisionMask()
     );
 

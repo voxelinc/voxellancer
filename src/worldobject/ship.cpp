@@ -8,7 +8,7 @@
 
 
 Ship::Ship():
-    Ship(new CollisionFilter(this, CollisionFilterClass::Ship))
+    Ship(new CollisionFilter(this))
 {
 }
 
@@ -25,6 +25,10 @@ Ship::Ship(CollisionFilter* collisionFilter):
 
 Ship::~Ship() {
     m_shipHandle.invalidate();
+}
+
+WorldObjectType Ship::objectType() const {
+    return WorldObjectType::Ship;
 }
 
 void Ship::update(float deltaSec) {
