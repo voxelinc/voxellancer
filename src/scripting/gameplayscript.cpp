@@ -62,9 +62,10 @@ void GamePlayScript::load(const std::string& path) {
     m_lua->Register("orientation", std::function<glm::vec3(int)>([&] (int key) {
         return apiOrientation(key);
     }));
-  /*   m_lua->Register("createSingleShotTimer", std::function<int(std::string, float)>([&] (std::string callback, float delta) {
+     m_lua->Register("createSingleShotTimer", std::function<int(std::string, float)>([&] (std::string callback, float delta) {
        return apiCreateSingleShotTimer(callback, delta);
     }));
+/*
     m_lua->Register("createLoopingTimer", std::function<int(std::string, float)>([&] (std::string callback, float delta) {
         return apiCreateLoopingTimer(callback, delta);
     }));
@@ -140,7 +141,6 @@ glm::vec3 GamePlayScript::apiOrientation(int key) {
     return glm::vec3(0.0f);
 }
 
-/*
 int GamePlayScript::apiCreateSingleShotTimer(const std::string& callback, float delta) {
     m_scriptEngine->registerTimer(new SingleShotTimer(delta, [=] {
         m_lua->call(callback);
@@ -148,6 +148,7 @@ int GamePlayScript::apiCreateSingleShotTimer(const std::string& callback, float 
     return 0;
 }
 
+/*
 int GamePlayScript::apiCreateLoopingTimer(const std::string& callback, float delta) {
     m_scriptEngine->registerTimer(new LoopingTimer(delta, [=] {
         m_lua->call(callback);
