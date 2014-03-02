@@ -66,7 +66,6 @@ void ObjectHudgetVoxels::draw() {
 }
 
 bool ObjectHudgetVoxels::isAt(const Ray& ray) const {
-    int index = 2 * ((int)m_relationType) + (m_targetHightlight ? 1 : 0);
-    return GeometryHelper::intersectRectangle(&ray, m_lu[index * 2].get()->position(), m_ru[index * 2].get()->position(), m_rb[index * 2].get()->position(), m_lb[index * 2].get()->position());
+    return GeometryHelper::intersectRectangle(&ray, m_lu.get()->position(), m_ru.get()->position(), m_rb.get()->position(), m_lb.get()->position());
 }
 
