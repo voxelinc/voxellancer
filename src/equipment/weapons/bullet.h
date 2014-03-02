@@ -13,6 +13,8 @@ class Bullet: public Projectile {
 public:
     Bullet();
 
+    virtual WorldObjectType objectType() const override;
+
     virtual void update(float deltaSec) override;
 
 protected:
