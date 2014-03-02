@@ -1,11 +1,14 @@
-#include "ui/targetselector.h"
+#include "targetselector.h"
 
 #include <algorithm>
 
-#include "player.h"
+#include "ui/objectinfo.h"
+
 #include "worldobject/ship.h"
+
 #include "world/world.h"
-#include "objectinfo.h"
+
+#include "player.h"
 
 
 TargetSelector::TargetSelector(Player& player):

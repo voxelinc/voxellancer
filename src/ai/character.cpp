@@ -15,6 +15,10 @@ Character::Character(Ship& ship, Faction* faction):
 {
 }
 
+Ship& Character::ship() {
+    return m_ship;
+}
+
 Faction* Character::faction() {
     return m_faction;
 }

@@ -11,6 +11,8 @@ class Character {
 public:
     Character(Ship& ship, Faction* faction);
 
+    Ship& ship();
+
     Faction* faction();
     void setFaction(Faction* faction);
 
