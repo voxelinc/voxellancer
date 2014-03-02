@@ -29,11 +29,10 @@ enum class SpawnState {
 };
 
 enum class WorldObjectType {
-    WorldObject = 1 << 0,
-    Ship        = 1 << 1,
-    Bullet      = 1 << 2,
-    Rocket      = 1 << 3,
-    Other       = 1 << 4
+    Ship        = 1 << 0,
+    Bullet      = 1 << 1,
+    Rocket      = 1 << 2,
+    Other       = 1 << 3
 };
 
 class WorldObject : public VoxelCluster, public Scriptable {
