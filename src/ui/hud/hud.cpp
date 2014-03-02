@@ -46,7 +46,7 @@ HUD::HUD(Player* player, Viewer* viewer):
     m_crossHair(new CrossHair(this)),
     m_aimHelper(new AimHelperHudget(this)),
     m_scanner(new WorldTreeScanner()),
-    m_textfield(new TextFieldHudget(this, 20)),
+    m_textfield(new TextFieldHudget(this,"test",glm::vec3(0,0,-1))),
     m_target(nullptr)
 {
     m_scanner->setScanRadius(1050.0f);

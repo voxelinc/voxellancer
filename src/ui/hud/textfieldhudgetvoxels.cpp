@@ -66,10 +66,17 @@ bool TextFieldHudgetVoxels::isAt(const Ray& ray) const {
     bool isAt = false;
     isAt = isAt || glm::intersectRayTriangle<glm::vec3>(ray.origin(), ray.direction(), upperRight, upperLeft, lowerRight, intersectionPoint);
     isAt = isAt || glm::intersectRayTriangle<glm::vec3>(ray.origin(), ray.direction(), lowerRight, upperLeft, lowerLeft, intersectionPoint);
-    if (isAt) {
-        printf("hit\n");
-    } else {
-        printf("no hit\n");
-    }
     return isAt;
+}
+
+float TextFieldHudgetVoxels::width() {
+    return m_width;
+}
+
+float TextFieldHudgetVoxels::height() {
+    return m_height;
+}
+
+float TextFieldHudgetVoxels::scale() {
+    return m_scale;
 }

@@ -24,6 +24,10 @@ public:
     glm::vec3 upperRight();
     glm::vec3 lowerRight();
 
+    float width();
+    float height();
+    float scale();
+
 
 protected:
     TextFieldHudget* m_textFieldHudget;
