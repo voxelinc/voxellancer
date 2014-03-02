@@ -32,10 +32,11 @@ public:
 
     float hp() const;
     void applyDamage(float deltaHp);
+    virtual float damageForwardingDestructionDamage();
 
     float normalizedMass() const;
 
-    // These hooks apply only for WorldObjects and do not need to be called by pqure VoxelClusters
+    // These hooks apply only for WorldObjects and do not need to be called by pure VoxelClusters
     virtual void onRemoval();
     virtual void onDestruction();
 
