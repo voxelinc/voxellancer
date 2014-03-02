@@ -3,13 +3,9 @@
 #include <memory>
 #include <vector>
 
-<<<<<<< HEAD
-class Ray;
-=======
 #include "factions/factionrelation.h"
 
-
->>>>>>> d04ee8921f9dfbf7b952f1a5cf0cca1cbe75a42b
+class Ray;
 class ObjectHudget;
 class ObjectHudgetCornerVoxels;
 
@@ -34,10 +30,6 @@ public:
 
 protected:
     ObjectHudget* m_hudget;
-    std::unique_ptr<ObjectHudgetCornerVoxels> m_lu[2];
-    std::unique_ptr<ObjectHudgetCornerVoxels> m_lb[2];
-    std::unique_ptr<ObjectHudgetCornerVoxels> m_ru[2];
-    std::unique_ptr<ObjectHudgetCornerVoxels> m_rb[2];
 
     std::unique_ptr<ObjectHudgetCornerVoxels> m_lu[10];
     std::unique_ptr<ObjectHudgetCornerVoxels> m_lb[10];

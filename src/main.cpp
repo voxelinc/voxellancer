@@ -106,7 +106,7 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
 
 
 static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
-    game->inputHandler().mouseButtonCallback(button, action, mods);
+    game->gamePlay().running().input().mouseButtonCallback(button, action, mods);
 }
 
 void setGLFWCallbacks(GLFWwindow* window) {

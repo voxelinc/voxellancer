@@ -16,6 +16,7 @@ class Camera;
 class CameraHead;
 class HUD;
 class GamePlay;
+class CameraDolly;
 
 class Player {
 public:
@@ -27,6 +28,7 @@ public:
 
     void update(float deltaSec);
 
+    CameraDolly& cameraDolly();
     CameraHead& cameraHead();
     const CameraHead& cameraHead() const;
 

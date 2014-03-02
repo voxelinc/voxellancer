@@ -76,6 +76,7 @@ void ObjectHudgetVoxels::addCornerSet(int index, uint32_t color) {
 }
 
 bool ObjectHudgetVoxels::isAt(const Ray& ray) const {
-    return GeometryHelper::intersectRectangle(&ray, m_lu->get()->position(), m_ru->get()->position(), m_rb->get()->position(), m_lb->get()->position());
+    int index = 2 * ((int)m_relationType) + (m_targetHightlight ? 1 : 0);
+    return GeometryHelper::intersectRectangle(&ray, m_lu[index * 2].get()->position(), m_ru[index * 2].get()->position(), m_rb[index * 2].get()->position(), m_lb[index * 2].get()->position());
 }
 

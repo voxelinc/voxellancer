@@ -101,7 +101,7 @@ GamePlayRunningInput::GamePlayRunningInput(Player* player):
     m_currentTimePressed = 0;
 }
 
-void InputHandler::resizeEvent(const unsigned int width, const unsigned int height){
+void GamePlayRunningInput::resizeEvent(const unsigned int width, const unsigned int height) {
 	m_lastfocus = false; // through window resize everything becomes scrambled
 }
 
@@ -137,7 +137,7 @@ void GamePlayRunningInput::keyCallback(int key, int scancode, int action, int mo
 }
 
 
-void InputHandler::mouseButtonCallback(int button, int action, int mods) {
+void GamePlayRunningInput::mouseButtonCallback(int button, int action, int mods) {
     if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_RELEASE) {
         if (m_currentTimePressed > 0 && m_currentTimePressed < prop_maxClickTime) {
             m_player->hud().onClick(GLFW_MOUSE_BUTTON_RIGHT);
@@ -214,7 +214,7 @@ void GamePlayRunningInput::processUpdate() {
     processTargetSelectActions();
 }
 
-void GamePlayRunningInput::processMouseUpdate() {
+void GamePlayRunningInput::processMouseUpdate(float deltaSec) {
     // mouse handling
     double x, y;
     glfwGetCursorPos(glfwGetCurrentContext(), &x, &y);
