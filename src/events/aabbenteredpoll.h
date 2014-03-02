@@ -13,13 +13,14 @@ class AABBEnteredPoll : public EventPoll {
 public:
     AABBEnteredPoll(WorldObject* worldObject, const AABB& aabb, const std::function<void()>& callback);
 
-    virtual void update(float deltaSec);
-
 
 protected:
     Handle<WorldObject> m_worldObject;
     AABB m_aabb;
 
     bool m_lastEntered;
+
+
+    virtual bool poll() override;
 };
 

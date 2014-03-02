@@ -7,6 +7,10 @@
 
 #include <glow/logging.h>
 
+#include "events/eventpoller.h"
+#include "events/singleshottimer.h"
+#include "events/loopingtimer.h"
+
 #include "gamestate/gameplay/gameplay.h"
 
 #include "geometry/aabb.h"
@@ -14,13 +18,9 @@
 #include "resource/worldobjectbuilder.h"
 
 #include "scripting/elematelua/luawrapper.h"
-#include "scripting/polls/aabbenteredpoll.h"
 #include "scripting/scriptengine.h"
 
 #include "ui/objectinfo.h"
-
-#include "utils/singleshottimer.h"
-#include "utils/loopingtimer.h"
 
 #include "world/world.h"
 #include "world/god.h"
@@ -62,13 +62,17 @@ void GamePlayScript::load(const std::string& path) {
     m_lua->Register("orientation", std::function<glm::vec3(int)>([&] (int key) {
         return apiOrientation(key);
     }));
-     m_lua->Register("createSingleShotTimer", std::function<int(std::string, float)>([&] (std::string callback, float delta) {
+    m_lua->Register("setActive", std::function<int(int, bool)>([&] (int key, bool active) {
+       return apiSetActive(key, active);
+    }));
+    m_lua->Register("createSingleShotTimer", std::function<int(std::string, float)>([&] (std::string callback, float delta) {
        return apiCreateSingleShotTimer(callback, delta);
     }));
-/*
+
     m_lua->Register("createLoopingTimer", std::function<int(std::string, float)>([&] (std::string callback, float delta) {
         return apiCreateLoopingTimer(callback, delta);
     }));
+/*
     m_lua->Register("onAABBEntered", std::function<int(int, float, float, float, float, float, float, std::string)>([&] (int handle, float x1, float y1, float z1, float x2, float y2, float z2, std::string callback) {
         return apiOnAABBEntered(handle, glm::vec3(x1, y1, z1), glm::vec3(x2, y2, z2), callback);
     }));
@@ -141,21 +145,35 @@ glm::vec3 GamePlayScript::apiOrientation(int key) {
     return glm::vec3(0.0f);
 }
 
-int GamePlayScript::apiCreateSingleShotTimer(const std::string& callback, float delta) {
-    m_scriptEngine->registerTimer(new SingleShotTimer(delta, [=] {
-        m_lua->call(callback);
-    } ));
+int GamePlayScript::apiSetActive(int key, bool active) {
+    EventPoll* poll = m_scriptEngine->getEventPoll(key);
+
+    if (poll) {
+        poll->setActive(active);
+    }
+
     return 0;
+}
+
+int GamePlayScript::apiCreateSingleShotTimer(const std::string& callback, float delta) {
+    SingleShotTimer* timer = new SingleShotTimer(delta, [=] {
+        m_lua->call(callback);
+    } );
+
+    World::instance()->eventPoller().addPoll(timer);
+    return timer->scriptKey();
+}
+
+int GamePlayScript::apiCreateLoopingTimer(const std::string& callback, float delta) {
+    LoopingTimer* timer = new LoopingTimer(delta, [=] {
+        m_lua->call(callback);
+    } );
+
+    World::instance()->eventPoller().addPoll(timer);
+    return timer->scriptKey();
 }
 
 /*
-int GamePlayScript::apiCreateLoopingTimer(const std::string& callback, float delta) {
-    m_scriptEngine->registerTimer(new LoopingTimer(delta, [=] {
-        m_lua->call(callback);
-    } ));
-    return 0;
-}
-
 int GamePlayScript::apiOnAABBEntered(int handle, glm::vec3 llf, glm::vec3 urb, const std::string& callback) {
     WorldObject* worldObject = m_scriptEngine->getWorldObject(handle);
     if (worldObject) {

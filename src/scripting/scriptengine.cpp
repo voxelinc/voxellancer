@@ -5,6 +5,8 @@
 
 #include <glow/logging.h>
 
+#include "events/eventpoll.h"
+
 #include "worldobject/ship.h"
 #include "worldobject/worldobject.h"
 
@@ -58,6 +60,9 @@ void ScriptEngine::registerScriptable(Scriptable* scriptable) {
         case ScriptableType::Ship:
             scriptHandle = new ScriptHandle<Ship>(dynamic_cast<Ship*>(scriptable));
         break;
+        case ScriptableType::EventPoll:
+            scriptHandle = new ScriptHandle<EventPoll>(dynamic_cast<EventPoll*>(scriptable));
+        break;
         default:
             assert(0);
     }
@@ -103,6 +108,19 @@ WorldObject* ScriptEngine::getWorldObject(int key) {
     }
 }
 
+EventPoll* ScriptEngine::getEventPoll(int key) {
+    Scriptable* scriptable = getScriptable(key);
+    if (!scriptable) {
+        return nullptr;
+    }
+
+    if (scriptable->scriptableType() == ScriptableType::EventPoll) {
+        return static_cast<EventPoll*>(scriptable);
+    } else {
+        glow::warning("ScriptEngine: script-key '%;' of type '%;' is no EventPoll", key, static_cast<int>(scriptable->scriptableType()));
+        return nullptr;
+    }
+}
 
 //void ScriptEngine::registerTimer(Timer *timer) {
 //    m_timerManager.registerTimer(timer);

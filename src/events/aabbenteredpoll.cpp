@@ -1,5 +1,7 @@
 #include "aabbenteredpoll.h"
 
+#include <iostream>
+
 #include "voxel/voxelclusterbounds.h"
 
 #include "worldobject/worldobject.h"
@@ -11,13 +13,12 @@ AABBEnteredPoll::AABBEnteredPoll(WorldObject* worldObject, const AABB& aabb, con
     m_aabb(aabb),
     m_lastEntered(false)
 {
+    std::cout << "Created Enteredpoll "<<this << std::endl;
 }
 
-void AABBEnteredPoll::update(float deltaSec) {
-    bool entered = m_worldObject->bounds().aabb().intersects(m_aabb);
-    if (entered && !m_lastEntered) {
-        m_callback();
-    }
+bool AABBEnteredPoll::poll() {
+    bool entered = m_worldObject->bounds().aabb().intersects(m_aabb) && !m_lastEntered;
     m_lastEntered = entered;
+    return entered;
 }
 

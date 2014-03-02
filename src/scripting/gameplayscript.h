@@ -37,10 +37,13 @@ protected:
     int apiSetOrientation(int key, float x, float y, float z);
     glm::vec3 apiPosition(int key);
     glm::vec3 apiOrientation(int key);
-/*
+
+    int apiSetActive(int key, bool active);
+
     int apiCreateSingleShotTimer(const std::string& callback, float delta);
     int apiCreateLoopingTimer(const std::string& callback, float delta);
 
+/*
     int apiOnAABBEntered(int handle, glm::vec3 llf, glm::vec3 urb, const std::string& callback);
 
     WorldObject* getWorldObject(int handle);*/

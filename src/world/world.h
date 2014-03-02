@@ -4,6 +4,7 @@
 #include <unordered_set>
 
 
+class EventPoller;
 class FactionMatrix;
 class God;
 class Ship;
@@ -26,6 +27,7 @@ public:
     VoxelParticleEngine& voxelParticleEngine();
     ScriptEngine& scriptEngine();
     FactionMatrix& factionMatrix();
+    EventPoller& eventPoller();
 
     std::unordered_set<WorldObject*> &worldObjects();
     std::unordered_set<Ship*> &ships();
@@ -57,6 +59,7 @@ protected:
     std::unique_ptr<VoxelParticleEngine> m_voxelParticleEngine;
     std::unique_ptr<ScriptEngine> m_scriptEngine;
     std::unique_ptr<FactionMatrix> m_factionMatrix;
+    std::unique_ptr<EventPoller> m_eventPoller;
 
     std::unordered_set<WorldObject*> m_worldObjects;
     std::unordered_set<Ship*> m_ships;

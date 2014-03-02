@@ -1,13 +1,9 @@
 #pragma once
 
-#include <vector>
+#include <list>
 #include <memory>
 #include <unordered_map>
-
-#include "utils/timer.h"
-#include "utils/timermanager.h"
-
-#include "scripting/polls/eventpoll.h"
+#include <vector>
 
 #include "iscripthandle.h"
 
@@ -47,6 +43,7 @@ public:
 
     Scriptable* getScriptable(int key);
     WorldObject* getWorldObject(int key);
+    EventPoll* getEventPoll(int key);
 
 //    void registerTimer(Timer *timer);
 //

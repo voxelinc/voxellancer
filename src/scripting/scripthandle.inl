@@ -3,7 +3,7 @@
 
 template<typename T>
 ScriptHandle<T>::ScriptHandle(T* scriptable):
-    m_handle(scriptable)
+    m_handle(scriptable->handle())
 {
 }
 

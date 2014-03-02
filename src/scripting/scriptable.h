@@ -5,6 +5,7 @@ enum class ScriptableType {
     Squad,
     WorldObject,
     Ship,
+    EventPoll,
     Other
 };
 

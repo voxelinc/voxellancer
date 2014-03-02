@@ -1,4 +1,4 @@
-#include "timermanager.h"
+/*#include "timermanager.h"
 
 TimerManager::TimerManager() {
 
@@ -13,13 +13,7 @@ void TimerManager::registerTimer(Timer* timer) {
 }
 
 void TimerManager::update(float deltaSec) {
-    for (std::list<std::unique_ptr<Timer>>::iterator i = m_timers.begin(); i != m_timers.end(); ++i) {
-        Timer* timer = i->get();
 
-        timer->update(deltaSec);
-        if (!timer->ticking()) {
-            i = m_timers.erase(i);
-        }
-    }
 }
 
+*/

@@ -27,7 +27,7 @@ public:
 
     virtual void update(float deltaSec) override;
 
-    Handle<Ship> shipHandle();
+    Handle<Ship> handle();
 
     void setTargetObject(WorldObject* target);
     WorldObject* targetObject();
