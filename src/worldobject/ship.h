@@ -22,6 +22,8 @@ public:
     Ship();
     virtual ~Ship();
 
+    virtual WorldObjectType objectType() const override;
+
     virtual void update(float deltaSec) override;
 
     Handle<Ship> shipHandle();

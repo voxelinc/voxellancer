@@ -5,7 +5,7 @@
 
 class CollisionFilterIgnoringCreator : public CollisionFilter {
 public:
-    CollisionFilterIgnoringCreator(WorldObject* owner, WorldObject* creator, CollisionFilterClass collisionFilterClass, uint32_t collisionMask = 0xFFFFFFFF);
+    CollisionFilterIgnoringCreator(WorldObject* owner, WorldObject* creator, uint32_t collisionMask = 0xFFFFFFFF);
 
     virtual WorldObject* creator() const override;
 

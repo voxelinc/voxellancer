@@ -18,10 +18,19 @@ class ObjectInfo;
 class VoxelCollision;
 class WorldObjectComponents;
 
+enum class WorldObjectType {
+    Ship        = 1 << 0,
+    Bullet      = 1 << 1,
+    Rocket      = 1 << 2,
+    Other       = 1 << 3
+};
+
 class WorldObject : public VoxelCluster {
 public:
     WorldObject();
     virtual ~WorldObject();
+
+    virtual WorldObjectType objectType() const;
 
     CollisionFilter& collisionFilter();
     void setCollisionFilter(CollisionFilter* collisionFilter);

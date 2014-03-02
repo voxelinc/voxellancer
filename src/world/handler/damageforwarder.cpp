@@ -29,13 +29,19 @@ void DamageForwarder::forwardDamageImpacts(std::list<DamageImpact> &dampedDeadly
             glm::vec3 voxelVec = glm::normalize(static_cast<glm::vec3>(neighbour->gridCell() - deadVoxel->gridCell()));
             glm::vec3 damageImpactVec = glm::normalize(glm::inverse(m_currentWorldObject->transform().orientation()) * dampedDeadlyDamageImpact.damageVec());
 
+            float distanceFactor = 1.0f;
+            if ((voxelVec.x != 0 && voxelVec.y != 0) || (voxelVec.x != 0 && voxelVec.z != 0) || (voxelVec.y != 0 && voxelVec.z != 0)) {
+                // diagonals get less damage
+                distanceFactor = 0.5f;
+            }
+
             float dotProduct = glm::dot(damageImpactVec, voxelVec);
             glm::vec3 forwardedDamage = dampedDeadlyDamageImpact.damageVec() * forwardFactor(dotProduct, dampedDeadlyDamageImpact.fieldOfDamage(), neighbours.size());
-            glm::vec3 createdDamage = voxelVec * deadVoxel->destructionDamage();
+            glm::vec3 createdDamage = voxelVec * deadVoxel->damageForwardingDestructionDamage();
 
             DamageImpact forwarded(m_currentWorldObject, 
                                     neighbour, 
-                                    forwardedDamage + createdDamage, 
+                                    distanceFactor * (forwardedDamage + createdDamage), 
                                     dampedDeadlyDamageImpact.fieldOfDamage());
             m_damageImpactAccumulator.parse(forwarded);
         }
