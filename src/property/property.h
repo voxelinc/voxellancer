@@ -19,11 +19,14 @@ public:
     T* operator->();
 
     static T get(const std::string& name);
+    static T get(const std::string& name, const T& defaultvalue);
 
 
 protected:
     std::string m_name;
     T m_value;
 };
+
+
 
 #include "property.inl"

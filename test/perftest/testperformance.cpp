@@ -72,7 +72,6 @@ go_bandit([](){
         SoundManager soundManager;
 
         before_each([&]() {
-            soundManager.activate();
             World::reset();
             world = World::instance();
         });

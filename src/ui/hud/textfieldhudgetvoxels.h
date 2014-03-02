@@ -19,10 +19,10 @@ public:
     void draw();
 
     virtual bool isAt(const Ray& ray) const;
-    glm::vec3 upperLeft();
-    glm::vec3 lowerLeft();
-    glm::vec3 upperRight();
-    glm::vec3 lowerRight();
+    const glm::vec3 upperLeft() const;
+    const glm::vec3 lowerLeft() const;
+    const glm::vec3 upperRight() const;
+    const glm::vec3 lowerRight() const;
 
     float width();
     float height();

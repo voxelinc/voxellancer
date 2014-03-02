@@ -15,13 +15,12 @@ class Aimer;
 class Camera;
 class CameraHead;
 class HUD;
+class GamePlay;
 class CameraDolly;
-
-class Game;
 
 class Player {
 public:
-    Player(Game* game);
+    Player(GamePlay* gamePlay);
     ~Player();
 
     Ship* ship();
@@ -29,8 +28,10 @@ public:
 
     void update(float deltaSec);
 
-    CameraHead& cameraHead();
     CameraDolly& cameraDolly();
+    CameraHead& cameraHead();
+    const CameraHead& cameraHead() const;
+
     HUD& hud();
 
     void fire();
@@ -38,13 +39,11 @@ public:
     void move(const glm::vec3& vec);
     void rotate(const glm::vec3& euler);
 
-
     void selectTarget(bool next);
     void setTarget(WorldObject* target);
 
-
 protected:
-    Game* m_game;
+    GamePlay* m_gamePlay;
     Handle<Ship> m_ship;
     std::unique_ptr<CameraDolly> m_cameraDolly;
     std::unique_ptr<HUD> m_hud;

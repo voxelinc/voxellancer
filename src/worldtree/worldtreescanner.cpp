@@ -21,7 +21,10 @@
 WorldTreeScanner::WorldTreeScanner():
     m_scanInterval(0.0f),
     m_scanCountdown(0.0f),
-    m_scanRadius(0.0f)
+    m_scanRadius(0.0f),
+    m_worldObjects(),
+    m_foundWorldObjects(),
+    m_lostWorldObjects()
 {
 
 }
@@ -42,7 +45,7 @@ void WorldTreeScanner::setScanRadius(float scanRadius) {
     m_scanRadius = scanRadius;
 }
 
-std::list<WorldObject*> WorldTreeScanner::worldObjects() {
+const std::list<WorldObject*>& WorldTreeScanner::worldObjects() {
     return m_worldObjects;
 }
 
@@ -54,11 +57,11 @@ void WorldTreeScanner::update(float deltaSec, const glm::vec3& position) {
     update(deltaSec, nullptr, position);
 }
 
-std::list<WorldObject*> WorldTreeScanner::foundWorldObjects() {
+const std::list<WorldObject*>& WorldTreeScanner::foundWorldObjects() {
     return m_foundWorldObjects;
 }
 
-std::list<WorldObject*> WorldTreeScanner::lostWorldObjects() {
+const std::list<WorldObject*>& WorldTreeScanner::lostWorldObjects() {
     return m_lostWorldObjects;
 }
 

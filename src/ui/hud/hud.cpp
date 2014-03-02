@@ -53,7 +53,6 @@ HUD::HUD(Player* player, Viewer* viewer):
     m_hudgets.push_back(m_crossHair.get());
     m_hudgets.push_back(m_aimHelper.get());
     m_hudgets.push_back(m_textfield.get());
-    m_textfield->setContent("testes");
 }
 
 HUD::~HUD() = default;
@@ -96,7 +95,7 @@ void HUD::removeHudget(Hudget* hudget) {
 
 void HUD::addObjectDelegate(HUDObjectDelegate* objectDelegate) {
     m_objectDelegates[objectDelegate->worldObject()] = objectDelegate;
-    addHudget(objectDelegate->objectHudget());
+    addHudget(&objectDelegate->hudget());
 }
 
 void HUD::removeObjectDelegate(HUDObjectDelegate* objectDelegate) {
@@ -108,7 +107,7 @@ void HUD::removeObjectDelegate(HUDObjectDelegate* objectDelegate) {
     assert(i != m_objectDelegates.end());
     m_objectDelegates.erase(i);
 
-    removeHudget(objectDelegate->objectHudget());
+    removeHudget(&objectDelegate->hudget());
 
     delete objectDelegate;
 }
@@ -122,7 +121,6 @@ void HUD::setCrossHairOffset(const glm::vec2& mousePosition) {
     float fovy = m_viewer->view().fovy();
     float nearZ = m_viewer->view().zNear();
     float ar = m_viewer->view().aspectRatio();
-    float d = glm::length(glm::vec2(1.0f, nearZ));
 
     float nearPlaneHeight = 2 * std::tan(fovy / 2.0f);
     float nearPlaneWidth = nearPlaneHeight * ar;

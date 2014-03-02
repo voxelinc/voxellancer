@@ -1,6 +1,5 @@
 #include "propertymanager.h"
 
-#include "def_regex.h"
 
 #include <string>
 #include <fstream>
@@ -9,86 +8,10 @@
 #include <glow/logging.h>
 
 #include "propertycollection.h"
+#include "propertyconverter.h"
+#include "propertyregex.h"
+
 #include "input/inputmapping.h"
-
-
-// some string, some spaces, equals, some spaces, some string, maybe a comment
-static regexns::regex line_regex() { return regexns::regex(R"(^([\w\.]*) *= *(.+?)( *#.*)?$)"); }
-static regexns::regex title_regex() { return regexns::regex(R"(^\[(\w+)\])"); }
-
-static regexns::regex float_regex() { return regexns::regex(R"(^[-+]?\d*\.?\d*$)"); }
-static regexns::regex int_regex() { return regexns::regex(R"(^([-+]?\d+)|(0x([0-9a-fA-F]){1,7})$)"); } // stoi can also parse hex values
-static regexns::regex uint32_regex() { return regexns::regex(R"(^(\d+)|(0x([0-9a-fA-F]){1,8})$)"); } // stoi can also parse hex values
-static regexns::regex bool_regex() { return regexns::regex(R"(^(true|false)$)"); }
-static regexns::regex char_regex() { return regexns::regex(R"(^\w$)"); }
-static regexns::regex string_regex() { return regexns::regex(R"(^.*$)"); }
-static regexns::regex vec2_regex() { return regexns::regex(R"(^([-+]?\d*\.?\d*), ?([-+]?\d*\.?\d*)$)"); }
-static regexns::regex vec3_regex() { return regexns::regex(R"(^([-+]?\d*\.?\d*), ?([-+]?\d*\.?\d*), ?([-+]?\d*\.?\d*)$)"); }
-static regexns::regex vec4_regex() { return regexns::regex(R"(^([-+]?\d*\.?\d*), *([-+]?\d*\.?\d*), *([-+]?\d*\.?\d*), *([-+]?\d*\.?\d*)$)"); }
-static regexns::regex input_mapping_regex() { return regexns::regex(R"(^InputMapping\((\d+), ?(\d+), ?([-+]?\d*\.?\d*), *([-+]?\d*\.?\d*)\)$)"); }
-static regexns::regex list_regex() { return regexns::regex(R"(^([a-zA-Z1-9]+)(, ?([a-zA-Z1-9]+))*$)"); }
-
-
-static glm::vec2 vec2Converter(const std::string &s) {
-    regexns::smatch matches;
-    regexns::regex_match(s, matches, vec2_regex());
-
-    float x = std::stof(matches[1]);
-    float y = std::stof(matches[2]);
-
-    return glm::vec2(x, y);
-}
-
-static glm::vec3 vec3Converter(const std::string &s) {
-    regexns::smatch matches;
-    regexns::regex_match(s, matches, vec3_regex());
-
-    float x = std::stof(matches[1]);
-    float y = std::stof(matches[2]);
-    float z = std::stof(matches[3]);
-
-    return glm::vec3(x, y, z);
-}
-
-static glm::vec4 vec4Converter(const std::string &s) {
-    regexns::smatch matches;
-    regexns::regex_match(s, matches, vec4_regex());
-
-    float x = std::stof(matches[1]);
-    float y = std::stof(matches[2]);
-    float z = std::stof(matches[3]);
-    float w = std::stof(matches[4]);
-
-    return glm::vec4(x, y, z, w);
-}
-
-static std::list<std::string> listConverter(const std::string &s) {
-    regexns::smatch matches;
-    regexns::regex_match(s, matches, list_regex());
-    std::list<std::string> result;
-
-    for(int i = 1; i <= matches.size(); i += 2) {
-        std::string listEntry = matches[i];
-
-         if(!listEntry.empty()) {
-            result.push_back(matches[i]);
-        }
-    }
-
-    return result;
-}
-
-static InputMapping inputMappingConverter(const std::string &s) {
-    regexns::smatch matches;
-    regexns::regex_match(s, matches, input_mapping_regex());
-
-    InputType type = static_cast<InputType>(std::stoi(matches[1]));
-    int index = std::stoi(matches[2]);
-    float maxValue = std::stof(matches[3]);
-    float idleValue = std::stof(matches[4]);
-
-    return InputMapping(type, index, maxValue, idleValue);
-}
 
 
 PropertyManager::PropertyManager():
@@ -98,11 +21,11 @@ PropertyManager::PropertyManager():
     m_charProperties(new PropertyCollection<char>(char_regex(), [](std::string s) { return s[0]; })),
     m_boolProperties(new PropertyCollection<bool>(bool_regex(), [](std::string s) { return s == "true" ? true : false; })),
     m_stringProperties(new PropertyCollection<std::string>(string_regex(), [](std::string s) { return s; })),
-    m_vec2Properties(new PropertyCollection<glm::vec2>(vec2_regex(), vec2Converter)),
-    m_vec3Properties(new PropertyCollection<glm::vec3>(vec3_regex(), vec3Converter)),
-    m_vec4Properties(new PropertyCollection<glm::vec4>(vec4_regex(), vec4Converter)),
-    m_inputMappingProperties(new PropertyCollection<InputMapping>(input_mapping_regex(), inputMappingConverter)),
-    m_listProperties(new PropertyCollection<std::list<std::string>>(list_regex(), listConverter))
+    m_vec2Properties(new PropertyCollection<glm::vec2>(vec2_regex(), PropertyConverter::vec2Converter)),
+    m_vec3Properties(new PropertyCollection<glm::vec3>(vec3_regex(), PropertyConverter::vec3Converter)),
+    m_vec4Properties(new PropertyCollection<glm::vec4>(vec4_regex(), PropertyConverter::vec4Converter)),
+    m_inputMappingProperties(new PropertyCollection<InputMapping>(input_mapping_regex(), PropertyConverter::inputMappingConverter)),
+    m_listProperties(new PropertyCollection<std::list<std::string>>(list_regex(), PropertyConverter::listConverter))
 {
 
 }
@@ -121,7 +44,7 @@ void PropertyManager::load(const std::string& file, const std::string& prefix) {
         glow::fatal("PropertyManager: could not open %;", file);
         throw std::runtime_error("Critical configuration file not readable");
     } else {
-        glow::info("PropertyManager: Loading %; with prefix '%;'", file, prefix);
+        //glow::info("PropertyManager: Loading %; with prefix '%;'", file, prefix);
     }
 
     std::string keyPrefix = prefix.empty() ? "" : prefix + ".";

@@ -17,9 +17,13 @@
 ObjectHudgetVoxels::ObjectHudgetVoxels(ObjectHudget* hudget):
     m_hudget(hudget),
     m_openingAngle(0.0f),
-    m_targetHightlight(false)
+    m_targetHightlight(false),
+    m_relationType(FactionRelationType::Neutral),
+    m_lu(new ObjectHudgetCornerVoxels(this, glm::ivec3(-1, 1, 0))),
+    m_lb(new ObjectHudgetCornerVoxels(this, glm::ivec3(-1, -1, 0))),
+    m_ru(new ObjectHudgetCornerVoxels(this, glm::ivec3(1, 1, 0))),
+    m_rb(new ObjectHudgetCornerVoxels(this, glm::ivec3(1, -1, 0)))
 {
-    setupCorners();
 }
 
 ObjectHudgetVoxels::~ObjectHudgetVoxels() {
@@ -33,6 +37,10 @@ void ObjectHudgetVoxels::setTargetHightlight(bool targetHightlight) {
     m_targetHightlight = targetHightlight;
 }
 
+void ObjectHudgetVoxels::setRelationType(FactionRelationType relationType) {
+    m_relationType = relationType;
+}
+
 float ObjectHudgetVoxels::openingAngle() const {
     return m_openingAngle;
 }
@@ -41,34 +49,23 @@ void ObjectHudgetVoxels::setOpeningAngle(float openingAngle) {
     m_openingAngle = openingAngle;
 }
 
+void ObjectHudgetVoxels::update(float deltaSec) {
+    m_lu->update(deltaSec);
+    m_lb->update(deltaSec);
+    m_ru->update(deltaSec);
+    m_rb->update(deltaSec);
+}
+
 void ObjectHudgetVoxels::draw() {
-    int index = m_targetHightlight ? 1 : 0;
+    int index = 2 * ((int)m_relationType) + (m_targetHightlight ? 1 : 0) ;
 
-    m_lu[index]->draw();
-    m_lb[index]->draw();
-    m_ru[index]->draw();
-    m_rb[index]->draw();
+    m_lu->draw(index);
+    m_lb->draw(index);
+    m_ru->draw(index);
+    m_rb->draw(index);
 }
-
-void ObjectHudgetVoxels::setupCorners() {
-    m_lu[0].reset(new ObjectHudgetCornerVoxels(this, glm::ivec3(-1, 1, 0), false));
-    m_lb[0].reset(new ObjectHudgetCornerVoxels(this, glm::ivec3(-1, -1, 0), false));
-    m_ru[0].reset(new ObjectHudgetCornerVoxels(this, glm::ivec3(1, 1, 0), false));
-    m_rb[0].reset(new ObjectHudgetCornerVoxels(this, glm::ivec3(1, -1, 0), false));
-
-    m_lu[1].reset(new ObjectHudgetCornerVoxels(this, glm::ivec3(-1, 1, 0), true));
-    m_lb[1].reset(new ObjectHudgetCornerVoxels(this, glm::ivec3(-1, -1, 0), true));
-    m_ru[1].reset(new ObjectHudgetCornerVoxels(this, glm::ivec3(1, 1, 0), true));
-    m_rb[1].reset(new ObjectHudgetCornerVoxels(this, glm::ivec3(1, -1, 0), true));
-}
-
-
 
 bool ObjectHudgetVoxels::isAt(const Ray& ray) const {
-    glm::vec3 intersectionPoint;
-    bool isAt = false;
-    isAt |= glm::intersectRayTriangle<glm::vec3>(ray.origin(), ray.direction(), m_rb->get()->transform().position(), m_lb->get()->transform().position(), m_lu->get()->transform().position(), intersectionPoint);
-    isAt |= glm::intersectRayTriangle<glm::vec3>(ray.origin(), ray.direction(), m_ru->get()->transform().position(), m_lb->get()->transform().position(), m_lu->get()->transform().position(), intersectionPoint);
-    return isAt;
+    return GeometryHelper::intersectRectangle(&ray, m_lu.get()->position(), m_ru.get()->position(), m_rb.get()->position(), m_lb.get()->position());
 }
 

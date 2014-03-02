@@ -13,17 +13,20 @@ class ContextProvider {
 public:
     static ContextProvider* instance();
 
+    void setRequiredGLVersion(int majorVersionRequire, int minorVersionRequire);
+
+    void initWindowed();
+    void initWindowed(const Size<int>& resolution);
+    void initWindowed(const Size<int>& resolution, const Size<int>& position);
+    void initFullScreen(int monitorIndex = 0);
+
+    void toggleFullScreen();
+    void shutdown();
+
+    bool fullScreen() const;
     Size<int> resolution() const;
     Viewport viewport() const;
     float aspectRatio() const;
-
-    void initWindowed(int majorVersionRequire, int minorVersionRequire, const Size<int>* resolution = nullptr, const Size<int>* position = nullptr);
-    void initFullScreen(int majorVersionRequire, int minorVersionRequire, int monitorIndex = 0);
-
-    bool fullScreen() const;
-    void toggleFullScreen();
-
-    void shutdown();
 
     std::vector<GLFWmonitor*> monitors() const;
     int currentMonitor() const;

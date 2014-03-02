@@ -1,14 +1,14 @@
 #include "rendermetadata.h"
 
 
-RenderMetaData::RenderMetaData(Camera* camera, EyeSide eyeside):
+RenderMetaData::RenderMetaData(const Camera& camera, EyeSide eyeside):
     m_camera(camera),
     m_eyeside(eyeside)
 {
 }
 
 
-Camera* RenderMetaData::camera() const {
+const Camera& RenderMetaData::camera() const {
     return m_camera;
 }
 

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "voxel/specialvoxel.h"
 
 
@@ -17,8 +19,7 @@ public:
     virtual void onDestruction() override;
 
 
-
 protected:
-    EngineSlot* m_engineSlot;
+    std::shared_ptr<EngineSlot> m_engineSlot;
 };
 

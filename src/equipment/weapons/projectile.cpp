@@ -4,6 +4,7 @@
 
 #include "world/god.h"
 #include "world/world.h"
+#include "sound/soundmanager.h"
 
 
 Projectile::Projectile():
@@ -22,7 +23,6 @@ void Projectile::setCreator(WorldObject* creator) {
     CollisionFilterIgnoringCreator* newCollisionFilter = new CollisionFilterIgnoringCreator(
         this,
         m_creator,
-        collisionFilter().collisionFilterClass(),
         collisionFilter().collisionMask()
     );
 
@@ -52,3 +52,13 @@ void Projectile::onLifetimeOver() {
 
 }
 
+void Projectile::onCollision() {
+    SoundManager::current()->play(hitSound(), position());
+
+    World::instance()->god().scheduleRemoval(this);
+    spawnExplosion();
+}
+
+void Projectile::onSpawnFail() {
+    spawnExplosion();
+}

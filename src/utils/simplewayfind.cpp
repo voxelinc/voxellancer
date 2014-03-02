@@ -12,8 +12,8 @@
 glm::vec3 SimpleWayfind::calculateTravelPoint(WorldObject& object, glm::vec3 targetPoint) {
     //Wayfinding doesn't care about projectiles
     CollisionFilter filter(object.collisionFilter());
-    filter.setCollideableWith(CollisionFilterClass::Bullet, false);
-    filter.setCollideableWith(CollisionFilterClass::Rocket, false);
+    filter.setCollideableWith(WorldObjectType::Bullet, false);
+    filter.setCollideableWith(WorldObjectType::Rocket, false);
 
     Capsule capsule = Capsule(object.transform().position(), targetPoint - object.transform().position(), object.bounds().sphere().radius());
     std::unordered_set<WorldObject*> obstacles = WorldTreeQuery(&World::instance()->worldTree(), &capsule, nullptr, &filter).intersectingWorldObjects();

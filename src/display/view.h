@@ -17,7 +17,7 @@ public:
 
     virtual void setViewport(const Viewport& viewport);
 
-    virtual void draw(Scene* scene, CameraHead* cameraHead) = 0;
+    virtual void draw(const Scene& scene, const CameraHead& cameraHead) = 0;
 
 
 protected:

@@ -1,11 +1,11 @@
 #pragma once
 
 class World;
-class Game;
+class GamePlay;
 
 class BaseScenario {
 public:
-    BaseScenario(Game* game);
+    BaseScenario(GamePlay* gamePlay);
 
     void load();
     void clear();
@@ -13,7 +13,7 @@ public:
 
 
 protected:
-    Game* m_game;
+    GamePlay* m_gamePlay;
     World* m_world;
 
     virtual void createWorld();

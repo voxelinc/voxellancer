@@ -13,10 +13,10 @@ public:
 
 
 protected:
-    Property<int> m_engineSlotPrefix;
-    Property<int> m_hardpointPrefix;
-    Property<int> m_cockpitPrefix;
-    Property<int> m_fuelPrefix;
-    Property<int> m_crucialPrefix;
+    Property<uint32_t> m_engineSlotPrefix;
+    Property<uint32_t> m_hardpointPrefix;
+    Property<uint32_t> m_cockpitPrefix;
+    Property<uint32_t> m_fuelPrefix;
+    Property<uint32_t> m_crucialPrefix;
 };
 

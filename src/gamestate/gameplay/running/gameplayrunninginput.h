@@ -2,23 +2,25 @@
 
 #include <vector>
 
+#include "input/inputmapping.h"
+
+#include "ui/actionkeymapping.h"
+#include "utils/statemachine/trigger.h"
+
 #include "property/property.h"
-#include "inputconfigurator.h"
-#include "actionkeymapping.h"
 
 
 class Player;
 class WorldObject;
 class InputConfigurator;
+class GameState;
 class HUD;
 class HMD;
 class Player;
 
-class InputHandler {
+class GamePlayRunningInput {
 public:
-    InputHandler(Player& player);
-
-    void setHMD(HMD& hmd);
+    GamePlayRunningInput(Player *player);
 
     void resizeEvent(const unsigned int width, const unsigned int height);
     void keyCallback(int key, int scancode, int action, int mods);
@@ -28,7 +30,6 @@ public:
 
 protected:
     Player* m_player;
-    HMD* m_hmd;
     InputConfigurator* m_inputConfigurator;
     SecondaryInputValues m_secondaryInputValues;
     std::vector<ActionKeyMapping*> m_actions;
