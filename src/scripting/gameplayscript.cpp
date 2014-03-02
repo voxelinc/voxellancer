@@ -10,6 +10,7 @@
 #include "events/eventpoller.h"
 #include "events/singleshottimer.h"
 #include "events/loopingtimer.h"
+#include "events/aabbenteredpoll.h"
 
 #include "gamestate/gameplay/gameplay.h"
 
@@ -72,11 +73,9 @@ void GamePlayScript::load(const std::string& path) {
     m_lua->Register("createLoopingTimer", std::function<int(std::string, float)>([&] (std::string callback, float delta) {
         return apiCreateLoopingTimer(callback, delta);
     }));
-/*
     m_lua->Register("onAABBEntered", std::function<int(int, float, float, float, float, float, float, std::string)>([&] (int handle, float x1, float y1, float z1, float x2, float y2, float z2, std::string callback) {
         return apiOnAABBEntered(handle, glm::vec3(x1, y1, z1), glm::vec3(x2, y2, z2), callback);
     }));
-*/
 }
 
 int GamePlayScript::apiPlayerShip() {
@@ -173,16 +172,18 @@ int GamePlayScript::apiCreateLoopingTimer(const std::string& callback, float del
     return timer->scriptKey();
 }
 
-/*
-int GamePlayScript::apiOnAABBEntered(int handle, glm::vec3 llf, glm::vec3 urb, const std::string& callback) {
-    WorldObject* worldObject = m_scriptEngine->getWorldObject(handle);
-    if (worldObject) {
-        return m_scriptEngine->registerEventPoll(new AABBEnteredPoll(worldObject, AABB(llf, urb), [=] {
-            m_lua->call(callback, handle);
-        }));
-    } else {
+int GamePlayScript::apiOnAABBEntered(int key, glm::vec3 llf, glm::vec3 urb, const std::string& callback) {
+    WorldObject* worldObject = m_scriptEngine->getWorldObject(key);
+    if(!worldObject) {
         return -1;
     }
+
+    AABBEnteredPoll* enteredPoll = new AABBEnteredPoll(worldObject, AABB(llf, urb), [=] {
+            m_lua->call(callback, key);
+    });
+
+    World::instance()->eventPoller().addPoll(enteredPoll);
+    return enteredPoll->scriptKey();
 }
 
-*/
+

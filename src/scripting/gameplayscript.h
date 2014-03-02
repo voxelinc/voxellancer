@@ -28,7 +28,7 @@ protected:
     /*
         API for gameplayscripts below
     */
-   int apiPlayerShip();
+    int apiPlayerShip();
 
     int apiCreateShip(const std::string& name);
     bool apiSpawn(int key);
@@ -43,9 +43,6 @@ protected:
     int apiCreateSingleShotTimer(const std::string& callback, float delta);
     int apiCreateLoopingTimer(const std::string& callback, float delta);
 
-/*
     int apiOnAABBEntered(int handle, glm::vec3 llf, glm::vec3 urb, const std::string& callback);
-
-    WorldObject* getWorldObject(int handle);*/
 };
 
