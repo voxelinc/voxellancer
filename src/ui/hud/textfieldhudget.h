@@ -10,7 +10,7 @@ class TextFieldHudgetVoxels;
 
 class TextFieldHudget : public Hudget {
 public:
-    TextFieldHudget(HUD* hud, int numberOfLetters);
+    TextFieldHudget(HUD* hud, std::string content, glm::vec3 direction);
     virtual ~TextFieldHudget();
 
     void setContent(std::string content);
@@ -19,6 +19,8 @@ public:
     virtual void draw() override;
 
     virtual bool isAt(const Ray& ray) const override;
+
+    virtual void onClick(int button) override;
 
 protected:
     std::string m_content;

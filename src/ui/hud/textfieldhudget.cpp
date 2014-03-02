@@ -4,11 +4,12 @@
 #include "textfieldhudgetvoxels.h"
 
 
-TextFieldHudget::TextFieldHudget(HUD* hud, int numberOfLetters) :
+TextFieldHudget::TextFieldHudget(HUD* hud, std::string content, glm::vec3 direction) :
 Hudget(hud),
+m_content(content),
 m_voxels(new TextFieldHudgetVoxels(this))
 {
-    
+    m_direction = direction;
 }
 
 TextFieldHudget::~TextFieldHudget() = default;
@@ -28,4 +29,8 @@ void TextFieldHudget::setContent(std::string content) {
 
 bool TextFieldHudget::isAt(const Ray& ray) const {
     return m_voxels->isAt(ray);
+}
+
+void TextFieldHudget::onClick(int Button) {
+    printf("text clicked");
 }

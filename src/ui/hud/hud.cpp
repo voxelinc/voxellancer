@@ -161,9 +161,6 @@ void HUD::onClick(int button) {
     Ray toCrossHair = Ray::fromTo(m_player->cameraHead().position(), m_crossHair.get()->worldPosition());
     for (Hudget* hudget : m_hudgets) {
         if (hudget->isAt(toCrossHair) && hudget != m_crossHair.get()) {
-            if (!dynamic_cast<ObjectHudget*>(hudget)) {
-                continue; // TODO implement HUD Spheres and use them to distinguish hud elements
-            }
             hudget->onClick(button);
             return;
         }
