@@ -4,6 +4,8 @@
 #include <cassert>
 #include <unordered_set>
 
+#include "collision/collisionfilter.h"
+
 #include "geometry/sphere.h"
 
 #include "voxel/voxeltreequery.h"
@@ -29,6 +31,8 @@ WorldTreeScanner::WorldTreeScanner():
 
 }
 
+WorldTreeScanner::~WorldTreeScanner() = default;
+
 float WorldTreeScanner::scanInterval() const {
     return m_scanInterval;
 }
@@ -43,6 +47,14 @@ float WorldTreeScanner::scanRadius() const {
 
 void WorldTreeScanner::setScanRadius(float scanRadius) {
     m_scanRadius = scanRadius;
+}
+
+CollisionFilter* WorldTreeScanner::filter() {
+    return m_filter.get();
+}
+
+void WorldTreeScanner::setFilter(CollisionFilter* filter) {
+    m_filter.reset(filter);
 }
 
 const std::list<WorldObject*>& WorldTreeScanner::worldObjects() {
@@ -97,13 +109,17 @@ void WorldTreeScanner::scan(WorldObject* worldObject, const glm::vec3& position)
     for(WorldTreeGeode* foundGeode : foundGeodes) {
         WorldObject* foundWorldObject = foundGeode->worldObject();
 
-        if(!VoxelTreeQuery(&foundWorldObject->collisionDetector().voxelTree(), &scanSphere).areVoxelsIntersecting()) {
+        if (!(m_filter.get() && m_filter->isCollideableWith(&foundWorldObject->collisionFilter()))) {
+            continue;
+        }
+
+        if (!VoxelTreeQuery(&foundWorldObject->collisionDetector().voxelTree(), &scanSphere).areVoxelsIntersecting()) {
             continue;
         }
 
         std::unordered_set<WorldObject*>::iterator j = worldObjects.find(foundWorldObject);
 
-        if(j == worldObjects.end()) { // Object not yet found, add to newly found
+        if (j == worldObjects.end()) { // Object not yet found, add to newly found
             m_foundWorldObjects.push_back(foundWorldObject);
         } else { // object found again, thus wasn't lost
             lostWorldObjects.erase(foundWorldObject);
