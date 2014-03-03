@@ -19,6 +19,10 @@ WorldObject* WorldObjectComponents::worldObject() {
     return m_worldObject;
 }
 
+const WorldObject* WorldObjectComponents::worldObject() const {
+    return m_worldObject;
+}
+
 void WorldObjectComponents::addEngineSlot(std::shared_ptr<EngineSlot> engineSlot) {
     m_engineSlots.push_back(engineSlot);
 }
@@ -102,8 +106,6 @@ void WorldObjectComponents::fireAtPoint(const glm::vec3& point) {
 }
 
 void WorldObjectComponents::fireAtObject(WorldObject* worldObject) {
-    assert(worldObject);
-
     for (std::shared_ptr<Hardpoint> hardpoint : m_hardpoints) {
         if(!hardpoint->weapon()) {
             continue;

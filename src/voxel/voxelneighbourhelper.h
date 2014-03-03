@@ -13,7 +13,7 @@ public:
     VoxelNeighbourHelper(VoxelCluster *voxelCluster, bool includeDiagonals = true);
 
     const std::vector<Voxel*>& neighbours(const glm::ivec3& pos);
-    const std::vector<Voxel*>& neighbours(const Voxel* voxel);
+    const std::vector<Voxel*>& neighbours(Voxel* voxel);
 
 protected:
     VoxelCluster *m_voxelCluster;

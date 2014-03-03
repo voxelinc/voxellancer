@@ -4,11 +4,12 @@
 #include "property/property.h"
 #include "voxelparticlespawnbase.h"
 
+class VoxelCluster;
 class Transform;
 
 class VoxelExplosionGenerator : public VoxelParticleSpawnBase {
 public:
-    VoxelExplosionGenerator();
+    VoxelExplosionGenerator(const VoxelCluster* creator);
     virtual ~VoxelExplosionGenerator();
 
     void setRadius(float radius);

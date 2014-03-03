@@ -1,7 +1,12 @@
 #include "player.h"
 
+#include "ai/character.h"
+
 #include "camera/cameradolly.h"
 #include "camera/camerahead.h"
+
+#include "factions/factionmatrix.h"
+#include "factions/playerfaction.h"
 
 #include "gamestate/game.h"
 #include "gamestate/gameplay/gameplay.h"
@@ -15,6 +20,8 @@
 #include "utils/aimer.h"
 
 #include "physics/physics.h"
+
+#include "world/world.h"
 
 #include "worldobject/ship.h"
 #include "worldobject/worldobjectcomponents.h"
@@ -38,6 +45,7 @@ Ship* Player::ship() {
 
 void Player::setShip(Ship* ship) {
     m_ship = ship->shipHandle();
+    m_ship->character()->setFaction(World::instance()->factionMatrix().playerFaction());
     m_ship->objectInfo().setShowOnHud(false);
     m_cameraDolly->followWorldObject(ship);
     m_aimer->setWorldObject(ship);
@@ -51,10 +59,6 @@ void Player::update(float deltaSec) {
     if (Ship* ship = m_ship.get()) {
         ship->components().setEngineState(m_engineState);
     }
-}
-
-CameraDolly& Player::cameraDolly() {
-    return *m_cameraDolly;
 }
 
 CameraHead& Player::cameraHead() {

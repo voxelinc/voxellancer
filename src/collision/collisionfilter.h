@@ -2,20 +2,17 @@
 
 #include <cinttypes>
 
-#include "collisionfilterclass.h"
 
 class WorldObject;
+enum class WorldObjectType;
 
 class CollisionFilter {
 public:
-    CollisionFilter(WorldObject* owner, CollisionFilterClass collisionFilterClass, uint32_t collisionMask = 0xFFFFFFFF);
-
-    CollisionFilterClass collisionFilterClass() const;
-    void setCollisionFilterClass(CollisionFilterClass collisionFilterClass);
+    CollisionFilter(WorldObject* owner, uint32_t collisionMask = 0xFFFFFFFF);
 
     uint32_t collisionMask() const;
 
-    void setCollideableWith(CollisionFilterClass collisionFilterClass, bool collides);
+    void setCollideableWith(WorldObjectType objectType, bool collides);
     bool isCollideableWith(const CollisionFilter* other) const;
 
     virtual WorldObject* owner() const;
@@ -23,7 +20,6 @@ public:
 
 
 protected:
-    CollisionFilterClass m_collisionFilterClass;
     uint32_t m_collisionMask;
     WorldObject* m_owner;
 

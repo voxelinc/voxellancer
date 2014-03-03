@@ -3,6 +3,8 @@
 #include <memory>
 #include <vector>
 
+#include "factions/factionrelation.h"
+
 
 class ObjectHudget;
 class ObjectHudgetCornerVoxels;
@@ -16,24 +18,25 @@ public:
     ObjectHudget* hudget();
 
     void setTargetHightlight(bool targetHightlight);
+    void setRelationType(FactionRelationType relationType);
 
     float openingAngle() const;
     void setOpeningAngle(float openingAngle);
 
+    void update(float deltaSec);
     void draw();
 
 
 protected:
     ObjectHudget* m_hudget;
 
-    std::unique_ptr<ObjectHudgetCornerVoxels> m_lu[2];
-    std::unique_ptr<ObjectHudgetCornerVoxels> m_lb[2];
-    std::unique_ptr<ObjectHudgetCornerVoxels> m_ru[2];
-    std::unique_ptr<ObjectHudgetCornerVoxels> m_rb[2];
+    std::unique_ptr<ObjectHudgetCornerVoxels> m_lu;
+    std::unique_ptr<ObjectHudgetCornerVoxels> m_lb;
+    std::unique_ptr<ObjectHudgetCornerVoxels> m_ru;
+    std::unique_ptr<ObjectHudgetCornerVoxels> m_rb;
 
     float m_openingAngle;
     bool m_targetHightlight;
-
-    void setupCorners();
+    FactionRelationType m_relationType;
 };
 

@@ -17,11 +17,15 @@ PostProcessingPass::PostProcessingPass(const std::string& name, std::shared_ptr<
     m_output(),
     m_inputMapping(),
     m_fragmentShader(),
-    m_vertexShader("data/shader/postprocessing/screenquad.vert")
+    m_vertexShader("data/shader/postprocessing/screenquad.vert"),
+    m_enabled(true)
 {
 }
 
 void PostProcessingPass::beforeDraw(FrameBuffer& frameBuffer) {
+    if (!m_enabled) {
+        return;
+    }
     frameBuffer.setDrawBuffers(m_output);
     int i = 0;
     for (const std::pair<std::string, int>& mapping : m_inputMapping) {
@@ -35,6 +39,9 @@ void PostProcessingPass::beforeDraw(FrameBuffer& frameBuffer) {
 }
 
 void PostProcessingPass::apply(FrameBuffer& frameBuffer, const RenderMetaData& metadata) {
+    if (!m_enabled) {
+        return;
+    }
     if (!m_program) {
         initialize();
     }
@@ -83,4 +90,12 @@ void PostProcessingPass::restoreUniforms() {
         glow::ref_ptr<glow::AbstractUniform> uniform = pair.second;
         m_program->addUniform(uniform);
     }
+}
+
+bool PostProcessingPass::isEnabled() {
+    return m_enabled;
+}
+
+void PostProcessingPass::setEnabled(bool enabled) {
+    m_enabled = enabled;
 }

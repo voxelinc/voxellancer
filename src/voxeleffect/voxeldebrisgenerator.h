@@ -6,10 +6,11 @@
 #include "voxelparticlespawnbase.h"
 
 class Transform;
+class VoxelCluster;
 
 class VoxelDebrisGenerator : public VoxelParticleSpawnBase {
 public:
-    VoxelDebrisGenerator();
+    VoxelDebrisGenerator(const VoxelCluster* creator);
     virtual ~VoxelDebrisGenerator();
 
     void setOrientation(const glm::quat& orientation);
