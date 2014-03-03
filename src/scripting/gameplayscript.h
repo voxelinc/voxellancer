@@ -43,6 +43,9 @@ protected:
     int apiCreateSingleShotTimer(const std::string& callback, float delta);
     int apiCreateLoopingTimer(const std::string& callback, float delta);
 
-    int apiOnAABBEntered(int handle, glm::vec3 llf, glm::vec3 urb, const std::string& callback);
+    int apiOnAABBEntered(int key, glm::vec3 llf, glm::vec3 urb, const std::string& callback);
+
+    int apiCreateFlyToTask(int key);
+    int apiSetTargetPoint(int key, float x, float y, float z);
 };
 

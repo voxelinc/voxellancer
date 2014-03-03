@@ -9,6 +9,8 @@ Scriptable::Scriptable():
 
 }
 
+Scriptable::~Scriptable() = default;
+
 int Scriptable::scriptKey() const {
     return m_key;
 }

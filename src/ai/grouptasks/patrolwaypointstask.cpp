@@ -46,3 +46,4 @@ void PatrolWaypointsTask::onNewLeader(Ship* leader) {
 void PatrolWaypointsTask::onMemberJoin(Ship* member) {
     member->character()->setTask(std::make_shared<FormationMemberTask>(*member));
 }
+

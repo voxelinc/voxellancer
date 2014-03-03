@@ -6,12 +6,14 @@ enum class ScriptableType {
     WorldObject,
     Ship,
     EventPoll,
+    AiTask,
     Other
 };
 
 class Scriptable {
 public:
     Scriptable();
+    virtual ~Scriptable();
 
     virtual ScriptableType scriptableType() const = 0;
 

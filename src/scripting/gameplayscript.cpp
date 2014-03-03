@@ -7,6 +7,10 @@
 
 #include <glow/logging.h>
 
+#include "ai/aitask.h"
+#include "ai/character.h"
+#include "ai/basictasks/flytotask.h"
+
 #include "events/eventpoller.h"
 #include "events/singleshottimer.h"
 #include "events/loopingtimer.h"
@@ -89,7 +93,7 @@ int GamePlayScript::apiCreateShip(const std::string& name) {
         m_scriptEngine->registerScriptable(ship);
         return ship->scriptKey();
     } else {
-        glow::warning("ScriptEngine: Couldn't create ship '%;'", name);
+        glow::warning("GamePlayScript: Couldn't create ship '%;'", name);
         return -1;
     }
 }
@@ -186,4 +190,37 @@ int GamePlayScript::apiOnAABBEntered(int key, glm::vec3 llf, glm::vec3 urb, cons
     return enteredPoll->scriptKey();
 }
 
+int GamePlayScript::apiCreateFlyToTask(int key) {
+    Ship* ship = m_scriptEngine->getShip(key);
+    if (!ship) {
+        return -1;
+    }
+
+    FlyToTask* flyToTask = new FlyToTask(ship->boardComputer());
+
+    m_scriptEngine->addScriptable(flyToTask);
+
+    Character* character = ship->character();
+    if (!character) {
+        glow::warning("GamePlayScript: Ship '%;' has no Character", key);
+        return -1;
+    }
+    character->setTask(flyToTask);
+
+    return flyToTask->scriptKey();
+}
+
+int GamePlayScript::apiSetTargetPoint(int key, float x, float y, float z) {
+    AiTask* task = m_scriptEngine->getAiTask(key);
+    if (!task) {
+        return 0;
+    }
+
+    FlyToTask *flyToTask = dynamic_cast<FlyToTask*>(task); // TODO: Find a better way
+    if (!flyToTask) {
+        glow::warning("GamePlayScript: Task '%;' is no FlyToTask", key);
+    }
+
+    flyToTask->setTargetPoint(glm::vec3(x, y, z));
+}
 

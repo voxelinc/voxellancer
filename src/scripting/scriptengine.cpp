@@ -5,6 +5,8 @@
 
 #include <glow/logging.h>
 
+#include "ai/aitask.h"
+
 #include "events/eventpoll.h"
 
 #include "worldobject/ship.h"
@@ -42,6 +44,20 @@ void ScriptEngine::start() {
 
 void ScriptEngine::stop() {
     m_running = false;
+}
+
+void ScriptEngine::addScriptable(Scriptable* scriptable) {
+    assert(scriptable->scriptKey() < 0);
+
+    m_scriptables.push_back(std::unique_ptr<Scriptable>(scriptable));
+    registerScriptable(scriptable);
+}
+
+void ScriptEngine::removeScriptable(Scriptable* scriptable) {
+    assert(scriptable->scriptKey() >= 0);
+
+    m_scriptables.remove_if([&](std::unique_ptr<Scriptable>& scriptablePtr) { return scriptablePtr.get() == scriptable; });
+    unregisterScriptable(scriptable);
 }
 
 void ScriptEngine::registerScriptable(Scriptable* scriptable) {
@@ -108,6 +124,20 @@ WorldObject* ScriptEngine::getWorldObject(int key) {
     }
 }
 
+Ship* ScriptEngine::getShip(int key) {
+    Scriptable* scriptable = getScriptable(key);
+    if (!scriptable) {
+        return nullptr;
+    }
+
+    if (scriptable->scriptableType() == ScriptableType::Ship) {
+        return static_cast<Ship*>(scriptable);
+    } else {
+        glow::warning("ScriptEngine: script-key '%;' of type '%;' is no Ship", key, static_cast<int>(scriptable->scriptableType()));
+        return nullptr;
+    }
+}
+
 EventPoll* ScriptEngine::getEventPoll(int key) {
     Scriptable* scriptable = getScriptable(key);
     if (!scriptable) {
@@ -118,6 +148,20 @@ EventPoll* ScriptEngine::getEventPoll(int key) {
         return static_cast<EventPoll*>(scriptable);
     } else {
         glow::warning("ScriptEngine: script-key '%;' of type '%;' is no EventPoll", key, static_cast<int>(scriptable->scriptableType()));
+        return nullptr;
+    }
+}
+
+AiTask* ScriptEngine::getAiTask(int key) {
+    Scriptable* scriptable = getScriptable(key);
+    if (!scriptable) {
+        return nullptr;
+    }
+
+    if (scriptable->scriptableType() == ScriptableType::AiTask) {
+        return static_cast<AiTask*>(scriptable);
+    } else {
+        glow::warning("ScriptEngine: script-key '%;' of type '%;' is no AiTask", key, static_cast<int>(scriptable->scriptableType()));
         return nullptr;
     }
 }
