@@ -80,6 +80,12 @@ void GamePlayScript::load(const std::string& path) {
     m_lua->Register("onAABBEntered", std::function<int(int, float, float, float, float, float, float, std::string)>([&] (int handle, float x1, float y1, float z1, float x2, float y2, float z2, std::string callback) {
         return apiOnAABBEntered(handle, glm::vec3(x1, y1, z1), glm::vec3(x2, y2, z2), callback);
     }));
+    m_lua->Register("createFlyToTask", std::function<int(int)>([&] (int key) {
+        return apiCreateFlyToTask(key);
+    }));
+    m_lua->Register("setTargetPoint", std::function<int(int, float, float, float)>([&] (int key, float x, float y, float z) {
+        return apiSetTargetPoint(key, x, y, z);
+    }));
 }
 
 int GamePlayScript::apiPlayerShip() {
@@ -198,14 +204,14 @@ int GamePlayScript::apiCreateFlyToTask(int key) {
 
     FlyToTask* flyToTask = new FlyToTask(ship->boardComputer());
 
-    m_scriptEngine->addScriptable(flyToTask);
+    m_scriptEngine->registerScriptable(flyToTask);
 
     Character* character = ship->character();
     if (!character) {
         glow::warning("GamePlayScript: Ship '%;' has no Character", key);
         return -1;
     }
-    character->setTask(flyToTask);
+    character->setTask(std::shared_ptr<AiTask>(flyToTask));
 
     return flyToTask->scriptKey();
 }

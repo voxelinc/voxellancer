@@ -46,20 +46,6 @@ void ScriptEngine::stop() {
     m_running = false;
 }
 
-void ScriptEngine::addScriptable(Scriptable* scriptable) {
-    assert(scriptable->scriptKey() < 0);
-
-    m_scriptables.push_back(std::unique_ptr<Scriptable>(scriptable));
-    registerScriptable(scriptable);
-}
-
-void ScriptEngine::removeScriptable(Scriptable* scriptable) {
-    assert(scriptable->scriptKey() >= 0);
-
-    m_scriptables.remove_if([&](std::unique_ptr<Scriptable>& scriptablePtr) { return scriptablePtr.get() == scriptable; });
-    unregisterScriptable(scriptable);
-}
-
 void ScriptEngine::registerScriptable(Scriptable* scriptable) {
     if (scriptable->scriptKey() > 0) {
         // This is legit indeed and happens when an object is created by a script
@@ -78,6 +64,9 @@ void ScriptEngine::registerScriptable(Scriptable* scriptable) {
         break;
         case ScriptableType::EventPoll:
             scriptHandle = new ScriptHandle<EventPoll>(dynamic_cast<EventPoll*>(scriptable));
+        break;
+        case ScriptableType::AiTask:
+            scriptHandle = new ScriptHandle<AiTask>(dynamic_cast<AiTask*>(scriptable));
         break;
         default:
             assert(0);

@@ -41,13 +41,6 @@ public:
     void stop();
 
     /*
-        Add/Remove Scriptables that shall be hold by the ScriptEngine
-        and equip them with a valid scriptKey
-    */
-    void addScriptable(Scriptable* scriptable);
-    void removeScriptable(Scriptable* scriptable);
-
-    /*
         Register/Unregister Scriptables that are managed by other objects
         and equip them with a valid scriptKey
     */
@@ -93,7 +86,6 @@ protected:
 
     std::list<std::unique_ptr<GamePlayScript>> m_scripts;
     std::vector<std::unique_ptr<IScriptHandle>> m_handles;
-    std::list<std::unique_ptr<Scriptable>> m_scriptables;
 
     int m_handleKeyIncrementor;
     bool m_running;
