@@ -26,7 +26,7 @@ VoxelParticleIntersectionCheck::VoxelParticleIntersectionCheck(const VoxelPartic
 }
 
 bool VoxelParticleIntersectionCheck::isDead(const VoxelParticleData& particleData) {
-	float timeDelta = m_particleEngine.time() - particleData.creationTime;
+    float timeDelta = m_particleEngine.time() - particleData.creationTime;
     glm::vec3 position = particleData.directionalSpeed * timeDelta + particleData.creationPosition;
 
     if (!m_Sphere.intersects(Sphere(position, particleData.scale))) {
