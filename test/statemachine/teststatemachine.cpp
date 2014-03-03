@@ -25,12 +25,10 @@ public:
     }
 
     virtual void onLeft() override {
-        State::onLeft();
         enterLeaveLog += "l" + name();
     }
 
     virtual void onEntered() override {
-        State::onEntered();
         enterLeaveLog += "e" + name();
     }
 };
