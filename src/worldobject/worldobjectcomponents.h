@@ -24,6 +24,7 @@ public:
     WorldObjectComponents(WorldObject* worldObject);
 
     WorldObject* worldObject();
+    const WorldObject* worldObject() const;
 
     void addEngineSlot(std::shared_ptr<EngineSlot> engineSlot);
     void removeEngineSlot(const EngineSlot* engineSlot);

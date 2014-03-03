@@ -53,6 +53,7 @@ void GamePlayScene::update(float deltaSec) {
 
 void GamePlayScene::setOutputBuffer(int i) {
     m_currentOutputBuffer = glm::min(i, m_renderPipeline->bufferCount() - 1);
+    glow::info("Outputbuffer: %;", bufferNames[m_currentOutputBuffer]);
 }
 
 void GamePlayScene::drawGame(const Camera& camera) const {
@@ -69,7 +70,7 @@ void GamePlayScene::drawGame(const Camera& camera) const {
     m_gamePlay->player().hud().draw();
     m_voxelRenderer->afterDraw();
 
-    World::instance()->voxelParticleEngine().draw(camera);
+    World::instance()->particleEngine().draw(camera);
 
 }
 

@@ -29,7 +29,7 @@ WorldObject::WorldObject(CollisionFilter* collisionFilter, float scale):
     m_crucialVoxel(nullptr),
     m_collisionFieldOfDamage(glm::half_pi<float>()),
     m_handle(Handle<WorldObject>(this)),
-    m_scheduledForDeletion(false),
+    m_spawnState(SpawnState::None),
     m_collisionFilter(collisionFilter)
 {
 }
@@ -40,6 +40,14 @@ WorldObject::~WorldObject() {
 
 WorldObjectType WorldObject::objectType() const {
     return WorldObjectType::Other;
+}
+
+SpawnState WorldObject::spawnState() const {
+    return m_spawnState;
+}
+
+void WorldObject::setSpawnState(SpawnState spawnState) {
+    m_spawnState = spawnState;
 }
 
 CollisionDetector& WorldObject::collisionDetector() {
@@ -58,11 +66,19 @@ Physics& WorldObject::physics() {
     return *m_physics;
 }
 
+const Physics& WorldObject::physics() const {
+    return *m_physics;
+}
+
 ObjectInfo& WorldObject::objectInfo() {
     return *m_objectInfo;
 }
 
 WorldObjectComponents& WorldObject::components() {
+    return *m_components;
+}
+
+const WorldObjectComponents& WorldObject::components() const {
     return *m_components;
 }
 
@@ -130,14 +146,6 @@ void WorldObject::onSpawnFail() {
 
 Handle<WorldObject>& WorldObject::handle() {
     return m_handle;
-}
-
-bool WorldObject::scheduledForDeletion() const {
-    return m_scheduledForDeletion;
-}
-
-void WorldObject::onScheduleForDeletion() {
-    m_scheduledForDeletion = true;
 }
 
 float WorldObject::collisionFieldOfDamage() const {
