@@ -78,6 +78,8 @@ GamePlayRunningInput::GamePlayRunningInput(Player* player):
     selectNextAction("input.mappingSelectNextPrimary", "input.mappingSelectNextSecondary", "Select Next Target", true),
     selectPreviousAction("input.mappingSelectPreviousPrimary", "input.mappingSelectPreviousSecondary", "Select Previous Target", true),
 
+    selectNextEnemyAction("input.mappingSelectNextEnemyPrimary", "input.mappingSelectNextEnemySecondary", "Select Next Enemy", true),
+
     m_secondaryInputValues(),
     m_actions(),
 
@@ -264,6 +266,7 @@ void GamePlayRunningInput::addActionsToVector() {
     m_actions.push_back(&rotateCClockwiseAction);
     m_actions.push_back(&selectNextAction);
     m_actions.push_back(&selectPreviousAction);
+    m_actions.push_back(&selectNextEnemyAction);
 }
 
 float GamePlayRunningInput::getInputValue(ActionKeyMapping* action) {
@@ -356,6 +359,9 @@ void GamePlayRunningInput::processTargetSelectActions() {
     }
     if (getInputValue(&selectPreviousAction)) {
         m_targetSelector->selectPreviousTarget();
+    }
+    if (getInputValue(&selectNextEnemyAction)) {
+        m_player->selectNextEnemy();
     }
 }
 

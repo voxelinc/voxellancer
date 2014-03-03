@@ -109,7 +109,7 @@ void WorldTreeScanner::scan(WorldObject* worldObject, const glm::vec3& position)
     for(WorldTreeGeode* foundGeode : foundGeodes) {
         WorldObject* foundWorldObject = foundGeode->worldObject();
 
-        if (!(m_filter.get() && m_filter->isCollideableWith(&foundWorldObject->collisionFilter()))) {
+        if (m_filter.get() && !m_filter->isCollideableWith(&foundWorldObject->collisionFilter())) {
             continue;
         }
 
