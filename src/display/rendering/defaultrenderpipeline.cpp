@@ -41,6 +41,7 @@ void DefaultRenderPipeline::addFXAA() {
     m_fxaa->setInputMapping({ { "source", BufferNames::Color } });
     m_fxaa->setOutput({ BufferNames::FXAA });
     m_fxaa->setFragmentShader("data/shader/postprocessing/fxaa.frag");
+    m_fxaa->setEnabled(false);
     add(m_fxaa);
 }
 
@@ -64,7 +65,7 @@ void DefaultRenderPipeline::addEmissivenessBlurHorizontal() {
 
 void DefaultRenderPipeline::addFinalization() {
     m_finalization = std::make_shared<PostProcessingPass>("blurh", m_quad);
-    m_finalization->setInputMapping({ { "color", BufferNames::FXAA }, { "bloom", BufferNames::Bloom } });
+    m_finalization->setInputMapping({ { "color", BufferNames::Color }, { "bloom", BufferNames::Bloom } });
     m_finalization->setOutput({ BufferNames::Default });
     m_finalization->setFragmentShader("data/shader/postprocessing/combine.frag");
     add(m_finalization);
