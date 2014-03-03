@@ -36,6 +36,8 @@ public:
     template<typename T>
     void setUniform(const std::string& name, const T& value);
 
+    bool isEnabled();
+    void setEnabled(bool enabled);
 
 protected:
     std::unordered_map<std::string, glow::ref_ptr<glow::AbstractUniform>> m_uniforms;
@@ -46,6 +48,7 @@ protected:
     std::vector<int> m_output;
     std::string m_fragmentShader;
     std::string m_vertexShader;
+    bool m_enabled;
 
     void initialize();
     void restoreUniforms();
