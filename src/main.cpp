@@ -23,17 +23,19 @@
 #include <glowutils/FileRegistry.h>
 
 #include "etc/contextprovider.h"
+#include "etc/hmd/hmdmanager.h"
 #include "etc/cli/commandlineparser.h"
 
-#include "geometry/viewport.h"
-
 #include "display/stereorenderinfo.h"
-
-#include "ui/inputhandler.h"
-
-#include "game.h"
 #include "display/viewer.h"
-#include "etc/hmd/hmdmanager.h"
+
+#include "property/propertydirectory.h"
+
+#include "gamestate/gameplay/gameplay.h"
+#include "gamestate/gameplay/running/gameplayrunning.h"
+#include "gamestate/gameplay/running/gameplayrunninginput.h"
+#include "gamestate/game.h"
+#include "gamestate/gameplay/gameplayscene.h"
 
 
 static GLint MajorVersionRequire = 3;
@@ -41,7 +43,7 @@ static GLint MinorVersionRequire = 1;
 
 static Game* game;
 
-static void checkVersion() {
+static void checkGLVersion() {
     glow::info("OpenGL Version Needed %;.%; (%;.%; Found)",
         MajorVersionRequire, MinorVersionRequire,
         glow::Version::currentMajorVersion(), glow::Version::currentMinorVersion());
@@ -70,7 +72,7 @@ static void resizeCallback(GLFWwindow* window, int width, int height) {
     glow::info("Resizing viewport to %;x%;", width, height);
     if (width > 0 && height > 0) {
         glViewport(0, 0, width, height);
-        game->inputHandler().resizeEvent(width, height);
+        game->gamePlay().running().input().resizeEvent(width, height);
         game->viewer().setViewport(Viewport(0, 0, width, height));
     }
 }
@@ -93,13 +95,16 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
         PropertyManager::instance()->load("data/config.ini");
     }
     if (key >= GLFW_KEY_1 && key <= GLFW_KEY_9 && action == GLFW_PRESS) {
-        game->setOutputBuffer(key-GLFW_KEY_1);
+        game->gamePlay().scene().setOutputBuffer(key-GLFW_KEY_1);
+    }
+    if (key >= GLFW_KEY_F1 && key <= GLFW_KEY_F4 && action == GLFW_PRESS) {
+        game->gamePlay().loadScenario(key - GLFW_KEY_F1);
     }
 
-	game->inputHandler().keyCallback(key, scancode, action, mods);
+	game->gamePlay().running().input().keyCallback(key, scancode, action, mods);
 }
 
-void setCallbacks(GLFWwindow* window) {
+void setGLFWCallbacks(GLFWwindow* window) {
     glfwSetKeyCallback(window, keyCallback);
     glfwSetWindowSizeCallback(window, resizeCallback);
 }
@@ -124,6 +129,7 @@ static void miscSettings() {
 static void mainloop() {
     glow::debug("Entering mainloop");
     double time = glfwGetTime();
+
     while (!glfwWindowShouldClose(glfwGetCurrentContext())) {
         double delta = glfwGetTime() - time;
         time += delta;
@@ -136,42 +142,13 @@ static void mainloop() {
     }
 }
 
-/*
-    At some day, modding-capabilities in mind, this shoul be done by polling the
-    appropriate dirs
-*/
-static void loadWorldObjectConfigs() {
-    PropertyManager::instance()->load("data/worldobjects/basicship.ini", "basicship");
-    PropertyManager::instance()->load("data/worldobjects/banner.ini", "banner");
-    PropertyManager::instance()->load("data/worldobjects/eagle.ini", "eagle");
-    PropertyManager::instance()->load("data/worldobjects/specialbasicship.ini", "specialbasicship");
-    PropertyManager::instance()->load("data/worldobjects/normandy.ini", "normandy");
-    PropertyManager::instance()->load("data/worldobjects/gunbullet.ini", "gunbullet");
-    PropertyManager::instance()->load("data/worldobjects/snowball.ini", "snowball");
-    PropertyManager::instance()->load("data/worldobjects/hornet.ini", "hornet");
-}
-
-/*
-    At some day, modding-capabilities in mind, this shoul be done by polling the
-    appropriate dirs
-*/
-static void loadEquipmentConfigs() {
-    PropertyManager::instance()->load("data/equipment/engines/enginemk1.ini", "enginemk1");
-    PropertyManager::instance()->load("data/equipment/engines/superslowengine.ini", "superslowengine");
-    PropertyManager::instance()->load("data/equipment/engines/piratethruster.ini", "piratethruster");
-    PropertyManager::instance()->load("data/equipment/engines/rocketthrustermk1.ini", "rocketthrustermk1");
-    PropertyManager::instance()->load("data/equipment/weapons/gun.ini", "gun");
-    PropertyManager::instance()->load("data/equipment/weapons/snowcanon.ini", "snowcanon");
-    PropertyManager::instance()->load("data/equipment/weapons/hornetlauncher.ini", "hornetlauncher");
-}
-
 void toggleFullScreen() {
     ContextProvider::instance()->toggleFullScreen();
 
     GLFWwindow* window = glfwGetCurrentContext();
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
-    setCallbacks(window);
+    setGLFWCallbacks(window);
 
     // not checking version etc again
 
@@ -193,18 +170,19 @@ int main(int argc, char* argv[]) {
 
     glfwSetErrorCallback(errorCallback);
 
+    ContextProvider::instance()->setRequiredGLVersion(MajorVersionRequire, MinorVersionRequire);
     if(clParser.fullScreen()) {
-        ContextProvider::instance()->initFullScreen(MajorVersionRequire, MinorVersionRequire, 1);
+        ContextProvider::instance()->initFullScreen(1);
     } else {
-        ContextProvider::instance()->initWindowed(MajorVersionRequire, MinorVersionRequire);
+        ContextProvider::instance()->initWindowed();
     }
 
     GLFWwindow* window = glfwGetCurrentContext();
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
-    setCallbacks(window);
 
-    checkVersion();
+    setGLFWCallbacks(window);
+    checkGLVersion();
     checkOpenMP();
 
     glewExperimental = GL_TRUE;
@@ -220,13 +198,15 @@ int main(int argc, char* argv[]) {
 #ifdef TRYCATCH
     try {
 #endif
-        loadWorldObjectConfigs();
-        loadEquipmentConfigs();
+        PropertyDirectory("data/worldobjects").read();
+        PropertyDirectory("data/equipment/engines").read();
+        PropertyDirectory("data/equipment/weapons").read();
+        PropertyDirectory("data/equipment/projectiles").read();
 
         game = new Game();
 
         if(clParser.hmd()) {
-            game->hmdManager().setupHMD();
+            game->hmdManager().setupHMD(game->viewer());
         } else {
             if(clParser.stereoView()) {
                 game->viewer().switchToStereoView(StereoRenderInfo::dummy());
@@ -235,7 +215,7 @@ int main(int argc, char* argv[]) {
 
         int width, height;
         glfwGetFramebufferSize(window, &width, &height);
-        game->inputHandler().resizeEvent(width, height);
+        //game->inputHandler().resizeEvent(width, height);
 
         mainloop();
 

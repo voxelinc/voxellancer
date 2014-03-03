@@ -12,7 +12,7 @@
 
 
 
-God::God(World & world):
+God::God(World& world):
     m_world(world)
 {
 }
@@ -21,35 +21,20 @@ God::~God() {
 
 }
 
-void God::scheduleSpawn(WorldObject *worldObject) {
-    assert(worldObject->collisionDetector().geode() == nullptr);
-    assert(worldObject->collisionDetector().worldTree() == nullptr);
-    m_scheduledSpawns.push_back(worldObject);
+void God::scheduleSpawn(SpawnRequest spawnRequest) {
+    m_spawnRequests.push_back(spawnRequest);
 }
 
-void God::scheduleSpawns(const std::list<WorldObject*> &spawns) {
-#ifndef NDEBUG // only spawn things that aren't in a worldTree
-    for (WorldObject* worldObject : spawns){
-        assert(worldObject->collisionDetector().geode() == nullptr);
-        assert(worldObject->collisionDetector().worldTree() == nullptr);
-    }
-#endif
-    m_scheduledSpawns.insert(m_scheduledSpawns.end(), spawns.begin(), spawns.end());
-}
-
-const std::list<WorldObject*>& God::scheduledSpawns(){
-    return m_scheduledSpawns;
-}
-
-void God::scheduleRemoval(WorldObject *worldObject) {
+void God::scheduleRemoval(WorldObject* worldObject) {
     assert(worldObject->collisionDetector().geode() != nullptr);
     assert(worldObject->collisionDetector().worldTree() == &m_world.worldTree());
     for (WorldObject* scheduled : m_scheduledRemovals){
-        if (scheduled == worldObject)
+        if (scheduled == worldObject) {
             return;
+        }
     }
     m_scheduledRemovals.push_back(worldObject);
-    worldObject->onScheduleForDeletion();
+    worldObject->setSpawnState(SpawnState::RemovalScheduled);
 }
 
 void God::scheduleRemovals(const std::list<WorldObject*> &removals) {
@@ -58,33 +43,35 @@ void God::scheduleRemovals(const std::list<WorldObject*> &removals) {
     }
 }
 
-const std::list<WorldObject*>& God::scheduledRemovals(){
-    return m_scheduledRemovals;
-}
-
 void God::spawn() {
-    for (WorldObject* worldObject : m_scheduledSpawns) {
-        m_world.worldTree().insert(worldObject);
+    for (SpawnRequest& spawnRequest : m_spawnRequests) {
+        for (WorldObject* worldObject : spawnRequest.worldObjects()) {
+            m_world.worldTree().insert(worldObject);
 
-        std::list<VoxelCollision> collisions = worldObject->collisionDetector().checkCollisions();
+            std::list<VoxelCollision> collisions = worldObject->collisionDetector().checkCollisions();
 
-        if (collisions.size() > 0){
-            World::instance()->worldTree().remove(worldObject->collisionDetector().geode());
-            glow::warning("Failed to spawn %;", worldObject->objectInfo().name());
-            worldObject->onSpawnFail();
-            delete worldObject;
-            continue;
+            if (!collisions.empty()){
+                World::instance()->worldTree().remove(worldObject->collisionDetector().geode());
+                glow::warning("Failed to spawn %;", worldObject->objectInfo().name());
+                worldObject->setSpawnState(SpawnState::Rejected);
+                worldObject->onSpawnFail();
+
+                if (spawnRequest.deleteOnRejection()) {
+                    delete worldObject;
+                }
+            } else {
+                worldObject->setSpawnState(SpawnState::Spawned);
+                m_world.addWorldObject(worldObject);
+            }
         }
-
-        m_world.worldObjects().insert(worldObject);
     }
-    m_scheduledSpawns.clear();
+    m_spawnRequests.clear();
 }
 
 void God::remove() {
     for (WorldObject* worldObject : m_scheduledRemovals) {
         m_world.worldTree().remove(worldObject->collisionDetector().geode());
-        m_world.worldObjects().erase(worldObject);
+        m_world.removeWorldObject(worldObject);
         delete worldObject;
     }
     m_scheduledRemovals.clear();

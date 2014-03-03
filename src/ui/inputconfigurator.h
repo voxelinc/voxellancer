@@ -35,9 +35,7 @@ private:
 
     HUD* m_hud;
 
-    Property<float>* prop_deadzoneMouse;
     Property<float>* prop_deadzoneGamepad;
-
 
     bool setActionInputMapping(ActionKeyMapping* action, InputClass inputClass);
     bool isLastInputValid(InputClass inputClass);
