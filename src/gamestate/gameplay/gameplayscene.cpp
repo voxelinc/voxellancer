@@ -70,7 +70,7 @@ void GamePlayScene::drawGame(const Camera& camera) const {
     m_gamePlay->player().hud().draw();
     m_voxelRenderer->afterDraw();
 
-    World::instance()->voxelParticleEngine().draw(camera);
+    World::instance()->particleEngine().draw(camera);
 
 }
 

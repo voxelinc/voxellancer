@@ -15,7 +15,7 @@ EngineSlot::EngineSlot(WorldObjectComponents* components, EngineSlotVoxel* voxel
 {
 }
 
-EngineSlotVoxel* EngineSlot::voxel() {
+const EngineSlotVoxel* EngineSlot::voxel() const{
     return m_voxel;
 }
 

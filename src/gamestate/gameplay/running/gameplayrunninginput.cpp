@@ -243,9 +243,9 @@ void GamePlayRunningInput::processMouseUpdate() {
 
 void GamePlayRunningInput::processHMDUpdate() {
     if (HMDManager::instance()->hmd()) {
-        m_player->cameraDolly().setHeadOrientation(HMDManager::instance()->hmd()->orientation());
+        m_player->cameraHead().setRelativeOrientation(HMDManager::instance()->hmd()->orientation());
     } else {
-        m_player->cameraDolly().setHeadOrientation(glm::quat());
+        m_player->cameraHead().setRelativeOrientation(glm::quat());
     }
 }
 

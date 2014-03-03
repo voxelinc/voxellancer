@@ -53,7 +53,7 @@ protected:
 
     void calculateMinimalGridAABB();
     void calculateMinimalGridSphere();
-    IAABB calculateAABB(const Transform& transform);
+    const IAABB calculateAABB(const Transform& transform);
 
 
 private:

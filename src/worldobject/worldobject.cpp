@@ -66,11 +66,19 @@ Physics& WorldObject::physics() {
     return *m_physics;
 }
 
+const Physics& WorldObject::physics() const {
+    return *m_physics;
+}
+
 ObjectInfo& WorldObject::objectInfo() {
     return *m_objectInfo;
 }
 
 WorldObjectComponents& WorldObject::components() {
+    return *m_components;
+}
+
+const WorldObjectComponents& WorldObject::components() const {
     return *m_components;
 }
 

@@ -3,23 +3,18 @@
 #include <memory>
 #include <vector>
 #include <stack>
-#include <list>
 
-#include "glow/ref_ptr.h"
-#include <glow/Program.h>
-#include <glow/VertexArrayObject.h>
-#include <glow/Buffer.h>
-
-#include "camera/camera.h"
+#include <glow/ref_ptr.h>
 
 #include "property/property.h"
 
-#include "voxelparticledata.h"
-#include "voxelparticlesetup.h"
-#include "voxelparticlerenderer.h"
-#include "voxelparticleexpirecheck.h"
-#include "voxelparticleintersectioncheck.h"
-
+class Player;
+class Camera;
+struct VoxelParticleData;
+class VoxelParticleSetup;
+class VoxelParticleRenderer;
+class VoxelParticleRemover;
+class VoxelCluster;
 
 /*
     Main class for managing and displaying the VoxelParticles of
@@ -28,13 +23,17 @@
 class VoxelParticleEngine {
 public:
     VoxelParticleEngine();
+    ~VoxelParticleEngine();
 
     float time() const;
 
     int particleDataCount() const;
     VoxelParticleData* particleData(int index);
+    std::vector<VoxelParticleData>& particleDataVector();
 
-    void addParticle(const VoxelParticleSetup& particleSetup);
+    void setPlayer(Player& m_player);
+
+    void addParticle(const VoxelParticleSetup& particleSetup, const VoxelCluster* creator);
     void removeParticle(int index);
 
     void update(float deltaSec);
@@ -45,13 +44,11 @@ protected:
     float m_time;
     bool m_initialized;
 
-    VoxelParticleRenderer m_renderer;
-    VoxelParticleExpireCheck m_expireCheck;
-    VoxelParticleIntersectionCheck m_intersectionCheck;
+    std::unique_ptr<VoxelParticleRenderer> m_renderer;
+    std::unique_ptr<VoxelParticleRemover> m_remover;
 
     std::vector<VoxelParticleData> m_cpuParticleBuffer;
     std::stack<int> m_freeParticleBufferIndices;
-
 
     bool m_gpuParticleBufferInvalid;
     int m_gpuParticleBufferInvalidBegin;
