@@ -8,6 +8,11 @@ enum class InputType {
     GamePadAxis
 };
 
+enum class InputClass {
+    Primary,
+    Secondary
+};
+
 class InputMapping {
 public:
     InputMapping();

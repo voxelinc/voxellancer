@@ -3,14 +3,14 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 
-#include "display/rendering/visuals.h"
-
 #include "equipment.h"
 
-
+class Sound;
 class Hardpoint;
 class Projectile;
 class WorldObject;
+class Visuals;
+class SoundProperties;
 
 enum class WeaponType {
     Gun,
@@ -21,7 +21,7 @@ class Weapon: public Equipment {
 public:
     Weapon(WeaponType type, const std::string& equipmentKey);
 
-    virtual Visuals visuals() const = 0;
+    virtual const Visuals& visuals() const = 0;
 
     Hardpoint* hardpoint();
     void setHardpoint(Hardpoint* hardpoint);

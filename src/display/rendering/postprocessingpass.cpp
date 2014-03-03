@@ -27,7 +27,7 @@ void PostProcessingPass::beforeDraw(FrameBuffer& frameBuffer) {
     }
     frameBuffer.setDrawBuffers(m_output);
     int i = 0;
-    for (std::pair<std::string, int> mapping : m_inputMapping) {
+    for (const std::pair<std::string, int>& mapping : m_inputMapping) {
         glActiveTexture(GL_TEXTURE0 + i);
         m_program->setUniform<GLint>(mapping.first, i);
         frameBuffer.texture(mapping.second)->bind();
@@ -66,7 +66,7 @@ void PostProcessingPass::setFragmentShader(const std::string& fragmentShader) {
 
 void PostProcessingPass::initialize() {
     m_program = new glow::Program();
-    
+
     glow::Shader* vertShader = glowutils::createShaderFromFile(GL_VERTEX_SHADER, m_vertexShader);
     glow::Shader* fragShader = glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, m_fragmentShader);
 
@@ -85,7 +85,7 @@ void PostProcessingPass::afterContextRebuild() {
 }
 
 void PostProcessingPass::restoreUniforms() {
-    for (auto pair : m_uniforms) {
+    for (auto& pair : m_uniforms) {
         glow::ref_ptr<glow::AbstractUniform> uniform = pair.second;
         m_program->addUniform(uniform);
     }

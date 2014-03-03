@@ -7,6 +7,8 @@
 
 #include "ai/character.h"
 
+#include "gamestate/gameplay/gameplay.h"
+
 #include "resource/clustercache.h"
 
 #include "resource/worldobjectbuilder.h"
@@ -15,12 +17,12 @@
 #include "sound/soundmanager.h"
 #include "world/world.h"
 #include "world/god.h"
-#include "game.h"
 #include "player.h"
 
 
-BaseScenario::BaseScenario(Game* game):
-    m_game(game)
+BaseScenario::BaseScenario(GamePlay* gamePlay) :
+    m_gamePlay(gamePlay),
+    m_world(nullptr)
 {
 }
 
@@ -57,6 +59,6 @@ void BaseScenario::populateWorld() {
     playerShip->objectInfo().setShowOnHud(false);
     playerShip->objectInfo().setCanLockOn(false);
     m_world->god().scheduleSpawn(playerShip);
-    m_game->player().setShip(playerShip);
+    m_gamePlay->player().setShip(playerShip);
     m_world->god().spawn();
 }

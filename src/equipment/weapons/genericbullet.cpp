@@ -5,7 +5,8 @@
 #include "voxeleffect/voxelexplosiongenerator.h"
 
 
-GenericBullet::GenericBullet()
+GenericBullet::GenericBullet():
+    m_emissiveness(0.0f)
 {
 }
 
@@ -15,6 +16,14 @@ float GenericBullet::emissiveness() const {
 
 void GenericBullet::setEmissiveness(float emissiveness) {
     m_emissiveness = emissiveness;
+}
+
+const SoundProperties& GenericBullet::hitSound() const {
+    return m_hitSound;
+}
+
+void GenericBullet::setHitSound(const SoundProperties& hitSound) {
+    m_hitSound = hitSound;
 }
 
 void GenericBullet::spawnExplosion() {
@@ -31,4 +40,3 @@ void GenericBullet::spawnExplosion() {
 
     generator.spawn();
 }
-

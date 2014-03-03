@@ -36,6 +36,5 @@ protected:
     std::shared_ptr<PostProcessingPass> m_finalization;
     Property<bool> m_useFxaa;
 
-    Camera* m_camera;
 };
 

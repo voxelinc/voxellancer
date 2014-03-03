@@ -25,8 +25,8 @@ public:
     Transform& transform();
     void setTransform(const Transform& transform);
 
-    const glm::vec3& position();
-    const glm::quat& orientation();
+    const glm::vec3& position() const;
+    const glm::quat& orientation() const;
 
     Voxel* voxel(const glm::ivec3& position);
 

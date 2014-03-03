@@ -9,6 +9,9 @@
 
 #include "equipment/engineslot.h"
 
+#include "sound/sound.h"
+#include "sound/soundmanager.h"
+
 #include "ui/objectinfo.h"
 
 #include "worldobject/worldobjectcomponents.h"
@@ -23,11 +26,14 @@ Rocket::Rocket():
     m_boardComputer(this),
     m_aiTask(nullptr)
 {
-    collisionFilter().setCollisionFilterClass(CollisionFilterClass::Rocket);
-    collisionFilter().setCollideableWith(CollisionFilterClass::Rocket, false);
+    collisionFilter().setCollideableWith(WorldObjectType::Rocket, false);
 
     m_objectInfo->setShowOnHud(false);
     m_objectInfo->setCanLockOn(false);
+}
+
+WorldObjectType Rocket::objectType() const {
+    return WorldObjectType::Rocket;
 }
 
 WorldObject* Rocket::target() {
@@ -44,27 +50,17 @@ void Rocket::setTarget(WorldObject* targetObject) {
     }
 }
 
+
 void Rocket::update(float deltaSec) {
     Projectile::update(deltaSec);
 
-    if (m_aiTask.get()) {
+    if (m_aiTask) {
         m_aiTask->update(deltaSec);
         m_boardComputer.update(deltaSec);
     } else {
         components().setEngineState(EngineState(
             glm::vec3(0, 0, -1),
             glm::vec3(0, 0, 0)
-        ));
+            ));
     }
 }
-
-void Rocket::onCollision() {
-    World::instance()->god().scheduleRemoval(this);
-    spawnExplosion();
-}
-
-void Rocket::onSpawnFail() {
-    spawnExplosion();
-}
-
-

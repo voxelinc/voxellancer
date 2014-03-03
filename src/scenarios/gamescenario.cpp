@@ -11,14 +11,19 @@
 #include "ai/squadlogic.h"
 #include "ai/squad.h"
 
-#include "resource/worldobjectbuilder.h"
-
-#include "worldobject/ship.h"
 #include "equipment/engineslot.h"
 #include "equipment/hardpoint.h"
 #include "equipment/weapons/gun.h"
+
+#include "factions/factionmatrix.h"
+#include "factions/policefaction.h"
+#include "factions/piratefaction.h"
+
+#include "resource/worldobjectbuilder.h"
+
+#include "worldobject/ship.h"
 #include "sound/soundmanager.h"
-#include "game.h"
+#include "gamestate/gameplay/gameplay.h"
 #include "world/world.h"
 #include "voxel/voxel.h"
 #include "world/god.h"
@@ -26,8 +31,8 @@
 #include "ui/objectinfo.h"
 
 
-GameScenario::GameScenario(Game* game) :
-    BaseScenario(game)
+GameScenario::GameScenario(GamePlay* gamePlay):
+    BaseScenario(gamePlay)
 {
 }
 
@@ -69,6 +74,7 @@ void GameScenario::populateWorld() {
         glm::vec3(-500, 0, -500), glm::vec3(500, 0, -500) }));
 
     Ship *leader = WorldObjectBuilder("eagle").buildShip();
+    leader->character()->setFaction(World::instance()->factionMatrix().pirateFaction());
     leader->transform().setPosition(glm::vec3(0, 200, -100));
     leader->objectInfo().setName("leader");
     leader->objectInfo().setShowOnHud(true);
@@ -79,6 +85,7 @@ void GameScenario::populateWorld() {
     int lmember_count = 2;
     for (int i = 0; i < lmember_count; i++) {
         Ship *follower = WorldObjectBuilder("basicship").buildShip();
+        follower->character()->setFaction(World::instance()->factionMatrix().pirateFaction());
         follower->transform().setPosition(glm::vec3(100 * (-lmember_count / 2.0f + i), 200, 0));
         follower->objectInfo().setName("member");
         follower->objectInfo().setShowOnHud(true);
@@ -93,7 +100,7 @@ void GameScenario::populateWorld() {
     testCluster->objectInfo().setShowOnHud(false);
     m_world->god().scheduleSpawn(testCluster);
 
-    m_game->player().setShip(testCluster);
+    m_gamePlay->player().setShip(testCluster);
 
     WorldObject *wall = new WorldObject();
     wall->transform().move(glm::vec3(-30, 0, -50));
@@ -170,16 +177,18 @@ void GameScenario::createArmada() {
     chief->objectInfo().setShowOnHud(true);
     chief->objectInfo().setCanLockOn(true);
     chief->squadLogic()->joinSquad(armada);
+    chief->character()->setFaction(World::instance()->factionMatrix().policeFaction());
     m_world->god().scheduleSpawn(chief);
 
     int memberCount = 12;
     for (int i = 0; i < memberCount; i++) {
-        Ship *follower = i < 6 ? WorldObjectBuilder("mox").buildShip() : WorldObjectBuilder("basicship").buildShip();
+        Ship *follower = i < 6 ? WorldObjectBuilder("mox").buildShip() : WorldObjectBuilder("smallpolice").buildShip();
         follower->transform().setPosition(glm::vec3(700, 50* (-memberCount / 2.0f + i), 0));
         follower->objectInfo().setName("member");
         follower->objectInfo().setShowOnHud(true);
         follower->objectInfo().setCanLockOn(true);
         follower->squadLogic()->joinSquad(armada);
+        follower->character()->setFaction(World::instance()->factionMatrix().policeFaction());
         m_world->god().scheduleSpawn(follower);
     }
 

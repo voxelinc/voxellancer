@@ -3,6 +3,7 @@
 #include <memory>
 #include <string>
 
+#include "sound/soundproperties.h"
 #include "display/rendering/visuals.h"
 
 #include "bullet.h"
@@ -20,8 +21,11 @@ public:
     virtual float bulletSpeed() const override;
     void setBulletSpeed(float bulletSpeed);
 
-    virtual Visuals visuals() const override;
+    virtual const Visuals& visuals() const override;
     void setVisuals(const Visuals& visuals);
+
+    virtual const SoundProperties& fireSound() const override;
+    void setFireSound(const SoundProperties& fireSound);
 
     virtual float cooldownTime() const override;
     void setCooldownTime(float cooldownTime);
@@ -35,6 +39,7 @@ protected:
     float m_bulletLifetime;
     float m_cooldownTime;
     Visuals m_visuals;
+    SoundProperties m_fireSound;
     std::string m_bulletName;
 
     virtual Bullet* createBullet() override;

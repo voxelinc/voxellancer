@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 
 class Voxel;
 class WorldObject;

@@ -42,16 +42,16 @@ FrameBuffer& StereoViewEye::fbo() {
     return *m_fbo;
 }
 
-void StereoViewEye::draw(Scene* scene, CameraHead* cameraHead) {
-    m_camera->setPosition(cameraHead->position() + cameraHead->orientation() * m_offset);
-    m_camera->setOrientation(cameraHead->orientation());
+void StereoViewEye::draw(const Scene& scene, const CameraHead& cameraHead) {
+    m_camera->setPosition(cameraHead.position() + cameraHead.orientation() * m_offset);
+    m_camera->setOrientation(cameraHead.orientation());
 
     m_fbo->bind();
     m_fbo->clear();
 
     glViewport(0, 0, m_textureSize.x, m_textureSize.y);
 
-    scene->draw(*m_camera, &m_fbo->get(), m_side);
+    scene.draw(*m_camera, &m_fbo->get(), m_side);
 
     m_fbo->unbind();
 }
