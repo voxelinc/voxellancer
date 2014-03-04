@@ -11,16 +11,16 @@
 
 #include "display/rendering/visuals.h"
 
-#include "world/god.h"
+#include "voxelparticleengine.h"
+#include "voxelparticlesetup.h"
+
 #include "world/world.h"
 
-#include "voxelparticlesetup.h"
-#include "voxelparticleengine.h"
 
 
-
-VoxelDebrisGenerator::VoxelDebrisGenerator() :
-    VoxelParticleSpawnBase("physics.debrisDirectionalDampening",
+VoxelDebrisGenerator::VoxelDebrisGenerator(const VoxelCluster* creator) :
+    VoxelParticleSpawnBase(creator,
+                           "physics.debrisDirectionalDampening",
                            "physics.debrisAngularDampening",
                            "physics.debrisBaseForce",
                            "physics.debrisAngularBaseForce"),
@@ -77,7 +77,7 @@ void VoxelDebrisGenerator::spawn() {
                     createLifetime()
                 );
 
-                World::instance()->voxelParticleEngine().addParticle(particleSetup);
+                World::instance()->particleEngine().addParticle(particleSetup, m_creator);
             }
         }
     }

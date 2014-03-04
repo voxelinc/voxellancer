@@ -11,6 +11,10 @@
 #include "property/property.h"
 #include "worldobject/handle/handle.h"
 
+enum class ClickType {
+    None,
+    Selection
+};
 
 
 class Player;
@@ -51,7 +55,7 @@ public:
     void setTarget(WorldObject* target);
     WorldObject* target();
 
-    void onClick(int button);
+    void onClick(ClickType clickType);
 
     void update(float deltaSec);
     void draw();

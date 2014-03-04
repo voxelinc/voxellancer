@@ -5,7 +5,7 @@
 
 #include "geometry/ray.h"
 
-
+enum class ClickType;
 class HUD;
 
 
@@ -30,7 +30,7 @@ public:
     bool entered() const;
     bool left() const;
 
-    virtual void onClick(int button);
+    virtual void onClick(ClickType clickType);
 
     /*
     Shall return true when the Clickable is under a

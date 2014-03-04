@@ -1,7 +1,6 @@
 #pragma once
 
 #include "property/property.h"
-
 #include "voxelparticleremovecheck.h"
 
 
@@ -16,15 +15,11 @@ struct VoxelParticleData;
 */
 class VoxelParticleExpireCheck: public VoxelParticleRemoveCheck {
 public:
-    VoxelParticleExpireCheck(VoxelParticleEngine* engine);
+    VoxelParticleExpireCheck(const VoxelParticleEngine& engine);
 
-    virtual void update(float deltaSec) override;
-
+    virtual bool isDead(const VoxelParticleData& particle) override;
 
 protected:
-    Property<float> m_fullDeadCheckInterval;
-
-    virtual bool check(VoxelParticleData* particleData) override;
-    virtual bool isParallel(int checkCount) override;
+    const VoxelParticleEngine& m_particleEngine;
 };
 

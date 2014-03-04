@@ -19,6 +19,10 @@ WorldObject* WorldObjectComponents::worldObject() {
     return m_worldObject;
 }
 
+const WorldObject* WorldObjectComponents::worldObject() const {
+    return m_worldObject;
+}
+
 void WorldObjectComponents::addEngineSlot(std::shared_ptr<EngineSlot> engineSlot) {
     m_engineSlots.push_back(engineSlot);
 }
