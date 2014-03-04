@@ -34,7 +34,7 @@ void main() {
 
     gl_Position = viewProjection * vec4(position, 1.0);
 
-    f_normal = vec4(qtransform(m_orientation, v_normal), 0.0)).xyz;
+    f_normal = qtransform(m_orientation, v_normal);
     f_color = v_color.rgb;
     f_emissiveness = clamp(emissiveness + v_emissiveness, 0, 1);
     f_modelposition = v_vertex;

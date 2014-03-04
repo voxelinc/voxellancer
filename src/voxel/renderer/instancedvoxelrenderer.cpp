@@ -24,7 +24,10 @@
 
 
 InstancedVoxelRenderer::InstancedVoxelRenderer() :
-m_program(0) {
+    m_program(0),
+    m_clusterData(),
+    m_clustersMap()
+{
     glow::debug("Create Voxelrenderer");
     createAndSetupShaders();
 }
@@ -37,48 +40,47 @@ void InstancedVoxelRenderer::prepareDraw(const Camera& camera, bool withBorder) 
     m_program->setUniform("viewProjection", camera.viewProjection());
     m_program->setUniform("withBorder", (withBorder ? 1.0f : 0.0f));
 
-    m_modelMatrixUniform = m_program->getUniform<glm::mat4>("model");
-    m_emissivenessUniform = m_program->getUniform<float>("emissiveness");
-
-    assert(m_modelMatrixUniform != nullptr);
-    assert(m_emissivenessUniform != nullptr);
-
     glProvokingVertex(GL_LAST_VERTEX_CONVENTION);
 }
 
 void InstancedVoxelRenderer::draw(VoxelCluster& cluster) {
-    m_program->use();
-    m_modelMatrixUniform->set(cluster.transform().matrix());
-    m_emissivenessUniform->set(cluster.emissiveness());
-
-    IVoxelRenderData& renderData = cluster.voxelRenderData();
-
-    renderData.vertexArrayObject()->bind();
-    glVertexAttribDivisor(m_program->getAttributeLocation("v_vertex"), 0);
-    glVertexAttribDivisor(m_program->getAttributeLocation("v_Instanced"), 0);
-    glVertexAttribDivisor(m_program->getAttributeLocation("v_position"), 1);
-    glVertexAttribDivisor(m_program->getAttributeLocation("v_color"), 1);
-    glVertexAttribDivisor(m_program->getAttributeLocation("v_emissiveness"), 1);
-    renderData.vertexArrayObject()->drawArraysInstanced(GL_TRIANGLE_STRIP, 0, 14, renderData.voxelCount());
+    assert(cluster.isInstanced());
+    std::vector<VoxelCluster*>& clusters = m_clustersMap[&cluster.voxelRenderData()];
+    if (clusters.size() == 0) {
+        //setup(clustser.voxelRenderData())
+    }
+    clusters.push_back(&cluster);
 }
 
 
 void InstancedVoxelRenderer::afterDraw() {
-    glActiveTexture(GL_TEXTURE0);
+    m_program->use();
+
+    for (auto& pair : m_clustersMap)
+    {
+        drawInstances(pair.first, pair.second);
+        pair.second.clear();
+    }
+
     m_program->release();
 }
 
 void InstancedVoxelRenderer::createAndSetupShaders() {
     m_program = new glow::Program();
     m_program->attach(
-        glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/shader/voxelcluster/voxelcluster.vert"),
+        glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/shader/voxelcluster/instancedvoxelcluster.vert"),
+        glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/shader/lib/quaternion.glsl"),
         glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/shader/voxelcluster/voxelcluster.frag"),
         glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/shader/lib/voxel.frag")
         );
+
+    m_clusterBuffer = new glow::Buffer(GL_ARRAY_BUFFER);
 }
 
 void InstancedVoxelRenderer::beforeContextDestroy() {
     m_program = nullptr;
+    m_clusterBuffer = nullptr;
+    m_clustersMap.clear();
 }
 
 void InstancedVoxelRenderer::afterContextRebuild() {
@@ -91,4 +93,29 @@ int InstancedVoxelRenderer::getAttributeLocation(const std::string& name) {
 
 glow::Program* InstancedVoxelRenderer::program() {
     return m_program;
+}
+
+void InstancedVoxelRenderer::drawInstances(IVoxelRenderData* renderData, std::vector<VoxelCluster*> clusters) {
+    m_clusterData.clear();
+
+    for (VoxelCluster* cluster : clusters)
+    {
+        const Transform& transform = cluster->transform();
+        m_clusterData.push_back(ClusterData{ transform.position(), transform.orientation(), 
+                                             transform.scale(), transform.center() });
+    }
+    m_clusterBuffer->setData(m_clusterData, GL_STREAM_DRAW);
+
+    renderData->vertexArrayObject()->bind();
+    glVertexAttribDivisor(m_program->getAttributeLocation("v_vertex"), 0);
+    glVertexAttribDivisor(m_program->getAttributeLocation("v_normal"), 0);
+    glVertexAttribDivisor(m_program->getAttributeLocation("v_position"), 1);
+    glVertexAttribDivisor(m_program->getAttributeLocation("v_color"), 1);
+    glVertexAttribDivisor(m_program->getAttributeLocation("v_emissiveness"), 1);
+    glVertexAttribDivisor(m_program->getAttributeLocation("m_position"), renderData->voxelCount());
+    glVertexAttribDivisor(m_program->getAttributeLocation("m_orientation"), renderData->voxelCount());
+    glVertexAttribDivisor(m_program->getAttributeLocation("m_scale"), renderData->voxelCount());
+    glVertexAttribDivisor(m_program->getAttributeLocation("m_center"), renderData->voxelCount());
+    renderData->vertexArrayObject()->drawArraysInstanced(GL_TRIANGLE_STRIP, 0, 14, renderData->voxelCount() * m_clusterData.size());
+
 }

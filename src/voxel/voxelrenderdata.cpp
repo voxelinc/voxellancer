@@ -45,6 +45,10 @@ void VoxelRenderData::setupVertexAttributes() {
     setupVertexAttribute(offsetof(VoxelData, emissiveness), "v_emissiveness", 1, GL_FLOAT, GL_FALSE, 4);
 }
 
+int VoxelRenderData::bindings() {
+    return 5; // bindings 0-4 are used
+}
+
 void VoxelRenderData::setupVertexAttribute(GLint offset, const std::string& name, int numPerVertex, GLenum type, GLboolean normalised, int bindingNum) {
     glow::VertexAttributeBinding* binding = m_vertexArrayObject->binding(bindingNum);
     GLint location = VoxelRenderer::instance()->getAttributeLocation(name);
@@ -136,4 +140,8 @@ bool InstancedVoxelRenderData::isInstanced() {
 
 glow::VertexArrayObject* InstancedVoxelRenderData::vertexArrayObject() {
     return m_prototype.vertexArrayObject();
+}
+
+int InstancedVoxelRenderData::bindings() {
+    return m_prototype.bindings();
 }

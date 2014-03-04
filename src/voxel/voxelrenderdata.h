@@ -23,6 +23,7 @@ public:
     virtual void invalidate() = 0;
     virtual int voxelCount() = 0;
     virtual bool isInstanced() = 0;
+    virtual int bindings() = 0;
 
     virtual glow::VertexArrayObject* vertexArrayObject() = 0;
 };
@@ -35,9 +36,11 @@ public:
 
     virtual void invalidate() override; // throws assertion or just do nothing
     virtual int voxelCount() override;
+    virtual int bindings() override;
     virtual bool isInstanced() override;
 
     virtual glow::VertexArrayObject* vertexArrayObject() override;
+
 
 protected:
     IVoxelRenderData& m_prototype;
@@ -50,6 +53,7 @@ public:
 
     virtual void invalidate() override;
     virtual int voxelCount() override;
+    virtual int bindings() override;
     virtual bool isInstanced() override;
 
     virtual glow::VertexArrayObject* vertexArrayObject() override;
