@@ -8,12 +8,23 @@
 #include <glm/glm.hpp>
 
 #include <glow/Changeable.h>
+#include <unordered_map>
+#include <map>
 
 
 class InputMapping;
 
 template<typename T> class Property;
 template<typename T> class PropertyCollection;
+class AbstractPropertyCollection;
+
+namespace {
+    struct compareTypeInfo {
+        bool operator ()(const type_info* a, const type_info* b) const {
+            return a->before(*b);
+        }
+    };
+}
 
 /*
  Keeps track of properties and loads ini files.
@@ -43,21 +54,12 @@ public:
 protected:
     template<typename T>
     PropertyCollection<T>* getPropertyCollection();
+    template<typename T>
+    void addPropertyCollection(PropertyCollection<T>* collection);
 
-    std::unique_ptr<PropertyCollection<float>> m_floatProperties;
-    std::unique_ptr<PropertyCollection<int>> m_intProperties;
-    std::unique_ptr<PropertyCollection<uint32_t>> m_uint32Properties;
-    std::unique_ptr<PropertyCollection<char>> m_charProperties;
-    std::unique_ptr<PropertyCollection<bool>> m_boolProperties;
-    std::unique_ptr<PropertyCollection<std::string>> m_stringProperties;
-    std::unique_ptr<PropertyCollection<glm::vec2>> m_vec2Properties;
-    std::unique_ptr<PropertyCollection<glm::vec3>> m_vec3Properties;
-    std::unique_ptr<PropertyCollection<glm::vec4>> m_vec4Properties;
-    std::unique_ptr<PropertyCollection<InputMapping>> m_inputMappingProperties;
-    std::unique_ptr<PropertyCollection<std::list<std::string>>> m_listProperties;
+    std::unordered_map<const std::type_info*, std::unique_ptr<AbstractPropertyCollection>> m_propertyCollections;
 
     static PropertyManager* s_instance;
 };
-
 
 #include "propertymanager.inl"
