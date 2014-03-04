@@ -7,8 +7,14 @@
 TextFieldHudget::TextFieldHudget(HUD* hud, std::string content, glm::vec3 direction) :
 Hudget(hud),
 m_content(content),
-m_voxels(new TextFieldHudgetVoxels(this,content,direction,0.04f))
-{
+m_voxels(new TextFieldHudgetVoxels(this, content, direction, 0.04f)) {
+    m_direction = direction;
+}
+
+TextFieldHudget::TextFieldHudget(HUD* hud, std::string content, glm::vec3 direction, float scale) :
+Hudget(hud),
+m_content(content),
+m_voxels(new TextFieldHudgetVoxels(this, content, direction, scale)) {
     m_direction = direction;
 }
 
@@ -31,6 +37,6 @@ bool TextFieldHudget::isAt(const Ray& ray) const {
     return m_voxels->isAt(ray);
 }
 
-void TextFieldHudget::onClick(int Button) {
-    printf("text clicked");
+void TextFieldHudget::onClick(ClickType clickType) {
+    // Nothing to do here
 }

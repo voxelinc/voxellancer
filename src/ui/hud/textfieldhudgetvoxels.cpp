@@ -38,21 +38,21 @@ void TextFieldHudgetVoxels::setContent(std::string content) {
 
 void TextFieldHudgetVoxels::draw() {
     std::vector<Letter*> letters;
-    m_voxelFont->drawString(m_content, m_textFieldHudget->worldPosition(glm::vec3(0, 0, -1)), m_textFieldHudget->worldOrientation(glm::vec3(0, 0, -1)), FontSize::s5x7, 0.04f, FontAlign::aCenter);
+    m_voxelFont->drawString(m_content, m_textFieldHudget->worldPosition(m_direction), m_textFieldHudget->worldOrientation(m_direction), FontSize::s5x7, m_scale, FontAlign::aCenter);
 }
 
 const glm::vec3 TextFieldHudgetVoxels::upperLeft() const {
-    return m_textFieldHudget->worldPosition(glm::vec3(0, 0, -1)) + m_textFieldHudget->worldOrientation(glm::vec3(0, 0, -1)) * glm::vec3(m_offset + m_width * 0 - m_width / 2, m_height, 0);
+    return m_textFieldHudget->worldPosition(m_direction) + m_textFieldHudget->worldOrientation(m_direction) * glm::vec3(m_offset + m_width * 0 - m_width / 2, m_height, 0);
 }
 
 const glm::vec3 TextFieldHudgetVoxels::lowerLeft() const {
-    return m_textFieldHudget->worldPosition(glm::vec3(0, 0, -1)) + m_textFieldHudget->worldOrientation(glm::vec3(0, 0, -1)) * glm::vec3(m_offset + m_width * 0 - m_width / 2, -m_height, 0);
+    return m_textFieldHudget->worldPosition(m_direction) + m_textFieldHudget->worldOrientation(m_direction) * glm::vec3(m_offset + m_width * 0 - m_width / 2, -m_height, 0);
 }
 const glm::vec3 TextFieldHudgetVoxels::upperRight() const {
-    return m_textFieldHudget->worldPosition(glm::vec3(0, 0, -1)) + m_textFieldHudget->worldOrientation(glm::vec3(0, 0, -1)) * glm::vec3(m_offset + m_width * m_content.length() - m_width / 2, m_height, 0);
+    return m_textFieldHudget->worldPosition(m_direction) + m_textFieldHudget->worldOrientation(m_direction) * glm::vec3(m_offset + m_width * m_content.length() - m_width / 2, m_height, 0);
 }
 const glm::vec3 TextFieldHudgetVoxels::lowerRight() const {
-    return m_textFieldHudget->worldPosition(glm::vec3(0, 0, -1)) + m_textFieldHudget->worldOrientation(glm::vec3(0, 0, -1)) * glm::vec3(m_offset + m_width * m_content.length() - m_width / 2, -m_height, 0);
+    return m_textFieldHudget->worldPosition(m_direction) + m_textFieldHudget->worldOrientation(m_direction) * glm::vec3(m_offset + m_width * m_content.length() - m_width / 2, -m_height, 0);
 }
 
 bool TextFieldHudgetVoxels::isAt(const Ray& ray) const {

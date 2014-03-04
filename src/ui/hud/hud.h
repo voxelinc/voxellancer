@@ -78,7 +78,8 @@ protected:
     std::unique_ptr<AimHelperHudget> m_aimHelper;
     std::unique_ptr<CrossHair> m_crossHair;
     std::unique_ptr<WorldTreeScanner> m_scanner;
-    std::unique_ptr<TextFieldHudget> m_textfield;
+    std::unique_ptr<TextFieldHudget> m_speedLabel;
+    std::unique_ptr<TextFieldHudget> m_targetName;
 
     std::list<Hudget*> m_hudgets;
 

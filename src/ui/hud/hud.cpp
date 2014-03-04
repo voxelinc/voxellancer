@@ -35,7 +35,7 @@
 #include "display/view.h"
 #include "camera/camerahead.h"
 #include "textfieldhudget.h"
-
+#include "physics/physics.h"
 
 
 
@@ -46,13 +46,15 @@ HUD::HUD(Player* player, Viewer* viewer):
     m_crossHair(new CrossHair(this)),
     m_aimHelper(new AimHelperHudget(this)),
     m_scanner(new WorldTreeScanner()),
-    m_textfield(new TextFieldHudget(this,"test",glm::vec3(0,0,-1))),
+    m_targetName(new TextFieldHudget(this, "", glm::normalize(glm::vec3(0, -1, -2)))),
+    m_speedLabel(new TextFieldHudget(this, "", glm::normalize(glm::vec3(1, -1, -2)), 0.03f)),
     m_target(nullptr)
 {
     m_scanner->setScanRadius(1050.0f);
     m_hudgets.push_back(m_crossHair.get());
     m_hudgets.push_back(m_aimHelper.get());
-    m_hudgets.push_back(m_textfield.get());
+    m_hudgets.push_back(m_targetName.get());
+    m_hudgets.push_back(m_speedLabel.get());
 }
 
 HUD::~HUD() = default;
@@ -134,6 +136,16 @@ void HUD::update(float deltaSec) {
     updateScanner(deltaSec);
 
     Ray toCrossHair = Ray::fromTo(m_player->cameraHead().position(), m_crossHair->worldPosition());
+
+    if (m_target.get()) {
+        m_targetName->setContent(m_target->objectInfo().name());
+    } else {
+        m_targetName->setContent("no target");
+    }
+
+    if (m_player) {
+        m_speedLabel->setContent(std::to_string((int)(glm::length(m_player->ship()->physics().speed().directional()))));
+    }
 
     for (Hudget* hudget : m_hudgets) {
         hudget->pointerAt(toCrossHair, m_crossHair->actionActive());
