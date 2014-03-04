@@ -14,7 +14,7 @@
 #include "input/inputmapping.h"
 
 
-PropertyManager::PropertyManager() :
+PropertyManager::PropertyManager():
     m_propertyCollections() 
 {
     addPropertyCollection(new PropertyCollection<float>(float_regex(), [](std::string s) { return std::stof(s); }));
