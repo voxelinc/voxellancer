@@ -2,6 +2,10 @@
 
 #include <string>
 
+#include <glm/glm.hpp>
+
+#include <glm/glm.hpp>
+
 #include <glow/ref_ptr.h>
 
 #include "etc/contextdependant.h"
@@ -12,6 +16,8 @@ namespace glow {
     class Program;
     class VertexArrayObject;
     class Buffer;
+    template<typename T>
+    class Uniform;
 };
 
 class Camera;
@@ -31,6 +37,9 @@ public:
 
 protected:
     glow::ref_ptr<glow::Program> m_program;
+
+    glow::Uniform<glm::mat4>* m_modelMatrixUniform;
+    glow::Uniform<float>* m_emissivenessUniform;
 
     void createAndSetupShaders();
     virtual void beforeContextDestroy() override;

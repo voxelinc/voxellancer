@@ -7,6 +7,7 @@
 #include <glow/VertexAttributeBinding.h>
 #include <glow/Program.h>
 #include <glow/Buffer.h>
+#include <glow/Uniform.h>
 #include <glow/Shader.h>
 #include <glowutils/global.h>
 
@@ -37,15 +38,19 @@ void NormalVoxelRenderer::prepareDraw(const Camera& camera, bool withBorder) {
     m_program->setUniform("viewProjection", camera.viewProjection());
     m_program->setUniform("withBorder", (withBorder ? 1.0f : 0.0f));
 
-    m_program->use();
+    m_modelMatrixUniform = m_program->getUniform<glm::mat4>("model");
+    m_emissivenessUniform = m_program->getUniform<float>("emissiveness");
+
+    assert(m_modelMatrixUniform != nullptr);
+    assert(m_emissivenessUniform != nullptr);
 
     glProvokingVertex(GL_LAST_VERTEX_CONVENTION);
 }
 
 void NormalVoxelRenderer::draw(VoxelCluster& cluster) {
-    m_program->setUniform("model", cluster.transform().matrix());
-    m_program->setUniform("emissiveness", cluster.emissiveness());
-
+    m_program->use();
+    m_modelMatrixUniform->set(cluster.transform().matrix());
+    m_emissivenessUniform->set(cluster.emissiveness());
 
     IVoxelRenderData& renderData = cluster.voxelRenderData();
 
