@@ -83,7 +83,6 @@ GamePlayRunningInput::GamePlayRunningInput(Player* player):
     m_actions(),
 
     m_inputConfigurator(new InputConfigurator(&m_actions, &m_secondaryInputValues, &prop_deadzoneGamepad, &m_player->hud())),
-    m_targetSelector(new TargetSelector(*player)),
     m_fireUpdate(false),
     m_rocketUpdate(false),
     m_moveUpdate(0),
@@ -101,8 +100,9 @@ GamePlayRunningInput::GamePlayRunningInput(Player* player):
     m_currentTimePressed = 0;
 }
 
-void GamePlayRunningInput::resizeEvent(const unsigned int width, const unsigned int height){
-	m_lastfocus = false; // through window resize everything becomes scrambled
+void GamePlayRunningInput::resizeEvent(const unsigned int width, const unsigned int height) {
+    m_lastfocus = false; // through window resize everything becomes scrambled
+}
 
 /*
 *    Check here for single-time key-presses, that you do not want fired multiple times, e.g. toggles
