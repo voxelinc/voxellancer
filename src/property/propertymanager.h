@@ -18,14 +18,6 @@ template<typename T> class Property;
 template<typename T> class PropertyCollection;
 class AbstractPropertyCollection;
 
-namespace {
-    struct compareTypeInfo {
-        bool operator ()(const type_info* a, const type_info* b) const {
-            return a->before(*b);
-        }
-    };
-}
-
 /*
  Keeps track of properties and loads ini files.
  Properties will be updated when a new ini file is loaded.
