@@ -87,7 +87,7 @@ void Voxel::onRemoval() {
 
 void Voxel::onDestruction(const WorldObject* owner) {
     if (owner) {
-        VoxelDebrisGenerator generator(worldObject);
+        VoxelDebrisGenerator generator(owner);
         generator.setOrientation(owner->transform().orientation());
         generator.setPosition(owner->transform().applyTo(glm::vec3(m_gridCell)));
         generator.setScale(owner->transform().scale() * 0.6f, 0.4f);

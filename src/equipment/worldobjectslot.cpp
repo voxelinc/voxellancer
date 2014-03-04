@@ -43,7 +43,7 @@ int WorldObjectSlot::index() const {
     return m_index;
 }
 
-glm::vec3 WorldObjectSlot::position() {
+const glm::vec3 WorldObjectSlot::position() const {
     return m_voxel->position(m_components->worldObject()->transform());
 }
 

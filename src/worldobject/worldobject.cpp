@@ -46,8 +46,8 @@ WorldObject::WorldObject(WorldObject* prototype):
     m_crucialVoxel(nullptr),
     m_collisionFieldOfDamage(glm::half_pi<float>()),
     m_handle(Handle<WorldObject>(this)),
-    m_scheduledForDeletion(false),
-    m_collisionFilter(new CollisionFilter(this, prototype->collisionFilter().collisionFilterClass(), prototype->collisionFilter().collisionMask()))
+    m_spawnState(SpawnState::None),
+    m_collisionFilter(new CollisionFilter(this, prototype->collisionFilter().collisionMask()))
 {
 
 }

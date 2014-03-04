@@ -29,13 +29,13 @@ void FuelVoxel::onRemoval() {
 }
 
 void FuelVoxel::onDestruction(const WorldObject* owner) {
-    SpecialVoxel::onDestruction();
+    SpecialVoxel::onDestruction(owner);
 
     // In addition to spawning debris, explode a little
     VoxelExplosionGenerator generator(owner);
-    generator.setPosition(position());
-    generator.setRadius(worldObject->transform().scale());
-    generator.setScale(worldObject->transform().scale() / 2.0f);
+    generator.setPosition(position(owner->transform()));
+    generator.setRadius(owner->transform().scale());
+    generator.setScale(owner->transform().scale() / 2.0f);
     generator.setCount(30);
     generator.setEmissiveness(0.4f);
     generator.setColor(0xFF0000);

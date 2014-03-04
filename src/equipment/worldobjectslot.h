@@ -19,7 +19,7 @@ public:
 
     std::list<std::string> mountables() const;
 
-    glm::vec3 position();
+    const glm::vec3 position() const;
 
     bool mountable(const std::string& name) const;
     void setMountable(const std::string& name, bool mountable);
