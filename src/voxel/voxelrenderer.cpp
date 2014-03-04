@@ -12,7 +12,6 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
 
-
 #include "camera/camera.h"
 
 #include "voxel/voxelrenderer.h"
