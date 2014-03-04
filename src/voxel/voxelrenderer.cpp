@@ -5,11 +5,13 @@
 #include <glow/VertexAttributeBinding.h>
 #include <glow/Program.h>
 #include <glow/Buffer.h>
+#include <glow/Uniform.h>
 #include <glow/Shader.h>
 #include <glowutils/global.h>
 
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
+
 
 #include "camera/camera.h"
 
@@ -26,7 +28,9 @@ std::weak_ptr<VoxelRenderer> VoxelRenderer::s_instance;
 VoxelRenderer::VoxelRenderer() :
     m_program(0),
     m_prepared(false),
-    m_voxelMesh(new VoxelMesh())
+    m_voxelMesh(new VoxelMesh()),
+    m_modelMatrixUniform(nullptr),
+    m_emissivenessUniform(nullptr)
 {
     glow::debug("Create Voxelrenderer");
     createAndSetupShaders();
@@ -40,6 +44,12 @@ void VoxelRenderer::prepareDraw(const Camera& camera, bool withBorder) {
     m_program->setUniform("viewProjection", camera.viewProjection());
     m_program->setUniform("withBorder", (withBorder ? 1.0f : 0.0f));
 
+    m_modelMatrixUniform = m_program->getUniform<glm::mat4>("model");
+    m_emissivenessUniform = m_program->getUniform<float>("emissiveness");
+
+    assert(m_modelMatrixUniform != nullptr);
+    assert(m_emissivenessUniform != nullptr);
+
     m_program->use();
 
     glProvokingVertex(GL_LAST_VERTEX_CONVENTION);
@@ -48,8 +58,8 @@ void VoxelRenderer::prepareDraw(const Camera& camera, bool withBorder) {
 }
 
 void VoxelRenderer::draw(VoxelCluster& cluster) {
-    m_program->setUniform("model", cluster.transform().matrix());
-    m_program->setUniform("emissiveness", cluster.emissiveness());
+    m_modelMatrixUniform->set(cluster.transform().matrix());
+    m_emissivenessUniform->set(cluster.emissiveness());
 
     VoxelRenderData* renderData = cluster.voxelRenderData();
 
