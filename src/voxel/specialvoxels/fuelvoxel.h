@@ -9,6 +9,8 @@ public:
 
     virtual void addToObject(WorldObject* worldObject) override;
 
+    virtual float damageForwardingDestructionDamage() override;
+
     virtual void onRemoval() override;
     virtual void onDestruction(const WorldObject* owner) override;
 };

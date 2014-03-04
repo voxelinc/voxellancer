@@ -13,15 +13,15 @@
 #include "voxeleffect/enginetrailgenerator.h"
 #include "voxel/specialvoxels/engineslotvoxel.h"
 
+#include "equipment/engineslot.h"
 #include "worldobject/worldobjectcomponents.h"
 #include "worldobject/worldobject.h"
 
 
 Engine::Engine(const std::string& key):
     Equipment(key),
-    m_trailGenerator(new EngineTrailGenerator(this))
+    m_trailGenerator(nullptr)
 {
-    setupTrail();
 }
 
 Engine::~Engine() {
@@ -34,8 +34,15 @@ EngineSlot* Engine::engineSlot() {
     return m_engineSlot;
 }
 
+const EngineSlot* Engine::engineSlot() const {
+    return m_engineSlot;
+}
+
 void Engine::setEngineSlot(EngineSlot* engineSlot) {
     m_engineSlot = engineSlot;
+
+    m_trailGenerator.reset(new EngineTrailGenerator(*this, *m_engineSlot->components()->worldObject()));
+    setupTrail();
 }
 
 void Engine::update(float deltaSec) {

@@ -30,6 +30,7 @@ public:
     const glm::quat& orientation() const;
 
     Voxel* voxel(const glm::ivec3& position);
+    const Voxel* voxel(const glm::ivec3& position) const;
 
     virtual void addVoxel(Voxel* voxel);
     virtual void removeVoxel(Voxel* voxel);

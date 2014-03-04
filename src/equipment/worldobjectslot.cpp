@@ -35,6 +35,10 @@ WorldObjectComponents* WorldObjectSlot::components() {
     return m_components;
 }
 
+const WorldObjectComponents* WorldObjectSlot::components() const {
+    return m_components;
+}
+
 int WorldObjectSlot::index() const {
     return m_index;
 }

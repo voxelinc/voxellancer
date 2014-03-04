@@ -13,8 +13,9 @@
 #include "worldobject/worldobjectcomponents.h"
 
 
-EngineTrailGenerator::EngineTrailGenerator(Engine* engine) :
-    m_generator(new VoxelExplosionGenerator()),
+EngineTrailGenerator::EngineTrailGenerator(Engine& engine, const WorldObject& creator) :
+    m_generator(new VoxelExplosionGenerator(nullptr)),
+    m_creator(creator),
     m_engine(engine),
     m_spawnOffset(0.5f),
     m_lastValid(false),
@@ -23,8 +24,6 @@ EngineTrailGenerator::EngineTrailGenerator(Engine* engine) :
     prop_stepDistance("vfx.engineTrailStepDistance"),
     prop_idleTime("vfx.engineTrailIdleCooldown")
 {
-    assert(engine != nullptr);
-
     m_generator->setColor(0x6666FF);
     m_generator->setEmissiveness(0.4f);
     m_generator->setCount(8);
@@ -39,14 +38,12 @@ void EngineTrailGenerator::setLifetime(float lifetime) {
 }
 
 void EngineTrailGenerator::update(float deltaSec) {
-    assert(m_engine);
-
-    if(m_engine->engineSlot()) { // Only spawn if engine is installed
+    if(m_engine.engineSlot()) { // Only spawn if engine is installed
         m_timeSinceLastSpawn += deltaSec;
 
         updateTrailSettings();
 
-        if (m_engine->state().directional().z <= -0.05f) { //only when moving forward
+        if (m_engine.state().directional().z <= -0.05f) { //only when moving forward
             spawnTrail();
         } else {
             if (m_timeSinceLastSpawn > prop_idleTime) { // When not moving, we still want some exhausts
@@ -59,9 +56,7 @@ void EngineTrailGenerator::update(float deltaSec) {
 }
 
 void EngineTrailGenerator::spawnTrail() {
-    WorldObject* worldObject = m_engine->engineSlot()->components()->worldObject();
-
-    m_spawnOffset = worldObject->transform().scale() * 1.2f;
+    m_spawnOffset = m_creator.transform().scale() * 1.2f;
 
     glm::vec3 newPosition = calculateSpawnPosition();
     glm::vec3 distance = newPosition - m_lastSpawnPoint;
@@ -82,15 +77,12 @@ void EngineTrailGenerator::spawnTrail() {
 }
 
 glm::vec3 EngineTrailGenerator::calculateSpawnPosition() {
-    WorldObject* worldObject = m_engine->engineSlot()->components()->worldObject();
-    return m_engine->engineSlot()->position() + worldObject->transform().orientation() * glm::vec3(0, 0, m_spawnOffset);
+    return m_engine.engineSlot()->position() + m_creator.transform().orientation() * glm::vec3(0, 0, m_spawnOffset);
 }
 
 void EngineTrailGenerator::spawnAt(glm::vec3 position) {
-    WorldObject* worldObject = m_engine->engineSlot()->components()->worldObject();
-
     m_generator->setPosition(position);
-    m_generator->setImpactVector(worldObject->transform().orientation() * (glm::vec3(0, 0, 0.1f) * glm::abs(worldObject->physics().acceleration().directional()) / 5.0f));
+    m_generator->setImpactVector(m_creator.transform().orientation() * (glm::vec3(0, 0, 0.1f) * glm::abs(m_creator.physics().acceleration().directional()) / 5.0f));
 
     m_generator->spawn();
     m_timeSinceLastSpawn = 0.0f;
@@ -103,7 +95,7 @@ void EngineTrailGenerator::spawnAt(glm::vec3 position) {
     them very frame
 */
 void EngineTrailGenerator::updateTrailSettings() {
-    WorldObject* worldObject = m_engine->engineSlot()->components()->worldObject();
+    const WorldObject* worldObject = m_engine.engineSlot()->components()->worldObject();
 
     m_generator->setScale(worldObject->transform().scale() / 15.0f);
     m_generator->setRadius(worldObject->transform().scale() * 0.3f);

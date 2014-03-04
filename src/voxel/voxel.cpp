@@ -7,9 +7,9 @@
 #include "glow/logging.hpp"
 
 #include "worldobject/worldobject.h"
+#include "voxel/voxeltree.h"
 #include "voxel/voxeltreenode.h"
 #include "voxeleffect/voxeldebrisgenerator.h"
-#include "voxeltree.h"
 
 
 Property<float>* Voxel::s_defaultMass;
@@ -73,6 +73,10 @@ void Voxel::applyDamage(float deltaHp) {
     m_hp = std::max(m_hp - deltaHp, 0.0f);
 }
 
+float Voxel::damageForwardingDestructionDamage() {
+    return 0;
+}
+
 float Voxel::normalizedMass() const {
     return m_normalizedMass;
 }
@@ -83,7 +87,7 @@ void Voxel::onRemoval() {
 
 void Voxel::onDestruction(const WorldObject* owner) {
     if (owner) {
-        VoxelDebrisGenerator generator;
+        VoxelDebrisGenerator generator(worldObject);
         generator.setOrientation(owner->transform().orientation());
         generator.setPosition(owner->transform().applyTo(glm::vec3(m_gridCell)));
         generator.setScale(owner->transform().scale() * 0.6f, 0.4f);

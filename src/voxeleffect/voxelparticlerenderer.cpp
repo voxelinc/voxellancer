@@ -1,7 +1,5 @@
 #include "voxelparticlerenderer.h"
 
-#include <algorithm>
-
 #include <glow/Buffer.h>
 #include <glow/Program.h>
 #include <glow/VertexAttributeBinding.h>
@@ -14,16 +12,20 @@
 #include "utils/math.h"
 
 #include "voxelparticleengine.h"
+#include "voxelmesh.h"
 
 
 VoxelParticleRenderer::VoxelParticleRenderer(VoxelParticleEngine* engine):
     m_initialized(false),
     m_engine(engine),
     m_bufferSize(0),
+    m_voxelMesh(new VoxelMesh()),
     m_defaultLightDir("vfx.lightdir")
 {
 
 }
+
+VoxelParticleRenderer::~VoxelParticleRenderer() = default;
 
 void VoxelParticleRenderer::updateBuffer(int begin, int end, VoxelParticleData* data) {
     if (!m_initialized) {
@@ -36,14 +38,8 @@ void VoxelParticleRenderer::updateBuffer(int begin, int end, VoxelParticleData* 
 
     int byteCount = (end - begin + 1) * sizeof(VoxelParticleData);
 
-    VoxelParticleData* mappedBuffer = static_cast<VoxelParticleData*>(m_gpuParticleBuffer->mapRange(
-        begin * sizeof(VoxelParticleData),
-        byteCount,
-        GL_MAP_WRITE_BIT
-    ));
-    assert(mappedBuffer);
-    memcpy(mappedBuffer, data, byteCount);
-    m_gpuParticleBuffer->unmap();
+    m_gpuParticleBuffer->setSubData(begin * sizeof(VoxelParticleData), byteCount, data);
+
 }
 
 void VoxelParticleRenderer::draw(const Camera& camera) {
@@ -85,7 +81,7 @@ void VoxelParticleRenderer::setupVertexAttributes() {
     
     int vertexLocation = m_program->getAttributeLocation("v_vertex");
     int normalLocation = m_program->getAttributeLocation("v_normal");
-    m_voxelMesh.bindTo(vertexLocation, normalLocation, b++, b++, m_vertexArrayObject);
+    m_voxelMesh->bindTo(vertexLocation, normalLocation, b++, b++, m_vertexArrayObject);
 
     setupVertexAttribute(offsetof(VoxelParticleData, creationPosition), "creationPosition", 3, GL_FLOAT, GL_FALSE, b++);
     setupVertexAttribute(offsetof(VoxelParticleData, creationEulers), "creationEulers", 3, GL_FLOAT, GL_FALSE, b++);
@@ -151,3 +147,4 @@ void VoxelParticleRenderer::beforeContextDestroy() {
 void VoxelParticleRenderer::afterContextRebuild() {
     // lazy init
 }
+

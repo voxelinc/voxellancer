@@ -62,6 +62,7 @@ void ObjectHudget::update(float deltaSec) {
 
     m_voxels->setTargetHightlight(targetHighlight);
     m_voxels->setRelationType(relationType);
+    m_voxels->update(deltaSec);
 }
 
 void ObjectHudget::draw() {
