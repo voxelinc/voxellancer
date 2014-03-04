@@ -17,8 +17,6 @@ public:
     CameraHead& cameraHead();
     const CameraHead& cameraHead() const;
 
-    void setHeadOrientation(const glm::quat& orientation);
-
     void followWorldObject(WorldObject* m_followWorldObject);
 
     void update(float deltaSec);

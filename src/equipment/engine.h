@@ -25,6 +25,7 @@ public:
     virtual const SoundProperties& sound() const = 0;
     
     EngineSlot* engineSlot();
+    const EngineSlot* engineSlot() const;
     void setEngineSlot(EngineSlot* engineSlot);
 
     virtual EnginePower power() const = 0;

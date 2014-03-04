@@ -47,9 +47,14 @@ public:
     void setCollisionFilter(CollisionFilter* collisionFilter);
 
     CollisionDetector& collisionDetector();
+
     Physics& physics();
+    const Physics& physics() const;
+
     ObjectInfo& objectInfo();
+
     WorldObjectComponents& components();
+    const WorldObjectComponents& components() const;
 
     virtual void update(float deltaSec);
 

@@ -31,12 +31,12 @@ void FuelVoxel::onRemoval() {
 void FuelVoxel::onDestruction() {
     Voxel::onDestruction();
 
+    WorldObject* worldObject = m_voxelTreeNode->voxelTree()->worldObject();
     // In addition to spawning debris, explode a little
-    VoxelExplosionGenerator generator;
-
+    VoxelExplosionGenerator generator(worldObject);
     generator.setPosition(position());
-    generator.setRadius(m_voxelTreeNode->voxelTree()->worldObject()->transform().scale());
-    generator.setScale(m_voxelTreeNode->voxelTree()->worldObject()->transform().scale() / 2.0f);
+    generator.setRadius(worldObject->transform().scale());
+    generator.setScale(worldObject->transform().scale() / 2.0f);
     generator.setCount(30);
     generator.setEmissiveness(0.4f);
     generator.setColor(0xFF0000);

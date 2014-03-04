@@ -83,7 +83,7 @@ GamePlayRunningInput::GamePlayRunningInput(Player* player):
     m_actions(),
 
     m_inputConfigurator(new InputConfigurator(&m_actions, &m_secondaryInputValues, &prop_deadzoneGamepad, &m_player->hud())),
-
+    m_targetSelector(new TargetSelector(*player)),
     m_fireUpdate(false),
     m_rocketUpdate(false),
     m_moveUpdate(0),
@@ -101,9 +101,8 @@ GamePlayRunningInput::GamePlayRunningInput(Player* player):
     m_currentTimePressed = 0;
 }
 
-void GamePlayRunningInput::resizeEvent(const unsigned int width, const unsigned int height) {
+void GamePlayRunningInput::resizeEvent(const unsigned int width, const unsigned int height){
 	m_lastfocus = false; // through window resize everything becomes scrambled
-}
 
 /*
 *    Check here for single-time key-presses, that you do not want fired multiple times, e.g. toggles
@@ -111,22 +110,22 @@ void GamePlayRunningInput::resizeEvent(const unsigned int width, const unsigned 
 */
 void GamePlayRunningInput::keyCallback(int key, int scancode, int action, int mods) {
     if (action == GLFW_PRESS) {
-        m_inputConfigurator->setLastPrimaryInput(InputMapping(InputType::Keyboard, key, 1, 0.0f));
+        m_inputConfigurator->setLastInput(InputMapping(InputType::Keyboard, key, 1, 0.0f), InputClass::Primary);
     } else {
-        m_inputConfigurator->setLastPrimaryInput(InputMapping());
+        m_inputConfigurator->setLastInput(InputMapping(), InputClass::Primary);
     }
 
     if(action == GLFW_PRESS) {
         switch(key) {
             case GLFW_KEY_F10:
                 if (glfwJoystickPresent(GLFW_JOYSTICK_1)) {
-                    m_inputConfigurator->startConfiguration(false);
+                    m_inputConfigurator->startConfiguration(InputClass::Secondary);
                 }
             break;
 
             case GLFW_KEY_F11:
-                m_inputConfigurator->startConfiguration(true);
-                m_inputConfigurator->setLastPrimaryInput(InputMapping());
+                m_inputConfigurator->startConfiguration(InputClass::Primary);
+                m_inputConfigurator->setLastInput(InputMapping(), InputClass::Primary);
             break;
 
             case GLFW_KEY_SPACE:
@@ -257,9 +256,9 @@ void GamePlayRunningInput::processMouseUpdate(float deltaSec) {
 
 void GamePlayRunningInput::processHMDUpdate() {
     if (HMDManager::instance()->hmd()) {
-        m_player->cameraDolly().setHeadOrientation(HMDManager::instance()->hmd()->orientation());
+        m_player->cameraHead().setRelativeOrientation(HMDManager::instance()->hmd()->orientation());
     } else {
-        m_player->cameraDolly().setHeadOrientation(glm::quat());
+        m_player->cameraHead().setRelativeOrientation(glm::quat());
     }
 }
 
@@ -281,15 +280,15 @@ void GamePlayRunningInput::addActionsToVector() {
 }
 
 float GamePlayRunningInput::getInputValue(ActionKeyMapping* action) {
-    float inputValue = glm::max(getInputValue(action->primaryMapping.get()), getInputValue(action->secondaryMapping.get()));
-    if (action->toggleAction) {
+    float inputValue = glm::max(getInputValue(action->mapping(InputClass::Primary)), getInputValue(action->mapping(InputClass::Secondary)));
+    if (action->toggleAction()) {
         if (inputValue) {
-            if (action->toggleStatus) {
+            if (action->toggleStatus()) {
                 inputValue = 0;
             }
-            action->toggleStatus = true;
+            action->setToggleStatus(true);
         } else {
-            action->toggleStatus = false;
+            action->setToggleStatus(false);
         }
     }
     return inputValue;
