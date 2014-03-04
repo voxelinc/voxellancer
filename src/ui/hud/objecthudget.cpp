@@ -148,8 +148,10 @@ glm::vec3 ObjectHudget::closestPointInsideFov() {
     return pointInsideFov;
 }
 
-void ObjectHudget::onClick(int button) {
-    m_hud->player()->setTarget(m_objectDelegate->worldObject());
+void ObjectHudget::onClick(ClickType clickType) {
+    if (clickType == ClickType::Selection) {
+        m_hud->player()->setTarget(m_objectDelegate->worldObject());
+    }
 }
 
 void ObjectHudget::updateTargeted() {

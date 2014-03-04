@@ -140,7 +140,7 @@ void GamePlayRunningInput::keyCallback(int key, int scancode, int action, int mo
 void GamePlayRunningInput::mouseButtonCallback(int button, int action, int mods) {
     if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_RELEASE) {
         if (m_currentTimePressed > 0 && m_currentTimePressed < prop_maxClickTime) {
-            m_player->hud().onClick(GLFW_MOUSE_BUTTON_RIGHT);
+            m_player->hud().onClick(ClickType::Selection);
         } else {
         }
         m_currentTimePressed = 0;

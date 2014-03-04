@@ -22,7 +22,7 @@ public:
 
     virtual bool isAt(const Ray& ray) const override;
 
-    virtual void onClick(int button) override;
+    virtual void onClick(ClickType clickType) override;
 
     HUDObjectDelegate* objectDelegate();
 

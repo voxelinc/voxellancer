@@ -151,11 +151,11 @@ void HUD::draw() {
     lightuniform->set(oldLightdir);
 }
 
-void HUD::onClick(int button) {
+void HUD::onClick(ClickType clickType) {
     Ray toCrossHair = Ray::fromTo(m_player->cameraHead().position(), m_crossHair.get()->worldPosition());
     for (Hudget* hudget : m_hudgets) {
         if (hudget->isAt(toCrossHair) && hudget != m_crossHair.get()) {
-            hudget->onClick(button);
+            hudget->onClick(clickType);
             return;
         }
     }
