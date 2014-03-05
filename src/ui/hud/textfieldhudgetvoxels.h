@@ -15,14 +15,10 @@ public:
 
     void setContent(std::string content);
 
-    void update(float deltaSec);
-    void draw();
+    virtual void update(float deltaSec);
+    virtual void draw();
 
     virtual bool isAt(const Ray& ray) const;
-    const glm::vec3 upperLeft() const;
-    const glm::vec3 lowerLeft() const;
-    const glm::vec3 upperRight() const;
-    const glm::vec3 lowerRight() const;
 
     float width();
     float height();
@@ -30,6 +26,12 @@ public:
 
 
 protected:
+
+    const glm::vec3 upperLeft() const;
+    const glm::vec3 lowerLeft() const;
+    const glm::vec3 upperRight() const;
+    const glm::vec3 lowerRight() const;
+
     TextFieldHudget* m_textFieldHudget;
     std::string m_content;
     VoxelFont* m_voxelFont;
