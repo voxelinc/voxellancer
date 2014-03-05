@@ -104,9 +104,15 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
 	game->gamePlay().running().input().keyCallback(key, scancode, action, mods);
 }
 
+
+static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
+    game->gamePlay().running().input().mouseButtonCallback(button, action, mods);
+}
+
 void setGLFWCallbacks(GLFWwindow* window) {
     glfwSetKeyCallback(window, keyCallback);
     glfwSetWindowSizeCallback(window, resizeCallback);
+    glfwSetMouseButtonCallback(window, mouseButtonCallback);
 }
 
 static void miscSettings() {

@@ -15,6 +15,7 @@
 #include "ui/hud/hudget.h"
 #include "ui/hud/aimhelperhudget.h"
 #include "ui/hud/crosshair.h"
+
 #include "ui/objectinfo.h"
 
 #include "utils/aimer.h"
@@ -25,6 +26,7 @@
 
 #include "worldobject/ship.h"
 #include "worldobject/worldobjectcomponents.h"
+#include "ui/targetselector.h"
 
 
 Player::Player(GamePlay* gamePlay):
@@ -32,7 +34,8 @@ Player::Player(GamePlay* gamePlay):
     m_aimer(new Aimer(nullptr)),
     m_hud(new HUD(this, &gamePlay->game()->viewer())),
     m_ship(nullptr),
-    m_cameraDolly(new CameraDolly())
+    m_cameraDolly(new CameraDolly()),
+    m_targetSelector(new TargetSelector(this))
 {
 
 }
@@ -93,3 +96,11 @@ void Player::rotate(const glm::vec3& euler) {
     m_engineState.setAngular(euler);
 }
 
+void Player::selectTarget(bool next) {
+    m_targetSelector->selectTarget(next);
+}
+
+void Player::setTarget(WorldObject* target) {
+    m_ship->setTargetObject(target);
+    m_hud->setTarget(target);
+}

@@ -5,7 +5,7 @@
 
 #include "geometry/ray.h"
 
-
+enum class ClickType;
 class HUD;
 
 
@@ -30,9 +30,11 @@ public:
     bool entered() const;
     bool left() const;
 
+    virtual void onClick(ClickType clickType);
+
     /*
-        Shall return true when the Clickable is under a
-        pointer at quat orientation
+    Shall return true when the Clickable is under a
+    pointer at quat orientation
     */
     virtual bool isAt(const Ray& ray) const;
 
