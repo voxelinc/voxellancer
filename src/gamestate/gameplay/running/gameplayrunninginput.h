@@ -81,6 +81,8 @@ protected:
     ActionKeyMapping selectNextAction;
     ActionKeyMapping selectPreviousAction;
 
+    ActionKeyMapping selectNextEnemyAction;
+
     glm::vec3 m_moveUpdate;
     glm::vec3 m_rotateUpdate;
     bool m_fireUpdate;

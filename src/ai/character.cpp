@@ -8,11 +8,19 @@
 #include "worldobject/ship.h"
 
 
-Character::Character(Ship& ship, Faction* faction):
+Character::Character(Ship* ship, Faction* faction):
     m_ship(ship),
     m_faction(faction),
     m_task(nullptr)
 {
+}
+
+Ship* Character::ship() {
+    return m_ship;
+}
+
+void Character::setShip(Ship* ship) {
+    m_ship = ship;
 }
 
 Faction* Character::faction() {
@@ -32,8 +40,8 @@ std::shared_ptr<AiTask> Character::task() {
 }
 
 void Character::update(float deltaSec) {
-    if (m_ship.squadLogic()->isSquadLeader() && m_ship.squadLogic()->squad()->task().get()) {
-        m_ship.squadLogic()->squad()->task()->update(deltaSec);
+    if (m_ship->squadLogic()->isSquadLeader() && m_ship->squadLogic()->squad()->task().get()) {
+        m_ship->squadLogic()->squad()->task()->update(deltaSec);
     }
     if (m_task.get()) {
         m_task->update(deltaSec);

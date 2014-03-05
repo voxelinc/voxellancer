@@ -14,7 +14,7 @@ Ship::Ship():
 
 Ship::Ship(CollisionFilter* collisionFilter):
     WorldObject(collisionFilter),
-    m_character(new Character(*this, nullptr)),
+    m_character(new Character(this, nullptr)),
     m_boardComputer(new BoardComputer(this)),
     m_squadLogic(new SquadLogic(*this)),
     m_shipHandle(Handle<Ship>(this)),

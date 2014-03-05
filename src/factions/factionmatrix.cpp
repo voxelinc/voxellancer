@@ -36,7 +36,7 @@ PlayerFaction* FactionMatrix::playerFaction() {
 }
 
 void FactionMatrix::setupFactionRelations() {
-    addFactionRelation(std::make_shared<FactionRelation>(m_playerFaction, m_pirateFaction, -20.0f));
+    addFactionRelation(std::make_shared<FactionRelation>(m_playerFaction, m_pirateFaction, -80.0f));
     addFactionRelation(std::make_shared<FactionRelation>(m_playerFaction, m_policeFaction, 10.0f));
     addFactionRelation(std::make_shared<FactionRelation>(m_policeFaction, m_pirateFaction, -50.0f));
 }

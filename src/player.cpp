@@ -21,6 +21,8 @@
 
 #include "physics/physics.h"
 
+#include "utils/enemyselector.h"
+
 #include "world/world.h"
 
 #include "worldobject/ship.h"
@@ -28,8 +30,10 @@
 
 
 Player::Player(GamePlay* gamePlay):
+    Character(nullptr, World::instance()->factionMatrix().playerFaction()),
     m_gamePlay(gamePlay),
     m_aimer(new Aimer(nullptr)),
+    m_enemySelector(new EnemySelector(this)),
     m_hud(new HUD(this, &gamePlay->game()->viewer())),
     m_ship(nullptr),
     m_cameraDolly(new CameraDolly())
@@ -45,16 +49,31 @@ Ship* Player::ship() {
 
 void Player::setShip(Ship* ship) {
     m_ship = ship->shipHandle();
-    m_ship->character()->setFaction(World::instance()->factionMatrix().playerFaction());
+
+    m_ship->setCharacter(this);
+    Character::setShip(m_ship.get());
+
     m_ship->objectInfo().setShowOnHud(false);
     m_cameraDolly->followWorldObject(ship);
     m_aimer->setWorldObject(ship);
+}
+
+void Player::selectNextEnemy() {
+    if (!m_ship.get()) {
+        return;
+    }
+
+    Ship* nextEnemy = m_enemySelector->nextEnemy();
+    if(nextEnemy) {
+        m_ship->setTargetObject(nextEnemy);
+    }
 }
 
 void Player::update(float deltaSec) {
     m_cameraDolly->update(deltaSec);
     m_hud->update(deltaSec);
     m_aimer->update(deltaSec);
+    m_enemySelector->update(deltaSec);
 
     if (Ship* ship = m_ship.get()) {
         ship->components().setEngineState(m_engineState);
