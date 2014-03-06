@@ -1,9 +1,13 @@
 #include "objecthudgetvoxels.h"
 
 #include <glm/gtx/quaternion.hpp>
+#include <glm/gtx/intersect.hpp>
 
 #include "utils/geometryhelper.h"
 #include "voxel/voxelrenderer.h"
+
+#include "geometry/ray.h"
+
 #include "hud.h"
 #include "objecthudget.h"
 
@@ -59,5 +63,9 @@ void ObjectHudgetVoxels::draw() {
     m_lb->draw(index);
     m_ru->draw(index);
     m_rb->draw(index);
+}
+
+bool ObjectHudgetVoxels::isAt(const Ray& ray) const {
+    return GeometryHelper::intersectRectangle(&ray, m_lu.get()->position(), m_ru.get()->position(), m_rb.get()->position(), m_lb.get()->position());
 }
 

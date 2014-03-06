@@ -18,7 +18,7 @@ go_bandit([](){
     public:
         bool success = false;
 
-        virtual void notifyChanged() {
+        virtual void notifyChanged(glow::Changeable * sender) override {
             success = true;
         }
     };
@@ -114,6 +114,8 @@ go_bandit([](){
             AssertThat(listener.success, Equals(false));
             PropertyManager::instance()->load("test/property/test.ini");
             AssertThat(listener.success, Equals(true));
+
+            PropertyManager::instance()->deregisterListener(&listener);
 
         });
     });

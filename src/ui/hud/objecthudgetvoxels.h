@@ -5,7 +5,7 @@
 
 #include "factions/factionrelation.h"
 
-
+class Ray;
 class ObjectHudget;
 class ObjectHudgetCornerVoxels;
 
@@ -25,6 +25,8 @@ public:
 
     void update(float deltaSec);
     void draw();
+
+    bool isAt(const Ray& ray) const;
 
 
 protected:
