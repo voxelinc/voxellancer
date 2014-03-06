@@ -4,27 +4,30 @@
 #include <string>
 
 #include "hudget.h"
+#include "textfieldhudget.h"
 
-class TextFieldHudgetVoxels;
+class ButtonHudgetVoxels;
 
-
-class TextFieldHudget : public Hudget {
+class ButtonHudget : public TextFieldHudget {
 public:
-    TextFieldHudget(HUD* hud, std::string content, glm::vec3 direction);
-    TextFieldHudget(HUD* hud, std::string content, glm::vec3 direction, float scale);
-    virtual ~TextFieldHudget();
-
-    void setContent(std::string content);
+    ButtonHudget(HUD* hud, std::string content, glm::vec3 direction);
+    ButtonHudget(HUD* hud, std::string content, glm::vec3 direction, float scale);
+    virtual ~ButtonHudget();
 
     virtual void update(float deltaSec) override;
     virtual void draw() override;
 
     virtual bool isAt(const Ray& ray) const override;
 
-    virtual void onClick(ClickType clickType) override;
+    virtual void onClick(ClickType clicktype) override;
+
+    virtual void setContent(std::string content);
+
+    void registerCallback(void(*callbackFunction)(ClickType clickType));
 
 protected:
+    void(*callback)(ClickType clicktype);
     std::string m_content;
-    std::unique_ptr<TextFieldHudgetVoxels> m_voxels;
+    std::unique_ptr<ButtonHudgetVoxels> m_voxels;
 };
 

@@ -26,6 +26,7 @@ class Viewer;
 class WorldTreeScanner;
 class CrossHair;
 class TextFieldHudget;
+class ButtonHudget;
 
 class HUD {
 public:
@@ -79,7 +80,7 @@ protected:
     std::unique_ptr<CrossHair> m_crossHair;
     std::unique_ptr<WorldTreeScanner> m_scanner;
     std::unique_ptr<TextFieldHudget> m_speedLabel;
-    std::unique_ptr<TextFieldHudget> m_targetName;
+    std::unique_ptr<ButtonHudget> m_targetName;
 
     std::list<Hudget*> m_hudgets;
 
@@ -87,5 +88,7 @@ protected:
 
     void updateScanner(float deltaSec);
     void updateFov();
+
+    void callback(ClickType clicktype);
 };
 

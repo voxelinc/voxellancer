@@ -1,42 +1,40 @@
-#include "textfieldhudget.h"
+#include "buttonhudget.h"
 
 #include "hud.h"
-#include "textfieldhudgetvoxels.h"
+#include "buttonhudgetvoxels.h"
 
 
-TextFieldHudget::TextFieldHudget(HUD* hud, std::string content, glm::vec3 direction) :
-Hudget(hud),
-m_content(content),
-m_voxels(new TextFieldHudgetVoxels(this, content, direction, 0.04f)) {
-    m_direction = direction;
+ButtonHudget::ButtonHudget(HUD* hud, std::string content, glm::vec3 direction) :
+TextFieldHudget(hud,content,direction),
+m_voxels(new ButtonHudgetVoxels(this, content, direction, 0.04f)) {
 }
 
-TextFieldHudget::TextFieldHudget(HUD* hud, std::string content, glm::vec3 direction, float scale) :
-Hudget(hud),
-m_content(content),
-m_voxels(new TextFieldHudgetVoxels(this, content, direction, scale)) {
-    m_direction = direction;
+ButtonHudget::ButtonHudget(HUD* hud, std::string content, glm::vec3 direction, float scale) :
+TextFieldHudget(hud, content, direction, scale),
+m_voxels(new ButtonHudgetVoxels(this, content, direction, scale)) {
 }
 
-TextFieldHudget::~TextFieldHudget() = default;
+ButtonHudget::~ButtonHudget() = default;
 
-void TextFieldHudget::update(float deltaSec) {
+void ButtonHudget::update(float deltaSec) {
 }
 
-void TextFieldHudget::draw() {
+void ButtonHudget::draw() {
     m_voxels->draw();
 }
 
-void TextFieldHudget::setContent(std::string content) {
-    m_content = content;
-    m_voxels->setContent(content);
-}
-
-
-bool TextFieldHudget::isAt(const Ray& ray) const {
+bool ButtonHudget::isAt(const Ray& ray) const {
     return m_voxels->isAt(ray);
 }
 
-void TextFieldHudget::onClick(ClickType clickType) {
-    // Nothing to do here
+void ButtonHudget::onClick(ClickType clickType) {
+    callback(clickType);
+}
+
+void ButtonHudget::registerCallback(void(*callbackFunction)(ClickType clickType)) {
+    callback = callbackFunction;
+}
+
+void ButtonHudget::setContent(std::string content) {
+    m_voxels->setContent(content);
 }

@@ -13,9 +13,9 @@ public:
     TextFieldHudgetVoxels(TextFieldHudget* textFieldHudget);
     TextFieldHudgetVoxels(TextFieldHudget* textFieldHudget, std::string content, glm::vec3 direction, float scale);
 
-    void setContent(std::string content);
+    virtual void setContent(std::string content);
 
-    virtual void update(float deltaSec);
+    //virtual void update(float deltaSec);
     virtual void draw();
 
     virtual bool isAt(const Ray& ray) const;
@@ -32,7 +32,7 @@ protected:
     const glm::vec3 upperRight() const;
     const glm::vec3 lowerRight() const;
 
-    TextFieldHudget* m_textFieldHudget;
+    TextFieldHudget* m_hudget;
     std::string m_content;
     VoxelFont* m_voxelFont;
     glm::vec3 m_direction;

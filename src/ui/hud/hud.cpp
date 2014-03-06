@@ -35,6 +35,7 @@
 #include "display/view.h"
 #include "camera/camerahead.h"
 #include "textfieldhudget.h"
+#include "buttonhudget.h"
 #include "physics/physics.h"
 
 
@@ -46,7 +47,7 @@ HUD::HUD(Player* player, Viewer* viewer):
     m_crossHair(new CrossHair(this)),
     m_aimHelper(new AimHelperHudget(this)),
     m_scanner(new WorldTreeScanner()),
-    m_targetName(new TextFieldHudget(this, "", glm::normalize(glm::vec3(0, -1, -2)))),
+    m_targetName(new ButtonHudget(this, "", glm::normalize(glm::vec3(0, -1, -2)))),
     m_speedLabel(new TextFieldHudget(this, "", glm::normalize(glm::vec3(1, -1, -2)), 0.03f)),
     m_target(nullptr)
 {
@@ -55,6 +56,7 @@ HUD::HUD(Player* player, Viewer* viewer):
     m_hudgets.push_back(m_aimHelper.get());
     m_hudgets.push_back(m_targetName.get());
     m_hudgets.push_back(m_speedLabel.get());
+    //m_targetName->registerCallback(&callback);
 }
 
 HUD::~HUD() = default;
@@ -231,4 +233,8 @@ float HUD::fovy() const {
 
 float HUD::fovx() const {
     return m_fovx;
+}
+
+void HUD::callback(ClickType clicktype) {
+    printf("callback");
 }
