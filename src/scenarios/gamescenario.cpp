@@ -94,7 +94,7 @@ void GameScenario::populateWorld() {
         m_world->god().scheduleSpawn(follower);
     }
 
-    Ship *testCluster = WorldObjectBuilder("bc304").buildShip();
+    Ship *testCluster = WorldObjectBuilder("f302").buildShip();
     testCluster->transform().setPosition(glm::vec3(0, 0, 10));
     testCluster->objectInfo().setName("basicship");
     testCluster->objectInfo().setShowOnHud(false);
