@@ -56,7 +56,7 @@ HUD::HUD(Player* player, Viewer* viewer):
     m_hudgets.push_back(m_aimHelper.get());
     m_hudgets.push_back(m_targetName.get());
     m_hudgets.push_back(m_speedLabel.get());
-    //m_targetName->registerCallback(&callback);
+    m_targetName->registerCallback(&HUD::helloFunction);
 }
 
 HUD::~HUD() = default;
@@ -235,6 +235,6 @@ float HUD::fovx() const {
     return m_fovx;
 }
 
-void HUD::callback(ClickType clicktype) {
+void HUD::helloFunction(ClickType clicktype) {
     printf("callback");
 }

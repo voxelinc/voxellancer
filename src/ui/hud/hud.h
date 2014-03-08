@@ -10,6 +10,7 @@
 
 #include "property/property.h"
 #include "worldobject/handle/handle.h"
+#include "callback.h"
 
 enum class ClickType {
     None,
@@ -89,6 +90,9 @@ protected:
     void updateScanner(float deltaSec);
     void updateFov();
 
-    void callback(ClickType clicktype);
+    void helloFunction(ClickType clicktype);
 };
 
+class HUDCallback : public Callback {
+    virtual void onClickCallback(ClickType clickType) override;
+};

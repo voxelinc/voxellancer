@@ -2,7 +2,7 @@
 
 #include "hud.h"
 #include "buttonhudgetvoxels.h"
-
+#include "callback.h"
 
 ButtonHudget::ButtonHudget(HUD* hud, std::string content, glm::vec3 direction) :
 TextFieldHudget(hud,content,direction),
@@ -28,11 +28,12 @@ bool ButtonHudget::isAt(const Ray& ray) const {
 }
 
 void ButtonHudget::onClick(ClickType clickType) {
-    callback(clickType);
+    (m_hud->*callback)(clickType);
 }
 
-void ButtonHudget::registerCallback(void(*callbackFunction)(ClickType clickType)) {
-    callback = callbackFunction;
+void ButtonHudget::registerCallback(void(HUD::*callbackFunction)(ClickType clickType)) {
+    (m_hud->*callbackFunction)(ClickType::Selection);
+    //callback = callbackFunction;
 }
 
 void ButtonHudget::setContent(std::string content) {

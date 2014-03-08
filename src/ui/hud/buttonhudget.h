@@ -7,6 +7,7 @@
 #include "textfieldhudget.h"
 
 class ButtonHudgetVoxels;
+class Callback;
 
 class ButtonHudget : public TextFieldHudget {
 public:
@@ -23,11 +24,12 @@ public:
 
     virtual void setContent(std::string content);
 
-    void registerCallback(void(*callbackFunction)(ClickType clickType));
+    void registerCallback(void(HUD::*callbackFunction)(ClickType clickType));
 
 protected:
-    void(*callback)(ClickType clicktype);
+    void(HUD::*callback)(ClickType clicktype);
     std::string m_content;
     std::unique_ptr<ButtonHudgetVoxels> m_voxels;
+    std::unique_ptr<Callback> m_callback;
 };
 

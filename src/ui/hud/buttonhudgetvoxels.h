@@ -26,8 +26,7 @@ public:
     //virtual bool isAt(const Ray& ray) const override;
 
 protected:
-    VoxelCluster* m_horizontalBounds;
-    VoxelCluster* m_verticalBounds;
+    VoxelCluster* m_buttonVoxels;
 
 };
 
