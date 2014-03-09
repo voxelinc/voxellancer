@@ -2,6 +2,7 @@
 
 #include <assert.h>
 
+#include <glow/Texture.h>
 #include <glow/Program.h>
 #include <glowutils/global.h>
 

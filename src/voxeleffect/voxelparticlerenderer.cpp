@@ -38,7 +38,7 @@ void VoxelParticleRenderer::updateBuffer(int begin, int end, VoxelParticleData* 
 
     int byteCount = (end - begin + 1) * sizeof(VoxelParticleData);
 
-    m_gpuParticleBuffer->setSubData(begin * sizeof(VoxelParticleData), byteCount, data);
+    m_gpuParticleBuffer->setSubData(byteCount, begin * sizeof(VoxelParticleData), data);
 
 }
 
