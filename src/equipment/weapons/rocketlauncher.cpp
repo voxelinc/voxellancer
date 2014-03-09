@@ -15,6 +15,10 @@
 #include "world/world.h"
 #include "world/god.h"
 
+#include "physics/physics.h"
+#include "voxel/voxelclusterbounds.h"
+#include "utils/geometryhelper.h"
+
 #include "sound/soundmanager.h"
 
 
@@ -40,11 +44,11 @@ void RocketLauncher::update(float deltaSec) {
 
 void RocketLauncher::setupRocket(Rocket* rocket, WorldObject* target) {
     WorldObject* worldObject = hardpoint()->components()->worldObject();
-    glm::quat shipOrientation = worldObject->transform().orientation();
+    glm::quat launchOrientation = worldObject->transform().orientation() * GeometryHelper::quatFromViewDirection(hardpoint()->direction());
     float rocketLength = rocket->bounds().minimalGridAABB().extent(ZAxis) * rocket->transform().scale();
-    glm::vec3 rocketPosition = hardpoint()->voxel()->position() + shipOrientation * glm::vec3(0, 0, -rocketLength / 2.0f);
+    glm::vec3 rocketPosition = hardpoint()->voxel()->position() + launchOrientation * glm::vec3(0, 0, -rocketLength / 2.0f);
 
-    rocket->transform().setOrientation(shipOrientation);
+    rocket->transform().setOrientation(launchOrientation);
     rocket->transform().setPosition(rocketPosition);
 
     rocket->setCreator(worldObject);

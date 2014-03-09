@@ -14,10 +14,9 @@
 #include "input/inputmapping.h"
 
 
-PropertyManager::PropertyManager():
-    m_propertyCollections() 
+PropertyManager::PropertyManager()
 {
-    addPropertyCollection(new PropertyCollection<float>(float_regex(), [](std::string s) { return std::stof(s); }));
+    addPropertyCollection(new PropertyCollection<float>(float_regex(), PropertyConverter::floatConverter));
     addPropertyCollection(new PropertyCollection<int>(int_regex(), [](std::string s) { return std::stoi(s, nullptr, 0); })); // base=0 allows adding 0x to parse hex
     addPropertyCollection(new PropertyCollection<uint32_t>(uint32_regex(), [](std::string s) { return std::stoul(s, nullptr, 0); })); // base=0 allows adding 0x to parse hex
     addPropertyCollection(new PropertyCollection<char>(char_regex(), [](std::string s) { return s[0]; }));

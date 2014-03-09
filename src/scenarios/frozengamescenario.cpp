@@ -18,6 +18,7 @@
 #include "equipment/engineslot.h"
 #include "equipment/hardpoint.h"
 #include "equipment/weapons/gun.h"
+
 #include "sound/soundmanager.h"
 #include "gamestate/gameplay/gameplay.h"
 #include "world/world.h"
