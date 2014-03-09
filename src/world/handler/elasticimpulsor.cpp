@@ -10,7 +10,8 @@
 
 
 ElasticImpulsor::ElasticImpulsor():
-    m_rotationFactor("physics.globalRotationFactor")
+    m_rotationFactor("physics.globalRotationFactor"),
+    m_elasticity("physics.globalElasticity")
 {
 }
 
@@ -36,10 +37,9 @@ void ElasticImpulsor::parse(std::list<Impulse>& worldObjectImpulses) {
 
         glm::vec3 angular(m_rotationFactor.get() * vDiff * (1.f / m1) * glm::cross(normal, r));
 
-        float k = 0.5f;
         Speed newSpeed = physics.speed();
-        newSpeed += (newSpeed * -1.0f) * k;
-        newSpeed += Speed(directional, angular) * k;
+        newSpeed += (newSpeed * -1.0f) * m_elasticity;
+        newSpeed += Speed(directional, angular) * m_elasticity;
         physics.setSpeed(newSpeed);
     }
 }
