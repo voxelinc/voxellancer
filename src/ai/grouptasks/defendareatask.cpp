@@ -11,6 +11,10 @@
 #include "world/world.h"
 #include "worldtree/worldtree.h"
 #include "collision/collisionfilter.h"
+#include "factions/faction.h"
+#include "factions/factionmatrix.h"
+#include "factions/factionrelation.h"
+#include "factions/playerfaction.h"
 
 
 DefendAreaTask::DefendAreaTask(Squad& squad, std::list<glm::vec3> points, float defendRange) :
@@ -19,8 +23,10 @@ DefendAreaTask::DefendAreaTask(Squad& squad, std::list<glm::vec3> points, float 
     m_currentPoint(m_points.begin()),
     m_fightTask(nullptr),
     m_leaderFlyTask(nullptr),
-    m_defendRange(defendRange)
+    m_defendRange(defendRange),
+    m_shipFilter(new CollisionFilter(m_squad.leader(), 0))
 {
+    m_shipFilter->setCollideableWith(WorldObjectType::Ship, true);
     if (m_squad.leader()) {
         onNewLeader(m_squad.leader());
     }
@@ -49,15 +55,18 @@ void DefendAreaTask::onMemberJoin(Ship* member) {
 
 bool DefendAreaTask::isEnemyInRange() {
     m_enemies.clear();
+    Faction* faction;
     Sphere sphere(m_squad.leader()->transform().position(), m_defendRange);
-    WorldTreeQuery query(&(World::instance()->worldTree()), &sphere,nullptr,new CollisionFilter(m_squad.leader(),CollisionFilterClass::Ship));
+    WorldTreeQuery query(&(World::instance()->worldTree()), &sphere,nullptr,m_shipFilter.get());
     for (WorldObject *worldObject : query.intersectingWorldObjects()) {
         Ship* ship = dynamic_cast<Ship*>(worldObject);
         if (ship) {
-            if (ship->character()->faction() == m_squad.leader()->character()->faction() || ship->character()->faction() == 0) {
+            faction = ship->character()->faction();
+            if (faction && faction->relationTo(World::instance()->factionMatrix().playerFaction())->type() == FactionRelationType::Enemy) {
+                m_enemies.push_back(worldObject->handle());
+            } else {
                 continue;
             }
-            m_enemies.push_back(worldObject->handle());
         }
     }
     return m_enemies.size() > 0;

@@ -9,14 +9,13 @@
 #include "ai/basictasks/flytotask.h"
 #include "ai/basictasks/fighttask.h"
 
-
+class CollisionFilter;
 class Squad;
 class Sphere;
 
 class DefendAreaTask : public AiGroupTask {
 public:
     DefendAreaTask(Squad& squad, std::list<glm::vec3> points, float defendRange);
-    //DefendAreaTask(Squad% squad, Sphere sphere);
 
     virtual void update(float deltaSec) override;
 
@@ -33,6 +32,8 @@ protected:
     std::list<glm::vec3> m_points;
     std::list<glm::vec3>::iterator m_currentPoint;
     std::vector<Handle<WorldObject>> m_enemies;
+
+    std::unique_ptr<CollisionFilter> m_shipFilter;
     float m_defendRange;
 };
 
