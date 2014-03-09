@@ -33,9 +33,7 @@ GamePlay::GamePlay(Game* game) :
     m_pausedState(new GamePlayPaused(this)),
     m_scene(new GamePlayScene(this, *m_player)),
     m_soundManager(new SoundManager()),
-    m_scenario(new GameScenario(this))
     m_scenario(new ScriptedScenario(this, "data/scripts/scenarios/flyto.lua"))
-    m_scenario(new PirateScenario(this))
 {
     setInitialSubState(m_runningState);
 
@@ -81,15 +79,18 @@ void GamePlay::loadScenario(int i) {
     m_scenario->clear();
     switch (i){
     case 0:
-        m_scenario.reset(new GameScenario(this));
+        m_scenario.reset(new ScriptedScenario(this, "data/scripts/scenarios/flyto.lua"));
         break;
     case 1:
-        m_scenario.reset(new BattleScenario(this));
+        m_scenario.reset(new GameScenario(this));
         break;
     case 2:
-        m_scenario.reset(new FrozenGameScenario(this));
+        m_scenario.reset(new BattleScenario(this));
         break;
     case 3:
+        m_scenario.reset(new FrozenGameScenario(this));
+        break;
+    case 4:
         m_scenario.reset(new PirateScenario(this));
         break;
     default:
