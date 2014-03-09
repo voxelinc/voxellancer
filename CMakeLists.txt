@@ -97,6 +97,7 @@ find_package(LibOVR REQUIRED)
 find_package(OpenMP REQUIRED)
 find_package(Lua52 REQUIRED)
 
+
 if(REGEX_USE_BOOST)
 find_package(Boost REQUIRED regex)
 endif()
@@ -110,10 +111,8 @@ else()
     message(WARNING "OpenMP not found")
 endif()
 
-set(GLOW_DIRECTORY glow)
-include_directories(${LIB_DIR}/${GLOW_DIRECTORY}/include)
-add_subdirectory(${LIB_DIR}/${GLOW_DIRECTORY})
-
+set(GLOW_SOURCE_DIR ${LIB_DIR}/glow)
+include_directories(${GLOW_SOURCE_DIR}/include)
 
 # Include directories
 include_directories(
@@ -160,9 +159,9 @@ file(GLOB_RECURSE SHADER_FILES
 source_group(${SHADER_GROUP} FILES ${SHADER_FILES})
 
 
-source_group_by_path_function(${SOURCE_DIR} "\\.h$|\\.hpp$"
+source_group_by_path(${SOURCE_DIR} "\\.h$|\\.hpp$"
     ${HEADER_GROUP} ${SRC_FILES})
-source_group_by_path_function(${SOURCE_DIR} "\\.cpp$|\\.c$|\\.inl$"
+source_group_by_path(${SOURCE_DIR} "\\.cpp$|\\.c$|\\.inl$"
     ${SOURCE_GROUP} ${SRC_FILES})
 
 add_executable(${target}
@@ -223,4 +222,15 @@ include(CPack)
 include_directories(${SOURCE_DIR})
 
 add_subdirectory(test)
+
+# add GLOW and GLOWUTILS
+set(INSTALL_BIN           ".")
+set(INSTALL_SHARED        ".")
+set(INSTALL_LIB           "lib")
+set(OPTION_BUILD_STATIC   OFF)
+option(OPTION_ERRORS_AS_EXCEPTION "Throw exceptions" OFF)
+
+include_directories(${GLOW_SOURCE_DIR}/pre-build/generated)
+add_subdirectory(${GLOW_SOURCE_DIR}/source/glow)
+add_subdirectory(${GLOW_SOURCE_DIR}/source/glowutils)
 

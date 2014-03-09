@@ -4,9 +4,9 @@ function(make_test TEST_TARGET) #TEST_FILES is second argument!
     
     source_group("Tests" FILES ${TEST_FILES} ${TEST_MAIN})
 
-    source_group_by_path_function(${SOURCE_DIR} "\\.h$|\\.hpp$"
+    source_group_by_path(${SOURCE_DIR} "\\.h$|\\.hpp$"
     ${HEADER_GROUP} ${SRC_FILES_EXCEPT_MAIN})
-    source_group_by_path_function(${SOURCE_DIR} "\\.cpp$|\\.c$|\\.inl$"
+    source_group_by_path(${SOURCE_DIR} "\\.cpp$|\\.c$|\\.inl$"
     ${SOURCE_GROUP} ${SRC_FILES_EXCEPT_MAIN})
 
     add_executable(${TEST_TARGET}
