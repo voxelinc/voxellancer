@@ -128,7 +128,7 @@ public:
         return pop<Ret...>();
     }
 
-
+    
     template<typename Return, typename Class, typename... Args>
     void Register(const std::string & name, Class * obj, Return(Class::* const method) (Args...))
     {

@@ -18,7 +18,7 @@
 
 ScriptEngine::ScriptEngine(World* world):
     m_world(world),
-    m_handleKeyIncrementor(1),
+    m_keyIncrementor(1),
     m_running(false)
 {
 }
@@ -51,25 +51,26 @@ void ScriptEngine::registerScriptable(Scriptable* scriptable) {
         return;
     }
 
-    m_handles[m_handleKeyIncrementor] = scriptable;
-    scriptable->setScriptKey(m_handleKeyIncrementor);
+    m_scriptables[m_keyIncrementor] = scriptable;
+    scriptable->setScriptKey(m_keyIncrementor);
 
-    m_handleKeyIncrementor++;
+    m_keyIncrementor++;
 }
 
 void ScriptEngine::unregisterScriptable(Scriptable* scriptable) {
     if (scriptable->scriptKey() > 0) {
-        m_handles.erase(scriptable->scriptKey());
+        m_scriptables.erase(scriptable->scriptKey());
+        scriptable->setScriptKey(Scriptable::INVALID_KEY);
     }
 }
 
 Scriptable* ScriptEngine::getScriptable(int key) {
-    if (key <= 0 || key >= m_handleKeyIncrementor) {
+    if (key <= 0 || key >= m_keyIncrementor) {
         glow::warning("ScriptEngine: script-key '%;' is not valid", key);
         return nullptr;
     } else {
-        auto pair = m_handles.find(key);
-        if (pair == m_handles.end()) {
+        auto pair = m_scriptables.find(key);
+        if (pair == m_scriptables.end()) {
             glow::warning("ScriptEngine: the script-key '%;' points to a removed object, next time check with valid()", key);
             return nullptr;
         } else {
@@ -79,10 +80,6 @@ Scriptable* ScriptEngine::getScriptable(int key) {
 }
 
 void ScriptEngine::update(float deltaSec) {
-//    m_timerManager.update(deltaSec);
 
-//    for(std::pair<const int, std::unique_ptr<EventPoll>>& pair : m_eventPolls) {
-//        pair.second->update(deltaSec);
-//    }
 }
 

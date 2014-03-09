@@ -4,14 +4,9 @@
 #include <unordered_map>
 #include <vector>
 
-class AiTask;
-class EventPoll;
 class GamePlayScript;
 class Scriptable;
-class Ship;
 class World;
-class WorldObject;
-
 
 /*
     Main class for accessing scripts during gameplay.
@@ -48,14 +43,13 @@ protected:
     World* m_world;
 
     std::vector<std::shared_ptr<GamePlayScript>> m_scripts;
-    std::unordered_map<int, Scriptable*> m_handles;
+    std::unordered_map<int, Scriptable*> m_scriptables;
 
-    int m_handleKeyIncrementor;
+    int m_keyIncrementor;
     bool m_running;
 
     Scriptable* getScriptable(int key);
-
-
+    
 };
 
 #include "scriptengine.inl"

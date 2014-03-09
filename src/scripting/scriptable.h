@@ -20,6 +20,7 @@ public:
     int scriptKey() const;
     void setScriptKey(int key);
 
+    static const int INVALID_KEY = -1;
 
 protected:
     int m_key;
