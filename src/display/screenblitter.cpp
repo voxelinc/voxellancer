@@ -5,7 +5,6 @@
 #include <glow/FrameBufferObject.h>
 
 #include "programs/blitprogram.h"
-#include "programs/monoblitprogram.h"
 #include "rendering/framebuffer.h"
 
 
