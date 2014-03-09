@@ -120,6 +120,8 @@ void BattleScenario::setTargets(const std::vector<Ship*>& fleet, const std::vect
     for (Ship* enemy : enemies) {
         enemyHandles.push_back(enemy->handle());
     }
+    enemyHandles.clear();
+    enemyHandles.push_back(m_gamePlay->player().ship()->handle());
     for (Ship* ship : fleet) {
         std::random_shuffle(enemyHandles.begin(), enemyHandles.end());
         ship->character()->setTask(std::make_shared<FightTask>(ship->boardComputer(), enemyHandles));
