@@ -47,31 +47,24 @@ GamePlayScript::GamePlayScript(GamePlay* gamePlay, ScriptEngine* scriptEngine):
 void GamePlayScript::load(const std::string& path) {
     Script::load(path);
 
-    m_lua->RegisterMethod("playerShip", this, &GamePlayScript::apiPlayerShip);
+    m_lua->Register("playerShip", this, &GamePlayScript::apiPlayerShip);
+    m_lua->Register("createShip", this, &GamePlayScript::apiCreateShip);
+    m_lua->Register("spawn", this, &GamePlayScript::apiSpawn);
 
-    m_lua->RegisterMethod("createShip", this, &GamePlayScript::apiCreateShip);
+    m_lua->Register("position", this, &GamePlayScript::apiPosition);
+    m_lua->Register("orientation", this, &GamePlayScript::apiOrientation);
+    m_lua->Register("setPosition", this, &GamePlayScript::apiSetPosition);
+    m_lua->Register("setOrientation", this, &GamePlayScript::apiSetOrientation);
 
-    m_lua->RegisterMethod("spawn", this, &GamePlayScript::apiSpawn);
-    
-    m_lua->RegisterMethod("setPosition", this, &GamePlayScript::apiSetPosition);
-    
-    m_lua->RegisterMethod("setOrientation", this, &GamePlayScript::apiSetOrientation);
-    
-    m_lua->RegisterMethod("position", this, &GamePlayScript::apiPosition);
-    
-    m_lua->RegisterMethod("orientation", this, &GamePlayScript::apiOrientation);
-    
-    m_lua->RegisterMethod("setActive", this, &GamePlayScript::apiSetEventActive);
-    
-    m_lua->RegisterMethod("createSingleShotTimer", this, &GamePlayScript::apiCreateSingleShotTimer);
-    
-    m_lua->RegisterMethod("createLoopingTimer", this, &GamePlayScript::apiCreateLoopingTimer);
-    
-    m_lua->RegisterMethod("onAABBEntered", this, &GamePlayScript::apiOnAABBEntered);
-    
-    m_lua->RegisterMethod("createFlyToTask", this, &GamePlayScript::apiCreateFlyToTask);
-    
-    m_lua->RegisterMethod("setTargetPoint", this, &GamePlayScript::apiSetTargetPoint);
+    m_lua->Register("setActive", this, &GamePlayScript::apiSetEventActive);
+
+    m_lua->Register("createSingleShotTimer", this, &GamePlayScript::apiCreateSingleShotTimer);
+    m_lua->Register("createLoopingTimer", this, &GamePlayScript::apiCreateLoopingTimer);
+
+    m_lua->Register("onAABBEntered", this, &GamePlayScript::apiOnAABBEntered);
+
+    m_lua->Register("createFlyToTask", this, &GamePlayScript::apiCreateFlyToTask);
+    m_lua->Register("setTargetPoint", this, &GamePlayScript::apiSetTargetPoint);
     
 }
 

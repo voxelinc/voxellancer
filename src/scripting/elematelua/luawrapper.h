@@ -130,7 +130,7 @@ public:
 
 
     template<typename Return, typename Class, typename... Args>
-    void RegisterMethod(const std::string & name, Class * obj, Return(Class::* const method) (Args...))
+    void Register(const std::string & name, Class * obj, Return(Class::* const method) (Args...))
     {
         auto mem = std::mem_fn(method);
     
