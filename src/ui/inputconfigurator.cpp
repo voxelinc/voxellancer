@@ -17,165 +17,128 @@ InputConfigurator::InputConfigurator(std::vector<ActionKeyMapping*>* actions, Se
     m_secondaryInputValues(secondaryInputValues)
 {
     prop_deadzoneGamepad = deadzone;
-    primaryConfigurationState = -1;
-    secondaryConfigurationState = -1;
+    m_primaryConfigurationState = -1;
+    m_secondaryConfigurationState = -1;
 }
 
-bool InputConfigurator::isSecondaryInput() {
-    bool valid = false;
-
-    for (int i = 0; i < m_secondaryInputValues->buttonCnt; i++) { // get pushed button
-        if (m_secondaryInputValues->buttonValues[i] == GLFW_PRESS) {
-            valid = true;
-        }
-    }
-    for (int i = 0; i < m_secondaryInputValues->axisCnt; i++) { // get pushed axes
-        if (glm::abs(m_secondaryInputValues->axisValues[i]-m_idleValues[i]) > *prop_deadzoneGamepad) {
-            valid = true;
-        }
-    }
-    return valid;
-}
-
-bool InputConfigurator::isPrimaryInput() {
-    if (lastPrimaryInput.index() == static_cast<int>(InputType::None)) {
-        return false;
-    }
-    return true;
-}
-
-bool InputConfigurator::isLastSecondaryInputValid() {
-    for (int i = 0; i < m_secondaryInputValues->buttonCnt; i++) { // get pushed button
-        if (m_secondaryInputValues->buttonValues[i] == GLFW_PRESS) {
-            lastSecondaryInput = InputMapping(InputType::GamePadKey, i, 1, 0.0f);
-            return true;
-        }
-    }
-    for (int i = 0; i < m_secondaryInputValues->axisCnt; i++) { // get pushed axes
-        if (glm::abs(m_secondaryInputValues->axisValues[i]-m_idleValues[i]) > *prop_deadzoneGamepad) {
-            // greater maxValue for same axes
-            if (lastSecondaryInput.index() == i) {
-                if (glm::abs(lastSecondaryInput.maxValue()-m_idleValues[i]) <= glm::abs(m_secondaryInputValues->axisValues[i]-m_idleValues[i])) {
-                    lastSecondaryInput = InputMapping(InputType::GamePadAxis, i, m_secondaryInputValues->axisValues[i], m_idleValues[i]);
-                    return false;
-                } else {
-                    return true;
-                }
-            } else {
-                lastSecondaryInput = InputMapping(InputType::GamePadAxis, i, m_secondaryInputValues->axisValues[i], m_idleValues[i]);
-                return false;
-            }
-        }
+bool InputConfigurator::setActionInputMapping(ActionKeyMapping* action, InputClass inputClass) {
+    if (isLastInputValid(inputClass)) {
+        action->setMapping(lastInput(inputClass), inputClass);
+        setLastInput(InputMapping(), inputClass);
+        return true;
     }
     return false;
 }
 
-bool InputConfigurator::isLastPrimaryInputValid() {
-    if (lastPrimaryInput.type() == InputType::None) {
+bool InputConfigurator::isKeyPressed(InputClass inputClass) {
+    if (inputClass == InputClass::Primary) {
+        return lastInput(inputClass).type() != InputType::None;
+    }
+    else {
+        for (int i = 0; i < m_secondaryInputValues->buttonCnt; i++) { // get pushed button
+            if (m_secondaryInputValues->buttonValues[i] == GLFW_PRESS) {
+                return true;
+            }
+        }
+        for (int i = 0; i < m_secondaryInputValues->axisCnt; i++) { // get pushed axes
+            if (glm::abs(m_secondaryInputValues->axisValues[i] - m_idleValues[i]) > *prop_deadzoneGamepad) {
+                return true;
+            }
+        }
         return false;
     }
-    return true;
+}
+
+bool InputConfigurator::isLastInputValid(InputClass inputClass) {
+    if (inputClass == InputClass::Primary) {
+        return lastInput(inputClass).type() != InputType::None;
+    } else {
+        for (int i = 0; i < m_secondaryInputValues->buttonCnt; i++) { // get pushed button
+            if (m_secondaryInputValues->buttonValues[i] == GLFW_PRESS) {
+                lastInput(inputClass) = InputMapping(InputType::GamePadKey, i, 1, 0.0f);
+                return true;
+            }
+        }
+        for (int i = 0; i < m_secondaryInputValues->axisCnt; i++) { // get pushed axes
+            if (glm::abs(m_secondaryInputValues->axisValues[i] - m_idleValues[i]) > *prop_deadzoneGamepad) {
+                // greater maxValue for same axes
+                if (lastInput(inputClass).index() == i) {
+                    if (glm::abs(lastInput(inputClass).maxValue() - m_idleValues[i]) <= glm::abs(m_secondaryInputValues->axisValues[i] - m_idleValues[i])) {
+                        setLastInput(InputMapping(InputType::GamePadAxis, i, m_secondaryInputValues->axisValues[i], m_idleValues[i]), inputClass);
+                        return false;
+                    } else {
+                        return true;
+                    }
+                } else {
+                    setLastInput(InputMapping(InputType::GamePadAxis, i, m_secondaryInputValues->axisValues[i], m_idleValues[i]), inputClass);
+                    return false;
+                }
+            }
+        }
+        return false;
+    }
 }
 
 bool InputConfigurator::isConfiguring() {
-    return primaryConfigurationState >= 0 || secondaryConfigurationState >= 0;
+    return m_primaryConfigurationState >= 0 || m_secondaryConfigurationState >= 0;
 }
 
-void InputConfigurator::startConfiguration(bool primary) {
-    if (primary) {
+void InputConfigurator::startConfiguration(InputClass inputClass) {
+    if (inputClass == InputClass::Primary) {
         glow::info("Starting configuration for primary input device (keyboard), Please follow the instructions");
-        primaryConfigurationState = 0;
     } else {
         glow::info("Starting configuration for secondary input device (gamepad/Joystick), Please follow the instructions");
-        secondaryConfigurationState = 0;
-
         m_idleValues.resize(m_secondaryInputValues->axisCnt);
         for(int a = 0; a < m_secondaryInputValues->axisCnt; a++) {
             m_idleValues[a] = m_secondaryInputValues->axisValues[a];
         }
     }
-    displayedInstructions = false;
-    displayedKeyPressedWarning = false;
-    beginningKeyConfiguration = true;
+    setConfigurationState(0, inputClass);
+    m_displayedInstructions = false;
+    m_displayedKeyPressedWarning = false;
+    m_beginningKeyConfiguration = true;
 }
 
 void InputConfigurator::update() {
-    if (primaryConfigurationState >= 0) {
-        setupPrimaryControls();
-    }
-    if (secondaryConfigurationState >= 0) {
-        setupSecondaryControls();
+    updateConfiguration(InputClass::Primary);
+    updateConfiguration(InputClass::Secondary);
+}
+
+void InputConfigurator::updateConfiguration(InputClass inputClass) {
+    if (configurationState(inputClass) >= 0) {
+        setupControls(inputClass);
     }
 }
 
-void InputConfigurator::setupPrimaryControls() {
-    if (!displayedInstructions) {
-        glow::info("Please press Key for action: %;", m_actions->at(primaryConfigurationState)->name);
-        displayedInstructions = true;
+void InputConfigurator::setupControls(InputClass inputClass) {
+    if (!m_displayedInstructions) {
+        glow::info("Please press Key for action: %;", m_actions->at(configurationState(inputClass))->name());
+        m_displayedInstructions = true;
     }
-    if (beginningKeyConfiguration) {
-        if (isPrimaryInput()) {
-            if (!displayedKeyPressedWarning) {
+    if (m_beginningKeyConfiguration) {
+        if (isKeyPressed(inputClass)) {
+            if (!m_displayedKeyPressedWarning) {
                 glow::info("Please release all buttons before setting a new key mapping");
-                displayedKeyPressedWarning = true;
+                m_displayedKeyPressedWarning = true;
             }
             return;
         } else {
-            beginningKeyConfiguration = false;
+            m_beginningKeyConfiguration = false;
         }
     }
-    if (!isLastPrimaryInputValid()) {
+    if (!isLastInputValid(inputClass)) {
         return;
     }
-    m_actions->at(primaryConfigurationState)->primaryMapping.set(lastPrimaryInput);
-    lastPrimaryInput = InputMapping();
-    primaryConfigurationState++;
-    if (primaryConfigurationState >= m_actions->size()) {
-        glow::info("Joystick setup complete");
-        primaryConfigurationState = -1;
+    m_actions->at(configurationState(inputClass))->setMapping(lastInput(inputClass), inputClass);
+    setLastInput(InputMapping(), inputClass);
+    incrementConfigurationState(inputClass);
+    if (configurationState(inputClass) >= m_actions->size()) {
+        glow::info("Setup complete");
+        setConfigurationState(-1, inputClass);
     }
-    beginningKeyConfiguration = true;
-    displayedKeyPressedWarning = false;
-    displayedInstructions = false;
-}
-
-void InputConfigurator::setupSecondaryControls() {
-    if (!displayedInstructions) {
-        glow::info("Please press Joystick button or axis for action: %;", m_actions->at(secondaryConfigurationState)->name);
-        displayedInstructions = true;
-    }
-    if (beginningKeyConfiguration) {
-        if (isSecondaryInput()) {
-            if (!displayedKeyPressedWarning) {
-                glow::info("Please release all buttons before setting a new key mapping");
-                displayedKeyPressedWarning = true;
-            }
-            return;
-        } else {
-            beginningKeyConfiguration = false;
-        }
-    }
-    if (!isLastSecondaryInputValid()) {
-        return;
-    }
-    m_actions->at(secondaryConfigurationState)->secondaryMapping.set(lastSecondaryInput);
-    lastSecondaryInput = InputMapping();
-    secondaryConfigurationState++;
-    if (secondaryConfigurationState >= m_actions->size()) {
-        glow::info("Joystick setup complete");
-        secondaryConfigurationState = -1;
-    }
-    beginningKeyConfiguration = true;
-    displayedKeyPressedWarning = false;
-    displayedInstructions = false;
-}
-
-void InputConfigurator::setLastPrimaryInput(InputMapping lastInput) {
-    lastPrimaryInput = lastInput;
-}
-
-void InputConfigurator::setLastSecondaryInput(InputMapping lastInput) {
-    lastSecondaryInput = lastInput;
+    m_beginningKeyConfiguration = true;
+    m_displayedKeyPressedWarning = false;
+    m_displayedInstructions = false;
 }
 
 void InputConfigurator::setActions(std::vector<ActionKeyMapping*>* m_actions) {
@@ -186,3 +149,42 @@ void InputConfigurator::setSecondaryInputValues(SecondaryInputValues* values) {
     m_secondaryInputValues = values;
 }
 
+void InputConfigurator::setLastInput(InputMapping lastInput, InputClass inputClass) {
+    if (inputClass == InputClass::Primary) {
+        lastPrimaryInput = lastInput;
+    } else {
+        lastSecondaryInput = lastInput;
+    }
+}
+
+InputMapping InputConfigurator::lastInput(InputClass inputClass) {
+    if (inputClass == InputClass::Primary) {
+        return lastPrimaryInput;
+    } else {
+        return lastSecondaryInput;
+    }
+}
+
+int InputConfigurator::configurationState(InputClass inputClass) {
+    if (inputClass == InputClass::Primary) {
+        return m_primaryConfigurationState;
+    } else {
+        return m_secondaryConfigurationState;
+    }
+}
+
+void InputConfigurator::incrementConfigurationState(InputClass inputClass) {
+    if (inputClass == InputClass::Primary) {
+        m_primaryConfigurationState++;
+    } else {
+        m_secondaryConfigurationState++;
+    }
+}
+
+void InputConfigurator::setConfigurationState(int state, InputClass inputClass) {
+    if (inputClass == InputClass::Primary) {
+        m_primaryConfigurationState = state;
+    } else {
+        m_secondaryConfigurationState = state;
+    }
+}

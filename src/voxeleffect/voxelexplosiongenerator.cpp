@@ -2,17 +2,18 @@
 
 #include <ctime>
 
-#include "world/god.h"
 #include "world/world.h"
 #include "utils/randfloat.h"
 #include "utils/randvec.h"
 
 #include "voxelparticledata.h"
+#include "voxelparticlesetup.h"
 #include "voxelparticleengine.h"
 
 
-VoxelExplosionGenerator::VoxelExplosionGenerator() :
-    VoxelParticleSpawnBase("physics.explosionDirectionalDampening",
+VoxelExplosionGenerator::VoxelExplosionGenerator(const VoxelCluster* creator) :
+    VoxelParticleSpawnBase(creator,
+                           "physics.explosionDirectionalDampening",
                            "physics.explosionAngularDampening",
                            "physics.explosionBaseForce",
                            "physics.explosionAngularBaseForce"),
@@ -51,7 +52,7 @@ void VoxelExplosionGenerator::spawn() {
             createLifetime()
         );
 
-        World::instance()->voxelParticleEngine().addParticle(particleSetup);
+        World::instance()->particleEngine().addParticle(particleSetup, m_creator);
     }
 }
 

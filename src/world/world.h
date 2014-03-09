@@ -24,8 +24,8 @@ public:
     WorldLogic &worldLogic();
     God &god();
     WorldTree &worldTree();
-    VoxelParticleEngine& voxelParticleEngine();
     ScriptEngine& scriptEngine();
+    VoxelParticleEngine& particleEngine();
     FactionMatrix& factionMatrix();
     EventPoller& eventPoller();
 
@@ -56,8 +56,8 @@ protected:
     std::unique_ptr<WorldTree> m_worldTree;
     std::unique_ptr<WorldLogic> m_worldLogic;
     std::unique_ptr<God> m_god;
-    std::unique_ptr<VoxelParticleEngine> m_voxelParticleEngine;
     std::unique_ptr<ScriptEngine> m_scriptEngine;
+    std::unique_ptr<VoxelParticleEngine> m_particleEngine;
     std::unique_ptr<FactionMatrix> m_factionMatrix;
     std::unique_ptr<EventPoller> m_eventPoller;
 

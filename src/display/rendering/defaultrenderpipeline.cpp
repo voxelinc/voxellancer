@@ -8,15 +8,41 @@
 
 DefaultRenderPipeline::DefaultRenderPipeline() :
     RenderPipeline("defaultpipeline"),
+    m_useFxaa("vfx.fxaa"),
+    m_fxaa(nullptr),
+    m_finalization(nullptr),
     m_quad(std::make_shared<ScreenQuad>())
 {
     
 }
 
+void DefaultRenderPipeline::apply(FrameBuffer& frameBuffer, const RenderMetaData& metadata) {
+    RenderPipeline::apply(frameBuffer, metadata);
+    
+    if (m_useFxaa != m_fxaa->isEnabled()) {
+        m_fxaa->setEnabled(m_useFxaa);
+        if (m_useFxaa) {
+            m_finalization->setInputMapping({ { "color", BufferNames::FXAA }, { "bloom", BufferNames::Bloom } });
+        } else {
+            m_finalization->setInputMapping({ { "color", BufferNames::Color }, { "bloom", BufferNames::Bloom } });
+        }
+    }
+}
+
 void DefaultRenderPipeline::setup() {
+    addFXAA();
     addEmissivenessBlurVertical();
     addEmissivenessBlurHorizontal();
     addFinalization();
+}
+
+void DefaultRenderPipeline::addFXAA() {
+    m_fxaa = std::make_shared<PostProcessingPass>("fxaa", m_quad);
+    m_fxaa->setInputMapping({ { "source", BufferNames::Color } });
+    m_fxaa->setOutput({ BufferNames::FXAA });
+    m_fxaa->setFragmentShader("data/shader/postprocessing/fxaa.frag");
+    m_fxaa->setEnabled(false);
+    add(m_fxaa);
 }
 
 void DefaultRenderPipeline::addEmissivenessBlurVertical() {
@@ -38,14 +64,13 @@ void DefaultRenderPipeline::addEmissivenessBlurHorizontal() {
 }
 
 void DefaultRenderPipeline::addFinalization() {
-    auto pass = std::make_shared<PostProcessingPass>("blurh", m_quad);
-    pass->setInputMapping({ { "color", BufferNames::Color }, { "bloom", BufferNames::Bloom } });
-    pass->setOutput({ BufferNames::Default });
-    pass->setFragmentShader("data/shader/postprocessing/combine.frag");
-    add(pass);
+    m_finalization = std::make_shared<PostProcessingPass>("blurh", m_quad);
+    m_finalization->setInputMapping({ { "color", BufferNames::Color }, { "bloom", BufferNames::Bloom } });
+    m_finalization->setOutput({ BufferNames::Default });
+    m_finalization->setFragmentShader("data/shader/postprocessing/combine.frag");
+    add(m_finalization);
 }
 
 int DefaultRenderPipeline::bufferCount() {
     return BufferNames::BufferCount;
 }
-

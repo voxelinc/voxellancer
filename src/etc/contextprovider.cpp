@@ -5,7 +5,6 @@
 
 #include <glow/logging.h>
 #include <glow/global.h>
-#include <glowutils/FileRegistry.h>
 
 #include "geometry/size.h"
 

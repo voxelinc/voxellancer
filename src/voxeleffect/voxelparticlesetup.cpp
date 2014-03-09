@@ -14,7 +14,7 @@ VoxelParticleSetup::VoxelParticleSetup(const Transform& transform, const Visuals
 VoxelParticleData VoxelParticleSetup::toData(float timeSecs) const {
     VoxelParticleData particle;
 
-    particle.dead = false;
+    particle.status = VoxelParticleData::Status::Alive;
     particle.creationPosition = m_transform.position();
     particle.creationEulers = glm::eulerAngles(m_transform.orientation());
     particle.directionalSpeed = m_speed.directional();

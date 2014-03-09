@@ -12,6 +12,7 @@ HUDObjectDelegate::HUDObjectDelegate(HUD* hud, WorldObject* worldObject):
     m_worldObjectHandle(worldObject->handle()),
     m_hudget(new ObjectHudget(m_hud, this))
 {
+
 }
 
 HUD* HUDObjectDelegate::hud() {
@@ -25,4 +26,3 @@ WorldObject* HUDObjectDelegate::worldObject() {
 Hudget& HUDObjectDelegate::hudget() {
     return *m_hudget;
 }
-

@@ -135,8 +135,6 @@ void GameScenario::populateWorld() {
     }
     planet->setCrucialVoxel(glm::ivec3(middle));
     planet->objectInfo().setName("Planet");
-    planet->objectInfo().setShowOnHud(true);
-    planet->objectInfo().setCanLockOn(true);
     m_world->god().scheduleSpawn(planet);
 
     for(int e = 0; e < 15; e++) {
