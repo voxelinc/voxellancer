@@ -86,6 +86,9 @@ void GamePlay::loadScenario(int i) {
     case 2:
         m_scenario.reset(new FrozenGameScenario(this));
         break;
+    case 3:
+        m_scenario.reset(new PirateScenario(this));
+        break;
     default:
         m_scenario.reset(new BaseScenario(this));
     }
