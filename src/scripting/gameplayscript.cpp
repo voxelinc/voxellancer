@@ -42,50 +42,37 @@ GamePlayScript::GamePlayScript(GamePlay* gamePlay, ScriptEngine* scriptEngine):
 {
 
 }
+ 
 
 void GamePlayScript::load(const std::string& path) {
     Script::load(path);
 
-   m_lua->Register("playerShip", std::function<int()>([&] () {
-       return apiPlayerShip();
-    }));
-    m_lua->Register("createShip", std::function<int(std::string)>([&] (std::string name) {
-        return apiCreateShip(name);
-    }));
-    m_lua->Register("spawn", std::function<bool(int)>([&] (int key) {
-        return apiSpawn(key);
-    }));
-    m_lua->Register("setPosition", std::function<int(int, float, float, float)>([&] (int key, float x, float y, float z) {
-        return apiSetPosition(key, x, y, z);
-    }));
-    m_lua->Register("setOrientation", std::function<int(int, float, float, float)>([&] (int key, float x, float y, float z) {
-        return apiSetOrientation(key, x, y, z);
-    }));
-    m_lua->Register("position", std::function<glm::vec3(int)>([&] (int key) {
-        return apiPosition(key);
-    }));
-    m_lua->Register("orientation", std::function<glm::vec3(int)>([&] (int key) {
-        return apiOrientation(key);
-    }));
-    m_lua->Register("setActive", std::function<int(int, bool)>([&] (int key, bool active) {
-       return apiSetEventActive(key, active);
-    }));
-    m_lua->Register("createSingleShotTimer", std::function<int(std::string, float)>([&] (std::string callback, float delta) {
-       return apiCreateSingleShotTimer(callback, delta);
-    }));
+    m_lua->RegisterMethod("playerShip", this, &GamePlayScript::apiPlayerShip);
 
-    m_lua->Register("createLoopingTimer", std::function<int(std::string, float)>([&] (std::string callback, float delta) {
-        return apiCreateLoopingTimer(callback, delta);
-    }));
-    m_lua->Register("onAABBEntered", std::function<int(int, float, float, float, float, float, float, std::string)>([&] (int handle, float x1, float y1, float z1, float x2, float y2, float z2, std::string callback) {
-        return apiOnAABBEntered(handle, glm::vec3(x1, y1, z1), glm::vec3(x2, y2, z2), callback);
-    }));
-    m_lua->Register("createFlyToTask", std::function<int(int)>([&] (int key) {
-        return apiCreateFlyToTask(key);
-    }));
-    m_lua->Register("setTargetPoint", std::function<int(int, float, float, float)>([&] (int key, float x, float y, float z) {
-        return apiSetTargetPoint(key, x, y, z);
-    }));
+    m_lua->RegisterMethod("createShip", this, &GamePlayScript::apiCreateShip);
+
+    m_lua->RegisterMethod("spawn", this, &GamePlayScript::apiSpawn);
+    
+    m_lua->RegisterMethod("setPosition", this, &GamePlayScript::apiSetPosition);
+    
+    m_lua->RegisterMethod("setOrientation", this, &GamePlayScript::apiSetOrientation);
+    
+    m_lua->RegisterMethod("position", this, &GamePlayScript::apiPosition);
+    
+    m_lua->RegisterMethod("orientation", this, &GamePlayScript::apiOrientation);
+    
+    m_lua->RegisterMethod("setActive", this, &GamePlayScript::apiSetEventActive);
+    
+    m_lua->RegisterMethod("createSingleShotTimer", this, &GamePlayScript::apiCreateSingleShotTimer);
+    
+    m_lua->RegisterMethod("createLoopingTimer", this, &GamePlayScript::apiCreateLoopingTimer);
+    
+    m_lua->RegisterMethod("onAABBEntered", this, &GamePlayScript::apiOnAABBEntered);
+    
+    m_lua->RegisterMethod("createFlyToTask", this, &GamePlayScript::apiCreateFlyToTask);
+    
+    m_lua->RegisterMethod("setTargetPoint", this, &GamePlayScript::apiSetTargetPoint);
+    
 }
 
 int GamePlayScript::apiPlayerShip() {

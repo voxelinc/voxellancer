@@ -128,6 +128,19 @@ public:
         return pop<Ret...>();
     }
 
+
+    template<typename Return, typename Class, typename... Args>
+    void RegisterMethod(const std::string & name, Class * obj, Return(Class::* const method) (Args...))
+    {
+        auto mem = std::mem_fn(method);
+    
+        auto function = std::function<Return(typename std::remove_reference<Args>::type...)>([=](Args... args) {
+            return mem(obj, args...);
+        });
+     
+        Register(name, function);
+    };
+    
     template <typename Return, typename... Args>
     void Register(const std::string & name, std::function<Return(Args...)> function)
     {
