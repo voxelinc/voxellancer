@@ -9,7 +9,7 @@
 #include "geometry/sphere.h"
 
 #include "property/property.h"
-#include "worldobject/handle/handle.h"
+#include "utils/handle/handle.h"
 
 enum class ClickType {
     None,

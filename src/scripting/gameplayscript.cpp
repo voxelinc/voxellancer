@@ -165,19 +165,13 @@ int GamePlayScript::apiSetActive(int key, bool active) {
 }
 
 int GamePlayScript::apiCreateSingleShotTimer(const std::string& callback, float delta) {
-    SingleShotTimer* timer = new SingleShotTimer(delta, [=] {
-        m_lua->call(callback);
-    } );
-
+    auto timer = std::make_shared<SingleShotTimer>(delta, [=] { m_lua->call(callback); } );
     World::instance()->eventPoller().addPoll(timer);
     return timer->scriptKey();
 }
 
 int GamePlayScript::apiCreateLoopingTimer(const std::string& callback, float delta) {
-    LoopingTimer* timer = new LoopingTimer(delta, [=] {
-        m_lua->call(callback);
-    } );
-
+    auto timer = std::make_shared<LoopingTimer>(delta, [=] { m_lua->call(callback); } );
     World::instance()->eventPoller().addPoll(timer);
     return timer->scriptKey();
 }
@@ -188,10 +182,7 @@ int GamePlayScript::apiOnAABBEntered(int key, glm::vec3 llf, glm::vec3 urb, cons
         return -1;
     }
 
-    AABBEnteredPoll* enteredPoll = new AABBEnteredPoll(worldObject, AABB(llf, urb), [=] {
-            m_lua->call(callback, key);
-    });
-
+    auto enteredPoll = std::make_shared<AABBEnteredPoll>(worldObject, AABB(llf, urb), [=] { m_lua->call(callback, key); });
     World::instance()->eventPoller().addPoll(enteredPoll);
     return enteredPoll->scriptKey();
 }
@@ -228,5 +219,6 @@ int GamePlayScript::apiSetTargetPoint(int key, float x, float y, float z) {
     }
 
     flyToTask->setTargetPoint(glm::vec3(x, y, z));
+    return 0;
 }
 

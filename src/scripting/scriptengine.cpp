@@ -14,7 +14,6 @@
 
 #include "gameplayscript.h"
 #include "scriptable.h"
-#include "scripthandle.h"
 
 
 ScriptEngine::ScriptEngine(World* world):
