@@ -195,14 +195,9 @@ int GamePlayScript::apiCreateFlyToTask(int key) {
 }
 
 int GamePlayScript::apiSetTargetPoint(int key, float x, float y, float z) {
-    AiTask* task = m_scriptEngine->get<AiTask>(key);
-    if (!task) {
-        return 0;
-    }
-
-    FlyToTask *flyToTask = dynamic_cast<FlyToTask*>(task); // TODO: Find a better way
+    FlyToTask* flyToTask = m_scriptEngine->get<FlyToTask>(key);
     if (!flyToTask) {
-        glow::warning("GamePlayScript: Task '%;' is no FlyToTask", key);
+        return -1;
     }
 
     flyToTask->setTargetPoint(glm::vec3(x, y, z));
