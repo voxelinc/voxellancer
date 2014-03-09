@@ -16,22 +16,22 @@ EventPoller::EventPoller()
 
 EventPoller::~EventPoller() = default;
 
-void EventPoller::addPoll(EventPoll* eventPoll) {
-    m_eventPolls.push_back(std::unique_ptr<EventPoll>(eventPoll));
-    World::instance()->scriptEngine().registerScriptable(eventPoll);
+void EventPoller::addPoll(std::shared_ptr<EventPoll> eventPoll) {
+    m_eventPolls.push_back(eventPoll);
+    World::instance()->scriptEngine().registerScriptable(eventPoll.get());
 }
 
-void EventPoller::removePoll(EventPoll* eventPoll) {
-    m_eventPolls.remove_if([&](std::unique_ptr<EventPoll>& eventPollPtr) { return eventPollPtr.get() == eventPoll; });
-    World::instance()->scriptEngine().unregisterScriptable(eventPoll);
+void EventPoller::removePoll(std::shared_ptr<EventPoll> eventPoll) {
+    m_eventPolls.remove_if([&](std::shared_ptr<EventPoll>& eventPollPtr) { return eventPollPtr == eventPoll; });
+    World::instance()->scriptEngine().unregisterScriptable(eventPoll.get());
 }
 
 void EventPoller::update(float deltaSec) {
-    for (std::list<std::unique_ptr<EventPoll>>::iterator i = m_eventPolls.begin(); i != m_eventPolls.end(); ++i) {
-        EventPoll* poll = i->get();
+    for (auto& iter = m_eventPolls.begin(); iter != m_eventPolls.end(); ++iter) {
+        EventPoll* poll = iter->get();
         poll->update(deltaSec);
         if (poll->dead()) {
-            i = m_eventPolls.erase(i);
+            iter = m_eventPolls.erase(iter);
         }
     }
 }

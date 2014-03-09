@@ -5,12 +5,10 @@
 #include <unordered_map>
 #include <vector>
 
-#include "iscripthandle.h"
-
-
 class AiTask;
 class EventPoll;
 class GamePlayScript;
+class Scriptable;
 class Ship;
 class World;
 class WorldObject;
@@ -84,8 +82,8 @@ public:
 protected:
     World* m_world;
 
-    std::list<std::unique_ptr<GamePlayScript>> m_scripts;
-    std::vector<std::unique_ptr<IScriptHandle>> m_handles;
+    std::vector<std::unique_ptr<GamePlayScript>> m_scripts;
+    std::unordered_map<int, Scriptable*> m_handles;
 
     int m_handleKeyIncrementor;
     bool m_running;

@@ -52,27 +52,7 @@ void ScriptEngine::registerScriptable(Scriptable* scriptable) {
         return;
     }
 
-    m_handles.resize(m_handleKeyIncrementor + 1);
-
-    IScriptHandle* scriptHandle = nullptr;
-    switch(scriptable->scriptableType()) {
-        case ScriptableType::WorldObject:
-            scriptHandle = new ScriptHandle<WorldObject>(dynamic_cast<WorldObject*>(scriptable));
-        break;
-        case ScriptableType::Ship:
-            scriptHandle = new ScriptHandle<Ship>(dynamic_cast<Ship*>(scriptable));
-        break;
-        case ScriptableType::EventPoll:
-            scriptHandle = new ScriptHandle<EventPoll>(dynamic_cast<EventPoll*>(scriptable));
-        break;
-        case ScriptableType::AiTask:
-            scriptHandle = new ScriptHandle<AiTask>(dynamic_cast<AiTask*>(scriptable));
-        break;
-        default:
-            assert(0);
-    }
-    m_handles[m_handleKeyIncrementor].reset(scriptHandle);
-
+    m_handles[m_handleKeyIncrementor] = scriptable;
     scriptable->setScriptKey(m_handleKeyIncrementor);
 
     m_handleKeyIncrementor++;
@@ -80,21 +60,21 @@ void ScriptEngine::registerScriptable(Scriptable* scriptable) {
 
 void ScriptEngine::unregisterScriptable(Scriptable* scriptable) {
     if (scriptable->scriptKey() > 0) {
-        m_handles[scriptable->scriptKey()]->invalidate();
+        m_handles.erase(scriptable->scriptKey());
     }
 }
 
 Scriptable* ScriptEngine::getScriptable(int key) {
-    if (key < 0 || key >= m_handles.size()) {
+    if (key < 0 || key >= m_handleKeyIncrementor) {
         glow::warning("ScriptEngine: script-key '%;' is not valid", key);
         return nullptr;
     } else {
-        Scriptable* scriptable = m_handles[key]->scriptable();
-        if (!scriptable) {
+        auto pair = m_handles.find(key);
+        if (pair == m_handles.end()) {
             glow::warning("ScriptEngine: the script-key '%;' points to a removed object, next time check with valid()", key);
             return nullptr;
         } else {
-            return scriptable;
+            return pair->second;
         }
     }
 }
