@@ -51,5 +51,5 @@ void ScriptedScenario::populateWorld() {
     m_world->god().scheduleSpawn(playerShip);
     m_gamePlay->player().setShip(playerShip);
 
-    m_world->scriptEngine().addScript(m_script.get());
+    m_world->scriptEngine().addScript(m_script);
 }

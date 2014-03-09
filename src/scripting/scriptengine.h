@@ -1,6 +1,5 @@
 #pragma once
 
-#include <list>
 #include <memory>
 #include <unordered_map>
 #include <vector>
@@ -25,56 +24,22 @@ public:
 
     ~ScriptEngine();
 
-    void addScript(GamePlayScript* script);
+    void addScript(std::shared_ptr<GamePlayScript> script);
 
-    /*
-        start (call the "main" function) all added scripts and all future
-        added scripts until stop is called
-    */
+    /*  start (call the "main" function) all added scripts and all future
+        added scripts until stop is called */
     void start();
 
-    /*
-        Stops the ScriptEngine, continuing to update after start() is called again.
-    */
+    /* Stops the ScriptEngine, continuing to update after start() is called again. */
     void stop();
 
-    /*
-        Register/Unregister Scriptables that are managed by other objects
-        and equip them with a valid scriptKey
-    */
+    /*  Register/Unregister Scriptables that are managed by other objects
+        and equip them with a valid scriptKey */
     void registerScriptable(Scriptable* scriptable);
     void unregisterScriptable(Scriptable* scriptable);
 
-    Scriptable* getScriptable(int key);
-    WorldObject* getWorldObject(int key);
-    Ship* getShip(int key);
-    EventPoll* getEventPoll(int key);
-    AiTask* getAiTask(int key);
-
-//    void registerTimer(Timer *timer);
-//
-//    /*
-//        Registers a worldObject and returns a key to access the worldObject from
-//        a script
-//    */
-//    int registerWorldObject(WorldObject* worldObject);
-//
-//    WorldObject* getWorldObject(int handle);
-//    int getWorldObjectHandle(WorldObject* worldObject);
-//
-//    /*
-//        Adds the WorldObject (checking if it was previously added via registerWorldObject()
-//        Called by God
-//    */
-//    void addWorldObject(WorldObject* worldObject);
-//
-//    /*
-//        Called by God
-//    */
-//    void removeWorldObject(WorldObject* worldObject);
-//
-//    int registerEventPoll(EventPoll* eventPoll);
-//    void unregisterEventPoll(int handle);
+    template<class T>
+    T* get(int key);
 
     void update(float deltaSec);
 
@@ -82,20 +47,15 @@ public:
 protected:
     World* m_world;
 
-    std::vector<std::unique_ptr<GamePlayScript>> m_scripts;
+    std::vector<std::shared_ptr<GamePlayScript>> m_scripts;
     std::unordered_map<int, Scriptable*> m_handles;
 
     int m_handleKeyIncrementor;
     bool m_running;
 
+    Scriptable* getScriptable(int key);
 
-    /*std::unordered_map<int, std::unique_ptr<EventPoll>> m_eventPolls;
-    int m_eventPollHandleIncrementor;
 
-    std::unordered_map<int, std::shared_ptr<WorldObjectScriptHandle>> m_handle2WorldObjectHandle;
-    std::unordered_map<WorldObject*, std::shared_ptr<WorldObjectScriptHandle>> m_worldObject2WorldObjectHandle;
-    int m_worldObjectHandleIncrementor;
-
-    TimerManager m_timerManager;*/
 };
 
+#include "scriptengine.inl"

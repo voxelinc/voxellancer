@@ -19,7 +19,7 @@ public:
 
 
 protected:
-    std::unique_ptr<GamePlayScript> m_script;
+    std::shared_ptr<GamePlayScript> m_script;
 
     virtual void populateWorld() override;
 };

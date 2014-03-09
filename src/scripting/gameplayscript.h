@@ -38,7 +38,7 @@ protected:
     glm::vec3 apiPosition(int key);
     glm::vec3 apiOrientation(int key);
 
-    int apiSetActive(int key, bool active);
+    int apiSetEventActive(int key, bool active);
 
     int apiCreateSingleShotTimer(const std::string& callback, float delta);
     int apiCreateLoopingTimer(const std::string& callback, float delta);
