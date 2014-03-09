@@ -6,7 +6,7 @@
 #include "property/property.h"
 
 
-struct ActionKeyMapping;
+class ActionKeyMapping;
 struct SecondaryInputValues;
 
 class HUD;
@@ -15,7 +15,7 @@ class InputConfigurator {
 public:
     InputConfigurator(std::vector<ActionKeyMapping*>* actions, SecondaryInputValues *secondaryInputValues, Property<float>* deadzone, HUD* hud);
 
-    void startConfiguration(bool primary);
+    void startConfiguration(InputClass inputClass);
     bool isConfiguring();
     void update();
 
@@ -23,8 +23,9 @@ public:
 
     void setSecondaryInputValues(SecondaryInputValues* values);
 
-    void setLastPrimaryInput(InputMapping lastInput);
-    void setLastSecondaryInput(InputMapping lastInput);
+    void setLastInput(InputMapping lastInput, InputClass inputClass);
+
+    InputMapping lastInput(InputClass inputClass);
 
 
 private:
@@ -34,27 +35,28 @@ private:
 
     HUD* m_hud;
 
-    Property<float>* prop_deadzoneMouse;
     Property<float>* prop_deadzoneGamepad;
 
+    bool setActionInputMapping(ActionKeyMapping* action, InputClass inputClass);
+    bool isLastInputValid(InputClass inputClass);
 
-    bool setActionInputMapping(ActionKeyMapping* action, bool primary);
-    bool isLastPrimaryInputValid();
-    bool isLastSecondaryInputValid();
+    bool isKeyPressed(InputClass inputClass);
 
-    bool isSecondaryInput();
-    bool isPrimaryInput();
+    void setupControls(InputClass inputClass);
 
-    void setupPrimaryControls();
-    void setupSecondaryControls();
+    void updateConfiguration(InputClass inputClass);
 
     InputMapping lastPrimaryInput;
     InputMapping lastSecondaryInput;
 
-    int secondaryConfigurationState;
-    int primaryConfigurationState;
+    int m_secondaryConfigurationState;
+    int m_primaryConfigurationState;
 
-    bool beginningKeyConfiguration = true;
-    bool displayedKeyPressedWarning = false;
-    bool displayedInstructions = false;
+    int configurationState(InputClass inputClass);
+    void incrementConfigurationState(InputClass inputClass);
+    void setConfigurationState(int state, InputClass inputClass);
+
+    bool m_beginningKeyConfiguration = true;
+    bool m_displayedKeyPressedWarning = false;
+    bool m_displayedInstructions = false;
 };

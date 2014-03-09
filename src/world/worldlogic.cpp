@@ -17,6 +17,9 @@ WorldLogic::WorldLogic(World &world):
 
 void WorldLogic::update(float deltaSecs) {
 
+    m_world.god().remove();
+    m_world.god().spawn();
+
     m_mover.moveWorldObjects(deltaSecs);
 
     m_voxelCollisionAccumulator.parse(m_mover.voxelCollisions());
@@ -31,7 +34,7 @@ void WorldLogic::update(float deltaSecs) {
     m_splitDetector.searchSplitOffs(m_damager.worldObjectModifications());
     m_splitter.split(m_splitDetector.splitDataList());
 
-    m_world.god().scheduleSpawns(m_splitter.splitOffWorldObjects());
+    m_world.god().scheduleSpawn(m_splitter.splitOffWorldObjects());
 
 //    m_wrecker.detectWreckages(m_damager.modifiedVoxelClusters());
 //    //m_wrecker.applyOnWreckageHooks();
@@ -53,7 +56,7 @@ void WorldLogic::update(float deltaSecs) {
 void WorldLogic::damageForwardLoop(std::list<DamageImpact> damageImpacts) {
     m_damager.reset();
 
-    while(damageImpacts.size() > 0) {
+    while(!damageImpacts.empty()) {
 
         m_damager.applyDamages(damageImpacts);
 

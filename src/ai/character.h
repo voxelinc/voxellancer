@@ -2,27 +2,26 @@
 
 #include <memory>
 
-class Ship;
+
 class AiTask;
+class Faction;
+class Ship;
 
 class Character {
 public:
-    Character(Ship& ship);
-    Character(Ship& ship, int faction);
+    Character(Ship& ship, Faction* faction);
+
+    Faction* faction();
+    void setFaction(Faction* faction);
 
     void setTask(std::shared_ptr<AiTask> task);
     std::shared_ptr<AiTask> task();
-    
-    virtual void update(float deltaSec);
 
-    int faction();
-    void setFaction(int faction);
+    virtual void update(float deltaSec);
 
 protected:
     Ship& m_ship;
+    Faction* m_faction;
     std::shared_ptr<AiTask> m_task;
-
-    // placeholder until faction system is implemented
-    int m_faction;
 };
 

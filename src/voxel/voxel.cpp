@@ -7,9 +7,9 @@
 #include "glow/logging.hpp"
 
 #include "worldobject/worldobject.h"
+#include "voxel/voxeltree.h"
 #include "voxel/voxeltreenode.h"
 #include "voxeleffect/voxeldebrisgenerator.h"
-#include "voxeltree.h"
 
 
 Property<float>* Voxel::s_defaultMass;
@@ -43,7 +43,7 @@ const glm::ivec3& Voxel::gridCell() const {
 
 glm::vec3 Voxel::position() const {
     assert(m_voxelTreeNode);
-    return m_voxelTreeNode->voxelTree()->worldObject()->transform().applyTo(static_cast<glm::vec3>(m_gridCell));
+    return m_voxelTreeNode->voxelTree()->worldObject()->transform().applyTo(glm::vec3(m_gridCell));
 }
 
 void Voxel::addToCluster(VoxelCluster *cluster) {
@@ -74,6 +74,10 @@ void Voxel::applyDamage(float deltaHp) {
     m_hp = std::max(m_hp - deltaHp, 0.0f);
 }
 
+float Voxel::damageForwardingDestructionDamage() {
+    return 0;
+}
+
 float Voxel::normalizedMass() const {
     return m_normalizedMass;
 }
@@ -88,7 +92,7 @@ void Voxel::onDestruction() {
     WorldObject* worldObject = m_voxelTreeNode->voxelTree()->worldObject();
 
     if (m_voxelTreeNode && worldObject) {
-        VoxelDebrisGenerator generator;
+        VoxelDebrisGenerator generator(worldObject);
         generator.setOrientation(worldObject->transform().orientation());
         generator.setPosition(worldObject->transform().applyTo(glm::vec3(m_gridCell)));
         generator.setScale(worldObject->transform().scale() * 0.6f, 0.4f);

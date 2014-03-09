@@ -23,7 +23,7 @@ public:
     virtual float zNear() const override;
     virtual float aspectRatio() const override;
 
-    virtual void draw(Scene* scene, CameraHead* cameraHead) override;
+    virtual void draw(const Scene& scene, const CameraHead& cameraHead) override;
 
 
 protected:

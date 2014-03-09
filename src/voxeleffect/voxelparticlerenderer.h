@@ -2,11 +2,12 @@
 
 #include <string>
 
+#include <GL/glew.h>
+
 #include "etc/contextdependant.h"
 #include "property/property.h"
 
 #include "voxelparticledata.h"
-#include "voxelmesh.h"
 
 
 namespace glow {
@@ -16,6 +17,7 @@ namespace glow {
 }
 
 class Camera;
+class VoxelMesh;
 class VoxelParticleEngine;
 
 /*
@@ -25,14 +27,15 @@ class VoxelParticleEngine;
 class VoxelParticleRenderer :  public ContextDependant {
 public:
     VoxelParticleRenderer(VoxelParticleEngine* engine);
+    ~VoxelParticleRenderer();
 
     void updateBuffer(int begin, int end, VoxelParticleData* data);
 
-    void draw(Camera& camera);
+    void draw(const Camera& camera);
 
 
 protected:
-    VoxelMesh m_voxelMesh;
+    std::unique_ptr<VoxelMesh> m_voxelMesh;
 
     bool m_initialized;
     VoxelParticleEngine* m_engine;

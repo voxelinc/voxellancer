@@ -6,10 +6,11 @@
 #include "voxelparticlespawnbase.h"
 
 class Transform;
+class VoxelCluster;
 
 class VoxelDebrisGenerator : public VoxelParticleSpawnBase {
 public:
-    VoxelDebrisGenerator();
+    VoxelDebrisGenerator(const VoxelCluster* creator);
     virtual ~VoxelDebrisGenerator();
 
     void setOrientation(const glm::quat& orientation);
@@ -23,7 +24,6 @@ protected:
     glm::quat m_orientation;
     int m_density;
     float m_spawnProbability;
-    float m_particleBaseLifetime;
 
     float createScale();
 };

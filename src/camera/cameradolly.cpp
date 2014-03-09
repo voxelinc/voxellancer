@@ -18,6 +18,10 @@ CameraHead& CameraDolly::cameraHead() {
     return *m_cameraHead;
 }
 
+const CameraHead& CameraDolly::cameraHead() const {
+    return *m_cameraHead;
+}
+
 void CameraDolly::followWorldObject(WorldObject* followWorldObject) {
     m_followHelper->setTarget(followWorldObject);
 }

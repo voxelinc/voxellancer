@@ -18,7 +18,7 @@ go_bandit([](){
     public:
         bool success = false;
 
-        virtual void notifyChanged() {
+        virtual void notifyChanged(glow::Changeable * sender) override {
             success = true;
         }
     };
@@ -34,7 +34,6 @@ go_bandit([](){
 
         it("should load", [&]() {
             PropertyManager::instance()->load("test/property/test.ini");
-            PropertyManager::instance()->load("data/voxels.ini", "voxels");
 
             Property<int> iSize("player.size");
             Property<float> fProp("player.size");
@@ -44,6 +43,7 @@ go_bandit([](){
             Property<char> cProp("section.forward");
             Property<bool> bProp2("player.is_true");
             Property<glm::vec3> v3Prop("player.pos");
+            Property<float> angleProp("player.angle");
 
             AssertThat(iSize.get(), Equals(1));
             AssertThat(fProp.get(), Equals(1));
@@ -55,6 +55,7 @@ go_bandit([](){
             AssertThat(v3Prop->x, Equals(1.0));
             AssertThat(v3Prop->y, Equals(0));
             AssertThat(v3Prop->z, Equals(.5));
+            AssertThat(angleProp.get(), EqualsWithDelta(glm::radians(45.0f), 0.01));
         });
 
         it("understands inputmapping", [&]() {
@@ -70,17 +71,15 @@ go_bandit([](){
         });
 
         it("should work before load", [&]() {
-            // suppress property not found debug info
-            glow::setVerbosityLevel(glow::LogMessage::Fatal);
 
-            Property<int> iSize("player.size");
+            Property<int> iSize("player.size", 0);
             AssertThat(iSize.get(), Equals(0));
-            Property<float> fProp("player.size");
-            Property<float> fProp2("player.height");
-            Property<std::string> sProp1("player.name");
-            Property<std::string> sProp2("section.name");
-            Property<char> cProp("section.forward");
-            Property<bool> bProp2("player.is_true");
+            Property<float> fProp("player.size", 0);
+            Property<float> fProp2("player.height", 0);
+            Property<std::string> sProp1("player.name", "");
+            Property<std::string> sProp2("section.name", "");
+            Property<char> cProp("section.forward", ' ');
+            Property<bool> bProp2("player.is_true", false);
 
             PropertyManager::instance()->load("test/property/test.ini");
 
@@ -92,7 +91,6 @@ go_bandit([](){
             AssertThat(cProp.get(), Equals('w'));
             AssertThat(bProp2.get(), Equals(true));
 
-            glow::setVerbosityLevel(glow::LogMessage::Debug);
         });
 
         it("should reload", [&]() {
@@ -116,6 +114,8 @@ go_bandit([](){
             AssertThat(listener.success, Equals(false));
             PropertyManager::instance()->load("test/property/test.ini");
             AssertThat(listener.success, Equals(true));
+
+            PropertyManager::instance()->deregisterListener(&listener);
 
         });
     });

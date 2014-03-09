@@ -92,7 +92,7 @@ void VoxelClusterBounds::calculateMinimalGridSphere() {
     m_minimalGridSphereValid = true;
 }
 
-IAABB VoxelClusterBounds::calculateAABB(const Transform& transform) {
+const IAABB VoxelClusterBounds::calculateAABB(const Transform& transform) {
     glm::vec3 middle = transform.applyTo(minimalGridSphere().position());
     float radius = minimalGridSphere().radius() * transform.scale();
 

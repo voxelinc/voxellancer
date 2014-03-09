@@ -5,6 +5,7 @@
 
 #include <glow/Program.hpp>
 #include <glow/VertexArrayObject.h>
+#include <glow/Texture.h>
 #include <glow/Buffer.h>
 #include <glow/Shader.h>
 #include <glow/VertexAttributeBinding.h>
@@ -73,7 +74,7 @@ void Skybox::initialize() {
     m_vertexArrayObject->enable(a_vertex);
 }
 
-void Skybox::draw(Camera& camera){
+void Skybox::draw(const Camera& camera){
     if (!m_texture) {
         initialize();
     }

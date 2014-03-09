@@ -49,3 +49,4 @@ void RenderPipeline::insertAfter(std::shared_ptr<RenderPass> pass, const std::st
     }
     assert(false); // pass not found
 }
+

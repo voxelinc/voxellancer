@@ -5,6 +5,7 @@
 
 class HUD;
 class Hudget;
+class ObjectHudget;
 class WorldObject;
 
 /*
@@ -17,12 +18,11 @@ public:
 
     HUD* hud();
     WorldObject* worldObject();
-    Hudget* hudget();
-
+    Hudget& hudget();
 
 protected:
     HUD* m_hud;
     Handle<WorldObject> m_worldObjectHandle;
-    Hudget* m_hudget;
+    std::unique_ptr<Hudget> m_hudget;
 };
 

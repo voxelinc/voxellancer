@@ -9,6 +9,7 @@ public:
     explicit HandleImpl(T* object);
 
     T* get();
+    const T* get() const;
 
     bool valid() const;
 

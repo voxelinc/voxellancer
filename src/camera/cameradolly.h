@@ -15,6 +15,7 @@ public:
     ~CameraDolly();
 
     CameraHead& cameraHead();
+    const CameraHead& cameraHead() const;
 
     void followWorldObject(WorldObject* m_followWorldObject);
 

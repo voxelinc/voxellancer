@@ -5,6 +5,7 @@
 #include "property/property.h"
 
 class Transform;
+class VoxelCluster;
 
 class VoxelParticleSpawnBase {
 public:
@@ -19,10 +20,13 @@ public:
 
 
 protected:
-    VoxelParticleSpawnBase(char* dampeningName,
+    VoxelParticleSpawnBase(const VoxelCluster* creator,
+                           char* dampeningName,
                            char* angularDampeningName,
                            char* baseForceName,
                            char* angularBaseForceName);
+    
+    const VoxelCluster* m_creator;
 
     glm::vec3 m_position;
 

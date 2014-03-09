@@ -8,12 +8,16 @@
 
 #include "def_regex.h"
 
+class AbstractPropertyCollection {
+public:
+    virtual bool update(const std::string& key, const std::string& svalue) = 0;
+};
 
 template <class T>
 class Property;
 
 template <class T>
-class PropertyCollection {
+class PropertyCollection : public AbstractPropertyCollection {
 public:
     PropertyCollection(regexns::regex regex, std::function<T(const std::string&)> converter);
     virtual ~PropertyCollection();
@@ -23,12 +27,12 @@ public:
 
     void unregisterProperty(Property<T> * prop);
 
-    bool update(const std::string& key, const std::string& svalue);
+    virtual bool update(const std::string& key, const std::string& svalue) override;
 
     void set(const std::string& key, const T& value);
 
     T get(const std::string& name) const;
-    T get(const std::string& name, const std::string& defaultValue) const;
+    T get(const std::string& name, const T& defaultValue) const;
 
 
 private:
