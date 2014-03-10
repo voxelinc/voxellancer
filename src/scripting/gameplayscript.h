@@ -1,6 +1,6 @@
 #pragma once
 
-#include <map>
+#include <vector>
 #include <memory>
 
 #include <glm/glm.hpp>
@@ -13,31 +13,31 @@ class ScriptEngine;
 class Ship;
 class Squad;
 class WorldObject;
+class Bindings;
 
 class GamePlayScript: public Script {
 public:
     GamePlayScript(GamePlay* gamePlay, ScriptEngine* scriptEngine);
+    virtual ~GamePlayScript();
 
-    virtual void load(const std::string& path) override;
+    void initializeBindings();
 
+    ScriptEngine& scriptEngine();
+    GamePlay& gamePlay();
+    LuaWrapper& luaWrapper();
 
 protected:
     GamePlay* m_gamePlay;
     ScriptEngine* m_scriptEngine;
 
+    std::vector<std::unique_ptr<Bindings>> m_bindings;
+
     /*
         API for gameplayscripts below
     */
     bool apiValid(int key);
-
-    int apiPlayerShip();
-    int apiCreateShip(const std::string& name);
-    int apiSpawn(int key);
-
-    int apiSetPosition(int key, float x, float y, float z);
-    int apiSetOrientation(int key, float x, float y, float z);
-    glm::vec3 apiPosition(int key);
-    glm::vec3 apiOrientation(int key);
+    int apiShowText(const std::string& string);
+    int apiShowTextFor(const std::string& string, int seconds);
 
     int apiSetEventActive(int key, bool active);
 
@@ -46,7 +46,5 @@ protected:
 
     int apiOnAABBEntered(int key, glm::vec3 llf, glm::vec3 urb, const std::string& callback);
 
-    int apiCreateFlyToTask(int key);
-    int apiSetTargetPoint(int key, float x, float y, float z);
 };
 

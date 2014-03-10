@@ -27,11 +27,13 @@ void EventPoller::removePoll(std::shared_ptr<EventPoll> eventPoll) {
 }
 
 void EventPoller::update(float deltaSec) {
-    for (auto iter = m_eventPolls.begin(); iter != m_eventPolls.end(); ++iter) {
+    for (auto iter = m_eventPolls.begin(); iter != m_eventPolls.end();) {
         EventPoll* poll = iter->get();
         poll->update(deltaSec);
         if (poll->dead()) {
             iter = m_eventPolls.erase(iter);
+        } else {
+            ++iter;
         }
     }
 }
