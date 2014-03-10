@@ -18,9 +18,4 @@ protected:
     ScriptEngine& m_scriptEngine;
     GamePlay& m_gamePlay;
 
-    template<typename Return, typename Class, typename... Args>
-    void Register(const std::string & name, Return(Class::* const method) (Args...)) {
-        m_lua->Register(name, static_cast<Class>(this), method);
-    }
-
 };

@@ -113,10 +113,9 @@ void World::addWorldObject(WorldObject* worldObject) {
     switch(worldObject->objectType()) {
         case WorldObjectType::Ship:
             m_ships.insert(static_cast<Ship*>(worldObject));
+            m_scriptEngine->registerScriptable(worldObject);
         break;
     }
-
-    m_scriptEngine->registerScriptable(worldObject);
 }
 
 void World::removeWorldObject(WorldObject* worldObject) {

@@ -8,6 +8,7 @@
 
 #include "worldobject/ship.h"
 
+
 AiBindings::AiBindings(GamePlayScript& script): 
     Bindings(script)
 {
@@ -33,7 +34,7 @@ int AiBindings::apiCreateFlyToTask(int key) {
 
     Character* character = ship->character();
     if (!character) {
-        glow::warning("GamePlayScript: Ship '%;' has no Character", key);
+        glow::warning("AiBindings: Ship '%;' has no Character", key);
         return -1;
     }
     character->setTask(std::shared_ptr<AiTask>(flyToTask));
@@ -45,6 +46,7 @@ int AiBindings::apiSetTargetPoint(int key, float x, float y, float z) {
     FlyToTask* flyToTask = m_scriptEngine.get<FlyToTask>(key);
 
     if (!flyToTask) {
+        glow::warning("AiBindings: FlyToTask '%;' doesn't exist", key);
         return -1;
     }
 
