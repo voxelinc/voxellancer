@@ -9,6 +9,6 @@ public:
 protected:
     virtual void initialize();
 
-    int apiCreateFlyToTask(int key);
-    int apiSetTargetPoint(int key, float x, float y, float z);
+    apikey apiCreateFlyToTask(apikey ship);
+    int apiSetTargetPoint(apikey flyToTask, float x, float y, float z);
 };

@@ -35,7 +35,7 @@ void WorldObjectBindings::initialize()
 }
 
 
-int WorldObjectBindings::apiPlayerShip() {
+apikey WorldObjectBindings::apiPlayerShip() {
     return m_gamePlay.player().ship()->scriptKey();
 }
 
@@ -51,7 +51,7 @@ int WorldObjectBindings::apiCreateShip(const std::string& name) {
     return ship->scriptKey();
 }
 
-int WorldObjectBindings::apiSpawn(int key) {
+int WorldObjectBindings::apiSpawn(apikey key) {
     WorldObject* worldObject = m_scriptEngine.get<WorldObject>(key);
 
     if (!worldObject) {
@@ -65,7 +65,7 @@ int WorldObjectBindings::apiSpawn(int key) {
 
 
 
-glm::vec3 WorldObjectBindings::apiOrientation(int key) {
+glm::vec3 WorldObjectBindings::apiOrientation(apikey key) {
     WorldObject* worldObject = m_scriptEngine.get<WorldObject>(key);
 
     if (!worldObject) {
@@ -76,7 +76,7 @@ glm::vec3 WorldObjectBindings::apiOrientation(int key) {
 }
 
 
-glm::vec3 WorldObjectBindings::apiPosition(int key) {
+glm::vec3 WorldObjectBindings::apiPosition(apikey key) {
     WorldObject* worldObject = m_scriptEngine.get<WorldObject>(key);
 
     if (!worldObject) {
@@ -86,7 +86,7 @@ glm::vec3 WorldObjectBindings::apiPosition(int key) {
     return worldObject->transform().position();
 }
 
-int WorldObjectBindings::apiSetPosition(int key, float x, float y, float z) {
+int WorldObjectBindings::apiSetPosition(apikey key, float x, float y, float z) {
     WorldObject* worldObject = m_scriptEngine.get<WorldObject>(key);
 
     if (!worldObject) {
@@ -98,7 +98,7 @@ int WorldObjectBindings::apiSetPosition(int key, float x, float y, float z) {
 }
 
 
-int WorldObjectBindings::apiSetOrientation(int key, float x, float y, float z) {
+int WorldObjectBindings::apiSetOrientation(apikey key, float x, float y, float z) {
     WorldObject* worldObject = m_scriptEngine.get<WorldObject>(key);
 
     if (worldObject) {

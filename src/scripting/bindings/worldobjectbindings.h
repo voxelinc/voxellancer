@@ -9,12 +9,12 @@ public:
 protected:
     virtual void initialize();
 
-    int apiPlayerShip();
-    int apiCreateShip(const std::string& name);
-    int apiSpawn(int key);
+    apikey apiPlayerShip();
+    apikey apiCreateShip(const std::string& name);
+    int apiSpawn(apikey worldObject);
 
-    int apiSetPosition(int key, float x, float y, float z);
-    int apiSetOrientation(int key, float x, float y, float z);
-    glm::vec3 apiPosition(int key);
-    glm::vec3 apiOrientation(int key);
+    int apiSetPosition(apikey worldObject, float x, float y, float z);
+    int apiSetOrientation(apikey worldObject, float x, float y, float z);
+    glm::vec3 apiPosition(apikey worldObject);
+    glm::vec3 apiOrientation(apikey worldObject);
 };

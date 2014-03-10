@@ -7,6 +7,8 @@ class ScriptEngine;
 class GamePlay;
 class GamePlayScript;
 
+typedef int apikey;
+
 class Bindings {
 public:
     Bindings(GamePlayScript& gamePlayScript);

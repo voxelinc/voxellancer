@@ -21,7 +21,7 @@ void AiBindings::initialize() {
 
 }
 
-int AiBindings::apiCreateFlyToTask(int key) {
+apikey AiBindings::apiCreateFlyToTask(apikey key) {
     Ship* ship = m_scriptEngine.get<Ship>(key);
 
     if (!ship) {
@@ -42,7 +42,7 @@ int AiBindings::apiCreateFlyToTask(int key) {
     return flyToTask->scriptKey();
 }
 
-int AiBindings::apiSetTargetPoint(int key, float x, float y, float z) {
+int AiBindings::apiSetTargetPoint(apikey key, float x, float y, float z) {
     FlyToTask* flyToTask = m_scriptEngine.get<FlyToTask>(key);
 
     if (!flyToTask) {
