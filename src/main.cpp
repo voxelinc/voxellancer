@@ -20,7 +20,7 @@
 #include <glow/logging.h>
 #include <glow/debugmessageoutput.h>
 #include <glowutils/global.h>
-#include <glowutils/FileRegistry.h>
+#include <glowutils/File.h>
 
 #include "etc/contextprovider.h"
 #include "etc/hmd/hmdmanager.h"
@@ -46,13 +46,13 @@ static Game* game;
 static void checkGLVersion() {
     glow::info("OpenGL Version Needed %;.%; (%;.%; Found)",
         MajorVersionRequire, MinorVersionRequire,
-        glow::Version::currentMajorVersion(), glow::Version::currentMinorVersion());
-    glow::info("version %;", glow::Version::current().toString());
-    glow::info("vendor: %;", glow::Version::vendor());
-    glow::info("renderer %;", glow::Version::renderer());
-    glow::info("core profile: %;", glow::Version::currentVersionIsInCoreProfile() ? "true" : "false");
+        glow::version().majorVersion, glow::version().minorVersion);
+    glow::info("version %;", glow::versionString());
+    glow::info("vendor: %;", glow::vendor());
+    glow::info("renderer %;", glow::renderer());
+    glow::info("core profile: %;", glow::isCoreProfile() ? "true" : "false");
     glow::info("GLSL version: %;", glow::getString(GL_SHADING_LANGUAGE_VERSION));
-    glow::info("GL Versionstring: %;\n", glow::Version::versionString());
+    glow::info("GL Versionstring: %;\n", glow::versionString());
 }
 
 static void checkOpenMP() {
@@ -89,7 +89,7 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
         toggleFullScreen();
     }
     if (key == GLFW_KEY_F5 && action == GLFW_PRESS) {
-        glowutils::FileRegistry::instance().reloadAll();
+        glowutils::File::reloadAll();
     }
     if (key == GLFW_KEY_F6 && action == GLFW_PRESS) {
         PropertyManager::instance()->load("data/config.ini");
@@ -104,9 +104,15 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
 	game->gamePlay().running().input().keyCallback(key, scancode, action, mods);
 }
 
+
+static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
+    game->gamePlay().running().input().mouseButtonCallback(button, action, mods);
+}
+
 void setGLFWCallbacks(GLFWwindow* window) {
     glfwSetKeyCallback(window, keyCallback);
     glfwSetWindowSizeCallback(window, resizeCallback);
+    glfwSetMouseButtonCallback(window, mouseButtonCallback);
 }
 
 static void miscSettings() {

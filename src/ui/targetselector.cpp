@@ -2,28 +2,37 @@
 
 #include <algorithm>
 
-#include "player.h"
 #include "worldobject/ship.h"
 #include "world/world.h"
 #include "objectinfo.h"
 
+#include "player.h"
 
-TargetSelector::TargetSelector(Player& player):
-    m_player(&player)
+
+TargetSelector::TargetSelector(Player* player):
+    m_player(player)
 {
 
 }
 
+void TargetSelector::selectTarget(bool next) {
+    if (next) {
+        selectNextTarget();
+    } else {
+        selectPreviousTarget();
+    }
+}
+
 void TargetSelector::selectNextTarget() {
     std::unordered_set<WorldObject*>& worldObjects = World::instance()->worldObjects();
-    m_player->ship()->setTargetObject(findNextTarget(worldObjects.begin(), worldObjects.end()));
+    m_player->setTarget(findNextTarget(worldObjects.begin(), worldObjects.end()));
 }
 
 void TargetSelector::selectPreviousTarget() {
     std::unordered_set<WorldObject*>& worldObjects = World::instance()->worldObjects();
     // HACK: unordered sets don't have reverse iterators (on linux)
     // since this algorithm has to be improved anyway, for the moment previous will also go forward
-    m_player->ship()->setTargetObject(findNextTarget(worldObjects.begin(), worldObjects.end()));
+    m_player->setTarget(findNextTarget(worldObjects.begin(), worldObjects.end()));
 }
 
 template<typename IteratorType>

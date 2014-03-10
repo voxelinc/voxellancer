@@ -9,6 +9,12 @@
 #include "geometry/sphere.h"
 
 #include "property/property.h"
+#include "worldobject/handle/handle.h"
+
+enum class ClickType {
+    None,
+    Selection
+};
 
 
 class Player;
@@ -45,14 +51,26 @@ public:
 
     void setCrossHairOffset(const glm::vec2& mousePosition);
 
+    void setTarget(WorldObject* target);
+    WorldObject* target();
+
+    void onClick(ClickType clickType);
+
     void update(float deltaSec);
     void draw();
 
+    Viewer* viewer() const;
+
+    float fovy() const;
+    float fovx() const;
 
 protected:
     Player* m_player;
     Viewer* m_viewer;
     Sphere m_sphere;
+    Handle<WorldObject> m_target;
+
+    float m_fovy, m_fovx;
 
     std::unique_ptr<AimHelperHudget> m_aimHelper;
     std::unique_ptr<CrossHair> m_crossHair;
@@ -63,5 +81,6 @@ protected:
     std::map<WorldObject*, HUDObjectDelegate*> m_objectDelegates;
 
     void updateScanner(float deltaSec);
+    void updateFov();
 };
 

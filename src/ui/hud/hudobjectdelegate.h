@@ -5,6 +5,7 @@
 
 class HUD;
 class Hudget;
+class ObjectHudget;
 class WorldObject;
 
 /*
@@ -18,7 +19,6 @@ public:
     HUD* hud();
     WorldObject* worldObject();
     Hudget& hudget();
-
 
 protected:
     HUD* m_hud;

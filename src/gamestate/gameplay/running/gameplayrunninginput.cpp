@@ -59,6 +59,7 @@ GamePlayRunningInput::GamePlayRunningInput(Player* player):
 
     prop_deadzoneMouse("input.deadzoneMouse"),
     prop_deadzoneGamepad("input.deadzoneGamepad"),
+    prop_maxClickTime("input.maxClickTime"),
 
     fireAction("input.mappingFirePrimary", "input.mappingFireSecondary", "Fire"),
     rocketAction("input.mappingRocketPrimary", "input.mappingRocketSecondary", "Launch Rockets"),
@@ -82,9 +83,6 @@ GamePlayRunningInput::GamePlayRunningInput(Player* player):
     m_actions(),
 
     m_inputConfigurator(new InputConfigurator(&m_actions, &m_secondaryInputValues, &prop_deadzoneGamepad, &m_player->hud())),
-
-    m_targetSelector(new TargetSelector(*player)),
-
     m_fireUpdate(false),
     m_rocketUpdate(false),
     m_moveUpdate(0),
@@ -96,14 +94,14 @@ GamePlayRunningInput::GamePlayRunningInput(Player* player):
 
     m_mouseControl = false;
     m_lastfocus = glfwGetWindowAttrib(glfwGetCurrentContext(), GLFW_FOCUSED);
-
 //    glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
     retrieveInputValues();
+    m_currentTimePressed = 0;
 }
 
-void GamePlayRunningInput::resizeEvent(const unsigned int width, const unsigned int height){
-	m_lastfocus = false; // through window resize everything becomes scrambled
+void GamePlayRunningInput::resizeEvent(const unsigned int width, const unsigned int height) {
+    m_lastfocus = false; // through window resize everything becomes scrambled
 }
 
 /*
@@ -138,6 +136,17 @@ void GamePlayRunningInput::keyCallback(int key, int scancode, int action, int mo
 }
 
 
+void GamePlayRunningInput::mouseButtonCallback(int button, int action, int mods) {
+    if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_RELEASE) {
+        if (m_currentTimePressed > 0 && m_currentTimePressed < prop_maxClickTime) {
+            m_player->hud().onClick(ClickType::Selection);
+        } else {
+        }
+        m_currentTimePressed = 0;
+    }
+}
+
+
 /*
 *Check here for every-frame events, e.g. view & movement controls
 */
@@ -151,7 +160,7 @@ void GamePlayRunningInput::update(float deltaSec) {
                 m_inputConfigurator->update();
             } else {
                 processUpdate();
-                processMouseUpdate();
+                processMouseUpdate(deltaSec);
                 applyUpdates();
                 processHMDUpdate();
             }
@@ -204,7 +213,7 @@ void GamePlayRunningInput::processUpdate() {
     processTargetSelectActions();
 }
 
-void GamePlayRunningInput::processMouseUpdate() {
+void GamePlayRunningInput::processMouseUpdate(float deltaSec) {
     // mouse handling
     double x, y;
     glfwGetCursorPos(glfwGetCurrentContext(), &x, &y);
@@ -224,7 +233,11 @@ void GamePlayRunningInput::processMouseUpdate() {
         m_fireUpdate = true;
     }
 
-    if (m_mouseControl || glfwGetMouseButton(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS) {
+    if (glfwGetMouseButton(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS){
+        m_currentTimePressed += deltaSec;
+    }
+
+    if (m_mouseControl || glfwGetMouseButton(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS &&  prop_maxClickTime < m_currentTimePressed) {
         glm::vec3 rot;
         x = ContextProvider::instance()->resolution().width() / 2 - (int)floor(x);
         y = ContextProvider::instance()->resolution().height() / 2 - (int)floor(y);
@@ -352,10 +365,10 @@ void GamePlayRunningInput::processRotateActions() {
 
 void GamePlayRunningInput::processTargetSelectActions() {
     if (getInputValue(&selectNextAction)) {
-        m_targetSelector->selectNextTarget();
+        m_player->selectTarget(true);
     }
     if (getInputValue(&selectPreviousAction)) {
-        m_targetSelector->selectPreviousTarget();
+        m_player->selectTarget(false);
     }
 }
 

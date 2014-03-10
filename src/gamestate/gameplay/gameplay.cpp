@@ -12,6 +12,7 @@
 #include "scenarios/battlescenario.h"
 #include "scenarios/gamescenario.h"
 #include "scenarios/frozengamescenario.h"
+#include "scenarios/piratescenario.h"
 
 #include "sound/soundmanager.h"
 
@@ -31,7 +32,7 @@ GamePlay::GamePlay(Game* game) :
     m_pausedState(new GamePlayPaused(this)),
     m_scene(new GamePlayScene(this, *m_player)),
     m_soundManager(new SoundManager()),
-    m_scenario(new GameScenario(this))
+    m_scenario(new PirateScenario(this))
 {
     setInitialSubState(m_runningState);
 
@@ -84,6 +85,9 @@ void GamePlay::loadScenario(int i) {
         break;
     case 2:
         m_scenario.reset(new FrozenGameScenario(this));
+        break;
+    case 3:
+        m_scenario.reset(new PirateScenario(this));
         break;
     default:
         m_scenario.reset(new BaseScenario(this));

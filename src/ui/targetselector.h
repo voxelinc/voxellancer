@@ -7,14 +7,13 @@ class Player;
 
 class TargetSelector {
 public:
-    TargetSelector(Player& player);
+    TargetSelector(Player* player);
 
+    void selectTarget(bool next);
+private:
     void selectNextTarget();
     void selectPreviousTarget();
-    
-private:
     Player* m_player;
-
     template<typename IteratorType>
     WorldObject* findNextTarget(IteratorType begin, IteratorType end);
 

@@ -4,10 +4,14 @@
 
 
 float PropertyConverter::floatConverter(const std::string& s) {
-    if (s.length() > 4 && s.substr(s.length() - 4, 4) == " DEG")
-        return glm::radians(std::stof(s.substr(0, s.length() - 4)));
-    else
+    regexns::smatch matches;
+    regexns::regex_match(s, matches, float_regex());
+    
+    if (matches[2] == "DEG") {
+        return glm::radians(std::stof(matches[1]));
+    } else {
         return std::stof(s);
+    }
 }
 
 glm::vec2 PropertyConverter::vec2Converter(const std::string& s) {
