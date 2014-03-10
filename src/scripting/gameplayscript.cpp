@@ -47,6 +47,8 @@ GamePlayScript::GamePlayScript(GamePlay* gamePlay, ScriptEngine* scriptEngine):
 void GamePlayScript::load(const std::string& path) {
     Script::load(path);
 
+    m_lua->Register("valid", this, &GamePlayScript::apiValid);
+
     m_lua->Register("playerShip", this, &GamePlayScript::apiPlayerShip);
     m_lua->Register("createShip", this, &GamePlayScript::apiCreateShip);
     m_lua->Register("spawn", this, &GamePlayScript::apiSpawn);
@@ -75,34 +77,35 @@ int GamePlayScript::apiPlayerShip() {
 int GamePlayScript::apiCreateShip(const std::string& name) {
     Ship* ship = WorldObjectBuilder(name).buildShip();
 
-    if (ship) {
-        m_scriptEngine->registerScriptable(ship);
-        return ship->scriptKey();
-    } else {
+    if (!ship) {
         glow::warning("GamePlayScript: Couldn't create ship '%;'", name);
         return -1;
     }
+
+    m_scriptEngine->registerScriptable(ship);
+    return ship->scriptKey();
 }
 
-bool GamePlayScript::apiSpawn(int key) {
+int GamePlayScript::apiSpawn(int key) {
     WorldObject* worldObject = m_scriptEngine->get<WorldObject>(key);
 
-    if (worldObject) {
-        World::instance()->god().scheduleSpawn(SpawnRequest(worldObject, false));
-        World::instance()->god().spawn();
-
-        return worldObject->spawnState() == SpawnState::Spawned;
+    if (!worldObject) {
+        return -1;
     }
 
-    return false;
+    World::instance()->god().scheduleSpawn(SpawnRequest(worldObject, false));
+    World::instance()->god().spawn();
+    return worldObject->spawnState() == SpawnState::Spawned;
 }
 
 int GamePlayScript::apiSetPosition(int key, float x, float y, float z) {
     WorldObject* worldObject = m_scriptEngine->get<WorldObject>(key);
 
-    if (worldObject) {
-        worldObject->transform().setPosition(glm::vec3(x, y, z));
+    if (!worldObject) {
+        return -1;
     }
+    
+    worldObject->transform().setPosition(glm::vec3(x, y, z));
     return 0;
 }
 
@@ -111,36 +114,41 @@ int GamePlayScript::apiSetOrientation(int key, float x, float y, float z) {
     WorldObject* worldObject = m_scriptEngine->get<WorldObject>(key);
 
     if (worldObject) {
-        worldObject->transform().setOrientation(glm::quat(glm::vec3(x, y, z)));
+        return -1;
     }
+    
+    worldObject->transform().setOrientation(glm::quat(glm::vec3(x, y, z)));
     return 0;
 }
 
 glm::vec3 GamePlayScript::apiPosition(int key) {
     WorldObject* worldObject = m_scriptEngine->get<WorldObject>(key);
 
-    if (worldObject) {
-        return worldObject->transform().position();
+    if (!worldObject) {
+        return glm::vec3(0.0f);
     }
-    return glm::vec3(0.0f);
+    
+    return worldObject->transform().position();
 }
 
 glm::vec3 GamePlayScript::apiOrientation(int key) {
     WorldObject* worldObject = m_scriptEngine->get<WorldObject>(key);
 
-    if (worldObject) {
-        return glm::eulerAngles(worldObject->transform().orientation());
+    if (!worldObject) {
+        return glm::vec3(0.0f);
     }
-    return glm::vec3(0.0f);
+ 
+    return glm::eulerAngles(worldObject->transform().orientation());
 }
 
 int GamePlayScript::apiSetEventActive(int key, bool active) {
     EventPoll* poll = m_scriptEngine->get<EventPoll>(key);
 
-    if (poll) {
-        poll->setActive(active);
+    if (!poll) {
+        return -1;
     }
 
+    poll->setActive(active);
     return 0;
 }
 
@@ -158,6 +166,7 @@ int GamePlayScript::apiCreateLoopingTimer(const std::string& callback, float del
 
 int GamePlayScript::apiOnAABBEntered(int key, glm::vec3 llf, glm::vec3 urb, const std::string& callback) {
     WorldObject* worldObject = m_scriptEngine->get<WorldObject>(key);
+    
     if(!worldObject) {
         return -1;
     }
@@ -169,6 +178,7 @@ int GamePlayScript::apiOnAABBEntered(int key, glm::vec3 llf, glm::vec3 urb, cons
 
 int GamePlayScript::apiCreateFlyToTask(int key) {
     Ship* ship = m_scriptEngine->get<Ship>(key);
+    
     if (!ship) {
         return -1;
     }
@@ -189,11 +199,16 @@ int GamePlayScript::apiCreateFlyToTask(int key) {
 
 int GamePlayScript::apiSetTargetPoint(int key, float x, float y, float z) {
     FlyToTask* flyToTask = m_scriptEngine->get<FlyToTask>(key);
+    
     if (!flyToTask) {
         return -1;
     }
 
     flyToTask->setTargetPoint(glm::vec3(x, y, z));
     return 0;
+}
+
+bool GamePlayScript::apiValid(int key) {
+    return m_scriptEngine->get<void>(key) != nullptr;
 }
 

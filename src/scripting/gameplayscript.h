@@ -28,10 +28,11 @@ protected:
     /*
         API for gameplayscripts below
     */
-    int apiPlayerShip();
+    bool apiValid(int key);
 
+    int apiPlayerShip();
     int apiCreateShip(const std::string& name);
-    bool apiSpawn(int key);
+    int apiSpawn(int key);
 
     int apiSetPosition(int key, float x, float y, float z);
     int apiSetOrientation(int key, float x, float y, float z);
