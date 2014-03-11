@@ -47,9 +47,10 @@ void GameScenario::populateWorld() {
     squadA->setTask(std::make_shared<DefendAreaTask>(*squadA,
         std::list<glm::vec3>{ glm::vec3(400, 0, 200), glm::vec3(-400, 0, -400),
         glm::vec3(-600, 0, -400), glm::vec3(0, 100, -600),
-        glm::vec3(-100, 150, -900) },500.0f));
+        glm::vec3(-100, 150, -900) },1000.0f));
 
     Ship* normandy = WorldObjectBuilder("bc304").buildShip();
+    normandy->character()->setFaction(World::instance()->factionMatrix().policeFaction());
     normandy->transform().setPosition(glm::vec3(0, 0, -100));
     normandy->objectInfo().setName("Normandy");
     normandy->objectInfo().setShowOnHud(true);
@@ -61,7 +62,7 @@ void GameScenario::populateWorld() {
     for (int i = 0; i < nmember_count; i++) {
         Ship *follower = WorldObjectBuilder("f302").buildShip();
         follower->transform().setPosition(glm::vec3(100 * (-nmember_count / 2.0f + i), 50, 0));
-        follower->character()->setFaction(1);
+        follower->character()->setFaction(World::instance()->factionMatrix().policeFaction());
         follower->objectInfo().setName("member");
         follower->objectInfo().setShowOnHud(true);
         follower->objectInfo().setCanLockOn(true);
