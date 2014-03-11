@@ -19,7 +19,7 @@ set(DEFAULT_COMPILE_DEFS_RELEASE
 
 
 set(WIN32_COMPILE_FLAGS
-	"/nologo /Zc:wchar_t /Zc:forScope /GL /GF /GR /GS- /Zi /fp:precise /MP /wd4267 /wd4251 /wd4273 /W3 /WX "
+	"/nologo /Zc:wchar_t /Zc:forScope /GF /GR /GS- /Zi /fp:precise /MP /wd4267 /wd4251 /wd4273 /W3 /WX "
 	# nologo       -> no logo
  	# Zc:wchar_t   -> treat wchar_t as built-in type: yes
  	# Zc:forScope  -> force conformance in for loop scope: Yes
@@ -71,12 +71,11 @@ set(WIN32_COMPILE_FLAGS
 #	set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS_MODIFIED} CACHE TYPE STRING)
 #endif()
 
-
 set(DEFAULT_COMPILE_FLAGS ${WIN32_COMPILE_FLAGS})
 
 
 set(WIN32_LINKER_FLAGS
-	"/NOLOGO /INCREMENTAL:NO /NXCOMPAT /DYNAMICBASE:NO"
+	"/NOLOGO /NXCOMPAT /DYNAMICBASE:NO"
 	# NOLOGO 											-> suppress logo
 	# INCREMENTAL:NO 									-> enable incremental linking: no
 	# MANIFEST 											-> generate manifest: yes
@@ -86,7 +85,7 @@ set(WIN32_LINKER_FLAGS
 )
 
 set(DEFAULT_LINKER_FLAGS_DEBUG
-	"${WIN32_LINKER_FLAGS} /DEBUG /LTCG"
+	"${WIN32_LINKER_FLAGS} /DEBUG /INCREMENTAL"
 	# DEBUG        -> create debug info
 )
 
