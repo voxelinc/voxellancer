@@ -17,6 +17,7 @@ public:
 
     AbstractMove& operator+=(const AbstractMove& other);
     AbstractMove operator*(const AbstractMove& other) const;
+    AbstractMove operator*(float multiplier) const;
     AbstractMove operator/(float dividor) const;
 
 
