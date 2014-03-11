@@ -17,9 +17,6 @@ protected:
     int apiShowText(const std::string& string);
     int apiShowTextFor(const std::string& string, int seconds);
 
-    float apiGetFactionRelation(const std::string& factionA, const std::string& factionB);
-    int apiSetFactionRelation(const std::string& factionA, const std::string& factionB, float friendliness);
-
     int apiSetEventActive(apikey eventPoll, bool active);
 
     apikey apiCreateSingleShotTimer(const std::string& callback, float delta);

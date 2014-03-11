@@ -19,6 +19,7 @@ public:
     Faction& pirateFaction();
     Faction& policeFaction();
     Faction& playerFaction();
+    Faction& unknownFaction();
 
     Faction& getFaction(const std::string& factionName);
     void addFaction(std::shared_ptr<Faction> faction);

@@ -1,9 +1,12 @@
 #Lua API bindings
-generated from 0a672ff
+generated from 5ac573e
 
 
 ## aibindings.h
 ```c
+std::string getFactionName(apikey ship);
+float getFactionRelation(const std::string& factionA, const std::string& factionB);
+int setFactionRelation(const std::string& factionA, const std::string& factionB, float friendliness);
 apikey createFlyToTask(apikey ship);
 int setTargetPoint(apikey flyToTask, float x, float y, float z);
 ```
@@ -12,8 +15,6 @@ int setTargetPoint(apikey flyToTask, float x, float y, float z);
 bool isKeyValid(apikey key);
 int showText(const std::string& string);
 int showTextFor(const std::string& string, int seconds);
-float getFactionRelation(const std::string& factionA, const std::string& factionB);
-int setFactionRelation(const std::string& factionA, const std::string& factionB, float friendliness);
 int setEventActive(apikey eventPoll, bool active);
 apikey createSingleShotTimer(const std::string& callback, float delta);
 apikey createLoopingTimer(const std::string& callback, float delta);

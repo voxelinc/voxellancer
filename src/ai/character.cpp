@@ -8,15 +8,15 @@
 #include "worldobject/ship.h"
 
 
-Character::Character(Ship& ship, Faction* faction):
+Character::Character(Ship& ship, Faction& faction):
     m_ship(ship),
-    m_faction(faction),
+    m_faction(&faction),
     m_task(nullptr)
 {
 }
 
-Faction* Character::faction() {
-    return m_faction;
+Faction& Character::faction() {
+    return *m_faction;
 }
 
 void Character::setFaction(Faction& faction) {

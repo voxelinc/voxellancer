@@ -7,9 +7,6 @@
 #include "events/aabbenteredpoll.h"
 #include "events/worldobjectdestroyedpoll.h"
 
-#include "factions/factionrelation.h"
-#include "factions/factionmatrix.h"
-
 #include "gamestate/gameplay/gameplay.h"
 
 #include "geometry/aabb.h"
@@ -19,7 +16,6 @@
 
 #include "world/world.h"
 #include "worldobject/worldobject.h"
-
 
 
 CommonBindings::CommonBindings(GamePlayScript& script): 
@@ -58,26 +54,11 @@ int CommonBindings::apiShowTextFor(const std::string& string, int seconds) {
     return 0;
 }
 
-float CommonBindings::apiGetFactionRelation(const std::string& factionA, const std::string& factionB) {
-    FactionMatrix& factions = World::instance()->factionMatrix();
-    Faction& fA = factions.getFaction(factionA);
-    Faction& fB = factions.getFaction(factionB);
-    return factions.getRelation(fA, fB).friendliness();
-}
-int CommonBindings::apiSetFactionRelation(const std::string& factionA, const std::string& factionB, float friendliness) {
-    FactionMatrix& factions = World::instance()->factionMatrix();
-    Faction& fA = factions.getFaction(factionA);
-    Faction& fB = factions.getFaction(factionB);
-    factions.getRelation(fA, fB).setFriendliness(friendliness);
-    return 0;
-}
 
 int CommonBindings::apiSetEventActive(apikey eventPoll, bool active) {
     EventPoll* poll = m_scriptEngine.get<EventPoll>(eventPoll);
 
-    if (!poll) {
-        return -1;
-    }
+    if (!poll) { return -1; }
 
     poll->setActive(active);
     return 0;

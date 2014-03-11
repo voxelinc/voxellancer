@@ -3,10 +3,16 @@
 #include "ai/basictasks/flytotask.h"
 #include "ai/character.h"
 
+#include "factions/faction.h"
+#include "factions/factionmatrix.h"
+#include "factions/factionrelation.h"
+
 #include "scripting/scriptengine.h"
 #include "scripting/elematelua/luawrapper.h"
 
 #include "worldobject/ship.h"
+#include "world/world.h"
+
 
 
 AiBindings::AiBindings(GamePlayScript& script): 
@@ -21,12 +27,36 @@ void AiBindings::initialize() {
 
 }
 
+
+std::string AiBindings::apiGetFactionName(apikey key) {
+    Ship* ship = m_scriptEngine.get<Ship>(key);
+
+    if (!ship) { 
+        glow::warning("AiBindings: ship %; doesnt exist", key);
+        return ""; 
+    }
+
+    return ship->character()->faction().key();
+}
+
+float AiBindings::apiGetFactionRelation(const std::string& factionA, const std::string& factionB) {
+    FactionMatrix& factions = World::instance()->factionMatrix();
+    Faction& fA = factions.getFaction(factionA);
+    Faction& fB = factions.getFaction(factionB);
+    return factions.getRelation(fA, fB).friendliness();
+}
+int AiBindings::apiSetFactionRelation(const std::string& factionA, const std::string& factionB, float friendliness) {
+    FactionMatrix& factions = World::instance()->factionMatrix();
+    Faction& fA = factions.getFaction(factionA);
+    Faction& fB = factions.getFaction(factionB);
+    factions.getRelation(fA, fB).setFriendliness(friendliness);
+    return 0;
+}
+
 apikey AiBindings::apiCreateFlyToTask(apikey key) {
     Ship* ship = m_scriptEngine.get<Ship>(key);
 
-    if (!ship) {
-        return -1;
-    }
+    if (!ship) { return -1; }
 
     FlyToTask* flyToTask = new FlyToTask(ship->boardComputer());
 
