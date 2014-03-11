@@ -18,6 +18,6 @@ protected:
     int m_scheduledCalls;
 
     virtual bool poll() override;
-    virtual void onCallbacked() override;
+    virtual void specialOnCallback() override;
 };
 

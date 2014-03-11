@@ -19,8 +19,8 @@ Faction* Character::faction() {
     return m_faction;
 }
 
-void Character::setFaction(Faction* faction) {
-    m_faction = faction;
+void Character::setFaction(Faction& faction) {
+    m_faction = &faction;
 }
 
 void Character::setTask(std::shared_ptr<AiTask> task) {

@@ -77,6 +77,7 @@ public:
     float collisionFieldOfDamage() const;
     void setCollisionFieldOfDamage(float collisionFieldOfDamage);
 
+    bool isDestroyed() const;
 
 protected:
     std::unique_ptr<CollisionFilter> m_collisionFilter;
@@ -89,7 +90,9 @@ protected:
     Voxel* m_crucialVoxel;
     float m_collisionFieldOfDamage;
     SpawnState m_spawnState;
+    bool m_isDestroyed;
 
     WorldObject(CollisionFilter* collisionFilter, float scale = 1.0f);
+    virtual void onDestruction();
 };
 

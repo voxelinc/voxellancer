@@ -7,12 +7,12 @@ SingleShotTimer::SingleShotTimer(float interval, const std::function<void()>& ca
 {
 }
 
-bool SingleShotTimer::dead() const {
+bool SingleShotTimer::isDead() const {
     return !m_ticking;
 }
 
-void SingleShotTimer::onCallbacked() {
-    Timer::onCallbacked();
+void SingleShotTimer::specialOnCallback() {
+    Timer::specialOnCallback();
     m_ticking = false;
 }
 

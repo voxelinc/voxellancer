@@ -18,23 +18,21 @@ public:
     /*
         Return true if the poll won't fire anymore
     */
-    virtual bool dead() const;
+    virtual bool isDead() const;
+    virtual void update(float deltaSec);
 
     bool active() const;
     void setActive(bool active);
 
-    virtual void update(float deltaSec);
-
     Handle<EventPoll>& handle();
-
 
 protected:
     std::function<void()> m_callback;
     Handle<EventPoll> m_handle;
     bool m_active;
 
+    void doCallback();
     virtual bool poll() = 0;
-    void callback();
-    virtual void onCallbacked();
+    virtual void specialOnCallback();
 };
 

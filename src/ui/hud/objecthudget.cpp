@@ -8,7 +8,6 @@
 
 #include "factions/factionrelation.h"
 #include "factions/factionmatrix.h"
-#include "factions/playerfaction.h"
 
 #include "utils/geometryhelper.h"
 
@@ -58,11 +57,10 @@ void ObjectHudget::update(float deltaSec) {
             }
             // TODO: Replace the following two lines with proper WorldObjectType mechanism
             Ship* ship = dynamic_cast<Ship*>(worldObject);
-            if (ship) {
+            if (ship && ship->character()->faction()) {
                 Faction* faction = ship->character()->faction();
-
                 if (faction) {
-                    relationType = faction->relationTo(World::instance()->factionMatrix().playerFaction())->type();
+                    relationType = World::instance()->factionMatrix().getRelationToPlayer(*faction).type();
                 }
             }
         }

@@ -6,7 +6,6 @@
 #include "camera/camerahead.h"
 
 #include "factions/factionmatrix.h"
-#include "factions/playerfaction.h"
 
 #include "gamestate/game.h"
 #include "gamestate/gameplay/gameplay.h"

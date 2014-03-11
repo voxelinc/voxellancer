@@ -28,8 +28,8 @@ bool Timer::poll() {
     return m_scheduledCalls > 0;
 }
 
-void Timer::onCallbacked() {
-    EventPoll::onCallbacked();
+void Timer::specialOnCallback() {
+    EventPoll::specialOnCallback();
     m_scheduledCalls--;
 }
 

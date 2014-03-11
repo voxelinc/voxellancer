@@ -30,7 +30,7 @@ void EventPoller::update(float deltaSec) {
     for (auto iter = m_eventPolls.begin(); iter != m_eventPolls.end();) {
         EventPoll* poll = iter->get();
         poll->update(deltaSec);
-        if (poll->dead()) {
+        if (poll->isDead()) {
             iter = m_eventPolls.erase(iter);
         } else {
             ++iter;

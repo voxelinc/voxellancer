@@ -2,47 +2,79 @@
 
 #include <cassert>
 
+#include <glow/logging.h>
+
 #include "factionmatrix.h"
 #include "factionrelation.h"
-#include "playerfaction.h"
-#include "piratefaction.h"
-#include "policefaction.h"
+#include "faction.h"
 
 
 FactionMatrix::FactionMatrix():
-    m_playerFaction(new PlayerFaction(this)),
-    m_pirateFaction(new PirateFaction(this)),
-    m_policeFaction(new PoliceFaction(this))
+    m_factions()
 {
-    m_factions.push_back(std::unique_ptr<Faction>(m_playerFaction));
-    m_factions.push_back(std::unique_ptr<Faction>(m_pirateFaction));
-    m_factions.push_back(std::unique_ptr<Faction>(m_policeFaction));
+    // create default factions
+    addFaction(std::make_shared<Faction>("player", "Player"));
+    addFaction(std::make_shared<Faction>("pirate", "Pirate"));
+    addFaction(std::make_shared<Faction>("police", "Police"));
 
-    setupFactionRelations();
+    setupRelations();
 }
 
 FactionMatrix::~FactionMatrix() = default;
 
-PirateFaction* FactionMatrix::pirateFaction() {
-    return m_pirateFaction;
+Faction& FactionMatrix::pirateFaction() {
+    return getFaction("pirate");
 }
 
-PoliceFaction* FactionMatrix::policeFaction() {
-    return m_policeFaction;
+Faction& FactionMatrix::policeFaction() {
+    return getFaction("police");
 }
 
-PlayerFaction* FactionMatrix::playerFaction() {
-    return m_playerFaction;
+Faction& FactionMatrix::playerFaction() {
+    return getFaction("player");
 }
 
-void FactionMatrix::setupFactionRelations() {
-    addFactionRelation(std::make_shared<FactionRelation>(m_playerFaction, m_pirateFaction, -20.0f));
-    addFactionRelation(std::make_shared<FactionRelation>(m_playerFaction, m_policeFaction, 10.0f));
-    addFactionRelation(std::make_shared<FactionRelation>(m_policeFaction, m_pirateFaction, -50.0f));
+Faction& FactionMatrix::getFaction(const std::string& factionName) {
+    auto iter = m_factions.find(factionName);
+    if (iter == m_factions.end()) {
+        glow::debug("FactionMatrix: created non existing faction %;", factionName);
+        addFaction(std::make_shared<Faction>(factionName, factionName));
+        return getFaction(factionName);
+    }
+    return *iter->second;
 }
 
-void FactionMatrix::addFactionRelation(std::shared_ptr<FactionRelation> relation) {
-    relation->factionA()->setRelation(relation);
-    relation->factionB()->setRelation(relation);
+void FactionMatrix::addFaction(std::shared_ptr<Faction> faction) {
+    assert(m_factions.find(faction->key()) == m_factions.end());
+    m_factions[faction->key()] = faction;
+    getRelation(*faction, *faction).setFriendliness(100);
+}
+
+FactionRelation& FactionMatrix::getRelation(Faction& factionA, Faction& factionB) {
+    auto iter = m_relations.find(uniquePair(factionA, factionB));
+    if (iter == m_relations.end()) {
+        auto relation = std::make_shared<FactionRelation>(factionA, factionB, 0.0f);
+        m_relations[uniquePair(factionA, factionB)] = relation;
+        return *relation;
+    }
+    return *iter->second;
+}
+
+FactionRelation& FactionMatrix::getRelationToPlayer(Faction& faction) {
+    return getRelation(faction, playerFaction());
+}
+
+void FactionMatrix::setupRelations() {
+    getRelation(playerFaction(), pirateFaction()).setFriendliness(-20.0f);
+    getRelation(playerFaction(), policeFaction()).setFriendliness(10.0f);
+    getRelation(policeFaction(), pirateFaction()).setFriendliness(-50.0f);
+}
+
+std::pair<Faction*, Faction*> FactionMatrix::uniquePair(Faction& factionA, Faction& factionB) {
+    if (factionA.key() < factionB.key()) {
+        return std::pair<Faction*, Faction*>(&factionA, &factionB);
+    } else {
+        return std::pair<Faction*, Faction*>(&factionB, &factionA);
+    }
 }
 

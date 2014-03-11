@@ -19,7 +19,7 @@ ScriptableType EventPoll::scriptableType() const {
     return ScriptableType::EventPoll;
 }
 
-bool EventPoll::dead() const {
+bool EventPoll::isDead() const {
     return false;
 }
 
@@ -36,12 +36,12 @@ void EventPoll::update(float deltaSec) {
         return;
     }
     if (poll()) {
-        callback();
-        onCallbacked();
+        doCallback();
+        specialOnCallback();
     }
 }
 
-void EventPoll::callback() {
+void EventPoll::doCallback() {
     m_callback();
 }
 
@@ -49,7 +49,7 @@ Handle<EventPoll>& EventPoll::handle() {
     return m_handle;
 }
 
-void EventPoll::onCallbacked() {
+void EventPoll::specialOnCallback() {
 
 }
 

@@ -7,12 +7,12 @@ class SingleShotTimer : public Timer {
 public:
     SingleShotTimer(float interval, const std::function<void()>& callback);
 
-    virtual bool dead() const override;
+    virtual bool isDead() const override;
 
 
 protected:
     bool m_ticking;
 
-    virtual void onCallbacked() override;
+    virtual void specialOnCallback() override;
 };
 

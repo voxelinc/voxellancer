@@ -30,7 +30,8 @@ WorldObject::WorldObject(CollisionFilter* collisionFilter, float scale):
     m_collisionFieldOfDamage(glm::half_pi<float>()),
     m_handle(Handle<WorldObject>(this)),
     m_spawnState(SpawnState::None),
-    m_collisionFilter(collisionFilter)
+    m_collisionFilter(collisionFilter),
+    m_isDestroyed(false)
 {
 }
 
@@ -115,8 +116,15 @@ void WorldObject::removeVoxel(Voxel* voxel) {
 
     voxel->onRemoval();
 
+    if (m_voxels.size() == 0) {
+        onDestruction();
+    }
+
     if (voxel == m_crucialVoxel) {
         m_crucialVoxel = nullptr;  // do spectacular stuff like an explosion
+        if (!isDestroyed()) {
+            onDestruction();
+        }
     }
 
     m_collisionDetector->removeVoxel(voxel);
@@ -158,5 +166,13 @@ float WorldObject::collisionFieldOfDamage() const {
 
 void WorldObject::setCollisionFieldOfDamage(float collisionFieldOfDamage) {
     m_collisionFieldOfDamage = collisionFieldOfDamage;
+}
+
+void WorldObject::onDestruction() {
+    m_isDestroyed = true;
+}
+
+bool WorldObject::isDestroyed() const {
+    return m_isDestroyed;
 }
 
