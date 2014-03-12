@@ -1,5 +1,5 @@
 #Lua API bindings
-generated from 283f696
+generated from a133a4b
 
 
 ## aibindings.h
@@ -11,6 +11,8 @@ int setFactionRelation(const std::string& factionA, const std::string& factionB,
 apikey onAiTaskFinished(apikey aiTask, const std::string& callback);
 apikey createFlyToTask(apikey ship);
 int setTargetPoint(apikey flyToTask, const glm::vec3& point);
+apikey createFightTask(apikey ship);
+int addFightTaskTarget(apikey flyToTask, apikey worldObject);
 ```
 
 ## commonbindings.h

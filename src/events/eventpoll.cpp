@@ -1,7 +1,5 @@
 #include "eventpoll.h"
 
-#include <iostream>
-
 
 EventPoll::EventPoll(const std::function<void()>& callback):
     m_callback(callback),

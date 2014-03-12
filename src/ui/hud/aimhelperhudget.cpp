@@ -1,7 +1,5 @@
 #include "aimhelperhudget.h"
 
-#include <iostream>
-
 #include <glm/glm.hpp>
 
 #include "utils/geometryhelper.h"

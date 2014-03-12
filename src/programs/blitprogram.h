@@ -1,7 +1,5 @@
 #pragma once
 
-#include <iostream>
-
 #include <glow/Program.h>
 
 #include "geometry/viewport.h"

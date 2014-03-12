@@ -1,6 +1,6 @@
 #include "god.h"
 
-#include <iostream>
+
 
 #include <glow/logging.h>
 

@@ -2,7 +2,6 @@
 
 #include <assert.h>
 #include <algorithm>
-#include <iostream>
 
 #include "utils/tostring.h"
 #include "voxel/voxel.h"

@@ -1,7 +1,6 @@
 #include "timer.h"
 
 #include <cassert>
-#include <iostream>
 #include <algorithm>
 
 

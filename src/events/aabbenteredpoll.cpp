@@ -1,7 +1,5 @@
 #include "aabbenteredpoll.h"
 
-#include <iostream>
-
 #include "voxel/voxelclusterbounds.h"
 
 #include "worldobject/worldobject.h"

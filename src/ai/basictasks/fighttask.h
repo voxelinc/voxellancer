@@ -20,10 +20,12 @@ class FightTask : public AiTask {
     };
 
 public:
-    FightTask(BoardComputer* boardComputer, const std::vector<Handle<WorldObject>>& targets);
+    FightTask(BoardComputer* boardComputer, const std::vector<Handle<WorldObject>>& targets = {});
 
     virtual void update(float deltaSec);
-    virtual void addTargets(const std::vector<Handle<WorldObject>>& targets);
+
+    std::vector<Handle<WorldObject>>& targets();
+    virtual void addTarget(const Handle<WorldObject>& targets);
     virtual void setTargets(const std::vector<Handle<WorldObject>>& targets);
 
     virtual bool isFinished();

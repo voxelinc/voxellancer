@@ -1,7 +1,6 @@
 #include "scriptengine.h"
 
 #include <algorithm>
-#include <iostream>
 
 #include <glow/logging.h>
 

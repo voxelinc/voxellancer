@@ -20,7 +20,7 @@ PatrolWaypointsTask::PatrolWaypointsTask(Squad& squad, std::list<glm::vec3> poin
 }
 
 void PatrolWaypointsTask::appendWaypoint(const glm::vec3& point) {
-    // Valid, see http://stackoverflow.com/questions/6230350/keeping-stdlist-iterators-valid-through-insertion
+    // m_points needs to be a list to keep the iterator valid!
     m_points.push_back(point);
 }
 

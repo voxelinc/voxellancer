@@ -7,7 +7,8 @@
 
 FlyToTask::FlyToTask(BoardComputer* boardComputer) :
     AiTask(boardComputer),
-    m_targetPoint(boardComputer->worldObject()->transform().position())
+    m_targetPoint(boardComputer->worldObject()->transform().position()),
+    m_minDistance(1.0f)
 {
 }
 
@@ -23,6 +24,6 @@ void FlyToTask::update(float deltaSec) {
 }
 
 bool FlyToTask::isFinished() {
-    return glm::length(boardComputer()->worldObject()->position() - m_targetPoint) < 3;
+    return glm::length(boardComputer()->worldObject()->position() - m_targetPoint) < m_minDistance;
 }
 

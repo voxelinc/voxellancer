@@ -1,7 +1,5 @@
 #include "timedtask.h"
 
-#include <iostream>
-
 
 TimedTask::TimedTask(std::chrono::duration<float> intervalSecs):
     m_intervalSecs(intervalSecs),

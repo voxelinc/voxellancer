@@ -15,6 +15,7 @@
 
 #include "worldobject/ship.h"
 #include "world/world.h"
+#include "ai/basictasks/fighttask.h"
 
 
 
@@ -32,8 +33,11 @@ void AiBindings::initialize() {
     m_lua.Register("setFactionRelation", this, &AiBindings::apiSetFactionRelation);
     
     m_lua.Register("onAiTaskFinished", this, &AiBindings::apiOnAiTaskFinished);
+
     m_lua.Register("createFlyToTask", this, &AiBindings::apiCreateFlyToTask);
     m_lua.Register("setTargetPoint", this, &AiBindings::apiSetTargetPoint);
+    m_lua.Register("createFightTask", this, &AiBindings::apiCreateFightTask);
+    m_lua.Register("addFightTaskTarget", this, &AiBindings::apiAddFightTaskTarget);
 }
 
 
@@ -117,5 +121,37 @@ int AiBindings::apiSetTargetPoint(apikey key, const glm::vec3& point) {
     }
 
     flyToTask->setTargetPoint(point);
+    return 0;
+}
+
+apikey AiBindings::apiCreateFightTask(apikey key) {
+    Ship* ship = m_scriptEngine.get<Ship>(key);
+
+    if (!ship) { return -1; }
+
+    FightTask* fightTask = new FightTask(ship->boardComputer());
+
+    m_scriptEngine.registerScriptable(fightTask);
+
+    Character* character = ship->character();
+    character->setTask(std::shared_ptr<AiTask>(fightTask));
+
+    return fightTask->scriptKey();
+}
+
+
+int AiBindings::apiAddFightTaskTarget(apikey key, apikey worldObjectKey) {
+    FightTask* fightTask = m_scriptEngine.get<FightTask>(key);
+
+    if (!fightTask) {
+        glow::warning("AiBindings: Fighttask '%;' doesn't exist", key);
+        return -1;
+    }
+
+    WorldObject* worldObject = m_scriptEngine.get<WorldObject>(worldObjectKey);
+    if (!worldObject) { return -1; }
+
+
+    fightTask->addTarget(worldObject->handle());
     return 0;
 }

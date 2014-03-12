@@ -1,7 +1,5 @@
 #include "eventpoller.h"
 
-#include <iostream>
-
 #include "eventpoll.h"
 
 #include "scripting/scriptengine.h"

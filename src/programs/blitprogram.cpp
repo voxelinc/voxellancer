@@ -1,7 +1,5 @@
 #include "blitprogram.h"
 
-#include <iostream>
-
 #include <glow/Buffer.h>
 #include <glow/Texture.h>
 #include <glow/VertexAttributeBinding.h>

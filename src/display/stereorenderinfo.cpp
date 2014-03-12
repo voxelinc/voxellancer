@@ -1,8 +1,6 @@
 #include "stereorenderinfo.h"
 
 #include <cassert>
-#include <iostream>
-
 #include <OVR.h>
 
 #include "geometry/size.h"

@@ -17,6 +17,7 @@
 #include "events/eventpoller.h"
 #include "ai/character.h"
 #include "ai/aitask.h"
+#include "ai/basictasks/fighttask.h"
 
 
 using namespace bandit;
@@ -174,7 +175,20 @@ go_bandit([](){
             AssertThat(script->debugStatus(), Equals(""));
         });
 
+        it("can set fighttask", [&]() {
+            Ship* ship = new Ship();
+            scriptEngine->registerScriptable(ship);
+            World::instance()->player().setShip(ship);
+            script->loadString(R"( 
+                task = createFightTask(playerShip())
+                target = createShip("basicship")
+	            addFightTaskTarget(task, target)
+            )");
+
+            FightTask* fightTask = dynamic_cast<FightTask*>(ship->character()->task().get());
+            AssertThat(fightTask->targets().size(), Equals(1));
+
+        });
     });
- 
 });
 

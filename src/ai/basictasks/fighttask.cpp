@@ -73,9 +73,12 @@ void FightTask::updateTargets() {
     }
 }
 
+std::vector<Handle<WorldObject>>& FightTask::targets() {
+    return m_targets;
+}
 
-void FightTask::addTargets(const std::vector<Handle<WorldObject>>& targets) {
-    m_targets.insert(m_targets.end(), targets.begin(), targets.end());
+void FightTask::addTarget(const Handle<WorldObject>& target) {
+    m_targets.push_back(target);
 }
 
 void FightTask::setTargets(const std::vector<Handle<WorldObject>>& targets) {
@@ -168,4 +171,3 @@ float FightTask::angleToTarget() {
     assert(std::isfinite(angle));
     return glm::degrees(angle);
 }
-

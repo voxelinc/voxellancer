@@ -20,4 +20,6 @@ protected:
 
     apikey apiCreateFlyToTask(apikey ship);
     int apiSetTargetPoint(apikey flyToTask, const glm::vec3& point);
+    apikey apiCreateFightTask(apikey ship);
+    int apiAddFightTaskTarget(apikey flyToTask, apikey worldObject);
 };

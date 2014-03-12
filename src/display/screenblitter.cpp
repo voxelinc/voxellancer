@@ -1,7 +1,5 @@
 #include "screenblitter.h"
 
-#include <iostream>
-
 #include <glow/FrameBufferObject.h>
 
 #include "programs/blitprogram.h"

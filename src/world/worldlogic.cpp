@@ -1,7 +1,5 @@
 #include "worldlogic.h"
 
-#include <iostream>
-
 #include "utils/tostring.h"
 
 #include "world.h"

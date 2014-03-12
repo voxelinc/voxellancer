@@ -1,7 +1,5 @@
 #include "stereovieweye.h"
 
-#include <iostream>
-
 #include <glow/Texture.h>
 #include <glow/RenderBufferObject.h>
 

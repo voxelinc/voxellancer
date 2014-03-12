@@ -1,6 +1,5 @@
 #include "gameplayscript.h"
 
-#include <iostream>
 
 #include <glow/logging.h>
 
