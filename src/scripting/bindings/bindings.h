@@ -18,6 +18,5 @@ public:
 protected:
     LuaWrapper& m_lua;
     ScriptEngine& m_scriptEngine;
-    GamePlay& m_gamePlay;
 
 };

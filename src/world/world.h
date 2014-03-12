@@ -52,6 +52,7 @@ protected:
 
     float m_deltaSec;
 
+    std::unique_ptr<Player> m_player;
     std::unique_ptr<Skybox> m_skybox;
     std::unique_ptr<WorldTree> m_worldTree;
     std::unique_ptr<WorldLogic> m_worldLogic;

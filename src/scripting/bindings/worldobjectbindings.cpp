@@ -1,5 +1,10 @@
 #include "worldobjectbindings.h"
 
+#include <memory>
+
+#include "events/worldobjectdestroyedpoll.h"
+#include "events/eventpoller.h"
+
 #include "gamestate/gameplay/gameplay.h"
 
 #include "player.h"
@@ -13,6 +18,7 @@
 #include "world/spawnrequest.h"
 
 #include "worldobject/ship.h"
+
 
 
 WorldObjectBindings::WorldObjectBindings(GamePlayScript& script):
@@ -36,7 +42,11 @@ void WorldObjectBindings::initialize()
 
 
 apikey WorldObjectBindings::apiPlayerShip() {
-    return m_gamePlay.player().ship()->scriptKey();
+    if (World::instance()->player().ship()) {
+        return World::instance()->player().ship()->scriptKey();
+    } else {
+        return 0;
+    }
 }
 
 int WorldObjectBindings::apiCreateShip(const std::string& name) {
@@ -107,4 +117,14 @@ int WorldObjectBindings::apiSetOrientation(apikey key, float x, float y, float z
 
     worldObject->transform().setOrientation(glm::quat(glm::vec3(x, y, z)));
     return 0;
+}
+
+apikey WorldObjectBindings::apiOnWorldObjectDestroyed(apikey key, const std::string& callback) {
+    WorldObject* worldObject = m_scriptEngine.get<WorldObject>(key);
+
+    if (!worldObject) { return -1; }
+
+    auto destructionPoll = std::make_shared<WorldObjectDestroyedPoll>(worldObject, [=] { m_lua.call(callback, key); });
+    World::instance()->eventPoller().addPoll(destructionPoll);
+    return destructionPoll->scriptKey();
 }

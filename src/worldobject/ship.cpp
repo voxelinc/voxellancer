@@ -38,10 +38,6 @@ WorldObjectType Ship::objectType() const {
     return WorldObjectType::Ship;
 }
 
-ScriptableType Ship::scriptableType() const {
-    return ScriptableType::Ship;
-}
-
 void Ship::update(float deltaSec) {
     WorldObject::update(deltaSec);
 

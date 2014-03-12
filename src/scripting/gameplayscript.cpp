@@ -9,8 +9,7 @@
 #include "bindings/commonbindings.h"
 #include "bindings/squadbindings.h"
 
-GamePlayScript::GamePlayScript(GamePlay* gamePlay, ScriptEngine* scriptEngine):
-    m_gamePlay(gamePlay),
+GamePlayScript::GamePlayScript(ScriptEngine* scriptEngine):
     m_scriptEngine(scriptEngine),
     m_bindings()
 {
@@ -34,10 +33,6 @@ void GamePlayScript::initializeBindings() {
 
 ScriptEngine& GamePlayScript::scriptEngine() {
     return *m_scriptEngine;
-}
-
-GamePlay& GamePlayScript::gamePlay() {
-    return *m_gamePlay;
 }
 
 LuaWrapper& GamePlayScript::luaWrapper() {

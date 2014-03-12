@@ -82,8 +82,8 @@ void FightTask::setTargets(const std::vector<Handle<WorldObject>>& targets) {
     m_targets = targets;
 }
 
-bool FightTask::isInProgress() {
-    return m_state != IDLE;
+bool FightTask::isFinished() {
+    return m_state == IDLE;
 }
 
 void FightTask::updateState() {

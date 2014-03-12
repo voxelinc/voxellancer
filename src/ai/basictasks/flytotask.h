@@ -17,6 +17,8 @@ public:
 
     virtual void update(float deltaSec) override;
 
+    virtual bool isFinished();
+
 
 protected:
     glm::vec3 m_targetPoint;

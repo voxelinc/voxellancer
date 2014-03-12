@@ -26,7 +26,7 @@ public:
     virtual void addTargets(const std::vector<Handle<WorldObject>>& targets);
     virtual void setTargets(const std::vector<Handle<WorldObject>>& targets);
 
-    virtual bool isInProgress();
+    virtual bool isFinished();
 
 protected:
     std::vector<Handle<WorldObject>> m_targets;

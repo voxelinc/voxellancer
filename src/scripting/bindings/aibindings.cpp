@@ -3,6 +3,9 @@
 #include "ai/basictasks/flytotask.h"
 #include "ai/character.h"
 
+#include "events/aitaskfinishedpoll.h"
+#include "events/eventpoller.h"
+
 #include "factions/faction.h"
 #include "factions/factionmatrix.h"
 #include "factions/factionrelation.h"
@@ -12,6 +15,7 @@
 
 #include "worldobject/ship.h"
 #include "world/world.h"
+
 
 
 
@@ -45,6 +49,7 @@ float AiBindings::apiGetFactionRelation(const std::string& factionA, const std::
     Faction& fB = factions.getFaction(factionB);
     return factions.getRelation(fA, fB).friendliness();
 }
+
 int AiBindings::apiSetFactionRelation(const std::string& factionA, const std::string& factionB, float friendliness) {
     FactionMatrix& factions = World::instance()->factionMatrix();
     Faction& fA = factions.getFaction(factionA);
@@ -52,6 +57,18 @@ int AiBindings::apiSetFactionRelation(const std::string& factionA, const std::st
     factions.getRelation(fA, fB).setFriendliness(friendliness);
     return 0;
 }
+
+
+apikey AiBindings::onAiTaskFinished(apikey key, const std::string& callback) {
+    AiTask* aiTask = m_scriptEngine.get<AiTask>(key);
+
+    if (!aiTask) { return -1; }
+
+    auto finishedPoll = std::make_shared<AiTaskFinishedPoll>(aiTask, [=] { m_lua.call(callback, key); });
+    World::instance()->eventPoller().addPoll(finishedPoll);
+    return finishedPoll->scriptKey();
+}
+
 
 apikey AiBindings::apiCreateFlyToTask(apikey key) {
     Ship* ship = m_scriptEngine.get<Ship>(key);

@@ -13,10 +13,9 @@ public:
 
 protected:
     Handle<WorldObject> m_worldObject;
-    bool m_isDestroyed;
 
     virtual bool poll() override;
-    virtual bool isDead() const override;
+    virtual bool isDead() override;
 
 };
 

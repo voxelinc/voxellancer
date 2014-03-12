@@ -13,12 +13,10 @@ public:
     AiTask(BoardComputer* boardComputer);
     virtual ~AiTask();
 
-    virtual ScriptableType scriptableType() const override;
-
     BoardComputer* boardComputer();
 
     virtual void update(float deltaSec);
-    virtual bool isInProgress();
+    virtual bool isFinished();
 
     Handle<AiTask>& handle();
 

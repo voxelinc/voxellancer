@@ -5,7 +5,6 @@
 #include "events/singleshottimer.h"
 #include "events/loopingtimer.h"
 #include "events/aabbenteredpoll.h"
-#include "events/worldobjectdestroyedpoll.h"
 
 #include "gamestate/gameplay/gameplay.h"
 
@@ -86,12 +85,3 @@ apikey CommonBindings::apiOnAABBEntered(apikey key, glm::vec3 llf, glm::vec3 urb
     return enteredPoll->scriptKey();
 }
 
-apikey CommonBindings::apiOnWorldObjectDestroyed(apikey key, const std::string& callback) {
-    WorldObject* worldObject = m_scriptEngine.get<WorldObject>(key);
-
-    if (!worldObject) { return -1; }
-
-    auto destructionPoll = std::make_shared<WorldObjectDestroyedPoll>(worldObject, [=] { m_lua.call(callback, key); });
-    World::instance()->eventPoller().addPoll(destructionPoll);
-    return destructionPoll->scriptKey();
-}

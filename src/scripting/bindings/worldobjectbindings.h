@@ -17,4 +17,7 @@ protected:
     int apiSetOrientation(apikey worldObject, float x, float y, float z);
     glm::vec3 apiPosition(apikey worldObject);
     glm::vec3 apiOrientation(apikey worldObject);
+
+    apikey apiOnWorldObjectDestroyed(apikey worldObject, const std::string& callback);
+
 };

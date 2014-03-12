@@ -23,7 +23,6 @@ public:
     virtual ~Ship();
 
     virtual WorldObjectType objectType() const override;
-    virtual ScriptableType scriptableType() const override;
 
     virtual void update(float deltaSec) override;
 

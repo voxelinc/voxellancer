@@ -7,7 +7,7 @@ class SingleShotTimer : public Timer {
 public:
     SingleShotTimer(float interval, const std::function<void()>& callback);
 
-    virtual bool isDead() const override;
+    virtual bool isDead() override;
 
 
 protected:

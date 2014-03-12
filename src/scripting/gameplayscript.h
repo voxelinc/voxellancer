@@ -8,7 +8,6 @@
 #include "scripting/script.h"
 
 
-class GamePlay;
 class ScriptEngine;
 class Ship;
 class Squad;
@@ -17,17 +16,15 @@ class Bindings;
 
 class GamePlayScript: public Script {
 public:
-    GamePlayScript(GamePlay* gamePlay, ScriptEngine* scriptEngine);
+    GamePlayScript(ScriptEngine* scriptEngine);
     virtual ~GamePlayScript();
 
     void initializeBindings();
 
     ScriptEngine& scriptEngine();
-    GamePlay& gamePlay();
     LuaWrapper& luaWrapper();
 
 protected:
-    GamePlay* m_gamePlay;
     ScriptEngine* m_scriptEngine;
 
     std::vector<std::unique_ptr<Bindings>> m_bindings;

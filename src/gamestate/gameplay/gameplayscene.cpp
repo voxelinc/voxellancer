@@ -23,7 +23,7 @@ GamePlayScene::GamePlayScene(GamePlay* gamePlay, Player& player):
     m_outputBlitter(new Blitter()),
     m_renderPipeline(RenderPipeline::getDefault()),
     m_starField(std::make_shared<Starfield>()),
-    m_framebuffer(new FrameBuffer(m_renderPipeline->bufferCount())),
+    m_framebuffer(nullptr),
     m_currentOutputBuffer(0),
     m_player(&player),
     m_defaultLightDir("vfx.lightdir")
@@ -34,6 +34,10 @@ GamePlayScene::GamePlayScene(GamePlay* gamePlay, Player& player):
 GamePlayScene::~GamePlayScene() = default;
 
 void GamePlayScene::draw(const Camera& camera, glow::FrameBufferObject* target, EyeSide side) const {
+    if (m_framebuffer == nullptr) {
+        m_framebuffer.reset(new FrameBuffer(m_renderPipeline->bufferCount()));
+    }
+
     m_framebuffer->setResolution(camera.viewport());
     m_framebuffer->clear();
 

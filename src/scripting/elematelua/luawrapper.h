@@ -21,6 +21,7 @@ public:
     ~LuaWrapper();
 
     void loadScript(const std::string & script);
+    void loadString(const std::string & script);
     void removeScript(const std::string & script);
     void reloadScripts();
 

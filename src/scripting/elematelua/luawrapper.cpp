@@ -42,6 +42,12 @@ void LuaWrapper::loadScript(const std::string & script)
     m_scripts.push_back(script);
 }
 
+void LuaWrapper::loadString(const std::string & script) {
+    m_err = luaL_dostring(m_state, script.c_str());
+    luaError();
+}
+
+
 void LuaWrapper::removeScript(const std::string & script)
 {
     unsigned int current_position = 0;

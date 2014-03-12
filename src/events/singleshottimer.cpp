@@ -7,7 +7,7 @@ SingleShotTimer::SingleShotTimer(float interval, const std::function<void()>& ca
 {
 }
 
-bool SingleShotTimer::isDead() const {
+bool SingleShotTimer::isDead() {
     return !m_ticking;
 }
 

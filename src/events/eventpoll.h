@@ -13,15 +13,13 @@ public:
     EventPoll(const std::function<void()>& callback);
     ~EventPoll();
 
-    virtual ScriptableType scriptableType() const override;
-
     /*
         Return true if the poll won't fire anymore
     */
-    virtual bool isDead() const;
+    virtual bool isDead();
     virtual void update(float deltaSec);
 
-    bool active() const;
+    bool isActive() const;
     void setActive(bool active);
 
     Handle<EventPoll>& handle();

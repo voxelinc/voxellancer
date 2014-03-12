@@ -35,7 +35,7 @@
 
 ScriptedScenario::ScriptedScenario(GamePlay* gamePlay, const std::string& path):
     BaseScenario(gamePlay),
-    m_script(new GamePlayScript(gamePlay, &World::instance()->scriptEngine()))
+    m_script(new GamePlayScript(&World::instance()->scriptEngine()))
 {
     m_script->load(path);
 }

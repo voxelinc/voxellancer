@@ -29,7 +29,6 @@
 
 
 Player::Player(GamePlay* gamePlay):
-    m_gamePlay(gamePlay),
     m_aimer(new Aimer(nullptr)),
     m_hud(new HUD(this, &gamePlay->game()->viewer())),
     m_ship(nullptr),

@@ -15,15 +15,11 @@ EventPoll::~EventPoll() {
     m_handle.invalidate();
 }
 
-ScriptableType EventPoll::scriptableType() const {
-    return ScriptableType::EventPoll;
-}
-
-bool EventPoll::isDead() const {
+bool EventPoll::isDead() {
     return false;
 }
 
-bool EventPoll::active() const {
+bool EventPoll::isActive() const {
     return m_active;
 }
 

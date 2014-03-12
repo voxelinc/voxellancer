@@ -43,10 +43,6 @@ WorldObjectType WorldObject::objectType() const {
     return WorldObjectType::Other;
 }
 
-ScriptableType WorldObject::scriptableType() const {
-    return ScriptableType::WorldObject;
-}
-
 SpawnState WorldObject::spawnState() const {
     return m_spawnState;
 }

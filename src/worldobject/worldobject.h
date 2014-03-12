@@ -41,7 +41,6 @@ public:
     virtual ~WorldObject();
 
     virtual WorldObjectType objectType() const;
-    virtual ScriptableType scriptableType() const override;
 
     SpawnState spawnState() const;
     void setSpawnState(SpawnState spawnState);

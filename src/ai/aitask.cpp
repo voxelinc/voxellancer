@@ -11,10 +11,6 @@ AiTask::~AiTask() {
     m_handle.invalidate();
 }
 
-ScriptableType AiTask::scriptableType() const {
-    return ScriptableType::AiTask;
-}
-
 BoardComputer* AiTask::boardComputer() {
     return m_boardComputer;
 }
@@ -23,8 +19,8 @@ void AiTask::update(float deltaSec) {
 
 }
 
-bool AiTask::isInProgress() {
-    return true;
+bool AiTask::isFinished() {
+    return false;
 }
 
 Handle<AiTask>& AiTask::handle() {

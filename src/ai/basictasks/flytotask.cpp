@@ -22,3 +22,7 @@ void FlyToTask::update(float deltaSec) {
     boardComputer()->moveTo(currentTargetPoint);
 }
 
+bool FlyToTask::isFinished() {
+    return glm::length(boardComputer()->worldObject()->position() - m_targetPoint) < 3;
+}
+

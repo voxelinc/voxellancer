@@ -25,8 +25,6 @@ public:
     GamePlayScene(GamePlay* gamePlay, Player& player);
     ~GamePlayScene();
 
-    void setPlayer(Player* player);
-
     virtual void draw(const Camera& camera, glow::FrameBufferObject* target, EyeSide side = EyeSide::None) const override;
     virtual void update(float deltaSec) override;
 
@@ -36,7 +34,7 @@ public:
 protected:
     std::unique_ptr<Blitter> m_outputBlitter;
     std::unique_ptr<RenderPipeline> m_renderPipeline;
-    std::unique_ptr<FrameBuffer> m_framebuffer;
+    mutable std::unique_ptr<FrameBuffer> m_framebuffer;
     std::shared_ptr<VoxelRenderer> m_voxelRenderer;
     std::shared_ptr<Starfield> m_starField;
 
