@@ -187,6 +187,5 @@ void GameScenario::createArmada() {
         follower->character()->setFaction(World::instance()->factionMatrix().policeFaction());
         m_world->god().scheduleSpawn(follower);
     }
-
 }
 

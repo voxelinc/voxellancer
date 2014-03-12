@@ -4,12 +4,13 @@
 #include <memory>
 
 #include "glm/glm.hpp"
+#include "scripting/scriptable.h"
 
 
 class Ship;
 class AiGroupTask;
 
-class Squad {
+class Squad : public Scriptable {
 public:
     Squad(Ship* leader = nullptr);
     ~Squad();

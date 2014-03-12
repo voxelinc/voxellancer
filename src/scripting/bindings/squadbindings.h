@@ -9,4 +9,9 @@ public:
 protected:
     virtual void initialize();
 
+    apikey apiCreateSquad(apikey leader);
+    int apiCreatePatrolWaypointsTask(apikey squad);
+    int apiAddPatrolwWaypointPoint(apikey task, const glm::vec3& point);
+    int apiJoinSquad(apikey squad, apikey ship);
+
 };

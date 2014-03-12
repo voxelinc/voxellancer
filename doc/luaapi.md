@@ -1,5 +1,5 @@
 #Lua API bindings
-generated from a133a4b
+generated from 1a5e259
 
 
 ## aibindings.h
@@ -24,6 +24,14 @@ int setEventActive(apikey eventPoll, bool active);
 apikey createSingleShotTimer(const std::string& callback, float delta);
 apikey createLoopingTimer(const std::string& callback, float delta);
 apikey onAABBEntered(apikey worldObject, const glm::vec3& llf, const glm::vec3& urb, const std::string& callback);
+```
+
+## squadbindings.h
+```c
+apikey createSquad(apikey leader);
+int createPatrolWaypointsTask(apikey squad);
+int addPatrolwWaypointPoint(apikey task, const glm::vec3& point);
+int joinSquad(apikey squad, apikey ship);
 ```
 
 ## worldobjectbindings.h

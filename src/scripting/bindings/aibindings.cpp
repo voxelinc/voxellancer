@@ -1,6 +1,7 @@
 #include "aibindings.h"
 
 #include "ai/basictasks/flytotask.h"
+#include "ai/basictasks/fighttask.h"
 #include "ai/character.h"
 
 #include "events/aitaskfinishedpoll.h"
@@ -15,7 +16,6 @@
 
 #include "worldobject/ship.h"
 #include "world/world.h"
-#include "ai/basictasks/fighttask.h"
 
 
 
@@ -98,16 +98,15 @@ apikey AiBindings::apiCreateFlyToTask(apikey key) {
 
     if (!ship) { return -1; }
 
-    FlyToTask* flyToTask = new FlyToTask(ship->boardComputer());
-
-    m_scriptEngine.registerScriptable(flyToTask);
+    auto flyToTask = std::make_shared<FlyToTask>(ship->boardComputer());
+    m_scriptEngine.registerScriptable(flyToTask.get());
 
     Character* character = ship->character();
     if (!character) {
         glow::warning("AiBindings: Ship '%;' has no Character", key);
         return -1;
     }
-    character->setTask(std::shared_ptr<AiTask>(flyToTask));
+    character->setTask(flyToTask);
 
     return flyToTask->scriptKey();
 }

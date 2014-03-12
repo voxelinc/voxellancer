@@ -13,7 +13,7 @@ class Squad;
 
 class PatrolWaypointsTask : public AiGroupTask {
 public:
-    PatrolWaypointsTask(Squad& squad, std::list<glm::vec3> points = std::list<glm::vec3>());
+    PatrolWaypointsTask(Squad& squad, std::list<glm::vec3> points = {});
 
     void appendWaypoint(const glm::vec3& point);
 
