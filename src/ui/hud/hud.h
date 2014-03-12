@@ -28,7 +28,7 @@ class CrossHair;
 
 class HUD {
 public:
-    HUD(Player* player, Viewer* viewer);
+    HUD(Player* player);
     ~HUD();
 
     Player* player();
@@ -54,12 +54,14 @@ public:
     void setTarget(WorldObject* target);
     WorldObject* target();
 
+
     void onClick(ClickType clickType);
 
     void update(float deltaSec);
     void draw();
 
     Viewer* viewer() const;
+    void setViewer(Viewer& viewer);
 
     float fovy() const;
     float fovx() const;

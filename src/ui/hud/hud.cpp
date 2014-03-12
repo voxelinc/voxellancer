@@ -37,9 +37,9 @@
 
 
 
-HUD::HUD(Player* player, Viewer* viewer):
+HUD::HUD(Player* player):
     m_player(player),
-    m_viewer(viewer),
+    m_viewer(nullptr),
     m_sphere(glm::vec3(0, 0, 0), 5.0f),
     m_crossHair(new CrossHair(this)),
     m_aimHelper(new AimHelperHudget(this)),
@@ -114,6 +114,7 @@ HUDObjectDelegate* HUD::objectDelegate(WorldObject* worldObject) {
 }
 
 void HUD::setCrossHairOffset(const glm::vec2& mousePosition) {
+    assert(m_viewer);
     float fovy = m_viewer->view().fovy();
     float nearZ = m_viewer->view().zNear();
     float ar = m_viewer->view().aspectRatio();
@@ -201,6 +202,7 @@ Viewer* HUD::viewer() const {
 }
 
 void HUD::updateFov() {
+    assert(m_viewer);
     m_fovy = m_viewer->view().fovy() / 2;
     m_fovx = glm::atan(glm::tan(m_fovy)*m_viewer->view().aspectRatio());
 }
@@ -211,4 +213,8 @@ float HUD::fovy() const {
 
 float HUD::fovx() const {
     return m_fovx;
+}
+
+void HUD::setViewer(Viewer& viewer) {
+    m_viewer = &viewer;
 }

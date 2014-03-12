@@ -24,7 +24,7 @@ go_bandit([](){
 
         before_each([&](){
             World::reset();
-            GamePlayScript(new ScriptEngine(World::instance()));
+            script = new GamePlayScript(new ScriptEngine(World::instance()));
         });
 
         it("debug status works", [&]() {

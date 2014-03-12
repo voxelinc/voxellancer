@@ -16,11 +16,13 @@
 
 #include "worldlogic.h"
 #include "god.h"
+#include "player.h"
 
 
 World *World::s_instance = nullptr;
 
 World::World():
+    m_player(new Player()),
     m_skybox(new Skybox()),
     m_worldLogic(new WorldLogic(*this)),
     m_worldTree(new WorldTree()),
@@ -30,10 +32,15 @@ World::World():
     m_factionMatrix(new FactionMatrix()),
     m_eventPoller(new EventPoller())
 {
+    m_particleEngine->setPlayer(*m_player);
 }
 
 World::~World() {
 
+}
+
+Player& World::player() {
+    return *m_player;
 }
 
 Skybox &World::skybox() {

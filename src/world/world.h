@@ -7,6 +7,7 @@
 class EventPoller;
 class FactionMatrix;
 class God;
+class Player;
 class Ship;
 class Skybox;
 class ScriptEngine;
@@ -20,17 +21,18 @@ public:
     World();
     virtual ~World();
 
-    Skybox &skybox();
-    WorldLogic &worldLogic();
-    God &god();
-    WorldTree &worldTree();
+    Player& player();
+    Skybox& skybox();
+    WorldLogic& worldLogic();
+    God& god();
+    WorldTree& worldTree();
     ScriptEngine& scriptEngine();
     VoxelParticleEngine& particleEngine();
     FactionMatrix& factionMatrix();
     EventPoller& eventPoller();
 
-    std::unordered_set<WorldObject*> &worldObjects();
-    std::unordered_set<Ship*> &ships();
+    std::unordered_set<WorldObject*>& worldObjects();
+    std::unordered_set<Ship*>& ships();
 
     void update(float deltaSecs);
 
