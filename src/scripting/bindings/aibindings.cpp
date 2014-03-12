@@ -26,9 +26,14 @@ AiBindings::AiBindings(GamePlayScript& script):
 }
 
 void AiBindings::initialize() {
+    m_lua.Register("getFaction", this, &AiBindings::apiGetFaction);
+    m_lua.Register("setFaction", this, &AiBindings::apiGetFaction);
+    m_lua.Register("getFactionRelation", this, &AiBindings::apiGetFactionRelation);
+    m_lua.Register("setFactionRelation", this, &AiBindings::apiSetFactionRelation);
+    
+    m_lua.Register("onAiTaskFinished", this, &AiBindings::apiOnAiTaskFinished);
     m_lua.Register("createFlyToTask", this, &AiBindings::apiCreateFlyToTask);
     m_lua.Register("setTargetPoint", this, &AiBindings::apiSetTargetPoint);
-
 }
 
 
@@ -73,7 +78,7 @@ int AiBindings::apiSetFactionRelation(const std::string& factionA, const std::st
 }
 
 
-apikey AiBindings::onAiTaskFinished(apikey key, const std::string& callback) {
+apikey AiBindings::apiOnAiTaskFinished(apikey key, const std::string& callback) {
     AiTask* aiTask = m_scriptEngine.get<AiTask>(key);
 
     if (!aiTask) { return -1; }

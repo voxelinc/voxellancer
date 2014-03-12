@@ -14,6 +14,9 @@
 #include "world/world.h"
 #include "worldobject/worldobject.h"
 #include "worldobject/ship.h"
+#include "events/eventpoller.h"
+#include "ai/character.h"
+#include "ai/aitask.h"
 
 
 using namespace bandit;
@@ -32,10 +35,14 @@ go_bandit([](){
         std::unique_ptr<ScriptEngine> scriptEngine;
         std::unique_ptr<GamePlayScript> script;
 
+        std::string callbackFunction = R"( function callback() setDebugStatus("callback!") end )";
+
+
         before_each([&](){
             World::reset(false);
             scriptEngine.reset(new ScriptEngine(World::instance()));
             script.reset(new GamePlayScript(scriptEngine.get()));
+            script->loadString(callbackFunction);
         });
 
         it("can set debug status", [&]() {
@@ -111,6 +118,60 @@ go_bandit([](){
             )");
 
             AssertThat(ship->position(), Equals(glm::vec3(7,8,9)));
+        });
+
+        it("can set positions", [&]() {
+            Ship* ship = new Ship();
+            scriptEngine->registerScriptable(ship);
+            World::instance()->player().setShip(ship);
+            script->loadString(R"( 
+                ship = playerShip()
+                setPosition(ship, vec3(7,8,9))
+            )");
+
+            AssertThat(ship->position(), Equals(glm::vec3(7, 8, 9)));
+        });
+
+        it("can poll aabb", [&]() {
+            Ship* ship = new Ship();
+            scriptEngine->registerScriptable(ship);
+            World::instance()->player().setShip(ship);
+            script->loadString(R"( 
+                onAABBEntered(playerShip(), vec3(-50,-50,-150), vec3(50,50,-100), "callback")
+            )");
+            World::instance()->eventPoller().update(1.0f);
+            AssertThat(script->debugStatus(), Equals(""));
+
+            ship->transform().setPosition(glm::vec3(0, 0, -110));
+            World::instance()->eventPoller().update(1.0f);
+            AssertThat(script->debugStatus(), Equals("callback!"));
+
+            script->apiSetDebugStatus("");
+            World::instance()->eventPoller().update(1.0f);
+            AssertThat(script->debugStatus(), Equals(""));
+        });
+
+        it("can poll flyto finished", [&]() {
+            Ship* ship = new Ship();
+            scriptEngine->registerScriptable(ship);
+            World::instance()->player().setShip(ship);
+            script->loadString(R"( 
+                task = createFlyToTask(playerShip())
+	            setTargetPoint(task, vec3(0, 0, 10))
+                onAiTaskFinished(task, "callback")
+            )");
+            AssertThat(ship->character()->task()->isFinished(), Equals(false));
+
+            World::instance()->eventPoller().update(1.0f);
+            AssertThat(script->debugStatus(), Equals(""));
+
+            ship->transform().setPosition(glm::vec3(0, 0, 9.8));
+            World::instance()->eventPoller().update(1.0f);
+            AssertThat(script->debugStatus(), Equals("callback!"));
+
+            script->apiSetDebugStatus("");
+            World::instance()->eventPoller().update(1.0f);
+            AssertThat(script->debugStatus(), Equals(""));
         });
 
     });
