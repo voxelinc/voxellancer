@@ -53,6 +53,7 @@ int AiBindings::apiSetFaction(apikey key, const std::string& faction) {
     
     Faction& f = World::instance()->factionMatrix().getFaction(faction);
     ship->character()->setFaction(f);
+    return 0;
 }
 
 
@@ -102,7 +103,7 @@ apikey AiBindings::apiCreateFlyToTask(apikey key) {
     return flyToTask->scriptKey();
 }
 
-int AiBindings::apiSetTargetPoint(apikey key, float x, float y, float z) {
+int AiBindings::apiSetTargetPoint(apikey key, const glm::vec3& point) {
     FlyToTask* flyToTask = m_scriptEngine.get<FlyToTask>(key);
 
     if (!flyToTask) {
@@ -110,6 +111,6 @@ int AiBindings::apiSetTargetPoint(apikey key, float x, float y, float z) {
         return -1;
     }
 
-    flyToTask->setTargetPoint(glm::vec3(x, y, z));
+    flyToTask->setTargetPoint(point);
     return 0;
 }

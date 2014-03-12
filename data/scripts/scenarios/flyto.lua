@@ -12,9 +12,9 @@ function spawnNextShip()
 	ship = createShip("basicship")
 	task = createFlyToTask(ship)
 	
-	setTargetPoint(task, -20, -20, z)
+	setTargetPoint(task, vec3(-20, -20, z))
 	
-	setPosition(ship, 0, 0, -40)
+	setPosition(ship, vec3(0, 0, -40))
 	spawn(ship)
 	
 	z = z - 30

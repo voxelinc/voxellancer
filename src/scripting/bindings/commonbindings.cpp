@@ -75,7 +75,7 @@ apikey CommonBindings::apiCreateLoopingTimer(const std::string& callback, float 
     return timer->scriptKey();
 }
 
-apikey CommonBindings::apiOnAABBEntered(apikey key, glm::vec3 llf, glm::vec3 urb, const std::string& callback) {
+apikey CommonBindings::apiOnAABBEntered(apikey key, const glm::vec3& llf, const glm::vec3& urb, const std::string& callback) {
     WorldObject* worldObject = m_scriptEngine.get<WorldObject>(key);
 
     if (!worldObject) { return -1; }

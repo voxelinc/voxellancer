@@ -1,6 +1,6 @@
 #pragma once
 
-#include <list>
+#include <unordered_set>
 #include <memory>
 
 
@@ -18,6 +18,6 @@ public:
 
 
 protected:
-    std::list<std::shared_ptr<EventPoll>> m_eventPolls;
+    std::unordered_set<std::shared_ptr<EventPoll>> m_eventPolls;
 };
 

@@ -1,5 +1,5 @@
 #Lua API bindings
-generated from 55cb10d
+generated from 283f696
 
 
 ## aibindings.h
@@ -10,7 +10,7 @@ float getFactionRelation(const std::string& factionA, const std::string& faction
 int setFactionRelation(const std::string& factionA, const std::string& factionB, float friendliness);
 apikey onAiTaskFinished(apikey aiTask, const std::string& callback);
 apikey createFlyToTask(apikey ship);
-int setTargetPoint(apikey flyToTask, float x, float y, float z);
+int setTargetPoint(apikey flyToTask, const glm::vec3& point);
 ```
 
 ## commonbindings.h
@@ -21,7 +21,7 @@ int showTextFor(const std::string& string, int seconds);
 int setEventActive(apikey eventPoll, bool active);
 apikey createSingleShotTimer(const std::string& callback, float delta);
 apikey createLoopingTimer(const std::string& callback, float delta);
-apikey onAABBEntered(apikey worldObject, glm::vec3 llf, glm::vec3 urb, const std::string& callback);
+apikey onAABBEntered(apikey worldObject, const glm::vec3& llf, const glm::vec3& urb, const std::string& callback);
 ```
 
 ## worldobjectbindings.h

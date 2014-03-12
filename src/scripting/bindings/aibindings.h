@@ -19,5 +19,5 @@ protected:
     apikey onAiTaskFinished(apikey aiTask, const std::string& callback);
 
     apikey apiCreateFlyToTask(apikey ship);
-    int apiSetTargetPoint(apikey flyToTask, float x, float y, float z);
+    int apiSetTargetPoint(apikey flyToTask, const glm::vec3& point);
 };

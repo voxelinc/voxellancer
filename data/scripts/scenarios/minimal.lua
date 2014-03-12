@@ -5,13 +5,13 @@ end
 
 function newShip() 
 	width = 10
-	distance = 20
+	d = 20
 
 	x = count % width
 	z = math.floor(count / width)
 	
 	otherShip = createShip('eagle')
-	setPosition(otherShip, x * distance - distance * width/2, -30 + z * 5, -100 - z * distance)
+	setPosition(otherShip, vec3(x * d - d * width/2, -30 + z * 5, -100 - z * d))
 	spawn(otherShip)
 	
 	count = count + 1
