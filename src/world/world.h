@@ -39,7 +39,7 @@ public:
     float deltaSec() const;
 
     static World *instance();
-    static void reset();
+    static void reset(bool showWarning=true);
 
 
 protected:

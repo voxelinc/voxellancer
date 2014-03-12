@@ -69,7 +69,7 @@ int WorldObjectBindings::apiSpawn(apikey key) {
     }
 
     World::instance()->god().scheduleSpawn(SpawnRequest(worldObject, false));
-    World::instance()->god().spawn();
+    World::instance()->god().spawn(); // should this really happen?
     return worldObject->spawnState() == SpawnState::Spawned;
 }
 

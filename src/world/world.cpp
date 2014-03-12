@@ -108,8 +108,10 @@ World *World::instance() {
     return s_instance;
 }
 
-void World::reset() {
-    glow::warning("world reset!");
+void World::reset(bool showWarning) {
+    if (showWarning) {
+        glow::warning("world reset!");
+    }
     delete s_instance;
     s_instance = nullptr;
 }
