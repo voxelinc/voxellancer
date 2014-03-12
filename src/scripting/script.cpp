@@ -9,6 +9,7 @@ Script::Script():
     m_debugStatus("")
 {
     m_lua->Register("setDebugStatus", this, &Script::apiSetDebugStatus);
+    load("data/scripts/vec3.lua");
 }
 
 Script::~Script() = default;

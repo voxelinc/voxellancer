@@ -85,24 +85,21 @@ namespace Luaw
             return glm::vec3();
         }
 
-        glm::vec3 v;
-        int v_index = 0;
-        lua_pushnil(state);
-        while (lua_next(state, index) != 0) {
-            if (!lua_isnumber(state, -1))
-                glow::critical("LuaWrapper: Return table value is not number, while trying to read a vec3.");
-            else
-                if (v_index < 3)   // only try to copy the value into the vector if size table has not more than 3 entries
-                    v[v_index] = static_cast<float>(lua_tonumber(state, -1));
-            ++v_index;
-            lua_pop(state, 1);
-            if (v_index > 3) {
-                glow::critical("LuaWrapper: Return table larger than expected, while trying to read a vec3.");
-                break;
-            }
-        }
+        float x = _check_get_field<float>(state, index, "x");
+        float y = _check_get_field<float>(state, index, "y");
+        float z = _check_get_field<float>(state, index, "z");
 
-        return v;
+        return glm::vec3(x,y,z);
+    }
+
+    template <typename T>
+    T _check_get_field(lua_State * state, const int index, const char* key) {
+        assert(lua_istable(state, index));
+        lua_pushstring(state, key); 
+        lua_gettable(state, index);  // pop key, push table[key] on stack
+        T result = _check_get<T>(state, -1);
+        lua_pop(state, 1);  // remove table[key] from stack
+        return result;
     }
 
     void _push(lua_State * /*state*/)
@@ -154,4 +151,5 @@ namespace Luaw
         lua_pushnumber(state, value.z);
         lua_setfield(state, -2, "z");
     }
+
 }

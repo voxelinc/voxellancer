@@ -1,18 +1,19 @@
 #include <bandit/bandit.h>
 
+#include <memory>
+
 #include "../bandit_extension/vec3helper.h"
 
-#include "scripting/gameplayscript.h"
-#include "worldobject/worldobject.h"
-#include "property/propertymanager.h"
-#include "world/world.h"
-#include "gamestate/gameplay/gameplay.h"
-#include "scripting/scriptengine.h"
 #include "gamestate/game.h"
-#include "property/propertydirectory.h"
-#include "worldobject/ship.h"
+#include "gamestate/gameplay/gameplay.h"
 #include "player.h"
-#include <memory>
+#include "property/propertydirectory.h"
+#include "property/propertymanager.h"
+#include "scripting/scriptengine.h"
+#include "scripting/gameplayscript.h"
+#include "world/world.h"
+#include "worldobject/worldobject.h"
+#include "worldobject/ship.h"
 
 
 using namespace bandit;
@@ -85,6 +86,34 @@ go_bandit([](){
 
             AssertThat(script->debugStatus(), Equals("1337"));
         });
+
+        it("can access positions", [&]() {
+            Ship* ship = new Ship();
+            ship->transform().setPosition(glm::vec3(4, 5, 6));
+            scriptEngine->registerScriptable(ship);
+            World::instance()->player().setShip(ship);
+            script->loadString(R"( 
+                ship = playerShip()
+                p = position(ship)
+                setDebugStatus(p.x*100 + p.y*10 + p.z)
+            )");
+
+            AssertThat(script->debugStatus(), Equals("456"));
+        });
+
+        it("can set positions", [&]() {
+            Ship* ship = new Ship();
+            scriptEngine->registerScriptable(ship);
+            World::instance()->player().setShip(ship);
+            script->loadString(R"( 
+                ship = playerShip()
+                setPosition(ship, vec3(7,8,9))
+            )");
+
+            AssertThat(ship->position(), Equals(glm::vec3(7,8,9)));
+        });
+
     });
+ 
 });
 

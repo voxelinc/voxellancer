@@ -1,2 +1,2 @@
 
-make_test(test_scripting testscripting.cpp)
+make_test(test_scripting testscripting.cpp testvectorextension.cpp)

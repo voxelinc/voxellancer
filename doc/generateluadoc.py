@@ -31,7 +31,7 @@ for line in out.splitlines():
     header, api = re.split(":\s+", line)
     if old_header != header:
         if old_header is not None:
-            args.output.write("```\n")
+            args.output.write("```\n\n")
         args.output.write("## {0}\n".format(header))
         args.output.write("```c\n")
         old_header = header

@@ -11,7 +11,8 @@ public:
 protected:
     virtual void initialize();
 
-    std::string apiGetFactionName(apikey ship);
+    std::string apiGetFaction(apikey ship);
+    int apiSetFaction(apikey ship, const std::string& faction);
     float apiGetFactionRelation(const std::string& factionA, const std::string& factionB);
     int apiSetFactionRelation(const std::string& factionA, const std::string& factionB, float friendliness);
 

@@ -13,8 +13,8 @@ protected:
     apikey apiCreateShip(const std::string& name);
     int apiSpawn(apikey worldObject);
 
-    int apiSetPosition(apikey worldObject, float x, float y, float z);
-    int apiSetOrientation(apikey worldObject, float x, float y, float z);
+    int apiSetPosition(apikey worldObject, const glm::vec3& position);
+    int apiSetOrientation(apikey worldObject, const glm::vec3& orientation);
     glm::vec3 apiPosition(apikey worldObject);
     glm::vec3 apiOrientation(apikey worldObject);
 

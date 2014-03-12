@@ -96,26 +96,26 @@ glm::vec3 WorldObjectBindings::apiPosition(apikey key) {
     return worldObject->transform().position();
 }
 
-int WorldObjectBindings::apiSetPosition(apikey key, float x, float y, float z) {
+int WorldObjectBindings::apiSetPosition(apikey key, const glm::vec3& position) {
     WorldObject* worldObject = m_scriptEngine.get<WorldObject>(key);
 
     if (!worldObject) {
         return -1;
     }
 
-    worldObject->transform().setPosition(glm::vec3(x, y, z));
+    worldObject->transform().setPosition(position);
     return 0;
 }
 
 
-int WorldObjectBindings::apiSetOrientation(apikey key, float x, float y, float z) {
+int WorldObjectBindings::apiSetOrientation(apikey key, const glm::vec3& orientation) {
     WorldObject* worldObject = m_scriptEngine.get<WorldObject>(key);
 
     if (worldObject) {
         return -1;
     }
 
-    worldObject->transform().setOrientation(glm::quat(glm::vec3(x, y, z)));
+    worldObject->transform().setOrientation(glm::quat(orientation));
     return 0;
 }
 

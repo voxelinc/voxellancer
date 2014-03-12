@@ -1,16 +1,18 @@
 #Lua API bindings
-generated from fa6f4be
+generated from 55cb10d
 
 
 ## aibindings.h
 ```c
-std::string getFactionName(apikey ship);
+std::string getFaction(apikey ship);
+int setFaction(apikey ship, const std::string& faction);
 float getFactionRelation(const std::string& factionA, const std::string& factionB);
 int setFactionRelation(const std::string& factionA, const std::string& factionB, float friendliness);
 apikey onAiTaskFinished(apikey aiTask, const std::string& callback);
 apikey createFlyToTask(apikey ship);
 int setTargetPoint(apikey flyToTask, float x, float y, float z);
 ```
+
 ## commonbindings.h
 ```c
 bool isKeyValid(apikey key);
@@ -21,13 +23,14 @@ apikey createSingleShotTimer(const std::string& callback, float delta);
 apikey createLoopingTimer(const std::string& callback, float delta);
 apikey onAABBEntered(apikey worldObject, glm::vec3 llf, glm::vec3 urb, const std::string& callback);
 ```
+
 ## worldobjectbindings.h
 ```c
 apikey playerShip();
 apikey createShip(const std::string& name);
 int spawn(apikey worldObject);
-int setPosition(apikey worldObject, float x, float y, float z);
-int setOrientation(apikey worldObject, float x, float y, float z);
+int setPosition(apikey worldObject, const glm::vec3& position);
+int setOrientation(apikey worldObject, const glm::vec3& orientation);
 glm::vec3 position(apikey worldObject);
 glm::vec3 orientation(apikey worldObject);
 apikey onWorldObjectDestroyed(apikey worldObject, const std::string& callback);

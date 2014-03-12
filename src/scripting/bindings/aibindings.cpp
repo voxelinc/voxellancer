@@ -32,7 +32,7 @@ void AiBindings::initialize() {
 }
 
 
-std::string AiBindings::apiGetFactionName(apikey key) {
+std::string AiBindings::apiGetFaction(apikey key) {
     Ship* ship = m_scriptEngine.get<Ship>(key);
 
     if (!ship) { 
@@ -42,6 +42,19 @@ std::string AiBindings::apiGetFactionName(apikey key) {
 
     return ship->character()->faction().key();
 }
+
+int AiBindings::apiSetFaction(apikey key, const std::string& faction) {
+    Ship* ship = m_scriptEngine.get<Ship>(key);
+
+    if (!ship) {
+        glow::warning("AiBindings: ship %; doesnt exist", key);
+        return -1;
+    }
+    
+    Faction& f = World::instance()->factionMatrix().getFaction(faction);
+    ship->character()->setFaction(f);
+}
+
 
 float AiBindings::apiGetFactionRelation(const std::string& factionA, const std::string& factionB) {
     FactionMatrix& factions = World::instance()->factionMatrix();
