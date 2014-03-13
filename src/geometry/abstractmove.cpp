@@ -47,11 +47,17 @@ AbstractMove AbstractMove::operator*(const AbstractMove& other) const {
     );
 }
 
+AbstractMove AbstractMove::operator*(float multiplier) const {
+    return AbstractMove(
+        m_directional * multiplier,
+        m_angular * multiplier
+        );
+}
+
 AbstractMove AbstractMove::operator/(float dividor) const {
     assert(dividor != 0.0f);
     return AbstractMove(
-         m_directional / dividor,
-         m_angular / dividor
-    );
+        m_directional / dividor,
+        m_angular / dividor
+        );
 }
-

@@ -48,7 +48,7 @@ void GameScenario::populateWorld() {
         glm::vec3(-600, 0, -400), glm::vec3(0, 100, -600),
         glm::vec3(-100, 150, -900) }));
 
-    Ship* normandy = WorldObjectBuilder("normandy").buildShip();
+    Ship* normandy = WorldObjectBuilder("bc304").buildShip();
     normandy->transform().setPosition(glm::vec3(0, 0, -100));
     normandy->objectInfo().setName("Normandy");
     normandy->objectInfo().setShowOnHud(true);
@@ -58,7 +58,7 @@ void GameScenario::populateWorld() {
 
     int nmember_count = 4;
     for (int i = 0; i < nmember_count; i++) {
-        Ship *follower = WorldObjectBuilder("basicship").buildShip();
+        Ship *follower = WorldObjectBuilder("f302").buildShip();
         follower->transform().setPosition(glm::vec3(100 * (-nmember_count / 2.0f + i), 50, 0));
         follower->objectInfo().setName("member");
         follower->objectInfo().setShowOnHud(true);
@@ -84,7 +84,7 @@ void GameScenario::populateWorld() {
 
     int lmember_count = 2;
     for (int i = 0; i < lmember_count; i++) {
-        Ship *follower = WorldObjectBuilder("basicship").buildShip();
+        Ship *follower = WorldObjectBuilder("f301").buildShip();
         follower->character()->setFaction(World::instance()->factionMatrix().pirateFaction());
         follower->transform().setPosition(glm::vec3(100 * (-lmember_count / 2.0f + i), 200, 0));
         follower->objectInfo().setName("member");
@@ -94,7 +94,7 @@ void GameScenario::populateWorld() {
         m_world->god().scheduleSpawn(follower);
     }
 
-    Ship *testCluster = WorldObjectBuilder("mox").buildShip();
+    Ship *testCluster = WorldObjectBuilder("bc304").buildShip();
     testCluster->transform().setPosition(glm::vec3(0, 0, 10));
     testCluster->objectInfo().setName("basicship");
     testCluster->objectInfo().setShowOnHud(false);

@@ -148,6 +148,7 @@ static void mainloop() {
     }
 }
 
+
 void toggleFullScreen() {
     ContextProvider::instance()->toggleFullScreen();
 
