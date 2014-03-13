@@ -18,16 +18,14 @@
 
 
 DefendAreaTask::DefendAreaTask(Squad& squad, std::list<glm::vec3> points, float defendRange) :
-    AiGroupTask(squad),
-    m_points(points),
-    m_currentPoint(m_points.begin()),
-    m_fightTask(nullptr),
-    m_leaderFlyTask(nullptr),
-    m_defendRange(defendRange)
+AiGroupTask(squad),
+m_points(points),
+m_currentPoint(m_points.begin()),
+m_fightTask(nullptr),
+m_leaderFlyTask(nullptr),
+m_defendRange(defendRange),
+m_collisionFilter(new CollisionFilter(nullptr))
 {
-    if (m_squad.leader()) {
-        onNewLeader(m_squad.leader());
-    }
 }
 
 DefendAreaTask::~DefendAreaTask() = default;
@@ -47,6 +45,8 @@ void DefendAreaTask::onNewLeader(Ship* leader) {
     m_fightTask = std::make_shared<FightTask>(leader->boardComputer(), std::vector<Handle<WorldObject>>());
     m_leaderFlyTask = std::make_shared<FlyToTask>(leader->boardComputer());
     leader->character()->setTask(m_leaderFlyTask);
+    m_collisionFilter = std::unique_ptr<CollisionFilter>(new CollisionFilter(leader, 0));
+    m_collisionFilter->setCollideableWith(WorldObjectType::Ship, true);
 }
 
 void DefendAreaTask::onMemberJoin(Ship* member) {
@@ -56,10 +56,8 @@ void DefendAreaTask::onMemberJoin(Ship* member) {
 bool DefendAreaTask::isEnemyInRange() {
     m_enemies.clear();
     Faction* enemyFaction;
-    CollisionFilter* filter = new CollisionFilter(m_squad.leader(),0);
-    filter->setCollideableWith(WorldObjectType::Ship, true);
     Sphere sphere(m_squad.leader()->transform().position(), m_defendRange);
-    WorldTreeQuery query(&(World::instance()->worldTree()), &sphere, nullptr, filter);
+    WorldTreeQuery query(&(World::instance()->worldTree()), &sphere, nullptr, m_collisionFilter.get());
     for (WorldObject *worldObject : query.intersectingWorldObjects()) {
         Ship* ship = dynamic_cast<Ship*>(worldObject);
         if (ship) {

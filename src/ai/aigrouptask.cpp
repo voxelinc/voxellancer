@@ -9,6 +9,9 @@
 AiGroupTask::AiGroupTask(Squad& squad) :
     m_squad(squad)
 {
+    if (m_squad.leader()) {
+        onNewLeader(m_squad.leader());
+    }
 }
 
 void AiGroupTask::update(float deltaSec) {

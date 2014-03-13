@@ -28,6 +28,7 @@ protected:
 
     bool isEnemyInRange();
 
+    std::unique_ptr<CollisionFilter> m_collisionFilter;
     std::shared_ptr<FlyToTask> m_leaderFlyTask;
     std::shared_ptr<FightTask> m_fightTask;
     std::list<glm::vec3> m_points;
