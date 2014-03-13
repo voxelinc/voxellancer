@@ -50,7 +50,7 @@ void GameScenario::populateWorld() {
 
     Ship* normandy = WorldObjectBuilder("c306").buildShip();
     normandy->transform().setPosition(glm::vec3(0, 0, -200));
-    normandy->objectInfo().setName("Normandy");
+    normandy->objectInfo().setName("Capital");
     normandy->objectInfo().setShowOnHud(true);
     normandy->objectInfo().setCanLockOn(true);
     normandy->squadLogic()->joinSquad(squadA);
@@ -94,9 +94,9 @@ void GameScenario::populateWorld() {
         m_world->god().scheduleSpawn(follower);
     }
 
-    Ship *testCluster = WorldObjectBuilder("bc304").buildShip();
+    Ship *testCluster = WorldObjectBuilder("f302").buildShip();
     testCluster->transform().setPosition(glm::vec3(0, 0, 10));
-    testCluster->objectInfo().setName("basicship");
+    testCluster->objectInfo().setName("player");
     testCluster->objectInfo().setShowOnHud(false);
     m_world->god().scheduleSpawn(testCluster);
 
