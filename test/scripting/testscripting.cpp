@@ -4,20 +4,29 @@
 
 #include "../bandit_extension/vec3helper.h"
 
-#include "gamestate/game.h"
-#include "gamestate/gameplay/gameplay.h"
-#include "player.h"
-#include "property/propertydirectory.h"
-#include "property/propertymanager.h"
-#include "scripting/scriptengine.h"
-#include "scripting/gameplayscript.h"
-#include "world/world.h"
-#include "worldobject/worldobject.h"
-#include "worldobject/ship.h"
-#include "events/eventpoller.h"
+#include "ai/squad.h"
 #include "ai/character.h"
 #include "ai/aitask.h"
 #include "ai/basictasks/fighttask.h"
+#include "ai/grouptasks/patrolwaypointstask.h"
+#include "ai/squadlogic.h"
+
+#include "events/eventpoller.h"
+
+#include "gamestate/game.h"
+#include "gamestate/gameplay/gameplay.h"
+
+#include "player.h"
+
+#include "property/propertydirectory.h"
+#include "property/propertymanager.h"
+
+#include "scripting/scriptengine.h"
+#include "scripting/gameplayscript.h"
+
+#include "world/world.h"
+#include "worldobject/worldobject.h"
+#include "worldobject/ship.h"
 
 
 using namespace bandit;
@@ -189,6 +198,66 @@ go_bandit([](){
             AssertThat(fightTask->targets().size(), Equals(1));
 
         });
+
+        it("can create squads", [&]() {
+            Ship* ship = new Ship();
+            scriptEngine->registerScriptable(ship);
+            World::instance()->player().setShip(ship);
+            script->loadString(R"( 
+                createSquad(playerShip())
+            )");
+
+            AssertThat(ship->squadLogic()->inSquad(), Equals(true));
+            AssertThat(ship->squadLogic()->isSquadLeader(), Equals(true));
+            AssertThat(ship->squadLogic()->squad()->members().size(), Equals(0)); // squad leader is not member!?
+        });
+
+        it("can add ships to squads", [&]() {
+            Ship* ship = new Ship();
+            scriptEngine->registerScriptable(ship);
+            World::instance()->player().setShip(ship);
+            script->loadString(R"( 
+                squad = createSquad(playerShip())
+                s1 = createShip("basicship")
+                s2 = createShip("basicship")
+                joinSquad(squad, s1)
+                joinSquad(squad, s2)
+            )");
+
+            AssertThat(ship->squadLogic()->isSquadLeader(), Equals(true));
+            AssertThat(ship->squadLogic()->squad()->members().size(), Equals(2));
+        });
+
+        it("can create patrolwaypoint task with squads", [&]() {
+            Ship* ship = new Ship();
+            scriptEngine->registerScriptable(ship);
+            World::instance()->player().setShip(ship);
+            script->loadString(R"( 
+                squad = createSquad(playerShip())
+                createPatrolWaypointsTask(squad)
+            )");
+
+            AiGroupTask* task = ship->squadLogic()->squad()->task().get();
+            AssertThat(task != nullptr, IsTrue());
+        });
+
+        it("can create patrolwaypoint task with squads", [&]() {
+            Ship* ship = new Ship();
+            scriptEngine->registerScriptable(ship);
+            World::instance()->player().setShip(ship);
+            script->loadString(R"( 
+                squad = createSquad(playerShip())
+                task = createPatrolWaypointsTask(squad)
+                addPatrolwWaypointPoint(task, vec3(1,2,3))
+            )");
+
+            PatrolWaypointsTask* task = dynamic_cast<PatrolWaypointsTask*>(ship->squadLogic()->squad()->task().get());
+            AssertThat(*task->currentTargetPoint(), EqualsWithDelta(glm::vec3(1,2,3), 0.001f));
+        });
+        /*
+            m_lua.Register("createPatrolWaypointsTask", this, SquadBindings::apiCreatePatrolWaypointsTask);
+            m_lua.Register("addPatrolwWaypointPoint", this, SquadBindings::apiAddPatrolwWaypointPoint);
+            */
     });
 });
 

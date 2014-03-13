@@ -1,5 +1,5 @@
 #Lua API bindings
-generated from 1a5e259
+generated from 01772b3
 
 
 ## aibindings.h

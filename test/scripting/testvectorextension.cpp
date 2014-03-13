@@ -47,6 +47,26 @@ go_bandit([](){
             AssertThat(script->debugStatus(), Equals("vec3(11, 22, 33)"));
         });
 
+        it("can multiply vec3", [&]() {
+            AssertThat(script->debugStatus(), Equals(""));
+            script->loadString(R"( 
+                x = vmul(vec3(1,2,3), 3.5)
+                setDebugStatus(vstring(x))
+            )");
+            AssertThat(script->debugStatus(), Equals("vec3(3.5, 7, 10.5)"));
+        });
+
+        it("can normalize vec3 ", [&]() {
+            AssertThat(script->debugStatus(), Equals(""));
+            script->loadString(R"( 
+                x = vec3(1,4,9)
+                l = vlength(vnormalize(v))
+                setDebugStatus(l)
+            )");
+            
+            AssertThat(atof(script->debugStatus().c_str()), EqualsWithDelta(1.0f, 0.001f));
+        });
+
         it("can calculate vec3 lenght", [&]() {
             AssertThat(script->debugStatus(), Equals(""));
             script->loadString(R"( 

@@ -19,6 +19,7 @@ public:
 
     virtual void update(float deltaSec) override;
 
+    const glm::vec3* currentTargetPoint();
 
 protected:
     virtual void onNewLeader(Ship* leader) override;

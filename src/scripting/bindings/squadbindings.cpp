@@ -4,11 +4,12 @@
 
 #include "ai/squad.h"
 #include "ai/squadlogic.h"
+#include "ai/grouptasks/patrolwaypointstask.h"
 
 #include "scripting/scriptengine.h"
+#include "scripting/elematelua/luawrapper.h"
 
 #include "worldobject/ship.h"
-#include "ai/grouptasks/patrolwaypointstask.h"
 
 SquadBindings::SquadBindings(GamePlayScript& script):
     Bindings(script)
@@ -17,7 +18,10 @@ SquadBindings::SquadBindings(GamePlayScript& script):
 }
 
 void SquadBindings::initialize() {
-
+    m_lua.Register("createSquad", this, &SquadBindings::apiCreateSquad);
+    m_lua.Register("createPatrolWaypointsTask", this, &SquadBindings::apiCreatePatrolWaypointsTask);
+    m_lua.Register("addPatrolwWaypointPoint", this, &SquadBindings::apiAddPatrolwWaypointPoint);
+    m_lua.Register("joinSquad", this, &SquadBindings::apiJoinSquad);
 }
 
 apikey SquadBindings::apiCreateSquad(apikey leader) {
@@ -39,9 +43,11 @@ int SquadBindings::apiCreatePatrolWaypointsTask(apikey squadKey) {
     if (!squad) { return -1; }
 
     auto task = std::make_shared<PatrolWaypointsTask>(*squad);
+    m_scriptEngine.registerScriptable(task.get());
+    
     squad->setTask(task);
 
-    return 0;
+    return task->scriptKey();
 }
 
 int SquadBindings::apiAddPatrolwWaypointPoint(apikey taskKey, const glm::vec3& point) {
@@ -61,5 +67,6 @@ int SquadBindings::apiJoinSquad(apikey squadKey, apikey shipKey) {
     if (!ship) { return -1; }
 
     ship->squadLogic()->joinSquadOf(squad->leader());
+    return 0;
 }
 
