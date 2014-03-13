@@ -48,8 +48,8 @@ void GameScenario::populateWorld() {
         glm::vec3(-600, 0, -400), glm::vec3(0, 100, -600),
         glm::vec3(-100, 150, -900) }));
 
-    Ship* normandy = WorldObjectBuilder("bc304").buildShip();
-    normandy->transform().setPosition(glm::vec3(0, 0, -100));
+    Ship* normandy = WorldObjectBuilder("c306").buildShip();
+    normandy->transform().setPosition(glm::vec3(0, 0, -200));
     normandy->objectInfo().setName("Normandy");
     normandy->objectInfo().setShowOnHud(true);
     normandy->objectInfo().setCanLockOn(true);
@@ -94,7 +94,7 @@ void GameScenario::populateWorld() {
         m_world->god().scheduleSpawn(follower);
     }
 
-    Ship *testCluster = WorldObjectBuilder("f302").buildShip();
+    Ship *testCluster = WorldObjectBuilder("bc304").buildShip();
     testCluster->transform().setPosition(glm::vec3(0, 0, 10));
     testCluster->objectInfo().setName("basicship");
     testCluster->objectInfo().setShowOnHud(false);
