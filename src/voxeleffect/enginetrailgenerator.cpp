@@ -37,6 +37,14 @@ void EngineTrailGenerator::setLifetime(float lifetime) {
     m_generator->setLifetime(lifetime, 0.1f);
 }
 
+void EngineTrailGenerator::setColor(int color) {
+    m_generator->setColor(color);
+}
+
+void EngineTrailGenerator::setEmissiveness(float emissiveness) {
+    m_generator->setEmissiveness(emissiveness);
+}
+
 void EngineTrailGenerator::update(float deltaSec) {
     if(m_engine.engineSlot()) { // Only spawn if engine is installed
         m_timeSinceLastSpawn += deltaSec;
