@@ -20,7 +20,7 @@ function(source_group_by_path PARENT_PATH REGEX GROUP)
 endfunction()
 
 
-macro(list_extract OUTPUT REGEX)
+function(list_extract OUTPUT REGEX)
 
     set(args ${ARGV})
 
@@ -35,4 +35,4 @@ macro(list_extract OUTPUT REGEX)
 
     endforeach()
 
-endmacro()
+endfunction()
