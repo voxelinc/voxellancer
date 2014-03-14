@@ -35,17 +35,17 @@ void TextFieldHudgetVoxels::draw() {
 }
 
 const glm::vec3 TextFieldHudgetVoxels::upperLeft() const {
-    return m_textFieldHudget->worldPosition(m_direction) + m_textFieldHudget->worldOrientation(m_direction) * glm::vec3(m_offset + m_width * 0 - m_width / 2, m_height, 0);
+    return worldPosition() + worldOrientation() * offsetToCenter(true, true);
 }
 
 const glm::vec3 TextFieldHudgetVoxels::lowerLeft() const {
-    return m_textFieldHudget->worldPosition(m_direction) + m_textFieldHudget->worldOrientation(m_direction) * glm::vec3(m_offset + m_width * 0 - m_width / 2, -m_height, 0);
+    return worldPosition() + worldOrientation() * offsetToCenter(false, true);
 }
 const glm::vec3 TextFieldHudgetVoxels::upperRight() const {
-    return m_textFieldHudget->worldPosition(m_direction) + m_textFieldHudget->worldOrientation(m_direction) * glm::vec3(m_offset + m_width * m_content.length() - m_width / 2, m_height, 0);
+    return worldPosition() + worldOrientation() * offsetToCenter(true, false);
 }
 const glm::vec3 TextFieldHudgetVoxels::lowerRight() const {
-    return m_textFieldHudget->worldPosition(m_direction) + m_textFieldHudget->worldOrientation(m_direction) * glm::vec3(m_offset + m_width * m_content.length() - m_width / 2, -m_height, 0);
+    return worldPosition() + worldOrientation() * offsetToCenter(false, false);
 }
 
 bool TextFieldHudgetVoxels::isAt(const Ray& ray) const {
@@ -64,7 +64,7 @@ float TextFieldHudgetVoxels::scale() {
     return m_scale;
 }
 
-glm::vec3 TextFieldHudgetVoxels::offsetToCenter(bool left, bool upper) {
+const glm::vec3 TextFieldHudgetVoxels::offsetToCenter(bool upper, bool left) const {
     float horizontalOffset, verticalOffset;
     if (left) {
         horizontalOffset = (float)m_content.length();
@@ -78,4 +78,12 @@ glm::vec3 TextFieldHudgetVoxels::offsetToCenter(bool left, bool upper) {
     }
 
     return glm::vec3(m_offset + m_width*horizontalOffset - m_width / 2, verticalOffset, 0);
+}
+
+glm::vec3 TextFieldHudgetVoxels::worldPosition() const {
+    return m_textFieldHudget->worldPosition(m_direction);
+}
+
+glm::quat TextFieldHudgetVoxels::worldOrientation() const {
+    return m_textFieldHudget->worldOrientation(m_direction);
 }

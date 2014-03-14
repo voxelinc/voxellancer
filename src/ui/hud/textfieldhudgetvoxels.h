@@ -19,17 +19,20 @@ public:
     void draw();
 
     virtual bool isAt(const Ray& ray) const;
-    const glm::vec3 upperLeft() const;
-    const glm::vec3 lowerLeft() const;
-    const glm::vec3 upperRight() const;
-    const glm::vec3 lowerRight() const;
 
     float width();
     float height();
     float scale();
 
-
 protected:
+    const glm::vec3 upperLeft() const;
+    const glm::vec3 lowerLeft() const;
+    const glm::vec3 upperRight() const;
+    const glm::vec3 lowerRight() const;
+
+    glm::vec3 worldPosition()  const;
+    glm::quat worldOrientation() const;
+
     FontSize m_fontSize;
     TextFieldHudget* m_textFieldHudget;
     std::string m_content;
@@ -37,6 +40,6 @@ protected:
     glm::vec3 m_direction;
     float m_width, m_height, m_scale;
     float m_offset;
-    glm::vec3 offsetToCenter(bool left, bool upper);
+    const glm::vec3 offsetToCenter(bool upper, bool left) const;
 };
 
