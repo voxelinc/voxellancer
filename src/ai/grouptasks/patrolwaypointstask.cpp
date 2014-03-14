@@ -1,14 +1,18 @@
 #include "patrolwaypointstask.h"
 
+#include <glow/logging.h>
+
 #include "worldobject/ship.h"
 #include "ai/squadlogic.h"
 #include "ai/squad.h"
 #include "ai/character.h"
+#include "ai/basictasks/flytotask.h"
 #include "ai/basictasks/formationmembertask.h"
+
 #include "voxel/voxelclusterbounds.h"
 
 
-PatrolWaypointsTask::PatrolWaypointsTask(Squad& squad, std::list<glm::vec3> points) :
+PatrolWaypointsTask::PatrolWaypointsTask(Squad& squad, const std::list<glm::vec3>& points) :
     AiGroupTask(squad),
     m_points(points),
     m_currentPoint(m_points.begin()),
@@ -17,6 +21,11 @@ PatrolWaypointsTask::PatrolWaypointsTask(Squad& squad, std::list<glm::vec3> poin
     if (m_squad.leader()) {
         onNewLeader(m_squad.leader());
     }
+}
+
+PatrolWaypointsTask::PatrolWaypointsTask(Squad& squad):
+    PatrolWaypointsTask(squad, {})
+{
 }
 
 void PatrolWaypointsTask::appendWaypoint(const glm::vec3& point) {

@@ -39,12 +39,12 @@ apikey SquadBindings::apiCreateSquad(apikey leader) {
 
 int SquadBindings::apiCreatePatrolWaypointsTask(apikey squadKey) {
     Squad* squad = m_scriptEngine.get<Squad>(squadKey);
-
+    
     if (!squad) { return -1; }
-
+    
     auto task = std::make_shared<PatrolWaypointsTask>(*squad);
     m_scriptEngine.registerScriptable(task.get());
-    
+
     squad->setTask(task);
 
     return task->scriptKey();

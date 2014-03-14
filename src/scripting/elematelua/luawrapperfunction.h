@@ -48,6 +48,7 @@ namespace Luaw
 
     template <typename T> T _check_get(lua_State * state, const int index);
     
+    template <typename T> bool _check(lua_State * state, const int index);
     template <typename T> T _check_get_field(lua_State * state, const int index, const char* key);
 
     void _push(lua_State * state); // Necessary in the case no arguments are passed

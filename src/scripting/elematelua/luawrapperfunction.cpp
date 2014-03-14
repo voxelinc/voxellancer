@@ -92,17 +92,54 @@ namespace Luaw
         return glm::vec3(x,y,z);
     }
 
+    template <>
+    bool _check<int>(lua_State * state, const int index) {
+        return lua_isnumber(state, index) != 0;
+    };
+
+    template <>
+    bool _check<unsigned long>(lua_State * state, const int index) {
+        return _check<int>(state, index);
+    }
+
+    template <>
+    bool _check<unsigned int>(lua_State * state, const int index) {
+        return _check<int>(state, index);
+    }
+
+    template <>
+    bool _check<float>(lua_State * state, const int index) {
+        return _check<int>(state, index);
+    }
+
+    template <>
+    bool _check<double>(lua_State * state, const int index) {
+        return _check<int>(state, index);
+    }
+
+    template <>
+    bool _check<bool>(lua_State * state, const int index) {
+        return _check<int>(state, index);
+    }
+
+    template <>
+    bool _check<std::string>(lua_State * state, const int index) {
+        return lua_isstring(state, index) != 0;
+    }
+
     template <typename T>
     T _check_get_field(lua_State * state, const int index, const char* key) {
         assert(lua_istable(state, index));
         lua_pushstring(state, key); 
         lua_gettable(state, index);  // pop key, push table[key] on stack
+        if (!_check<T>(state, -1))
+            glow::critical("table[%;] is not of type %;", key, typeid(T).name());
         T result = _check_get<T>(state, -1);
         lua_pop(state, 1);  // remove table[key] from stack
         return result;
     }
 
-    void _push(lua_State * /*state*/)
+    void _push(lua_State * state)
     {
     }
 

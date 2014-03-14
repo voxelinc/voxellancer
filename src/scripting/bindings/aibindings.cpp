@@ -128,7 +128,7 @@ apikey AiBindings::apiCreateFightTask(apikey key) {
 
     if (!ship) { return -1; }
 
-    FightTask* fightTask = new FightTask(ship->boardComputer());
+    FightTask* fightTask = new FightTask(ship->boardComputer(), {});
 
     m_scriptEngine.registerScriptable(fightTask);
 

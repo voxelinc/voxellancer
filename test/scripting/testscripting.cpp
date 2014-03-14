@@ -234,9 +234,7 @@ go_bandit([](){
             World::instance()->player().setShip(ship);
             script->loadString(R"( 
                 squad = createSquad(playerShip())
-                print(1)
                 createPatrolWaypointsTask(squad)
-                print(2)
             )");
 
             AiGroupTask* task = ship->squadLogic()->squad()->task().get();

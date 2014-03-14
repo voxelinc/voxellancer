@@ -20,7 +20,7 @@ class FightTask : public AiTask {
     };
 
 public:
-    FightTask(BoardComputer* boardComputer, const std::vector<Handle<WorldObject>>& targets = {});
+    FightTask(BoardComputer* boardComputer, const std::vector<Handle<WorldObject>>& targets);
 
     virtual void update(float deltaSec);
 
