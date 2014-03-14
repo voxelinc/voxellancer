@@ -65,7 +65,7 @@ void Engine::setState(const EngineState& state) {
 Acceleration Engine::currentAcceleration() const {
     WorldObject* worldObject = (m_engineSlot ? m_engineSlot->components()->worldObject() : nullptr);
     if (worldObject) {
-        return Acceleration(power().accelerationAt(m_state) / worldObject->physics().mass());
+        return Acceleration(power().accelerationAt(m_state) / worldObject->physics().maxMass());
     } else {
         return Acceleration();
     }
