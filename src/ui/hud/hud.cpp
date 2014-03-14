@@ -46,8 +46,8 @@ HUD::HUD(Player* player, Viewer* viewer):
     m_crossHair(new CrossHair(this)),
     m_aimHelper(new AimHelperHudget(this)),
     m_scanner(new WorldTreeScanner()),
-    m_targetName(new TextFieldHudget(this, "", glm::normalize(glm::vec3(0, -1, -2)))),
-    m_speedLabel(new TextFieldHudget(this, "", glm::normalize(glm::vec3(1, -1, -2)), 0.03f)),
+    m_targetName(new TextFieldHudget(this, glm::normalize(glm::vec3(0, -1, -2)), 0.04f, "")),
+    m_speedLabel(new TextFieldHudget(this, glm::normalize(glm::vec3(1, -1, -2)), 0.03f, "")),
     m_target(nullptr)
 {
     m_scanner->setScanRadius(1050.0f);
