@@ -7,7 +7,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 
-#include "voxelfontconstant.h"
+#include "voxelfontconstants.h"
 
 class Letter;
 class VoxelRenderer;
@@ -34,5 +34,4 @@ protected:
     std::map<char, std::unique_ptr<Letter>> m_font3x5;
     std::map<char, std::unique_ptr<Letter>> m_font5x7;
 
-    std::vector<Letter*> m_letters;
 };

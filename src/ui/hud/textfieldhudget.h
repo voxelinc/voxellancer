@@ -4,7 +4,7 @@
 #include <string>
 
 #include "hudget.h"
-#include "ui/voxelfontconstant.h"
+#include "ui/voxelfontconstants.h"
 
 class TextFieldHudgetVoxels;
 

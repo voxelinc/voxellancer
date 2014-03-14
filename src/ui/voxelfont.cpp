@@ -12,7 +12,6 @@ VoxelFont::VoxelFont():
     m_font3x5(),
     m_font5x7()
 {
-    m_letters = std::vector<Letter*>();
     loadFont("3x5", glm::vec3(1, 2, 0), &m_font3x5);
     loadFont("5x7", glm::vec3(2, 3, 0), &m_font5x7);
 }
