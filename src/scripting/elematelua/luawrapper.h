@@ -133,12 +133,10 @@ public:
     template<typename Return, typename Class, typename... Args>
     void Register(const std::string & name, Class * obj, Return(Class::* const method) (Args...))
     {
-        auto mem = std::mem_fn(method);
-    
-        auto function = std::function<Return(typename std::remove_reference<Args>::type...)>([=](Args... args) {
-            return mem(obj, args...);
-        });
-     
+        std::function<Return(typename std::remove_reference<Args>::type...)> function = [obj, method](Args... args) {
+            return (obj->*method)(args...);
+        };
+
         Register(name, function);
     };
     
