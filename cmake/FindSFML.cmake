@@ -62,6 +62,7 @@ if(WIN32)
     find_file(OPENAL_BINARY
         NAMES openal32.dll
         PATHS ${LIB_DIR}/SFML-2.1/extlibs/bin/x64
+        NO_SYSTEM_ENVIRONMENT_PATH 
         DOC "The OpenAL binary")
     find_file(SNDFILE_BINARY
         NAMES libsndfile-1.dll
