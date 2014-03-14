@@ -33,7 +33,7 @@ using namespace bandit;
 
 
 go_bandit([](){
-    describe("Scripting", [](){
+    describe("Scripting / GamePlayScript", [](){
         PropertyManager::instance()->reset();
         PropertyManager::instance()->load("data/config.ini");
         PropertyManager::instance()->load("data/voxels.ini", "voxels");
@@ -234,14 +234,16 @@ go_bandit([](){
             World::instance()->player().setShip(ship);
             script->loadString(R"( 
                 squad = createSquad(playerShip())
+                print(1)
                 createPatrolWaypointsTask(squad)
+                print(2)
             )");
 
             AiGroupTask* task = ship->squadLogic()->squad()->task().get();
             AssertThat(task != nullptr, IsTrue());
         });
 
-        it("can create patrolwaypoint task with squads", [&]() {
+        it("can add waypoints to patrolwaypointtask", [&]() {
             Ship* ship = new Ship();
             scriptEngine->registerScriptable(ship);
             World::instance()->player().setShip(ship);
@@ -254,10 +256,6 @@ go_bandit([](){
             PatrolWaypointsTask* task = dynamic_cast<PatrolWaypointsTask*>(ship->squadLogic()->squad()->task().get());
             AssertThat(*task->currentTargetPoint(), EqualsWithDelta(glm::vec3(1,2,3), 0.001f));
         });
-        /*
-            m_lua.Register("createPatrolWaypointsTask", this, SquadBindings::apiCreatePatrolWaypointsTask);
-            m_lua.Register("addPatrolwWaypointPoint", this, SquadBindings::apiAddPatrolwWaypointPoint);
-            */
     });
 });
 
