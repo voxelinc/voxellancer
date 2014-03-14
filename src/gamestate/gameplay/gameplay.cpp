@@ -32,7 +32,7 @@ GamePlay::GamePlay(Game* game) :
     m_pausedState(new GamePlayPaused(this)),
     m_scene(new GamePlayScene(this, *m_player)),
     m_soundManager(new SoundManager()),
-    m_scenario(new PirateScenario(this))
+    m_scenario(new GameScenario(this))
 {
     setInitialSubState(m_runningState);
 
