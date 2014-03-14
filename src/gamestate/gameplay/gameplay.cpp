@@ -75,6 +75,7 @@ SoundManager& GamePlay::soundManager() {
 }
 
 void GamePlay::loadScenario(int i) {
+    m_soundManager->stopAll();
     m_scenario->clear();
     switch (i){
     case 0:
@@ -103,11 +104,12 @@ void GamePlay::update(float deltaSec) {
 
 void GamePlay::onEntered() {
     GameState::onEntered();
-
+    m_soundManager->activate();
     m_scenario->load();
 }
 
 void GamePlay::onLeft() {
+    m_soundManager->deactivate();
     GameState::onLeft();
 }
 
