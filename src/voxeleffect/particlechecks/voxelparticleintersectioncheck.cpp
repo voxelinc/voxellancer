@@ -48,5 +48,10 @@ void VoxelParticleIntersectionCheck::setPlayer(Player& player) {
 
 void VoxelParticleIntersectionCheck::beforeCheck() {
     assert(m_player);
-    m_Sphere = m_player->ship()->bounds().sphere();
+    if (m_player->ship()) {
+        m_Sphere = m_player->ship()->bounds().sphere();
+    } else {
+        m_Sphere = Sphere();
+    }
+
 }

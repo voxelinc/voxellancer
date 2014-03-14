@@ -90,7 +90,8 @@ set(DEFAULT_LINKER_FLAGS_DEBUG
 )
 
 set(DEFAULT_LINKER_FLAGS_RELEASE
-	"${WIN32_LINKER_FLAGS} /OPT:REF /LTCG /OPT:ICF /DELAY:UNLOAD /INCREMENTAL:NO"
+	"${WIN32_LINKER_FLAGS} /DEBUG /OPT:REF /LTCG /OPT:ICF /DELAY:UNLOAD"
+	# voxellancer custom: DEBUG -> debug symbols even in release
 	# OPT:REF      -> references: eliminate unreferenced data
 	# OPT:ICF      -> enable comdat folding: remove redundant comdats
 	# LTCG         -> link time code generation: use link time code generation

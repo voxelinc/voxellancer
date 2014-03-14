@@ -12,13 +12,6 @@ class Ship;
 class WorldObject;
 
 class FightTask : public AiTask {
-    enum State {
-        IDLE,
-        APPROACH,
-        ENGAGE,
-        EVADE
-    };
-
 public:
     FightTask(BoardComputer* boardComputer, const std::vector<Handle<WorldObject>>& targets);
 
@@ -31,18 +24,25 @@ public:
     virtual bool isFinished();
 
 protected:
+    enum class State {
+        IDLE,
+        APPROACH,
+        ENGAGE,
+        EVADE
+    };
+
     std::vector<Handle<WorldObject>> m_targets;
     WorldObject* m_primaryTarget;
     void updateTargets();
     void updateState();
-    void setState(int newState);
+    void setState(State newState);
 
     glm::vec3 findRandomEvasionPoint();
     float targetDistance();
     float pointDistance(glm::vec3 point);
     float angleToTarget();
 
-    int m_state;
+    State m_state;
     bool m_stateChanged;
     float m_maxFireDistance, m_maxRocketDistance, m_minEnemyDistance;
     glm::vec3 m_positionBehindTarget;

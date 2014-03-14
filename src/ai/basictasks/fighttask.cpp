@@ -10,7 +10,7 @@ FightTask::FightTask(BoardComputer* boardComputer, const std::vector<Handle<Worl
     m_targets(targets),
     m_primaryTarget(nullptr)
 {
-    m_state = IDLE;
+    m_state = State::IDLE;
     m_maxFireDistance = 150.0f;
     m_maxRocketDistance = 200.0f;
     m_minEnemyDistance = 100.0f;
@@ -24,9 +24,9 @@ void FightTask::update(float deltaSec) {
     WorldObject* worldObject = boardComputer()->worldObject();
 
     switch (m_state) {
-        case IDLE:
+        case State::IDLE:
             return;
-        case APPROACH:
+        case State::APPROACH:
             if (angleToTarget() > 45.0f) {
                 boardComputer();
                 boardComputer()->rotateTo(m_primaryTarget->transform().position());
@@ -36,7 +36,7 @@ void FightTask::update(float deltaSec) {
             }
             boardComputer()->shootBullet(m_targets);
             break;
-        case ENGAGE:
+        case State::ENGAGE:
             if (angleToTarget() > 45.0f) {
                 boardComputer()->moveTo(worldObject->transform().position() + glm::vec3(0, 0, -1) * worldObject->transform().orientation());
                 boardComputer()->rotateTo(m_primaryTarget->transform().position());
@@ -51,7 +51,7 @@ void FightTask::update(float deltaSec) {
                 boardComputer()->shootBullet(m_targets);
             }
             break;
-        case EVADE:
+        case State::EVADE:
             boardComputer()->rotateTo(m_positionBehindTarget);
             boardComputer()->moveTo(m_positionBehindTarget);
             boardComputer()->shootBullet(m_targets);
@@ -70,6 +70,8 @@ void FightTask::updateTargets() {
     }
     if (!m_targets.empty()) {
         m_primaryTarget = m_targets.front().get();
+    } else {
+        m_primaryTarget = nullptr;
     }
 }
 
@@ -86,30 +88,34 @@ void FightTask::setTargets(const std::vector<Handle<WorldObject>>& targets) {
 }
 
 bool FightTask::isFinished() {
-    return m_state == IDLE;
+    return m_state == State::IDLE;
 }
 
 void FightTask::updateState() {
+    if (m_state != State::IDLE && m_targets.empty()) {
+        setState(State::IDLE);
+    }
+
     switch (m_state) {
-        case IDLE:
+        case State::IDLE:
             if (m_targets.empty()) {
                 return;
             } else {
-                setState(APPROACH);
+                setState(State::APPROACH);
             }
             break;
-        case APPROACH:
+        case State::APPROACH:
             if (targetDistance() < m_maxFireDistance) {
-                setState(ENGAGE);
+                setState(State::ENGAGE);
             }
             break;
-        case ENGAGE:
+        case State::ENGAGE:
             if (targetDistance() < m_minEnemyDistance) {
-                setState(EVADE);
+                setState(State::EVADE);
                 m_positionBehindTarget = findRandomEvasionPoint();
             }
             break;
-        case EVADE:
+        case State::EVADE:
             if (pointDistance(m_positionBehindTarget) < 20 && targetDistance() < m_minEnemyDistance) {
                 m_positionBehindTarget = findRandomEvasionPoint();
             }
@@ -119,18 +125,14 @@ void FightTask::updateState() {
                 break;
             }
             if (targetDistance() < m_maxFireDistance) {
-                setState(ENGAGE);
+                setState(State::ENGAGE);
             } else {
-                setState(APPROACH);
+                setState(State::APPROACH);
             }
             break;
         default:
             assert(false);
             return;
-    }
-
-    if (m_state > 0 && m_targets.empty()) {
-        setState(IDLE);
     }
 
     if (m_stateChanged) {
@@ -141,7 +143,9 @@ void FightTask::updateState() {
 
 float FightTask::targetDistance() {
     WorldObject* worldObject = boardComputer()->worldObject();
-    return glm::length(worldObject->transform().position() - m_primaryTarget->transform().position()) - worldObject->bounds().minimalGridSphere().radius() * worldObject->transform().scale() - m_primaryTarget->bounds().minimalGridSphere().radius() * m_primaryTarget->transform().scale();
+    return glm::length(worldObject->transform().position() - m_primaryTarget->transform().position()) 
+                        - worldObject->bounds().minimalGridSphere().radius() * worldObject->transform().scale() 
+                        - m_primaryTarget->bounds().minimalGridSphere().radius() * m_primaryTarget->transform().scale();
 }
 
 float FightTask::pointDistance(glm::vec3 point) {
@@ -158,7 +162,7 @@ glm::vec3 FightTask::findRandomEvasionPoint() {
     return point;
 }
 
-void FightTask::setState(int newState) {
+void FightTask::setState(State newState) {
     m_stateChanged = true;
     m_state = newState;
 }
