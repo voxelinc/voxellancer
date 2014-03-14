@@ -22,7 +22,7 @@
 World *World::s_instance = nullptr;
 
 World::World():
-    m_player(new Player()),
+    m_player(nullptr),
     m_skybox(new Skybox()),
     m_worldLogic(new WorldLogic(*this)),
     m_worldTree(new WorldTree()),
@@ -32,7 +32,6 @@ World::World():
     m_factionMatrix(new FactionMatrix()),
     m_eventPoller(new EventPoller())
 {
-    m_particleEngine->setPlayer(*m_player);
 }
 
 World::~World() {
@@ -40,7 +39,12 @@ World::~World() {
 }
 
 Player& World::player() {
+    assert(m_player);
     return *m_player;
+}
+
+void World::setPlayer(Player& player) {
+    m_player = &player;
 }
 
 Skybox &World::skybox() {
@@ -138,4 +142,3 @@ void World::removeWorldObject(WorldObject* worldObject) {
 
     m_scriptEngine->unregisterScriptable(worldObject);
 }
-

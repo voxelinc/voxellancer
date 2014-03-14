@@ -29,9 +29,10 @@
 GamePlay::GamePlay(Game* game) :
     GameState("In Game", game),
     m_game(game),
+    m_player(new Player()),
     m_runningState(new GamePlayRunning(this)),
     m_pausedState(new GamePlayPaused(this)),
-    m_scene(new GamePlayScene(this, World::instance()->player())),
+    m_scene(new GamePlayScene(*this, *m_player)),
     m_soundManager(new SoundManager()),
     m_scenario(new ScriptedScenario(this, "data/scripts/scenarios/flyto.lua"))
 {
@@ -39,7 +40,8 @@ GamePlay::GamePlay(Game* game) :
 
     m_runningState->pauseTrigger().setTarget(new TriggeredTransition(m_runningState, m_pausedState));
     m_pausedState->continueTrigger().setTarget(new TriggeredTransition(m_pausedState, m_runningState));
-    World::instance()->player().hud().setViewer(m_game->viewer());
+    m_player->hud().setViewer(m_game->viewer());
+    World::instance()->setPlayer(*m_player);
 }
 
 
@@ -64,11 +66,11 @@ const Scene& GamePlay::scene() const {
 }
 
 const CameraHead& GamePlay::cameraHead() const {
-    return World::instance()->player().cameraHead();
+    return m_player->cameraHead();
 }
 
 Player& GamePlay::player() {
-    return World::instance()->player();
+    return *m_player;
 }
 
 SoundManager& GamePlay::soundManager() {
@@ -97,7 +99,7 @@ void GamePlay::loadScenario(int i) {
         m_scenario.reset(new BaseScenario(this));
     }
     m_scenario->load();
-    World::instance()->player().hud().setViewer(m_game->viewer());
+    World::instance()->setPlayer(*m_player);
 }
 
 void GamePlay::update(float deltaSec) {

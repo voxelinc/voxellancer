@@ -45,6 +45,7 @@ public:
 protected:
     Game* m_game;
 
+    std::unique_ptr<Player> m_player;
     std::unique_ptr<GamePlayScene> m_scene;
     std::unique_ptr<BaseScenario> m_scenario;
     std::shared_ptr<SoundManager> m_soundManager;

@@ -17,7 +17,7 @@
 #include "worldobject/worldobject.h"
 #include "display/rendering/starfield.h"
 
-GamePlayScene::GamePlayScene(GamePlay* gamePlay, Player& player):
+GamePlayScene::GamePlayScene(GamePlay& gamePlay, Player& player):
     m_gamePlay(gamePlay),
     m_voxelRenderer(VoxelRenderer::instance()),
     m_outputBlitter(new Blitter()),
@@ -25,7 +25,7 @@ GamePlayScene::GamePlayScene(GamePlay* gamePlay, Player& player):
     m_starField(std::make_shared<Starfield>()),
     m_framebuffer(nullptr),
     m_currentOutputBuffer(0),
-    m_player(&player),
+    m_player(player),
     m_defaultLightDir("vfx.lightdir")
 {
     m_renderPipeline->add(m_starField, 0);
@@ -52,7 +52,7 @@ void GamePlayScene::draw(const Camera& camera, glow::FrameBufferObject* target, 
 }
 
 void GamePlayScene::update(float deltaSec) {
-    m_starField->update(deltaSec, m_player->cameraHead().position());
+    m_starField->update(deltaSec, m_player.cameraHead().position());
 }
 
 void GamePlayScene::setOutputBuffer(int i) {
@@ -71,7 +71,7 @@ void GamePlayScene::drawGame(const Camera& camera) const {
     for (WorldObject* worldObject : World::instance()->worldObjects()) {
         VoxelRenderer::instance()->draw(*worldObject);
     }
-    m_gamePlay->player().hud().draw();
+    m_gamePlay.player().hud().draw();
     m_voxelRenderer->afterDraw();
 
     World::instance()->particleEngine().draw(camera);

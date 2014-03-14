@@ -22,7 +22,7 @@ class Starfield;
 
 class GamePlayScene: public Scene {
 public:
-    GamePlayScene(GamePlay* gamePlay, Player& player);
+    GamePlayScene(GamePlay& gamePlay, Player& player);
     ~GamePlayScene();
 
     virtual void draw(const Camera& camera, glow::FrameBufferObject* target, EyeSide side = EyeSide::None) const override;
@@ -38,8 +38,8 @@ protected:
     std::shared_ptr<VoxelRenderer> m_voxelRenderer;
     std::shared_ptr<Starfield> m_starField;
 
-    GamePlay* m_gamePlay;
-    Player* m_player;
+    GamePlay& m_gamePlay;
+    Player& m_player;
 
     Property<glm::vec3> m_defaultLightDir;
     int m_currentOutputBuffer;

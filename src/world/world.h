@@ -22,6 +22,8 @@ public:
     virtual ~World();
 
     Player& player();
+    void setPlayer(Player& player);
+
     Skybox& skybox();
     WorldLogic& worldLogic();
     God& god();
@@ -48,13 +50,12 @@ protected:
     void addWorldObject(WorldObject* worldObject);
     void removeWorldObject(WorldObject* worldObject);
 
-
 protected:
     static World *s_instance;
 
     float m_deltaSec;
+    Player* m_player;
 
-    std::unique_ptr<Player> m_player;
     std::unique_ptr<Skybox> m_skybox;
     std::unique_ptr<WorldTree> m_worldTree;
     std::unique_ptr<WorldLogic> m_worldLogic;
