@@ -3,12 +3,13 @@ cmake_minimum_required(VERSION 2.8.9 FATAL_ERROR)
 # PROJECT DESCRIPTION
 set(META_PROJECT_NAME "voxellancer")
 set(META_VERSION_MAJOR "0")
-set(META_VERSION_MINOR "1")
+set(META_VERSION_MINOR "2")
 set(META_VERSION_PATCH "0")
 set(META_VERSION "${META_VERSION_MAJOR}.${META_VERSION_MINOR}.${META_VERSION_PATCH}")
 set(META_AUTHOR_ORGANIZATION "voxelinc")
 set(META_AUTHOR_DOMAIN "https://github.com/voxelinc/voxellancer/")
 
+set(VOXELLANCER_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
 # OPTIONS
 option(OPTION_LIMIT_CONFIGS "Generate limited configs (Release; Debug)" ON)
@@ -212,18 +213,7 @@ install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/data
         PATTERN "*.png" EXCLUDE)
 install(FILES ${BINARIES} DESTINATION .)
 
-
-if(WIN32)
-    INSTALL(FILES vcredist_x64.exe DESTINATION ./)
-    SET(CPACK_NSIS_INSTALL_ROOT "$PROGRAMFILES64")
-    SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS 
-            ${CPACK_NSIS_EXTRA_INSTALL_COMMANDS} 
-            "ExecWait '\\\"$INSTDIR\\\\vcredist_x64.exe\\\" /quiet /norestart'")
-    SET(CPACK_PACKAGE_INSTALL_REGISTRY_KEY "${CPACK_PACKAGE_NAME} ${CPACK_PACKAGE_VERSION} (Win64)")
-endif() 
-set(CPACK_NSIS_CREATE_ICONS "CreateShortCut '\$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\${PROJECT_NAME}.lnk' '\$INSTDIR\\\\${PROJECT_NAME}.exe'")
-
-include(CPack)
+include(cmake/Package.cmake)
 
 include_directories(${SOURCE_DIR})
 
