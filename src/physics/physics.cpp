@@ -34,7 +34,7 @@ float Physics::directionalDampening() const {
     return m_directionalDampening;
 }
 
-void Physics::setDirectionalDampening(float directionalDampening) {
+void Physics::setDirectionalDampening(const Property<float>& directionalDampening) {
     m_directionalDampening = directionalDampening;
 }
 
@@ -42,7 +42,7 @@ float Physics::angularDampening() const {
     return m_angularDampening;
 }
 
-void Physics::setAngularDampening(float angularDampening) {
+void Physics::setAngularDampening(const Property<float>& angularDampening) {
     m_angularDampening = angularDampening;
 }
 

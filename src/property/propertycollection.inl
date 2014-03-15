@@ -1,6 +1,6 @@
 #pragma once
 
-#include "property.h"
+#include "propertyimpl.h"
 
 
 template<typename T>
@@ -10,10 +10,6 @@ PropertyCollection<T>::PropertyCollection(regexns::regex regex, std::function<T 
     m_regex(regex),
     m_converter(converter)
 {
-}
-
-template<typename T>
-PropertyCollection<T>::~PropertyCollection() {
 }
 
 template<typename T>
@@ -42,7 +38,6 @@ bool PropertyCollection<T>::update(const std::string& key, const std::string& sv
     if (!regexns::regex_match(svalue, m_regex)) {
         return false;
     }
-
     set(key, m_converter(svalue));
     return true;
 }
@@ -51,48 +46,46 @@ bool PropertyCollection<T>::update(const std::string& key, const std::string& sv
 template<typename T>
 void PropertyCollection<T>::set(const std::string& key, const T& value) {
     m_values[key] = value;
-
-    auto result = m_properties.equal_range(key);
-
-    for (auto iter = result.first; iter != result.second; ++iter)
-    {
-        Property<T>* prop = iter->second;
-        prop->set(value);
-    }
+    getOrCreate(key)->set(value);
 }
 
 template<typename T>
-void PropertyCollection<T>::registerProperty(Property<T>* prop) {
-    m_properties.insert(std::pair<std::string, Property<T> *>(prop->name(), prop));
-    auto iter = m_values.find(prop->name());
-    if (iter != m_values.end()) {
-        prop->set(iter->second);
+PropertyImpl<T>* PropertyCollection<T>::getImpl(const std::string& key) {
+    PropertyImpl<T>* impl = m_properties[key];
+    if (impl) {
+        return impl;
     } else {
-        glow::debug("PropertyCollection: could not find a '%;' value for %;", typeid(T).name(), prop->name());
+        glow::debug("PropertyCollection: could not find a '%;' value for %;", typeid(T).name(), key);
+        return new PropertyImpl<T>(key);
     }
 }
 
 template<typename T>
-void PropertyCollection<T>::registerProperty(Property<T>* prop, const T& defaultValue) {
-    m_properties.insert(std::pair<std::string, Property<T> *>(prop->name(), prop));
-    auto iter = m_values.find(prop->name());
-    if (iter != m_values.end()) {
-        prop->set(iter->second);
+PropertyImpl<T>* PropertyCollection<T>::getImpl(const std::string& key, const T& defaultValue) {
+    PropertyImpl<T>* impl = m_properties[key];
+    if (impl == nullptr) {
+        impl = create(key);
+        impl->set(defaultValue);
+    }
+    return impl;
+}
+
+template <class T>
+PropertyImpl<T>* PropertyCollection<T>::getOrCreate(const std::string& key) {
+    auto impl = m_properties[key];
+    if (impl) {
+        return impl;
     } else {
-        set(prop->name(), defaultValue);
-        registerProperty(prop);
+        return create(key);
     }
 }
 
-template<typename T>
-void PropertyCollection<T>::unregisterProperty(Property<T>* prop) {
-    auto iter = m_properties.find(prop->name());
-    for (; iter != m_properties.end(); ++iter) {
-        if (iter->second == prop) {
-            m_properties.erase(iter);
-            break;
-        }
-    }
-}
+template <class T>
+PropertyImpl<T>* PropertyCollection<T>::create(const std::string& key) {
+    assert(m_properties[key] == nullptr);
 
+    PropertyImpl<T>* impl = new PropertyImpl<T>(key);
+    m_properties[key] = impl;
+    return impl;
+}
 

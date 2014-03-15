@@ -9,6 +9,7 @@
 #include "sound/soundmanager.h"
 
 
+
 Bullet::Bullet():
     Projectile()
 {
@@ -17,8 +18,8 @@ Bullet::Bullet():
     m_objectInfo->setShowOnHud(false);
     m_objectInfo->setCanLockOn(false);
 
-    m_physics->setDirectionalDampening(0.0f);
-    m_physics->setAngularDampening(0.0f);
+    m_physics->setDirectionalDampening(Property<float>::unnamed(0.0f));
+    m_physics->setAngularDampening(Property<float>::unnamed(0.0f));
 }
 
 
