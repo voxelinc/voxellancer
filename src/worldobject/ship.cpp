@@ -4,16 +4,9 @@
 #include "ai/character.h"
 #include "ai/squadlogic.h"
 
-#include "collision/collisionfilter.h"
-
 
 Ship::Ship():
-    Ship(new CollisionFilter(this))
-{
-}
-
-Ship::Ship(CollisionFilter* collisionFilter):
-    WorldObject(collisionFilter),
+    WorldObject(),
     m_character(new Character(*this, nullptr)),
     m_boardComputer(new BoardComputer(this)),
     m_squadLogic(new SquadLogic(*this)),

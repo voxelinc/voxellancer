@@ -13,16 +13,9 @@
 #include "voxel/voxel.h"
 #include "worldobjectcomponents.h"
 
-
-WorldObject::WorldObject():
-    WorldObject(new CollisionFilter(this), 1.0f)
-{
-
-}
-
-WorldObject::WorldObject(CollisionFilter* collisionFilter, float scale):
-    VoxelCluster(scale),
-    m_physics(new Physics(*this, scale)),
+WorldObject::WorldObject() :
+    VoxelCluster(1.0f),
+    m_physics(new Physics(*this, 1.0f)),
     m_collisionDetector(new CollisionDetector(*this)),
     m_objectInfo(new ObjectInfo()),
     m_components(new WorldObjectComponents(this)),
@@ -30,9 +23,30 @@ WorldObject::WorldObject(CollisionFilter* collisionFilter, float scale):
     m_collisionFieldOfDamage(glm::half_pi<float>()),
     m_handle(Handle<WorldObject>(this)),
     m_spawnState(SpawnState::None),
-    m_collisionFilter(collisionFilter)
+    m_collisionFilter(new CollisionFilter(this))
 {
 }
+
+WorldObject::WorldObject(const Transform& transform) :
+    WorldObject()
+{
+    setTransform(transform);
+}
+
+WorldObject::WorldObject(CollisionFilter* filter) :
+    VoxelCluster(1.0f),
+    m_physics(new Physics(*this, 1.0f)),
+    m_collisionDetector(new CollisionDetector(*this)),
+    m_objectInfo(new ObjectInfo()),
+    m_components(new WorldObjectComponents(this)),
+    m_crucialVoxel(nullptr),
+    m_collisionFieldOfDamage(glm::half_pi<float>()),
+    m_handle(Handle<WorldObject>(this)),
+    m_spawnState(SpawnState::None),
+    m_collisionFilter(filter)
+{
+}
+
 
 WorldObject::~WorldObject() {
      m_handle.invalidate();
@@ -112,7 +126,8 @@ void WorldObject::removeVoxel(Voxel* voxel) {
     voxel->onRemoval();
 
     if (voxel == m_crucialVoxel) {
-        m_crucialVoxel = nullptr;  // do spectacular stuff like an explosion
+        m_crucialVoxel = nullptr;
+        m_crucialVoxelDestroyed = true;
     }
 
     m_collisionDetector->removeVoxel(voxel);
@@ -133,7 +148,16 @@ Voxel* WorldObject::crucialVoxel() {
 }
 
 void WorldObject::setCrucialVoxel(const glm::ivec3& cell) {
-    m_crucialVoxel = voxel(cell);
+    if (m_crucialVoxel == nullptr) {
+        m_crucialVoxel = voxel(cell);
+        m_crucialVoxelDestroyed = false;
+    } else {
+        assert(false); // there may only be one cruicialVoxel
+    }
+}
+
+bool WorldObject::crucialVoxelDestroyed(){
+    return m_crucialVoxelDestroyed;
 }
 
 void WorldObject::onCollision() {

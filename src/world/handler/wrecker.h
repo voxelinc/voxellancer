@@ -1,20 +1,24 @@
-//#pragma once
-//
-//#include <list>
-//
-//class WorldObject;
-//
-//
-//class Wrecker
-//{
-//public:
-//    void detectWreckages(std::list<WorldObject*> &modifiedVoxelClusters);
-//    //void applyOnWreckageHooks();
-//    std::list<WorldObject*> &wreckages();
-//    std::list<WorldObject*> &recycled();
-//
-//protected:
-//    std::list<WorldObject*> m_wreckages;
-//    std::list<WorldObject*> m_recycled;
-//};
-//
+#pragma once
+
+#include <list>
+
+class WorldObject;
+class WorldObjectModification;
+
+
+class Wrecker
+{
+public:
+    void detectWreckedObjects(std::list<WorldObjectModification>& worldObjectModifications);
+    void applyOnWreckageHooks();
+    std::list<WorldObject*> &wreckedObjects();
+    std::list<WorldObject*> &newWreckages();
+
+protected:
+    WorldObject* wreckFromObject(WorldObject* object);
+
+    std::list<WorldObject*> m_wreckedObjects;
+    std::list<WorldObject*> m_newWreckages;
+
+};
+
