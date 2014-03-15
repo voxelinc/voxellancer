@@ -30,4 +30,4 @@ codeblocks/
 **~
 **.orig
 .idea/
-doc/doxygen/
+doxygen/
