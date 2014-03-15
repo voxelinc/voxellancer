@@ -3,7 +3,7 @@
 # Example: source_group_by_path_function("${CMAKE_CURRENT_SOURCE_DIR}/src" 
 #   "\\.h$|\\.hpp$|\\.cpp$|\\.c$|\\.ui$|\\.qrc$" "Source Files" ${sources})
 
-function(source_group_by_path_function PARENT_PATH REGEX GROUP)
+function(source_group_by_path PARENT_PATH REGEX GROUP)
     foreach(FILENAME ${ARGN})
 
         get_filename_component(FILEPATH "${FILENAME}" REALPATH)
@@ -20,7 +20,7 @@ function(source_group_by_path_function PARENT_PATH REGEX GROUP)
 endfunction()
 
 
-macro(list_extract OUTPUT REGEX)
+function(list_extract OUTPUT REGEX)
 
     set(args ${ARGV})
 
@@ -35,4 +35,4 @@ macro(list_extract OUTPUT REGEX)
 
     endforeach()
 
-endmacro()
+endfunction()

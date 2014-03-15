@@ -24,7 +24,7 @@ m_currentPoint(m_points.begin()),
 m_fightTask(nullptr),
 m_leaderFlyTask(nullptr),
 m_defendRange(defendRange),
-m_collisionFilter(new CollisionFilter(nullptr))
+m_collisionFilter(new CollisionFilter(nullptr,0))
 {
 }
 

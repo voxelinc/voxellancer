@@ -85,7 +85,7 @@ void GameScenario::populateWorld() {
     leader->squadLogic()->joinSquad(squadB);
     m_world->god().scheduleSpawn(leader);
 
-    int lmember_count = 20;
+    int lmember_count = 10;
     for (int i = 0; i < lmember_count; i++) {
         Ship *follower = WorldObjectBuilder("piratelight").buildShip();
         follower->character()->setFaction(World::instance()->factionMatrix().pirateFaction());
@@ -98,13 +98,13 @@ void GameScenario::populateWorld() {
     }
 
     std::shared_ptr<Squad> squadC = std::make_shared<Squad>();
-    squadB->setTask(std::make_shared<DefendAreaTask>(*squadB,
+    squadC->setTask(std::make_shared<DefendAreaTask>(*squadC,
         std::list<glm::vec3>{ glm::vec3(500, 0, 500), glm::vec3(500, 0, -500),
         glm::vec3(-500, 0, -500), glm::vec3(-500, 0, 500) }, 500.0f));
 
-    Ship *leader2 = WorldObjectBuilder("pirategunboat").buildShip();
+    Ship *leader2 = WorldObjectBuilder("piratefrigatte").buildShip();
     leader2->character()->setFaction(World::instance()->factionMatrix().pirateFaction());
-    leader2->transform().setPosition(glm::vec3(100, -200, -1200));
+    leader2->transform().setPosition(glm::vec3(100, -200, -1000));
     leader2->objectInfo().setName("leader");
     leader2->objectInfo().setShowOnHud(true);
     leader2->objectInfo().setCanLockOn(true);
@@ -112,15 +112,15 @@ void GameScenario::populateWorld() {
     m_world->god().scheduleSpawn(leader2);
 
     int lmember_count2 = 5;
-    for (int i = 0; i < lmember_count; i++) {
-        Ship *follower = WorldObjectBuilder("piratefrigatte").buildShip();
+    for (int i = 0; i < lmember_count2; i++) {
+        Ship *follower = WorldObjectBuilder("pirategunboat").buildShip();
         follower->character()->setFaction(World::instance()->factionMatrix().pirateFaction());
-        follower->transform().setPosition(glm::vec3(100 * (-lmember_count / 2.0f + i), -200, -1200));
+        follower->transform().setPosition(glm::vec3(200 * (-lmember_count / 2.0f + i), -200, -1000));
         follower->objectInfo().setName("member");
         follower->objectInfo().setShowOnHud(true);
         follower->objectInfo().setCanLockOn(true);
-        follower->squadLogic()->joinSquadOf(leader);
-        m_world->god().scheduleSpawn(leader2);
+        follower->squadLogic()->joinSquadOf(leader2);
+        m_world->god().scheduleSpawn(follower);
     }
 
     Ship *testCluster = WorldObjectBuilder("f302").buildShip();
