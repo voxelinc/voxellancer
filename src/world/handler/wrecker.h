@@ -10,7 +10,6 @@ class Wrecker
 {
 public:
     void detectWreckedObjects(std::list<WorldObjectModification>& worldObjectModifications);
-    void applyOnWreckageHooks();
     std::list<WorldObject*> &wreckedObjects();
     std::list<WorldObject*> &newWreckages();
 

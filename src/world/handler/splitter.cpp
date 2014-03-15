@@ -34,9 +34,6 @@ WorldObject* Splitter::createWorldObjectFromSplitOff(std::shared_ptr<SplitData> 
     worldObject = new WorldObject(transform);
 
     worldObject->objectInfo().setName(split->exWorldObject()->objectInfo().name() + " - splitoff");
-    worldObject->objectInfo().setCanLockOn(false);
-    worldObject->objectInfo().setShowOnHud(false);
-
     worldObject->physics().setSpeed(worldObject->physics().speed());
 
     for(Voxel *voxel : split->splitOffVoxels()) {
