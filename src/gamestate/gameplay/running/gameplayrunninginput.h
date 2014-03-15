@@ -54,7 +54,6 @@ protected:
     float getInputValue(InputMapping mapping);
 
     void addActionsToVector();
-    void setupJoystickControls();
     void retrieveInputValues();
 
     float m_currentTimePressed;

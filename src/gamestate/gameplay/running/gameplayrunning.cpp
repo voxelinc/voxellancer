@@ -5,6 +5,7 @@
 #include "gameplayrunninginput.h"
 
 #include "camera/camerahead.h"
+#include "camera/cameradolly.h"
 #include "world/world.h"
 #include "player.h"
 #include "sound/soundmanager.h"
@@ -43,6 +44,7 @@ void GamePlayRunning::update(float deltaSec) {
 void GamePlayRunning::onEntered() {
     GameState::onEntered();
     m_gamePlay->soundManager().activate();
+    m_gamePlay->player().cameraHead().cameraDolly()->setInertia(10.0f, 10.0f);
 }
 
 void GamePlayRunning::onLeft() {

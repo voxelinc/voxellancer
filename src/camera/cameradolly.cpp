@@ -34,3 +34,7 @@ void CameraDolly::update(float deltaSec) {
     }
 }
 
+void CameraDolly::setInertia(float directional, float angular) {
+    m_directionalInertia = directional;
+    m_angularInertia = angular;
+}

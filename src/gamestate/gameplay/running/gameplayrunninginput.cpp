@@ -377,11 +377,3 @@ void GamePlayRunningInput::placeCrossHair(double winX, double winY) {
     glfwGetWindowSize(glfwGetCurrentContext(), &width, &height);
     m_player->hud().setCrossHairOffset(glm::vec2((winX - (width/2))/(width/2), -(winY - (height/2))/(height/2)));
 }
-
-SecondaryInputValues::SecondaryInputValues() {
-    buttonCnt = 0;
-    axisCnt = 0;
-    buttonValues = glfwGetJoystickButtons(GLFW_JOYSTICK_1, &buttonCnt);
-    axisValues = glfwGetJoystickAxes(GLFW_JOYSTICK_1, &axisCnt);
-}
-

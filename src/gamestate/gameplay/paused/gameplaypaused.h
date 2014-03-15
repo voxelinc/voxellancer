@@ -1,6 +1,7 @@
 #pragma once
 
 #include "gamestate/gamestate.h"
+#include "../gameplayfreecaminput.h"
 
 #include "utils/statemachine/keytrigger.h"
 
@@ -23,5 +24,7 @@ protected:
     GamePlay* m_gamePlay;
 
     KeyTrigger m_continueTrigger;
+
+    std::unique_ptr<GamePlayFreecamInput> m_input;
 };
 
