@@ -10,8 +10,12 @@ protected:
     virtual void initialize();
 
     apikey apiCreateSquad(apikey leader);
+    int apiJoinSquad(apikey squad, apikey ship);
+    
     int apiCreatePatrolWaypointsTask(apikey squad);
     int apiAddPatrolwWaypointPoint(apikey task, const glm::vec3& point);
-    int apiJoinSquad(apikey squad, apikey ship);
+
+    int apiCreateDefendAreaTask(apikey squad, const glm::vec3& point, float range);
+    int apiAddDefendAreaPoint(apikey task, const glm::vec3& point);
 
 };

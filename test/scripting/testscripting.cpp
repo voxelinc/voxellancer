@@ -27,6 +27,7 @@
 #include "world/world.h"
 #include "worldobject/worldobject.h"
 #include "worldobject/ship.h"
+#include "ai/grouptasks/defendareatask.h"
 
 
 using namespace bandit;
@@ -256,6 +257,40 @@ go_bandit([](){
 
             PatrolWaypointsTask* task = dynamic_cast<PatrolWaypointsTask*>(ship->squadLogic()->squad()->task().get());
             AssertThat(*task->currentTargetPoint(), EqualsWithDelta(glm::vec3(1,2,3), 0.001f));
+        });
+
+        it("can create defend area task with squads", [&]() {
+            Ship* ship = new Ship();
+            scriptEngine->registerScriptable(ship);
+            World::instance()->player().setShip(ship);
+            script->loadString(R"( 
+                squad = createSquad(playerShip())
+                createDefendAreaTask(squad, vec3(1,2,3), 3.14)
+            )");
+
+            DefendAreaTask* defendTask = dynamic_cast<DefendAreaTask*>(ship->squadLogic()->squad()->task().get());
+
+            AssertThat(defendTask != nullptr, IsTrue());
+            AssertThat(defendTask->points().front(), EqualsWithDelta(glm::vec3(1, 2, 3), 0.001f));
+            AssertThat(defendTask->range(), EqualsWithDelta(3.14f, 0.001f));
+
+        });
+
+        it("can add waypoints to defend area task", [&]() {
+            Ship* ship = new Ship();
+            scriptEngine->registerScriptable(ship);
+            World::instance()->player().setShip(ship);
+            script->loadString(R"( 
+                squad = createSquad(playerShip())
+                task = createDefendAreaTask(squad, vec3(1,2,3), 3.14)
+                addDefendAreaPoint(task, vec3(3,4,5))
+            )");
+
+            DefendAreaTask* task = dynamic_cast<DefendAreaTask*>(ship->squadLogic()->squad()->task().get());
+            
+            AssertThat(task->points().size(), Equals(2));
+            AssertThat(task->points().front(), EqualsWithDelta(glm::vec3(1, 2, 3), 0.001f));
+            AssertThat(task->points().back(), EqualsWithDelta(glm::vec3(3, 4, 5), 0.001f));
         });
     });
 });

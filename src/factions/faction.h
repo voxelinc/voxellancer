@@ -15,6 +15,8 @@ public:
     void setPrintName(const std::string& printName);
     const std::string& printName() const;
     
+    FactionRelation& relationTo(Faction& other);
+
 protected:
     std::string m_key;
     std::string m_printName;
