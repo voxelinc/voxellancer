@@ -16,7 +16,8 @@
 
 MonoView::MonoView(const Viewport& viewport):
     View(viewport),
-    m_camera(new Camera(m_viewport.width(), m_viewport.height()))
+    m_camera(new Camera(m_viewport.width(), m_viewport.height())),
+    m_samplingFactor("vfx.samplingFactor")
 {
 
 }
@@ -39,11 +40,15 @@ float MonoView::aspectRatio() const {
 }
 
 void MonoView::draw(const Scene& scene, const CameraHead& cameraHead) {
-    glViewport(m_viewport.x(), m_viewport.y(), m_viewport.width(), m_viewport.height());
+    int sampleWidth = static_cast<int>(m_viewport.width() * m_samplingFactor);
+    int sampleHeight = static_cast<int>(m_viewport.height() * m_samplingFactor);
 
+    glViewport(m_viewport.x(), m_viewport.y(), sampleWidth, sampleHeight);
+
+    m_camera->setViewport(glm::ivec2(sampleWidth, sampleHeight));
     m_camera->setPosition(cameraHead.position());
     m_camera->setOrientation(cameraHead.orientation());
 
-    scene.draw(*m_camera, glow::FrameBufferObject::defaultFBO());
+    scene.draw(*m_camera, glow::FrameBufferObject::defaultFBO(), m_viewport);
 }
 

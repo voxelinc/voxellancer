@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 
 #include "eyeside.h"
+#include "property/property.h"
 
 namespace glow {
     class FrameBufferObject;
@@ -33,6 +34,7 @@ public:
 protected:
     glm::vec3 m_offset;
     EyeSide m_side;
+    Property<float> m_samplingFactor;
 
     float m_distortionScale;
     glm::ivec2 m_textureSize;
