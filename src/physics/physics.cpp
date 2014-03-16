@@ -98,10 +98,10 @@ void Physics::updateSpeed(float deltaSec) {
     glm::vec3 directional(m_speed.directional());
     glm::vec3 angular(m_speed.angular());
 
-    directional *= (1.0f - m_directionalDampening * deltaSec);
+    directional *= (1.0f - glm::min(1.0f, m_directionalDampening * deltaSec));
     directional += m_acceleration.directional() * deltaSec;
 
-    angular *= (1.0f - m_angularDampening * deltaSec);
+    angular *= (1.0f - glm::min(1.0f, m_angularDampening * deltaSec));
     angular += m_acceleration.angular() * deltaSec;
 
     m_speed = Speed(directional, angular);

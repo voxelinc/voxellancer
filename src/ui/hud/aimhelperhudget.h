@@ -31,7 +31,7 @@ public:
 
     virtual void update(float deltaSec) override;
     virtual void draw();
-
+    virtual bool isAt(const Ray& ray) const override;
 
 protected:
     std::unique_ptr<AimHelperHudgetVoxels> m_voxels;

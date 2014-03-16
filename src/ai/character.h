@@ -19,7 +19,6 @@ public:
 
     virtual void update(float deltaSec);
 
-
 protected:
     Ship& m_ship;
     Faction* m_faction;

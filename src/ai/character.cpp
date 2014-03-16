@@ -39,4 +39,3 @@ void Character::update(float deltaSec) {
         m_task->update(deltaSec);
     }
 }
-

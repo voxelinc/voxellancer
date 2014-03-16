@@ -17,6 +17,8 @@ public:
     virtual ~EngineTrailGenerator();
 
     void setLifetime(float lifetime);
+    void setColor(int color);
+    void setEmissiveness(float emissiveness);
 
     void update(float deltaSec);
 
