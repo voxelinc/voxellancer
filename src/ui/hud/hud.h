@@ -11,12 +11,7 @@
 #include "property/property.h"
 #include "worldobject/handle/handle.h"
 #include "callback.h"
-
-enum class ClickType {
-    None,
-    Selection
-};
-
+#include "ui/clicktype.h"
 
 class Player;
 class Hudget;

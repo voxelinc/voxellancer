@@ -5,6 +5,7 @@
 
 #include <glow/Program.hpp>
 #include <glow/VertexArrayObject.h>
+#include <glow/Texture.h>
 #include <glow/Buffer.h>
 #include <glow/Shader.h>
 #include <glow/VertexAttributeBinding.h>
@@ -26,12 +27,12 @@ void Skybox::initialize() {
     /* Texture */
     m_texture = new glow::Texture(GL_TEXTURE_CUBE_MAP);
     if (!DdsTexture::loadImageCube(m_texture,
-        "data/gfx/skybox/nebula_1024_right1.dds",
-        "data/gfx/skybox/nebula_1024_left2.dds",
-        "data/gfx/skybox/nebula_1024_top3.dds",
-        "data/gfx/skybox/nebula_1024_bottom4.dds",
-        "data/gfx/skybox/nebula_1024_front5.dds",
-        "data/gfx/skybox/nebula_1024_back6.dds")) {
+        "data/textures/skybox/nebula_1024_right1.dds",
+        "data/textures/skybox/nebula_1024_left2.dds",
+        "data/textures/skybox/nebula_1024_top3.dds",
+        "data/textures/skybox/nebula_1024_bottom4.dds",
+        "data/textures/skybox/nebula_1024_front5.dds",
+        "data/textures/skybox/nebula_1024_back6.dds")) {
         throw std::runtime_error("Skybox textures not found. Check working directory?");
     }
     m_texture->setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);

@@ -1,5 +1,5 @@
 
-enum ClickType;
+#include "ui/clicktype.h"
 
 class Callback {
 public:

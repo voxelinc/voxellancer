@@ -11,8 +11,7 @@ class Callback;
 
 class ButtonHudget : public TextFieldHudget {
 public:
-    ButtonHudget(HUD* hud, std::string content, glm::vec3 direction);
-    ButtonHudget(HUD* hud, std::string content, glm::vec3 direction, float scale);
+    ButtonHudget(HUD* hud, glm::vec3 direction, float scale = 0.5f, std::string content = "", FontSize fontSize = FontSize::SIZE5x7);
     virtual ~ButtonHudget();
 
     virtual void update(float deltaSec) override;

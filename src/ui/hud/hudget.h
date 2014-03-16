@@ -4,8 +4,8 @@
 #include <glm/gtx/quaternion.hpp>
 
 #include "geometry/ray.h"
+#include "ui/clicktype.h"
 
-enum class ClickType;
 class HUD;
 
 

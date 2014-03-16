@@ -3,18 +3,10 @@
 #include "hud.h"
 #include "textfieldhudgetvoxels.h"
 
-
-TextFieldHudget::TextFieldHudget(HUD* hud, std::string content, glm::vec3 direction) :
+TextFieldHudget::TextFieldHudget(HUD* hud, glm::vec3 direction, float scale, std::string content, FontSize size) :
 Hudget(hud),
 m_content(content),
-m_voxels(new TextFieldHudgetVoxels(this, content, direction, 0.04f)) {
-    m_direction = direction;
-}
-
-TextFieldHudget::TextFieldHudget(HUD* hud, std::string content, glm::vec3 direction, float scale) :
-Hudget(hud),
-m_content(content),
-m_voxels(new TextFieldHudgetVoxels(this, content, direction, scale)) {
+m_voxels(new TextFieldHudgetVoxels(this, direction, scale, content, size)) {
     m_direction = direction;
 }
 

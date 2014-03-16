@@ -72,6 +72,8 @@ Acceleration Engine::currentAcceleration() const {
 }
 
 void Engine::setupTrail() {
-    m_trailGenerator->setLifetime(Property<float>(equipmentKey() + ".trail.lifetime"));
+    m_trailGenerator->setLifetime(Property<float>::get(equipmentKey() + ".trail.lifetime", 1.0f));
+    m_trailGenerator->setColor(Property<uint32_t>::get(equipmentKey() + ".trail.color", 0x6666FF));
+    m_trailGenerator->setEmissiveness(Property<float>::get(equipmentKey() + ".trail.emissiveness", 0.4f));
 }
 

@@ -47,8 +47,8 @@ HUD::HUD(Player* player, Viewer* viewer):
     m_crossHair(new CrossHair(this)),
     m_aimHelper(new AimHelperHudget(this)),
     m_scanner(new WorldTreeScanner()),
-    m_targetName(new ButtonHudget(this, "", glm::normalize(glm::vec3(0, -1, -2)))),
-    m_speedLabel(new TextFieldHudget(this, "", glm::normalize(glm::vec3(1, -1, -2)), 0.03f)),
+    m_targetName(new ButtonHudget(this, glm::normalize(glm::vec3(0, -1.1f, -2)), 0.025f, "")),
+    m_speedLabel(new TextFieldHudget(this, glm::normalize(glm::vec3(1.5f, -1.1f, -2)), 0.020f, "")),
     m_target(nullptr)
 {
     m_scanner->setScanRadius(1050.0f);
@@ -145,8 +145,10 @@ void HUD::update(float deltaSec) {
         m_targetName->setContent("no target");
     }
 
-    if (m_player) {
+    if (m_player->ship()) {
         m_speedLabel->setContent(std::to_string((int)(glm::length(m_player->ship()->physics().speed().directional()))));
+    } else {
+        m_speedLabel->setContent("-");
     }
 
     for (Hudget* hudget : m_hudgets) {

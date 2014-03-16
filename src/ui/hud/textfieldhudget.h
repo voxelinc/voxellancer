@@ -4,14 +4,14 @@
 #include <string>
 
 #include "hudget.h"
+#include "ui/voxelfontconstants.h"
 
 class TextFieldHudgetVoxels;
 
 
 class TextFieldHudget : public Hudget {
 public:
-    TextFieldHudget(HUD* hud, std::string content, glm::vec3 direction);
-    TextFieldHudget(HUD* hud, std::string content, glm::vec3 direction, float scale);
+    TextFieldHudget(HUD* hud, glm::vec3 direction, float scale = 0.5f, std::string content = "", FontSize fontSize = FontSize::SIZE5x7);
     virtual ~TextFieldHudget();
 
     void setContent(std::string content);

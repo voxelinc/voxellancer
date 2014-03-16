@@ -4,13 +4,8 @@
 #include "buttonhudgetvoxels.h"
 #include "callback.h"
 
-ButtonHudget::ButtonHudget(HUD* hud, std::string content, glm::vec3 direction) :
-TextFieldHudget(hud,content,direction),
-m_voxels(new ButtonHudgetVoxels(this, content, direction, 0.04f)) {
-}
-
-ButtonHudget::ButtonHudget(HUD* hud, std::string content, glm::vec3 direction, float scale) :
-TextFieldHudget(hud, content, direction, scale),
+ButtonHudget::ButtonHudget(HUD* hud, glm::vec3 direction, float scale = 0.5f, std::string content = "", FontSize fontSize = FontSize::SIZE5x7) :
+TextFieldHudget(hud, direction,scale,content,fontSize),
 m_voxels(new ButtonHudgetVoxels(this, content, direction, scale)) {
 }
 
