@@ -1,5 +1,5 @@
 #Lua API bindings
-generated from 01772b3
+generated from 66949b7
 
 
 ## aibindings.h
@@ -29,9 +29,11 @@ apikey onAABBEntered(apikey worldObject, const glm::vec3& llf, const glm::vec3& 
 ## squadbindings.h
 ```c
 apikey createSquad(apikey leader);
+int joinSquad(apikey squad, apikey ship);
 int createPatrolWaypointsTask(apikey squad);
 int addPatrolwWaypointPoint(apikey task, const glm::vec3& point);
-int joinSquad(apikey squad, apikey ship);
+int createDefendAreaTask(apikey squad, const glm::vec3& point, float range);
+int addDefendAreaPoint(apikey task, const glm::vec3& point);
 ```
 
 ## worldobjectbindings.h
