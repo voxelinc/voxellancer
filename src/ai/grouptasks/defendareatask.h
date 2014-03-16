@@ -18,6 +18,11 @@ public:
     DefendAreaTask(Squad& squad, std::list<glm::vec3> points, float defendRange);
     ~DefendAreaTask();
 
+    void addPoint(const glm::vec3& point);
+    
+    const std::list<glm::vec3>& points();
+    float range();
+
     virtual void update(float deltaSec) override;
 
 protected:

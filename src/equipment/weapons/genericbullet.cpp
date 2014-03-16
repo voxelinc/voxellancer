@@ -1,7 +1,5 @@
 #include "genericbullet.h"
 
-#include <iostream>
-
 #include "voxeleffect/voxelexplosiongenerator.h"
 
 

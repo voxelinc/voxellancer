@@ -13,8 +13,10 @@
 
 #include "resource/worldobjectbuilder.h"
 #include "worldobject/ship.h"
+#include "scripting/scriptengine.h"
 #include "ui/objectinfo.h"
 #include "sound/soundmanager.h"
+#include "world/god.h"
 #include "world/world.h"
 #include "world/god.h"
 #include "player.h"
@@ -34,6 +36,8 @@ void BaseScenario::load() {
     {
         glowutils::AutoTimer timer("Populating World took");
         populateWorld();
+        m_world->god().spawn();
+        m_world->scriptEngine().start();
     }
 }
 
@@ -62,3 +66,4 @@ void BaseScenario::populateWorld() {
     m_gamePlay->player().setShip(playerShip);
     m_world->god().spawn();
 }
+

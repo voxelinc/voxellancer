@@ -1,7 +1,5 @@
 #include "physics.h"
 
-#include <iostream>
-
 #include <glm/gtx/quaternion.hpp>
 
 #include "geometry/transform.h"

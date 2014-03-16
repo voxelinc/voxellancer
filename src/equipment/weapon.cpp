@@ -1,7 +1,6 @@
 #include "weapon.h"
 
 #include <algorithm>
-#include <iostream>
 
 #include "utils/geometryhelper.h"
 

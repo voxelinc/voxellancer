@@ -2,7 +2,8 @@
 
 #include <glm/glm.hpp>
 
-#include "worldobject/handle/handle.h"
+#include "utils/handle/handle.h"
+
 
 class WorldObject;
 

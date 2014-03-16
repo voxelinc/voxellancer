@@ -1,6 +1,5 @@
 #include "aigrouptask.h"
 
-
 #include "ai/squad.h"
 #include "worldobject/ship.h"
 #include "ai/character.h"

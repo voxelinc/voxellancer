@@ -1,7 +1,5 @@
 #include "stereoview.h"
 
-#include <iostream>
-
 #include <GL/glew.h>
 
 #include "camera/camera.h"

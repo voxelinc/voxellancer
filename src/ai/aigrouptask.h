@@ -2,12 +2,14 @@
 
 #include <memory>
 
+#include "scripting/scriptable.h"
+
 
 class Squad;
 class AiTask;
 class Ship;
 
-class AiGroupTask {
+class AiGroupTask : public Scriptable {
 public:
     AiGroupTask(Squad& squad);
 

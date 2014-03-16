@@ -17,8 +17,6 @@
 #include "equipment/weapons/gun.h"
 
 #include "factions/factionmatrix.h"
-#include "factions/policefaction.h"
-#include "factions/piratefaction.h"
 
 #include "resource/worldobjectbuilder.h"
 
@@ -218,6 +216,5 @@ void GameScenario::createArmada() {
         follower->character()->setFaction(World::instance()->factionMatrix().policeFaction());
         m_world->god().scheduleSpawn(follower);
     }
-
 }
 

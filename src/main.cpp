@@ -88,6 +88,9 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
         (glfwGetKey(window, GLFW_KEY_RIGHT_ALT) == GLFW_PRESS))) {
         toggleFullScreen();
     }
+    if (key >= GLFW_KEY_F1 && key <= GLFW_KEY_F4 && action == GLFW_PRESS) {
+        game->gamePlay().loadScenario(key - GLFW_KEY_F1);
+    }
     if (key == GLFW_KEY_F5 && action == GLFW_PRESS) {
         glowutils::File::reloadAll();
     }
@@ -96,9 +99,6 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
     }
     if (key >= GLFW_KEY_1 && key <= GLFW_KEY_9 && action == GLFW_PRESS) {
         game->gamePlay().scene().setOutputBuffer(key-GLFW_KEY_1);
-    }
-    if (key >= GLFW_KEY_F1 && key <= GLFW_KEY_F4 && action == GLFW_PRESS) {
-        game->gamePlay().loadScenario(key - GLFW_KEY_F1);
     }
 
 	game->gamePlay().running().input().keyCallback(key, scancode, action, mods);

@@ -7,7 +7,8 @@
 
 FlyToTask::FlyToTask(BoardComputer* boardComputer) :
     AiTask(boardComputer),
-    m_targetPoint(boardComputer->worldObject()->transform().position())
+    m_targetPoint(boardComputer->worldObject()->transform().position()),
+    m_minDistance(1.0f)
 {
 }
 
@@ -20,5 +21,9 @@ void FlyToTask::update(float deltaSec) {
     glm::vec3 currentTargetPoint = SimpleWayfind::calculateTravelPoint(*boardComputer()->worldObject(), m_targetPoint);
     boardComputer()->rotateTo(currentTargetPoint, m_targetUp);
     boardComputer()->moveTo(currentTargetPoint);
+}
+
+bool FlyToTask::isFinished() {
+    return glm::length(boardComputer()->worldObject()->position() - m_targetPoint) < m_minDistance;
 }
 
