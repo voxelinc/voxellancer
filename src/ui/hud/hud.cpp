@@ -143,8 +143,10 @@ void HUD::update(float deltaSec) {
         m_targetName->setContent("no target");
     }
 
-    if (m_player) {
+    if (m_player->ship()) {
         m_speedLabel->setContent(std::to_string((int)(glm::length(m_player->ship()->physics().speed().directional()))));
+    } else {
+        m_speedLabel->setContent("-");
     }
 
     for (Hudget* hudget : m_hudgets) {
