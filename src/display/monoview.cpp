@@ -17,7 +17,7 @@
 MonoView::MonoView(const Viewport& viewport):
     View(viewport),
     m_camera(new Camera(m_viewport.width(), m_viewport.height())),
-    m_samplingFactor("vfx.samplingFactor")
+    m_antialiasing("vfx.antialiasing")
 {
 
 }
@@ -40,8 +40,12 @@ float MonoView::aspectRatio() const {
 }
 
 void MonoView::draw(const Scene& scene, const CameraHead& cameraHead) {
-    int sampleWidth = static_cast<int>(m_viewport.width() * m_samplingFactor);
-    int sampleHeight = static_cast<int>(m_viewport.height() * m_samplingFactor);
+    int samplingFactor = 1;
+    if (m_antialiasing.get() == "ssaa") {
+        samplingFactor = 2;
+    }
+    int sampleWidth = static_cast<int>(m_viewport.width() * samplingFactor);
+    int sampleHeight = static_cast<int>(m_viewport.height() * samplingFactor);
 
     glViewport(m_viewport.x(), m_viewport.y(), sampleWidth, sampleHeight);
 

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include <memory>
 
 #include <glm/glm.hpp>
@@ -34,7 +35,7 @@ public:
 protected:
     glm::vec3 m_offset;
     EyeSide m_side;
-    Property<float> m_samplingFactor;
+    Property<std::string> m_antialiasing;
 
     float m_distortionScale;
     glm::ivec2 m_textureSize;

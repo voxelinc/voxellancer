@@ -17,7 +17,7 @@ StereoViewEye::StereoViewEye(const glm::ivec2& viewportResolution, const StereoR
     m_camera(new Camera(viewportResolution.x, viewportResolution.y)),
     m_distortionScale(stereoRenderInfo.distortionScale()),
     m_fbo(new FrameBuffer()),
-    m_samplingFactor("vfx.samplingFactor")
+    m_antialiasing("vfx.antialiasing") 
 {
     setViewportResolution(viewportResolution);
 
@@ -45,8 +45,12 @@ FrameBuffer& StereoViewEye::fbo() {
 
 
 void StereoViewEye::draw(const Scene& scene, const CameraHead& cameraHead) {
-    int sampleWidth = static_cast<int>(m_textureSize.x * m_samplingFactor);
-    int sampleHeight = static_cast<int>(m_textureSize.y * m_samplingFactor);
+    int samplingFactor = 1;
+    if (m_antialiasing.get() == "ssaa") {
+        samplingFactor = 2;
+    }
+    int sampleWidth = static_cast<int>(m_textureSize.x * samplingFactor);
+    int sampleHeight = static_cast<int>(m_textureSize.y * samplingFactor);
 
     m_camera->setViewport(glm::ivec2(sampleWidth, sampleHeight));
     m_camera->setPosition(cameraHead.position() + cameraHead.orientation() * m_offset);

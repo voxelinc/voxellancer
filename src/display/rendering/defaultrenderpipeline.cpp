@@ -8,7 +8,7 @@
 
 DefaultRenderPipeline::DefaultRenderPipeline() :
     RenderPipeline("defaultpipeline"),
-    m_useFxaa("vfx.fxaa"),
+    m_antialiasing("vfx.antialiasing"),
     m_fxaa(nullptr),
     m_finalization(nullptr),
     m_quad(std::make_shared<ScreenQuad>())
@@ -19,9 +19,10 @@ DefaultRenderPipeline::DefaultRenderPipeline() :
 void DefaultRenderPipeline::apply(FrameBuffer& frameBuffer, const RenderMetaData& metadata) {
     RenderPipeline::apply(frameBuffer, metadata);
     
-    if (m_useFxaa != m_fxaa->isEnabled()) {
-        m_fxaa->setEnabled(m_useFxaa);
-        if (m_useFxaa) {
+    bool useFxaa = m_antialiasing.get() == "fxaa";
+    if (useFxaa != m_fxaa->isEnabled()) {
+        m_fxaa->setEnabled(useFxaa);
+        if (useFxaa) { // rewire buffer for fxaa
             m_finalization->setInputMapping({ { "color", BufferNames::FXAA }, { "bloom", BufferNames::Bloom } });
         } else {
             m_finalization->setInputMapping({ { "color", BufferNames::Color }, { "bloom", BufferNames::Bloom } });

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include <memory>
 
 #include "view.h"
@@ -25,6 +26,6 @@ public:
 
 protected:
     std::unique_ptr<Camera> m_camera;
-    Property<float> m_samplingFactor;
+    Property<std::string> m_antialiasing;
 };
 
