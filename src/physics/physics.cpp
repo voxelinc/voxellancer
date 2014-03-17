@@ -22,6 +22,7 @@ Physics::Physics(WorldObject& worldObject, float scale):
     m_directionalDampening(Property<float>("physics.globalDirectionalDampening")),
     m_angularDampening(Property<float>("physics.globalAngularDampening")),
     m_mass(0),
+    m_maxMass(0),
     m_accumulatedMassVec(0.0f, 0.0f, 0.0f),
     m_worldObject(worldObject)
 {
@@ -64,6 +65,10 @@ float Physics::mass() const {
     return m_mass;
 }
 
+float Physics::maxMass() const {
+    return m_maxMass;
+}
+
 const Transform Physics::projectedTransformIn(float deltaSec){
     Transform targetTransform(m_worldObject.transform());
 
@@ -88,6 +93,9 @@ std::list<VoxelCollision> &Physics::move(float deltaSec) {
 
 void Physics::addVoxel(Voxel* voxel) {
     voxelChanged(voxel, true);
+    if (m_mass > m_maxMass) {
+        m_maxMass = m_mass;
+    }
 }
 
 void Physics::removeVoxel(Voxel* voxel) {
