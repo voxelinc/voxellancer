@@ -74,7 +74,7 @@ void GamePlayScene::drawGame(const Camera& camera) const {
     for (WorldObject* worldObject : World::instance()->worldObjects()) {
         VoxelRenderer::instance()->draw(*worldObject);
     }
-    //m_gamePlay.player().hud().draw();
+    m_gamePlay.player().hud().draw();
     m_voxelRenderer->afterDraw();
 
     World::instance()->particleEngine().draw(camera);
