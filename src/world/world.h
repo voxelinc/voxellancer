@@ -12,6 +12,8 @@ class VoxelParticleEngine;
 class WorldObject;
 class WorldLogic;
 class WorldTree;
+class TextFieldHudget;
+class HUD;
 
 class World {
 public:
@@ -35,6 +37,8 @@ public:
     static World *instance();
     static void reset();
 
+    void showText(std::string text, HUD* hud, float lifeTime = 2.0f);
+
 
 protected:
     friend class God;
@@ -54,6 +58,11 @@ protected:
     std::unique_ptr<God> m_god;
     std::unique_ptr<VoxelParticleEngine> m_particleEngine;
     std::unique_ptr<FactionMatrix> m_factionMatrix;
+
+    std::unique_ptr<TextFieldHudget> m_textHudget;
+    float m_textLifeTime;
+    float m_textTimer;
+    
 
     std::unordered_set<WorldObject*> m_worldObjects;
     std::unordered_set<Ship*> m_ships;

@@ -6,9 +6,11 @@
 #include "voxel/voxelrenderer.h"
 
 
-ButtonHudgetVoxels::ButtonHudgetVoxels(ButtonHudget* buttonHudget, std::string content, glm::vec3 direction, float scale) :
-TextFieldHudgetVoxels(buttonHudget, content, direction, scale),
-m_buttonVoxels(new VoxelCluster(scale))
+ButtonHudgetVoxels::ButtonHudgetVoxels(ButtonHudget* buttonHudget, glm::vec3 direction, float scale, std::string content, FontSize fontSize, bool bounds) :
+TextFieldHudgetVoxels(buttonHudget, direction, scale, content, fontSize),
+m_buttonVoxels(new VoxelCluster(scale)),
+m_bounds(bounds),
+m_hudget(buttonHudget)
 {
     setContent(content);
 }
@@ -16,25 +18,27 @@ m_buttonVoxels(new VoxelCluster(scale))
 ButtonHudgetVoxels::~ButtonHudgetVoxels() = default;
 
 void ButtonHudgetVoxels::updateBounds() {
-    delete m_buttonVoxels;
-    m_buttonVoxels = (new VoxelCluster(m_scale));
+    m_buttonVoxels.reset(new VoxelCluster(m_scale));
     int width = (int)(m_width/m_scale)*m_content.size()+1;
-    int height = (int)(m_height/m_scale)*2+1;
+    int height = (int)(m_height/m_scale)*2;
     for (int i = 0; i < width; i++) {
         for (int j = 0; j < height; j++) {
             if (i == 0 || j == 0 || i == width - 1 || j == height - 1) {
                 m_buttonVoxels->addVoxel(new Voxel(glm::ivec3(i, j, 0), 0x0FF00F));
             } else {
-                // draw only bounds
+                m_buttonVoxels->addVoxel(new Voxel(glm::ivec3(i, j, 1), 0x17012D));
             }
         }
     }
 }
 
 void ButtonHudgetVoxels::draw() {
-    m_buttonVoxels->transform().setPosition(lowerLeft());
-    m_buttonVoxels->transform().setOrientation(m_hudget->worldOrientation(m_direction));
-    VoxelRenderer::instance()->draw(*m_buttonVoxels);
+    if (m_bounds) {
+        m_buttonVoxels->transform().setPosition(lowerRight());
+        m_buttonVoxels->transform().setOrientation(m_hudget->worldOrientation(TextFieldHudgetVoxels::m_direction));
+        m_buttonVoxels->transform().rotate(glm::angleAxis(glm::pi<float>(), glm::vec3(0, 1, 0)));
+        VoxelRenderer::instance()->draw(*m_buttonVoxels);
+    }
     TextFieldHudgetVoxels::draw();
 }
 

@@ -9,6 +9,9 @@
 #include "worldobject/ship.h"
 #include "worldobject/worldobject.h"
 
+#include "ui/hud/textfieldhudget.h"
+#include "ui/hud/hud.h"
+
 #include "skybox.h"
 
 #include "worldlogic.h"
@@ -24,8 +27,11 @@ World::World():
     m_god(new God(*this)),
     m_particleEngine(new VoxelParticleEngine()),
     m_factionMatrix(new FactionMatrix()),
-    m_deltaSec(0.0f)
+    m_deltaSec(0.0f),
+    m_textHudget(new TextFieldHudget(nullptr, glm::normalize(glm::vec3(0,0.05f,-1)),0.03f))
 {
+    m_textLifeTime = 0.0f;
+    m_textTimer = 0.0f;
 }
 
 World::~World() {
@@ -73,6 +79,11 @@ void World::update(float deltaSecs) {
     for (WorldObject *worldObject : m_worldObjects) {
         worldObject->update(deltaSecs);
     }
+
+    if (m_textTimer < m_textLifeTime) {
+        m_textTimer += deltaSecs;
+        m_textHudget->draw();
+    }
 }
 
 float World::deltaSec() const {
@@ -113,3 +124,8 @@ void World::removeWorldObject(WorldObject* worldObject) {
     }
 }
 
+void World::showText(std::string text, HUD* hud, float lifeTime) {
+    m_textHudget.reset(new TextFieldHudget(hud, glm::normalize(glm::vec3(0, 0.05f, -1)), 0.03f, text));
+    m_textLifeTime = lifeTime;
+    m_textTimer = 0;
+}

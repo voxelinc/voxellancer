@@ -11,11 +11,12 @@ class VoxelFont;
 
 class TextFieldHudgetVoxels{
 public:
-    TextFieldHudgetVoxels(TextFieldHudget* textFieldHudget, glm::vec3 direction, float scale = 0.5f, std::string content = "", FontSize fontSize = FontSize::SIZE5x7);
+    TextFieldHudgetVoxels(Hudget* textFieldHudget, glm::vec3 direction, float scale = 0.5f, std::string content = "", FontSize fontSize = FontSize::SIZE5x7);
+    ~TextFieldHudgetVoxels();
 
     virtual void setContent(std::string content);
 
-    //virtual void update(float deltaSec);
+
     virtual void draw();
 
     virtual bool isAt(const Ray& ray) const;
@@ -25,12 +26,12 @@ public:
     float scale();
 
 protected:
-    const glm::vec3 upperLeft() const;
-    const glm::vec3 lowerLeft() const;
-    const glm::vec3 upperRight() const;
-    const glm::vec3 lowerRight() const;
+    virtual const glm::vec3 upperLeft() const;
+    virtual const glm::vec3 lowerLeft() const;
+    virtual const glm::vec3 upperRight() const;
+    virtual const glm::vec3 lowerRight() const;
 
-    TextFieldHudget* m_hudget;
+    Hudget* m_hudget;
     glm::vec3 worldPosition()  const;
     glm::quat worldOrientation() const;
 

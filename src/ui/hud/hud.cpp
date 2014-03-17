@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <functional>
 
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
@@ -47,8 +48,9 @@ HUD::HUD(Player* player, Viewer* viewer):
     m_crossHair(new CrossHair(this)),
     m_aimHelper(new AimHelperHudget(this)),
     m_scanner(new WorldTreeScanner()),
-    m_targetName(new ButtonHudget(this, glm::normalize(glm::vec3(0, -1.1f, -2)), 0.025f, "")),
+    m_targetName(new TextFieldHudget(this, glm::normalize(glm::vec3(0, -1.1f, -2)), 0.025f, "")),
     m_speedLabel(new TextFieldHudget(this, glm::normalize(glm::vec3(1.5f, -1.1f, -2)), 0.020f, "")),
+    m_menuButton(new ButtonHudget(this, glm::normalize(glm::vec3(-1.5f, 1.1f, -2)), 0.01f, "MENU")),
     m_target(nullptr)
 {
     m_scanner->setScanRadius(1050.0f);
@@ -56,7 +58,9 @@ HUD::HUD(Player* player, Viewer* viewer):
     m_hudgets.push_back(m_aimHelper.get());
     m_hudgets.push_back(m_targetName.get());
     m_hudgets.push_back(m_speedLabel.get());
-    m_targetName->registerCallback(&HUD::helloFunction);
+    m_hudgets.push_back(m_menuButton.get());
+    std::function<void(ClickType clickType)> callbackFunction = std::bind(&HUD::helloFunction, this, std::placeholders::_1);
+    m_menuButton->registerCallback(callbackFunction);
 }
 
 HUD::~HUD() = default;
@@ -238,5 +242,5 @@ float HUD::fovx() const {
 }
 
 void HUD::helloFunction(ClickType clicktype) {
-    printf("callback");
+    World::instance()->showText("new Text", this);
 }
