@@ -9,10 +9,10 @@ class Ship;
 
 class Character {
 public:
-    Character(Ship& ship, Faction* faction);
+    Character(Ship& ship, Faction& faction);
 
-    Faction* faction();
-    void setFaction(Faction* faction);
+    Faction& faction();
+    void setFaction(Faction& faction);
 
     void setTask(std::shared_ptr<AiTask> task);
     std::shared_ptr<AiTask> task();

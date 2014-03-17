@@ -73,8 +73,9 @@ void Squad::onMemberLeave(Ship* member) {
         std::vector<Ship*>::iterator it = std::find(m_members.begin(), m_members.end(), member);
         assert(it != m_members.end());
         m_members.erase(it);
-        if (m_task)
+        if (m_task) {
             m_task->onMemberLeave(member);
+        }
     }
 }
 

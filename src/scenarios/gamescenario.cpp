@@ -17,8 +17,6 @@
 #include "equipment/weapons/gun.h"
 
 #include "factions/factionmatrix.h"
-#include "factions/policefaction.h"
-#include "factions/piratefaction.h"
 
 #include "resource/worldobjectbuilder.h"
 
@@ -237,3 +235,4 @@ void GameScenario::spawnStuff() {
 
     }
 }
+

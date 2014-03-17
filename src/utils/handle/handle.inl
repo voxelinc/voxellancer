@@ -27,7 +27,17 @@ T* Handle<T>::operator->() {
 }
 
 template<class T>
+const T* Handle<T>::operator->() const {
+    return m_impl->get();
+}
+
+template<class T>
 T* Handle<T>::operator*() {
+    return m_impl->get();
+}
+
+template<class T>
+const T* Handle<T>::operator*() const {
     return m_impl->get();
 }
 

@@ -6,6 +6,12 @@
 
 #include "collision/collisionfilter.h"
 
+#include "factions/factionmatrix.h"
+
+#include "ui/objectinfo.h"
+
+#include "world/world.h"
+
 
 Ship::Ship():
     Ship(new CollisionFilter(this))
@@ -14,13 +20,14 @@ Ship::Ship():
 
 Ship::Ship(CollisionFilter* collisionFilter):
     WorldObject(collisionFilter),
-    m_character(new Character(*this, nullptr)),
+    m_character(new Character(*this, World::instance()->factionMatrix().unknownFaction())),
     m_boardComputer(new BoardComputer(this)),
     m_squadLogic(new SquadLogic(*this)),
     m_shipHandle(Handle<Ship>(this)),
     m_targetObjectHandle(Handle<WorldObject>(nullptr))
 {
-
+    m_objectInfo->setShowOnHud(true);
+    m_objectInfo->setCanLockOn(true);
 }
 
 Ship::~Ship() {
@@ -38,7 +45,7 @@ void Ship::update(float deltaSec) {
     m_boardComputer->update(deltaSec);
 }
 
-Handle<Ship> Ship::shipHandle() {
+Handle<Ship>& Ship::handle() {
     return m_shipHandle;
 }
 

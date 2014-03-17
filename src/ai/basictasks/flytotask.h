@@ -17,9 +17,12 @@ public:
 
     virtual void update(float deltaSec) override;
 
+    virtual bool isFinished();
+
 
 protected:
     glm::vec3 m_targetPoint;
     glm::vec3 m_targetUp;
+    float m_minDistance;
 };
 

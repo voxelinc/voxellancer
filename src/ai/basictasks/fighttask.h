@@ -3,8 +3,10 @@
 #include <vector>
 #include <glm/glm.hpp>
 
-#include "worldobject/handle/handle.h"
 #include "ai/aitask.h"
+
+#include "utils/handle/handle.h"
+
 
 class Ship;
 class WorldObject;
@@ -14,10 +16,12 @@ public:
     FightTask(BoardComputer* boardComputer, const std::vector<Handle<WorldObject>>& targets);
 
     virtual void update(float deltaSec);
-    virtual void addTargets(const std::vector<Handle<WorldObject>>& targets);
+
+    std::vector<Handle<WorldObject>>& targets();
+    virtual void addTarget(const Handle<WorldObject>& targets);
     virtual void setTargets(const std::vector<Handle<WorldObject>>& targets);
 
-    virtual bool isInProgress();
+    virtual bool isFinished();
 
 protected:
     enum class State {

@@ -1,7 +1,6 @@
 #include "worldtree.h"
 
 #include <algorithm>
-#include <iostream>
 
 #include "utils/tostring.h"
 #include "worldobject/worldobject.h"

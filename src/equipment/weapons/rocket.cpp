@@ -1,7 +1,5 @@
 #include "rocket.h"
 
-#include <iostream>
-
 #include "ai/aitask.h"
 #include "ai/basictasks/directsuicidetask.h"
 

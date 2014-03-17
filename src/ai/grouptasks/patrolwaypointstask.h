@@ -6,16 +6,20 @@
 
 #include "glm/glm.hpp"
 
-#include "ai/basictasks/flytotask.h"
-
 
 class Squad;
+class FlyToTask;
 
 class PatrolWaypointsTask : public AiGroupTask {
 public:
-    PatrolWaypointsTask(Squad& squad, std::list<glm::vec3> points);
+    PatrolWaypointsTask(Squad& squad);
+    PatrolWaypointsTask(Squad& squad, const std::list<glm::vec3>& points);
+
+    void appendWaypoint(const glm::vec3& point);
 
     virtual void update(float deltaSec) override;
+
+    const glm::vec3* currentTargetPoint();
 
 protected:
     virtual void onNewLeader(Ship* leader) override;

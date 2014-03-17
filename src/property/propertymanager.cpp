@@ -3,7 +3,6 @@
 
 #include <string>
 #include <fstream>
-#include <iostream>
 
 #include <glow/logging.h>
 
