@@ -34,11 +34,7 @@ const T& Property<T>::get() const {
 
 template <class T>
 void Property<T>::set(const T& value) {
-    if (m_impl->name() != "") {
-        m_impl = new PropertyImpl<T>("", value);
-    } else {
-        m_impl->set(value);
-    }
+    m_impl->set(value);
 }
 
 template <class T>

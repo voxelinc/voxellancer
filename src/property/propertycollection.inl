@@ -51,6 +51,7 @@ void PropertyCollection<T>::set(const std::string& key, const T& value) {
 
 template<typename T>
 PropertyImpl<T>* PropertyCollection<T>::getImpl(const std::string& key) {
+    assert(key != "");
     PropertyImpl<T>* impl = m_properties[key];
     if (impl) {
         return impl;
@@ -62,6 +63,7 @@ PropertyImpl<T>* PropertyCollection<T>::getImpl(const std::string& key) {
 
 template<typename T>
 PropertyImpl<T>* PropertyCollection<T>::getImpl(const std::string& key, const T& defaultValue) {
+    assert(key != "");
     PropertyImpl<T>* impl = m_properties[key];
     if (impl == nullptr) {
         impl = create(key);
