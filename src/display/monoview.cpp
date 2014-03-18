@@ -9,9 +9,11 @@
 #include "camera/camera.h"
 #include "camera/camerahead.h"
 
+#include "display/scene.h"
+
 #include "geometry/viewport.h"
 
-#include "display/scene.h"
+#include "rendering/antialiasing.h"
 
 
 MonoView::MonoView(const Viewport& viewport):
@@ -41,7 +43,7 @@ float MonoView::aspectRatio() const {
 
 void MonoView::draw(const Scene& scene, const CameraHead& cameraHead) {
     int samplingFactor = 1;
-    if (m_antialiasing.get() == "ssaa") {
+    if (m_antialiasing.get() == Antialiasing::SSAA) {
         samplingFactor = 2;
     }
     int sampleWidth = static_cast<int>(m_viewport.width() * samplingFactor);

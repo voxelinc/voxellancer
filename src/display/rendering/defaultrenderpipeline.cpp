@@ -4,6 +4,7 @@
 #include "framebuffer.h"
 #include "screenquad.h"
 #include "buffernames.h"
+#include "antialiasing.h"
 
 
 DefaultRenderPipeline::DefaultRenderPipeline() :
@@ -19,7 +20,7 @@ DefaultRenderPipeline::DefaultRenderPipeline() :
 void DefaultRenderPipeline::apply(FrameBuffer& frameBuffer, const RenderMetaData& metadata) {
     RenderPipeline::apply(frameBuffer, metadata);
     
-    bool useFxaa = m_antialiasing.get() == "fxaa";
+    bool useFxaa = m_antialiasing.get() == Antialiasing::FSAA;
     if (useFxaa != m_fxaa->isEnabled()) {
         m_fxaa->setEnabled(useFxaa);
         if (useFxaa) { // rewire buffer for fxaa

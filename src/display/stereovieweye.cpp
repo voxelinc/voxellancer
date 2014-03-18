@@ -4,12 +4,15 @@
 #include <glow/RenderBufferObject.h>
 
 #include "camera/camerahead.h"
+#include "camera/camera.h"
+
+#include "geometry/viewport.h"
+
+#include "rendering/framebuffer.h"
+#include "rendering/antialiasing.h"
 
 #include "scene.h"
-#include "rendering/framebuffer.h"
 #include "stereorenderinfo.h"
-#include "camera/camera.h"
-#include "geometry/viewport.h"
 
 
 StereoViewEye::StereoViewEye(const glm::ivec2& viewportResolution, const StereoRenderInfo& stereoRenderInfo, EyeSide side):
@@ -46,7 +49,7 @@ FrameBuffer& StereoViewEye::fbo() {
 
 void StereoViewEye::draw(const Scene& scene, const CameraHead& cameraHead) {
     int samplingFactor = 1;
-    if (m_antialiasing.get() == "ssaa") {
+    if (m_antialiasing.get() == Antialiasing::SSAA) {
         samplingFactor = 2;
     }
     int sampleWidth = static_cast<int>(m_textureSize.x * samplingFactor);
