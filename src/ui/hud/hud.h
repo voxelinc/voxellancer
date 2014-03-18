@@ -9,7 +9,7 @@
 #include "geometry/sphere.h"
 
 #include "property/property.h"
-#include "worldobject/handle/handle.h"
+#include "utils/handle/handle.h"
 
 enum class ClickType {
     None,
@@ -29,7 +29,7 @@ class TextFieldHudget;
 
 class HUD {
 public:
-    HUD(Player* player, Viewer* viewer);
+    HUD(Player* player);
     ~HUD();
 
     Player* player();
@@ -55,6 +55,7 @@ public:
     void setTarget(WorldObject* target);
     WorldObject* target();
 
+
     void onClick(ClickType clickType);
 
     void update(float deltaSec);
@@ -63,6 +64,7 @@ public:
     glm::vec3 applyTo(const glm::vec3 &vertex) const;
 	
     Viewer* viewer() const;
+    void setViewer(Viewer& viewer);
 
     float fovy() const;
     float fovx() const;

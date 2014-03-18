@@ -2,7 +2,6 @@
 
 #include <assert.h>
 #include <algorithm>
-#include <iostream>
 
 #include "utils/tostring.h"
 #include "voxel/voxel.h"
@@ -140,8 +139,7 @@ void WorldTreeNode::insert(WorldTreeGeode* geode) {
                 toGroup();
             }
         }
-    }
-    else {
+    } else {
         for (int n = 0; n < SUBNODE_COUNT; n++) { // TODO: shrink iteration range
             WorldTreeNode* subnode = m_subnodes[n];
 
@@ -160,8 +158,7 @@ void WorldTreeNode::remove(WorldTreeGeode* geode) {
         if(isEmpty()) {
             setActive(false);
         }
-    }
-    else {
+    } else {
         assert(!m_activeSubnodes.empty());
 
         for (int n = 0; n < SUBNODE_COUNT; n++) { // TODO: shrink iteration range

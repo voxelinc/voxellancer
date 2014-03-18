@@ -20,11 +20,8 @@ public:
 
     virtual bool isDead(const VoxelParticleData& particle) override;
 
-    virtual void setPlayer(Player& player) override;
-
 protected:
     const VoxelParticleEngine& m_particleEngine;
-    Player* m_player;
     Sphere m_Sphere;
 
     virtual void beforeCheck();

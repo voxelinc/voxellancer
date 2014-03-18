@@ -1,6 +1,5 @@
 #include "skybox.h"
 
-#include <iostream>
 #include <stdexcept>
 
 #include <glow/Program.hpp>

@@ -2,7 +2,6 @@
 
 #include <algorithm>
 #include <set>
-#include <iostream>
 
 #include "worldobject/worldobject.h"
 

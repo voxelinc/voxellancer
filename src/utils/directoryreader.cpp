@@ -1,6 +1,5 @@
 #include "directoryreader.h"
 
-#include <iostream>
 #include <stdexcept>
 
 #ifdef WIN32

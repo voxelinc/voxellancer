@@ -26,6 +26,7 @@
 #include "player.h"
 #include "ui/objectinfo.h"
 
+
 BattleScenario::BattleScenario(GamePlay* gamePlay):
     BaseScenario(gamePlay)
 {
@@ -50,7 +51,7 @@ void BattleScenario::populateWorld() {
     aitester->transform().setPosition(glm::vec3(0, 0, 10));
     aitester->objectInfo().setName("basicship");
     aitester->objectInfo().setShowOnHud(false);
-    aitester->character()->setTask(std::make_shared<FightTask>(aitester->boardComputer(), std::vector<Handle<WorldObject>>{ playerShip->handle() }));
+    aitester->character()->setTask(std::make_shared<FightTask>(aitester->boardComputer(), std::vector<Handle<WorldObject>>{ playerShip->WorldObject::handle() }));
     //m_world->god().scheduleSpawn(aitester);
 
 
@@ -109,7 +110,7 @@ void BattleScenario::spawnCapital(const std::vector<Ship*>& enemies) {
 
     std::vector<Handle<WorldObject>> enemyHandles;
     for (Ship* enemy : enemies) {
-        enemyHandles.push_back(enemy->handle());
+        enemyHandles.push_back(enemy->WorldObject::handle());
     }
     ship->character()->setTask(std::make_shared<FightTask>(ship->boardComputer(), enemyHandles));
     m_world->god().scheduleSpawn(ship);
@@ -118,10 +119,9 @@ void BattleScenario::spawnCapital(const std::vector<Ship*>& enemies) {
 void BattleScenario::setTargets(const std::vector<Ship*>& fleet, const std::vector<Ship*>& enemies) {
     std::vector<Handle<WorldObject>> enemyHandles;
     for (Ship* enemy : enemies) {
-        enemyHandles.push_back(enemy->handle());
+        enemyHandles.push_back(enemy->WorldObject::handle());
     }
-    enemyHandles.clear();
-    enemyHandles.push_back(m_gamePlay->player().ship()->handle());
+    enemyHandles.push_back(m_gamePlay->player().ship()->WorldObject::handle());
     for (Ship* ship : fleet) {
         std::random_shuffle(enemyHandles.begin(), enemyHandles.end());
         ship->character()->setTask(std::make_shared<FightTask>(ship->boardComputer(), enemyHandles));

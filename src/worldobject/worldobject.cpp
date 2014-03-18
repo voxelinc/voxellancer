@@ -7,7 +7,7 @@
 
 #include "utils/tostring.h"
 
-#include "worldobject/handle/handle.h"
+#include "utils/handle/handle.h"
 #include "physics/physics.h"
 #include "ui/objectinfo.h"
 #include "voxel/voxel.h"
@@ -43,7 +43,8 @@ WorldObject::WorldObject(CollisionFilter* filter) :
     m_collisionFieldOfDamage(glm::half_pi<float>()),
     m_handle(Handle<WorldObject>(this)),
     m_spawnState(SpawnState::None),
-    m_collisionFilter(filter)
+    m_collisionFilter(filter),
+    m_isDestroyed(false)
 {
 }
 
@@ -125,9 +126,16 @@ void WorldObject::removeVoxel(Voxel* voxel) {
 
     voxel->onRemoval();
 
+    if (m_voxels.size() == 0) {
+        onDestruction();
+    }
+
     if (voxel == m_crucialVoxel) {
-        m_crucialVoxel = nullptr;
         m_crucialVoxelDestroyed = true;
+        m_crucialVoxel = nullptr;
+        if (!isDestroyed()) {
+            onDestruction();
+        }
     }
 
     m_collisionDetector->removeVoxel(voxel);
@@ -178,5 +186,13 @@ float WorldObject::collisionFieldOfDamage() const {
 
 void WorldObject::setCollisionFieldOfDamage(float collisionFieldOfDamage) {
     m_collisionFieldOfDamage = collisionFieldOfDamage;
+}
+
+void WorldObject::onDestruction() {
+    m_isDestroyed = true;
+}
+
+bool WorldObject::isDestroyed() const {
+    return m_isDestroyed;
 }
 

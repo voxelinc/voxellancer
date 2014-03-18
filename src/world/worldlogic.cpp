@@ -1,7 +1,5 @@
 #include "worldlogic.h"
 
-#include <iostream>
-
 #include "utils/tostring.h"
 
 #include "world.h"
@@ -16,7 +14,6 @@ WorldLogic::WorldLogic(World &world):
 }
 
 void WorldLogic::update(float deltaSecs) {
-
     m_world.god().remove();
     m_world.god().spawn();
 

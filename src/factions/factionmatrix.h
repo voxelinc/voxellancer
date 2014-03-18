@@ -1,35 +1,37 @@
 #pragma once
-
 #include <list>
 #include <map>
 #include <memory>
+#include <unordered_map>
+#include <utility>
 
+#include "utils/pairhash.h"
 
 class Faction;
 class FactionRelation;
-class PlayerFaction;
-class PirateFaction;
-class PoliceFaction;
+
 
 class FactionMatrix {
 public:
     FactionMatrix();
     ~FactionMatrix();
 
-    PirateFaction* pirateFaction();
-    PoliceFaction* policeFaction();
-    PlayerFaction* playerFaction();
+    Faction& pirateFaction();
+    Faction& policeFaction();
+    Faction& playerFaction();
+    Faction& unknownFaction();
 
+    Faction& getFaction(const std::string& factionName);
+    void addFaction(std::shared_ptr<Faction> faction);
+
+    FactionRelation& getRelation(Faction& factionA, Faction& factionB);
+    FactionRelation& getRelationToPlayer(Faction& faction);
 
 protected:
-    std::list<std::unique_ptr<Faction>> m_factions;
-    std::list<std::shared_ptr<FactionRelation>> m_relations;
+    std::unordered_map<std::string, std::shared_ptr<Faction>> m_factions;
+    std::unordered_map<std::pair<Faction*, Faction*>, std::shared_ptr<FactionRelation>> m_relations;
 
-    PlayerFaction* m_playerFaction;
-    PirateFaction* m_pirateFaction;
-    PoliceFaction* m_policeFaction;
-
-    void setupFactionRelations();
-    void addFactionRelation(std::shared_ptr<FactionRelation> relation);
+    void setupRelations();
+    std::pair<Faction*, Faction*> uniquePair(Faction& factionA, Faction& factionB);
 };
 

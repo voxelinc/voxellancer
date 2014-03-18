@@ -1,7 +1,5 @@
 #include "line.h"
 
-#include <iostream>
-
 #include "geometry/transform.h"
 
 #include "utils/tostring.h"

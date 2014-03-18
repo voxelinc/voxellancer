@@ -1,7 +1,5 @@
 #pragma once
 
-#include <iostream>
-
 #include <glow/ref_ptr.h>
 
 #include "etc/contextdependant.h"
