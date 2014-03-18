@@ -4,6 +4,7 @@
 #include "camera/camerahead.h"
 #include "voxel/voxelrenderer.h"
 #include "sound/soundmanager.h"
+#include "geometry/viewport.h"
 #include "gamestate/gameplay/gameplay.h"
 #include "display/rendering/framebuffer.h"
 #include "display/rendering/renderpipeline.h"
@@ -33,7 +34,7 @@ GamePlayScene::GamePlayScene(GamePlay& gamePlay, Player& player):
 
 GamePlayScene::~GamePlayScene() = default;
 
-void GamePlayScene::draw(const Camera& camera, glow::FrameBufferObject* target, EyeSide side) const {
+void GamePlayScene::draw(const Camera& camera, glow::FrameBufferObject* target, const Viewport& destinationViewport, EyeSide side) const {
     if (m_framebuffer == nullptr) {
         m_framebuffer.reset(new FrameBuffer(m_renderPipeline->bufferCount()));
     }
@@ -46,6 +47,8 @@ void GamePlayScene::draw(const Camera& camera, glow::FrameBufferObject* target, 
     RenderMetaData metadata(camera, side);
     m_renderPipeline->apply(*m_framebuffer, metadata);
 
+
+    glViewport(destinationViewport.x(), destinationViewport.y(), destinationViewport.width(), destinationViewport.height());
     // transfer rendered image to target framebuffer
     m_outputBlitter->setInputMapping({ { "source", m_currentOutputBuffer } });
     m_outputBlitter->apply(*m_framebuffer, target);

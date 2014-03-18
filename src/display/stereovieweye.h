@@ -1,10 +1,12 @@
 #pragma once
 
+#include <string>
 #include <memory>
 
 #include <glm/glm.hpp>
 
 #include "eyeside.h"
+#include "property/property.h"
 
 namespace glow {
     class FrameBufferObject;
@@ -33,6 +35,7 @@ public:
 protected:
     glm::vec3 m_offset;
     EyeSide m_side;
+    Property<std::string> m_antialiasing;
 
     float m_distortionScale;
     glm::ivec2 m_textureSize;

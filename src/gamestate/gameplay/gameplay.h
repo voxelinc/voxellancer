@@ -13,7 +13,7 @@ class GamePlayScene;
 class Player;
 class SoundManager;
 
-/*
+/**
     State that is active whenever the the game is actually played and not
     in some menustate etc.
 */

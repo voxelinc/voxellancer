@@ -25,7 +25,7 @@ public:
     GamePlayScene(GamePlay& gamePlay, Player& player);
     ~GamePlayScene();
 
-    virtual void draw(const Camera& camera, glow::FrameBufferObject* target, EyeSide side = EyeSide::None) const override;
+    virtual void draw(const Camera& camera, glow::FrameBufferObject* target, const Viewport& destinationViewport, EyeSide side = EyeSide::None) const override;
     virtual void update(float deltaSec) override;
 
     void setOutputBuffer(int i);

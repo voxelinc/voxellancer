@@ -9,6 +9,7 @@
 #include "geometry/sphere.h"
 
 #include "property/property.h"
+
 #include "utils/handle/handle.h"
 
 enum class ClickType {
@@ -74,6 +75,7 @@ protected:
     Viewer* m_viewer;
     Sphere m_sphere;
     Handle<WorldObject> m_target;
+    Property<bool> m_drawHud;
 
     float m_fovy, m_fovx;
 
@@ -86,7 +88,6 @@ protected:
     std::list<Hudget*> m_hudgets;
 
     std::map<WorldObject*, HUDObjectDelegate*> m_objectDelegates;
-
     void updateScanner(float deltaSec);
     void updateFov();
 };
