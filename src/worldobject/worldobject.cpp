@@ -44,7 +44,7 @@ WorldObject::WorldObject(CollisionFilter* filter) :
     m_handle(Handle<WorldObject>(this)),
     m_spawnState(SpawnState::None),
     m_collisionFilter(filter),
-    m_isDestroyed(false)
+    m_crucialVoxelDestroyed(false)
 {
 }
 
@@ -126,16 +126,9 @@ void WorldObject::removeVoxel(Voxel* voxel) {
 
     voxel->onRemoval();
 
-    if (m_voxels.size() == 0) {
-        onDestruction();
-    }
-
     if (voxel == m_crucialVoxel) {
         m_crucialVoxelDestroyed = true;
         m_crucialVoxel = nullptr;
-        if (!isDestroyed()) {
-            onDestruction();
-        }
     }
 
     m_collisionDetector->removeVoxel(voxel);
@@ -164,7 +157,7 @@ void WorldObject::setCrucialVoxel(const glm::ivec3& cell) {
     }
 }
 
-bool WorldObject::crucialVoxelDestroyed(){
+bool WorldObject::isCrucialVoxelDestroyed(){
     return m_crucialVoxelDestroyed;
 }
 
@@ -186,13 +179,5 @@ float WorldObject::collisionFieldOfDamage() const {
 
 void WorldObject::setCollisionFieldOfDamage(float collisionFieldOfDamage) {
     m_collisionFieldOfDamage = collisionFieldOfDamage;
-}
-
-void WorldObject::onDestruction() {
-    m_isDestroyed = true;
-}
-
-bool WorldObject::isDestroyed() const {
-    return m_isDestroyed;
 }
 

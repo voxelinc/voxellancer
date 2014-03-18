@@ -66,7 +66,7 @@ public:
 
     Voxel* crucialVoxel();
     void setCrucialVoxel(const glm::ivec3& cell);
-    bool crucialVoxelDestroyed();
+    bool isCrucialVoxelDestroyed();
 
     void updateTransformAndGeode(const glm::vec3& position, const glm::quat& orientation);
 
@@ -78,8 +78,6 @@ public:
 
     float collisionFieldOfDamage() const;
     void setCollisionFieldOfDamage(float collisionFieldOfDamage);
-
-    bool isDestroyed() const;
 
 protected:
     WorldObject(CollisionFilter* filter);
@@ -95,9 +93,5 @@ protected:
     bool m_crucialVoxelDestroyed;
     float m_collisionFieldOfDamage;
     SpawnState m_spawnState;
-
-    bool m_isDestroyed;
-
-    virtual void onDestruction();
 };
 
