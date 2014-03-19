@@ -149,12 +149,10 @@ Voxel* WorldObject::crucialVoxel() {
 }
 
 void WorldObject::setCrucialVoxel(const glm::ivec3& cell) {
-    if (m_crucialVoxel == nullptr) {
-        m_crucialVoxel = voxel(cell);
-        m_crucialVoxelDestroyed = false;
-    } else {
-        assert(false); // there may only be one cruicialVoxel
-    }
+    assert(m_crucialVoxel == nullptr);
+ 
+    m_crucialVoxel = voxel(cell);
+    m_crucialVoxelDestroyed = false;
 }
 
 bool WorldObject::isCrucialVoxelDestroyed(){
