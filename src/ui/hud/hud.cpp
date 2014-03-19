@@ -48,7 +48,8 @@ HUD::HUD(Player* player):
     m_scanner(new WorldTreeScanner()),
     m_targetName(new TextFieldHudget(this, glm::normalize(glm::vec3(0, -1.1f, -2)), 0.025f, "")),
     m_speedLabel(new TextFieldHudget(this, glm::normalize(glm::vec3(1.5f, -1.1f, -2)), 0.020f, "")),
-    m_target(nullptr)
+    m_target(nullptr),
+    m_drawHud("vfx.drawhud")
 {
     m_scanner->setScanRadius(1050.0f);
     m_hudgets.push_back(m_crossHair.get());
@@ -157,6 +158,9 @@ void HUD::update(float deltaSec) {
 }
 
 void HUD::draw() {
+    if (!m_drawHud) {
+        return;
+    }
     glow::Uniform<glm::vec3>* lightuniform = VoxelRenderer::instance()->program()->getUniform<glm::vec3>("lightdir");
     glm::vec3 oldLightdir = lightuniform->value();
     lightuniform->set(m_player->cameraHead().orientation() * glm::vec3(0,0,1));
