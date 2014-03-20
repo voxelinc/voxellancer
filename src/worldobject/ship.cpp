@@ -45,7 +45,7 @@ void Ship::update(float deltaSec) {
     m_boardComputer->update(deltaSec);
 }
 
-Handle<Ship> Ship::handle() {
+Handle<Ship>& Ship::handle() {
     return m_shipHandle;
 }
 

@@ -29,6 +29,9 @@ public:
     void activate();
     void deactivate();
 
+
+    void stopAll();
+
     static SoundManager* current();
 
 
@@ -39,7 +42,7 @@ protected:
 
     sf::SoundBuffer* obtain(std::string soundFile);
     void cleanUp();
-
+    void forcedCleanup();
     static SoundManager* s_current;
 };
 

@@ -12,5 +12,8 @@ protected:
     virtual void populateWorld() override;
 
     void createArmada();
+    void spawnPoliceFleet();
+    void spawnPirateFleet();
+    void spawnStuff();
 };
 
