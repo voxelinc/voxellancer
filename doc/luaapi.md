@@ -1,6 +1,6 @@
 Lua API bindings
 ================
-generated from 0fa0ada
+generated from 94ca368
 
 ## squadbindings.h
 
@@ -20,7 +20,6 @@ generated from 0fa0ada
     int setEventActive(apikey eventPoll, bool active);
     apikey createSingleShotTimer(const std::string& callback, float delta);
     apikey createLoopingTimer(const std::string& callback, float delta);
-    apikey onAABBEntered(apikey worldObject, const glm::vec3& llf, const glm::vec3& urb, const std::string& callback);
 
 
 ## worldobjectbindings.h
@@ -33,6 +32,7 @@ generated from 0fa0ada
     glm::vec3 position(apikey worldObject);
     glm::vec3 orientation(apikey worldObject);
     apikey onWorldObjectDestroyed(apikey worldObject, const std::string& callback);
+    apikey onAABBEntered(apikey worldObject, const glm::vec3& llf, const glm::vec3& urb, const std::string& callback);
 
 
 ## aibindings.h
@@ -100,6 +100,7 @@ Ini Objects
 
  * basicship
  * bc304
+ * c306
  * eagle
  * f301
  * f302
