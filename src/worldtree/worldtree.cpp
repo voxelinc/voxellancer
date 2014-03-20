@@ -27,6 +27,7 @@ WorldTreeGeode* WorldTree::insert(WorldObject* worldObject) {
     worldObject->collisionDetector().setWorldTree(this);
     
     WorldTreeGeode* geode = new WorldTreeGeode(worldObject);
+    
     insert(geode);
 
     return geode;

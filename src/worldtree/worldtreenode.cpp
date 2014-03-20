@@ -25,7 +25,7 @@ WorldTreeNode::WorldTreeNode(const IAABB &aabb, WorldTreeNode* initialSubnode):
     WorldTreeNode(0, nullptr, aabb)
 {
     if (initialSubnode != nullptr) {
-        toGroup(initialSubnode);
+        convertToGroup(initialSubnode);
         initialSubnode->setParent(this);
     }
 }
@@ -37,7 +37,8 @@ WorldTreeNode::~WorldTreeNode() {
 }
 
 void WorldTreeNode::clear() {
-    assert(m_geodes.empty());
+    assert(m_normalGeodes.empty());
+    assert(m_passiveGeodes.empty());
     assert(m_activeSubnodes.empty());
     assert(!m_active);
 
@@ -47,6 +48,7 @@ void WorldTreeNode::clear() {
 
     m_subnodes.clear();
     m_activeSubnodes.clear();
+    m_passiveGeodes.clear();
 }
 
 int WorldTreeNode::octIndex() const {
@@ -93,7 +95,7 @@ void WorldTreeNode::setActive(bool active) {
 }
 
 const std::list<WorldTreeGeode*>& WorldTreeNode::geodes() const {
-    return m_geodes;
+    return m_normalGeodes;
 }
 
 const std::list<WorldTreeNode*>& WorldTreeNode::subnodes() const {
@@ -106,7 +108,7 @@ bool WorldTreeNode::isLeaf() const {
 }
 
 bool WorldTreeNode::isEmpty() const {
-    return m_activeSubnodes.empty() && m_geodes.empty();
+    return m_activeSubnodes.empty() && m_normalGeodes.empty() && m_passiveGeodes.empty();
 }
 
 bool WorldTreeNode::isRootnode() const {
@@ -129,20 +131,20 @@ void WorldTreeNode::insert(WorldTreeGeode* geode) {
         assert(isLeaf());
     }
 
+    std::list<WorldTreeGeode*>& geodes = geodesList(geode);
+
     if (isLeaf()) {
-        if (std::find(m_geodes.begin(), m_geodes.end(), geode) == m_geodes.end()) {
-            m_geodes.push_back(geode);
+        if (std::find(geodes.begin(), geodes.end(), geode) == geodes.end()) {
+            geodes.push_back(geode);
             geode->addIntersectingLeaf(this);
             setActive(true);
 
-            if(m_geodes.size() > MAX_GEODES && !isAtomic()) {
-                toGroup();
+            if (m_normalGeodes.size() > MAX_GEODES && !isAtomic()) { // only active geodes are important for MAX_GEODES
+                convertToGroup();
             }
         }
     } else {
-        for (int n = 0; n < SUBNODE_COUNT; n++) { // TODO: shrink iteration range
-            WorldTreeNode* subnode = m_subnodes[n];
-
+        for (WorldTreeNode* subnode : m_subnodes) { // TODO: shrink iteration range -- what does that mean?
             if (subnode->aabb().intersects(geode->aabb())) {
                 subnode->insert(geode);
                 assert(!subnode->isEmpty());
@@ -153,7 +155,7 @@ void WorldTreeNode::insert(WorldTreeGeode* geode) {
 
 void WorldTreeNode::remove(WorldTreeGeode* geode) {
     if(isLeaf()) {
-        m_geodes.remove(geode);
+        geodesList(geode).remove(geode);
 
         if(isEmpty()) {
             setActive(false);
@@ -161,9 +163,7 @@ void WorldTreeNode::remove(WorldTreeGeode* geode) {
     } else {
         assert(!m_activeSubnodes.empty());
 
-        for (int n = 0; n < SUBNODE_COUNT; n++) { // TODO: shrink iteration range
-            WorldTreeNode* subnode = m_subnodes[n];
-
+        for (WorldTreeNode* subnode : m_subnodes) { // TODO: shrink iteration range
             if (subnode->active()) {
                 subnode->remove(geode);
             }
@@ -171,7 +171,7 @@ void WorldTreeNode::remove(WorldTreeGeode* geode) {
     }
 }
 
-void WorldTreeNode::toGroup(WorldTreeNode* initialSubnode) {
+void WorldTreeNode::convertToGroup(WorldTreeNode* initialSubnode) {
     assert(isLeaf());
 
     int subnodeExtent = static_cast<int>(m_extent / 2.0f);
@@ -192,20 +192,27 @@ void WorldTreeNode::toGroup(WorldTreeNode* initialSubnode) {
             m_subnodes[n] = new WorldTreeNode(n, this, subnodeAABB);
         }
 
-        for (WorldTreeGeode* geode : m_geodes) {
-            if(geode->aabb().intersects(m_subnodes[n]->aabb())) {
-                m_subnodes[n]->insert(geode);
-            }
+        for (WorldTreeGeode* geode : m_normalGeodes) {
+            moveToSubNode(geode, m_subnodes[n]);
+        }
+        for (WorldTreeGeode* geode : m_passiveGeodes) {
+            moveToSubNode(geode, m_subnodes[n]);
         }
     }
 
-    for (WorldTreeGeode* geode : m_geodes) {
-        geode->removeIntersectingLeaf(this);
-    }
-    m_geodes.clear();
+    m_normalGeodes.clear();
+    m_passiveGeodes.clear();
 
     assert(!isLeaf());
 }
+
+void WorldTreeNode::moveToSubNode(WorldTreeGeode* geode, WorldTreeNode* subnode) {
+    if (geode->aabb().intersects(subnode->aabb())) {
+        subnode->insert(geode);
+        geode->removeIntersectingLeaf(this);
+    }
+}
+
 
 void WorldTreeNode::subnodeActivated(WorldTreeNode* subnode) {
     m_activeSubnodes.push_back(subnode);
@@ -220,3 +227,10 @@ void WorldTreeNode::subnodeDeactivated(WorldTreeNode* subnode) {
     }
 }
 
+std::list<WorldTreeGeode*>& WorldTreeNode::geodesList(WorldTreeGeode* geode) {
+    if (geode->isPassive()) {
+        return m_passiveGeodes;
+    } else {
+        return m_normalGeodes;
+    }
+}

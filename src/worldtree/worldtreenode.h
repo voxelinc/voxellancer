@@ -45,7 +45,7 @@ public:
 
 protected:
     static const int MIN_EXTENT = 16;
-    static const int MAX_GEODES = 4;
+    static const int MAX_GEODES = 8;
 
     WorldTreeNode* m_parent;
     IAABB m_aabb;
@@ -53,13 +53,24 @@ protected:
     float m_extent;
     bool m_active;
 
-    std::list<WorldTreeGeode*> m_geodes;
+    std::list<WorldTreeGeode*> m_normalGeodes;
+    std::list<WorldTreeGeode*> m_passiveGeodes;
     std::vector<WorldTreeNode*> m_subnodes;
     std::list<WorldTreeNode*> m_activeSubnodes;
 
-    void toGroup(WorldTreeNode* initialSubnode = nullptr);
+    /**
+     *  convert a leaf to a node with subnodes                                                                   
+     */ 
+    void convertToGroup(WorldTreeNode* initialSubnode = nullptr);
+    /**
+     *  move a geode to the specified subnode if it is contained in its aabb                                                                   
+     */ 
+    void moveToSubNode(WorldTreeGeode* geode, WorldTreeNode* subnode);
 
     void subnodeActivated(WorldTreeNode* subnode);
     void subnodeDeactivated(WorldTreeNode* subnode);
+
+    std::list<WorldTreeGeode*>& geodesList(WorldTreeGeode* geode);
+
 };
 
