@@ -42,7 +42,7 @@ void WorldObjectBindings::initialize()
     m_lua.Register("setPosition", this, &WorldObjectBindings::apiSetPosition);
     m_lua.Register("setOrientation", this, &WorldObjectBindings::apiSetOrientation);
 
-    m_lua.Register("onWorldobjectDestroyed", this, &WorldObjectBindings::apiOnWorldObjectDestroyed);
+    m_lua.Register("onWorldObjectDestroyed", this, &WorldObjectBindings::apiOnWorldObjectDestroyed);
     m_lua.Register("onAABBEntered", this, &WorldObjectBindings::apiOnAABBEntered);
 }
 

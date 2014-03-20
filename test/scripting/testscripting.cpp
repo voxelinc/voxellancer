@@ -10,6 +10,7 @@
 #include "ai/basictasks/fighttask.h"
 #include "ai/grouptasks/patrolwaypointstask.h"
 #include "ai/squadlogic.h"
+#include "ai/grouptasks/defendareatask.h"
 
 #include "events/eventpoller.h"
 
@@ -24,10 +25,11 @@
 #include "scripting/scriptengine.h"
 #include "scripting/gameplayscript.h"
 
+#include "voxel/voxel.h"
+
 #include "world/world.h"
 #include "worldobject/worldobject.h"
 #include "worldobject/ship.h"
-#include "ai/grouptasks/defendareatask.h"
 
 
 using namespace bandit;
@@ -187,6 +189,42 @@ go_bandit([](){
             World::instance()->eventPoller().update(1.0f);
             AssertThat(script->debugStatus(), Equals(""));
         });
+
+        it("can poll destruction", [&]() {
+            Ship* ship = new Ship();
+            ship->addVoxel(new Voxel(glm::ivec3(1, 2, 3)));
+            ship->setCrucialVoxel(glm::ivec3(1, 2, 3));
+            scriptEngine->registerScriptable(ship);
+            World::instance()->player().setShip(ship);
+            script->loadString(R"( 
+                onWorldObjectDestroyed(playerShip(), "callback")
+            )");
+
+            World::instance()->eventPoller().update(1.0f);
+            AssertThat(script->debugStatus(), Equals(""));
+
+            ship->removeVoxel(ship->crucialVoxel());
+            World::instance()->eventPoller().update(1.0f);
+            AssertThat(script->debugStatus(), Equals("callback!"));
+        });
+
+        it("can poll destruction on deleted ship", [&]() {
+            Ship* ship = new Ship();
+            ship->addVoxel(new Voxel(glm::ivec3(1, 2, 3)));
+            scriptEngine->registerScriptable(ship);
+            World::instance()->player().setShip(ship);
+            script->loadString(R"( 
+                onWorldObjectDestroyed(playerShip(), "callback")
+            )");
+
+            World::instance()->eventPoller().update(1.0f);
+            AssertThat(script->debugStatus(), Equals(""));
+
+            delete ship;
+            World::instance()->eventPoller().update(1.0f);
+            AssertThat(script->debugStatus(), Equals("callback!"));
+        });
+
 
         it("can set fighttask", [&]() {
             Ship* ship = new Ship();
