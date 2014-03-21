@@ -13,6 +13,7 @@
 #include "geometry/acceleration.h"
 #include "ui/objectinfo.h"
 #include "utils/tostring.h"
+#include "player.h"
 #include "physics/physics.h"
 #include "resource/clustercache.h"
 #include "sound/soundmanager.h"
@@ -24,6 +25,11 @@
 #include "world/helper/worldobjectmodification.h"
 #include "world/god.h"
 #include "worldobject/worldobjectcomponents.h"
+
+#include "utils/randvec3.h"
+#include "utils/randvec3pool.h"
+#include "utils/randfloat.h"
+#include "utils/randfloatpool.h"
 
 
 
@@ -74,9 +80,55 @@ go_bandit([](){
         before_each([&]() {
             World::reset();
             world = World::instance();
+            world->setPlayer(*new Player());
         });
 
         after_each([&]() {
+        });
+        
+        it("randomness", [&]() {
+            const int ROUNDS = 1000 * 1000 * 10;
+            glm::vec3 v;
+            {
+                glowutils::AutoTimer t("rand vec3");
+                for (int i = 0; i < ROUNDS; i++) {
+                    v += RandVec3::randUnitVec();
+                }
+            }
+            {
+                glowutils::AutoTimer t("pool vec3");
+                for (int i = 0; i < ROUNDS; i++) {
+                    v += RandVec3Pool::randUnitVec();
+                }
+            }
+            float f = 0;
+            {
+                glowutils::AutoTimer t("rand float");
+                for (int i = 0; i < ROUNDS; i++) {
+                    f += RandFloat::rand(0, 10);
+                }
+            }
+            {
+                glowutils::AutoTimer t("pool float");
+                for (int i = 0; i < ROUNDS; i++) {
+                    f += RandFloatPool::rand(0, 10);
+                }
+            }
+            {
+                glowutils::AutoTimer t("xor float");
+                for (int i = 0; i < ROUNDS; i++) {
+                    f += RandFloat::rand_xor(0, 10);
+                }
+            }
+
+            glow::debug("%; %;", v.x, f);
+
+            int r[10] = { 0 };
+            for (int i = 0; i < ROUNDS; i++) {
+                r[int(RandFloat::rand_xor(0, 10))]++;
+            }
+            glow::debug("%; %; %; %; %; %; %; %; %; %;", r[0], r[1], r[2], r[3], r[4], r[5], r[6], r[7], r[8], r[9]);
+
         });
 
         it_skip("test a big hole", [&]() {
@@ -132,7 +184,7 @@ go_bandit([](){
         });
 
 
-        it("test global performance", [&]() {
+        it_skip("test global performance", [&]() {
             Ship *ship;
             Ship *normandy;
             WorldObject *planet;

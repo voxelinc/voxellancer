@@ -23,6 +23,18 @@ float RandFloat::randomize(float value, float randomization) {
     return value * RandFloat::rand(1.0f - randomization, 1.0f + randomization);
 }
 
+uint32_t RandFloat::_xor_rand() {
+    static uint32_t r = 2463534242UL;
+    r ^= (r << 13);
+    r ^= (r >> 17);
+    r ^= (r << 5);
+    return r;
+}
+
+float RandFloat::rand_xor(float from, float to) {
+    return from + static_cast<float>(_xor_rand()) / 4294967296.f * (to - from); // divide by 2^32
+}
+
 glm::vec3 RandVec3::rand(float from, float to) {
     return glm::vec3(
         RandFloat::rand(from, to),
