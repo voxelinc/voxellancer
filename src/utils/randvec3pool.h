@@ -12,18 +12,13 @@
 */
 class RandVec3Pool {
 public:
-	static std::shared_ptr<RandVec3Pool> instance();
-
-	glm::vec3 randUnitVec();
+	static glm::vec3 randUnitVec();
 
 
 protected:
-	std::vector<glm::vec3> m_pool;
-	int m_iter;
+	static std::vector<glm::vec3> s_pool;
+	static int s_iter;
 
-	static std::weak_ptr<RandVec3Pool> s_instance;
-
-
-	RandVec3Pool();
+	static void initialize();
 };
 

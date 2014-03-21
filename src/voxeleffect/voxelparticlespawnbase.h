@@ -8,7 +8,6 @@
 
 
 class RandVec3Pool;
-class RandFloatPool;
 class Transform;
 class VoxelCluster;
 
@@ -55,9 +54,6 @@ protected:
     Property<float> m_particleAngularDampening;
     Property<float> m_particleBaseForce;
     Property<float> m_particleAngularBaseForce;
-
-    std::shared_ptr<RandVec3Pool> m_randVec3Pool;
-    std::shared_ptr<RandFloatPool> m_randFloatPool;
 
 
     glm::vec3 createDirectionalSpeed();

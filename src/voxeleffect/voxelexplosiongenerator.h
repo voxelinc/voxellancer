@@ -27,7 +27,5 @@ protected:
     float m_radius;
     int m_count;
 
-    std::shared_ptr<RandFloatPool> m_randFloatPool;
-
     float createScale();
 };

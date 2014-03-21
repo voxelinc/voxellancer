@@ -19,8 +19,7 @@ VoxelExplosionGenerator::VoxelExplosionGenerator(const VoxelCluster* creator) :
                            "physics.explosionBaseForce",
                            "physics.explosionAngularBaseForce"),
     m_radius(0.5f),
-    m_count(10),
-    m_randFloatPool(RandFloatPool::instance())
+    m_count(10)
 {
 }
 
@@ -59,5 +58,5 @@ void VoxelExplosionGenerator::spawn() {
 }
 
 float VoxelExplosionGenerator::createScale() {
-    return m_randFloatPool->randomize(m_scale, m_scaleRandomization);
+    return RandFloatPool::randomize(m_scale, m_scaleRandomization);
 }

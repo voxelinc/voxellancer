@@ -5,31 +5,24 @@
 
 const static int POOL_SIZE = 1024;
 
-std::weak_ptr<RandVec3Pool> RandVec3Pool::s_instance;
-
-std::shared_ptr<RandVec3Pool> RandVec3Pool::instance() {
-    if (std::shared_ptr<RandVec3Pool> pool = s_instance.lock()) {
-        return pool;
-    } else {
-        pool = std::shared_ptr<RandVec3Pool>(new RandVec3Pool());
-        s_instance = pool;
-        return pool;
-    }
-}
+std::vector<glm::vec3> RandVec3Pool::s_pool;
+int RandVec3Pool::s_iter(0);
 
 glm::vec3 RandVec3Pool::randUnitVec() {
-    glm::vec3 result = m_pool[m_iter];
-    m_iter = (m_iter + 1) % m_pool.size();
+    if (s_pool.empty()) {
+        initialize();
+    }
+
+    glm::vec3 result = s_pool[s_iter];
+    s_iter = (s_iter + 1) % s_pool.size();
 
     return result;
 }
 
-RandVec3Pool::RandVec3Pool():
-    m_pool(POOL_SIZE),
-    m_iter(0)
-{
+void RandVec3Pool::initialize() {
+    s_pool.resize(POOL_SIZE);
     for (int i = 0; i < POOL_SIZE; i++) {
-        m_pool[i] = RandVec3::randUnitVec();
+        s_pool[i] = RandVec3::randUnitVec();
     }
 }
 

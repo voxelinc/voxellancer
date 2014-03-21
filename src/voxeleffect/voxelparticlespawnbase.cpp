@@ -35,9 +35,7 @@ VoxelParticleSpawnBase::VoxelParticleSpawnBase(
     m_particleDampening(dampeningName),
     m_particleAngularDampening(angularDampeningName),
     m_particleBaseForce(baseForceName),
-    m_particleAngularBaseForce(angularBaseForceName),
-    m_randVec3Pool(RandVec3Pool::instance()),
-    m_randFloatPool(RandFloatPool::instance())
+    m_particleAngularBaseForce(angularBaseForceName)
 {
 }
 
@@ -78,17 +76,17 @@ void VoxelParticleSpawnBase::setImpactVector(const glm::vec3& impactVector) {
 }
 
 glm::vec3 VoxelParticleSpawnBase::createDirectionalSpeed() {
-    float speedVal = m_randFloatPool->randomize(m_force, m_forceRandomization) * m_particleBaseForce;
-    glm::vec3 speedDir = m_randVec3Pool->randUnitVec();
+    float speedVal = RandFloatPool::randomize(m_force, m_forceRandomization) * m_particleBaseForce;
+    glm::vec3 speedDir = RandVec3Pool::randUnitVec();
 
     return speedVal * speedDir + m_impactVector;
 }
 
 glm::vec3 VoxelParticleSpawnBase::createAngularSpeed() {
-    return m_randVec3Pool->randUnitVec() * m_randFloatPool->randomize(m_force, m_forceRandomization) * m_particleAngularBaseForce.get();
+    return RandVec3Pool::randUnitVec() * RandFloatPool::randomize(m_force, m_forceRandomization) * m_particleAngularBaseForce.get();
 }
 
 float VoxelParticleSpawnBase::createLifetime() {
-    return m_randFloatPool->randomize(m_lifetime, m_lifetimeRandomization);
+    return RandFloatPool::randomize(m_lifetime, m_lifetimeRandomization);
 }
 

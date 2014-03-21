@@ -8,23 +8,18 @@
 
 const static int POOL_SIZE = 1024;
 
-std::weak_ptr<RandFloatPool> RandFloatPool::s_instance;
-
-std::shared_ptr<RandFloatPool> RandFloatPool::instance() {
-    if (std::shared_ptr<RandFloatPool> pool = s_instance.lock()) {
-        return pool;
-    } else {
-        pool = std::shared_ptr<RandFloatPool>(new RandFloatPool());
-        s_instance = pool;
-        return pool;
-    }
-}
+std::vector<float> RandFloatPool::s_pool;
+int RandFloatPool::s_iter(0);
 
 float RandFloatPool::rand(float from, float to) {
     assert(from <= to);
 
-    float randBase = m_pool[m_iter];
-    m_iter = (m_iter + 1) % m_pool.size();
+    if (s_pool.empty()) {
+        initialize();
+    }
+
+    float randBase = s_pool[s_iter];
+    s_iter = (s_iter + 1) % s_pool.size();
 
     return from + (to - from) * randBase;
 }
@@ -34,11 +29,10 @@ float RandFloatPool::randomize(float value, float randomization) {
     return value * rand(1.0f - randomization, 1.0f + randomization);
 }
 
-RandFloatPool::RandFloatPool():
-    m_pool(POOL_SIZE),
-    m_iter(0)
-{
+void RandFloatPool::initialize() {
+    s_pool.resize(POOL_SIZE);
     for (int i = 0; i < POOL_SIZE; i++) {
-        m_pool[i] = RandFloat::rand(0.0f, 1.0f);
+        s_pool[i] = RandFloat::rand(0.0f, 1.0f);
     }
 }
+
