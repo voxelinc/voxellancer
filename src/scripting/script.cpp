@@ -1,5 +1,6 @@
 #include "script.h"
 
+#include "scripting/bindings/bindings.h"
 #include "scripting/elematelua/luawrapper.h"
 
 
@@ -31,12 +32,23 @@ void Script::start() {
     m_started = true;
 }
 
+void Script::update(float deltaSec) {
+    if (m_lua->has("update")) {
+        m_lua->call("update", deltaSec);
+    }
+}
 
 const std::string& Script::debugStatus() {
     return m_debugStatus;
+}
+
+void Script::addBindings(Bindings* bindings) {
+    m_bindings.push_back(std::unique_ptr<Bindings>(bindings));
+    bindings->bind();
 }
 
 int Script::apiSetDebugStatus(const std::string& string) {
     m_debugStatus = string;
     return 0;
 }
+

@@ -4,12 +4,14 @@
 
 #include "bindings.h"
 
+
 class AiBindings : public Bindings {
 public:
     AiBindings(GamePlayScript& script);
 
+
 protected:
-    virtual void initialize();
+    virtual void bind() override;
 
     std::string apiGetFaction(apikey ship);
     int apiSetFaction(apikey ship, const std::string& faction);

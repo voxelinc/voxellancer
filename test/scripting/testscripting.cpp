@@ -45,15 +45,12 @@ go_bandit([](){
 
         std::unique_ptr<ScriptEngine> scriptEngine;
         std::unique_ptr<GamePlayScript> script;
-        std::unique_ptr<Player> player;
 
         std::string callbackFunction = R"( function callback() setDebugStatus("callback!") end )";
 
 
         before_each([&](){
             World::reset(false);
-            player.reset(new Player());
-            World::instance()->setPlayer(*player);
             scriptEngine.reset(new ScriptEngine(World::instance()));
             script.reset(new GamePlayScript(scriptEngine.get()));
             script->loadString(callbackFunction);
@@ -61,14 +58,14 @@ go_bandit([](){
 
         it("can set debug status", [&]() {
             AssertThat(script->debugStatus(), Equals(""));
-            script->loadString(R"( 
-                setDebugStatus("success") 
+            script->loadString(R"(
+                setDebugStatus("success")
             )");
             AssertThat(script->debugStatus(), Equals("success"));
         });
 
         it("can spawn ships", [&]() {
-            script->loadString(R"( 
+            script->loadString(R"(
                 ship = createShip("basicship")
                 spawn(ship)
             )");
@@ -77,7 +74,7 @@ go_bandit([](){
         });
 
         it("can access non existing playership", [&]() {
-            script->loadString(R"( 
+            script->loadString(R"(
                 ship = playerShip()
                 setDebugStatus(ship)
             )");
@@ -87,7 +84,7 @@ go_bandit([](){
 
         it("can access unscriptable playership", [&]() {
             World::instance()->player().setShip(new Ship);
-            script->loadString(R"( 
+            script->loadString(R"(
                 ship = playerShip()
                 setDebugStatus(ship)
             )");
@@ -100,7 +97,7 @@ go_bandit([](){
             Ship* ship = new Ship();
             ship->setScriptKey(1337);
             World::instance()->player().setShip(ship);
-            script->loadString(R"( 
+            script->loadString(R"(
                 ship = playerShip()
                 setDebugStatus(ship)
             )");
@@ -113,7 +110,7 @@ go_bandit([](){
             ship->transform().setPosition(glm::vec3(4, 5, 6));
             scriptEngine->registerScriptable(ship);
             World::instance()->player().setShip(ship);
-            script->loadString(R"( 
+            script->loadString(R"(
                 ship = playerShip()
                 p = position(ship)
                 setDebugStatus(p.x*100 + p.y*10 + p.z)
@@ -126,7 +123,7 @@ go_bandit([](){
             Ship* ship = new Ship();
             scriptEngine->registerScriptable(ship);
             World::instance()->player().setShip(ship);
-            script->loadString(R"( 
+            script->loadString(R"(
                 ship = playerShip()
                 setPosition(ship, vec3(7,8,9))
             )");
@@ -138,7 +135,7 @@ go_bandit([](){
             Ship* ship = new Ship();
             scriptEngine->registerScriptable(ship);
             World::instance()->player().setShip(ship);
-            script->loadString(R"( 
+            script->loadString(R"(
                 ship = playerShip()
                 setPosition(ship, vec3(7,8,9))
             )");
@@ -150,7 +147,7 @@ go_bandit([](){
             Ship* ship = new Ship();
             scriptEngine->registerScriptable(ship);
             World::instance()->player().setShip(ship);
-            script->loadString(R"( 
+            script->loadString(R"(
                 onAABBEntered(playerShip(), vec3(-50,-50,-150), vec3(50,50,-100), "callback")
             )");
             World::instance()->eventPoller().update(1.0f);
@@ -169,7 +166,7 @@ go_bandit([](){
             Ship* ship = new Ship();
             scriptEngine->registerScriptable(ship);
             World::instance()->player().setShip(ship);
-            script->loadString(R"( 
+            script->loadString(R"(
                 task = createFlyToTask(playerShip())
 	            setTargetPoint(task, vec3(0, 0, 10))
                 onAiTaskFinished(task, "callback")
@@ -192,7 +189,7 @@ go_bandit([](){
             Ship* ship = new Ship();
             scriptEngine->registerScriptable(ship);
             World::instance()->player().setShip(ship);
-            script->loadString(R"( 
+            script->loadString(R"(
                 task = createFightTask(playerShip())
                 target = createShip("basicship")
 	            addFightTaskTarget(task, target)
@@ -207,7 +204,7 @@ go_bandit([](){
             Ship* ship = new Ship();
             scriptEngine->registerScriptable(ship);
             World::instance()->player().setShip(ship);
-            script->loadString(R"( 
+            script->loadString(R"(
                 createSquad(playerShip())
             )");
 
@@ -220,7 +217,7 @@ go_bandit([](){
             Ship* ship = new Ship();
             scriptEngine->registerScriptable(ship);
             World::instance()->player().setShip(ship);
-            script->loadString(R"( 
+            script->loadString(R"(
                 squad = createSquad(playerShip())
                 s1 = createShip("basicship")
                 s2 = createShip("basicship")
@@ -236,7 +233,7 @@ go_bandit([](){
             Ship* ship = new Ship();
             scriptEngine->registerScriptable(ship);
             World::instance()->player().setShip(ship);
-            script->loadString(R"( 
+            script->loadString(R"(
                 squad = createSquad(playerShip())
                 createPatrolWaypointsTask(squad)
             )");
@@ -249,7 +246,7 @@ go_bandit([](){
             Ship* ship = new Ship();
             scriptEngine->registerScriptable(ship);
             World::instance()->player().setShip(ship);
-            script->loadString(R"( 
+            script->loadString(R"(
                 squad = createSquad(playerShip())
                 task = createPatrolWaypointsTask(squad)
                 addPatrolwWaypointPoint(task, vec3(1,2,3))
@@ -263,7 +260,7 @@ go_bandit([](){
             Ship* ship = new Ship();
             scriptEngine->registerScriptable(ship);
             World::instance()->player().setShip(ship);
-            script->loadString(R"( 
+            script->loadString(R"(
                 squad = createSquad(playerShip())
                 createDefendAreaTask(squad, vec3(1,2,3), 3.14)
             )");
@@ -280,14 +277,14 @@ go_bandit([](){
             Ship* ship = new Ship();
             scriptEngine->registerScriptable(ship);
             World::instance()->player().setShip(ship);
-            script->loadString(R"( 
+            script->loadString(R"(
                 squad = createSquad(playerShip())
                 task = createDefendAreaTask(squad, vec3(1,2,3), 3.14)
                 addDefendAreaPoint(task, vec3(3,4,5))
             )");
 
             DefendAreaTask* task = dynamic_cast<DefendAreaTask*>(ship->squadLogic()->squad()->task().get());
-            
+
             AssertThat(task->points().size(), Equals(2));
             AssertThat(task->points().front(), EqualsWithDelta(glm::vec3(1, 2, 3), 0.001f));
             AssertThat(task->points().back(), EqualsWithDelta(glm::vec3(3, 4, 5), 0.001f));

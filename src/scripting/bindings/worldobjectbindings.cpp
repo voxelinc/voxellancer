@@ -27,9 +27,7 @@ WorldObjectBindings::WorldObjectBindings(GamePlayScript& script):
 
 }
 
-
-void WorldObjectBindings::initialize()
-{
+void WorldObjectBindings::bind() {
     m_lua.Register("playerShip", this, &WorldObjectBindings::apiPlayerShip);
     m_lua.Register("createShip", this, &WorldObjectBindings::apiCreateShip);
     m_lua.Register("spawn", this, &WorldObjectBindings::apiSpawn);
@@ -39,7 +37,6 @@ void WorldObjectBindings::initialize()
     m_lua.Register("setPosition", this, &WorldObjectBindings::apiSetPosition);
     m_lua.Register("setOrientation", this, &WorldObjectBindings::apiSetOrientation);
 }
-
 
 apikey WorldObjectBindings::apiPlayerShip() {
     if (World::instance()->player().ship()) {
@@ -73,8 +70,6 @@ int WorldObjectBindings::apiSpawn(apikey key) {
     return worldObject->spawnState() == SpawnState::Spawned;
 }
 
-
-
 glm::vec3 WorldObjectBindings::apiOrientation(apikey key) {
     WorldObject* worldObject = m_scriptEngine.get<WorldObject>(key);
 
@@ -84,7 +79,6 @@ glm::vec3 WorldObjectBindings::apiOrientation(apikey key) {
 
     return glm::eulerAngles(worldObject->transform().orientation());
 }
-
 
 glm::vec3 WorldObjectBindings::apiPosition(apikey key) {
     WorldObject* worldObject = m_scriptEngine.get<WorldObject>(key);
@@ -106,7 +100,6 @@ int WorldObjectBindings::apiSetPosition(apikey key, const glm::vec3& position) {
     worldObject->transform().setPosition(position);
     return 0;
 }
-
 
 int WorldObjectBindings::apiSetOrientation(apikey key, const glm::vec3& orientation) {
     WorldObject* worldObject = m_scriptEngine.get<WorldObject>(key);

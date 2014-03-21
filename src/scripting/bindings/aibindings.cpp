@@ -20,18 +20,18 @@
 
 
 
-AiBindings::AiBindings(GamePlayScript& script): 
+AiBindings::AiBindings(GamePlayScript& script):
     Bindings(script)
 {
 
 }
 
-void AiBindings::initialize() {
+void AiBindings::bind() {
     m_lua.Register("getFaction", this, &AiBindings::apiGetFaction);
     m_lua.Register("setFaction", this, &AiBindings::apiGetFaction);
     m_lua.Register("getFactionRelation", this, &AiBindings::apiGetFactionRelation);
     m_lua.Register("setFactionRelation", this, &AiBindings::apiSetFactionRelation);
-    
+
     m_lua.Register("onAiTaskFinished", this, &AiBindings::apiOnAiTaskFinished);
 
     m_lua.Register("createFlyToTask", this, &AiBindings::apiCreateFlyToTask);
@@ -44,9 +44,9 @@ void AiBindings::initialize() {
 std::string AiBindings::apiGetFaction(apikey key) {
     Ship* ship = m_scriptEngine.get<Ship>(key);
 
-    if (!ship) { 
+    if (!ship) {
         glow::warning("AiBindings: ship %; doesnt exist", key);
-        return ""; 
+        return "";
     }
 
     return ship->character()->faction().key();
@@ -59,7 +59,7 @@ int AiBindings::apiSetFaction(apikey key, const std::string& faction) {
         glow::warning("AiBindings: ship %; doesnt exist", key);
         return -1;
     }
-    
+
     Faction& f = World::instance()->factionMatrix().getFaction(faction);
     ship->character()->setFaction(f);
     return 0;

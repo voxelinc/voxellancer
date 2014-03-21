@@ -1,6 +1,5 @@
 #include "commonbindings.h"
 
-
 #include "events/eventpoller.h"
 #include "events/singleshottimer.h"
 #include "events/loopingtimer.h"
@@ -17,15 +16,13 @@
 #include "worldobject/worldobject.h"
 
 
-CommonBindings::CommonBindings(GamePlayScript& script): 
-    Bindings(script) 
+CommonBindings::CommonBindings(GamePlayScript& script):
+    Bindings(script)
 {
-
 }
 
-
-void CommonBindings::initialize() {
-    m_lua.Register("valid", this, &CommonBindings::apiIsKeyValid);
+void CommonBindings::bind() {
+    m_lua.Register("valid", this, &CommonBindings::apiValid);
     m_lua.Register("showText", this, &CommonBindings::apiShowText);
     m_lua.Register("showTextFor", this, &CommonBindings::apiShowTextFor);
 
@@ -37,15 +34,13 @@ void CommonBindings::initialize() {
     m_lua.Register("onAABBEntered", this, &CommonBindings::apiOnAABBEntered);
 }
 
-
-bool CommonBindings::apiIsKeyValid(apikey key) {
-    return m_scriptEngine.get<void>(key) != nullptr;
+bool CommonBindings::apiValid(apikey key) {
+    return m_scriptEngine.keyValid(key);
 }
 
 int CommonBindings::apiShowText(const std::string& string) {
     return apiShowTextFor(string, 3);
 }
-
 
 int CommonBindings::apiShowTextFor(const std::string& string, int seconds) {
     // TODO show text on hud
@@ -53,11 +48,12 @@ int CommonBindings::apiShowTextFor(const std::string& string, int seconds) {
     return 0;
 }
 
-
 int CommonBindings::apiSetEventActive(apikey eventPoll, bool active) {
     EventPoll* poll = m_scriptEngine.get<EventPoll>(eventPoll);
 
-    if (!poll) { return -1; }
+    if (!poll) {
+        return -1;
+    }
 
     poll->setActive(active);
     return 0;
@@ -78,7 +74,9 @@ apikey CommonBindings::apiCreateLoopingTimer(const std::string& callback, float 
 apikey CommonBindings::apiOnAABBEntered(apikey key, const glm::vec3& llf, const glm::vec3& urb, const std::string& callback) {
     WorldObject* worldObject = m_scriptEngine.get<WorldObject>(key);
 
-    if (!worldObject) { return -1; }
+    if (!worldObject) {
+        return -1;
+    }
 
     auto enteredPoll = std::make_shared<AABBEnteredPoll>(worldObject, AABB(llf, urb), [=] { m_lua.call(callback, key); });
     World::instance()->eventPoller().addPoll(enteredPoll);

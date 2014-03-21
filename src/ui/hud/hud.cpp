@@ -2,18 +2,36 @@
 
 #include <algorithm>
 #include <cmath>
+#include <string>
 
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 
 #include <glow/Program.hpp>
 
+#include "camera/camerahead.h"
+
+#include "collision/collisionfilter.h"
+
+#include "display/view.h"
+#include "display/viewer.h"
+
+#include "gamestate/game.h"
+
+#include "geometry/ray.h"
+
+#include "physics/physics.h"
+
+#include "ui/objectinfo.h"
+
 #include "utils/tostring.h"
 #include "utils/geometryhelper.h"
 
-#include "world/world.h"
-#include <string>
+#include "voxel/voxelrenderer.h"
 
+#include "world/world.h"
+
+#include "worldtree/worldtreescanner.h"
 #include "worldtree/worldtreequery.h"
 
 #include "worldobject/ship.h"
@@ -21,33 +39,24 @@
 #include "hudget.h"
 #include "hudobjectdelegate.h"
 #include "objecthudget.h"
-
-#include "collision/collisionfilter.h"
-
 #include "player.h"
-#include "voxel/voxelrenderer.h"
-#include "geometry/ray.h"
-#include "display/viewer.h"
 #include "crosshair.h"
-#include "worldtree/worldtreescanner.h"
 #include "aimhelperhudget.h"
-#include "ui/objectinfo.h"
-#include "display/view.h"
-#include "camera/camerahead.h"
 #include "textfieldhudget.h"
-#include "physics/physics.h"
 
 
 
 HUD::HUD(Player* player):
     m_player(player),
-    m_viewer(nullptr),
     m_sphere(glm::vec3(0, 0, 0), 5.0f),
     m_crossHair(new CrossHair(this)),
     m_aimHelper(new AimHelperHudget(this)),
     m_scanner(new WorldTreeScanner()),
     m_targetName(new TextFieldHudget(this, glm::normalize(glm::vec3(0, -1.1f, -2)), 0.025f, "")),
     m_speedLabel(new TextFieldHudget(this, glm::normalize(glm::vec3(1.5f, -1.1f, -2)), 0.020f, "")),
+    m_missionTitle(new TextFieldHudget(this, glm::normalize(glm::vec3(0.0f, 1.0f, -2)), 0.020f, "")),
+    m_missionCaption(new TextFieldHudget(this, glm::normalize(glm::vec3(0.0f, 0.8f, -2)), 0.010f, "")),
+    m_missionMessage(new TextFieldHudget(this, glm::normalize(glm::vec3(0.0f, -0.4f, -2)), 0.010f, "")),
     m_target(nullptr),
     m_drawHud("vfx.drawhud")
 {
@@ -56,6 +65,9 @@ HUD::HUD(Player* player):
     m_hudgets.push_back(m_aimHelper.get());
     m_hudgets.push_back(m_targetName.get());
     m_hudgets.push_back(m_speedLabel.get());
+    m_hudgets.push_back(m_missionTitle.get());
+    m_hudgets.push_back(m_missionCaption.get());
+    m_hudgets.push_back(m_missionMessage.get());
 }
 
 HUD::~HUD() = default;
@@ -121,10 +133,11 @@ HUDObjectDelegate* HUD::objectDelegate(WorldObject* worldObject) {
 }
 
 void HUD::setCrossHairOffset(const glm::vec2& mousePosition) {
-    assert(m_viewer);
-    float fovy = m_viewer->view().fovy();
-    float nearZ = m_viewer->view().zNear();
-    float ar = m_viewer->view().aspectRatio();
+    Viewer* viewer = &Game::instance()->viewer();
+
+    float fovy = viewer->view().fovy();
+    float nearZ = viewer->view().zNear();
+    float ar = viewer->view().aspectRatio();
 
     float nearPlaneHeight = 2 * std::tan(fovy / 2.0f);
     float nearPlaneWidth = nearPlaneHeight * ar;
@@ -140,15 +153,15 @@ void HUD::update(float deltaSec) {
     Ray toCrossHair = Ray::fromTo(m_player->cameraHead().position(), m_crossHair->worldPosition());
 
     if (m_target.get()) {
-        m_targetName->setContent(m_target->objectInfo().name());
+        m_targetName->setText(m_target->objectInfo().name());
     } else {
-        m_targetName->setContent("no target");
+        m_targetName->setText("no target");
     }
 
     if (m_player->ship()) {
-        m_speedLabel->setContent(std::to_string((int)(glm::length(m_player->ship()->physics().speed().directional()))));
+        m_speedLabel->setText(std::to_string((int)(glm::length(m_player->ship()->physics().speed().directional()))));
     } else {
-        m_speedLabel->setContent("-");
+        m_speedLabel->setText("-");
     }
 
     for (Hudget* hudget : m_hudgets) {
@@ -161,6 +174,7 @@ void HUD::draw() {
     if (!m_drawHud) {
         return;
     }
+
     glow::Uniform<glm::vec3>* lightuniform = VoxelRenderer::instance()->program()->getUniform<glm::vec3>("lightdir");
     glm::vec3 oldLightdir = lightuniform->value();
     lightuniform->set(m_player->cameraHead().orientation() * glm::vec3(0,0,1));
@@ -182,6 +196,35 @@ void HUD::onClick(ClickType clickType) {
             return;
         }
     }
+}
+
+glm::vec3 HUD::applyTo(const glm::vec3 &vertex) const {
+    return position() + (orientation() * vertex);
+}
+
+void HUD::setTarget(WorldObject* target) {
+    m_target = target->handle();
+}
+
+WorldObject* HUD::target() {
+    return m_target.get();
+}
+
+float HUD::fovy() const {
+    return m_fovy;
+}
+
+float HUD::fovx() const {
+    return m_fovx;
+}
+
+void HUD::showMissionInfo(const std::string& title, const std::string& caption) {
+    m_missionTitle->setText(title);
+    m_missionCaption->setText(caption);
+}
+
+void HUD::showMissionMessage(const std::string& message) {
+    m_missionMessage->setText(message);
 }
 
 void HUD::updateScanner(float deltaSec) {
@@ -211,36 +254,11 @@ void HUD::updateScanner(float deltaSec) {
     }
 }
 
-glm::vec3 HUD::applyTo(const glm::vec3 &vertex) const {
-    return position() + (orientation() * vertex);
-}
-
-void HUD::setTarget(WorldObject* target) {
-    m_target = target->handle();
-}
-
-WorldObject* HUD::target() {
-    return m_target.get();
-}
-
-Viewer* HUD::viewer() const {
-    return m_viewer;
-}
-
 void HUD::updateFov() {
-    assert(m_viewer);
-    m_fovy = m_viewer->view().fovy() / 2;
-    m_fovx = glm::atan(glm::tan(m_fovy)*m_viewer->view().aspectRatio());
+    Viewer* viewer = &Game::instance()->viewer();
+
+    m_fovy = viewer->view().fovy() / 2;
+    m_fovx = glm::atan(glm::tan(m_fovy) * viewer->view().aspectRatio());
 }
 
-float HUD::fovy() const {
-    return m_fovy;
-}
 
-float HUD::fovx() const {
-    return m_fovx;
-}
-
-void HUD::setViewer(Viewer& viewer) {
-    m_viewer = &viewer;
-}

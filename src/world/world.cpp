@@ -22,7 +22,7 @@
 World *World::s_instance = nullptr;
 
 World::World():
-    m_player(nullptr),
+    m_player(new Player()),
     m_skybox(new Skybox()),
     m_worldLogic(new WorldLogic(*this)),
     m_worldTree(new WorldTree()),
@@ -39,12 +39,7 @@ World::~World() {
 }
 
 Player& World::player() {
-    assert(m_player);
     return *m_player;
-}
-
-void World::setPlayer(Player& player) {
-    m_player = &player;
 }
 
 Skybox &World::skybox() {
@@ -90,6 +85,7 @@ std::unordered_set<Ship*> &World::ships() {
 void World::update(float deltaSecs) {
     m_deltaSec = deltaSecs;
 
+    m_player->update(deltaSecs);
     m_worldLogic->update(deltaSecs);
     m_scriptEngine->update(deltaSecs);
     m_eventPoller->update(deltaSecs);

@@ -69,6 +69,16 @@ void LuaWrapper::reloadScripts()
     }
 }
 
+bool LuaWrapper::has(const std::string & fun) {
+    lua_getglobal(m_state, fun.c_str());
+
+    bool result = lua_isfunction(m_state, -1);
+
+    lua_pop(m_state, 1);
+
+    return result;
+}
+
 void LuaWrapper::reloadAll()
 {
     for (auto & instance : s_instances)

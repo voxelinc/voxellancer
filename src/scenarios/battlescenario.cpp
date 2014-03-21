@@ -44,7 +44,7 @@ void BattleScenario::populateWorld() {
     playerShip->objectInfo().setCanLockOn(false);
 
     m_world->god().scheduleSpawn(playerShip);
-    m_gamePlay->player().setShip(playerShip);
+    World::instance()->player().setShip(playerShip);
 
     // create enemy ai driven ship
     Ship *aitester = WorldObjectBuilder("basicship").buildShip();
@@ -121,7 +121,7 @@ void BattleScenario::setTargets(const std::vector<Ship*>& fleet, const std::vect
     for (Ship* enemy : enemies) {
         enemyHandles.push_back(enemy->WorldObject::handle());
     }
-    enemyHandles.push_back(m_gamePlay->player().ship()->WorldObject::handle());
+    enemyHandles.push_back(World::instance()->player().ship()->WorldObject::handle());
     for (Ship* ship : fleet) {
         std::random_shuffle(enemyHandles.begin(), enemyHandles.end());
         ship->character()->setTask(std::make_shared<FightTask>(ship->boardComputer(), enemyHandles));

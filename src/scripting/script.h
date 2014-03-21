@@ -2,8 +2,10 @@
 
 #include <memory>
 #include <string>
+#include <vector>
 
 
+class Bindings;
 class LuaWrapper;
 
 /*
@@ -21,12 +23,21 @@ public:
 
     void start();
 
+    void update(float deltaSec);
+
     const std::string& debugStatus();
-    int apiSetDebugStatus(const std::string& string);
+
 
 protected:
     std::unique_ptr<LuaWrapper> m_lua;
     bool m_started;
     std::string m_debugStatus;
+    std::vector<std::unique_ptr<Bindings>> m_bindings;
+
+
+    void addBindings(Bindings* bindings);
+
+    int apiSetDebugStatus(const std::string& string);
 };
+
 

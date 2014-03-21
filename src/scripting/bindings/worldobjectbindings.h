@@ -2,12 +2,14 @@
 
 #include "bindings.h"
 
+
 class WorldObjectBindings : public Bindings {
 public:
     WorldObjectBindings(GamePlayScript& script);
 
+
 protected:
-    virtual void initialize();
+    virtual void bind() override;
 
     apikey apiPlayerShip();
     apikey apiCreateShip(const std::string& name);
@@ -19,5 +21,4 @@ protected:
     glm::vec3 apiOrientation(apikey worldObject);
 
     apikey apiOnWorldObjectDestroyed(apikey worldObject, const std::string& callback);
-
 };

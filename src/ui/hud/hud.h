@@ -56,19 +56,19 @@ public:
     void setTarget(WorldObject* target);
     WorldObject* target();
 
-
     void onClick(ClickType clickType);
 
     void update(float deltaSec);
     void draw();
 
     glm::vec3 applyTo(const glm::vec3 &vertex) const;
-	
-    Viewer* viewer() const;
-    void setViewer(Viewer& viewer);
 
     float fovy() const;
     float fovx() const;
+
+    void showMissionInfo(const std::string& title, const std::string& caption);
+    void showMissionMessage(const std::string& message);
+
 
 protected:
     Player* m_player;
@@ -84,10 +84,15 @@ protected:
     std::unique_ptr<WorldTreeScanner> m_scanner;
     std::unique_ptr<TextFieldHudget> m_speedLabel;
     std::unique_ptr<TextFieldHudget> m_targetName;
+    std::unique_ptr<TextFieldHudget> m_missionTitle;
+    std::unique_ptr<TextFieldHudget> m_missionMessage;
+    std::unique_ptr<TextFieldHudget> m_missionCaption;
 
     std::list<Hudget*> m_hudgets;
 
     std::map<WorldObject*, HUDObjectDelegate*> m_objectDelegates;
+
+
     void updateScanner(float deltaSec);
     void updateFov();
 };

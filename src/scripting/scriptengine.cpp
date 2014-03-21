@@ -63,6 +63,10 @@ void ScriptEngine::unregisterScriptable(Scriptable* scriptable) {
     }
 }
 
+bool ScriptEngine::keyValid(int key) const {
+    return m_scriptables.find(key) != m_scriptables.end();
+}
+
 Scriptable* ScriptEngine::getScriptable(int key) {
     if (key <= 0 || key >= m_keyIncrementor) {
         glow::warning("ScriptEngine: script-key '%;' is not valid", key);
@@ -79,6 +83,10 @@ Scriptable* ScriptEngine::getScriptable(int key) {
 }
 
 void ScriptEngine::update(float deltaSec) {
-
+    if (m_running) {
+        for (std::shared_ptr<GamePlayScript>& script : m_scripts) {
+            script->update(deltaSec);
+        }
+    }
 }
 

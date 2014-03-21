@@ -36,6 +36,8 @@ public:
     template<class T>
     T* get(int key);
 
+    bool keyValid(int key) const;
+
     void update(float deltaSec);
 
 
@@ -49,7 +51,6 @@ protected:
     bool m_running;
 
     Scriptable* getScriptable(int key);
-    
 };
 
 #include "scriptengine.inl"

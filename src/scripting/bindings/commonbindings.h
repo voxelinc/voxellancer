@@ -6,14 +6,16 @@
 
 #include "bindings.h"
 
+
 class CommonBindings : public Bindings {
 public:
     CommonBindings(GamePlayScript& script);
 
-protected:
-    virtual void initialize();
 
-    bool apiIsKeyValid(apikey key);
+protected:
+    virtual void bind() override;
+
+    bool apiValid(apikey key);
     int apiShowText(const std::string& string);
     int apiShowTextFor(const std::string& string, int seconds);
 
@@ -23,5 +25,5 @@ protected:
     apikey apiCreateLoopingTimer(const std::string& callback, float delta);
 
     apikey apiOnAABBEntered(apikey worldObject, const glm::vec3& llf, const glm::vec3& urb, const std::string& callback);
-
 };
+

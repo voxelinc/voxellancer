@@ -9,13 +9,15 @@
 
 #include "utils/handle/handle.h"
 
-class TargetSelector;
 
 class Aimer;
 class Camera;
 class CameraHead;
-class HUD;
 class CameraDolly;
+class HUD;
+class Mission;
+class MissionSystem;
+class TargetSelector;
 
 class Player {
 public:
@@ -39,12 +41,16 @@ public:
     void selectTarget(bool next);
     void setTarget(WorldObject* target);
 
+    void addMission(Mission* mission);
+
+
 protected:
     Handle<Ship> m_ship;
     std::unique_ptr<CameraDolly> m_cameraDolly;
     std::unique_ptr<HUD> m_hud;
     std::unique_ptr<TargetSelector> m_targetSelector;
     std::unique_ptr<Aimer> m_aimer;
+    std::unique_ptr<MissionSystem> m_missionSystem;
     EngineState m_engineState;
 };
 
