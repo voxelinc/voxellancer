@@ -31,10 +31,10 @@ std::list<WorldObject*> &Wrecker::newWreckages() {
 WorldObject* Wrecker::wreckFromObject(WorldObject* object) {
     WorldObject* wreckage = new WorldObject(object->transform());
 
-    wreckage->objectInfo().setName(object->objectInfo().name());
+    wreckage->objectInfo().setName(object->objectInfo().name() + " - wreck");
     wreckage->physics().setSpeed(object->physics().speed());
 
-    for (auto pair : object->voxelMap()) {
+    for (auto& pair : object->voxelMap()) {
         wreckage->addVoxel(new Voxel(*pair.second));
     }
 
