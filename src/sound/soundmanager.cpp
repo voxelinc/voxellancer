@@ -103,7 +103,7 @@ SoundManager* SoundManager::current() {
 void SoundManager::activate() {
     if (s_current == this) {
         return;
-    } 
+    }
     assert(s_current == nullptr);
 
     s_current = this;
