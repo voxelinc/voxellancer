@@ -21,13 +21,13 @@ void GenericEngine::setEngineSound(const SoundProperties& engineSound) {
     m_engineSound = engineSound;
 }
 
-EnginePower GenericEngine::power() const {
-    return m_power;
-}
-
-void GenericEngine::setPower(const EnginePower& power) {
-    m_power = power;
-}
+//EnginePower GenericEngine::power() const {
+//    return m_power;
+//}
+//
+//void GenericEngine::setPower(const EnginePower& power) {
+//    m_power = power;
+//}
 
 void GenericEngine::update(float deltaSec) {
     Engine::update(deltaSec);

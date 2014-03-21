@@ -5,6 +5,7 @@
 
 #include "equipment/enginepower.h"
 #include "equipment/enginestate.h"
+#include "geometry/speed.h"
 
 
 class EngineSlot;
@@ -36,21 +37,11 @@ public:
     std::shared_ptr<EngineSlot> engineSlot(int index);
     std::list<std::shared_ptr<EngineSlot>>& engineSlots();
 
-    /*
-        Poll all installed engines for accumulated power
-    */
-    EnginePower enginePower() const;
+    EnginePower maxSpeed() const;
+    void setMaxSpeed(const EnginePower& maxSpeed);
 
-    /*
-        Acceleration of all engines accumulated;
-    */
-    Acceleration currentAcceleration() const;
+    Acceleration currentAcceleration();
 
-    /*
-        Set relative state on all installed engines,
-        the value returned by engineState() is the last set and doesn't react on
-        possible indivdual changes of engines;
-    */
     const EngineState& engineState() const;
     void setEngineState(const EngineState& engineState);
 
@@ -87,5 +78,6 @@ protected:
     std::list<std::shared_ptr<Hardpoint>> m_hardpoints;
 
     EngineState m_engineState;
+    EnginePower m_maxSpeed;
 };
 

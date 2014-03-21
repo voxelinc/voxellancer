@@ -9,9 +9,13 @@
 #include "equipment/weapons/gun.h"
 #include "equipment/weapons/rocketlauncher.h"
 
+#include "worldobject.h"
+
 
 WorldObjectComponents::WorldObjectComponents(WorldObject* worldObject):
-    m_worldObject(worldObject)
+    m_worldObject(worldObject),
+    m_engineState(),
+    m_maxSpeed(glm::vec4(50, 50, 100, 40), glm::vec3(2.f))
 {
 }
 
@@ -42,25 +46,11 @@ std::list<std::shared_ptr<EngineSlot>>& WorldObjectComponents::engineSlots() {
     return m_engineSlots;
 }
 
-EnginePower WorldObjectComponents::enginePower() const {
-    EnginePower accumulated;
-    for (std::shared_ptr<EngineSlot> engineSlot : m_engineSlots) {
-        if (engineSlot->engine()) {
-            accumulated += engineSlot->engine()->power();
-        }
-    }
-    return accumulated;
-}
-
-Acceleration WorldObjectComponents::currentAcceleration() const {
-    Acceleration accumulated;
-    for (std::shared_ptr<EngineSlot> engineSlot : m_engineSlots) {
-        if (engineSlot->engine()) {
-            accumulated += engineSlot->engine()->currentAcceleration();
-        }
-    }
-    return accumulated;
-
+Acceleration WorldObjectComponents::currentAcceleration() {
+    Acceleration acceleration = m_maxSpeed.accelerationAt(m_engineState, m_worldObject->physics());
+    float aliveEngineRatio = 1.0; // this will decrease if engines get destroyed - engines could have a multiplier if it should be possible to make them more important
+    
+    return acceleration * aliveEngineRatio;
 }
 
 const EngineState& WorldObjectComponents::engineState() const {
@@ -69,12 +59,6 @@ const EngineState& WorldObjectComponents::engineState() const {
 
 void WorldObjectComponents::setEngineState(const EngineState& engineState) {
     m_engineState = engineState;
-
-    for (std::shared_ptr<EngineSlot> engineSlot : m_engineSlots) {
-        if (engineSlot->engine()) {
-            engineSlot->engine()->setState(engineState);
-        }
-    }
 }
 
 void WorldObjectComponents::addHardpoint(std::shared_ptr<Hardpoint> hardpoint) {
@@ -125,6 +109,10 @@ void WorldObjectComponents::update(float deltaSec) {
     for (std::shared_ptr<EngineSlot> engineSlot : m_engineSlots) {
         engineSlot->update(deltaSec);
     }
+}
+
+EnginePower WorldObjectComponents::maxSpeed() const {
+    return m_maxSpeed;
 }
 
 

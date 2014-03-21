@@ -19,7 +19,7 @@ Engine* EngineBuilder::build() {
     GenericEngine* genericEngine = new GenericEngine(m_name);
 
     genericEngine->setVisuals(Visuals::fromProperties(m_name + ".visuals"));
-    genericEngine->setPower(EnginePower::fromProperties(m_name  + ".general"));
+    //genericEngine->setPower(EnginePower::fromProperties(m_name  + ".general"));
     genericEngine->setEngineSound(SoundProperties::fromProperties(m_name + ".sound"));
 
     return genericEngine;

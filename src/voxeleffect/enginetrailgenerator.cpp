@@ -51,7 +51,7 @@ void EngineTrailGenerator::update(float deltaSec) {
 
         updateTrailSettings();
 
-        if (m_engine.state().directional().z <= -0.05f) { //only when moving forward
+        if (/*m_engine.state().directional().z <= -0.05f*/ true) { //only when moving forward
             spawnTrail();
         } else {
             if (m_timeSinceLastSpawn > prop_idleTime) { // When not moving, we still want some exhausts
