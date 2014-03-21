@@ -27,7 +27,7 @@
 
 #include "player.h"
 #include "ui/objectinfo.h"
-#include "utils/randvec.h"
+#include "utils/randvec3.h"
 
 #include "scripting/scriptengine.h"
 #include "scripting/gameplayscript.h"

@@ -4,7 +4,9 @@
 
 #include "world/god.h"
 #include "world/world.h"
-#include "utils/randvec.h"
+#include "utils/randvec3.h"
+#include "utils/randvec3pool.h"
+#include "utils/randfloatpool.h"
 #include "utils/randfloat.h"
 #include "utils/randbool.h"
 
@@ -14,9 +16,9 @@
 
 
 VoxelParticleSpawnBase::VoxelParticleSpawnBase(
-    const VoxelCluster* creator, 
+    const VoxelCluster* creator,
     char* dampeningName,
-    char* angularDampeningName, 
+    char* angularDampeningName,
     char* baseForceName,
     char* angularBaseForceName):
     m_creator(creator),
@@ -33,9 +35,13 @@ VoxelParticleSpawnBase::VoxelParticleSpawnBase(
     m_particleDampening(dampeningName),
     m_particleAngularDampening(angularDampeningName),
     m_particleBaseForce(baseForceName),
-    m_particleAngularBaseForce(angularBaseForceName)
+    m_particleAngularBaseForce(angularBaseForceName),
+    m_randVec3Pool(RandVec3Pool::instance()),
+    m_randFloatPool(RandFloatPool::instance())
 {
 }
+
+VoxelParticleSpawnBase::~VoxelParticleSpawnBase() = default;
 
 void VoxelParticleSpawnBase::setPosition(const glm::vec3& position) {
     m_position = position;
@@ -72,16 +78,17 @@ void VoxelParticleSpawnBase::setImpactVector(const glm::vec3& impactVector) {
 }
 
 glm::vec3 VoxelParticleSpawnBase::createDirectionalSpeed() {
-    float speedVal = RandFloat::randomize(m_force, m_forceRandomization) * m_particleBaseForce;
-    glm::vec3 speedDir = RandVec3::randUnitVec();
+    float speedVal = m_randFloatPool->randomize(m_force, m_forceRandomization) * m_particleBaseForce;
+    glm::vec3 speedDir = m_randVec3Pool->randUnitVec();
 
     return speedVal * speedDir + m_impactVector;
 }
 
 glm::vec3 VoxelParticleSpawnBase::createAngularSpeed() {
-    return RandVec3::randUnitVec() * RandFloat::randomize(m_force, m_forceRandomization) * m_particleAngularBaseForce.get();
+    return m_randVec3Pool->randUnitVec() * m_randFloatPool->randomize(m_force, m_forceRandomization) * m_particleAngularBaseForce.get();
 }
 
 float VoxelParticleSpawnBase::createLifetime() {
-    return RandFloat::randomize(m_lifetime, m_lifetimeRandomization);
+    return m_randFloatPool->randomize(m_lifetime, m_lifetimeRandomization);
 }
+

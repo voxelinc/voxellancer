@@ -1,11 +1,16 @@
 #pragma once
+
 #include <glm/glm.hpp>
 
 #include "property/property.h"
+
 #include "voxelparticlespawnbase.h"
 
-class VoxelCluster;
+
+
+class RandFloatPool;
 class Transform;
+class VoxelCluster;
 
 class VoxelExplosionGenerator : public VoxelParticleSpawnBase {
 public:
@@ -17,9 +22,12 @@ public:
 
     void spawn();
 
+
 protected:
     float m_radius;
     int m_count;
+
+    std::shared_ptr<RandFloatPool> m_randFloatPool;
 
     float createScale();
 };

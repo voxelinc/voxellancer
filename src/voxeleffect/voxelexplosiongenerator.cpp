@@ -4,7 +4,8 @@
 
 #include "world/world.h"
 #include "utils/randfloat.h"
-#include "utils/randvec.h"
+#include "utils/randfloatpool.h"
+#include "utils/randvec3.h"
 
 #include "voxelparticledata.h"
 #include "voxelparticlesetup.h"
@@ -18,7 +19,8 @@ VoxelExplosionGenerator::VoxelExplosionGenerator(const VoxelCluster* creator) :
                            "physics.explosionBaseForce",
                            "physics.explosionAngularBaseForce"),
     m_radius(0.5f),
-    m_count(10)
+    m_count(10),
+    m_randFloatPool(RandFloatPool::instance())
 {
 }
 
@@ -57,5 +59,5 @@ void VoxelExplosionGenerator::spawn() {
 }
 
 float VoxelExplosionGenerator::createScale() {
-    return RandFloat::randomize(m_scale, m_scaleRandomization);
+    return m_randFloatPool->randomize(m_scale, m_scaleRandomization);
 }

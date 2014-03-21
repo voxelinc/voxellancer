@@ -22,7 +22,7 @@
 #include "world/world.h"
 #include "world/god.h"
 
-#include "utils/randvec.h"
+#include "utils/randvec3.h"
 #include "player.h"
 #include "ui/objectinfo.h"
 
