@@ -9,6 +9,8 @@
 #include "enginestate.h"
 
 
+class Physics;
+
 /*
     Max acceleration per mass an engine - or mutiple engines accumulated -
     are able to perform.
@@ -30,7 +32,11 @@ public:
     const glm::vec3& angular() const;
     void setAngular(const glm::vec3& angular);
 
-    Acceleration accelerationAt(const EngineState& engineState);
+    /**
+     *  maxmimum speed is at v * (1-dampening) = v + a
+     *  a = -dampening * v
+     */
+    Acceleration accelerationAt(const EngineState& engineState, Physics& physics);
 
     EnginePower& operator+=(const EnginePower& other);
 

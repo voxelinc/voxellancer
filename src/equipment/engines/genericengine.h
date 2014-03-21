@@ -18,8 +18,8 @@ public:
     virtual const SoundProperties& sound() const override;
     void setEngineSound(const SoundProperties& engineSound);
 
-    virtual EnginePower power() const override;
-    void setPower(const EnginePower& power);
+    //virtual EnginePower power() const override;
+    //void setPower(const EnginePower& power);
 
     virtual void update(float deltaSec) override;
 

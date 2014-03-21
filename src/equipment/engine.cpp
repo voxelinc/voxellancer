@@ -54,22 +54,22 @@ void Engine::update(float deltaSec) {
     m_trailGenerator->update(deltaSec);
 }
 
-const EngineState& Engine::state() const {
-    return m_state;
-}
-
-void Engine::setState(const EngineState& state) {
-    m_state = state;
-}
-
-Acceleration Engine::currentAcceleration() const {
-    WorldObject* worldObject = (m_engineSlot ? m_engineSlot->components()->worldObject() : nullptr);
-    if (worldObject) {
-        return Acceleration(power().accelerationAt(m_state) / worldObject->physics().maxMass());
-    } else {
-        return Acceleration();
-    }
-}
+//const EngineState& Engine::state() const {
+//    return m_state;
+//}
+//
+//void Engine::setState(const EngineState& state) {
+//    m_state = state;
+//}
+//
+//Acceleration Engine::currentAcceleration() const {
+//    WorldObject* worldObject = (m_engineSlot ? m_engineSlot->components()->worldObject() : nullptr);
+//    if (worldObject) {
+//        return Acceleration(power().accelerationAt(m_state) / worldObject->physics().maxMass());
+//    } else {
+//        return Acceleration();
+//    }
+//}
 
 void Engine::setupTrail() {
     m_trailGenerator->setLifetime(Property<float>::get(equipmentKey() + ".trail.lifetime", 1.0f));

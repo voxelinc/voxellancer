@@ -1,6 +1,7 @@
 #include "enginepower.h"
 
 #include "property/propertymanager.h"
+#include "physics/physics.h"
 
 
 EnginePower::EnginePower():
@@ -30,11 +31,12 @@ void EnginePower::setAngular(const glm::vec3& angular) {
     m_angular = angular;
 }
 
-Acceleration EnginePower::accelerationAt(const EngineState& engineState) {
-    return Acceleration(
-        glm::vec3(m_directional.x, m_directional.y, engineState.directional().z < 0 ? m_directional.z : m_directional.w) * engineState.directional(),
-        m_angular * engineState.angular()
-    );
+Acceleration EnginePower::accelerationAt(const EngineState& engineState, Physics& physics) {
+    glm::vec3 directional = glm::vec3(m_directional.x, m_directional.y, engineState.directional().z < 0 ? m_directional.z : m_directional.w);
+    directional = directional * engineState.directional() * physics.directionalDampening();
+    glm::vec3 angular = m_angular * engineState.angular() * physics.angularDampening();
+    
+    return Acceleration(directional, angular);
 }
 
 EnginePower& EnginePower::operator+=(const EnginePower& other) {
