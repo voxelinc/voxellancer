@@ -18,8 +18,8 @@ Bullet::Bullet():
     m_objectInfo->setShowOnHud(false);
     m_objectInfo->setCanLockOn(false);
 
-    m_physics->setDirectionalDampening(unnamed_property(0.0f));
-    m_physics->setAngularDampening(unnamed_property(0.0f));
+    m_physics->setDirectionalDampening(unnamedProperty(0.0f));
+    m_physics->setAngularDampening(unnamedProperty(0.0f));
 }
 
 

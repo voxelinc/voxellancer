@@ -36,7 +36,7 @@ protected:
  *  helper method to get rid of the <T> as it can be inferred from the value
  */
 template<class T>
-Property<T> unnamed_property(const T& value) {
+Property<T> unnamedProperty(const T& value) {
     return Property<T>::unnamed(value);
 }
 

@@ -24,7 +24,7 @@ public:
     void setDirectionalDampening(const Property<float>& directionalDampening);
 
     float angularDampening() const;
-    void setAngularDampening(const Property<float>& directionalDampening);
+    void setAngularDampening(const Property<float>& angularDampening);
 
     const Speed& speed() const;
     void setSpeed(const Speed& speed);
