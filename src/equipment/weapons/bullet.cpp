@@ -30,3 +30,7 @@ void Bullet::update(float deltaSec) {
     Projectile::update(deltaSec);
 }
 
+bool Bullet::wantsPassiveGeode() {
+    return true;
+}
+

@@ -172,3 +172,7 @@ bool WorldObject::isDestroyed() const {
     return m_isDestroyed;
 }
 
+bool WorldObject::wantsPassiveGeode() {
+    return false;
+}
+

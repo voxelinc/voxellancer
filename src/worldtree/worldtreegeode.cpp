@@ -15,7 +15,7 @@ WorldTreeGeode::WorldTreeGeode(WorldObject* worldObject) :
     m_passive(false)
 {
     m_worldObject->collisionDetector().setGeode(this);
-    if (worldObject->objectType() == WorldObjectType::Bullet) {
+    if (worldObject->wantsPassiveGeode()) {
         m_passive = true;
     }
 }

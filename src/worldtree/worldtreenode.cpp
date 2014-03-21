@@ -193,10 +193,14 @@ void WorldTreeNode::convertToGroup(WorldTreeNode* initialSubnode) {
         }
 
         for (WorldTreeGeode* geode : m_normalGeodes) {
-            moveToSubNode(geode, m_subnodes[n]);
+            if (geode->aabb().intersects(m_subnodes[n]->aabb())) {
+                moveToSubnode(geode, m_subnodes[n]);
+            }
         }
         for (WorldTreeGeode* geode : m_passiveGeodes) {
-            moveToSubNode(geode, m_subnodes[n]);
+            if (geode->aabb().intersects(m_subnodes[n]->aabb())) {
+                moveToSubnode(geode, m_subnodes[n]);
+            }
         }
     }
 
@@ -206,11 +210,9 @@ void WorldTreeNode::convertToGroup(WorldTreeNode* initialSubnode) {
     assert(!isLeaf());
 }
 
-void WorldTreeNode::moveToSubNode(WorldTreeGeode* geode, WorldTreeNode* subnode) {
-    if (geode->aabb().intersects(subnode->aabb())) {
+void WorldTreeNode::moveToSubnode(WorldTreeGeode* geode, WorldTreeNode* subnode) {
         subnode->insert(geode);
         geode->removeIntersectingLeaf(this);
-    }
 }
 
 

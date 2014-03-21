@@ -65,7 +65,7 @@ protected:
     /**
      *  move a geode to the specified subnode if it is contained in its aabb                                                                   
      */ 
-    void moveToSubNode(WorldTreeGeode* geode, WorldTreeNode* subnode);
+    void moveToSubnode(WorldTreeGeode* geode, WorldTreeNode* subnode);
 
     void subnodeActivated(WorldTreeNode* subnode);
     void subnodeDeactivated(WorldTreeNode* subnode);
