@@ -12,7 +12,7 @@ InputConfigWriter::InputConfigWriter(const std::string& file):
 {
     m_file.open(file, std::ios::out);
     assert(m_file.is_open());
-    if (m_file.is_open()) {
+    if (m_file.is_open()) { 
         m_file << "[input]" << std::endl;
     } else {
         glow::warning("InputConfigWriter: cant open file %;", file);
@@ -33,9 +33,11 @@ void InputConfigWriter::write(ActionKeyMapping& mapping) {
     }
 }
 
-void InputConfigWriter::write(std::string name, const InputMapping& mapping) {
-    name.erase(name.begin(), name.begin() + 6); // remove "input."
-    m_file << name << " = InputMapping(";
+void InputConfigWriter::write(const std::string& name, const InputMapping& mapping) {
+    assert(m_file.is_open());
+    std::string unPrefixedName = name;
+    unPrefixedName.erase(unPrefixedName.begin(), unPrefixedName.begin() + 6); // remove "input."
+    m_file << unPrefixedName << " = InputMapping(";
     m_file << std::setprecision(2);
     m_file << static_cast<int>(mapping.type()) << ",";
     m_file << mapping.index() << ",";
