@@ -38,7 +38,7 @@ protected:
     DamageImpactGenerator m_damageImpactGenerator;
     SplitDetector m_splitDetector;
     Splitter m_splitter;
-    //Wrecker m_wrecker;
+    Wrecker m_wrecker;
     GarbageCollector m_garbageCollector;
     VoxelHangman m_voxelHangman;
 

@@ -4,6 +4,7 @@
 #include <glow/ChangeListener.h>
 #include <glow/logging.h>
 
+#include "property/property.h"
 #include "property/propertymanager.h"
 #include "input/inputmapping.h"
 
