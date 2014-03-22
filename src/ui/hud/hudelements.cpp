@@ -63,10 +63,10 @@ void HUDElements::setSpeed(const std::string& speed) {
 
 void HUDElements::showMissionInfo(const std::string& title, const std::string& caption) {
     m_missionTitle->setText(title);
-    m_missionTitleHider->hideIn(2.0f);
+    m_missionTitleHider->hideIn(4.0f);
 
     m_missionCaption->setText(caption);
-    m_missionCaptionHider->hideIn(1.5f);
+    m_missionCaptionHider->hideIn(3.5f);
 }
 
 void HUDElements::showMissionMessage(const std::string& message) {
@@ -91,3 +91,4 @@ void HUDElements::draw() {
         }
     }
 }
+

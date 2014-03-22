@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#include "bindings/missionbindings.h"
+#include "bindings/internalmissionbindings.h"
 
 #include "scripting/elematelua/luawrapper.h"
 
@@ -11,7 +11,7 @@ MissionScript::MissionScript(Mission& mission, ScriptEngine* scriptEngine):
     GamePlayScript(scriptEngine),
     m_mission(mission)
 {
-    addBindings(new MissionBindings(*this));
+    addBindings(new InternalMissionBindings(*this));
 }
 
 Mission& MissionScript::mission() {

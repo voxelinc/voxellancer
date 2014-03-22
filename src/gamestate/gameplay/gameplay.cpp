@@ -34,7 +34,7 @@ GamePlay::GamePlay(Game* game) :
     m_pausedState(new GamePlayPaused(this)),
     m_scene(new GamePlayScene(*this)),
     m_soundManager(new SoundManager()),
-    m_scenario(new ScriptedScenario(this, "data/scripts/scenarios/flyto.lua"))
+    m_scenario(new ScriptedScenario(this, "data/scripts/scenarios/demo.lua"))
 {
     setInitialSubState(m_runningState);
 
@@ -76,7 +76,7 @@ void GamePlay::loadScenario(int i) {
 
     switch (i) {
     case 0:
-        m_scenario.reset(new ScriptedScenario(this, "data/scripts/scenarios/flyto.lua"));
+        m_scenario.reset(new ScriptedScenario(this, "data/scripts/scenarios/demo.lua"));
         break;
     case 1:
         m_scenario.reset(new GameScenario(this));

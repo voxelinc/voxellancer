@@ -2,6 +2,10 @@
 
 #include <iostream>
 
+#include "scripting/scriptengine.h"
+
+#include "world/world.h"
+
 #include "mission.h"
 
 
@@ -25,6 +29,14 @@ void MissionSystem::update(float deltaSec) {
 
 void MissionSystem::addMission(Mission* mission) {
     m_missions.push_back(std::unique_ptr<Mission>(mission));
+    World::instance()->scriptEngine().registerScriptable(mission);
     mission->start();
+}
+
+void MissionSystem::removeMission(Mission* mission) {
+    m_missions.remove_if([&] (std::unique_ptr<Mission> &missionPtr) {
+        return missionPtr.get() == mission;
+    });
+    World::instance()->scriptEngine().unregisterScriptable(mission);
 }
 

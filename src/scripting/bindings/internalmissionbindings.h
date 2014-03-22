@@ -5,16 +5,19 @@
 
 class MissionScript;
 
-class MissionBindings : public Bindings {
+/**
+    API available to MissionScript
+*/
+class InternalMissionBindings : public Bindings {
 public:
-    MissionBindings(MissionScript& script);
+    InternalMissionBindings(MissionScript& script);
 
 
 protected:
     MissionScript& m_missionScript;
 
 
-    virtual void bind();
+    virtual void bind() override;
 
     int apiMissionSucceed();
     int apiMissionFail();

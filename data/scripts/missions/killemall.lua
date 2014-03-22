@@ -1,28 +1,33 @@
 function main() 
 	showTextFor("Welcome to a mission script", 2.0)
 	
-	count = 10
+	ships = {}
+	count = 5
 	radius = 40
+	
+	playerPos = position(playerShip())
 	
 	for i = 1, count do
 		local ship = createShip("basicship")
+		print("Created ship with key", ship)
 		local angle = (i/count) * (2 * math.pi)
 		
-		local position = vec3(-10 + math.cos(angle) * radius, -10 + math.sin(angle) * radius, -60)
+		local position = vec3(playerPos.x - 10 + math.cos(angle) * radius, playerPos.y -10 + math.sin(angle) * radius, playerPos.z - 60)
 		
 		setPosition(ship, position)
 		
 		flyAnywhere(ship)		
 		
 		spawn(ship)
+		ships[i] = ship
 				
 		onWorldObjectDestroyed(ship, "destroyed")
 	end
 	
 	missionMessage("...and go!")
 	
-	createLoopingTimer("timeWarning", 10)
-	createSingleShotTimer("timeout", 60)
+	createLoopingTimer("timeWarning", 7)
+	createSingleShotTimer("timeout", 30)
 end
 
 function missionTitle() return "Kill'em all" end
@@ -60,6 +65,12 @@ end
 
 function onFailure() 
 	missionFailureMessage("That really took too long.")
+	
+	for k, v in pairs(ships) do
+		if valid(v) then
+			remove(v)
+		end
+	end
 end
 
 function onSuccess()

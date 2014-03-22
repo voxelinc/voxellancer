@@ -4,6 +4,7 @@
 
 #include "bindings/worldobjectbindings.h"
 #include "bindings/aibindings.h"
+#include "bindings/externalmissionbindings.h"
 #include "bindings/commonbindings.h"
 #include "bindings/squadbindings.h"
 
@@ -17,6 +18,7 @@ GamePlayScript::GamePlayScript(ScriptEngine* scriptEngine):
     addBindings(new WorldObjectBindings(*this));
     addBindings(new AiBindings(*this));
     addBindings(new SquadBindings(*this));
+    addBindings(new ExternalMissionBindings(*this));
 }
 
 GamePlayScript::~GamePlayScript() {

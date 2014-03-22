@@ -34,7 +34,9 @@ WorldObjectBindings::WorldObjectBindings(GamePlayScript& script):
 void WorldObjectBindings::bind() {
     m_lua.Register("playerShip", this, &WorldObjectBindings::apiPlayerShip);
     m_lua.Register("createShip", this, &WorldObjectBindings::apiCreateShip);
+    m_lua.Register("createWorldObject", this, &WorldObjectBindings::apiCreateWorldObject);
     m_lua.Register("spawn", this, &WorldObjectBindings::apiSpawn);
+    m_lua.Register("remove", this, &WorldObjectBindings::apiRemove);
 
     m_lua.Register("position", this, &WorldObjectBindings::apiPosition);
     m_lua.Register("orientation", this, &WorldObjectBindings::apiOrientation);
@@ -53,7 +55,7 @@ apikey WorldObjectBindings::apiPlayerShip() {
     }
 }
 
-int WorldObjectBindings::apiCreateShip(const std::string& name) {
+apikey WorldObjectBindings::apiCreateShip(const std::string& name) {
     Ship* ship = WorldObjectBuilder(name).buildShip();
 
     if (!ship) {
@@ -65,6 +67,18 @@ int WorldObjectBindings::apiCreateShip(const std::string& name) {
     return ship->scriptKey();
 }
 
+apikey WorldObjectBindings::apiCreateWorldObject(const std::string& name) {
+    WorldObject* worldObject = WorldObjectBuilder(name).buildWorldObject();
+
+    if (!worldObject) {
+        glow::warning("WorldObjectBindings: Couldn't create worldObject '%;'", name);
+        return -1;
+    }
+
+    m_scriptEngine.registerScriptable(worldObject);
+    return worldObject->scriptKey();
+}
+
 int WorldObjectBindings::apiSpawn(apikey key) {
     WorldObject* worldObject = m_scriptEngine.get<WorldObject>(key);
 
@@ -74,7 +88,21 @@ int WorldObjectBindings::apiSpawn(apikey key) {
 
     World::instance()->god().scheduleSpawn(SpawnRequest(worldObject, false));
     World::instance()->god().spawn(); // should this really happen?
+
     return worldObject->spawnState() == SpawnState::Spawned;
+}
+
+int WorldObjectBindings::apiRemove(apikey key) {
+    WorldObject* worldObject = m_scriptEngine.get<WorldObject>(key);
+
+    if (!worldObject) {
+        return -1;
+    }
+
+    World::instance()->god().scheduleRemoval(worldObject);
+    World::instance()->god().remove();
+
+    return 0;
 }
 
 glm::vec3 WorldObjectBindings::apiOrientation(apikey key) {

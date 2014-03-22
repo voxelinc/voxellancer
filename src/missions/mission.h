@@ -3,10 +3,12 @@
 #include <memory>
 #include <string>
 
+#include "scripting/scriptable.h"
+
 
 class MissionScript;
 
-class Mission {
+class Mission : public Scriptable {
 public:
     Mission(const std::string& path);
     ~Mission();

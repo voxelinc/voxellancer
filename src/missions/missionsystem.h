@@ -14,6 +14,7 @@ public:
     void update(float deltaSec);
 
     void addMission(Mission* mission);
+    void removeMission(Mission* mission);
 
 
 protected:
