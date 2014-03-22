@@ -2,6 +2,7 @@
 
 #include "ai/basictasks/flytotask.h"
 #include "ai/basictasks/fighttask.h"
+#include "ai/boardcomputer.h"
 #include "ai/character.h"
 
 #include "events/aitaskfinishedpoll.h"
@@ -37,6 +38,8 @@ void AiBindings::bind() {
     m_lua.Register("setTargetPoint", this, &AiBindings::apiSetTargetPoint);
     m_lua.Register("createFightTask", this, &AiBindings::apiCreateFightTask);
     m_lua.Register("addFightTaskTarget", this, &AiBindings::apiAddFightTaskTarget);
+
+    m_lua.Register("taskExecutor", this, &AiBindings::apiTaskExecutor);
 }
 
 
@@ -63,7 +66,6 @@ int AiBindings::apiSetFaction(apikey key, const std::string& faction) {
     ship->character()->setFaction(f);
     return 0;
 }
-
 
 float AiBindings::apiGetFactionRelation(const std::string& factionA, const std::string& factionB) {
     FactionMatrix& factions = World::instance()->factionMatrix();
@@ -162,4 +164,19 @@ int AiBindings::apiAddFightTaskTarget(apikey key, apikey worldObjectKey) {
 
     fightTask->addTarget(worldObject->handle());
     return 0;
+}
+
+apikey AiBindings::apiTaskExecutor(apikey aiTask) {
+    AiTask* task = m_scriptEngine.get<AiTask>(aiTask);
+
+    if (!task) {
+        glow::warning("AiBindings: AiTask '%;' doesn't exist", aiTask);
+        return -1;
+    }
+
+    assert(task->boardComputer());
+    WorldObject* ship = task->boardComputer()->worldObject();
+    assert(ship);
+
+    return ship->scriptKey();
 }

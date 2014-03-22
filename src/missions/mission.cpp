@@ -49,7 +49,7 @@ void Mission::succeed() {
 void Mission::fail() {
     assert(m_active);
 
-    m_succeeded = true;
+    m_succeeded = false;
     m_script->onFailure();
 
     over();

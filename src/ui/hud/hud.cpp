@@ -36,8 +36,11 @@
 
 #include "worldobject/ship.h"
 
+#include "hudelements.h"
 #include "hudget.h"
 #include "hudobjectdelegate.h"
+#include "hudgetanimation.h"
+#include "hudgethideanimation.h"
 #include "objecthudget.h"
 #include "player.h"
 #include "crosshair.h"
@@ -52,22 +55,14 @@ HUD::HUD(Player* player):
     m_crossHair(new CrossHair(this)),
     m_aimHelper(new AimHelperHudget(this)),
     m_scanner(new WorldTreeScanner()),
-    m_targetName(new TextFieldHudget(this, glm::normalize(glm::vec3(0, -1.1f, -2)), 0.025f, "")),
-    m_speedLabel(new TextFieldHudget(this, glm::normalize(glm::vec3(1.5f, -1.1f, -2)), 0.020f, "")),
-    m_missionTitle(new TextFieldHudget(this, glm::normalize(glm::vec3(0.0f, 1.0f, -2)), 0.020f, "")),
-    m_missionCaption(new TextFieldHudget(this, glm::normalize(glm::vec3(0.0f, 0.8f, -2)), 0.010f, "")),
-    m_missionMessage(new TextFieldHudget(this, glm::normalize(glm::vec3(0.0f, -0.4f, -2)), 0.010f, "")),
+    m_elements(new HUDElements(*this)),
     m_target(nullptr),
     m_drawHud("vfx.drawhud")
 {
     m_scanner->setScanRadius(1050.0f);
-    m_hudgets.push_back(m_crossHair.get());
-    m_hudgets.push_back(m_aimHelper.get());
-    m_hudgets.push_back(m_targetName.get());
-    m_hudgets.push_back(m_speedLabel.get());
-    m_hudgets.push_back(m_missionTitle.get());
-    m_hudgets.push_back(m_missionCaption.get());
-    m_hudgets.push_back(m_missionMessage.get());
+
+    m_elements->addHudget(m_aimHelper);
+    m_elements->addHudget(m_crossHair);
 }
 
 HUD::~HUD() = default;
@@ -101,16 +96,16 @@ glm::quat HUD::orientation() const {
 }
 
 void HUD::addHudget(Hudget* hudget) {
-    m_hudgets.push_back(hudget);
+    m_elements->addHudget(hudget);
 }
 
 void HUD::removeHudget(Hudget* hudget) {
-    m_hudgets.remove(hudget);
+    m_elements->removeHudget(hudget);
 }
 
 void HUD::addObjectDelegate(HUDObjectDelegate* objectDelegate) {
     m_objectDelegates[objectDelegate->worldObject()] = objectDelegate;
-    addHudget(&objectDelegate->hudget());
+    addHudget(objectDelegate->hudget());
 }
 
 void HUD::removeObjectDelegate(HUDObjectDelegate* objectDelegate) {
@@ -122,7 +117,7 @@ void HUD::removeObjectDelegate(HUDObjectDelegate* objectDelegate) {
     assert(i != m_objectDelegates.end());
     m_objectDelegates.erase(i);
 
-    removeHudget(&objectDelegate->hudget());
+    removeHudget(objectDelegate->hudget());
 
     delete objectDelegate;
 }
@@ -150,24 +145,24 @@ void HUD::update(float deltaSec) {
     updateFov();
     updateScanner(deltaSec);
 
-    Ray toCrossHair = Ray::fromTo(m_player->cameraHead().position(), m_crossHair->worldPosition());
-
     if (m_target.get()) {
-        m_targetName->setText(m_target->objectInfo().name());
+        m_elements->setTargetName(m_target->objectInfo().name());
     } else {
-        m_targetName->setText("no target");
+        m_elements->setTargetName("no target");
     }
 
     if (m_player->ship()) {
-        m_speedLabel->setText(std::to_string((int)(glm::length(m_player->ship()->physics().speed().directional()))));
+        m_elements->setSpeed(std::to_string((int)(glm::length(m_player->ship()->physics().speed().directional()))));
     } else {
-        m_speedLabel->setText("-");
+        m_elements->setSpeed("-");
     }
 
-    for (Hudget* hudget : m_hudgets) {
+    Ray toCrossHair = Ray::fromTo(m_player->cameraHead().position(), m_crossHair->worldPosition());
+    for (std::unique_ptr<Hudget>& hudget : m_elements->hudgets()) {
         hudget->pointerAt(toCrossHair, m_crossHair->actionActive());
-        hudget->update(deltaSec);
     }
+
+    m_elements->update(deltaSec);
 }
 
 void HUD::draw() {
@@ -179,19 +174,15 @@ void HUD::draw() {
     glm::vec3 oldLightdir = lightuniform->value();
     lightuniform->set(m_player->cameraHead().orientation() * glm::vec3(0,0,1));
 
-    for (Hudget* hudget : m_hudgets) {
-        if (hudget->visible()) {
-            hudget->draw();
-        }
-    }
+    m_elements->draw();
 
     lightuniform->set(oldLightdir);
 }
 
 void HUD::onClick(ClickType clickType) {
-    Ray toCrossHair = Ray::fromTo(m_player->cameraHead().position(), m_crossHair.get()->worldPosition());
-    for (Hudget* hudget : m_hudgets) {
-        if (hudget->isAt(toCrossHair) && hudget != m_crossHair.get()) {
+    Ray toCrossHair = Ray::fromTo(m_player->cameraHead().position(), m_crossHair->worldPosition());
+    for (std::unique_ptr<Hudget>& hudget : m_elements->hudgets()) {
+        if (hudget->isAt(toCrossHair) && hudget.get() != m_crossHair) {
             hudget->onClick(clickType);
             return;
         }
@@ -219,12 +210,11 @@ float HUD::fovx() const {
 }
 
 void HUD::showMissionInfo(const std::string& title, const std::string& caption) {
-    m_missionTitle->setText(title);
-    m_missionCaption->setText(caption);
+    m_elements->showMissionInfo(title, caption);
 }
 
 void HUD::showMissionMessage(const std::string& message) {
-    m_missionMessage->setText(message);
+    m_elements->showMissionMessage(message);
 }
 
 void HUD::updateScanner(float deltaSec) {
@@ -233,7 +223,8 @@ void HUD::updateScanner(float deltaSec) {
 
         for (WorldObject* worldObject : m_scanner->foundWorldObjects()) {
             if (worldObject->objectInfo().showOnHud()) {
-                HUDObjectDelegate* objectDelgate = new HUDObjectDelegate(this, worldObject);
+                ObjectHudget* objectHudget = new ObjectHudget(this);
+                HUDObjectDelegate* objectDelgate = new HUDObjectDelegate(this, worldObject, objectHudget);
                 addObjectDelegate(objectDelgate);
             }
         }

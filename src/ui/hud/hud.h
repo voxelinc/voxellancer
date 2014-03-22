@@ -12,16 +12,19 @@
 
 #include "utils/handle/handle.h"
 
+
 enum class ClickType {
     None,
     Selection
 };
 
-
 class Player;
 class Hudget;
 class WorldObject;
+class HUDElements;
 class HUDObjectDelegate;
+class HudgetAnimation;
+class HudgetHideAnimation;
 class AimHelperHudget;
 class Viewer;
 class WorldTreeScanner;
@@ -77,18 +80,14 @@ protected:
     Handle<WorldObject> m_target;
     Property<bool> m_drawHud;
 
-    float m_fovy, m_fovx;
+    float m_fovy;
+    float m_fovx;
 
-    std::unique_ptr<AimHelperHudget> m_aimHelper;
-    std::unique_ptr<CrossHair> m_crossHair;
+    CrossHair* m_crossHair;
+    AimHelperHudget* m_aimHelper;
+
     std::unique_ptr<WorldTreeScanner> m_scanner;
-    std::unique_ptr<TextFieldHudget> m_speedLabel;
-    std::unique_ptr<TextFieldHudget> m_targetName;
-    std::unique_ptr<TextFieldHudget> m_missionTitle;
-    std::unique_ptr<TextFieldHudget> m_missionMessage;
-    std::unique_ptr<TextFieldHudget> m_missionCaption;
-
-    std::list<Hudget*> m_hudgets;
+    std::unique_ptr<HUDElements> m_elements;
 
     std::map<WorldObject*, HUDObjectDelegate*> m_objectDelegates;
 

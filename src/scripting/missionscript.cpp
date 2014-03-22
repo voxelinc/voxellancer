@@ -1,5 +1,7 @@
 #include "missionscript.h"
 
+#include <iostream>
+
 #include "bindings/missionbindings.h"
 
 #include "scripting/elematelua/luawrapper.h"
