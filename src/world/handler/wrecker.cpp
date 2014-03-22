@@ -20,11 +20,11 @@ void Wrecker::detectWreckedObjects(std::list<WorldObjectModification>& worldObje
 
 }
 
-std::list<WorldObject*> &Wrecker::wreckedObjects() {
+std::list<WorldObject*>& Wrecker::wreckedObjects() {
     return m_wreckedObjects;
 }
 
-std::list<WorldObject*> &Wrecker::newWreckages() {
+std::list<WorldObject*>& Wrecker::newWreckages() {
     return m_newWreckages;
 }
 
