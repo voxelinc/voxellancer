@@ -32,28 +32,35 @@ void MissionBindings::bind() {
 int MissionBindings::apiMissionSucceed() {
     if (m_missionScript.mission().active()) {
         m_missionScript.mission().succeed();
+        return 0;
     } else {
         glow::warning("MissionBindings: Mission already marked as succeed");
+        return -1;
     }
 }
 
 int MissionBindings::apiMissionFail() {
     if (m_missionScript.mission().active()) {
         m_missionScript.mission().fail();
+        return 0;
     } else {
         glow::warning("MissionBindings: Mission already marked as failure");
+        return -1;
     }
 }
 
 int MissionBindings::apiMissionMessage(const std::string& message) {
     World::instance()->player().hud().showMissionMessage(message);
+    return 0;
 }
 
 int MissionBindings::apiMissionFailureMessage(const std::string& message) {
     World::instance()->player().hud().showMissionMessage(message);
+    return 0;
 }
 
 int MissionBindings::apiMissionSuccessMessage(const std::string& message) {
     World::instance()->player().hud().showMissionMessage(message);
+    return 0;
 }
 
