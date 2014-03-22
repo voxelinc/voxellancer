@@ -1,14 +1,6 @@
 #include "actionkeymapping.h"
 #include "inputconfigurator.h"
 
-ActionKeyMapping::ActionKeyMapping(std::string primary, std::string secondary, std::string name) :
-    m_primaryMapping(primary),
-    m_secondaryMapping(secondary),
-    m_toggleAction(false),
-    m_toggleStatus(false),
-    m_name(name) {
-}
-
 ActionKeyMapping::ActionKeyMapping(std::string primary, std::string secondary, std::string name, bool toggleAction) :
     m_primaryMapping(primary),
     m_secondaryMapping(secondary),

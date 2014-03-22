@@ -8,8 +8,7 @@
 
 class ActionKeyMapping {
 public:
-    ActionKeyMapping(std::string primary, std::string secondary, std::string name);
-    ActionKeyMapping(std::string primary, std::string secondary, std::string name, bool toggleAction);
+    ActionKeyMapping(std::string primary, std::string secondary, std::string name, bool toggleAction = false);
 
     InputMapping mapping(InputClass inputClass);
     void setMapping(InputMapping mapping, InputClass inputClass);
