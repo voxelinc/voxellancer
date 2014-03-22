@@ -11,13 +11,12 @@
 #include "factions/factionmatrix.h"
 #include "factions/factionrelation.h"
 
+#include "scripting/gameplayscript.h"
 #include "scripting/scriptengine.h"
 #include "scripting/elematelua/luawrapper.h"
 
 #include "worldobject/ship.h"
 #include "world/world.h"
-
-
 
 
 AiBindings::AiBindings(GamePlayScript& script):
@@ -81,22 +80,29 @@ int AiBindings::apiSetFactionRelation(const std::string& factionA, const std::st
     return 0;
 }
 
-
 apikey AiBindings::apiOnAiTaskFinished(apikey key, const std::string& callback) {
     AiTask* aiTask = m_scriptEngine.get<AiTask>(key);
 
-    if (!aiTask) { return -1; }
+    if (!aiTask) {
+        glow::warning("AiBindings: AiTask '%;' doesn't exist", key);
+        return -1;
+    }
 
-    auto finishedPoll = std::make_shared<AiTaskFinishedPoll>(aiTask, [=] { m_lua.call(callback, key); });
+    AiTaskFinishedPoll* finishedPoll = new AiTaskFinishedPoll(aiTask, [=] { m_lua.call(callback, key); });
+
     World::instance()->eventPoller().addPoll(finishedPoll);
+    m_script.addLocal(finishedPoll->scriptKey());
+
     return finishedPoll->scriptKey();
 }
-
 
 apikey AiBindings::apiCreateFlyToTask(apikey key) {
     Ship* ship = m_scriptEngine.get<Ship>(key);
 
-    if (!ship) { return -1; }
+    if (!ship) {
+        glow::warning("AiBindings: Ship '%;' doesn't exist", key);
+        return -1;
+    }
 
     auto flyToTask = std::make_shared<FlyToTask>(ship->boardComputer());
     m_scriptEngine.registerScriptable(flyToTask.get());
@@ -126,7 +132,10 @@ int AiBindings::apiSetTargetPoint(apikey key, const glm::vec3& point) {
 apikey AiBindings::apiCreateFightTask(apikey key) {
     Ship* ship = m_scriptEngine.get<Ship>(key);
 
-    if (!ship) { return -1; }
+    if (!ship) {
+        glow::warning("AiBindings: Ship '%;' doesn't exist", key);
+        return -1;
+    }
 
     FightTask* fightTask = new FightTask(ship->boardComputer(), {});
 

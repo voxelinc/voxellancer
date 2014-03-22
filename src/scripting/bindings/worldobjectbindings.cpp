@@ -4,13 +4,17 @@
 
 #include "events/worldobjectdestroyedpoll.h"
 #include "events/eventpoller.h"
+#include "events/aabbenteredpoll.h"
 
 #include "gamestate/gameplay/gameplay.h"
+
+#include "geometry/aabb.h"
 
 #include "player.h"
 
 #include "resource/worldobjectbuilder.h"
 
+#include "scripting/gameplayscript.h"
 #include "scripting/elematelua/luawrapper.h"
 
 #include "world/world.h"
@@ -36,6 +40,9 @@ void WorldObjectBindings::bind() {
     m_lua.Register("orientation", this, &WorldObjectBindings::apiOrientation);
     m_lua.Register("setPosition", this, &WorldObjectBindings::apiSetPosition);
     m_lua.Register("setOrientation", this, &WorldObjectBindings::apiSetOrientation);
+
+    m_lua.Register("onWorldObjectDestroyed", this, &WorldObjectBindings::apiOnWorldObjectDestroyed);
+    m_lua.Register("onAABBEntered", this, &WorldObjectBindings::apiOnAABBEntered);
 }
 
 apikey WorldObjectBindings::apiPlayerShip() {
@@ -104,7 +111,7 @@ int WorldObjectBindings::apiSetPosition(apikey key, const glm::vec3& position) {
 int WorldObjectBindings::apiSetOrientation(apikey key, const glm::vec3& orientation) {
     WorldObject* worldObject = m_scriptEngine.get<WorldObject>(key);
 
-    if (worldObject) {
+    if (!worldObject) {
         return -1;
     }
 
@@ -115,9 +122,30 @@ int WorldObjectBindings::apiSetOrientation(apikey key, const glm::vec3& orientat
 apikey WorldObjectBindings::apiOnWorldObjectDestroyed(apikey key, const std::string& callback) {
     WorldObject* worldObject = m_scriptEngine.get<WorldObject>(key);
 
-    if (!worldObject) { return -1; }
+    if (!worldObject) {
+        return -1;
+    }
 
-    auto destructionPoll = std::make_shared<WorldObjectDestroyedPoll>(worldObject, [=] { m_lua.call(callback, key); });
+    WorldObjectDestroyedPoll* destructionPoll = new WorldObjectDestroyedPoll(worldObject, [=] { m_lua.call(callback, key); });
+
     World::instance()->eventPoller().addPoll(destructionPoll);
+    m_script.addLocal(destructionPoll->scriptKey());
+
     return destructionPoll->scriptKey();
 }
+
+apikey WorldObjectBindings::apiOnAABBEntered(apikey key, const glm::vec3& llf, const glm::vec3& urb, const std::string& callback) {
+    WorldObject* worldObject = m_scriptEngine.get<WorldObject>(key);
+
+    if (!worldObject) {
+        return -1;
+    }
+
+    AABBEnteredPoll* enteredPoll = new AABBEnteredPoll(worldObject, AABB(llf, urb), [=] { m_lua.call(callback, key); });
+
+    World::instance()->eventPoller().addPoll(enteredPoll);
+    m_script.addLocal(enteredPoll->scriptKey());
+
+    return enteredPoll->scriptKey();
+}
+

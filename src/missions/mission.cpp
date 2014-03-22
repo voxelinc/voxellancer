@@ -57,7 +57,7 @@ void Mission::fail() {
 
 void Mission::over() {
     m_active = false;
-    World::instance()->scriptEngine().removeScript(m_script.get());
+    m_script->stop();
 }
 
 void Mission::update(float deltaSec) {

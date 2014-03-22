@@ -21,7 +21,6 @@ public:
     ~ScriptEngine();
 
     void addScript(std::shared_ptr<GamePlayScript> script);
-    void removeScript(GamePlayScript *scrip);
 
     /*  start (call the "main" function) all added scripts and all future
         added scripts until stop is called */
@@ -30,10 +29,13 @@ public:
     /* Stops the ScriptEngine, continuing to update after start() is called again. */
     void stop();
 
-    /*  Register/Unregister Scriptables that are managed by other objects
+    /*  Register Scriptables that are managed by other objects
         and equip them with a valid scriptKey */
     void registerScriptable(Scriptable* scriptable);
+
+    /*  Unregister Scriptable. If it is scriptlocal, remove it from the game  */
     void unregisterScriptable(Scriptable* scriptable);
+
 
     template<class T>
     T* get(int key);
@@ -47,14 +49,15 @@ protected:
     World* m_world;
 
     std::list<std::shared_ptr<GamePlayScript>> m_scripts;
-    std::list<GamePlayScript*> m_removeSchedules;
     std::unordered_map<int, Scriptable*> m_scriptables;
 
     int m_keyIncrementor;
     bool m_running;
 
+
     Scriptable* getScriptable(int key);
     void performRemovals();
+    void removeScriptable(Scriptable* scriptable);
 };
 
 #include "scriptengine.inl"
