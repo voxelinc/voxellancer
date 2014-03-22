@@ -1,7 +1,6 @@
 #include "state.h"
 
 #include <cassert>
-#include <iostream>
 
 #include <glow/logging.h>
 

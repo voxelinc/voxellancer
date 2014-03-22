@@ -90,13 +90,22 @@ void SoundManager::cleanUp() {
     m_nextCleanup = 0;
 }
 
+void SoundManager::forcedCleanup() {
+    m_nextCleanup = CLEANUP_PERIOD;
+    cleanUp();
+}
+
 SoundManager* SoundManager::current() {
     assert(s_current != nullptr);
     return s_current;
 }
 
 void SoundManager::activate() {
+    if (s_current == this) {
+        return;
+    }
     assert(s_current == nullptr);
+
     s_current = this;
 
     for (std::shared_ptr<Sound>& sound : m_sounds) {
@@ -110,8 +119,8 @@ void SoundManager::deactivate() {
     assert(s_current == this);
     s_current = nullptr;
 
-    m_nextCleanup = CLEANUP_PERIOD;
-    cleanUp();
+    forcedCleanup();
+
 
     for (std::shared_ptr<Sound>& sound : m_sounds) {
         if (sound->status() == Sound::Status::Playing) {
@@ -119,3 +128,14 @@ void SoundManager::deactivate() {
         }
     }
 }
+
+void SoundManager::stopAll() {
+    for (std::shared_ptr<Sound>& sound : m_sounds) {
+        if (sound->status() != Sound::Status::Stopped) {
+            sound->stop();
+        }
+    }
+    forcedCleanup();
+}
+
+

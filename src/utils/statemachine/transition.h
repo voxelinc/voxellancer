@@ -5,7 +5,7 @@
 
 class State;
 
-/*
+/**
     Abstract base class for a transition from one state to another. Derived
     classes need to implement isPossible(). The actual transition is performed by the update() of
     the parentstate of from-

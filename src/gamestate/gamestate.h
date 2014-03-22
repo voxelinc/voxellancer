@@ -8,7 +8,7 @@
 class CameraHead;
 class Scene;
 
-/*
+/**
     Base class for a State the game can be in - for example
     Menu, OptionsMenu, normal Gameplay or ingame menu
 

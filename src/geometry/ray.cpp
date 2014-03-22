@@ -1,7 +1,6 @@
 #include "ray.h"
 
 #include <cmath>
-#include <iostream>
 
 #include "geometry/transform.h"
 

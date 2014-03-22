@@ -17,7 +17,7 @@ Sound::~Sound() = default;
 
 Sound::Status Sound::status() {
     if (!m_sound) {
-        return Status::Disabled;
+        return Status::Null;
     }
     switch (m_sound->getStatus()) {
         case sf::SoundSource::Playing:

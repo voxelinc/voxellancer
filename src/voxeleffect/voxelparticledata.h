@@ -2,7 +2,6 @@
 
 #include <glm/glm.hpp>
 
-#include <iostream>
 #include <stdint.h>
 
 struct VoxelParticleData {

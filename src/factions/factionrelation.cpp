@@ -5,18 +5,18 @@
 #include "faction.h"
 
 
-FactionRelation::FactionRelation(Faction* factionA, Faction* factionB, float friendliness):
+FactionRelation::FactionRelation(Faction& factionA, Faction& factionB, float friendliness):
     m_factionA(factionA),
     m_factionB(factionB),
     m_friendliness(friendliness)
 {
 }
 
-Faction* FactionRelation::factionA() {
+Faction& FactionRelation::factionA() {
     return m_factionA;
 }
 
-Faction* FactionRelation::factionB() {
+Faction& FactionRelation::factionB() {
     return m_factionB;
 }
 

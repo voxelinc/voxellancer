@@ -1,6 +1,5 @@
 #include "damager.h"
 
-#include <iostream>
 #include <set>
 #include <glow/logging.h>
 

@@ -1,7 +1,6 @@
 #include "hmd.h"
 
 #include <cassert>
-#include <iostream>
 
 #include <OVR.h>
 

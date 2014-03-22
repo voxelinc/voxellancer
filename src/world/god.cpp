@@ -1,15 +1,20 @@
+#include "god.h"
+
+
 
 #include <glow/logging.h>
 
-#include "god.h"
 #include "collision/collisiondetector.h"
-#include "world.h"
-#include "worldtree/worldtree.h"
-#include "utils/tostring.h"
 
-#include "worldobject/worldobject.h"
+#include "scripting/scriptengine.h"
+
 #include "ui/objectinfo.h"
 
+#include "worldtree/worldtree.h"
+
+#include "worldobject/worldobject.h"
+
+#include "world.h"
 
 
 God::God(World& world):
@@ -37,7 +42,7 @@ void God::scheduleRemoval(WorldObject* worldObject) {
     worldObject->setSpawnState(SpawnState::RemovalScheduled);
 }
 
-void God::scheduleRemovals(const std::list<WorldObject*> &removals) {
+void God::scheduleRemovals(const std::list<WorldObject*>& removals) {
     for (WorldObject* worldObject : removals) {
         scheduleRemoval(worldObject);
     }
@@ -50,9 +55,11 @@ void God::spawn() {
 
             std::list<VoxelCollision> collisions = worldObject->collisionDetector().checkCollisions();
 
-            if (!collisions.empty()){
-                World::instance()->worldTree().remove(worldObject->collisionDetector().geode());
+            if (!collisions.empty()) {
                 glow::warning("Failed to spawn %;", worldObject->objectInfo().name());
+
+                World::instance()->worldTree().remove(worldObject->collisionDetector().geode());
+
                 worldObject->setSpawnState(SpawnState::Rejected);
                 worldObject->onSpawnFail();
 

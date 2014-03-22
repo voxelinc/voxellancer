@@ -33,6 +33,7 @@ public:
     void setAcceleration(const Acceleration& acceleration);
 
     float mass() const;
+    float maxMass() const;
 
     const Transform projectedTransformIn(float deltaSec);
 
@@ -51,6 +52,7 @@ protected:
     Property<float> m_angularDampening;
 
     float m_mass;
+    float m_maxMass;
     glm::vec3 m_accumulatedMassVec; // For fast recalc of center of mass on voxel addition/removal
     float m_massScaleFactor;
 
