@@ -12,7 +12,7 @@ public:
     ActionKeyMapping(std::string primary, std::string secondary, std::string name, bool toggleAction);
 
     InputMapping mapping(InputClass inputClass);
-    void setMapping(InputMapping mapping, InputClass inputClass);
+    void setMapping(InputClass inputClass, InputMapping mapping);
 
     std::string name();
     bool toggleAction();
