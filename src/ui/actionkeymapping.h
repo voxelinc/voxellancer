@@ -14,7 +14,8 @@ public:
     InputMapping mapping(InputClass inputClass);
     void setMapping(InputMapping mapping, InputClass inputClass);
 
-    std::string name();
+    const std::string& name();
+    const std::string& mappingName(InputClass inputClass);
     bool toggleAction();
     bool toggleStatus();
 
