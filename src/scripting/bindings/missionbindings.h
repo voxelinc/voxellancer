@@ -16,8 +16,8 @@ protected:
 
     virtual void bind();
 
-    int apiMissionSucceeded();
-    int apiMissionFailed();
+    int apiMissionSucceed();
+    int apiMissionFail();
     int apiMissionMessage(const std::string& message);
     int apiMissionFailureMessage(const std::string& message);
     int apiMissionSuccessMessage(const std::string& message);

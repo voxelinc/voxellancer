@@ -22,19 +22,27 @@ MissionBindings::MissionBindings(MissionScript& script):
 }
 
 void MissionBindings::bind() {
-    m_lua.Register("missionSucceeded", this, &MissionBindings::apiMissionSucceeded);
-    m_lua.Register("missionFailed", this, &MissionBindings::apiMissionFailed);
+    m_lua.Register("missionSucceed", this, &MissionBindings::apiMissionSucceed);
+    m_lua.Register("missionFail", this, &MissionBindings::apiMissionFail);
     m_lua.Register("missionMessage", this, &MissionBindings::apiMissionMessage);
     m_lua.Register("missionFailureMessage", this, &MissionBindings::apiMissionFailureMessage);
     m_lua.Register("missionSuccessMessage", this, &MissionBindings::apiMissionSuccessMessage);
 }
 
-int MissionBindings::apiMissionSucceeded() {
-    m_missionScript.mission().succeeded();
+int MissionBindings::apiMissionSucceed() {
+    if (m_missionScript.mission().active()) {
+        m_missionScript.mission().succeed();
+    } else {
+        glow::warning("MissionBindings: Mission already marked as succeed");
+    }
 }
 
-int MissionBindings::apiMissionFailed() {
-    m_missionScript.mission().failed();
+int MissionBindings::apiMissionFail() {
+    if (m_missionScript.mission().active()) {
+        m_missionScript.mission().fail();
+    } else {
+        glow::warning("MissionBindings: Mission already marked as failure");
+    }
 }
 
 int MissionBindings::apiMissionMessage(const std::string& message) {

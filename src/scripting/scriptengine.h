@@ -1,8 +1,9 @@
 #pragma once
 
+#include <list>
 #include <memory>
 #include <unordered_map>
-#include <vector>
+
 
 class GamePlayScript;
 class Scriptable;
@@ -20,6 +21,7 @@ public:
     ~ScriptEngine();
 
     void addScript(std::shared_ptr<GamePlayScript> script);
+    void removeScript(GamePlayScript *scrip);
 
     /*  start (call the "main" function) all added scripts and all future
         added scripts until stop is called */
@@ -44,13 +46,15 @@ public:
 protected:
     World* m_world;
 
-    std::vector<std::shared_ptr<GamePlayScript>> m_scripts;
+    std::list<std::shared_ptr<GamePlayScript>> m_scripts;
+    std::list<GamePlayScript*> m_removeSchedules;
     std::unordered_map<int, Scriptable*> m_scriptables;
 
     int m_keyIncrementor;
     bool m_running;
 
     Scriptable* getScriptable(int key);
+    void performRemovals();
 };
 
 #include "scriptengine.inl"

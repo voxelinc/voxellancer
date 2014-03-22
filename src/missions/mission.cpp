@@ -13,7 +13,8 @@
 
 Mission::Mission(const std::string& path):
     m_script(new MissionScript(*this, &World::instance()->scriptEngine())),
-    m_active(true)
+    m_active(true),
+    m_succeeded(false)
 {
     m_script->load(path);
     World::instance()->scriptEngine().addScript(m_script);
@@ -32,14 +33,31 @@ bool Mission::active() const {
     return m_active;
 }
 
-void Mission::succeeded() {
-    m_active = false;
-    m_script->onSuccess();
+bool Mission::succeeded() const {
+    return m_succeeded;
 }
 
-void Mission::failed() {
-    m_active = false;
+void Mission::succeed() {
+    assert(m_active);
+
+    m_succeeded = true;
+    m_script->onSuccess();
+
+    over();
+}
+
+void Mission::fail() {
+    assert(m_active);
+
+    m_succeeded = true;
     m_script->onFailure();
+
+    over();
+}
+
+void Mission::over() {
+    m_active = false;
+    World::instance()->scriptEngine().removeScript(m_script.get());
 }
 
 void Mission::update(float deltaSec) {

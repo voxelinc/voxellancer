@@ -31,6 +31,10 @@ void ScriptEngine::addScript(std::shared_ptr<GamePlayScript> script) {
     }
 }
 
+void ScriptEngine::removeScript(GamePlayScript* script) {
+    m_removeSchedules.push_back(script);
+}
+
 void ScriptEngine::start() {
     m_running = true;
     for (std::shared_ptr<GamePlayScript>& script : m_scripts) {
@@ -67,6 +71,16 @@ bool ScriptEngine::keyValid(int key) const {
     return m_scriptables.find(key) != m_scriptables.end();
 }
 
+void ScriptEngine::update(float deltaSec) {
+    performRemovals();
+
+    if (m_running) {
+        for (std::shared_ptr<GamePlayScript>& script : m_scripts) {
+            script->update(deltaSec);
+        }
+    }
+}
+
 Scriptable* ScriptEngine::getScriptable(int key) {
     if (key <= 0 || key >= m_keyIncrementor) {
         glow::warning("ScriptEngine: script-key '%;' is not valid", key);
@@ -82,11 +96,13 @@ Scriptable* ScriptEngine::getScriptable(int key) {
     }
 }
 
-void ScriptEngine::update(float deltaSec) {
-    if (m_running) {
-        for (std::shared_ptr<GamePlayScript>& script : m_scripts) {
-            script->update(deltaSec);
-        }
+void ScriptEngine::performRemovals() {
+    for (auto i = m_removeSchedules.begin(); i != m_removeSchedules.end(); i++) {
+        GamePlayScript* script = *i;
+
+        m_scripts.remove_if([&] (std::shared_ptr<GamePlayScript>& scriptPtr) {
+            return scriptPtr.get() == script;
+        } );
     }
 }
 

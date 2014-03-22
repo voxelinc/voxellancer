@@ -15,12 +15,12 @@ function missionBriefing() return "Kill the ship, that's really not that difficu
 
 function update(deltaSec) 
 	if not valid(ship) then
-		missionSucceeded()
+		missionSucceed()
 	end
 end
 
 function timeout() 
-	missionFailed()
+	missionFail()
 end
 
 function timeWarning() 

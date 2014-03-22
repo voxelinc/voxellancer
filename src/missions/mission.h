@@ -14,18 +14,24 @@ public:
     void start();
 
     bool active() const;
+    bool succeeded() const;
 
     /*
         Mark the mission as successfully played.
         Calls onSuccess() in the script
     */
-    void succeeded();
+    void succeed();
 
     /*
         Mark the mission the function as failure played.
         Calls onFailure() in the script
     */
-    void failed();
+    void fail();
+
+    /*
+        Mark the mission as inactive, deactivate the script
+    */
+    void over();
 
     const std::string& title() const;
     const std::string& caption() const;
@@ -38,5 +44,6 @@ public:
 protected:
     std::shared_ptr<MissionScript> m_script;
     bool m_active;
+    bool m_succeeded;
 };
 
