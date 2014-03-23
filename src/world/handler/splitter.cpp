@@ -5,9 +5,9 @@
 #include "world/helper/splitdata.h"
 
 #include "voxel/voxel.h"
-#include "worldobject/split.h"
 #include "physics/physics.h"
 #include "ui/objectinfo.h"
+#include "worldobject/worldobject.h"
 
 void Splitter::split(std::vector<std::shared_ptr<SplitData>> &splits) {
     std::unordered_set<WorldObject*> splittedWorldObjects;
@@ -26,17 +26,14 @@ std::list<WorldObject*> &Splitter::splitOffWorldObjects() {
     return m_splitOffWorldObjects;
 }
 
-WorldObject *Splitter::createWorldObjectFromSplitOff(std::shared_ptr<SplitData> split) {
+WorldObject* Splitter::createWorldObjectFromSplitOff(std::shared_ptr<SplitData> split) {
     WorldObject *worldObject;
     Transform transform = split->exWorldObject()->transform();
     transform.setCenter(transform.center()/* - glm::vec3(split->llf())*/);
 
-    worldObject = new Split(transform);
+    worldObject = new WorldObject(transform);
 
     worldObject->objectInfo().setName(split->exWorldObject()->objectInfo().name() + " - splitoff");
-    worldObject->objectInfo().setCanLockOn(false);
-    worldObject->objectInfo().setShowOnHud(false);
-
     worldObject->physics().setSpeed(worldObject->physics().speed());
 
     for(Voxel *voxel : split->splitOffVoxels()) {

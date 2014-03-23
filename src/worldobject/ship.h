@@ -38,8 +38,6 @@ public:
 
 
 protected:
-    Ship(CollisionFilter* collisionFilter);
-
     std::unique_ptr<Character> m_character;
     std::unique_ptr<BoardComputer> m_boardComputer;
 

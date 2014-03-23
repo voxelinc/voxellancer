@@ -38,6 +38,7 @@ enum class WorldObjectType {
 class WorldObject : public VoxelCluster, public Scriptable {
 public:
     WorldObject();
+    WorldObject(const Transform& transform);
     virtual ~WorldObject();
 
     virtual WorldObjectType objectType() const;
@@ -65,21 +66,23 @@ public:
 
     Voxel* crucialVoxel();
     void setCrucialVoxel(const glm::ivec3& cell);
+    bool isCrucialVoxelDestroyed();
 
     void updateTransformAndGeode(const glm::vec3& position, const glm::quat& orientation);
 
     virtual void onCollision();
     virtual void onSpawnFail();
+    //virtual void onWrecked();
 
     Handle<WorldObject>& handle();
 
     float collisionFieldOfDamage() const;
     void setCollisionFieldOfDamage(float collisionFieldOfDamage);
 
-    bool isDestroyed() const;
-
 
 protected:
+    WorldObject(CollisionFilter* filter);
+
     std::unique_ptr<CollisionFilter> m_collisionFilter;
     std::unique_ptr<CollisionDetector> m_collisionDetector;
     std::unique_ptr<Physics> m_physics;
@@ -88,11 +91,8 @@ protected:
 
     Handle<WorldObject> m_handle;
     Voxel* m_crucialVoxel;
+    bool m_crucialVoxelDestroyed;
     float m_collisionFieldOfDamage;
     SpawnState m_spawnState;
-    bool m_isDestroyed;
-
-    WorldObject(CollisionFilter* collisionFilter, float scale = 1.0f);
-    virtual void onDestruction();
 };
 
