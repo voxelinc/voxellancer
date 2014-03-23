@@ -194,7 +194,7 @@ glm::vec3 HUD::applyTo(const glm::vec3 &vertex) const {
 }
 
 void HUD::setTarget(WorldObject* target) {
-    m_target = target->handle();
+    m_target = target ? target->handle() : nullptr;;
 }
 
 WorldObject* HUD::target() {

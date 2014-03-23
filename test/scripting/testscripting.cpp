@@ -47,15 +47,12 @@ go_bandit([](){
 
         std::unique_ptr<ScriptEngine> scriptEngine;
         std::unique_ptr<GamePlayScript> script;
-        std::unique_ptr<Player> player;
 
         std::string callbackFunction = R"( function callback() setDebugStatus("callback!") end )";
 
 
         before_each([&](){
             World::reset(false);
-            player.reset(new Player());
-            World::instance()->setPlayer(*player);
             scriptEngine.reset(new ScriptEngine(World::instance()));
             script.reset(new GamePlayScript(scriptEngine.get()));
             script->loadString(callbackFunction);
@@ -92,6 +89,7 @@ go_bandit([](){
             std::unique_ptr<Ship> ship;
 
             before_each([&]() {
+                        std::cout << "New playership" << std::endl;
                 ship.reset(new Ship());
                 World::instance()->player().setShip(ship.get());
                 scriptEngine->registerScriptable(ship.get());

@@ -17,7 +17,6 @@ class World;
 class ScriptEngine {
 public:
     ScriptEngine(World* world);
-
     ~ScriptEngine();
 
     void addScript(std::shared_ptr<GamePlayScript> script);

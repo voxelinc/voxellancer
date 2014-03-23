@@ -30,6 +30,8 @@ public:
 
     const std::string& debugStatus();
 
+    int apiSetDebugStatus(const std::string& string);
+
 
 protected:
     std::unique_ptr<LuaWrapper> m_lua;
@@ -40,8 +42,6 @@ protected:
 
 
     void addBindings(Bindings* bindings);
-
-    int apiSetDebugStatus(const std::string& string);
 };
 
 
