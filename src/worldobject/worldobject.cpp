@@ -179,7 +179,7 @@ void WorldObject::setCollisionFieldOfDamage(float collisionFieldOfDamage) {
     m_collisionFieldOfDamage = collisionFieldOfDamage;
 }
 
-bool WorldObject::wantsPassiveGeode() {
+bool WorldObject::passiveForCollisionDetection() {
     return false;
 }
 

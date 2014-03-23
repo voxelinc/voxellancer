@@ -15,7 +15,7 @@ WorldTreeGeode::WorldTreeGeode(WorldObject* worldObject) :
     m_passive(false)
 {
     m_worldObject->collisionDetector().setGeode(this);
-    if (worldObject->wantsPassiveGeode()) {
+    if (worldObject->passiveForCollisionDetection()) {
         m_passive = true;
     }
 }

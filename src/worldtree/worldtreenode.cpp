@@ -144,7 +144,7 @@ void WorldTreeNode::insert(WorldTreeGeode* geode) {
             }
         }
     } else {
-        for (WorldTreeNode* subnode : m_subnodes) { // TODO: shrink iteration range -- what does that mean?
+        for (WorldTreeNode* subnode : m_subnodes) {
             if (subnode->aabb().intersects(geode->aabb())) {
                 subnode->insert(geode);
                 assert(!subnode->isEmpty());
@@ -163,7 +163,7 @@ void WorldTreeNode::remove(WorldTreeGeode* geode) {
     } else {
         assert(!m_activeSubnodes.empty());
 
-        for (WorldTreeNode* subnode : m_subnodes) { // TODO: shrink iteration range
+        for (WorldTreeNode* subnode : m_subnodes) {
             if (subnode->active()) {
                 subnode->remove(geode);
             }

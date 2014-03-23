@@ -31,7 +31,7 @@ void Bullet::update(float deltaSec) {
     Projectile::update(deltaSec);
 }
 
-bool Bullet::wantsPassiveGeode() {
+bool Bullet::passiveForCollisionDetection() {
     return true;
 }
 

@@ -17,7 +17,7 @@ public:
 
     virtual void update(float deltaSec) override;
 
-    virtual bool wantsPassiveGeode();
+    virtual bool passiveForCollisionDetection();
 
 protected:
 

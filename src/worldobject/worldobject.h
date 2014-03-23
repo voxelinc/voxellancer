@@ -79,7 +79,7 @@ public:
     float collisionFieldOfDamage() const;
     void setCollisionFieldOfDamage(float collisionFieldOfDamage);
 
-    virtual bool wantsPassiveGeode();
+    virtual bool passiveForCollisionDetection();
 
 protected:
     WorldObject(CollisionFilter* filter);
