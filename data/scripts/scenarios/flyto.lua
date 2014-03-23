@@ -6,6 +6,7 @@ end
 
 function welcome()
     showText("Welcome to the Flyto Scenario")
+    playVoice("data/sound/mission/youre_awesome.ogg")
 end
 
 function spawnNextShip()

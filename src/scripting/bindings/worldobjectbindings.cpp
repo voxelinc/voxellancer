@@ -4,8 +4,11 @@
 
 #include "events/worldobjectdestroyedpoll.h"
 #include "events/eventpoller.h"
+#include "events/aabbenteredpoll.h"
 
 #include "gamestate/gameplay/gameplay.h"
+
+#include "geometry/aabb.h"
 
 #include "player.h"
 
@@ -38,6 +41,9 @@ void WorldObjectBindings::initialize()
     m_lua.Register("orientation", this, &WorldObjectBindings::apiOrientation);
     m_lua.Register("setPosition", this, &WorldObjectBindings::apiSetPosition);
     m_lua.Register("setOrientation", this, &WorldObjectBindings::apiSetOrientation);
+
+    m_lua.Register("onWorldObjectDestroyed", this, &WorldObjectBindings::apiOnWorldObjectDestroyed);
+    m_lua.Register("onAABBEntered", this, &WorldObjectBindings::apiOnAABBEntered);
 }
 
 
@@ -111,7 +117,7 @@ int WorldObjectBindings::apiSetPosition(apikey key, const glm::vec3& position) {
 int WorldObjectBindings::apiSetOrientation(apikey key, const glm::vec3& orientation) {
     WorldObject* worldObject = m_scriptEngine.get<WorldObject>(key);
 
-    if (worldObject) {
+    if (!worldObject) {
         return -1;
     }
 
@@ -122,9 +128,25 @@ int WorldObjectBindings::apiSetOrientation(apikey key, const glm::vec3& orientat
 apikey WorldObjectBindings::apiOnWorldObjectDestroyed(apikey key, const std::string& callback) {
     WorldObject* worldObject = m_scriptEngine.get<WorldObject>(key);
 
-    if (!worldObject) { return -1; }
+    if (!worldObject) { 
+        return -1; 
+    }
 
     auto destructionPoll = std::make_shared<WorldObjectDestroyedPoll>(worldObject, [=] { m_lua.call(callback, key); });
     World::instance()->eventPoller().addPoll(destructionPoll);
     return destructionPoll->scriptKey();
 }
+
+
+apikey WorldObjectBindings::apiOnAABBEntered(apikey key, const glm::vec3& llf, const glm::vec3& urb, const std::string& callback) {
+    WorldObject* worldObject = m_scriptEngine.get<WorldObject>(key);
+
+    if (!worldObject) { 
+        return -1; 
+    }
+
+    auto enteredPoll = std::make_shared<AABBEnteredPoll>(worldObject, AABB(llf, urb), [=] { m_lua.call(callback, key); });
+    World::instance()->eventPoller().addPoll(enteredPoll);
+    return enteredPoll->scriptKey();
+}
+

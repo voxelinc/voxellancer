@@ -3,7 +3,10 @@
 #include <stdexcept>
 
 #ifdef WIN32
-#include <windows.h>
+#include <filesystem>
+namespace std {
+    namespace sys = tr2::sys;
+}
 #else
 #include <dirent.h>
 #endif
@@ -35,22 +38,15 @@ std::list<std::string> DirectoryReader::read() const {
     }
 
 #ifdef WIN32
-    WIN32_FIND_DATA findfiledata;
-    HANDLE hFind = INVALID_HANDLE_VALUE;
+    std::sys::path path(m_path);
+    std::sys::directory_iterator end_iter;
 
-    std::wstring wpath(pathBase.begin(), pathBase.end());
-    hFind = FindFirstFile((wpath + L"*").c_str(), &findfiledata);
-    if (hFind != INVALID_HANDLE_VALUE) {
-        do {
-            if ((findfiledata.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0) {
-                std::wstring file(findfiledata.cFileName);
-                files.push_back(pathBase + std::string(file.begin(), file.end()));
+    if (std::sys::exists(path) && std::sys::is_directory(path)) {
+        for (std::sys::directory_iterator dir_iter(path); dir_iter != end_iter; ++dir_iter) {
+            if (std::sys::is_regular_file(dir_iter->status())) {
+                files.push_back(dir_iter->path());
             }
         }
-        while (FindNextFile(hFind, &findfiledata) != 0);
-    } else {
-        glow::critical("Failed to read directory '%;'", pathBase);
-        throw std::runtime_error(std::string("Directory '" + pathBase + "' not found!"));
     }
 #else
     DIR* directory = opendir(pathBase.c_str());

@@ -8,13 +8,13 @@
 
 class ActionKeyMapping {
 public:
-    ActionKeyMapping(std::string primary, std::string secondary, std::string name);
-    ActionKeyMapping(std::string primary, std::string secondary, std::string name, bool toggleAction);
+    ActionKeyMapping(std::string primary, std::string secondary, std::string name, bool toggleAction = false);
 
     InputMapping mapping(InputClass inputClass);
-    void setMapping(InputMapping mapping, InputClass inputClass);
+    void setMapping(InputClass inputClass, InputMapping mapping);
 
-    std::string name();
+    const std::string& name();
+    const std::string& mappingName(InputClass inputClass);
     bool toggleAction();
     bool toggleStatus();
 

@@ -19,8 +19,6 @@ public:
     GamePlayScript(ScriptEngine* scriptEngine);
     virtual ~GamePlayScript();
 
-    void initializeBindings();
-
     ScriptEngine& scriptEngine();
     LuaWrapper& luaWrapper();
 
