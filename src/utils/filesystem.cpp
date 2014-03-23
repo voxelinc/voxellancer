@@ -18,13 +18,21 @@ bool FileSystem::exists(const std::string& path) {
     if (stat(path.c_str(), &info) != 0) {
         return false;
     } else {
-        int exists = info.st_mode & (S_IFREG | S_IFDIR);
+        int exists = info.st_mode & (S_IFREG | S_IFDIR); // is file or directory
         return exists != 0;
     }
 }
 
+bool FileSystem::remove(const std::string& path) {
+    return ::remove(path.c_str()) != 0;
+}
+
 bool FileSystem::createDirectory(const std::string& path) {
+#ifdef WIN32
     return _mkdir(path.c_str()) != 0;
+#else
+    return mkdir(path.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) != 0;
+#endif
 }
 
 bool FileSystem::copyFile(const std::string& from, const std::string& to) {
@@ -42,13 +50,13 @@ bool FileSystem::copyFile(const std::string& from, const std::string& to) {
 
 std::string FileSystem::userConfigDir() {
     std::string path;
-    #ifdef WIN32
+#ifdef WIN32
     path = getenv("APPDATA");
-    path += "/voxellancer/";
-    #else
+    path += "/voxellancer";
+#else
     path = getenv("HOME");
-    path += "/.voxellancer/";
-    #endif
+    path += "/.voxellancer";
+#endif
     
     if (!exists(path)) {
         createDirectory(path);

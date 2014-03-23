@@ -171,11 +171,11 @@ int main(int argc, char* argv[]) {
 
     PropertyManager::instance()->load("data/config.ini");
     glow::info("Config Directory: %;", FileSystem::userConfigDir());
-    std::string controlsConfig = FileSystem::userConfigDir() + "controls.ini";
+    std::string controlsConfig = FileSystem::userConfigDir() + "/controls.ini";
     if (!FileSystem::exists(controlsConfig)) {
         FileSystem::copyFile("data/controls.ini.default", controlsConfig);
     }
-    PropertyManager::instance()->load(FileSystem::userConfigDir() + "controls.ini");
+    PropertyManager::instance()->load(controlsConfig);
     PropertyManager::instance()->load("data/voxels.ini", "voxels");
 
     if (!glfwInit()) {

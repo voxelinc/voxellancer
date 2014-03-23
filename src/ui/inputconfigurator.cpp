@@ -193,7 +193,7 @@ void InputConfigurator::setConfigurationState(int state, InputClass inputClass) 
 }
 
 void InputConfigurator::writeConfig() {
-    InputConfigWriter writer(FileSystem::userConfigDir() + "controls.ini");
+    InputConfigWriter writer(FileSystem::userConfigDir() + "/controls.ini");
     for (ActionKeyMapping* mapping : *m_actions) {
         writer.write(*mapping);
     }

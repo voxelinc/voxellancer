@@ -7,6 +7,7 @@
 #include "property/property.h"
 #include "property/propertymanager.h"
 #include "input/inputmapping.h"
+#include "utils/filesystem.h"
 
 using namespace bandit;
 
@@ -118,6 +119,29 @@ go_bandit([](){
 
             PropertyManager::instance()->deregisterListener(&listener);
 
+        });
+
+        it("should work with FileSystem", [&]() {
+            std::string dir = FileSystem::userConfigDir();
+            AssertThat(dir, !Equals(""));
+            AssertThat(FileSystem::exists(dir), Equals(true));
+
+            std::string source = "test/property/test.ini";
+            std::string target = FileSystem::userConfigDir() + "/test.ini";
+            if (FileSystem::exists(target)) {
+                FileSystem::remove(target);
+            }
+
+            AssertThat(FileSystem::exists(source), Equals(true));
+            AssertThat(FileSystem::exists(target), Equals(false));
+
+            FileSystem::copyFile(source, target);
+
+            AssertThat(FileSystem::exists(target), Equals(true));
+
+            FileSystem::remove(target);
+
+            AssertThat(FileSystem::exists(target), Equals(false));
         });
     });
 });
