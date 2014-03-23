@@ -18,7 +18,7 @@ SquadBindings::SquadBindings(GamePlayScript& script):
 
 }
 
-void SquadBindings::initialize() {
+void SquadBindings::bind() {
     m_lua.Register("createSquad", this, &SquadBindings::apiCreateSquad);
     m_lua.Register("joinSquad", this, &SquadBindings::apiJoinSquad);
     m_lua.Register("createPatrolWaypointsTask", this, &SquadBindings::apiCreatePatrolWaypointsTask);
@@ -37,7 +37,7 @@ apikey SquadBindings::apiCreateSquad(apikey leader) {
 
     ship->squadLogic()->joinSquad(squad);
 
-    return squad->scriptKey();   
+    return squad->scriptKey();
 }
 
 int SquadBindings::apiJoinSquad(apikey squadKey, apikey shipKey) {
@@ -53,9 +53,9 @@ int SquadBindings::apiJoinSquad(apikey squadKey, apikey shipKey) {
 
 int SquadBindings::apiCreatePatrolWaypointsTask(apikey squadKey) {
     Squad* squad = m_scriptEngine.get<Squad>(squadKey);
-    
+
     if (!squad) { return -1; }
-    
+
     auto task = std::make_shared<PatrolWaypointsTask>(*squad);
     m_scriptEngine.registerScriptable(task.get());
 

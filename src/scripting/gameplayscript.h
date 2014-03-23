@@ -1,7 +1,8 @@
 #pragma once
 
-#include <vector>
+#include <list>
 #include <memory>
+#include <vector>
 
 #include <glm/glm.hpp>
 
@@ -12,7 +13,6 @@ class ScriptEngine;
 class Ship;
 class Squad;
 class WorldObject;
-class Bindings;
 
 class GamePlayScript: public Script {
 public:
@@ -22,10 +22,14 @@ public:
     ScriptEngine& scriptEngine();
     LuaWrapper& luaWrapper();
 
+    /* Add a Scriptable to be hold by this script. On destruction of the script
+    this Scriptable becomes invalid and will be destroyed */
+    void addLocal(int key);
+
+
+
 protected:
     ScriptEngine* m_scriptEngine;
-
-    std::vector<std::unique_ptr<Bindings>> m_bindings;
-
+    std::list<int> m_locals;
 };
 

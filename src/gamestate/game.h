@@ -18,6 +18,10 @@ public:
     Game();
     ~Game();
 
+    static void setup();
+    static Game* instance();
+    static void tearDown();
+
     GamePlay& gamePlay();
 
     virtual const Scene& scene() const override;
@@ -31,6 +35,8 @@ public:
 
 
 protected:
+    static Game* s_instance;
+
     std::shared_ptr<HMDManager> m_hmdManager;
     std::unique_ptr<Viewer> m_viewer;
 

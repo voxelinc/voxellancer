@@ -31,8 +31,6 @@ public:
     VoxelParticleData* particleData(int index);
     std::vector<VoxelParticleData>& particleDataVector();
 
-    void setPlayer(Player& m_player);
-
     void addParticle(const VoxelParticleSetup& particleSetup, const VoxelCluster* creator);
     void removeParticle(int index);
 

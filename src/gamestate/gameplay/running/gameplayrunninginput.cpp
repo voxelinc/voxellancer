@@ -21,6 +21,7 @@
 #include "camera/cameradolly.h"
 #include "etc/hmd/hmd.h"
 #include "input/inputmapping.h"
+#include "world/world.h"
 #include "worldobject/worldobject.h"
 #include "worldobject/worldobjectcomponents.h"
 #include "worldobject/ship.h"
@@ -54,9 +55,7 @@
 * B9: right stick
 */
 
-GamePlayRunningInput::GamePlayRunningInput(Player* player):
-    m_player(player),
-
+GamePlayRunningInput::GamePlayRunningInput():
     prop_deadzoneMouse("input.deadzoneMouse"),
     prop_deadzoneGamepad("input.deadzoneGamepad"),
     prop_maxClickTime("input.maxClickTime"),
@@ -82,7 +81,7 @@ GamePlayRunningInput::GamePlayRunningInput(Player* player):
     m_secondaryInputValues(),
     m_actions(),
 
-    m_inputConfigurator(new InputConfigurator(&m_actions, &m_secondaryInputValues, &prop_deadzoneGamepad, &m_player->hud())),
+    m_inputConfigurator(new InputConfigurator(&m_actions, &m_secondaryInputValues, &prop_deadzoneGamepad, &World::instance()->player().hud())),
     m_fireUpdate(false),
     m_rocketUpdate(false),
     m_moveUpdate(0),
@@ -141,8 +140,9 @@ void GamePlayRunningInput::keyCallback(int key, int scancode, int action, int mo
 void GamePlayRunningInput::mouseButtonCallback(int button, int action, int mods) {
     if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_RELEASE) {
         if (m_currentTimePressed > 0 && m_currentTimePressed < prop_maxClickTime) {
-            m_player->hud().onClick(ClickType::Selection);
+            World::instance()->player().hud().onClick(ClickType::Selection);
         } else {
+
         }
         m_currentTimePressed = 0;
     }
@@ -178,25 +178,25 @@ void GamePlayRunningInput::applyUpdates() {
     // collect them and apply them here
 
     if (m_fireUpdate){
-        m_player->fire(); // fire checks for existence of ship
+        World::instance()->player().fire(); // fire checks for existence of ship
     }
     m_fireUpdate = false;
 
-    if (m_rocketUpdate && m_player->ship()) {
-        m_player->ship()->components().fireAtObject(m_player->ship()->targetObject());
+    if (m_rocketUpdate && World::instance()->player().ship()) {
+        World::instance()->player().ship()->components().fireAtObject(World::instance()->player().ship()->targetObject());
     }
     m_rocketUpdate = false;
 
     if (glm::length(m_moveUpdate) > 1.0f) {
         m_moveUpdate = glm::normalize(m_moveUpdate);
     }
-    m_player->move(m_moveUpdate);
+    World::instance()->player().move(m_moveUpdate);
     m_moveUpdate = glm::vec3(0);
 
     if (glm::length(m_rotateUpdate) > 1.0f) {
         m_rotateUpdate = glm::normalize(m_rotateUpdate);
     }
-    m_player->rotate(m_rotateUpdate);
+    World::instance()->player().rotate(m_rotateUpdate);
     m_rotateUpdate = glm::vec3(0);
 }
 
@@ -222,7 +222,7 @@ void GamePlayRunningInput::processMouseUpdate(float deltaSec) {
 
     bool pressed = glfwGetMouseButton(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS;
 
-    m_player->hud().crossHair().setActionActive(pressed);
+    World::instance()->player().hud().crossHair().setActionActive(pressed);
 
     glm::vec2 mousePos(x, y);
     if (glm::length(m_lastMousePos - mousePos) > 0.01f) {
@@ -231,7 +231,7 @@ void GamePlayRunningInput::processMouseUpdate(float deltaSec) {
     }
 
     if (m_centerCrosshair) {
-        m_player->hud().crossHair().pointToLocalPoint(glm::vec3(0, 0, -1));
+        World::instance()->player().hud().crossHair().pointToLocalPoint(glm::vec3(0, 0, -1));
     } else {
         placeCrossHair(x, y);
     }
@@ -263,9 +263,9 @@ void GamePlayRunningInput::processMouseUpdate(float deltaSec) {
 
 void GamePlayRunningInput::processHMDUpdate() {
     if (HMDManager::instance()->hmd()) {
-        m_player->cameraHead().setRelativeOrientation(HMDManager::instance()->hmd()->orientation());
+        World::instance()->player().cameraHead().setRelativeOrientation(HMDManager::instance()->hmd()->orientation());
     } else {
-        m_player->cameraHead().setRelativeOrientation(glm::quat());
+        World::instance()->player().cameraHead().setRelativeOrientation(glm::quat());
     }
 }
 
@@ -334,7 +334,7 @@ float GamePlayRunningInput::getInputValue(InputMapping mapping) {
 }
 
 void GamePlayRunningInput::processFireActions() {
-    m_player->hud().crossHair().setActionActive(getInputValue(&fireAction) > 0.001);
+    World::instance()->player().hud().crossHair().setActionActive(getInputValue(&fireAction) > 0.001);
 
     if (getInputValue(&fireAction)) {
         m_fireUpdate = true;
@@ -373,17 +373,17 @@ void GamePlayRunningInput::processRotateActions() {
 
 void GamePlayRunningInput::processTargetSelectActions() {
     if (getInputValue(&selectNextAction)) {
-        m_player->selectTarget(true);
+        World::instance()->player().selectTarget(true);
     }
     if (getInputValue(&selectPreviousAction)) {
-        m_player->selectTarget(false);
+        World::instance()->player().selectTarget(false);
     }
 }
 
 void GamePlayRunningInput::placeCrossHair(double winX, double winY) {
     int width, height;
     glfwGetWindowSize(glfwGetCurrentContext(), &width, &height);
-    m_player->hud().setCrossHairOffset(glm::vec2((winX - (width/2))/(width/2), -(winY - (height/2))/(height/2)));
+    World::instance()->player().hud().setCrossHairOffset(glm::vec2((winX - (width/2))/(width/2), -(winY - (height/2))/(height/2)));
 }
 
 SecondaryInputValues::SecondaryInputValues() {

@@ -1,22 +1,13 @@
 Lua API bindings
 ================
-generated from 94ca368
-
-## squadbindings.h
-
-    apikey createSquad(apikey leader);
-    int joinSquad(apikey squad, apikey ship);
-    int createPatrolWaypointsTask(apikey squad);
-    int addPatrolwWaypointPoint(apikey task, const glm::vec3& point);
-    int createDefendAreaTask(apikey squad, const glm::vec3& point, float range);
-    int addDefendAreaPoint(apikey task, const glm::vec3& point);
-
+generated from 165ede4
 
 ## commonbindings.h
 
-    bool isKeyValid(apikey key);
+    bool valid(apikey key);
     int showText(const std::string& string);
     int showTextFor(const std::string& string, int seconds);
+    int playVoice(const std::string& soundFile);
     int setEventActive(apikey eventPoll, bool active);
     apikey createSingleShotTimer(const std::string& callback, float delta);
     apikey createLoopingTimer(const std::string& callback, float delta);
@@ -26,13 +17,42 @@ generated from 94ca368
 
     apikey playerShip();
     apikey createShip(const std::string& name);
+    apikey createWorldObject(const std::string& name);
     int spawn(apikey worldObject);
+    int remove(apikey worldObject);
     int setPosition(apikey worldObject, const glm::vec3& position);
     int setOrientation(apikey worldObject, const glm::vec3& orientation);
     glm::vec3 position(apikey worldObject);
     glm::vec3 orientation(apikey worldObject);
     apikey onWorldObjectDestroyed(apikey worldObject, const std::string& callback);
     apikey onAABBEntered(apikey worldObject, const glm::vec3& llf, const glm::vec3& urb, const std::string& callback);
+
+
+## externalmissionbindings.h
+
+    apikey missionStart(const std::string& name);
+    apikey onMissionFailure(apikey missionKey, const std::string& callback);
+    apikey onMissionSuccess(apikey missionKey, const std::string& callback);
+    apikey createStatePoll(apikey missionKey, MissionState state, const std::string& callback);
+
+
+## internalmissionbindings.h
+
+    int missionSucceed();
+    int missionFail();
+    int missionMessage(const std::string& message);
+    int missionFailureMessage(const std::string& message);
+    int missionSuccessMessage(const std::string& message);
+
+
+## squadbindings.h
+
+    apikey createSquad(apikey leader);
+    int joinSquad(apikey squad, apikey ship);
+    int createPatrolWaypointsTask(apikey squad);
+    int addPatrolwWaypointPoint(apikey task, const glm::vec3& point);
+    int createDefendAreaTask(apikey squad, const glm::vec3& point, float range);
+    int addDefendAreaPoint(apikey task, const glm::vec3& point);
 
 
 ## aibindings.h
@@ -46,6 +66,7 @@ generated from 94ca368
     int setTargetPoint(apikey flyToTask, const glm::vec3& point);
     apikey createFightTask(apikey ship);
     int addFightTaskTarget(apikey flyToTask, apikey worldObject);
+    apikey taskExecutor(apikey aiTask);
 
 
 Ini Objects
@@ -94,6 +115,8 @@ Ini Objects
 ## worldobjects
 
  * banner
+ * idareyou
+ * missionstart
 
 
 ## ships

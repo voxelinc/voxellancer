@@ -14,14 +14,16 @@ EventPoller::EventPoller()
 
 EventPoller::~EventPoller() = default;
 
-void EventPoller::addPoll(std::shared_ptr<EventPoll> eventPoll) {
-    m_eventPolls.insert(eventPoll);
-    World::instance()->scriptEngine().registerScriptable(eventPoll.get());
+void EventPoller::addPoll(EventPoll* eventPoll) {
+    m_eventPolls.push_back(std::unique_ptr<EventPoll>(eventPoll));
+    World::instance()->scriptEngine().registerScriptable(eventPoll);
 }
 
-void EventPoller::removePoll(std::shared_ptr<EventPoll> eventPoll) {
-    m_eventPolls.erase(eventPoll);
-    World::instance()->scriptEngine().unregisterScriptable(eventPoll.get());
+void EventPoller::removePoll(EventPoll* eventPoll) {
+    World::instance()->scriptEngine().unregisterScriptable(eventPoll);
+    m_eventPolls.remove_if([&](std::unique_ptr<EventPoll>& eventPollPtr) {
+        return eventPollPtr.get() == eventPoll;
+    });
 }
 
 void EventPoller::update(float deltaSec) {

@@ -12,16 +12,19 @@
 
 #include "utils/handle/handle.h"
 
+
 enum class ClickType {
     None,
     Selection
 };
 
-
 class Player;
 class Hudget;
 class WorldObject;
+class HUDElements;
 class HUDObjectDelegate;
+class HudgetAnimation;
+class HudgetHideAnimation;
 class AimHelperHudget;
 class Viewer;
 class WorldTreeScanner;
@@ -56,19 +59,20 @@ public:
     void setTarget(WorldObject* target);
     WorldObject* target();
 
-
     void onClick(ClickType clickType);
 
     void update(float deltaSec);
     void draw();
 
     glm::vec3 applyTo(const glm::vec3 &vertex) const;
-	
-    Viewer* viewer() const;
-    void setViewer(Viewer& viewer);
 
     float fovy() const;
     float fovx() const;
+
+    void showMissionInfo(const std::string& title, const std::string& caption);
+    void showMissionMessage(const std::string& message);
+    void showMessage(const std::string& message);
+
 
 protected:
     Player* m_player;
@@ -77,17 +81,18 @@ protected:
     Handle<WorldObject> m_target;
     Property<bool> m_drawHud;
 
-    float m_fovy, m_fovx;
+    float m_fovy;
+    float m_fovx;
 
-    std::unique_ptr<AimHelperHudget> m_aimHelper;
-    std::unique_ptr<CrossHair> m_crossHair;
+    CrossHair* m_crossHair;
+    AimHelperHudget* m_aimHelper;
+
     std::unique_ptr<WorldTreeScanner> m_scanner;
-    std::unique_ptr<TextFieldHudget> m_speedLabel;
-    std::unique_ptr<TextFieldHudget> m_targetName;
-
-    std::list<Hudget*> m_hudgets;
+    std::unique_ptr<HUDElements> m_elements;
 
     std::map<WorldObject*, HUDObjectDelegate*> m_objectDelegates;
+
+
     void updateScanner(float deltaSec);
     void updateFov();
 };

@@ -38,7 +38,7 @@ void InputConfigWriter::write(const std::string& name, const InputMapping& mappi
     std::string unPrefixedName = name;
     unPrefixedName.erase(unPrefixedName.begin(), unPrefixedName.begin() + 6); // remove "input."
     m_file << unPrefixedName << " = InputMapping(";
-    m_file << std::setprecision(2);
+    m_file << std::setprecision(1) << std::fixed;
     m_file << static_cast<int>(mapping.type()) << ",";
     m_file << mapping.index() << ",";
     m_file << mapping.maxValue() << ",";

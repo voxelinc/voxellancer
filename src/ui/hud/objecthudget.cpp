@@ -10,6 +10,7 @@
 #include "factions/factionmatrix.h"
 
 #include "utils/geometryhelper.h"
+#include "ui/objectinfo.h"
 
 #include "world/world.h"
 
@@ -29,9 +30,9 @@
 #include "display/view.h"
 
 
-ObjectHudget::ObjectHudget(HUD* hud, HUDObjectDelegate* objectDelegate):
+ObjectHudget::ObjectHudget(HUD* hud):
     Hudget(hud),
-    m_objectDelegate(objectDelegate),
+    m_objectDelegate(nullptr),
     m_objectVoxels(new ObjectHudgetVoxels(this)),
     m_arrowVoxels(new ArrowHudgetVoxels(this))
 {
@@ -96,6 +97,10 @@ HUDObjectDelegate* ObjectHudget::objectDelegate() {
     return m_objectDelegate;
 }
 
+void ObjectHudget::setObjectDelegate(HUDObjectDelegate* objectDelegate) {
+    m_objectDelegate = objectDelegate;
+}
+
 bool ObjectHudget::isAt(const Ray& ray) const {
     if (!m_insideFov) {
         return m_arrowVoxels->isAt(ray) || m_objectVoxels->isAt(ray);
@@ -111,7 +116,7 @@ bool ObjectHudget::isInsideFov() {
     if (GeometryHelper::angleBetweenVectorPlane(localDirection(), glm::vec3(0, 1, 0)) + angleCorrection < m_fovy &&
         GeometryHelper::angleBetweenVectorPlane(localDirection(), glm::vec3(1, 0, 0)) + angleCorrection < m_fovx) {
         return true;
-    } 
+    }
     return false;
 }
 
@@ -146,7 +151,10 @@ glm::vec3 ObjectHudget::closestPointInsideFov() {
 
 void ObjectHudget::onClick(ClickType clickType) {
     if (clickType == ClickType::Selection) {
-        m_hud->player()->setTarget(m_objectDelegate->worldObject());
+        WorldObject* worldObject = m_objectDelegate->worldObject();
+        if (worldObject && worldObject->objectInfo().canLockOn()) {
+            m_hud->player()->setTarget(worldObject);
+        }
     }
 }
 

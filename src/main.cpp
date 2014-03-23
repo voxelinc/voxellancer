@@ -43,7 +43,6 @@
 static GLint MajorVersionRequire = 3;
 static GLint MinorVersionRequire = 1;
 
-static Game* game;
 
 static void checkGLVersion() {
     glow::info("OpenGL Version Needed %;.%; (%;.%; Found)",
@@ -74,8 +73,8 @@ static void resizeCallback(GLFWwindow* window, int width, int height) {
     glow::info("Resizing viewport to %;x%;", width, height);
     if (width > 0 && height > 0) {
         glViewport(0, 0, width, height);
-        game->gamePlay().running().input().resizeEvent(width, height);
-        game->viewer().setViewport(Viewport(0, 0, width, height));
+        Game::instance()->gamePlay().running().input().resizeEvent(width, height);
+        Game::instance()->viewer().setViewport(Viewport(0, 0, width, height));
     }
 }
 
@@ -90,25 +89,23 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
         (glfwGetKey(window, GLFW_KEY_RIGHT_ALT) == GLFW_PRESS))) {
         toggleFullScreen();
     }
-    if (key >= GLFW_KEY_F1 && key <= GLFW_KEY_F4 && action == GLFW_PRESS) {
-        game->gamePlay().loadScenario(key - GLFW_KEY_F1);
+    if (key >= GLFW_KEY_F1 && key <= GLFW_KEY_F7 && action == GLFW_PRESS) {
+        Game::instance()->gamePlay().loadScenario(key - GLFW_KEY_F1);
     }
-    if (key == GLFW_KEY_F5 && action == GLFW_PRESS) {
+    if (key == GLFW_KEY_F8 && action == GLFW_PRESS) {
         glowutils::File::reloadAll();
-    }
-    if (key == GLFW_KEY_F6 && action == GLFW_PRESS) {
         PropertyManager::instance()->load("data/config.ini");
     }
     if (key >= GLFW_KEY_1 && key <= GLFW_KEY_9 && action == GLFW_PRESS) {
-        game->gamePlay().scene().setOutputBuffer(key-GLFW_KEY_1);
+        Game::instance()->gamePlay().scene().setOutputBuffer(key-GLFW_KEY_1);
     }
 
-	game->gamePlay().running().input().keyCallback(key, scancode, action, mods);
+	Game::instance()->gamePlay().running().input().keyCallback(key, scancode, action, mods);
 }
 
 
 static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
-    game->gamePlay().running().input().mouseButtonCallback(button, action, mods);
+    Game::instance()->gamePlay().running().input().mouseButtonCallback(button, action, mods);
 }
 
 void setGLFWCallbacks(GLFWwindow* window) {
@@ -142,8 +139,8 @@ static void mainloop() {
         double delta = glfwGetTime() - time;
         time += delta;
 
-        game->update(static_cast<float>(delta));
-        game->draw();
+        Game::instance()->update(static_cast<float>(delta));
+        Game::instance()->draw();
 
         glfwSwapBuffers(glfwGetCurrentContext());
         glfwPollEvents();
@@ -218,21 +215,21 @@ int main(int argc, char* argv[]) {
         PropertyDirectory("data/equipment/weapons").read();
         PropertyDirectory("data/equipment/projectiles").read();
 
-        game = new Game();
-
         if(clParser.hmd()) {
-            game->hmdManager().setupHMD(game->viewer());
+            Game::instance()->hmdManager().setupHMD(Game::instance()->viewer());
         } else {
             if(clParser.stereoView()) {
-                game->viewer().switchToStereoView(StereoRenderInfo::dummy());
+                Game::instance()->viewer().switchToStereoView(StereoRenderInfo::dummy());
             }
         }
 
         int width, height;
         glfwGetFramebufferSize(window, &width, &height);
-        //game->inputHandler().resizeEvent(width, height);
+        //Game::instance()->inputHandler().resizeEvent(width, height);
 
         mainloop();
+
+        Game::tearDown();
 
 #ifdef TRYCATCH
     }
@@ -245,7 +242,6 @@ int main(int argc, char* argv[]) {
     }
 #endif
 
-    delete game;
     ContextProvider::instance()->shutdown();
     glfwTerminate();
     OVR::System::Destroy();

@@ -45,7 +45,6 @@ void BaseScenario::clear() {
     m_world->reset();
 }
 
-
 void BaseScenario::reset() {
     clear();
     load();
@@ -63,7 +62,7 @@ void BaseScenario::populateWorld() {
     playerShip->objectInfo().setShowOnHud(false);
     playerShip->objectInfo().setCanLockOn(false);
     m_world->god().scheduleSpawn(playerShip);
-    m_gamePlay->player().setShip(playerShip);
+   World::instance()->player().setShip(playerShip);
     m_world->god().spawn();
 }
 
