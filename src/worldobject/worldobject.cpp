@@ -179,3 +179,7 @@ void WorldObject::setCollisionFieldOfDamage(float collisionFieldOfDamage) {
     m_collisionFieldOfDamage = collisionFieldOfDamage;
 }
 
+bool WorldObject::passiveForCollisionDetection() {
+    return false;
+}
+

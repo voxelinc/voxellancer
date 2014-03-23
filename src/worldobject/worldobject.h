@@ -79,6 +79,8 @@ public:
     float collisionFieldOfDamage() const;
     void setCollisionFieldOfDamage(float collisionFieldOfDamage);
 
+    virtual bool passiveForCollisionDetection();
+
 protected:
     WorldObject(CollisionFilter* filter);
 
