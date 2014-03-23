@@ -23,7 +23,8 @@ WorldObject::WorldObject() :
     m_collisionFieldOfDamage(glm::half_pi<float>()),
     m_handle(Handle<WorldObject>(this)),
     m_spawnState(SpawnState::None),
-    m_collisionFilter(new CollisionFilter(this))
+    m_collisionFilter(new CollisionFilter(this)),
+    m_crucialVoxelDestroyed(false)
 {
 }
 
@@ -32,22 +33,6 @@ WorldObject::WorldObject(const Transform& transform) :
 {
     setTransform(transform);
 }
-
-WorldObject::WorldObject(CollisionFilter* filter) :
-    VoxelCluster(1.0f),
-    m_physics(new Physics(*this, 1.0f)),
-    m_collisionDetector(new CollisionDetector(*this)),
-    m_objectInfo(new ObjectInfo()),
-    m_components(new WorldObjectComponents(this)),
-    m_crucialVoxel(nullptr),
-    m_collisionFieldOfDamage(glm::half_pi<float>()),
-    m_handle(Handle<WorldObject>(this)),
-    m_spawnState(SpawnState::None),
-    m_collisionFilter(filter),
-    m_crucialVoxelDestroyed(false)
-{
-}
-
 
 WorldObject::~WorldObject() {
      m_handle.invalidate();
