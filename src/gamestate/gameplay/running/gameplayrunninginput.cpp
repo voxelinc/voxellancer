@@ -321,6 +321,7 @@ float GamePlayRunningInput::getInputValue(InputMapping mapping) {
             if (m_secondaryInputValues.axisCnt > mapping.index() && glm::abs(m_secondaryInputValues.axisValues[mapping.index()]) > prop_deadzoneGamepad) {
                 float relativeValue = m_secondaryInputValues.axisValues[mapping.index()] / mapping.maxValue();
                 if (relativeValue > 0) {
+                    m_centerCrosshair = true;
                     return glm::min(relativeValue, 1.0f);
                 } else {
                     return 0;
@@ -365,8 +366,6 @@ void GamePlayRunningInput::processRotateActions() {
 
     if (glm::length(rot) < prop_deadzoneGamepad) {
         rot = glm::vec3(0);
-    } else {
-        m_centerCrosshair = true;
     }
 
     m_rotateUpdate += rot;
