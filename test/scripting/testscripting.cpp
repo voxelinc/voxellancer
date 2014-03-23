@@ -89,7 +89,6 @@ go_bandit([](){
             std::unique_ptr<Ship> ship;
 
             before_each([&]() {
-                        std::cout << "New playership" << std::endl;
                 ship.reset(new Ship());
                 World::instance()->player().setShip(ship.get());
                 scriptEngine->registerScriptable(ship.get());
