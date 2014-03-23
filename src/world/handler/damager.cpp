@@ -26,7 +26,7 @@ void Damager::applyDamages(std::list<DamageImpact> &damageImpacts) {
 
     for(DamageImpact &damageImpact : damageImpacts) {
         if (m_playerShipUndestroyable && World::instance()->player().ship() == damageImpact.worldObject()) {
-            return;
+            continue;
         }
 
         Voxel *voxel = damageImpact.voxel();
