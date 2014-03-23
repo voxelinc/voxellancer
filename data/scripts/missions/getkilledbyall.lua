@@ -32,8 +32,9 @@ function main()
 	end
 	
 	missionMessage("...and go!")
-	
-	createLoopingTimer("timeWarning", 7)
+	playVoice("data/sound/mission/woken_the_dragon.ogg")
+
+	createSingleShotTimer("timeWarning", 10)
 end
 
 function missionTitle() 
@@ -61,6 +62,7 @@ end
 
 function timeWarning() 
 	missionMessage("You're not supposed to merely survive. Kill or be killed!")
+	playVoice("data/sound/mission/not_supposed_to_survive.ogg")
 end
 
 

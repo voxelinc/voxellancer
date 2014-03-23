@@ -2,7 +2,7 @@ function main()
 	showTextFor("Welcome to a mission script", 2.0)
 	
 	ships = {}
-	count = 1
+	count = 6
 	radius = 40
 	
 	playerPos = position(playerShip())
@@ -82,8 +82,9 @@ function timeWarning2()
 end
 
 function onFailure() 
-	missionFailureMessage("That really took too long.")
-	
+	missionFailureMessage("That really took too long. You failed!")
+	playVoice("data/sound/mission/that_took_too_long.ogg")
+
 	for k, v in pairs(ships) do
 		if valid(v) then
 			remove(v)
