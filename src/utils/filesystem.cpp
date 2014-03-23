@@ -2,7 +2,9 @@
 
 #ifdef WIN32
 #include <filesystem>
-#include <direct.h>
+namespace std {
+    namespace sys = tr2::sys;
+}
 #else
 #include <dirent.h>
 #include <unistd.h>
@@ -31,8 +33,7 @@ bool FileSystem::removeFile(const std::string& path) {
 
 bool FileSystem::createDirectory(const std::string& path) {
 #ifdef WIN32
-    std::tr2::sys::path mypath = path;
-    return std::tr2::sys::create_directory(mypath);
+    return std::sys::create_directory(std::sys::path(path));
 #else
     return mkdir(path.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) != 0;
 #endif
@@ -40,7 +41,7 @@ bool FileSystem::createDirectory(const std::string& path) {
 
 bool FileSystem::removeDirectory(const std::string& path) {
 #ifdef WIN32 
-    return _rmdir(path.c_str()) == 0;
+    return std::sys::remove_directory(std::sys::path(path));
 #else
     return rmdir(path.c_str()) == 0;
 #endif
