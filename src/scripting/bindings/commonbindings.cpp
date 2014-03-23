@@ -37,7 +37,6 @@ void CommonBindings::initialize() {
     m_lua.Register("createSingleShotTimer", this, &CommonBindings::apiCreateSingleShotTimer);
     m_lua.Register("createLoopingTimer", this, &CommonBindings::apiCreateLoopingTimer);
 
-    m_lua.Register("onAABBEntered", this, &CommonBindings::apiOnAABBEntered);
 }
 
 
@@ -80,14 +79,4 @@ apikey CommonBindings::apiCreateLoopingTimer(const std::string& callback, float 
     auto timer = std::make_shared<LoopingTimer>(delta, [=] { m_lua.call(callback); });
     World::instance()->eventPoller().addPoll(timer);
     return timer->scriptKey();
-}
-
-apikey CommonBindings::apiOnAABBEntered(apikey key, const glm::vec3& llf, const glm::vec3& urb, const std::string& callback) {
-    WorldObject* worldObject = m_scriptEngine.get<WorldObject>(key);
-
-    if (!worldObject) { return -1; }
-
-    auto enteredPoll = std::make_shared<AABBEnteredPoll>(worldObject, AABB(llf, urb), [=] { m_lua.call(callback, key); });
-    World::instance()->eventPoller().addPoll(enteredPoll);
-    return enteredPoll->scriptKey();
 }

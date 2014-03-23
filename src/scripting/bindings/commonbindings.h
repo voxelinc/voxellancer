@@ -23,6 +23,5 @@ protected:
     apikey apiCreateSingleShotTimer(const std::string& callback, float delta);
     apikey apiCreateLoopingTimer(const std::string& callback, float delta);
 
-    apikey apiOnAABBEntered(apikey worldObject, const glm::vec3& llf, const glm::vec3& urb, const std::string& callback);
 
 };
