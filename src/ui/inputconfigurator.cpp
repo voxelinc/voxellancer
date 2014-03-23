@@ -9,6 +9,8 @@
 #include "ui/hud/hud.h"
 
 #include "gamestate/gameplay/running/gameplayrunninginput.h"
+#include "input/inputconfigwriter.h"
+#include "utils/filesystem.h"
 
 
 InputConfigurator::InputConfigurator(std::vector<ActionKeyMapping*>* actions, SecondaryInputValues *secondaryInputValues, Property<float>* deadzone, HUD* hud):
@@ -129,6 +131,7 @@ void InputConfigurator::setupControls(InputClass inputClass) {
     incrementConfigurationState(inputClass);
     if (configurationState(inputClass) >= m_actions->size()) {
         glow::info("Setup complete");
+        writeConfig();
         setConfigurationState(-1, inputClass);
     } else {
         glow::info(" ...done");
@@ -182,5 +185,12 @@ void InputConfigurator::setConfigurationState(int state, InputClass inputClass) 
         m_primaryConfigurationState = state;
     } else {
         m_secondaryConfigurationState = state;
+    }
+}
+
+void InputConfigurator::writeConfig() {
+    InputConfigWriter writer(FileSystem::userConfigDir() + "/controls.ini");
+    for (ActionKeyMapping* mapping : *m_actions) {
+        writer.write(*mapping);
     }
 }
