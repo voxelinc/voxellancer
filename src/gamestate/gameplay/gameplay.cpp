@@ -90,9 +90,6 @@ void GamePlay::loadScenario(int i) {
     case 4:
         m_scenario.reset(new PirateScenario(this));
         break;
-    case 5:
-        m_scenario.reset(new MissionScenario(this, "data/scripts/missions/killemall.lua"));
-        break;
     default:
         m_scenario.reset(new BaseScenario(this));
     }

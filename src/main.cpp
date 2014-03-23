@@ -89,13 +89,11 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
         (glfwGetKey(window, GLFW_KEY_RIGHT_ALT) == GLFW_PRESS))) {
         toggleFullScreen();
     }
-    if (key >= GLFW_KEY_F1 && key <= GLFW_KEY_F6 && action == GLFW_PRESS) {
+    if (key >= GLFW_KEY_F1 && key <= GLFW_KEY_F7 && action == GLFW_PRESS) {
         Game::instance()->gamePlay().loadScenario(key - GLFW_KEY_F1);
     }
-    if (key == GLFW_KEY_F5 && action == GLFW_PRESS) {
+    if (key == GLFW_KEY_F8 && action == GLFW_PRESS) {
         glowutils::File::reloadAll();
-    }
-    if (key == GLFW_KEY_F6 && action == GLFW_PRESS) {
         PropertyManager::instance()->load("data/config.ini");
     }
     if (key >= GLFW_KEY_1 && key <= GLFW_KEY_9 && action == GLFW_PRESS) {
