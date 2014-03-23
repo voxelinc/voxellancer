@@ -79,7 +79,7 @@ bool ScriptEngine::keyValid(int key) const {
 
 void ScriptEngine::update(float deltaSec) {
     if (m_running) {
-        for (std::list<std::shared_ptr<GamePlayScript>>::iterator i = m_scripts.begin(); i != m_scripts.end(); ++i) {
+        for (std::list<std::shared_ptr<GamePlayScript>>::iterator i = m_scripts.begin(); i != m_scripts.end(); ) {
             GamePlayScript* script = i->get();
 
             if (script->started() && !script->stopped()) {
@@ -88,6 +88,8 @@ void ScriptEngine::update(float deltaSec) {
 
             if (script->stopped()) {
                 i = m_scripts.erase(i);
+            } else {
+                ++i;
             }
         }
     }

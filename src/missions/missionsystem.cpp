@@ -16,13 +16,15 @@ MissionSystem::MissionSystem() {
 MissionSystem::~MissionSystem() = default;
 
 void MissionSystem::update(float deltaSec) {
-    for (auto i = m_missions.begin(); i != m_missions.end(); ++i) {
+    for (auto i = m_missions.begin(); i != m_missions.end(); ) {
         Mission* mission = i->get();
 
         mission->update(deltaSec);
 
         if (mission->state() != MissionState::Running) {
             i = m_missions.erase(i);
+        } else {
+            ++i;
         }
     }
 }
