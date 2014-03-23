@@ -25,12 +25,12 @@ go_bandit([](){
         }
     };
 
-    describe("Property", [](){
-        before_each([&](){
+    describe("Property", []() {
+        before_each([&]() {
             glow::setVerbosityLevel(glow::LogMessage::Fatal);
             PropertyManager::reset();
         });
-        after_each([&](){
+        after_each([&]() {
             glow::setVerbosityLevel(glow::LogMessage::Info);
         });
 
@@ -120,16 +120,20 @@ go_bandit([](){
             PropertyManager::instance()->deregisterListener(&listener);
 
         });
+    });
 
-        it("should work with FileSystem", [&]() {
+    describe("FilesSystem",[&]() {
+        it("has a user config dir", [&]() {
             std::string dir = FileSystem::userConfigDir();
             AssertThat(dir, !Equals(""));
             AssertThat(FileSystem::exists(dir), Equals(true));
+        });
 
+        it("can copy files", [&]() {
             std::string source = "test/property/test.ini";
             std::string target = FileSystem::userConfigDir() + "/test.ini";
             if (FileSystem::exists(target)) {
-                FileSystem::remove(target);
+                FileSystem::removeFile(target);
             }
 
             AssertThat(FileSystem::exists(source), Equals(true));
@@ -139,9 +143,23 @@ go_bandit([](){
 
             AssertThat(FileSystem::exists(target), Equals(true));
 
-            FileSystem::remove(target);
+            FileSystem::removeFile(target);
 
             AssertThat(FileSystem::exists(target), Equals(false));
+        });
+
+        it("can create dirs", [&]() {
+            std::string dir = FileSystem::userConfigDir() + "/test";
+            if (FileSystem::exists(dir)) {
+                FileSystem::removeDirectory(dir);
+            }
+            AssertThat(FileSystem::exists(dir), Equals(false));
+
+            FileSystem::createDirectory(dir);
+            AssertThat(FileSystem::exists(dir), Equals(true));
+
+            FileSystem::removeDirectory(dir);
+            AssertThat(FileSystem::exists(dir), Equals(false));
         });
     });
 });

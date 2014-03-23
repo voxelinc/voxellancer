@@ -1,9 +1,11 @@
 #include "filesystem.h"
 
 #ifdef WIN32
+#include <filesystem>
 #include <direct.h>
 #else
 #include <dirent.h>
+#include <unistd.h>
 #endif
 
 #include <fstream>
@@ -23,15 +25,24 @@ bool FileSystem::exists(const std::string& path) {
     }
 }
 
-bool FileSystem::remove(const std::string& path) {
-    return ::remove(path.c_str()) != 0;
+bool FileSystem::removeFile(const std::string& path) {
+    return ::remove(path.c_str()) == 0;
 }
 
 bool FileSystem::createDirectory(const std::string& path) {
 #ifdef WIN32
-    return _mkdir(path.c_str()) != 0;
+    std::tr2::sys::path mypath = path;
+    return std::tr2::sys::create_directory(mypath);
 #else
     return mkdir(path.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) != 0;
+#endif
+}
+
+bool FileSystem::removeDirectory(const std::string& path) {
+#ifdef WIN32 
+    return _rmdir(path.c_str()) == 0;
+#else
+    return rmdir(path.c_str()) == 0;
 #endif
 }
 
