@@ -23,9 +23,9 @@ public:
 
     void setSecondaryInputValues(SecondaryInputValues* values);
 
-    void setLastInput(InputMapping lastInput, InputClass inputClass);
+    void setLastInput(InputClass inputClass, InputMapping lastInput);
 
-    InputMapping lastInput(InputClass inputClass);
+    const InputMapping& lastInput(InputClass inputClass);
 
 
 private:
@@ -37,26 +37,26 @@ private:
 
     Property<float>* prop_deadzoneGamepad;
 
-    bool setActionInputMapping(ActionKeyMapping* action, InputClass inputClass);
-    bool isLastInputValid(InputClass inputClass);
-
-    bool isKeyPressed(InputClass inputClass);
-
-    void setupControls(InputClass inputClass);
-
-    void updateConfiguration(InputClass inputClass);
-
     InputMapping lastPrimaryInput;
     InputMapping lastSecondaryInput;
 
     int m_secondaryConfigurationState;
     int m_primaryConfigurationState;
+    
+    bool m_beginningKeyConfiguration = true;
+    bool m_displayedInstructions = false;
+
+    bool setActionInputMapping(InputClass inputClass, ActionKeyMapping* action);
+    bool isLastInputValid(InputClass inputClass);
+
+    bool isKeyPressed(InputClass inputClass);
+    void setupControls(InputClass inputClass);
+    void updateConfiguration(InputClass inputClass);
 
     int configurationState(InputClass inputClass);
     void incrementConfigurationState(InputClass inputClass);
     void setConfigurationState(int state, InputClass inputClass);
+
     void writeConfig();
-    bool m_beginningKeyConfiguration = true;
-    bool m_displayedKeyPressedWarning = false;
-    bool m_displayedInstructions = false;
+
 };

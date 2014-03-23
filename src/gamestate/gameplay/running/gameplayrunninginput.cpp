@@ -112,9 +112,9 @@ void GamePlayRunningInput::resizeEvent(const unsigned int width, const unsigned 
 */
 void GamePlayRunningInput::keyCallback(int key, int scancode, int action, int mods) {
     if (action == GLFW_PRESS) {
-        m_inputConfigurator->setLastInput(InputMapping(InputType::Keyboard, key, 1, 0.0f), InputClass::Primary);
+        m_inputConfigurator->setLastInput(InputClass::Primary, InputMapping(InputType::Keyboard, key, 1, 0.0f));
     } else {
-        m_inputConfigurator->setLastInput(InputMapping(), InputClass::Primary);
+        m_inputConfigurator->setLastInput(InputClass::Primary, InputMapping());
     }
 
     if(action == GLFW_PRESS) {
@@ -127,7 +127,7 @@ void GamePlayRunningInput::keyCallback(int key, int scancode, int action, int mo
 
             case GLFW_KEY_F11:
                 m_inputConfigurator->startConfiguration(InputClass::Primary);
-                m_inputConfigurator->setLastInput(InputMapping(), InputClass::Primary);
+                m_inputConfigurator->setLastInput(InputClass::Primary, InputMapping());
             break;
 
             case GLFW_KEY_SPACE:
@@ -149,9 +149,9 @@ void GamePlayRunningInput::mouseButtonCallback(int button, int action, int mods)
 }
 
 
-/*
-*Check here for every-frame events, e.g. view & movement controls
-*/
+/**
+ *  Check here for every-frame events, e.g. view & movement controls
+ */
 void GamePlayRunningInput::update(float deltaSec) {
     if (glfwGetWindowAttrib(glfwGetCurrentContext(), GLFW_FOCUSED)) {
         if (m_lastfocus) {
