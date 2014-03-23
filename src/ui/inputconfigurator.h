@@ -55,7 +55,7 @@ private:
     int configurationState(InputClass inputClass);
     void incrementConfigurationState(InputClass inputClass);
     void setConfigurationState(int state, InputClass inputClass);
-
+    void writeConfig();
     bool m_beginningKeyConfiguration = true;
     bool m_displayedKeyPressedWarning = false;
     bool m_displayedInstructions = false;
