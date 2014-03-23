@@ -18,6 +18,7 @@ protected:
     bool apiValid(apikey key);
     int apiShowText(const std::string& string);
     int apiShowTextFor(const std::string& string, int seconds);
+    int apiPlayVoice(const std::string& soundFile);
 
     int apiSetEventActive(apikey eventPoll, bool active);
 

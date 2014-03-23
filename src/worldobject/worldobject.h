@@ -79,10 +79,10 @@ public:
     float collisionFieldOfDamage() const;
     void setCollisionFieldOfDamage(float collisionFieldOfDamage);
 
+    virtual bool passiveForCollisionDetection();
+
 
 protected:
-    WorldObject(CollisionFilter* filter);
-
     std::unique_ptr<CollisionFilter> m_collisionFilter;
     std::unique_ptr<CollisionDetector> m_collisionDetector;
     std::unique_ptr<Physics> m_physics;

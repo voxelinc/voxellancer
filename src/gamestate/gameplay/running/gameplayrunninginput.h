@@ -32,6 +32,8 @@ protected:
     InputConfigurator* m_inputConfigurator;
     SecondaryInputValues m_secondaryInputValues;
     std::vector<ActionKeyMapping*> m_actions;
+    bool m_centerCrosshair;
+    glm::vec2 m_lastMousePos;
 
     bool m_mouseControl;
     int m_cursorMaxDistance;
