@@ -17,7 +17,7 @@ InputMapping ActionKeyMapping::mapping(InputClass inputClass) {
     }
 }
 
-void ActionKeyMapping::setMapping(InputMapping mapping, InputClass inputClass) {
+void ActionKeyMapping::setMapping(InputClass inputClass, InputMapping mapping) {
     if (inputClass == InputClass::Primary) {
         m_primaryMapping.set(mapping);
     } else {
