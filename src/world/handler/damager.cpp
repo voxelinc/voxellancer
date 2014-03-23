@@ -3,11 +3,21 @@
 #include <set>
 #include <glow/logging.h>
 
-#include "world/helper/damageimpact.h"
-#include "voxel/voxel.h"
 #include "utils/tostring.h"
-#include "worldobject/worldobject.h"
+#include "voxel/voxel.h"
 
+#include "worldobject/worldobject.h"
+#include "worldobject/ship.h"
+
+#include "world/world.h"
+#include "world/helper/damageimpact.h"
+
+#include "player.h"
+
+Damager::Damager() :
+    m_playerShipUndestroyable("general.playerShipUndestroyable") 
+{
+}
 
 void Damager::applyDamages(std::list<DamageImpact> &damageImpacts) {
     m_dampedDeadlyDamageImpacts.clear();
@@ -15,6 +25,10 @@ void Damager::applyDamages(std::list<DamageImpact> &damageImpacts) {
     m_deadVoxels.clear();
 
     for(DamageImpact &damageImpact : damageImpacts) {
+        if (m_playerShipUndestroyable && World::instance()->player().ship() == damageImpact.worldObject()) {
+            return;
+        }
+
         Voxel *voxel = damageImpact.voxel();
 
         float hpBeforeDamage = voxel->hp();
@@ -65,3 +79,4 @@ DamageImpact Damager::dampDamageImpact(DamageImpact &undamped, float factor) {
 void Damager::reset() {
     m_worldObjectModificationMap.clear();
 }
+

@@ -1,5 +1,5 @@
 function main() 
-	showTextFor("Welcome to another mission script", 2.0)
+	showMessage("Welcome to another mission script")
 	
 	ships = {}
 	count = 4

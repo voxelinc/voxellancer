@@ -71,6 +71,7 @@ public:
 
     void showMissionInfo(const std::string& title, const std::string& caption);
     void showMissionMessage(const std::string& message);
+    void showMessage(const std::string& message);
 
 
 protected:

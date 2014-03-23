@@ -217,6 +217,10 @@ void HUD::showMissionMessage(const std::string& message) {
     m_elements->showMissionMessage(message);
 }
 
+void HUD::showMessage(const std::string& message) {
+    m_elements->showMessage(message);
+}
+
 void HUD::updateScanner(float deltaSec) {
     if (m_player->ship()) {
         m_scanner->update(deltaSec, m_player->ship());

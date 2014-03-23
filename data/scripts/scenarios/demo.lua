@@ -11,7 +11,7 @@ end
 
 function startFightingMission(player)
 	local mission = missionStart("getkilledbyall")
-	remove(dareyou)
+	remove(dareyouBanner)
 	onMissionFailure(mission, "reset")
 	onMissionSuccess(mission, "firework")
 end
@@ -49,7 +49,7 @@ function secondChallengeTaken(dummy)
 end
 
 function firework()
-	missionMessage("Unbelievable, you survived! I got something for you!")
+	showMessage("Unbelievable, you survived! I got something for you!")
 	playVoice("data/sound/mission/got_something.ogg")
 
 	cake = createWorldObject("cake")

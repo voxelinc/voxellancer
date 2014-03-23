@@ -71,7 +71,11 @@ void HUDElements::showMissionInfo(const std::string& title, const std::string& c
 
 void HUDElements::showMissionMessage(const std::string& message) {
     m_missionMessage->setText(message);
-    m_missionMessageHider->hideIn(10);
+    m_missionMessageHider->hideIn(8);
+}
+
+void HUDElements::showMessage(const std::string& message) {
+    showMissionMessage(message); // TODO: different box
 }
 
 void HUDElements::update(float deltaSec) {

@@ -1,5 +1,5 @@
 function main() 
-	showTextFor("Welcome to a mission script", 2.0)
+	showMessage("Welcome to a mission script")
 	
 	ships = {}
 	count = 6
@@ -28,7 +28,6 @@ function main()
 	
 	playVoice("data/sound/mission/hell_is_empty.ogg")
 
-	createSingleShotTimer("playGreetingVoice", 2)
 	createSingleShotTimer("timeWarning1", 15)
 	createSingleShotTimer("timeWarning2", 20)
 	createSingleShotTimer("timeout", 40)
