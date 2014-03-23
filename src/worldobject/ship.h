@@ -7,7 +7,6 @@
 #include "property/property.h"
 
 
-
 class World;
 class God;
 class Hardpoint;
@@ -48,6 +47,7 @@ protected:
 
     Handle<Ship> m_shipHandle;
     Handle<WorldObject> m_targetObjectHandle;
+
 
     void updateEnginePosition();
 };

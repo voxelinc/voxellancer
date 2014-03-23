@@ -21,7 +21,7 @@ void MissionSystem::update(float deltaSec) {
 
         mission->update(deltaSec);
 
-        if (!mission->active()) {
+        if (mission->state() != MissionState::Running) {
             i = m_missions.erase(i);
         }
     }

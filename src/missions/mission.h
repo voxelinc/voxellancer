@@ -3,10 +3,19 @@
 #include <memory>
 #include <string>
 
+#include "utils/handle/handle.h"
+
 #include "scripting/scriptable.h"
 
 
 class MissionScript;
+
+enum class MissionState {
+    Idle,
+    Running,
+    Failed,
+    Succeeded
+};
 
 class Mission : public Scriptable {
 public:
@@ -15,8 +24,7 @@ public:
 
     void start();
 
-    bool active() const;
-    bool succeeded() const;
+    MissionState state() const;
 
     /*
         Mark the mission as successfully played.
@@ -30,14 +38,8 @@ public:
     */
     void fail();
 
-    /*
-        Mark the mission as inactive, deactivate the script
-    */
-    void over();
 
-    const std::string& title() const;
-    const std::string& caption() const;
-    const std::string& briefing() const;
+    Handle<Mission>& handle();
 
     void update(float deltaSec);
 
@@ -45,7 +47,7 @@ public:
 
 protected:
     std::shared_ptr<MissionScript> m_script;
-    bool m_active;
-    bool m_succeeded;
+    Handle<Mission> m_handle;
+    MissionState m_state;
 };
 

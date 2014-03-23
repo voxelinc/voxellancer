@@ -13,51 +13,47 @@
 
 Mission::Mission(const std::string& path):
     m_script(new MissionScript(*this, &World::instance()->scriptEngine())),
-    m_active(true),
-    m_succeeded(false)
+    m_handle(this),
+    m_state(MissionState::Idle)
 {
     m_script->load(path);
     World::instance()->scriptEngine().addScript(m_script);
 }
 
-Mission::~Mission() = default;
+Mission::~Mission() {
+    m_handle.invalidate();
+}
 
 void Mission::start() {
+    m_state = MissionState::Running;
     World::instance()->player().hud().showMissionInfo(
         m_script->luaWrapper().call<std::string>("missionTitle"),
         m_script->luaWrapper().call<std::string>("missionCaption")
     );
 }
 
-bool Mission::active() const {
-    return m_active;
-}
-
-bool Mission::succeeded() const {
-    return m_succeeded;
+MissionState Mission::state() const {
+    return m_state;
 }
 
 void Mission::succeed() {
-    assert(m_active);
+    assert(m_state == MissionState::Running);
 
-    m_succeeded = true;
+    m_state = MissionState::Succeeded;
     m_script->onSuccess();
-
-    over();
+    m_script->stop();
 }
 
 void Mission::fail() {
-    assert(m_active);
+    assert(m_state == MissionState::Running);
 
-    m_succeeded = false;
+    m_state = MissionState::Failed;
     m_script->onFailure();
-
-    over();
+    m_script->stop();
 }
 
-void Mission::over() {
-    m_active = false;
-    m_script->stop();
+Handle<Mission>& Mission::handle() {
+    return m_handle;
 }
 
 void Mission::update(float deltaSec) {

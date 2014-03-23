@@ -30,21 +30,21 @@ void InternalMissionBindings::bind() {
 }
 
 int InternalMissionBindings::apiMissionSucceed() {
-    if (m_missionScript.mission().active()) {
+    if (m_missionScript.mission().state() == MissionState::Running) {
         m_missionScript.mission().succeed();
         return 0;
     } else {
-        glow::warning("InternalMissionBindings: Mission already marked as succeed");
+        glow::warning("InternalMissionBindings: Mission not running, can't succeed");
         return -1;
     }
 }
 
 int InternalMissionBindings::apiMissionFail() {
-    if (m_missionScript.mission().active()) {
+    if (m_missionScript.mission().state() == MissionState::Running) {
         m_missionScript.mission().fail();
         return 0;
     } else {
-        glow::warning("InternalMissionBindings: Mission already marked as failure");
+        glow::warning("InternalMissionBindings: Mission not running, can't fail");
         return -1;
     }
 }

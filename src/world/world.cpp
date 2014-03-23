@@ -138,3 +138,4 @@ void World::removeWorldObject(WorldObject* worldObject) {
 
     m_scriptEngine->unregisterScriptable(worldObject);
 }
+
