@@ -68,12 +68,12 @@ void ScriptEngine::unregisterScriptable(Scriptable* scriptable) {
     if (scriptable->scriptKey() > 0) {
         assert(keyValid(scriptable->scriptKey()));
 
-        if (scriptable->scriptLocal()) {
-            removeScriptable(scriptable);
-        }
-
         m_scriptables.erase(scriptable->scriptKey());
         scriptable->setScriptKey(Scriptable::INVALID_KEY);
+
+        if (scriptable->isScriptLocal()) {
+            removeScriptable(scriptable);
+        }
     }
 }
 
