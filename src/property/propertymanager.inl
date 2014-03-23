@@ -6,18 +6,13 @@
 
 
 template<typename T>
-void PropertyManager::registerProperty(Property<T>* prop) {
-    getPropertyCollection<T>()->registerProperty(prop);
+PropertyImpl<T>* PropertyManager::getImpl(const std::string& key) {
+    return getPropertyCollection<T>()->getImpl(key);
 }
 
 template<typename T>
-void PropertyManager::registerProperty(Property<T>* prop, const T& defaultValue) {
-    getPropertyCollection<T>()->registerProperty(prop, defaultValue);
-}
-
-template<typename T>
-void PropertyManager::unregisterProperty(Property<T>* prop) {
-    getPropertyCollection<T>()->unregisterProperty(prop);
+PropertyImpl<T>* PropertyManager::getImpl(const std::string& key, const T& defaultValue) {
+    return getPropertyCollection<T>()->getImpl(key, defaultValue);
 }
 
 template<typename T>

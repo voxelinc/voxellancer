@@ -64,11 +64,7 @@ bool Movement::performSplitted() {
     Movement left(m_worldObject, m_originalTransform, pivotTransform);
     Movement right(m_worldObject, pivotTransform, m_targetTransform);
 
-    if (left.perform()) {
-        return right.perform();
-    } else {
-        return false;
-    }
+    return left.perform() && right.perform();
 }
 
 bool Movement::performStepped() {

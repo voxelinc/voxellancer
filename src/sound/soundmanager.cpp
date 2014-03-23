@@ -52,8 +52,13 @@ std::shared_ptr<Sound> SoundManager::create(std::string soundFile) {
     cleanUp();
 
     sf::SoundBuffer* buffer = obtain(soundFile);
-    // sounds don't work with more than one channel!
-    assert(buffer->getChannelCount() == 1);
+    if (!buffer) {
+        return createNullSound();
+    }
+    if (buffer->getChannelCount() != 1) {
+        glow::warning("SoundManager: %; sounds don't work with more than one channel!", soundFile);
+        return createNullSound();
+    }
 
     std::shared_ptr<Sound> sound(std::make_shared<Sound>(*buffer));
     sound->setAttenuation(0.1f);
@@ -69,6 +74,7 @@ sf::SoundBuffer* SoundManager::obtain(std::string soundFile) {
         buffer = new sf::SoundBuffer();
         if (!buffer->loadFromFile(soundFile)) {
             glow::warning("SoundManager: could not load %;", soundFile);
+            return nullptr;
         }
         m_buffer[soundFile] = buffer;
     }
@@ -101,7 +107,11 @@ SoundManager* SoundManager::current() {
 }
 
 void SoundManager::activate() {
+    if (s_current == this) {
+        return;
+    }
     assert(s_current == nullptr);
+
     s_current = this;
 
     for (std::shared_ptr<Sound>& sound : m_sounds) {
@@ -132,6 +142,10 @@ void SoundManager::stopAll() {
         }
     }
     forcedCleanup();
+}
+
+std::shared_ptr<Sound> SoundManager::createNullSound() {
+    return std::make_shared<Sound>();
 }
 
 
