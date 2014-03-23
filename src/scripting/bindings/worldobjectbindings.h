@@ -21,6 +21,8 @@ protected:
     int apiSetOrientation(apikey worldObject, const glm::vec3& orientation);
     glm::vec3 apiPosition(apikey worldObject);
     glm::vec3 apiOrientation(apikey worldObject);
+    int apiSetShowOnHud(apikey worldObject, bool show);
+    int apiSetCanLockOn(apikey worldObject, bool lockon);
 
     apikey apiOnWorldObjectDestroyed(apikey worldObject, const std::string& callback);
     apikey apiOnAABBEntered(apikey worldObject, const glm::vec3& llf, const glm::vec3& urb, const std::string& callback);

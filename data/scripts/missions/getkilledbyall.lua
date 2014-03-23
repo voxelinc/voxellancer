@@ -2,7 +2,7 @@ function main()
 	showTextFor("Welcome to another mission script", 2.0)
 	
 	ships = {}
-	count = 5
+	count = 4
 	radius = 40
 	
 	playerPos = position(playerShip())
@@ -64,5 +64,3 @@ function timeWarning()
 	missionMessage("You're not supposed to merely survive. Kill or be killed!")
 	playVoice("data/sound/mission/not_supposed_to_survive.ogg")
 end
-
-

@@ -23,14 +23,14 @@ function main()
 				
 		onWorldObjectDestroyed(ship, "destroyed")
 	end
-	
+
 	missionMessage("...and go!")
 	
 	playVoice("data/sound/mission/hell_is_empty.ogg")
 
 	createSingleShotTimer("playGreetingVoice", 2)
 	createSingleShotTimer("timeWarning1", 15)
-	createSingleShotTimer("timeWarning2", 25)
+	createSingleShotTimer("timeWarning2", 20)
 	createSingleShotTimer("timeout", 40)
 end
 

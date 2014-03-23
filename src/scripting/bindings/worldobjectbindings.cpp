@@ -10,6 +10,8 @@
 
 #include "geometry/aabb.h"
 
+#include "ui/objectinfo.h"
+
 #include "player.h"
 
 #include "resource/worldobjectbuilder.h"
@@ -42,6 +44,8 @@ void WorldObjectBindings::bind() {
     m_lua.Register("orientation", this, &WorldObjectBindings::apiOrientation);
     m_lua.Register("setPosition", this, &WorldObjectBindings::apiSetPosition);
     m_lua.Register("setOrientation", this, &WorldObjectBindings::apiSetOrientation);
+    m_lua.Register("setShowOnHud", this, &WorldObjectBindings::apiSetShowOnHud);
+    m_lua.Register("setCanLockOn", this, &WorldObjectBindings::apiSetCanLockOn);
 
     m_lua.Register("onWorldObjectDestroyed", this, &WorldObjectBindings::apiOnWorldObjectDestroyed);
     m_lua.Register("onAABBEntered", this, &WorldObjectBindings::apiOnAABBEntered);
@@ -79,8 +83,8 @@ apikey WorldObjectBindings::apiCreateWorldObject(const std::string& name) {
     return worldObject->scriptKey();
 }
 
-int WorldObjectBindings::apiSpawn(apikey key) {
-    WorldObject* worldObject = m_scriptEngine.get<WorldObject>(key);
+int WorldObjectBindings::apiSpawn(apikey worldObjectKey) {
+    WorldObject* worldObject = m_scriptEngine.get<WorldObject>(worldObjectKey);
 
     if (!worldObject) {
         return -1;
@@ -92,8 +96,8 @@ int WorldObjectBindings::apiSpawn(apikey key) {
     return worldObject->spawnState() == SpawnState::Spawned;
 }
 
-int WorldObjectBindings::apiRemove(apikey key) {
-    WorldObject* worldObject = m_scriptEngine.get<WorldObject>(key);
+int WorldObjectBindings::apiRemove(apikey worldObjectKey) {
+    WorldObject* worldObject = m_scriptEngine.get<WorldObject>(worldObjectKey);
 
     if (!worldObject) {
         return -1;
@@ -105,8 +109,8 @@ int WorldObjectBindings::apiRemove(apikey key) {
     return 0;
 }
 
-glm::vec3 WorldObjectBindings::apiOrientation(apikey key) {
-    WorldObject* worldObject = m_scriptEngine.get<WorldObject>(key);
+glm::vec3 WorldObjectBindings::apiOrientation(apikey worldObjectKey) {
+    WorldObject* worldObject = m_scriptEngine.get<WorldObject>(worldObjectKey);
 
     if (!worldObject) {
         return glm::vec3(0.0f);
@@ -115,8 +119,8 @@ glm::vec3 WorldObjectBindings::apiOrientation(apikey key) {
     return glm::eulerAngles(worldObject->transform().orientation());
 }
 
-glm::vec3 WorldObjectBindings::apiPosition(apikey key) {
-    WorldObject* worldObject = m_scriptEngine.get<WorldObject>(key);
+glm::vec3 WorldObjectBindings::apiPosition(apikey worldObjectKey) {
+    WorldObject* worldObject = m_scriptEngine.get<WorldObject>(worldObjectKey);
 
     if (!worldObject) {
         return glm::vec3(0.0f);
@@ -125,8 +129,8 @@ glm::vec3 WorldObjectBindings::apiPosition(apikey key) {
     return worldObject->transform().position();
 }
 
-int WorldObjectBindings::apiSetPosition(apikey key, const glm::vec3& position) {
-    WorldObject* worldObject = m_scriptEngine.get<WorldObject>(key);
+int WorldObjectBindings::apiSetPosition(apikey worldObjectKey, const glm::vec3& position) {
+    WorldObject* worldObject = m_scriptEngine.get<WorldObject>(worldObjectKey);
 
     if (!worldObject) {
         return -1;
@@ -136,14 +140,36 @@ int WorldObjectBindings::apiSetPosition(apikey key, const glm::vec3& position) {
     return 0;
 }
 
-int WorldObjectBindings::apiSetOrientation(apikey key, const glm::vec3& orientation) {
-    WorldObject* worldObject = m_scriptEngine.get<WorldObject>(key);
+int WorldObjectBindings::apiSetOrientation(apikey worldObjectKey, const glm::vec3& orientation) {
+    WorldObject* worldObject = m_scriptEngine.get<WorldObject>(worldObjectKey);
 
     if (!worldObject) {
         return -1;
     }
 
     worldObject->transform().setOrientation(glm::quat(orientation));
+    return 0;
+}
+
+int WorldObjectBindings::apiSetShowOnHud(apikey worldObjectKey, bool show) {
+    WorldObject* worldObject = m_scriptEngine.get<WorldObject>(worldObjectKey);
+
+    if (!worldObject) {
+        return -1;
+    }
+
+    worldObject->objectInfo().setShowOnHud(true);
+    return 0;
+}
+
+int WorldObjectBindings::apiSetCanLockOn(apikey worldObjectKey, bool lockon) {
+    WorldObject* worldObject = m_scriptEngine.get<WorldObject>(worldObjectKey);
+
+    if (!worldObject) {
+        return -1;
+    }
+
+    worldObject->objectInfo().setCanLockOn(lockon);
     return 0;
 }
 

@@ -13,6 +13,7 @@
 #include "equipment/weapon.h"
 #include "equipment/weapons/genericbullet.h"
 #include "equipment/weapons/genericrocket.h"
+#include "ui/objectinfo.h"
 #include "worldobject/genericship.h"
 #include "worldobject/genericworldobject.h"
 #include "worldobject/ship.h"
@@ -80,7 +81,10 @@ template<typename WorldObjectType>
 WorldObjectType* WorldObjectBuilder::makeWorldObject() {
     static_assert(std::is_base_of<WorldObject, WorldObjectType>::value, "WorldObjectType needs to be derived from WorldObject");
 
-    WorldObjectType* worldObject = new WorldObjectType();
+    WorldObjectType* object = new WorldObjectType();
+    WorldObject* worldObject = object;
+
+    worldObject->objectInfo().setName(m_name);
 
     setupVoxelCluster(worldObject);
     setupComponents(worldObject->components());
@@ -94,7 +98,7 @@ WorldObjectType* WorldObjectBuilder::makeWorldObject() {
 
     equipSomehow(worldObject);
 
-    return worldObject;
+    return object;
 }
 
 void WorldObjectBuilder::equipSomehow(WorldObject* worldObject) {
