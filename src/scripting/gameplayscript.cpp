@@ -25,11 +25,6 @@ GamePlayScript::GamePlayScript(ScriptEngine* scriptEngine):
 
 GamePlayScript::~GamePlayScript() = default;
 
-void GamePlayScript::initializeBindings() {
-    
-
-}
-
 ScriptEngine& GamePlayScript::scriptEngine() {
     return *m_scriptEngine;
 }
