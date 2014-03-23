@@ -30,6 +30,7 @@ ScriptEngine::~ScriptEngine() {
     for (auto pair : m_scriptables) {
         pair.second->setScriptKey(Scriptable::INVALID_KEY);
     }
+    m_scripts.clear(); // delete scripts before scriptengine
 }
 
 void ScriptEngine::addScript(std::shared_ptr<GamePlayScript> script) {

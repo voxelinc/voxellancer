@@ -3,6 +3,8 @@
 #include "events/eventpoller.h"
 #include "events/missionstatepoll.h"
 
+#include "missions/missionsystem.h"
+
 #include "scripting/gameplayscript.h"
 #include "scripting/elematelua/luawrapper.h"
 
@@ -27,7 +29,7 @@ apikey ExternalMissionBindings::apiMissionStart(const std::string& name) {
     std::string path = std::string("data/scripts/missions/") + name + ".lua";
 
     Mission* mission = new Mission(path);
-    World::instance()->player().addMission(mission);
+    World::instance()->missionSystem().addMission(mission);
 
     return mission->scriptKey();
 }

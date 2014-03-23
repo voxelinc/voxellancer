@@ -9,7 +9,7 @@ public:
     int scriptKey() const;
     void setScriptKey(int key);
 
-    bool scriptLocal() const;
+    bool isScriptLocal() const;
     void setScriptLocal(bool local);
 
     static const int INVALID_KEY = -1;

@@ -28,7 +28,7 @@ void Scriptable::setScriptKey(int key) {
     m_key = key;
 }
 
-bool Scriptable::scriptLocal() const {
+bool Scriptable::isScriptLocal() const {
     return m_local;
 }
 

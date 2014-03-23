@@ -36,9 +36,17 @@ function main()
 	createLoopingTimer("timeWarning", 7)
 end
 
-function missionTitle() return "They will kill you" end
-function missionCaption() return "Now you have woken the dragon" end
-function missionBriefing() return "Kill the ships, and yep, that's difficult" end
+function missionTitle() 
+	return "They will kill you" 
+end
+
+function missionCaption() 
+	return "Now you have woken the dragon" 
+end
+
+function missionBriefing() 
+	return "Kill the ships, and yep, that's difficult" 
+end
 
 function destroyed(ship) 
 	count = count - 1

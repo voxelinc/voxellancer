@@ -17,20 +17,22 @@
 #include "worldlogic.h"
 #include "god.h"
 #include "player.h"
+#include "missions/missionsystem.h"
 
 
 World *World::s_instance = nullptr;
 
 World::World():
     m_player(new Player()),
+    m_scriptEngine(new ScriptEngine(this)),
     m_skybox(new Skybox()),
     m_worldLogic(new WorldLogic(*this)),
     m_worldTree(new WorldTree()),
     m_god(new God(*this)),
-    m_scriptEngine(new ScriptEngine(this)),
     m_particleEngine(new VoxelParticleEngine()),
     m_factionMatrix(new FactionMatrix()),
-    m_eventPoller(new EventPoller())
+    m_eventPoller(new EventPoller()),
+    m_missionSystem(new MissionSystem())
 {
 }
 
@@ -74,6 +76,10 @@ EventPoller &World::eventPoller() {
     return *m_eventPoller;
 }
 
+MissionSystem& World::missionSystem() {
+    return *m_missionSystem;
+}
+
 std::unordered_set<WorldObject*> &World::worldObjects() {
     return m_worldObjects;
 }
@@ -90,6 +96,7 @@ void World::update(float deltaSecs) {
     m_scriptEngine->update(deltaSecs);
     m_eventPoller->update(deltaSecs);
     m_particleEngine->update(deltaSecs);
+    m_missionSystem->update(deltaSecs);
 
     for (WorldObject *worldObject : m_worldObjects) {
         worldObject->update(deltaSecs);
@@ -138,4 +145,6 @@ void World::removeWorldObject(WorldObject* worldObject) {
 
     m_scriptEngine->unregisterScriptable(worldObject);
 }
+
+
 

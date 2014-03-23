@@ -33,6 +33,7 @@
 
 #include "scripting/scriptengine.h"
 #include "scripting/gameplayscript.h"
+#include "missions/missionsystem.h"
 
 
 MissionScenario::MissionScenario(GamePlay* gamePlay, const std::string& path):
@@ -49,6 +50,6 @@ void MissionScenario::populateWorld() {
     m_world->god().scheduleSpawn(playerShip);
 
     World::instance()->player().setShip(playerShip);
-    World::instance()->player().addMission(m_mission);
+    World::instance()->missionSystem().addMission(m_mission);
 }
 

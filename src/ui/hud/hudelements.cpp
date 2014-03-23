@@ -63,15 +63,15 @@ void HUDElements::setSpeed(const std::string& speed) {
 
 void HUDElements::showMissionInfo(const std::string& title, const std::string& caption) {
     m_missionTitle->setText(title);
-    m_missionTitleHider->hideIn(4.0f);
+    m_missionTitleHider->hideIn(10);
 
     m_missionCaption->setText(caption);
-    m_missionCaptionHider->hideIn(3.5f);
+    m_missionCaptionHider->hideIn(9.5f);
 }
 
 void HUDElements::showMissionMessage(const std::string& message) {
     m_missionMessage->setText(message);
-    m_missionMessageHider->hideIn(2.5f);
+    m_missionMessageHider->hideIn(10);
 }
 
 void HUDElements::update(float deltaSec) {

@@ -2,7 +2,7 @@ function main()
 	showTextFor("Welcome to a mission script", 2.0)
 	
 	ships = {}
-	count = 5
+	count = 1
 	radius = 40
 	
 	playerPos = position(playerShip())
@@ -26,13 +26,25 @@ function main()
 	
 	missionMessage("...and go!")
 	
-	createLoopingTimer("timeWarning", 7)
-	createSingleShotTimer("timeout", 30)
+	playVoice("data/sound/mission/hell_is_empty.ogg")
+
+	createSingleShotTimer("playGreetingVoice", 2)
+	createSingleShotTimer("timeWarning1", 15)
+	createSingleShotTimer("timeWarning2", 25)
+	createSingleShotTimer("timeout", 40)
 end
 
-function missionTitle() return "Kill'em all" end
-function missionCaption() return "Hell is empty, and all the devils are here" end
-function missionBriefing() return "Kill the ships, that's really not that difficult" end
+function missionTitle() 
+	return "Kill'em all" 
+end
+
+function missionCaption() 
+	return "Hell is empty, and all the devils are here" 
+end
+
+function missionBriefing() 
+	return "Kill the ships, that's really not that difficult" 
+end
 
 function flyAnywhere(ship) 
 	local task = createFlyToTask(ship)
@@ -59,8 +71,14 @@ function timeout()
 	missionFail()
 end
 
-function timeWarning() 
-	missionMessage("Time is ticking, dude. Get your stuff done")
+function timeWarning1() 
+	missionMessage("Time is ticking, dude.")
+	playVoice("data/sound/mission/time_is_ticking.ogg")
+end
+
+function timeWarning2() 
+	missionMessage("Get your stuff done")
+	playVoice("data/sound/mission/get_your_stuff_done.ogg")
 end
 
 function onFailure() 
@@ -75,5 +93,6 @@ end
 
 function onSuccess()
 	missionSuccessMessage("Yeah, you're so awsome, dude!")
+	playVoice("data/sound/mission/youre_awesome.ogg")
 end
 

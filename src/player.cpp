@@ -10,8 +10,6 @@
 #include "gamestate/game.h"
 #include "gamestate/gameplay/gameplay.h"
 
-#include "missions/missionsystem.h"
-
 #include "ui/hud/hud.h"
 #include "ui/hud/hudget.h"
 #include "ui/hud/aimhelperhudget.h"
@@ -35,7 +33,6 @@ Player::Player():
     m_hud(new HUD(this)),
     m_ship(nullptr),
     m_cameraDolly(new CameraDolly()),
-    m_missionSystem(new MissionSystem()),
     m_targetSelector(new TargetSelector(this))
 {
 
@@ -59,7 +56,6 @@ void Player::update(float deltaSec) {
     m_cameraDolly->update(deltaSec);
     m_hud->update(deltaSec);
     m_aimer->update(deltaSec);
-    m_missionSystem->update(deltaSec);
 
     if (Ship* ship = m_ship.get()) {
         ship->components().setEngineState(m_engineState);
@@ -105,9 +101,5 @@ void Player::selectTarget(bool next) {
 void Player::setTarget(WorldObject* target) {
     m_ship->setTargetObject(target);
     m_hud->setTarget(target);
-}
-
-void Player::addMission(Mission* mission) {
-    m_missionSystem->addMission(mission);
 }
 

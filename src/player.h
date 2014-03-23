@@ -41,8 +41,6 @@ public:
     void selectTarget(bool next);
     void setTarget(WorldObject* target);
 
-    void addMission(Mission* mission);
-
 
 protected:
     Handle<Ship> m_ship;
@@ -50,7 +48,6 @@ protected:
     std::unique_ptr<HUD> m_hud;
     std::unique_ptr<TargetSelector> m_targetSelector;
     std::unique_ptr<Aimer> m_aimer;
-    std::unique_ptr<MissionSystem> m_missionSystem;
     EngineState m_engineState;
 };
 
