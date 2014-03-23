@@ -10,6 +10,7 @@
 
 #include "gamestate/gameplay/running/gameplayrunninginput.h"
 #include "input/inputconfigwriter.h"
+#include "utils/filesystem.h"
 
 
 InputConfigurator::InputConfigurator(std::vector<ActionKeyMapping*>* actions, SecondaryInputValues *secondaryInputValues, Property<float>* deadzone, HUD* hud):
@@ -192,7 +193,7 @@ void InputConfigurator::setConfigurationState(int state, InputClass inputClass) 
 }
 
 void InputConfigurator::writeConfig() {
-    InputConfigWriter writer("data/controls.ini");
+    InputConfigWriter writer(FileSystem::userConfigDir() + "/controls.ini");
     for (ActionKeyMapping* mapping : *m_actions) {
         writer.write(*mapping);
     }
