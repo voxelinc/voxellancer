@@ -20,10 +20,10 @@ void EventPoller::addPoll(EventPoll* eventPoll) {
 }
 
 void EventPoller::removePoll(EventPoll* eventPoll) {
-    m_eventPolls.remove_if([&] (std::unique_ptr<EventPoll>& eventPollPtr) {
+    World::instance()->scriptEngine().unregisterScriptable(eventPoll);
+    m_eventPolls.remove_if([&](std::unique_ptr<EventPoll>& eventPollPtr) {
         return eventPollPtr.get() == eventPoll;
     });
-    World::instance()->scriptEngine().unregisterScriptable(eventPoll);
 }
 
 void EventPoller::update(float deltaSec) {
