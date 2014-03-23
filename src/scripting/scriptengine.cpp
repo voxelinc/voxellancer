@@ -26,7 +26,11 @@ ScriptEngine::ScriptEngine(World* world):
 {
 }
 
-ScriptEngine::~ScriptEngine() = default;
+ScriptEngine::~ScriptEngine() {
+    for (auto pair : m_scriptables) {
+        pair.second->setScriptKey(Scriptable::INVALID_KEY);
+    }
+}
 
 void ScriptEngine::addScript(std::shared_ptr<GamePlayScript> script) {
     m_scripts.push_back(script);
