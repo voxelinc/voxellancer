@@ -200,6 +200,7 @@ go_bandit([](){
 
             it("can poll destruction on deleted ship", [&]() {
                 ship->addVoxel(new Voxel(glm::ivec3(1, 2, 3)));
+                ship->setCrucialVoxel(glm::ivec3(1, 2, 3));
                 script->loadString(R"( 
                     onWorldObjectDestroyed(playerShip(), "callback")
                 )");
