@@ -45,7 +45,6 @@ go_bandit([](){
         PropertyDirectory("data/equipment/weapons").read();
         PropertyDirectory("data/equipment/projectiles").read();
 
-        std::unique_ptr<ScriptEngine> scriptEngine;
         std::unique_ptr<GamePlayScript> script;
 
         std::string callbackFunction = R"( function callback() setDebugStatus("callback!") end )";
@@ -53,9 +52,12 @@ go_bandit([](){
 
         before_each([&](){
             World::reset(false);
-            scriptEngine.reset(new ScriptEngine(World::instance()));
-            script.reset(new GamePlayScript(scriptEngine.get()));
+            script.reset(new GamePlayScript(&World::instance()->scriptEngine()));
             script->loadString(callbackFunction);
+        });
+
+        after_each([&]() {
+            script.reset();
         });
 
         it("can set debug status", [&]() {
@@ -91,12 +93,15 @@ go_bandit([](){
             before_each([&]() {
                 ship.reset(new Ship());
                 World::instance()->player().setShip(ship.get());
-                scriptEngine->registerScriptable(ship.get());
+                World::instance()->scriptEngine().registerScriptable(ship.get());
             });
 
+            after_each([&] () {
+                ship.reset();
+            });
 
             it("can access unscriptable playership", [&]() {
-                scriptEngine->unregisterScriptable(ship.get());
+                World::instance()->scriptEngine().unregisterScriptable(ship.get());
                 script->loadString(R"(
                     ship = playerShip()
                     setDebugStatus(ship)
