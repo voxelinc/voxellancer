@@ -21,10 +21,10 @@ public:
     Physics(WorldObject& worldObject, float scale);
 
     float directionalDampening() const;
-    void setDirectionalDampening(float directionalDampening);
+    void setDirectionalDampening(const Property<float>& directionalDampening);
 
     float angularDampening() const;
-    void setAngularDampening(float angularDampening);
+    void setAngularDampening(const Property<float>& angularDampening);
 
     const Speed& speed() const;
     void setSpeed(const Speed& speed);
@@ -48,8 +48,8 @@ protected:
     Speed m_speed;
     Acceleration m_acceleration;
 
-    float m_directionalDampening;
-    float m_angularDampening;
+    Property<float> m_directionalDampening;
+    Property<float> m_angularDampening;
 
     float m_mass;
     float m_maxMass;

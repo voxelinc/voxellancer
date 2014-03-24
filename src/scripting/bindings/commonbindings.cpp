@@ -16,6 +16,9 @@
 #include "world/world.h"
 #include "worldobject/worldobject.h"
 
+#include "sound/soundmanager.h"
+#include "sound/sound.h"
+
 
 CommonBindings::CommonBindings(GamePlayScript& script): 
     Bindings(script) 
@@ -28,13 +31,12 @@ void CommonBindings::initialize() {
     m_lua.Register("valid", this, &CommonBindings::apiIsKeyValid);
     m_lua.Register("showText", this, &CommonBindings::apiShowText);
     m_lua.Register("showTextFor", this, &CommonBindings::apiShowTextFor);
-
+    m_lua.Register("playVoice", this, &CommonBindings::apiPlayVoice);
     m_lua.Register("setActive", this, &CommonBindings::apiSetEventActive);
 
     m_lua.Register("createSingleShotTimer", this, &CommonBindings::apiCreateSingleShotTimer);
     m_lua.Register("createLoopingTimer", this, &CommonBindings::apiCreateLoopingTimer);
 
-    m_lua.Register("onAABBEntered", this, &CommonBindings::apiOnAABBEntered);
 }
 
 
@@ -53,6 +55,10 @@ int CommonBindings::apiShowTextFor(const std::string& string, int seconds) {
     return 0;
 }
 
+int CommonBindings::apiPlayVoice(const std::string& soundFile) {
+    std::shared_ptr<Sound> sound = SoundManager::current()->play(soundFile, glm::vec3(0, 0, -1), true);
+    return sound->status() == Sound::Status::Null ? -1 : 0;
+}
 
 int CommonBindings::apiSetEventActive(apikey eventPoll, bool active) {
     EventPoll* poll = m_scriptEngine.get<EventPoll>(eventPoll);
@@ -74,14 +80,3 @@ apikey CommonBindings::apiCreateLoopingTimer(const std::string& callback, float 
     World::instance()->eventPoller().addPoll(timer);
     return timer->scriptKey();
 }
-
-apikey CommonBindings::apiOnAABBEntered(apikey key, const glm::vec3& llf, const glm::vec3& urb, const std::string& callback) {
-    WorldObject* worldObject = m_scriptEngine.get<WorldObject>(key);
-
-    if (!worldObject) { return -1; }
-
-    auto enteredPoll = std::make_shared<AABBEnteredPoll>(worldObject, AABB(llf, urb), [=] { m_lua.call(callback, key); });
-    World::instance()->eventPoller().addPoll(enteredPoll);
-    return enteredPoll->scriptKey();
-}
-

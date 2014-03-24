@@ -15,6 +15,7 @@ set(VOXELLANCER_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 option(OPTION_LIMIT_CONFIGS "Generate limited configs (Release; Debug)" ON)
 option(OPTION_ERRORS_AS_EXCEPTION "Throw exceptions" OFF)
 option(OPTION_CREATE_SUB_TEST "Create sub tests" OFF)
+option(OPTION_INCLUDE_VC_REDIST "Include VC redist" ON)
 
 
 # CMAKE CONFIGURATION
