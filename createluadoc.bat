@@ -1,3 +1,3 @@
 @echo off
-python doc/generateluadoc.py . doc/luaapi.md
+python tools/generateluadoc.py . doc/luaapi.md
 pause
