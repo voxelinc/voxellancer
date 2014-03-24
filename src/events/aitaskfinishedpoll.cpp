@@ -10,9 +10,10 @@ AiTaskFinishedPoll::AiTaskFinishedPoll(AiTask* aitask, const std::function<void(
 }
 
 bool AiTaskFinishedPoll::poll() {
-    return !m_aiTask.valid() || m_aiTask->isFinished();
+    return m_aiTask.valid() ? m_aiTask->isFinished() : false;
 }
 
 bool AiTaskFinishedPoll::isDead() {
     return poll();
 }
+

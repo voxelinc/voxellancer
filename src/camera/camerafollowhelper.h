@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 
 #include "utils/handle/handle.h"
+#include "property/property.h"
 
 
 class WorldObject;
@@ -19,6 +20,7 @@ public:
 
 protected:
     Handle<WorldObject> m_target;
+    Property<glm::vec3> m_cameraOffset;
 };
 
 

@@ -1,12 +1,16 @@
 #include "scriptengine.h"
 
 #include <algorithm>
+#include <cassert>
 
 #include <glow/logging.h>
 
 #include "ai/aitask.h"
 
 #include "events/eventpoll.h"
+#include "events/eventpoller.h"
+
+#include "world/world.h"
 
 #include "worldobject/ship.h"
 #include "worldobject/worldobject.h"
@@ -22,7 +26,12 @@ ScriptEngine::ScriptEngine(World* world):
 {
 }
 
-ScriptEngine::~ScriptEngine() = default;
+ScriptEngine::~ScriptEngine() {
+    for (auto pair : m_scriptables) {
+        pair.second->setScriptKey(Scriptable::INVALID_KEY);
+    }
+    m_scripts.clear(); // delete scripts before scriptengine
+}
 
 void ScriptEngine::addScript(std::shared_ptr<GamePlayScript> script) {
     m_scripts.push_back(script);
@@ -58,8 +67,36 @@ void ScriptEngine::registerScriptable(Scriptable* scriptable) {
 
 void ScriptEngine::unregisterScriptable(Scriptable* scriptable) {
     if (scriptable->scriptKey() > 0) {
+        assert(keyValid(scriptable->scriptKey()));
+
         m_scriptables.erase(scriptable->scriptKey());
         scriptable->setScriptKey(Scriptable::INVALID_KEY);
+
+        if (scriptable->isScriptLocal()) {
+            removeScriptable(scriptable);
+        }
+    }
+}
+
+bool ScriptEngine::keyValid(int key) const {
+    return m_scriptables.find(key) != m_scriptables.end();
+}
+
+void ScriptEngine::update(float deltaSec) {
+    if (m_running) {
+        for (std::list<std::shared_ptr<GamePlayScript>>::iterator i = m_scripts.begin(); i != m_scripts.end(); ) {
+            GamePlayScript* script = i->get();
+
+            if (script->started() && !script->stopped()) {
+                script->update(deltaSec);
+            }
+
+            if (script->stopped()) {
+                i = m_scripts.erase(i);
+            } else {
+                ++i;
+            }
+        }
     }
 }
 
@@ -78,7 +115,10 @@ Scriptable* ScriptEngine::getScriptable(int key) {
     }
 }
 
-void ScriptEngine::update(float deltaSec) {
-
+void ScriptEngine::removeScriptable(Scriptable* scriptable) {
+    EventPoll* eventPoll = dynamic_cast<EventPoll*>(scriptable);
+    if (eventPoll) {
+        World::instance()->eventPoller().removePoll(eventPoll);
+    }
 }
 

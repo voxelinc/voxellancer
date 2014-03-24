@@ -20,7 +20,7 @@ class Player;
 
 class GamePlayRunningInput {
 public:
-    GamePlayRunningInput(Player *player);
+    GamePlayRunningInput();
 
     void resizeEvent(const unsigned int width, const unsigned int height);
     void keyCallback(int key, int scancode, int action, int mods);
@@ -29,10 +29,11 @@ public:
 
 
 protected:
-    Player* m_player;
     InputConfigurator* m_inputConfigurator;
     SecondaryInputValues m_secondaryInputValues;
     std::vector<ActionKeyMapping*> m_actions;
+    bool m_centerCrosshair;
+    glm::vec2 m_lastMousePos;
 
     bool m_mouseControl;
     int m_cursorMaxDistance;

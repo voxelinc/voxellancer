@@ -1,6 +1,6 @@
 #pragma once
 
-#include <unordered_set>
+#include <list>
 #include <memory>
 
 
@@ -11,13 +11,13 @@ public:
     EventPoller();
     ~EventPoller();
 
-    void addPoll(std::shared_ptr<EventPoll> eventPoll);
-    void removePoll(std::shared_ptr<EventPoll> eventPoll);
+    void addPoll(EventPoll* eventPoll);
+    void removePoll(EventPoll* eventPoll);
 
     void update(float deltaSec);
 
 
 protected:
-    std::unordered_set<std::shared_ptr<EventPoll>> m_eventPolls;
+    std::list<std::unique_ptr<EventPoll>> m_eventPolls;
 };
 

@@ -34,10 +34,9 @@ void VoxelParticleRemover::update(float deltaSec) {
 
     beforeCheck();
     performChecks(checkCount);
-    
+
     m_currentIndex = (m_currentIndex + checkCount) % m_particleEngine->particleDataCount();
 }
-
 
 void VoxelParticleRemover::performChecks(int checkCount) {
     int firstIndex = m_currentIndex;
@@ -80,12 +79,6 @@ bool VoxelParticleRemover::isDead(VoxelParticleData& particle) {
 
 void VoxelParticleRemover::addCheck(std::shared_ptr<VoxelParticleRemoveCheck> checker) {
     m_checker.push_back(checker);
-}
-
-void VoxelParticleRemover::setPlayer(Player& player) {
-    for (std::shared_ptr<VoxelParticleRemoveCheck>& checker : m_checker) {
-        checker->setPlayer(player);
-    }
 }
 
 void VoxelParticleRemover::beforeCheck() {

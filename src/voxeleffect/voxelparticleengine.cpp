@@ -138,7 +138,3 @@ std::vector<VoxelParticleData>& VoxelParticleEngine::particleDataVector() {
     return m_cpuParticleBuffer;
 }
 
-void VoxelParticleEngine::setPlayer(Player& m_player) {
-    m_remover->setPlayer(m_player);
-}
-
