@@ -1,6 +1,6 @@
 Lua API bindings
 ================
-generated from 94ca368
+generated from d547944
 
 ## squadbindings.h
 
@@ -17,6 +17,7 @@ generated from 94ca368
     bool isKeyValid(apikey key);
     int showText(const std::string& string);
     int showTextFor(const std::string& string, int seconds);
+    int playVoice(const std::string& soundFile);
     int setEventActive(apikey eventPoll, bool active);
     apikey createSingleShotTimer(const std::string& callback, float delta);
     apikey createLoopingTimer(const std::string& callback, float delta);
@@ -114,5 +115,14 @@ Ini Objects
  * smallpolice
  * specialbasicship
  * startortress
+
+
+## colorcodess
+
+ * engineSlot: 0x000E
+ * hardpoint: 0x000D
+ * cockpit: 0x000C
+ * fuel: 0x000F
+ * crucial: 0xC00C
 
 

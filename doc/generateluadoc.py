@@ -15,7 +15,7 @@ import re
 def output_api(out, dic):
     """
     @type out: file
-    @type dic: dict[str, str]
+    @type dic: dict[str, list]
     """
     for header, values in dic.iteritems():
         out.write("## {0}\n\n".format(header))
@@ -27,7 +27,7 @@ def output_api(out, dic):
 def output_ini(out, dic):
     """
     @type out: file
-    @type dic: dict[str, str]
+    @type dic: dict[str, list]
     """
     for header, values in dic.iteritems():
         out.write("## {0}s\n\n".format(header))
@@ -39,6 +39,7 @@ def output_ini(out, dic):
 def get_api_methods(folder):
     """
     @type folder: string
+    @rtype : dict[str,list]
     """
     callback = lambda pat: " {0}".format(pat.group(1).lower())  # transforms apiFoo to foo
 
@@ -55,6 +56,7 @@ def get_api_methods(folder):
 def get_ini_objects(folder):
     """
     @type folder: string
+    @rtype : dict[str,list]
     """
     objects = defaultdict(list)
 
@@ -64,10 +66,26 @@ def get_ini_objects(folder):
                 config = ConfigParser.ConfigParser()
                 config.read(os.path.join(root, filename))
                 if config.has_option("general", "type"):
-                    type = config.get("general", "type")
+                    object_type = config.get("general", "type")
                     name = filename[:-4]
-                    objects[type].append(name)
+                    objects[object_type].append(name)
     return objects
+
+
+def get_color_codes(folder):
+    """
+    @type folder: string
+    @rtype : dict[str, list]
+    """
+    config = ConfigParser.ConfigParser()
+    config.read(os.path.join(folder, "voxels.ini"))
+
+    codes = []
+    for section in config.sections():
+        if config.has_option(section, "prefix"):
+            codes.append("{0}: {1}".format(section, config.get(section, "prefix")))
+    return {"colorcodes": codes}
+
 
 if __name__ == "__main__":
 
@@ -98,6 +116,8 @@ if __name__ == "__main__":
     ini_objects = get_ini_objects(ini_folder)
     output_ini(args.output, ini_objects)
 
+    color_codes = get_color_codes(ini_folder)
+    output_ini(args.output, color_codes)
 
     if args.output != sys.stdout:
         print "done"

@@ -210,12 +210,15 @@ if(WIN32)
     endforeach( binary )
 endif()
 
+set(DOCUMENTATION doc/howto.md doc/luaapi.md)
+
 install(TARGETS ${target}
         RUNTIME DESTINATION .)
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/data
         DESTINATION .
         PATTERN "*.png" EXCLUDE)
 install(FILES ${BINARIES} DESTINATION .)
+install(FILES ${DOCUMENTATION} DESTINATION .)
 
 include(cmake/Package.cmake)
 
