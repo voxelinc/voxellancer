@@ -36,13 +36,15 @@ public:
     std::unordered_set<WorldObject*>& worldObjects();
     std::unordered_set<Ship*>& ships();
 
+    void print_status();
+
     void update(float deltaSecs);
 
     float deltaSec() const;
 
     static World *instance();
     static void reset(bool showWarning=true);
-
+    
 
 protected:
     friend class God;

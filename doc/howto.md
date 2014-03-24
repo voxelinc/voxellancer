@@ -20,5 +20,6 @@ You can configure the controls as you want. The instructions are currently only 
 only for debugging:
 * F5 - reload shader
 * F6 - reload configs
+* F9 - world status information
 * 1-9 - show framebuffer
 

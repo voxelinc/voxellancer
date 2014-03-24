@@ -27,6 +27,7 @@ public:
 
     float time() const;
 
+    int activeParticleCount() const;
     int particleDataCount() const;
     VoxelParticleData* particleData(int index);
     std::vector<VoxelParticleData>& particleDataVector();
@@ -38,7 +39,6 @@ public:
 
     void update(float deltaSec);
     void draw(const Camera& camera);
-
 
 protected:
     float m_time;
