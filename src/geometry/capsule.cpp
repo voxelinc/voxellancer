@@ -1,7 +1,5 @@
 #include "capsule.h"
 
-#include <iostream>
-
 #include "transform.h"
 
 #include "utils/tostring.h"

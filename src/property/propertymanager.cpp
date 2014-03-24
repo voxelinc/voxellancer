@@ -3,7 +3,6 @@
 
 #include <string>
 #include <fstream>
-#include <iostream>
 
 #include <glow/logging.h>
 
@@ -80,8 +79,7 @@ void PropertyManager::load(const std::string& file, const std::string& prefix) {
     changed();
 }
 
-PropertyManager * PropertyManager::instance()
-{
+PropertyManager * PropertyManager::instance() {
     if (s_instance == nullptr) {
         s_instance = new PropertyManager();
     }
@@ -89,8 +87,7 @@ PropertyManager * PropertyManager::instance()
 }
 
 
-void PropertyManager::reset()
-{
+void PropertyManager::reset() {
     if (s_instance != nullptr) {
         delete s_instance;
         s_instance = nullptr;

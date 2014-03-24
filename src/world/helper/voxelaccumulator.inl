@@ -2,7 +2,6 @@
 
 #include <algorithm>
 #include <set>
-#include <iostream>
 
 template<typename Accumulatable>
 void VoxelAccumulator<Accumulatable>::clear() {

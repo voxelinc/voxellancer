@@ -39,16 +39,17 @@
 
 
 
-HUD::HUD(Player* player, Viewer* viewer):
+HUD::HUD(Player* player):
     m_player(player),
-    m_viewer(viewer),
+    m_viewer(nullptr),
     m_sphere(glm::vec3(0, 0, 0), 5.0f),
     m_crossHair(new CrossHair(this)),
     m_aimHelper(new AimHelperHudget(this)),
     m_scanner(new WorldTreeScanner()),
     m_targetName(new TextFieldHudget(this, glm::normalize(glm::vec3(0, -1.1f, -2)), 0.025f, "")),
     m_speedLabel(new TextFieldHudget(this, glm::normalize(glm::vec3(1.5f, -1.1f, -2)), 0.020f, "")),
-    m_target(nullptr)
+    m_target(nullptr),
+    m_drawHud("vfx.drawhud")
 {
     m_scanner->setScanRadius(1050.0f);
     m_hudgets.push_back(m_crossHair.get());
@@ -120,6 +121,7 @@ HUDObjectDelegate* HUD::objectDelegate(WorldObject* worldObject) {
 }
 
 void HUD::setCrossHairOffset(const glm::vec2& mousePosition) {
+    assert(m_viewer);
     float fovy = m_viewer->view().fovy();
     float nearZ = m_viewer->view().zNear();
     float ar = m_viewer->view().aspectRatio();
@@ -143,8 +145,10 @@ void HUD::update(float deltaSec) {
         m_targetName->setContent("no target");
     }
 
-    if (m_player) {
+    if (m_player->ship()) {
         m_speedLabel->setContent(std::to_string((int)(glm::length(m_player->ship()->physics().speed().directional()))));
+    } else {
+        m_speedLabel->setContent("-");
     }
 
     for (Hudget* hudget : m_hudgets) {
@@ -154,6 +158,9 @@ void HUD::update(float deltaSec) {
 }
 
 void HUD::draw() {
+    if (!m_drawHud) {
+        return;
+    }
     glow::Uniform<glm::vec3>* lightuniform = VoxelRenderer::instance()->program()->getUniform<glm::vec3>("lightdir");
     glm::vec3 oldLightdir = lightuniform->value();
     lightuniform->set(m_player->cameraHead().orientation() * glm::vec3(0,0,1));
@@ -221,6 +228,7 @@ Viewer* HUD::viewer() const {
 }
 
 void HUD::updateFov() {
+    assert(m_viewer);
     m_fovy = m_viewer->view().fovy() / 2;
     m_fovx = glm::atan(glm::tan(m_fovy)*m_viewer->view().aspectRatio());
 }
@@ -231,4 +239,8 @@ float HUD::fovy() const {
 
 float HUD::fovx() const {
     return m_fovx;
+}
+
+void HUD::setViewer(Viewer& viewer) {
+    m_viewer = &viewer;
 }

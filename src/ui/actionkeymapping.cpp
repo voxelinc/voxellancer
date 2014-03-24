@@ -7,21 +7,13 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-ActionKeyMapping::ActionKeyMapping(std::string primary, std::string secondary, std::string name) :
-    m_primaryMapping(primary),
-    m_secondaryMapping(secondary),
-    m_toggleAction(false),
-    m_toggleStatus(false),
-    m_name(name) 
-{
-}
 
 ActionKeyMapping::ActionKeyMapping(std::string primary, std::string secondary, std::string name, bool toggleAction) :
     m_primaryMapping(primary),
     m_secondaryMapping(secondary),
     m_toggleAction(toggleAction),
     m_toggleStatus(false),
-    m_name(name) 
+    m_name(name)
 {
 }
 
@@ -33,7 +25,7 @@ InputMapping ActionKeyMapping::mapping(InputClass inputClass) {
     }
 }
 
-void ActionKeyMapping::setMapping(InputMapping mapping, InputClass inputClass) {
+void ActionKeyMapping::setMapping(InputClass inputClass, InputMapping mapping) {
     if (inputClass == InputClass::Primary) {
         m_primaryMapping.set(mapping);
     } else {
@@ -41,8 +33,16 @@ void ActionKeyMapping::setMapping(InputMapping mapping, InputClass inputClass) {
     }
 }
 
-std::string ActionKeyMapping::name() {
+const std::string& ActionKeyMapping::name() {
     return m_name;
+}
+
+const std::string& ActionKeyMapping::mappingName(InputClass inputClass) {
+    if (inputClass == InputClass::Primary) {
+        return m_primaryMapping.name();
+    } else {
+        return m_secondaryMapping.name();
+    }
 }
 
 bool ActionKeyMapping::toggleAction() {
@@ -57,10 +57,11 @@ void ActionKeyMapping::setToggleStatus(bool status) {
     m_toggleStatus = status;
 }
 
-
 SecondaryInputValues::SecondaryInputValues() {
     buttonCnt = 0;
     axisCnt = 0;
     buttonValues = glfwGetJoystickButtons(GLFW_JOYSTICK_1, &buttonCnt);
     axisValues = glfwGetJoystickAxes(GLFW_JOYSTICK_1, &axisCnt);
 }
+
+

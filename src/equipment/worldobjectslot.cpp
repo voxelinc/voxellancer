@@ -1,7 +1,5 @@
 #include "worldobjectslot.h"
 
-#include <iostream>
-
 
 WorldObjectSlot::WorldObjectSlot(WorldObjectComponents* components, int index):
     m_components(components),

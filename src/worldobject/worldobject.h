@@ -3,9 +3,11 @@
 #include <list>
 #include <memory>
 
-#include "voxel/voxelcluster.h"
-#include "worldobject/handle/handle.h"
+#include "scripting/scriptable.h"
 
+#include "utils/handle/handle.h"
+
+#include "voxel/voxelcluster.h"
 
 class CollisionDetector;
 class EngineVoxel;
@@ -33,9 +35,10 @@ enum class WorldObjectType {
     Other       = 1 << 3
 };
 
-class WorldObject : public VoxelCluster {
+class WorldObject : public VoxelCluster, public Scriptable {
 public:
     WorldObject();
+    WorldObject(const Transform& transform);
     virtual ~WorldObject();
 
     virtual WorldObjectType objectType() const;
@@ -63,17 +66,20 @@ public:
 
     Voxel* crucialVoxel();
     void setCrucialVoxel(const glm::ivec3& cell);
+    bool isCrucialVoxelDestroyed();
 
     void updateTransformAndGeode(const glm::vec3& position, const glm::quat& orientation);
 
     virtual void onCollision();
     virtual void onSpawnFail();
+    //virtual void onWrecked();
 
     Handle<WorldObject>& handle();
 
     float collisionFieldOfDamage() const;
     void setCollisionFieldOfDamage(float collisionFieldOfDamage);
 
+    virtual bool passiveForCollisionDetection();
 
 protected:
     std::unique_ptr<CollisionFilter> m_collisionFilter;
@@ -84,9 +90,8 @@ protected:
 
     Handle<WorldObject> m_handle;
     Voxel* m_crucialVoxel;
+    bool m_crucialVoxelDestroyed;
     float m_collisionFieldOfDamage;
     SpawnState m_spawnState;
-
-    WorldObject(CollisionFilter* collisionFilter, float scale = 1.0f);
 };
 

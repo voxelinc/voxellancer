@@ -9,7 +9,8 @@
 
 
 CameraFollowHelper::CameraFollowHelper():
-    m_target(nullptr)
+    m_target(nullptr),
+    m_cameraOffset("general.cameraOffset")
 {
 }
 
@@ -31,7 +32,7 @@ glm::vec3 CameraFollowHelper::followPosition() {
 
     if (worldObject->bounds().sphere().radius() > 0) {
         float sizeScaling = 1 + (5.0f / worldObject->bounds().sphere().radius());
-        return sphere.position() + (worldObject->transform().orientation() * glm::vec3(0.0f, 0.6f * sizeScaling, 1.5f * sizeScaling)) * sphere.radius();
+        return sphere.position() + (worldObject->transform().orientation() * m_cameraOffset.get() * sizeScaling) * sphere.radius();
     } else {
         return sphere.position();
     }

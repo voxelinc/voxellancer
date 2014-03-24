@@ -4,12 +4,13 @@
 #include <memory>
 
 #include "glm/glm.hpp"
+#include "scripting/scriptable.h"
 
 
 class Ship;
 class AiGroupTask;
 
-class Squad {
+class Squad : public Scriptable {
 public:
     Squad(Ship* leader = nullptr);
     ~Squad();
@@ -22,8 +23,10 @@ public:
 
     const std::vector<Ship*>& members();
 
+
 protected:
     friend class SquadLogic;
+
     // Interface for SquadLogic
     void onMemberJoin(Ship* member);
     void onMemberLeave(Ship* member);
