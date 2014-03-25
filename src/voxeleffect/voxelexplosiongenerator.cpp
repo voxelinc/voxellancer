@@ -59,3 +59,4 @@ void VoxelExplosionGenerator::spawn() {
 float VoxelExplosionGenerator::createScale() {
     return RandFloat::randomize(m_scale, m_scaleRandomization);
 }
+

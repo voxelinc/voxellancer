@@ -110,7 +110,8 @@ void BattleScenario::spawnCapital(const std::vector<Ship*>& enemies) {
 
     std::vector<Handle<WorldObject>> enemyHandles;
     for (Ship* enemy : enemies) {
-        enemyHandles.push_back(enemy->WorldObject::handle());
+        Handle<WorldObject> handle = enemy->WorldObject::handle();
+        enemyHandles.push_back(handle);
     }
     ship->character()->setTask(std::make_shared<FightTask>(ship->boardComputer(), enemyHandles));
     m_world->god().scheduleSpawn(ship);

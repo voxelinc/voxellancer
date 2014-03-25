@@ -2,9 +2,8 @@
 
 #include <memory>
 
-template<class T>
+template<typename T>
 class HandleImpl {
-
 public:
     explicit HandleImpl(T* object);
 
@@ -13,6 +12,7 @@ public:
     bool valid() const;
 
     void invalidate();
+
 
 protected:
     T* m_object;
