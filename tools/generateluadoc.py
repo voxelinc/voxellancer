@@ -91,7 +91,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="this program generates an overview over the available lua bindings. "
                                                  "please call all methods exposed to lua 'api...'!")
-    parser.add_argument("root", help="the root dir of voxellancer", default="..", nargs='?', type=str)
+    parser.add_argument("root", help="the root dir of voxellancer", default=".", nargs='?', type=str)
     parser.add_argument("output", help="The output file (default=sys.stdout)",
                         default=sys.stdout, nargs='?', type=argparse.FileType('w'))
     args = parser.parse_args()
@@ -101,7 +101,7 @@ if __name__ == "__main__":
     ini_folder = os.path.abspath(os.path.join(args.root, "data"))
     print "Scanning ini folder: {0}".format(ini_folder)
 
-    git_hash = subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD']).strip()
+    git_hash = subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD'], cwd=args.root).strip()
 
     args.output.write("Lua API bindings\n")
     args.output.write("================\n")
