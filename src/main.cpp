@@ -101,7 +101,7 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
         PropertyManager::instance()->load("data/config.ini");
     }
     if (key == GLFW_KEY_F9 && action == GLFW_PRESS) {
-        World::instance()->print_status();
+        World::instance()->printStatus();
     }
     if (key >= GLFW_KEY_1 && key <= GLFW_KEY_9 && action == GLFW_PRESS) {
         game->gamePlay().scene().setOutputBuffer(key-GLFW_KEY_1);

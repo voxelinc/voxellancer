@@ -36,7 +36,7 @@ public:
     std::unordered_set<WorldObject*>& worldObjects();
     std::unordered_set<Ship*>& ships();
 
-    void print_status();
+    void printStatus();
 
     void update(float deltaSecs);
 

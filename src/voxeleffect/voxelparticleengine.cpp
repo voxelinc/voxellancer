@@ -142,7 +142,7 @@ void VoxelParticleEngine::setPlayer(Player& m_player) {
     m_remover->setPlayer(m_player);
 }
 
-int VoxelParticleEngine::activeParticleCount() const {
+int VoxelParticleEngine::particleCount() const {
     return m_cpuParticleBuffer.size() - m_freeParticleBufferIndices.size();
 }
 

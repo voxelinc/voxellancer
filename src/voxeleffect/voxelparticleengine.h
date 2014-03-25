@@ -27,7 +27,7 @@ public:
 
     float time() const;
 
-    int activeParticleCount() const;
+    int particleCount() const;
     int particleDataCount() const;
     VoxelParticleData* particleData(int index);
     std::vector<VoxelParticleData>& particleDataVector();
