@@ -4,7 +4,7 @@
 #include <vector>
 #include <stack>
 
-#include <glow/ref_ptr.h>
+#include "etc/contextdependant.h"
 
 #include "property/property.h"
 
@@ -20,7 +20,7 @@ class VoxelCluster;
     Main class for managing and displaying the VoxelParticles of
     a World.
 */
-class VoxelParticleEngine {
+class VoxelParticleEngine : ContextDependant {
 public:
     VoxelParticleEngine();
     ~VoxelParticleEngine();
@@ -57,5 +57,9 @@ protected:
     void setBufferSize(int bufferSize);
     void particleChanged(int bufferIndex);
     void updateGPUBuffers(int begin, int end);
+
+    virtual void beforeContextDestroy();
+    virtual void afterContextRebuild();
+
 };
 

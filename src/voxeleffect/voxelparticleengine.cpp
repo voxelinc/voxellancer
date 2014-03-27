@@ -146,3 +146,11 @@ int VoxelParticleEngine::particleCount() const {
     return m_cpuParticleBuffer.size() - m_freeParticleBufferIndices.size();
 }
 
+void VoxelParticleEngine::beforeContextDestroy() {
+    // nothing to do
+}
+
+void VoxelParticleEngine::afterContextRebuild() {
+    updateGPUBuffers(0, m_cpuParticleBuffer.size()-1);
+}
+
