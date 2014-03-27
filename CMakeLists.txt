@@ -166,6 +166,12 @@ source_group_by_path(${SOURCE_DIR} "\\.h$|\\.hpp$"
 source_group_by_path(${SOURCE_DIR} "\\.cpp$|\\.c$|\\.inl$"
     ${SOURCE_GROUP} ${SRC_FILES})
 
+# If we build for windows systems, we also include the resource file
+# containing the manifest, icon and other resources
+if(WIN32)
+  set(SRC_FILES ${SRC_FILES} "${SOURCE_DIR}/voxellancer.rc")
+endif(WIN32)
+
 add_executable(${target}
     ${SRC_FILES}
     ${SHADER_FILES}

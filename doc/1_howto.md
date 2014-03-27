@@ -22,5 +22,6 @@ only for debugging:
 
 * F5 - reload shader
 * F6 - reload configs
+* F9 - world status information
 * 1-9 - show framebuffer
 
