@@ -44,7 +44,7 @@ go_bandit([]() {
 
         it("Handle from pointer is root", [&]() {
             Foo foo;
-            AssertThat(foo.handle().root());
+            AssertThat(foo.handle().root(), Equals(true));
         });
 
         it("Root-handle gets invalidated on delete", [&]() {
