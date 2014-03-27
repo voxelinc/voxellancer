@@ -142,3 +142,19 @@ void World::removeWorldObject(WorldObject* worldObject) {
 
     m_scriptEngine->unregisterScriptable(worldObject);
 }
+
+void World::printStatus() {
+    int worldObjectCount = m_worldObjects.size();
+    int voxelCount = 0;
+    for (WorldObject* worldObject : m_worldObjects) {
+        voxelCount += worldObject->voxelMap().size();
+    }
+    int particleCount = m_particleEngine->particleCount();
+
+    glow::info("World: status report");
+    glow::info("  Worldobjects: %;", worldObjectCount);
+    glow::info("  VoxelCount: %;", voxelCount);
+    glow::info("  ParticleCount: %;", particleCount);
+}
+
+
