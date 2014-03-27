@@ -17,6 +17,8 @@ public:
 
     virtual void update(float deltaSec) override;
 
+    virtual bool passiveForCollisionDetection();
+
 protected:
 
 };

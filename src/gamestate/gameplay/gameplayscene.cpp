@@ -47,8 +47,9 @@ void GamePlayScene::draw(const Camera& camera, glow::FrameBufferObject* target, 
     RenderMetaData metadata(camera, side);
     m_renderPipeline->apply(*m_framebuffer, metadata);
 
-
+    // set viewport to original resolution
     glViewport(destinationViewport.x(), destinationViewport.y(), destinationViewport.width(), destinationViewport.height());
+    
     // transfer rendered image to target framebuffer
     m_outputBlitter->setInputMapping({ { "source", m_currentOutputBuffer } });
     m_outputBlitter->apply(*m_framebuffer, target);

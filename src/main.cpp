@@ -37,6 +37,9 @@
 #include "gamestate/game.h"
 #include "gamestate/gameplay/gameplayscene.h"
 
+#include "utils/filesystem.h"
+#include "world/world.h"
+
 
 static GLint MajorVersionRequire = 3;
 static GLint MinorVersionRequire = 1;
@@ -96,6 +99,9 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
     }
     if (key == GLFW_KEY_F6 && action == GLFW_PRESS) {
         PropertyManager::instance()->load("data/config.ini");
+    }
+    if (key == GLFW_KEY_F9 && action == GLFW_PRESS) {
+        World::instance()->printStatus();
     }
     if (key >= GLFW_KEY_1 && key <= GLFW_KEY_9 && action == GLFW_PRESS) {
         game->gamePlay().scene().setOutputBuffer(key-GLFW_KEY_1);
@@ -168,6 +174,12 @@ int main(int argc, char* argv[]) {
     clParser.parse(argc, argv);
 
     PropertyManager::instance()->load("data/config.ini");
+    glow::info("Config Directory: %;", FileSystem::userConfigDir());
+    std::string controlsConfig = FileSystem::userConfigDir() + "/controls.ini";
+    if (!FileSystem::exists(controlsConfig)) {
+        FileSystem::copyFile("data/controls.ini.default", controlsConfig);
+    }
+    PropertyManager::instance()->load(controlsConfig);
     PropertyManager::instance()->load("data/voxels.ini", "voxels");
 
     if (!glfwInit()) {

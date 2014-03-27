@@ -15,6 +15,7 @@ set(VOXELLANCER_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 option(OPTION_LIMIT_CONFIGS "Generate limited configs (Release; Debug)" ON)
 option(OPTION_ERRORS_AS_EXCEPTION "Throw exceptions" OFF)
 option(OPTION_CREATE_SUB_TEST "Create sub tests" OFF)
+option(OPTION_INCLUDE_VC_REDIST "Include VC redist" ON)
 
 
 # CMAKE CONFIGURATION
@@ -164,6 +165,12 @@ source_group_by_path(${SOURCE_DIR} "\\.h$|\\.hpp$"
     ${HEADER_GROUP} ${SRC_FILES})
 source_group_by_path(${SOURCE_DIR} "\\.cpp$|\\.c$|\\.inl$"
     ${SOURCE_GROUP} ${SRC_FILES})
+
+# If we build for windows systems, we also include the resource file
+# containing the manifest, icon and other resources
+if(WIN32)
+  set(SRC_FILES ${SRC_FILES} "${SOURCE_DIR}/voxellancer.rc")
+endif(WIN32)
 
 add_executable(${target}
     ${SRC_FILES}
