@@ -23,3 +23,13 @@ only for debugging:
 * F9 - world status information
 * 1-9 - show framebuffer
 
+## Commandline parameters
+
+	Usage: voxellancer [-fullscreen] [-stereo] [-hmd]
+
+	  -fullscreen  fullscreen mode
+	  -stereo      stereo rendering
+	  -hmd         use head mounted display (e.g. OculusRift)
+		           automatically activates fullscreen and stereo
+
+
