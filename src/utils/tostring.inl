@@ -17,7 +17,7 @@ template<typename T>
 std::string toString(const TAABB<T> &aabb) {
     std::stringstream result;
 
-    glm::detail::tvec3<T> diff = aabb.rub() - aabb.llf();
+    glm::detail::tvec3<T> diff = aabb.urb() - aabb.llf();
 
     result << "[" << toString(aabb.llf()) << " " << diff.x << "x" << diff.y << "x" << diff.z << "]";
 
