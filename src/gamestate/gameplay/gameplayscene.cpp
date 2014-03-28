@@ -17,6 +17,8 @@
 #include "voxeleffect/voxelparticleengine.h"
 #include "worldobject/worldobject.h"
 #include "display/rendering/starfield.h"
+#include "display/rendering/worldtreerenderer.h"
+
 
 GamePlayScene::GamePlayScene(GamePlay& gamePlay, Player& player):
     m_gamePlay(gamePlay),
@@ -24,6 +26,7 @@ GamePlayScene::GamePlayScene(GamePlay& gamePlay, Player& player):
     m_outputBlitter(new Blitter()),
     m_renderPipeline(RenderPipeline::getDefault()),
     m_starField(std::make_shared<Starfield>()),
+    m_worldTreeRenderer(new WorldTreeRenderer()),
     m_framebuffer(nullptr),
     m_currentOutputBuffer(0),
     m_player(player),
@@ -49,7 +52,7 @@ void GamePlayScene::draw(const Camera& camera, glow::FrameBufferObject* target, 
 
     // set viewport to original resolution
     glViewport(destinationViewport.x(), destinationViewport.y(), destinationViewport.width(), destinationViewport.height());
-    
+
     // transfer rendered image to target framebuffer
     m_outputBlitter->setInputMapping({ { "source", m_currentOutputBuffer } });
     m_outputBlitter->apply(*m_framebuffer, target);
@@ -79,6 +82,6 @@ void GamePlayScene::drawGame(const Camera& camera) const {
     m_voxelRenderer->afterDraw();
 
     World::instance()->particleEngine().draw(camera);
-
+    m_worldTreeRenderer->draw(camera);
 }
 

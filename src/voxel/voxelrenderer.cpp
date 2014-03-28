@@ -89,7 +89,6 @@ void VoxelRenderer::createAndSetupShaders() {
         glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/shader/voxelcluster/voxelcluster.frag"),
         glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/shader/lib/voxel.frag")
     );
-
 }
 
 glow::Program* VoxelRenderer::program() {

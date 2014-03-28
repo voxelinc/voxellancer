@@ -19,6 +19,7 @@ class Blitter;
 class RenderPipeline;
 class Player;
 class Starfield;
+class WorldTreeRenderer;
 
 class GamePlayScene: public Scene {
 public:
@@ -37,6 +38,7 @@ protected:
     mutable std::unique_ptr<FrameBuffer> m_framebuffer;
     std::shared_ptr<VoxelRenderer> m_voxelRenderer;
     std::shared_ptr<Starfield> m_starField;
+    std::unique_ptr<WorldTreeRenderer> m_worldTreeRenderer;
 
     GamePlay& m_gamePlay;
     Player& m_player;
