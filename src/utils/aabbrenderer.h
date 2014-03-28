@@ -1,9 +1,16 @@
 #pragma once
 
-#include <list>
 #include <memory>
+#include <vector>
 
 #include <glm/glm.hpp>
+
+#include <glow/ref_ptr.h>
+
+#include "etc/contextdependant.h"
+
+#include "geometry/aabb.h"
+
 
 namespace glow {
     class Buffer;
@@ -11,7 +18,6 @@ namespace glow {
     class Program;
 }
 
-class AABB;
 class Camera;
 class CubeMesh;
 class WorldTreeNode;
@@ -19,13 +25,14 @@ class WorldTreeNode;
 /**
     Able to render a set of AABBs, as wireframes only, currently
 */
-class AABBRenderer {
+class AABBRenderer : public ContextDependant {
 public:
     AABBRenderer();
+    ~AABBRenderer();
 
     void clear();
 
-    void addAABB(const AABB& aabb);
+    void add(const AABB& aabb);
 
     void draw(const Camera& camera);
 
@@ -37,12 +44,18 @@ protected:
 
     glow::ref_ptr<glow::VertexArrayObject> m_vao;
     glow::ref_ptr<glow::Buffer> m_aabbBuffer;
-    glow::ref_ptr<glow::Buffer> m_wireframeBuffer;
 
     std::unique_ptr<CubeMesh> m_cubeMesh;
 
     std::vector<std::pair<glm::vec3, glm::vec3>> m_aabbs;
 
-    void intialize();
+
+    void initialize();
+
+    void initializeProgram();
+    void initializeVAO();
+
+    void beforeContextDestroy();
+    void afterContextRebuild();
 };
 

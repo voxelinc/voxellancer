@@ -1,18 +1,27 @@
 #pragma once
 
+#include <glow/ref_ptr.h>
+
 #include "etc/contextdependant.h"
 
 
 namespace glow {
+    class Buffer;
     class Program;
-    class VertexArrayBinding;
+    class VertexArrayObject;
 }
 
+/**
+    Provides the geometry of a unit-cube
+    Not that the lifetime of this class has to be >= the lifetime of the program/vao
+    it is bound to, otherwise their behaviour is undefined
+ */
 class CubeMesh : public ContextDependant {
 public:
     CubeMesh();
 
-    void bindLinestripTo(glow::Program& program, glow::VertexArrayBinding* vertexBinding);
+    int numLineVertices() const;
+    void bindLinesTo(glow::Program& program, glow::VertexArrayObject& vao, int bindingIndex);
 
 
 protected:
@@ -20,4 +29,7 @@ protected:
     glow::ref_ptr<glow::Buffer> m_vertexBuffer;
 
     void initialize();
+    void beforeContextDestroy();
+    void afterContextRebuild();
 };
+

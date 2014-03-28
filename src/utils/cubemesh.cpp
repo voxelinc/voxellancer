@@ -20,25 +20,37 @@ namespace {
 }
 
 CubeMesh::CubeMesh():
-    m_initialized(false);
+    m_initialized(false)
 {
-
 }
 
-void CubeMesh::bindLinestripTo(glow::Program& program, glow::VertexArrayBinding* vertexBinding) {
+int CubeMesh::numLineVertices() const {
+    return 24;
+}
+
+void CubeMesh::bindLinesTo(glow::Program& program, glow::VertexArrayObject& vao, int bindingIndex) {
     if (!m_initialized) {
         initialize();
     }
+
+    GLint location = program.getAttributeLocation("v_vertex");
+    assert(location >= 0);
+
+    glow::VertexAttributeBinding* binding = vao.binding(bindingIndex);
+    binding->setAttribute(location);
+    binding->setBuffer(m_vertexBuffer, 0, sizeof(glm::vec3));
+    binding->setFormat(3, GL_FLOAT, GL_FALSE, 0);
+
+    vao.enable(location);
 }
 
 void CubeMesh::initialize() {
     //assert(ContextProvider::instance()->available());
 
     glow::Array<glm::vec3> array{
-        llf, llb, lrb, lrf,
-        ulf, ulb, urb, urf,
-
-
+        llf, llb, lrb, lrf, llf, lrf, llb, lrb,
+        ulf, ulb, urb, urf, ulf, urf, ulb, urb,
+        llf, ulf, llb, ulb, lrf, urf, lrb, urb
     };
 
     m_vertexBuffer = new glow::Buffer(GL_ARRAY_BUFFER);
@@ -46,3 +58,13 @@ void CubeMesh::initialize() {
 
     m_initialized = true;
 }
+
+void CubeMesh::beforeContextDestroy() {
+    m_vertexBuffer = nullptr;
+    m_initialized = false;
+}
+
+void CubeMesh::afterContextRebuild() {
+
+}
+
