@@ -17,7 +17,6 @@
 #include "collision/collisiondetector.h"
 
 
-
 WorldTreeScanner::WorldTreeScanner():
     m_scanInterval(0.0f),
     m_scanCountdown(0.0f),
@@ -26,7 +25,6 @@ WorldTreeScanner::WorldTreeScanner():
     m_foundWorldObjects(),
     m_lostWorldObjects()
 {
-
 }
 
 float WorldTreeScanner::scanInterval() const {
