@@ -114,7 +114,13 @@ void WorldTreeScanner::scan(WorldObject* worldObject, const glm::vec3& position)
         m_foundWorldObjects.insert(*iRight);
     }
 
-    m_worldObjects = worldObjects;
+    for(WorldObject* worldObject : m_foundWorldObjects) {
+        m_worldObjects.insert(worldObject);
+    }
+
+    for(WorldObject* worldObject : m_lostWorldObjects) {
+        m_worldObjects.erase(worldObject);
+    }
 
     for(WorldObject* worldObject : m_foundWorldObjects) {
         onFoundWorldObject(worldObject);
