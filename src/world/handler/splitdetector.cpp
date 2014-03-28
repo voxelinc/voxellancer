@@ -54,7 +54,7 @@ void SplitDetector::findSplits(WorldObject* worldObject) {
 
 void SplitDetector::init(WorldObject* worldObject) {
     m_llf = worldObject->bounds().minimalGridAABB().llf();
-    m_size = worldObject->bounds().minimalGridAABB().rub() - m_llf + glm::ivec3(1);
+    m_size = worldObject->bounds().minimalGridAABB().urb() - m_llf + glm::ivec3(1);
 
     m_voxelArray.clear();
     m_voxelArray.resize(m_size.x * m_size.y * m_size.z + 1);
