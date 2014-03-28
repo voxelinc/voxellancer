@@ -9,7 +9,6 @@
 #include "property/property.h"
 
 
-
 class GamePlay;
 class VoxelRenderer;
 class SoundManager;
@@ -29,6 +28,9 @@ public:
     virtual void draw(const Camera& camera, glow::FrameBufferObject* target, const Viewport& destinationViewport, EyeSide side = EyeSide::None) const override;
     virtual void update(float deltaSec) override;
 
+    bool worldTreeRendererEnabled() const;
+    void setWorldTreeRendererEnabled(bool enabled);
+
     void setOutputBuffer(int i);
 
 
@@ -38,6 +40,8 @@ protected:
     mutable std::unique_ptr<FrameBuffer> m_framebuffer;
     std::shared_ptr<VoxelRenderer> m_voxelRenderer;
     std::shared_ptr<Starfield> m_starField;
+
+    bool m_worldTreeRendererEnabled;
     std::unique_ptr<WorldTreeRenderer> m_worldTreeRenderer;
 
     GamePlay& m_gamePlay;
