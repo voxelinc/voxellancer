@@ -1,18 +1,8 @@
 #pragma once
 
-#include <list>
-
-#include <glm/glm.hpp>
+#include "utils/aabbrenderer.h"
 
 
-namespace glow {
-    class Buffer;
-    class VertexArrayObject;
-    class Program;
-}
-
-class Camera;
-class WorldTreeNode;
 
 class WorldTreeRenderer {
 public:
@@ -22,12 +12,8 @@ public:
 
 
 protected:
-    glow::ref_ptr<glow::Program> m_program;
-    glow::ref_ptr<glow::Buffer> m_aabbBuffer;
-    glow::ref_ptr<glow::Buffer> m_wireframeBuffer;
-    glow::ref_ptr<glow::VertexArrayObject> m_vao;
-    std::vector<std::pair<glm::vec3, glm::vec3>> m_aabbs;
+    std::unique_ptr<AABBRenderer> m_renderer;
 
-    void draw(const Camera& camera, WorldTreeNode* node);
+    void poll(WorldTreeNode* node);
 };
 
