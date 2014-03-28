@@ -45,7 +45,7 @@ void WorldTreeScanner::setScanRadius(float scanRadius) {
     m_scanRadius = scanRadius;
 }
 
-const std::list<WorldObject*>& WorldTreeScanner::worldObjects() {
+const std::set<WorldObject*>& WorldTreeScanner::worldObjects() {
     return m_worldObjects;
 }
 
@@ -57,11 +57,11 @@ void WorldTreeScanner::update(float deltaSec, const glm::vec3& position) {
     update(deltaSec, nullptr, position);
 }
 
-const std::list<WorldObject*>& WorldTreeScanner::foundWorldObjects() {
+const std::set<WorldObject*>& WorldTreeScanner::foundWorldObjects() {
     return m_foundWorldObjects;
 }
 
-const std::list<WorldObject*>& WorldTreeScanner::lostWorldObjects() {
+const std::set<WorldObject*>& WorldTreeScanner::lostWorldObjects() {
     return m_lostWorldObjects;
 }
 
@@ -85,40 +85,63 @@ void WorldTreeScanner::update(float deltaSec, WorldObject* worldObject, const gl
 }
 
 void WorldTreeScanner::scan(WorldObject* worldObject, const glm::vec3& position) {
+    std::set<WorldObject*> worldObjects(worldObjectsInRange(worldObject, position));
+
+    m_foundWorldObjects.clear();
+    m_lostWorldObjects.clear();
+
+    std::set<WorldObject*>::iterator iLeft = m_worldObjects.begin();
+    std::set<WorldObject*>::iterator iRight = worldObjects.begin();
+
+    while (iLeft != m_worldObjects.end() && iRight != worldObjects.end()) {
+        WorldObject* left = *iLeft;
+        WorldObject* right = *iRight;
+
+        if (left == right) {
+            iLeft++;
+            iRight++;
+        } else if (left < right) {
+            m_lostWorldObjects.insert(left);
+            iLeft++;
+        } else if (right < left) {
+            m_foundWorldObjects.insert(right);
+            iRight++;
+        }
+    }
+
+    for (; iLeft != m_worldObjects.end(); iLeft++) {
+        m_lostWorldObjects.insert(*iLeft);
+    }
+    for (; iRight != worldObjects.end(); iRight++) {
+        m_foundWorldObjects.insert(*iRight);
+    }
+
+    m_worldObjects = worldObjects;
+
+    for(WorldObject* worldObject : m_foundWorldObjects) {
+        onFoundWorldObject(worldObject);
+    }
+
+    for(WorldObject* worldObject : m_lostWorldObjects) {
+        onLostWorldObject(worldObject);
+    }
+}
+
+std::set<WorldObject*> WorldTreeScanner::worldObjectsInRange(WorldObject* worldObject, const glm::vec3& position) {
+    std::set<WorldObject*> result;
     Sphere scanSphere(position, m_scanRadius);
 
     WorldTreeQuery worldTreeQuery(&World::instance()->worldTree(), &scanSphere, worldObject->collisionDetector().geode()->containingNode(), &worldObject->collisionFilter());
     std::unordered_set<WorldTreeGeode*> foundGeodes = worldTreeQuery.nearGeodes();
 
-    // Unordered sets for more performance
-    std::unordered_set<WorldObject*> lostWorldObjects(m_worldObjects.begin(), m_worldObjects.end()); // Re-Found objects are removed from this
-    std::unordered_set<WorldObject*> worldObjects(m_worldObjects.begin(), m_worldObjects.end()); // Re-Found objects are removed from this
+    for (WorldTreeGeode* foundGeode : foundGeodes) {
+        WorldObject* worldObject = foundGeode->worldObject();
 
-    for(WorldTreeGeode* foundGeode : foundGeodes) {
-        WorldObject* foundWorldObject = foundGeode->worldObject();
-
-        if(!VoxelTreeQuery(&foundWorldObject->collisionDetector().voxelTree(), &scanSphere).areVoxelsIntersecting()) {
-            continue;
-        }
-
-        std::unordered_set<WorldObject*>::iterator j = worldObjects.find(foundWorldObject);
-
-        if(j == worldObjects.end()) { // Object not yet found, add to newly found
-            m_foundWorldObjects.push_back(foundWorldObject);
-        } else { // object found again, thus wasn't lost
-            lostWorldObjects.erase(foundWorldObject);
+        if (VoxelTreeQuery(&worldObject->collisionDetector().voxelTree(), &scanSphere).areVoxelsIntersecting()) {
+            result.insert(worldObject);
         }
     }
 
-    m_lostWorldObjects = std::list<WorldObject*>(lostWorldObjects.begin(), lostWorldObjects.end());
-
-    for(WorldObject* worldObject : m_foundWorldObjects) {
-        m_worldObjects.push_back(worldObject);
-        onFoundWorldObject(worldObject);
-    }
-
-    for(WorldObject* worldObject : m_lostWorldObjects) {
-        m_worldObjects.remove(worldObject);
-        onLostWorldObject(worldObject);
-    }
+    return result;
 }
+

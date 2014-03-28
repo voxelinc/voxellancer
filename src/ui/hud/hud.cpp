@@ -51,7 +51,7 @@ HUD::HUD(Player* player):
     m_target(nullptr),
     m_drawHud("vfx.drawhud")
 {
-    m_scanner->setScanRadius(1050.0f);
+    m_scanner->setScanRadius(500.0f);
     m_hudgets.push_back(m_crossHair.get());
     m_hudgets.push_back(m_aimHelper.get());
     m_hudgets.push_back(m_targetName.get());
@@ -244,3 +244,4 @@ float HUD::fovx() const {
 void HUD::setViewer(Viewer& viewer) {
     m_viewer = &viewer;
 }
+

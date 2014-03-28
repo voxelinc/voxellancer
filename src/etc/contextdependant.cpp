@@ -8,5 +8,4 @@ ContextDependant::ContextDependant() {
 
 ContextDependant::~ContextDependant() {
     ContextProvider::instance()->unregisterContextDependant(this);
-
 }
