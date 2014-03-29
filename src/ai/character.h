@@ -8,9 +8,9 @@ class Faction;
 class Ship;
 
 /**
-*   The Character is the Ship's pilot and executes his AiTask. He has a Faction which decides
-*   who is a friend or foe to him
-*/
+ *  The Character is the Ship's pilot and executes his AiTask. He has a Faction which decides
+ *  who is a friend or foe to him
+ */
 
 class Character {
 public:

@@ -36,8 +36,8 @@ enum class WorldObjectType {
 };
 
 /**
-*   A WorldObject is an Object in our World. Being the second level in the object hierarchy,
-*   it adds CollisionDetection, Physics and SpecialVoxels aka WorldObjectComponents
+ *  A WorldObject is an Object in our World. Being the second level in the object hierarchy,
+ *  it adds CollisionDetection, Physics and SpecialVoxels aka WorldObjectComponents
 */
 
 class WorldObject : public VoxelCluster, public Scriptable {

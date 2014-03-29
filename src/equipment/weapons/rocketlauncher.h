@@ -6,8 +6,8 @@
 
 
 /**
-*    Base class for every Weapon that shoots rockets,
-*    i.e. projectiles that follow a target
+ *   Base class for every Weapon that shoots rockets,
+ *   i.e. projectiles that follow a target
 */
 class RocketLauncher: public Weapon {
 public:

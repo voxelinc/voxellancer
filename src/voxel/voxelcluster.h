@@ -11,7 +11,7 @@
 #include "utils/vec3hash.h"
 
 /**
-*   Base class for anything that consits of Voxels
+ *  Base class for anything that consits of Voxels
 */
 
 class Voxel;
