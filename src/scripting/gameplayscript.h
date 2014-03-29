@@ -23,7 +23,7 @@ public:
     LuaWrapper& luaWrapper();
 
     /**
-        Add a Scriptable to be hold by this script. On destruction of the script
+        Add a Scriptable to be held by this script. On destruction of the script
         this Scriptable becomes invalid and will be destroyed
     */
     void addLocal(int key);

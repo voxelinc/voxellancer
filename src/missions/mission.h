@@ -33,7 +33,7 @@ public:
     void succeed();
 
     /*
-        Mark the mission the function as failure.
+        Mark the mission as failed.
         Calls onFailure() in the script
     */
     void fail();

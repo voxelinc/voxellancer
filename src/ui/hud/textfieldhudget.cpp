@@ -34,3 +34,4 @@ bool TextFieldHudget::isAt(const Ray& ray) const {
 void TextFieldHudget::onClick(ClickType clickType) {
     // Nothing to do here
 }
+
