@@ -8,7 +8,7 @@
 
 #include "ui/hud/hud.h"
 
-#include "gamestate/gameplay/running/gameplayrunninginput.h"
+#include "ui/actionkeymapping.h"
 #include "input/inputconfigwriter.h"
 #include "utils/filesystem.h"
 

@@ -10,6 +10,9 @@ class Game;
 class GamePlayRunning;
 class GamePlayPaused;
 class GamePlayScene;
+class GamePlayInput;
+class GamePlayNormalInput;
+class GamePlayFreecamInput;
 class Player;
 class SoundManager;
 
@@ -25,6 +28,8 @@ public:
 
     GamePlayScene& scene();
 
+    GamePlayInput& currentInput();
+
     GamePlayRunning& running();
     GamePlayPaused& paused();
 
@@ -36,6 +41,7 @@ public:
 
     void loadScenario(int i);
 
+    void keyCallback(int key, int scancode, int action, int mods);
     virtual void update(float deltaSec) override;
 
     virtual void onEntered() override;
@@ -52,5 +58,8 @@ protected:
 
     GamePlayRunning* m_runningState;
     GamePlayPaused* m_pausedState;
+    std::unique_ptr<GamePlayNormalInput> m_normalInput;
+    std::unique_ptr<GamePlayFreecamInput> m_freecamInput;
+    bool m_freecamActive;
 };
 

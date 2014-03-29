@@ -9,42 +9,50 @@
 
 #include "property/property.h"
 
+#include "gamestate/gameplay/gameplayinput.h"
 
+
+class Player;
 class WorldObject;
+class InputConfigurator;
 class GameState;
 class HUD;
 class HMD;
-class CameraDolly;
+class Player;
 
-class GamePlayFreecamInput {
+class GamePlayNormalInput : public GamePlayInput {
 public:
-    GamePlayFreecamInput(CameraDolly* cameraDolly);
+    GamePlayNormalInput(Player *player);
 
-    //void resizeEvent(const unsigned int width, const unsigned int height);
-    //void keyCallback(int key, int scancode, int action, int mods);
-    //void mouseButtonCallback(int button, int action, int mods);
-	void update(float deltaSec);
-
-    const glm::vec3& position();
-    const glm::quat& orientation();
-    void setPosition(const glm::vec3& position);
-    void setOrientation(const glm::quat& orientation);
+    virtual void resizeEvent(const unsigned int width, const unsigned int height) override;
+    virtual void keyCallback(int key, int scancode, int action, int mods) override;
+    virtual void mouseButtonCallback(int button, int action, int mods) override;
+    virtual void update(float deltaSec) override;
 
 
 protected:
-    CameraDolly* m_cameraDolly;
+    Player* m_player;
+    InputConfigurator* m_inputConfigurator;
     SecondaryInputValues m_secondaryInputValues;
     std::vector<ActionKeyMapping*> m_actions;
+    bool m_centerCrosshair;
+    glm::vec2 m_lastMousePos;
 
+    bool m_mouseControl;
+    int m_cursorMaxDistance;
     int m_lastfocus;
+
+    void toggleControls();
 
     void processUpdate();
     void processMouseUpdate(float deltaSec);
     void processHMDUpdate();
     void applyUpdates();
 
+    void processFireActions();
     void processMoveActions();
     void processRotateActions();
+    void processTargetSelectActions();
 
     float getInputValue(ActionKeyMapping* action);
     float getInputValue(InputMapping mapping);
@@ -59,6 +67,9 @@ protected:
 
     Property<float> prop_maxClickTime;
 
+    ActionKeyMapping fireAction;
+    ActionKeyMapping rocketAction;
+
     ActionKeyMapping moveLeftAction;
     ActionKeyMapping moveRightAction;
     ActionKeyMapping moveForwardAction;
@@ -71,10 +82,13 @@ protected:
     ActionKeyMapping rotateClockwiseAction;
     ActionKeyMapping rotateCClockwiseAction;
 
+    ActionKeyMapping selectNextAction;
+    ActionKeyMapping selectPreviousAction;
+
     glm::vec3 m_moveUpdate;
     glm::vec3 m_rotateUpdate;
-    float m_moveFactor;
-    float m_rotateFactor;
-    glm::vec3 m_position;
-    glm::quat m_orientation;
+    bool m_fireUpdate;
+    bool m_rocketUpdate;
+
+    void placeCrossHair(double winX, double winY);
 };
