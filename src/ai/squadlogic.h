@@ -4,10 +4,13 @@
 #include <memory>
 
 #include "glm/glm.hpp"
-
-
 class Ship;
 class Squad;
+
+/**
+*   The SquadLogic is the single member's endpoint for interaction with a Squad
+*/
+
 
 class SquadLogic
 {
