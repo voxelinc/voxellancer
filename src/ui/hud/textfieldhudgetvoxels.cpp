@@ -21,8 +21,6 @@ TextFieldHudgetVoxels::TextFieldHudgetVoxels(TextFieldHudget* textFieldHudget, c
     m_scale(scale),
     m_fontSize(fontSize)
 {
-  //  std::cout << "Created " << m_text << " " << this << std::endl;
-
     m_width = m_voxelFont->letterWidth(fontSize) * m_scale;
     m_height = m_voxelFont->letterWidth(fontSize) * m_scale;
     m_offset = -1.f * ((m_text.length() - 1) / 2.0f) * m_width;
