@@ -1,6 +1,6 @@
 Lua API bindings
 ================
-generated from 2a92754
+generated from a47d65f
 
 ## squadbindings.h
 

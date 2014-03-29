@@ -216,7 +216,7 @@ if(WIN32)
     endforeach( binary )
 endif()
 
-#set(DOCUMENTATION doc/howto.md doc/luaapi.md)
+set(DOCUMENTATION doc/howto.html doc/luaapi.html)
 
 install(TARGETS ${target}
         RUNTIME DESTINATION .)
