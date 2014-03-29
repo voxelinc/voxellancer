@@ -8,7 +8,8 @@
 #include "worldtree/worldtreenode.h"
 
 
-WorldTreeRenderer::WorldTreeRenderer()
+WorldTreeRenderer::WorldTreeRenderer():
+    m_renderer(new AABBRenderer())
 {
 }
 
