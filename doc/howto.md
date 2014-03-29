@@ -21,4 +21,5 @@ only for debugging:
 * F5 - reload shader
 * F6 - reload configs
 * 1-9 - show framebuffer
+* F - toggle flycam
 
