@@ -18,6 +18,7 @@ You can configure the controls as you want. The instructions are currently only 
 * F11 start keyboard configuration
 
 only for debugging:
+* T - show active leafs of worldtree
 * F5 - reload shader
 * F6 - reload configs
 * 1-9 - show framebuffer
