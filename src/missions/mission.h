@@ -26,13 +26,13 @@ public:
 
     MissionState state() const;
 
-    /*
+    /**
         Mark the mission as successfully played.
         Calls onSuccess() in the script
     */
     void succeed();
 
-    /*
+    /**
         Mark the mission as failed.
         Calls onFailure() in the script
     */

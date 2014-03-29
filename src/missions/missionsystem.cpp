@@ -9,8 +9,8 @@
 #include "mission.h"
 
 
-MissionSystem::MissionSystem() {
-
+MissionSystem::MissionSystem()
+{
 }
 
 MissionSystem::~MissionSystem() = default;
