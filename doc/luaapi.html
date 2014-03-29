@@ -131,8 +131,11 @@ body{font-size:16px;}
   </head>
   <body>
     <h1>Lua API bindings</h1>
-<p>generated from a47d65f</p>
+
+<p>generated from 15b8cfc</p>
+
 <h2>squadbindings.h</h2>
+
 <pre><code>apikey createSquad(apikey leader);
 int joinSquad(apikey squad, apikey ship);
 int createPatrolWaypointsTask(apikey squad);
@@ -140,7 +143,9 @@ int addPatrolwWaypointPoint(apikey task, const glm::vec3&amp; point);
 int createDefendAreaTask(apikey squad, const glm::vec3&amp; point, float range);
 int addDefendAreaPoint(apikey task, const glm::vec3&amp; point);
 </code></pre>
+
 <h2>commonbindings.h</h2>
+
 <pre><code>bool isKeyValid(apikey key);
 int showText(const std::string&amp; string);
 int showTextFor(const std::string&amp; string, int seconds);
@@ -149,7 +154,9 @@ int setEventActive(apikey eventPoll, bool active);
 apikey createSingleShotTimer(const std::string&amp; callback, float delta);
 apikey createLoopingTimer(const std::string&amp; callback, float delta);
 </code></pre>
+
 <h2>worldobjectbindings.h</h2>
+
 <pre><code>apikey playerShip();
 apikey createShip(const std::string&amp; name);
 int spawn(apikey worldObject);
@@ -160,7 +167,9 @@ glm::vec3 orientation(apikey worldObject);
 apikey onWorldObjectDestroyed(apikey worldObject, const std::string&amp; callback);
 apikey onAABBEntered(apikey worldObject, const glm::vec3&amp; llf, const glm::vec3&amp; urb, const std::string&amp; callback);
 </code></pre>
+
 <h2>aibindings.h</h2>
+
 <pre><code>std::string getFaction(apikey ship);
 int setFaction(apikey ship, const std::string&amp; faction);
 float getFactionRelation(const std::string&amp; factionA, const std::string&amp; factionB);
@@ -171,8 +180,11 @@ int setTargetPoint(apikey flyToTask, const glm::vec3&amp; point);
 apikey createFightTask(apikey ship);
 int addFightTaskTarget(apikey flyToTask, apikey worldObject);
 </code></pre>
+
 <h1>Ini Objects</h1>
+
 <h2>engines</h2>
+
 <ul>
 <li>enginemk1</li>
 <li>enginemk3</li>
@@ -183,7 +195,9 @@ int addFightTaskTarget(apikey flyToTask, apikey worldObject);
 <li>rocketthrustermk1</li>
 <li>superslowengine</li>
 </ul>
+
 <h2>bullets</h2>
+
 <ul>
 <li>gunbullet</li>
 <li>ionbullet</li>
@@ -191,11 +205,15 @@ int addFightTaskTarget(apikey flyToTask, apikey worldObject);
 <li>railgunbullet</li>
 <li>snowball</li>
 </ul>
+
 <h2>rockets</h2>
+
 <ul>
 <li>hornet</li>
 </ul>
+
 <h2>guns</h2>
+
 <ul>
 <li>gun</li>
 <li>ioncannon</li>
@@ -203,15 +221,21 @@ int addFightTaskTarget(apikey flyToTask, apikey worldObject);
 <li>railgun</li>
 <li>snowcanon</li>
 </ul>
+
 <h2>rocketlaunchers</h2>
+
 <ul>
 <li>hornetlauncher</li>
 </ul>
+
 <h2>worldobjects</h2>
+
 <ul>
 <li>banner</li>
 </ul>
+
 <h2>ships</h2>
+
 <ul>
 <li>basicship</li>
 <li>bc304</li>
@@ -230,7 +254,9 @@ int addFightTaskTarget(apikey flyToTask, apikey worldObject);
 <li>specialbasicship</li>
 <li>startortress</li>
 </ul>
+
 <h2>colorcodess</h2>
+
 <ul>
 <li>engineSlot: 0x000E</li>
 <li>hardpoint: 0x000D</li>
@@ -238,5 +264,6 @@ int addFightTaskTarget(apikey flyToTask, apikey worldObject);
 <li>fuel: 0x000F</li>
 <li>crucial: 0xC00C</li>
 </ul>
+
   </body>
 </html>
