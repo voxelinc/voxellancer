@@ -69,7 +69,7 @@ void LuaWrapper::reloadScripts()
     }
 }
 
-bool LuaWrapper::has(const std::string & fun) {
+bool LuaWrapper::hasFunction(const std::string & fun) {
     lua_getglobal(m_state, fun.c_str());
 
     bool result = lua_isfunction(m_state, -1);

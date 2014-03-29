@@ -19,13 +19,13 @@ Mission& MissionScript::mission() {
 }
 
 void MissionScript::onSuccess() {
-    if (m_lua->has("onSuccess")) {
+    if (m_lua->hasFunction("onSuccess")) {
         m_lua->call("onSuccess");
     }
 }
 
 void MissionScript::onFailure() {
-    if (m_lua->has("onFailure")) {
+    if (m_lua->hasFunction("onFailure")) {
         m_lua->call("onFailure");
     }
 }

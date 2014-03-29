@@ -8,7 +8,13 @@
 class Bindings;
 class LuaWrapper;
 
-/*
+enum class ScriptState {
+    Idle,
+    Running,
+    Stopped
+};
+
+/**
     Handle to a lua script
 */
 class Script {
@@ -17,10 +23,9 @@ public:
     ~Script();
 
     void start();
-    bool started() const;
-
     void stop();
-    bool stopped() const;
+
+    ScriptState state() const;
 
     virtual void load(const std::string& path);
     virtual void loadString(const std::string& script);
@@ -35,8 +40,7 @@ public:
 
 protected:
     std::unique_ptr<LuaWrapper> m_lua;
-    bool m_started;
-    bool m_stopped;
+    ScriptState m_state;
     std::string m_debugStatus;
     std::vector<std::unique_ptr<Bindings>> m_bindings;
 

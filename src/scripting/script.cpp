@@ -6,8 +6,7 @@
 
 Script::Script():
     m_lua(new LuaWrapper()),
-    m_started(false),
-    m_stopped(false),
+    m_state(ScriptState::Idle),
     m_debugStatus("")
 {
     m_lua->Register("setDebugStatus", this, &Script::apiSetDebugStatus);
@@ -17,20 +16,20 @@ Script::Script():
 Script::~Script() = default;
 
 void Script::start() {
-    m_lua->call("main");
-    m_started = true;
-}
+    assert(m_state == ScriptState::Idle);
 
-bool Script::started() const {
-    return m_started;
+    m_lua->call("main");
+    m_state = ScriptState::Running;
 }
 
 void Script::stop() {
-    m_stopped = true;
+    assert(m_state == ScriptState::Running);
+
+    m_state = ScriptState::Stopped;
 }
 
-bool Script::stopped() const {
-    return m_stopped;
+ScriptState Script::state() const {
+    return m_state;
 }
 
 void Script::load(const std::string& path) {
@@ -43,7 +42,7 @@ void Script::loadString(const std::string& script) {
 
 
 void Script::update(float deltaSec) {
-    if (m_lua->has("update")) {
+    if (m_lua->hasFunction("update")) {
         m_lua->call("update", deltaSec);
     }
 }

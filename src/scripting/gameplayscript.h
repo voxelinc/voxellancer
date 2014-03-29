@@ -22,8 +22,10 @@ public:
     ScriptEngine& scriptEngine();
     LuaWrapper& luaWrapper();
 
-    /* Add a Scriptable to be hold by this script. On destruction of the script
-    this Scriptable becomes invalid and will be destroyed */
+    /**
+        Add a Scriptable to be hold by this script. On destruction of the script
+        this Scriptable becomes invalid and will be destroyed
+    */
     void addLocal(int key);
 
 

@@ -29,12 +29,11 @@ TextFieldHudgetVoxels::TextFieldHudgetVoxels(TextFieldHudget* textFieldHudget, c
 }
 
 void TextFieldHudgetVoxels::setText(const std::string& text) {
-    m_text = text;// std::cout << this << " Setting text: " << text << std::endl;
+    m_text = text;
     m_offset = -1.f * ((m_text.length() - 1) / 2.0f) * m_width;
 }
 
 void TextFieldHudgetVoxels::draw() {
- //   std::cout << this << " Drawing: " << m_text << std::endl;
     m_voxelFont->drawString(m_text, m_textFieldHudget->worldPosition(m_direction), m_textFieldHudget->worldOrientation(m_direction), m_fontSize, m_scale, FontAlign::CENTER);
 }
 
@@ -71,7 +70,7 @@ float TextFieldHudgetVoxels::scale() {
 }
 
 const glm::vec3 TextFieldHudgetVoxels::offsetToCenter(bool upper, bool left) const {
-    float horizontalOffset = left ? static_cast<float>(m_text.length()) : 0;
+    float horizontalOffset = left ? m_text.length() : 0;
     float verticalOffset = upper ? m_height : -m_height;
 
     return glm::vec3(m_offset + m_width * horizontalOffset - m_width / 2, verticalOffset, 0);

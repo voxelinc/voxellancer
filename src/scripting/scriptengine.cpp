@@ -43,7 +43,7 @@ void ScriptEngine::addScript(std::shared_ptr<GamePlayScript> script) {
 void ScriptEngine::start() {
     m_running = true;
     for (std::shared_ptr<GamePlayScript>& script : m_scripts) {
-        if (!script->started()) {
+        if (script->state() == ScriptState::Idle) {
             script->start();
         }
     }
@@ -87,11 +87,11 @@ void ScriptEngine::update(float deltaSec) {
         for (std::list<std::shared_ptr<GamePlayScript>>::iterator i = m_scripts.begin(); i != m_scripts.end(); ) {
             GamePlayScript* script = i->get();
 
-            if (script->started() && !script->stopped()) {
+            if (script->state() == ScriptState::Running) {
                 script->update(deltaSec);
             }
 
-            if (script->stopped()) {
+            if (script->state() == ScriptState::Stopped) {
                 i = m_scripts.erase(i);
             } else {
                 ++i;

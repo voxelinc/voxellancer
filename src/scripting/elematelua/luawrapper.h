@@ -25,7 +25,7 @@ public:
     void removeScript(const std::string & script);
     void reloadScripts();
 
-    bool has(const std::string & fun);
+    bool hasFunction(const std::string & fun);
 
     static void reloadAll();
 

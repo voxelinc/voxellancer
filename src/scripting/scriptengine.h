@@ -9,7 +9,7 @@ class GamePlayScript;
 class Scriptable;
 class World;
 
-/*
+/**
     Main class for accessing scripts during gameplay.
     The ScriptEngine connects Scripts with the World by tunneling events from World to the Script
     and all sorts of actions (Objectcreation, Tasks) back to the World.
@@ -21,18 +21,26 @@ public:
 
     void addScript(std::shared_ptr<GamePlayScript> script);
 
-    /*  start (call the "main" function) all added scripts and all future
-        added scripts until stop is called */
+    /**
+        start (call the "main" function) all added scripts and all future
+        added scripts until stop is called
+    */
     void start();
 
-    /* Stops the ScriptEngine, continuing to update after start() is called again. */
+    /**
+        Stops the ScriptEngine, continuing to update after start() is called again.
+    */
     void stop();
 
-    /*  Register Scriptables that are managed by other objects
-        and equip them with a valid scriptKey */
+    /**
+        Register Scriptables that are managed by other objects
+        and equip them with a valid scriptKey
+    */
     void registerScriptable(Scriptable* scriptable);
 
-    /*  Unregister Scriptable. If it is scriptlocal, remove it from the game  */
+    /**
+        Unregister Scriptable. If it is scriptlocal, remove it from the game
+    */
     void unregisterScriptable(Scriptable* scriptable);
 
 
