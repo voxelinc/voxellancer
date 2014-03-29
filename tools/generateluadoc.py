@@ -19,7 +19,7 @@ def output_api(out, dic):
     @type out: file
     @type dic: dict[str, list]
     """
-    for header, values in dic.iteritems():
+    for header, values in dic.items():
         out.write("## {0}\n\n".format(header))
         for value in values:
             out.write("    {0}\n".format(value))
@@ -31,7 +31,7 @@ def output_ini(out, dic):
     @type out: file
     @type dic: dict[str, list]
     """
-    for header, values in dic.iteritems():
+    for header, values in dic.items():
         out.write("## {0}s\n\n".format(header))
         for value in values:
             out.write(" * {0}\n".format(value))
@@ -50,7 +50,7 @@ def get_api_methods(folder):
         for name in files:
             if name.endswith(".h"):
                 f = os.path.join(root, name)
-                code = file(f).read()
+                code = open(f).read()
                 matches = re.findall(r"[^ ]* api\w*\(.*\);", code)
                 lines += [(name, line) for line in matches]
 
