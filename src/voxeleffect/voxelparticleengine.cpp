@@ -37,8 +37,20 @@ int VoxelParticleEngine::particleDataCount() const {
     return m_cpuParticleBuffer.size();
 }
 
+int VoxelParticleEngine::particleCount() const {
+    return m_cpuParticleBuffer.size() - m_freeParticleBufferIndices.size();
+}
+
 VoxelParticleData* VoxelParticleEngine::particleData(int index) {
     return &m_cpuParticleBuffer[index];
+}
+
+std::vector<VoxelParticleData>& VoxelParticleEngine::particleDataVector() {
+    return m_cpuParticleBuffer;
+}
+
+void VoxelParticleEngine::setPlayer(Player& m_player) {
+    m_remover->setPlayer(m_player);
 }
 
 void VoxelParticleEngine::addParticle(const VoxelParticleSetup& particleSetup, const VoxelCluster* creator) {
@@ -134,7 +146,11 @@ void VoxelParticleEngine::updateGPUBuffers(int begin, int end) {
     m_gpuParticleBufferInvalid = false;
 }
 
-std::vector<VoxelParticleData>& VoxelParticleEngine::particleDataVector() {
-    return m_cpuParticleBuffer;
+void VoxelParticleEngine::beforeContextDestroy() {
+    // nothing to do
+}
+
+void VoxelParticleEngine::afterContextRebuild() {
+    updateGPUBuffers(0, m_cpuParticleBuffer.size()-1);
 }
 

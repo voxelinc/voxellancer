@@ -18,6 +18,12 @@ You can configure the controls as you want. The instructions are currently only 
 * F11 start keyboard configuration
 
 only for debugging:
+<<<<<<< HEAD
 * F8 - reload shader and configs
+=======
+* F5 - reload shader
+* F6 - reload configs
+* F9 - world status information
+>>>>>>> 212f573ed53c6d219b2d512ae1c637136bc737b7
 * 1-9 - show framebuffer
 

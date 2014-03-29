@@ -74,6 +74,7 @@ bool VoxelParticleRemover::isDead(VoxelParticleData& particle) {
             return true;
         }
     }
+
     return false;
 }
 
@@ -81,8 +82,15 @@ void VoxelParticleRemover::addCheck(std::shared_ptr<VoxelParticleRemoveCheck> ch
     m_checker.push_back(checker);
 }
 
+void VoxelParticleRemover::setPlayer(Player& player) {
+    for (std::shared_ptr<VoxelParticleRemoveCheck>& checker : m_checker) {
+        checker->setPlayer(player);
+    }
+}
+
 void VoxelParticleRemover::beforeCheck() {
     for (std::shared_ptr<VoxelParticleRemoveCheck>& checker : m_checker) {
         checker->beforeCheck();
     }
 }
+
