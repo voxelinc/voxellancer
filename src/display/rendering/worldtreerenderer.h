@@ -13,10 +13,8 @@ public:
 
 
 protected:
-    bool m_initialized;
     std::unique_ptr<AABBRenderer> m_renderer;
 
-    void initialize();
     void poll(WorldTreeNode* node);
 };
 
