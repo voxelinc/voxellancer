@@ -107,10 +107,6 @@ void GamePlayNormalInput::resizeEvent(const unsigned int width, const unsigned i
     m_lastfocus = false; // through window resize everything becomes scrambled
 }
 
-/*
-*    Check here for single-time key-presses, that you do not want fired multiple times, e.g. toggles
-*    This only applies for menu events etc, for action events set the toggleAction attribute to true
-*/
 void GamePlayNormalInput::keyCallback(int key, int scancode, int action, int mods) {
     if (action == GLFW_PRESS) {
         m_inputConfigurator->setLastInput(InputClass::Primary, InputMapping(InputType::Keyboard, key, 1, 0.0f));
@@ -149,10 +145,6 @@ void GamePlayNormalInput::mouseButtonCallback(int button, int action, int mods) 
     }
 }
 
-
-/**
- *  Check here for every-frame events, e.g. view & movement controls
- */
 void GamePlayNormalInput::update(float deltaSec) {
     if (glfwGetWindowAttrib(glfwGetCurrentContext(), GLFW_FOCUSED)) {
         if (m_lastfocus) {

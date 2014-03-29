@@ -30,8 +30,6 @@ void GamePlayRunning::update(float deltaSec) {
     World::instance()->update(deltaSec);
 
     m_gamePlay->player().update(deltaSec);
-
-    m_gamePlay->soundManager().setListener(m_gamePlay->player().cameraHead().position(), m_gamePlay->player().cameraHead().orientation());
 }
 
 void GamePlayRunning::onEntered() {

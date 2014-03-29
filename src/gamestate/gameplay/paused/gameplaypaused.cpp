@@ -27,9 +27,6 @@ Trigger& GamePlayPaused::continueTrigger() {
 void GamePlayPaused::update(float deltaSec) {
     GameState::update(deltaSec);
     m_continueTrigger.update(deltaSec);
-
-    m_gamePlay->soundManager().setListener(m_gamePlay->player().cameraHead().cameraDolly()->position(), 
-        m_gamePlay->player().cameraHead().cameraDolly()->orientation());
 }
 
 void GamePlayPaused::onEntered() {

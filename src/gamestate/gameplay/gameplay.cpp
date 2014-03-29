@@ -126,6 +126,7 @@ void GamePlay::keyCallback(int key, int scancode, int action, int mods) {
             if (m_freecamActive) {
                 m_freecamInput->setPosition(m_player->cameraHead().cameraDolly()->position());
                 m_freecamInput->setOrientation(m_player->cameraHead().cameraDolly()->orientation());
+
                 m_player->move(glm::vec3(0));
                 m_player->rotate(glm::vec3(0));
                 Property<bool>("vfx.drawhud").set(false);
@@ -139,6 +140,11 @@ void GamePlay::keyCallback(int key, int scancode, int action, int mods) {
 
 void GamePlay::update(float deltaSec) {
     currentInput().update(deltaSec);
+    if (m_freecamActive) {
+        m_soundManager->setListener(m_freecamInput->cameraHead().position(), m_freecamInput->cameraHead().orientation());
+    } else {
+        m_soundManager->setListener(m_player->cameraHead().position(), m_player->cameraHead().orientation());
+    }
 
     GameState::update(deltaSec);
     m_scene->update(deltaSec);

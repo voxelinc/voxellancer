@@ -65,12 +65,9 @@ GamePlayFreecamInput::GamePlayFreecamInput() :
 
 
 void GamePlayFreecamInput::resizeEvent(const unsigned int width, const unsigned int height) {
-    m_lastfocus = false; // through window resize everything becomes scrambled
+    m_lastfocus = false; // through window resize the cursor position is scrambled
 }
 
-/*
-*Check here for every-frame events, e.g. view & movement controls
-*/
 void GamePlayFreecamInput::update(float deltaSec) {
     if (glfwGetWindowAttrib(glfwGetCurrentContext(), GLFW_FOCUSED)) {
         if (m_lastfocus) {
