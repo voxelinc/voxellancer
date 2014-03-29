@@ -1,9 +1,11 @@
-
 """
 generates a documentation of all c++ methods available to lua
 """
 
-import ConfigParser
+try:
+    import configparser
+except ImportError:
+    import ConfigParser as configparser
 import argparse
 import sys
 from collections import defaultdict
@@ -43,12 +45,18 @@ def get_api_methods(folder):
     """
     callback = lambda pat: " {0}".format(pat.group(1).lower())  # transforms apiFoo to foo
 
-    methods = defaultdict(list)
-    out = subprocess.check_output(["grep", r"api.*\(.*\);", "*.h",  "-H"], cwd=folder)
+    lines = []
+    for root, dirs, files in os.walk(folder):
+        for name in files:
+            if name.endswith(".h"):
+                f = os.path.join(root, name)
+                code = file(f).read()
+                matches = re.findall(r"[^ ]* api\w*\(.*\);", code)
+                lines += [(name, line) for line in matches]
 
-    for line in out.splitlines():
-        line = re.sub(r"\sapi([A-Z])", callback, line)
-        header, api = re.split(":\s+", line)
+    methods = defaultdict(list)
+    for header, line in lines:
+        api = re.sub(r"\sapi([A-Z])", callback, line)
         methods[header].append(api)
     return methods
 
@@ -63,7 +71,7 @@ def get_ini_objects(folder):
     for root, _, files in os.walk(folder):
         for filename in files:
             if filename.endswith(".ini"):
-                config = ConfigParser.ConfigParser()
+                config = configparser.ConfigParser()
                 config.read(os.path.join(root, filename))
                 if config.has_option("general", "type"):
                     object_type = config.get("general", "type")
@@ -77,7 +85,7 @@ def get_color_codes(folder):
     @type folder: string
     @rtype : dict[str, list]
     """
-    config = ConfigParser.ConfigParser()
+    config = configparser.ConfigParser()
     config.read(os.path.join(folder, "voxels.ini"))
 
     codes = []
@@ -97,9 +105,9 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     api_folder = os.path.abspath(os.path.join(args.root, "src/scripting/bindings"))
-    print "Scanning binding folder: {0}".format(api_folder)
+    print("Scanning binding folder: {0}".format(api_folder))
     ini_folder = os.path.abspath(os.path.join(args.root, "data"))
-    print "Scanning ini folder: {0}".format(ini_folder)
+    print("Scanning ini folder: {0}".format(ini_folder))
 
     git_hash = subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD'], cwd=args.root).strip()
 
@@ -120,4 +128,4 @@ if __name__ == "__main__":
     output_ini(args.output, color_codes)
 
     if args.output != sys.stdout:
-        print "done"
+        print("done")
