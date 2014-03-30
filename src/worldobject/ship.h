@@ -16,6 +16,10 @@ class Sound;
 class SquadLogic;
 class BoardComputer;
 
+/**
+ *  A Ship is a WorldObject with a Pilot (Character), thus can have an AiTask and a Squad membership
+*/
+
 class Ship: public WorldObject {
 public:
     Ship();
