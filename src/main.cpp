@@ -38,6 +38,7 @@
 #include "gamestate/gameplay/gameplayscene.h"
 
 #include "utils/filesystem.h"
+#include "utils/randfloatpool.h"
 
 
 static GLint MajorVersionRequire = 3;
@@ -177,6 +178,8 @@ int main(int argc, char* argv[]) {
     }
     PropertyManager::instance()->load(controlsConfig);
     PropertyManager::instance()->load("data/voxels.ini", "voxels");
+
+    RandFloatPool::initialize();
 
     if (!glfwInit()) {
         glow::fatal("Could not init GLFW");

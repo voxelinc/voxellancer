@@ -13,10 +13,11 @@ public:
     static float randomize(float value, float randomization);
 
 
+	static void initialize();
+
 protected:
 	static std::vector<float> s_pool;
 	static int s_iter;
 
-	static void initialize();
 };
 

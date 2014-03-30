@@ -12,14 +12,8 @@ std::vector<float> RandFloatPool::s_pool;
 int RandFloatPool::s_iter(0);
 
 float RandFloatPool::rand(float from, float to) {
-    assert(from <= to);
-
-    if (s_pool.empty()) {
-        initialize();
-    }
-
-    float randBase = s_pool[s_iter];
-    s_iter = (s_iter + 1) % s_pool.size();
+    float randBase = s_pool[s_iter & 0x3FF];
+    s_iter++;
 
     return from + (to - from) * randBase;
 }

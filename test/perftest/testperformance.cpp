@@ -85,9 +85,12 @@ go_bandit([](){
 
         after_each([&]() {
         });
-        
+
         it("randomness", [&]() {
             const int ROUNDS = 1000 * 1000 * 10;
+
+            RandFloatPool::initialize();
+
             glm::vec3 v;
             {
                 glowutils::AutoTimer t("rand vec3");
