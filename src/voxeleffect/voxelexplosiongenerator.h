@@ -8,7 +8,6 @@
 
 
 
-class RandFloatPool;
 class Transform;
 class VoxelCluster;
 
@@ -29,3 +28,4 @@ protected:
 
     float createScale();
 };
+

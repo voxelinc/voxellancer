@@ -58,5 +58,5 @@ void VoxelExplosionGenerator::spawn() {
 }
 
 float VoxelExplosionGenerator::createScale() {
-    return RandFloatPool::randomize(m_scale, m_scaleRandomization);
+    return RandFloat::randomize(m_scale, m_scaleRandomization);
 }
