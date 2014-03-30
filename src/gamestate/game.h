@@ -9,14 +9,18 @@ class GamePlay;
 class HMDManager;
 class Viewer;
 
-/*
-    Mainstate of the Game, entered once when libraries and context are setup
-    and left just before they are teared down again
-*/
+/**
+ *  Mainstate of the Game, entered once when libraries and context are setup
+ *  and left just before they are teared down again
+ */
 class Game: public GameState {
 public:
     Game();
     ~Game();
+
+    static void setup();
+    static Game* instance();
+    static void tearDown();
 
     GamePlay& gamePlay();
 
@@ -31,6 +35,8 @@ public:
 
 
 protected:
+    static Game* s_instance;
+
     std::shared_ptr<HMDManager> m_hmdManager;
     std::unique_ptr<Viewer> m_viewer;
 

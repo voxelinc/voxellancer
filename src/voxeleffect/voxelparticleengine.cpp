@@ -99,8 +99,8 @@ void VoxelParticleEngine::particleChanged(int bufferIndex) {
         m_gpuParticleBufferInvalidEnd = bufferIndex;
     }
     /*
-    If the range of particles gets too big, probably because of too many
-    particles between two free positions, push the old range to the gpu
+        If the range of particles gets too big, probably because of too many
+        particles between two free positions, push the old range to the gpu
     */
     int oldInvalidCount = oldInvalidEnd - oldInvalidBegin;
     int newInvalidCount = m_gpuParticleBufferInvalidEnd - m_gpuParticleBufferInvalidBegin;
@@ -136,10 +136,6 @@ void VoxelParticleEngine::updateGPUBuffers(int begin, int end) {
 
 std::vector<VoxelParticleData>& VoxelParticleEngine::particleDataVector() {
     return m_cpuParticleBuffer;
-}
-
-void VoxelParticleEngine::setPlayer(Player& m_player) {
-    m_remover->setPlayer(m_player);
 }
 
 int VoxelParticleEngine::particleCount() const {

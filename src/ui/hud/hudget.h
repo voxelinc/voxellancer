@@ -30,6 +30,8 @@ public:
     bool entered() const;
     bool left() const;
 
+
+
     virtual void onClick(ClickType clickType);
 
     /*

@@ -3,8 +3,8 @@ cmake_minimum_required(VERSION 2.8.9 FATAL_ERROR)
 # PROJECT DESCRIPTION
 set(META_PROJECT_NAME "voxellancer")
 set(META_VERSION_MAJOR "0")
-set(META_VERSION_MINOR "2")
-set(META_VERSION_PATCH "0")
+set(META_VERSION_MINOR "3")
+set(META_VERSION_PATCH "1")
 set(META_VERSION "${META_VERSION_MAJOR}.${META_VERSION_MINOR}.${META_VERSION_PATCH}")
 set(META_AUTHOR_ORGANIZATION "voxelinc")
 set(META_AUTHOR_DOMAIN "https://github.com/voxelinc/voxellancer/")
@@ -216,7 +216,7 @@ if(WIN32)
     endforeach( binary )
 endif()
 
-#set(DOCUMENTATION doc/howto.md doc/luaapi.md)
+set(DOCUMENTATION doc/howto.html doc/luaapi.html)
 
 install(TARGETS ${target}
         RUNTIME DESTINATION .)

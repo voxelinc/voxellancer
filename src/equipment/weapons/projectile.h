@@ -4,10 +4,10 @@
 
 class SoundProperties;
 
-/*
-    Base class for everything shot by a weapon, characterised by
-        - doesn't collide with creator
-        - destroyed after lifetime is over
+/**
+ *   Base class for everything shot by a weapon, characterised by
+ *       - doesn't collide with creator
+ *       - destroyed after lifetime is over
 */
 class Projectile: public WorldObject {
 public:

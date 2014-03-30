@@ -4,6 +4,7 @@ How to play
 You can fly around, fight and destroy other ships or do missions.
 
 ## Controls
+
 * W,A,S,D - direction
 * Left Mouse - fire
 * Right Mouse - click to select target / hold to change direction
@@ -11,7 +12,7 @@ You can fly around, fight and destroy other ships or do missions.
 * Q, E - roll
 * R - Rocket
 * P - Pause
-* F1-F4 change scenarios
+* F1-F5 change scenarios
 
 You can configure the controls as you want. The instructions are currently only displayed in the console.
 
@@ -20,8 +21,7 @@ You can configure the controls as you want. The instructions are currently only 
 
 only for debugging:
 
-* F5 - reload shader
-* F6 - reload configs
+* F8 - reload shader and configs
 * F9 - world status information
 * 1-9 - show framebuffer
 
