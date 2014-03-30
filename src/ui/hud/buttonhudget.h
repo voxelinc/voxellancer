@@ -12,7 +12,7 @@ class TextFieldHudgetVoxels;
 
 class ButtonHudget : public Hudget{
 public:
-    ButtonHudget(HUD* hud, glm::vec3 direction, std::function<void(ClickType clickType)>& callback, float scale = 0.5f, std::string content = "", FontSize fontSize = FontSize::SIZE5x7, bool bounds = true);
+    ButtonHudget(const HUD* hud, glm::vec3 direction, std::function<void(ClickType clickType)>& callback, float scale = 0.5f, std::string content = "", FontSize fontSize = FontSize::SIZE5x7, bool bounds = true);
     virtual ~ButtonHudget();
 
     virtual void update(float deltaSec) override;
