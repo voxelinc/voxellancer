@@ -4,10 +4,13 @@
 #include <unordered_set>
 
 
+class EventPoller;
 class FactionMatrix;
 class God;
+class Player;
 class Ship;
 class Skybox;
+class ScriptEngine;
 class VoxelParticleEngine;
 class WorldObject;
 class WorldLogic;
@@ -20,25 +23,32 @@ public:
     World();
     virtual ~World();
 
-    Skybox &skybox();
-    WorldLogic &worldLogic();
-    God &god();
-    WorldTree &worldTree();
+    Player& player();
+    void setPlayer(Player& player);
+
+    Skybox& skybox();
+    WorldLogic& worldLogic();
+    God& god();
+    WorldTree& worldTree();
+    ScriptEngine& scriptEngine();
     VoxelParticleEngine& particleEngine();
     FactionMatrix& factionMatrix();
+    EventPoller& eventPoller();
 
-    std::unordered_set<WorldObject*> &worldObjects();
-    std::unordered_set<Ship*> &ships();
+    std::unordered_set<WorldObject*>& worldObjects();
+    std::unordered_set<Ship*>& ships();
+
+    void printStatus();
 
     void update(float deltaSecs);
 
     float deltaSec() const;
 
     static World *instance();
-    static void reset();
 
     void showText(std::string text, HUD* hud, float lifeTime = 2.0f);
 
+    static void reset(bool showWarning=true);
 
 protected:
     friend class God;
@@ -46,18 +56,20 @@ protected:
     void addWorldObject(WorldObject* worldObject);
     void removeWorldObject(WorldObject* worldObject);
 
-
 protected:
     static World *s_instance;
 
     float m_deltaSec;
+    Player* m_player;
 
     std::unique_ptr<Skybox> m_skybox;
     std::unique_ptr<WorldTree> m_worldTree;
     std::unique_ptr<WorldLogic> m_worldLogic;
     std::unique_ptr<God> m_god;
+    std::unique_ptr<ScriptEngine> m_scriptEngine;
     std::unique_ptr<VoxelParticleEngine> m_particleEngine;
     std::unique_ptr<FactionMatrix> m_factionMatrix;
+    std::unique_ptr<EventPoller> m_eventPoller;
 
     std::unique_ptr<TextFieldHudget> m_textHudget;
     float m_textLifeTime;

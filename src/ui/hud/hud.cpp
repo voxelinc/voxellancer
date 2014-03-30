@@ -41,9 +41,9 @@
 
 
 
-HUD::HUD(Player* player, Viewer* viewer):
+HUD::HUD(Player* player):
     m_player(player),
-    m_viewer(viewer),
+    m_viewer(nullptr),
     m_sphere(glm::vec3(0, 0, 0), 5.0f),
     m_crossHair(new CrossHair(this)),
     m_aimHelper(new AimHelperHudget(this)),
@@ -52,6 +52,8 @@ HUD::HUD(Player* player, Viewer* viewer):
     m_speedLabel(new TextFieldHudget(this, glm::normalize(glm::vec3(1.5f, -1.1f, -2)), 0.020f, "")),
     m_menuButton(new ButtonHudget(this, glm::normalize(glm::vec3(-1.5f, 1.1f, -2)), 0.01f, "MENU")),
     m_target(nullptr)
+    m_target(nullptr),
+    m_drawHud("vfx.drawhud")
 {
     m_scanner->setScanRadius(1050.0f);
     m_hudgets.push_back(m_crossHair.get());
@@ -126,6 +128,7 @@ HUDObjectDelegate* HUD::objectDelegate(WorldObject* worldObject) {
 }
 
 void HUD::setCrossHairOffset(const glm::vec2& mousePosition) {
+    assert(m_viewer);
     float fovy = m_viewer->view().fovy();
     float nearZ = m_viewer->view().zNear();
     float ar = m_viewer->view().aspectRatio();
@@ -162,6 +165,9 @@ void HUD::update(float deltaSec) {
 }
 
 void HUD::draw() {
+    if (!m_drawHud) {
+        return;
+    }
     glow::Uniform<glm::vec3>* lightuniform = VoxelRenderer::instance()->program()->getUniform<glm::vec3>("lightdir");
     glm::vec3 oldLightdir = lightuniform->value();
     lightuniform->set(m_player->cameraHead().orientation() * glm::vec3(0,0,1));
@@ -229,6 +235,7 @@ Viewer* HUD::viewer() const {
 }
 
 void HUD::updateFov() {
+    assert(m_viewer);
     m_fovy = m_viewer->view().fovy() / 2;
     m_fovx = glm::atan(glm::tan(m_fovy)*m_viewer->view().aspectRatio());
 }
@@ -243,4 +250,8 @@ float HUD::fovx() const {
 
 void HUD::helloFunction(ClickType clicktype) {
     World::instance()->showText("new Text", this);
+}
+
+void HUD::setViewer(Viewer& viewer) {
+    m_viewer = &viewer;
 }

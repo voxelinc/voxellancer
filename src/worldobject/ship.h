@@ -26,7 +26,7 @@ public:
 
     virtual void update(float deltaSec) override;
 
-    Handle<Ship> shipHandle();
+    Handle<Ship>& handle();
 
     void setTargetObject(WorldObject* target);
     WorldObject* targetObject();
@@ -39,8 +39,6 @@ public:
 
 
 protected:
-    Ship(CollisionFilter* collisionFilter);
-
     std::unique_ptr<Character> m_character;
     std::unique_ptr<BoardComputer> m_boardComputer;
 

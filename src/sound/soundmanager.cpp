@@ -52,8 +52,13 @@ std::shared_ptr<Sound> SoundManager::create(std::string soundFile) {
     cleanUp();
 
     sf::SoundBuffer* buffer = obtain(soundFile);
-    // sounds don't work with more than one channel!
-    assert(buffer->getChannelCount() == 1);
+    if (!buffer) {
+        return createNullSound();
+    }
+    if (buffer->getChannelCount() != 1) {
+        glow::warning("SoundManager: %; sounds don't work with more than one channel!", soundFile);
+        return createNullSound();
+    }
 
     std::shared_ptr<Sound> sound(std::make_shared<Sound>(*buffer));
     sound->setAttenuation(0.1f);
@@ -69,6 +74,7 @@ sf::SoundBuffer* SoundManager::obtain(std::string soundFile) {
         buffer = new sf::SoundBuffer();
         if (!buffer->loadFromFile(soundFile)) {
             glow::warning("SoundManager: could not load %;", soundFile);
+            return nullptr;
         }
         m_buffer[soundFile] = buffer;
     }
@@ -90,13 +96,22 @@ void SoundManager::cleanUp() {
     m_nextCleanup = 0;
 }
 
+void SoundManager::forcedCleanup() {
+    m_nextCleanup = CLEANUP_PERIOD;
+    cleanUp();
+}
+
 SoundManager* SoundManager::current() {
     assert(s_current != nullptr);
     return s_current;
 }
 
 void SoundManager::activate() {
+    if (s_current == this) {
+        return;
+    }
     assert(s_current == nullptr);
+
     s_current = this;
 
     for (std::shared_ptr<Sound>& sound : m_sounds) {
@@ -110,8 +125,8 @@ void SoundManager::deactivate() {
     assert(s_current == this);
     s_current = nullptr;
 
-    m_nextCleanup = CLEANUP_PERIOD;
-    cleanUp();
+    forcedCleanup();
+
 
     for (std::shared_ptr<Sound>& sound : m_sounds) {
         if (sound->status() == Sound::Status::Playing) {
@@ -119,3 +134,18 @@ void SoundManager::deactivate() {
         }
     }
 }
+
+void SoundManager::stopAll() {
+    for (std::shared_ptr<Sound>& sound : m_sounds) {
+        if (sound->status() != Sound::Status::Stopped) {
+            sound->stop();
+        }
+    }
+    forcedCleanup();
+}
+
+std::shared_ptr<Sound> SoundManager::createNullSound() {
+    return std::make_shared<Sound>();
+}
+
+

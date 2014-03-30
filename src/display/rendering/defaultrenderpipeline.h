@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <string>
 #include <vector>
 
 #include "renderpipeline.h"
@@ -34,7 +35,7 @@ protected:
     
     std::shared_ptr<PostProcessingPass> m_fxaa;
     std::shared_ptr<PostProcessingPass> m_finalization;
-    Property<bool> m_useFxaa;
+    Property<std::string> m_antialiasing;
 
 };
 

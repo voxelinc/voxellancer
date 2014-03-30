@@ -6,7 +6,6 @@
 #include "camera/camerahead.h"
 
 #include "factions/factionmatrix.h"
-#include "factions/playerfaction.h"
 
 #include "gamestate/game.h"
 #include "gamestate/gameplay/gameplay.h"
@@ -29,10 +28,9 @@
 #include "ui/targetselector.h"
 
 
-Player::Player(GamePlay* gamePlay):
-    m_gamePlay(gamePlay),
+Player::Player():
     m_aimer(new Aimer(nullptr)),
-    m_hud(new HUD(this, &gamePlay->game()->viewer())),
+    m_hud(new HUD(this)),
     m_ship(nullptr),
     m_cameraDolly(new CameraDolly()),
     m_targetSelector(new TargetSelector(this))
@@ -47,7 +45,7 @@ Ship* Player::ship() {
 }
 
 void Player::setShip(Ship* ship) {
-    m_ship = ship->shipHandle();
+    m_ship = ship->handle();
     m_ship->character()->setFaction(World::instance()->factionMatrix().playerFaction());
     m_ship->objectInfo().setShowOnHud(false);
     m_cameraDolly->followWorldObject(ship);

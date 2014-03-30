@@ -1,7 +1,5 @@
 #include "physics.h"
 
-#include <iostream>
-
 #include <glm/gtx/quaternion.hpp>
 
 #include "geometry/transform.h"
@@ -24,6 +22,7 @@ Physics::Physics(WorldObject& worldObject, float scale):
     m_directionalDampening(Property<float>("physics.globalDirectionalDampening")),
     m_angularDampening(Property<float>("physics.globalAngularDampening")),
     m_mass(0),
+    m_maxMass(0),
     m_accumulatedMassVec(0.0f, 0.0f, 0.0f),
     m_worldObject(worldObject)
 {
@@ -34,7 +33,7 @@ float Physics::directionalDampening() const {
     return m_directionalDampening;
 }
 
-void Physics::setDirectionalDampening(float directionalDampening) {
+void Physics::setDirectionalDampening(const Property<float>& directionalDampening) {
     m_directionalDampening = directionalDampening;
 }
 
@@ -42,7 +41,7 @@ float Physics::angularDampening() const {
     return m_angularDampening;
 }
 
-void Physics::setAngularDampening(float angularDampening) {
+void Physics::setAngularDampening(const Property<float>& angularDampening) {
     m_angularDampening = angularDampening;
 }
 
@@ -64,6 +63,10 @@ void Physics::setAcceleration(const Acceleration& acceleration) {
 
 float Physics::mass() const {
     return m_mass;
+}
+
+float Physics::maxMass() const {
+    return m_maxMass;
 }
 
 const Transform Physics::projectedTransformIn(float deltaSec){
@@ -90,6 +93,9 @@ std::list<VoxelCollision> &Physics::move(float deltaSec) {
 
 void Physics::addVoxel(Voxel* voxel) {
     voxelChanged(voxel, true);
+    if (m_mass > m_maxMass) {
+        m_maxMass = m_mass;
+    }
 }
 
 void Physics::removeVoxel(Voxel* voxel) {

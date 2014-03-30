@@ -7,7 +7,7 @@
 
 #include "equipment/enginestate.h"
 
-#include "worldobject/handle/handle.h"
+#include "utils/handle/handle.h"
 
 class TargetSelector;
 
@@ -15,12 +15,11 @@ class Aimer;
 class Camera;
 class CameraHead;
 class HUD;
-class GamePlay;
 class CameraDolly;
 
 class Player {
 public:
-    Player(GamePlay* gamePlay);
+    Player();
     ~Player();
 
     Ship* ship();
@@ -41,7 +40,6 @@ public:
     void setTarget(WorldObject* target);
 
 protected:
-    GamePlay* m_gamePlay;
     Handle<Ship> m_ship;
     std::unique_ptr<CameraDolly> m_cameraDolly;
     std::unique_ptr<HUD> m_hud;

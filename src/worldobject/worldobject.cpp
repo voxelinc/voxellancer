@@ -7,22 +7,15 @@
 
 #include "utils/tostring.h"
 
-#include "worldobject/handle/handle.h"
+#include "utils/handle/handle.h"
 #include "physics/physics.h"
 #include "ui/objectinfo.h"
 #include "voxel/voxel.h"
 #include "worldobjectcomponents.h"
 
-
-WorldObject::WorldObject():
-    WorldObject(new CollisionFilter(this), 1.0f)
-{
-
-}
-
-WorldObject::WorldObject(CollisionFilter* collisionFilter, float scale):
-    VoxelCluster(scale),
-    m_physics(new Physics(*this, scale)),
+WorldObject::WorldObject() :
+    VoxelCluster(1.0f),
+    m_physics(new Physics(*this, 1.0f)),
     m_collisionDetector(new CollisionDetector(*this)),
     m_objectInfo(new ObjectInfo()),
     m_components(new WorldObjectComponents(this)),
@@ -30,8 +23,15 @@ WorldObject::WorldObject(CollisionFilter* collisionFilter, float scale):
     m_collisionFieldOfDamage(glm::half_pi<float>()),
     m_handle(Handle<WorldObject>(this)),
     m_spawnState(SpawnState::None),
-    m_collisionFilter(collisionFilter)
+    m_collisionFilter(new CollisionFilter(this)),
+    m_crucialVoxelDestroyed(false)
 {
+}
+
+WorldObject::WorldObject(const Transform& transform) :
+    WorldObject()
+{
+    setTransform(transform);
 }
 
 WorldObject::~WorldObject() {
@@ -112,7 +112,8 @@ void WorldObject::removeVoxel(Voxel* voxel) {
     voxel->onRemoval();
 
     if (voxel == m_crucialVoxel) {
-        m_crucialVoxel = nullptr;  // do spectacular stuff like an explosion
+        m_crucialVoxelDestroyed = true;
+        m_crucialVoxel = nullptr;
     }
 
     m_collisionDetector->removeVoxel(voxel);
@@ -133,7 +134,14 @@ Voxel* WorldObject::crucialVoxel() {
 }
 
 void WorldObject::setCrucialVoxel(const glm::ivec3& cell) {
+    assert(m_crucialVoxel == nullptr);
+ 
     m_crucialVoxel = voxel(cell);
+    m_crucialVoxelDestroyed = false;
+}
+
+bool WorldObject::isCrucialVoxelDestroyed(){
+    return m_crucialVoxelDestroyed;
 }
 
 void WorldObject::onCollision() {
@@ -154,5 +162,9 @@ float WorldObject::collisionFieldOfDamage() const {
 
 void WorldObject::setCollisionFieldOfDamage(float collisionFieldOfDamage) {
     m_collisionFieldOfDamage = collisionFieldOfDamage;
+}
+
+bool WorldObject::passiveForCollisionDetection() {
+    return false;
 }
 

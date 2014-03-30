@@ -45,7 +45,6 @@ if(WIN32)
         $ENV{GLFW_HOME}/bin
         $ENV{GLFW_HOME}/bin/Release/x64
         DOC "The GLFW binary")
-
 endif()
     
 if(GLFW_INCLUDE_DIR AND GLFW_LIBRARY)

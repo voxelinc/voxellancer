@@ -1,6 +1,5 @@
 #include "elasticimpulsegenerator.h"
 
-#include <iostream>
 #include <cassert>
 
 #include "worldobject/worldobject.h"

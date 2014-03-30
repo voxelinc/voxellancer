@@ -2,7 +2,6 @@
 #include "randfloat.h"
 #include "randbool.h"
 
-#include <iostream>
 #include <cassert>
 
 #include <glm/glm.hpp>

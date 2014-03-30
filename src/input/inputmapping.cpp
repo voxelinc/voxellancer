@@ -15,19 +15,19 @@ InputMapping::InputMapping():
 
 }
 
-InputType InputMapping::type() {
+InputType InputMapping::type() const {
     return m_type;
 }
 
-int InputMapping::index() {
+int InputMapping::index() const {
     return m_index;
 }
 
-float InputMapping::maxValue() {
+float InputMapping::maxValue() const {
     return m_maxValue;
 }
 
-float InputMapping::idleValue() {
+float InputMapping::idleValue() const {
     return m_idleValue;
 }
 

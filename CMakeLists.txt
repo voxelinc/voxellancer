@@ -3,17 +3,19 @@ cmake_minimum_required(VERSION 2.8.9 FATAL_ERROR)
 # PROJECT DESCRIPTION
 set(META_PROJECT_NAME "voxellancer")
 set(META_VERSION_MAJOR "0")
-set(META_VERSION_MINOR "1")
+set(META_VERSION_MINOR "2")
 set(META_VERSION_PATCH "0")
 set(META_VERSION "${META_VERSION_MAJOR}.${META_VERSION_MINOR}.${META_VERSION_PATCH}")
 set(META_AUTHOR_ORGANIZATION "voxelinc")
 set(META_AUTHOR_DOMAIN "https://github.com/voxelinc/voxellancer/")
 
+set(VOXELLANCER_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
 # OPTIONS
 option(OPTION_LIMIT_CONFIGS "Generate limited configs (Release; Debug)" ON)
 option(OPTION_ERRORS_AS_EXCEPTION "Throw exceptions" OFF)
 option(OPTION_CREATE_SUB_TEST "Create sub tests" OFF)
+option(OPTION_INCLUDE_VC_REDIST "Include VC redist" ON)
 
 
 # CMAKE CONFIGURATION
@@ -95,6 +97,7 @@ find_package(SFML REQUIRED)
 find_package(BANDIT REQUIRED)
 find_package(LibOVR REQUIRED)
 find_package(OpenMP REQUIRED)
+find_package(Lua52 REQUIRED)
 
 
 if(REGEX_USE_BOOST)
@@ -122,6 +125,7 @@ include_directories(
     ${SFML_INCLUDE_DIR}
     ${BANDIT_INCLUDE_DIR}
     ${LIBOVR_INCLUDE_DIRS}
+    ${LUA52_INCLUDE_DIR}
 )
 
 
@@ -162,6 +166,12 @@ source_group_by_path(${SOURCE_DIR} "\\.h$|\\.hpp$"
 source_group_by_path(${SOURCE_DIR} "\\.cpp$|\\.c$|\\.inl$"
     ${SOURCE_GROUP} ${SRC_FILES})
 
+# If we build for windows systems, we also include the resource file
+# containing the manifest, icon and other resources
+if(WIN32)
+  set(SRC_FILES ${SRC_FILES} "${SOURCE_DIR}/voxellancer.rc")
+endif(WIN32)
+
 add_executable(${target}
     ${SRC_FILES}
     ${SHADER_FILES}
@@ -176,6 +186,7 @@ set(LIBS_TO_LINK
     ${SFML_LIBRARIES}
     ${Boost_LIBRARIES}
     ${LIBOVR_LIBRARIES}
+    ${LUA52_LIBRARY}
     glow
     glowutils
     ${LIBS_TO_LINK}
@@ -196,7 +207,7 @@ set_target_properties(${target}
     DEBUG_POSTFIX "d${DEBUG_POSTFIX}"
 )
 
-set(BINARIES ${GLEW_BINARY} ${GLFW_BINARY} ${SFML_BINARIES})
+set(BINARIES ${GLEW_BINARY} ${GLFW_BINARY} ${SFML_BINARIES} ${LUA52_BINARY})
 
 if(WIN32)
     foreach( binary ${BINARIES})
@@ -205,25 +216,17 @@ if(WIN32)
     endforeach( binary )
 endif()
 
+#set(DOCUMENTATION doc/howto.md doc/luaapi.md)
+
 install(TARGETS ${target}
         RUNTIME DESTINATION .)
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/data
         DESTINATION .
         PATTERN "*.png" EXCLUDE)
 install(FILES ${BINARIES} DESTINATION .)
+install(FILES ${DOCUMENTATION} DESTINATION .)
 
-
-if(WIN32)
-    INSTALL(FILES vcredist_x64.exe DESTINATION ./)
-    SET(CPACK_NSIS_INSTALL_ROOT "$PROGRAMFILES64")
-    SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS 
-            ${CPACK_NSIS_EXTRA_INSTALL_COMMANDS} 
-            "ExecWait '\\\"$INSTDIR\\\\vcredist_x64.exe\\\" /quiet /norestart'")
-    SET(CPACK_PACKAGE_INSTALL_REGISTRY_KEY "${CPACK_PACKAGE_NAME} ${CPACK_PACKAGE_VERSION} (Win64)")
-endif() 
-set(CPACK_NSIS_CREATE_ICONS "CreateShortCut '\$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\${PROJECT_NAME}.lnk' '\$INSTDIR\\\\${PROJECT_NAME}.exe'")
-
-include(CPack)
+include(cmake/Package.cmake)
 
 include_directories(${SOURCE_DIR})
 

@@ -14,7 +14,7 @@
 
 class InputMapping;
 
-template<typename T> class Property;
+template<typename T> class PropertyImpl;
 template<typename T> class PropertyCollection;
 class AbstractPropertyCollection;
 
@@ -31,10 +31,8 @@ public:
 
     void load(const std::string& file, const std::string& prefix = "");
 
-    template<typename T> void registerProperty(Property<T>* prop);
-    template<typename T> void registerProperty(Property<T>* prop, const T& defaultValue);
-
-    template<typename T> void unregisterProperty(Property<T>* prop);
+    template<typename T> PropertyImpl<T>* getImpl(const std::string& key);
+    template<typename T> PropertyImpl<T>* getImpl(const std::string& key, const T& defaultValue);
 
     static PropertyManager* instance();
     static void reset();

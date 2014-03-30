@@ -63,8 +63,8 @@ void VoxelCollisionAccumulator::parse(std::list<VoxelCollision>& voxelCollisions
 }
 
 void VoxelCollisionAccumulator::applyOnCollsionHooks(){
-    for (WorldObject* o : m_worldObjects){
-        o->onCollision();
+    for (WorldObject* object : m_worldObjects){
+        object->onCollision();
     }
 }
 

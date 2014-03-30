@@ -14,7 +14,6 @@
 #include "factions/faction.h"
 #include "factions/factionmatrix.h"
 #include "factions/factionrelation.h"
-#include "factions/playerfaction.h"
 
 
 DefendAreaTask::DefendAreaTask(Squad& squad, std::list<glm::vec3> points, float defendRange) :
@@ -55,14 +54,13 @@ void DefendAreaTask::onMemberJoin(Ship* member) {
 
 bool DefendAreaTask::isEnemyInRange() {
     m_enemies.clear();
-    Faction* enemyFaction;
     Sphere sphere(m_squad.leader()->transform().position(), m_defendRange);
     WorldTreeQuery query(&(World::instance()->worldTree()), &sphere, nullptr, m_collisionFilter.get());
     for (WorldObject *worldObject : query.intersectingWorldObjects()) {
         Ship* ship = dynamic_cast<Ship*>(worldObject);
         if (ship) {
-            enemyFaction = ship->character()->faction();
-            if (enemyFaction && enemyFaction != m_squad.leader()->character()->faction() && enemyFaction->relationTo(m_squad.leader()->character()->faction())->type() == FactionRelationType::Enemy) {
+            Faction& enemyFaction = ship->character()->faction();
+            if (enemyFaction.relationTo(m_squad.leader()->character()->faction()).type() == FactionRelationType::Enemy) {
                 m_enemies.push_back(worldObject->handle());
             } else {
                 continue;
@@ -93,4 +91,16 @@ void DefendAreaTask::updateFight() {
     for (Ship* ship : m_squad.members()) {
         ship->character()->setTask(std::make_shared<FightTask>(ship->boardComputer(), m_enemies));
     }
+}
+
+void DefendAreaTask::addPoint(const glm::vec3& point) {
+    m_points.push_back(point);
+}
+
+const std::list<glm::vec3>& DefendAreaTask::points() {
+    return m_points;
+}
+
+float DefendAreaTask::range() {
+    return m_defendRange;
 }
