@@ -1,6 +1,6 @@
 Lua API bindings
 ================
-generated from 0f8b48c
+generated from 56f1b4a
 
 ## commonbindings.h
 
