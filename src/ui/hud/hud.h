@@ -89,5 +89,5 @@ protected:
     void updateScanner(float deltaSec);
     void updateFov();
 
-    void helloFunction(ClickType clicktype);
+    void openMenu(ClickType clicktype);
 };

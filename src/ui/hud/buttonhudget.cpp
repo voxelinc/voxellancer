@@ -3,9 +3,10 @@
 #include "hud.h"
 #include "buttonhudgetvoxels.h"
 
-ButtonHudget::ButtonHudget(HUD* hud, glm::vec3 direction, float scale, std::string content, FontSize fontSize, bool bounds) :
+ButtonHudget::ButtonHudget(HUD* hud, glm::vec3 direction, std::function<void(ClickType clickType)>& callback, float scale, std::string content, FontSize fontSize, bool bounds) :
 Hudget(hud),
-m_buttonVoxels(new ButtonHudgetVoxels(this, direction, scale, content, fontSize, bounds))
+m_buttonVoxels(new ButtonHudgetVoxels(this, direction, scale, content, fontSize, bounds)),
+m_callback(callback)
 {
     m_buttonVoxels->updateBounds();
 }
@@ -24,6 +25,7 @@ bool ButtonHudget::isAt(const Ray& ray) const {
 }
 
 void ButtonHudget::onClick(ClickType clickType) {
+    assert(m_callback);
     m_callback(clickType);
 }
 

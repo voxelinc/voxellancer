@@ -50,8 +50,7 @@ HUD::HUD(Player* player):
     m_scanner(new WorldTreeScanner()),
     m_targetName(new TextFieldHudget(this, glm::normalize(glm::vec3(0, -1.1f, -2)), 0.025f, "")),
     m_speedLabel(new TextFieldHudget(this, glm::normalize(glm::vec3(1.5f, -1.1f, -2)), 0.020f, "")),
-    m_menuButton(new ButtonHudget(this, glm::normalize(glm::vec3(-1.5f, 1.1f, -2)), 0.01f, "MENU")),
-    m_target(nullptr)
+    m_menuButton(new ButtonHudget(this, glm::normalize(glm::vec3(-1.5f, 1.1f, -2)), (std::function<void(ClickType clickType)>)std::bind(&HUD::openMenu, this, std::placeholders::_1), 0.01f, "MENU")),
     m_target(nullptr),
     m_drawHud("vfx.drawhud")
 {
@@ -61,8 +60,6 @@ HUD::HUD(Player* player):
     m_hudgets.push_back(m_targetName.get());
     m_hudgets.push_back(m_speedLabel.get());
     m_hudgets.push_back(m_menuButton.get());
-    std::function<void(ClickType clickType)> callbackFunction = std::bind(&HUD::helloFunction, this, std::placeholders::_1);
-    m_menuButton->registerCallback(callbackFunction);
 }
 
 HUD::~HUD() = default;
@@ -248,8 +245,8 @@ float HUD::fovx() const {
     return m_fovx;
 }
 
-void HUD::helloFunction(ClickType clicktype) {
-    World::instance()->showText("new Text", this);
+void HUD::openMenu(ClickType clicktype) {
+    glow::debug("Not yet implemented");
 }
 
 void HUD::setViewer(Viewer& viewer) {
