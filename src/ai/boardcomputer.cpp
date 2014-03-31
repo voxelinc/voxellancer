@@ -148,6 +148,7 @@ void BoardComputer::update(float deltaSec) {
     if(m_overwriteEngineState) {
         m_worldObject->components().setEngineState(m_engineState);
     }
+    m_engineState.clear();
     m_overwriteEngineState = false;
 }
 
