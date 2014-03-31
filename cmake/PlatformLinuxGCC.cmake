@@ -13,9 +13,13 @@ else()
 endif()
 
 if(GCC_VERSION VERSION_LESS 4.9)
-    set(REGEX_USE_BOOST TRUE)
+    set(USE_BOOST ${USE_BOOST} regex)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DREGEX_USE_BOOST")
 endif()
+
+set(USE_BOOST ${USE_BOOST} system filesystem)  # until gcc implements <filesystem>
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DFILESYSTEM_USE_BOOST")
+
 
 set(LINUX_COMPILE_DEFS
 	LINUX	                  # Linux system

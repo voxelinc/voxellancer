@@ -1,49 +1,27 @@
 #include "filesystem.h"
 
-#ifdef WIN32
-#include <filesystem>
-namespace std {
-    namespace sys = tr2::sys;
-}
-#else
-#include <dirent.h>
-#include <unistd.h>
-#endif
-
 #include <fstream>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <stdio.h>
 #include <stdlib.h>
 
+#include "def_filesystem.h"
 
 bool FileSystem::exists(const std::string& path) {
-    struct stat info;
-    if (stat(path.c_str(), &info) != 0) {
-        return false;
-    } else {
-        int exists = info.st_mode & (S_IFREG | S_IFDIR); // is file or directory
-        return exists != 0;
-    }
+    return filesystem::exists(filesystem::path(path));
 }
 
 bool FileSystem::removeFile(const std::string& path) {
-    return ::remove(path.c_str()) == 0;
+    return filesystem::remove(filesystem::path(path));
 }
 
 bool FileSystem::createDirectory(const std::string& path) {
-#ifdef WIN32
-    return std::sys::create_directory(std::sys::path(path));
-#else
-    return mkdir(path.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) != 0;
-#endif
+    return filesystem::create_directory(filesystem::path(path));
 }
 
 bool FileSystem::removeDirectory(const std::string& path) {
-#ifdef WIN32 
-    return std::sys::remove_directory(std::sys::path(path));
+#ifdef WIN32
+    return filesystem::remove_directory(filesystem::path(path));
 #else
-    return rmdir(path.c_str()) == 0;
+    return filesystem::remove(filesystem::path(path));
 #endif
 }
 
