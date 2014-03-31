@@ -5,14 +5,16 @@
 
 #include "randfloat.h"
 
-
+/**
+ *  this needs to be a power of 2!
+ */
 const static int POOL_SIZE = 1024;
 
 std::vector<float> RandFloatPool::s_pool;
 int RandFloatPool::s_iter(0);
 
 float RandFloatPool::rand(float from, float to) {
-    float randBase = s_pool[s_iter & 0x3FF];
+    float randBase = s_pool[s_iter & (POOL_SIZE-1)];
     s_iter++;
 
     return from + (to - from) * randBase;

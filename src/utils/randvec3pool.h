@@ -14,6 +14,10 @@ class RandVec3Pool {
 public:
 	static glm::vec3 randUnitVec();
 
+    class _Init {
+    public:
+        _Init();
+    };
 
 protected:
 	static std::vector<glm::vec3> s_pool;

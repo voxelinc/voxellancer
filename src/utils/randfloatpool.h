@@ -18,11 +18,10 @@ public:
         _Init();
     };
 
-
 protected:
-    static void initialize();
-
     static std::vector<float> s_pool;
 	static int s_iter;
+
+    static void initialize();
 };
 
