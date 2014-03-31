@@ -37,8 +37,8 @@ go_bandit([](){
             AssertThat(files, Contains(pathBase + "lulz.mp3"));
         });
 
-        it("doesn't care about slash at the end", [&]() {
-            DirectoryReader r(pathBase);
+        it("doesn't care about missing slash at the end", [&]() {
+            DirectoryReader r(pathBase.substr(0, pathBase.size()-1));
 
             std::list<std::string> files = r.read();
 
