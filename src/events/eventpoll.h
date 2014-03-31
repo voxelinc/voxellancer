@@ -1,16 +1,16 @@
 #pragma once
 
-#include <functional>
 #include <memory>
 
 #include "scripting/scriptable.h"
 
+#include "utils/callback.h"
 #include "utils/handle/handle.h"
 
 
 class EventPoll: public Scriptable {
 public:
-    EventPoll(const std::function<void()>& callback);
+    EventPoll(const std::shared_ptr<Callback>& callback);
     ~EventPoll();
 
     /*
@@ -25,7 +25,7 @@ public:
     Handle<EventPoll>& handle();
 
 protected:
-    std::function<void()> m_callback;
+    std::shared_ptr<Callback> m_callback;
     Handle<EventPoll> m_handle;
     bool m_active;
 

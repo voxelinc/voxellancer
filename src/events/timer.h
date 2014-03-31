@@ -7,7 +7,7 @@
 
 class Timer: public EventPoll {
 public:
-    Timer(float interval, const std::function<void()>& callback);
+    Timer(float interval, const std::shared_ptr<Callback>& callback);
 
     virtual void update(float deltaSec) override;
 

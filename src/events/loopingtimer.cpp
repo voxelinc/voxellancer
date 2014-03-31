@@ -2,8 +2,9 @@
 
 #include "glow/logging.h"
 
-LoopingTimer::LoopingTimer(float interval, const std::function<void()>& callback):
+LoopingTimer::LoopingTimer(float interval, const std::shared_ptr<Callback>& callback):
     Timer(interval, callback)
 {
-    glow::debug("Created loopingtimeer %;", this);
+
 }
+

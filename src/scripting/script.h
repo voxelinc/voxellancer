@@ -3,6 +3,8 @@
 #include <memory>
 #include <string>
 
+#include "utils/handle/handle.h"
+
 
 class LuaWrapper;
 
@@ -21,11 +23,17 @@ public:
 
     void start();
 
+    LuaWrapper& lua();
+
+    Handle<Script>& handle();
+
     const std::string& debugStatus();
     int apiSetDebugStatus(const std::string& string);
 
+
 protected:
     std::unique_ptr<LuaWrapper> m_lua;
+    Handle<Script> m_handle;
     bool m_started;
     std::string m_debugStatus;
 };

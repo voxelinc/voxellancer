@@ -15,6 +15,8 @@
 #include "resource/worldobjectbuilder.h"
 
 #include "scripting/elematelua/luawrapper.h"
+#include "scripting/gameplayscript.h"
+#include "scripting/scriptcallback.h"
 
 #include "world/world.h"
 #include "world/god.h"
@@ -128,11 +130,11 @@ int WorldObjectBindings::apiSetOrientation(apikey key, const glm::vec3& orientat
 apikey WorldObjectBindings::apiOnWorldObjectDestroyed(apikey key, const std::string& callback) {
     WorldObject* worldObject = m_scriptEngine.get<WorldObject>(key);
 
-    if (!worldObject) { 
-        return -1; 
+    if (!worldObject) {
+        return -1;
     }
 
-    auto destructionPoll = std::make_shared<WorldObjectDestroyedPoll>(worldObject, [=] { m_lua.call(callback, key); });
+    auto destructionPoll = std::make_shared<WorldObjectDestroyedPoll>(worldObject, createCallback(callback, key));
     World::instance()->eventPoller().addPoll(destructionPoll);
     return destructionPoll->scriptKey();
 }
@@ -141,11 +143,11 @@ apikey WorldObjectBindings::apiOnWorldObjectDestroyed(apikey key, const std::str
 apikey WorldObjectBindings::apiOnAABBEntered(apikey key, const glm::vec3& llf, const glm::vec3& urb, const std::string& callback) {
     WorldObject* worldObject = m_scriptEngine.get<WorldObject>(key);
 
-    if (!worldObject) { 
-        return -1; 
+    if (!worldObject) {
+        return -1;
     }
 
-    auto enteredPoll = std::make_shared<AABBEnteredPoll>(worldObject, AABB(llf, urb), [=] { m_lua.call(callback, key); });
+    auto enteredPoll = std::make_shared<AABBEnteredPoll>(worldObject, AABB(llf, urb), createCallback(callback, key));
     World::instance()->eventPoller().addPoll(enteredPoll);
     return enteredPoll->scriptKey();
 }

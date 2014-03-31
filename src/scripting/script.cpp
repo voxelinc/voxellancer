@@ -5,6 +5,7 @@
 
 Script::Script():
     m_lua(new LuaWrapper()),
+    m_handle(this),
     m_started(false),
     m_debugStatus("")
 {
@@ -12,7 +13,9 @@ Script::Script():
     load("data/scripts/vec3.lua");
 }
 
-Script::~Script() = default;
+Script::~Script() {
+    m_handle.invalidate();
+}
 
 bool Script::started() const {
     return m_started;
@@ -31,6 +34,13 @@ void Script::start() {
     m_started = true;
 }
 
+LuaWrapper& Script::lua() {
+    return *m_lua.get();
+}
+
+Handle<Script>& Script::handle() {
+    return m_handle;
+}
 
 const std::string& Script::debugStatus() {
     return m_debugStatus;
@@ -40,3 +50,4 @@ int Script::apiSetDebugStatus(const std::string& string) {
     m_debugStatus = string;
     return 0;
 }
+

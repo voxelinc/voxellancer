@@ -3,7 +3,7 @@
 #include "worldobject/worldobject.h"
 
 
-WorldObjectDestroyedPoll::WorldObjectDestroyedPoll(WorldObject* worldObject, const std::function<void()>& callback) :
+WorldObjectDestroyedPoll::WorldObjectDestroyedPoll(WorldObject* worldObject, const std::shared_ptr<Callback>& callback) :
     EventPoll(callback),
     m_worldObject(worldObject->handle())
 {

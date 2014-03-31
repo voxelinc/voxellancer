@@ -11,7 +11,7 @@
 
 class AABBEnteredPoll : public EventPoll {
 public:
-    AABBEnteredPoll(WorldObject* worldObject, const AABB& aabb, const std::function<void()>& callback);
+    AABBEnteredPoll(WorldObject* worldObject, const AABB& aabb, const std::shared_ptr<Callback>& callback);
 
 
 protected:

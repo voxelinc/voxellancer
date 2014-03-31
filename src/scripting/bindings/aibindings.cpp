@@ -11,8 +11,10 @@
 #include "factions/factionmatrix.h"
 #include "factions/factionrelation.h"
 
-#include "scripting/scriptengine.h"
 #include "scripting/elematelua/luawrapper.h"
+#include "scripting/scriptcallback.h"
+#include "scripting/scriptengine.h"
+#include "scripting/gameplayscript.h"
 
 #include "worldobject/ship.h"
 #include "world/world.h"
@@ -20,7 +22,7 @@
 
 
 
-AiBindings::AiBindings(GamePlayScript& script): 
+AiBindings::AiBindings(GamePlayScript& script):
     Bindings(script)
 {
 
@@ -31,7 +33,7 @@ void AiBindings::initialize() {
     m_lua.Register("setFaction", this, &AiBindings::apiGetFaction);
     m_lua.Register("getFactionRelation", this, &AiBindings::apiGetFactionRelation);
     m_lua.Register("setFactionRelation", this, &AiBindings::apiSetFactionRelation);
-    
+
     m_lua.Register("onAiTaskFinished", this, &AiBindings::apiOnAiTaskFinished);
 
     m_lua.Register("createFlyToTask", this, &AiBindings::apiCreateFlyToTask);
@@ -44,9 +46,9 @@ void AiBindings::initialize() {
 std::string AiBindings::apiGetFaction(apikey key) {
     Ship* ship = m_scriptEngine.get<Ship>(key);
 
-    if (!ship) { 
+    if (!ship) {
         glow::warning("AiBindings: ship %; doesnt exist", key);
-        return ""; 
+        return "";
     }
 
     return ship->character()->faction().key();
@@ -59,7 +61,7 @@ int AiBindings::apiSetFaction(apikey key, const std::string& faction) {
         glow::warning("AiBindings: ship %; doesnt exist", key);
         return -1;
     }
-    
+
     Faction& f = World::instance()->factionMatrix().getFaction(faction);
     ship->character()->setFaction(f);
     return 0;
@@ -87,7 +89,7 @@ apikey AiBindings::apiOnAiTaskFinished(apikey key, const std::string& callback) 
 
     if (!aiTask) { return -1; }
 
-    auto finishedPoll = std::make_shared<AiTaskFinishedPoll>(aiTask, [=] { m_lua.call(callback, key); });
+    auto finishedPoll = std::make_shared<AiTaskFinishedPoll>(aiTask, createCallback(callback, key));
     World::instance()->eventPoller().addPoll(finishedPoll);
     return finishedPoll->scriptKey();
 }

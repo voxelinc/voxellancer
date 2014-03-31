@@ -3,7 +3,7 @@
 #include "ai/aitask.h"
 
 
-AiTaskFinishedPoll::AiTaskFinishedPoll(AiTask* aitask, const std::function<void()>& callback):
+AiTaskFinishedPoll::AiTaskFinishedPoll(AiTask* aitask, const std::shared_ptr<Callback>& callback):
     EventPoll(callback),
     m_aiTask(aitask->handle())
 {
@@ -16,3 +16,4 @@ bool AiTaskFinishedPoll::poll() {
 bool AiTaskFinishedPoll::isDead() {
     return poll();
 }
+
