@@ -24,6 +24,7 @@
 
 #include "player.h"
 #include "ui/hud/hud.h"
+#include "display/viewer.h"
 
 
 
@@ -36,6 +37,7 @@ GamePlay::GamePlay(Game* game) :
     m_soundManager(new SoundManager()),
     m_scenario(new ScriptedScenario(this, "data/scripts/scenarios/demo.lua"))
 {
+    updateView();
     setInitialSubState(m_runningState);
 
     m_runningState->pauseTrigger().setTarget(new TriggeredTransition(m_runningState, m_pausedState));
@@ -73,6 +75,7 @@ SoundManager& GamePlay::soundManager() {
 void GamePlay::loadScenario(int i) {
     m_soundManager->stopAll();
     m_scenario->clear();
+    updateView();
 
     switch (i) {
     case 0:
@@ -111,5 +114,9 @@ void GamePlay::onEntered() {
 void GamePlay::onLeft() {
     m_soundManager->deactivate();
     GameState::onLeft();
+}
+
+void GamePlay::updateView() {
+    World::instance()->player().hud().setView(&m_game->viewer().view());
 }
 

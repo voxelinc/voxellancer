@@ -14,7 +14,6 @@
 #include "collision/collisionfilter.h"
 
 #include "display/view.h"
-#include "display/viewer.h"
 
 #include "gamestate/game.h"
 
@@ -57,7 +56,8 @@ HUD::HUD(Player* player):
     m_scanner(new WorldTreeScanner()),
     m_elements(new HUDElements(*this)),
     m_target(nullptr),
-    m_drawHud("vfx.drawhud")
+    m_drawHud("vfx.drawhud"),
+    m_view(nullptr)
 {
     m_scanner->setScanRadius(1050.0f);
 
@@ -128,11 +128,10 @@ HUDObjectDelegate* HUD::objectDelegate(WorldObject* worldObject) {
 }
 
 void HUD::setCrossHairOffset(const glm::vec2& mousePosition) {
-    Viewer* viewer = &Game::instance()->viewer();
-
-    float fovy = viewer->view().fovy();
-    float nearZ = viewer->view().zNear();
-    float ar = viewer->view().aspectRatio();
+    assert(m_view);
+    float fovy = m_view->fovy();
+    float nearZ = m_view->zNear();
+    float ar = m_view->aspectRatio();
 
     float nearPlaneHeight = 2 * std::tan(fovy / 2.0f);
     float nearPlaneWidth = nearPlaneHeight * ar;
@@ -250,10 +249,13 @@ void HUD::updateScanner(float deltaSec) {
 }
 
 void HUD::updateFov() {
-    Viewer* viewer = &Game::instance()->viewer();
+    assert(m_view);
+    m_fovy = m_view->fovy() / 2;
+    m_fovx = glm::atan(glm::tan(m_fovy) * m_view->aspectRatio());
+}
 
-    m_fovy = viewer->view().fovy() / 2;
-    m_fovx = glm::atan(glm::tan(m_fovy) * viewer->view().aspectRatio());
+void HUD::setView(const View* view) {
+    m_view = view;
 }
 
 

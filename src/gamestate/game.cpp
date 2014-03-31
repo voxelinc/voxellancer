@@ -8,8 +8,6 @@
 #include "gamestate/gameplay/gameplay.h"
 
 
-Game* Game::s_instance(nullptr);
-
 Game::Game():
     GameState("Game", nullptr),
     m_hmdManager(HMDManager::instance()),
@@ -20,18 +18,6 @@ Game::Game():
 }
 
 Game::~Game() = default;
-
-Game* Game::instance() {
-    if (!s_instance) {
-        s_instance = new Game();
-    }
-    return s_instance;
-}
-
-void Game::tearDown() {
-    delete s_instance;
-    s_instance = nullptr;
-}
 
 GamePlay& Game::gamePlay() {
     return *m_gamePlay;

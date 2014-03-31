@@ -30,6 +30,7 @@ class Viewer;
 class WorldTreeScanner;
 class CrossHair;
 class TextFieldHudget;
+class View;
 
 class HUD {
 public:
@@ -59,6 +60,8 @@ public:
     void setTarget(WorldObject* target);
     WorldObject* target();
 
+    void setView(const View* view);
+
     void onClick(ClickType clickType);
 
     void update(float deltaSec);
@@ -76,7 +79,7 @@ public:
 
 protected:
     Player* m_player;
-    Viewer* m_viewer;
+    const View* m_view;
     Sphere m_sphere;
     Handle<WorldObject> m_target;
     Property<bool> m_drawHud;
