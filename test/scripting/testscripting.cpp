@@ -45,32 +45,31 @@ go_bandit([](){
         PropertyDirectory("data/equipment/weapons").read();
         PropertyDirectory("data/equipment/projectiles").read();
 
-        std::unique_ptr<ScriptEngine> scriptEngine;
         std::unique_ptr<GamePlayScript> script;
-        std::unique_ptr<Player> player;
 
         std::string callbackFunction = R"( function callback() setDebugStatus("callback!") end )";
 
 
         before_each([&](){
             World::reset(false);
-            player.reset(new Player());
-            World::instance()->setPlayer(*player);
-            scriptEngine.reset(new ScriptEngine(World::instance()));
-            script.reset(new GamePlayScript(scriptEngine.get()));
+            script.reset(new GamePlayScript(World::instance()->scriptEngine()));
             script->loadString(callbackFunction);
+        });
+
+        after_each([&]() {
+            script.reset();
         });
 
         it("can set debug status", [&]() {
             AssertThat(script->debugStatus(), Equals(""));
-            script->loadString(R"( 
-                setDebugStatus("success") 
+            script->loadString(R"(
+                setDebugStatus("success")
             )");
             AssertThat(script->debugStatus(), Equals("success"));
         });
 
         it("can spawn ships", [&]() {
-            script->loadString(R"( 
+            script->loadString(R"(
                 ship = createShip("basicship")
                 spawn(ship)
             )");
@@ -80,7 +79,7 @@ go_bandit([](){
 
         it("can access non existing playership", [&]() {
 
-            script->loadString(R"( 
+            script->loadString(R"(
                 ship = playerShip()
                 setDebugStatus(ship)
             )");
@@ -94,13 +93,16 @@ go_bandit([](){
             before_each([&]() {
                 ship.reset(new Ship());
                 World::instance()->player().setShip(ship.get());
-                scriptEngine->registerScriptable(ship.get());
+                World::instance()->scriptEngine().registerScriptable(ship.get());
             });
-       
+
+            after_each([&] () {
+                ship.reset();
+            });
 
             it("can access unscriptable playership", [&]() {
-                scriptEngine->unregisterScriptable(ship.get());
-                script->loadString(R"( 
+                World::instance()->scriptEngine().unregisterScriptable(ship.get());
+                script->loadString(R"(
                     ship = playerShip()
                     setDebugStatus(ship)
                 )");
@@ -110,7 +112,7 @@ go_bandit([](){
 
 
             it("can access scriptable playership", [&]() {
-                script->loadString(R"( 
+                script->loadString(R"(
                     ship = playerShip()
                     setDebugStatus(ship)
                 )");
@@ -120,7 +122,7 @@ go_bandit([](){
 
             it("can access positions", [&]() {
                 ship->transform().setPosition(glm::vec3(4, 5, 6));
-                script->loadString(R"( 
+                script->loadString(R"(
                     ship = playerShip()
                     p = position(ship)
                     setDebugStatus(p.x*100 + p.y*10 + p.z)
@@ -130,7 +132,7 @@ go_bandit([](){
             });
 
             it("can set positions", [&]() {
-                script->loadString(R"( 
+                script->loadString(R"(
                     ship = playerShip()
                     setPosition(ship, vec3(7,8,9))
                 )");
@@ -139,7 +141,7 @@ go_bandit([](){
             });
 
             it("can set positions", [&]() {
-                script->loadString(R"( 
+                script->loadString(R"(
                     ship = playerShip()
                     setPosition(ship, vec3(7,8,9))
                 )");
@@ -148,7 +150,7 @@ go_bandit([](){
             });
 
             it("can poll aabb", [&]() {
-                script->loadString(R"( 
+                script->loadString(R"(
                     onAABBEntered(playerShip(), vec3(-50,-50,-150), vec3(50,50,-100), "callback")
                 )");
                 World::instance()->eventPoller().update(1.0f);
@@ -164,7 +166,7 @@ go_bandit([](){
             });
 
             it("can poll flyto finished", [&]() {
-                script->loadString(R"( 
+                script->loadString(R"(
                     task = createFlyToTask(playerShip())
 	                setTargetPoint(task, vec3(0, 0, 10))
                     onAiTaskFinished(task, "callback")
@@ -186,7 +188,7 @@ go_bandit([](){
             it("can poll destruction", [&]() {
                 ship->addVoxel(new Voxel(glm::ivec3(1, 2, 3)));
                 ship->setCrucialVoxel(glm::ivec3(1, 2, 3));
-                script->loadString(R"( 
+                script->loadString(R"(
                     onWorldObjectDestroyed(playerShip(), "callback")
                 )");
 
@@ -200,8 +202,9 @@ go_bandit([](){
 
             it("can poll destruction on deleted ship", [&]() {
                 ship->addVoxel(new Voxel(glm::ivec3(1, 2, 3)));
+
                 ship->setCrucialVoxel(glm::ivec3(1, 2, 3));
-                script->loadString(R"( 
+                script->loadString(R"(
                     onWorldObjectDestroyed(playerShip(), "callback")
                 )");
 
@@ -215,7 +218,7 @@ go_bandit([](){
 
 
             it("can set fighttask", [&]() {
-                script->loadString(R"( 
+                script->loadString(R"(
                     task = createFightTask(playerShip())
                     target = createShip("basicship")
 	                addFightTaskTarget(task, target)
@@ -227,7 +230,7 @@ go_bandit([](){
             });
 
             it("can create squads", [&]() {
-                script->loadString(R"( 
+                script->loadString(R"(
                     createSquad(playerShip())
                 )");
 
@@ -237,7 +240,7 @@ go_bandit([](){
             });
 
             it("can add ships to squads", [&]() {
-                script->loadString(R"( 
+                script->loadString(R"(
                     squad = createSquad(playerShip())
                     s1 = createShip("basicship")
                     s2 = createShip("basicship")
@@ -250,7 +253,7 @@ go_bandit([](){
             });
 
             it("can create patrolwaypoint task with squads", [&]() {
-                script->loadString(R"( 
+                script->loadString(R"(
                     squad = createSquad(playerShip())
                     createPatrolWaypointsTask(squad)
                 )");
@@ -260,7 +263,7 @@ go_bandit([](){
             });
 
             it("can add waypoints to patrolwaypointtask", [&]() {
-                script->loadString(R"( 
+                script->loadString(R"(
                     squad = createSquad(playerShip())
                     task = createPatrolWaypointsTask(squad)
                     addPatrolwWaypointPoint(task, vec3(1,2,3))
@@ -271,7 +274,7 @@ go_bandit([](){
             });
 
             it("can create defend area task with squads", [&]() {
-                script->loadString(R"( 
+                script->loadString(R"(
                     squad = createSquad(playerShip())
                     createDefendAreaTask(squad, vec3(1,2,3), 3.14)
                 )");
@@ -285,19 +288,19 @@ go_bandit([](){
             });
 
             it("can add waypoints to defend area task", [&]() {
-                script->loadString(R"( 
+                script->loadString(R"(
                     squad = createSquad(playerShip())
                     task = createDefendAreaTask(squad, vec3(1,2,3), 3.14)
                     addDefendAreaPoint(task, vec3(3,4,5))
                 )");
 
                 DefendAreaTask* task = dynamic_cast<DefendAreaTask*>(ship->squadLogic()->squad()->task().get());
-            
+
                 AssertThat(task->points().size(), Equals(2));
                 AssertThat(task->points().front(), EqualsWithDelta(glm::vec3(1, 2, 3), 0.001f));
                 AssertThat(task->points().back(), EqualsWithDelta(glm::vec3(3, 4, 5), 0.001f));
             });
-        }); 
+        });
     });
 });
 

@@ -4,7 +4,9 @@
 
 #include "world/god.h"
 #include "world/world.h"
-#include "utils/randvec.h"
+#include "utils/randvec3.h"
+#include "utils/randvec3pool.h"
+#include "utils/randfloatpool.h"
 #include "utils/randfloat.h"
 #include "utils/randbool.h"
 
@@ -14,9 +16,9 @@
 
 
 VoxelParticleSpawnBase::VoxelParticleSpawnBase(
-    const VoxelCluster* creator, 
+    const VoxelCluster* creator,
     char* dampeningName,
-    char* angularDampeningName, 
+    char* angularDampeningName,
     char* baseForceName,
     char* angularBaseForceName):
     m_creator(creator),
@@ -36,6 +38,8 @@ VoxelParticleSpawnBase::VoxelParticleSpawnBase(
     m_particleAngularBaseForce(angularBaseForceName)
 {
 }
+
+VoxelParticleSpawnBase::~VoxelParticleSpawnBase() = default;
 
 void VoxelParticleSpawnBase::setPosition(const glm::vec3& position) {
     m_position = position;
@@ -72,16 +76,17 @@ void VoxelParticleSpawnBase::setImpactVector(const glm::vec3& impactVector) {
 }
 
 glm::vec3 VoxelParticleSpawnBase::createDirectionalSpeed() {
-    float speedVal = RandFloat::randomize(m_force, m_forceRandomization) * m_particleBaseForce;
-    glm::vec3 speedDir = RandVec3::randUnitVec();
+    float speedVal = RandFloatPool::randomize(m_force, m_forceRandomization) * m_particleBaseForce;
+    glm::vec3 speedDir = RandVec3Pool::randUnitVec();
 
     return speedVal * speedDir + m_impactVector;
 }
 
 glm::vec3 VoxelParticleSpawnBase::createAngularSpeed() {
-    return RandVec3::randUnitVec() * RandFloat::randomize(m_force, m_forceRandomization) * m_particleAngularBaseForce.get();
+    return RandVec3Pool::randUnitVec() * RandFloatPool::randomize(m_force, m_forceRandomization) * m_particleAngularBaseForce.get();
 }
 
 float VoxelParticleSpawnBase::createLifetime() {
-    return RandFloat::randomize(m_lifetime, m_lifetimeRandomization);
+    return RandFloatPool::randomize(m_lifetime, m_lifetimeRandomization);
 }
+
