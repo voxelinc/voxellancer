@@ -4,7 +4,9 @@
 
 #include "geometry/transform.h"
 
-/* Represents the camera. matrix thus is the view matrix for all other objects */
+/**
+ *  Represents the camera. matrix thus is the view matrix for all other objects
+ */
 class Camera : protected Transform { //protected so we don't have matrix, because we want view
 public:
     Camera(int viewportWidth, int viewportHeight);
