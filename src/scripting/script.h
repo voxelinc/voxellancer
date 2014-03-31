@@ -30,7 +30,6 @@ public:
     virtual void load(const std::string& path);
     virtual void loadString(const std::string& script);
 
-
     void update(float deltaSec);
 
     const std::string& debugStatus();
@@ -43,7 +42,6 @@ protected:
     ScriptState m_state;
     std::string m_debugStatus;
     std::vector<std::unique_ptr<Bindings>> m_bindings;
-
 
     void addBindings(Bindings* bindings);
 };
