@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <memory>
 
 #include "basescenario.h"
 
@@ -14,7 +15,7 @@ public:
 
 
 protected:
-    Mission* m_mission;
+    std::shared_ptr<Mission> m_mission;
 
     virtual void populateWorld() override;
 };

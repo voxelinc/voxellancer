@@ -38,11 +38,9 @@ public:
     */
     void fail();
 
-
     Handle<Mission>& handle();
 
     void update(float deltaSec);
-
 
 
 protected:

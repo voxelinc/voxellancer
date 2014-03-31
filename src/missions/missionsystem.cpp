@@ -1,7 +1,5 @@
 #include "missionsystem.h"
 
-#include <iostream>
-
 #include "scripting/scriptengine.h"
 
 #include "world/world.h"
@@ -16,29 +14,27 @@ MissionSystem::MissionSystem()
 MissionSystem::~MissionSystem() = default;
 
 void MissionSystem::update(float deltaSec) {
-    for (auto i = m_missions.begin(); i != m_missions.end(); ) {
-        Mission* mission = i->get();
+    for (auto iter = m_missions.begin(); iter != m_missions.end(); ) {
+        Mission* mission = iter->second.get();
 
         mission->update(deltaSec);
 
         if (mission->state() != MissionState::Running) {
-            i = m_missions.erase(i);
+            iter = m_missions.erase(iter);
         } else {
-            ++i;
+            ++iter;
         }
     }
 }
 
-void MissionSystem::addMission(Mission* mission) {
-    m_missions.push_back(std::unique_ptr<Mission>(mission));
-    World::instance()->scriptEngine().registerScriptable(mission);
+void MissionSystem::addMission(std::shared_ptr<Mission> mission) {
+    m_missions[mission.get()] = mission;
+    World::instance()->scriptEngine().registerScriptable(mission.get());
     mission->start();
 }
 
 void MissionSystem::removeMission(Mission* mission) {
-    m_missions.remove_if([&] (std::unique_ptr<Mission> &missionPtr) {
-        return missionPtr.get() == mission;
-    });
+    m_missions.erase(mission);
     World::instance()->scriptEngine().unregisterScriptable(mission);
 }
 

@@ -29,7 +29,7 @@ void ExternalMissionBindings::bind() {
 apikey ExternalMissionBindings::apiMissionStart(const std::string& name) {
     std::string path = std::string("data/scripts/missions/") + name + ".lua";
 
-    Mission* mission = new Mission(path);
+    auto mission = std::make_shared<Mission>(path);
     World::instance()->missionSystem().addMission(mission);
 
     return mission->scriptKey();

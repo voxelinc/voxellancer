@@ -1,7 +1,7 @@
 #pragma once
 
-#include <list>
 #include <memory>
+#include <unordered_map>
 
 
 class Mission;
@@ -13,11 +13,11 @@ public:
 
     void update(float deltaSec);
 
-    void addMission(Mission* mission);
+    void addMission(std::shared_ptr<Mission> mission);
     void removeMission(Mission* mission);
 
 
 protected:
-    std::list<std::unique_ptr<Mission>> m_missions;
+    std::unordered_map<Mission*, std::shared_ptr<Mission>> m_missions;
 };
 
