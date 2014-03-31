@@ -10,9 +10,9 @@ class VoxelCluster;
 class WorldObject;
 class WorldObjectComponents;
 
-/*
-    Sets up WorldObject by the settinsg provided by properties
-*/
+/**
+ *    Sets up WorldObject by the settinsg provided by properties
+ */
 class WorldObjectBuilder {
 public:
     WorldObjectBuilder(const std::string& name);

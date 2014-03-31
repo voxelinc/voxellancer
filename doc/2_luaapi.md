@@ -1,6 +1,16 @@
 Lua API bindings
 ================
-generated from 53857a7
+generated from a47d65f
+
+## squadbindings.h
+
+    apikey createSquad(apikey leader);
+    int joinSquad(apikey squad, apikey ship);
+    int createPatrolWaypointsTask(apikey squad);
+    int addPatrolwWaypointPoint(apikey task, const glm::vec3& point);
+    int createDefendAreaTask(apikey squad, const glm::vec3& point, float range);
+    int addDefendAreaPoint(apikey task, const glm::vec3& point);
+
 
 ## commonbindings.h
 
