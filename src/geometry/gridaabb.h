@@ -12,28 +12,28 @@
 class GridAABB {
 public:
     GridAABB();
-    GridAABB(const glm::ivec3 &llf, const glm::ivec3 &rub);
+    GridAABB(const glm::ivec3 &llf, const glm::ivec3 &urb);
 
     const glm::ivec3 &llf() const;
     void setLLF(const glm::ivec3& llf);
 
-    const glm::ivec3 &rub() const;
-    void setRUB(const glm::ivec3& rub);
+    const glm::ivec3 &urb() const;
+    void setURB(const glm::ivec3& urb);
 
     bool contains(const glm::ivec3& cell) const;
 
     int extent(Axis axis) const;
 
     /*
-        Distance from LLF to RUB
+        Distance from LLF to URB
     */
     float diameter() const;
-    
+
     bool operator==(const GridAABB& other) const;
 
 
 protected:
     glm::ivec3 m_llf;
-    glm::ivec3 m_rub;
+    glm::ivec3 m_urb;
 };
 

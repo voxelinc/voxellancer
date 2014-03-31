@@ -210,7 +210,7 @@ VoxelTreeNode* VoxelTreeNode::cellSubnode(const glm::ivec3& cell) {
 }
 
 void VoxelTreeNode::calculateSpherePosition(const Transform& transform) {
-    glm::vec3 center = static_cast<glm::vec3>(m_gridAABB.rub() + m_gridAABB.llf()) / 2.0f;
+    glm::vec3 center = static_cast<glm::vec3>(m_gridAABB.urb() + m_gridAABB.llf()) / 2.0f;
     m_sphere.setPosition(transform.applyTo(center));
 
     m_cachedSphereTransform.setPosition(transform.position());
@@ -222,7 +222,7 @@ void VoxelTreeNode::calculateSphereRadius(const Transform& transform) {
     if(isAtomic()) {
         m_sphere.setRadius(0.5f * transform.scale());
     } else {
-        m_sphere.setRadius((glm::length(glm::vec3(m_gridAABB.rub() - m_gridAABB.llf() + glm::ivec3(1, 1, 1))/2.0f)) * transform.scale()) ;
+        m_sphere.setRadius((glm::length(glm::vec3(m_gridAABB.urb() - m_gridAABB.llf() + glm::ivec3(1, 1, 1))/2.0f)) * transform.scale()) ;
     }
 
     m_cachedSphereTransform.setScale(transform.scale());
