@@ -38,6 +38,7 @@
 #include "gamestate/gameplay/gameplayscene.h"
 
 #include "utils/filesystem.h"
+
 #include "world/world.h"
 
 static GLint MajorVersionRequire = 3;
@@ -150,7 +151,6 @@ static void mainloop() {
         glfwPollEvents();
     }
 }
-
 
 void toggleFullScreen() {
     ContextProvider::instance()->toggleFullScreen();
