@@ -1,7 +1,8 @@
 #include "filesystem.h"
 
-#include <fstream>
 #include <stdlib.h>
+
+#include <glow/logging.h>
 
 #include "def_filesystem.h"
 
@@ -26,15 +27,12 @@ bool FileSystem::removeDirectory(const std::string& path) {
 }
 
 bool FileSystem::copyFile(const std::string& from, const std::string& to) {
-    std::ifstream  src(from, std::ios::binary);
-    if (!src.is_open()) {
+    try {
+        filesystem::copy_file(filesystem::path(from), filesystem::path(to), filesystem::copy_option::fail_if_exists);
+    } catch (const filesystem::filesystem_error& e) {
+        glow::warning("filesystem: %;", e.what());
         return false;
     }
-    std::ofstream  dst(to, std::ios::binary);
-    if (!dst.is_open()) {
-        return false;
-    }
-    dst << src.rdbuf();
     return true;
 }
 
