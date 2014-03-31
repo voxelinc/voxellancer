@@ -52,11 +52,13 @@ GamePlayFreecamInput::GamePlayFreecamInput() :
     m_rotateUpdate(0),
 
     prop_moveFactor("input.flycamMoveFactor", 1.0f),
-    prop_rotateFactor("input.flycamRotateFactor", 0.02f)
+    prop_rotateFactor("input.flycamRotateFactor", 0.5f),
+    prop_mouseMultiplier("input.flycamMouseMultiplier", 1.0f)
 {
     addActionsToVector();
 
     m_lastfocus = glfwGetWindowAttrib(glfwGetCurrentContext(), GLFW_FOCUSED);
+    m_cursorMaxDistance = glm::min(ContextProvider::instance()->resolution().width(), ContextProvider::instance()->resolution().height()) / 2;
 
     retrieveInputValues();
 
@@ -66,6 +68,7 @@ GamePlayFreecamInput::GamePlayFreecamInput() :
 
 void GamePlayFreecamInput::resizeEvent(const unsigned int width, const unsigned int height) {
     m_lastfocus = false; // through window resize the cursor position is scrambled
+    m_cursorMaxDistance = glm::min(ContextProvider::instance()->resolution().width(), ContextProvider::instance()->resolution().height()) / 2;
 }
 
 void GamePlayFreecamInput::update(float deltaSec) {
@@ -128,15 +131,15 @@ void GamePlayFreecamInput::processMouseUpdate(float deltaSec) {
     glm::vec3 rot;
     x = ContextProvider::instance()->resolution().width() / 2 - (int)floor(x);
     y = ContextProvider::instance()->resolution().height() / 2 - (int)floor(y);
-    //x = glm::min((double)m_cursorMaxDistance, x);
-    //y = glm::min((double)m_cursorMaxDistance, y);
+    x = glm::min((double)m_cursorMaxDistance, x);
+    y = glm::min((double)m_cursorMaxDistance, y);
     rot = glm::vec3(y, x, 0);
-    //rot /= m_cursorMaxDistance;
+    rot /= m_cursorMaxDistance;
 
     if (glm::length(rot) < prop_deadzoneMouse) {
         rot = glm::vec3(0);
     }
-    m_rotateUpdate += rot;
+    m_rotateUpdate += rot * prop_mouseMultiplier.get();
 
     x = ContextProvider::instance()->resolution().width() / 2;
     y = ContextProvider::instance()->resolution().height() / 2;

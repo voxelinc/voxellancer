@@ -43,6 +43,7 @@ protected:
     std::vector<ActionKeyMapping*> m_actions;
 
     int m_lastfocus;
+    int m_cursorMaxDistance;
 
     void processUpdate();
     void processMouseUpdate(float deltaSec);
@@ -77,6 +78,7 @@ protected:
     glm::vec3 m_rotateUpdate;
     Property<float> prop_moveFactor;
     Property<float> prop_rotateFactor;
+    Property<float> prop_mouseMultiplier;
     glm::vec3 m_position;
     glm::quat m_orientation;
 };

@@ -105,6 +105,7 @@ GamePlayNormalInput::GamePlayNormalInput(Player* player) :
 
 void GamePlayNormalInput::resizeEvent(const unsigned int width, const unsigned int height) {
     m_lastfocus = false; // through window resize everything becomes scrambled
+    m_cursorMaxDistance = glm::min(ContextProvider::instance()->resolution().width(), ContextProvider::instance()->resolution().height()) / 2;
 }
 
 void GamePlayNormalInput::keyCallback(int key, int scancode, int action, int mods) {
