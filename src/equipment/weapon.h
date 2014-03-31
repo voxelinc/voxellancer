@@ -18,7 +18,7 @@ enum class WeaponType {
 };
 
 /**
-*   Weapon to be mounted to a HardPoint
+*   Weapon to be mounted to a Hardpoint
 */
 
 class Weapon: public Equipment {
