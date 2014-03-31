@@ -166,6 +166,12 @@ source_group_by_path(${SOURCE_DIR} "\\.h$|\\.hpp$"
 source_group_by_path(${SOURCE_DIR} "\\.cpp$|\\.c$|\\.inl$"
     ${SOURCE_GROUP} ${SRC_FILES})
 
+# If we build for windows systems, we also include the resource file
+# containing the manifest, icon and other resources
+if(WIN32)
+  set(SRC_FILES ${SRC_FILES} "${SOURCE_DIR}/voxellancer.rc")
+endif(WIN32)
+
 add_executable(${target}
     ${SRC_FILES}
     ${SHADER_FILES}
@@ -210,12 +216,15 @@ if(WIN32)
     endforeach( binary )
 endif()
 
+#set(DOCUMENTATION doc/howto.md doc/luaapi.md)
+
 install(TARGETS ${target}
         RUNTIME DESTINATION .)
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/data
         DESTINATION .
         PATTERN "*.png" EXCLUDE)
 install(FILES ${BINARIES} DESTINATION .)
+install(FILES ${DOCUMENTATION} DESTINATION .)
 
 include(cmake/Package.cmake)
 

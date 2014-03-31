@@ -61,9 +61,9 @@ bool Capsule::nearTo(const TAABB<int>& aabb) const {
     glm::vec3 a(m_origin - extendDirection);
     glm::vec3 b(m_origin + m_direction + extendDirection);
     glm::ivec3 llf(std::min(a.x, b.x), std::min(a.y, b.y), std::min(a.z, b.z));
-    glm::ivec3 rub(std::max(a.x, b.x), std::max(a.y, b.y), std::max(a.z, b.z));
+    glm::ivec3 urb(std::max(a.x, b.x), std::max(a.y, b.y), std::max(a.z, b.z));
 
-    TAABB<int> lineAABB(llf, rub);
+    TAABB<int> lineAABB(llf, urb);
     return lineAABB.intersects(aabb);
 }
 
