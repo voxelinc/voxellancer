@@ -12,14 +12,14 @@ ButtonHudgetVoxels::ButtonHudgetVoxels(ButtonHudget* buttonHudget, glm::vec3 dir
     m_bounds(bounds),
     m_hudget(buttonHudget)
 {
-    setContent(content);
+    setText(content);
 }
 
 ButtonHudgetVoxels::~ButtonHudgetVoxels() = default;
 
 void ButtonHudgetVoxels::updateBounds() {
     m_buttonVoxels.reset(new VoxelCluster(m_scale));
-    int width = (int)(m_width/m_scale)*m_content.size()+1;
+    int width = (int)(m_width/m_scale)*m_text.size()+1;
     int height = (int)(m_height/m_scale)*2;
     for (int i = 0; i < width; i++) {
         for (int j = 0; j < height; j++) {
@@ -42,10 +42,10 @@ void ButtonHudgetVoxels::draw() {
     TextFieldHudgetVoxels::draw();
 }
 
-void ButtonHudgetVoxels::setContent(std::string content) {
-    if (m_content.compare(content) == 0) {
+void ButtonHudgetVoxels::setText(const std::string& text) {
+    if (m_text.compare(text) == 0) {
         return;
     }
-    TextFieldHudgetVoxels::setContent(content);
+    TextFieldHudgetVoxels::setText(text);
     updateBounds();
 }

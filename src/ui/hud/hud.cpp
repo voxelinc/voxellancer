@@ -65,12 +65,12 @@ HUD::HUD(Player* player):
     m_view(nullptr)
 {
     m_scanner->setScanRadius(1050.0f);
-    m_hudgets.push_back(m_targetName.get());
-    m_hudgets.push_back(m_speedLabel.get());
-    m_hudgets.push_back(m_menuButton.get());
 
     m_elements->addHudget(m_aimHelper);
     m_elements->addHudget(m_crossHair);
+    m_elements->addHudget(m_targetName);
+    m_elements->addHudget(m_speedLabel);
+    m_elements->addHudget(m_menuButton);
 }
 
 HUD::~HUD() = default;

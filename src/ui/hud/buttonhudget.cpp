@@ -34,5 +34,5 @@ void ButtonHudget::registerCallback(const std::function<void(ClickType clickType
 }
 
 void ButtonHudget::setContent(std::string content) {
-    m_buttonVoxels->setContent(content);
+    m_buttonVoxels->setText(content);
 }

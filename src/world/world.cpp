@@ -169,9 +169,3 @@ void World::printStatus() {
     glow::info("  VoxelCount: %;", voxelCount);
     glow::info("  ParticleCount: %;", particleCount);
 }
-
-void World::showText(std::string text, HUD* hud, float lifeTime) {
-    //m_textHudget.reset(new TextFieldHudget(hud, glm::normalize(glm::vec3(0, 0.05f, -1)), 0.03f, text));
-    m_textLifeTime = lifeTime;
-    m_textTimer = 0;
-}

@@ -84,12 +84,9 @@ protected:
     float m_fovy;
     float m_fovx;
 
-    std::unique_ptr<AimHelperHudget> m_aimHelper;
-    std::unique_ptr<CrossHair> m_crossHair;
-    std::unique_ptr<WorldTreeScanner> m_scanner;
-    std::unique_ptr<TextFieldHudget> m_speedLabel;
-    std::unique_ptr<TextFieldHudget> m_targetName;
-    std::unique_ptr<ButtonHudget> m_menuButton;
+    TextFieldHudget* m_speedLabel;
+    TextFieldHudget* m_targetName;
+    ButtonHudget* m_menuButton;
     CrossHair* m_crossHair;
     AimHelperHudget* m_aimHelper;
 
