@@ -25,6 +25,8 @@ public:
     void removeScript(const std::string & script);
     void reloadScripts();
 
+    bool hasFunction(const std::string & fun);
+
     static void reloadAll();
 
 
@@ -129,7 +131,7 @@ public:
         return pop<Ret...>();
     }
 
-    
+
     template<typename Return, typename Class, typename... Args>
     void Register(const std::string & name, Class * obj, Return(Class::* const method) (Args...))
     {
@@ -139,7 +141,7 @@ public:
 
         Register(name, function);
     };
-    
+
     template <typename Return, typename... Args>
     void Register(const std::string & name, std::function<Return(Args...)> function)
     {

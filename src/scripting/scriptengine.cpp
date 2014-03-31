@@ -1,30 +1,28 @@
 #include "scriptengine.h"
 
 #include <algorithm>
+#include <cassert>
 
 #include <glow/logging.h>
 
-#include "ai/aitask.h"
-
-#include "events/eventpoll.h"
-
-#include "worldobject/ship.h"
-#include "worldobject/worldobject.h"
-
-#include "gameplayscript.h"
 #include "scriptable.h"
+#include "script.h"
 
 
-ScriptEngine::ScriptEngine(World* world):
-    m_world(world),
-    m_keyIncrementor(1),
+ScriptEngine::ScriptEngine():
+    m_nextKey(1),
     m_running(false)
 {
 }
 
-ScriptEngine::~ScriptEngine() = default;
+ScriptEngine::~ScriptEngine() {
+    for (auto pair : m_scriptables) {
+        pair.second->setScriptKey(Scriptable::INVALID_KEY);
+    }
+    m_scripts.clear(); // delete scripts before scriptengine
+}
 
-void ScriptEngine::addScript(std::shared_ptr<GamePlayScript> script) {
+void ScriptEngine::addScript(std::shared_ptr<Script> script) {
     m_scripts.push_back(script);
     if (m_running) {
         script->start();
@@ -33,8 +31,8 @@ void ScriptEngine::addScript(std::shared_ptr<GamePlayScript> script) {
 
 void ScriptEngine::start() {
     m_running = true;
-    for (std::shared_ptr<GamePlayScript>& script : m_scripts) {
-        if (!script->started()) {
+    for (std::shared_ptr<Script>& script : m_scripts) {
+        if (script->state() == ScriptState::Idle) {
             script->start();
         }
     }
@@ -46,25 +44,49 @@ void ScriptEngine::stop() {
 
 void ScriptEngine::registerScriptable(Scriptable* scriptable) {
     if (scriptable->scriptKey() > 0) {
-        // This is legit indeed and happens when an object is created by a script
+        // This is legit and happens e.g. when an object is created by a script
         return;
     }
 
-    m_scriptables[m_keyIncrementor] = scriptable;
-    scriptable->setScriptKey(m_keyIncrementor);
+    m_scriptables[m_nextKey] = scriptable;
+    scriptable->setScriptKey(m_nextKey);
 
-    m_keyIncrementor++;
+    m_nextKey++;
 }
 
 void ScriptEngine::unregisterScriptable(Scriptable* scriptable) {
     if (scriptable->scriptKey() > 0) {
+        assert(keyValid(scriptable->scriptKey()));
+
         m_scriptables.erase(scriptable->scriptKey());
         scriptable->setScriptKey(Scriptable::INVALID_KEY);
     }
 }
 
+bool ScriptEngine::keyValid(int key) const {
+    return m_scriptables.find(key) != m_scriptables.end();
+}
+
+void ScriptEngine::update(float deltaSec) {
+    if (m_running) {
+        for (std::list<std::shared_ptr<Script>>::iterator iter = m_scripts.begin(); iter != m_scripts.end();) {
+            Script* script = iter->get();
+
+            if (script->state() == ScriptState::Running) {
+                script->update(deltaSec);
+            }
+
+            if (script->state() == ScriptState::Stopped) {
+                iter = m_scripts.erase(iter);
+            } else {
+                ++iter;
+            }
+        }
+    }
+}
+
 Scriptable* ScriptEngine::getScriptable(int key) {
-    if (key <= 0 || key >= m_keyIncrementor) {
+    if (key <= 0 || key >= m_nextKey) {
         glow::warning("ScriptEngine: script-key '%;' is not valid", key);
         return nullptr;
     } else {
@@ -76,9 +98,5 @@ Scriptable* ScriptEngine::getScriptable(int key) {
             return pair->second;
         }
     }
-}
-
-void ScriptEngine::update(float deltaSec) {
-
 }
 

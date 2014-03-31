@@ -2,6 +2,7 @@
 
 #include "ai/basictasks/flytotask.h"
 #include "ai/basictasks/fighttask.h"
+#include "ai/boardcomputer.h"
 #include "ai/character.h"
 
 #include "events/aitaskfinishedpoll.h"
@@ -11,6 +12,7 @@
 #include "factions/factionmatrix.h"
 #include "factions/factionrelation.h"
 
+#include "scripting/gameplayscript.h"
 #include "scripting/scriptengine.h"
 #include "scripting/elematelua/luawrapper.h"
 
@@ -18,35 +20,35 @@
 #include "world/world.h"
 
 
-
-
-AiBindings::AiBindings(GamePlayScript& script): 
+AiBindings::AiBindings(GamePlayScript& script):
     Bindings(script)
 {
 
 }
 
-void AiBindings::initialize() {
+void AiBindings::bind() {
     m_lua.Register("getFaction", this, &AiBindings::apiGetFaction);
     m_lua.Register("setFaction", this, &AiBindings::apiGetFaction);
     m_lua.Register("getFactionRelation", this, &AiBindings::apiGetFactionRelation);
     m_lua.Register("setFactionRelation", this, &AiBindings::apiSetFactionRelation);
-    
+
     m_lua.Register("onAiTaskFinished", this, &AiBindings::apiOnAiTaskFinished);
 
     m_lua.Register("createFlyToTask", this, &AiBindings::apiCreateFlyToTask);
     m_lua.Register("setTargetPoint", this, &AiBindings::apiSetTargetPoint);
     m_lua.Register("createFightTask", this, &AiBindings::apiCreateFightTask);
     m_lua.Register("addFightTaskTarget", this, &AiBindings::apiAddFightTaskTarget);
+
+    m_lua.Register("taskExecutor", this, &AiBindings::apiTaskExecutor);
 }
 
 
 std::string AiBindings::apiGetFaction(apikey key) {
     Ship* ship = m_scriptEngine.get<Ship>(key);
 
-    if (!ship) { 
+    if (!ship) {
         glow::warning("AiBindings: ship %; doesnt exist", key);
-        return ""; 
+        return "";
     }
 
     return ship->character()->faction().key();
@@ -59,12 +61,11 @@ int AiBindings::apiSetFaction(apikey key, const std::string& faction) {
         glow::warning("AiBindings: ship %; doesnt exist", key);
         return -1;
     }
-    
+
     Faction& f = World::instance()->factionMatrix().getFaction(faction);
     ship->character()->setFaction(f);
     return 0;
 }
-
 
 float AiBindings::apiGetFactionRelation(const std::string& factionA, const std::string& factionB) {
     FactionMatrix& factions = World::instance()->factionMatrix();
@@ -81,22 +82,29 @@ int AiBindings::apiSetFactionRelation(const std::string& factionA, const std::st
     return 0;
 }
 
-
 apikey AiBindings::apiOnAiTaskFinished(apikey key, const std::string& callback) {
     AiTask* aiTask = m_scriptEngine.get<AiTask>(key);
 
-    if (!aiTask) { return -1; }
+    if (!aiTask) {
+        glow::warning("AiBindings: AiTask '%;' doesn't exist", key);
+        return -1;
+    }
 
     auto finishedPoll = std::make_shared<AiTaskFinishedPoll>(aiTask, [=] { m_lua.call(callback, key); });
+
     World::instance()->eventPoller().addPoll(finishedPoll);
+    m_script.addLocal(finishedPoll);
+
     return finishedPoll->scriptKey();
 }
-
 
 apikey AiBindings::apiCreateFlyToTask(apikey key) {
     Ship* ship = m_scriptEngine.get<Ship>(key);
 
-    if (!ship) { return -1; }
+    if (!ship) {
+        glow::warning("AiBindings: Ship '%;' doesn't exist", key);
+        return -1;
+    }
 
     auto flyToTask = std::make_shared<FlyToTask>(ship->boardComputer());
     m_scriptEngine.registerScriptable(flyToTask.get());
@@ -126,7 +134,10 @@ int AiBindings::apiSetTargetPoint(apikey key, const glm::vec3& point) {
 apikey AiBindings::apiCreateFightTask(apikey key) {
     Ship* ship = m_scriptEngine.get<Ship>(key);
 
-    if (!ship) { return -1; }
+    if (!ship) {
+        glow::warning("AiBindings: Ship '%;' doesn't exist", key);
+        return -1;
+    }
 
     FightTask* fightTask = new FightTask(ship->boardComputer(), {});
 
@@ -153,4 +164,19 @@ int AiBindings::apiAddFightTaskTarget(apikey key, apikey worldObjectKey) {
 
     fightTask->addTarget(worldObject->handle());
     return 0;
+}
+
+apikey AiBindings::apiTaskExecutor(apikey aiTask) {
+    AiTask* task = m_scriptEngine.get<AiTask>(aiTask);
+
+    if (!task) {
+        glow::warning("AiBindings: AiTask '%;' doesn't exist", aiTask);
+        return -1;
+    }
+
+    assert(task->boardComputer());
+    WorldObject* ship = task->boardComputer()->worldObject();
+    assert(ship);
+
+    return ship->scriptKey();
 }
