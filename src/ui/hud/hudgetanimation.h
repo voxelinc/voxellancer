@@ -3,9 +3,9 @@
 
 class Hudget;
 
-/*
-    Base class for Animations of Hudgets
-*/
+/**
+ *  Base class for Animations of Hudgets
+ */
 class HudgetAnimation {
 public:
     HudgetAnimation(Hudget& hudget);
