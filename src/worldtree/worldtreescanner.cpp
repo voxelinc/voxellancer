@@ -84,27 +84,16 @@ void WorldTreeScanner::update(float deltaSec, WorldObject* worldObject, const gl
 
 void WorldTreeScanner::scan(WorldObject* worldObject, const glm::vec3& position) {
     m_foundWorldObjects.clear();
-    m_lostWorldObjects.clear();
+    m_lostWorldObjects = std::move(m_worldObjects);
 
-    m_lostWorldObjects.insert(m_worldObjects.begin(), m_worldObjects.end());
+    m_worldObjects = worldObjectsInRange(worldObject, position);
 
-    std::unordered_set<WorldObject*> worldObjects(worldObjectsInRange(worldObject, position));
-
-    for (WorldObject* worldObject : worldObjects) {
+    for (WorldObject* worldObject : m_worldObjects) {
         bool existed = m_lostWorldObjects.erase(worldObject) > 0;
 
         if (!existed) {
             m_foundWorldObjects.insert(worldObject);
         }
-    }
-
-    /* These two loops are not performance - relevant because
-       the containers they iterate will mostly be empty */
-    for(WorldObject* worldObject : m_foundWorldObjects) {
-        m_worldObjects.insert(worldObject);
-    }
-    for(WorldObject* worldObject : m_lostWorldObjects) {
-        m_worldObjects.erase(worldObject);
     }
 
     for(WorldObject* worldObject : m_foundWorldObjects) {
