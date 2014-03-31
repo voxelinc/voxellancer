@@ -17,20 +17,22 @@
 #include "worldlogic.h"
 #include "god.h"
 #include "player.h"
+#include "missions/missionsystem.h"
 
 
 World *World::s_instance = nullptr;
 
 World::World():
-    m_player(nullptr),
+    m_player(new Player()),
+    m_scriptEngine(new ScriptEngine()),
     m_skybox(new Skybox()),
     m_worldLogic(new WorldLogic(*this)),
     m_worldTree(new WorldTree()),
     m_god(new God(*this)),
-    m_scriptEngine(new ScriptEngine(this)),
     m_particleEngine(new VoxelParticleEngine()),
     m_factionMatrix(new FactionMatrix()),
-    m_eventPoller(new EventPoller())
+    m_eventPoller(new EventPoller()),
+    m_missionSystem(new MissionSystem())
 {
 }
 
@@ -39,12 +41,7 @@ World::~World() {
 }
 
 Player& World::player() {
-    assert(m_player);
     return *m_player;
-}
-
-void World::setPlayer(Player& player) {
-    m_player = &player;
 }
 
 Skybox &World::skybox() {
@@ -79,6 +76,10 @@ EventPoller &World::eventPoller() {
     return *m_eventPoller;
 }
 
+MissionSystem& World::missionSystem() {
+    return *m_missionSystem;
+}
+
 std::unordered_set<WorldObject*> &World::worldObjects() {
     return m_worldObjects;
 }
@@ -90,10 +91,12 @@ std::unordered_set<Ship*> &World::ships() {
 void World::update(float deltaSecs) {
     m_deltaSec = deltaSecs;
 
+    m_player->update(deltaSecs);
     m_worldLogic->update(deltaSecs);
     m_scriptEngine->update(deltaSecs);
     m_eventPoller->update(deltaSecs);
     m_particleEngine->update(deltaSecs);
+    m_missionSystem->update(deltaSecs);
 
     for (WorldObject *worldObject : m_worldObjects) {
         worldObject->update(deltaSecs);
@@ -142,3 +145,19 @@ void World::removeWorldObject(WorldObject* worldObject) {
 
     m_scriptEngine->unregisterScriptable(worldObject);
 }
+
+void World::printStatus() {
+    int worldObjectCount = m_worldObjects.size();
+    int voxelCount = 0;
+    for (WorldObject* worldObject : m_worldObjects) {
+        voxelCount += worldObject->voxelMap().size();
+    }
+    int particleCount = m_particleEngine->particleCount();
+
+    glow::info("World: status report");
+    glow::info("  Worldobjects: %;", worldObjectCount);
+    glow::info("  VoxelCount: %;", voxelCount);
+    glow::info("  ParticleCount: %;", particleCount);
+}
+
+

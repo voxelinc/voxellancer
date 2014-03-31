@@ -17,12 +17,14 @@ public:
         Return true if the poll won't fire anymore
     */
     virtual bool isDead();
+
     virtual void update(float deltaSec);
 
     bool isActive() const;
     void setActive(bool active);
 
     Handle<EventPoll>& handle();
+
 
 protected:
     std::function<void()> m_callback;

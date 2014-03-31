@@ -47,7 +47,7 @@ void GameScenario::populateWorld() {
     testCluster->objectInfo().setName("player");
     testCluster->objectInfo().setShowOnHud(false);
     m_world->god().scheduleSpawn(testCluster);
-    m_gamePlay->player().setShip(testCluster);
+    World::instance()->player().setShip(testCluster);
 
     spawnStuff();
 

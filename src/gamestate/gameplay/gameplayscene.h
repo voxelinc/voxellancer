@@ -22,7 +22,7 @@ class WorldTreeRenderer;
 
 class GamePlayScene: public Scene {
 public:
-    GamePlayScene(GamePlay& gamePlay, Player& player);
+    GamePlayScene(GamePlay& gamePlay);
     ~GamePlayScene();
 
     virtual void draw(const Camera& camera, glow::FrameBufferObject* target, const Viewport& destinationViewport, EyeSide side = EyeSide::None) const override;
@@ -45,7 +45,6 @@ protected:
     std::unique_ptr<WorldTreeRenderer> m_worldTreeRenderer;
 
     GamePlay& m_gamePlay;
-    Player& m_player;
 
     Property<glm::vec3> m_defaultLightDir;
     int m_currentOutputBuffer;

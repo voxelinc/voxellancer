@@ -3,8 +3,8 @@ cmake_minimum_required(VERSION 2.8.9 FATAL_ERROR)
 # PROJECT DESCRIPTION
 set(META_PROJECT_NAME "voxellancer")
 set(META_VERSION_MAJOR "0")
-set(META_VERSION_MINOR "2")
-set(META_VERSION_PATCH "0")
+set(META_VERSION_MINOR "3")
+set(META_VERSION_PATCH "1")
 set(META_VERSION "${META_VERSION_MAJOR}.${META_VERSION_MINOR}.${META_VERSION_PATCH}")
 set(META_AUTHOR_ORGANIZATION "voxelinc")
 set(META_AUTHOR_DOMAIN "https://github.com/voxelinc/voxellancer/")
@@ -99,9 +99,8 @@ find_package(LibOVR REQUIRED)
 find_package(OpenMP REQUIRED)
 find_package(Lua52 REQUIRED)
 
-
-if(REGEX_USE_BOOST)
-find_package(Boost REQUIRED regex)
+if(BOOST_MODULES)
+    find_package(Boost REQUIRED ${BOOST_MODULES})
 endif()
 
 if(OPENMP_FOUND)
@@ -166,6 +165,12 @@ source_group_by_path(${SOURCE_DIR} "\\.h$|\\.hpp$"
 source_group_by_path(${SOURCE_DIR} "\\.cpp$|\\.c$|\\.inl$"
     ${SOURCE_GROUP} ${SRC_FILES})
 
+# If we build for windows systems, we also include the resource file
+# containing the manifest, icon and other resources
+if(WIN32)
+  set(SRC_FILES ${SRC_FILES} "${SOURCE_DIR}/voxellancer.rc")
+endif(WIN32)
+
 add_executable(${target}
     ${SRC_FILES}
     ${SHADER_FILES}
@@ -210,12 +215,15 @@ if(WIN32)
     endforeach( binary )
 endif()
 
+set(DOCUMENTATION doc/howto.html doc/luaapi.html)
+
 install(TARGETS ${target}
         RUNTIME DESTINATION .)
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/data
         DESTINATION .
         PATTERN "*.png" EXCLUDE)
 install(FILES ${BINARIES} DESTINATION .)
+install(FILES ${DOCUMENTATION} DESTINATION .)
 
 include(cmake/Package.cmake)
 

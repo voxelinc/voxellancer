@@ -2,25 +2,33 @@
 
 #include "camera/camera.h"
 #include "camera/camerahead.h"
-#include "voxel/voxelrenderer.h"
-#include "sound/soundmanager.h"
-#include "geometry/viewport.h"
-#include "gamestate/gameplay/gameplay.h"
+
 #include "display/rendering/framebuffer.h"
 #include "display/rendering/renderpipeline.h"
 #include "display/rendering/blitter.h"
 #include "display/rendering/buffernames.h"
-#include "player.h"
-#include "ui/hud/hud.h"
-#include "world/world.h"
-#include "skybox.h"
-#include "voxeleffect/voxelparticleengine.h"
-#include "worldobject/worldobject.h"
 #include "display/rendering/starfield.h"
 #include "display/rendering/worldtreerenderer.h"
 
+#include "gamestate/gameplay/gameplay.h"
 
-GamePlayScene::GamePlayScene(GamePlay& gamePlay, Player& player):
+#include "geometry/viewport.h"
+
+#include "sound/soundmanager.h"
+
+#include "ui/hud/hud.h"
+
+#include "voxel/voxelrenderer.h"
+#include "voxeleffect/voxelparticleengine.h"
+
+#include "world/world.h"
+#include "worldobject/worldobject.h"
+
+#include "skybox.h"
+#include "player.h"
+
+
+GamePlayScene::GamePlayScene(GamePlay& gamePlay):
     m_gamePlay(gamePlay),
     m_voxelRenderer(VoxelRenderer::instance()),
     m_outputBlitter(new Blitter()),
@@ -30,7 +38,6 @@ GamePlayScene::GamePlayScene(GamePlay& gamePlay, Player& player):
     m_worldTreeRenderer(new WorldTreeRenderer()),
     m_framebuffer(nullptr),
     m_currentOutputBuffer(0),
-    m_player(player),
     m_defaultLightDir("vfx.lightdir")
 {
     m_renderPipeline->add(m_starField, 0);
@@ -61,7 +68,7 @@ void GamePlayScene::draw(const Camera& camera, glow::FrameBufferObject* target, 
 }
 
 void GamePlayScene::update(float deltaSec) {
-    m_starField->update(deltaSec, m_player.cameraHead().position());
+    m_starField->update(deltaSec, World::instance()->player().cameraHead().position());
 }
 
 bool GamePlayScene::worldTreeRendererEnabled() const {
@@ -87,8 +94,12 @@ void GamePlayScene::drawGame(const Camera& camera) const {
     for (WorldObject* worldObject : World::instance()->worldObjects()) {
         VoxelRenderer::instance()->draw(*worldObject);
     }
+<<<<<<< HEAD
     m_gamePlay.player().hud().draw();
 
+=======
+    World::instance()->player().hud().draw();
+>>>>>>> b6b0a2bc5e5e17ece7373244896ddc5cc5c27700
     m_voxelRenderer->afterDraw();
 
     World::instance()->particleEngine().draw(camera);
