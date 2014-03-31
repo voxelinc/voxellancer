@@ -30,12 +30,12 @@ std::list<std::string> DirectoryReader::read() const {
     }
 
     filesystem::path path(m_path);
-    filesystem::directory_iterator end_iter;
 
     if (filesystem::exists(path) && filesystem::is_directory(path)) {
-        for (filesystem::directory_iterator dir_iter(path); dir_iter != end_iter; ++dir_iter) {
-            if (filesystem::is_regular_file(dir_iter->status())) {
-                files.push_back(dir_iter->path().string());
+        filesystem::directory_iterator end;
+        for (filesystem::directory_iterator iter(path); iter != end; ++iter) {
+            if (filesystem::is_regular_file(iter->status())) {
+                files.push_back(iter->path().string());
             }
         }
     }

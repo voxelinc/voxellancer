@@ -99,9 +99,8 @@ find_package(LibOVR REQUIRED)
 find_package(OpenMP REQUIRED)
 find_package(Lua52 REQUIRED)
 
-if(USE_BOOST)
-message("find ${USE_BOOST}")
-find_package(Boost REQUIRED ${USE_BOOST})
+if(BOOST_MODULES)
+    find_package(Boost REQUIRED ${BOOST_MODULES})
 endif()
 
 if(OPENMP_FOUND)
