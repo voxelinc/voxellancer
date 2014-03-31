@@ -35,5 +35,6 @@ void RandFloatPool::initialize() {
 RandFloatPool::_Init::_Init() {
     initialize();
 };
-
-RandFloatPool::_Init _init;
+namespace {
+    RandFloatPool::_Init _init;
+}
