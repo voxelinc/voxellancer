@@ -7,10 +7,10 @@
 
 
 ButtonHudgetVoxels::ButtonHudgetVoxels(ButtonHudget* buttonHudget, glm::vec3 direction, float scale, std::string content, FontSize fontSize, bool bounds) :
-TextFieldHudgetVoxels(buttonHudget, direction, scale, content, fontSize),
-m_buttonVoxels(new VoxelCluster(scale)),
-m_bounds(bounds),
-m_hudget(buttonHudget)
+    TextFieldHudgetVoxels(buttonHudget, direction, scale, content, fontSize),
+    m_buttonVoxels(new VoxelCluster(scale)),
+    m_bounds(bounds),
+    m_hudget(buttonHudget)
 {
     setContent(content);
 }
