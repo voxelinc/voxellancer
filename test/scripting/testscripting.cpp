@@ -52,7 +52,7 @@ go_bandit([](){
 
         before_each([&](){
             World::reset(false);
-            script.reset(new GamePlayScript(&World::instance()->scriptEngine()));
+            script.reset(new GamePlayScript(World::instance()->scriptEngine()));
             script->loadString(callbackFunction);
         });
 
