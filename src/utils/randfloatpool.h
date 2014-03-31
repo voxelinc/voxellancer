@@ -12,11 +12,15 @@ public:
     static float rand(float from, float to);
     static float randomize(float value, float randomization);
 
-
-	static void initialize();
+    class _Init {
+    public:
+        _Init();
+    };
 
 protected:
-	static std::vector<float> s_pool;
+    static void initialize();
+    
+    static std::vector<float> s_pool;
 	static int s_iter;
 
 };
