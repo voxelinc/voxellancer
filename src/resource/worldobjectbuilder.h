@@ -29,8 +29,8 @@ public:
 protected:
     std::string m_name;
 
-    template<typename WorldObjectType>
-    WorldObjectType* makeWorldObject();
+    template<typename T>
+    T* makeWorldObject();
 
     void setupVoxelCluster(WorldObject* worldObject);
     void setupComponents(WorldObjectComponents& components);

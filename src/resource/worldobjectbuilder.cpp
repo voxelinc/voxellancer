@@ -80,11 +80,11 @@ WorldObject* WorldObjectBuilder::buildWorldObject() {
     return worldObject;
 }
 
-template<typename WorldObjectType>
-WorldObjectType* WorldObjectBuilder::makeWorldObject() {
-    static_assert(std::is_base_of<WorldObject, WorldObjectType>::value, "WorldObjectType needs to be derived from WorldObject");
-
-    WorldObjectType* object = new WorldObjectType();
+template<typename T>
+T* WorldObjectBuilder::makeWorldObject() {
+    static_assert(std::is_base_of<WorldObject, T>::value, "T needs to be derived from WorldObject");
+    
+    T* object = new T();
     WorldObject* worldObject = object;
 
     worldObject->objectInfo().setName(m_name);
