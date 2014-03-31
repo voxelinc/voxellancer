@@ -68,6 +68,9 @@ Rocket* WorldObjectBuilder::buildRocket() {
 
 Ship* WorldObjectBuilder::buildShip() {
     GenericShip* ship = makeWorldObject<GenericShip>();
+    if (ship->crucialVoxel() == nullptr) {
+        glow::warning("WorldObjectBuilder: ship %; has no crucial voxel", m_name);
+    }
     return ship;
 }
 

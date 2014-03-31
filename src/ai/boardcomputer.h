@@ -10,8 +10,11 @@
 
 #include "utils/handle/handle.h"
 
-
 class WorldObject;
+
+/**
+ *  The BoardComputer abstracts the Ship's systems to a level usable to AiTask, Character and Player
+ */
 
 class BoardComputer {
 public:

@@ -65,9 +65,9 @@ bool Sphere::containedBy(const TAABB<int>& aabb) const {
         m_position.x - m_radius >= aabb.llf().x &&
         m_position.y - m_radius >= aabb.llf().y &&
         m_position.z - m_radius >= aabb.llf().z &&
-        m_position.x + m_radius <= aabb.rub().x &&
-        m_position.y + m_radius <= aabb.rub().y &&
-        m_position.z + m_radius <= aabb.rub().z;
+        m_position.x + m_radius <= aabb.urb().x &&
+        m_position.y + m_radius <= aabb.urb().y &&
+        m_position.z + m_radius <= aabb.urb().z;
 }
 
 

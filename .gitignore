@@ -32,3 +32,4 @@ codeblocks/
 **.orig
 .idea/
 doxygen/
+doc/*.html

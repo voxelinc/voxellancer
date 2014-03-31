@@ -102,8 +102,7 @@ WorldTreeNode* WorldTreeQuery::getQueryRoot(WorldTreeNode* node) const {
 
     if (node == nullptr) {
         return m_worldTree->root();
-    }
-    else {
+    } else {
         if (m_shape->containedBy(node->aabb())) {
             return node;
         }

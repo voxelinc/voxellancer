@@ -32,26 +32,26 @@
 
 
 /*
-* 360 gamepad assignment: (direction given for positive values)
-* - A0: left stick right                        move right
-* - A1: left stick up                           move forward
-* - A2: left trigger (right trigger is [-1, 0]  -1 = gun trigger, +1 = rocket trigger
-* - A3: right stick down(!)                     rotate down
-* - A4: right stick right                       rotate up
+ *  360 gamepad assignment: (direction given for positive values)
+ *  - A0: left stick right                        move right
+ *  - A1: left stick up                           move forward
+ *  - A2: left trigger (right trigger is [-1, 0]  -1 = gun trigger, +1 = rocket trigger
+ *  - A3: right stick down(!)                     rotate down
+ *  - A4: right stick right                       rotate up
 */
 
 /*
-* Button assignment
-* B0: A
-* B1: B
-* B2: X
-* B3: Y
-* B4: left bumper               --previous target
-* B5: right bumper              next target
-* B6: back
-* B7: start
-* B8: left stick
-* B9: right stick
+ *  Button assignment
+ *  B0: A
+ *  B1: B
+ *  B2: X
+ *  B3: Y
+ *  B4: left bumper               --previous target
+ *  B5: right bumper              next target
+ *  B6: back
+ *  B7: start
+ *  B8: left stick
+ *  B9: right stick
 */
 
 GamePlayRunningInput::GamePlayRunningInput(Player* player):
@@ -107,8 +107,8 @@ void GamePlayRunningInput::resizeEvent(const unsigned int width, const unsigned 
 }
 
 /*
-*    Check here for single-time key-presses, that you do not want fired multiple times, e.g. toggles
-*    This only applies for menu events etc, for action events set the toggleAction attribute to true
+ *   Check here for single-time key-presses, that you do not want fired multiple times, e.g. toggles
+ *   This only applies for menu events etc, for action events set the toggleAction attribute to true
 */
 void GamePlayRunningInput::keyCallback(int key, int scancode, int action, int mods) {
     if (action == GLFW_PRESS) {
