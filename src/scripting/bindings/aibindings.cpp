@@ -90,10 +90,10 @@ apikey AiBindings::apiOnAiTaskFinished(apikey key, const std::string& callback) 
         return -1;
     }
 
-    AiTaskFinishedPoll* finishedPoll = new AiTaskFinishedPoll(aiTask, [=] { m_lua.call(callback, key); });
+    auto finishedPoll = std::make_shared<AiTaskFinishedPoll>(aiTask, [=] { m_lua.call(callback, key); });
 
     World::instance()->eventPoller().addPoll(finishedPoll);
-    m_script.addLocal(finishedPoll->scriptKey());
+    m_script.addLocal(finishedPoll);
 
     return finishedPoll->scriptKey();
 }

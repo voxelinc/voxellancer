@@ -1,7 +1,5 @@
 #pragma once
 
-#include "scripting/scriptengine.h"
-
 
 class LuaWrapper;
 class ScriptEngine;

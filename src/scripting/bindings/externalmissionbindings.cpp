@@ -5,6 +5,7 @@
 
 #include "missions/missionsystem.h"
 
+#include "scripting/scriptengine.h"
 #include "scripting/gameplayscript.h"
 #include "scripting/elematelua/luawrapper.h"
 
@@ -48,9 +49,9 @@ apikey ExternalMissionBindings::createStatePoll(apikey missionKey, MissionState 
        return -1;
     }
 
-    MissionStatePoll* poll = new MissionStatePoll(mission->handle(), state, [=] { m_lua.call(callback, missionKey); });
+    auto poll = std::make_shared<MissionStatePoll>(mission->handle(), state, [=] { m_lua.call(callback, missionKey); });
     World::instance()->eventPoller().addPoll(poll);
-    m_script.addLocal(poll->scriptKey());
+    m_script.addLocal(poll);
 
     return poll->scriptKey();
 }

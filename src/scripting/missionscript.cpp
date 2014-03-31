@@ -7,7 +7,7 @@
 #include "scripting/elematelua/luawrapper.h"
 
 
-MissionScript::MissionScript(Mission& mission, ScriptEngine* scriptEngine):
+MissionScript::MissionScript(Mission& mission, ScriptEngine& scriptEngine):
     GamePlayScript(scriptEngine),
     m_mission(mission)
 {

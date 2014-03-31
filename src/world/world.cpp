@@ -24,7 +24,7 @@ World *World::s_instance = nullptr;
 
 World::World():
     m_player(new Player()),
-    m_scriptEngine(new ScriptEngine(this)),
+    m_scriptEngine(new ScriptEngine()),
     m_skybox(new Skybox()),
     m_worldLogic(new WorldLogic(*this)),
     m_worldTree(new WorldTree()),

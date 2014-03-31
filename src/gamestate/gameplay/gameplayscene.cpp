@@ -18,11 +18,9 @@
 #include "ui/hud/hud.h"
 
 #include "voxel/voxelrenderer.h"
-
 #include "voxeleffect/voxelparticleengine.h"
 
 #include "world/world.h"
-
 #include "worldobject/worldobject.h"
 
 #include "skybox.h"

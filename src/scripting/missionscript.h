@@ -6,7 +6,7 @@ class Mission;
 
 class MissionScript : public GamePlayScript {
 public:
-    MissionScript(Mission& mission, ScriptEngine* scriptEngine);
+    MissionScript(Mission& mission, ScriptEngine& scriptEngine);
 
     Mission& mission();
 

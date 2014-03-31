@@ -24,6 +24,7 @@
 #include "world/spawnrequest.h"
 
 #include "worldobject/ship.h"
+#include "scripting/scriptengine.h"
 
 
 
@@ -180,10 +181,10 @@ apikey WorldObjectBindings::apiOnWorldObjectDestroyed(apikey key, const std::str
         return -1;
     }
 
-    WorldObjectDestroyedPoll* destructionPoll = new WorldObjectDestroyedPoll(worldObject, [=] { m_lua.call(callback, key); });
+    auto destructionPoll = std::make_shared<WorldObjectDestroyedPoll>(worldObject, [=] { m_lua.call(callback, key); });
 
     World::instance()->eventPoller().addPoll(destructionPoll);
-    m_script.addLocal(destructionPoll->scriptKey());
+    m_script.addLocal(destructionPoll);
 
     return destructionPoll->scriptKey();
 }
@@ -195,10 +196,10 @@ apikey WorldObjectBindings::apiOnAABBEntered(apikey key, const glm::vec3& llf, c
         return -1;
     }
 
-    AABBEnteredPoll* enteredPoll = new AABBEnteredPoll(worldObject, AABB(llf, urb), [=] { m_lua.call(callback, key); });
+    auto enteredPoll = std::make_shared<AABBEnteredPoll>(worldObject, AABB(llf, urb), [=] { m_lua.call(callback, key); });
 
     World::instance()->eventPoller().addPoll(enteredPoll);
-    m_script.addLocal(enteredPoll->scriptKey());
+    m_script.addLocal(enteredPoll);
 
     return enteredPoll->scriptKey();
 }

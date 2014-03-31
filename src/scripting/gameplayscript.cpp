@@ -8,11 +8,17 @@
 #include "bindings/commonbindings.h"
 #include "bindings/squadbindings.h"
 
+#include "events/eventpoll.h"
+#include "events/eventpoller.h"
+
 #include "scripting/scriptable.h"
+#include "scripting/scriptengine.h"
+
+#include "world/world.h"
 
 
-GamePlayScript::GamePlayScript(ScriptEngine* scriptEngine):
-    m_scriptEngine(scriptEngine)
+GamePlayScript::GamePlayScript(ScriptEngine& scriptEngine):
+    m_scriptEngine(&scriptEngine)
 {
     addBindings(new CommonBindings(*this));
     addBindings(new WorldObjectBindings(*this));
@@ -22,6 +28,12 @@ GamePlayScript::GamePlayScript(ScriptEngine* scriptEngine):
 }
 
 GamePlayScript::~GamePlayScript() {
+    for (std::weak_ptr<EventPoll>& eventPoll : m_eventPolls) {
+        if (auto poll = eventPoll.lock()) {
+            World::instance()->eventPoller().removePoll(poll.get());
+        }
+    }
+
     for (int key : m_locals) {
         if (m_scriptEngine->keyValid(key)) {
             m_scriptEngine->unregisterScriptable(m_scriptEngine->get<Scriptable>(key));
@@ -37,10 +49,14 @@ LuaWrapper& GamePlayScript::luaWrapper() {
     return *m_lua;
 }
 
-void GamePlayScript::addLocal(int key) {
-    assert(m_scriptEngine->keyValid(key));
-
-    m_scriptEngine->get<Scriptable>(key)->setScriptLocal(true);
-    m_locals.push_back(key);
+void GamePlayScript::addLocal(std::shared_ptr<EventPoll> poll) {
+    m_eventPolls.push_back(poll);
+    addLocal(poll.get());
 }
 
+void GamePlayScript::addLocal(Scriptable* scriptable) {
+    assert(m_scriptEngine->keyValid(scriptable->scriptKey()));
+
+    scriptable->setScriptLocal(true);
+    m_locals.push_back(scriptable->scriptKey());
+}

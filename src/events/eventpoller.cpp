@@ -14,21 +14,19 @@ EventPoller::EventPoller()
 
 EventPoller::~EventPoller() = default;
 
-void EventPoller::addPoll(EventPoll* eventPoll) {
-    m_eventPolls.push_back(std::unique_ptr<EventPoll>(eventPoll));
-    World::instance()->scriptEngine().registerScriptable(eventPoll);
+void EventPoller::addPoll(std::shared_ptr<EventPoll> eventPoll) {
+    m_eventPolls[eventPoll.get()] = eventPoll;
+    World::instance()->scriptEngine().registerScriptable(eventPoll.get());
 }
 
 void EventPoller::removePoll(EventPoll* eventPoll) {
     World::instance()->scriptEngine().unregisterScriptable(eventPoll);
-    m_eventPolls.remove_if([&](std::unique_ptr<EventPoll>& eventPollPtr) {
-        return eventPollPtr.get() == eventPoll;
-    });
+    m_eventPolls.erase(eventPoll);
 }
 
 void EventPoller::update(float deltaSec) {
     for (auto iter = m_eventPolls.begin(); iter != m_eventPolls.end();) {
-        EventPoll* poll = iter->get();
+        EventPoll* poll = iter->second.get();
         poll->update(deltaSec);
         if (poll->isDead()) {
             iter = m_eventPolls.erase(iter);

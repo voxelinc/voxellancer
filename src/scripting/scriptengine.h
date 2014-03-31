@@ -4,10 +4,8 @@
 #include <memory>
 #include <unordered_map>
 
-
-class GamePlayScript;
+class Script;
 class Scriptable;
-class World;
 
 /**
     Main class for accessing scripts during gameplay.
@@ -16,10 +14,10 @@ class World;
 */
 class ScriptEngine {
 public:
-    ScriptEngine(World* world);
+    ScriptEngine();
     ~ScriptEngine();
 
-    void addScript(std::shared_ptr<GamePlayScript> script);
+    void addScript(std::shared_ptr<Script> script);
 
     /**
         start (call the "main" function) all added scripts and all future
@@ -32,15 +30,8 @@ public:
     */
     void stop();
 
-    /**
-        Register Scriptables that are managed by other objects
-        and equip them with a valid scriptKey
-    */
     void registerScriptable(Scriptable* scriptable);
 
-    /**
-        Unregister Scriptable. If it is scriptlocal, remove it from the game
-    */
     void unregisterScriptable(Scriptable* scriptable);
 
 
@@ -53,18 +44,15 @@ public:
 
 
 protected:
-    World* m_world;
-
-    std::list<std::shared_ptr<GamePlayScript>> m_scripts;
+    std::list<std::shared_ptr<Script>> m_scripts;
     std::unordered_map<int, Scriptable*> m_scriptables;
 
-    int m_keyIncrementor;
+    int m_nextKey;
     bool m_running;
 
 
     Scriptable* getScriptable(int key);
     void performRemovals();
-    void removeScriptable(Scriptable* scriptable);
 };
 
 #include "scriptengine.inl"

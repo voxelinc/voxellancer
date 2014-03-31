@@ -66,19 +66,19 @@ int CommonBindings::apiSetEventActive(apikey eventPoll, bool active) {
 }
 
 apikey CommonBindings::apiCreateSingleShotTimer(const std::string& callback, float delta) {
-    SingleShotTimer* timer = new SingleShotTimer(delta, [=] { m_lua.call(callback); });
+    auto timer = std::make_shared<SingleShotTimer>(delta, [=] { m_lua.call(callback); });
 
     World::instance()->eventPoller().addPoll(timer);
-    m_script.addLocal(timer->scriptKey());
+    m_script.addLocal(timer);
 
     return timer->scriptKey();
 }
 
 apikey CommonBindings::apiCreateLoopingTimer(const std::string& callback, float delta) {
-    LoopingTimer* timer = new LoopingTimer(delta, [=] { m_lua.call(callback); });
+    auto timer = std::make_shared<LoopingTimer>(delta, [=] { m_lua.call(callback); });
 
     World::instance()->eventPoller().addPoll(timer);
-    m_script.addLocal(timer->scriptKey());
+    m_script.addLocal(timer);
 
     return timer->scriptKey();
 }

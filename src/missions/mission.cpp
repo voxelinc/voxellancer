@@ -12,7 +12,7 @@
 
 
 Mission::Mission(const std::string& path):
-    m_script(new MissionScript(*this, &World::instance()->scriptEngine())),
+    m_script(new MissionScript(*this, World::instance()->scriptEngine())),
     m_handle(this),
     m_state(MissionState::Idle)
 {
