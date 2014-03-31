@@ -5,7 +5,7 @@
 
 class SingleShotTimer : public Timer {
 public:
-    SingleShotTimer(float interval, const std::shared_ptr<Callback>& callback);
+    SingleShotTimer(float interval, const Callback& callback);
 
     virtual bool isDead() override;
 

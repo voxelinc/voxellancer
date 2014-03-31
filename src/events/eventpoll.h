@@ -10,13 +10,14 @@
 
 class EventPoll: public Scriptable {
 public:
-    EventPoll(const std::shared_ptr<Callback>& callback);
+    EventPoll(const Callback& callback);
     ~EventPoll();
 
     /*
         Return true if the poll won't fire anymore
     */
     virtual bool isDead();
+
     virtual void update(float deltaSec);
 
     bool isActive() const;
@@ -24,8 +25,9 @@ public:
 
     Handle<EventPoll>& handle();
 
+
 protected:
-    std::shared_ptr<Callback> m_callback;
+    Callback m_callback;
     Handle<EventPoll> m_handle;
     bool m_active;
 

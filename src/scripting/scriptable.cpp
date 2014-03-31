@@ -7,7 +7,8 @@
 
 
 Scriptable::Scriptable():
-    m_key(INVALID_KEY)
+    m_key(INVALID_KEY),
+    m_local(false)
 {
 
 }
@@ -27,3 +28,10 @@ void Scriptable::setScriptKey(int key) {
     m_key = key;
 }
 
+bool Scriptable::isScriptLocal() const {
+    return m_local;
+}
+
+void Scriptable::setScriptLocal(bool local) {
+    m_local = local;
+}

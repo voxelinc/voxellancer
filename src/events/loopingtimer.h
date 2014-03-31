@@ -5,6 +5,6 @@
 
 class LoopingTimer : public Timer {
 public:
-    LoopingTimer(float interval, const std::shared_ptr<Callback>& callback);
+    LoopingTimer(float interval, const Callback& callback);
 };
 

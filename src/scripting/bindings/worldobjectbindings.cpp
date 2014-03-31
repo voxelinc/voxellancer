@@ -10,10 +10,13 @@
 
 #include "geometry/aabb.h"
 
+#include "ui/objectinfo.h"
+
 #include "player.h"
 
 #include "resource/worldobjectbuilder.h"
 
+#include "scripting/gameplayscript.h"
 #include "scripting/elematelua/luawrapper.h"
 #include "scripting/gameplayscript.h"
 #include "scripting/scriptcallback.h"
@@ -23,6 +26,7 @@
 #include "world/spawnrequest.h"
 
 #include "worldobject/ship.h"
+#include "scripting/scriptengine.h"
 
 
 
@@ -32,22 +36,23 @@ WorldObjectBindings::WorldObjectBindings(GamePlayScript& script):
 
 }
 
-
-void WorldObjectBindings::initialize()
-{
+void WorldObjectBindings::bind() {
     m_lua.Register("playerShip", this, &WorldObjectBindings::apiPlayerShip);
     m_lua.Register("createShip", this, &WorldObjectBindings::apiCreateShip);
+    m_lua.Register("createWorldObject", this, &WorldObjectBindings::apiCreateWorldObject);
     m_lua.Register("spawn", this, &WorldObjectBindings::apiSpawn);
+    m_lua.Register("remove", this, &WorldObjectBindings::apiRemove);
 
     m_lua.Register("position", this, &WorldObjectBindings::apiPosition);
     m_lua.Register("orientation", this, &WorldObjectBindings::apiOrientation);
     m_lua.Register("setPosition", this, &WorldObjectBindings::apiSetPosition);
     m_lua.Register("setOrientation", this, &WorldObjectBindings::apiSetOrientation);
+    m_lua.Register("setShowOnHud", this, &WorldObjectBindings::apiSetShowOnHud);
+    m_lua.Register("setCanLockOn", this, &WorldObjectBindings::apiSetCanLockOn);
 
     m_lua.Register("onWorldObjectDestroyed", this, &WorldObjectBindings::apiOnWorldObjectDestroyed);
     m_lua.Register("onAABBEntered", this, &WorldObjectBindings::apiOnAABBEntered);
 }
-
 
 apikey WorldObjectBindings::apiPlayerShip() {
     if (World::instance()->player().ship()) {
@@ -57,7 +62,7 @@ apikey WorldObjectBindings::apiPlayerShip() {
     }
 }
 
-int WorldObjectBindings::apiCreateShip(const std::string& name) {
+apikey WorldObjectBindings::apiCreateShip(const std::string& name) {
     Ship* ship = WorldObjectBuilder(name).buildShip();
 
     if (!ship) {
@@ -66,11 +71,25 @@ int WorldObjectBindings::apiCreateShip(const std::string& name) {
     }
 
     m_scriptEngine.registerScriptable(ship);
+
     return ship->scriptKey();
 }
 
-int WorldObjectBindings::apiSpawn(apikey key) {
-    WorldObject* worldObject = m_scriptEngine.get<WorldObject>(key);
+apikey WorldObjectBindings::apiCreateWorldObject(const std::string& name) {
+    WorldObject* worldObject = WorldObjectBuilder(name).buildWorldObject();
+
+    if (!worldObject) {
+        glow::warning("WorldObjectBindings: Couldn't create worldObject '%;'", name);
+        return -1;
+    }
+
+    m_scriptEngine.registerScriptable(worldObject);
+
+    return worldObject->scriptKey();
+}
+
+int WorldObjectBindings::apiSpawn(apikey worldObjectKey) {
+    WorldObject* worldObject = m_scriptEngine.get<WorldObject>(worldObjectKey);
 
     if (!worldObject) {
         return -1;
@@ -78,13 +97,25 @@ int WorldObjectBindings::apiSpawn(apikey key) {
 
     World::instance()->god().scheduleSpawn(SpawnRequest(worldObject, false));
     World::instance()->god().spawn(); // should this really happen?
+
     return worldObject->spawnState() == SpawnState::Spawned;
 }
 
+int WorldObjectBindings::apiRemove(apikey worldObjectKey) {
+    WorldObject* worldObject = m_scriptEngine.get<WorldObject>(worldObjectKey);
 
+    if (!worldObject) {
+        return -1;
+    }
 
-glm::vec3 WorldObjectBindings::apiOrientation(apikey key) {
-    WorldObject* worldObject = m_scriptEngine.get<WorldObject>(key);
+    World::instance()->god().scheduleRemoval(worldObject);
+    World::instance()->god().remove();
+
+    return 0;
+}
+
+glm::vec3 WorldObjectBindings::apiOrientation(apikey worldObjectKey) {
+    WorldObject* worldObject = m_scriptEngine.get<WorldObject>(worldObjectKey);
 
     if (!worldObject) {
         return glm::vec3(0.0f);
@@ -93,9 +124,8 @@ glm::vec3 WorldObjectBindings::apiOrientation(apikey key) {
     return glm::eulerAngles(worldObject->transform().orientation());
 }
 
-
-glm::vec3 WorldObjectBindings::apiPosition(apikey key) {
-    WorldObject* worldObject = m_scriptEngine.get<WorldObject>(key);
+glm::vec3 WorldObjectBindings::apiPosition(apikey worldObjectKey) {
+    WorldObject* worldObject = m_scriptEngine.get<WorldObject>(worldObjectKey);
 
     if (!worldObject) {
         return glm::vec3(0.0f);
@@ -104,26 +134,48 @@ glm::vec3 WorldObjectBindings::apiPosition(apikey key) {
     return worldObject->transform().position();
 }
 
-int WorldObjectBindings::apiSetPosition(apikey key, const glm::vec3& position) {
-    WorldObject* worldObject = m_scriptEngine.get<WorldObject>(key);
+int WorldObjectBindings::apiSetPosition(apikey worldObjectKey, const glm::vec3& position) {
+    WorldObject* worldObject = m_scriptEngine.get<WorldObject>(worldObjectKey);
 
     if (!worldObject) {
         return -1;
     }
 
     worldObject->transform().setPosition(position);
+
     return 0;
 }
 
-
-int WorldObjectBindings::apiSetOrientation(apikey key, const glm::vec3& orientation) {
-    WorldObject* worldObject = m_scriptEngine.get<WorldObject>(key);
+int WorldObjectBindings::apiSetOrientation(apikey worldObjectKey, const glm::vec3& orientation) {
+    WorldObject* worldObject = m_scriptEngine.get<WorldObject>(worldObjectKey);
 
     if (!worldObject) {
         return -1;
     }
 
     worldObject->transform().setOrientation(glm::quat(orientation));
+    return 0;
+}
+
+int WorldObjectBindings::apiSetShowOnHud(apikey worldObjectKey, bool show) {
+    WorldObject* worldObject = m_scriptEngine.get<WorldObject>(worldObjectKey);
+
+    if (!worldObject) {
+        return -1;
+    }
+
+    worldObject->objectInfo().setShowOnHud(true);
+    return 0;
+}
+
+int WorldObjectBindings::apiSetCanLockOn(apikey worldObjectKey, bool lockon) {
+    WorldObject* worldObject = m_scriptEngine.get<WorldObject>(worldObjectKey);
+
+    if (!worldObject) {
+        return -1;
+    }
+
+    worldObject->objectInfo().setCanLockOn(lockon);
     return 0;
 }
 
@@ -135,10 +187,12 @@ apikey WorldObjectBindings::apiOnWorldObjectDestroyed(apikey key, const std::str
     }
 
     auto destructionPoll = std::make_shared<WorldObjectDestroyedPoll>(worldObject, createCallback(callback, key));
+
     World::instance()->eventPoller().addPoll(destructionPoll);
+    m_script.addLocal(destructionPoll);
+
     return destructionPoll->scriptKey();
 }
-
 
 apikey WorldObjectBindings::apiOnAABBEntered(apikey key, const glm::vec3& llf, const glm::vec3& urb, const std::string& callback) {
     WorldObject* worldObject = m_scriptEngine.get<WorldObject>(key);
@@ -148,7 +202,10 @@ apikey WorldObjectBindings::apiOnAABBEntered(apikey key, const glm::vec3& llf, c
     }
 
     auto enteredPoll = std::make_shared<AABBEnteredPoll>(worldObject, AABB(llf, urb), createCallback(callback, key));
+
     World::instance()->eventPoller().addPoll(enteredPoll);
+    m_script.addLocal(enteredPoll);
+
     return enteredPoll->scriptKey();
 }
 

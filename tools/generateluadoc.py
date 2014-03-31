@@ -92,7 +92,7 @@ def get_color_codes(folder):
     for section in config.sections():
         if config.has_option(section, "prefix"):
             codes.append("{0}: {1}".format(section, config.get(section, "prefix")))
-    return {"colorcodes": codes}
+    return {"colorcode": codes}
 
 
 if __name__ == "__main__":

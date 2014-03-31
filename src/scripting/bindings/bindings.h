@@ -1,7 +1,5 @@
 #pragma once
 
-#include "scripting/scriptengine.h"
-
 #include "utils/callback.h"
 
 #include "scripting/scriptcallback.h"
@@ -18,11 +16,10 @@ class Bindings {
 public:
     Bindings(GamePlayScript& script);
 
-    virtual void initialize() = 0;
+    virtual void bind() = 0;
 
     template<typename ...Args>
-    std::shared_ptr<Callback> createCallback(const std::string& function, Args... args);
-
+    Callback createCallback(const std::string& function, Args... args);
 
 
 protected:
@@ -33,3 +30,4 @@ protected:
 
 
 #include "bindings.inl"
+

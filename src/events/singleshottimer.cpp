@@ -1,7 +1,7 @@
 #include "singleshottimer.h"
 
 
-SingleShotTimer::SingleShotTimer(float interval, const std::shared_ptr<Callback>& callback):
+SingleShotTimer::SingleShotTimer(float interval, const Callback& callback):
     Timer(interval, callback),
     m_ticking(true)
 {

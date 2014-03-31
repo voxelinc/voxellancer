@@ -11,16 +11,19 @@
 
 class AABBEnteredPoll : public EventPoll {
 public:
-    AABBEnteredPoll(WorldObject* worldObject, const AABB& aabb, const std::shared_ptr<Callback>& callback);
+    AABBEnteredPoll(WorldObject* worldObject, const AABB& aabb, const Callback& callback);
+
+    virtual bool isDead() override;
 
 
 protected:
     Handle<WorldObject> m_worldObject;
     AABB m_aabb;
 
-    bool m_lastEntered;
+    bool m_entered;
 
 
     virtual bool poll() override;
+    virtual void specialOnCallback() override;
 };
 

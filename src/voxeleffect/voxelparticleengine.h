@@ -40,6 +40,7 @@ public:
     void update(float deltaSec);
     void draw(const Camera& camera);
 
+
 protected:
     float m_time;
     bool m_initialized;
@@ -60,6 +61,5 @@ protected:
 
     virtual void beforeContextDestroy();
     virtual void afterContextRebuild();
-
 };
 

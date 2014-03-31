@@ -1,7 +1,7 @@
 #include "eventpoll.h"
 
 
-EventPoll::EventPoll(const std::shared_ptr<Callback>& callback):
+EventPoll::EventPoll(const Callback& callback):
     m_callback(callback),
     m_handle(Handle<EventPoll>(this)),
     m_active(true)
@@ -36,7 +36,7 @@ void EventPoll::update(float deltaSec) {
 }
 
 void EventPoll::doCallback() {
-    m_callback->call();
+    m_callback.call();
 }
 
 Handle<EventPoll>& EventPoll::handle() {

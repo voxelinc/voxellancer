@@ -3,14 +3,14 @@
 #include "ai/aitask.h"
 
 
-AiTaskFinishedPoll::AiTaskFinishedPoll(AiTask* aitask, const std::shared_ptr<Callback>& callback):
+AiTaskFinishedPoll::AiTaskFinishedPoll(AiTask* aitask, const Callback& callback):
     EventPoll(callback),
     m_aiTask(aitask->handle())
 {
 }
 
 bool AiTaskFinishedPoll::poll() {
-    return !m_aiTask.valid() || m_aiTask->isFinished();
+    return m_aiTask.valid() ? m_aiTask->isFinished() : false;
 }
 
 bool AiTaskFinishedPoll::isDead() {
