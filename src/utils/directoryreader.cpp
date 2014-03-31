@@ -35,7 +35,7 @@ std::list<std::string> DirectoryReader::read() const {
     if (filesystem::exists(path) && filesystem::is_directory(path)) {
         for (filesystem::directory_iterator dir_iter(path); dir_iter != end_iter; ++dir_iter) {
             if (filesystem::is_regular_file(dir_iter->status())) {
-                files.push_back(dir_iter->path());
+                files.push_back(dir_iter->path().string());
             }
         }
     }
