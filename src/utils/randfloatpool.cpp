@@ -11,7 +11,6 @@ const static int POOL_SIZE = 1024;
 std::vector<float> RandFloatPool::s_pool;
 int RandFloatPool::s_iter(0);
 
-
 float RandFloatPool::rand(float from, float to) {
     float randBase = s_pool[s_iter & 0x3FF];
     s_iter++;
@@ -35,6 +34,8 @@ void RandFloatPool::initialize() {
 RandFloatPool::_Init::_Init() {
     initialize();
 };
+
 namespace {
     RandFloatPool::_Init _init;
 }
+

@@ -179,8 +179,6 @@ int main(int argc, char* argv[]) {
     PropertyManager::instance()->load(controlsConfig);
     PropertyManager::instance()->load("data/voxels.ini", "voxels");
 
-    RandFloatPool::initialize();
-
     if (!glfwInit()) {
         glow::fatal("Could not init GLFW");
         exit(-1);
