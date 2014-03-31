@@ -23,9 +23,9 @@ public:
 
     virtual void onClick(ClickType clicktype) override;
 
-    virtual void setContent(std::string content);
+    virtual void setText(const std::string& content);
 
-    void registerCallback(const std::function<void(ClickType clickType)>& callback);
+    void setCallback(const std::function<void(ClickType clickType)>& callback);
 
 protected:
     std::function<void(ClickType clickType)> m_callback;

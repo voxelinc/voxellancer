@@ -80,10 +80,6 @@ const glm::vec3 TextFieldHudgetVoxels::offsetToCenter(bool upper, bool left) con
     }
 
     return glm::vec3(m_offset + m_width*horizontalOffset - m_width / 2, verticalOffset, 0);
-    //float horizontalOffset = left ? static_cast<float>(m_text.length()) : 0;
-    //float verticalOffset = upper ? m_height : -m_height;
-
-    //return glm::vec3(m_offset + m_width * horizontalOffset - m_width / 2, verticalOffset, 0);
 }
 
 glm::vec3 TextFieldHudgetVoxels::worldPosition() const {

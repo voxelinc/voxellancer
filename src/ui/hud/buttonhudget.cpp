@@ -29,10 +29,10 @@ void ButtonHudget::onClick(ClickType clickType) {
     m_callback(clickType);
 }
 
-void ButtonHudget::registerCallback(const std::function<void(ClickType clickType)>& callback) {
+void ButtonHudget::setCallback(const std::function<void(ClickType clickType)>& callback) {
     m_callback = callback;
 }
 
-void ButtonHudget::setContent(std::string content) {
+void ButtonHudget::setText(const std::string& content) {
     m_buttonVoxels->setText(content);
 }
