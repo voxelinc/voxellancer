@@ -1,4 +1,5 @@
 #pragma once
+
 #include <memory>
 
 #include <glm/glm.hpp>
@@ -13,8 +14,7 @@ namespace glow {
     class Program;
     class VertexArrayObject;
     class Buffer;
-    template<typename T>
-    class Uniform;
+    template<typename T> class Uniform;
 };
 
 class Camera;

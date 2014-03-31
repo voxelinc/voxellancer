@@ -27,7 +27,7 @@
 
 #include "player.h"
 #include "ui/objectinfo.h"
-#include "utils/randvec.h"
+#include "utils/randvec3.h"
 
 #include "scripting/scriptengine.h"
 #include "scripting/gameplayscript.h"
@@ -35,7 +35,7 @@
 
 ScriptedScenario::ScriptedScenario(GamePlay* gamePlay, const std::string& path):
     BaseScenario(gamePlay),
-    m_script(new GamePlayScript(&World::instance()->scriptEngine()))
+    m_script(new GamePlayScript(World::instance()->scriptEngine()))
 {
     m_script->load(path);
 }
@@ -49,7 +49,8 @@ void ScriptedScenario::populateWorld() {
     playerShip->objectInfo().setShowOnHud(false);
     playerShip->objectInfo().setCanLockOn(false);
     m_world->god().scheduleSpawn(playerShip);
-    m_gamePlay->player().setShip(playerShip);
+    World::instance()->player().setShip(playerShip);
 
     m_world->scriptEngine().addScript(m_script);
 }
+

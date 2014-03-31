@@ -45,7 +45,6 @@ void BaseScenario::clear() {
     m_world->reset();
 }
 
-
 void BaseScenario::reset() {
     clear();
     load();
@@ -56,14 +55,7 @@ void BaseScenario::createWorld() {
 }
 
 void BaseScenario::populateWorld() {
-    // Any scenario must set the player ship atm
-    Ship *playerShip = WorldObjectBuilder("basicship").buildShip();
-    playerShip->transform().setPosition(glm::vec3(0, 0, 10));
-    playerShip->objectInfo().setName("basicship");
-    playerShip->objectInfo().setShowOnHud(false);
-    playerShip->objectInfo().setCanLockOn(false);
-    m_world->god().scheduleSpawn(playerShip);
-    m_gamePlay->player().setShip(playerShip);
-    m_world->god().spawn();
+
 }
+
 

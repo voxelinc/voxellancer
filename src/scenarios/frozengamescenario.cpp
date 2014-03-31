@@ -84,7 +84,7 @@ void FrozenGameScenario::populateWorld() {
     testCluster->objectInfo().setShowOnHud(false);
     m_world->god().scheduleSpawn(testCluster);
 
-    m_gamePlay->player().setShip(testCluster);
+    World::instance()->player().setShip(testCluster);
 
     WorldObject *wall = new WorldObject();
     wall->transform().move(glm::vec3(-30, 0, -50));

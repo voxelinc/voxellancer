@@ -1,6 +1,5 @@
 #pragma once
 
-#include "scripting/scriptengine.h"
 
 class LuaWrapper;
 class ScriptEngine;
@@ -13,10 +12,12 @@ class Bindings {
 public:
     Bindings(GamePlayScript& gamePlayScript);
 
-    virtual void initialize() = 0;
+    virtual void bind() = 0;
+
 
 protected:
     LuaWrapper& m_lua;
+    GamePlayScript& m_script;
     ScriptEngine& m_scriptEngine;
-
 };
+

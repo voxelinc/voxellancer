@@ -1,15 +1,18 @@
 #pragma once
 
 #include <string>
+#include <glm/glm.hpp>
 
 #include "bindings.h"
+
 
 class AiBindings : public Bindings {
 public:
     AiBindings(GamePlayScript& script);
 
+
 protected:
-    virtual void initialize();
+    virtual void bind() override;
 
     std::string apiGetFaction(apikey ship);
     int apiSetFaction(apikey ship, const std::string& faction);
@@ -22,4 +25,7 @@ protected:
     int apiSetTargetPoint(apikey flyToTask, const glm::vec3& point);
     apikey apiCreateFightTask(apikey ship);
     int apiAddFightTaskTarget(apikey flyToTask, apikey worldObject);
+
+    apikey apiTaskExecutor(apikey aiTask);
 };
+

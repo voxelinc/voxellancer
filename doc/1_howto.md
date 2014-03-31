@@ -11,7 +11,7 @@ You can fly around, fight and destroy other ships or do missions.
 * Q, E - roll
 * R - Rocket
 * P - Pause
-* F1-F4 change scenarios
+* F1-F5 change scenarios
 
 You can configure the controls as you want. The instructions are currently only displayed in the console.
 
@@ -19,9 +19,7 @@ You can configure the controls as you want. The instructions are currently only 
 * F11 start keyboard configuration
 
 only for debugging:
-
-* F5 - reload shader
-* F6 - reload configs
+* F8 - reload shader and configs
 * F9 - world status information
 * 1-9 - show framebuffer
 
