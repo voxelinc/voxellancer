@@ -1,3 +1,4 @@
+
 #include <bandit/bandit.h>
 
 #include <iostream>
@@ -19,22 +20,25 @@ go_bandit([](){
         PropertyManager::instance()->load("data/config.ini");
         PropertyManager::instance()->load("data/voxels.ini", "voxels");
 
-        it("reads directory", [&]() {
-            std::string pathBase = "test/directoryreader/test";
+#ifdef WIN32
+        std::string pathBase = "test\\directoryreader\\test\\";
+#else
+        std::string pathBase = "test/directoryreader/test/";
+#endif
 
+        it("reads directory", [&]() {
             DirectoryReader r(pathBase);
             std::list<std::string> files = r.read();
 
             AssertThat(files.size(), Equals(3));
 
-            AssertThat(files, Contains(pathBase + "/ab_-c.txt"));
-            AssertThat(files, Contains(pathBase + "/awesometestrly"));
-            AssertThat(files, Contains(pathBase + "/lulz.mp3"));
+            AssertThat(files, Contains(pathBase + "ab_-c.txt"));
+            AssertThat(files, Contains(pathBase + "awesometestrly"));
+            AssertThat(files, Contains(pathBase + "lulz.mp3"));
         });
 
-        it("doesn't care about slash at the end", [&]() {
-            std::string pathBase = "test/directoryreader/test/";
-            DirectoryReader r(pathBase);
+        it("doesn't care about missing slash at the end", [&]() {
+            DirectoryReader r(pathBase.substr(0, pathBase.size()-1));
 
             std::list<std::string> files = r.read();
 
