@@ -20,11 +20,7 @@ go_bandit([](){
         PropertyManager::instance()->load("data/config.ini");
         PropertyManager::instance()->load("data/voxels.ini", "voxels");
 
-#ifdef WIN32
-        std::string pathBase = "test\\directoryreader\\test\\";
-#else
         std::string pathBase = "test/directoryreader/test/";
-#endif
 
         it("reads directory", [&]() {
             DirectoryReader r(pathBase);
