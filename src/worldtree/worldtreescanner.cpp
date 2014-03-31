@@ -43,7 +43,7 @@ void WorldTreeScanner::setScanRadius(float scanRadius) {
     m_scanRadius = scanRadius;
 }
 
-const std::set<WorldObject*>& WorldTreeScanner::worldObjects() {
+const std::unordered_set<WorldObject*>& WorldTreeScanner::worldObjects() {
     return m_worldObjects;
 }
 
@@ -55,11 +55,11 @@ void WorldTreeScanner::update(float deltaSec, const glm::vec3& position) {
     update(deltaSec, nullptr, position);
 }
 
-const std::set<WorldObject*>& WorldTreeScanner::foundWorldObjects() {
+const std::unordered_set<WorldObject*>& WorldTreeScanner::foundWorldObjects() {
     return m_foundWorldObjects;
 }
 
-const std::set<WorldObject*>& WorldTreeScanner::lostWorldObjects() {
+const std::unordered_set<WorldObject*>& WorldTreeScanner::lostWorldObjects() {
     return m_lostWorldObjects;
 }
 
@@ -83,37 +83,23 @@ void WorldTreeScanner::update(float deltaSec, WorldObject* worldObject, const gl
 }
 
 void WorldTreeScanner::scan(WorldObject* worldObject, const glm::vec3& position) {
-    std::set<WorldObject*> worldObjects(worldObjectsInRange(worldObject, position));
-
     m_foundWorldObjects.clear();
     m_lostWorldObjects.clear();
 
-    std::set<WorldObject*>::iterator iLeft = m_worldObjects.begin();
-    std::set<WorldObject*>::iterator iRight = worldObjects.begin();
+    m_lostWorldObjects.insert(m_worldObjects.begin(), m_worldObjects.end());
 
-    while (iLeft != m_worldObjects.end() && iRight != worldObjects.end()) {
-        WorldObject* left = *iLeft;
-        WorldObject* right = *iRight;
+    std::unordered_set<WorldObject*> worldObjects(worldObjectsInRange(worldObject, position));
 
-        if (left == right) {
-            iLeft++;
-            iRight++;
-        } else if (left < right) {
-            m_lostWorldObjects.insert(left);
-            iLeft++;
-        } else if (right < left) {
-            m_foundWorldObjects.insert(right);
-            iRight++;
+    for (WorldObject* worldObject : worldObjects) {
+        bool existed = m_lostWorldObjects.erase(worldObject) > 0;
+
+        if (!existed) {
+            m_foundWorldObjects.insert(worldObject);
         }
     }
 
-    for (; iLeft != m_worldObjects.end(); iLeft++) {
-        m_lostWorldObjects.insert(*iLeft);
-    }
-    for (; iRight != worldObjects.end(); iRight++) {
-        m_foundWorldObjects.insert(*iRight);
-    }
-
+    /* These two loops are not performance - relevant because
+       the containers they iterate will mostly be empty */
     for(WorldObject* worldObject : m_foundWorldObjects) {
         m_worldObjects.insert(worldObject);
     }
@@ -129,8 +115,8 @@ void WorldTreeScanner::scan(WorldObject* worldObject, const glm::vec3& position)
     }
 }
 
-std::set<WorldObject*> WorldTreeScanner::worldObjectsInRange(WorldObject* worldObject, const glm::vec3& position) {
-    std::set<WorldObject*> result;
+std::unordered_set<WorldObject*> WorldTreeScanner::worldObjectsInRange(WorldObject* worldObject, const glm::vec3& position) {
+    std::unordered_set<WorldObject*> result;
     Sphere scanSphere(position, m_scanRadius);
 
     WorldTreeQuery worldTreeQuery(&World::instance()->worldTree(), &scanSphere, worldObject->collisionDetector().geode()->containingNode(), &worldObject->collisionFilter());

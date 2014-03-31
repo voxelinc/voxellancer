@@ -1,6 +1,6 @@
 #pragma once
 
-#include <set>
+#include <unordered_set>
 
 #include <glm/glm.hpp>
 
@@ -18,9 +18,9 @@ public:
     float scanRadius() const;
     void setScanRadius(float scanRadius);
 
-    const std::set<WorldObject*>& worldObjects();
-    const std::set<WorldObject*>& foundWorldObjects();
-    const std::set<WorldObject*>& lostWorldObjects();
+    const std::unordered_set<WorldObject*>& worldObjects();
+    const std::unordered_set<WorldObject*>& foundWorldObjects();
+    const std::unordered_set<WorldObject*>& lostWorldObjects();
 
     void update(float deltaSec, WorldObject* worldObject);
     void update(float deltaSec, const glm::vec3& position);
@@ -35,14 +35,14 @@ protected:
 
     float m_scanRadius;
 
-    std::set<WorldObject*> m_worldObjects;
+    std::unordered_set<WorldObject*> m_worldObjects;
 
-    std::set<WorldObject*> m_foundWorldObjects;
-    std::set<WorldObject*> m_lostWorldObjects;
+    std::unordered_set<WorldObject*> m_foundWorldObjects;
+    std::unordered_set<WorldObject*> m_lostWorldObjects;
 
 
     void update(float deltaSec, WorldObject* worldObject, const glm::vec3& position);
     void scan(WorldObject* worldObject, const glm::vec3& position);
-    std::set<WorldObject*> worldObjectsInRange(WorldObject* worldObject, const glm::vec3& position);
+    std::unordered_set<WorldObject*> worldObjectsInRange(WorldObject* worldObject, const glm::vec3& position);
 };
 
