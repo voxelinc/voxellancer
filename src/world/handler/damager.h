@@ -6,12 +6,16 @@
 #include "world/helper/damageimpact.h"
 #include "world/helper/worldobjectmodification.h"
 
+#include "property/property.h"
+
 
 class WorldObject;
 
 class Damager
 {
 public:
+    Damager();
+
     void applyDamages(std::list<DamageImpact> &damageImpacts);
     void reset();
 
@@ -29,5 +33,7 @@ protected:
     std::list<WorldObjectModification> m_worldObjectModifications;
 
     DamageImpact dampDamageImpact(DamageImpact &undamped, float factor);
+
+    Property<bool> m_playerShipUndestroyable;
 };
 
