@@ -23,6 +23,14 @@ class CubeMesh;
 class WorldTreeNode;
 
 /**
+ * Data for the shader
+ */
+struct AABBData {
+    glm::vec3 middle;
+    glm::vec3 extent;
+};
+
+/**
     Able to render a set of AABBs, as wireframes only, currently
 */
 class AABBRenderer : public ContextDependant {
@@ -47,7 +55,7 @@ protected:
 
     std::unique_ptr<CubeMesh> m_cubeMesh;
 
-    std::vector<std::pair<glm::vec3, glm::vec3>> m_aabbs;
+    std::vector<AABBData> m_aabbs;
 
 
     void initialize();

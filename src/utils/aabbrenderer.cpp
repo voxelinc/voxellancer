@@ -18,14 +18,19 @@ AABBRenderer::AABBRenderer():
 {
 }
 
-AABBRenderer::~AABBRenderer() =default;
+AABBRenderer::~AABBRenderer() = default;
 
 void AABBRenderer::clear() {
     m_aabbs.clear();
 }
 
 void AABBRenderer::add(const AABB& aabb) {
-    m_aabbs.push_back(std::make_pair(aabb.middle(), aabb.extent()));
+    AABBData data;
+
+    data.middle = aabb.middle();
+    data.extent = aabb.extent();
+
+    m_aabbs.push_back(data);
 }
 
 void AABBRenderer::draw(const Camera& camera) {
@@ -85,7 +90,6 @@ void AABBRenderer::initializeVAO() {
     extentBinding->setFormat(3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3));
     m_vao->enable(extentLocation);
 }
-
 
 void AABBRenderer::beforeContextDestroy() {
     m_program = nullptr;
