@@ -1,12 +1,11 @@
 Lua API bindings
 ================
-generated from 165ede4
+generated from 53857a7
 
 ## commonbindings.h
 
     bool valid(apikey key);
-    int showText(const std::string& string);
-    int showTextFor(const std::string& string, int seconds);
+    int showMessage(const std::string& string);
     int playVoice(const std::string& soundFile);
     int setEventActive(apikey eventPoll, bool active);
     apikey createSingleShotTimer(const std::string& callback, float delta);
@@ -24,6 +23,8 @@ generated from 165ede4
     int setOrientation(apikey worldObject, const glm::vec3& orientation);
     glm::vec3 position(apikey worldObject);
     glm::vec3 orientation(apikey worldObject);
+    int setShowOnHud(apikey worldObject, bool show);
+    int setCanLockOn(apikey worldObject, bool lockon);
     apikey onWorldObjectDestroyed(apikey worldObject, const std::string& callback);
     apikey onAABBEntered(apikey worldObject, const glm::vec3& llf, const glm::vec3& urb, const std::string& callback);
 
@@ -33,7 +34,6 @@ generated from 165ede4
     apikey missionStart(const std::string& name);
     apikey onMissionFailure(apikey missionKey, const std::string& callback);
     apikey onMissionSuccess(apikey missionKey, const std::string& callback);
-    apikey createStatePoll(apikey missionKey, MissionState state, const std::string& callback);
 
 
 ## internalmissionbindings.h
@@ -74,6 +74,7 @@ Ini Objects
 
 ## engines
 
+ * candle
  * enginemk1
  * enginemk3
  * loudengine
@@ -115,6 +116,7 @@ Ini Objects
 ## worldobjects
 
  * banner
+ * cake
  * idareyou
  * missionstart
 
@@ -137,5 +139,14 @@ Ini Objects
  * smallpolice
  * specialbasicship
  * startortress
+
+
+## colorcodess
+
+ * engineSlot: 0x000E
+ * hardpoint: 0x000D
+ * cockpit: 0x000C
+ * fuel: 0x000F
+ * crucial: 0xC00C
 
 
