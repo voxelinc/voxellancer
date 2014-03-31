@@ -19,6 +19,7 @@
 #include <glow/global.h>
 #include <glow/logging.h>
 #include <glow/debugmessageoutput.h>
+#include <glow/Program.h>
 #include <glowutils/global.h>
 #include <glowutils/File.h>
 
@@ -175,7 +176,8 @@ void drawLoading(TextureRenderer& r, Camera& c, const std::string& status) {
     r.draw(c);
     glClear(GL_DEPTH_BUFFER_BIT);
     VoxelRenderer::instance()->prepareDraw(c, false);
-    VoxelFont::instance()->drawString(status, glm::vec3(-0.85f, -0.5f, -1) * 40.f, glm::quat(), FontSize::SIZE5x7, 0.2f, FontAlign::LEFT);
+    VoxelFont::instance()->drawString("Voxellancer", glm::vec3(0, 0.5f, -1) * 40.f, glm::quat(), FontSize::SIZE5x7, 0.4f, FontAlign::CENTER);
+    VoxelFont::instance()->drawString(status, glm::vec3(-0.85f, -0.5f, -1) * 40.f, glm::quat(), FontSize::SIZE5x7, 0.15f, FontAlign::LEFT);
     VoxelRenderer::instance()->afterDraw();
     glfwSwapBuffers(glfwGetCurrentContext());
 }
@@ -231,6 +233,7 @@ int main(int argc, char* argv[]) {
         TextureRenderer r("data/textures/loading.dds");
         Camera c(ContextProvider::instance()->viewport().width(), ContextProvider::instance()->viewport().height());
         std::shared_ptr<VoxelRenderer> vr = VoxelRenderer::instance();
+        vr->program()->getUniform<glm::vec3>("lightdir")->set(glm::vec3(0, 0, 1));
 
         drawLoading(r, c, "Loading... Objects");
         PropertyDirectory("data/worldobjects").read();
