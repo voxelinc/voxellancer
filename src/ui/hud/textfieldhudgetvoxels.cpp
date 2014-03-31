@@ -13,12 +13,12 @@
 #include "utils/geometryhelper.h"
 
 TextFieldHudgetVoxels::TextFieldHudgetVoxels(TextFieldHudget* textFieldHudget, glm::vec3 direction, float scale, std::string content, FontSize fontSize) :
-m_textFieldHudget(textFieldHudget),
-m_voxelFont(VoxelFont::instance()),
-m_content(content),
-m_direction(direction),
-m_scale(scale),
-m_fontSize(fontSize)
+    m_textFieldHudget(textFieldHudget),
+    m_voxelFont(VoxelFont::instance()),
+    m_content(content),
+    m_direction(direction),
+    m_scale(scale),
+    m_fontSize(fontSize)
 {
     m_width = m_voxelFont->letterWidth(fontSize) * m_scale;
     m_height = m_voxelFont->letterWidth(fontSize) * m_scale;
