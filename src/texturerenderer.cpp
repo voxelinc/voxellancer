@@ -2,6 +2,13 @@
 
 #include <stdexcept>
 
+#include <GL/glew.h>
+
+#ifdef WIN32
+#include <GL/wglew.h>
+#endif
+#include <GLFW/glfw3.h>
+
 #include <glow/Program.hpp>
 #include <glow/Texture.h>
 #include <glow/Buffer.h>
@@ -10,15 +17,18 @@
 #include <glowutils/global.h>
 
 #include "resource/ddstexture.h"
-#include "camera/camera.h"
+#include "voxel/voxelrenderer.h"
+#include "ui/voxelfont.h"
+#include "etc/contextprovider.h"
 
 TextureRenderer::TextureRenderer(const std::string& file) :
     m_texture(0),
     m_shaderProgram(0),
     m_quad(),
+    m_camera(ContextProvider::instance()->viewport().width(), ContextProvider::instance()->viewport().height()),
+    m_voxelRenderer(VoxelRenderer::instance()), // we hold this pointer to avoid the VR being recreated each time
     m_file(file)
 {
-
 }
 
 void TextureRenderer::initialize() {
@@ -41,13 +51,21 @@ void TextureRenderer::initialize() {
     m_shaderProgram = new glow::Program();
     m_shaderProgram->attach(vertexShader, fragmentShader);
 
-    m_shaderProgram->getUniform<GLint>("tex")->set(0);
-
-
- 
+    m_shaderProgram->getUniform<GLint>("tex")->set(0); 
 }
 
-void TextureRenderer::draw(const Camera& camera){
+void TextureRenderer::drawLoading(const std::string& status) {
+    draw();
+    glClear(GL_DEPTH_BUFFER_BIT);
+    m_voxelRenderer->prepareDraw(m_camera, false);
+    m_voxelRenderer->program()->getUniform<glm::vec3>("lightdir")->set(glm::vec3(0, 0, 1));
+    VoxelFont::instance()->drawString("Voxellancer", glm::vec3(0, 0.5f, -1) * 40.f, glm::quat(), FontSize::SIZE5x7, 0.4f, FontAlign::CENTER);
+    VoxelFont::instance()->drawString(status, glm::vec3(-0.85f, -0.5f, -1) * 40.f, glm::quat(), FontSize::SIZE5x7, 0.15f, FontAlign::LEFT);
+    m_voxelRenderer->afterDraw();
+    glfwSwapBuffers(glfwGetCurrentContext());
+}
+
+void TextureRenderer::draw(){
     if (!m_texture) {
         initialize();
     }
@@ -57,7 +75,6 @@ void TextureRenderer::draw(const Camera& camera){
     m_shaderProgram->use();
 
     m_quad.draw();
-    //m_vertexArrayObject->drawArrays(GL_TRIANGLE_FAN, 0, 4);
 
     m_shaderProgram->release();
     m_texture->unbind();

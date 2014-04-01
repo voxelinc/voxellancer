@@ -1,10 +1,12 @@
 #pragma once
 
+#include <memory>
 #include <string>
 #include <glow/ref_ptr.h>
 
 #include "etc/contextdependant.h"
 #include "display/rendering/screenquad.h"
+#include "camera/camera.h"
 
 namespace glow {
     class Texture;
@@ -14,18 +16,22 @@ namespace glow {
 }
 
 class Camera;
+class VoxelRenderer;
 
 class TextureRenderer : public ContextDependant {
 public:
     TextureRenderer(const std::string& file);
 
-    void draw(const Camera& camera);
+    void draw();
+    void drawLoading(const std::string& status);
 
 
 protected:
     glow::ref_ptr<glow::Texture> m_texture;
     glow::ref_ptr<glow::Program> m_shaderProgram;
+    std::shared_ptr<VoxelRenderer> m_voxelRenderer;
     ScreenQuad m_quad;
+    Camera m_camera;
     std::string m_file;
 
     void initialize();

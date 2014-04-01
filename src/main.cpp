@@ -42,10 +42,6 @@
 #include "world/world.h"
 
 #include "texturerenderer.h"
-#include "voxel/voxelrenderer.h"
-#include "ui/voxelfont.h"
-#include "skybox.h"
-#include "camera/camera.h"
 
 static GLint MajorVersionRequire = 3;
 static GLint MinorVersionRequire = 1;
@@ -172,16 +168,6 @@ void toggleFullScreen() {
     resizeCallback(window, res.width(), res.height());
 }
 
-void drawLoading(TextureRenderer& r, Camera& c, const std::string& status) {
-    r.draw(c);
-    glClear(GL_DEPTH_BUFFER_BIT);
-    VoxelRenderer::instance()->prepareDraw(c, false);
-    VoxelFont::instance()->drawString("Voxellancer", glm::vec3(0, 0.5f, -1) * 40.f, glm::quat(), FontSize::SIZE5x7, 0.4f, FontAlign::CENTER);
-    VoxelFont::instance()->drawString(status, glm::vec3(-0.85f, -0.5f, -1) * 40.f, glm::quat(), FontSize::SIZE5x7, 0.15f, FontAlign::LEFT);
-    VoxelRenderer::instance()->afterDraw();
-    glfwSwapBuffers(glfwGetCurrentContext());
-}
-
 int main(int argc, char* argv[]) {
     CommandLineParser clParser;
     clParser.parse(argc, argv);
@@ -230,21 +216,18 @@ int main(int argc, char* argv[]) {
 #ifdef TRYCATCH
     try {
 #endif
-        TextureRenderer r("data/textures/loading.dds");
-        Camera c(ContextProvider::instance()->viewport().width(), ContextProvider::instance()->viewport().height());
-        std::shared_ptr<VoxelRenderer> vr = VoxelRenderer::instance();
-        vr->program()->getUniform<glm::vec3>("lightdir")->set(glm::vec3(0, 0, 1));
+        TextureRenderer* r = new TextureRenderer("data/textures/loading.dds");
 
-        drawLoading(r, c, "Loading... Objects");
+        r->drawLoading("Loading... Objects");
         PropertyDirectory("data/worldobjects").read();
-        drawLoading(r, c, "Loading... Engines");
+        r->drawLoading("Loading... Engines");
         PropertyDirectory("data/equipment/engines").read();
-        drawLoading(r, c, "Loading... Weapons");
+        r->drawLoading("Loading... Weapons");
         PropertyDirectory("data/equipment/weapons").read();
-        drawLoading(r, c, "Loading... Projectiles");
+        r->drawLoading("Loading... Projectiles");
         PropertyDirectory("data/equipment/projectiles").read();
 
-        drawLoading(r, c, "Loading... Game");
+        r->drawLoading("Loading... Game");
         game = new Game();
 
         if(clParser.hmd()) {
@@ -255,7 +238,7 @@ int main(int argc, char* argv[]) {
             }
         }
 
-        vr.reset();
+        delete r;
 
         mainloop();
 
