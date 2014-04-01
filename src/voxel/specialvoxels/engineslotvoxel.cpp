@@ -11,7 +11,7 @@
 
 
 EngineSlotVoxel::EngineSlotVoxel(const glm::ivec3& gridCell, int index):
-    SpecialVoxel(gridCell, index, Property<uint32_t>::get("voxels.engineSlot.color"), Property<float>::get("voxels.engineSlot.mass"), Property<float>::get("voxels.engineSlot.hp")),
+    SpecialVoxel(gridCell, index, Property<uint32_t>::get("voxels.engineSlot.color"), Property<float>::get("voxels.engineSlot.unscaledMass"), Property<float>::get("voxels.engineSlot.hp")),
     m_engineSlot(nullptr)
 {
 }

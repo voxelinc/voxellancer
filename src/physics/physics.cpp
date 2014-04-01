@@ -21,9 +21,9 @@
 Physics::Physics(WorldObject& worldObject):
     m_directionalDampening(Property<float>("physics.globalDirectionalDampening")),
     m_angularDampening(Property<float>("physics.globalAngularDampening")),
-    m_baseMass(0),
-    m_maxBaseMass(0),
-    m_accumulatedBaseMassVec(0.0f, 0.0f, 0.0f),
+    m_unscaledMass(0),
+    m_maxUnscaledMass(0),
+    m_accumulatedUnscaledMassVec(0.0f, 0.0f, 0.0f),
     m_worldObject(worldObject)
 {
 }
@@ -61,11 +61,11 @@ void Physics::setAcceleration(const Acceleration& acceleration) {
 }
 
 float Physics::mass() const {
-    return m_baseMass * std::pow(m_worldObject.transform().scale(), 3);
+    return m_unscaledMass * std::pow(m_worldObject.transform().scale(), 3);
 }
 
 float Physics::maxMass() const {
-    return m_maxBaseMass * std::pow(m_worldObject.transform().scale(), 3);
+    return m_maxUnscaledMass * std::pow(m_worldObject.transform().scale(), 3);
 }
 
 const Transform Physics::projectedTransformIn(float deltaSec){
@@ -92,7 +92,7 @@ std::list<VoxelCollision> &Physics::move(float deltaSec) {
 
 void Physics::addVoxel(Voxel* voxel) {
     voxelChanged(voxel, true);
-    m_maxBaseMass = std::max(m_maxBaseMass, m_baseMass);
+    m_maxUnscaledMass = std::max(m_maxUnscaledMass, m_unscaledMass);
 }
 
 void Physics::removeVoxel(Voxel* voxel) {
@@ -115,13 +115,13 @@ void Physics::updateSpeed(float deltaSec) {
 }
 
 void Physics::voxelChanged(Voxel* voxel, bool isAdd) {
-    float baseMassDelta = (isAdd ? 1 : -1) * voxel->normalizedMass();
+    float baseMassDelta = (isAdd ? 1 : -1) * voxel->unscaledMass();
 
-    m_baseMass += baseMassDelta;
-    m_accumulatedBaseMassVec += glm::vec3(voxel->gridCell()) * baseMassDelta;
+    m_unscaledMass += baseMassDelta;
+    m_accumulatedUnscaledMassVec += glm::vec3(voxel->gridCell()) * baseMassDelta;
 
-    if (m_baseMass > 0.0f) {
-        m_worldObject.transform().setCenterAndAdjustPosition(m_accumulatedBaseMassVec / m_baseMass);
+    if (m_unscaledMass > 0.0f) {
+        m_worldObject.transform().setCenterAndAdjustPosition(m_accumulatedUnscaledMassVec / m_unscaledMass);
     }  else {
         m_worldObject.transform().setCenterAndAdjustPosition(glm::vec3(0.0f, 0.0f, 0.0f));
     }

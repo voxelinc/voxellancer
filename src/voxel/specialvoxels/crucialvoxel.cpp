@@ -8,7 +8,7 @@
 
 
 CrucialVoxel::CrucialVoxel(const glm::ivec3& gridCell, int index):
-    SpecialVoxel(gridCell, Property<uint32_t>::get("voxels.crucial.color"), index, Property<float>::get("voxels.crucial.mass"), Property<float>::get("voxels.crucial.hp"))
+    SpecialVoxel(gridCell, Property<uint32_t>::get("voxels.crucial.color"), index, Property<float>::get("voxels.crucial.unscaledMass"), Property<float>::get("voxels.crucial.hp"))
 {
 }
 
