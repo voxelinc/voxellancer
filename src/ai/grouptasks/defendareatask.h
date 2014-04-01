@@ -28,6 +28,8 @@ public:
 protected:
     virtual void onNewLeader(Ship* leader) override;
     virtual void onMemberJoin(Ship* member) override;
+    void setPatrol();
+    void setFight();
     void updatePatrol();
     void updateFight();
 
@@ -35,11 +37,12 @@ protected:
 
     std::unique_ptr<CollisionFilter> m_collisionFilter;
     std::shared_ptr<FlyToTask> m_leaderFlyTask;
-    std::shared_ptr<FightTask> m_fightTask;
+    std::shared_ptr<FightTask> m_leaderFightTask;
     std::list<glm::vec3> m_points;
     std::list<glm::vec3>::iterator m_currentPoint;
     std::vector<Handle<WorldObject>> m_enemies;
 
     float m_defendRange;
+    bool m_fighting;
 };
 
