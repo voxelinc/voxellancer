@@ -18,6 +18,11 @@ namespace glow {
 class Camera;
 class VoxelRenderer;
 
+/*
+ *  Renders a texture at file on the screen quad
+ *  Optionally including a status text
+ */
+
 class TextureRenderer : public ContextDependant {
 public:
     TextureRenderer(const std::string& file);

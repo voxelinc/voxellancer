@@ -56,7 +56,6 @@ void TextureRenderer::initialize() {
 
 void TextureRenderer::drawLoading(const std::string& status) {
     draw();
-    glClear(GL_DEPTH_BUFFER_BIT);
     m_voxelRenderer->prepareDraw(m_camera, false);
     m_voxelRenderer->program()->getUniform<glm::vec3>("lightdir")->set(glm::vec3(0, 0, 1));
     VoxelFont::instance()->drawString("Voxellancer", glm::vec3(0, 0.5f, -1) * 40.f, glm::quat(), FontSize::SIZE5x7, 0.4f, FontAlign::CENTER);
@@ -69,6 +68,7 @@ void TextureRenderer::draw(){
     if (!m_texture) {
         initialize();
     }
+    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
     glDisable(GL_DEPTH_TEST);
 
     m_texture->bind();
