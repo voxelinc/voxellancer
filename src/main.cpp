@@ -22,6 +22,7 @@
 #include <glow/Program.h>
 #include <glowutils/global.h>
 #include <glowutils/File.h>
+#include <glowutils/AutoTimer.h>
 
 #include "etc/contextprovider.h"
 #include "etc/hmd/hmdmanager.h"
@@ -169,6 +170,7 @@ void toggleFullScreen() {
 }
 
 int main(int argc, char* argv[]) {
+    glowutils::AutoTimer* initTimer = new glowutils::AutoTimer("Setup");
     CommandLineParser clParser;
     clParser.parse(argc, argv);
 
@@ -239,6 +241,7 @@ int main(int argc, char* argv[]) {
         }
 
         delete r;
+        delete initTimer;
 
         mainloop();
 
