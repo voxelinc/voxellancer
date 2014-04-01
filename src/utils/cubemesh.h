@@ -13,7 +13,7 @@ namespace glow {
 
 /**
     Provides the geometry of a unit-cube
-    Not that the lifetime of this class has to be >= the lifetime of the program/vao
+    Note that the lifetime of this class has to be >= the lifetime of the program/vao
     it is bound to, otherwise their behaviour is undefined
  */
 class CubeMesh : public ContextDependant {
