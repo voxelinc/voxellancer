@@ -22,7 +22,7 @@ class Player;
 
 class GamePlayNormalInput : public GamePlayInput {
 public:
-    GamePlayNormalInput(Player *player);
+    GamePlayNormalInput();
 
     virtual void resizeEvent(const unsigned int width, const unsigned int height) override;
     virtual void keyCallback(int key, int scancode, int action, int mods) override;
@@ -31,7 +31,6 @@ public:
 
 
 protected:
-    Player* m_player;
     InputConfigurator* m_inputConfigurator;
     SecondaryInputValues m_secondaryInputValues;
     std::vector<ActionKeyMapping*> m_actions;

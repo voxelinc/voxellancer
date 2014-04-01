@@ -5,7 +5,7 @@
 #include "geometry/speed.h"
 #include "geometry/acceleration.h"
 
-#include "utils/randvec.h"
+#include "utils/randvec3.h"
 #include "utils/randfloat.h"
 #include "utils/randbool.h"
 

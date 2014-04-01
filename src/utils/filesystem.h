@@ -1,9 +1,5 @@
 #include <string>
 
-/**
- *  A wrapper for basic filesystem.
- *  Can be replaced with QtCore or something like this if someone wants to do this ;)
- */
 class FileSystem {
 public:
 
@@ -16,7 +12,7 @@ public:
 
     /**
      * Returns the writable user config directory.
-     * Ensures that it exists
+     * Ensures that it exists.
      */
     static std::string userConfigDir();
 

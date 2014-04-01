@@ -28,8 +28,6 @@ void GamePlayRunning::update(float deltaSec) {
     m_pauseTrigger.update(deltaSec);
 
     World::instance()->update(deltaSec);
-
-    m_gamePlay->player().update(deltaSec);
 }
 
 void GamePlayRunning::onEntered() {

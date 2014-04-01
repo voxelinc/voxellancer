@@ -17,8 +17,8 @@ class Player;
 class SoundManager;
 
 /**
-    State that is active whenever the the game is actually played and not
-    in some menustate etc.
+ *   State that is active whenever the the game is actually played and not
+ *   in some menustate etc.
 */
 class GamePlay: public GameState {
 public:
@@ -36,7 +36,6 @@ public:
     virtual const Scene& scene() const override;
     virtual const CameraHead& cameraHead() const override;
 
-    Player& player();
     SoundManager& soundManager();
 
     void loadScenario(int i);
@@ -46,12 +45,11 @@ public:
 
     virtual void onEntered() override;
     virtual void onLeft() override;
-
+    void updateView();
 
 protected:
     Game* m_game;
 
-    std::unique_ptr<Player> m_player;
     std::unique_ptr<GamePlayScene> m_scene;
     std::unique_ptr<BaseScenario> m_scenario;
     std::shared_ptr<SoundManager> m_soundManager;

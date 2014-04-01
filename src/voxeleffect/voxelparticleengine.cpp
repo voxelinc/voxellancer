@@ -37,8 +37,20 @@ int VoxelParticleEngine::particleDataCount() const {
     return m_cpuParticleBuffer.size();
 }
 
+int VoxelParticleEngine::particleCount() const {
+    return m_cpuParticleBuffer.size() - m_freeParticleBufferIndices.size();
+}
+
 VoxelParticleData* VoxelParticleEngine::particleData(int index) {
     return &m_cpuParticleBuffer[index];
+}
+
+std::vector<VoxelParticleData>& VoxelParticleEngine::particleDataVector() {
+    return m_cpuParticleBuffer;
+}
+
+void VoxelParticleEngine::setPlayer(Player& m_player) {
+    m_remover->setPlayer(m_player);
 }
 
 void VoxelParticleEngine::addParticle(const VoxelParticleSetup& particleSetup, const VoxelCluster* creator) {
@@ -99,8 +111,8 @@ void VoxelParticleEngine::particleChanged(int bufferIndex) {
         m_gpuParticleBufferInvalidEnd = bufferIndex;
     }
     /*
-    If the range of particles gets too big, probably because of too many
-    particles between two free positions, push the old range to the gpu
+        If the range of particles gets too big, probably because of too many
+        particles between two free positions, push the old range to the gpu
     */
     int oldInvalidCount = oldInvalidEnd - oldInvalidBegin;
     int newInvalidCount = m_gpuParticleBufferInvalidEnd - m_gpuParticleBufferInvalidBegin;
@@ -132,18 +144,6 @@ void VoxelParticleEngine::updateGPUBuffers(int begin, int end) {
     m_renderer->updateBuffer(begin, end, &m_cpuParticleBuffer[begin]);
 
     m_gpuParticleBufferInvalid = false;
-}
-
-std::vector<VoxelParticleData>& VoxelParticleEngine::particleDataVector() {
-    return m_cpuParticleBuffer;
-}
-
-void VoxelParticleEngine::setPlayer(Player& m_player) {
-    m_remover->setPlayer(m_player);
-}
-
-int VoxelParticleEngine::particleCount() const {
-    return m_cpuParticleBuffer.size() - m_freeParticleBufferIndices.size();
 }
 
 void VoxelParticleEngine::beforeContextDestroy() {

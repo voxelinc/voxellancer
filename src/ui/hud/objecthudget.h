@@ -14,7 +14,7 @@ class ArrowHudgetVoxels;
 
 class ObjectHudget: public Hudget {
 public:
-    ObjectHudget(HUD* hud, HUDObjectDelegate* objectDelegate);
+    ObjectHudget(HUD* hud);
     virtual ~ObjectHudget();
 
     virtual void update(float deltaSec) override;
@@ -25,6 +25,7 @@ public:
     virtual void onClick(ClickType clickType) override;
 
     HUDObjectDelegate* objectDelegate();
+    void setObjectDelegate(HUDObjectDelegate* objectDelegate);
 
 
 protected:

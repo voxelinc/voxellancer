@@ -167,6 +167,7 @@ go_bandit([](){
 
         it("can iterate directories", [&]() {
             std::string dir = FileSystem::userConfigDir() + "/test";
+            AssertThat(FileSystem::exists(dir), Equals(false));
             FileSystem::createDirectory(dir);
 
             std::ofstream(dir + "/test1.txt").close();
@@ -182,6 +183,7 @@ go_bandit([](){
             FileSystem::removeFile(dir + "/test2.txt");
             FileSystem::removeDirectory(dir + "/test3");
             FileSystem::removeDirectory(dir);
+
         });
     });
 });

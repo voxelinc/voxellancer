@@ -9,13 +9,15 @@
 
 #include "utils/handle/handle.h"
 
-class TargetSelector;
 
 class Aimer;
 class Camera;
 class CameraHead;
-class HUD;
 class CameraDolly;
+class HUD;
+class Mission;
+class MissionSystem;
+class TargetSelector;
 
 class Player {
 public:
@@ -38,6 +40,7 @@ public:
 
     void selectTarget(bool next);
     void setTarget(WorldObject* target);
+
 
 protected:
     Handle<Ship> m_ship;

@@ -14,6 +14,7 @@
 #include "scenarios/battlescenario.h"
 #include "scenarios/gamescenario.h"
 #include "scenarios/frozengamescenario.h"
+#include "scenarios/missionscenario.h"
 #include "scenarios/scriptedscenario.h"
 #include "scenarios/piratescenario.h"
 
@@ -27,30 +28,28 @@
 #include "camera/camerahead.h"
 #include "camera/cameradolly.h"
 #include "ui/hud/hud.h"
+#include "display/viewer.h"
 
 
 
 GamePlay::GamePlay(Game* game) :
     GameState("In Game", game),
     m_game(game),
-    m_player(new Player()),
     m_runningState(new GamePlayRunning(this)),
     m_pausedState(new GamePlayPaused(this)),
-    m_normalInput(new GamePlayNormalInput(m_player.get())),
+    m_normalInput(new GamePlayNormalInput()),
     m_freecamInput(new GamePlayFreecamInput()),
     m_freecamActive(false),
-    m_scene(new GamePlayScene(*this, *m_player)),
+    m_scene(new GamePlayScene(*this)),
     m_soundManager(new SoundManager()),
-    m_scenario(new ScriptedScenario(this, "data/scripts/scenarios/flyto.lua"))
+    m_scenario(new ScriptedScenario(this, "data/scripts/scenarios/demo.lua"))
 {
+    updateView();
     setInitialSubState(m_runningState);
 
     m_runningState->pauseTrigger().setTarget(new TriggeredTransition(m_runningState, m_pausedState));
     m_pausedState->continueTrigger().setTarget(new TriggeredTransition(m_pausedState, m_runningState));
-    m_player->hud().setViewer(m_game->viewer());
-    World::instance()->setPlayer(*m_player);
 }
-
 
 Game* GamePlay::game() {
     return m_game;
@@ -81,11 +80,7 @@ GamePlayInput& GamePlay::currentInput() {
 }
 
 const CameraHead& GamePlay::cameraHead() const {
-    return m_freecamActive ? m_freecamInput->cameraHead() : m_player->cameraHead();
-}
-
-Player& GamePlay::player() {
-    return *m_player;
+    return m_freecamActive ? m_freecamInput->cameraHead() : World::instance()->player().cameraHead();
 }
 
 SoundManager& GamePlay::soundManager() {
@@ -95,9 +90,11 @@ SoundManager& GamePlay::soundManager() {
 void GamePlay::loadScenario(int i) {
     m_soundManager->stopAll();
     m_scenario->clear();
-    switch (i){
+    updateView();
+
+    switch (i) {
     case 0:
-        m_scenario.reset(new ScriptedScenario(this, "data/scripts/scenarios/flyto.lua"));
+        m_scenario.reset(new ScriptedScenario(this, "data/scripts/scenarios/demo.lua"));
         break;
     case 1:
         m_scenario.reset(new GameScenario(this));
@@ -114,8 +111,8 @@ void GamePlay::loadScenario(int i) {
     default:
         m_scenario.reset(new BaseScenario(this));
     }
+
     m_scenario->load();
-    World::instance()->setPlayer(*m_player);
 }
 
 void GamePlay::keyCallback(int key, int scancode, int action, int mods) {
@@ -124,11 +121,11 @@ void GamePlay::keyCallback(int key, int scancode, int action, int mods) {
         case GLFW_KEY_F:        
             m_freecamActive = !m_freecamActive;
             if (m_freecamActive) {
-                m_freecamInput->setPosition(m_player->cameraHead().cameraDolly()->position());
-                m_freecamInput->setOrientation(m_player->cameraHead().cameraDolly()->orientation());
+                m_freecamInput->setPosition(World::instance()->player().cameraHead().cameraDolly()->position());
+                m_freecamInput->setOrientation(World::instance()->player().cameraHead().cameraDolly()->orientation());
 
-                m_player->move(glm::vec3(0));
-                m_player->rotate(glm::vec3(0));
+                World::instance()->player().move(glm::vec3(0));
+                World::instance()->player().rotate(glm::vec3(0));
                 Property<bool>("vfx.drawhud").set(false);
             } else {
                 Property<bool>("vfx.drawhud").set(true);
@@ -143,7 +140,7 @@ void GamePlay::update(float deltaSec) {
     if (m_freecamActive) {
         m_soundManager->setListener(m_freecamInput->cameraHead().position(), m_freecamInput->cameraHead().orientation());
     } else {
-        m_soundManager->setListener(m_player->cameraHead().position(), m_player->cameraHead().orientation());
+        m_soundManager->setListener(World::instance()->player().cameraHead().position(), World::instance()->player().cameraHead().orientation());
     }
 
     GameState::update(deltaSec);
@@ -159,5 +156,9 @@ void GamePlay::onEntered() {
 void GamePlay::onLeft() {
     m_soundManager->deactivate();
     GameState::onLeft();
+}
+
+void GamePlay::updateView() {
+    World::instance()->player().hud().setView(&m_game->viewer().view());
 }
 
