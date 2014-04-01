@@ -42,7 +42,7 @@
 
 #include "world/world.h"
 
-#include "texturerenderer.h"
+#include "display/rendering/texturerenderer.h"
 
 static GLint MajorVersionRequire = 3;
 static GLint MinorVersionRequire = 1;

@@ -26,7 +26,7 @@
 #include "ui/hud/hud.h"
 #include "display/viewer.h"
 
-#include "texturerenderer.h"
+#include "display/rendering/texturerenderer.h"
 
 
 GamePlay::GamePlay(Game* game) :
