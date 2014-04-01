@@ -56,7 +56,7 @@ void GamePlayScene::draw(const Camera& camera, glow::FrameBufferObject* target, 
 }
 
 void GamePlayScene::update(float deltaSec) {
-    m_starField->update(deltaSec, m_player.cameraHead().position());
+    m_starField->update(deltaSec, m_gamePlay.cameraHead().position());
 }
 
 void GamePlayScene::setOutputBuffer(int i) {
