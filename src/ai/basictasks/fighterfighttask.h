@@ -11,6 +11,10 @@
 class Ship;
 class WorldObject;
 
+/**
+ *  FightTask for smaller and quicker ships
+ */
+
 class FighterFightTask : public FightTaskImplementation {
 public:
     FighterFightTask(BoardComputer* boardComputer, const std::vector<Handle<WorldObject>>& targets);

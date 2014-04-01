@@ -27,7 +27,6 @@ void FighterFightTask::update(float deltaSec) {
             return;
         case State::APPROACH:
             if (angleToTarget() > 45.0f) {
-                boardComputer();
                 boardComputer()->rotateTo(m_primaryTarget->transform().position());
             } else {
                 boardComputer()->rotateTo(m_primaryTarget->transform().position());

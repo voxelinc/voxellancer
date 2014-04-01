@@ -3,13 +3,17 @@
 #include "ai/boardcomputer.h"
 
 #include "ai/basictasks/fighterfighttask.h"
+#include "ai/basictasks/cruiserfighttask.h"
 
 
 FightTask::FightTask(BoardComputer* boardComputer, const std::vector<Handle<WorldObject>>& targets) :
     AiTask(boardComputer)
 {
-    //TODO: switch subtask by ship type
-    m_task.reset(new FighterFightTask(boardComputer, targets));
+    if (boardComputer->worldObject()->voxelCount() < 10000) { // better: WorldObjectType::BigShip?
+        m_task.reset(new FighterFightTask(boardComputer, targets));
+    } else {
+        m_task.reset(new CruiserFightTask(boardComputer, targets));
+    }
 }
 
 void FightTask::update(float deltaSec) {
