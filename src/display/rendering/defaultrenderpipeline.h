@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <string>
 #include <vector>
 
 #include "renderpipeline.h"
@@ -12,10 +13,10 @@ class RenderPass;
 class ScreenQuad;
 class PostProcessingPass;
 
-/*
-   a renderpipeline that applies basic effects to the frame like
-   a bloom effect and creates the final image
-*/
+/**
+ *  a renderpipeline that applies basic effects to the frame like
+ *  a bloom effect and creates the final image
+ */
 class DefaultRenderPipeline : public RenderPipeline {
 public:
     DefaultRenderPipeline();
@@ -34,7 +35,7 @@ protected:
     
     std::shared_ptr<PostProcessingPass> m_fxaa;
     std::shared_ptr<PostProcessingPass> m_finalization;
-    Property<bool> m_useFxaa;
+    Property<std::string> m_antialiasing;
 
 };
 

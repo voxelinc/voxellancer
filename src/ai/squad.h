@@ -4,12 +4,16 @@
 #include <memory>
 
 #include "glm/glm.hpp"
-
+#include "scripting/scriptable.h"
 
 class Ship;
 class AiGroupTask;
 
-class Squad {
+/**
+ *  Ships can be joined to Squads to give them AiGroupTasks. The Squad's leader is the one to execute the Squad's task.
+ */
+
+class Squad : public Scriptable {
 public:
     Squad(Ship* leader = nullptr);
     ~Squad();
@@ -22,8 +26,10 @@ public:
 
     const std::vector<Ship*>& members();
 
+
 protected:
     friend class SquadLogic;
+
     // Interface for SquadLogic
     void onMemberJoin(Ship* member);
     void onMemberLeave(Ship* member);

@@ -3,17 +3,19 @@ cmake_minimum_required(VERSION 2.8.9 FATAL_ERROR)
 # PROJECT DESCRIPTION
 set(META_PROJECT_NAME "voxellancer")
 set(META_VERSION_MAJOR "0")
-set(META_VERSION_MINOR "1")
-set(META_VERSION_PATCH "0")
+set(META_VERSION_MINOR "3")
+set(META_VERSION_PATCH "1")
 set(META_VERSION "${META_VERSION_MAJOR}.${META_VERSION_MINOR}.${META_VERSION_PATCH}")
 set(META_AUTHOR_ORGANIZATION "voxelinc")
 set(META_AUTHOR_DOMAIN "https://github.com/voxelinc/voxellancer/")
 
+set(VOXELLANCER_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
 # OPTIONS
 option(OPTION_LIMIT_CONFIGS "Generate limited configs (Release; Debug)" ON)
 option(OPTION_ERRORS_AS_EXCEPTION "Throw exceptions" OFF)
 option(OPTION_CREATE_SUB_TEST "Create sub tests" OFF)
+option(OPTION_INCLUDE_VC_REDIST "Include VC redist" ON)
 
 
 # CMAKE CONFIGURATION
@@ -95,9 +97,10 @@ find_package(SFML REQUIRED)
 find_package(BANDIT REQUIRED)
 find_package(LibOVR REQUIRED)
 find_package(OpenMP REQUIRED)
+find_package(Lua52 REQUIRED)
 
-if(REGEX_USE_BOOST)
-find_package(Boost REQUIRED regex)
+if(BOOST_MODULES)
+    find_package(Boost REQUIRED ${BOOST_MODULES})
 endif()
 
 if(OPENMP_FOUND)
@@ -109,10 +112,8 @@ else()
     message(WARNING "OpenMP not found")
 endif()
 
-set(GLOW_DIRECTORY glow)
-include_directories(${LIB_DIR}/${GLOW_DIRECTORY}/include)
-add_subdirectory(${LIB_DIR}/${GLOW_DIRECTORY})
-
+set(GLOW_SOURCE_DIR ${LIB_DIR}/glow)
+include_directories(${GLOW_SOURCE_DIR}/include)
 
 # Include directories
 include_directories(
@@ -123,6 +124,7 @@ include_directories(
     ${SFML_INCLUDE_DIR}
     ${BANDIT_INCLUDE_DIR}
     ${LIBOVR_INCLUDE_DIRS}
+    ${LUA52_INCLUDE_DIR}
 )
 
 
@@ -158,10 +160,16 @@ file(GLOB_RECURSE SHADER_FILES
 source_group(${SHADER_GROUP} FILES ${SHADER_FILES})
 
 
-source_group_by_path_function(${SOURCE_DIR} "\\.h$|\\.hpp$"
+source_group_by_path(${SOURCE_DIR} "\\.h$|\\.hpp$"
     ${HEADER_GROUP} ${SRC_FILES})
-source_group_by_path_function(${SOURCE_DIR} "\\.cpp$|\\.c$|\\.inl$"
+source_group_by_path(${SOURCE_DIR} "\\.cpp$|\\.c$|\\.inl$"
     ${SOURCE_GROUP} ${SRC_FILES})
+
+# If we build for windows systems, we also include the resource file
+# containing the manifest, icon and other resources
+if(WIN32)
+  set(SRC_FILES ${SRC_FILES} "${SOURCE_DIR}/voxellancer.rc")
+endif(WIN32)
 
 add_executable(${target}
     ${SRC_FILES}
@@ -177,6 +185,7 @@ set(LIBS_TO_LINK
     ${SFML_LIBRARIES}
     ${Boost_LIBRARIES}
     ${LIBOVR_LIBRARIES}
+    ${LUA52_LIBRARY}
     glow
     glowutils
     ${LIBS_TO_LINK}
@@ -197,7 +206,7 @@ set_target_properties(${target}
     DEBUG_POSTFIX "d${DEBUG_POSTFIX}"
 )
 
-set(BINARIES ${GLEW_BINARY} ${GLFW_BINARY} ${SFML_BINARIES})
+set(BINARIES ${GLEW_BINARY} ${GLFW_BINARY} ${SFML_BINARIES} ${LUA52_BINARY})
 
 if(WIN32)
     foreach( binary ${BINARIES})
@@ -206,18 +215,30 @@ if(WIN32)
     endforeach( binary )
 endif()
 
+set(DOCUMENTATION doc/howto.html doc/luaapi.html)
+
 install(TARGETS ${target}
         RUNTIME DESTINATION .)
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/data
         DESTINATION .
         PATTERN "*.png" EXCLUDE)
 install(FILES ${BINARIES} DESTINATION .)
+install(FILES ${DOCUMENTATION} DESTINATION .)
 
- set(CPACK_NSIS_CREATE_ICONS "CreateShortCut '\$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\${PROJECT_NAME}.lnk' '\$INSTDIR\\\\${PROJECT_NAME}.exe'")
- 
-include(CPack)
+include(cmake/Package.cmake)
 
 include_directories(${SOURCE_DIR})
 
 add_subdirectory(test)
+
+# add GLOW and GLOWUTILS
+set(INSTALL_BIN           ".")
+set(INSTALL_SHARED        ".")
+set(INSTALL_LIB           "lib")
+set(OPTION_BUILD_STATIC   OFF)
+option(OPTION_ERRORS_AS_EXCEPTION "Throw exceptions" OFF)
+
+include_directories(${GLOW_SOURCE_DIR}/pre-build/generated)
+add_subdirectory(${GLOW_SOURCE_DIR}/source/glow)
+add_subdirectory(${GLOW_SOURCE_DIR}/source/glowutils)
 

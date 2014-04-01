@@ -4,7 +4,8 @@
 
 #include "world/world.h"
 #include "utils/randfloat.h"
-#include "utils/randvec.h"
+#include "utils/randfloatpool.h"
+#include "utils/randvec3.h"
 
 #include "voxelparticledata.h"
 #include "voxelparticlesetup.h"
@@ -57,5 +58,5 @@ void VoxelExplosionGenerator::spawn() {
 }
 
 float VoxelExplosionGenerator::createScale() {
-    return RandFloat::randomize(m_scale, m_scaleRandomization);
+    return RandFloatPool::randomize(m_scale, m_scaleRandomization);
 }

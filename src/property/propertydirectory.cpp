@@ -21,7 +21,7 @@ PropertyDirectory::PropertyDirectory(const std::string& path):
 void PropertyDirectory::read() {
     std::list<std::string> files = DirectoryReader(m_path).read();
 
-    regexns::regex iniRegex(R"(^.*?([^\/]+)\.ini$)");
+    regexns::regex iniRegex(R"(^.*?([^\/\\]+)\.ini$)");
 
     for (std::string& file : files) {
         regexns::smatch matches;

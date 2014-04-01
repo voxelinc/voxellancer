@@ -37,6 +37,9 @@
 #include "gamestate/game.h"
 #include "gamestate/gameplay/gameplayscene.h"
 
+#include "utils/filesystem.h"
+
+#include "world/world.h"
 
 static GLint MajorVersionRequire = 3;
 static GLint MinorVersionRequire = 1;
@@ -88,25 +91,32 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
         (glfwGetKey(window, GLFW_KEY_RIGHT_ALT) == GLFW_PRESS))) {
         toggleFullScreen();
     }
-    if (key == GLFW_KEY_F5 && action == GLFW_PRESS) {
-        glowutils::File::reloadAll();
+    if (key >= GLFW_KEY_F1 && key <= GLFW_KEY_F7 && action == GLFW_PRESS) {
+        game->gamePlay().loadScenario(key - GLFW_KEY_F1);
     }
-    if (key == GLFW_KEY_F6 && action == GLFW_PRESS) {
+    if (key == GLFW_KEY_F8 && action == GLFW_PRESS) {
+        glowutils::File::reloadAll();
         PropertyManager::instance()->load("data/config.ini");
+    }
+    if (key == GLFW_KEY_F9 && action == GLFW_PRESS) {
+        World::instance()->printStatus();
     }
     if (key >= GLFW_KEY_1 && key <= GLFW_KEY_9 && action == GLFW_PRESS) {
         game->gamePlay().scene().setOutputBuffer(key-GLFW_KEY_1);
-    }
-    if (key >= GLFW_KEY_F1 && key <= GLFW_KEY_F4 && action == GLFW_PRESS) {
-        game->gamePlay().loadScenario(key - GLFW_KEY_F1);
     }
 
 	game->gamePlay().running().input().keyCallback(key, scancode, action, mods);
 }
 
+
+static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
+    game->gamePlay().running().input().mouseButtonCallback(button, action, mods);
+}
+
 void setGLFWCallbacks(GLFWwindow* window) {
     glfwSetKeyCallback(window, keyCallback);
     glfwSetWindowSizeCallback(window, resizeCallback);
+    glfwSetMouseButtonCallback(window, mouseButtonCallback);
 }
 
 static void miscSettings() {
@@ -161,6 +171,12 @@ int main(int argc, char* argv[]) {
     clParser.parse(argc, argv);
 
     PropertyManager::instance()->load("data/config.ini");
+    glow::info("Config Directory: %;", FileSystem::userConfigDir());
+    std::string controlsConfig = FileSystem::userConfigDir() + "/controls.ini";
+    if (!FileSystem::exists(controlsConfig)) {
+        FileSystem::copyFile("data/controls.ini.default", controlsConfig);
+    }
+    PropertyManager::instance()->load(controlsConfig);
     PropertyManager::instance()->load("data/voxels.ini", "voxels");
 
     if (!glfwInit()) {

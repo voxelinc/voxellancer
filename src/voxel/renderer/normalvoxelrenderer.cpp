@@ -63,7 +63,6 @@ void NormalVoxelRenderer::draw(VoxelCluster& cluster) {
     renderData.vertexArrayObject()->drawArraysInstanced(GL_TRIANGLE_STRIP, 0, 14, renderData.voxelCount());
 }
 
-
 void NormalVoxelRenderer::afterDraw() {
     glActiveTexture(GL_TEXTURE0);
     m_program->release();
@@ -76,7 +75,6 @@ void NormalVoxelRenderer::createAndSetupShaders() {
         glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/shader/voxelcluster/voxelcluster.frag"),
         glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/shader/lib/voxel.frag")
     );
-
 }
 
 void NormalVoxelRenderer::beforeContextDestroy() {
@@ -90,3 +88,4 @@ void NormalVoxelRenderer::afterContextRebuild() {
 glow::Program* NormalVoxelRenderer::program() {
     return m_program.get();
 }
+

@@ -1,7 +1,5 @@
 #include "stereoblitprogram.h"
 
-#include <iostream>
-
 #include <glm/glm.hpp>
 
 #include <glow/Shader.h>

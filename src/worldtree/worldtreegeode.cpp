@@ -11,9 +11,13 @@
 WorldTreeGeode::WorldTreeGeode(WorldObject* worldObject) :
     m_worldObject(worldObject),
     m_containingNode(nullptr),
-    m_aabb(worldObject->bounds().aabb())
+    m_aabb(worldObject->bounds().aabb()),
+    m_passive(false)
 {
     m_worldObject->collisionDetector().setGeode(this);
+    if (worldObject->passiveForCollisionDetection()) {
+        m_passive = true;
+    }
 }
 
 WorldObject* WorldTreeGeode::worldObject() {
@@ -54,3 +58,8 @@ void WorldTreeGeode::addIntersectingLeaf(WorldTreeNode* leaf) {
 void WorldTreeGeode::removeIntersectingLeaf(WorldTreeNode* leaf) {
     m_intersectingLeafs.remove(leaf);
 }
+bool WorldTreeGeode::isPassive() {
+    return m_passive;
+}
+
+

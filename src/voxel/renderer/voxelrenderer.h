@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include <glm/glm.hpp>
 
 class Camera;
 class VoxelCluster;

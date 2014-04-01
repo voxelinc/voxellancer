@@ -18,6 +18,7 @@
 #include "equipment/engineslot.h"
 #include "equipment/hardpoint.h"
 #include "equipment/weapons/gun.h"
+
 #include "sound/soundmanager.h"
 #include "gamestate/gameplay/gameplay.h"
 #include "world/world.h"
@@ -83,7 +84,7 @@ void FrozenGameScenario::populateWorld() {
     testCluster->objectInfo().setShowOnHud(false);
     m_world->god().scheduleSpawn(testCluster);
 
-    m_gamePlay->player().setShip(testCluster);
+    World::instance()->player().setShip(testCluster);
 
     WorldObject *wall = new WorldObject();
     wall->transform().move(glm::vec3(-30, 0, -50));

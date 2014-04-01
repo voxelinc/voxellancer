@@ -9,3 +9,4 @@ public:
     virtual void setPlayer(Player& player);
     virtual void beforeCheck();
 };
+

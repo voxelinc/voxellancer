@@ -1,7 +1,6 @@
 #include "worldtree.h"
 
 #include <algorithm>
-#include <iostream>
 
 #include "utils/tostring.h"
 #include "worldobject/worldobject.h"
@@ -29,6 +28,7 @@ WorldTreeGeode* WorldTree::insert(WorldObject* worldObject) {
     
     assert(!worldObject->isInstanced());
     WorldTreeGeode* geode = new WorldTreeGeode(worldObject);
+    
     insert(geode);
 
     return geode;

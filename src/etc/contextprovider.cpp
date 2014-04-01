@@ -134,9 +134,9 @@ void ContextProvider::toggleFullScreen() {
 }
 
 void ContextProvider::shutdown() {
-    //for (ContextDependant* dependant : m_contextDependants) {
-    //    dependant->beforeContextDestroy();
-    //}
+    for (ContextDependant* dependant : m_contextDependants) {
+        dependant->beforeContextDestroy();
+    }
     glfwDestroyWindow(glfwGetCurrentContext());
 }
 
@@ -189,7 +189,7 @@ int ContextProvider::currentMonitor() const {
 }
 
 void ContextProvider::registerContextDependant(ContextDependant* dependant) {
-    assert(m_contextDependants.find(dependant) == m_contextDependants.end());
+    assert(m_contextDependants.count(dependant) == 0);
     m_contextDependants.insert(dependant);
 }
 

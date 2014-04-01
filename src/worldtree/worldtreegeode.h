@@ -26,11 +26,13 @@ public:
     std::list<WorldTreeNode*>& intersectingLeafs();
     void addIntersectingLeaf(WorldTreeNode* leaf);
     void removeIntersectingLeaf(WorldTreeNode* leaf);
+    bool isPassive();
 
 protected:
     WorldObject* m_worldObject;
     WorldTreeNode* m_containingNode;
     IAABB m_aabb;
+    bool m_passive;
     std::list<WorldTreeNode*> m_intersectingLeafs;
 };
 

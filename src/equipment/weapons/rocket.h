@@ -5,8 +5,9 @@
 #include "ai/aitask.h"
 #include "ai/boardcomputer.h"
 
+#include "utils/handle/handle.h"
+
 #include "worldobject/worldobject.h"
-#include "worldobject/handle/handle.h"
 
 #include "projectile.h"
 #include "sound/soundproperties.h"
@@ -14,9 +15,9 @@
 
 class Sound;
 
-/*
-    Base class for Projectiles that follow a target and attempt to crush into it.
-    Also, currently explodes on any collision
+/**
+ *   Base class for Projectiles that follow a target and attempt to crush into it.
+ *   Also, currently explodes on any collision
 */
 class Rocket: public Projectile {
 public:

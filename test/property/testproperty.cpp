@@ -4,8 +4,13 @@
 #include <glow/ChangeListener.h>
 #include <glow/logging.h>
 
+#include <fstream>
+
+#include "property/property.h"
 #include "property/propertymanager.h"
 #include "input/inputmapping.h"
+#include "utils/filesystem.h"
+#include "utils/directoryreader.h"
 
 using namespace bandit;
 
@@ -23,18 +28,17 @@ go_bandit([](){
         }
     };
 
-    describe("Property", [](){
-        before_each([&](){
+    describe("Property", []() {
+        before_each([&]() {
             glow::setVerbosityLevel(glow::LogMessage::Fatal);
             PropertyManager::reset();
         });
-        after_each([&](){
+        after_each([&]() {
             glow::setVerbosityLevel(glow::LogMessage::Info);
         });
 
         it("should load", [&]() {
             PropertyManager::instance()->load("test/property/test.ini");
-            PropertyManager::instance()->load("data/voxels.ini", "voxels");
 
             Property<int> iSize("player.size");
             Property<float> fProp("player.size");
@@ -44,6 +48,7 @@ go_bandit([](){
             Property<char> cProp("section.forward");
             Property<bool> bProp2("player.is_true");
             Property<glm::vec3> v3Prop("player.pos");
+            Property<float> angleProp("player.angle");
 
             AssertThat(iSize.get(), Equals(1));
             AssertThat(fProp.get(), Equals(1));
@@ -55,6 +60,7 @@ go_bandit([](){
             AssertThat(v3Prop->x, Equals(1.0));
             AssertThat(v3Prop->y, Equals(0));
             AssertThat(v3Prop->z, Equals(.5));
+            AssertThat(angleProp.get(), EqualsWithDelta(glm::radians(45.0f), 0.01));
         });
 
         it("understands inputmapping", [&]() {
@@ -115,6 +121,68 @@ go_bandit([](){
             AssertThat(listener.success, Equals(true));
 
             PropertyManager::instance()->deregisterListener(&listener);
+
+        });
+    });
+
+    describe("FilesSystem",[&]() {
+        it("has a user config dir", [&]() {
+            std::string dir = FileSystem::userConfigDir();
+            AssertThat(dir, !Equals(""));
+            AssertThat(FileSystem::exists(dir), Equals(true));
+        });
+
+        it("can copy files", [&]() {
+            std::string source = "test/property/test.ini";
+            std::string target = FileSystem::userConfigDir() + "/test.ini";
+            if (FileSystem::exists(target)) {
+                FileSystem::removeFile(target);
+            }
+
+            AssertThat(FileSystem::exists(source), Equals(true));
+            AssertThat(FileSystem::exists(target), Equals(false));
+
+            FileSystem::copyFile(source, target);
+
+            AssertThat(FileSystem::exists(target), Equals(true));
+
+            FileSystem::removeFile(target);
+
+            AssertThat(FileSystem::exists(target), Equals(false));
+        });
+
+        it("can create dirs", [&]() {
+            std::string dir = FileSystem::userConfigDir() + "/test";
+            if (FileSystem::exists(dir)) {
+                FileSystem::removeDirectory(dir);
+            }
+            AssertThat(FileSystem::exists(dir), Equals(false));
+
+            FileSystem::createDirectory(dir);
+            AssertThat(FileSystem::exists(dir), Equals(true));
+
+            FileSystem::removeDirectory(dir);
+            AssertThat(FileSystem::exists(dir), Equals(false));
+        });
+
+        it("can iterate directories", [&]() {
+            std::string dir = FileSystem::userConfigDir() + "/test";
+            AssertThat(FileSystem::exists(dir), Equals(false));
+            FileSystem::createDirectory(dir);
+
+            std::ofstream(dir + "/test1.txt").close();
+            std::ofstream(dir + "/test2.txt").close();
+            FileSystem::createDirectory(dir + "/test3");
+
+            DirectoryReader reader(dir);
+            std::list<std::string> files = reader.read();
+
+            AssertThat(files.size(), Equals(2));
+
+            FileSystem::removeFile(dir + "/test1.txt");
+            FileSystem::removeFile(dir + "/test2.txt");
+            FileSystem::removeDirectory(dir + "/test3");
+            FileSystem::removeDirectory(dir);
 
         });
     });

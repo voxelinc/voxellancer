@@ -1,5 +1,9 @@
 #!/bin/bash
 
+sudo apt-get install -y build-essential xorg-dev libglu1-mesa-dev cmake \
+    libboost-regex1.54-dev libboost-filesystem1.54-dev libudev-dev \
+    libopenal-dev libsndfile1-dev libjpeg-dev liblua5.2-dev
+
 pushd `dirname $0`
 
 # glew

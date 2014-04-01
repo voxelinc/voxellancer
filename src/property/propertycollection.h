@@ -8,22 +8,23 @@
 
 #include "def_regex.h"
 
+class AbstractPropertyCollection {
+public:
+    virtual bool update(const std::string& key, const std::string& svalue) = 0;
+};
 
 template <class T>
-class Property;
+class PropertyImpl;
 
 template <class T>
-class PropertyCollection {
+class PropertyCollection : public AbstractPropertyCollection {
 public:
     PropertyCollection(regexns::regex regex, std::function<T(const std::string&)> converter);
-    virtual ~PropertyCollection();
 
-    void registerProperty(Property<T> * prop);
-    void registerProperty(Property<T> * prop, const T& defaultValue);
+    PropertyImpl<T>* getImpl(const std::string& key);
+    PropertyImpl<T>* getImpl(const std::string& key, const T& defaultValue);
 
-    void unregisterProperty(Property<T> * prop);
-
-    bool update(const std::string& key, const std::string& svalue);
+    virtual bool update(const std::string& key, const std::string& svalue) override;
 
     void set(const std::string& key, const T& value);
 
@@ -31,11 +32,15 @@ public:
     T get(const std::string& name, const T& defaultValue) const;
 
 
-private:
+protected:
     std::map<std::string, T> m_values;
-    std::multimap<std::string, Property<T> *> m_properties;
+    std::map<std::string, PropertyImpl<T>*> m_properties;
     regexns::regex m_regex;
     std::function<T(const std::string&)> m_converter;
+
+    PropertyImpl<T>* getOrCreate(const std::string& key);
+    PropertyImpl<T>* create(const std::string& key);
+
 };
 
 #include "propertycollection.inl"

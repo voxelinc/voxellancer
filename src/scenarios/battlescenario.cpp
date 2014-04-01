@@ -22,9 +22,10 @@
 #include "world/world.h"
 #include "world/god.h"
 
-#include "utils/randvec.h"
+#include "utils/randvec3.h"
 #include "player.h"
 #include "ui/objectinfo.h"
+
 
 BattleScenario::BattleScenario(GamePlay* gamePlay):
     BaseScenario(gamePlay)
@@ -43,14 +44,14 @@ void BattleScenario::populateWorld() {
     playerShip->objectInfo().setCanLockOn(false);
 
     m_world->god().scheduleSpawn(playerShip);
-    m_gamePlay->player().setShip(playerShip);
+    World::instance()->player().setShip(playerShip);
 
     // create enemy ai driven ship
     Ship *aitester = WorldObjectBuilder("basicship").buildShip();
     aitester->transform().setPosition(glm::vec3(0, 0, 10));
     aitester->objectInfo().setName("basicship");
     aitester->objectInfo().setShowOnHud(false);
-    aitester->character()->setTask(std::make_shared<FightTask>(aitester->boardComputer(), std::vector<Handle<WorldObject>>{ playerShip->handle() }));
+    aitester->character()->setTask(std::make_shared<FightTask>(aitester->boardComputer(), std::vector<Handle<WorldObject>>{ playerShip->WorldObject::handle() }));
     //m_world->god().scheduleSpawn(aitester);
 
 
@@ -109,7 +110,7 @@ void BattleScenario::spawnCapital(const std::vector<Ship*>& enemies) {
 
     std::vector<Handle<WorldObject>> enemyHandles;
     for (Ship* enemy : enemies) {
-        enemyHandles.push_back(enemy->handle());
+        enemyHandles.push_back(enemy->WorldObject::handle());
     }
     ship->character()->setTask(std::make_shared<FightTask>(ship->boardComputer(), enemyHandles));
     m_world->god().scheduleSpawn(ship);
@@ -118,8 +119,9 @@ void BattleScenario::spawnCapital(const std::vector<Ship*>& enemies) {
 void BattleScenario::setTargets(const std::vector<Ship*>& fleet, const std::vector<Ship*>& enemies) {
     std::vector<Handle<WorldObject>> enemyHandles;
     for (Ship* enemy : enemies) {
-        enemyHandles.push_back(enemy->handle());
+        enemyHandles.push_back(enemy->WorldObject::handle());
     }
+    enemyHandles.push_back(World::instance()->player().ship()->WorldObject::handle());
     for (Ship* ship : fleet) {
         std::random_shuffle(enemyHandles.begin(), enemyHandles.end());
         ship->character()->setTask(std::make_shared<FightTask>(ship->boardComputer(), enemyHandles));

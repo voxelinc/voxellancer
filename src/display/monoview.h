@@ -1,8 +1,10 @@
 #pragma once
 
+#include <string>
 #include <memory>
 
 #include "view.h"
+#include "property/property.h"
 
 
 class Scene;
@@ -24,5 +26,6 @@ public:
 
 protected:
     std::unique_ptr<Camera> m_camera;
+    Property<std::string> m_antialiasing;
 };
 

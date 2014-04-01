@@ -2,31 +2,42 @@
 
 #include <string>
 
+template <class T>
+class PropertyImpl;
 
+/**
+ *  represents a value loaded from an .ini file                                                              
+ */
 template <class T>
 class Property {
 public:
     Property(const std::string& name);
     Property(const std::string& name, const T& defaultValue);
-    virtual ~Property();
 
     const std::string& name() const;
 
-    T get() const;
+    const T& get() const;
     void set(const T& value);
 
     operator T() const;
-    T* operator->();
+    const T* operator->() const;
 
     static T get(const std::string& name);
     static T get(const std::string& name, const T& defaultvalue);
-
+   
+    static Property<T> unnamed(const T& value);
 
 protected:
-    std::string m_name;
-    T m_value;
+    PropertyImpl<T>* m_impl;
+
 };
 
-
+/**
+ *  helper method to get rid of the <T> as it can be inferred from the value
+ */
+template<class T>
+Property<T> unnamedProperty(const T& value) {
+    return Property<T>::unnamed(value);
+}
 
 #include "property.inl"

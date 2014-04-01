@@ -10,42 +10,41 @@
 #include "property/property.h"
 
 
+class Player;
 class WorldObject;
 class InputConfigurator;
 class GameState;
 class HUD;
 class HMD;
 class Player;
-class TargetSelector;
 
 class GamePlayRunningInput {
 public:
-    GamePlayRunningInput(Player *player);
+    GamePlayRunningInput();
 
     void resizeEvent(const unsigned int width, const unsigned int height);
     void keyCallback(int key, int scancode, int action, int mods);
-    void update(float deltaSec);
+    void mouseButtonCallback(int button, int action, int mods);
+	void update(float deltaSec);
 
 
 protected:
-    Player* m_player;
-    TargetSelector* m_targetSelector;
     InputConfigurator* m_inputConfigurator;
     SecondaryInputValues m_secondaryInputValues;
     std::vector<ActionKeyMapping*> m_actions;
+    bool m_centerCrosshair;
+    glm::vec2 m_lastMousePos;
 
     bool m_mouseControl;
     int m_cursorMaxDistance;
     int m_lastfocus;
 
-
-protected:
     void toggleControls();
 
     void processUpdate();
-    void processMouseUpdate();
-    void applyUpdates();
+    void processMouseUpdate(float deltaSec);
     void processHMDUpdate();
+    void applyUpdates();
 
     void processFireActions();
     void processMoveActions();
@@ -59,9 +58,12 @@ protected:
     void setupJoystickControls();
     void retrieveInputValues();
 
+    float m_currentTimePressed;
 
     Property<float> prop_deadzoneMouse;
     Property<float> prop_deadzoneGamepad;
+
+    Property<float> prop_maxClickTime;
 
     ActionKeyMapping fireAction;
     ActionKeyMapping rocketAction;

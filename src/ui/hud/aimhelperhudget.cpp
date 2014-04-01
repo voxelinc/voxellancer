@@ -1,7 +1,5 @@
 #include "aimhelperhudget.h"
 
-#include <iostream>
-
 #include <glm/glm.hpp>
 
 #include "utils/geometryhelper.h"
@@ -112,3 +110,6 @@ void AimHelperHudget::calculateTargetPoint(WorldObject* targetObject) {
     }
 }
 
+bool AimHelperHudget::isAt(const Ray& ray) const {
+    return m_visible && CircularHudget::isAt(ray);
+}

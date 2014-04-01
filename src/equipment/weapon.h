@@ -17,6 +17,10 @@ enum class WeaponType {
     RocketLauncher
 };
 
+/**
+*   Weapon to be mounted to a Hardpoint
+*/
+
 class Weapon: public Equipment {
 public:
     Weapon(WeaponType type, const std::string& equipmentKey);

@@ -10,6 +10,9 @@
 
 #include "utils/vec3hash.h"
 
+/**
+ *  Base class for anything that consits of Voxels
+*/
 
 class Voxel;
 class IVoxelRenderData;

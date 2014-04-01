@@ -1,7 +1,5 @@
 #include "hardpointaimhelper.h"
 
-#include <iostream>
-
 #include "voxel/specialvoxels/hardpointvoxel.h"
 
 #include "equipment/weapon.h"

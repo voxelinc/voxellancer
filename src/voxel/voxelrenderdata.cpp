@@ -1,6 +1,5 @@
 #include "voxelrenderdata.h"
 
-#include <iostream>
 #include <vector>
 
 #include <glow/VertexArrayObject.h>

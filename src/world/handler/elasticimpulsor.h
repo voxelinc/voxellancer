@@ -15,4 +15,5 @@ public:
 
 protected:
     Property<float> m_rotationFactor;
+    Property<float> m_elasticity;
 };

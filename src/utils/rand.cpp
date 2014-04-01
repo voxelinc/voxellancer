@@ -1,8 +1,7 @@
-#include "randvec.h"
+#include "randvec3.h"
 #include "randfloat.h"
 #include "randbool.h"
 
-#include <iostream>
 #include <cassert>
 
 #include <glm/glm.hpp>
@@ -38,3 +37,4 @@ glm::vec3 RandVec3::randUnitVec() {
     glm::vec3 result = glm::quat(glm::vec3(angX, angY, 0.0f)) * glm::vec3(0.0f, 0.0f, 1.0f);
     return glm::normalize(result);
 }
+

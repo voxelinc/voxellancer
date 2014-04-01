@@ -2,12 +2,18 @@
 
 #include <memory>
 
+#include "scripting/scriptable.h"
 
 class Squad;
 class AiTask;
 class Ship;
 
-class AiGroupTask {
+/**
+ *  AiGroupTasks are AiTasks on the level of Squads, e.g. can be executed by multiple Characters /  Ships
+ *  They work by setting the Tasks of the single Characters
+ */
+
+class AiGroupTask : public Scriptable {
 public:
     AiGroupTask(Squad& squad);
 

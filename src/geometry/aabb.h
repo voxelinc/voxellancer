@@ -15,14 +15,14 @@ template<typename T>
 class TAABB: public AbstractShape {
 public:
     TAABB();
-    TAABB(const glm::detail::tvec3<T> &llf, const glm::detail::tvec3<T> &rub);
+    TAABB(const glm::detail::tvec3<T> &llf, const glm::detail::tvec3<T> &urb);
     template<typename OtherT> TAABB(const TAABB<OtherT>& other);
 
     inline const glm::detail::tvec3<T> &llf() const;
     inline void setLLF(const glm::detail::tvec3<T> &llf);
 
-    inline const glm::detail::tvec3<T> &rub() const;
-    inline void setRUB(const glm::detail::tvec3<T> &rub);
+    inline const glm::detail::tvec3<T> &urb() const;
+    inline void setURB(const glm::detail::tvec3<T> &urb);
 
     T axisMin(Axis axis) const;
     T axisMax(Axis axis) const;
@@ -65,7 +65,7 @@ public:
 
 
 protected:
-    glm::detail::tvec3<T> m_llf, m_rub;
+    glm::detail::tvec3<T> m_llf, m_urb;
 };
 
 typedef TAABB<glm::mediump_float> AABB;

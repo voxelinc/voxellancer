@@ -6,7 +6,7 @@ WorldObjectModification::WorldObjectModification(WorldObject *worldObject):
 
 }
 
-WorldObject *WorldObjectModification::worldObject() {
+WorldObject* WorldObjectModification::worldObject() {
     return m_worldObject;
 }
 

@@ -11,7 +11,7 @@ static const glm::vec3 lub(-0.5f,  0.5f,  0.5f);
 static const glm::vec3 rlf( 0.5f, -0.5f, -0.5f);
 static const glm::vec3 rlb( 0.5f, -0.5f,  0.5f);
 static const glm::vec3 ruf( 0.5f,  0.5f, -0.5f);
-static const glm::vec3 rub( 0.5f,  0.5f,  0.5f);
+static const glm::vec3 urb( 0.5f,  0.5f,  0.5f);
 
 static const glm::vec3 left(-1, 0, 0);
 static const glm::vec3 right(1, 0, 0);
@@ -55,14 +55,14 @@ void VoxelMesh::bindTo(
 
 void VoxelMesh::initialize() {
     glow::Array<glm::vec3> array{
-        rub, dummy,
+        urb, dummy,
         lub, dummy,
         rlb, back,
         llb, back,
         llf, bottom,
         lub, left,
         luf, left,
-        rub, top,
+        urb, top,
         ruf, top,
         rlb, right,
         rlf, right,

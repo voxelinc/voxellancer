@@ -12,12 +12,12 @@ class Hardpoint;
 class HardpointVoxel;
 class WorldObject;
 
-/*
-    Module of the WorldObject that is responsible for managing all
-    the components of a WorldObject (Engines, Weapons) and their respective
-    slots.
-    Also provides functions to trigger actions or retrieve values from
-    a whole category of components. (like, fire all weapons, set all engines)
+/**
+ *   Module of the WorldObject that is responsible for managing all
+ *   the components of a WorldObject (Engines, Weapons) and their respective
+ *   slots.
+ *   Also provides functions to trigger actions or retrieve values from
+ *   a whole category of components. (like, fire all weapons, set all engines)
 */
 class WorldObjectComponents {
 public:

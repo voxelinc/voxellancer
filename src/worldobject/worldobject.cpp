@@ -7,7 +7,7 @@
 
 #include "utils/tostring.h"
 
-#include "worldobject/handle/handle.h"
+#include "utils/handle/handle.h"
 #include "physics/physics.h"
 #include "ui/objectinfo.h"
 #include "worldobjectcomponents.h"
@@ -16,16 +16,9 @@
 #include "voxel/voxeltree.h"
 #include "voxel/voxelrenderdata.h"
 
-
-WorldObject::WorldObject():
-    WorldObject(new CollisionFilter(this), 1.0f)
-{
-
-}
-
-WorldObject::WorldObject(CollisionFilter* collisionFilter, float scale) :
-    VoxelCluster(scale),
-    m_physics(new Physics(*this, scale)),
+WorldObject::WorldObject() :
+    VoxelCluster(1.0f),
+    m_physics(new Physics(*this, 1.0f)),
     m_collisionDetector(new CollisionDetector(*this, std::make_shared<VoxelTree>(this))),
     m_objectInfo(new ObjectInfo()),
     m_components(new WorldObjectComponents(this)),
@@ -33,7 +26,8 @@ WorldObject::WorldObject(CollisionFilter* collisionFilter, float scale) :
     m_collisionFieldOfDamage(glm::half_pi<float>()),
     m_handle(Handle<WorldObject>(this)),
     m_spawnState(SpawnState::None),
-    m_collisionFilter(collisionFilter)
+    m_collisionFilter(new CollisionFilter(this)),
+    m_crucialVoxelDestroyed(false)
 {
 }
 
@@ -50,6 +44,12 @@ WorldObject::WorldObject(WorldObject* prototype):
     m_collisionFilter(new CollisionFilter(this, prototype->collisionFilter().collisionMask()))
 {
 
+}
+
+WorldObject::WorldObject(const Transform& transform) :
+    WorldObject()
+{
+    setTransform(transform);
 }
 
 WorldObject::~WorldObject() {
@@ -132,7 +132,8 @@ void WorldObject::removeVoxel(Voxel* voxel) {
     voxel->onRemoval();
 
     if (voxel == m_crucialVoxel) {
-        m_crucialVoxel = nullptr;  // do spectacular stuff like an explosion
+        m_crucialVoxelDestroyed = true;
+        m_crucialVoxel = nullptr;
     }
 
     m_collisionDetector->removeVoxel(voxel);
@@ -153,7 +154,14 @@ Voxel* WorldObject::crucialVoxel() {
 }
 
 void WorldObject::setCrucialVoxel(const glm::ivec3& cell) {
+    assert(m_crucialVoxel == nullptr);
+ 
     m_crucialVoxel = voxel(cell);
+    m_crucialVoxelDestroyed = false;
+}
+
+bool WorldObject::isCrucialVoxelDestroyed(){
+    return m_crucialVoxelDestroyed;
 }
 
 void WorldObject::onCollision() {
@@ -179,5 +187,9 @@ void WorldObject::setCollisionFieldOfDamage(float collisionFieldOfDamage) {
 bool WorldObject::isInstanced() {
     assert(m_collisionDetector->voxelTree().isInstanced() == VoxelCluster::isInstanced());
     return VoxelCluster::isInstanced();
+}
+
+bool WorldObject::passiveForCollisionDetection() {
+    return false;
 }
 

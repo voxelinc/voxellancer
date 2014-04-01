@@ -6,7 +6,7 @@
 
 #include "collision/collisionfilter.h"
 
-#include "utils/randvec.h"
+#include "utils/randvec3.h"
 #include "utils/geometryhelper.h"
 #include "physics/physics.h"
 
@@ -68,6 +68,9 @@ void BoardComputer::rotateTo(const glm::vec3& position, const glm::vec3& up) {
     glm::vec3 projectedDirection = projectedOrientation * glm::vec3(0, 0, -1);
 
     // Direction to the target, in the local coordinate-sys
+    if (position == m_worldObject->transform().position()) {
+        return;
+    }
     glm::vec3 targetDirection = glm::inverse(m_worldObject->transform().orientation()) * glm::normalize(position - m_worldObject->transform().position());
 
     // The rotation that needs to be performed, in the local coordinate-sys

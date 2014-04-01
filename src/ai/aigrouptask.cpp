@@ -1,6 +1,5 @@
 #include "aigrouptask.h"
 
-
 #include "ai/squad.h"
 #include "worldobject/ship.h"
 #include "ai/character.h"
@@ -9,6 +8,9 @@
 AiGroupTask::AiGroupTask(Squad& squad) :
     m_squad(squad)
 {
+    if (m_squad.leader()) {
+        onNewLeader(m_squad.leader());
+    }
 }
 
 void AiGroupTask::update(float deltaSec) {

@@ -1,6 +1,5 @@
 #include "voxelcluster.h"
 
-#include <iostream>
 #include <list>
 
 #include <glm/glm.hpp>

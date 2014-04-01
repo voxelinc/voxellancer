@@ -12,7 +12,7 @@ namespace sf {
 class Sound {
 public:
     enum class Status {
-        Paused, Playing, Stopped, Disabled
+        Paused, Playing, Stopped, Null
     };
 
     Sound();

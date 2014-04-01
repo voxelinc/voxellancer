@@ -1,7 +1,5 @@
 #include "worldlogic.h"
 
-#include <iostream>
-
 #include "utils/tostring.h"
 
 #include "world.h"
@@ -16,6 +14,8 @@ WorldLogic::WorldLogic(World &world):
 }
 
 void WorldLogic::update(float deltaSecs) {
+    m_world.god().remove();
+    m_world.god().spawn();
 
     m_mover.moveWorldObjects(deltaSecs);
 
@@ -33,10 +33,11 @@ void WorldLogic::update(float deltaSecs) {
 
     m_world.god().scheduleSpawn(m_splitter.splitOffWorldObjects());
 
-//    m_wrecker.detectWreckages(m_damager.modifiedVoxelClusters());
-//    //m_wrecker.applyOnWreckageHooks();
-//    m_world.god().scheduleRemovals(m_wrecker.wreckages());
-//    m_world.god().scheduleSpawns(m_wrecker.recycled());
+    m_wrecker.detectWreckedObjects(m_damager.worldObjectModifications());
+    //m_wrecker.applyOnWreckageHooks();
+
+    m_world.god().scheduleRemovals(m_wrecker.wreckedObjects());
+    m_world.god().scheduleSpawn(m_wrecker.newWreckages());
 
     m_garbageCollector.check(m_world.worldObjects()/*m_damager.modifiedVoxelClusters()*/);
     //m_garbageCollector.applyOnGarbageHooks();

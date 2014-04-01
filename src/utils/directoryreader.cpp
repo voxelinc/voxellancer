@@ -1,16 +1,10 @@
 #include "directoryreader.h"
 
-#include <iostream>
 #include <stdexcept>
-
-#ifdef WIN32
-#include <windows.h>
-#else
-#include <dirent.h>
-#endif
 
 #include <glow/logging.h>
 
+#include "def_filesystem.h"
 
 
 DirectoryReader::DirectoryReader():
@@ -35,39 +29,16 @@ std::list<std::string> DirectoryReader::read() const {
         pathBase = m_path + "/";
     }
 
-#ifdef WIN32
-    WIN32_FIND_DATA findfiledata;
-    HANDLE hFind = INVALID_HANDLE_VALUE;
+    filesystem::path path(m_path);
 
-    std::wstring wpath(pathBase.begin(), pathBase.end());
-    hFind = FindFirstFile((wpath + L"*").c_str(), &findfiledata);
-    if (hFind != INVALID_HANDLE_VALUE) {
-        do {
-            if ((findfiledata.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0) {
-                std::wstring file(findfiledata.cFileName);
-                files.push_back(pathBase + std::string(file.begin(), file.end()));
+    if (filesystem::exists(path) && filesystem::is_directory(path)) {
+        filesystem::directory_iterator end;
+        for (filesystem::directory_iterator iter(path); iter != end; ++iter) {
+            if (filesystem::is_regular_file(iter->status())) {
+                files.push_back(iter->path().string());
             }
         }
-        while (FindNextFile(hFind, &findfiledata) != 0);
-    } else {
-        glow::critical("Failed to read directory '%;'", pathBase);
-        throw std::runtime_error(std::string("Directory '" + pathBase + "' not found!"));
     }
-#else
-    DIR* directory = opendir(pathBase.c_str());
-    if (directory == nullptr) {
-        glow::critical("Failed to read directory '%;'", pathBase);
-        throw std::runtime_error(std::string("Directory '" + pathBase + "' not found!"));
-    }
-
-    for (struct dirent* entity = readdir(directory); entity != nullptr; entity = readdir(directory)) {
-        if (entity->d_type == DT_REG) {
-            files.push_back(pathBase + entity->d_name);
-        }
-    }
-
-    closedir(directory);
-#endif
 
     return files;
 }

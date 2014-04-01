@@ -22,7 +22,8 @@
 Aimer::Aimer(WorldObject* worldObject) :
     m_worldObject(worldObject),
     m_infityAimDistance("general.infinityAimDistance"),
-    m_infityAimInterpolation("general.infinityAimInterpolation")
+    m_infityAimInterpolation("general.infinityAimInterpolation"),
+    m_lastDistance(0)
 {
 }
 

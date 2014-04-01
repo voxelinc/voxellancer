@@ -1,7 +1,5 @@
 #include "line.h"
 
-#include <iostream>
-
 #include "geometry/transform.h"
 
 #include "utils/tostring.h"
@@ -45,9 +43,9 @@ bool Line::intersects(const Sphere& sphere) const {
 
 bool Line::nearTo(const TAABB<int>& aabb) const {
     glm::ivec3 llf(std::min(m_a.x, m_b.x), std::min(m_a.y, m_b.y), std::min(m_a.z, m_b.z));
-    glm::ivec3 rub(std::max(m_a.x, m_b.x), std::max(m_a.y, m_b.y), std::max(m_a.z, m_b.z));
+    glm::ivec3 urb(std::max(m_a.x, m_b.x), std::max(m_a.y, m_b.y), std::max(m_a.z, m_b.z));
 
-    TAABB<int> lineAABB(llf, rub);
+    TAABB<int> lineAABB(llf, urb);
     return lineAABB.intersects(aabb);
 }
 
