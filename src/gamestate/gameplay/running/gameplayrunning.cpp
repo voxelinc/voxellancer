@@ -13,7 +13,7 @@
 GamePlayRunning::GamePlayRunning(GamePlay* gamePlay):
     GameState("GamePlay Main", gamePlay),
     m_gamePlay(gamePlay),
-    m_input(new GamePlayRunningInput(&gamePlay->player())),
+    m_input(new GamePlayRunningInput()),
     m_pauseTrigger(GLFW_KEY_P)
 {
 
@@ -35,9 +35,7 @@ void GamePlayRunning::update(float deltaSec) {
 
     World::instance()->update(deltaSec);
 
-    m_gamePlay->player().update(deltaSec);
-
-    m_gamePlay->soundManager().setListener(m_gamePlay->player().cameraHead().position(), m_gamePlay->player().cameraHead().orientation());
+    m_gamePlay->soundManager().setListener(World::instance()->player().cameraHead().position(), World::instance()->player().cameraHead().orientation());
 }
 
 void GamePlayRunning::onEntered() {

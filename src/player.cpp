@@ -71,7 +71,7 @@ HUD& Player::hud() {
 }
 
 void Player::fire() {
-    if(ship()) {
+    if (ship()) {
         glm::vec3 targetPoint;
 
         if(m_hud->aimHelper().hovered()) {
@@ -102,3 +102,4 @@ void Player::setTarget(WorldObject* target) {
     m_ship->setTargetObject(target);
     m_hud->setTarget(target);
 }
+

@@ -49,4 +49,5 @@ protected:
     bool m_root;
 };
 
+
 #include "handle.inl"
