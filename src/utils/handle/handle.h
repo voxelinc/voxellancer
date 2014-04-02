@@ -32,4 +32,5 @@ protected:
     std::shared_ptr<HandleImpl<T>> m_impl;
 };
 
+
 #include "handle.inl"
