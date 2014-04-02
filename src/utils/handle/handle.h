@@ -8,12 +8,12 @@ class Ship;
 template<typename T> class HandleImpl;
 
 
-/*
-    A Handle to an object is a secure way to check whether this object still exists or was deleted.
-
-    Preferably, the referenced object itself should provide a handle to itself that other objects can
-    obtain. Once the referenced object is deleted, all referencing handles turn to invalid.
-*/
+/**
+ *   A Handle to an object is a secure way to reference an object that might get deleted at another place
+ *
+ *   Preferably, the referenced object itself should provide a handle to itself that other objects can
+ *   obtain. Once the referenced object is deleted, all referencing handles turn to invalid.
+ */
 template<typename T>
 class Handle {
 public:
@@ -34,10 +34,10 @@ public:
     Handle<T>& operator=(const Handle<T>& other);
     Handle<T>& operator=(const Handle<T>&& rother);
 
-    /*
-        The root-Handle is the handle created directly from the pointer to the referenced object
-        Copies from a root handle aren't root.
-    */
+    /**
+     * The root-Handle is the handle created directly from the pointer to the referenced object
+     * Copies from a root handle aren't root.
+     */
     bool root() const;
 
     bool valid() const;
