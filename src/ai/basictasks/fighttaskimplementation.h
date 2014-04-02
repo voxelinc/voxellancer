@@ -29,5 +29,9 @@ public:
 
 protected:
     std::vector<Handle<WorldObject>> m_targets;
+    WorldObject* m_primaryTarget;
+
+    void updateTargets();
+    float targetDistance();
 };
 

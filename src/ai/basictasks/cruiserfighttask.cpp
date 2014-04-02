@@ -7,8 +7,7 @@
 
 
 CruiserFightTask::CruiserFightTask(BoardComputer* boardComputer, const std::vector<Handle<WorldObject>>& targets) :
-    FightTaskImplementation(boardComputer, targets),
-    m_primaryTarget(nullptr)
+    FightTaskImplementation(boardComputer, targets)
 {
     m_state = State::IDLE;
     m_maxFireDistance = 250.0f;
@@ -44,22 +43,6 @@ void CruiserFightTask::update(float deltaSec) {
     }
 }
 
-void CruiserFightTask::updateTargets() {
-    auto iterator = m_targets.begin();
-    while (iterator != m_targets.end()) {
-        if (!iterator->get()) {
-            iterator = m_targets.erase(iterator);
-        } else {
-            iterator++;
-        }
-    }
-    if (!m_targets.empty()) {
-        m_primaryTarget = m_targets.front().get();
-    } else {
-        m_primaryTarget = nullptr;
-    }
-}
-
 bool CruiserFightTask::isFinished() {
     return m_state == State::IDLE;
 }
@@ -89,13 +72,6 @@ void CruiserFightTask::updateState() {
     }
 }
 
-float CruiserFightTask::targetDistance() {
-    WorldObject* worldObject = boardComputer()->worldObject();
-    return glm::length(worldObject->transform().position() - m_primaryTarget->transform().position())
-        - worldObject->bounds().minimalGridSphere().radius() * worldObject->transform().scale()
-        - m_primaryTarget->bounds().minimalGridSphere().radius() * m_primaryTarget->transform().scale();
-}
-
 float CruiserFightTask::anyTargetDistance() {
     WorldObject* worldObject = boardComputer()->worldObject();
     WorldObject* closestTarget = GeometryHelper::closestObject(*worldObject, &m_targets);
@@ -112,13 +88,4 @@ float CruiserFightTask::anyTargetDistance() {
 void CruiserFightTask::setState(State newState) {
     m_stateChanged = true;
     m_state = newState;
-}
-
-float CruiserFightTask::angleToTarget() {
-    WorldObject* worldObject = boardComputer()->worldObject();
-    glm::vec3 shipDirection = glm::vec3(0, 0, -1);
-    glm::vec3 targetDirection = glm::inverse(worldObject->transform().orientation()) * glm::normalize(m_primaryTarget->transform().position() - worldObject->transform().position());
-    float angle = glm::acos(glm::clamp(glm::dot(glm::normalize(shipDirection), glm::normalize(targetDirection)), 0.0f, 1.0f));
-    assert(std::isfinite(angle));
-    return glm::degrees(angle);
 }

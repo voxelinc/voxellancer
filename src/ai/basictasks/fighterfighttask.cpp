@@ -3,11 +3,10 @@
 #include "worldobject/ship.h"
 #include "ai/boardcomputer.h"
 #include "voxel/voxelclusterbounds.h"
-
+#include "utils/geometryhelper.h"
 
 FighterFightTask::FighterFightTask(BoardComputer* boardComputer, const std::vector<Handle<WorldObject>>& targets) :
-    FightTaskImplementation(boardComputer, targets),
-    m_primaryTarget(nullptr)
+    FightTaskImplementation(boardComputer, targets)
 {
     m_state = State::IDLE;
     m_maxFireDistance = 150.0f;
@@ -54,22 +53,6 @@ void FighterFightTask::update(float deltaSec) {
             boardComputer()->moveTo(m_positionBehindTarget);
             boardComputer()->shootBullet(m_targets);
             break;
-    }
-}
-
-void FighterFightTask::updateTargets() {
-    auto iterator = m_targets.begin();
-    while (iterator != m_targets.end()) {
-        if (!iterator->get()) {
-            iterator = m_targets.erase(iterator);
-        } else {
-            iterator++;
-        }
-    }
-    if (!m_targets.empty()) {
-        m_primaryTarget = m_targets.front().get();
-    } else {
-        m_primaryTarget = nullptr;
     }
 }
 
@@ -127,13 +110,6 @@ void FighterFightTask::updateState() {
     }
 }
 
-float FighterFightTask::targetDistance() {
-    WorldObject* worldObject = boardComputer()->worldObject();
-    return glm::length(worldObject->transform().position() - m_primaryTarget->transform().position()) 
-                        - worldObject->bounds().minimalGridSphere().radius() * worldObject->transform().scale() 
-                        - m_primaryTarget->bounds().minimalGridSphere().radius() * m_primaryTarget->transform().scale();
-}
-
 float FighterFightTask::pointDistance(glm::vec3 point) {
     WorldObject* worldObject = boardComputer()->worldObject();
     return glm::length(worldObject->transform().position() - point) - worldObject->bounds().minimalGridSphere().radius() * worldObject->transform().scale();
@@ -157,7 +133,6 @@ float FighterFightTask::angleToTarget() {
     WorldObject* worldObject = boardComputer()->worldObject();
     glm::vec3 shipDirection = glm::vec3(0, 0, -1);
     glm::vec3 targetDirection = glm::inverse(worldObject->transform().orientation()) * glm::normalize(m_primaryTarget->transform().position() - worldObject->transform().position());
-    float angle = glm::acos(glm::clamp(glm::dot(glm::normalize(shipDirection), glm::normalize(targetDirection)), 0.0f, 1.0f));
-    assert(std::isfinite(angle));
+    float angle = GeometryHelper::angleBetween(shipDirection, targetDirection);
     return glm::degrees(angle);
 }

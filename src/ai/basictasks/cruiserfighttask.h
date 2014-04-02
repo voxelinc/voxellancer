@@ -29,14 +29,10 @@ protected:
         ENGAGE
     };
 
-    WorldObject* m_primaryTarget;
-    void updateTargets();
     void updateState();
     void setState(State newState);
 
-    float targetDistance();
     float anyTargetDistance();
-    float angleToTarget();
 
     State m_state;
     bool m_stateChanged;

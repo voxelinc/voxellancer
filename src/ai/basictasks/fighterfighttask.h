@@ -31,13 +31,10 @@ protected:
         EVADE
     };
 
-    WorldObject* m_primaryTarget;
-    void updateTargets();
     void updateState();
     void setState(State newState);
 
     glm::vec3 findRandomEvasionPoint();
-    float targetDistance();
     float pointDistance(glm::vec3 point);
     float angleToTarget();
 
