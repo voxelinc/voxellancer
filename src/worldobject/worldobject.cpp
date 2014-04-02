@@ -24,7 +24,9 @@ WorldObject::WorldObject() :
     m_handle(Handle<WorldObject>(this)),
     m_spawnState(SpawnState::None),
     m_collisionFilter(new CollisionFilter(this)),
-    m_crucialVoxelDestroyed(false)
+    m_crucialVoxelDestroyed(false),
+    m_cockpitVoxelsDestroyed(false),
+    m_cockpitVoxels(std::unordered_map<glm::ivec3, Voxel*>())
 {
 }
 
@@ -116,6 +118,10 @@ void WorldObject::removeVoxel(Voxel* voxel) {
         m_crucialVoxel = nullptr;
     }
 
+    if (m_cockpitVoxels.erase(voxel->gridCell())) {
+        m_cockpitVoxelsDestroyed = m_cockpitVoxels.size() == 0;
+    }
+
     m_collisionDetector->removeVoxel(voxel);
     m_physics->removeVoxel(voxel);
 
@@ -166,5 +172,18 @@ void WorldObject::setCollisionFieldOfDamage(float collisionFieldOfDamage) {
 
 bool WorldObject::passiveForCollisionDetection() {
     return false;
+}
+
+std::unordered_map<glm::ivec3, Voxel*> WorldObject::cockpitVoxels() {
+    return m_cockpitVoxels;
+}
+
+void WorldObject::addCockpitVoxel(const glm::ivec3& cell) {
+    m_cockpitVoxels[cell] = voxel(cell);
+    m_cockpitVoxelsDestroyed = false;
+}
+
+bool WorldObject::areCockpitVoxelsDestroyed() {
+    return m_cockpitVoxelsDestroyed;
 }
 

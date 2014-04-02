@@ -10,7 +10,7 @@ WorldObjectDestroyedPoll::WorldObjectDestroyedPoll(WorldObject* worldObject, con
 }
 
 bool WorldObjectDestroyedPoll::poll() {
-    return m_worldObject.valid() == false || m_worldObject->isCrucialVoxelDestroyed();
+    return m_worldObject.valid() == false || m_worldObject->isCrucialVoxelDestroyed() || m_worldObject->areCockpitVoxelsDestroyed();
 }
 
 bool WorldObjectDestroyedPoll::isDead() {
