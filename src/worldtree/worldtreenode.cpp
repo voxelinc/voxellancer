@@ -4,8 +4,12 @@
 #include <algorithm>
 
 #include "utils/tostring.h"
+
 #include "voxel/voxel.h"
 #include "worldobject/worldobject.h"
+
+#include "worldtreehint.h"
+#include "worldtreeshadownode.h"
 #include "worldtreegeode.h"
 
 
@@ -15,7 +19,8 @@ WorldTreeNode::WorldTreeNode(int octIndex, WorldTreeNode* parent, const IAABB& a
     m_octIndex(octIndex),
     m_parent(parent),
     m_aabb(aabb),
-    m_active(false)
+    m_active(false),
+    m_shadowNode(new WorldTreeShadowNode(parent ? parent->m_shadowNode : nullptr, this))
 {
     assert(m_aabb.extent(XAxis) == m_aabb.extent(YAxis) && m_aabb.extent(XAxis) == m_aabb.extent(ZAxis));
     m_extent = static_cast<float>(m_aabb.extent(ZAxis));
@@ -64,10 +69,6 @@ const IAABB &WorldTreeNode::aabb() const {
 }
 
 WorldTreeNode* WorldTreeNode::parent() {
-    return m_parent;
-}
-
-const WorldTreeNode* WorldTreeNode::parent() const {
     return m_parent;
 }
 
@@ -169,6 +170,10 @@ void WorldTreeNode::remove(WorldTreeGeode* geode) {
             }
         }
     }
+}
+
+WorldTreeHint WorldTreeNode::hint() {
+    return WorldTreeHint(m_shadowNode);
 }
 
 void WorldTreeNode::convertToGroup(WorldTreeNode* initialSubnode) {

@@ -2,20 +2,17 @@
 
 #include <memory>
 
+#include "utils/handle/handle.h"
+
 
 class WorldTreeNode;
 
-enum WorldTreeShadowNodeState
-{
-    Active,
-    Inactive,
-    Zombie
-};
 
 /**
- * Hidden twin of a WorldTreeNode, that means that for every WorldTreeNode there is a
+ * Hidden twin of a WorldTreeNode, i.e. for every WorldTreeNode there is a
  * WorldTreeShadowNode.
  * This class is used by WorldTreeHints to find an undeleted and active WorldTreeNode
+ * near to a location
  */
 class WorldTreeShadowNode {
 public:
@@ -24,8 +21,13 @@ public:
     WorldTreeShadowNode* parent();
     WorldTreeNode* node();
 
+    bool parentRedirectActive() const;
+    void setParentRedirectActive(bool active);
+
 
 protected:
-    WorldTreeShadowNodeImpl m_impl;
+    bool m_parentRedirectActive;
+    std::shared_ptr<WorldTreeShadowNode> m_parent;
+    Handle<WorldTreeNode> m_node;
 };
 
