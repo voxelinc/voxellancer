@@ -87,7 +87,7 @@ void WorldTreeScanner::update(float deltaSec, WorldObject* worldObject, const gl
 void WorldTreeScanner::scan(WorldObject* worldObject, const glm::vec3& position) {
     Sphere scanSphere(position, m_scanRadius);
 
-    WorldTreeQuery worldTreeQuery(&World::instance()->worldTree(), &scanSphere, worldObject->collisionDetector().geode()->containingNode(), &worldObject->collisionFilter());
+    WorldTreeQuery worldTreeQuery(&World::instance()->worldTree(), &scanSphere, worldObject->collisionDetector().geode()->hint().node(), &worldObject->collisionFilter());
     std::unordered_set<WorldTreeGeode*> foundGeodes = worldTreeQuery.nearGeodes();
 
     // Unordered sets for more performance

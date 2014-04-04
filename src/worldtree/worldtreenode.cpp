@@ -124,7 +124,7 @@ void WorldTreeNode::insert(WorldTreeGeode* geode) {
     assert(geode->aabb().intersects(m_aabb));
 
     if (m_aabb.contains(geode->aabb())) {
-        geode->setContainingNode(this);
+        geode->setHint(hint());
     }
 
     if(!m_active) {

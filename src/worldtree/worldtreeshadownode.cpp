@@ -1,5 +1,7 @@
 #include "worldtreeshadownode.h"
 
+#include <iostream>
+
 #include "worldtreenode.h"
 
 
@@ -15,13 +17,5 @@ WorldTreeShadowNode* WorldTreeShadowNode::parent() {
 }
 
 WorldTreeNode* WorldTreeShadowNode::node() {
-    return m_node.valid() ? m_node.get() : m_parent->node();
-}
-
-bool WorldTreeShadowNode::parentRedirectActive() const {
-    return m_parentRedirectActive;
-}
-
-void WorldTreeShadowNode::setParentRedirectActive(bool active) {
-    m_parentRedirectActive = active;
+    return (m_node.valid() && m_node->active()) ? m_node.get() : m_parent->node();
 }

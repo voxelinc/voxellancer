@@ -48,7 +48,7 @@ go_bandit([]() {
             worldTree->insert(b);
             AssertThat(worldTree->root()->geodes().size(), Equals(1));
             AssertThat(worldTree->root()->subnodes().size(), Equals(0));
-            AssertThat(b->containingNode(), Equals(worldTree->root()));
+            AssertThat(b->hint().node(), Equals(worldTree->root()));
 
             worldTree->insert(a);
             AssertThat(worldTree->root()->geodes().size(), Equals(2));

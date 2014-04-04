@@ -9,5 +9,5 @@ WorldTreeHint::WorldTreeHint(const std::shared_ptr<WorldTreeShadowNode>& shadowN
 }
 
 WorldTreeNode* WorldTreeHint::node() {
-    return m_shadowNode->node();
+    return m_shadowNode.get() ? m_shadowNode->node() : nullptr;
 }

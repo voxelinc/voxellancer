@@ -19,8 +19,8 @@ public:
     WorldObject* worldObject();
     void setWorldObject(WorldObject* worldObject);
 
-    WorldTreeHint& worldTreeHint();
-    void setWorldTreeHint(const WorldTreeHint& worldTreeHint);
+    WorldTreeHint& hint();
+    void setHint(const WorldTreeHint& hint);
 
     const IAABB& aabb() const;
     void setAABB(const IAABB& aabb);
@@ -34,7 +34,7 @@ public:
 
 protected:
     WorldObject* m_worldObject;
-    WorldTreeHint m_worldTreeHint;
+    WorldTreeHint m_hint;
     IAABB m_aabb;
     bool m_passive;
     std::list<WorldTreeNode*> m_intersectingLeafs;
