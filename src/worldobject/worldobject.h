@@ -5,9 +5,10 @@
 
 #include "scripting/scriptable.h"
 
-#include "utils/handle/handle.h"
+#include "utils/handle/handleowner.h"
 
 #include "voxel/voxelcluster.h"
+
 
 class CollisionDetector;
 class EngineVoxel;
@@ -40,7 +41,7 @@ enum class WorldObjectType {
  *  it adds CollisionDetection, Physics and SpecialVoxels aka WorldObjectComponents
 */
 
-class WorldObject : public VoxelCluster, public Scriptable {
+class WorldObject : public VoxelCluster, public Scriptable, public HandleOwner {
 public:
     WorldObject();
     WorldObject(const Transform& transform);
@@ -79,8 +80,6 @@ public:
     virtual void onSpawnFail();
     //virtual void onWrecked();
 
-    Handle<WorldObject>& handle();
-
     float collisionFieldOfDamage() const;
     void setCollisionFieldOfDamage(float collisionFieldOfDamage);
 
@@ -94,7 +93,6 @@ protected:
     std::unique_ptr<ObjectInfo> m_objectInfo;
     std::unique_ptr<WorldObjectComponents> m_components;
 
-    Handle<WorldObject> m_handle;
     Voxel* m_crucialVoxel;
     bool m_crucialVoxelDestroyed;
     float m_collisionFieldOfDamage;

@@ -61,7 +61,7 @@ bool DefendAreaTask::isEnemyInRange() {
         if (ship) {
             Faction& enemyFaction = ship->character()->faction();
             if (enemyFaction.relationTo(m_squad.leader()->character()->faction()).type() == FactionRelationType::Enemy) {
-                m_enemies.push_back(worldObject->handle());
+                m_enemies.push_back(worldObject->handle<WorldObject>());
             } else {
                 continue;
             }

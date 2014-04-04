@@ -20,7 +20,6 @@
 
 Rocket::Rocket():
     Projectile(),
-    m_targetHandle(nullptr),
     m_boardComputer(this),
     m_aiTask(nullptr)
 {
@@ -40,14 +39,13 @@ WorldObject* Rocket::target() {
 
 void Rocket::setTarget(WorldObject* targetObject) {
     if (targetObject) {
-        m_targetHandle = targetObject->handle();
+        m_targetHandle = targetObject->handle<WorldObject>();
         m_aiTask.reset(new DirectSuicideTask(&m_boardComputer, targetObject));
     } else {
-        m_targetHandle = Handle<WorldObject>(nullptr);
+        m_targetHandle = Handle<WorldObject>();
         m_aiTask.reset(nullptr);
     }
 }
-
 
 void Rocket::update(float deltaSec) {
     Projectile::update(deltaSec);

@@ -28,7 +28,7 @@ public:
     void rotateTo(const glm::vec3& position, const glm::vec3& up = glm::vec3(0, 0, 0));
 
     void shootBullet(const std::vector<Handle<WorldObject>>& targets);
-    void shootRockets(Handle<WorldObject>& target);
+    void shootRockets(WorldObject* target);
 
     void update(float deltaSec);
 

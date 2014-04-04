@@ -2,20 +2,20 @@
 
 #include <memory>
 
-template<class T>
+
+class HandleOwner;
+
 class HandleImpl {
-
 public:
-    explicit HandleImpl(T* object);
+    explicit HandleImpl(HandleOwner* owner);
 
-    T* get();
+    HandleOwner* owner();
 
     bool valid() const;
-
     void invalidate();
 
+
 protected:
-    T* m_object;
+    HandleOwner* m_owner;
 };
 
-#include "handleimpl.inl"
