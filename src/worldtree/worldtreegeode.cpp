@@ -26,10 +26,6 @@ WorldObject* WorldTreeGeode::worldObject() {
     return m_worldObject;
 }
 
-void WorldTreeGeode::setWorldObject(WorldObject* worldObject) {
-    m_worldObject = worldObject;
-}
-
 WorldTreeHint& WorldTreeGeode::hint() {
     return m_hint;
 }

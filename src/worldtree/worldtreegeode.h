@@ -17,7 +17,6 @@ public:
     virtual ~WorldTreeGeode();
 
     WorldObject* worldObject();
-    void setWorldObject(WorldObject* worldObject);
 
     WorldTreeHint& hint();
     void setHint(const WorldTreeHint& hint);

@@ -21,9 +21,6 @@ public:
     WorldTreeShadowNode* parent();
     WorldTreeNode* node();
 
-    bool parentRedirectActive() const;
-    void setParentRedirectActive(bool active);
-
 
 protected:
     bool m_parentRedirectActive;
