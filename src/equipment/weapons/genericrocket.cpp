@@ -35,3 +35,4 @@ void GenericRocket::spawnExplosion() {
 
     generator.spawn();
 }
+

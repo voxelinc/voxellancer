@@ -1,5 +1,7 @@
 #include "bulletengine.h"
 
+#include "genericinstancedbullet.h"
+
 
 BulletEngine::BulletEngine()
 {
@@ -9,7 +11,7 @@ BulletEngine::BulletEngine()
 BulletEngine::~BulletEngine() = default;
 
 InstancedBullet* BulletEngine::createBullet(const std::string& name) {
-    return nullptr;
+    return new GenericInstancedBullet();
 }
 
 void BulletEngine::update(float deltaSec) {

@@ -2,23 +2,18 @@
 
 #include "sound/soundproperties.h"
 
-#include "equipment/weapons/worldobjectbullet.h"
+#include "instancedbullet.h"
 
 
-
-class GenericWorldObjectBullet: public WorldObjectBullet {
+class GenericInstancedBullet : public InstancedBullet {
 public:
-    GenericWorldObjectBullet();
-
-    virtual float emissiveness() const override;
-    void setEmissiveness(float emissiveness);
+    GenericInstancedBullet();
 
     virtual const SoundProperties& hitSound() const override;
     void setHitSound(const SoundProperties& hitSound);
 
 
 protected:
-    float m_emissiveness;
     SoundProperties m_hitSound;
 
     virtual void spawnExplosion() override;

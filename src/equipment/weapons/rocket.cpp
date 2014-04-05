@@ -89,6 +89,10 @@ void Rocket::update(float deltaSec) {
     }
 }
 
+void Rocket::spawn() {
+    World::instance()->god().scheduleSpawn(this);
+}
+
 void Rocket::remove() {
     World::instance()->god().scheduleRemoval(this);
 }

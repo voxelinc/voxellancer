@@ -37,6 +37,7 @@ public:
 
     virtual void update(float deltaSec) override;
 
+    virtual void spawn() override;
     virtual void remove() override;
 
     virtual void onCollision() override;

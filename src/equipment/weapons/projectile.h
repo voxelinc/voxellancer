@@ -32,6 +32,7 @@ public:
 
     virtual void update(float deltaSec);
 
+    virtual void spawn() = 0;
     virtual void remove() = 0;
 
     void onCollision();

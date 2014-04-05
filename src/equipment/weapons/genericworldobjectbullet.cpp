@@ -38,3 +38,4 @@ void GenericWorldObjectBullet::spawnExplosion() {
 
     generator.spawn();
 }
+

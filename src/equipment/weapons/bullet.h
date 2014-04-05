@@ -17,12 +17,6 @@ public:
 
     virtual void update(float deltaSec) override;
 
-    virtual void spawn() = 0;
     virtual float length() = 0;
-
-
-
-protected:
-
 };
 
