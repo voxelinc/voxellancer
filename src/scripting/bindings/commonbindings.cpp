@@ -11,6 +11,7 @@
 
 #include "scripting/elematelua/luawrapper.h"
 #include "scripting/gameplayscript.h"
+#include "scripting/scriptcallback.h"
 #include "scripting/scriptengine.h"
 
 #include "world/world.h"
@@ -66,7 +67,7 @@ int CommonBindings::apiSetEventActive(apikey eventPoll, bool active) {
 }
 
 apikey CommonBindings::apiCreateSingleShotTimer(const std::string& callback, float delta) {
-    auto timer = std::make_shared<SingleShotTimer>(delta, [=] { m_lua.call(callback); });
+    auto timer = std::make_shared<SingleShotTimer>(delta, createCallback(callback));
 
     World::instance()->eventPoller().addPoll(timer);
     m_script.addLocal(timer);
@@ -75,7 +76,7 @@ apikey CommonBindings::apiCreateSingleShotTimer(const std::string& callback, flo
 }
 
 apikey CommonBindings::apiCreateLoopingTimer(const std::string& callback, float delta) {
-    auto timer = std::make_shared<LoopingTimer>(delta, [=] { m_lua.call(callback); });
+    auto timer = std::make_shared<LoopingTimer>(delta, createCallback(callback));
 
     World::instance()->eventPoller().addPoll(timer);
     m_script.addLocal(timer);

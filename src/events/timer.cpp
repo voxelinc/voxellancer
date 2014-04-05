@@ -4,7 +4,7 @@
 #include <algorithm>
 
 
-Timer::Timer(float interval, const std::function<void()>& callback):
+Timer::Timer(float interval, const Callback& callback):
     EventPoll(callback),
     m_interval(interval),
     m_countdown(interval),
