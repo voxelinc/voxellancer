@@ -33,8 +33,3 @@ void CameraDolly::update(float deltaSec) {
         follow(m_followHelper->followPosition(), followWorldObject->transform().orientation(), deltaSec);
     }
 }
-
-void CameraDolly::setInertia(float directional, float angular) {
-    m_directionalInertia = directional;
-    m_angularInertia = angular;
-}

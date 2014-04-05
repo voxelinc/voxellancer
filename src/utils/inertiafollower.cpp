@@ -29,6 +29,11 @@ void InertiaFollower::setOrientation(const glm::quat& orientation) {
     m_orientation = orientation;
 }
 
+void InertiaFollower::setInertia(float directional, float angular) {
+    m_directionalInertia = directional;
+    m_angularInertia = angular;
+}
+
 void InertiaFollower::follow(const glm::vec3& targetPosition, const glm::quat& targetOrientation, float deltaSec) {
     float mix = std::min(1.0f, m_directionalInertia * deltaSec);
 

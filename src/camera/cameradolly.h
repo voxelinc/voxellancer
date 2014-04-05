@@ -21,8 +21,6 @@ public:
 
     void update(float deltaSec);
 
-    void setInertia(float directional, float angular);
-
 protected:
     std::unique_ptr<CameraHead> m_cameraHead;
     std::unique_ptr<CameraFollowHelper> m_followHelper;

@@ -14,6 +14,8 @@ public:
     const glm::quat& orientation() const;
     void setOrientation(const glm::quat& orientation);
 
+    void setInertia(float directional, float angular);
+
     void follow(const glm::vec3& targetPosition, const glm::quat& targetOrientation, float deltaSec);
 
 
