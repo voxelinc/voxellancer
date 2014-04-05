@@ -1,5 +1,7 @@
 #pragma once
 
+
+
 #include "sound/soundproperties.h"
 
 #include "instancedbullet.h"
@@ -7,7 +9,7 @@
 
 class GenericInstancedBullet : public InstancedBullet {
 public:
-    GenericInstancedBullet();
+    GenericInstancedBullet(const std::string& name);
 
     virtual const SoundProperties& hitSound() const override;
     void setHitSound(const SoundProperties& hitSound);

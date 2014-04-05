@@ -1,11 +1,15 @@
 #pragma once
 
+#include <string>
+
 #include "equipment/weapons/bullet.h"
 
 
 class InstancedBullet : public Bullet {
 public:
-    InstancedBullet();
+    InstancedBullet(const std::string& name);
+
+    const std::string& name() const;
 
     virtual void update(float deltaSec) override;
 
@@ -19,5 +23,8 @@ public:
 
     virtual float length() override;
 
+
+protected:
+    std::string m_name;
 };
 

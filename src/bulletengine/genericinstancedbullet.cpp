@@ -3,7 +3,8 @@
 #include "voxeleffect/voxelexplosiongenerator.h"
 
 
-GenericInstancedBullet::GenericInstancedBullet()
+GenericInstancedBullet::GenericInstancedBullet(const std::string& name):
+    InstancedBullet(name)
 {
 }
 
