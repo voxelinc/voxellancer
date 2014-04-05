@@ -7,9 +7,19 @@
 
 class InstancedBullet : public Bullet {
 public:
+    struct Data {
+
+    };
+
+public:
     InstancedBullet(const std::string& name);
 
     const std::string& name() const;
+
+    int bufferSlot() const;
+    void setBufferSlot(int bufferSlot);
+
+    Data* data();
 
     virtual void update(float deltaSec) override;
 
@@ -26,5 +36,7 @@ public:
 
 protected:
     std::string m_name;
+    int m_bufferSlot;
+    Data m_data;
 };
 

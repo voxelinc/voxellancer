@@ -6,12 +6,25 @@
 
 
 InstancedBullet::InstancedBullet(const std::string& name):
-    m_name(name)
+    m_name(name),
+    m_bufferSlot(-1)
 {
 }
 
 const std::string& InstancedBullet::name() const {
     return m_name;
+}
+
+int InstancedBullet::bufferSlot() const {
+    return m_bufferSlot;
+}
+
+void InstancedBullet::setBufferSlot(int bufferSlot) {
+    m_bufferSlot = bufferSlot;
+}
+
+InstancedBullet::Data* InstancedBullet::data() {
+    return &m_data;
 }
 
 Transform& InstancedBullet::transform() {
