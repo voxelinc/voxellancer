@@ -24,3 +24,4 @@ bool AABBEnteredPoll::poll() {
 void AABBEnteredPoll::specialOnCallback() {
     m_entered = true;
 }
+

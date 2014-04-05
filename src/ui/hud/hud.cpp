@@ -59,7 +59,7 @@ HUD::HUD(Player* player):
     m_drawHud("vfx.drawhud"),
     m_view(nullptr)
 {
-    m_scanner->setScanRadius(1050.0f);
+    m_scanner->setScanRadius(500.0f);
 
     m_elements->addHudget(m_aimHelper);
     m_elements->addHudget(m_crossHair);
@@ -257,5 +257,4 @@ void HUD::updateFov() {
 void HUD::setView(const View* view) {
     m_view = view;
 }
-
 

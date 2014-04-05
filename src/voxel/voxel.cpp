@@ -11,24 +11,24 @@
 #include "voxeleffect/voxeldebrisgenerator.h"
 
 
-Property<float>* Voxel::s_defaultMass;
+Property<float>* Voxel::s_defaultUnscaledMass;
 Property<float>* Voxel::s_defaultHp;
 
-Voxel::Voxel(const glm::ivec3& gridCell, uint32_t color, float normalizedMass, float hp, float emissiveness):
+Voxel::Voxel(const glm::ivec3& gridCell, uint32_t color, float unscaledMass, float hp, float emissiveness):
     m_gridCell(gridCell),
     m_voxelTreeNode(nullptr),
     m_visuals(color, 0.0f),
-    m_normalizedMass(normalizedMass),
+    m_unscaledMass(unscaledMass),
     m_hp(hp)
 {
-    assert(m_normalizedMass > 0.0f);
+    assert(m_unscaledMass > 0.0f);
     assert( gridCell.x >= 0 && gridCell.x < 256 &&
             gridCell.y >= 0 && gridCell.y < 256 &&
             gridCell.z >= 0 && gridCell.z < 256);
 }
 
 Voxel::Voxel(const Voxel& other):
-    Voxel(other.gridCell(), other.visuals().color(), other.normalizedMass(), other.hp())
+    Voxel(other.gridCell(), other.visuals().color(), other.unscaledMass(), other.hp())
 {
     m_visuals = other.visuals();
 }
@@ -77,8 +77,8 @@ float Voxel::damageForwardingDestructionDamage() {
     return 0;
 }
 
-float Voxel::normalizedMass() const {
-    return m_normalizedMass;
+float Voxel::unscaledMass() const {
+    return m_unscaledMass;
 }
 
 void Voxel::onRemoval() {
@@ -104,11 +104,11 @@ void Voxel::onDestruction() {
     }
 }
 
-float Voxel::defaultMass() {
-    if (s_defaultMass == nullptr) {
-        s_defaultMass = new Property<float>("voxels.default.mass");
+float Voxel::defaultUnscaledMass() {
+    if (s_defaultUnscaledMass == nullptr) {
+        s_defaultUnscaledMass = new Property<float>("voxels.default.mass");
     }
-    return s_defaultMass->get();
+    return s_defaultUnscaledMass->get();
 }
 
 float Voxel::defaultHp() {

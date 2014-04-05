@@ -15,7 +15,7 @@
 
 WorldObject::WorldObject() :
     VoxelCluster(1.0f),
-    m_physics(new Physics(*this, 1.0f)),
+    m_physics(new Physics(*this)),
     m_collisionDetector(new CollisionDetector(*this)),
     m_objectInfo(new ObjectInfo()),
     m_components(new WorldObjectComponents(this)),
@@ -135,7 +135,7 @@ Voxel* WorldObject::crucialVoxel() {
 
 void WorldObject::setCrucialVoxel(const glm::ivec3& cell) {
     assert(m_crucialVoxel == nullptr);
- 
+
     m_crucialVoxel = voxel(cell);
     m_crucialVoxelDestroyed = false;
 }
