@@ -9,7 +9,7 @@
 
 #include "utils/handle/handle.h"
 #include "physics/physics.h"
-#include "worldobject/objectinfo.h"
+#include "worldobject/worldobjectinfo.h"
 #include "voxel/voxel.h"
 #include "worldobjectcomponents.h"
 
@@ -17,7 +17,7 @@ WorldObject::WorldObject() :
     VoxelCluster(1.0f),
     m_physics(new Physics(*this)),
     m_collisionDetector(new CollisionDetector(*this)),
-    m_objectInfo(new ObjectInfo()),
+    m_objectInfo(new WorldObjectInfo()),
     m_components(new WorldObjectComponents(this)),
     m_crucialVoxel(nullptr),
     m_collisionFieldOfDamage(glm::half_pi<float>()),
@@ -70,7 +70,7 @@ const Physics& WorldObject::physics() const {
     return *m_physics;
 }
 
-ObjectInfo& WorldObject::objectInfo() {
+WorldObjectInfo& WorldObject::info() {
     return *m_objectInfo;
 }
 

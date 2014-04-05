@@ -10,7 +10,7 @@
 #include "sound/sound.h"
 #include "sound/soundmanager.h"
 
-#include "worldobject/objectinfo.h"
+#include "worldobject/worldobjectinfo.h"
 
 #include "worldobject/worldobjectcomponents.h"
 

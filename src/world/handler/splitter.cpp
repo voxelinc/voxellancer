@@ -6,7 +6,7 @@
 
 #include "voxel/voxel.h"
 #include "physics/physics.h"
-#include "worldobject/objectinfo.h"
+#include "worldobject/worldobjectinfo.h"
 #include "worldobject/worldobject.h"
 
 void Splitter::split(std::vector<std::shared_ptr<SplitData>> &splits) {
@@ -33,7 +33,7 @@ WorldObject* Splitter::createWorldObjectFromSplitOff(std::shared_ptr<SplitData> 
 
     worldObject = new WorldObject(transform);
 
-    worldObject->objectInfo().setName(split->exWorldObject()->objectInfo().name() + " - splitoff");
+    worldObject->info().setName(split->exWorldObject()->info().name() + " - splitoff");
     worldObject->physics().setSpeed(worldObject->physics().speed());
 
     for(Voxel *voxel : split->splitOffVoxels()) {

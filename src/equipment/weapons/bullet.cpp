@@ -4,7 +4,7 @@
 
 #include "world/god.h"
 #include "world/world.h"
-#include "worldobject/objectinfo.h"
+#include "worldobject/worldobjectinfo.h"
 #include "physics/physics.h"
 #include "sound/soundmanager.h"
 

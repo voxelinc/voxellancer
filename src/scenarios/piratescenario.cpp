@@ -26,7 +26,7 @@
 #include "voxel/voxel.h"
 #include "world/god.h"
 #include "player.h"
-#include "worldobject/objectinfo.h"
+#include "worldobject/worldobjectinfo.h"
 
 
 PirateScenario::PirateScenario(GamePlay* gamePlay) :
@@ -47,9 +47,9 @@ void PirateScenario::populateWorld() {
 
     Ship* normandy = WorldObjectBuilder("piratefrigatte").buildShip();
     normandy->transform().setPosition(glm::vec3(0, 0, -100));
-    normandy->objectInfo().setName("Frigatte");
-    normandy->objectInfo().setShowOnHud(true);
-    normandy->objectInfo().setCanLockOn(true);
+    normandy->info().setName("Frigatte");
+    normandy->info().setShowOnHud(true);
+    normandy->info().setCanLockOn(true);
     normandy->squadLogic()->joinSquad(squadA);
     m_world->god().scheduleSpawn(normandy);
 
@@ -57,9 +57,9 @@ void PirateScenario::populateWorld() {
     for (int i = 0; i < nmember_count; i++) {
         Ship *follower = WorldObjectBuilder("piratelight").buildShip();
         follower->transform().setPosition(glm::vec3(100 * (-nmember_count / 2.0f + i), 50, 0));
-        follower->objectInfo().setName("Light");
-        follower->objectInfo().setShowOnHud(true);
-        follower->objectInfo().setCanLockOn(true);
+        follower->info().setName("Light");
+        follower->info().setShowOnHud(true);
+        follower->info().setCanLockOn(true);
         follower->squadLogic()->joinSquad(squadA);
         m_world->god().scheduleSpawn(follower);
     }
@@ -73,9 +73,9 @@ void PirateScenario::populateWorld() {
     Ship *leader = WorldObjectBuilder("pirategunboat").buildShip();
     leader->character()->setFaction(World::instance()->factionMatrix().pirateFaction());
     leader->transform().setPosition(glm::vec3(0, 200, -100));
-    leader->objectInfo().setName("leader");
-    leader->objectInfo().setShowOnHud(true);
-    leader->objectInfo().setCanLockOn(true);
+    leader->info().setName("leader");
+    leader->info().setShowOnHud(true);
+    leader->info().setCanLockOn(true);
     leader->squadLogic()->joinSquad(squadB);
     m_world->god().scheduleSpawn(leader);
 
@@ -84,17 +84,17 @@ void PirateScenario::populateWorld() {
         Ship *follower = WorldObjectBuilder("pirateheavy").buildShip();
         follower->character()->setFaction(World::instance()->factionMatrix().pirateFaction());
         follower->transform().setPosition(glm::vec3(100 * (-lmember_count / 2.0f + i), 200, 0));
-        follower->objectInfo().setName("member");
-        follower->objectInfo().setShowOnHud(true);
-        follower->objectInfo().setCanLockOn(true);
+        follower->info().setName("member");
+        follower->info().setShowOnHud(true);
+        follower->info().setCanLockOn(true);
         follower->squadLogic()->joinSquadOf(leader);
         m_world->god().scheduleSpawn(follower);
     }
 
     Ship *testCluster = WorldObjectBuilder("pirateheavy").buildShip();
     testCluster->transform().setPosition(glm::vec3(0, 0, 10));
-    testCluster->objectInfo().setName("basicship");
-    testCluster->objectInfo().setShowOnHud(false);
+    testCluster->info().setName("basicship");
+    testCluster->info().setShowOnHud(false);
     m_world->god().scheduleSpawn(testCluster);
 
     World::instance()->player().setShip(testCluster);
@@ -109,9 +109,9 @@ void PirateScenario::populateWorld() {
             }
         }
     }
-    wall->objectInfo().setName("Wall");
-    wall->objectInfo().setShowOnHud(true);
-    wall->objectInfo().setCanLockOn(true);
+    wall->info().setName("Wall");
+    wall->info().setShowOnHud(true);
+    wall->info().setCanLockOn(true);
     m_world->god().scheduleSpawn(wall);
 
     glow::debug("Create Planet");
@@ -131,7 +131,7 @@ void PirateScenario::populateWorld() {
         }
     }
     planet->setCrucialVoxel(glm::ivec3(middle));
-    planet->objectInfo().setName("Planet");
+    planet->info().setName("Planet");
     m_world->god().scheduleSpawn(planet);
 
     glow::debug("Initial spawn");
@@ -149,9 +149,9 @@ void PirateScenario::createArmada() {
 
     Ship* chief = WorldObjectBuilder("normandy").buildShip();
     chief->transform().setPosition(glm::vec3(700, 0, 0));
-    chief->objectInfo().setName("Normandy");
-    chief->objectInfo().setShowOnHud(true);
-    chief->objectInfo().setCanLockOn(true);
+    chief->info().setName("Normandy");
+    chief->info().setShowOnHud(true);
+    chief->info().setCanLockOn(true);
     chief->squadLogic()->joinSquad(armada);
     chief->character()->setFaction(World::instance()->factionMatrix().policeFaction());
     m_world->god().scheduleSpawn(chief);
@@ -160,9 +160,9 @@ void PirateScenario::createArmada() {
     for (int i = 0; i < memberCount; i++) {
         Ship *follower = i < 6 ? WorldObjectBuilder("flyingtortress").buildShip() : WorldObjectBuilder("startortress").buildShip();
         follower->transform().setPosition(glm::vec3(700, 50* (-memberCount / 2.0f + i), 0));
-        follower->objectInfo().setName("Turtle");
-        follower->objectInfo().setShowOnHud(true);
-        follower->objectInfo().setCanLockOn(true);
+        follower->info().setName("Turtle");
+        follower->info().setShowOnHud(true);
+        follower->info().setCanLockOn(true);
         follower->squadLogic()->joinSquad(armada);
         follower->character()->setFaction(World::instance()->factionMatrix().policeFaction());
         m_world->god().scheduleSpawn(follower);

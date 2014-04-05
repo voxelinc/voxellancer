@@ -10,7 +10,7 @@
 
 #include "geometry/aabb.h"
 
-#include "worldobject/objectinfo.h"
+#include "worldobject/worldobjectinfo.h"
 
 #include "player.h"
 
@@ -164,7 +164,7 @@ int WorldObjectBindings::apiSetShowOnHud(apikey worldObjectKey, bool show) {
         return -1;
     }
 
-    worldObject->objectInfo().setShowOnHud(true);
+    worldObject->info().setShowOnHud(true);
     return 0;
 }
 
@@ -175,7 +175,7 @@ int WorldObjectBindings::apiSetCanLockOn(apikey worldObjectKey, bool lockon) {
         return -1;
     }
 
-    worldObject->objectInfo().setCanLockOn(lockon);
+    worldObject->info().setCanLockOn(lockon);
     return 0;
 }
 

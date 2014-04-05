@@ -2,7 +2,7 @@
 
 #include "world/helper/worldobjectmodification.h"
 #include "worldobject/worldobject.h"
-#include "worldobject/objectinfo.h"
+#include "worldobject/worldobjectinfo.h"
 #include "physics/physics.h"
 #include "voxel/voxel.h"
 
@@ -31,7 +31,7 @@ std::list<WorldObject*>& Wrecker::newWreckages() {
 WorldObject* Wrecker::wreckFromObject(WorldObject* object) {
     WorldObject* wreckage = new WorldObject(object->transform());
 
-    wreckage->objectInfo().setName(object->objectInfo().name() + " - wreck");
+    wreckage->info().setName(object->info().name() + " - wreck");
     wreckage->physics().setSpeed(object->physics().speed());
 
     for (auto& pair : object->voxelMap()) {

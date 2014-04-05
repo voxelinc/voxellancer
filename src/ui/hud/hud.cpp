@@ -21,7 +21,7 @@
 
 #include "physics/physics.h"
 
-#include "worldobject/objectinfo.h"
+#include "worldobject/worldobjectinfo.h"
 
 #include "utils/tostring.h"
 #include "utils/geometryhelper.h"
@@ -145,7 +145,7 @@ void HUD::update(float deltaSec) {
     updateScanner(deltaSec);
 
     if (m_target.get()) {
-        m_elements->setTargetName(m_target->objectInfo().name());
+        m_elements->setTargetName(m_target->info().name());
     } else {
         m_elements->setTargetName("no target");
     }
@@ -225,7 +225,7 @@ void HUD::updateScanner(float deltaSec) {
         m_scanner->update(deltaSec, m_player->ship());
 
         for (WorldObject* worldObject : m_scanner->foundWorldObjects()) {
-            if (worldObject->objectInfo().showOnHud()) {
+            if (worldObject->info().showOnHud()) {
                 ObjectHudget* objectHudget = new ObjectHudget(this);
                 HUDObjectDelegate* objectDelgate = new HUDObjectDelegate(this, worldObject, objectHudget);
                 addObjectDelegate(objectDelgate);

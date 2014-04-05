@@ -6,7 +6,7 @@
 
 #include "factions/factionmatrix.h"
 
-#include "worldobject/objectinfo.h"
+#include "worldobject/worldobjectinfo.h"
 
 #include "world/world.h"
 

@@ -10,7 +10,7 @@
 #include "factions/factionmatrix.h"
 
 #include "utils/geometryhelper.h"
-#include "worldobject/objectinfo.h"
+#include "worldobject/worldobjectinfo.h"
 
 #include "world/world.h"
 
@@ -152,7 +152,7 @@ glm::vec3 ObjectHudget::closestPointInsideFov() {
 void ObjectHudget::onClick(ClickType clickType) {
     if (clickType == ClickType::Selection) {
         WorldObject* worldObject = m_objectDelegate->worldObject();
-        if (worldObject && worldObject->objectInfo().canLockOn()) {
+        if (worldObject && worldObject->info().canLockOn()) {
             m_hud->player()->setTarget(worldObject);
         }
     }
