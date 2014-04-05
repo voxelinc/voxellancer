@@ -1,9 +1,9 @@
 #include "worldobjectslot.h"
 
 
-WorldObjectSlot::WorldObjectSlot(WorldObjectComponents* components, int index):
+WorldObjectSlot::WorldObjectSlot(WorldObjectComponents* components, int group):
     m_components(components),
-    m_index(index)
+    m_group(group)
 {
 }
 
@@ -35,7 +35,7 @@ const WorldObjectComponents* WorldObjectSlot::components() const {
     return m_components;
 }
 
-int WorldObjectSlot::index() const {
-    return m_index;
+int WorldObjectSlot::group() const {
+    return m_group;
 }
 

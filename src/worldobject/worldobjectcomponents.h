@@ -29,11 +29,6 @@ public:
     void addEngineSlot(std::shared_ptr<EngineSlot> engineSlot);
     void removeEngineSlot(const EngineSlot* engineSlot);
 
-    /*
-        Access EngineSlots either by index in the model or all of them
-        at a time
-    */
-    std::shared_ptr<EngineSlot> engineSlot(int index);
     std::list<std::shared_ptr<EngineSlot>>& engineSlots();
 
     /*
@@ -58,11 +53,6 @@ public:
     void addHardpoint(std::shared_ptr<Hardpoint> hardpoint);
     void removeHardpoint(const Hardpoint* hardpoint);
 
-    /*
-        Access Hardpoints either by index in the model or all of them
-        at a time
-    */
-    std::shared_ptr<Hardpoint> hardpoint(int index);
     std::list<std::shared_ptr<Hardpoint>>& hardpoints();
 
     /*
@@ -73,11 +63,7 @@ public:
     void fireAtPoint(const glm::vec3& point);
     void fireAtObject(WorldObject* worldObject);
 
-    /*
-        Update all components
-    */
     void update(float deltaSec);
-
 
 
 protected:

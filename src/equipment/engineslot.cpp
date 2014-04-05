@@ -9,7 +9,7 @@
 
 
 EngineSlot::EngineSlot(WorldObjectComponents* components, EngineSlotVoxel* voxel):
-    WorldObjectSlot(components, voxel->index()),
+    WorldObjectSlot(components, voxel->group()),
     m_voxel(voxel),
     m_engine(nullptr)
 {
