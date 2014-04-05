@@ -10,7 +10,7 @@ InertiaFollower::InertiaFollower(float directionalInertia, float angularInertia)
     m_directionalInertia(directionalInertia),
     m_angularInertia(angularInertia)
 {
-    assert(directional >= 0 && directional <= 100 && angular >= 0 && angular <= 100);
+    assert(directionalInertia >= 0 && directionalInertia <= 100 && angularInertia >= 0 && angularInertia <= 100);
 }
 
 const glm::vec3& InertiaFollower::position() const {
