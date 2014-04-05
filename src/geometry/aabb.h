@@ -30,6 +30,7 @@ public:
     glm::detail::tvec3<T> middle() const;
 
     virtual T extent(Axis axis) const;
+    glm::detail::tvec3<T> extent() const;
     T diameter() const;
 
     TAABB<T> moved(Axis axis, T delta) const;
