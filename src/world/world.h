@@ -4,6 +4,7 @@
 #include <unordered_set>
 
 
+class BulletEngine;
 class EventPoller;
 class FactionMatrix;
 class God;
@@ -32,6 +33,7 @@ public:
     FactionMatrix& factionMatrix();
     EventPoller& eventPoller();
     MissionSystem& missionSystem();
+    BulletEngine& bulletEngine();
 
     std::unordered_set<WorldObject*>& worldObjects();
     std::unordered_set<Ship*>& ships();
@@ -44,7 +46,7 @@ public:
 
     static World* instance();
     static void reset(bool showWarning=true);
-    
+
 
 protected:
     friend class God;
@@ -67,6 +69,7 @@ protected:
     std::unique_ptr<FactionMatrix> m_factionMatrix;
     std::unique_ptr<EventPoller> m_eventPoller;
     std::unique_ptr<MissionSystem> m_missionSystem;
+    std::unique_ptr<BulletEngine> m_bulletEngine;
 
     std::unordered_set<WorldObject*> m_worldObjects;
     std::unordered_set<Ship*> m_ships;

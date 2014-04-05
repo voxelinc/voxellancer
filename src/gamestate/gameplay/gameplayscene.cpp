@@ -1,5 +1,7 @@
 #include "gameplayscene.h"
 
+#include "bulletengine/bulletengine.h"
+
 #include "camera/camera.h"
 #include "camera/camerahead.h"
 
@@ -100,6 +102,7 @@ void GamePlayScene::drawGame(const Camera& camera) const {
     m_voxelRenderer->afterDraw();
 
     World::instance()->particleEngine().draw(camera);
+    World::instance()->bulletEngine().draw(camera);
 
     if (m_worldTreeRendererEnabled) {
         m_worldTreeRenderer->draw(camera);
