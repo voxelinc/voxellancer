@@ -3,6 +3,7 @@
 #include <memory>
 #include <string>
 #include <glow/ref_ptr.h>
+#include <glowutils/ScreenAlignedQuad.h>
 
 #include "etc/contextdependant.h"
 #include "display/rendering/screenquad.h"
@@ -33,9 +34,8 @@ public:
 
 protected:
     glow::ref_ptr<glow::Texture> m_texture;
-    glow::ref_ptr<glow::Program> m_shaderProgram;
+    glow::ref_ptr<glowutils::ScreenAlignedQuad> m_quad;
     std::shared_ptr<VoxelRenderer> m_voxelRenderer;
-    std::unique_ptr<ScreenQuad> m_quad;
     std::unique_ptr<Camera> m_camera;
     std::string m_file;
 
