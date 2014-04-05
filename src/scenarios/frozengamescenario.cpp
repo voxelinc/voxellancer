@@ -12,7 +12,7 @@
 #include "ai/squad.h"
 
 #include "resource/clustercache.h"
-#include "resource/worldobjectbuilder.h"
+#include "resource/worldelementbuilder.h"
 
 #include "worldobject/ship.h"
 #include "equipment/engineslot.h"
@@ -37,7 +37,7 @@ void FrozenGameScenario::populateWorld() {
     glow::debug("Create WorldObjects");
     std::shared_ptr<Squad> squadA = std::make_shared<Squad>();
 
-    Ship* normandy = WorldObjectBuilder("normandy").buildShip();
+    Ship* normandy = WorldElementBuilder("normandy").buildShip();
     normandy->transform().setPosition(glm::vec3(0, 0, -100));
     normandy->objectInfo().setName("Normandy");
     normandy->objectInfo().setShowOnHud(true);
@@ -47,7 +47,7 @@ void FrozenGameScenario::populateWorld() {
 
     int nmember_count = 4;
     for (int i = 0; i < nmember_count; i++) {
-        Ship *follower = WorldObjectBuilder("basicship").buildShip();
+        Ship *follower = WorldElementBuilder("basicship").buildShip();
         follower->transform().setPosition(glm::vec3(100 * (-nmember_count / 2.0f + i), 50, 0));
         follower->objectInfo().setName("member");
         follower->objectInfo().setShowOnHud(true);
@@ -59,7 +59,7 @@ void FrozenGameScenario::populateWorld() {
 
     std::shared_ptr<Squad> squadB = std::make_shared<Squad>();
 
-    Ship *leader = WorldObjectBuilder("eagle").buildShip();
+    Ship *leader = WorldElementBuilder("eagle").buildShip();
     leader->transform().setPosition(glm::vec3(0, 200, -100));
     leader->objectInfo().setName("leader");
     leader->objectInfo().setShowOnHud(true);
@@ -69,7 +69,7 @@ void FrozenGameScenario::populateWorld() {
 
     int lmember_count = 2;
     for (int i = 0; i < lmember_count; i++) {
-        Ship *follower = WorldObjectBuilder("basicship").buildShip();
+        Ship *follower = WorldElementBuilder("basicship").buildShip();
         follower->transform().setPosition(glm::vec3(100 * (-lmember_count / 2.0f + i), 200, 0));
         follower->objectInfo().setName("member");
         follower->objectInfo().setShowOnHud(true);
@@ -78,7 +78,7 @@ void FrozenGameScenario::populateWorld() {
         m_world->god().scheduleSpawn(follower);
     }
 
-    Ship *testCluster = WorldObjectBuilder("basicship").buildShip();
+    Ship *testCluster = WorldElementBuilder("basicship").buildShip();
     testCluster->transform().setPosition(glm::vec3(0, 0, 10));
     testCluster->objectInfo().setName("basicship");
     testCluster->objectInfo().setShowOnHud(false);

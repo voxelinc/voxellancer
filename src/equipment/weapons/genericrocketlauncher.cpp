@@ -2,7 +2,7 @@
 
 #include "property/property.h"
 
-#include "resource/worldobjectbuilder.h"
+#include "resource/worldelementbuilder.h"
 
 #include "rocket.h"
 
@@ -38,7 +38,7 @@ void GenericRocketLauncher::setRocketName(const std::string& rocketName) {
 }
 
 Rocket* GenericRocketLauncher::createRocket() {
-    Rocket* rocket = WorldObjectBuilder(m_rocketName).buildRocket();
+    Rocket* rocket = WorldElementBuilder(m_rocketName).buildRocket();
     return rocket;
 }
 

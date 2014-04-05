@@ -1,8 +1,8 @@
 #include "genericgun.h"
 
-#include "resource/worldobjectbuilder.h"
+#include "resource/worldelementbuilder.h"
 
-#include "genericbullet.h"
+#include "genericworldobjectbullet.h"
 
 
 GenericGun::GenericGun(const std::string& name):
@@ -62,7 +62,7 @@ void GenericGun::setBulletName(const std::string& bulletName) {
 }
 
 Bullet* GenericGun::createBullet() {
-    return WorldObjectBuilder(m_bulletName).buildBullet();
+    return WorldElementBuilder(m_bulletName).buildBullet();
     //return World::instance()->bulletEngine().createBullet(m_bulletName);
 }
 

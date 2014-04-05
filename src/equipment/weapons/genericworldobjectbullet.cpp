@@ -1,4 +1,4 @@
-#include "genericbullet.h"
+#include "genericworldobjectbullet.h"
 
 #include "voxeleffect/voxelexplosiongenerator.h"
 
