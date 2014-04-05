@@ -22,5 +22,7 @@ public:
 
     virtual void spawn() override;
     virtual float length() override;
+
+    virtual bool passiveForCollisionDetection() override;
 };
 

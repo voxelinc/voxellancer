@@ -62,3 +62,7 @@ float WorldObjectBullet::length() {
     return bounds().minimalGridAABB().extent(ZAxis) * transform().scale();
 }
 
+bool WorldObjectBullet::passiveForCollisionDetection() {
+    return true;
+}
+

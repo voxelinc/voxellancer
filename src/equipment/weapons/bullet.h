@@ -20,7 +20,6 @@ public:
     virtual void spawn() = 0;
     virtual float length() = 0;
 
-    virtual bool passiveForCollisionDetection();
 
 
 protected:
