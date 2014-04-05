@@ -14,22 +14,23 @@
 
 #include "gamestate/gamestate.h"
 
-#include "utils/tostring.h"
-#include "utils/aimer.h"
-
 #include "camera/camerahead.h"
 #include "camera/cameradolly.h"
-#include "etc/hmd/hmd.h"
+
 #include "input/inputmapping.h"
+
+#include "world/world.h"
 #include "worldobject/worldobject.h"
 #include "worldobject/worldobjectcomponents.h"
 #include "worldobject/ship.h"
+
 #include "player.h"
+
 #include "ui/hud/hud.h"
 #include "ui/inputconfigurator.h"
 #include "ui/targetselector.h"
 #include "ui/hud/crosshair.h"
-#include "world/world.h"
+
 
 
 /*

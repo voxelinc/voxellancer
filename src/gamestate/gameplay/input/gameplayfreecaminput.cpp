@@ -12,17 +12,9 @@
 #include "etc/hmd/hmd.h"
 #include "etc/hmd/hmdmanager.h"
 
-#include "gamestate/gamestate.h"
-
-#include "utils/tostring.h"
-#include "utils/aimer.h"
-
 #include "camera/camerahead.h"
-#include "camera/cameradolly.h"
-#include "etc/hmd/hmd.h"
+
 #include "input/inputmapping.h"
-#include "ui/hud/hud.h"
-#include "ui/inputconfigurator.h"
 
 
 GamePlayFreecamInput::GamePlayFreecamInput() :
