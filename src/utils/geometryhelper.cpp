@@ -1,6 +1,6 @@
 #include "geometryhelper.h"
 
-#include "randvec.h"
+#include "randvec3.h"
 #include "worldobject/worldobject.h"
 #include "geometry/ray.h"
 

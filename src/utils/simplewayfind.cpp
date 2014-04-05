@@ -6,6 +6,8 @@
 #include "worldobject/worldobject.h"
 #include "utils/geometryhelper.h"
 #include "collision/collisionfilter.h"
+#include "collision/collisiondetector.h"
+#include "worldtree/worldtreegeode.h"
 #include "voxel/voxelclusterbounds.h"
 
 
@@ -16,7 +18,7 @@ glm::vec3 SimpleWayfind::calculateTravelPoint(WorldObject& object, glm::vec3 tar
     filter.setCollideableWith(WorldObjectType::Rocket, false);
 
     Capsule capsule = Capsule(object.transform().position(), targetPoint - object.transform().position(), object.bounds().sphere().radius());
-    std::unordered_set<WorldObject*> obstacles = WorldTreeQuery(&World::instance()->worldTree(), &capsule, nullptr, &filter).intersectingWorldObjects();
+    std::unordered_set<WorldObject*> obstacles = WorldTreeQuery(&World::instance()->worldTree(), &capsule, object.collisionDetector().geode()->containingNode(), &filter).intersectingWorldObjects();
 
     if (!obstacles.empty()) {
         WorldObject* obstacle = GeometryHelper::closestObject(object, &obstacles);

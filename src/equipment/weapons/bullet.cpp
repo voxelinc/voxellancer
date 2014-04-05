@@ -9,6 +9,7 @@
 #include "sound/soundmanager.h"
 
 
+
 Bullet::Bullet():
     Projectile()
 {
@@ -17,8 +18,8 @@ Bullet::Bullet():
     m_objectInfo->setShowOnHud(false);
     m_objectInfo->setCanLockOn(false);
 
-    m_physics->setDirectionalDampening(0.0f);
-    m_physics->setAngularDampening(0.0f);
+    m_physics->setDirectionalDampening(unnamedProperty(0.0f));
+    m_physics->setAngularDampening(unnamedProperty(0.0f));
 }
 
 
@@ -28,5 +29,9 @@ WorldObjectType Bullet::objectType() const {
 
 void Bullet::update(float deltaSec) {
     Projectile::update(deltaSec);
+}
+
+bool Bullet::passiveForCollisionDetection() {
+    return true;
 }
 

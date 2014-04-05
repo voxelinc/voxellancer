@@ -1,7 +1,6 @@
 #include "enginepower.h"
 
-#include "property/propertymanager.h"
-#include "physics/physics.h"
+#include "property/property.h"
 
 
 EnginePower::EnginePower():

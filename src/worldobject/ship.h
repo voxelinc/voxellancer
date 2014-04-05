@@ -7,7 +7,6 @@
 #include "property/property.h"
 
 
-
 class World;
 class God;
 class Hardpoint;
@@ -16,6 +15,10 @@ class Character;
 class Sound;
 class SquadLogic;
 class BoardComputer;
+
+/**
+ *  A Ship is a WorldObject with a Pilot (Character), thus can have an AiTask and a Squad membership
+*/
 
 class Ship: public WorldObject {
 public:
@@ -39,8 +42,6 @@ public:
 
 
 protected:
-    Ship(CollisionFilter* collisionFilter);
-
     std::unique_ptr<Character> m_character;
     std::unique_ptr<BoardComputer> m_boardComputer;
 
@@ -48,6 +49,7 @@ protected:
 
     Handle<Ship> m_shipHandle;
     Handle<WorldObject> m_targetObjectHandle;
+
 
     void updateEnginePosition();
 };

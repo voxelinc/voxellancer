@@ -4,8 +4,6 @@
 #include "ai/character.h"
 #include "ai/squadlogic.h"
 
-#include "collision/collisionfilter.h"
-
 #include "factions/factionmatrix.h"
 
 #include "ui/objectinfo.h"
@@ -14,12 +12,7 @@
 
 
 Ship::Ship():
-    Ship(new CollisionFilter(this))
-{
-}
-
-Ship::Ship(CollisionFilter* collisionFilter):
-    WorldObject(collisionFilter),
+    WorldObject(),
     m_character(new Character(*this, World::instance()->factionMatrix().unknownFaction())),
     m_boardComputer(new BoardComputer(this)),
     m_squadLogic(new SquadLogic(*this)),

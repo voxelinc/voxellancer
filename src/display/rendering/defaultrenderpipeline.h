@@ -13,10 +13,10 @@ class RenderPass;
 class ScreenQuad;
 class PostProcessingPass;
 
-/*
-   a renderpipeline that applies basic effects to the frame like
-   a bloom effect and creates the final image
-*/
+/**
+ *  a renderpipeline that applies basic effects to the frame like
+ *  a bloom effect and creates the final image
+ */
 class DefaultRenderPipeline : public RenderPipeline {
 public:
     DefaultRenderPipeline();

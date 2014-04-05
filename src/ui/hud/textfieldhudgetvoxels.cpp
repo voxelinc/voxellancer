@@ -12,26 +12,27 @@
 
 #include "utils/geometryhelper.h"
 
-TextFieldHudgetVoxels::TextFieldHudgetVoxels(TextFieldHudget* textFieldHudget, glm::vec3 direction, float scale, std::string content, FontSize fontSize) :
-m_textFieldHudget(textFieldHudget),
-m_voxelFont(VoxelFont::instance()),
-m_content(content),
-m_direction(direction),
-m_scale(scale),
-m_fontSize(fontSize)
+
+TextFieldHudgetVoxels::TextFieldHudgetVoxels(TextFieldHudget* textFieldHudget, const glm::vec3& direction, float scale, const std::string& text, FontSize fontSize) :
+    m_textFieldHudget(textFieldHudget),
+    m_voxelFont(VoxelFont::instance()),
+    m_text(text),
+    m_direction(direction),
+    m_scale(scale),
+    m_fontSize(fontSize)
 {
     m_width = m_voxelFont->letterWidth(fontSize) * m_scale;
     m_height = m_voxelFont->letterWidth(fontSize) * m_scale;
-    m_offset = -1.f * ((m_content.length() - 1) / 2.0f) * m_width;
+    m_offset = -1.f * ((m_text.length() - 1) / 2.0f) * m_width;
 }
 
-void TextFieldHudgetVoxels::setContent(std::string content) {
-    m_content = content;
-    m_offset = -1.f * ((m_content.length() - 1) / 2.0f) * m_width;
+void TextFieldHudgetVoxels::setText(const std::string& text) {
+    m_text = text;
+    m_offset = -1.f * ((m_text.length() - 1) / 2.0f) * m_width;
 }
 
 void TextFieldHudgetVoxels::draw() {
-    m_voxelFont->drawString(m_content, m_textFieldHudget->worldPosition(m_direction), m_textFieldHudget->worldOrientation(m_direction), m_fontSize, m_scale, FontAlign::CENTER);
+    m_voxelFont->drawString(m_text, m_textFieldHudget->worldPosition(m_direction), m_textFieldHudget->worldOrientation(m_direction), m_fontSize, m_scale, FontAlign::CENTER);
 }
 
 const glm::vec3 TextFieldHudgetVoxels::upperLeft() const {
@@ -41,9 +42,11 @@ const glm::vec3 TextFieldHudgetVoxels::upperLeft() const {
 const glm::vec3 TextFieldHudgetVoxels::lowerLeft() const {
     return worldPosition() + worldOrientation() * offsetToCenter(false, true);
 }
+
 const glm::vec3 TextFieldHudgetVoxels::upperRight() const {
     return worldPosition() + worldOrientation() * offsetToCenter(true, false);
 }
+
 const glm::vec3 TextFieldHudgetVoxels::lowerRight() const {
     return worldPosition() + worldOrientation() * offsetToCenter(false, false);
 }
@@ -65,19 +68,10 @@ float TextFieldHudgetVoxels::scale() {
 }
 
 const glm::vec3 TextFieldHudgetVoxels::offsetToCenter(bool upper, bool left) const {
-    float horizontalOffset, verticalOffset;
-    if (left) {
-        horizontalOffset = (float)m_content.length();
-    } else {
-        horizontalOffset = 0;
-    }
-    if (upper) {
-        verticalOffset = m_height;
-    } else {
-        verticalOffset = -m_height;
-    }
+    float horizontalOffset = left ? static_cast<float>(m_text.length()) : 0;
+    float verticalOffset = upper ? m_height : -m_height;
 
-    return glm::vec3(m_offset + m_width*horizontalOffset - m_width / 2, verticalOffset, 0);
+    return glm::vec3(m_offset + m_width * horizontalOffset - m_width / 2, verticalOffset, 0);
 }
 
 glm::vec3 TextFieldHudgetVoxels::worldPosition() const {
@@ -87,3 +81,4 @@ glm::vec3 TextFieldHudgetVoxels::worldPosition() const {
 glm::quat TextFieldHudgetVoxels::worldOrientation() const {
     return m_textFieldHudget->worldOrientation(m_direction);
 }
+

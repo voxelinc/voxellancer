@@ -1,4 +1,4 @@
-build instructions
+Build instructions
 ==================
 
 git and cmake should be on the path!

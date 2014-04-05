@@ -12,6 +12,7 @@
 #include "scenarios/battlescenario.h"
 #include "scenarios/gamescenario.h"
 #include "scenarios/frozengamescenario.h"
+#include "scenarios/missionscenario.h"
 #include "scenarios/scriptedscenario.h"
 #include "scenarios/piratescenario.h"
 
@@ -23,27 +24,25 @@
 
 #include "player.h"
 #include "ui/hud/hud.h"
+#include "display/viewer.h"
 
 
 
 GamePlay::GamePlay(Game* game) :
     GameState("In Game", game),
     m_game(game),
-    m_player(new Player()),
     m_runningState(new GamePlayRunning(this)),
     m_pausedState(new GamePlayPaused(this)),
-    m_scene(new GamePlayScene(*this, *m_player)),
+    m_scene(new GamePlayScene(*this)),
     m_soundManager(new SoundManager()),
-    m_scenario(new ScriptedScenario(this, "data/scripts/scenarios/flyto.lua"))
+    m_scenario(new ScriptedScenario(this, "data/scripts/scenarios/demo.lua"))
 {
+    updateView();
     setInitialSubState(m_runningState);
 
     m_runningState->pauseTrigger().setTarget(new TriggeredTransition(m_runningState, m_pausedState));
     m_pausedState->continueTrigger().setTarget(new TriggeredTransition(m_pausedState, m_runningState));
-    m_player->hud().setViewer(m_game->viewer());
-    World::instance()->setPlayer(*m_player);
 }
-
 
 Game* GamePlay::game() {
     return m_game;
@@ -66,11 +65,7 @@ const Scene& GamePlay::scene() const {
 }
 
 const CameraHead& GamePlay::cameraHead() const {
-    return m_player->cameraHead();
-}
-
-Player& GamePlay::player() {
-    return *m_player;
+    return World::instance()->player().cameraHead();
 }
 
 SoundManager& GamePlay::soundManager() {
@@ -80,9 +75,11 @@ SoundManager& GamePlay::soundManager() {
 void GamePlay::loadScenario(int i) {
     m_soundManager->stopAll();
     m_scenario->clear();
-    switch (i){
+    updateView();
+
+    switch (i) {
     case 0:
-        m_scenario.reset(new ScriptedScenario(this, "data/scripts/scenarios/flyto.lua"));
+        m_scenario.reset(new ScriptedScenario(this, "data/scripts/scenarios/demo.lua"));
         break;
     case 1:
         m_scenario.reset(new GameScenario(this));
@@ -99,8 +96,8 @@ void GamePlay::loadScenario(int i) {
     default:
         m_scenario.reset(new BaseScenario(this));
     }
+
     m_scenario->load();
-    World::instance()->setPlayer(*m_player);
 }
 
 void GamePlay::update(float deltaSec) {
@@ -117,5 +114,9 @@ void GamePlay::onEntered() {
 void GamePlay::onLeft() {
     m_soundManager->deactivate();
     GameState::onLeft();
+}
+
+void GamePlay::updateView() {
+    World::instance()->player().hud().setView(&m_game->viewer().view());
 }
 
