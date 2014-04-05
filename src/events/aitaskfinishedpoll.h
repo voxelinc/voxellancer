@@ -10,7 +10,7 @@ class AiTask;
 
 class AiTaskFinishedPoll : public EventPoll {
 public:
-    AiTaskFinishedPoll(AiTask* aitask, const std::function<void()>& callback);
+    AiTaskFinishedPoll(AiTask* aitask, const Callback& callback);
 
 protected:
     Handle<AiTask> m_aiTask;

@@ -15,6 +15,9 @@
 #include "scripting/gameplayscript.h"
 #include "scripting/scriptengine.h"
 #include "scripting/elematelua/luawrapper.h"
+#include "scripting/scriptcallback.h"
+#include "scripting/scriptengine.h"
+#include "scripting/gameplayscript.h"
 
 #include "worldobject/ship.h"
 #include "world/world.h"
@@ -90,7 +93,7 @@ apikey AiBindings::apiOnAiTaskFinished(apikey key, const std::string& callback) 
         return -1;
     }
 
-    auto finishedPoll = std::make_shared<AiTaskFinishedPoll>(aiTask, [=] { m_lua.call(callback, key); });
+    auto finishedPoll = std::make_shared<AiTaskFinishedPoll>(aiTask, createCallback(callback, key));
 
     World::instance()->eventPoller().addPoll(finishedPoll);
     m_script.addLocal(finishedPoll);
@@ -180,3 +183,4 @@ apikey AiBindings::apiTaskExecutor(apikey aiTask) {
 
     return ship->scriptKey();
 }
+
