@@ -50,6 +50,11 @@ WorldObjectType WorldObjectBullet::objectType() const {
     return WorldObjectType::Bullet;
 }
 
+void WorldObjectBullet::update(float deltaSec) {
+    Bullet::update(deltaSec);
+    WorldObject::update(deltaSec);
+}
+
 void WorldObjectBullet::remove() {
     World::instance()->god().scheduleRemoval(this);
 }

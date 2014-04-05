@@ -20,6 +20,8 @@ public:
 
     virtual void remove() override;
 
+    virtual void update(float deltaSec);
+
     virtual void spawn() override;
     virtual float length() override;
 
