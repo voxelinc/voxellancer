@@ -2,6 +2,13 @@
 
 #include "collision/collisionfilterignoringcreator.h"
 
+#include "physics/physics.h"
+
+#include "ui/objectinfo.h"
+
+#include "voxel/voxelclusterbounds.h"
+
+#include "world/god.h"
 #include "world/world.h"
 
 
@@ -48,7 +55,7 @@ void WorldObjectBullet::remove() {
 }
 
 void WorldObjectBullet::spawn() {
-    World::instance()->scheduleSpawn(this);
+    World::instance()->god().scheduleSpawn(this);
 }
 
 float WorldObjectBullet::length() {
