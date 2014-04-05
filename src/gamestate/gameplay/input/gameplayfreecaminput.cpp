@@ -54,7 +54,7 @@ GamePlayFreecamInput::GamePlayFreecamInput() :
 
     retrieveInputValues();
 
-    m_cameraDolly->setInertia(std::numeric_limits<float>::infinity(), std::numeric_limits<float>::infinity());
+    m_cameraDolly->setInertia(std::numeric_limits<float>::infinity(), 0);
 }
 
 
