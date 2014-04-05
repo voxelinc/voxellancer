@@ -43,7 +43,7 @@ protected:
     std::vector<ActionKeyMapping*> m_actions;
 
     int m_lastfocus;
-    int m_cursorMaxDistance;
+    float m_cursorMaxDistance;
 
     void processUpdate();
     void processMouseUpdate(float deltaSec);

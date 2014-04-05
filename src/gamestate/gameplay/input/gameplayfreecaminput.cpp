@@ -58,7 +58,7 @@ GamePlayFreecamInput::GamePlayFreecamInput() :
     addActionsToVector();
 
     m_lastfocus = glfwGetWindowAttrib(glfwGetCurrentContext(), GLFW_FOCUSED);
-    m_cursorMaxDistance = glm::min(ContextProvider::instance()->resolution().width(), ContextProvider::instance()->resolution().height()) / 2;
+    m_cursorMaxDistance = glm::min(ContextProvider::instance()->resolution().width(), ContextProvider::instance()->resolution().height()) / 2.0f;
 
     retrieveInputValues();
 
@@ -68,7 +68,7 @@ GamePlayFreecamInput::GamePlayFreecamInput() :
 
 void GamePlayFreecamInput::resizeEvent(const unsigned int width, const unsigned int height) {
     m_lastfocus = false; // through window resize the cursor position is scrambled
-    m_cursorMaxDistance = glm::min(ContextProvider::instance()->resolution().width(), ContextProvider::instance()->resolution().height()) / 2;
+    m_cursorMaxDistance = glm::min(ContextProvider::instance()->resolution().width(), ContextProvider::instance()->resolution().height()) / 2.0f;
 }
 
 void GamePlayFreecamInput::update(float deltaSec) {
@@ -103,9 +103,6 @@ void GamePlayFreecamInput::applyUpdates() {
     m_position += m_orientation * (m_moveUpdate * prop_moveFactor.get());
     m_moveUpdate = glm::vec3(0);
 
-    if (glm::length(m_rotateUpdate) > 1.0f) {
-        m_rotateUpdate = glm::normalize(m_rotateUpdate);
-    }
     m_orientation = m_orientation * glm::quat(m_rotateUpdate * prop_rotateFactor.get());
     m_rotateUpdate = glm::vec3(0);
 }
@@ -129,10 +126,8 @@ void GamePlayFreecamInput::processMouseUpdate(float deltaSec) {
     glfwGetCursorPos(glfwGetCurrentContext(), &x, &y);
 
     glm::vec3 rot;
-    x = ContextProvider::instance()->resolution().width() / 2 - (int)floor(x);
-    y = ContextProvider::instance()->resolution().height() / 2 - (int)floor(y);
-    x = glm::min((double)m_cursorMaxDistance, x);
-    y = glm::min((double)m_cursorMaxDistance, y);
+    x = ContextProvider::instance()->resolution().width() / 2 - x;
+    y = ContextProvider::instance()->resolution().height() / 2 - y;
     rot = glm::vec3(y, x, 0);
     rot /= m_cursorMaxDistance;
 
