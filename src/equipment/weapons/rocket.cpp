@@ -26,8 +26,8 @@ Rocket::Rocket():
 {
     collisionFilter().setCollideableWith(WorldObjectType::Rocket, false);
 
-    m_objectInfo->setShowOnHud(false);
-    m_objectInfo->setCanLockOn(false);
+    m_info->setShowOnHud(false);
+    m_info->setCanLockOn(false);
 }
 
 WorldObjectType Rocket::objectType() const {

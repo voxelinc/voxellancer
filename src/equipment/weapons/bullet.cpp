@@ -15,8 +15,8 @@ Bullet::Bullet():
 {
     collisionFilter().setCollideableWith(WorldObjectType::Bullet, false);
 
-    m_objectInfo->setShowOnHud(false);
-    m_objectInfo->setCanLockOn(false);
+    m_info->setShowOnHud(false);
+    m_info->setCanLockOn(false);
 
     m_physics->setDirectionalDampening(unnamedProperty(0.0f));
     m_physics->setAngularDampening(unnamedProperty(0.0f));

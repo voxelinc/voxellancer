@@ -91,7 +91,7 @@ protected:
     std::unique_ptr<CollisionFilter> m_collisionFilter;
     std::unique_ptr<CollisionDetector> m_collisionDetector;
     std::unique_ptr<Physics> m_physics;
-    std::unique_ptr<WorldObjectInfo> m_objectInfo;
+    std::unique_ptr<WorldObjectInfo> m_info;
     std::unique_ptr<WorldObjectComponents> m_components;
 
     Handle<WorldObject> m_handle;
