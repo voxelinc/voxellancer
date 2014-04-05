@@ -3,6 +3,7 @@
 #include "propertymanager.h"
 #include "propertyimpl.h"
 
+
 template <class T>
 Property<T>::Property(const std::string& name):
     m_impl(nullptr)
