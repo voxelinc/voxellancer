@@ -19,22 +19,33 @@ class Sound;
  *   Base class for Projectiles that follow a target and attempt to crush into it.
  *   Also, currently explodes on any collision
 */
-class Rocket: public Projectile {
+class Rocket: public Projectile, public WorldObject {
 public:
     Rocket();
 
     virtual WorldObjectType objectType() const override;
+
+    virtual Transform& transform() override;
+    virtual void setTransform(const Transform& transform) override;
+
+    virtual void setSpeed(const Speed& speed) override;
+
+    virtual void setCreator(WorldObject* creator) override;
 
     WorldObject* target();
     void setTarget(WorldObject* targetObject);
 
     virtual void update(float deltaSec) override;
 
+    virtual void remove() override;
+
+    virtual void onCollision() override;
+    virtual void onSpawnFail() override;
+
 
 protected:
     Handle<WorldObject> m_targetHandle;
     BoardComputer m_boardComputer;
     std::unique_ptr<AiTask> m_aiTask;
-
 };
 

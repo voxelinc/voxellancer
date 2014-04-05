@@ -3,11 +3,11 @@
 #include <string>
 
 
-class Bullet;
 class Rocket;
 class Ship;
 class VoxelCluster;
 class WorldObject;
+class WorldObjectBullet;
 class WorldObjectComponents;
 
 /**
@@ -19,7 +19,7 @@ public:
 
     WorldObject* build();
 
-    Bullet* buildBullet();
+    WorldObjectBullet* buildBullet();
     Rocket* buildRocket();
     Ship* buildShip();
     WorldObject* buildWorldObject();

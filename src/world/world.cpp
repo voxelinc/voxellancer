@@ -41,7 +41,7 @@ World::World():
 
 World::~World() {
 
-}b
+}
 
 Player& World::player() {
     return *m_player;

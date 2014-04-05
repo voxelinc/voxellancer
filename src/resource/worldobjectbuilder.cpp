@@ -48,8 +48,8 @@ WorldObject* WorldObjectBuilder::build() {
     return nullptr;
 }
 
-Bullet* WorldObjectBuilder::buildBullet() {
-    GenericBullet* bullet = makeWorldObject<GenericBullet>();
+WorldObjectBullet* WorldObjectBuilder::buildBullet() {
+    GenericWorldObjectBullet* bullet = makeWorldObject<GenericWorldObjectBullet>();
 
     bullet->setEmissiveness(Property<float>(m_name + ".general.emissiveness", 0.0f));
     bullet->setLifetime(Property<float>(m_name + ".general.lifetime"));
@@ -83,7 +83,7 @@ WorldObject* WorldObjectBuilder::buildWorldObject() {
 template<typename T>
 T* WorldObjectBuilder::makeWorldObject() {
     static_assert(std::is_base_of<WorldObject, T>::value, "T needs to be derived from WorldObject");
-    
+
     T* object = new T();
     WorldObject* worldObject = object;
 

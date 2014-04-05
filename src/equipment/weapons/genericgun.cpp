@@ -63,5 +63,6 @@ void GenericGun::setBulletName(const std::string& bulletName) {
 
 Bullet* GenericGun::createBullet() {
     return WorldObjectBuilder(m_bulletName).buildBullet();
+    //return World::instance()->bulletEngine().createBullet(m_bulletName);
 }
 

@@ -29,7 +29,7 @@ void Gun::fireAtPoint(const glm::vec3& point) {
         Bullet *bullet = createBullet();
         setupBullet(bullet, point);
 
-        World::instance()->god().scheduleSpawn(bullet);
+        bullet->spawn();
 
         SoundManager::current()->play(fireSound(), hardpoint()->voxel()->position());
 
@@ -61,13 +61,13 @@ void Gun::setupBullet(Bullet* bullet, const glm::vec3& point) {
         bulletTransform.rotateWorld(bulletOrientation); //then rotate towards target
     }
 
-    float bulletLength = bullet->bounds().minimalGridAABB().extent(ZAxis) * bullet->transform().scale();
+    float bulletLength = bullet->length();
     float spawnDistance = glm::root_two<float>() * bullet->transform().scale();
     bulletTransform.setPosition(m_hardpoint->voxel()->position() + bulletDirection * (bulletLength / 2.0f + spawnDistance));
 
     bullet->setTransform(bulletTransform);
 
-    bullet->physics().setSpeed(Speed(
+    bullet->setSpeed(Speed(
         bulletDirection * bulletSpeed() /*+ firingWorldObject->physics().speed().directional()*/,
         bulletTransform.orientation() * glm::vec3(0, 0, 5.0f)
     ));

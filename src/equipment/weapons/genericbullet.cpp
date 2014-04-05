@@ -3,28 +3,28 @@
 #include "voxeleffect/voxelexplosiongenerator.h"
 
 
-GenericBullet::GenericBullet():
+GenericWorldObjectBullet::GenericWorldObjectBullet():
     m_emissiveness(0.0f)
 {
 }
 
-float GenericBullet::emissiveness() const {
+float GenericWorldObjectBullet::emissiveness() const {
     return m_emissiveness;
 }
 
-void GenericBullet::setEmissiveness(float emissiveness) {
+void GenericWorldObjectBullet::setEmissiveness(float emissiveness) {
     m_emissiveness = emissiveness;
 }
 
-const SoundProperties& GenericBullet::hitSound() const {
+const SoundProperties& GenericWorldObjectBullet::hitSound() const {
     return m_hitSound;
 }
 
-void GenericBullet::setHitSound(const SoundProperties& hitSound) {
+void GenericWorldObjectBullet::setHitSound(const SoundProperties& hitSound) {
     m_hitSound = hitSound;
 }
 
-void GenericBullet::spawnExplosion() {
+void GenericWorldObjectBullet::spawnExplosion() {
     VoxelExplosionGenerator generator(this);
 
     generator.setPosition(m_transform.position());

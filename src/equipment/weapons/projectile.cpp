@@ -1,7 +1,5 @@
 #include "projectile.h"
 
-#include "collision/collisionfilterignoringcreator.h"
-
 #include "world/god.h"
 #include "world/world.h"
 #include "sound/soundmanager.h"
@@ -19,14 +17,6 @@ WorldObject* Projectile::creator() {
 
 void Projectile::setCreator(WorldObject* creator) {
     m_creator = creator;
-
-    CollisionFilterIgnoringCreator* newCollisionFilter = new CollisionFilterIgnoringCreator(
-        this,
-        m_creator,
-        collisionFilter().collisionMask()
-    );
-
-    setCollisionFilter(newCollisionFilter);
 }
 
 float Projectile::lifetime() const {
@@ -38,13 +28,11 @@ void Projectile::setLifetime(float lifetime) {
 }
 
 void Projectile::update(float deltaSec) {
-    WorldObject::update(deltaSec);
-
     m_lifetime -= deltaSec;
 
     if (m_lifetime <= 0.0f) {
-        World::instance()->god().scheduleRemoval(this);
         onLifetimeOver();
+        remove();
     }
 }
 
@@ -53,12 +41,13 @@ void Projectile::onLifetimeOver() {
 }
 
 void Projectile::onCollision() {
-    SoundManager::current()->play(hitSound(), position());
+    SoundManager::current()->play(hitSound(), transform().position());
 
-    World::instance()->god().scheduleRemoval(this);
     spawnExplosion();
+    remove();
 }
 
 void Projectile::onSpawnFail() {
     spawnExplosion();
 }
+
