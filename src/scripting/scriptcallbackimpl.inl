@@ -5,29 +5,29 @@
 
 
 namespace {
-template<typename ...Args>
-void call(ScriptCallbackImpl<Args...>* callback, const std::string& function, Args... args) {
+template<typename... Args>
+void callHelper(ScriptCallbackImpl<Args...>* callback, const std::string& function, Args... args) {
     callback->script()->lua().call(function, args...);
 }
 }
 
-template<typename ...Args>
+template<typename... Args>
 ScriptCallbackImpl<Args...>::ScriptCallbackImpl(Script& script, const std::string& function, Args... args):
     m_script(script.handle()),
     m_function(function),
-    m_call(std::bind(::call<Args...>, this, function, args...))
+    m_call(std::bind(callHelper<Args...>, this, function, args...))
 {
 }
 
-template<typename ...Args>
+template<typename... Args>
 ScriptCallbackImpl<Args...>::~ScriptCallbackImpl() = default;
 
-template<typename ...Args>
+template<typename... Args>
 Handle<Script>& ScriptCallbackImpl<Args...>::script() {
     return m_script;
 }
 
-template<typename ...Args>
+template<typename... Args>
 void ScriptCallbackImpl<Args...>::call() {
     if (!m_script.valid()) {
         return;

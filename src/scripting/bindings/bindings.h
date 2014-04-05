@@ -18,7 +18,7 @@ public:
 
     virtual void bind() = 0;
 
-    template<typename ...Args>
+    template<typename... Args>
     Callback createCallback(const std::string& function, Args... args);
 
 
