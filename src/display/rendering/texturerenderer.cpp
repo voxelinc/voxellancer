@@ -28,7 +28,6 @@ TextureRenderer::TextureRenderer(const std::string& file) :
     m_voxelRenderer(VoxelRenderer::instance()), // we hold this pointer to avoid the VR being recreated each time
     m_file(file)
 {
-    initialize();
 }
 
 void TextureRenderer::initialize() {
@@ -54,7 +53,10 @@ void TextureRenderer::drawLoading(const std::string& status) {
 }
 
 void TextureRenderer::draw(){
-    assert(m_texture);
+    if (!m_texture) {
+        initialize();
+    }
+
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
     glDisable(GL_DEPTH_TEST);
 
@@ -69,5 +71,5 @@ void TextureRenderer::beforeContextDestroy() {
 }
 
 void TextureRenderer::afterContextRebuild() {
-    initialize();
+    // lazy init
 }
