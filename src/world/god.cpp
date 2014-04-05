@@ -8,7 +8,7 @@
 
 #include "scripting/scriptengine.h"
 
-#include "ui/objectinfo.h"
+#include "worldobject/objectinfo.h"
 
 #include "worldtree/worldtree.h"
 

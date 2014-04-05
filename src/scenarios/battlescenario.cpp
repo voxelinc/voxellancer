@@ -24,7 +24,7 @@
 
 #include "utils/randvec3.h"
 #include "player.h"
-#include "ui/objectinfo.h"
+#include "worldobject/objectinfo.h"
 
 
 BattleScenario::BattleScenario(GamePlay* gamePlay):

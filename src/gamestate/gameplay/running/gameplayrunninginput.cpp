@@ -27,7 +27,7 @@
 #include "worldobject/ship.h"
 #include "player.h"
 #include "ui/hud/hud.h"
-#include "ui/inputconfigurator.h"
+#include "input/inputconfigurator.h"
 #include "ui/targetselector.h"
 #include "ui/hud/crosshair.h"
 

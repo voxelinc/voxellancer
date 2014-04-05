@@ -11,7 +11,7 @@
 #include "test/bandit_extension/vec3helper.h"
 
 #include "geometry/acceleration.h"
-#include "ui/objectinfo.h"
+#include "worldobject/objectinfo.h"
 #include "utils/tostring.h"
 #include "player.h"
 #include "physics/physics.h"

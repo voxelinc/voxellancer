@@ -26,7 +26,7 @@
 #include "world/god.h"
 
 #include "player.h"
-#include "ui/objectinfo.h"
+#include "worldobject/objectinfo.h"
 #include "utils/randvec3.h"
 
 #include "scripting/scriptengine.h"

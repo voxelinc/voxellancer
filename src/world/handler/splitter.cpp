@@ -6,7 +6,7 @@
 
 #include "voxel/voxel.h"
 #include "physics/physics.h"
-#include "ui/objectinfo.h"
+#include "worldobject/objectinfo.h"
 #include "worldobject/worldobject.h"
 
 void Splitter::split(std::vector<std::shared_ptr<SplitData>> &splits) {

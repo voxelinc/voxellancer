@@ -21,7 +21,7 @@
 
 #include "physics/physics.h"
 
-#include "ui/objectinfo.h"
+#include "worldobject/objectinfo.h"
 
 #include "utils/tostring.h"
 #include "utils/geometryhelper.h"

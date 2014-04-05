@@ -25,7 +25,7 @@
 #include "voxel/voxel.h"
 #include "world/god.h"
 #include "player.h"
-#include "ui/objectinfo.h"
+#include "worldobject/objectinfo.h"
 
 
 FrozenGameScenario::FrozenGameScenario(GamePlay* inGame) :

@@ -3,8 +3,9 @@
 #include <algorithm>
 
 #include "worldobject/ship.h"
+#include "worldobject/objectinfo.h"
+
 #include "world/world.h"
-#include "objectinfo.h"
 
 #include "player.h"
 

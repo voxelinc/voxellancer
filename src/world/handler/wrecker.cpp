@@ -2,7 +2,7 @@
 
 #include "world/helper/worldobjectmodification.h"
 #include "worldobject/worldobject.h"
-#include "ui/objectinfo.h"
+#include "worldobject/objectinfo.h"
 #include "physics/physics.h"
 #include "voxel/voxel.h"
 

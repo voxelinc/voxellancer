@@ -7,7 +7,7 @@
 
 #include "resource/worldobjectbuilder.h"
 
-#include "ui/objectinfo.h"
+#include "worldobject/objectinfo.h"
 
 #include "world/world.h"
 #include "world/god.h"

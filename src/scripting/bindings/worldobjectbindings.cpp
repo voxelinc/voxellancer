@@ -10,7 +10,7 @@
 
 #include "geometry/aabb.h"
 
-#include "ui/objectinfo.h"
+#include "worldobject/objectinfo.h"
 
 #include "player.h"
 

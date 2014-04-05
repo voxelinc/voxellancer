@@ -15,7 +15,7 @@
 #include "ui/hud/aimhelperhudget.h"
 #include "ui/hud/crosshair.h"
 
-#include "ui/objectinfo.h"
+#include "worldobject/objectinfo.h"
 
 #include "utils/aimer.h"
 

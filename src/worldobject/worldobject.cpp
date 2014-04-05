@@ -9,7 +9,7 @@
 
 #include "utils/handle/handle.h"
 #include "physics/physics.h"
-#include "ui/objectinfo.h"
+#include "worldobject/objectinfo.h"
 #include "voxel/voxel.h"
 #include "worldobjectcomponents.h"
 

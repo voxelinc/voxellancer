@@ -14,7 +14,7 @@
 #include "resource/worldobjectbuilder.h"
 #include "worldobject/ship.h"
 #include "scripting/scriptengine.h"
-#include "ui/objectinfo.h"
+#include "worldobject/objectinfo.h"
 #include "sound/soundmanager.h"
 #include "world/god.h"
 #include "world/world.h"
