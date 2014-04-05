@@ -1,14 +1,20 @@
 #pragma once
 
+#include <memory>
+
 #include <glm/glm.hpp>
 
 #include "property/property.h"
 
+
+class RandVec3Pool;
 class Transform;
 class VoxelCluster;
 
 class VoxelParticleSpawnBase {
 public:
+    ~VoxelParticleSpawnBase();
+
     void setPosition(const glm::vec3& position);
     void setOrientation(const glm::quat& orientation);
     void setScale(float scale, float randomization = 0.0f);
@@ -25,7 +31,7 @@ protected:
                            char* angularDampeningName,
                            char* baseForceName,
                            char* angularBaseForceName);
-    
+
     const VoxelCluster* m_creator;
 
     glm::vec3 m_position;

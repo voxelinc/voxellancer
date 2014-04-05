@@ -13,7 +13,7 @@
 #include "utils/randfloat.h"
 #include "display/rendering/framebuffer.h"
 #include "display/rendering/buffernames.h"
-#include "utils/randvec.h"
+#include "utils/randvec3.h"
 #include "etc/contextdependant.h"
 #include "camera/camera.h"
 

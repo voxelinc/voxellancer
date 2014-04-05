@@ -38,6 +38,7 @@
 #include "gamestate/gameplay/gameplayscene.h"
 
 #include "utils/filesystem.h"
+
 #include "world/world.h"
 
 static GLint MajorVersionRequire = 3;
@@ -103,6 +104,9 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
     if (key >= GLFW_KEY_1 && key <= GLFW_KEY_9 && action == GLFW_PRESS) {
         game->gamePlay().scene().setOutputBuffer(key-GLFW_KEY_1);
     }
+    if (key == GLFW_KEY_T && action == GLFW_PRESS) {
+        game->gamePlay().scene().setWorldTreeRendererEnabled(!game->gamePlay().scene().worldTreeRendererEnabled());
+    }
 
 	game->gamePlay().running().input().keyCallback(key, scancode, action, mods);
 }
@@ -150,7 +154,6 @@ static void mainloop() {
         glfwPollEvents();
     }
 }
-
 
 void toggleFullScreen() {
     ContextProvider::instance()->toggleFullScreen();
