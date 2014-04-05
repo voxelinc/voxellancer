@@ -24,8 +24,8 @@
 TextureRenderer::TextureRenderer(const std::string& file) :
     m_texture(0),
     m_shaderProgram(0),
-    m_quad(),
-    m_camera(ContextProvider::instance()->viewport().width(), ContextProvider::instance()->viewport().height()),
+    m_quad(new ScreenQuad()),
+    m_camera(new Camera(ContextProvider::instance()->viewport().width(), ContextProvider::instance()->viewport().height())),
     m_voxelRenderer(VoxelRenderer::instance()), // we hold this pointer to avoid the VR being recreated each time
     m_file(file)
 {
@@ -56,7 +56,7 @@ void TextureRenderer::initialize() {
 
 void TextureRenderer::drawLoading(const std::string& status) {
     draw();
-    m_voxelRenderer->prepareDraw(m_camera, false);
+    m_voxelRenderer->prepareDraw(*m_camera.get(), false);
     m_voxelRenderer->program()->getUniform<glm::vec3>("lightdir")->set(glm::vec3(0, 0, 1));
     VoxelFont::instance()->drawString("Voxellancer", glm::vec3(0, 0.5f, -1) * 40.f, glm::quat(), FontSize::SIZE5x7, 0.4f, FontAlign::CENTER);
     VoxelFont::instance()->drawString(status, glm::vec3(-0.85f, -0.5f, -1) * 40.f, glm::quat(), FontSize::SIZE5x7, 0.15f, FontAlign::LEFT);
@@ -74,7 +74,7 @@ void TextureRenderer::draw(){
     m_texture->bind();
     m_shaderProgram->use();
 
-    m_quad.draw();
+    m_quad->draw();
 
     m_shaderProgram->release();
     m_texture->unbind();

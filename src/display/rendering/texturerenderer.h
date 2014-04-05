@@ -35,8 +35,8 @@ protected:
     glow::ref_ptr<glow::Texture> m_texture;
     glow::ref_ptr<glow::Program> m_shaderProgram;
     std::shared_ptr<VoxelRenderer> m_voxelRenderer;
-    ScreenQuad m_quad;
-    Camera m_camera;
+    std::unique_ptr<ScreenQuad> m_quad;
+    std::unique_ptr<Camera> m_camera;
     std::string m_file;
 
     void initialize();
