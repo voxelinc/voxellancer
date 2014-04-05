@@ -106,7 +106,7 @@ void Voxel::onDestruction() {
 
 float Voxel::defaultUnscaledMass() {
     if (s_defaultUnscaledMass == nullptr) {
-        s_defaultUnscaledMass = new Property<float>("voxels.default.unscaledMass");
+        s_defaultUnscaledMass = new Property<float>("voxels.default.mass");
     }
     return s_defaultUnscaledMass->get();
 }
