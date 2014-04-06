@@ -8,7 +8,14 @@
 class InstancedBullet : public Bullet {
 public:
     struct Data {
-
+        glm::vec3 v_creationPosition;
+        glm::vec3 v_creationEulers;
+        glm::vec3 v_directionalSpeed;
+        glm::vec3 v_angularSpeed;
+        float v_creationTime;
+        float v_deathTime;
+        glm::vec4 v_color;
+        float v_emissiveness;
     };
 
 public:
