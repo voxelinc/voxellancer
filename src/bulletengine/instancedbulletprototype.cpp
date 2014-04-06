@@ -88,7 +88,7 @@ void InstancedBulletPrototype::draw(const Camera& camera, glow::Program* program
 
     std::cout << "InstancedBulletPrototype drawing " << m_cpuBulletBuffer.size() << " bullets" << std::endl;
 
-    m_vao->drawArraysInstanced(GL_TRIANGLE_STRIP, 0, 14, m_cpuBulletBuffer.size());
+    m_vao->drawArraysInstanced(GL_TRIANGLE_STRIP, 0, 14, voxelCount * m_cpuBulletBuffer.size());
 }
 
 void InstancedBulletPrototype::initialize() {
