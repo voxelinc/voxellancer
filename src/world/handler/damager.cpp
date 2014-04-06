@@ -3,19 +3,25 @@
 #include <set>
 #include <glow/logging.h>
 
+#include "equipment/shield.h"
+#include "equipment/shieldslot.h"
+
 #include "utils/tostring.h"
+
 #include "voxel/voxel.h"
 
-#include "worldobject/worldobject.h"
 #include "worldobject/ship.h"
+#include "worldobject/worldobject.h"
+#include "worldobject/worldobjectcomponents.h"
 
 #include "world/world.h"
 #include "world/helper/damageimpact.h"
 
 #include "player.h"
 
+
 Damager::Damager() :
-    m_playerShipUndestroyable("general.playerShipUndestroyable") 
+    m_playerShipUndestroyable("general.playerShipUndestroyable")
 {
 }
 
@@ -26,6 +32,11 @@ void Damager::applyDamages(std::list<DamageImpact> &damageImpacts) {
 
     for(DamageImpact &damageImpact : damageImpacts) {
         if (m_playerShipUndestroyable && World::instance()->player().ship() == damageImpact.worldObject()) {
+            continue;
+        }
+
+        applyShield(damageImpact);
+        if(damageImpact.damage() == 0) {
             continue;
         }
 
@@ -78,5 +89,14 @@ DamageImpact Damager::dampDamageImpact(DamageImpact &undamped, float factor) {
 
 void Damager::reset() {
     m_worldObjectModificationMap.clear();
+}
+
+void Damager::applyShield(DamageImpact& damageImpact) {
+    Shield* shield = damageImpact.worldObject()->components().shieldSlot().shield().get();
+    if (!shield) {
+        return;
+    }
+
+    damageImpact.setDamage(shield->compensate(damageImpact.damage()));
 }
 

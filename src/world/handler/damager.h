@@ -21,7 +21,7 @@ public:
 
     std::list<DamageImpact> &dampedDeadlyDamageImpacts();
     std::list<DamageImpact> &deadlyDamageImpacts();
-    std::list<Voxel*> &deadVoxels();
+    std::list<Voxel*>& deadVoxels();
     std::list<WorldObjectModification>& worldObjectModifications();
 
 
@@ -32,7 +32,8 @@ protected:
     std::map<WorldObject*, WorldObjectModification> m_worldObjectModificationMap;
     std::list<WorldObjectModification> m_worldObjectModifications;
 
-    DamageImpact dampDamageImpact(DamageImpact &undamped, float factor);
+    DamageImpact dampDamageImpact(DamageImpact& undamped, float factor);
+    void applyShield(DamageImpact& damageImpact);
 
     Property<bool> m_playerShipUndestroyable;
 };

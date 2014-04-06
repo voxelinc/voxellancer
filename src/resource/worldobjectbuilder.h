@@ -36,6 +36,7 @@ protected:
     void setupComponents(WorldObjectComponents& components);
     void setupHardpoints(WorldObjectComponents& components);
     void setupEngineSlots(WorldObjectComponents& components);
+    void setupShieldSlots(WorldObjectComponents& components);
 
 
     /*

@@ -20,6 +20,7 @@ public:
     const glm::vec3& damageVec() const;
 
     float damage() const;
+    void setDamage(float damage);
 
     float fieldOfDamage() const;
 

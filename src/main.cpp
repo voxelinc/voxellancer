@@ -219,6 +219,7 @@ int main(int argc, char* argv[]) {
 #endif
         PropertyDirectory("data/worldobjects").read();
         PropertyDirectory("data/equipment/engines").read();
+        PropertyDirectory("data/equipment/shields").read();
         PropertyDirectory("data/equipment/weapons").read();
         PropertyDirectory("data/equipment/projectiles").read();
 

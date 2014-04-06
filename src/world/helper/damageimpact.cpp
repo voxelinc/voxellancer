@@ -37,6 +37,10 @@ float DamageImpact::damage() const {
     return glm::length(m_damageVec);
 }
 
+void DamageImpact::setDamage(float damage) {
+    m_damageVec = glm::normalize(m_damageVec) * damage;
+}
+
 float DamageImpact::fieldOfDamage() const {
     return m_fieldOfDamage;
 }

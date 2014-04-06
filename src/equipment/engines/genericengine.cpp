@@ -32,3 +32,4 @@ void GenericEngine::setPower(const EnginePower& power) {
 void GenericEngine::update(float deltaSec) {
     Engine::update(deltaSec);
 }
+

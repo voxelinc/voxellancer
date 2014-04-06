@@ -10,6 +10,7 @@
 class EngineSlot;
 class Hardpoint;
 class HardpointVoxel;
+class ShieldSlot;
 class WorldObject;
 
 /**
@@ -22,6 +23,7 @@ class WorldObject;
 class WorldObjectComponents {
 public:
     WorldObjectComponents(WorldObject* worldObject);
+    ~WorldObjectComponents();
 
     WorldObject* worldObject();
     const WorldObject* worldObject() const;
@@ -73,6 +75,8 @@ public:
     void fireAtPoint(const glm::vec3& point);
     void fireAtObject(WorldObject* worldObject);
 
+    ShieldSlot& shieldSlot();
+
     /*
         Update all components
     */
@@ -85,6 +89,8 @@ protected:
 
     std::list<std::shared_ptr<EngineSlot>> m_engineSlots;
     std::list<std::shared_ptr<Hardpoint>> m_hardpoints;
+
+    std::unique_ptr<ShieldSlot> m_shieldSlot;
 
     EngineState m_engineState;
 };
