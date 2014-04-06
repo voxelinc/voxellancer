@@ -1,6 +1,7 @@
 #include "worldobjectcomponents.h"
 
 #include <algorithm>
+#include <iostream>
 
 #include "equipment/engineslot.h"
 #include "equipment/engine.h"
@@ -11,10 +12,11 @@
 #include "equipment/weapons/gun.h"
 #include "equipment/weapons/rocketlauncher.h"
 
+#include "ui/objectinfo.h"
+
 
 WorldObjectComponents::WorldObjectComponents(WorldObject* worldObject):
-    m_worldObject(worldObject),
-    m_shieldSlot(new ShieldSlot(this))
+    m_worldObject(worldObject)
 {
 }
 
@@ -132,8 +134,8 @@ std::list<std::shared_ptr<ShieldSlot>>& WorldObjectComponents::shieldSlots() {
 
 float WorldObjectComponents::compensate(float damage) {
     for (std::shared_ptr<ShieldSlot>& shieldSlot : m_shieldSlots) {
-        Shield* shield = shieldSlot->shield;
-        if (!shield) {
+        std::shared_ptr<Shield>& shield = shieldSlot->shield();
+        if (!shield.get()) {
             continue;
         }
 

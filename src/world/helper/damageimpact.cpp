@@ -6,11 +6,18 @@
 DamageImpact::DamageImpact(WorldObject* worldObject, Voxel* voxel, const glm::vec3& damageVec, float fieldOfDamage):
     m_worldObject(worldObject),
     m_voxel(voxel),
-    m_damageVec(damageVec),
     m_fieldOfDamage(fieldOfDamage)
 {
     assert(m_worldObject);
     assert(m_voxel);
+
+    if (glm::length(damageVec) > 0) {
+        m_direction = glm::normalize(damageVec);
+        m_damage = glm::length(damageVec);
+    } else {
+        makeUniform();
+        m_damage = 0.0f;
+    }
 }
 
 WorldObject* DamageImpact::worldObject() {
@@ -29,16 +36,16 @@ const Voxel* DamageImpact::voxel() const {
     return m_voxel;
 }
 
-const glm::vec3& DamageImpact::damageVec() const {
-    return m_damageVec;
+glm::vec3 DamageImpact::damageVec() const {
+    return m_direction * m_damage;
 }
 
 float DamageImpact::damage() const {
-    return glm::length(m_damageVec);
+    return m_damage;
 }
 
 void DamageImpact::setDamage(float damage) {
-    m_damageVec = glm::normalize(m_damageVec) * damage;
+    m_damage = damage;
 }
 
 float DamageImpact::fieldOfDamage() const {
@@ -51,6 +58,19 @@ void DamageImpact::add(const DamageImpact& damageImpact) {
 
     m_fieldOfDamage = glm::mix(m_fieldOfDamage, damageImpact.fieldOfDamage(), damage() / (damage() + damageImpact.damage()));
 
-    m_damageVec += damageImpact.damageVec();
+    glm::vec3 damageVecSum = damageVec() + damageImpact.damageVec();
+
+    if (glm::length(damageVecSum) == 0) { // This is extremely unlikely to happen
+        makeUniform();
+    } else {
+        m_direction = glm::normalize(damageVecSum);
+    }
+
+    m_damage += damageImpact.damage();
+}
+
+void DamageImpact::makeUniform() {
+    m_direction = glm::vec3(1.0f, 0.0f, 0.0f);
+    m_fieldOfDamage = std::numeric_limits<float>::infinity();
 }
 

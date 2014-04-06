@@ -78,9 +78,9 @@ void FrozenGameScenario::populateWorld() {
         m_world->god().scheduleSpawn(follower);
     }
 
-    Ship *testCluster = WorldObjectBuilder("basicship").buildShip();
+    Ship *testCluster = WorldObjectBuilder("mox").buildShip();
     testCluster->transform().setPosition(glm::vec3(0, 0, 10));
-    testCluster->objectInfo().setName("basicship");
+    testCluster->objectInfo().setName("mox");
     testCluster->objectInfo().setShowOnHud(false);
     m_world->god().scheduleSpawn(testCluster);
 

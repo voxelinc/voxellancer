@@ -151,33 +151,40 @@ void WorldObjectBuilder::setupEngineSlots(WorldObjectComponents& components) {
 }
 
 void WorldObjectBuilder::setupShieldSlots(WorldObjectComponents& components) {
-    std::string prefix = m_name + ".shieldslot.";
+    for (int i = 0; PropertyManager::instance()->hasGroup(m_name + ".shieldslot" + std::to_string(i)); i++) {
+        std::shared_ptr<ShieldSlot> shieldSlot = std::make_shared<ShieldSlot>(&components, i);
 
-    ShieldSlot& shieldSlot = components.shieldSlot();
+        std::string prefix = m_name + ".shieldslot" + std::to_string(i) + ".";
+        std::list<std::string> mountableShields = Property<std::list<std::string>>(prefix + "mountable");
 
-    std::list<std::string> mountableShields = Property<std::list<std::string>>(prefix + "mountable");
-    for(std::string& shield : mountableShields) {
-        shieldSlot.setMountable(shield, true);
+        for(std::string& shield : mountableShields) {
+            shieldSlot->setMountable(shield, true);
+        }
+
+        components.addShieldSlot(shieldSlot);
     }
 }
 
 void WorldObjectBuilder::equipSomehow(WorldObject* worldObject) {
-    for (std::shared_ptr<Hardpoint> hardpoint : worldObject->components().hardpoints()) {
+    for (std::shared_ptr<Hardpoint>& hardpoint : worldObject->components().hardpoints()) {
         if(!hardpoint->mountables().empty()) {
             Weapon* weapon = WeaponBuilder(hardpoint->mountables().front()).build();
             hardpoint->setWeapon(std::shared_ptr<Weapon>(weapon));
         }
     }
-    for (std::shared_ptr<EngineSlot> engineSlot : worldObject->components().engineSlots()) {
+
+    for (std::shared_ptr<EngineSlot>& engineSlot : worldObject->components().engineSlots()) {
         if(!engineSlot->mountables().empty()) {
             Engine* engine = EngineBuilder(engineSlot->mountables().front()).build();
             engineSlot->setEngine(std::shared_ptr<Engine>(engine));
         }
     }
 
-    if(!worldObject->components().shieldSlot().mountables().empty()) {
-        Shield* shield = ShieldBuilder(worldObject->components().shieldSlot().mountables().front()).build();
-        worldObject->components().shieldSlot().setShield(std::shared_ptr<Shield>(shield));
+    for (std::shared_ptr<ShieldSlot>& shieldSlot : worldObject->components().shieldSlots()) {
+        if(!shieldSlot->mountables().empty()) {
+            Shield* shield = ShieldBuilder(shieldSlot->mountables().front()).build();
+            shieldSlot->setShield(std::shared_ptr<Shield>(shield));
+        }
     }
 }
 

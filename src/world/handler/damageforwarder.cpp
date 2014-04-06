@@ -39,9 +39,9 @@ void DamageForwarder::forwardDamageImpacts(std::list<DamageImpact> &dampedDeadly
             glm::vec3 forwardedDamage = dampedDeadlyDamageImpact.damageVec() * forwardFactor(dotProduct, dampedDeadlyDamageImpact.fieldOfDamage(), neighbours.size());
             glm::vec3 createdDamage = voxelVec * deadVoxel->damageForwardingDestructionDamage();
 
-            DamageImpact forwarded(m_currentWorldObject, 
-                                    neighbour, 
-                                    distanceFactor * (forwardedDamage + createdDamage), 
+            DamageImpact forwarded(m_currentWorldObject,
+                                    neighbour,
+                                    distanceFactor * (forwardedDamage + createdDamage),
                                     dampedDeadlyDamageImpact.fieldOfDamage());
             m_damageImpactAccumulator.parse(forwarded);
         }

@@ -4,6 +4,7 @@
 #include <memory>
 #include <stdint.h>
 #include <string>
+#include <unordered_set>
 
 #include <glm/glm.hpp>
 
@@ -40,6 +41,8 @@ public:
     template<typename T> T get(const std::string& name);
     template<typename T> T get(const std::string& name, const T& defaultValue);
 
+    bool hasGroup(const std::string& name);
+
 
 protected:
     template<typename T>
@@ -47,6 +50,7 @@ protected:
     template<typename T>
     void addPropertyCollection(PropertyCollection<T>* collection);
 
+    std::unordered_set<std::string> m_groups;
     std::unordered_map<const std::type_info*, std::unique_ptr<AbstractPropertyCollection>> m_propertyCollections;
 
     static PropertyManager* s_instance;

@@ -5,8 +5,8 @@
 #include "shield.h"
 
 
-ShieldSlot::ShieldSlot(WorldObjectComponents* components):
-    WorldObjectSlot(components, 0)
+ShieldSlot::ShieldSlot(WorldObjectComponents* components, int index):
+    WorldObjectSlot(components, index)
 {
 
 }

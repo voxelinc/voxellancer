@@ -1,10 +1,14 @@
 #include "damager.h"
 
+#include <iostream>
 #include <set>
+
 #include <glow/logging.h>
 
 #include "equipment/shield.h"
 #include "equipment/shieldslot.h"
+
+#include "ui/objectinfo.h"
 
 #include "utils/tostring.h"
 
@@ -35,7 +39,9 @@ void Damager::applyDamages(std::list<DamageImpact> &damageImpacts) {
             continue;
         }
 
-        applyShield(damageImpact);
+        std::cout << "Damager: " << damageImpact.worldObject()->objectInfo().name() << " gets " << toString(damageImpact.damageVec()) << std::endl;
+
+        applyShields(damageImpact);
         if(damageImpact.damage() == 0) {
             continue;
         }
@@ -83,20 +89,15 @@ std::list<WorldObjectModification>& Damager::worldObjectModifications() {
     return m_worldObjectModifications;
 }
 
-DamageImpact Damager::dampDamageImpact(DamageImpact &undamped, float factor) {
-    return DamageImpact(undamped.worldObject(), undamped.voxel(), undamped.damageVec() * factor, undamped.fieldOfDamage());
+DamageImpact Damager::dampDamageImpact(DamageImpact &undamped, float factor) { std::cout << "Dampening" << toString(undamped.damageVec()) << " by " << factor << std::endl;
+    return DamageImpact(undamped.worldObject(), undamped.voxel(), glm::normalize(undamped.damageVec()) * factor, undamped.fieldOfDamage());
 }
 
 void Damager::reset() {
     m_worldObjectModificationMap.clear();
 }
 
-void Damager::applyShield(DamageImpact& damageImpact) {
-    Shield* shield = damageImpact.worldObject()->components().shieldSlot().shield().get();
-    if (!shield) {
-        return;
-    }
-
-    damageImpact.setDamage(shield->compensate(damageImpact.damage()));
+void Damager::applyShields(DamageImpact& damageImpact) {
+    damageImpact.setDamage(damageImpact.worldObject()->components().compensate(damageImpact.damage()));
 }
 
