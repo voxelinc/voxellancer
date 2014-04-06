@@ -36,3 +36,4 @@ protected:
     WorldTreeNode* getQueryRoot(WorldTreeNode* node = nullptr) const;
     void query(WorldTreeNode* node, std::function<void(WorldTreeGeode*)> onGeodeInteraction);
 };
+

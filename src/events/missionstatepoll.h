@@ -9,7 +9,7 @@
 
 class MissionStatePoll : public EventPoll {
 public:
-    MissionStatePoll(const Handle<Mission>& mission, MissionState state, const std::function<void()>& callback);
+    MissionStatePoll(const Handle<Mission>& mission, MissionState state, const Callback& callback);
 
     virtual bool isDead() override;
 
@@ -23,3 +23,4 @@ protected:
     virtual bool poll() override;
     virtual void specialOnCallback() override;
 };
+

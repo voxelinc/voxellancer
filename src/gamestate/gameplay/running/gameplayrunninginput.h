@@ -4,7 +4,7 @@
 
 #include "input/inputmapping.h"
 
-#include "ui/actionkeymapping.h"
+#include "input/actionkeymapping.h"
 #include "utils/statemachine/trigger.h"
 
 #include "property/property.h"
