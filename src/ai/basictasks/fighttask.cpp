@@ -44,7 +44,7 @@ void FightTask::update(float deltaSec) {
                 boardComputer()->rotateTo(m_primaryTarget->transform().position());
                 boardComputer()->moveTo(m_primaryTarget->transform().position());
                 if (angleToTarget() < 15.0f && targetDistance() < m_maxRocketDistance) {
-                    boardComputer()->shootRockets(m_primaryTarget->handle());
+                    boardComputer()->shootRockets(m_primaryTarget);
                 }
             }
             if (targetDistance() < m_maxFireDistance) {
@@ -143,8 +143,8 @@ void FightTask::updateState() {
 
 float FightTask::targetDistance() {
     WorldObject* worldObject = boardComputer()->worldObject();
-    return glm::length(worldObject->transform().position() - m_primaryTarget->transform().position()) 
-                        - worldObject->bounds().minimalGridSphere().radius() * worldObject->transform().scale() 
+    return glm::length(worldObject->transform().position() - m_primaryTarget->transform().position())
+                        - worldObject->bounds().minimalGridSphere().radius() * worldObject->transform().scale()
                         - m_primaryTarget->bounds().minimalGridSphere().radius() * m_primaryTarget->transform().scale();
 }
 

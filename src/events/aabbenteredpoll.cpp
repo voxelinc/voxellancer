@@ -7,7 +7,7 @@
 
 AABBEnteredPoll::AABBEnteredPoll(WorldObject* worldObject, const AABB& aabb, const Callback& callback):
     EventPoll(callback),
-    m_worldObject(worldObject->handle()),
+    m_worldObject(worldObject->handle<WorldObject>()),
     m_aabb(aabb),
     m_entered(false)
 {

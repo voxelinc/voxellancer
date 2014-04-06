@@ -5,10 +5,10 @@
 #include "scripting/scriptable.h"
 
 #include "utils/callback.h"
-#include "utils/handle/handle.h"
+#include "utils/handle/handleowner.h"
 
 
-class EventPoll: public Scriptable {
+class EventPoll: public Scriptable, public HandleOwner {
 public:
     EventPoll(const Callback& callback);
     ~EventPoll();
@@ -23,12 +23,9 @@ public:
     bool isActive() const;
     void setActive(bool active);
 
-    Handle<EventPoll>& handle();
-
 
 protected:
     Callback m_callback;
-    Handle<EventPoll> m_handle;
     bool m_active;
 
     void doCallback();

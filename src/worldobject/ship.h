@@ -29,8 +29,6 @@ public:
 
     virtual void update(float deltaSec) override;
 
-    Handle<Ship>& handle();
-
     void setTargetObject(WorldObject* target);
     WorldObject* targetObject();
 
@@ -47,7 +45,6 @@ protected:
 
     std::unique_ptr<SquadLogic> m_squadLogic;
 
-    Handle<Ship> m_shipHandle;
     Handle<WorldObject> m_targetObjectHandle;
 
 
