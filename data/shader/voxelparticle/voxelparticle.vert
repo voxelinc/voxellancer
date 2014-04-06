@@ -13,9 +13,6 @@ layout(location = 7) in float deathTime;
 layout(location = 8) in float scale;
 layout(location = 9) in vec4 color;
 layout(location = 10) in float emissiveness;
-layout(location = 11) in float directinalDampening;
-layout(location = 12) in float angularDampening;
-
 // Output
 out vec3 f_color;
 flat out vec3 f_normal;
