@@ -16,7 +16,7 @@
 
 MissionScenario::MissionScenario(GamePlay* gamePlay, const std::string& path):
     BaseScenario(gamePlay),
-    m_mission(new Mission(path))
+    m_mission(new Mission(World::instance(), path))
 {
 
 }
@@ -28,6 +28,7 @@ void MissionScenario::populateWorld() {
     m_world->god().scheduleSpawn(playerShip);
 
     World::instance()->player().setShip(playerShip);
-    World::instance()->missionSystem().addMission(m_mission);
+
+    m_mission->activateInWorld();
 }
 

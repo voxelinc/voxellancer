@@ -2,7 +2,7 @@
 
 #include <glow/Referenced.h>
 
-#include <utils/handle/handleowner.h"
+#include "utils/handle/handleowner.h"
 
 
 class World;
@@ -28,12 +28,12 @@ public:
     bool activeInWorld() const;
 
     void activateInWorld();
-    void dectivateInWorld();
+    void deactivateInWorld();
 
 
 protected:
     virtual void onActivationInWorld() = 0;
-    virtual void onDectivationInWorld() = 0;
+    virtual void onDeactivationInWorld() = 0;
 
 
 protected:

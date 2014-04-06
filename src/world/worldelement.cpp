@@ -19,7 +19,7 @@ void WorldElement::activateInWorld() {
     onActivationInWorld();
 }
 
-void WorldElement::dectivateInWorld() {
+void WorldElement::deactivateInWorld() {
     m_active = false;
     onDeactivationInWorld();
 }

@@ -10,8 +10,11 @@
 
 #include "player.h"
 
+#include "missionsystem.h"
 
-Mission::Mission(const std::string& path):
+
+Mission::Mission(World* world, const std::string& path):
+    WorldElement(world),
     m_script(new MissionScript(*this, World::instance()->scriptEngine())),
     m_state(MissionState::Idle)
 {
@@ -51,5 +54,13 @@ void Mission::fail() {
 
 void Mission::update(float deltaSec) {
 
+}
+
+void Mission::onActivationInWorld() {
+    m_world->missionSystem().addMission(this);
+}
+
+void Mission::onDeactivationInWorld() {
+    m_world->missionSystem().removeMission(this);
 }
 

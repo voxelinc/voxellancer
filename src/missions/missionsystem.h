@@ -1,7 +1,9 @@
 #pragma once
 
 #include <memory>
-#include <unordered_map>
+#include <list>
+
+#include <glow/ref_ptr.h>
 
 
 class Mission;
@@ -13,11 +15,11 @@ public:
 
     void update(float deltaSec);
 
-    void addMission(std::shared_ptr<Mission> mission);
+    void addMission(Mission* mission);
     void removeMission(Mission* mission);
 
 
 protected:
-    std::unordered_map<Mission*, std::shared_ptr<Mission>> m_missions;
+    std::list<glow::ref_ptr<Mission>> m_missions;
 };
 

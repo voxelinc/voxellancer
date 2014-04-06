@@ -15,7 +15,7 @@ MissionSystem::~MissionSystem() = default;
 
 void MissionSystem::update(float deltaSec) {
     for (auto iter = m_missions.begin(); iter != m_missions.end(); ) {
-        Mission* mission = iter->second.get();
+        Mission* mission = *iter;
 
         mission->update(deltaSec);
 
@@ -27,14 +27,14 @@ void MissionSystem::update(float deltaSec) {
     }
 }
 
-void MissionSystem::addMission(std::shared_ptr<Mission> mission) {
-    m_missions[mission.get()] = mission;
-    World::instance()->scriptEngine().registerScriptable(mission.get());
+void MissionSystem::addMission(Mission* mission) {
+    m_missions.push_back(mission);
+    World::instance()->scriptEngine().registerScriptable(mission);
     mission->start();
 }
 
 void MissionSystem::removeMission(Mission* mission) {
-    m_missions.erase(mission);
+    m_missions.remove(mission);
     World::instance()->scriptEngine().unregisterScriptable(mission);
 }
 
