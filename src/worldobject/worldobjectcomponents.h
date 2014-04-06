@@ -75,7 +75,13 @@ public:
     void fireAtPoint(const glm::vec3& point);
     void fireAtObject(WorldObject* worldObject);
 
-    ShieldSlot& shieldSlot();
+
+    void addShieldSlot(std::shared_ptr<ShieldSlot>& shieldSlot);
+
+    std::list<std::shared_ptr<ShieldSlot>>& shieldSlots();
+
+    float compensate(float damage);
+
 
     /*
         Update all components
@@ -89,8 +95,7 @@ protected:
 
     std::list<std::shared_ptr<EngineSlot>> m_engineSlots;
     std::list<std::shared_ptr<Hardpoint>> m_hardpoints;
-
-    std::unique_ptr<ShieldSlot> m_shieldSlot;
+    std::list<std::shared_ptr<ShieldSlot>> m_shieldSlots;
 
     EngineState m_engineState;
 };
