@@ -32,14 +32,16 @@ void InstancedBulletPrototype::add(InstancedBullet* bullet) {
     }
 
     if (m_freeBulletSlots.empty()) {
-        allocateBulletSlots();
+        extendBulletBuffers();
     }
 
-    bullet->setBufferSlot(m_freeBulletSlots.top());
+    int slot = m_freeBulletSlots.top();
     m_freeBulletSlots.pop();
 
-    m_cpuBulletBuffer[bullet->bufferSlot()] = bullet->data();
-    m_gpuBulletBuffer->setSubData(bullet->bufferSlot() * sizeof(bullet->data()), sizeof(bullet->data()), &bullet->data());
+    bullet->setBufferSlot(slot);
+    m_cpuBulletBuffer[slot].active = true;
+
+    updateGPUBuffer(slot);
 }
 
 void InstancedBulletPrototype::remove(InstancedBullet* bullet) {
@@ -47,10 +49,13 @@ void InstancedBulletPrototype::remove(InstancedBullet* bullet) {
         initialize();
     }
 
-    m_freeBulletSlots.push(bullet->bufferSlot());
+    int slot = bullet->bufferSlot();
 
-    m_cpuBulletBuffer[bullet->bufferSlot()].active = false;
-    m_gpuBulletBuffer->setSubData(bullet->bufferSlot() * sizeof(bullet->data()), sizeof(bullet->data()), &bullet->data())
+    m_freeBulletSlots.push(slot);
+
+    m_cpuBulletBuffer[slot].active = false;
+
+    updateGPUBulletBuffer(slot)
 }
 
 void InstancedBulletPrototype::draw(const Camera& camera, glow::Program* program) {
@@ -65,27 +70,31 @@ void InstancedBulletPrototype::draw(const Camera& camera, glow::Program* program
     glVertexAttribDivisor(program->getAttributeLocation("v_vertex"), 0);
     glVertexAttribDivisor(program->getAttributeLocation("v_normal"), 0);
 
-    glVertexAttribDivisor(program->getAttributeLocation("v_active"), m_voxelCount);
-    glVertexAttribDivisor(program->getAttributeLocation("v_cell"), m_voxelCount);
-    glVertexAttribDivisor(program->getAttributeLocation("v_color"), m_voxelCount);
-    glVertexAttribDivisor(program->getAttributeLocation("v_emissiveness"), m_voxelCount);
+    glVertexAttribDivisor(program->getAttributeLocation("v_cell"), 1);
+    glVertexAttribDivisor(program->getAttributeLocation("v_color"), 1);
+    glVertexAttribDivisor(program->getAttributeLocation("v_emissiveness"), 1);
 
-    glVertexAttribDivisor(program->getAttributeLocation("v_creationPosition"), m_voxelCount);
-    glVertexAttribDivisor(program->getAttributeLocation("v_creationEulers"), m_voxelCount);
-    glVertexAttribDivisor(program->getAttributeLocation("v_directionalSpeed"), m_voxelCount);
-    glVertexAttribDivisor(program->getAttributeLocation("v_angularSpeed"), m_voxelCount);
-    glVertexAttribDivisor(program->getAttributeLocation("v_creationTime"), m_voxelCount);
-    glVertexAttribDivisor(program->getAttributeLocation("v_deathTime"), m_voxelCount);
-    glVertexAttribDivisor(program->getAttributeLocation("v_color"), m_voxelCount);
-    glVertexAttribDivisor(program->getAttributeLocation("v_emissiveness"), m_voxelCount);
+    int voxelCount = m_worldObjectBullet->voxelMap().size();
 
-    m_vao->drawArraysInstanced(GL_TRIANGLE_STRIP, 0, 14, m_bulletBufferSize);
+    glVertexAttribDivisor(program->getAttributeLocation("v_active"), voxelCount);
+    glVertexAttribDivisor(program->getAttributeLocation("v_creationPosition"), voxelCount);
+    glVertexAttribDivisor(program->getAttributeLocation("v_creationEulers"), voxelCount);
+    glVertexAttribDivisor(program->getAttributeLocation("v_directionalSpeed"), voxelCount);
+    glVertexAttribDivisor(program->getAttributeLocation("v_angularSpeed"), voxelCount);
+    glVertexAttribDivisor(program->getAttributeLocation("v_creationTime"), voxelCount);
+    glVertexAttribDivisor(program->getAttributeLocation("v_deathTime"), voxelCount);
+    glVertexAttribDivisor(program->getAttributeLocation("v_color"), voxelCount);
+    glVertexAttribDivisor(program->getAttributeLocation("v_emissiveness"), voxelCount);
+
+    std::cout << "InstancedBulletPrototype drawing " << m_cpuBulletBuffer.size() << " bullets" << std::endl;
+
+    m_vao->drawArraysInstanced(GL_TRIANGLE_STRIP, 0, 14, m_cpuBulletBuffer.size());
 }
 
 void InstancedBulletPrototype::initialize() {
     m_vao = new glow::VertexArrayObject();
-    m_renderer.bindVoxelMeshTo(m_vao);
 
+    m_renderer.bindVoxelMeshTo(m_vao);
     initializeGrid();
     initializeBullets();
 
@@ -95,10 +104,8 @@ void InstancedBulletPrototype::initialize() {
 void InstancedBulletPrototype::initializeGrid() {
     m_worldObjectBullet.reset(WorldElementBuilder(m_name).buildWorldObjectBullet());
 
-    m_voxelCount = m_worldObjectBullet->voxelMap().size();
-
     std::vector<InstancedBulletVoxelData> bufferData;
-    for (auto pair : m_worldObjectBullet->voxelMap()) {
+    for (auto& pair : m_worldObjectBullet->voxelMap()) {
         InstancedBulletVoxelData data(pair.second);
         bufferData.push_back(data);
     }
@@ -111,7 +118,7 @@ void InstancedBulletPrototype::initializeBullets() {
     m_gpuBulletBuffer = new glow::Buffer(GL_ARRAY_BUFFER);
 }
 
-void InstancedBulletPrototype::allocateBulletSlots() {
+void InstancedBulletPrototype::extendBulletBuffers() {
     int newBulletBufferSize = m_bulletBufferSize * 2;
 
     m_cpuBulletBuffer.resize(newBulletBufferSize);
@@ -120,6 +127,11 @@ void InstancedBulletPrototype::allocateBulletSlots() {
     }
 
     m_gpuBulletBuffer.setData(m_cpuBulletBuffer);
+}
+
+void InstancedBulletPrototype::updateGPUBulletBuffer(int slot) {
+    InstancedBullet::Data* data = &m_cpuBulletBuffer[slot];
+    m_gpuBulletBuffer->setSubData(slot * sizeof(*data), sizeof(*data), data);
 }
 
 void InstancedBulletPrototype::beforeContextDestroy() {

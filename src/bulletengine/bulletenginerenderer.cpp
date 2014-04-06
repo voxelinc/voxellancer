@@ -11,8 +11,9 @@
 
 
 
-BulletEngineRenderer::BulletEngineRenderer():
-    m_initialized(false)
+BulletEngineRenderer::BulletEngineRenderer(BulletEngine& engine):
+    m_initialized(false),
+    m_engine(engine)
 {
 
 }
@@ -50,9 +51,14 @@ void BulletEngineRenderer::draw(const Camera& camera) {
     }
 
     m_program->use();
-    for (auto pair : m_prototypes) {
+
+    m_program->setUniform("viewProjection", camera.viewProjection());
+    m_program->setUniform("time", m_engine.time());
+
+    for (auto& pair : m_prototypes) {
         pair.second->draw(camera, m_program);
     }
+
     m_program->release();
 }
 

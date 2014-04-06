@@ -3,6 +3,7 @@
 #include <memory>
 #include <stack>
 #include <string>
+#include <vector>
 
 #include <glow/ref_ptr.h>
 
@@ -32,20 +33,19 @@ public:
 
 
 protected:
-    BulletEngineRenderer& m_renderer;
     bool m_initialized;
+
+    BulletEngineRenderer& m_renderer;
     std::string m_name;
     std::unique_ptr<WorldObjectBullet> m_worldObjectBullet;
 
-    int m_voxelCount;
-
-    int m_bulletBufferSize;
     std::stack<int> m_freeBulletSlots;
 
     glow::ref_ptr<glow::VertexArrayObject> m_vao;
     glow::ref_ptr<glow::Buffer> m_gridBuffer;
-    glow::ref_ptr<glow::Buffer> m_bulletBuffer;
 
+    glow::ref_ptr<glow::Buffer> m_gpuBulletBuffer;
+    std::vector<InstancedBullet::Data> m_cpuBulletBuffer;
 
     void initialize();
     void initializeGrid();

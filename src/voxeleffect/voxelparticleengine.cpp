@@ -151,6 +151,6 @@ void VoxelParticleEngine::beforeContextDestroy() {
 }
 
 void VoxelParticleEngine::afterContextRebuild() {
-    updateGPUBuffers(0, m_cpuParticleBuffer.size()-1);
+    updateGPUBuffers(0, m_cpuParticleBuffer.size() - 1);
 }
 
