@@ -12,7 +12,7 @@ void Wrecker::detectWreckedObjects(std::list<WorldObjectModification>& worldObje
 
     for (WorldObjectModification& modification : worldObjectModifications) {
         WorldObject* object = modification.worldObject();
-        if (object->isCrucialVoxelDestroyed() || object->areCockpitVoxelsDestroyed()) {
+        if (object->isCrucialVoxelDestroyed()) {
             m_wreckedObjects.push_back(object);
             m_newWreckages.push_back(wreckFromObject(object));
         }
