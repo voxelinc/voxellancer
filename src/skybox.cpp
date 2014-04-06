@@ -52,11 +52,12 @@ void Skybox::initialize() {
 
 
     /* Geometry */
-    auto vertices = glow::Array<glm::vec3>()
-        << glm::vec3(-1, -1, 0)
-        << glm::vec3(1, -1, 0)
-        << glm::vec3(1, 1, 0)
-        << glm::vec3(-1, 1, 0);
+    std::array<glm::vec3, 4> vertices {
+        glm::vec3(-1, -1, 0),
+        glm::vec3(1, -1, 0),
+        glm::vec3(1, 1, 0),
+        glm::vec3(-1, 1, 0) 
+    };
 
     m_vertexArrayObject = new glow::VertexArrayObject();
 

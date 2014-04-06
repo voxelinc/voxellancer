@@ -42,7 +42,7 @@ void VoxelMesh::bindTo(
 }
 
 void VoxelMesh::initialize() {
-    glow::Array<glm::vec3> array{
+    std::array<glm::vec3, 28> array {
         urb, dummy,
         lub, dummy,
         rlb, back,
