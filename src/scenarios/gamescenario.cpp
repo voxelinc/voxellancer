@@ -38,39 +38,18 @@ GameScenario::GameScenario(GamePlay* gamePlay):
 void GameScenario::populateWorld() {
     glow::debug("Create WorldObjects");
 
-    //spawnPoliceFleet();
+    spawnPoliceFleet();
 
-    //spawnPirateFleet();
+    spawnPirateFleet();
 
-    Ship *follower = WorldObjectBuilder("mox").buildShip();
-    follower->transform().setPosition(glm::vec3(0, 0, 200));
-    follower->info().setName("member");
-    follower->info().setShowOnHud(true);
-    follower->info().setCanLockOn(true);
-    follower->character()->setFaction(World::instance()->factionMatrix().policeFaction());
-    m_world->god().scheduleSpawn(follower);
-
-    std::shared_ptr<Squad> armada = std::make_shared<Squad>();
-    armada->setTask(std::make_shared<DefendAreaTask>(*armada,
-        std::list<glm::vec3>{glm::vec3(0, 0, 0)}, 500.0f));
-    follower = WorldObjectBuilder("piratelight").buildShip();
-    follower->transform().setPosition(glm::vec3(0, 0, -200));
-    follower->info().setName("member");
-    follower->info().setShowOnHud(true);
-    follower->info().setCanLockOn(true);
-    follower->character()->setFaction(World::instance()->factionMatrix().pirateFaction());
-    follower->squadLogic()->joinSquad(armada);
-    m_world->god().scheduleSpawn(follower);
-
-
-    Ship *testCluster = WorldObjectBuilder("bc304").buildShip();
+    Ship *testCluster = WorldObjectBuilder("f302").buildShip();
     testCluster->transform().setPosition(glm::vec3(0, 0, 10));
     testCluster->info().setName("player");
     testCluster->info().setShowOnHud(false);
     m_world->god().scheduleSpawn(testCluster);
     World::instance()->player().setShip(testCluster);
 
-    //spawnStuff();
+    spawnStuff();
 
     glow::debug("Initial spawn");
     m_world->god().spawn();
