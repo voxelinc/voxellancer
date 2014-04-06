@@ -38,13 +38,19 @@ void InstancedBulletPrototype::add(InstancedBullet* bullet) {
     bullet->setBufferSlot(m_freeBulletSlots.top());
     m_freeBulletSlots.pop();
 
-    m_bulletBuffer->setSubData(bullet->bufferSlot() * sizeof(*bullet->data()), sizeof(*bullet->data()), bullet->data());
+    m_cpuBulletBuffer[bullet->bufferSlot()] = bullet->data();
+    m_gpuBulletBuffer->setSubData(bullet->bufferSlot() * sizeof(bullet->data()), sizeof(bullet->data()), &bullet->data());
 }
 
 void InstancedBulletPrototype::remove(InstancedBullet* bullet) {
     if (!m_initialized) {
         initialize();
     }
+
+    m_freeBulletSlots.push(bullet->bufferSlot());
+
+    m_cpuBulletBuffer[bullet->bufferSlot()].active = false;
+    m_gpuBulletBuffer->setSubData(bullet->bufferSlot() * sizeof(bullet->data()), sizeof(bullet->data()), &bullet->data())
 }
 
 void InstancedBulletPrototype::draw(const Camera& camera, glow::Program* program) {
@@ -102,11 +108,18 @@ void InstancedBulletPrototype::initializeGrid() {
 }
 
 void InstancedBulletPrototype::initializeBullets() {
-    m_bulletBuffer = new glow::Buffer(GL_ARRAY_BUFFER);
+    m_gpuBulletBuffer = new glow::Buffer(GL_ARRAY_BUFFER);
 }
 
 void InstancedBulletPrototype::allocateBulletSlots() {
+    int newBulletBufferSize = m_bulletBufferSize * 2;
 
+    m_cpuBulletBuffer.resize(newBulletBufferSize);
+    for (int i = m_bulletBufferSize; i < newBulletBufferSize; ++i) {
+        m_freeBulletSlots.push(i);
+    }
+
+    m_gpuBulletBuffer.setData(m_cpuBulletBuffer);
 }
 
 void InstancedBulletPrototype::beforeContextDestroy() {

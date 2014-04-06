@@ -66,7 +66,9 @@ void BulletEngineRenderer::initializeProgram() {
     m_program = new glow::Program();
     m_program->attach(
         glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/shader/bulletengine/bullet.vert"),
-        glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/shader/bulletengine/bullet.frag")
+        glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/shader/lib/quaternion.glsl"),
+        glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/shader/bulletengine/bullet.frag"),
+        glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/shader/lib/voxel.frag")
     );
     m_program->link();
 }
