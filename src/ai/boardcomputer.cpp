@@ -131,7 +131,7 @@ void BoardComputer::shootBullet(const std::vector<Handle<WorldObject>>& targets)
             float angle = GeometryHelper::angleBetween(shipDirection, targetDirection);
             if (glm::abs(angle) < max_angle) {
                 glm::vec3 offset = RandVec3::rand(0, 1) * glm::length(targetDirection) / 30.0f;
-                m_worldObject->components().fireAtPoint(target->position() + offset);
+                m_worldObject->components().fireAtPoint(target->position() + offset, true);
                 break;
             }
         }
@@ -150,4 +150,5 @@ void BoardComputer::update(float deltaSec) {
     }
     m_overwriteEngineState = false;
 }
+
 
