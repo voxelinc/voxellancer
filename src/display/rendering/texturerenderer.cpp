@@ -11,10 +11,6 @@
 
 #include <glow/Program.hpp>
 #include <glow/Texture.h>
-#include <glow/Buffer.h>
-#include <glow/Shader.h>
-#include <glow/VertexAttributeBinding.h>
-#include <glowutils/global.h>
 
 #include "resource/ddstexture.h"
 #include "voxel/voxelrenderer.h"
@@ -22,7 +18,6 @@
 #include "etc/contextprovider.h"
 
 TextureRenderer::TextureRenderer(const std::string& file) :
-    m_texture(0),
     m_quad(),
     m_camera(new Camera(ContextProvider::instance()->viewport().width(), ContextProvider::instance()->viewport().height())),
     m_voxelRenderer(VoxelRenderer::instance()), // we hold this pointer to avoid the VR being recreated each time
@@ -31,15 +26,15 @@ TextureRenderer::TextureRenderer(const std::string& file) :
 }
 
 void TextureRenderer::initialize() {
-    m_texture = new glow::Texture(GL_TEXTURE_2D);
-    if (!DdsTexture::loadImage2d(m_texture, m_file)) {
+    glow::ref_ptr<glow::Texture> texture = new glow::Texture(GL_TEXTURE_2D);
+    if (!DdsTexture::loadImage2d(texture, m_file)) {
         throw std::runtime_error("Texture not found. Check working directory?");
     }
-    m_texture->setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    m_texture->setParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    texture->setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    texture->setParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     
     
-    m_quad = new glowutils::ScreenAlignedQuad(m_texture);
+    m_quad = new glowutils::ScreenAlignedQuad(texture);
 }
 
 void TextureRenderer::drawLoading(const std::string& status) {
@@ -53,7 +48,7 @@ void TextureRenderer::drawLoading(const std::string& status) {
 }
 
 void TextureRenderer::draw(){
-    if (!m_texture) {
+    if (!m_quad.get()) {
         initialize();
     }
 
@@ -66,7 +61,6 @@ void TextureRenderer::draw(){
 }
 
 void TextureRenderer::beforeContextDestroy() {
-    m_texture = nullptr;
     m_quad = nullptr;
 }
 

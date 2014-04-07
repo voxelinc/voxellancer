@@ -75,8 +75,8 @@ SoundManager& GamePlay::soundManager() {
 
 void GamePlay::loadScenario(int i) {
 
-    TextureRenderer r("data/textures/loading.dds");
-    r.drawLoading("Loading Scenario...");
+    TextureRenderer loadRenderer("data/textures/loading.dds");
+    loadRenderer.drawLoading("Loading Scenario...");
 
     m_soundManager->stopAll();
     m_scenario->clear();

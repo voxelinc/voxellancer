@@ -19,7 +19,7 @@ namespace glow {
 class Camera;
 class VoxelRenderer;
 
-/*
+/**
  *  Renders a texture at file on the screen quad
  *  Optionally including a status text
  */
@@ -33,7 +33,6 @@ public:
 
 
 protected:
-    glow::ref_ptr<glow::Texture> m_texture;
     glow::ref_ptr<glowutils::ScreenAlignedQuad> m_quad;
     std::shared_ptr<VoxelRenderer> m_voxelRenderer;
     std::unique_ptr<Camera> m_camera;
