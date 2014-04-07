@@ -17,6 +17,7 @@
 #include "ui/voxelfont.h"
 #include "etc/contextprovider.h"
 
+
 TextureRenderer::TextureRenderer(const std::string& file) :
     m_quad(),
     m_camera(new Camera(ContextProvider::instance()->viewport().width(), ContextProvider::instance()->viewport().height())),

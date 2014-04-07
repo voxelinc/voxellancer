@@ -9,6 +9,7 @@
 #include "display/rendering/screenquad.h"
 #include "camera/camera.h"
 
+
 namespace glow {
     class Texture;
     class Program;
