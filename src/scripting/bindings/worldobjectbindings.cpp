@@ -10,7 +10,7 @@
 
 #include "geometry/aabb.h"
 
-#include "ui/objectinfo.h"
+#include "worldobject/worldobjectinfo.h"
 
 #include "player.h"
 
@@ -18,6 +18,8 @@
 
 #include "scripting/gameplayscript.h"
 #include "scripting/elematelua/luawrapper.h"
+#include "scripting/gameplayscript.h"
+#include "scripting/scriptcallback.h"
 
 #include "world/world.h"
 #include "world/god.h"
@@ -69,6 +71,7 @@ apikey WorldObjectBindings::apiCreateShip(const std::string& name) {
     }
 
     m_scriptEngine.registerScriptable(ship);
+
     return ship->scriptKey();
 }
 
@@ -81,6 +84,7 @@ apikey WorldObjectBindings::apiCreateWorldObject(const std::string& name) {
     }
 
     m_scriptEngine.registerScriptable(worldObject);
+
     return worldObject->scriptKey();
 }
 
@@ -138,6 +142,7 @@ int WorldObjectBindings::apiSetPosition(apikey worldObjectKey, const glm::vec3& 
     }
 
     worldObject->transform().setPosition(position);
+
     return 0;
 }
 
@@ -159,7 +164,7 @@ int WorldObjectBindings::apiSetShowOnHud(apikey worldObjectKey, bool show) {
         return -1;
     }
 
-    worldObject->objectInfo().setShowOnHud(true);
+    worldObject->info().setShowOnHud(true);
     return 0;
 }
 
@@ -170,7 +175,7 @@ int WorldObjectBindings::apiSetCanLockOn(apikey worldObjectKey, bool lockon) {
         return -1;
     }
 
-    worldObject->objectInfo().setCanLockOn(lockon);
+    worldObject->info().setCanLockOn(lockon);
     return 0;
 }
 
@@ -181,7 +186,7 @@ apikey WorldObjectBindings::apiOnWorldObjectDestroyed(apikey key, const std::str
         return -1;
     }
 
-    auto destructionPoll = std::make_shared<WorldObjectDestroyedPoll>(worldObject, [=] { m_lua.call(callback, key); });
+    auto destructionPoll = std::make_shared<WorldObjectDestroyedPoll>(worldObject, createCallback(callback, key));
 
     World::instance()->eventPoller().addPoll(destructionPoll);
     m_script.addLocal(destructionPoll);
@@ -196,7 +201,7 @@ apikey WorldObjectBindings::apiOnAABBEntered(apikey key, const glm::vec3& llf, c
         return -1;
     }
 
-    auto enteredPoll = std::make_shared<AABBEnteredPoll>(worldObject, AABB(llf, urb), [=] { m_lua.call(callback, key); });
+    auto enteredPoll = std::make_shared<AABBEnteredPoll>(worldObject, AABB(llf, urb), createCallback(callback, key));
 
     World::instance()->eventPoller().addPoll(enteredPoll);
     m_script.addLocal(enteredPoll);

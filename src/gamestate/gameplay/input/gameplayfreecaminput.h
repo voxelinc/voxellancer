@@ -3,13 +3,11 @@
 #include <vector>
 
 #include "input/inputmapping.h"
+#include "input/actionkeymapping.h"
+
 #include "gamestate/gameplay/gameplayinput.h"
-
-#include "ui/actionkeymapping.h"
 #include "utils/statemachine/trigger.h"
-
 #include "property/property.h"
-
 #include "camera/cameradolly.h"
 
 

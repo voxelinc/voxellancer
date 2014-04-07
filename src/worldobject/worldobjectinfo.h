@@ -5,9 +5,9 @@
 #include <glm/glm.hpp>
 
 
-class ObjectInfo  {
+class WorldObjectInfo  {
 public:
-    ObjectInfo();
+    WorldObjectInfo();
 
     std::string name();
     void setName(const std::string& name);
