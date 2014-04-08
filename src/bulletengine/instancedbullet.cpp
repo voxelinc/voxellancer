@@ -1,5 +1,7 @@
 #include "instancedbullet.h"
 
+#include <glm/gtc/quaternion.hpp>
+
 #include "bulletengine/bulletengine.h"
 
 #include "world/world.h"
@@ -7,7 +9,9 @@
 
 InstancedBullet::InstancedBullet(const std::string& name):
     m_name(name),
-    m_bufferSlot(-1)
+    m_bufferSlot(-1),
+    m_prototype(nullptr),
+    m_dataChanged(true)
 {
 }
 
@@ -23,8 +27,24 @@ void InstancedBullet::setBufferSlot(int bufferSlot) {
     m_bufferSlot = bufferSlot;
 }
 
+InstancedBulletPrototype* InstancedBullet::prototype() {
+    return m_prototype;
+}
+
+void InstancedBullet::setPrototype(InstancedBulletPrototype* prototype) {
+    m_prototype = prototype;
+}
+
 InstancedBullet::Data* InstancedBullet::data() {
     return &m_data;
+}
+
+bool InstancedBullet::dataChanged() const {
+    return m_dataChanged;
+}
+
+void InstancedBullet::setDataChanged(bool changed) {
+    return m_dataChanged;
 }
 
 Transform& InstancedBullet::transform() {
@@ -33,14 +53,16 @@ Transform& InstancedBullet::transform() {
 
 void InstancedBullet::setTransform(const Transform& transform) {
     m_transform = transform;
+    updateData();
 }
 
 void InstancedBullet::setSpeed(const Speed& speed) {
-
+    m_speed = speed;
+    updateData();
 }
 
 void InstancedBullet::update(float deltaSec) {
-
+    m_transform = m_speed.moved(m_transform, deltaSec);
 }
 
 void InstancedBullet::spawn() {
@@ -52,6 +74,17 @@ void InstancedBullet::remove() {
 }
 
 float InstancedBullet::length() {
+    return 1.0f; // TODO
+}
 
+void InstancedBullet::updateData() {
+    m_data.originPosition = m_transform.position();
+    m_data.originEulers = glm::eulerAngles(m_transform.orientation());
+    m_data.directionalSpeed = m_speed.directional();
+    m_data.angularSpeed = m_speed.angular();
+    m_data.originTime = World::instance()->time();
+    m_data.deathTime = World::instance()->time() + lifetime();
+
+    m_dataChanged = true;
 }
 

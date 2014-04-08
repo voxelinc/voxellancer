@@ -35,6 +35,8 @@ void InstancedBulletPrototype::add(InstancedBullet* bullet) {
         extendBulletBuffers();
     }
 
+    bullet->setPrototype(this);
+
     int slot = m_freeBulletSlots.top();
     m_freeBulletSlots.pop();
 
@@ -55,7 +57,9 @@ void InstancedBulletPrototype::remove(InstancedBullet* bullet) {
 
     m_cpuBulletBuffer[slot].active = false;
 
-    updateGPUBulletBuffer(slot)
+    updateGPUBulletBuffer(slot);
+
+    bullet->setPrototype(nullptr);
 }
 
 void InstancedBulletPrototype::draw(const Camera& camera, glow::Program* program) {

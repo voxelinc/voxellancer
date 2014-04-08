@@ -4,20 +4,22 @@
 
 #include "equipment/weapons/bullet.h"
 
+#include "geometry/transform.h"
+#include "geometry/speed.h"
+
+
+class InstancedBulletPrototype;
+
+struct InstancedBulletData {
+    glm::vec3 originPosition;
+    glm::vec3 originEulers;
+    glm::vec3 directionalSpeed;
+    glm::vec3 angularSpeed;
+    float originTime;
+    float deathTime;
+};
 
 class InstancedBullet : public Bullet {
-public:
-    struct Data {
-        glm::vec3 v_creationPosition;
-        glm::vec3 v_creationEulers;
-        glm::vec3 v_directionalSpeed;
-        glm::vec3 v_angularSpeed;
-        float v_creationTime;
-        float v_deathTime;
-        glm::vec4 v_color;
-        float v_emissiveness;
-    };
-
 public:
     InstancedBullet(const std::string& name);
 
@@ -26,7 +28,13 @@ public:
     int bufferSlot() const;
     void setBufferSlot(int bufferSlot);
 
+    InstancedBulletPrototype* prototype();
+    void setPrototype(InstancedBulletPrototype* prototype);
+
     Data* data();
+
+    bool dataChanged() const;
+    void setDataChanged(bool changed);
 
     virtual void update(float deltaSec) override;
 
@@ -43,7 +51,14 @@ public:
 
 protected:
     std::string m_name;
+    Transform m_transform;
+    Speed m_speed;
+
     int m_bufferSlot;
+    InstancedBulletPrototype* m_prototype;
+
     Data m_data;
+    bool m_dataChanged;
+    bool m_dataInvalid;
 };
 

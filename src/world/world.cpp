@@ -25,6 +25,8 @@
 World *World::s_instance = nullptr;
 
 World::World():
+    m_deltaSec(0.0f),
+    m_time(0.0f),
     m_player(new Player()),
     m_scriptEngine(new ScriptEngine()),
     m_skybox(new Skybox()),
@@ -97,6 +99,7 @@ std::unordered_set<Ship*> &World::ships() {
 
 void World::update(float deltaSecs) {
     m_deltaSec = deltaSecs;
+    m_time += deltaSecs;
 
     m_player->update(deltaSecs);
     m_worldLogic->update(deltaSecs);
@@ -113,6 +116,10 @@ void World::update(float deltaSecs) {
 
 float World::deltaSec() const {
     return m_deltaSec;
+}
+
+float World::time() const {
+    return m_time;
 }
 
 World *World::instance() {
