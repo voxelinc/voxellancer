@@ -25,8 +25,7 @@ WorldObject::WorldObject() :
     m_spawnState(SpawnState::None),
     m_collisionFilter(new CollisionFilter(this)),
     m_crucialVoxelDestroyed(false),
-    m_cockpitVoxelsDestroyed(false),
-    m_cockpitVoxels(std::unordered_map<glm::ivec3, Voxel*>())
+    m_cockpitVoxelsDestroyed(false)
 {
 }
 
@@ -119,7 +118,7 @@ void WorldObject::removeVoxel(Voxel* voxel) {
     }
 
     if (m_cockpitVoxels.erase(voxel->gridCell())) {
-        m_cockpitVoxelsDestroyed = m_cockpitVoxels.size() == 0;
+        m_cockpitVoxelsDestroyed = m_cockpitVoxels.empty();
     }
 
     m_collisionDetector->removeVoxel(voxel);
