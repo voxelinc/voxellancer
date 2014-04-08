@@ -90,7 +90,7 @@ void Gun::setupBullet(Bullet* bullet, const glm::vec3& point) {
     bullet->setCreator(m_hardpoint->components()->worldObject());
 }
 
-bool Gun::isBulletPathClear(glm::vec3 point, bool checkFriendlyFire) {
+bool Gun::isBulletPathClear(const glm::vec3& point, bool checkFriendlyFire) {
     glm::vec3 direction = glm::normalize(point - m_hardpoint->voxel()->position());
     Ray rayToTarget = Ray::fromTo(m_hardpoint->voxel()->position() + direction*m_owner->transform().scale(), point);
     WorldTreeQuery fireDirectionQuery(&World::instance()->worldTree(), &rayToTarget, m_owner->collisionDetector().geode()->containingNode(), nullptr);
