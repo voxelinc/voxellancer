@@ -25,6 +25,8 @@ public:
 
     FactionRelationType type() const;
 
+    bool isHostile() const;
+
     static std::string typeName(FactionRelationType type);
 
 

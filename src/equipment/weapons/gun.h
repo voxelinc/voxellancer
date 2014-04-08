@@ -34,6 +34,6 @@ protected:
     virtual Bullet* createBullet() = 0;
     void setupBullet(Bullet* bullet, const glm::vec3& point);
     bool isBulletPathClear(glm::vec3 point, bool checkFriendlyFire);
-    Ship* m_owner;
+    WorldObject* m_owner;
 };
 

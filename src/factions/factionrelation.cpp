@@ -28,6 +28,14 @@ void FactionRelation::setFriendliness(float friendliness) {
     m_friendliness = friendliness;
 }
 
+bool FactionRelation::isHostile() const {
+    if (m_friendliness <= -30.0f) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 FactionRelationType FactionRelation::type() const {
     if (m_friendliness <= -30.0f) {
         return FactionRelationType::Enemy;

@@ -16,6 +16,8 @@
 #include "worldobject/worldobjectcomponents.h"
 #include "worldobject/ship.h"
 
+#include "collision/collisiondetector.h"
+
 #include "factions/faction.h"
 #include "factions/factionmatrix.h"
 #include "factions/factionrelation.h"
@@ -23,6 +25,7 @@
 #include "ai/character.h"
 
 #include "worldtree/worldtreequery.h"
+#include "worldtree/worldtreegeode.h"
 
 #include "world/world.h"
 #include "world/god.h"
@@ -88,17 +91,17 @@ void Gun::setupBullet(Bullet* bullet, const glm::vec3& point) {
 }
 
 bool Gun::isBulletPathClear(glm::vec3 point, bool checkFriendlyFire) {
-    Ray rayToTarget(m_hardpoint->voxel()->position() + m_hardpoint->components()->worldObject()->transform().orientation()*glm::vec3(0,0,-1), point - m_hardpoint->voxel()->position());
-    WorldTreeQuery fireDirectionQuery(&World::instance()->worldTree(), &rayToTarget, nullptr, nullptr);
+    glm::vec3 direction = glm::normalize(point - m_hardpoint->voxel()->position());
+    Ray rayToTarget = Ray::fromTo(m_hardpoint->voxel()->position() + direction*m_owner->transform().scale(), point);
+    WorldTreeQuery fireDirectionQuery(&World::instance()->worldTree(), &rayToTarget, m_owner->collisionDetector().geode()->containingNode(), nullptr);
     for (WorldObject* object : fireDirectionQuery.intersectingWorldObjects()) {
-        Ship* shipInFireDirection = dynamic_cast<Ship*>(object);
-        if (!shipInFireDirection) {
-            continue;
-        }
-        if (shipInFireDirection == m_hardpoint->components()->worldObject()) {
+        if (object == m_hardpoint->components()->worldObject()) {
             return false;
         }
-        if (checkFriendlyFire && m_owner && shipInFireDirection->character()->faction().relationTo(m_owner->character()->faction()).type() != FactionRelationType::Enemy) {
+        if (checkFriendlyFire && 
+            m_owner->objectType() == WorldObjectType::Ship && 
+            object->objectType() == WorldObjectType::Ship &&
+            static_cast<Ship*>(object)->character()->faction().relationTo(static_cast<Ship*>(m_owner)->character()->faction()).isHostile()) {
             return false;
         }
     }
@@ -107,5 +110,5 @@ bool Gun::isBulletPathClear(glm::vec3 point, bool checkFriendlyFire) {
 
 void Gun::setHardpoint(Hardpoint* hardpoint) {
     Weapon::setHardpoint(hardpoint);
-    m_owner = dynamic_cast<Ship*>(m_hardpoint->components()->worldObject());
+    m_owner = m_hardpoint->components()->worldObject();
 }
