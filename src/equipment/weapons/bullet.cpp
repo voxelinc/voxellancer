@@ -4,14 +4,12 @@
 
 #include "world/god.h"
 #include "world/world.h"
-#include "ui/objectinfo.h"
+#include "worldobject/worldobjectinfo.h"
 #include "physics/physics.h"
 #include "sound/soundmanager.h"
 
 
-
-Bullet::Bullet():
-    Projectile()
+Bullet::Bullet()
 {
 }
 

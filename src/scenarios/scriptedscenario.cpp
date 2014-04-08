@@ -26,7 +26,7 @@
 #include "world/god.h"
 
 #include "player.h"
-#include "ui/objectinfo.h"
+#include "worldobject/worldobjectinfo.h"
 #include "utils/randvec3.h"
 
 #include "scripting/scriptengine.h"
@@ -45,9 +45,9 @@ ScriptedScenario::~ScriptedScenario() = default;
 void ScriptedScenario::populateWorld() {
     Ship *playerShip = WorldElementBuilder("mox").buildShip();
     playerShip->transform().setPosition(glm::vec3(0, 0, 10));
-    playerShip->objectInfo().setName("mox");
-    playerShip->objectInfo().setShowOnHud(false);
-    playerShip->objectInfo().setCanLockOn(false);
+    playerShip->info().setName("mox");
+    playerShip->info().setShowOnHud(false);
+    playerShip->info().setCanLockOn(false);
     m_world->god().scheduleSpawn(playerShip);
     World::instance()->player().setShip(playerShip);
 

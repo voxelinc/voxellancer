@@ -28,11 +28,11 @@ InstancedBullet::Data* InstancedBullet::data() {
 }
 
 Transform& InstancedBullet::transform() {
-
+    return m_transform;
 }
 
 void InstancedBullet::setTransform(const Transform& transform) {
-
+    m_transform = transform;
 }
 
 void InstancedBullet::setSpeed(const Speed& speed) {

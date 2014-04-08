@@ -3,8 +3,9 @@
 #include <algorithm>
 
 #include "worldobject/ship.h"
+#include "worldobject/worldobjectinfo.h"
+
 #include "world/world.h"
-#include "objectinfo.h"
 
 #include "player.h"
 
@@ -62,7 +63,7 @@ WorldObject* TargetSelector::findNextTarget(IteratorType begin, IteratorType end
 
 std::function<bool(WorldObject*)> TargetSelector::canLockOnPredicate() {
     return [] (WorldObject* worldObject) {
-        return worldObject->objectInfo().canLockOn();
+        return worldObject->info().canLockOn();
     };
 }
 

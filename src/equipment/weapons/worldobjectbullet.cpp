@@ -4,19 +4,19 @@
 
 #include "physics/physics.h"
 
-#include "ui/objectinfo.h"
-
 #include "voxel/voxelclusterbounds.h"
 
 #include "world/god.h"
 #include "world/world.h"
 
+#include "worldobject/worldobjectinfo.h"
+
 
 WorldObjectBullet::WorldObjectBullet() {
     collisionFilter().setCollideableWith(WorldObjectType::Bullet, false);
 
-    m_objectInfo->setShowOnHud(false);
-    m_objectInfo->setCanLockOn(false);
+    m_info->setShowOnHud(false);
+    m_info->setCanLockOn(false);
 
     m_physics->setDirectionalDampening(unnamedProperty(0.0f));
     m_physics->setAngularDampening(unnamedProperty(0.0f));
