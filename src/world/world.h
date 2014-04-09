@@ -43,6 +43,7 @@ public:
     void update(float deltaSecs);
 
     float deltaSec() const;
+    float time() const;
 
     static World* instance();
     static void reset(bool showWarning=true);
@@ -58,6 +59,7 @@ protected:
     static World* s_instance;
 
     float m_deltaSec;
+    float m_time;
 
     std::unique_ptr<Player> m_player;
     std::unique_ptr<ScriptEngine> m_scriptEngine;

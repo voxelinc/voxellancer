@@ -1,28 +1,46 @@
 #include "bulletengine.h"
 
+#include "equipment/weapons/worldobjectbullet.h"
+
 #include "bulletenginerenderer.h"
 #include "genericinstancedbullet.h"
+#include "instancedbulletcontainer.h"
+#include "instancedbulletcontainerrenderer.h"
 
 
 BulletEngine::BulletEngine():
-    m_renderer(new BulletEngineRenderer(*this)),
-    m_time(0.0f)
+    m_renderer(new BulletEngineRenderer())
 {
-
 }
 
-BulletEngine::~BulletEngine() = default;
+BulletEngine::~BulletEngine() {
+    for (InstancedBullet* bullet : m_bullets) {
+        delete bullet;
+    }
+}
 
-float BulletEngine::time() const {
-    return m_time;
+BulletEngineRenderer& BulletEngine::renderer() {
+    return *m_renderer;
 }
 
 void BulletEngine::add(InstancedBullet* bullet) {
-    m_renderer->add(bullet);
+    container(bullet->name())->add(bullet);
+    m_bullets.insert(bullet);
 }
 
 void BulletEngine::remove(InstancedBullet* bullet) {
-    m_renderer->remove(bullet);
+    assert(bullet->container());
+    bullet->container()->remove(bullet);
+    m_bullets.erase(bullet);
+}
+
+InstancedBulletContainer* BulletEngine::container(const std::string& name) {
+    auto iter = m_containers.find(name);
+    if (iter == m_containers.end()) {
+        iter = m_containers.emplace(name, std::unique_ptr<InstancedBulletContainer>(new InstancedBulletContainer(*this, name))).first;
+        m_renderer->add(iter->second.get());
+    }
+    return iter->second.get();
 }
 
 InstancedBullet* BulletEngine::createBullet(const std::string& name) {
@@ -30,7 +48,13 @@ InstancedBullet* BulletEngine::createBullet(const std::string& name) {
 }
 
 void BulletEngine::update(float deltaSec) {
-    m_time += deltaSec;
+    for (InstancedBullet* bullet : m_bullets) {
+        bullet->update(deltaSec);
+    }
+
+    for (auto& pair : m_containers) {
+        pair.second->update(deltaSec);
+    }
 }
 
 void BulletEngine::draw(const Camera& camera) {

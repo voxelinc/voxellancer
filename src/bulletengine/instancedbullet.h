@@ -8,9 +8,10 @@
 #include "geometry/speed.h"
 
 
-class InstancedBulletPrototype;
+class InstancedBulletContainer;
 
 struct InstancedBulletData {
+    bool active;
     glm::vec3 originPosition;
     glm::vec3 originEulers;
     glm::vec3 directionalSpeed;
@@ -28,10 +29,10 @@ public:
     int bufferSlot() const;
     void setBufferSlot(int bufferSlot);
 
-    InstancedBulletPrototype* prototype();
-    void setPrototype(InstancedBulletPrototype* prototype);
+    InstancedBulletContainer* container();
+    void setContainer(InstancedBulletContainer* container);
 
-    Data* data();
+    InstancedBulletData* data();
 
     bool dataChanged() const;
     void setDataChanged(bool changed);
@@ -50,15 +51,17 @@ public:
 
 
 protected:
+    void updateData();
+
+protected:
     std::string m_name;
     Transform m_transform;
     Speed m_speed;
 
     int m_bufferSlot;
-    InstancedBulletPrototype* m_prototype;
+    InstancedBulletContainer* m_container;
 
-    Data m_data;
+    InstancedBulletData m_data;
     bool m_dataChanged;
-    bool m_dataInvalid;
 };
 

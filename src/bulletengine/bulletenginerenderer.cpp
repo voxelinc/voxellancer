@@ -4,45 +4,37 @@
 
 #include <glowutils/global.h>
 
+#include "camera/camera.h"
+
 #include "voxeleffect/voxelmesh.h"
 
+#include "world/world.h"
+
 #include "instancedbullet.h"
-#include "instancedbulletprototype.h"
+#include "instancedbulletcontainer.h"
 
 
-
-BulletEngineRenderer::BulletEngineRenderer(BulletEngine& engine):
-    m_initialized(false),
-    m_engine(engine)
+BulletEngineRenderer::BulletEngineRenderer():
+    m_initialized(false)
 {
 
 }
 
 BulletEngineRenderer::~BulletEngineRenderer() = default;
 
-void BulletEngineRenderer::bindVoxelMeshTo(glow::VertexArrayObject* vao) {
+int BulletEngineRenderer::location(const std::string& attribute) {
     if (!m_initialized) {
         initialize();
     }
-
-    m_voxelMesh->bindTo(vao, 0, m_program->getAttributeLocation("v_vertex"), 1, m_program->getAttributeLocation("v_normal"));
+    return m_program->getAttributeLocation(attribute);
 }
 
-void BulletEngineRenderer::add(InstancedBullet* bullet) {
-    auto iter = m_prototypes.find(bullet->name());
-
-    if (iter == m_prototypes.end()) {
-        iter = m_prototypes.emplace(bullet->name(), new InstancedBulletPrototype(*this, bullet->name())).first;
-    }
-
-    iter->second->add(bullet);
+void BulletEngineRenderer::add(InstancedBulletContainer* container) {
+    m_containers.insert(container);
 }
 
-void BulletEngineRenderer::remove(InstancedBullet* bullet) {
-    auto iter = m_prototypes.find(bullet->name());
-    assert(iter != m_prototypes.end());
-
-    iter->second->remove(bullet);
+void BulletEngineRenderer::remove(InstancedBulletContainer* container) {
+    m_containers.erase(container);
 }
 
 void BulletEngineRenderer::draw(const Camera& camera) {
@@ -53,10 +45,10 @@ void BulletEngineRenderer::draw(const Camera& camera) {
     m_program->use();
 
     m_program->setUniform("viewProjection", camera.viewProjection());
-    m_program->setUniform("time", m_engine.time());
+    m_program->setUniform("time", World::instance()->time());
 
-    for (auto& pair : m_prototypes) {
-        pair.second->draw(camera, m_program);
+    for (InstancedBulletContainer* container : m_containers) {
+        container->draw(m_program);
     }
 
     m_program->release();
@@ -81,10 +73,8 @@ void BulletEngineRenderer::initializeProgram() {
 
 void BulletEngineRenderer::beforeContextDestroy() {
     m_initialized = false;
-    // TODO: Store bullets
 }
 
 void BulletEngineRenderer::afterContextRebuild() {
-    // Reinsert bullets
 }
 

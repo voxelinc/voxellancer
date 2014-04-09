@@ -33,7 +33,7 @@ void AbstractMove::setAngular(const glm::vec3& angular) {
     m_angular = angular;
 }
 
-Transform AbstractMove::project(const Transform& transform, float deltaSec) const {
+Transform AbstractMove::moved(const Transform& transform, float deltaSec) const {
     Transform result(transform);
 
     result.moveWorld(m_directional * deltaSec);

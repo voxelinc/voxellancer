@@ -10,7 +10,7 @@
 InstancedBullet::InstancedBullet(const std::string& name):
     m_name(name),
     m_bufferSlot(-1),
-    m_prototype(nullptr),
+    m_container(nullptr),
     m_dataChanged(true)
 {
 }
@@ -27,15 +27,15 @@ void InstancedBullet::setBufferSlot(int bufferSlot) {
     m_bufferSlot = bufferSlot;
 }
 
-InstancedBulletPrototype* InstancedBullet::prototype() {
-    return m_prototype;
+InstancedBulletContainer* InstancedBullet::container() {
+    return m_container;
 }
 
-void InstancedBullet::setPrototype(InstancedBulletPrototype* prototype) {
-    m_prototype = prototype;
+void InstancedBullet::setContainer(InstancedBulletContainer* container) {
+    m_container = container;
 }
 
-InstancedBullet::Data* InstancedBullet::data() {
+InstancedBulletData* InstancedBullet::data() {
     return &m_data;
 }
 
@@ -44,7 +44,7 @@ bool InstancedBullet::dataChanged() const {
 }
 
 void InstancedBullet::setDataChanged(bool changed) {
-    return m_dataChanged;
+    m_dataChanged = changed;
 }
 
 Transform& InstancedBullet::transform() {
@@ -84,6 +84,7 @@ void InstancedBullet::updateData() {
     m_data.angularSpeed = m_speed.angular();
     m_data.originTime = World::instance()->time();
     m_data.deathTime = World::instance()->time() + lifetime();
+    m_data.active = m_data.originTime < m_data.deathTime;
 
     m_dataChanged = true;
 }

@@ -33,8 +33,7 @@ Voxel::Voxel(const Voxel& other):
     m_visuals = other.visuals();
 }
 
-Voxel::~Voxel() {
-}
+Voxel::~Voxel() = default;
 
 const glm::ivec3& Voxel::gridCell() const {
     return m_gridCell;
@@ -43,6 +42,16 @@ const glm::ivec3& Voxel::gridCell() const {
 glm::vec3 Voxel::position() const {
     assert(m_voxelTreeNode);
     return m_voxelTreeNode->voxelTree()->worldObject()->transform().applyTo(glm::vec3(m_gridCell));
+}
+
+VoxelData Voxel::data() const {
+    VoxelData result;
+
+    result.gridCell = m_gridCell;
+    result.color = m_visuals.color();
+    result.emissiveness = m_visuals.emissiveness();
+
+    return result;
 }
 
 void Voxel::addToCluster(VoxelCluster *cluster) {

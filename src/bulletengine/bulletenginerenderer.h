@@ -2,7 +2,7 @@
 
 #include <memory>
 #include <string>
-#include <unordered_map>
+#include <unordered_set>
 
 #include <glow/ref_ptr.h>
 
@@ -16,7 +16,7 @@ namespace glow {
 
 class Camera;
 class InstancedBullet;
-class InstancedBulletPrototype;
+class InstancedBulletContainer;
 class VoxelMesh;
 
 class BulletEngineRenderer : public ContextDependant {
@@ -24,27 +24,25 @@ public:
     BulletEngineRenderer();
     ~BulletEngineRenderer();
 
-    void bindVoxelMeshTo(glow::VertexArrayObject* vao);
+    int location(const std::string& attribute);
 
-    void add(InstancedBullet* bullet);
-    void remove(InstancedBullet* bullet);
+    void add(InstancedBulletContainer* container);
+    void remove(InstancedBulletContainer* container);
 
     void draw(const Camera& camera);
 
 
 protected:
-    bool m_initialized;
-    std::unordered_map<std::string, InstancedBulletPrototype*> m_prototypes;
-
-    glow::ref_ptr<glow::Program> m_program;
-
-    std::unique_ptr<VoxelMesh> m_voxelMesh;
-
-
     void initialize();
     void initializeProgram();
 
     void beforeContextDestroy() override;
     void afterContextRebuild() override;
+
+
+protected:
+    bool m_initialized;
+    glow::ref_ptr<glow::Program> m_program;
+    std::unordered_set<InstancedBulletContainer*> m_containers;
 };
 
