@@ -34,7 +34,7 @@ InstancedBulletContainerRenderer::InstancedBulletContainerRenderer(InstancedBull
 InstancedBulletContainerRenderer::~InstancedBulletContainerRenderer() = default;
 
 void InstancedBulletContainerRenderer::invalidateSlot(int slot) {
-    std::cout << "Invalidating slot " << slot << std::endl;
+ //   std::cout << "Invalidating slot " << slot << std::endl;
     int oldInvalidBegin = m_invalidSlotsBegin;
     int oldInvalidEnd = m_invalidSlotsEnd;
 
@@ -80,6 +80,7 @@ void InstancedBulletContainerRenderer::draw() {
 
   //  std::cout << "Rendering " << m_container.prototype().voxelCount() << " " << m_slotCount << std::endl;
     m_vao->drawArraysInstanced(GL_TRIANGLE_STRIP, 0, 14, m_container.prototype().voxelCount() * m_slotCount);
+    m_vao->unbind();
 }
 
 void InstancedBulletContainerRenderer::initialize() {
@@ -91,7 +92,7 @@ void InstancedBulletContainerRenderer::initialize() {
 
     m_gridBuffer = new glow::Buffer(GL_ARRAY_BUFFER);
     setupVertexAttribute(m_gridBuffer, sizeof(VoxelData), 2, "v_gridCell", offsetof(VoxelData, gridCell), 3, GL_FLOAT);
-   setupVertexAttribute(m_gridBuffer, sizeof(VoxelData), 3, "v_color", offsetof(VoxelData, color), GL_BGRA, GL_UNSIGNED_BYTE, GL_TRUE);
+    setupVertexAttribute(m_gridBuffer, sizeof(VoxelData), 3, "v_color", offsetof(VoxelData, color), GL_BGRA, GL_UNSIGNED_BYTE, GL_TRUE);
   //  setupVertexAttribute(m_gridBuffer, sizeof(VoxelData), 4, "v_emissiveness", offsetof(VoxelData, emissiveness), 1, GL_FLOAT);
 
     m_bulletBuffer = new glow::Buffer(GL_ARRAY_BUFFER);
@@ -116,39 +117,32 @@ void InstancedBulletContainerRenderer::setupVertexAttribute(glow::Buffer * buffe
 }
 
 void InstancedBulletContainerRenderer::updateSlots(int begin, int end) {
-    std::cout << "Updating " << begin << " -> " << end << std::endl;
 
     int slotSize = sizeof(InstancedBulletData);
     m_bulletBuffer->setSubData((end - begin + 1) * slotSize, begin * slotSize, &m_container.bulletData()[begin]);
+    m_bulletBuffer->unbind();
 }
 
 void InstancedBulletContainerRenderer::allocateSlots(int slotCount) {
+    std::cout << "Allocating " << std::endl;
     int voxelCount = m_container.prototype().voxelCount();
     int voxelInstanced = slotCount * voxelCount;
 
-    m_gridBuffer->setData(voxelCount * sizeof(VoxelData));
-
-    std::cout << m_container.gridPrototype().size() << " " << voxelCount << std::endl;
+    m_gridBuffer->setData(voxelCount * sizeof(VoxelData), nullptr, GL_STREAM_DRAW);
 
     for (int i = 0; i < slotCount; i++) {
-        for (int j = 0; j < voxelCount; j++) {
-            std::cout << "----" << std::endl;
-            std::cout << "   |" << toString(m_container.gridPrototype()[j].gridCell) << std::endl;
-            std::cout << "   |" << (void*)m_container.gridPrototype()[j].color << std::endl;
-
-        }
-
         m_gridBuffer->setSubData(sizeof(VoxelData) * voxelCount, i * sizeof(VoxelData) * voxelCount, m_container.gridPrototype().data());
     }
+    m_gridBuffer->unbind();
 
-    m_bulletBuffer->setData(slotCount * sizeof(InstancedBulletData));
+    m_bulletBuffer->setData(slotCount * sizeof(InstancedBulletData), nullptr, GL_STREAM_DRAW);
+    m_bulletBuffer->unbind();
 
     m_slotsInvalid = true;
     m_invalidSlotsBegin = 0;
     m_invalidSlotsEnd = slotCount - 1;
 
     m_slotCount = slotCount;
-    std::cout << "Allocated " << m_slotCount << " " << slotCount << std::endl;
 }
 
 void InstancedBulletContainerRenderer::setVertexAttribDivisors() {

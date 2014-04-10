@@ -6,6 +6,8 @@
 
 #include "camera/camera.h"
 
+#include "property/property.h"
+
 #include "voxeleffect/voxelmesh.h"
 
 #include "world/world.h"
@@ -68,6 +70,11 @@ void BulletEngineRenderer::initializeProgram() {
         glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/shader/bulletengine/bullet.frag"),
         glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/shader/lib/voxel.frag")
     );
+
+    m_program->bindFragDataLocation(0, "fragColor");
+    m_program->setUniform("withBorder", 1.0f);
+    m_program->setUniform("lightdir", Property<glm::vec3>::get("vfx.lightdir"));
+
     m_program->link();
 }
 
