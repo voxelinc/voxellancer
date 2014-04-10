@@ -6,7 +6,6 @@
 
 Script::Script():
     m_lua(new LuaWrapper()),
-    m_handle(this),
     m_state(ScriptState::Idle),
     m_debugStatus("")
 {
@@ -14,9 +13,7 @@ Script::Script():
     load("data/scripts/vec3.lua");
 }
 
-Script::~Script() {
-    m_handle.invalidate();
-}
+Script::~Script() = default;
 
 void Script::start() {
     assert(m_state == ScriptState::Idle);
@@ -45,10 +42,6 @@ void Script::loadString(const std::string& script) {
 
 LuaWrapper& Script::lua() {
     return *m_lua.get();
-}
-
-Handle<Script>& Script::handle() {
-    return m_handle;
 }
 
 void Script::update(float deltaSec) {
