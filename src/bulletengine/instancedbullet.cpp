@@ -5,17 +5,22 @@
 
 #include <glm/gtc/quaternion.hpp>
 
-#include "bulletengine/bulletengine.h"
+#include "equipment/weapons/worldobjectbullet.h"
 
 #include "world/world.h"
 
+#include "bulletengine.h"
+#include "instancedbulletcontainer.h"
 
-InstancedBullet::InstancedBullet(const std::string& name):
+
+InstancedBullet::InstancedBullet(const Handle<InstancedBulletContainer>& container, const std::string& name):
     m_name(name),
+    m_container(container),
     m_bufferSlot(-1),
-    m_container(nullptr),
     m_dataChanged(true)
 {
+    assert(m_container.valid());
+    m_lifetime = m_container->prototype().lifetime();
 }
 
 const std::string& InstancedBullet::name() const {
@@ -31,11 +36,7 @@ void InstancedBullet::setBufferSlot(int bufferSlot) {
 }
 
 InstancedBulletContainer* InstancedBullet::container() {
-    return m_container;
-}
-
-void InstancedBullet::setContainer(InstancedBulletContainer* container) {
-    m_container = container;
+    return m_container.get();
 }
 
 InstancedBulletData* InstancedBullet::data() {
@@ -65,7 +66,7 @@ void InstancedBullet::setSpeed(const Speed& speed) {
 }
 
 void InstancedBullet::update(float deltaSec) {
-    m_transform = m_speed.moved(m_transform, deltaSec);
+    // m_transform = m_speed.moved(m_transform, deltaSec);
 }
 
 void InstancedBullet::spawn() {
@@ -77,7 +78,8 @@ void InstancedBullet::remove() {
 }
 
 float InstancedBullet::length() {
-    return 1.0f; // TODO
+    assert(m_container.valid());
+    return m_container->prototype().length();
 }
 
 void InstancedBullet::updateData() {
@@ -85,12 +87,10 @@ void InstancedBullet::updateData() {
     m_data.originEulers = glm::eulerAngles(m_transform.orientation());
     m_data.directionalSpeed = m_speed.directional();
     m_data.angularSpeed = m_speed.angular();
-  //  m_data.center = m_speed.angular();
+    m_data.center = m_container->prototype().transform().center();
     m_data.originTime = World::instance()->time();
     m_data.deathTime = World::instance()->time() + lifetime();
     m_data.active = m_data.originTime < m_data.deathTime ? 1 : 0;
-
-    std::cout << m_data.originTime << " " << m_data.deathTime << " " << m_data.active << std::endl;
 
     m_dataChanged = true;
 }

@@ -99,9 +99,10 @@ void InstancedBulletContainerRenderer::initialize() {
     setupVertexAttribute(m_bulletBuffer, sizeof(InstancedBulletData), 6, "v_originEulers", offsetof(InstancedBulletData, originEulers), 3, GL_FLOAT);
     setupVertexAttribute(m_bulletBuffer, sizeof(InstancedBulletData), 7, "v_directionalSpeed", offsetof(InstancedBulletData, directionalSpeed), 3, GL_FLOAT);
     setupVertexAttribute(m_bulletBuffer, sizeof(InstancedBulletData), 8, "v_angularSpeed", offsetof(InstancedBulletData, angularSpeed), 3, GL_FLOAT);
-    setupVertexAttribute(m_bulletBuffer, sizeof(InstancedBulletData), 9, "v_originTime", offsetof(InstancedBulletData, originTime), 1, GL_FLOAT);
-    setupVertexAttribute(m_bulletBuffer, sizeof(InstancedBulletData), 10, "v_deathTime", offsetof(InstancedBulletData, deathTime), 1, GL_FLOAT);
-    setupVertexAttribute(m_bulletBuffer, sizeof(InstancedBulletData), 11, "v_active", offsetof(InstancedBulletData, active), 1, GL_FLOAT);
+    setupVertexAttribute(m_bulletBuffer, sizeof(InstancedBulletData), 9, "v_center", offsetof(InstancedBulletData, center), 3, GL_FLOAT);
+    setupVertexAttribute(m_bulletBuffer, sizeof(InstancedBulletData), 10, "v_originTime", offsetof(InstancedBulletData, originTime), 1, GL_FLOAT);
+    setupVertexAttribute(m_bulletBuffer, sizeof(InstancedBulletData), 11, "v_deathTime", offsetof(InstancedBulletData, deathTime), 1, GL_FLOAT);
+    setupVertexAttribute(m_bulletBuffer, sizeof(InstancedBulletData), 12, "v_active", offsetof(InstancedBulletData, active), 1, GL_FLOAT);
 
     m_initialized = true;
 }
@@ -154,6 +155,7 @@ void InstancedBulletContainerRenderer::setVertexAttribDivisors() {
     setVertexAttribDivisor("v_originEulers", voxelCount);
     setVertexAttribDivisor("v_directionalSpeed", voxelCount);
     setVertexAttribDivisor("v_angularSpeed", voxelCount);
+    setVertexAttribDivisor("v_center", voxelCount);
     setVertexAttribDivisor("v_originTime", voxelCount);
     setVertexAttribDivisor("v_deathTime", voxelCount);
     setVertexAttribDivisor("v_active", voxelCount);

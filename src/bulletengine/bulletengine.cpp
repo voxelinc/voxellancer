@@ -44,7 +44,7 @@ InstancedBulletContainer* BulletEngine::container(const std::string& name) {
 }
 
 InstancedBullet* BulletEngine::createBullet(const std::string& name) {
-    return new GenericInstancedBullet(name);
+    return new GenericInstancedBullet(container(name)->handle<InstancedBulletContainer>(), name);
 }
 
 void BulletEngine::update(float deltaSec) {

@@ -8,6 +8,8 @@
 
 #include <glow/ref_ptr.h>
 
+#include "utils/handle/handleowner.h"
+
 #include "voxel/voxeldata.h"
 
 #include "instancedbullet.h"
@@ -25,7 +27,7 @@ class InstancedBulletContainerRenderer;
 class VoxelMesh;
 class WorldObjectBullet;
 
-class InstancedBulletContainer {
+class InstancedBulletContainer : public HandleOwner {
 public:
     InstancedBulletContainer(BulletEngine& engine, const std::string& name);
 

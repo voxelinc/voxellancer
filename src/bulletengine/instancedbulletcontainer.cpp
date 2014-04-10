@@ -50,8 +50,9 @@ const std::vector<InstancedBulletData>& InstancedBulletContainer::bulletData() c
 }
 
 void InstancedBulletContainer::add(InstancedBullet* bullet) {
+    assert(this == bullet->container());
+
     m_bullets.insert(bullet);
-    bullet->setContainer(this);
 
     if (m_freeSlots.empty()) {
         allocateSlots(m_bullets.size() * 2);
@@ -67,7 +68,8 @@ void InstancedBulletContainer::add(InstancedBullet* bullet) {
 }
 
 void InstancedBulletContainer::remove(InstancedBullet* bullet) {
-    bullet->setContainer(nullptr);
+    assert(this == bullet->container());
+
     m_bullets.erase(bullet);
 
     int slot = bullet->bufferSlot();

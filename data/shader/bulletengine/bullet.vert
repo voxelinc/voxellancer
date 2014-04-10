@@ -46,11 +46,11 @@ void main() {
     f_emissiveness = v_emissiveness;
     f_modelposition = v_vertex;
     
-    vec3 bulletEulers = v_originEulers + v_angularSpeed * deltaTime;
+    vec3 bulletEulers = v_originEulers + v_angularSpeed * deltaTime * 0;
     vec4 bulletOrientation = quat(bulletEulers);
     
     vec3 bulletPosition = v_originPosition + v_directionalSpeed * deltaTime;
     
-    gl_Position = viewProjection * vec4(qtransform(bulletOrientation, v_vertex + v_gridCell) * scale + bulletPosition, 1.0f);
+    gl_Position = viewProjection * vec4(qtransform(bulletOrientation, v_vertex + v_gridCell - v_center) * scale + bulletPosition, 1.0f);
 }
 

@@ -23,7 +23,7 @@ struct InstancedBulletData {
 
 class InstancedBullet : public Bullet {
 public:
-    InstancedBullet(const std::string& name);
+    InstancedBullet(const Handle<InstancedBulletContainer>& container, const std::string& name);
 
     const std::string& name() const;
 
@@ -31,7 +31,6 @@ public:
     void setBufferSlot(int bufferSlot);
 
     InstancedBulletContainer* container();
-    void setContainer(InstancedBulletContainer* container);
 
     InstancedBulletData* data();
 
@@ -54,13 +53,14 @@ public:
 protected:
     void updateData();
 
+
 protected:
     std::string m_name;
     Transform m_transform;
     Speed m_speed;
 
+    Handle<InstancedBulletContainer> m_container;
     int m_bufferSlot;
-    InstancedBulletContainer* m_container;
 
     InstancedBulletData m_data;
     bool m_dataChanged;

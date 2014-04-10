@@ -1,5 +1,7 @@
 #include "rocket.h"
 
+#include <iostream>
+
 #include "ai/aitask.h"
 #include "ai/basictasks/directsuicidetask.h"
 
@@ -76,6 +78,7 @@ void Rocket::setTarget(WorldObject* targetObject) {
 
 void Rocket::update(float deltaSec) {
     Projectile::update(deltaSec);
+    WorldObject::update(deltaSec);
 
     if (m_aiTask) {
         m_aiTask->update(deltaSec);

@@ -9,7 +9,7 @@
 
 class GenericInstancedBullet : public InstancedBullet {
 public:
-    GenericInstancedBullet(const std::string& name);
+    GenericInstancedBullet(const Handle<InstancedBulletContainer>& prototype, const std::string& name);
 
     virtual const SoundProperties& hitSound() const override;
     void setHitSound(const SoundProperties& hitSound);
