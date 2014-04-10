@@ -98,6 +98,7 @@ void InstancedBulletContainer::allocateSlots(int slotCount) {
     for (int i = m_bullets.size(); i < slotCount; i++) {
         m_freeSlots.push(i);
     }
+
     m_bulletData.resize(slotCount);
 }
 

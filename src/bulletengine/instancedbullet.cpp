@@ -1,5 +1,8 @@
 #include "instancedbullet.h"
 
+#include <iostream>
+#include "utils/tostring.h"
+
 #include <glm/gtc/quaternion.hpp>
 
 #include "bulletengine/bulletengine.h"
@@ -82,9 +85,12 @@ void InstancedBullet::updateData() {
     m_data.originEulers = glm::eulerAngles(m_transform.orientation());
     m_data.directionalSpeed = m_speed.directional();
     m_data.angularSpeed = m_speed.angular();
+  //  m_data.center = m_speed.angular();
     m_data.originTime = World::instance()->time();
     m_data.deathTime = World::instance()->time() + lifetime();
-    m_data.active = m_data.originTime < m_data.deathTime;
+    m_data.active = m_data.originTime < m_data.deathTime ? 1 : 0;
+
+    std::cout << m_data.originTime << " " << m_data.deathTime << " " << m_data.active << std::endl;
 
     m_dataChanged = true;
 }

@@ -11,11 +11,12 @@
 class InstancedBulletContainer;
 
 struct InstancedBulletData {
-    bool active;
+    float active;
     glm::vec3 originPosition;
     glm::vec3 originEulers;
     glm::vec3 directionalSpeed;
     glm::vec3 angularSpeed;
+    glm::vec3 center;
     float originTime;
     float deathTime;
 };
