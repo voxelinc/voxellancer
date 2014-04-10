@@ -1,7 +1,7 @@
 #include "missionstatepoll.h"
 
 
-MissionStatePoll::MissionStatePoll(const Handle<Mission>& mission, MissionState state, const std::function<void()>& callback):
+MissionStatePoll::MissionStatePoll(const Handle<Mission>& mission, MissionState state, const Callback& callback):
     EventPoll(callback),
     m_mission(mission),
     m_state(state),

@@ -49,7 +49,8 @@ apikey ExternalMissionBindings::createStatePoll(apikey missionKey, MissionState 
        return -1;
     }
 
-    auto poll = std::make_shared<MissionStatePoll>(mission->handle<Mission>(), state, [=] { m_lua.call(callback, missionKey); });
+    auto poll = std::make_shared<MissionStatePoll>(mission->handle<Mission>(), state, createCallback(callback, missionKey));
+
     World::instance()->eventPoller().addPoll(poll);
     m_script.addLocal(poll);
 

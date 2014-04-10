@@ -1,7 +1,7 @@
 #include "eventpoll.h"
 
 
-EventPoll::EventPoll(const std::function<void()>& callback):
+EventPoll::EventPoll(const Callback& callback):
     m_callback(callback),
     m_active(true)
 {
@@ -33,7 +33,7 @@ void EventPoll::update(float deltaSec) {
 }
 
 void EventPoll::doCallback() {
-    m_callback();
+    m_callback.call();
 }
 
 void EventPoll::specialOnCallback() {

@@ -60,3 +60,4 @@ void VoxelTreeQuery::query(VoxelTreeNode* node, std::function<void(Voxel*)> onVo
         }
     }
 }
+

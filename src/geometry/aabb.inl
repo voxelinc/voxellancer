@@ -76,6 +76,11 @@ T TAABB<T>::extent(Axis axis) const {
 }
 
 template<typename T>
+glm::detail::tvec3<T> TAABB<T>::extent() const {
+    return m_urb - m_llf;
+}
+
+template<typename T>
 T TAABB<T>::diameter() const {
     return static_cast<T>(glm::length(glm::vec3(m_urb - m_llf)));
 }

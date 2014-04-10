@@ -8,6 +8,7 @@
 #include "display/rendering/blitter.h"
 #include "display/rendering/buffernames.h"
 #include "display/rendering/starfield.h"
+#include "display/rendering/worldtreerenderer.h"
 
 #include "gamestate/gameplay/gameplay.h"
 
@@ -33,6 +34,8 @@ GamePlayScene::GamePlayScene(GamePlay& gamePlay):
     m_outputBlitter(new Blitter()),
     m_renderPipeline(RenderPipeline::getDefault()),
     m_starField(std::make_shared<Starfield>()),
+    m_worldTreeRendererEnabled(false),
+    m_worldTreeRenderer(new WorldTreeRenderer()),
     m_framebuffer(nullptr),
     m_currentOutputBuffer(0),
     m_defaultLightDir("vfx.lightdir")
@@ -49,6 +52,7 @@ void GamePlayScene::draw(const Camera& camera, glow::FrameBufferObject* target, 
 
     m_framebuffer->setResolution(camera.viewport());
     m_framebuffer->clear();
+    m_framebuffer->setDrawBuffers({ BufferNames::Color, BufferNames::NormalZ, BufferNames::Emissisiveness });
 
     drawGame(camera);
 
@@ -57,7 +61,7 @@ void GamePlayScene::draw(const Camera& camera, glow::FrameBufferObject* target, 
 
     // set viewport to original resolution
     glViewport(destinationViewport.x(), destinationViewport.y(), destinationViewport.width(), destinationViewport.height());
-    
+
     // transfer rendered image to target framebuffer
     m_outputBlitter->setInputMapping({ { "source", m_currentOutputBuffer } });
     m_outputBlitter->apply(*m_framebuffer, target);
@@ -67,26 +71,38 @@ void GamePlayScene::update(float deltaSec) {
     m_starField->update(deltaSec, World::instance()->player().cameraHead().position());
 }
 
+bool GamePlayScene::worldTreeRendererEnabled() const {
+    return m_worldTreeRendererEnabled;
+}
+
+void GamePlayScene::setWorldTreeRendererEnabled(bool enabled) {
+    m_worldTreeRendererEnabled = enabled;
+}
+
 void GamePlayScene::setOutputBuffer(int i) {
     m_currentOutputBuffer = glm::min(i, m_renderPipeline->bufferCount() - 1);
-    glow::info("Outputbuffer: %;", bufferNames[m_currentOutputBuffer]);
+    glow::info("Switched to output-buffer: %;", bufferNames[m_currentOutputBuffer]);
 }
 
 void GamePlayScene::drawGame(const Camera& camera) const {
-    m_framebuffer->setDrawBuffers({ BufferNames::Color, BufferNames::NormalZ, BufferNames::Emissisiveness });
-
     World::instance()->skybox().draw(camera);
 
     m_voxelRenderer->program()->setUniform("lightdir", m_defaultLightDir.get());
+
     m_voxelRenderer->prepareDraw(camera);
 
     for (WorldObject* worldObject : World::instance()->worldObjects()) {
         VoxelRenderer::instance()->draw(*worldObject);
     }
+
     World::instance()->player().hud().draw();
+
     m_voxelRenderer->afterDraw();
 
     World::instance()->particleEngine().draw(camera);
 
+    if (m_worldTreeRendererEnabled) {
+        m_worldTreeRenderer->draw(camera);
+    }
 }
 

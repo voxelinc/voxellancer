@@ -6,7 +6,7 @@
 
 #include "factions/factionmatrix.h"
 
-#include "ui/objectinfo.h"
+#include "worldobject/worldobjectinfo.h"
 
 #include "world/world.h"
 
@@ -17,8 +17,8 @@ Ship::Ship():
     m_boardComputer(new BoardComputer(this)),
     m_squadLogic(new SquadLogic(*this))
 {
-    m_objectInfo->setShowOnHud(true);
-    m_objectInfo->setCanLockOn(true);
+    m_info->setShowOnHud(true);
+    m_info->setCanLockOn(true);
 }
 
 Ship::~Ship() = default;

@@ -40,6 +40,9 @@ void Script::loadString(const std::string& script) {
     m_lua->loadString(script);
 }
 
+LuaWrapper& Script::lua() {
+    return *m_lua.get();
+}
 
 void Script::update(float deltaSec) {
     if (m_lua->hasFunction("update")) {
