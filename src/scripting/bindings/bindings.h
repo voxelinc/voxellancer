@@ -1,6 +1,9 @@
 #pragma once
 
-#include "scripting/scriptengine.h"
+#include "utils/callback.h"
+
+#include "scripting/scriptcallback.h"
+
 
 class LuaWrapper;
 class ScriptEngine;
@@ -11,12 +14,20 @@ typedef int apikey;
 
 class Bindings {
 public:
-    Bindings(GamePlayScript& gamePlayScript);
+    Bindings(GamePlayScript& script);
 
-    virtual void initialize() = 0;
+    virtual void bind() = 0;
+
+    template<typename... Args>
+    Callback createCallback(const std::string& function, Args... args);
+
 
 protected:
+    GamePlayScript& m_script;
     LuaWrapper& m_lua;
     ScriptEngine& m_scriptEngine;
-
 };
+
+
+#include "bindings.inl"
+

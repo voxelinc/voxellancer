@@ -6,7 +6,7 @@
 
 #include "collision/collisionfilter.h"
 
-#include "utils/randvec.h"
+#include "utils/randvec3.h"
 #include "utils/geometryhelper.h"
 #include "physics/physics.h"
 

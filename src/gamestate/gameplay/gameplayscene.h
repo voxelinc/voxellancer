@@ -9,7 +9,6 @@
 #include "property/property.h"
 
 
-
 class GamePlay;
 class VoxelRenderer;
 class SoundManager;
@@ -19,14 +18,18 @@ class Blitter;
 class RenderPipeline;
 class Player;
 class Starfield;
+class WorldTreeRenderer;
 
 class GamePlayScene: public Scene {
 public:
-    GamePlayScene(GamePlay& gamePlay, Player& player);
+    GamePlayScene(GamePlay& gamePlay);
     ~GamePlayScene();
 
     virtual void draw(const Camera& camera, glow::FrameBufferObject* target, const Viewport& destinationViewport, EyeSide side = EyeSide::None) const override;
     virtual void update(float deltaSec) override;
+
+    bool worldTreeRendererEnabled() const;
+    void setWorldTreeRendererEnabled(bool enabled);
 
     void setOutputBuffer(int i);
 
@@ -38,8 +41,10 @@ protected:
     std::shared_ptr<VoxelRenderer> m_voxelRenderer;
     std::shared_ptr<Starfield> m_starField;
 
+    bool m_worldTreeRendererEnabled;
+    std::unique_ptr<WorldTreeRenderer> m_worldTreeRenderer;
+
     GamePlay& m_gamePlay;
-    Player& m_player;
 
     Property<glm::vec3> m_defaultLightDir;
     int m_currentOutputBuffer;

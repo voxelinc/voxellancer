@@ -15,7 +15,7 @@
 #include "ui/hud/aimhelperhudget.h"
 #include "ui/hud/crosshair.h"
 
-#include "ui/objectinfo.h"
+#include "worldobject/worldobjectinfo.h"
 
 #include "utils/aimer.h"
 
@@ -47,7 +47,7 @@ Ship* Player::ship() {
 void Player::setShip(Ship* ship) {
     m_ship = ship->handle();
     m_ship->character()->setFaction(World::instance()->factionMatrix().playerFaction());
-    m_ship->objectInfo().setShowOnHud(false);
+    m_ship->info().setShowOnHud(false);
     m_cameraDolly->followWorldObject(ship);
     m_aimer->setWorldObject(ship);
 }
@@ -71,7 +71,7 @@ HUD& Player::hud() {
 }
 
 void Player::fire() {
-    if(ship()) {
+    if (ship()) {
         glm::vec3 targetPoint;
 
         if(m_hud->aimHelper().hovered()) {
@@ -102,3 +102,4 @@ void Player::setTarget(WorldObject* target) {
     m_ship->setTargetObject(target);
     m_hud->setTarget(target);
 }
+

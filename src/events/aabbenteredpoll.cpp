@@ -5,18 +5,23 @@
 #include "worldobject/worldobject.h"
 
 
-AABBEnteredPoll::AABBEnteredPoll(WorldObject* worldObject, const AABB& aabb, const std::function<void()>& callback):
+AABBEnteredPoll::AABBEnteredPoll(WorldObject* worldObject, const AABB& aabb, const Callback& callback):
     EventPoll(callback),
     m_worldObject(worldObject->handle()),
     m_aabb(aabb),
-    m_lastEntered(false)
+    m_entered(false)
 {
 }
 
+bool AABBEnteredPoll::isDead() {
+    return m_entered;
+}
+
 bool AABBEnteredPoll::poll() {
-    bool entered = m_worldObject->bounds().aabb().intersects(m_aabb);
-    bool result = entered && !m_lastEntered;
-    m_lastEntered = entered;
-    return result;
+    return m_worldObject->bounds().aabb().intersects(m_aabb);
+}
+
+void AABBEnteredPoll::specialOnCallback() {
+    m_entered = true;
 }
 

@@ -10,8 +10,7 @@
 class WorldTreeGeode;
 class WorldTreeNode;
 
-class WorldTreeNode
-{
+class WorldTreeNode {
 public:
     WorldTreeNode(int octIndex, WorldTreeNode* parent, const IAABB &aabb);
     WorldTreeNode(const IAABB &aabb, WorldTreeNode* initialSubnode);
@@ -59,12 +58,12 @@ protected:
     std::list<WorldTreeNode*> m_activeSubnodes;
 
     /**
-     *  convert a leaf to a node with subnodes                                                                   
-     */ 
+     *  convert a leaf to a node with subnodes
+     */
     void convertToGroup(WorldTreeNode* initialSubnode = nullptr);
     /**
-     *  move a geode to the specified subnode if it is contained in its aabb                                                                   
-     */ 
+     *  move a geode to the specified subnode if it is contained in its aabb
+     */
     void moveToSubnode(WorldTreeGeode* geode, WorldTreeNode* subnode);
 
     void subnodeActivated(WorldTreeNode* subnode);

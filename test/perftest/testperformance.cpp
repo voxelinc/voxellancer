@@ -11,8 +11,9 @@
 #include "test/bandit_extension/vec3helper.h"
 
 #include "geometry/acceleration.h"
-#include "ui/objectinfo.h"
+#include "worldobject/worldobjectinfo.h"
 #include "utils/tostring.h"
+#include "player.h"
 #include "physics/physics.h"
 #include "resource/clustercache.h"
 #include "sound/soundmanager.h"
@@ -24,6 +25,11 @@
 #include "world/helper/worldobjectmodification.h"
 #include "world/god.h"
 #include "worldobject/worldobjectcomponents.h"
+
+#include "utils/randvec3.h"
+#include "utils/randvec3pool.h"
+#include "utils/randfloat.h"
+#include "utils/randfloatpool.h"
 
 
 
@@ -45,7 +51,7 @@ static WorldObject* createPlanet(int diameter)
         }
     }
     planet->setCrucialVoxel(glm::ivec3(middle));
-    planet->objectInfo().setName("Planet");	return planet;
+    planet->info().setName("Planet");	return planet;
 }
 
 static void doSplitDetection(WorldObject* planet, WorldObjectModification &mod, int assumedSplits)
@@ -74,9 +80,44 @@ go_bandit([](){
         before_each([&]() {
             World::reset();
             world = World::instance();
+            world->setPlayer(*new Player());
         });
 
         after_each([&]() {
+        });
+
+        it("randomness", [&]() {
+            const int ROUNDS = 1000 * 1000 * 10;
+
+            glm::vec3 v;
+            {
+                glowutils::AutoTimer t("rand vec3");
+                for (int i = 0; i < ROUNDS; i++) {
+                    v += RandVec3::randUnitVec();
+                }
+            }
+            {
+                glowutils::AutoTimer t("pool vec3");
+                for (int i = 0; i < ROUNDS; i++) {
+                    v += RandVec3Pool::randUnitVec();
+                }
+            }
+            float f = 0;
+            {
+                glowutils::AutoTimer t("rand float");
+                for (int i = 0; i < ROUNDS; i++) {
+                    f += RandFloat::rand(0, 10);
+                }
+            }
+            {
+                glowutils::AutoTimer t("pool float");
+                for (int i = 0; i < ROUNDS; i++) {
+                    f += RandFloatPool::rand(0, 10);
+                }
+            }
+
+            glow::debug("%; %;", v.x, f);
+
         });
 
         it_skip("test a big hole", [&]() {
@@ -132,7 +173,7 @@ go_bandit([](){
         });
 
 
-        it("test global performance", [&]() {
+        it_skip("test global performance", [&]() {
             Ship *ship;
             Ship *normandy;
             WorldObject *planet;
@@ -142,14 +183,14 @@ go_bandit([](){
                 normandy = new Ship();
                 ClusterCache::instance()->fillObject(normandy, "data/voxelcluster/normandy.csv");
                 normandy->transform().setPosition(glm::vec3(0, 0, -100));
-                normandy->objectInfo().setName("Normandy");
+                normandy->info().setName("Normandy");
                 World::instance()->god().scheduleSpawn(normandy);
 
                 ship = new Ship();
                 ClusterCache::instance()->fillObject(ship, "data/voxelcluster/basicship.csv");
                 ship->transform().setPosition(glm::vec3(0, 0, 10));
-                ship->objectInfo().setName("basicship");
-                ship->objectInfo().setShowOnHud(false);
+                ship->info().setName("basicship");
+                ship->info().setShowOnHud(false);
                 World::instance()->god().scheduleSpawn(ship);
 
                 WorldObject *wall = new WorldObject();
@@ -163,7 +204,7 @@ go_bandit([](){
                         }
                     }
                 }
-                wall->objectInfo().setName("Wall");
+                wall->info().setName("Wall");
                 World::instance()->god().scheduleSpawn(wall);
 
                 planet = createPlanet(28);

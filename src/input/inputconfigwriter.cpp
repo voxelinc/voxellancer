@@ -4,7 +4,7 @@
 #include <assert.h>
 
 #include "inputmapping.h"
-#include "ui/actionkeymapping.h"
+#include "input/actionkeymapping.h"
 
 
 InputConfigWriter::InputConfigWriter(const std::string& file):
@@ -12,7 +12,7 @@ InputConfigWriter::InputConfigWriter(const std::string& file):
 {
     m_file.open(file, std::ios::out);
     assert(m_file.is_open());
-    if (m_file.is_open()) { 
+    if (m_file.is_open()) {
         m_file << "[input]" << std::endl;
     } else {
         glow::warning("InputConfigWriter: cant open file %;", file);
@@ -38,7 +38,7 @@ void InputConfigWriter::write(const std::string& name, const InputMapping& mappi
     std::string unPrefixedName = name;
     unPrefixedName.erase(unPrefixedName.begin(), unPrefixedName.begin() + 6); // remove "input."
     m_file << unPrefixedName << " = InputMapping(";
-    m_file << std::setprecision(2);
+    m_file << std::setprecision(1) << std::fixed;
     m_file << static_cast<int>(mapping.type()) << ",";
     m_file << mapping.index() << ",";
     m_file << mapping.maxValue() << ",";

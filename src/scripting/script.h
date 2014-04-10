@@ -2,31 +2,56 @@
 
 #include <memory>
 #include <string>
+#include <vector>
+
+#include "utils/handle/handle.h"
 
 
+class Bindings;
 class LuaWrapper;
 
-/*
-    Handle to a lua script
-*/
+enum class ScriptState {
+    Idle,
+    Running,
+    Stopped
+};
+
+/**
+ *  Handle to a lua script
+ */
 class Script {
 public:
     Script();
     ~Script();
 
-    bool started() const;
+    void start();
+    void stop();
+
+    ScriptState state() const;
 
     virtual void load(const std::string& path);
     virtual void loadString(const std::string& script);
 
-    void start();
+    void update(float deltaSec);
+
+    LuaWrapper& lua();
+
+    Handle<Script>& handle();
 
     const std::string& debugStatus();
     int apiSetDebugStatus(const std::string& string);
 
+
 protected:
     std::unique_ptr<LuaWrapper> m_lua;
-    bool m_started;
+    Handle<Script> m_handle;
+    ScriptState m_state;
+
     std::string m_debugStatus;
+    std::vector<std::unique_ptr<Bindings>> m_bindings;
+
+
+    void addBindings(Bindings* bindings);
 };
+
 

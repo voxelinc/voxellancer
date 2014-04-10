@@ -6,8 +6,11 @@
 class Voxel;
 class WorldObject;
 
-class Impulse
-{
+/**
+ * Describse a physical impulse to a specific Voxel of a WorldObject
+ * Impulses on the same Voxel are accumulated in the ImpulseAccumulator using add()
+ */
+class Impulse {
 public:
     Impulse(WorldObject* worldObject, Voxel* voxel, const glm::vec3& speed, float mass, const glm::vec3& normal);
 
@@ -22,7 +25,6 @@ public:
     float mass() const;
 
     const glm::vec3& normal() const;
-
 
     void add(const Impulse& impulse);
 

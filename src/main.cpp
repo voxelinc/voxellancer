@@ -38,8 +38,8 @@
 #include "gamestate/gameplay/gameplayscene.h"
 
 #include "utils/filesystem.h"
-#include "world/world.h"
 
+#include "world/world.h"
 
 static GLint MajorVersionRequire = 3;
 static GLint MinorVersionRequire = 1;
@@ -91,13 +91,11 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
         (glfwGetKey(window, GLFW_KEY_RIGHT_ALT) == GLFW_PRESS))) {
         toggleFullScreen();
     }
-    if (key >= GLFW_KEY_F1 && key <= GLFW_KEY_F4 && action == GLFW_PRESS) {
+    if (key >= GLFW_KEY_F1 && key <= GLFW_KEY_F7 && action == GLFW_PRESS) {
         game->gamePlay().loadScenario(key - GLFW_KEY_F1);
     }
-    if (key == GLFW_KEY_F5 && action == GLFW_PRESS) {
+    if (key == GLFW_KEY_F8 && action == GLFW_PRESS) {
         glowutils::File::reloadAll();
-    }
-    if (key == GLFW_KEY_F6 && action == GLFW_PRESS) {
         PropertyManager::instance()->load("data/config.ini");
     }
     if (key == GLFW_KEY_F9 && action == GLFW_PRESS) {
@@ -105,6 +103,9 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
     }
     if (key >= GLFW_KEY_1 && key <= GLFW_KEY_9 && action == GLFW_PRESS) {
         game->gamePlay().scene().setOutputBuffer(key-GLFW_KEY_1);
+    }
+    if (key == GLFW_KEY_T && action == GLFW_PRESS) {
+        game->gamePlay().scene().setWorldTreeRendererEnabled(!game->gamePlay().scene().worldTreeRendererEnabled());
     }
 
 	game->gamePlay().running().input().keyCallback(key, scancode, action, mods);
@@ -153,7 +154,6 @@ static void mainloop() {
         glfwPollEvents();
     }
 }
-
 
 void toggleFullScreen() {
     ContextProvider::instance()->toggleFullScreen();
