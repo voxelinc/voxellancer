@@ -79,8 +79,6 @@ go_bandit([](){
 
         before_each([&]() {
             World::reset();
-            world = World::instance();
-            world->setPlayer(*new Player());
         });
 
         after_each([&]() {
