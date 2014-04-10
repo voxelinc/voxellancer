@@ -4,6 +4,7 @@
 #include <unordered_set>
 #include <set>
 
+
 class Voxel;
 class WorldTree;
 class WorldTreeNode;

@@ -96,7 +96,7 @@ void GameScenario::spawnPoliceFleet() {
         glm::vec3(-600, 0, -400), glm::vec3(0, 100, -600),
         glm::vec3(-100, 150, -900) }, 500.0f));
 
-    Ship* capital = WorldElementBuilder("c306").buildShip();
+    Ship* capital = WorldElementBuilder("normandy").buildShip();
     capital->character()->setFaction(World::instance()->factionMatrix().policeFaction());
     capital->transform().setPosition(glm::vec3(0, 0, -200));
     capital->info().setName("Capital");

@@ -8,7 +8,7 @@ enum class WorldObjectType;
 
 class CollisionFilter {
 public:
-    CollisionFilter(WorldObject* owner, uint32_t collisionMask = 0xFFFFFFFF);
+    CollisionFilter(WorldObject* owner = nullptr, uint32_t collisionMask = 0xFFFFFFFF);
 
     uint32_t collisionMask() const;
 
