@@ -1,9 +1,11 @@
 #include "fighterfighttask.h"
-#include "utils/randfloat.h"
-#include "worldobject/ship.h"
+
 #include "ai/boardcomputer.h"
-#include "voxel/voxelclusterbounds.h"
 #include "utils/geometryhelper.h"
+#include "utils/randfloat.h"
+#include "voxel/voxelclusterbounds.h"
+#include "worldobject/ship.h"
+
 
 FighterFightTask::FighterFightTask(BoardComputer* boardComputer, const std::vector<Handle<WorldObject>>& targets) :
     FightTaskImplementation(boardComputer, targets)
@@ -110,7 +112,7 @@ void FighterFightTask::updateState() {
     }
 }
 
-float FighterFightTask::pointDistance(glm::vec3 point) {
+float FighterFightTask::pointDistance(const glm::vec3& point) {
     WorldObject* worldObject = boardComputer()->worldObject();
     return glm::length(worldObject->transform().position() - point) - worldObject->bounds().minimalGridSphere().radius() * worldObject->transform().scale();
 }

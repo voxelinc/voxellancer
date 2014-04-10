@@ -1,9 +1,10 @@
 #include "cruiserfighttask.h"
-#include "utils/randfloat.h"
-#include "worldobject/ship.h"
+
 #include "ai/boardcomputer.h"
-#include "voxel/voxelclusterbounds.h"
 #include "utils/geometryhelper.h"
+#include "utils/randfloat.h"
+#include "voxel/voxelclusterbounds.h"
+#include "worldobject/ship.h"
 
 
 CruiserFightTask::CruiserFightTask(BoardComputer* boardComputer, const std::vector<Handle<WorldObject>>& targets) :

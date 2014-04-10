@@ -12,9 +12,8 @@ class Ship;
 class WorldObject;
 
 /**
- *  FightTask for bigger ships and captials
+ *  FightTask for bigger ships and capitals
  */
-
 class CruiserFightTask : public FightTaskImplementation {
 public:
     CruiserFightTask(BoardComputer* boardComputer, const std::vector<Handle<WorldObject>>& targets);

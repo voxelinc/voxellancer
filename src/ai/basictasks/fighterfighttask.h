@@ -14,7 +14,6 @@ class WorldObject;
 /**
  *  FightTask for smaller and quicker ships
  */
-
 class FighterFightTask : public FightTaskImplementation {
 public:
     FighterFightTask(BoardComputer* boardComputer, const std::vector<Handle<WorldObject>>& targets);
@@ -35,7 +34,7 @@ protected:
     void setState(State newState);
 
     glm::vec3 findRandomEvasionPoint();
-    float pointDistance(glm::vec3 point);
+    float pointDistance(const glm::vec3& point);
     float angleToTarget();
 
     State m_state;
