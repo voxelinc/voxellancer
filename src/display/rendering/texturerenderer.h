@@ -24,13 +24,20 @@ class VoxelRenderer;
  *  Renders a texture at file on the screen quad
  *  Optionally including a status text
  */
-
 class TextureRenderer : public ContextDependant {
 public:
     TextureRenderer(const std::string& file);
 
+    /**
+     *  Draw the texture to the screen quad, setting the Z buffer to inf
+     */
     void draw();
-    void drawLoading(const std::string& status);
+
+    /**
+     *  Draw the texture, render Voxellancer in the top center and status in the bottom left,
+     *  then switch the buffers
+     */
+    void renderLoading(const std::string& status);
 
 
 protected:

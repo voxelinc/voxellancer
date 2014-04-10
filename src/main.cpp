@@ -220,16 +220,16 @@ int main(int argc, char* argv[]) {
 #endif
         TextureRenderer* r = new TextureRenderer("data/textures/loading.dds");
 
-        r->drawLoading("Loading... Objects");
+        r->renderLoading("Loading... Objects");
         PropertyDirectory("data/worldobjects").read();
-        r->drawLoading("Loading... Engines");
+        r->renderLoading("Loading... Engines");
         PropertyDirectory("data/equipment/engines").read();
-        r->drawLoading("Loading... Weapons");
+        r->renderLoading("Loading... Weapons");
         PropertyDirectory("data/equipment/weapons").read();
-        r->drawLoading("Loading... Projectiles");
+        r->renderLoading("Loading... Projectiles");
         PropertyDirectory("data/equipment/projectiles").read();
 
-        r->drawLoading("Loading... Game");
+        r->renderLoading("Loading... Game");
         game = new Game();
 
         if(clParser.hmd()) {
