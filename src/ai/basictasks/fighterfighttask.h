@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+
 #include <glm/glm.hpp>
 
 #include "ai/basictasks/fighttaskimplementation.h"
@@ -39,7 +40,9 @@ protected:
 
     State m_state;
     bool m_stateChanged;
-    float m_maxFireDistance, m_maxRocketDistance, m_minEnemyDistance;
+    float m_maxFireDistance;
+    float m_maxRocketDistance;
+    float m_minEnemyDistance;
     glm::vec3 m_positionBehindTarget;
 };
 

@@ -1,8 +1,8 @@
 #include "cruiserfighttask.h"
 
 #include "ai/boardcomputer.h"
-#include "utils/geometryhelper.h"
 #include "utils/randfloat.h"
+#include "utils/worldobjectgeometryhelper.h"
 #include "voxel/voxelclusterbounds.h"
 #include "worldobject/ship.h"
 
@@ -75,7 +75,7 @@ void CruiserFightTask::updateState() {
 
 float CruiserFightTask::anyTargetDistance() {
     WorldObject* worldObject = boardComputer()->worldObject();
-    WorldObject* closestTarget = GeometryHelper::closestObject(*worldObject, &m_targets);
+    WorldObject* closestTarget = WorldObjectGeometryHelper::closestObject(*worldObject, &m_targets);
     
     if (closestTarget) {
         return glm::length(worldObject->transform().position() - closestTarget->transform().position())

@@ -1,10 +1,10 @@
 #pragma once
 
 #include <vector>
+
 #include <glm/glm.hpp>
 
 #include "ai/aitask.h"
-
 #include "utils/handle/handle.h"
 
 
@@ -14,7 +14,6 @@ class WorldObject;
 /**
  *  Base Class for all FightTask variants, e.g. for FighterFightTask
  */
-
 class FightTaskImplementation : public AiTask {
 public:
     FightTaskImplementation(BoardComputer* boardComputer, const std::vector<Handle<WorldObject>>& targets);

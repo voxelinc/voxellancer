@@ -1,8 +1,9 @@
 #include "fighttaskimplementation.h"
 
 #include "ai/boardcomputer.h"
-#include "worldobject/worldobject.h"
 #include "voxel/voxelclusterbounds.h"
+#include "worldobject/worldobject.h"
+
 
 FightTaskImplementation::FightTaskImplementation(BoardComputer* boardComputer, const std::vector<Handle<WorldObject>>& targets) :
     AiTask(boardComputer),
