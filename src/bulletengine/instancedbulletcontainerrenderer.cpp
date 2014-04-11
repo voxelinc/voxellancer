@@ -127,11 +127,11 @@ void InstancedBulletContainerRenderer::allocateSlots(int slotCount) {
     int voxelCount = m_container.prototype().voxelCount();
     int voxelInstanced = slotCount * voxelCount;
 
-    m_gridBuffer->setData(voxelInstanced * sizeof(VoxelData), nullptr, GL_STREAM_DRAW);
+    m_gridBuffer->setData(voxelInstanced * sizeof(VoxelData)
+                          , nullptr, GL_STREAM_DRAW);
     for (int i = 0; i < slotCount; i++) {
         m_gridBuffer->setSubData(sizeof(VoxelData) * voxelCount, i * sizeof(VoxelData) * voxelCount, m_container.gridPrototype().data());
     }
-    m_gridBuffer->unbind();
 
     m_bulletBuffer->setData(slotCount * sizeof(InstancedBulletData), nullptr, GL_STREAM_DRAW);
 
@@ -170,8 +170,13 @@ void InstancedBulletContainerRenderer::beforeContextDestroy() {
     m_slotsInvalid = true;
     m_invalidSlotsBegin = 0;
     m_invalidSlotsEnd = m_slotCount - 1;
+    m_slotCount = 0;
+    m_vao = nullptr;
+    m_gridBuffer = nullptr;
+    m_bulletBuffer = nullptr;
 }
 
 void InstancedBulletContainerRenderer::afterContextRebuild() {
 
 }
+

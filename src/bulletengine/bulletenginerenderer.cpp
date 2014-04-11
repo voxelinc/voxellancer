@@ -63,6 +63,7 @@ void BulletEngineRenderer::initialize() {
 }
 
 void BulletEngineRenderer::initializeProgram() {
+    std::cout << "BulletEngineRenderer::initializeProgram" << std::endl;
     m_program = new glow::Program();
     m_program->attach(
         glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/shader/bulletengine/bullet.vert"),
@@ -71,17 +72,19 @@ void BulletEngineRenderer::initializeProgram() {
         glowutils::createShaderFromFile(GL_FRAGMENT_SHADER, "data/shader/lib/voxel.frag")
     );
 
+    m_program->link();
+
     m_program->bindFragDataLocation(0, "fragColor");
     m_program->setUniform("withBorder", 1.0f);
     m_program->setUniform("lightdir", Property<glm::vec3>::get("vfx.lightdir"));
-
-    m_program->link();
 }
 
 void BulletEngineRenderer::beforeContextDestroy() {
+    m_program = nullptr;
     m_initialized = false;
 }
 
 void BulletEngineRenderer::afterContextRebuild() {
+
 }
 
