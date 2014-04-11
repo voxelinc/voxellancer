@@ -167,6 +167,9 @@ void InstancedBulletContainerRenderer::setVertexAttribDivisor(const std::string&
 
 void InstancedBulletContainerRenderer::beforeContextDestroy() {
     m_initialized = false;
+    m_slotsInvalid = true;
+    m_invalidSlotsBegin = 0;
+    m_invalidSlotsEnd = m_slotCount - 1;
 }
 
 void InstancedBulletContainerRenderer::afterContextRebuild() {

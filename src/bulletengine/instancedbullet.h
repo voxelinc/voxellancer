@@ -33,6 +33,8 @@ public:
 
     const std::string& name() const;
 
+    bool alive() const;
+
     int bufferSlot() const;
     void setBufferSlot(int bufferSlot);
 

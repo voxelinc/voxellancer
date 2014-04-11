@@ -26,15 +26,21 @@ public:
 
     std::unordered_set<WorldObject*> intersectingWorldObjects();
 
+    WorldTreeNode* containingNode();
+
 
 protected:
     WorldTree* m_worldTree;
     WorldTreeNode* m_nodeHint;
     CollisionFilter* m_collisionFilter;
     const AbstractShape* m_shape;
+    WorldTreeNode* m_containingNode;
     bool m_queryInterrupted;
 
-    WorldTreeNode* getQueryRoot(WorldTreeNode* node = nullptr) const;
+    WorldTreeNode* getQueryRoot() const;
+    WorldTreeNode* getQueryRoot(WorldTreeNode* node) const;
+
+    void startQuery(std::function<void(WorldTreeGeode*)> onGeodeInteraction);
     void query(WorldTreeNode* node, std::function<void(WorldTreeGeode*)> onGeodeInteraction);
 };
 

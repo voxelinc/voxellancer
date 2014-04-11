@@ -7,7 +7,7 @@ layout(location = 0) out vec4 fragColor;
 layout(location = 1) out vec4 normalz;
 layout(location = 2) out vec4 emissiveness;
 
-in vec3 f_color;
+in vec4 f_color;
 flat in vec3 f_normal;
 in float f_emissiveness;
 in vec3 f_modelposition;
@@ -23,9 +23,9 @@ void main() {
     if (f_active < 0.5 || f_deathTime <= time) {
         discard;
     }
-    
-    fragColor = voxelFragmentColor(f_color, f_emissiveness, f_normal, f_modelposition);
-    emissiveness = voxelFragmentEmissiveness(f_color, f_emissiveness);
+
+    fragColor = voxelFragmentColor(f_color.xyz, f_emissiveness, f_normal, f_modelposition);
+    emissiveness = voxelFragmentEmissiveness(f_color.xyz, f_emissiveness);
     normalz = voxelFragmenNormalZ(f_normal);
 }
 

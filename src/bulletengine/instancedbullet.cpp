@@ -5,6 +5,7 @@
 #include "equipment/weapons/worldobjectbullet.h"
 
 #include "geometry/line.h"
+#include "geometry/point.h"
 
 #include "voxel/voxel.h"
 #include "voxel/voxeltree.h"
@@ -15,6 +16,7 @@
 #include "world/worldlogic.h"
 
 #include "worldtree/worldtree.h"
+#include "worldtree/worldtreenode.h"
 #include "worldtree/worldtreequery.h"
 
 #include "bulletengine.h"
@@ -41,6 +43,10 @@ InstancedBullet::InstancedBullet(const Handle<InstancedBulletContainer>& contain
 
 const std::string& InstancedBullet::name() const {
     return m_name;
+}
+
+bool InstancedBullet::alive() const {
+    return m_alive;
 }
 
 int InstancedBullet::bufferSlot() const {
@@ -83,13 +89,20 @@ void InstancedBullet::setSpeed(const Speed& speed) {
 }
 
 void InstancedBullet::update(float deltaSec) {
+    Bullet::update(deltaSec);
+
     glm::vec3 collisionLineBegin = m_collisionPoint;
     glm::vec3 collisionLineEnd = m_collisionPoint + m_speed.directional() * deltaSec;
 
-    Line collisionLine(collisionLineBegin, collisionLineEnd);
+    //Line collisionLine(collisionLineBegin, collisionLineEnd);
+    Point collisionPoint(collisionLineEnd);
 
-    WorldTreeQuery query(&World::instance()->worldTree(), &collisionLine, m_worldTreeHint.node(), &m_collisionFilter);
+    WorldTreeQuery query(&World::instance()->worldTree(), &collisionPoint, m_worldTreeHint.node(), &m_collisionFilter);
     std::unordered_set<Voxel*> intersectingVoxels = query.intersectingVoxels();
+
+    if (query.containingNode()) {
+        m_worldTreeHint = query.containingNode()->hint();
+    }
 
     if (intersectingVoxels.size() > 0) {
         Voxel* voxel = nearestVoxel(intersectingVoxels, collisionLineBegin);
@@ -109,7 +122,7 @@ void InstancedBullet::spawn() {
 }
 
 void InstancedBullet::remove() {
-    World::instance()->bulletEngine().remove(this);
+    m_alive = false;
 }
 
 float InstancedBullet::length() {

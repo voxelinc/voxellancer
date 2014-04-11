@@ -1,5 +1,7 @@
 #include "bulletengine.h"
 
+#include <iostream>
+
 #include "equipment/weapons/worldobjectbullet.h"
 
 #include "bulletenginerenderer.h"
@@ -48,8 +50,19 @@ InstancedBullet* BulletEngine::createBullet(const std::string& name) {
 }
 
 void BulletEngine::update(float deltaSec) {
+    std::list<InstancedBullet*> deadBullets;
+
+    std::cout << m_bullets.size() << std::endl;
+
     for (InstancedBullet* bullet : m_bullets) {
         bullet->update(deltaSec);
+        if (!bullet->alive()) {
+            deadBullets.push_back(bullet);
+        }
+    }
+
+    for (InstancedBullet* deadBullet : deadBullets) {
+        remove(deadBullet);
     }
 
     for (auto& pair : m_containers) {

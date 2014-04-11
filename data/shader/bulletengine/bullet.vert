@@ -19,7 +19,7 @@ layout(location = 12) in float v_active;
 
 
 // Output
-out vec3 f_color;
+out vec4 f_color;
 flat out vec3 f_normal;
 out float f_emissiveness;
 out vec3 f_modelposition;
@@ -38,19 +38,19 @@ vec4 quat(vec3 euler);
 void main() {
     f_active = v_active;
     f_deathTime = v_deathTime;
-    
+
     float deltaTime = time - v_originTime;
-    
+
     f_color = v_color;
     f_normal = v_normal;
     f_emissiveness = v_emissiveness;
     f_modelposition = v_vertex;
-    
-    vec3 bulletEulers = v_originEulers + v_angularSpeed * deltaTime * 0;
+
+    vec3 bulletEulers = v_originEulers + v_angularSpeed * deltaTime * 0.01;
     vec4 bulletOrientation = quat(bulletEulers);
-    
+
     vec3 bulletPosition = v_originPosition + v_directionalSpeed * deltaTime;
-    
+
     gl_Position = viewProjection * vec4(qtransform(bulletOrientation, v_vertex + v_gridCell - v_center) * scale + bulletPosition, 1.0f);
 }
 

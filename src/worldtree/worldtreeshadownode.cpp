@@ -17,5 +17,10 @@ WorldTreeShadowNode* WorldTreeShadowNode::parent() {
 }
 
 WorldTreeNode* WorldTreeShadowNode::node() {
-    return (m_node.valid() && m_node->active()) ? m_node.get() : m_parent->node();
+    if (m_node.valid() && m_node->active()) {
+        return m_node.get();
+    } else {
+        return m_parent ? m_parent->node() : nullptr;
+    }
 }
+
