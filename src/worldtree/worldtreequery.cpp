@@ -17,6 +17,11 @@
 
 
 
+WorldTreeQuery::WorldTreeQuery(WorldTree* worldTree, WorldTreeNode* nodeHint, CollisionFilter* collisionFilter):
+    WorldTreeQuery(worldTree, nullptr, nodeHint, collisionFilter)
+{
+}
+
 WorldTreeQuery::WorldTreeQuery(WorldTree* worldTree, const AbstractShape* shape, WorldTreeNode* nodeHint, CollisionFilter* collisionFilter):
     m_worldTree(worldTree),
     m_nodeHint(nodeHint),
@@ -25,6 +30,14 @@ WorldTreeQuery::WorldTreeQuery(WorldTree* worldTree, const AbstractShape* shape,
     m_queryInterrupted(false),
     m_containingNode(nullptr)
 {
+}
+
+const AbstractShape* WorldTreeQuery::shape() const {
+    return m_shape;
+}
+
+void WorldTreeQuery::setShape(const AbstractShape* shape) {
+    m_shape = shape;
 }
 
 bool WorldTreeQuery::areGeodesNear() {
@@ -116,6 +129,8 @@ WorldTreeNode* WorldTreeQuery::getQueryRoot(WorldTreeNode* node) const {
 }
 
 void WorldTreeQuery::startQuery(std::function<void(WorldTreeGeode*)> onGeodeInteraction) {
+    assert(m_shape);
+
     m_containingNode = getQueryRoot();
     query(m_containingNode, onGeodeInteraction);
 }

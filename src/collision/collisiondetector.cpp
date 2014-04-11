@@ -15,7 +15,7 @@
 #include "voxel/voxelclusterbounds.h"
 
 
-CollisionDetector::CollisionDetector(WorldObject& worldObject) :
+CollisionDetector::CollisionDetector(WorldObject& worldObject):
     m_voxelTree(new VoxelTree(&worldObject)),
     m_worldTree(nullptr),
     m_geode(nullptr),
@@ -23,8 +23,7 @@ CollisionDetector::CollisionDetector(WorldObject& worldObject) :
 {
 }
 
-CollisionDetector::~CollisionDetector() {
-}
+CollisionDetector::~CollisionDetector() = default;
 
 void CollisionDetector::addVoxel(Voxel* voxel) {
     m_voxelTree->insert(voxel);

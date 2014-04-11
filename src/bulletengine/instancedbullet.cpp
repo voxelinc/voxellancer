@@ -7,6 +7,8 @@
 #include "geometry/line.h"
 #include "geometry/point.h"
 
+#include "physics/physics.h"
+
 #include "voxel/voxel.h"
 #include "voxel/voxeltree.h"
 #include "voxel/voxeltreenode.h"
@@ -91,29 +93,23 @@ void InstancedBullet::setSpeed(const Speed& speed) {
 void InstancedBullet::update(float deltaSec) {
     Bullet::update(deltaSec);
 
-    glm::vec3 collisionLineBegin = m_collisionPoint;
-    glm::vec3 collisionLineEnd = m_collisionPoint + m_speed.directional() * deltaSec;
-
-    Line collisionLine(collisionLineBegin, collisionLineEnd);
-    //Point collisionPoint(collisionLineEnd);
+    Line collisionLine(m_collisionPoint, m_collisionPoint + m_speed.directional() * deltaSec);
 
     WorldTreeQuery query(&World::instance()->worldTree(), &collisionLine, m_worldTreeHint.node(), &m_collisionFilter);
+
     std::unordered_set<Voxel*> intersectingVoxels = query.intersectingVoxels();
+
+    if (!intersectingVoxels.empty()) {
+        applyDamage(nearestVoxel(intersectingVoxels, m_collisionPoint));
+        m_alive = false;
+        updateData();
+    }
 
     if (query.containingNode()) {
         m_worldTreeHint = query.containingNode()->hint();
     }
 
-    if (intersectingVoxels.size() > 0) {
-        Voxel* voxel = nearestVoxel(intersectingVoxels, collisionLineBegin);
-        WorldObject* worldObject = voxel->voxelTreeNode()->voxelTree()->worldObject();
-        DamageImpact damageImpact(worldObject, voxel, m_speed.directional(), 5);
-        World::instance()->worldLogic().addDamageImpact(damageImpact);
-        m_alive = false;
-        updateData();
-    }
-
-    m_collisionPoint = collisionLineEnd;
+    m_collisionPoint = collisionLine.b();
     m_transform.setPosition(m_transform.position() + m_speed.directional() * deltaSec);
 }
 
@@ -147,7 +143,16 @@ void InstancedBullet::updateCollisionPoint() {
     m_collisionPoint = m_transform.position() + m_transform.orientation() * glm::vec3(0, 0, -length());
 }
 
-Voxel* InstancedBullet::nearestVoxel(const std::unordered_set<Voxel*> voxels, const glm::vec3& point) {
+void InstancedBullet::applyDamage(Voxel* voxel) {
+    assert(m_container.valid());
+
+    WorldObject* worldObject = voxel->voxelTreeNode()->voxelTree()->worldObject();
+    DamageImpact damageImpact(worldObject, voxel, m_speed.directional() * m_container->prototype().physics().mass(), m_container->prototype().collisionFieldOfDamage());
+
+    World::instance()->worldLogic().addDamageImpact(damageImpact);
+}
+
+Voxel* InstancedBullet::nearestVoxel(const std::unordered_set<Voxel*> voxels, const glm::vec3& point) const {
     float minDistance = std::numeric_limits<float>::max();
     Voxel* nearestVoxel = nullptr;
 

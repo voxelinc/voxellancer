@@ -14,7 +14,6 @@ class Movement {
 
 public:
     Movement(WorldObject& worldObject, const Transform& originalTransform, const Transform& targetTransform);
-    virtual ~Movement();
 
     bool perform();
 

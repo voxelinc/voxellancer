@@ -15,7 +15,11 @@ class AbstractShape;
 
 class WorldTreeQuery {
 public:
+    WorldTreeQuery(WorldTree* worldTree, WorldTreeNode* nodeHint = nullptr, CollisionFilter* collisionFilter = nullptr);
     WorldTreeQuery(WorldTree* worldTree, const AbstractShape* shape, WorldTreeNode* nodeHint = nullptr, CollisionFilter* collisionFilter = nullptr);
+
+    const AbstractShape* shape() const;
+    void setShape(const AbstractShape* shape);
 
     bool areGeodesNear();
 

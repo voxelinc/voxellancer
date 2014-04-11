@@ -3,6 +3,7 @@
 #include <memory>
 #include <unordered_set>
 #include <string>
+#include <vector>
 
 #include "collision/collisionfilter.h"
 
@@ -10,6 +11,7 @@
 
 #include "geometry/transform.h"
 #include "geometry/speed.h"
+#include "geometry/point.h"
 
 #include "worldtree/worldtreehint.h"
 
@@ -42,6 +44,8 @@ public:
 
     InstancedBulletData* data();
 
+    const glm::vec3& collisionPoint();
+
     bool dataChanged() const;
     void setDataChanged(bool changed);
 
@@ -61,7 +65,8 @@ public:
 protected:
     void updateData();
     void updateCollisionPoint();
-    Voxel* nearestVoxel(const std::unordered_set<Voxel*> voxels, const glm::vec3& point);
+    Voxel* nearestVoxel(const std::unordered_set<Voxel*> voxels, const glm::vec3& point) const;
+    void applyDamage(Voxel* voxel);
 
 
 protected:
