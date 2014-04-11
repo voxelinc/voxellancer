@@ -94,10 +94,10 @@ void InstancedBullet::update(float deltaSec) {
     glm::vec3 collisionLineBegin = m_collisionPoint;
     glm::vec3 collisionLineEnd = m_collisionPoint + m_speed.directional() * deltaSec;
 
-    //Line collisionLine(collisionLineBegin, collisionLineEnd);
-    Point collisionPoint(collisionLineEnd);
+    Line collisionLine(collisionLineBegin, collisionLineEnd);
+    //Point collisionPoint(collisionLineEnd);
 
-    WorldTreeQuery query(&World::instance()->worldTree(), &collisionPoint, m_worldTreeHint.node(), &m_collisionFilter);
+    WorldTreeQuery query(&World::instance()->worldTree(), &collisionLine, m_worldTreeHint.node(), &m_collisionFilter);
     std::unordered_set<Voxel*> intersectingVoxels = query.intersectingVoxels();
 
     if (query.containingNode()) {
