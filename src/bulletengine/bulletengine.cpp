@@ -15,11 +15,7 @@ BulletEngine::BulletEngine():
 {
 }
 
-BulletEngine::~BulletEngine() {
-    for (InstancedBullet* bullet : m_bullets) {
-        delete bullet;
-    }
-}
+BulletEngine::~BulletEngine() = default;
 
 BulletEngineRenderer& BulletEngine::renderer() {
     return *m_renderer;
@@ -27,13 +23,7 @@ BulletEngineRenderer& BulletEngine::renderer() {
 
 void BulletEngine::add(InstancedBullet* bullet) {
     container(bullet->name())->add(bullet);
-    m_bullets.insert(bullet);
-}
-
-void BulletEngine::remove(InstancedBullet* bullet) {
-    assert(bullet->container());
-    bullet->container()->remove(bullet);
-    m_bullets.erase(bullet);
+    m_bullets.insert(std::unique_ptr<InstancedBullet>(bullet));
 }
 
 InstancedBulletContainer* BulletEngine::container(const std::string& name) {
@@ -50,19 +40,16 @@ InstancedBullet* BulletEngine::createBullet(const std::string& name) {
 }
 
 void BulletEngine::update(float deltaSec) {
-    std::list<InstancedBullet*> deadBullets;
+    for (auto iter = m_bullets.begin(); iter != m_bullets.end();) {
+        InstancedBullet* bullet = iter->get();
 
-    std::cout << m_bullets.size() << std::endl;
-
-    for (InstancedBullet* bullet : m_bullets) {
         bullet->update(deltaSec);
-        if (!bullet->alive()) {
-            deadBullets.push_back(bullet);
+        if (bullet->alive()) {
+            ++iter;
+        } else {
+            bullet->container()->remove(bullet);
+            iter = m_bullets.erase(iter);
         }
-    }
-
-    for (InstancedBullet* deadBullet : deadBullets) {
-        remove(deadBullet);
     }
 
     for (auto& pair : m_containers) {

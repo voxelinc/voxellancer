@@ -34,7 +34,7 @@ void WorldLogic::update(float deltaSecs) {
 
     damageForwardLoop(m_damageImpactGenerator.damageImpacts());
 
-  //  m_splitDetector.searchSplitOffs(m_damager.worldObjectModifications());
+    m_splitDetector.searchSplitOffs(m_damager.worldObjectModifications());
     m_splitter.split(m_splitDetector.splitDataList());
 
     m_world.god().scheduleSpawn(m_splitter.splitOffWorldObjects());

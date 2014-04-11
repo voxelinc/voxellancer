@@ -19,7 +19,6 @@ public:
     BulletEngineRenderer& renderer();
 
     void add(InstancedBullet* bullet);
-    void remove(InstancedBullet* bullet);
 
     InstancedBulletContainer* container(const std::string& name);
 
@@ -31,7 +30,7 @@ public:
 
 protected:
     std::unordered_map<std::string, std::unique_ptr<InstancedBulletContainer>> m_containers;
-    std::unordered_set<InstancedBullet*> m_bullets;
+    std::unordered_set<std::unique_ptr<InstancedBullet>> m_bullets;
     std::unique_ptr<BulletEngineRenderer> m_renderer;
 };
 
