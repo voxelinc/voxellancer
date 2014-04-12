@@ -37,6 +37,8 @@ public:
 
     bool alive() const;
 
+    void setCreator(WorldObject* creator) override;
+
     int bufferSlot() const;
     void setBufferSlot(int bufferSlot);
 
@@ -55,6 +57,9 @@ public:
     virtual void setTransform(const Transform& transform) override;
 
     virtual void setSpeed(const Speed& speed) override;
+
+    float emissiveness() const;
+    virtual const SoundProperties& hitSound() const override;
 
     virtual void spawn() override;
     virtual void remove() override;
@@ -83,7 +88,7 @@ protected:
     bool m_dataChanged;
 
     glm::vec3 m_collisionPoint;
-    CollisionFilter m_collisionFilter;
+    std::unique_ptr<CollisionFilter> m_collisionFilter;
     WorldTreeHint m_worldTreeHint;
 };
 

@@ -7,6 +7,7 @@
 
 #include "bulletengine/bulletengine.h"
 #include "bulletengine/instancedbullet.h"
+#include "bulletengine/genericinstancedbullet.h"
 
 #include "equipment/engine.h"
 #include "equipment/engineslot.h"
@@ -69,6 +70,7 @@ WorldObjectBullet* WorldElementBuilder::buildWorldObjectBullet() {
 
     bullet->setEmissiveness(Property<float>(m_name + ".general.emissiveness", 0.0f));
     bullet->setLifetime(Property<float>(m_name + ".general.lifetime"));
+
     bullet->setHitSound(SoundProperties::fromProperties(m_name + ".hitsound"));
 
     return bullet;

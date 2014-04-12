@@ -30,6 +30,7 @@ flat out float f_deathTime;
 uniform mat4 viewProjection;
 uniform float time;
 uniform float scale;
+uniform float emissiveness;
 
 
 vec3 qtransform(vec4 q, vec3 v);
@@ -43,7 +44,7 @@ void main() {
 
     f_color = v_color;
     f_normal = v_normal;
-    f_emissiveness = v_emissiveness;
+    f_emissiveness = clamp(emissiveness + v_emissiveness, 0, 1);
     f_modelposition = v_vertex;
 
     vec3 bulletEulers = v_originEulers + v_angularSpeed * deltaTime * 0.01;

@@ -8,16 +8,8 @@ GenericInstancedBullet::GenericInstancedBullet(const Handle<InstancedBulletConta
 {
 }
 
-const SoundProperties& GenericInstancedBullet::hitSound() const {
-    return m_hitSound;
-}
-
-void GenericInstancedBullet::setHitSound(const SoundProperties& hitSound) {
-    m_hitSound = hitSound;
-}
-
 void GenericInstancedBullet::spawnExplosion() {
-/*    VoxelExplosionGenerator generator(this);
+    VoxelExplosionGenerator generator(nullptr);
 
     generator.setPosition(transform().position());
     generator.setRadius(transform().scale());
@@ -29,6 +21,5 @@ void GenericInstancedBullet::spawnExplosion() {
     generator.setLifetime(0.7f, 0.2f);
 
     generator.spawn();
-*/
 }
 

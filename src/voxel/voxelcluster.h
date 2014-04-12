@@ -10,14 +10,14 @@
 
 #include "utils/vec3hash.h"
 
-/**
- *  Base class for anything that consits of Voxels
-*/
 
 class Voxel;
 class VoxelRenderData;
 class VoxelClusterBounds;
 
+/**
+ *  Base class for anything that consists of Voxels
+ */
 class VoxelCluster {
 public:
     VoxelCluster(float scale);

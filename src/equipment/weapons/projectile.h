@@ -2,6 +2,8 @@
 
 #include "geometry/speed.h"
 
+#include "sound/soundproperties.h"
+
 #include "worldobject/worldobject.h"
 
 
@@ -17,8 +19,6 @@ class Projectile {
 public:
     Projectile();
 
-    virtual const SoundProperties& hitSound() const = 0;
-
     virtual Transform& transform() = 0;
     virtual void setTransform(const Transform& transform) = 0;
 
@@ -29,6 +29,8 @@ public:
 
     float lifetime() const;
     void setLifetime(float lifetime);
+
+    virtual const SoundProperties& hitSound() const = 0;
 
     virtual void update(float deltaSec);
 
@@ -42,6 +44,7 @@ public:
 protected:
     WorldObject* m_creator;
     float m_lifetime;
+    SoundProperties m_hitSound;
 
     virtual void onLifetimeOver();
     virtual void spawnExplosion() = 0;

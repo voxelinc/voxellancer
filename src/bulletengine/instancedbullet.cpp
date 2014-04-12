@@ -4,6 +4,8 @@
 
 #include "equipment/weapons/worldobjectbullet.h"
 
+#include "collision/collisionfilterignoringcreator.h"
+
 #include "geometry/line.h"
 #include "geometry/point.h"
 
@@ -31,13 +33,14 @@ InstancedBullet::InstancedBullet(const Handle<InstancedBulletContainer>& contain
     m_bufferSlot(-1),
     m_dataChanged(true),
     m_alive(true),
+    m_collisionFilter(new CollisionFilter()),
     m_worldTreeHint(nullptr)
 {
     assert(m_container.valid());
     m_lifetime = m_container->prototype().lifetime();
 
-    m_collisionFilter.setCollideableWith(WorldObjectType::Rocket, false);
-    m_collisionFilter.setCollideableWith(WorldObjectType::Bullet, false);
+    m_collisionFilter->setCollideableWith(WorldObjectType::Rocket, false);
+    m_collisionFilter->setCollideableWith(WorldObjectType::Bullet, false);
 
     updateData();
     updateCollisionPoint();
@@ -90,27 +93,54 @@ void InstancedBullet::setSpeed(const Speed& speed) {
     updateData();
 }
 
+float InstancedBullet::emissiveness() const {
+    assert(m_container.valid());
+    return const_cast<InstancedBulletContainer*>(m_container.get())->prototype().emissiveness();
+}
+
+const SoundProperties& InstancedBullet::hitSound() const {
+    assert(m_container.valid());
+    return const_cast<InstancedBulletContainer*>(m_container.get())->prototype().hitSound();
+}
+
+void InstancedBullet::setCreator(WorldObject* creator) {
+    Bullet::setCreator(creator);
+
+    m_collisionFilter.reset(new CollisionFilterIgnoringCreator(
+        nullptr,
+        creator,
+        m_collisionFilter->collisionMask()
+    ));
+}
+
 void InstancedBullet::update(float deltaSec) {
     Bullet::update(deltaSec);
 
     Line collisionLine(m_collisionPoint, m_collisionPoint + m_speed.directional() * deltaSec);
 
-    WorldTreeQuery query(&World::instance()->worldTree(), &collisionLine, m_worldTreeHint.node(), &m_collisionFilter);
-
+    WorldTreeQuery query(&World::instance()->worldTree(), &collisionLine, m_worldTreeHint.node(), m_collisionFilter.get());
     std::unordered_set<Voxel*> intersectingVoxels = query.intersectingVoxels();
 
     if (!intersectingVoxels.empty()) {
-        applyDamage(nearestVoxel(intersectingVoxels, m_collisionPoint));
+        Voxel *voxel = nearestVoxel(intersectingVoxels, m_collisionPoint);
+
+        glm::vec3 collisionPointOffset(m_transform.position() - m_collisionPoint);
+        m_transform.setPosition(voxel->position() + collisionPointOffset); // so that the explosion can be spawned at the right place
+
+        applyDamage(voxel);
+
         m_alive = false;
         updateData();
-    }
 
-    if (query.containingNode()) {
-        m_worldTreeHint = query.containingNode()->hint();
-    }
+        onCollision();
+    } else {
+        if (query.containingNode()) {
+            m_worldTreeHint = query.containingNode()->hint();
+        }
 
-    m_collisionPoint = collisionLine.b();
-    m_transform.setPosition(m_transform.position() + m_speed.directional() * deltaSec);
+        m_collisionPoint = collisionLine.b();
+        m_transform.setPosition(m_transform.position() + m_speed.directional() * deltaSec);
+    }
 }
 
 void InstancedBullet::spawn() {

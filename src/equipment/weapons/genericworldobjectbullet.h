@@ -1,7 +1,5 @@
 #pragma once
 
-#include "sound/soundproperties.h"
-
 #include "equipment/weapons/worldobjectbullet.h"
 
 
@@ -19,7 +17,6 @@ public:
 
 protected:
     float m_emissiveness;
-    SoundProperties m_hitSound;
 
     virtual void spawnExplosion() override;
 };

@@ -91,6 +91,7 @@ void InstancedBulletContainer::update(float deltaSec) {
 
 void InstancedBulletContainer::draw(glow::Program* program) {
     program->setUniform("scale", m_prototype->transform().scale());
+    program->setUniform("emissiveness", m_prototype->emissiveness());
     m_renderer->draw();
 }
 
