@@ -16,11 +16,10 @@ class Ship;
 class Gun: public Weapon {
 public:
     Gun(const std::string& equipmentKey);
-
     ~Gun();
 
     virtual const SoundProperties& fireSound() const = 0;
-    
+
     virtual float bulletLifetime() const = 0;
     virtual float bulletSpeed() const = 0;
 
@@ -29,6 +28,7 @@ public:
     virtual void update(float deltaSec) override;
 
     virtual void setHardpoint(Hardpoint* hardpoint) override;
+
 
 protected:
     virtual Bullet* createBullet() = 0;
