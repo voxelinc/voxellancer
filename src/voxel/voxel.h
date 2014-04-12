@@ -14,7 +14,7 @@ class Sphere;
 
 class Voxel {
 public:
-    Voxel(const glm::ivec3& gridCell, uint32_t color = 0xFFFFFF, float mass = defaultMass(), float hp = defaultHp(), float emissiveness = 0);
+    Voxel(const glm::ivec3& gridCell, uint32_t color = 0xFFFFFF, float unscaledMatss = defaultUnscaledMass(), float hp = defaultHp(), float emissiveness = 0);
     Voxel(const Voxel& other);
     virtual ~Voxel();
 
@@ -34,7 +34,11 @@ public:
     void applyDamage(float deltaHp);
     virtual float damageForwardingDestructionDamage();
 
-    float normalizedMass() const;
+    /**
+     *  Mass of the voxel if it had a scale = 1.0f. Needs to be multiplied with scale^3 to get the
+     *  actual mass.
+     */
+    float unscaledMass() const;
 
     // These hooks apply only for WorldObjects and do not need to be called by pure VoxelClusters
     virtual void onRemoval();
@@ -47,12 +51,12 @@ protected:
     VoxelTreeNode *m_voxelTreeNode;
     Visuals m_visuals;
     float m_hp;
-    float m_normalizedMass;
+    float m_unscaledMass;
 
-    static Property<float>* s_defaultMass;
+    static Property<float>* s_defaultUnscaledMass;
     static Property<float>* s_defaultHp;
 
-    static float defaultMass();
+    static float defaultUnscaledMass();
     static float defaultHp();
 };
 

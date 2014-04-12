@@ -7,7 +7,7 @@
 
 #include "resource/worldobjectbuilder.h"
 
-#include "ui/objectinfo.h"
+#include "worldobject/worldobjectinfo.h"
 
 #include "world/world.h"
 #include "world/god.h"
@@ -24,7 +24,7 @@ MissionScenario::MissionScenario(GamePlay* gamePlay, const std::string& path):
 void MissionScenario::populateWorld() {
     Ship *playerShip = WorldObjectBuilder("mox").buildShip();
     playerShip->transform().setPosition(glm::vec3(0, 0, 10));
-    playerShip->objectInfo().setName("mox");
+    playerShip->info().setName("mox");
     m_world->god().scheduleSpawn(playerShip);
 
     World::instance()->player().setShip(playerShip);

@@ -6,7 +6,7 @@
 
 #include "factions/factionmatrix.h"
 
-#include "ui/objectinfo.h"
+#include "worldobject/worldobjectinfo.h"
 
 #include "world/world.h"
 
@@ -19,8 +19,8 @@ Ship::Ship():
     m_shipHandle(Handle<Ship>(this)),
     m_targetObjectHandle(Handle<WorldObject>(nullptr))
 {
-    m_objectInfo->setShowOnHud(true);
-    m_objectInfo->setCanLockOn(true);
+    m_info->setShowOnHud(true);
+    m_info->setCanLockOn(true);
 }
 
 Ship::~Ship() {

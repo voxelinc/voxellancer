@@ -9,15 +9,15 @@
 
 #include "utils/handle/handle.h"
 #include "physics/physics.h"
-#include "ui/objectinfo.h"
+#include "worldobject/worldobjectinfo.h"
 #include "voxel/voxel.h"
 #include "worldobjectcomponents.h"
 
 WorldObject::WorldObject() :
     VoxelCluster(1.0f),
-    m_physics(new Physics(*this, 1.0f)),
+    m_physics(new Physics(*this)),
     m_collisionDetector(new CollisionDetector(*this)),
-    m_objectInfo(new ObjectInfo()),
+    m_info(new WorldObjectInfo()),
     m_components(new WorldObjectComponents(this)),
     m_crucialVoxel(nullptr),
     m_collisionFieldOfDamage(glm::half_pi<float>()),
@@ -70,8 +70,8 @@ const Physics& WorldObject::physics() const {
     return *m_physics;
 }
 
-ObjectInfo& WorldObject::objectInfo() {
-    return *m_objectInfo;
+WorldObjectInfo& WorldObject::info() {
+    return *m_info;
 }
 
 WorldObjectComponents& WorldObject::components() {
@@ -135,7 +135,7 @@ Voxel* WorldObject::crucialVoxel() {
 
 void WorldObject::setCrucialVoxel(const glm::ivec3& cell) {
     assert(m_crucialVoxel == nullptr);
- 
+
     m_crucialVoxel = voxel(cell);
     m_crucialVoxelDestroyed = false;
 }

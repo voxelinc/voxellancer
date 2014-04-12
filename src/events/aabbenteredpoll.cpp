@@ -5,7 +5,7 @@
 #include "worldobject/worldobject.h"
 
 
-AABBEnteredPoll::AABBEnteredPoll(WorldObject* worldObject, const AABB& aabb, const std::function<void()>& callback):
+AABBEnteredPoll::AABBEnteredPoll(WorldObject* worldObject, const AABB& aabb, const Callback& callback):
     EventPoll(callback),
     m_worldObject(worldObject->handle()),
     m_aabb(aabb),
@@ -24,3 +24,4 @@ bool AABBEnteredPoll::poll() {
 void AABBEnteredPoll::specialOnCallback() {
     m_entered = true;
 }
+

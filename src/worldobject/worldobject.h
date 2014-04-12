@@ -16,7 +16,7 @@ class CockpitVoxel;
 class FuelVoxel;
 class CollisionFilter;
 class Physics;
-class ObjectInfo;
+class WorldObjectInfo;
 class VoxelCollision;
 class WorldObjectComponents;
 
@@ -59,7 +59,7 @@ public:
     Physics& physics();
     const Physics& physics() const;
 
-    ObjectInfo& objectInfo();
+    WorldObjectInfo& info();
 
     WorldObjectComponents& components();
     const WorldObjectComponents& components() const;
@@ -91,7 +91,7 @@ protected:
     std::unique_ptr<CollisionFilter> m_collisionFilter;
     std::unique_ptr<CollisionDetector> m_collisionDetector;
     std::unique_ptr<Physics> m_physics;
-    std::unique_ptr<ObjectInfo> m_objectInfo;
+    std::unique_ptr<WorldObjectInfo> m_info;
     std::unique_ptr<WorldObjectComponents> m_components;
 
     Handle<WorldObject> m_handle;
