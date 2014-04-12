@@ -85,8 +85,8 @@ void Rocket::update(float deltaSec) {
         m_boardComputer.update(deltaSec);
     } else {
         components().setEngineState(EngineState(
-            glm::vec3(0, 0, -1),
-            glm::vec3(0, 0, 0)
+                glm::vec3(0, 0, -1),
+                glm::vec3(0, 0, 0)
             ));
     }
 }

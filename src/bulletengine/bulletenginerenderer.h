@@ -19,6 +19,10 @@ class InstancedBullet;
 class InstancedBulletContainer;
 class VoxelMesh;
 
+/**
+ * Responsible for the Shader-Program drawing the InstancedBullets and calling
+ * draw() on the single InstancedBulletContainers
+ */
 class BulletEngineRenderer : public ContextDependant {
 public:
     BulletEngineRenderer();

@@ -29,6 +29,10 @@ struct InstancedBulletData {
     float deathTime;
 };
 
+/**
+ * A Bullet that is drawn instanced and caries no own voxel data but shares it with other
+ * InstancedBullets of the same type via an InstancedBulletContainer
+ */
 class InstancedBullet : public Bullet {
 public:
     InstancedBullet(const Handle<InstancedBulletContainer>& container, const std::string& name);

@@ -27,6 +27,9 @@ class InstancedBulletContainerRenderer;
 class VoxelMesh;
 class WorldObjectBullet;
 
+/**
+ * Hold a WorldObjectBullet as a prototype for an arbitrary number of InstancedBullets
+ */
 class InstancedBulletContainer : public HandleOwner {
 public:
     InstancedBulletContainer(BulletEngine& engine, const std::string& name);

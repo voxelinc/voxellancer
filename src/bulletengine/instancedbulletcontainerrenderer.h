@@ -19,6 +19,9 @@ namespace glow {
 class InstancedBulletContainer;
 class VoxelMesh;
 
+/**
+ * Renders all InstancedBullets belonging to a InstancedBulletContainer
+ */
 class InstancedBulletContainerRenderer : public ContextDependant {
 public:
     InstancedBulletContainerRenderer(InstancedBulletContainer& container);
