@@ -37,7 +37,7 @@ public:
      *  Draw the texture, render Voxellancer in the top center and status in the bottom left,
      *  then switch the buffers
      */
-    void renderLoading(const std::string& status);
+    void display(const std::string& status);
 
 
 protected:

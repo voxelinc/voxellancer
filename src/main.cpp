@@ -221,18 +221,18 @@ int main(int argc, char* argv[]) {
 #ifdef TRYCATCH
     try {
 #endif
-        TextureRenderer* r = new TextureRenderer("data/textures/loading.dds");
+        TextureRenderer* loadingScreen = new TextureRenderer("data/textures/loading.dds");
 
-        r->renderLoading("Loading... Objects");
+        loadingScreen->display("Loading... Objects");
         PropertyDirectory("data/worldobjects").read();
-        r->renderLoading("Loading... Engines");
+        loadingScreen->display("Loading... Engines");
         PropertyDirectory("data/equipment/engines").read();
-        r->renderLoading("Loading... Weapons");
+        loadingScreen->display("Loading... Weapons");
         PropertyDirectory("data/equipment/weapons").read();
-        r->renderLoading("Loading... Projectiles");
+        loadingScreen->display("Loading... Projectiles");
         PropertyDirectory("data/equipment/projectiles").read();
 
-        r->renderLoading("Loading... Game");
+        loadingScreen->display("Loading... Game");
         game = new Game();
 
         if(clParser.hmd()) {
@@ -243,7 +243,7 @@ int main(int argc, char* argv[]) {
             }
         }
 
-        delete r;
+        delete loadingScreen;
         delete initTimer;
 
         mainloop();

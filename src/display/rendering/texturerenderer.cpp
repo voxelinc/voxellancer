@@ -33,12 +33,12 @@ void TextureRenderer::initialize() {
     }
     texture->setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     texture->setParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    
-    
+
+
     m_quad = new glowutils::ScreenAlignedQuad(texture);
 }
 
-void TextureRenderer::renderLoading(const std::string& status) {
+void TextureRenderer::display(const std::string& status) {
     draw();
     m_voxelRenderer->prepareDraw(*m_camera.get(), false);
     m_voxelRenderer->program()->getUniform<glm::vec3>("lightdir")->set(glm::vec3(0, 0, 1));
