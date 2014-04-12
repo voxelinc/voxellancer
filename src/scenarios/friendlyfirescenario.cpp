@@ -17,6 +17,7 @@
 #include "equipment/weapons/gun.h"
 
 #include "factions/factionmatrix.h"
+#include "factions/factionrelation.h"
 
 #include "resource/worldobjectbuilder.h"
 
@@ -50,7 +51,7 @@ void FriendlyFireScenario::populateWorld() {
     attacker->setTask(std::make_shared<DefendAreaTask>(*attacker,
         std::list<glm::vec3>{glm::vec3(0, 0, 0)}, 500.0f));
     Ship* pirate = WorldObjectBuilder("piratelight").buildShip();
-    pirate->transform().setPosition(glm::vec3(0, 0, -200));
+    pirate->transform().setPosition(glm::vec3(0, -10, -200));
     pirate->transform().setOrientation(glm::quat(glm::vec3(0, 0, 1)));
     pirate->info().setName("pirate");
     pirate->info().setShowOnHud(true);
@@ -59,13 +60,23 @@ void FriendlyFireScenario::populateWorld() {
     pirate->squadLogic()->joinSquad(attacker);
     m_world->god().scheduleSpawn(pirate);
 
+    Ship *bigship = WorldObjectBuilder("bc304").buildShip();
+    bigship->transform().setPosition(glm::vec3(0, 0, 10));
+    bigship->transform().setOrientation(glm::quat(glm::vec3(0, 0, 1)));
+    bigship->info().setName("big");
+    bigship->info().setShowOnHud(true);
+    bigship->info().setShowOnHud(true);
+    bigship->character()->setFaction(World::instance()->factionMatrix().pirateFaction());
+    m_world->god().scheduleSpawn(bigship);
 
-    Ship *playerShip = WorldObjectBuilder("bc304").buildShip();
-    playerShip->transform().setPosition(glm::vec3(0, 0, 10));
+    Ship *playerShip = WorldObjectBuilder("basicship").buildShip();
+    playerShip->transform().setPosition(glm::vec3(100, 0, 0));
+    playerShip->transform().setOrientation(glm::quat(glm::vec3(0, glm::radians(70.0f), 0)));
     playerShip->info().setName("player");
-    playerShip->info().setShowOnHud(false);
-    m_world->god().scheduleSpawn(playerShip);
     World::instance()->player().setShip(playerShip);
+    m_world->god().scheduleSpawn(playerShip);
+
+    World::instance()->factionMatrix().getRelationToPlayer(World::instance()->factionMatrix().pirateFaction()).setFriendliness(100);
 
     glow::debug("Initial spawn");
     m_world->god().spawn();
