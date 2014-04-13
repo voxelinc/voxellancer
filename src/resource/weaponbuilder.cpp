@@ -17,10 +17,10 @@ WeaponBuilder::WeaponBuilder(const std::string& name):
 }
 
 Weapon* WeaponBuilder::build() {
-    /*
-        Currently only decides whether the weapons going to be a GenericWeapon
-        or a GenericRocketLauncher
-    */
+    /**
+     *  Currently only decides whether the weapons going to be a GenericWeapon
+     *  or a GenericRocketLauncher
+     */
     std::string type = Property<std::string>(m_name + ".general.type");
 
     if (type == "gun") {
@@ -29,9 +29,9 @@ Weapon* WeaponBuilder::build() {
         return buildGenericRocketLauncher();
     } else {
         glow::fatal("No such weapon '%;'", type);
+        assert(false);
+        return nullptr;
     }
-
-    return nullptr; // Should never be reached
 }
 
 GenericGun* WeaponBuilder::buildGenericGun() {

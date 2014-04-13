@@ -44,8 +44,8 @@ WorldObject* WorldObjectBuilder::build() {
     } else {
         glow::fatal("Unknown WorldObject-Type '%;'", type);
         assert(0); // Never to be reached
+        return nullptr;
     }
-    return nullptr;
 }
 
 Bullet* WorldObjectBuilder::buildBullet() {

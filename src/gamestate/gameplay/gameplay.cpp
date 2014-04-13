@@ -36,7 +36,7 @@ GamePlay::GamePlay(Game* game) :
     m_pausedState(new GamePlayPaused(this)),
     m_scene(new GamePlayScene(*this)),
     m_soundManager(new SoundManager()),
-    m_scenario(new ScriptedScenario(this, "data/scripts/scenarios/demo.lua"))
+    m_scenario(new FrozenGameScenario(this)) // ScriptedScenario(this, "data/scripts/scenarios/demo.lua"))
 {
     updateView();
     setInitialSubState(m_runningState);

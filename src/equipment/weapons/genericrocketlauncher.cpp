@@ -38,7 +38,12 @@ void GenericRocketLauncher::setRocketName(const std::string& rocketName) {
 }
 
 Rocket* GenericRocketLauncher::createRocket() {
-    Rocket* rocket = WorldObjectBuilder(m_rocketName).buildRocket();
+    WorldObject* object = WorldObjectBuilder(m_rocketName).build();
+    Rocket* rocket = dynamic_cast<Rocket*>(object);
+    if (!rocket) {
+        glow::fatal("Not a rocket '%;'", m_rocketName);
+        assert(false);
+    }
     return rocket;
 }
 
