@@ -16,7 +16,7 @@
 #include "world/world.h"
 
 static float s_detonationDistance = 100.0f;
-static float s_detonationFieldOfAim = glm::radians(30.0f);
+static float s_detonationFieldOfAim = glm::radians(25.0f);
 static float s_childrenCount = 5;
 static std::string s_childrenRocketName = "hornet";
 
