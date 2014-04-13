@@ -14,7 +14,7 @@ class WorldObject;
 */
 class HardpointAimHelper {
 public:
-    HardpointAimHelper(Hardpoint* hardpoint, WorldObject* targetObject);
+    HardpointAimHelper(Hardpoint* hardpoint, const WorldObject* targetObject);
 
     void aim(float maxOffset = 0.1f);
 
@@ -31,7 +31,7 @@ public:
 
 protected:
     Hardpoint* m_hardpoint;
-    WorldObject* m_targetObject;
+    const WorldObject* m_targetObject;
 
     bool m_aimed;
 

@@ -9,7 +9,7 @@
 #include "physics/physics.h"
 
 
-HardpointAimHelper::HardpointAimHelper(Hardpoint* hardpoint, WorldObject* targetObject):
+HardpointAimHelper::HardpointAimHelper(Hardpoint* hardpoint, const WorldObject* targetObject):
     m_hardpoint(hardpoint),
     m_targetObject(targetObject),
     m_bulletSpeed(0.0f),
@@ -18,7 +18,7 @@ HardpointAimHelper::HardpointAimHelper(Hardpoint* hardpoint, WorldObject* target
 {
     assert(m_hardpoint->weapon());
 
-    Gun& gun = dynamic_cast<Gun&>(*m_hardpoint->weapon().get());
+    const Gun& gun = dynamic_cast<Gun&>(*m_hardpoint->weapon().get());
 
     m_hardpointPosition = m_hardpoint->voxel()->position();
 
