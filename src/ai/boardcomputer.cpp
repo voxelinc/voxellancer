@@ -136,11 +136,13 @@ void BoardComputer::shootBullet(const std::vector<Handle<WorldObject>>& targets)
             if (glm::abs(angle) < max_angle) {
                 glm::vec3 offset = RandVec3::rand(0, 1) * glm::length(targetDirection) / 30.0f;
                 for (std::shared_ptr<Hardpoint> hardpoint : m_worldObject->components().hardpoints()) {
-                    if (hardpoint->weapon() && hardpoint->weapon()->type == WeaponType::Gun) {
-                        Gun* gun = dynamic_cast<Gun*>hardpoint->weapon();
+                    if (hardpoint->weapon() && hardpoint->weapon()->type() == WeaponType::Gun) {
+                        Gun* gun = dynamic_cast<Gun*>(hardpoint->weapon().get());
+                        if (gun->isBulletPathClear(target->position() + offset, true)) {
+                            gun->fireAtPoint(target->position() + offset);
+                        }
                     }
                 }
-                m_worldObject->components().fireAtPoint(target->position() + offset, true);
                 break;
             }
         }

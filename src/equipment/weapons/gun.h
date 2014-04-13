@@ -23,20 +23,21 @@ public:
     virtual float bulletLifetime() const = 0;
     virtual float bulletSpeed() const = 0;
 
-    virtual void fireAtPoint(const glm::vec3& point, bool checkFriendlyFire = false);
+    virtual void fireAtPoint(const glm::vec3& point);
 
     virtual void update(float deltaSec) override;
 
     virtual void setHardpoint(Hardpoint* hardpoint) override;
 
+    bool isBulletPathClear(const glm::vec3& point, bool checkFriendlyFire);
+
+    void createBulletPrototype();
+
 
 protected:
     virtual Bullet* createBullet() = 0;
     void setupBullet(Bullet* bullet, const glm::vec3& point);
-    bool isBulletPathClear(const glm::vec3& point, bool checkFriendlyFire);
     WorldObject* m_owner;
-
-    void createBulletPrototype();
 
     Bullet* bulletPrototype;
     float spawnDistance;

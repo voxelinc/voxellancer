@@ -41,11 +41,8 @@ Gun::Gun(const std::string& equipmentKey):
 
 Gun::~Gun() = default;
 
-void Gun::fireAtPoint(const glm::vec3& point, bool checkFriendlyFire) {
-    if (!bulletPrototype) {
-        createBulletPrototype();
-    }
-    if (canFire() && hardpoint()->inFieldOfAim(point) && isBulletPathClear(point, checkFriendlyFire)) {
+void Gun::fireAtPoint(const glm::vec3& point) {
+    if (canFire() && hardpoint()->inFieldOfAim(point)) {
         Bullet *bullet = createBullet();
         setupBullet(bullet, point);
 
