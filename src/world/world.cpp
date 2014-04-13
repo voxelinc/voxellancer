@@ -13,7 +13,7 @@
 #include "worldobject/ship.h"
 #include "worldobject/worldobject.h"
 
-#include "skybox.h"
+#include "display/rendering/skybox.h"
 #include "scripting/scriptengine.h"
 
 #include "worldlogic.h"

@@ -4,7 +4,7 @@
 #include "geometry/capsule.h"
 #include "worldtree/worldtreequery.h"
 #include "worldobject/worldobject.h"
-#include "utils/geometryhelper.h"
+#include "utils/worldobjectgeometryhelper.h"
 #include "collision/collisionfilter.h"
 #include "collision/collisiondetector.h"
 #include "worldtree/worldtreegeode.h"
@@ -12,7 +12,7 @@
 
 
 glm::vec3 SimpleWayfind::calculateTravelPoint(WorldObject& object, glm::vec3 targetPoint) {
-    //Wayfinding doesn't care about projectiles
+    // Wayfinding doesn't care about projectiles
     CollisionFilter filter(object.collisionFilter());
     filter.setCollideableWith(WorldObjectType::Bullet, false);
     filter.setCollideableWith(WorldObjectType::Rocket, false);
@@ -21,7 +21,7 @@ glm::vec3 SimpleWayfind::calculateTravelPoint(WorldObject& object, glm::vec3 tar
     std::unordered_set<WorldObject*> obstacles = WorldTreeQuery(&World::instance()->worldTree(), &capsule, object.collisionDetector().geode()->hint().node(), &filter).intersectingWorldObjects();
 
     if (!obstacles.empty()) {
-        WorldObject* obstacle = GeometryHelper::closestObject(object, &obstacles);
+        WorldObject* obstacle = WorldObjectGeometryHelper::closestObject(object, &obstacles);
         if (obstacle) {
             targetPoint = calculateEvasionPointFor(object, *obstacle, targetPoint);
         }

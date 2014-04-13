@@ -26,7 +26,7 @@
 #include "world/world.h"
 #include "worldobject/worldobject.h"
 
-#include "skybox.h"
+#include "display/rendering/skybox.h"
 #include "player.h"
 
 

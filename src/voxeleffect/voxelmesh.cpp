@@ -91,6 +91,6 @@ void VoxelMesh::beforeContextDestroy() {
 }
 
 void VoxelMesh::afterContextRebuild() {
-
+    // lazy init
 }
 
