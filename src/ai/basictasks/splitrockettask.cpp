@@ -1,6 +1,6 @@
 #include "splitrockettask.h"
 
-#include "equipment\weapons\splitrocket.h"
+#include "equipment/weapons/splitrocket.h"
 #include "ai/boardcomputer.h"
 #include "utils/geometryhelper.h"
 #include "utils/worldobjectgeometryhelper.h"
