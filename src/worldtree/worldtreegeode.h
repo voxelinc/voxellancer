@@ -4,6 +4,8 @@
 
 #include "geometry/aabb.h"
 
+#include "worldtreehint.h"
+
 
 class WorldTreeNode;
 class WorldObject;
@@ -15,12 +17,9 @@ public:
     virtual ~WorldTreeGeode();
 
     WorldObject* worldObject();
-    const WorldObject* worldObject() const;
-    void setWorldObject(WorldObject* worldObject);
 
-    WorldTreeNode* containingNode();
-    const WorldTreeNode* containingNode() const;
-    void setContainingNode(WorldTreeNode* node);
+    WorldTreeHint& hint();
+    void setHint(const WorldTreeHint& hint);
 
     const IAABB& aabb() const;
     void setAABB(const IAABB& aabb);
@@ -31,9 +30,10 @@ public:
 
     bool isPassive();
 
+
 protected:
     WorldObject* m_worldObject;
-    WorldTreeNode* m_containingNode;
+    WorldTreeHint m_hint;
     IAABB m_aabb;
     bool m_passive;
     std::list<WorldTreeNode*> m_intersectingLeafs;
