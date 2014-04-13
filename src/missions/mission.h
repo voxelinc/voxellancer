@@ -18,7 +18,7 @@ enum class MissionState {
     Succeeded
 };
 
-class Mission : public WorldElement, public Scriptable {
+class Mission : public WorldElement {
 public:
     Mission(World* world, const std::string& path);
     ~Mission();
@@ -43,8 +43,7 @@ public:
 
 
 protected:
-    void onActivationInWorld() override;
-    void onDeactivationInWorld() override;
+    void over();
 
 
 protected:

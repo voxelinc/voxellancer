@@ -4,6 +4,8 @@
 
 #include "factions/factionmatrix.h"
 
+#include "missions/missionsystem.h"
+
 #include "voxeleffect/voxelparticleengine.h"
 
 #include "worldtree/worldtree.h"
@@ -17,7 +19,7 @@
 #include "worldlogic.h"
 #include "god.h"
 #include "player.h"
-#include "missions/missionsystem.h"
+#include "worldelement.h"
 
 
 World *World::s_instance = nullptr;
@@ -101,6 +103,27 @@ void World::update(float deltaSecs) {
     for (WorldObject *worldObject : m_worldObjects) {
         worldObject->update(deltaSecs);
     }
+
+    for (auto iter = m_elements.begin(); iter != m_elements.end(); ) {
+        WorldElement* element = *iter;
+
+        element->update(deltaSecs);
+
+        if (!element->activeInWorld()) {
+            if (element->scriptKey() != Scriptable::INVALID_KEY) {
+                m_scriptEngine->unregisterScriptable(element);
+            }
+
+            iter = m_elements.erase(iter);
+        } else {
+            ++iter;
+        }
+    }
+
+    for (WorldElement* element : m_scheduledElements) {
+        m_elements.push_back(element);
+    }
+    m_scheduledElements.clear();
 }
 
 float World::deltaSec() const {
@@ -121,6 +144,11 @@ void World::reset(bool showWarning) {
     }
     delete s_instance;
     s_instance = nullptr;
+}
+
+void World::addElement(WorldElement* element) {
+    m_scriptEngine->registerScriptable(element);
+    m_scheduledElements.push_back(element);
 }
 
 void World::addWorldObject(WorldObject* worldObject) {

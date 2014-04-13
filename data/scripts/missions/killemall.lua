@@ -2,7 +2,7 @@ function main()
 	showMessage("Welcome to a mission script")
 	
 	ships = {}
-	count = 6
+	count = 1
 	radius = 40
 	
 	playerPos = position(playerShip())

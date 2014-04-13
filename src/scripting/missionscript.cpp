@@ -27,6 +27,6 @@ void MissionScript::onSuccess() {
 void MissionScript::onFailure() {
     if (m_lua->hasFunction("onFailure")) {
         m_lua->call("onFailure");
-    }
+     }
 }
 

@@ -32,6 +32,8 @@ apikey ExternalMissionBindings::apiMissionStart(const std::string& name) {
     auto mission = new Mission(World::instance(), path);
     mission->activateInWorld();
 
+    mission->start();
+
     return mission->scriptKey();
 }
 
@@ -49,7 +51,7 @@ apikey ExternalMissionBindings::createStatePoll(apikey missionKey, MissionState 
        return -1;
     }
 
-    auto poll = std::make_shared<MissionStatePoll>(mission->handle<Mission>(), state, createCallback(callback, missionKey));
+    auto poll = std::make_shared<MissionStatePoll>(*mission, state, createCallback(callback, missionKey));
 
     World::instance()->eventPoller().addPoll(poll);
     m_script.addLocal(poll);

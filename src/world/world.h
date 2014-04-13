@@ -1,7 +1,10 @@
 #pragma once
 
+#include <list>
 #include <memory>
 #include <unordered_set>
+
+#include <glow/ref_ptr.h>
 
 
 class EventPoller;
@@ -15,6 +18,7 @@ class ScriptEngine;
 class VoxelParticleEngine;
 class WorldObject;
 class WorldLogic;
+class WorldElement;
 class WorldTree;
 
 class World {
@@ -43,14 +47,18 @@ public:
     float deltaSec() const;
 
     static World* instance();
-    static void reset(bool showWarning=true);
-    
+
+    static void reset(bool showWarning = true);
+
+    void addElement(WorldElement* element);
+
 
 protected:
     friend class God;
 
     void addWorldObject(WorldObject* worldObject);
     void removeWorldObject(WorldObject* worldObject);
+
 
 protected:
     static World* s_instance;
@@ -67,6 +75,9 @@ protected:
     std::unique_ptr<FactionMatrix> m_factionMatrix;
     std::unique_ptr<EventPoller> m_eventPoller;
     std::unique_ptr<MissionSystem> m_missionSystem;
+
+    std::list<glow::ref_ptr<WorldElement>> m_elements;
+    std::list<glow::ref_ptr<WorldElement>> m_scheduledElements;
 
     std::unordered_set<WorldObject*> m_worldObjects;
     std::unordered_set<Ship*> m_ships;

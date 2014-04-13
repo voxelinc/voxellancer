@@ -16,6 +16,11 @@ function startFightingMission(player)
 	onMissionSuccess(mission, "firework")
 end
 
+function startEasyFightingMission(player)
+	local mission = missionStart("easymission")
+	onMissionFailure(mission, "reset")
+end
+
 function reset(dummy) 
 	missionStartBanner = createWorldObject("missionstart")
 	setShowOnHud(missionStartBanner, true)
@@ -32,8 +37,11 @@ function firstChallengeTaken(dummy)
 end
 
 function startSecondChallenge()
-	print("lol, mission over")
-	
+    initDifficultSecondChallenge()
+    initEasySecondChallenge()
+end
+
+function initDifficultSecondChallenge() 	
 	dareyouBanner = createWorldObject("idareyou")
 	setShowOnHud(dareyouBanner, true)
 	setCanLockOn(dareyouBanner, false)
@@ -42,6 +50,14 @@ function startSecondChallenge()
 	spawn(dareyouBanner)
 	
 	onAABBEntered(playerShip(), vec3(-120, 30, -380), vec3(-80, 70, -340), "startFightingMission")
+end
+
+function initEasySecondChallenge() 
+    tortess = createShip("startortress")    
+	setPosition(tortess, vec3(200, 50, -300))
+	spawn(tortess)
+        
+	onAABBEntered(playerShip(), vec3(180, 30, -320), vec3(220, 70, -280), "startEasyFightingMission")
 end
 
 function secondChallengeTaken(dummy) 

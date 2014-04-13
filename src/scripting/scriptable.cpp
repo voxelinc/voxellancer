@@ -13,11 +13,7 @@ Scriptable::Scriptable():
 
 }
 
-Scriptable::~Scriptable() {
-    if (m_key != INVALID_KEY) {
-        World::instance()->scriptEngine().unregisterScriptable(this);
-    }
-}
+Scriptable::~Scriptable() = default;
 
 int Scriptable::scriptKey() const {
     return m_key;

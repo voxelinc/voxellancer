@@ -2,6 +2,8 @@
 
 #include <glow/Referenced.h>
 
+#include "scripting/scriptable.h"
+
 #include "utils/handle/handleowner.h"
 
 
@@ -19,9 +21,10 @@ class World;
  * call deactivateInWorld(). When no glow::ref_ptr<> point to the WorldElement anymore it will be
  * deleted automatically.
  */
-class WorldElement : public glow::Referenced, public HandleOwner {
+class WorldElement : public glow::Referenced, public HandleOwner, public Scriptable {
 public:
     WorldElement(World* world);
+    virtual ~WorldElement();
 
     World* world();
 
@@ -30,10 +33,12 @@ public:
     void activateInWorld();
     void deactivateInWorld();
 
+    virtual void update(float deltaSec);
+
 
 protected:
-    virtual void onActivationInWorld() = 0;
-    virtual void onDeactivationInWorld() = 0;
+    virtual void onActivationInWorld();
+    virtual void onDeactivationInWorld();
 
 
 protected:

@@ -41,7 +41,8 @@ void Mission::succeed() {
 
     m_state = MissionState::Succeeded;
     m_script->onSuccess();
-    m_script->stop();
+
+    over();
 }
 
 void Mission::fail() {
@@ -49,18 +50,16 @@ void Mission::fail() {
 
     m_state = MissionState::Failed;
     m_script->onFailure();
-    m_script->stop();
+
+    over();
 }
 
 void Mission::update(float deltaSec) {
 
 }
 
-void Mission::onActivationInWorld() {
-    m_world->missionSystem().addMission(this);
-}
-
-void Mission::onDeactivationInWorld() {
-    m_world->missionSystem().removeMission(this);
+void Mission::over() {
+    m_script->stop();
+    deactivateInWorld();
 }
 

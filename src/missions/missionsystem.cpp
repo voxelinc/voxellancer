@@ -14,7 +14,7 @@ MissionSystem::MissionSystem()
 MissionSystem::~MissionSystem() = default;
 
 void MissionSystem::update(float deltaSec) {
-    for (auto iter = m_missions.begin(); iter != m_missions.end(); ) {
+/*    for (auto iter = m_missions.begin(); iter != m_missions.end(); ) {
         Mission* mission = *iter;
 
         mission->update(deltaSec);
@@ -24,17 +24,17 @@ void MissionSystem::update(float deltaSec) {
         } else {
             ++iter;
         }
-    }
+    }*/
 }
 
 void MissionSystem::addMission(Mission* mission) {
-    m_missions.push_back(mission);
+    /*m_missions.push_back(mission);
     World::instance()->scriptEngine().registerScriptable(mission);
-    mission->start();
+    mission->start();*/
 }
 
 void MissionSystem::removeMission(Mission* mission) {
-    m_missions.remove(mission);
-    World::instance()->scriptEngine().unregisterScriptable(mission);
+/*    m_missions.remove(mission);
+    World::instance()->scriptEngine().unregisterScriptable(mission);*/
 }
 
