@@ -29,12 +29,10 @@ BaseScenario::BaseScenario(GamePlay* gamePlay) :
 }
 
 void BaseScenario::load() {
+    createWorld();
+
     {
-        glowutils::AutoTimer timer("Creating World took");
-        createWorld();
-    }
-    {
-        glowutils::AutoTimer timer("Populating World took");
+        glowutils::AutoTimer timer("Populating World");
         populateWorld();
         m_world->god().spawn();
         m_world->scriptEngine().start();
