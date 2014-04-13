@@ -10,7 +10,6 @@
 class EventPoller;
 class FactionMatrix;
 class God;
-class MissionSystem;
 class Player;
 class Ship;
 class Skybox;
@@ -35,7 +34,6 @@ public:
     VoxelParticleEngine& particleEngine();
     FactionMatrix& factionMatrix();
     EventPoller& eventPoller();
-    MissionSystem& missionSystem();
 
     std::unordered_set<WorldObject*>& worldObjects();
     std::unordered_set<Ship*>& ships();
@@ -75,7 +73,6 @@ protected:
     std::unique_ptr<VoxelParticleEngine> m_particleEngine;
     std::unique_ptr<FactionMatrix> m_factionMatrix;
     std::unique_ptr<EventPoller> m_eventPoller;
-    std::unique_ptr<MissionSystem> m_missionSystem;
 
     std::list<glow::ref_ptr<WorldElement>> m_elements;
     std::unordered_set<WorldElement*> m_scheduledRemovals;

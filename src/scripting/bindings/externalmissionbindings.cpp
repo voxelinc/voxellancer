@@ -3,8 +3,6 @@
 #include "events/eventpoller.h"
 #include "events/missionstatepoll.h"
 
-#include "missions/missionsystem.h"
-
 #include "scripting/scriptengine.h"
 #include "scripting/gameplayscript.h"
 #include "scripting/elematelua/luawrapper.h"

@@ -10,8 +10,6 @@
 
 #include "player.h"
 
-#include "missionsystem.h"
-
 
 Mission::Mission(World* world, const std::string& path):
     WorldElement(world),
