@@ -29,7 +29,7 @@ public:
 
     virtual void setHardpoint(Hardpoint* hardpoint) override;
 
-    bool isBulletPathClear(const glm::vec3& point, bool checkFriendlyFire);
+    bool isBulletPathClear(const glm::vec3& point, bool checkFriendlyFire = false);
 
     void createBulletPrototype();
 
