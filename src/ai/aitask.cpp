@@ -12,10 +12,6 @@ BoardComputer* AiTask::boardComputer() {
     return m_boardComputer;
 }
 
-void AiTask::update(float deltaSec) {
-
-}
-
 bool AiTask::isFinished() {
     return false;
 }
