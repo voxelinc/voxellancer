@@ -1,7 +1,5 @@
 #include "genericrocket.h"
 
-#include "property/property.h"
-
 #include "voxeleffect/voxelexplosiongenerator.h"
 #include "sound/soundmanager.h"
 

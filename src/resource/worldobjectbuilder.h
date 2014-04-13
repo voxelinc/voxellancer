@@ -21,6 +21,7 @@ public:
 
     Bullet* buildBullet();
     Rocket* buildRocket();
+    Rocket* buildSplitRocket();
     Ship* buildShip();
     WorldObject* buildWorldObject();
 

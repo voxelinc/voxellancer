@@ -13,6 +13,7 @@
 #include "equipment/weapon.h"
 #include "equipment/weapons/genericbullet.h"
 #include "equipment/weapons/genericrocket.h"
+#include "equipment/weapons/splitrocket.h"
 #include "worldobject/worldobjectinfo.h"
 #include "worldobject/genericship.h"
 #include "worldobject/genericworldobject.h"
@@ -35,8 +36,10 @@ WorldObject* WorldObjectBuilder::build() {
 
     if(type == "bullet") {
         return buildBullet();
-    } else if(type == "rocket") {
+    } else if (type == "rocket") {
         return buildRocket();
+    } else if (type == "splitrocket") {
+        return buildSplitRocket();
     } else if(type == "ship") {
         return buildShip();
     } else if(type == "other") {
@@ -60,6 +63,15 @@ Bullet* WorldObjectBuilder::buildBullet() {
 
 Rocket* WorldObjectBuilder::buildRocket() {
     GenericRocket* rocket = makeWorldObject<GenericRocket>();
+
+    rocket->setLifetime(Property<float>(m_name + ".general.lifetime"));
+    rocket->setHitSound(SoundProperties::fromProperties(m_name + ".explosionsound"));
+
+    return rocket;
+}
+
+Rocket* WorldObjectBuilder::buildSplitRocket() {
+    SplitRocket* rocket = makeWorldObject<SplitRocket>();
 
     rocket->setLifetime(Property<float>(m_name + ".general.lifetime"));
     rocket->setHitSound(SoundProperties::fromProperties(m_name + ".explosionsound"));

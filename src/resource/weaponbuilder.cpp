@@ -20,7 +20,7 @@ Weapon* WeaponBuilder::build() {
     /**
      *  Currently only decides whether the weapons going to be a GenericWeapon
      *  or a GenericRocketLauncher
-     */
+    */
     std::string type = Property<std::string>(m_name + ".general.type");
 
     if (type == "gun") {
