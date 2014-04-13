@@ -26,6 +26,7 @@
 #include "ui/hud/hud.h"
 #include "display/viewer.h"
 
+#include "display/rendering/texturerenderer.h"
 
 
 GamePlay::GamePlay(Game* game) :
@@ -73,6 +74,10 @@ SoundManager& GamePlay::soundManager() {
 }
 
 void GamePlay::loadScenario(int i) {
+
+    TextureRenderer loadRenderer("data/textures/loading.dds");
+    loadRenderer.display("Loading Scenario...");
+
     m_soundManager->stopAll();
     m_scenario->clear();
     updateView();
