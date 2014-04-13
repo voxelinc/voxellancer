@@ -1,6 +1,9 @@
 #pragma once
 
+#include <list>
+
 #include <glow/Referenced.h>
+#include <glow/ref_ptr.h>
 
 #include "scripting/scriptable.h"
 
@@ -9,43 +12,31 @@
 
 class World;
 
-/**
- * Base class for all Objects that make up a running World
- * Offers glow::Referenced capabilities and a reference to the World
- * it exists in.
- * A WorldElement can either be an active in the World which means that it is
- * update()d and influences the World. In that case activeInWorld() returns true.
- * When created a activeInWorld() is false by default and activateInWorld() needs to be called
- * before the WorldElement can take active part in the World
- * When a WorldElement is no longer needed or shouldn't influence the World further,
- * call deactivateInWorld(). When no glow::ref_ptr<> point to the WorldElement anymore it will be
- * deleted automatically.
- */
 class WorldElement : public glow::Referenced, public HandleOwner, public Scriptable {
 public:
-    WorldElement(World* world);
+    explicit WorldElement(World* world);
+    explicit WorldElement(WorldElement* parent);
     virtual ~WorldElement();
 
     World* world();
+    void setWorld(World* world);
 
-    bool activeInWorld() const;
+    virtual bool isAddableToWorld(World* world) const;
 
-    void activateInWorld();
-    void deactivateInWorld();
+    virtual void onAddToWorld();
+    virtual void onRemovalFromWorld();
+
+    std::list<WorldElement*> children() const;
+
+    void addChild(WorldElement* child);
+    void removeChild(WorldElement* child);
 
     virtual void update(float deltaSec);
 
 
 protected:
-    virtual void onActivationInWorld();
-    virtual void onDeactivationInWorld();
-
-
-protected:
     World* m_world;
-
-
-private:
-    bool m_active;
+    WorldElement* m_parent;
+    std::list<glow::ref_ptr<WorldElement>> m_children;
 };
 

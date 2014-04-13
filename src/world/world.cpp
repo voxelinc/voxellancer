@@ -109,21 +109,16 @@ void World::update(float deltaSecs) {
 
         element->update(deltaSecs);
 
-        if (!element->activeInWorld()) {
-            if (element->scriptKey() != Scriptable::INVALID_KEY) {
-                m_scriptEngine->unregisterScriptable(element);
-            }
+        if (m_scheduledRemovals.find(element) != m_scheduledRemovals.end()) {
+            element->onRemovalFromWorld();
+            m_scriptEngine->unregisterScriptable(element);
+            element->setWorld(nullptr);
 
             iter = m_elements.erase(iter);
         } else {
             ++iter;
         }
     }
-
-    for (WorldElement* element : m_scheduledElements) {
-        m_elements.push_back(element);
-    }
-    m_scheduledElements.clear();
 }
 
 float World::deltaSec() const {
@@ -147,8 +142,20 @@ void World::reset(bool showWarning) {
 }
 
 void World::addElement(WorldElement* element) {
+    if (!element->isAddableToWorld(this)) {
+        glow::warning("World: Couldn't add WorldElement");
+        return;
+    }
+
+    m_elements.push_back(element);
     m_scriptEngine->registerScriptable(element);
-    m_scheduledElements.push_back(element);
+
+    element->setWorld(this);
+    element->onAddToWorld();
+}
+
+void  World::removeElement(WorldElement* element) {
+    m_scheduledRemovals.insert(element);
 }
 
 void World::addWorldObject(WorldObject* worldObject) {

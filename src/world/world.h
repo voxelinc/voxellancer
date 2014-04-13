@@ -51,6 +51,7 @@ public:
     static void reset(bool showWarning = true);
 
     void addElement(WorldElement* element);
+    void removeElement(WorldElement* element);
 
 
 protected:
@@ -77,7 +78,7 @@ protected:
     std::unique_ptr<MissionSystem> m_missionSystem;
 
     std::list<glow::ref_ptr<WorldElement>> m_elements;
-    std::list<glow::ref_ptr<WorldElement>> m_scheduledElements;
+    std::unordered_set<WorldElement*> m_scheduledRemovals;
 
     std::unordered_set<WorldObject*> m_worldObjects;
     std::unordered_set<Ship*> m_ships;

@@ -60,6 +60,8 @@ void Mission::update(float deltaSec) {
 
 void Mission::over() {
     m_script->stop();
-    deactivateInWorld();
+
+    assert(world());
+    world()->removeElement(this);
 }
 

@@ -29,6 +29,6 @@ void MissionScenario::populateWorld() {
 
     World::instance()->player().setShip(playerShip);
 
-    m_mission->activateInWorld();
+    m_mission->start();
 }
 

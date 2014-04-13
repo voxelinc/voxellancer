@@ -8,51 +8,70 @@
 
 
 WorldElement::WorldElement(World* world):
-    m_world(world),
-    m_active(false)
+    m_world(nullptr),
+    m_parent(nullptr)
 {
-    activateInWorld();
+    assert(world);
+    world->addElement(this);
 }
 
-WorldElement::~WorldElement() {
-    if (m_active) {
-        deactivateInWorld();
+WorldElement::WorldElement(WorldElement* parent):
+    WorldElement(parent->world())
+{
+    if (world()) {
+        parent->addChild(this);
     }
 }
+
+WorldElement::~WorldElement() = default;
 
 World* WorldElement::world() {
     return m_world;
 }
 
-bool WorldElement::activeInWorld() const {
-    return m_active;
+void WorldElement::setWorld(World* world) {
+    m_world = world;
 }
 
-void WorldElement::activateInWorld() {
-    m_active = true;
-
-    m_world->addElement(this);
-
-    onActivationInWorld();
+bool WorldElement::isAddableToWorld(World* world) const {
+    return true;
 }
 
-void WorldElement::deactivateInWorld() {
-    m_active = false;
+void WorldElement::onAddToWorld() {
+
+}
+
+void WorldElement::onRemovalFromWorld() {
+    for (auto child : m_children) {
+        m_world->removeElement(child);
+    }
+
+    if (m_parent) {
+        m_parent->removeChild(this);
+    }
 
     HandleOwner::invalidate();
+}
 
-    onDeactivationInWorld();
+std::list<WorldElement*> WorldElement::children() const {
+    std::list<WorldElement*> result;
+    for (auto child : m_children) {
+        result.push_back(child);
+    }
+
+    return result;
+}
+
+void WorldElement::addChild(WorldElement* child) {
+    m_children.push_back(child);
+}
+
+void WorldElement::removeChild(WorldElement* child) {
+    m_children.remove(child);
 }
 
 void WorldElement::update(float deltaSec) {
 
 }
 
-void WorldElement::onActivationInWorld() {
-
-}
-
-void WorldElement::onDeactivationInWorld() {
-
-}
 
