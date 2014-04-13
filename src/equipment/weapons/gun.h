@@ -35,5 +35,12 @@ protected:
     void setupBullet(Bullet* bullet, const glm::vec3& point);
     bool isBulletPathClear(const glm::vec3& point, bool checkFriendlyFire);
     WorldObject* m_owner;
+
+    void createBulletPrototype();
+
+    Bullet* bulletPrototype;
+    float spawnDistance;
+    float bulletLength;
+    float bulletMaxWidth;
 };
 

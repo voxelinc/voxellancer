@@ -82,7 +82,7 @@ void Player::fire() {
             targetPoint = m_aimer->aim(ray);
         }
 
-        ship()->components().fireAtPoint(targetPoint);
+        ship()->components().fireAtPoint(targetPoint, true);
     }
 }
 

@@ -79,3 +79,7 @@ bool Capsule::containedBy(const TAABB<int>& aabb) const {
         && aabb.contains(m_origin + m_direction + extendDirection);
 }
 
+Capsule Capsule::fromTo(glm::vec3 from, glm::vec3 to, float radius) {
+    return Capsule(from, to - from, radius);
+}
+
