@@ -12,6 +12,7 @@
 #include "scenarios/battlescenario.h"
 #include "scenarios/gamescenario.h"
 #include "scenarios/frozengamescenario.h"
+#include "scenarios/friendlyfirescenario.h"
 #include "scenarios/missionscenario.h"
 #include "scenarios/scriptedscenario.h"
 #include "scenarios/piratescenario.h"
@@ -92,6 +93,9 @@ void GamePlay::loadScenario(int i) {
         break;
     case 4:
         m_scenario.reset(new PirateScenario(this));
+        break;
+    case 5:
+        m_scenario.reset(new FriendlyFireScenario(this));
         break;
     default:
         m_scenario.reset(new BaseScenario(this));

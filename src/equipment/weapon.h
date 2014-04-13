@@ -28,7 +28,7 @@ public:
     virtual const Visuals& visuals() const = 0;
 
     Hardpoint* hardpoint();
-    void setHardpoint(Hardpoint* hardpoint);
+    virtual void setHardpoint(Hardpoint* hardpoint);
 
     WeaponType type() const;
 
