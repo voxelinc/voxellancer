@@ -26,6 +26,9 @@ public:
     virtual void onAddToWorld();
     virtual void onRemovalFromWorld();
 
+    virtual void registerInWorldComponents();
+    virtual void deregisterInWorldComponents();
+
     std::list<WorldElement*> children() const;
 
     void addChild(WorldElement* child);

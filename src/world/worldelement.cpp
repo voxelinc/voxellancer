@@ -11,8 +11,9 @@ WorldElement::WorldElement(World* world):
     m_world(nullptr),
     m_parent(nullptr)
 {
-    assert(world);
-    world->addElement(this);
+    if (world) {
+        world->addElement(this);
+    }
 }
 
 WorldElement::WorldElement(WorldElement* parent):
@@ -51,6 +52,14 @@ void WorldElement::onRemovalFromWorld() {
     }
 
     HandleOwner::invalidate();
+}
+
+void WorldElement::registerInWorldComponents() {
+
+}
+
+void WorldElement::deregisterInWorldComponents() {
+
 }
 
 std::list<WorldElement*> WorldElement::children() const {

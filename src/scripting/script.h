@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#include "utils/handle/handleowner.h"
+#include "world/worldelement.h"
 
 
 class Bindings;
@@ -19,9 +19,11 @@ enum class ScriptState {
 /**
  *  Handle to a lua script
  */
-class Script : public HandleOwner {
+class Script : public WorldElement {
 public:
     Script();
+    explicit Script(World* world);
+    explicit Script(WorldElement* parent);
     ~Script();
 
     void start();
