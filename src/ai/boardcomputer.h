@@ -41,6 +41,10 @@ protected:
     /* Return the euler angles needed to adjust 'up' */
     glm::vec3 rotateUpTo(const glm::vec3& up);
     glm::vec3 rotateUpAuto(const glm::quat& rotation);
+
+    bool m_checkFriendlyFire;
+    float m_aimHelperMaxOffset;
+    float m_inaccuracyOffset;
 };
 
 

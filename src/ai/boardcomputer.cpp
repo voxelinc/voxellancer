@@ -29,6 +29,9 @@ BoardComputer::BoardComputer(WorldObject* worldObject) :
     m_worldObject(worldObject),
     m_overwriteEngineState(false)
 {
+    m_checkFriendlyFire = true;
+    m_aimHelperMaxOffset = 3.0f;
+    m_inaccuracyOffset = 50.0f;
 }
 
 WorldObject* BoardComputer::worldObject() {
@@ -138,10 +141,13 @@ void BoardComputer::shootBullet(const std::vector<Handle<WorldObject>>& targets)
                 if (hardpoint->weapon() && hardpoint->weapon()->type() == WeaponType::Gun) {
                     Gun* gun = dynamic_cast<Gun*>(hardpoint->weapon().get());
                     HardpointAimHelper aimHelper = HardpointAimHelper(hardpoint.get(), target);
-                    aimHelper.aim(3.0f);
+                    aimHelper.aim(m_aimHelperMaxOffset);
+                    if (!aimHelper.isHitable()) {
+                        continue;
+                    }
                     glm::vec3 targetPoint = aimHelper.point();
-                    targetPoint += RandVec3::rand(-1, 1) * glm::length(targetPoint - hardpoint->voxel()->position()) / 50.0f;
-                    if (gun->isBulletPathClear(targetPoint, true)) {
+                    targetPoint += RandVec3::rand(-1, 1) * glm::length(targetPoint - hardpoint->voxel()->position()) / m_inaccuracyOffset;
+                    if (gun->isBulletPathClear(targetPoint, m_checkFriendlyFire)) {
                         gun->fireAtPoint(targetPoint);
                     }
                 }
