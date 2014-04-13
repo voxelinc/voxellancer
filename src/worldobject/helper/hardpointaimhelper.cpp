@@ -28,7 +28,7 @@ HardpointAimHelper::HardpointAimHelper(Hardpoint* hardpoint, WorldObject* target
     m_bulletLifetime = gun.bulletLifetime();
 }
 
-void HardpointAimHelper::aim() {
+void HardpointAimHelper::aim(float maxOffset) {
     float offset;
     int iterations = 0;
 
@@ -49,7 +49,7 @@ void HardpointAimHelper::aim() {
             m_hitable = false;
             return;
         }
-    } while(offset > 0.1f);
+    } while (offset > maxOffset);
 
     m_hitable = true;
     m_direction = glm::normalize(m_point - m_hardpointPosition);

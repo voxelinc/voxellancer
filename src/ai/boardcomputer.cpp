@@ -12,6 +12,7 @@
 
 #include "worldobject/ship.h"
 #include "worldobject/worldobjectcomponents.h"
+#include "worldobject/helper/hardpointaimhelper.h"
 
 
 static const float s_minActDistance = 0.5f;

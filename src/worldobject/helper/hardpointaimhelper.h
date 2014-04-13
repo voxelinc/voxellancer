@@ -16,7 +16,7 @@ class HardpointAimHelper {
 public:
     HardpointAimHelper(Hardpoint* hardpoint, WorldObject* targetObject);
 
-    void aim();
+    void aim(float maxOffset = 0.1f);
 
     /*
         For some reason it might be impossible to hit the target
