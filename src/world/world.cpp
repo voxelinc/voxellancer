@@ -103,6 +103,7 @@ void World::update(float deltaSecs) {
 
         if (m_scheduledRemovals.find(element) != m_scheduledRemovals.end()) {
             element->onRemovalFromWorld();
+            element->deregisterInWorldComponents();
             m_scriptEngine->unregisterScriptable(element);
             element->setWorld(nullptr);
 
@@ -144,6 +145,7 @@ void World::addElement(WorldElement* element) {
 
     element->setWorld(this);
     element->onAddToWorld();
+    element->registerInWorldComponents();
 }
 
 void  World::removeElement(WorldElement* element) {

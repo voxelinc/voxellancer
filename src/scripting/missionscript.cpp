@@ -6,9 +6,11 @@
 
 #include "scripting/elematelua/luawrapper.h"
 
+#include "missions/mission.h"
+
 
 MissionScript::MissionScript(Mission& mission, ScriptEngine& scriptEngine):
-    GamePlayScript(scriptEngine),
+    GamePlayScript(scriptEngine, &mission),
     m_mission(mission)
 {
     addBindings(new InternalMissionBindings(*this));

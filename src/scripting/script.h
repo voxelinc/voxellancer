@@ -21,8 +21,7 @@ enum class ScriptState {
  */
 class Script : public WorldElement {
 public:
-    Script();
-    explicit Script(World* world);
+    explicit Script(World* world = nullptr);
     explicit Script(WorldElement* parent);
     ~Script();
 
