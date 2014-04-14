@@ -44,6 +44,11 @@ public:
     virtual void onRemoval();
     virtual void onDestruction();
 
+    /**
+     * When collisiondetection is performed on this voxel, use this radius for a sphere
+     * to represent the voxel
+     */
+    static float collisionRadius(float scale);
 
 
 protected:

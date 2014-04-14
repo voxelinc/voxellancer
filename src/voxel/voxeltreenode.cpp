@@ -220,7 +220,7 @@ void VoxelTreeNode::calculateSpherePosition(const Transform& transform) {
 
 void VoxelTreeNode::calculateSphereRadius(const Transform& transform) {
     if(isAtomic()) {
-        m_sphere.setRadius(0.5f * transform.scale());
+        m_sphere.setRadius(Voxel::collisionRadius(transform.scale()));
     } else {
         m_sphere.setRadius((glm::length(glm::vec3(m_gridAABB.urb() - m_gridAABB.llf() + glm::ivec3(1, 1, 1))/2.0f)) * transform.scale()) ;
     }

@@ -104,6 +104,10 @@ void Voxel::onDestruction() {
     }
 }
 
+float Voxel::collisionRadius(float scale) {
+    return 0.5 * scale;
+}
+
 float Voxel::defaultUnscaledMass() {
     if (s_defaultUnscaledMass == nullptr) {
         s_defaultUnscaledMass = new Property<float>("voxels.default.mass");

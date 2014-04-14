@@ -12,7 +12,7 @@ class WorldTreeShadowNode;
  */
 class WorldTreeHint {
 public:
-    WorldTreeHint(const std::shared_ptr<WorldTreeShadowNode>& shadowNode);
+    WorldTreeHint(const std::shared_ptr<WorldTreeShadowNode>& shadowNode = nullptr);
 
     WorldTreeNode* node();
 
