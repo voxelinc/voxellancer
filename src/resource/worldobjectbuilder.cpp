@@ -60,12 +60,19 @@ Bullet* WorldObjectBuilder::buildBullet() {
 }
 
 Rocket* WorldObjectBuilder::buildRocket() {
-    std::string subtype = Property<std::string>(m_name + ".general.subtype");
+    std::string subtype = Property<std::string>(m_name + ".general.subtype", "");
     GenericRocket* rocket;
     if (subtype == "split") {
         SplitRocket* splitRocket = makeWorldObject<SplitRocket>();
+
         splitRocket->setChildrenCount(Property<int>(m_name + ".special.childrenCount", 5));
-        splitRocket->setChildrenType(Property<std::string>(m_name + ".special.childrenType", "hornet"));
+
+        std::string childType = Property<std::string>(m_name + ".special.childrenType", "hornet");
+        if (childType != m_name) {
+            splitRocket->setChildrenType((childType != m_name) ? childType : "hornet");
+        } else {
+            assert(false); // spawning yourself is a bad idea
+        }
         rocket = splitRocket;
     } else {
         rocket = makeWorldObject<GenericRocket>();

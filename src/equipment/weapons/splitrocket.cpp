@@ -34,9 +34,7 @@ void SplitRocket::setChildrenCount(int count) {
 }
 
 void SplitRocket::setChildrenType(const std::string& type) {
-    if (type != "hydra") {
-        m_childrenType = type;
-    }
+    m_childrenType = type;
 }
 
 float SplitRocket::detonationDistance() {
