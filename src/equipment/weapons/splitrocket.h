@@ -4,7 +4,7 @@
 
 
 /**
- *   A special Rocket that detonates before reaching the target and spawns normal Hornet Rockets
+ *   A special Rocket that detonates before reaching the target and spawns other rockets
 */
 class SplitRocket: public GenericRocket {
 public:
