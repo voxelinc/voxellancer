@@ -38,8 +38,6 @@ WorldObject* WorldObjectBuilder::build() {
         return buildBullet();
     } else if (type == "rocket") {
         return buildRocket();
-    } else if (type == "splitrocket") {
-        return buildSplitRocket();
     } else if(type == "ship") {
         return buildShip();
     } else if(type == "other") {
@@ -62,20 +60,18 @@ Bullet* WorldObjectBuilder::buildBullet() {
 }
 
 Rocket* WorldObjectBuilder::buildRocket() {
-    GenericRocket* rocket = makeWorldObject<GenericRocket>();
-
+    std::string subtype = Property<std::string>(m_name + ".general.subtype");
+    GenericRocket* rocket;
+    if (subtype == "split") {
+        SplitRocket* splitRocket = makeWorldObject<SplitRocket>();
+        splitRocket->setChildrenCount(Property<int>(m_name + ".special.childrenCount", 5));
+        splitRocket->setChildrenType(Property<std::string>(m_name + ".special.childrenType", "hornet"));
+        rocket = splitRocket;
+    } else {
+        rocket = makeWorldObject<GenericRocket>();
+    }
     rocket->setLifetime(Property<float>(m_name + ".general.lifetime"));
     rocket->setHitSound(SoundProperties::fromProperties(m_name + ".explosionsound"));
-
-    return rocket;
-}
-
-Rocket* WorldObjectBuilder::buildSplitRocket() {
-    SplitRocket* rocket = makeWorldObject<SplitRocket>();
-
-    rocket->setLifetime(Property<float>(m_name + ".general.lifetime"));
-    rocket->setHitSound(SoundProperties::fromProperties(m_name + ".explosionsound"));
-
     return rocket;
 }
 

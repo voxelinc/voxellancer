@@ -10,6 +10,8 @@ class SplitRocket: public GenericRocket {
 public:
     virtual void setTarget(WorldObject* targetObject) override;
 
+    void setChildrenCount(int count);
+    void setChildrenType(const std::string& type);
 
 protected:
     friend class SplitRocketTask;
@@ -18,6 +20,9 @@ protected:
     void detonate();
     void spawnChildren();
     virtual void spawnExplosion() override;
+
+    int m_childrenCount;
+    std::string m_childrenType;
 
 };
 

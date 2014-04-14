@@ -15,10 +15,8 @@
 #include "world/god.h"
 #include "world/world.h"
 
-static float s_detonationDistance = 100.0f;
-static float s_detonationFieldOfAim = glm::radians(25.0f);
-static float s_childrenCount = 5;
-static std::string s_childrenRocketName = "hornet";
+static float s_detonationDistance = 150.0f;
+static float s_detonationFieldOfAim = glm::radians(30.0f);
 
 
 void SplitRocket::setTarget(WorldObject* targetObject) {
@@ -28,6 +26,16 @@ void SplitRocket::setTarget(WorldObject* targetObject) {
     } else {
         m_targetHandle = Handle<WorldObject>(nullptr);
         m_aiTask.reset(nullptr);
+    }
+}
+
+void SplitRocket::setChildrenCount(int count) {
+    m_childrenCount = count;
+}
+
+void SplitRocket::setChildrenType(const std::string& type) {
+    if (type != "hydra") {
+        m_childrenType = type;
     }
 }
 
@@ -47,9 +55,9 @@ void SplitRocket::detonate() {
 
 void SplitRocket::spawnChildren() {
     if (m_targetHandle.valid()) {
-        for (int i = 0; i < s_childrenCount; i++) {
-            Rocket* rocket = WorldObjectBuilder(s_childrenRocketName).buildRocket();
-            glm::quat circleOrientation = glm::angleAxis(2 * glm::pi<float>() * i / s_childrenCount, glm::vec3(0, 0, -1));
+        for (int i = 0; i < m_childrenCount; i++) {
+            Rocket* rocket = WorldObjectBuilder(m_childrenType).buildRocket();
+            glm::quat circleOrientation = glm::angleAxis(2 * glm::pi<float>() * i / m_childrenCount, glm::vec3(0, 0, -1));
             glm::quat splitOrientation = glm::angleAxis(glm::quarter_pi<float>(), glm::vec3(1, 0, 0));
 
             glm::quat launchOrientation = transform().orientation() * circleOrientation * splitOrientation;
