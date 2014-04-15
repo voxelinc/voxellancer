@@ -18,17 +18,7 @@ Projectile::Projectile():
     m_lifetime(0.0f)
 {
 }
-
-
-const SoundProperties& Projectile::hitSound() const {
-    return m_hitSound;
-}
-
-void Projectile::setHitSound(const SoundProperties& hitSound) {
-    m_hitSound = hitSound;
-}
-
-
+z
 WorldObject* Projectile::creator() {
     return m_creator;
 }

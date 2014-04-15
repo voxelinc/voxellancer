@@ -1,9 +1,8 @@
 #pragma once
 
-#include "sound/soundproperties.h"
-
 #include "worldobject/worldobject.h"
 
+class SoundProperties;
 
 /**
  *   Base class for everything shot by a weapon, characterised by
@@ -14,8 +13,7 @@ class Projectile: public WorldObject {
 public:
     Projectile();
 
-    const SoundProperties& hitSound() const;
-    void setHitSound(const SoundProperties& hitSound);
+    virtual const SoundProperties& hitSound() const = 0;
 
     WorldObject* creator();
     void setCreator(WorldObject* creator);
@@ -32,7 +30,6 @@ public:
 protected:
     WorldObject* m_creator;
     float m_lifetime;
-    SoundProperties m_hitSound;
 
     virtual void onLifetimeOver();
     virtual void spawnExplosion() = 0;

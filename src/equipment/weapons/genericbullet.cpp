@@ -16,6 +16,14 @@ void GenericBullet::setEmissiveness(float emissiveness) {
     m_emissiveness = emissiveness;
 }
 
+const SoundProperties& GenericBullet::hitSound() const {
+    return m_hitSound;
+}
+
+void GenericBullet::setHitSound(const SoundProperties& hitSound) {
+    m_hitSound = hitSound;
+}
+
 void GenericBullet::spawnExplosion() {
     VoxelExplosionGenerator generator(this);
 
