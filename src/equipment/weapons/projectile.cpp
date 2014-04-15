@@ -37,6 +37,14 @@ void Projectile::setLifetime(float lifetime) {
     m_lifetime = lifetime;
 }
 
+const SoundProperties& Projectile::hitSound() const {
+    return m_hitSound;
+}
+
+void Projectile::setHitSound(const SoundProperties& hitSound) {
+    m_hitSound = hitSound;
+}
+
 void Projectile::update(float deltaSec) {
     WorldObject::update(deltaSec);
 

@@ -11,8 +11,9 @@
 #include "equipment/engineslot.h"
 #include "equipment/hardpoint.h"
 #include "equipment/weapon.h"
-#include "equipment/weapons/genericbullet.h"
-#include "equipment/weapons/genericrocket.h"
+#include "equipment/weapons/bullet.h"
+#include "equipment/weapons/rocket.h"
+
 #include "worldobject/worldobjectinfo.h"
 #include "worldobject/genericship.h"
 #include "worldobject/genericworldobject.h"
@@ -49,7 +50,7 @@ WorldObject* WorldObjectBuilder::build() {
 }
 
 Bullet* WorldObjectBuilder::buildBullet() {
-    GenericBullet* bullet = makeWorldObject<GenericBullet>();
+    Bullet* bullet = makeWorldObject<Bullet>();
 
     bullet->setEmissiveness(Property<float>(m_name + ".general.emissiveness", 0.0f));
     bullet->setLifetime(Property<float>(m_name + ".general.lifetime"));
@@ -59,7 +60,7 @@ Bullet* WorldObjectBuilder::buildBullet() {
 }
 
 Rocket* WorldObjectBuilder::buildRocket() {
-    GenericRocket* rocket = makeWorldObject<GenericRocket>();
+    Rocket* rocket = makeWorldObject<Rocket>();
 
     rocket->setLifetime(Property<float>(m_name + ".general.lifetime"));
     rocket->setHitSound(SoundProperties::fromProperties(m_name + ".explosionsound"));
