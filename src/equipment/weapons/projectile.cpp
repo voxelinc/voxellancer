@@ -1,10 +1,16 @@
 #include "projectile.h"
 
+#include "collision/collisiondetector.h"
 #include "collision/collisionfilterignoringcreator.h"
 
-#include "world/god.h"
-#include "world/world.h"
 #include "sound/soundmanager.h"
+
+#include "world/god.h"
+#include "world/shockwave.h"
+#include "world/world.h"
+
+#include "worldtree/worldtreegeode.h"
+
 
 
 Projectile::Projectile():
@@ -12,6 +18,16 @@ Projectile::Projectile():
     m_lifetime(0.0f)
 {
 }
+
+
+const SoundProperties& Projectile::hitSound() const {
+    return m_hitSound;
+}
+
+void Projectile::setHitSound(const SoundProperties& hitSound) {
+    m_hitSound = hitSound;
+}
+
 
 WorldObject* Projectile::creator() {
     return m_creator;
@@ -57,8 +73,11 @@ void Projectile::onCollision() {
 
     World::instance()->god().scheduleRemoval(this);
     spawnExplosion();
+
+   // Shockwave(2, 10000).trigger(transform().position(), collisionDetector().geode()->hint());
 }
 
 void Projectile::onSpawnFail() {
     spawnExplosion();
 }
+

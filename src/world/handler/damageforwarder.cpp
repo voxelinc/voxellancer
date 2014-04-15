@@ -18,14 +18,21 @@
 void DamageForwarder::forwardDamageImpacts(std::list<DamageImpact> &dampedDeadlyDamageImpacts) {
     m_damageImpactAccumulator.clear();
 
-    for(DamageImpact &dampedDeadlyDamageImpact : dampedDeadlyDamageImpacts) {
-        Voxel *deadVoxel = dampedDeadlyDamageImpact.voxel();
+    for(DamageImpact& dampedDeadlyDamageImpact : dampedDeadlyDamageImpacts) {
+        Voxel* deadVoxel = dampedDeadlyDamageImpact.voxel();
 
         m_currentWorldObject = dampedDeadlyDamageImpact.worldObject();
-        VoxelNeighbourHelper nHelper(m_currentWorldObject, true);
-        const std::vector<Voxel*>& neighbours = nHelper.neighbours(deadVoxel);
+        VoxelNeighbourHelper neighbourHelper(m_currentWorldObject, false);
 
-        for(Voxel *neighbour : neighbours) {
+        glm::vec3 damageDirection = glm::normalize(dampedDeadlyDamageImpact.damageVec());
+        VoxelPlane plane =
+        glm::ivec2 damageDirection2D =
+
+        if (plane.center)
+
+
+
+        for(Voxel* neighbour : neighbourHelper.neighbours(deadVoxel)) {
             glm::vec3 voxelVec = glm::normalize(static_cast<glm::vec3>(neighbour->gridCell() - deadVoxel->gridCell()));
             glm::vec3 damageImpactVec = glm::normalize(glm::inverse(m_currentWorldObject->transform().orientation()) * dampedDeadlyDamageImpact.damageVec());
 
@@ -39,9 +46,9 @@ void DamageForwarder::forwardDamageImpacts(std::list<DamageImpact> &dampedDeadly
             glm::vec3 forwardedDamage = dampedDeadlyDamageImpact.damageVec() * forwardFactor(dotProduct, dampedDeadlyDamageImpact.fieldOfDamage(), neighbours.size());
             glm::vec3 createdDamage = voxelVec * deadVoxel->damageForwardingDestructionDamage();
 
-            DamageImpact forwarded(m_currentWorldObject, 
-                                    neighbour, 
-                                    distanceFactor * (forwardedDamage + createdDamage), 
+            DamageImpact forwarded(m_currentWorldObject,
+                                    neighbour,
+                                    distanceFactor * (forwardedDamage + createdDamage),
                                     dampedDeadlyDamageImpact.fieldOfDamage());
             m_damageImpactAccumulator.parse(forwarded);
         }

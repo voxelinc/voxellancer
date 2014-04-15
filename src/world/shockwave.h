@@ -21,14 +21,16 @@ class WorldTreeHint;
  */
 class Shockwave {
 public:
-    Shockwave(const Sphere& sphere, float damage, const WorldTreeHint& worldTreeHint = WorldTreeHint());
+    Shockwave(float radius, float damage);
 
-    std::list<DamageImpact> generateDamageImpacts();
+    void trigger(const glm::vec3& position, const WorldTreeHint& worldTreeHint = WorldTreeHint());
 
 
 protected:
+    std::list<DamageImpact> generateDamageImpacts();
     bool isVoxelObscured(Voxel* voxel);
     DamageImpact getImpactOnVoxel(Voxel* voxel);
+
 
 protected:
     Sphere m_sphere;

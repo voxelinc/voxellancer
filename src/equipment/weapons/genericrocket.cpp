@@ -10,14 +10,6 @@ GenericRocket::GenericRocket()
 {
 }
 
-const SoundProperties& GenericRocket::hitSound() const {
-    return m_hitSound;
-}
-
-void GenericRocket::setHitSound(const SoundProperties& hitSound) {
-    m_hitSound = hitSound;
-}
-
 void GenericRocket::onLifetimeOver() {
     spawnExplosion();
 }

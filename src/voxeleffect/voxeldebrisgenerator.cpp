@@ -25,7 +25,7 @@ VoxelDebrisGenerator::VoxelDebrisGenerator(const VoxelCluster* creator) :
                            "physics.debrisBaseForce",
                            "physics.debrisAngularBaseForce"),
     m_orientation(),
-    m_density(2),
+    m_density(3),
     m_spawnProbability(1.0f)
 {
 }
