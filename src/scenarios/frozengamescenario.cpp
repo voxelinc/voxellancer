@@ -128,9 +128,9 @@ void FrozenGameScenario::populateWorld() {
         int r = 80;
         enemy->transform().move(glm::vec3(-80 + rand()%r-r/2,rand()%r-r/2,-20 + rand()%r-r/2));
 
-        for(int x = 0; x < 4; x++) {
+        for(int x = 0; x < 40; x++) {
             for(int y = 0; y < 2; y++) {
-                for(int z = 0; z < 8; z++) {
+                for(int z = 0; z < 18; z++) {
                     enemy->addVoxel(new Voxel(glm::ivec3(x, y, z), 0xF0FF00));
                 }
             }

@@ -6,7 +6,7 @@
 #include "collision/voxelcollision.h"
 #include "voxel/voxel.h"
 #include "physics/physics.h"
-
+#include "worldobject/worldobjectinfo.h"
 
 void DamageImpactGenerator::parse(std::list<WorldObjectCollision>& worldObjectCollisions) {
     m_damageImpactAccumulator.clear();
@@ -25,6 +25,11 @@ void DamageImpactGenerator::parse(std::list<WorldObjectCollision>& worldObjectCo
             glm::vec3 voxelSpeedA = targetTransformA.applyTo(glm::vec3(voxelCollision.a().voxel()->gridCell())) - worldObjectA->transform().applyTo(glm::vec3(voxelCollision.a().voxel()->gridCell()));
             glm::vec3 voxelSpeedB = targetTransformB.applyTo(glm::vec3(voxelCollision.b().voxel()->gridCell())) - worldObjectB->transform().applyTo(glm::vec3(voxelCollision.b().voxel()->gridCell()));
 
+
+            std::cout << "Energy A = " << glm::length(voxelSpeedA*voxelSpeedA * massPerImpactA/2.0f)<< std::endl;
+            std::cout << "Energy B = " << glm::length(voxelSpeedB*voxelSpeedB * massPerImpactB/2.0f)<< std::endl;
+            std::cout << "Energy delta = " << (((massPerImpactA * massPerImpactB) / (2*(massPerImpactA + massPerImpactB))) * (glm::length((voxelSpeedA - voxelSpeedB)) * glm::length((voxelSpeedA - voxelSpeedB)))) << std::endl;
+
             if (voxelCollision.a().worldObject()->spawnState() != SpawnState::RemovalScheduled) {
                 m_damageImpactAccumulator.parse(DamageImpact(voxelCollision.a().worldObject(),
                                                              voxelCollision.a().voxel(),
@@ -37,8 +42,10 @@ void DamageImpactGenerator::parse(std::list<WorldObjectCollision>& worldObjectCo
                                                              (voxelSpeedA - voxelSpeedB) * (massPerImpactA),
                                                              voxelCollision.a().worldObject()->collisionFieldOfDamage()));
             }
+            std::cout << std::endl;
         }
     }
+    std::cout << std::endl;
 }
 
 void DamageImpactGenerator::parse(std::list<DamageImpact>& damageImpacts) {

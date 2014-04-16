@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <algorithm>
+#include <iostream>
 #include <glm/glm.hpp>
 
 #include "voxel/voxelcluster.h"
@@ -18,21 +19,15 @@
 void DamageForwarder::forwardDamageImpacts(std::list<DamageImpact> &dampedDeadlyDamageImpacts) {
     m_damageImpactAccumulator.clear();
 
-    for(DamageImpact& dampedDeadlyDamageImpact : dampedDeadlyDamageImpacts) {
-        Voxel* deadVoxel = dampedDeadlyDamageImpact.voxel();
+    for(DamageImpact &dampedDeadlyDamageImpact : dampedDeadlyDamageImpacts) {
+        Voxel *deadVoxel = dampedDeadlyDamageImpact.voxel();
 
         m_currentWorldObject = dampedDeadlyDamageImpact.worldObject();
-        VoxelNeighbourHelper neighbourHelper(m_currentWorldObject, false);
-
-        glm::vec3 damageDirection = glm::normalize(dampedDeadlyDamageImpact.damageVec());
-        VoxelPlane plane =
-        glm::ivec2 damageDirection2D =
-
-        if (plane.center)
-
-
-
-        for(Voxel* neighbour : neighbourHelper.neighbours(deadVoxel)) {
+        VoxelNeighbourHelper nHelper(m_currentWorldObject, false);
+        const std::vector<Voxel*>& neighbours = nHelper.neighbours(deadVoxel);
+      //  std::cout << glm::length(dampedDeadlyDamageImpact.damageVec()) << std::endl;
+        float s = 0;
+        for(Voxel *neighbour : neighbours) {
             glm::vec3 voxelVec = glm::normalize(static_cast<glm::vec3>(neighbour->gridCell() - deadVoxel->gridCell()));
             glm::vec3 damageImpactVec = glm::normalize(glm::inverse(m_currentWorldObject->transform().orientation()) * dampedDeadlyDamageImpact.damageVec());
 
@@ -48,10 +43,12 @@ void DamageForwarder::forwardDamageImpacts(std::list<DamageImpact> &dampedDeadly
 
             DamageImpact forwarded(m_currentWorldObject,
                                     neighbour,
-                                    distanceFactor * (forwardedDamage + createdDamage),
+                                    voxelVec * glm::length(dampedDeadlyDamageImpact.damageVec()) / 6.0f,
                                     dampedDeadlyDamageImpact.fieldOfDamage());
+            s+= glm::length(forwarded.damageVec());
             m_damageImpactAccumulator.parse(forwarded);
         }
+    //    std::cout << "  " << s << std::endl;
     }
 }
 

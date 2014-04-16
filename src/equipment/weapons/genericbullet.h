@@ -16,7 +16,7 @@ public:
     void setEmissiveness(float emissiveness);
 
     virtual const SoundProperties& hitSound() const override;
-    void setHitSound(const SoundProperties& hitSound);z
+    void setHitSound(const SoundProperties& hitSound);
 
 protected:
     float m_emissiveness;

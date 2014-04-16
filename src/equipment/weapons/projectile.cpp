@@ -18,7 +18,7 @@ Projectile::Projectile():
     m_lifetime(0.0f)
 {
 }
-z
+
 WorldObject* Projectile::creator() {
     return m_creator;
 }

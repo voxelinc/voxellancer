@@ -13,7 +13,7 @@ public:
     GenericRocket();
 
     virtual const SoundProperties& hitSound() const override;
-    void setHitSound(const SoundProperties& hitSound);z
+    void setHitSound(const SoundProperties& hitSound);
 
 protected:
     SoundProperties m_hitSound;
