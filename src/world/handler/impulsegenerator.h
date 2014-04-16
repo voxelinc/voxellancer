@@ -7,7 +7,7 @@
 #include "physics/impulse.h"
 
 
-class ElasticImpulseGenerator {
+class ImpulseGenerator {
 public:
     void parse(std::list<WorldObjectCollision>& worldObjectCollisions);
 

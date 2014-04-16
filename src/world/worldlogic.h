@@ -7,11 +7,11 @@
 #include "handler/damager.h"
 #include "handler/voxelcollisionaccumulator.h"
 #include "handler/damageimpactgenerator.h"
-#include "handler/elasticimpulsegenerator.h"
+#include "handler/impulsegenerator.h"
 #include "handler/splitter.h"
 #include "handler/garbagecollector.h"
 #include "handler/wrecker.h"
-#include "handler/elasticimpulsor.h"
+#include "handler/impulsor.h"
 #include "handler/voxelhangman.h"
 #include "handler/splitdetector.h"
 
@@ -35,8 +35,8 @@ protected:
 
     Mover m_mover;
     VoxelCollisionAccumulator m_voxelCollisionAccumulator;
-    ElasticImpulseGenerator m_elasticImpulseGenerator;
-    ElasticImpulsor m_elasticImpulsor;
+    ImpulseGenerator m_impulseGenerator;
+    Impulsor m_impulsor;
     Damager m_damager;
     DamageForwarder m_damageForwarder;
     DamageImpactGenerator m_damageImpactGenerator;

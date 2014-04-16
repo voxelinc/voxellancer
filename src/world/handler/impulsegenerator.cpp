@@ -1,4 +1,4 @@
-#include "elasticimpulsegenerator.h"
+#include "impulsegenerator.h"
 
 #include <cassert>
 
@@ -10,7 +10,7 @@
 #include "physics/physics.h"
 
 
-void ElasticImpulseGenerator::parse(std::list<WorldObjectCollision>& worldObjectCollisions) {
+void ImpulseGenerator::parse(std::list<WorldObjectCollision>& worldObjectCollisions) {
     m_worldObjectImpulses.clear();
 
     for(WorldObjectCollision& worldObjectCollision : worldObjectCollisions) {
@@ -27,11 +27,11 @@ void ElasticImpulseGenerator::parse(std::list<WorldObjectCollision>& worldObject
     }
 }
 
-std::list<Impulse>& ElasticImpulseGenerator::worldObjectImpulses() {
+std::list<Impulse>& ImpulseGenerator::worldObjectImpulses() {
     return m_worldObjectImpulses;
 }
 
-void ElasticImpulseGenerator::generateImpulse(VoxelCollisionParticipant &from, VoxelCollisionParticipant &to) {
+void ImpulseGenerator::generateImpulse(VoxelCollisionParticipant &from, VoxelCollisionParticipant &to) {
     Transform targetTransformFrom(from.worldObject()->transform(),
         from.worldObject()->physics().speed().directional(),
         glm::quat(from.worldObject()->physics().speed().angular()));
