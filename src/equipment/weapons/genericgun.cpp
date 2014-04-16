@@ -2,8 +2,6 @@
 
 #include "resource/worldobjectbuilder.h"
 
-#include "genericbullet.h"
-
 
 GenericGun::GenericGun(const std::string& name):
     Gun(name),
