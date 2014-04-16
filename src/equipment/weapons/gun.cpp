@@ -8,6 +8,8 @@
 
 #include "physics/physics.h"
 
+#include "resource/worldobjectbuilder.h"
+
 #include "sound/soundmanager.h"
 
 #include "voxel/voxelclusterbounds.h"
@@ -20,13 +22,64 @@
 
 
 Gun::Gun(const std::string& equipmentKey):
-    Weapon(WeaponType::Gun, equipmentKey)
+    Weapon(WeaponType::Gun, equipmentKey),
+    m_bulletSpeed(100),
+    m_bulletLifetime(100),
+    m_cooldownTime(0)
 {
+}
+
+float Gun::bulletLifetime() const {
+    return m_bulletLifetime;
+}
+
+void Gun::setBulletLifetime(float bulletLifetime) {
+    m_bulletLifetime = bulletLifetime;
+}
+
+float Gun::bulletSpeed() const {
+    return m_bulletSpeed;
+}
+
+void Gun::setBulletSpeed(float bulletSpeed) {
+    m_bulletSpeed = bulletSpeed;
+}
+
+const Visuals& Gun::visuals() const {
+    return m_visuals;
+}
+
+void Gun::setVisuals(const Visuals& visuals) {
+    m_visuals = visuals;
+}
+
+const SoundProperties& Gun::fireSound() const {
+    return m_fireSound;
+}
+
+void Gun::setFireSound(const SoundProperties& fireSound) {
+    m_fireSound = fireSound;
+}
+
+float Gun::cooldownTime() const {
+    return m_cooldownTime;
+}
+
+void Gun::setCooldownTime(float cooldownTime) {
+    m_cooldownTime = cooldownTime;
+}
+
+const std::string& Gun::bulletName() const {
+    return m_bulletName;
+}
+
+void Gun::setBulletName(const std::string& bulletName) {
+    m_bulletName = bulletName;
 }
 
 void Gun::fireAtPoint(const glm::vec3& point) {
     if (canFire() && hardpoint()->inFieldOfAim(point)) {
-        Bullet *bullet = createBullet();
+        Bullet *bullet =  WorldObjectBuilder(m_bulletName).buildBullet();
         setupBullet(bullet, point);
 
         World::instance()->god().scheduleSpawn(bullet);

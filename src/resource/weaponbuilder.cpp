@@ -5,7 +5,7 @@
 #include <glow/logging.h>
 
 #include "equipment/weapon.h"
-#include "equipment/weapons/genericgun.h"
+#include "equipment/weapons/gun.h"
 #include "equipment/weapons/genericrocketlauncher.h"
 
 #include "property/property.h"
@@ -24,7 +24,7 @@ Weapon* WeaponBuilder::build() {
     std::string type = Property<std::string>(m_name + ".general.type");
 
     if (type == "gun") {
-        return buildGenericGun();
+        return buildGun();
     } else if(type == "rocketlauncher") {
         return buildGenericRocketLauncher();
     } else {
@@ -34,8 +34,8 @@ Weapon* WeaponBuilder::build() {
     return nullptr; // Should never be reached
 }
 
-GenericGun* WeaponBuilder::buildGenericGun() {
-    GenericGun* gun = new GenericGun(m_name);
+Gun* WeaponBuilder::buildGun() {
+    Gun* gun = new Gun(m_name);
 
     std::string bulletName = Property<std::string>(m_name + ".general.bullet");
 
