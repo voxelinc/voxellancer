@@ -164,7 +164,7 @@ void InstancedBullet::updateData() {
     m_data.center = m_container->prototype().transform().center();
     m_data.originTime = World::instance()->time();
     m_data.deathTime = World::instance()->time() + lifetime();
-    m_data.active = (m_alive && m_data.originTime < m_data.deathTime) ? 1 : 0;
+    m_data.active = (m_alive && m_data.originTime < m_data.deathTime) ? 1.0f : 0.0f;
 
     m_dataChanged = true;
 }
