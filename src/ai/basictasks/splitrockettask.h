@@ -16,6 +16,7 @@ public:
 
 protected:
     SplitRocket* m_rocket;
+    float m_flytime;
 
 };
 

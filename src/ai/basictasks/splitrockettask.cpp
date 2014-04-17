@@ -6,7 +6,8 @@
 #include "utils/worldobjectgeometryhelper.h"
 
 SplitRocketTask::SplitRocketTask(SplitRocket* rocket, BoardComputer* boardComputer, WorldObject* target) :
-    DirectSuicideTask(boardComputer, target)
+    DirectSuicideTask(boardComputer, target),
+    m_flytime(0)
 {
     assert(boardComputer->worldObject() == rocket); // alternative: create a Rocket::m_boardComputer accessor
     m_rocket = rocket;
@@ -14,8 +15,8 @@ SplitRocketTask::SplitRocketTask(SplitRocket* rocket, BoardComputer* boardComput
 
 void SplitRocketTask::update(float deltaSec) {
     DirectSuicideTask::update(deltaSec);
-
-    if (m_target.valid()) {
+    m_flytime += deltaSec;
+    if (m_flytime > 0.5f && m_target.valid()) {
         glm::vec3 requiredDirection = m_target->position() - m_rocket->position();
         glm::vec3 rocketDirection = m_rocket->orientation() * glm::vec3(0, 0, -1);
         
@@ -25,5 +26,3 @@ void SplitRocketTask::update(float deltaSec) {
         }
     }
 }
-
-
