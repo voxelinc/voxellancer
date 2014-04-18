@@ -8,13 +8,11 @@
 
 
 class GamePlay;
-class GamePlayRunningInput;
+class GamePlayNormalInput;
 
 class GamePlayRunning: public GameState {
 public:
     GamePlayRunning(GamePlay* gamePlay);
-
-    GamePlayRunningInput& input();
 
     Trigger& pauseTrigger();
 
@@ -28,6 +26,6 @@ protected:
     GamePlay* m_gamePlay;
     KeyTrigger m_pauseTrigger;
 
-    std::unique_ptr<GamePlayRunningInput> m_input;
+    std::unique_ptr<GamePlayNormalInput> m_input;
 };
 

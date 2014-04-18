@@ -4,7 +4,6 @@
 
 #include "utils/statemachine/keytrigger.h"
 
-
 class GamePlay;
 
 class GamePlayPaused: public GameState {
