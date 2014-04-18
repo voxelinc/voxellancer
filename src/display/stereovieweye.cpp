@@ -54,7 +54,7 @@ void StereoViewEye::draw(const Scene& scene, const CameraHead& cameraHead) {
     int sampleHeight = static_cast<int>(m_textureSize.y * samplingFactor);
 
     m_camera->setViewport(glm::ivec2(sampleWidth, sampleHeight));
-    m_camera->setPosition(cameraHead.position() + cameraHead.orientation() * m_offset);
+    m_camera->setEye(cameraHead.position() + cameraHead.orientation() * m_offset);
     m_camera->setOrientation(cameraHead.orientation());
 
     m_fbo->bind();
