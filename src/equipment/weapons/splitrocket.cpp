@@ -18,7 +18,7 @@
 
 SplitRocket::SplitRocket():
     m_splitDistance(150.0f),
-    m_splitAngle(30.0f)
+    m_splitDirectionTolerance(30.0f)
 {
 
 }
@@ -49,12 +49,12 @@ void SplitRocket::setSplitDistance(float splitDistance) {
     m_splitDistance = splitDistance;
 }
 
-float SplitRocket::splitAngle() const {
-    return m_splitAngle;
+float SplitRocket::splitDirectionTolerance() const {
+    return m_splitDirectionTolerance;
 }
 
-void SplitRocket::setSplitAngle(float splitAngle) {
-    m_splitAngle = splitAngle;
+void SplitRocket::setSplitDirectionTolerance(float splitDirectionTolerance) {
+    m_splitDirectionTolerance = splitDirectionTolerance;
 }
 
 void SplitRocket::split() {

@@ -21,8 +21,12 @@ public:
     float splitDistance() const;
     void setSplitDistance(float splitDistance);
 
-    float splitAngle() const;
-    void setSplitAngle(float splitAngle);
+    /**
+     * Maximum difference between rocket-orientation and direction to target in which
+     * a split is allowed
+     */
+    float splitDirectionTolerance() const;
+    void setSplitDirectionTolerance(float splitDirectionTolerance);
 
     void split();
 
@@ -31,7 +35,7 @@ protected:
     int m_childrenCount;
     std::string m_childrenType;
     float m_splitDistance;
-    float m_splitAngle;
+    float m_splitDirectionTolerance;
 
     void spawnChildren();
     virtual void spawnExplosion() override;
