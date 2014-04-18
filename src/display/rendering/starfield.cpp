@@ -1,6 +1,5 @@
 #include "starfield.h"
 
-#include <glow/Array.h>
 #include <glow/Shader.h>
 #include <glow/VertexArrayObject.h>
 #include <glow/VertexAttributeBinding.h>
