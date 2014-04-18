@@ -15,9 +15,13 @@
 #include "world/god.h"
 #include "world/world.h"
 
-static float s_detonationDistance = 150.0f;
-static float s_detonationFieldOfAim = glm::radians(30.0f);
 
+SplitRocket::SplitRocket():
+    m_splitDistance(150.0f),
+    m_splitAngle(30.0f)
+{
+
+}
 
 void SplitRocket::setTarget(WorldObject* targetObject) {
     if (targetObject) {
@@ -37,24 +41,34 @@ void SplitRocket::setChildrenType(const std::string& type) {
     m_childrenType = type;
 }
 
-float SplitRocket::detonationDistance() {
-    return s_detonationDistance;
+float SplitRocket::splitDistance() const {
+    return m_splitDistance;
 }
 
-float SplitRocket::detonationFieldOfAim() {
-    return s_detonationFieldOfAim;
+void SplitRocket::setSplitDistance(float splitDistance) {
+    m_splitDistance = splitDistance;
 }
 
-void SplitRocket::detonate() {
-    World::instance()->god().scheduleRemoval(this);
+float SplitRocket::splitAngle() const {
+    return m_splitAngle;
+}
+
+void SplitRocket::setSplitAngle(float splitAngle) {
+    m_splitAngle = splitAngle;
+}
+
+void SplitRocket::split() {
     spawnChildren();
     spawnExplosion();
+
+    World::instance()->god().scheduleRemoval(this);
 }
 
 void SplitRocket::spawnChildren() {
     if (m_targetHandle.valid()) {
         for (int i = 0; i < m_childrenCount; i++) {
             Rocket* rocket = WorldObjectBuilder(m_childrenType).buildRocket();
+
             glm::quat circleOrientation = glm::angleAxis(2 * glm::pi<float>() * i / m_childrenCount, glm::vec3(0, 0, -1));
             glm::quat splitOrientation = glm::angleAxis(glm::quarter_pi<float>(), glm::vec3(1, 0, 0));
 
@@ -80,7 +94,7 @@ void SplitRocket::spawnExplosion() {
 
     generator.setPosition(m_transform.position());
     generator.setScale(m_transform.scale() / 3.0f);
-    generator.setColor(0xFF0000);
+    generator.setColor(0xFFAA00);
     generator.setEmissiveness(0.4f);
     generator.setCount(300);
     generator.setLifetime(1.5f, 0.2f);

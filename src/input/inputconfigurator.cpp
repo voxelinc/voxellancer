@@ -1,6 +1,5 @@
 #include "inputconfigurator.h"
 
-
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
@@ -8,7 +7,7 @@
 
 #include "ui/hud/hud.h"
 
-#include "gamestate/gameplay/running/gameplayrunninginput.h"
+#include "input/actionkeymapping.h"
 #include "input/inputconfigwriter.h"
 #include "utils/filesystem.h"
 #include "world/world.h"

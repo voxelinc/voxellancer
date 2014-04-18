@@ -11,12 +11,12 @@
 #include "equipment/engineslot.h"
 #include "equipment/hardpoint.h"
 #include "equipment/weapon.h"
-#include "equipment/weapons/genericbullet.h"
-#include "equipment/weapons/genericrocket.h"
+
+#include "equipment/weapons/bullet.h"
+#include "equipment/weapons/rocket.h"
 #include "equipment/weapons/splitrocket.h"
+
 #include "worldobject/worldobjectinfo.h"
-#include "worldobject/genericship.h"
-#include "worldobject/genericworldobject.h"
 #include "worldobject/ship.h"
 #include "worldobject/worldobject.h"
 
@@ -50,7 +50,7 @@ WorldObject* WorldObjectBuilder::build() {
 }
 
 Bullet* WorldObjectBuilder::buildBullet() {
-    GenericBullet* bullet = makeWorldObject<GenericBullet>();
+    Bullet* bullet = makeWorldObject<Bullet>();
 
     bullet->setEmissiveness(Property<float>(m_name + ".general.emissiveness", 0.0f));
     bullet->setLifetime(Property<float>(m_name + ".general.lifetime"));
@@ -60,18 +60,20 @@ Bullet* WorldObjectBuilder::buildBullet() {
 }
 
 Rocket* WorldObjectBuilder::buildRocket() {
-    std::string subtype = Property<std::string>(m_name + ".general.subtype", "");
-    GenericRocket* rocket;
+    Rocket* rocket;
 
+    std::string subtype = Property<std::string>(m_name + ".general.subtype", "");
     if (subtype == "split") {
         SplitRocket* splitRocket = makeWorldObject<SplitRocket>();
 
         splitRocket->setChildrenCount(Property<int>(m_name + ".special.childrenCount", 5));
         splitRocket->setChildrenType(Property<std::string>(m_name + ".special.childrenType", "hornet"));
+        splitRocket->setSplitDistance(Property<float>(m_name + ".special.splitDistance", 150.0f));
+        splitRocket->setSplitAngle(Property<float>(m_name + ".special.splitAngle", 30.0f));
 
         rocket = splitRocket;
     } else {
-        rocket = makeWorldObject<GenericRocket>();
+        rocket = makeWorldObject<Rocket>();
     }
 
     rocket->setLifetime(Property<float>(m_name + ".general.lifetime"));
@@ -80,7 +82,7 @@ Rocket* WorldObjectBuilder::buildRocket() {
 }
 
 Ship* WorldObjectBuilder::buildShip() {
-    GenericShip* ship = makeWorldObject<GenericShip>();
+    Ship* ship = makeWorldObject<Ship>();
     if (ship->crucialVoxel() == nullptr) {
         glow::warning("WorldObjectBuilder: ship %; has no crucial voxel", m_name);
     }
@@ -88,7 +90,7 @@ Ship* WorldObjectBuilder::buildShip() {
 }
 
 WorldObject* WorldObjectBuilder::buildWorldObject() {
-    GenericWorldObject* worldObject = makeWorldObject<GenericWorldObject>();
+    WorldObject* worldObject = makeWorldObject<WorldObject>();
     return worldObject;
 }
 
