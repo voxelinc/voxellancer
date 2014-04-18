@@ -12,8 +12,6 @@
 
 #include "voxeleffect/voxelexplosiongenerator.h"
 
-#include "worldobject/worldobjectinfo.h"
-
 #include "worldobject/worldobjectcomponents.h"
 
 #include "world/god.h"
@@ -27,9 +25,6 @@ Rocket::Rocket():
     m_aiTask(nullptr)
 {
     collisionFilter().setCollideableWith(WorldObjectType::Rocket, false);
-
-    m_info->setShowOnHud(false);
-    m_info->setCanLockOn(false);
 }
 
 WorldObjectType Rocket::objectType() const {

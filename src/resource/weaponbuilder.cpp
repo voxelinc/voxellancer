@@ -39,7 +39,6 @@ Gun* WeaponBuilder::buildGun() {
 
     std::string bulletName = Property<std::string>(m_name + ".general.bullet");
 
-    gun->setBulletLifetime(Property<float>(bulletName + ".general.lifetime"));
     gun->setBulletSpeed(Property<float>(bulletName + ".general.speed"));
     gun->setVisuals(Visuals::fromProperties(m_name + ".visuals"));
     gun->setFireSound(SoundProperties::fromProperties(m_name + ".sound"));

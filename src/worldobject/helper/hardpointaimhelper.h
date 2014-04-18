@@ -18,15 +18,21 @@ public:
 
     void aim();
 
-    /*
-        For some reason it might be impossible to hit the target
-        (e.g. ship faster than bullet) then this will return false.
-        direction() and point() are invalid then.
-    */
+    /**
+     * For some reason it might be impossible to hit the target
+     * (e.g. ship faster than bullet, target out of range) then this will return false.
+     * direction() and point() are invalid then.
+     */
     bool isHitable();
 
     const glm::vec3& direction();
     const glm::vec3& point();
+
+
+protected:
+    float bulletTravelTime(const glm::vec3& point);
+    glm::vec3 targetPositionIn(float deltaSec);
+    float bulletSpeedInDirection(const glm::vec3& direction);
 
 
 protected:
@@ -47,10 +53,5 @@ protected:
 
     glm::vec3 m_direction;
     glm::vec3 m_point;
-
-
-    float bulletTravelTime(const glm::vec3& point);
-    glm::vec3 targetPositionIn(float deltaSec);
-    float bulletSpeedInDirection(const glm::vec3& direction);
 };
 

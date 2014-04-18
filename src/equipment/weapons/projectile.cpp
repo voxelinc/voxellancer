@@ -2,15 +2,20 @@
 
 #include "collision/collisionfilterignoringcreator.h"
 
+#include "sound/soundmanager.h"
+
 #include "world/god.h"
 #include "world/world.h"
-#include "sound/soundmanager.h"
+
+#include "worldobject/worldobjectinfo.h"
 
 
 Projectile::Projectile():
     m_creator(nullptr),
     m_lifetime(0.0f)
 {
+    m_info->setShowOnHud(false);
+    m_info->setCanLockOn(false);
 }
 
 WorldObject* Projectile::creator() {
@@ -70,3 +75,4 @@ void Projectile::onCollision() {
 void Projectile::onSpawnFail() {
     spawnExplosion();
 }
+

@@ -14,7 +14,8 @@ HardpointAimHelper::HardpointAimHelper(Hardpoint* hardpoint, WorldObject* target
     m_targetObject(targetObject),
     m_bulletSpeed(0.0f),
     m_hitable(false),
-    m_aimed(false)
+    m_aimed(false),
+    m_bulletLifetime(0.0f)
 {
     assert(m_hardpoint->weapon());
 
@@ -25,7 +26,7 @@ HardpointAimHelper::HardpointAimHelper(Hardpoint* hardpoint, WorldObject* target
     m_targetPosition = m_targetObject->transform().position();
     m_targetSpeed = m_targetObject->physics().speed().directional();
     m_bulletSpeed = gun.bulletSpeed();
-    m_bulletLifetime = gun.bulletLifetime();
+    m_bulletLifetime = Property<float>::get(gun.projectileName() + ".general.lifetime");
 }
 
 void HardpointAimHelper::aim() {

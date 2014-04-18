@@ -13,9 +13,6 @@ class Gun: public Weapon {
 public:
     Gun(const std::string& equipmentKey);
 
-    float bulletLifetime() const;
-    void setBulletLifetime(float bulletLifetime);
-
     float bulletSpeed() const;
     void setBulletSpeed(float bulletSpeed);
 
@@ -33,7 +30,6 @@ protected:
 
 protected:
     float m_bulletSpeed;
-    float m_bulletLifetime;
     Visuals m_visuals;
     SoundProperties m_fireSound;
 };
