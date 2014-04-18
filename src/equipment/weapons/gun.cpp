@@ -24,8 +24,7 @@
 Gun::Gun(const std::string& equipmentKey):
     Weapon(WeaponType::Gun, equipmentKey),
     m_bulletSpeed(100),
-    m_bulletLifetime(100),
-    m_cooldownTime(0)
+    m_bulletLifetime(100)
 {
 }
 
@@ -45,14 +44,6 @@ void Gun::setBulletSpeed(float bulletSpeed) {
     m_bulletSpeed = bulletSpeed;
 }
 
-const Visuals& Gun::visuals() const {
-    return m_visuals;
-}
-
-void Gun::setVisuals(const Visuals& visuals) {
-    m_visuals = visuals;
-}
-
 const SoundProperties& Gun::fireSound() const {
     return m_fireSound;
 }
@@ -61,25 +52,9 @@ void Gun::setFireSound(const SoundProperties& fireSound) {
     m_fireSound = fireSound;
 }
 
-float Gun::cooldownTime() const {
-    return m_cooldownTime;
-}
-
-void Gun::setCooldownTime(float cooldownTime) {
-    m_cooldownTime = cooldownTime;
-}
-
-const std::string& Gun::bulletName() const {
-    return m_bulletName;
-}
-
-void Gun::setBulletName(const std::string& bulletName) {
-    m_bulletName = bulletName;
-}
-
 void Gun::fireAtPoint(const glm::vec3& point) {
     if (canFire() && hardpoint()->inFieldOfAim(point)) {
-        Bullet *bullet =  WorldObjectBuilder(m_bulletName).buildBullet();
+        Bullet *bullet =  WorldObjectBuilder(projectileName()).buildBullet();
         setupBullet(bullet, point);
 
         World::instance()->god().scheduleSpawn(bullet);

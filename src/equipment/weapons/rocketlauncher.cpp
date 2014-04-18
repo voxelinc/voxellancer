@@ -27,39 +27,14 @@
 
 
 RocketLauncher::RocketLauncher(const std::string& equipmentKey):
-    Weapon(WeaponType::RocketLauncher, equipmentKey),
-    m_cooldownTime(0)
+    Weapon(WeaponType::RocketLauncher, equipmentKey)
 {
 
 }
 
-const Visuals& RocketLauncher::visuals() const {
-    return m_visuals;
-}
-
-void RocketLauncher::setVisuals(const Visuals& visuals) {
-    m_visuals = visuals;
-}
-
-float RocketLauncher::cooldownTime() const {
-    return m_cooldownTime;
-}
-
-void RocketLauncher::setCooldownTime(float cooldownTime) {
-    m_cooldownTime = cooldownTime;
-}
-
-const std::string& RocketLauncher::rocketName() const {
-    return m_rocketName;
-}
-
-void RocketLauncher::setRocketName(const std::string& rocketName) {
-    m_rocketName = rocketName;
-}
-
 void RocketLauncher::fireAtObject(WorldObject* target) {
     if (canFire()) {
-        Rocket* rocket = createRocket();
+        Rocket* rocket = WorldObjectBuilder(projectileName()).buildRocket();
         setupRocket(rocket, target);
 
         World::instance()->god().scheduleSpawn(rocket);
@@ -84,11 +59,5 @@ void RocketLauncher::setupRocket(Rocket* rocket, WorldObject* target) {
     rocket->setTarget(target);
 
     rocket->physics().setSpeed(worldObject->physics().speed());
-}
-
-
-Rocket* RocketLauncher::createRocket() {
-    Rocket* rocket = WorldObjectBuilder(m_rocketName).buildRocket();
-    return rocket;
 }
 
