@@ -71,6 +71,7 @@ Rocket* WorldObjectBuilder::buildRocket() {
         splitRocket->setSplitDistance(Property<float>(m_name + ".special.splitDistance", 150.0f));
         splitRocket->setSplitDirectionTolerance(Property<float>(m_name + ".special.splitDirectionTolerance", 30.0f));
         splitRocket->setSplitAngle(Property<float>(m_name + ".special.splitAngle", glm::quarter_pi<float>()));
+        splitRocket->setMinFlytimeBeforeSplit(Property<float>(m_name + ".special.minFlytimeBeforeSplit", 0.5f));
 
         rocket = splitRocket;
     } else {

@@ -19,7 +19,8 @@
 SplitRocket::SplitRocket():
     m_splitDistance(150.0f),
     m_splitDirectionTolerance(30.0f),
-    m_splitAngle(glm::quarter_pi<float>())
+    m_splitAngle(glm::quarter_pi<float>()),
+    m_minFlytimeBeforeSplit(0.0f)
 {
 
 }
@@ -64,6 +65,14 @@ float SplitRocket::splitAngle() const {
 
 void SplitRocket::setSplitAngle(float splitAngle) {
     m_splitAngle = splitAngle;
+}
+
+float SplitRocket::minFlytimeBeforeSplit() const {
+    return m_minFlytimeBeforeSplit;
+}
+
+void SplitRocket::setMinFlytimeBeforeSplit(float minFlytimeBeforeSplit) {
+    m_minFlytimeBeforeSplit = minFlytimeBeforeSplit;
 }
 
 void SplitRocket::split() {

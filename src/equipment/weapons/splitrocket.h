@@ -31,9 +31,11 @@ public:
     /**
      * Angle from fly-direction to direction of the spawned children
      */
-     float splitAngle() const;
-     void setSplitAngle(float splitAngle);
+    float splitAngle() const;
+    void setSplitAngle(float splitAngle);
 
+    float minFlytimeBeforeSplit() const;
+    void setMinFlytimeBeforeSplit(float minFlytimeBeforeSplit);
 
     void split();
 
@@ -44,6 +46,7 @@ protected:
     float m_splitDistance;
     float m_splitDirectionTolerance;
     float m_splitAngle;
+    float m_minFlytimeBeforeSplit;
 
     void spawnChildren();
     virtual void spawnExplosion() override;

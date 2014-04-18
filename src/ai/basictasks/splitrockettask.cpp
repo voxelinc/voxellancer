@@ -16,7 +16,8 @@ SplitRocketTask::SplitRocketTask(SplitRocket* rocket, BoardComputer* boardComput
 void SplitRocketTask::update(float deltaSec) {
     DirectSuicideTask::update(deltaSec);
     m_flytime += deltaSec;
-    if (m_flytime > 0.5f && m_target.valid()) {
+
+    if (m_flytime > m_rocket->minFlytimeBeforeSplit() && m_target.valid()) {
         glm::vec3 requiredDirection = m_target->position() - m_rocket->position();
         glm::vec3 rocketDirection = m_rocket->orientation() * glm::vec3(0, 0, -1);
 
