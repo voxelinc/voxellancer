@@ -23,9 +23,9 @@ void DamageForwarder::forwardDamageImpacts(std::list<DamageImpact> &dampedDeadly
         Voxel *deadVoxel = dampedDeadlyDamageImpact.voxel();
 
         m_currentWorldObject = dampedDeadlyDamageImpact.worldObject();
-        VoxelNeighbourHelper nHelper(m_currentWorldObject, false);
+        VoxelNeighbourHelper nHelper(m_currentWorldObject, true);
         const std::vector<Voxel*>& neighbours = nHelper.neighbours(deadVoxel);
-      //  std::cout << glm::length(dampedDeadlyDamageImpact.damageVec()) << std::endl;
+        std::cout << glm::length(dampedDeadlyDamageImpact.damageVec()) << std::endl;
         float s = 0;
         for(Voxel *neighbour : neighbours) {
             glm::vec3 voxelVec = glm::normalize(static_cast<glm::vec3>(neighbour->gridCell() - deadVoxel->gridCell()));
@@ -43,12 +43,13 @@ void DamageForwarder::forwardDamageImpacts(std::list<DamageImpact> &dampedDeadly
 
             DamageImpact forwarded(m_currentWorldObject,
                                     neighbour,
-                                    voxelVec * glm::length(dampedDeadlyDamageImpact.damageVec()) / 6.0f,
+                                    voxelVec * glm::length(dampedDeadlyDamageImpact.damageVec()) * distanceFactor
+                                    / 6.0f,
                                     dampedDeadlyDamageImpact.fieldOfDamage());
             s+= glm::length(forwarded.damageVec());
             m_damageImpactAccumulator.parse(forwarded);
         }
-    //    std::cout << "  " << s << std::endl;
+        std::cout << "  " << s << std::endl;
     }
 }
 

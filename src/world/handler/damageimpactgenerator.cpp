@@ -1,12 +1,20 @@
 #include "damageimpactgenerator.h"
 
-#include "worldobject/worldobject.h"
-
-#include "utils/tostring.h"
 #include "collision/voxelcollision.h"
-#include "voxel/voxel.h"
+
 #include "physics/physics.h"
+
+#include "voxel/voxel.h"
+
+#include "worldobject/worldobject.h"
 #include "worldobject/worldobjectinfo.h"
+
+
+
+DamageImpactGenerator::DamageImpactGenerator():
+    m_elasticity("physics.elasticity")
+{
+}
 
 void DamageImpactGenerator::parse(std::list<WorldObjectCollision>& worldObjectCollisions) {
     m_damageImpactAccumulator.clear();
@@ -15,37 +23,33 @@ void DamageImpactGenerator::parse(std::list<WorldObjectCollision>& worldObjectCo
         WorldObject* worldObjectA = worldObjectCollision.worldObjectA();
         WorldObject* worldObjectB = worldObjectCollision.worldObjectB();
 
-        float massPerImpactA = worldObjectA->physics().mass() / worldObjectCollision.voxelCollisions().size();
-        float massPerImpactB = worldObjectB->physics().mass() / worldObjectCollision.voxelCollisions().size();
+        float m1 = worldObjectA->physics().mass() / worldObjectCollision.voxelCollisions().size();
+        float m2 = worldObjectB->physics().mass() / worldObjectCollision.voxelCollisions().size();
 
         Transform targetTransformA = worldObjectA->physics().speed().moved(worldObjectA->transform(), 1.0f);
         Transform targetTransformB = worldObjectB->physics().speed().moved(worldObjectB->transform(), 1.0f);
 
         for(VoxelCollision& voxelCollision :  worldObjectCollision.voxelCollisions()) {
-            glm::vec3 voxelSpeedA = targetTransformA.applyTo(glm::vec3(voxelCollision.a().voxel()->gridCell())) - worldObjectA->transform().applyTo(glm::vec3(voxelCollision.a().voxel()->gridCell()));
-            glm::vec3 voxelSpeedB = targetTransformB.applyTo(glm::vec3(voxelCollision.b().voxel()->gridCell())) - worldObjectB->transform().applyTo(glm::vec3(voxelCollision.b().voxel()->gridCell()));
+            glm::vec3 v1 = targetTransformA.applyTo(glm::vec3(voxelCollision.a().voxel()->gridCell())) - voxelCollision.a().voxel()->position();
+            glm::vec3 v2 = targetTransformB.applyTo(glm::vec3(voxelCollision.b().voxel()->gridCell())) - voxelCollision.b().voxel()->position();
 
-
-            std::cout << "Energy A = " << glm::length(voxelSpeedA*voxelSpeedA * massPerImpactA/2.0f)<< std::endl;
-            std::cout << "Energy B = " << glm::length(voxelSpeedB*voxelSpeedB * massPerImpactB/2.0f)<< std::endl;
-            std::cout << "Energy delta = " << (((massPerImpactA * massPerImpactB) / (2*(massPerImpactA + massPerImpactB))) * (glm::length((voxelSpeedA - voxelSpeedB)) * glm::length((voxelSpeedA - voxelSpeedB)))) << std::endl;
+            float speedDiff = glm::length(v1 - v2);
+            float freedEnergy = ((m1 * m2) / (2*(m1 + m2))) * (speedDiff * speedDiff) * (1.0f - m_elasticity * m_elasticity);
 
             if (voxelCollision.a().worldObject()->spawnState() != SpawnState::RemovalScheduled) {
                 m_damageImpactAccumulator.parse(DamageImpact(voxelCollision.a().worldObject(),
                                                              voxelCollision.a().voxel(),
-                                                             (voxelSpeedB - voxelSpeedA) * (massPerImpactB),
+                                                             glm::normalize(v2 - v1) * (freedEnergy/2),
                                                              voxelCollision.b().worldObject()->collisionFieldOfDamage()));
             }
             if (voxelCollision.b().worldObject()->spawnState() != SpawnState::RemovalScheduled) {
                 m_damageImpactAccumulator.parse(DamageImpact(voxelCollision.b().worldObject(),
                                                              voxelCollision.b().voxel(),
-                                                             (voxelSpeedA - voxelSpeedB) * (massPerImpactA),
+                                                             glm::normalize(v1 - v2) * (freedEnergy/2),
                                                              voxelCollision.a().worldObject()->collisionFieldOfDamage()));
             }
-            std::cout << std::endl;
         }
     }
-    std::cout << std::endl;
 }
 
 void DamageImpactGenerator::parse(std::list<DamageImpact>& damageImpacts) {
