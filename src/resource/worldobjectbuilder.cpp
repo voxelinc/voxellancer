@@ -15,8 +15,6 @@
 #include "equipment/weapons/rocket.h"
 
 #include "worldobject/worldobjectinfo.h"
-#include "worldobject/genericship.h"
-#include "worldobject/genericworldobject.h"
 #include "worldobject/ship.h"
 #include "worldobject/worldobject.h"
 
@@ -69,7 +67,7 @@ Rocket* WorldObjectBuilder::buildRocket() {
 }
 
 Ship* WorldObjectBuilder::buildShip() {
-    GenericShip* ship = makeWorldObject<GenericShip>();
+    Ship* ship = makeWorldObject<Ship>();
     if (ship->crucialVoxel() == nullptr) {
         glow::warning("WorldObjectBuilder: ship %; has no crucial voxel", m_name);
     }
@@ -77,7 +75,7 @@ Ship* WorldObjectBuilder::buildShip() {
 }
 
 WorldObject* WorldObjectBuilder::buildWorldObject() {
-    GenericWorldObject* worldObject = makeWorldObject<GenericWorldObject>();
+    WorldObject* worldObject = makeWorldObject<WorldObject>();
     return worldObject;
 }
 
