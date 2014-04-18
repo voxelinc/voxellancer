@@ -2,6 +2,8 @@
 
 #include <GL/glew.h>
 
+#include <glow/logging.h>
+
 #include "camera/camera.h"
 #include "camera/camerahead.h"
 
@@ -24,6 +26,7 @@ StereoView::StereoView(const Viewport& viewport, const StereoRenderInfo& stereoR
     m_stereoBlitProgram(nullptr)
 {
     initialize();
+    glow::info() << "StereoView: " << this;
 }
 
 void StereoView::initialize() {

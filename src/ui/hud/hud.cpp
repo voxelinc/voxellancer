@@ -7,6 +7,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 
+#include <glow/logging.hpp>
 #include <glow/Program.hpp>
 
 #include "camera/camerahead.h"
@@ -63,6 +64,8 @@ HUD::HUD(Player* player):
 
     m_elements->addHudget(m_aimHelper);
     m_elements->addHudget(m_crossHair);
+
+    glow::info() << "Created HUD" << this;
 }
 
 HUD::~HUD() = default;
@@ -254,7 +257,7 @@ void HUD::updateFov() {
     m_fovx = glm::atan(glm::tan(m_fovy) * m_view->aspectRatio());
 }
 
-void HUD::setView(const View* view) {
+void HUD::setView(const View* view) { glow::debug() << "Set View " << view;
     m_view = view;
 }
 

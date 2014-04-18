@@ -18,8 +18,8 @@ glm::quat Camera::orientation() const {
 }
 
 void Camera::setOrientation(const glm::quat& orientation) {
-    setUp(orientation * glm::vec3(0, 1, 0));
-    setCenter(eye() + orientation * glm::vec3(0, 0, -1));
+    glowutils::Camera::setUp(orientation * glm::vec3(0, 1, 0));
+    glowutils::Camera::setCenter(eye() + orientation * glm::vec3(0, 0, -1));
     m_orientation = orientation;
 }
 

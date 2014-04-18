@@ -16,7 +16,7 @@ public:
     /**
      * Can't be set, orientation()/setOrientation() does their job.
      */
-    void setEye(const glm::vec3 & eye) = delete;
+    void setCenter(const glm::vec3 & center) = delete;
     void setUp(const glm::vec3 & up) = delete;
 
     glm::quat orientation() const;
