@@ -18,7 +18,8 @@
 
 SplitRocket::SplitRocket():
     m_splitDistance(150.0f),
-    m_splitDirectionTolerance(30.0f)
+    m_splitDirectionTolerance(30.0f),
+    m_splitAngle(glm::quarter_pi<float>())
 {
 
 }
@@ -57,6 +58,14 @@ void SplitRocket::setSplitDirectionTolerance(float splitDirectionTolerance) {
     m_splitDirectionTolerance = splitDirectionTolerance;
 }
 
+float SplitRocket::splitAngle() const {
+    return m_splitAngle;
+}
+
+void SplitRocket::setSplitAngle(float splitAngle) {
+    m_splitAngle = splitAngle;
+}
+
 void SplitRocket::split() {
     spawnChildren();
     spawnExplosion();
@@ -70,7 +79,7 @@ void SplitRocket::spawnChildren() {
             Rocket* rocket = WorldObjectBuilder(m_childrenType).buildRocket();
 
             glm::quat circleOrientation = glm::angleAxis(2 * glm::pi<float>() * i / m_childrenCount, glm::vec3(0, 0, -1));
-            glm::quat splitOrientation = glm::angleAxis(glm::quarter_pi<float>(), glm::vec3(1, 0, 0));
+            glm::quat splitOrientation = glm::angleAxis(m_splitAngle, glm::vec3(1, 0, 0));
 
             glm::quat launchOrientation = transform().orientation() * circleOrientation * splitOrientation;
             glm::vec3 spawnOffset = transform().orientation() * circleOrientation * glm::vec3(0, 1, 0);

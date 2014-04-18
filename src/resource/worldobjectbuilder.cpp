@@ -70,6 +70,7 @@ Rocket* WorldObjectBuilder::buildRocket() {
         splitRocket->setChildrenType(Property<std::string>(m_name + ".special.childrenType", "hornet"));
         splitRocket->setSplitDistance(Property<float>(m_name + ".special.splitDistance", 150.0f));
         splitRocket->setSplitDirectionTolerance(Property<float>(m_name + ".special.splitDirectionTolerance", 30.0f));
+        splitRocket->setSplitAngle(Property<float>(m_name + ".special.splitAngle", glm::quarter_pi<float>()));
 
         rocket = splitRocket;
     } else {

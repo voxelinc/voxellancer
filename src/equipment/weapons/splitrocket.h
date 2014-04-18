@@ -28,6 +28,13 @@ public:
     float splitDirectionTolerance() const;
     void setSplitDirectionTolerance(float splitDirectionTolerance);
 
+    /**
+     * Angle from fly-direction to direction of the spawned children
+     */
+     float splitAngle() const;
+     void setSplitAngle(float splitAngle);
+
+
     void split();
 
 
@@ -36,6 +43,7 @@ protected:
     std::string m_childrenType;
     float m_splitDistance;
     float m_splitDirectionTolerance;
+    float m_splitAngle;
 
     void spawnChildren();
     virtual void spawnExplosion() override;
