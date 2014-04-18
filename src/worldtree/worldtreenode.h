@@ -13,7 +13,6 @@
 
 class WorldTreeGeode;
 class WorldTreeNode;
-class WorldTreeShadowNodeImpl;
 
 class WorldTreeNode : public HandleOwner {
 public:

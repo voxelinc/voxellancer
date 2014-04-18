@@ -8,7 +8,7 @@ class WorldTreeShadowNode;
 
 /**
  * Returns the deepest active and undeleted node starting from the WorldTreeNode
- * it was obtained from
+ * it was obtained from.
  */
 class WorldTreeHint {
 public:
