@@ -100,10 +100,10 @@ bool Gun::isBulletPathClear(const glm::vec3& point, bool checkFriendlyFire) {
         if (object == m_hardpoint->components()->worldObject()) {
             return false;
         }
-        if (checkFriendlyFire && 
-            m_owner->objectType() == WorldObjectType::Ship && 
+        if (checkFriendlyFire)
+            if (m_owner->objectType() == WorldObjectType::Ship &&
             object->objectType() == WorldObjectType::Ship &&
-            !static_cast<Ship*>(object)->character()->faction().relationTo(static_cast<Ship*>(m_owner)->character()->faction()).isHostile()) {
+            static_cast<Ship*>(object)->character()->faction().relationTo(static_cast<Ship*>(m_owner)->character()->faction()).isFriendly()) {
             return false;
         }
     }
