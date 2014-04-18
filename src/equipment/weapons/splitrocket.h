@@ -34,6 +34,9 @@ public:
     float splitAngle() const;
     void setSplitAngle(float splitAngle);
 
+    float splitAngleRandomization() const;
+    void setSplitAngleRandomization(float splitAngleRandomization);
+
     float minFlytimeBeforeSplit() const;
     void setMinFlytimeBeforeSplit(float minFlytimeBeforeSplit);
 
@@ -46,6 +49,7 @@ protected:
     float m_splitDistance;
     float m_splitDirectionTolerance;
     float m_splitAngle;
+    float m_splitAngleRandomization;
     float m_minFlytimeBeforeSplit;
 
     void spawnChildren();

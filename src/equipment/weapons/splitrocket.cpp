@@ -1,12 +1,17 @@
 #include "splitrocket.h"
 
+#include <glow/logging.h>
+
 #include "ai/basictasks/splitrockettask.h"
+
+#include "equipment/weapons/bullet.h"
 
 #include "physics/physics.h"
 
 #include "resource/worldobjectbuilder.h"
 
 #include "utils/geometryhelper.h"
+#include "utils/randfloatpool.h"
 
 #include "voxeleffect/voxelexplosiongenerator.h"
 
@@ -15,11 +20,14 @@
 #include "world/god.h"
 #include "world/world.h"
 
+#include "worldobject/worldobject.h"
+
 
 SplitRocket::SplitRocket():
     m_splitDistance(150.0f),
     m_splitDirectionTolerance(30.0f),
     m_splitAngle(glm::quarter_pi<float>()),
+    m_splitAngleRandomization(0.0f),
     m_minFlytimeBeforeSplit(0.0f)
 {
 
@@ -67,6 +75,14 @@ void SplitRocket::setSplitAngle(float splitAngle) {
     m_splitAngle = splitAngle;
 }
 
+float SplitRocket::splitAngleRandomization() const {
+    return m_splitAngleRandomization;
+}
+
+void SplitRocket::setSplitAngleRandomization(float splitAngleRandomization) {
+    m_splitAngleRandomization = splitAngleRandomization;
+}
+
 float SplitRocket::minFlytimeBeforeSplit() const {
     return m_minFlytimeBeforeSplit;
 }
@@ -85,24 +101,35 @@ void SplitRocket::split() {
 void SplitRocket::spawnChildren() {
     if (m_targetHandle.valid()) {
         for (int i = 0; i < m_childrenCount; i++) {
-            Rocket* rocket = WorldObjectBuilder(m_childrenType).buildRocket();
+            WorldObject* child = WorldObjectBuilder(m_childrenType).build();
+
+            float splitAngle = RandFloatPool::randomize(m_splitAngle, m_splitAngleRandomization);
 
             glm::quat circleOrientation = glm::angleAxis(2 * glm::pi<float>() * i / m_childrenCount, glm::vec3(0, 0, -1));
-            glm::quat splitOrientation = glm::angleAxis(m_splitAngle, glm::vec3(1, 0, 0));
+            glm::quat splitOrientation = glm::angleAxis(splitAngle, glm::vec3(1, 0, 0));
 
             glm::quat launchOrientation = transform().orientation() * circleOrientation * splitOrientation;
             glm::vec3 spawnOffset = transform().orientation() * circleOrientation * glm::vec3(0, 1, 0);
             glm::vec3 rocketPosition = position() + circleOrientation * spawnOffset;
 
-            rocket->transform().setOrientation(launchOrientation);
-            rocket->transform().setPosition(rocketPosition);
+            child->transform().setOrientation(launchOrientation);
+            child->transform().setPosition(rocketPosition);
 
-            rocket->setCreator(m_creator);
-            rocket->setTarget(m_targetHandle.get());
+            Speed speed(physics().speed());
+            speed.setDirectional(launchOrientation * glm::vec3(0, 0, -1) * glm::length(speed.directional()));
+            child->physics().setSpeed(speed);
 
-            rocket->physics().setSpeed(physics().speed());
+            if (child->objectType() == WorldObjectType::Rocket) {
+                static_cast<Rocket*>(child)->setCreator(m_creator);
+                static_cast<Rocket*>(child)->setTarget(m_targetHandle.get());
+            }
 
-            World::instance()->god().scheduleSpawn(rocket);
+            if (child->objectType() == WorldObjectType::Bullet) {
+                static_cast<Bullet*>(child)->setCreator(m_creator);
+            }
+
+
+            World::instance()->god().scheduleSpawn(child);
         }
     }
 }
