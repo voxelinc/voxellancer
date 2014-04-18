@@ -36,7 +36,7 @@
 
 #include "gamestate/gameplay/gameplay.h"
 #include "gamestate/gameplay/running/gameplayrunning.h"
-#include "gamestate/gameplay/running/gameplayrunninginput.h"
+#include "gamestate/gameplay/gameplayinput.h"
 #include "gamestate/game.h"
 #include "gamestate/gameplay/gameplayscene.h"
 
@@ -78,7 +78,7 @@ static void resizeCallback(GLFWwindow* window, int width, int height) {
     glow::info("Resizing viewport to %;x%;", width, height);
     if (width > 0 && height > 0) {
         glViewport(0, 0, width, height);
-        game->gamePlay().running().input().resizeEvent(width, height);
+        game->gamePlay().currentInput().resizeEvent(width, height);
         game->viewer().setViewport(Viewport(0, 0, width, height));
     }
 }
@@ -111,12 +111,13 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
         game->gamePlay().scene().setWorldTreeRendererEnabled(!game->gamePlay().scene().worldTreeRendererEnabled());
     }
 
-	game->gamePlay().running().input().keyCallback(key, scancode, action, mods);
+    game->gamePlay().keyCallback(key, scancode, action, mods);
+    game->gamePlay().currentInput().keyCallback(key, scancode, action, mods);
 }
 
 
 static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
-    game->gamePlay().running().input().mouseButtonCallback(button, action, mods);
+    game->gamePlay().currentInput().mouseButtonCallback(button, action, mods);
 }
 
 void setGLFWCallbacks(GLFWwindow* window) {
