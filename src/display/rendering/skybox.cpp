@@ -19,7 +19,6 @@ Skybox::Skybox() :
     m_vertexArrayObject(0),
     m_vertexBuffer(0)
 {
-
 }
 
 void Skybox::initialize() {
@@ -78,6 +77,7 @@ void Skybox::draw(const Camera& camera){
     if (!m_texture) {
         initialize();
     }
+
     glDisable(GL_DEPTH_TEST);
 
     m_texture->bind();
@@ -101,5 +101,5 @@ void Skybox::beforeContextDestroy() {
 }
 
 void Skybox::afterContextRebuild() {
-    initialize();
+    // lazy init
 }

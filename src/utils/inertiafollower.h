@@ -3,6 +3,10 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 
+/**
+ *  Follows a position and orientation with a given inertia between
+ *  0 = instant follow and 100 = never moves
+ */
 
 class InertiaFollower {
 public:
@@ -13,6 +17,8 @@ public:
 
     const glm::quat& orientation() const;
     void setOrientation(const glm::quat& orientation);
+
+    void setInertia(float directional, float angular);
 
     void follow(const glm::vec3& targetPosition, const glm::quat& targetOrientation, float deltaSec);
 
