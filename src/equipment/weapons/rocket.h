@@ -32,13 +32,11 @@ public:
 
 
 protected:
-    void spawnExplosion() override;
-    void onLifetimeOver() override;
-
-
-protected:
     Handle<WorldObject> m_targetHandle;
     BoardComputer m_boardComputer;
     std::unique_ptr<AiTask> m_aiTask;
+
+    void spawnExplosion() override;
+    void onLifetimeOver() override;
 };
 

@@ -23,7 +23,7 @@ public:
      * (e.g. ship faster than bullet, target out of range) then this will return false.
      * direction() and point() are invalid then.
      */
-    bool isHitable();
+    bool isHittable();
 
     const glm::vec3& direction();
     const glm::vec3& point();

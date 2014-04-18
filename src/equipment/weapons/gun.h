@@ -25,12 +25,10 @@ public:
 
 
 protected:
-    void setupBullet(Bullet* bullet, const glm::vec3& point);
-
-
-protected:
     float m_bulletSpeed;
     Visuals m_visuals;
     SoundProperties m_fireSound;
+
+    void setupBullet(Bullet* bullet, const glm::vec3& point);
 };
 

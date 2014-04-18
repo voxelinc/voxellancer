@@ -58,7 +58,7 @@ void HardpointAimHelper::aim() {
     m_aimed = true;
 }
 
-bool HardpointAimHelper::isHitable() {
+bool HardpointAimHelper::isHittable() {
     if(!m_aimed) {
         aim();
     }

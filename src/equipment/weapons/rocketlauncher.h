@@ -23,11 +23,9 @@ public:
 
 
 protected:
-    void setupRocket(Rocket* rocket, WorldObject* target);
-
-
-protected:
     SoundProperties m_rocketSound;
     SoundProperties m_explosionSound;
+
+    void setupRocket(Rocket* rocket, WorldObject* target);
 };
 
