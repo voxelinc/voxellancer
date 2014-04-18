@@ -3,9 +3,9 @@
 #include <string>
 
 
-class Weapon;
 class Gun;
-class GenericRocketLauncher;
+class RocketLauncher;
+class Weapon;
 
 /*
     Dedicated to load either a Gun or GenericRocketLauncher
@@ -19,7 +19,7 @@ public:
     Weapon* build();
 
     Gun* buildGun();
-    GenericRocketLauncher* buildGenericRocketLauncher();
+    RocketLauncher* buildRocketLauncher();
 
 
 protected:

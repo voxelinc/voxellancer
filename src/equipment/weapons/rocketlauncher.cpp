@@ -7,6 +7,10 @@
 
 #include "physics/physics.h"
 
+#include "property/property.h"
+
+#include "resource/worldobjectbuilder.h"
+
 #include "voxel/voxelclusterbounds.h"
 #include "voxel/specialvoxels/hardpointvoxel.h"
 
@@ -23,9 +27,34 @@
 
 
 RocketLauncher::RocketLauncher(const std::string& equipmentKey):
-    Weapon(WeaponType::RocketLauncher, equipmentKey)
+    Weapon(WeaponType::RocketLauncher, equipmentKey),
+    m_cooldownTime(0)
 {
 
+}
+
+const Visuals& RocketLauncher::visuals() const {
+    return m_visuals;
+}
+
+void RocketLauncher::setVisuals(const Visuals& visuals) {
+    m_visuals = visuals;
+}
+
+float RocketLauncher::cooldownTime() const {
+    return m_cooldownTime;
+}
+
+void RocketLauncher::setCooldownTime(float cooldownTime) {
+    m_cooldownTime = cooldownTime;
+}
+
+const std::string& RocketLauncher::rocketName() const {
+    return m_rocketName;
+}
+
+void RocketLauncher::setRocketName(const std::string& rocketName) {
+    m_rocketName = rocketName;
 }
 
 void RocketLauncher::fireAtObject(WorldObject* target) {
@@ -55,5 +84,11 @@ void RocketLauncher::setupRocket(Rocket* rocket, WorldObject* target) {
     rocket->setTarget(target);
 
     rocket->physics().setSpeed(worldObject->physics().speed());
+}
+
+
+Rocket* RocketLauncher::createRocket() {
+    Rocket* rocket = WorldObjectBuilder(m_rocketName).buildRocket();
+    return rocket;
 }
 
