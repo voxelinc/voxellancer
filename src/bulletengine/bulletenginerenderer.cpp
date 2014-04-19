@@ -63,7 +63,7 @@ void BulletEngineRenderer::initialize() {
 }
 
 void BulletEngineRenderer::initializeProgram() {
-    std::cout << "BulletEngineRenderer::initializeProgram" << std::endl;
+//    std::cout << "BulletEngineRenderer::initializeProgram" << std::endl;
     m_program = new glow::Program();
     m_program->attach(
         glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/shader/bulletengine/bullet.vert"),
