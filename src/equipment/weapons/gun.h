@@ -4,18 +4,20 @@
 
 #include "equipment/weapon.h"
 
+#include "sound/soundproperties.h"
 
-class SoundProperties;
+
 class Bullet;
 
 class Gun: public Weapon {
 public:
     Gun(const std::string& equipmentKey);
 
-    virtual const SoundProperties& fireSound() const = 0;
-    
-    virtual float bulletLifetime() const = 0;
-    virtual float bulletSpeed() const = 0;
+    float bulletSpeed() const;
+    void setBulletSpeed(float bulletSpeed);
+
+    const SoundProperties& fireSound() const;
+    void setFireSound(const SoundProperties& fireSound);
 
     virtual void fireAtPoint(const glm::vec3& point);
 
@@ -23,7 +25,10 @@ public:
 
 
 protected:
-    virtual Bullet* createBullet() = 0;
+    float m_bulletSpeed;
+    Visuals m_visuals;
+    SoundProperties m_fireSound;
+
     void setupBullet(Bullet* bullet, const glm::vec3& point);
 };
 

@@ -1,6 +1,10 @@
 #pragma once
 
+#include "display/rendering/visuals.h"
+
 #include "equipment/weapon.h"
+
+#include "sound/soundproperties.h"
 
 #include "rocket.h"
 
@@ -13,13 +17,15 @@ class RocketLauncher: public Weapon {
 public:
     RocketLauncher(const std::string& equipmentKey);
 
-    virtual void fireAtObject(WorldObject* target);
+    void fireAtObject(WorldObject* target);
 
-    virtual void update(float deltaSec) override;
+    void update(float deltaSec) override;
 
 
 protected:
-    virtual Rocket* createRocket() = 0;
+    SoundProperties m_rocketSound;
+    SoundProperties m_explosionSound;
+
     void setupRocket(Rocket* rocket, WorldObject* target);
 };
 
