@@ -6,8 +6,6 @@
 
 #include <glm/glm.hpp>
 
-#include "display/drawable.h"
-
 #include "geometry/transform.h"
 
 #include "utils/vec3hash.h"
@@ -20,7 +18,7 @@ class VoxelClusterBounds;
 /**
  *  Base class for anything that consists of Voxels
  */
-class VoxelCluster : public Drawable {
+class VoxelCluster {
 public:
     VoxelCluster(float scale);
     virtual ~VoxelCluster();
@@ -33,6 +31,9 @@ public:
 
     const glm::vec3& position() const;
     const glm::quat& orientation() const;
+
+    float emissiveness() const;
+    void setEmissiveness(float emissiveness);
 
     Voxel* voxel(const glm::ivec3& position);
     const Voxel* voxel(const glm::ivec3& position) const;
@@ -51,5 +52,6 @@ protected:
     std::unique_ptr<VoxelRenderData> m_voxelRenderData;
     std::unique_ptr<VoxelClusterBounds> m_bounds;
     Transform m_transform;
+    float m_emissiveness;
 };
 
