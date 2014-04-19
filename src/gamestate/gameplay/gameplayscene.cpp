@@ -1,5 +1,10 @@
 #include "gameplayscene.h"
 
+#include "glowutils/global.h"
+#include "glowutils/Camera.h"
+#include "glowutils/WeightedAverageAlgorithm.h"
+#include "glowutils/ScreenAlignedQuad.h"
+
 #include "camera/camera.h"
 #include "camera/camerahead.h"
 
@@ -54,7 +59,7 @@ void GamePlayScene::draw(const Camera& camera, glow::FrameBufferObject* target, 
     m_framebuffer->clear();
     m_framebuffer->setDrawBuffers({ BufferNames::Color, BufferNames::NormalZ, BufferNames::Emissisiveness });
 
-    drawGame(camera);
+    drawGame(camera, destinationViewport);
 
     RenderMetaData metadata(camera, side);
     m_renderPipeline->apply(*m_framebuffer, metadata);
@@ -84,25 +89,46 @@ void GamePlayScene::setOutputBuffer(int i) {
     glow::info("Switched to output-buffer: %;", bufferNames[m_currentOutputBuffer]);
 }
 
-void GamePlayScene::drawGame(const Camera& camera) const {
+void GamePlayScene::drawGame(const Camera& camera, const Viewport& destinationViewport) const {
     World::instance()->skybox().draw(camera);
 
-    m_voxelRenderer->program()->setUniform("lightdir", m_defaultLightDir.get());
+    glow::ref_ptr<glowutils::AbstractTransparencyAlgorithm> algo(new glowutils::WeightedAverageAlgorithm());
+    std::unique_ptr<glowutils::Camera> cam(new glowutils::Camera(camera.orientation() * glm::vec3(0,0,-1), camera.position(), camera.orientation() * glm::vec3(0,1,0)));
+    algo->initialize("data/shader/transparency/", glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/shader/transparency/transparency.vert"), nullptr);
 
-    m_voxelRenderer->prepareDraw(camera);
 
-    for (WorldObject* worldObject : World::instance()->worldObjects()) {
-        VoxelRenderer::instance()->draw(*worldObject);
-    }
+    algo->draw([&](glow::Program* program) {
+        /*
+            m_voxelRenderer->program()->setUniform("lightdir", m_defaultLightDir.get());
 
-    World::instance()->player().hud().draw();
+            m_voxelRenderer->prepareDraw(camera);
 
-    m_voxelRenderer->afterDraw();
+            for (WorldObject* worldObject : World::instance()->worldObjects()) {
+                VoxelRenderer::instance()->draw(*worldObject);
+            }
 
-    World::instance()->particleEngine().draw(camera);
+            World::instance()->player().hud().draw();
 
-    if (m_worldTreeRendererEnabled) {
-        m_worldTreeRenderer->draw(camera);
-    }
+            m_voxelRenderer->afterDraw();
+
+            World::instance()->particleEngine().draw(camera);
+
+            if (m_worldTreeRendererEnabled) {
+                m_worldTreeRenderer->draw(camera);
+            }*/
+        },
+        cam.get(),
+        destinationViewport.width(),
+        destinationViewport.height());
+
+        glow::ref_ptr<glowutils::ScreenAlignedQuad> m_quad = new glowutils::ScreenAlignedQuad(algo->getOutput());
+
+        glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+        glDisable(GL_DEPTH_TEST);
+
+        m_quad->draw();
+
+        glEnable(GL_DEPTH_TEST);
+    
 }
 

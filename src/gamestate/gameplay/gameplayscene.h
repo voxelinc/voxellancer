@@ -50,6 +50,6 @@ protected:
     int m_currentOutputBuffer;
 
 
-    void drawGame(const Camera& camera) const;
+    void drawGame(const Camera& camera, const Viewport& destinationViewport) const;
 };
 
