@@ -65,8 +65,6 @@ void InstancedBulletContainer::add(InstancedBullet* bullet) {
     bullet->setBufferSlot(slot);
     m_bulletData[slot] = *bullet->data();
 
-    glow::debug() << slot << " " <<  m_bulletData[slot].originTime;
-
     invalidateSlot(slot);
 }
 
