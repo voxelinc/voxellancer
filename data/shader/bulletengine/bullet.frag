@@ -20,12 +20,12 @@ vec4 voxelFragmenNormalZ(vec3 normal);
 
 
 void main() {
-    if (f_active < 0.5 ) {
+    if (f_active < 0.5 || f_deathTime <= time) {
         discard;
     }
 
-    fragColor = vec4(0, 1, 0, 1);//voxelFragmentColor(f_color.xyz, f_emissiveness, f_normal, f_modelposition);
-    emissiveness = 0.5;//voxelFragmentEmissiveness(f_color.xyz, f_emissiveness);
+    fragColor = voxelFragmentColor(f_color.xyz, f_emissiveness, f_normal, f_modelposition);
+    emissiveness = voxelFragmentEmissiveness(f_color.xyz, f_emissiveness);
     normalz = voxelFragmenNormalZ(f_normal);
 }
 

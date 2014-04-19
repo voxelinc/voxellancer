@@ -3,6 +3,7 @@
 #include <cassert>
 #include <iostream>
 
+#include <glow/logging.h>
 #include <glow/Program.h>
 
 #include "resource/worldelementbuilder.h"
@@ -63,6 +64,8 @@ void InstancedBulletContainer::add(InstancedBullet* bullet) {
 
     bullet->setBufferSlot(slot);
     m_bulletData[slot] = *bullet->data();
+
+    glow::debug() << slot << " " <<  m_bulletData[slot].originTime;
 
     invalidateSlot(slot);
 }

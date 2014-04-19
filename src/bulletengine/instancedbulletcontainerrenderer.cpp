@@ -149,7 +149,7 @@ void InstancedBulletContainerRenderer::setVertexAttribDivisors() {
     setVertexAttribDivisor("v_gridCell", 1);
     setVertexAttribDivisor("v_color", 1);
     setVertexAttribDivisor("v_emissiveness", 1);
-std::cout << m_container.prototype().voxelCount() << std::endl;
+
     int voxelCount = m_container.prototype().voxelCount();
     setVertexAttribDivisor("v_originPosition", voxelCount);
     setVertexAttribDivisor("v_originEulers", voxelCount);
