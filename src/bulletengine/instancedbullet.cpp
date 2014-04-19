@@ -42,6 +42,8 @@ InstancedBullet::InstancedBullet(const Handle<InstancedBulletContainer>& contain
     m_collisionFilter->setCollideableWith(WorldObjectType::Rocket, false);
     m_collisionFilter->setCollideableWith(WorldObjectType::Bullet, false);
 
+    setHitSound(const_cast<InstancedBulletContainer*>(m_container.get())->prototype().hitSound());
+
     updateData();
     updateCollisionPoint();
 }
@@ -91,16 +93,6 @@ void InstancedBullet::setTransform(const Transform& transform) {
 void InstancedBullet::setSpeed(const Speed& speed) {
     m_speed = speed;
     updateData();
-}
-
-float InstancedBullet::emissiveness() const {
-    assert(m_container.valid());
-    return const_cast<InstancedBulletContainer*>(m_container.get())->prototype().emissiveness();
-}
-
-const SoundProperties& InstancedBullet::hitSound() const {
-    assert(m_container.valid());
-    return const_cast<InstancedBulletContainer*>(m_container.get())->prototype().hitSound();
 }
 
 void InstancedBullet::setCreator(WorldObject* creator) {

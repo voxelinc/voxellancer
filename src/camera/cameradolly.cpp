@@ -6,7 +6,7 @@
 
 
 CameraDolly::CameraDolly():
-    InertiaFollower(10.0f, 10.0f),
+    InertiaFollower(80.0f, 80.0f),
     m_cameraHead(new CameraHead(this)),
     m_followHelper(new CameraFollowHelper())
 {
@@ -33,4 +33,3 @@ void CameraDolly::update(float deltaSec) {
         follow(m_followHelper->followPosition(), followWorldObject->transform().orientation(), deltaSec);
     }
 }
-

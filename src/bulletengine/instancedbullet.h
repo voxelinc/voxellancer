@@ -13,10 +13,13 @@
 #include "geometry/speed.h"
 #include "geometry/point.h"
 
+#include "utils/handle/handle.h"
+
 #include "worldtree/worldtreehint.h"
 
 
 class InstancedBulletContainer;
+class Voxel;
 
 struct InstancedBulletData {
     float active;
@@ -61,9 +64,6 @@ public:
     virtual void setTransform(const Transform& transform) override;
 
     virtual void setSpeed(const Speed& speed) override;
-
-    float emissiveness() const;
-    virtual const SoundProperties& hitSound() const override;
 
     virtual void spawn() override;
     virtual void remove() override;

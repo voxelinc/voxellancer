@@ -95,7 +95,4 @@ int VoxelCluster::voxelCount() const {
     return m_voxels.size();
 }
 
-float VoxelCluster::emissiveness() const {
-    return 0.0f;
-}
 

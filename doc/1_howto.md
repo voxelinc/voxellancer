@@ -23,6 +23,7 @@ only for debugging:
 * F8 - reload shader and configs
 * F9 - world status information
 * 1-9 - show framebuffer
+* F - toggle flycam
 
 ## Commandline parameters
 

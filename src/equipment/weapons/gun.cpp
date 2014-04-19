@@ -8,11 +8,14 @@
 
 #include "physics/physics.h"
 
+#include "resource/worldelementbuilder.h"
+
 #include "sound/soundmanager.h"
 
 #include "voxel/voxelclusterbounds.h"
 #include "voxel/specialvoxels/hardpointvoxel.h"
 
+#include "worldobject/worldobject.h"
 #include "worldobject/worldobjectcomponents.h"
 
 #include "world/world.h"
@@ -20,13 +23,30 @@
 
 
 Gun::Gun(const std::string& equipmentKey):
-    Weapon(WeaponType::Gun, equipmentKey)
+    Weapon(WeaponType::Gun, equipmentKey),
+    m_bulletSpeed(100)
 {
+}
+
+float Gun::bulletSpeed() const {
+    return m_bulletSpeed;
+}
+
+void Gun::setBulletSpeed(float bulletSpeed) {
+    m_bulletSpeed = bulletSpeed;
+}
+
+const SoundProperties& Gun::fireSound() const {
+    return m_fireSound;
+}
+
+void Gun::setFireSound(const SoundProperties& fireSound) {
+    m_fireSound = fireSound;
 }
 
 void Gun::fireAtPoint(const glm::vec3& point) {
     if (canFire() && hardpoint()->inFieldOfAim(point)) {
-        Bullet *bullet = createBullet();
+        Bullet *bullet =  WorldElementBuilder(projectileName()).buildBullet();
         setupBullet(bullet, point);
 
         bullet->spawn();

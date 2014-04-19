@@ -37,9 +37,7 @@ void VoxelParticleRenderer::updateBuffer(int begin, int end, VoxelParticleData* 
     }
 
     int byteCount = (end - begin + 1) * sizeof(VoxelParticleData);
-
-    m_gpuParticleBuffer->setSubData(byteCount, begin * sizeof(VoxelParticleData), data);
-
+    m_gpuParticleBuffer->setSubData(begin * sizeof(VoxelParticleData), byteCount, data);
 }
 
 void VoxelParticleRenderer::draw(const Camera& camera) {
@@ -133,7 +131,6 @@ void VoxelParticleRenderer::setBufferSize(int bufferSize) {
     m_bufferSize = bufferSize;
     m_gpuParticleBuffer->setData(m_bufferSize * sizeof(VoxelParticleData), nullptr, GL_STREAM_DRAW);
 }
-
 
 void VoxelParticleRenderer::beforeContextDestroy() {
     m_vertexArrayObject = nullptr;

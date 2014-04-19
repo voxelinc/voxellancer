@@ -1,5 +1,7 @@
 #pragma once
 
+#include <unordered_map>
+#include <vector>
 #include <list>
 #include <memory>
 
@@ -73,6 +75,10 @@ public:
     void setCrucialVoxel(const glm::ivec3& cell);
     bool isCrucialVoxelDestroyed();
 
+    std::unordered_map<glm::ivec3, Voxel*> cockpitVoxels();
+    void addCockpitVoxel(const glm::ivec3& cell);
+    bool areCockpitVoxelsDestroyed();
+
     void updateTransformAndGeode(const glm::vec3& position, const glm::quat& orientation);
 
     virtual void onCollision();
@@ -92,6 +98,8 @@ protected:
     std::unique_ptr<WorldObjectInfo> m_info;
     std::unique_ptr<WorldObjectComponents> m_components;
 
+    std::unordered_map<glm::ivec3, Voxel*> m_cockpitVoxels;
+    bool m_cockpitVoxelsDestroyed;
     Voxel* m_crucialVoxel;
     bool m_crucialVoxelDestroyed;
     float m_collisionFieldOfDamage;

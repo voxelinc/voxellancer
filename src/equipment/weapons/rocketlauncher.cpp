@@ -7,6 +7,10 @@
 
 #include "physics/physics.h"
 
+#include "property/property.h"
+
+#include "resource/worldelementbuilder.h"
+
 #include "voxel/voxelclusterbounds.h"
 #include "voxel/specialvoxels/hardpointvoxel.h"
 
@@ -30,7 +34,7 @@ RocketLauncher::RocketLauncher(const std::string& equipmentKey):
 
 void RocketLauncher::fireAtObject(WorldObject* target) {
     if (canFire()) {
-        Rocket* rocket = createRocket();
+        Rocket* rocket = WorldElementBuilder(projectileName()).buildRocket();
         setupRocket(rocket, target);
 
         World::instance()->god().scheduleSpawn(rocket);

@@ -26,5 +26,9 @@ public:
     virtual float length() override;
 
     virtual bool passiveForCollisionDetection() override;
+
+
+protected:
+    void spawnExplosion() override;
 };
 

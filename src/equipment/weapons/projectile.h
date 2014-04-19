@@ -4,8 +4,6 @@
 
 #include "sound/soundproperties.h"
 
-#include "worldobject/worldobject.h"
-
 
 class SoundProperties;
 class WorldObject;
@@ -30,16 +28,16 @@ public:
     float lifetime() const;
     void setLifetime(float lifetime);
 
-    virtual const SoundProperties& hitSound() const = 0;
+    const SoundProperties& hitSound() const;
+    void setHitSound(const SoundProperties& hitSound);
 
     virtual void update(float deltaSec);
 
     virtual void spawn() = 0;
     virtual void remove() = 0;
 
-    void onCollision();
-    void onSpawnFail();
-
+    virtual void onCollision();
+    virtual void onSpawnFail();
 
 protected:
     WorldObject* m_creator;

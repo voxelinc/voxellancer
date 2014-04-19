@@ -107,7 +107,7 @@ void InstancedBulletContainerRenderer::initialize() {
     m_initialized = true;
 }
 
-void InstancedBulletContainerRenderer::setupVertexAttribute(glow::Buffer * buffer, int stride, int bindingNum, const std::string& name, GLint offset, int numPerVertex, GLenum type, GLboolean normalise) {
+void InstancedBulletContainerRenderer::setupVertexAttribute(glow::Buffer* buffer, int stride, int bindingNum, const std::string& name, GLint offset, int numPerVertex, GLenum type, GLboolean normalise) {
     glow::VertexAttributeBinding* binding = m_vao->binding(bindingNum);
     GLint location = m_container.engine().renderer().location(name);
 
@@ -149,7 +149,7 @@ void InstancedBulletContainerRenderer::setVertexAttribDivisors() {
     setVertexAttribDivisor("v_gridCell", 1);
     setVertexAttribDivisor("v_color", 1);
     setVertexAttribDivisor("v_emissiveness", 1);
-
+std::cout << m_container.prototype().voxelCount() << std::endl;
     int voxelCount = m_container.prototype().voxelCount();
     setVertexAttribDivisor("v_originPosition", voxelCount);
     setVertexAttribDivisor("v_originEulers", voxelCount);

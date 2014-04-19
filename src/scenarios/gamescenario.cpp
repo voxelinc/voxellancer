@@ -62,7 +62,7 @@ void GameScenario::createArmada() {
             glm::vec3(900, 0, 0),
             glm::vec3(1500, 0, 0),
             glm::vec3(1400, 500, 0),
-        },500.0f));
+        }, 500.0f));
 
     Ship* chief = WorldElementBuilder("normandy").buildShip();
     chief->transform().setPosition(glm::vec3(700, 0, 0));

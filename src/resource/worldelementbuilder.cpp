@@ -13,14 +13,12 @@
 #include "equipment/engineslot.h"
 #include "equipment/hardpoint.h"
 #include "equipment/weapon.h"
-#include "equipment/weapons/genericworldobjectbullet.h"
-#include "equipment/weapons/genericrocket.h"
+#include "equipment/weapons/worldobjectbullet.h"
+#include "equipment/weapons/rocket.h"
 
 #include "world/world.h"
 
 #include "worldobject/worldobjectinfo.h"
-#include "worldobject/genericship.h"
-#include "worldobject/genericworldobject.h"
 #include "worldobject/ship.h"
 #include "worldobject/worldobject.h"
 #include "worldobject/worldobjectcomponents.h"
@@ -66,7 +64,7 @@ InstancedBullet* WorldElementBuilder::buildInstancedBullet() {
 }
 
 WorldObjectBullet* WorldElementBuilder::buildWorldObjectBullet() {
-    GenericWorldObjectBullet* bullet = makeWorldObject<GenericWorldObjectBullet>();
+    WorldObjectBullet* bullet = makeWorldObject<WorldObjectBullet>();
 
     bullet->setEmissiveness(Property<float>(m_name + ".general.emissiveness", 0.0f));
     bullet->setLifetime(Property<float>(m_name + ".general.lifetime"));
@@ -77,7 +75,7 @@ WorldObjectBullet* WorldElementBuilder::buildWorldObjectBullet() {
 }
 
 Rocket* WorldElementBuilder::buildRocket() {
-    GenericRocket* rocket = makeWorldObject<GenericRocket>();
+    Rocket* rocket = makeWorldObject<Rocket>();
 
     rocket->setLifetime(Property<float>(m_name + ".general.lifetime"));
     rocket->setHitSound(SoundProperties::fromProperties(m_name + ".explosionsound"));
@@ -86,15 +84,19 @@ Rocket* WorldElementBuilder::buildRocket() {
 }
 
 Ship* WorldElementBuilder::buildShip() {
-    GenericShip* ship = makeWorldObject<GenericShip>();
+    Ship* ship = makeWorldObject<Ship>();
+
     if (ship->crucialVoxel() == nullptr) {
         glow::warning("WorldElementBuilder: ship %; has no crucial voxel", m_name);
+    }
+    if (ship->cockpitVoxels().empty()) {
+        glow::warning("WorldElementBuilder: ship %; has no cockpit voxel(s)", m_name);
     }
     return ship;
 }
 
 WorldObject* WorldElementBuilder::buildOther() {
-    return makeWorldObject<GenericWorldObject>();
+    return makeWorldObject<WorldObject>();
 }
 
 template<typename T>

@@ -1,14 +1,18 @@
 #include "projectile.h"
 
+#include "sound/soundmanager.h"
+
 #include "world/god.h"
 #include "world/world.h"
-#include "sound/soundmanager.h"
+
+#include "worldobject/worldobjectinfo.h"
 
 
 Projectile::Projectile():
     m_creator(nullptr),
     m_lifetime(0.0f)
 {
+
 }
 
 WorldObject* Projectile::creator() {
@@ -25,6 +29,14 @@ float Projectile::lifetime() const {
 
 void Projectile::setLifetime(float lifetime) {
     m_lifetime = lifetime;
+}
+
+const SoundProperties& Projectile::hitSound() const {
+    return m_hitSound;
+}
+
+void Projectile::setHitSound(const SoundProperties& hitSound) {
+    m_hitSound = hitSound;
 }
 
 void Projectile::update(float deltaSec) {
