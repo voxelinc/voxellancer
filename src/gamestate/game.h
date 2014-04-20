@@ -16,7 +16,7 @@ class Viewer;
  */
 class Game: public GameState {
 public:
-    Game();
+    Game(bool showIntro);
     ~Game();
 
     GamePlay& gamePlay();

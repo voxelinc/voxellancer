@@ -234,7 +234,7 @@ int main(int argc, char* argv[]) {
         PropertyDirectory("data/equipment/projectiles").read();
 
         loadingScreen->display("Loading... Game");
-        game = new Game();
+        game = new Game(clParser.showIntro());
 
         if(clParser.hmd()) {
             game->hmdManager().setupHMD(game->viewer());
