@@ -131,7 +131,7 @@ void GamePlayScene::drawGame(const Camera& camera) const {
 
 void GamePlayScene::drawGameAlpha(const Camera& camera) const {
     m_voxelRenderer->prepareDraw(camera, false);
-    m_voxelRenderer->program()->getUniform<glm::vec3>("lightdir")->set(glm::vec3(0, 0, 1));
+    m_voxelRenderer->program()->setUniform("lightdir", m_defaultLightDir.get());
     VoxelFont::instance()->drawString("Voxellancer", glm::vec3(0, 0.5f, -1) * 40.f, glm::quat(), FontSize::SIZE5x7, 0.4f, FontAlign::CENTER);
     m_voxelRenderer->afterDraw();
 }
