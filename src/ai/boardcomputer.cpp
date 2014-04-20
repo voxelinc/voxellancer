@@ -130,7 +130,7 @@ void BoardComputer::shootBullet(const std::vector<Handle<WorldObject>>& targets)
 
     for (auto& targetHandle : targets) {
         if (const WorldObject* target = targetHandle.get()) {
-            glm::vec3 shipDirection = m_worldObject->orientation() * glm::vec3(0, 0, -1);
+            // Hardpoints check themselves whether they can fire, just tell everyone to shoot everything
             glm::vec3 targetDirection = target->position() - m_worldObject->position();
             float angle = GeometryHelper::angleBetween(shipDirection, targetDirection);
             if (glm::abs(angle) < max_angle) {
@@ -159,6 +159,7 @@ void BoardComputer::update(float deltaSec) {
     if(m_overwriteEngineState) {
         m_worldObject->components().setEngineState(m_engineState);
     }
+    m_engineState.clear();
     m_overwriteEngineState = false;
 }
 

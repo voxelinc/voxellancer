@@ -3,13 +3,14 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 
+#include "display/rendering/visuals.h"
+
 #include "equipment.h"
 
 class Sound;
 class Hardpoint;
 class Projectile;
 class WorldObject;
-class Visuals;
 class SoundProperties;
 
 enum class WeaponType {
@@ -18,21 +19,25 @@ enum class WeaponType {
 };
 
 /**
-*   Weapon to be mounted to a Hardpoint
-*/
-
+ *   Weapon to be mounted to a Hardpoint
+ */
 class Weapon: public Equipment {
 public:
     Weapon(WeaponType type, const std::string& equipmentKey);
 
-    virtual const Visuals& visuals() const = 0;
-
     Hardpoint* hardpoint();
     virtual void setHardpoint(Hardpoint* hardpoint);
 
-    WeaponType type() const;
+    float cooldownTime() const;
+    void setCooldownTime(float cooldownTime);
 
-    virtual float cooldownTime() const = 0;
+    const Visuals& visuals() const;
+    void setVisuals(const Visuals& visuals);
+
+    const std::string projectileName() const;
+    void setProjectileName(const std::string& name);
+
+    WeaponType type() const;
 
     virtual void update(float deltaSec);
 
@@ -45,5 +50,8 @@ protected:
     WeaponType m_type;
 
     float m_cooldown;
+    float m_cooldownTime;
+    Visuals m_visuals;
+    std::string m_projectileName;
 };
 
