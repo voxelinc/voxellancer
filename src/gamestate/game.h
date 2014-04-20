@@ -6,6 +6,7 @@
 
 
 class GamePlay;
+class Intro;
 class HMDManager;
 class Viewer;
 
@@ -35,5 +36,6 @@ protected:
     std::unique_ptr<Viewer> m_viewer;
 
     GamePlay* m_gamePlay;
+    Intro* m_intro;
 };
 

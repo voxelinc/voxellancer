@@ -5,16 +5,19 @@
 #include "etc/contextprovider.h"
 #include "etc/hmd/hmdmanager.h"
 #include "display/viewer.h"
+
 #include "gamestate/gameplay/gameplay.h"
+#include "gamestate/intro/intro.h"
 
 
 Game::Game():
     GameState("Game", nullptr),
     m_hmdManager(HMDManager::instance()),
     m_viewer(new Viewer(Viewport(0, 0, ContextProvider::instance()->resolution().width(), ContextProvider::instance()->resolution().height()))),
-    m_gamePlay(new GamePlay(this))
+    m_gamePlay(new GamePlay(this)),
+    m_intro(new Intro(this))
 {
-    setInitialSubState(m_gamePlay);
+    setInitialSubState(m_intro);
 }
 
 Game::~Game() = default;
