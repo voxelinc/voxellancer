@@ -24,9 +24,15 @@ void DefaultRenderPipeline::apply(FrameBuffer& frameBuffer, const RenderMetaData
     if (useFxaa != m_fxaa->isEnabled()) {
         m_fxaa->setEnabled(useFxaa);
         if (useFxaa) { // rewire buffer for fxaa
-            m_finalization->setInputMapping({ { "color", BufferNames::FXAA }, { "bloom", BufferNames::Bloom }, { "transparency", BufferNames::TransparencyAccumulation } });
+            m_finalization->setInputMapping({   { "color", BufferNames::FXAA },
+                                                { "bloom", BufferNames::Emissisiveness },
+                                                { "transparencyAcc", BufferNames::TransparencyAccumulation },
+                                                { "transparencyCnt", BufferNames::TransparencyCount } });
         } else {
-            m_finalization->setInputMapping({ { "color", BufferNames::Color }, { "bloom", BufferNames::Bloom }, { "transparency", BufferNames::TransparencyAccumulation } });
+            m_finalization->setInputMapping({   { "color", BufferNames::Color },
+                                                { "bloom", BufferNames::Emissisiveness },
+                                                { "transparencyAcc", BufferNames::TransparencyAccumulation },
+                                                { "transparencyCnt", BufferNames::TransparencyCount } });
         }
     }
 }
@@ -59,7 +65,7 @@ void DefaultRenderPipeline::addEmissivenessBlurVertical() {
 void DefaultRenderPipeline::addEmissivenessBlurHorizontal() {
     auto pass = std::make_shared<PostProcessingPass>("blurh", m_quad);
     pass->setInputMapping({ { "source", BufferNames::BlurTmp } });
-    pass->setOutput({ BufferNames::Bloom });
+    pass->setOutput({ BufferNames::Emissisiveness }); // intentional repurpose to save buffers
     pass->setFragmentShader("data/shader/postprocessing/blur.frag");
     pass->setUniform("direction", glm::vec2(1, 0));
     add(pass);
@@ -67,7 +73,10 @@ void DefaultRenderPipeline::addEmissivenessBlurHorizontal() {
 
 void DefaultRenderPipeline::addFinalization() {
     m_finalization = std::make_shared<PostProcessingPass>("blurh", m_quad);
-    m_finalization->setInputMapping({ { "color", BufferNames::Color }, { "bloom", BufferNames::Bloom }, { "transparency", BufferNames::TransparencyAccumulation } });
+    m_finalization->setInputMapping({   { "color", BufferNames::Color }, 
+                                        { "bloom", BufferNames::Emissisiveness }, // intentional repurpose to save buffers
+                                        { "transparencyAcc", BufferNames::TransparencyAccumulation },
+                                        { "transparencyCnt", BufferNames::TransparencyCount } });
     m_finalization->setOutput({ BufferNames::Default });
     m_finalization->setFragmentShader("data/shader/postprocessing/combine.frag");
     add(m_finalization);

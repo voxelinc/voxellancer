@@ -5,6 +5,7 @@ uniform float withBorder;
 layout(location = 0) out vec4 fragColor;
 layout(location = 1) out vec4 normalz;
 layout(location = 2) out vec4 emissiveness;
+layout(location = 3) out vec4 count;
 
 flat in vec3 f_normal;
 in vec3 f_color;
@@ -21,5 +22,6 @@ void main() {
     fragColor = voxelFragmentColor(f_color, f_emissiveness, f_normal, f_modelposition);
     emissiveness = voxelFragmentEmissiveness(f_color, f_emissiveness);
     normalz = voxelFragmenNormalZ(f_normal);
+	count = vec4(0.01, 0.0, 0.0, 0.0);
 }
 
