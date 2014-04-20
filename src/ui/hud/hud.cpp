@@ -180,12 +180,23 @@ void HUD::draw() {
 
 void HUD::onClick(ClickType clickType) {
     Ray toCrossHair = Ray::fromTo(m_player->cameraHead().position(), m_crossHair->worldPosition());
+    ObjectHudget* smallestTargetHudget = nullptr;
     for (std::unique_ptr<Hudget>& hudget : m_elements->hudgets()) {
         if (hudget->isAt(toCrossHair) && hudget.get() != m_crossHair) {
-            hudget->onClick(clickType);
+            ObjectHudget *targetHudget = dynamic_cast<ObjectHudget*>(hudget.get());
+            if (targetHudget) {
+                if (!smallestTargetHudget) {
+                    smallestTargetHudget = targetHudget;
+                } else if (smallestTargetHudget->objectDelegate()->worldObject()->voxelCount() > targetHudget->objectDelegate()->worldObject()->voxelCount()) {
+                    smallestTargetHudget = targetHudget;
+                }
+                continue;
+            }
+            hudget->onClick(clickType); // if not an object hudget, click the first
             return;
         }
     }
+    smallestTargetHudget->onClick(clickType);
 }
 
 glm::vec3 HUD::applyTo(const glm::vec3 &vertex) const {
