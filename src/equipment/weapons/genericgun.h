@@ -33,7 +33,7 @@ public:
     const std::string& bulletName() const;
     void setBulletName(const std::string& bulletName);
 
-
+        
 protected:
     float m_bulletSpeed;
     float m_bulletLifetime;
@@ -43,5 +43,7 @@ protected:
     std::string m_bulletName;
 
     virtual Bullet* createBullet() override;
+
+    void setBulletExtend(const std::string& bulletName);
 };
 

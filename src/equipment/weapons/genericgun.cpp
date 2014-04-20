@@ -4,6 +4,29 @@
 
 #include "genericbullet.h"
 
+#include "equipment/hardpoint.h"
+
+#include "geometry/capsule.h"
+
+#include "worldtree/worldtreequery.h"
+#include "worldtree/worldtreegeode.h"
+
+#include "collision/collisiondetector.h"
+
+#include "voxel/specialvoxels/hardpointvoxel.h"
+#include "voxel/voxelclusterbounds.h"
+
+#include "world/world.h"
+
+#include "worldobject/worldobjectcomponents.h"
+#include "worldobject/ship.h"
+
+#include "ai/character.h"
+#include "factions/faction.h"
+#include "factions/factionrelation.h"
+
+#include "resource/clustercache.h"
+
 
 GenericGun::GenericGun(const std::string& name):
     Gun(name),
@@ -59,9 +82,22 @@ const std::string& GenericGun::bulletName() const {
 
 void GenericGun::setBulletName(const std::string& bulletName) {
     m_bulletName = bulletName;
+    setBulletExtend(bulletName);
 }
 
 Bullet* GenericGun::createBullet() {
     return WorldObjectBuilder(m_bulletName).buildBullet();
 }
 
+void GenericGun::setBulletExtend(const std::string& bulletName) {
+    //ClusterCache* cache = ClusterCache::instance();
+    Bullet* bullet = createBullet();
+
+    m_bulletMaxWidth = glm::max(bullet->bounds().minimalGridAABB().extent(XAxis), bullet->bounds().minimalGridAABB().extent(YAxis))* bullet->transform().scale();
+    m_bulletLength = bullet->bounds().minimalGridAABB().extent(ZAxis) * bullet->transform().scale();
+    m_spawnDistance = glm::root_two<float>() * bullet->transform().scale();
+
+    //m_bulletMaxWidth = glm::max(cache->gridExtend(filename, XAxis), cache->gridExtend(filename, YAxis))* scale;
+    //m_bulletLength = cache->gridExtend(filename, ZAxis) * scale;
+    //m_spawnDistance = glm::root_two<float>() * scale;
+}

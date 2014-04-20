@@ -29,9 +29,7 @@ public:
 
     virtual void setHardpoint(Hardpoint* hardpoint) override;
 
-    bool isBulletPathClear(const glm::vec3& point, bool checkFriendlyFire = false);
-
-    void createBulletPrototype();
+    virtual bool isBulletPathClear(const glm::vec3& point, bool checkFriendlyFire = false);
 
 
 protected:
@@ -39,9 +37,9 @@ protected:
     void setupBullet(Bullet* bullet, const glm::vec3& point);
     WorldObject* m_owner;
 
-    Bullet* bulletPrototype;
-    float spawnDistance;
-    float bulletLength;
-    float bulletMaxWidth;
+    Bullet* m_bulletPrototype;
+    float m_spawnDistance;
+    float m_bulletLength;
+    float m_bulletMaxWidth;
 };
 
