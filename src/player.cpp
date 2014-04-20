@@ -88,7 +88,7 @@ void Player::fire() {
 
         for (std::shared_ptr<Hardpoint>& hardpoint : m_ship->components().hardpoints()) {
             if (hardpoint->weapon() && hardpoint->weapon()->type() == WeaponType::Gun) {
-                Gun* gun = dynamic_cast<Gun*>(hardpoint->weapon().get());
+                Gun* gun = static_cast<Gun*>(hardpoint->weapon().get());
                 if (gun->isBulletPathClear(targetPoint)) {
                     gun->fireAtPoint(targetPoint);
                 }

@@ -33,6 +33,8 @@ public:
 
     virtual bool isBulletPathClear(const glm::vec3& point, bool checkFriendlyFire = false);
 
+    virtual void setProjectileName(const std::string& name) override;
+
 
 protected:
     float m_bulletSpeed;
@@ -42,7 +44,7 @@ protected:
     void setupBullet(Bullet* bullet, const glm::vec3& point);
     WorldObject* m_owner;
 
-    Bullet* m_bulletPrototype;
+    void setBulletExtend();
     float m_spawnDistance;
     float m_bulletLength;
     float m_bulletMaxWidth;
