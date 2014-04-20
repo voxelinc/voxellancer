@@ -81,7 +81,7 @@ void Intro::onLeft() {
 
 }
 
-const Trigger& Intro::overTrigger() const {
+Trigger& Intro::overTrigger() {
     return *m_overTrigger;
 }
 
