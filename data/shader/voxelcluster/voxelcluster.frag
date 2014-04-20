@@ -23,6 +23,6 @@ void main() {
     fragColor = vec4(rgbColor * f_color.a, f_color.a);
     emissiveness = voxelFragmentEmissiveness(f_color.rgb, f_emissiveness);
     normalz = voxelFragmenNormalZ(f_normal);
-	count = vec4(f_color.a, f_color.a, f_color.a, 1.0);
+	count = vec4(1/255, f_color.a, 1.0, 1.0);
 }
 
