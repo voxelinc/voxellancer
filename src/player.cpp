@@ -85,7 +85,8 @@ void Player::fire() {
             Ray ray(m_hud->crossHair().worldPosition(), shootDirection);
             targetPoint = m_aimer->aim(ray);
         }
-        for (std::shared_ptr<Hardpoint> hardpoint : m_ship->components().hardpoints()) {
+
+        for (std::shared_ptr<Hardpoint>& hardpoint : m_ship->components().hardpoints()) {
             if (hardpoint->weapon() && hardpoint->weapon()->type() == WeaponType::Gun) {
                 Gun* gun = dynamic_cast<Gun*>(hardpoint->weapon().get());
                 if (gun->isBulletPathClear(targetPoint)) {

@@ -32,6 +32,10 @@ bool FactionRelation::isHostile() const {
     return m_friendliness <= -30.0f;
 }
 
+bool FactionRelation::isFriendly() const {
+    return m_friendliness >= 30.0f;
+}
+
 FactionRelationType FactionRelation::type() const {
     if (m_friendliness <= -30.0f) {
         return FactionRelationType::Enemy;
