@@ -1,9 +1,11 @@
 #include "aitask.h"
 
 
-AiTask::AiTask(BoardComputer* boardComputer):
+AiTask::AiTask(BoardComputer* boardComputer, AiTask* parent):
+    State(parent),
     m_handle(Handle<AiTask>(this)),
-    m_boardComputer(boardComputer)
+    m_boardComputer(boardComputer),
+    m_parent(parent)
 {
 }
 
@@ -13,6 +15,10 @@ AiTask::~AiTask() {
 
 BoardComputer* AiTask::boardComputer() {
     return m_boardComputer;
+}
+
+AiTask* AiTask::parent() {
+    return m_parent;
 }
 
 bool AiTask::isFinished() {

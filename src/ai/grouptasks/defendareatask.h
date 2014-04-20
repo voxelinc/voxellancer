@@ -9,6 +9,7 @@
 #include "ai/basictasks/flytotask.h"
 #include "ai/basictasks/fighttask.h"
 
+
 class CollisionFilter;
 class Squad;
 class Sphere;
@@ -19,22 +20,14 @@ public:
     ~DefendAreaTask();
 
     void addPoint(const glm::vec3& point);
-    
+
     const std::list<glm::vec3>& points();
     float range();
 
     virtual void update(float deltaSec) override;
 
+
 protected:
-    virtual void onNewLeader(Ship* leader) override;
-    virtual void onMemberJoin(Ship* member) override;
-    void setPatrol();
-    void setFight();
-    void updatePatrol();
-    void updateFight();
-
-    bool isEnemyInRange();
-
     std::unique_ptr<CollisionFilter> m_collisionFilter;
     std::shared_ptr<FlyToTask> m_leaderFlyTask;
     std::shared_ptr<FightTask> m_leaderFightTask;
@@ -44,5 +37,14 @@ protected:
 
     float m_defendRange;
     bool m_fighting;
+
+    virtual void onNewLeader(Ship* leader) override;
+    virtual void onMemberJoin(Ship* member) override;
+    void setPatrol();
+    void setFight();
+    void updatePatrol();
+    void updateFight();
+
+    bool isEnemyInRange();
 };
 

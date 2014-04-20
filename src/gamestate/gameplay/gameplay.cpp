@@ -17,6 +17,7 @@
 #include "scenarios/missionscenario.h"
 #include "scenarios/scriptedscenario.h"
 #include "scenarios/piratescenario.h"
+#include "scenarios/raidscenario.h"
 
 #include "sound/soundmanager.h"
 
@@ -89,7 +90,6 @@ SoundManager& GamePlay::soundManager() {
 }
 
 void GamePlay::loadScenario(int i) {
-
     TextureRenderer loadRenderer("data/textures/loading.dds");
     loadRenderer.display("Loading Scenario...");
 
@@ -113,6 +113,9 @@ void GamePlay::loadScenario(int i) {
     case 4:
         m_scenario.reset(new PirateScenario(this));
         break;
+    case 6:
+        m_scenario.reset(new RaidScenario(this));
+        break;
     default:
         m_scenario.reset(new BaseScenario(this));
     }
@@ -123,7 +126,7 @@ void GamePlay::loadScenario(int i) {
 void GamePlay::keyCallback(int key, int scancode, int action, int mods) {
     if (action == GLFW_PRESS) {
         switch (key) {
-        case GLFW_KEY_F:        
+        case GLFW_KEY_F:
             m_freecamActive = !m_freecamActive;
             if (m_freecamActive) {
                 m_freecamInput->setPosition(World::instance()->player().cameraHead().cameraDolly()->position());

@@ -6,6 +6,7 @@
 #include "voxel/voxelrenderer.h"
 #include "letter.h"
 
+
 VoxelFont *VoxelFont::s_instance = nullptr;
 
 VoxelFont::VoxelFont():
@@ -39,7 +40,7 @@ void VoxelFont::loadFont(const std::string& identifier, glm::vec3 offset, std::m
 }
 
 void VoxelFont::loadChar(const std::string& filename, glm::vec3 offset, const char index, std::map<char, std::unique_ptr<Letter>> *map){
-    std::unique_ptr<Letter> element(new Letter(1.0));
+    std::unique_ptr<Letter> element(new Letter(1.0f));
     ClusterCache::instance()->fillCluster(element.get(), filename);
     element->transform().setCenter(offset);
     (*map)[index] = move(element);

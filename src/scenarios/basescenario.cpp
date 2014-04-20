@@ -16,9 +16,12 @@
 #include "scripting/scriptengine.h"
 #include "worldobject/worldobjectinfo.h"
 #include "sound/soundmanager.h"
+
 #include "world/god.h"
 #include "world/world.h"
 #include "world/god.h"
+#include "world/spawnhelper.h"
+
 #include "player.h"
 
 
@@ -27,6 +30,8 @@ BaseScenario::BaseScenario(GamePlay* gamePlay) :
     m_world(nullptr)
 {
 }
+
+BaseScenario::~BaseScenario() = default;
 
 void BaseScenario::load() {
     createWorld();
@@ -50,6 +55,7 @@ void BaseScenario::reset() {
 
 void BaseScenario::createWorld() {
     m_world = World::instance();
+    m_spawnHelper.reset(new SpawnHelper(m_world));
 }
 
 void BaseScenario::populateWorld() {
