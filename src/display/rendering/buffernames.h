@@ -12,6 +12,7 @@ namespace {
         Emissisiveness,
         BlurTmp,
         Bloom,
+        TransparencyAccumulation,
         BufferCount // should always be last member and not be used as a name
     };
 
@@ -24,5 +25,6 @@ namespace {
         "Emissisiveness",
         "BlurTmp",
         "Bloom",
+        "TransparencyAccumulation",
     };
 }

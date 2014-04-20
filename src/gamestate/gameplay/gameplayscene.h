@@ -51,5 +51,6 @@ protected:
 
 
     void drawGame(const Camera& camera) const;
+    void drawGameAlpha(const Camera& camera) const;
 };
 

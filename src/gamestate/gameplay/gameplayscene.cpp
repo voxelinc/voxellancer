@@ -17,6 +17,7 @@
 #include "sound/soundmanager.h"
 
 #include "ui/hud/hud.h"
+#include "ui/voxelfont.h"
 
 #include "voxel/voxelrenderer.h"
 #include "voxeleffect/voxelparticleengine.h"
@@ -51,10 +52,32 @@ void GamePlayScene::draw(const Camera& camera, glow::FrameBufferObject* target, 
     }
 
     m_framebuffer->setResolution(camera.viewport());
+    m_framebuffer->setDrawBuffers({ BufferNames::Color, BufferNames::TransparencyAccumulation, BufferNames::NormalZ, BufferNames::Emissisiveness });
     m_framebuffer->clear();
     m_framebuffer->setDrawBuffers({ BufferNames::Color, BufferNames::NormalZ, BufferNames::Emissisiveness });
 
-    drawGame(camera);
+    drawGame(camera);    
+    
+
+    m_framebuffer->setDrawBuffers({ BufferNames::TransparencyAccumulation, BufferNames::NormalZ, BufferNames::Emissisiveness });
+    //glDisable(GL_CULL_FACE);
+    //CheckGLError();
+    glDepthMask(GL_FALSE);
+    CheckGLError();
+    glEnable(GL_BLEND);
+    CheckGLError();
+    glBlendFunc(GL_ONE, GL_ONE);
+    CheckGLError();
+    drawGameAlpha(camera);
+    //glEnable(GL_CULL_FACE);
+    //CheckGLError();
+    glDepthMask(GL_TRUE);
+    CheckGLError();
+    glDisable(GL_BLEND);
+    CheckGLError();
+    glDisable(GL_DEPTH_TEST);
+    CheckGLError();
+
 
     RenderMetaData metadata(camera, side);
     m_renderPipeline->apply(*m_framebuffer, metadata);
@@ -106,3 +129,9 @@ void GamePlayScene::drawGame(const Camera& camera) const {
     }
 }
 
+void GamePlayScene::drawGameAlpha(const Camera& camera) const {
+    m_voxelRenderer->prepareDraw(camera, false);
+    m_voxelRenderer->program()->getUniform<glm::vec3>("lightdir")->set(glm::vec3(0, 0, 1));
+    VoxelFont::instance()->drawString("Voxellancer", glm::vec3(0, 0.5f, -1) * 40.f, glm::quat(), FontSize::SIZE5x7, 0.4f, FontAlign::CENTER);
+    m_voxelRenderer->afterDraw();
+}

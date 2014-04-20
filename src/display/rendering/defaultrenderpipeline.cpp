@@ -24,9 +24,9 @@ void DefaultRenderPipeline::apply(FrameBuffer& frameBuffer, const RenderMetaData
     if (useFxaa != m_fxaa->isEnabled()) {
         m_fxaa->setEnabled(useFxaa);
         if (useFxaa) { // rewire buffer for fxaa
-            m_finalization->setInputMapping({ { "color", BufferNames::FXAA }, { "bloom", BufferNames::Bloom } });
+            m_finalization->setInputMapping({ { "color", BufferNames::FXAA }, { "bloom", BufferNames::Bloom }, { "transparency", BufferNames::TransparencyAccumulation } });
         } else {
-            m_finalization->setInputMapping({ { "color", BufferNames::Color }, { "bloom", BufferNames::Bloom } });
+            m_finalization->setInputMapping({ { "color", BufferNames::Color }, { "bloom", BufferNames::Bloom }, { "transparency", BufferNames::TransparencyAccumulation } });
         }
     }
 }
@@ -67,7 +67,7 @@ void DefaultRenderPipeline::addEmissivenessBlurHorizontal() {
 
 void DefaultRenderPipeline::addFinalization() {
     m_finalization = std::make_shared<PostProcessingPass>("blurh", m_quad);
-    m_finalization->setInputMapping({ { "color", BufferNames::Color }, { "bloom", BufferNames::Bloom } });
+    m_finalization->setInputMapping({ { "color", BufferNames::Color }, { "bloom", BufferNames::Bloom }, { "transparency", BufferNames::TransparencyAccumulation } });
     m_finalization->setOutput({ BufferNames::Default });
     m_finalization->setFragmentShader("data/shader/postprocessing/combine.frag");
     add(m_finalization);
