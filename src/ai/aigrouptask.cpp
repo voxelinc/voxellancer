@@ -5,12 +5,18 @@
 #include "ai/character.h"
 #include "ai/basictasks/formationmembertask.h"
 
-AiGroupTask::AiGroupTask(Squad& squad) :
-    m_squad(squad)
+
+AiGroupTask::AiGroupTask(Squad& squad, AiGroupTask* parent):
+    m_squad(squad),
+    m_parent(parent)
 {
     if (m_squad.leader()) {
         onNewLeader(m_squad.leader());
     }
+}
+
+AiGroupTask* AiGroupTask::parent() {
+    return m_parent;
 }
 
 void AiGroupTask::update(float deltaSec) {
