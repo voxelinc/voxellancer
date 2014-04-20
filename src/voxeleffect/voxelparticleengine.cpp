@@ -77,7 +77,6 @@ void VoxelParticleEngine::removeParticle(int index) {
     VoxelParticleData& particle = m_cpuParticleBuffer[index];
     particle.status = VoxelParticleData::Status::Removed;
     m_freeParticleBufferIndices.push(index);
-    //particle.color = 0xff00ff;
 
     particleChanged(index);
 }

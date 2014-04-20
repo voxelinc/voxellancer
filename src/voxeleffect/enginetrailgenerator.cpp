@@ -24,7 +24,7 @@ EngineTrailGenerator::EngineTrailGenerator(Engine& engine, const WorldObject& cr
     prop_stepDistance("vfx.engineTrailStepDistance"),
     prop_idleTime("vfx.engineTrailIdleCooldown")
 {
-    m_generator->setColor(0x6666FF);
+    m_generator->setColor(0x6666FFFF);
     m_generator->setEmissiveness(0.4f);
     m_generator->setCount(8);
     m_generator->setForce(0.10f, 0.3f);

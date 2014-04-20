@@ -109,7 +109,7 @@ void ClusterLoader::readCsv(std::vector<Voxel*> *list){
                 green = stoi(voxelStrings[cell.x].substr(3, 2), NULL, 16);
                 blue = stoi(voxelStrings[cell.x].substr(5, 2), NULL, 16);
                 alpha = stoi(voxelStrings[cell.x].substr(7, 2), NULL, 16);
-                color = alpha << 24 | red << 16 | green << 8 | blue;
+                color = red << 24 | green << 16 | blue << 8 | alpha ;
                 if (alpha > 0)
                     list->push_back(new Voxel(cell, color));
                 cell.x++;

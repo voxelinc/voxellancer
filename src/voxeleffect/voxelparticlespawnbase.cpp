@@ -29,7 +29,7 @@ VoxelParticleSpawnBase::VoxelParticleSpawnBase(
     m_forceRandomization(0.0f),
     m_lifetime(1.0f),
     m_lifetimeRandomization(0.0f),
-    m_color(0xFFFFFF),
+    m_color(0xFFFFFFFF),
     m_emissiveness(0.0f),
     m_impactVector(0, 0, 0),
     m_particleDampening(dampeningName),

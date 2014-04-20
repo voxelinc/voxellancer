@@ -7,6 +7,7 @@
 #include <glow/Buffer.h>
 #include <glow/Program.h>
 
+#include "utils/colorhelper.h"
 #include "utils/tostring.h"
 
 #include "voxelcluster.h"
@@ -73,7 +74,7 @@ void VoxelRenderData::updateBuffer() {
     for (auto& pair : m_voxel) {
         Voxel *voxel = pair.second;
         assert(voxel != nullptr);
-        voxelData[i++] = VoxelData{ glm::vec3(voxel->gridCell()), voxel->visuals().color(), voxel->visuals().emissiveness() };
+        voxelData[i++] = VoxelData{ glm::vec3(voxel->gridCell()), ColorHelper::flipColorForGPU(voxel->visuals().color()), voxel->visuals().emissiveness() };
     }
 
     m_voxelDataBuffer->unmap();
