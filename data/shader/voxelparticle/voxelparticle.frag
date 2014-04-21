@@ -26,10 +26,10 @@ void main() {
         discard;
     }
     if (transparentPass > 0 && f_color.a > 0.9999) {
-            discard;
+        discard;
     }
     if (transparentPass == 0 && f_color.a < 0.9999) {
-            discard;
+        discard;
     }
     
     vec3 rgbColor = voxelFragmentColor(f_color.rgb, f_emissiveness, f_normal, f_modelposition);
