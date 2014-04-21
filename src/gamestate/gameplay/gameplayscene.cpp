@@ -63,8 +63,8 @@ void GamePlayScene::draw(const Camera& camera, glow::FrameBufferObject* target, 
     
 
     m_framebuffer->setDrawBuffers({ BufferNames::TransparencyAccumulation, BufferNames::NormalZ, BufferNames::Emissisiveness, BufferNames::TransparencyCount });
-    //glDisable(GL_CULL_FACE);
-    //CheckGLError();
+    glDisable(GL_CULL_FACE);
+    CheckGLError();
     glDepthMask(GL_FALSE);
     CheckGLError();
     glEnable(GL_BLEND);
@@ -72,8 +72,8 @@ void GamePlayScene::draw(const Camera& camera, glow::FrameBufferObject* target, 
     glBlendFunc(GL_ONE, GL_ONE);
     CheckGLError();
     drawGameAlpha(camera);
-    //glEnable(GL_CULL_FACE);
-    //CheckGLError();
+    glEnable(GL_CULL_FACE);
+    CheckGLError();
     glDepthMask(GL_TRUE);
     CheckGLError();
     glDisable(GL_BLEND);
