@@ -20,7 +20,7 @@ AiGroupTask* AiGroupTask::parent() {
 }
 
 void AiGroupTask::update(float deltaSec) {
-
+    State::update(deltaSec);
 }
 
 bool AiGroupTask::isInProgress() {
