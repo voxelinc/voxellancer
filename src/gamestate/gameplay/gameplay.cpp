@@ -17,6 +17,7 @@
 #include "scenarios/missionscenario.h"
 #include "scenarios/scriptedscenario.h"
 #include "scenarios/piratescenario.h"
+#include "scenarios/transparencyscenario.h"
 
 #include "sound/soundmanager.h"
 
@@ -43,7 +44,7 @@ GamePlay::GamePlay(Game* game) :
     m_freecamActive(false),
     m_scene(new GamePlayScene(*this)),
     m_soundManager(new SoundManager()),
-    m_scenario(new ScriptedScenario(this, "data/scripts/scenarios/demo.lua"))
+    m_scenario(new TransparencyScenario(this))
 {
     updateView();
     setInitialSubState(m_runningState);
@@ -112,6 +113,9 @@ void GamePlay::loadScenario(int i) {
         break;
     case 4:
         m_scenario.reset(new PirateScenario(this));
+        break;
+    case 5:
+        m_scenario.reset(new TransparencyScenario(this));
         break;
     default:
         m_scenario.reset(new BaseScenario(this));
