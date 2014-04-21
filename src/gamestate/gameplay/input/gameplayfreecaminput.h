@@ -3,71 +3,62 @@
 #include <vector>
 
 #include "input/inputmapping.h"
+#include "input/actionkeymapping.h"
 
-#include "ui/actionkeymapping.h"
+#include "gamestate/gameplay/gameplayinput.h"
 #include "utils/statemachine/trigger.h"
-
 #include "property/property.h"
+#include "camera/cameradolly.h"
 
 
-class Player;
 class WorldObject;
-class InputConfigurator;
 class GameState;
 class HUD;
 class HMD;
-class Player;
+class CameraDolly;
 
-class GamePlayRunningInput {
+class GamePlayFreecamInput : public GamePlayInput {
 public:
-    GamePlayRunningInput();
+    GamePlayFreecamInput();
 
-    void resizeEvent(const unsigned int width, const unsigned int height);
-    void keyCallback(int key, int scancode, int action, int mods);
-    void mouseButtonCallback(int button, int action, int mods);
-	void update(float deltaSec);
+    void resizeEvent(const unsigned int width, const unsigned int height) override;
+    //void keyCallback(int key, int scancode, int action, int mods);
+    //void mouseButtonCallback(int button, int action, int mods);
+	virtual void update(float deltaSec) override;
+
+    const glm::vec3& position();
+    const glm::quat& orientation();
+    void setPosition(const glm::vec3& position);
+    void setOrientation(const glm::quat& orientation);
+
+    CameraHead& cameraHead();
 
 
 protected:
-    InputConfigurator* m_inputConfigurator;
+    std::unique_ptr<CameraDolly> m_cameraDolly;
+
     SecondaryInputValues m_secondaryInputValues;
     std::vector<ActionKeyMapping*> m_actions;
-    bool m_centerCrosshair;
-    glm::vec2 m_lastMousePos;
 
-    bool m_mouseControl;
-    int m_cursorMaxDistance;
     int m_lastfocus;
-
-    void toggleControls();
+    float m_cursorMaxDistance;
 
     void processUpdate();
     void processMouseUpdate(float deltaSec);
     void processHMDUpdate();
     void applyUpdates();
 
-    void processFireActions();
     void processMoveActions();
     void processRotateActions();
-    void processTargetSelectActions();
 
     float getInputValue(ActionKeyMapping* action);
     float getInputValue(InputMapping mapping);
 
     void addActionsToVector();
-    void setupJoystickControls();
     void retrieveInputValues();
-
-    float m_currentTimePressedLeft;
-    float m_currentTimePressedRight;
 
     Property<float> prop_deadzoneMouse;
     Property<float> prop_deadzoneGamepad;
-
-    Property<float> prop_maxClickTime;
-
-    ActionKeyMapping fireAction;
-    ActionKeyMapping rocketAction;
 
     ActionKeyMapping moveLeftAction;
     ActionKeyMapping moveRightAction;
@@ -81,13 +72,11 @@ protected:
     ActionKeyMapping rotateClockwiseAction;
     ActionKeyMapping rotateCClockwiseAction;
 
-    ActionKeyMapping selectNextAction;
-    ActionKeyMapping selectPreviousAction;
-
     glm::vec3 m_moveUpdate;
     glm::vec3 m_rotateUpdate;
-    bool m_fireUpdate;
-    bool m_rocketUpdate;
-
-    void placeCrossHair(double winX, double winY);
+    Property<float> prop_moveFactor;
+    Property<float> prop_rotateFactor;
+    Property<float> prop_mouseMultiplier;
+    glm::vec3 m_position;
+    glm::quat m_orientation;
 };

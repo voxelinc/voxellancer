@@ -1,5 +1,7 @@
 #pragma once
 
+#include <unordered_map>
+#include <vector>
 #include <list>
 #include <memory>
 
@@ -16,7 +18,7 @@ class CockpitVoxel;
 class FuelVoxel;
 class CollisionFilter;
 class Physics;
-class ObjectInfo;
+class WorldObjectInfo;
 class VoxelCollision;
 class WorldObjectComponents;
 
@@ -59,7 +61,7 @@ public:
     Physics& physics();
     const Physics& physics() const;
 
-    ObjectInfo& objectInfo();
+    WorldObjectInfo& info();
 
     WorldObjectComponents& components();
     const WorldObjectComponents& components() const;
@@ -72,6 +74,10 @@ public:
     Voxel* crucialVoxel();
     void setCrucialVoxel(const glm::ivec3& cell);
     bool isCrucialVoxelDestroyed();
+
+    std::unordered_map<glm::ivec3, Voxel*> cockpitVoxels();
+    void addCockpitVoxel(const glm::ivec3& cell);
+    bool areCockpitVoxelsDestroyed();
 
     void updateTransformAndGeode(const glm::vec3& position, const glm::quat& orientation);
 
@@ -91,10 +97,12 @@ protected:
     std::unique_ptr<CollisionFilter> m_collisionFilter;
     std::unique_ptr<CollisionDetector> m_collisionDetector;
     std::unique_ptr<Physics> m_physics;
-    std::unique_ptr<ObjectInfo> m_objectInfo;
+    std::unique_ptr<WorldObjectInfo> m_info;
     std::unique_ptr<WorldObjectComponents> m_components;
 
     Handle<WorldObject> m_handle;
+    std::unordered_map<glm::ivec3, Voxel*> m_cockpitVoxels;
+    bool m_cockpitVoxelsDestroyed;
     Voxel* m_crucialVoxel;
     bool m_crucialVoxelDestroyed;
     float m_collisionFieldOfDamage;

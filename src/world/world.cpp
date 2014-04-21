@@ -14,7 +14,7 @@
 #include "ui/hud/textfieldhudget.h"
 #include "ui/hud/hud.h"
 
-#include "skybox.h"
+#include "display/rendering/skybox.h"
 #include "scripting/scriptengine.h"
 
 #include "worldlogic.h"

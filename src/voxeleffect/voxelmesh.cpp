@@ -1,4 +1,5 @@
 #include "voxelmesh.h"
+
 #include <glow/Buffer.h>
 #include <glow/VertexArrayObject.h>
 #include <glow/VertexAttributeBinding.h>
@@ -27,18 +28,6 @@ VoxelMesh::VoxelMesh():
 {
 }
 
-void VoxelMesh::setupVertexAttribute(glow::Program* program, glow::VertexArrayObject* vao, const std::string& name, GLboolean normalised, int bindingNum, GLint offset) {
-    glow::VertexAttributeBinding* binding = vao->binding(bindingNum);
-    GLint location = program->getAttributeLocation(name);
-    assert(location >= 0);
-
-    binding->setAttribute(location);
-    binding->setBuffer(m_vertexBuffer, 0, sizeof(glm::vec3) * 2);
-    binding->setFormat(3, GL_FLOAT, normalised, offset);
-
-    vao->enable(location);
-}
-
 void VoxelMesh::bindTo(
     glow::Program* program,
     glow::VertexArrayObject* vao,
@@ -53,7 +42,7 @@ void VoxelMesh::bindTo(
 }
 
 void VoxelMesh::initialize() {
-    glow::Array<glm::vec3> array{
+    std::array<glm::vec3, 28> array {
         urb, dummy,
         lub, dummy,
         rlb, back,
@@ -76,10 +65,24 @@ void VoxelMesh::initialize() {
     m_initialized = true;
 }
 
+void VoxelMesh::setupVertexAttribute(glow::Program* program, glow::VertexArrayObject* vao, const std::string& name, GLboolean normalised, int bindingNum, GLint offset) {
+    glow::VertexAttributeBinding* binding = vao->binding(bindingNum);
+    GLint location = program->getAttributeLocation(name);
+    assert(location >= 0);
+
+    binding->setAttribute(location);
+    binding->setBuffer(m_vertexBuffer, 0, sizeof(glm::vec3) * 2);
+    binding->setFormat(3, GL_FLOAT, normalised, offset);
+
+    vao->enable(location);
+}
+
 void VoxelMesh::beforeContextDestroy() {
     m_vertexBuffer = nullptr;
     m_initialized = false;
 }
 
 void VoxelMesh::afterContextRebuild() {
+    // lazy init
 }
+

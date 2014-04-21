@@ -19,7 +19,7 @@ public:
 
     BoardComputer* boardComputer();
 
-    virtual void update(float deltaSec);
+    virtual void update(float deltaSec) = 0;
     virtual bool isFinished();
 
     Handle<AiTask>& handle();

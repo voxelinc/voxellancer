@@ -22,7 +22,7 @@
 
 #include "physics/physics.h"
 
-#include "ui/objectinfo.h"
+#include "worldobject/worldobjectinfo.h"
 
 #include "utils/tostring.h"
 #include "utils/geometryhelper.h"
@@ -64,7 +64,7 @@ HUD::HUD(Player* player):
     m_drawHud("vfx.drawhud"),
     m_view(nullptr)
 {
-    m_scanner->setScanRadius(1050.0f);
+    m_scanner->setScanRadius(500.0f);
 
     m_elements->addHudget(m_aimHelper);
     m_elements->addHudget(m_crossHair);
@@ -153,7 +153,7 @@ void HUD::update(float deltaSec) {
     updateScanner(deltaSec);
 
     if (m_target.get()) {
-        m_elements->setTargetName(m_target->objectInfo().name());
+        m_elements->setTargetName(m_target->info().name());
     } else {
         m_elements->setTargetName("no target");
     }
@@ -188,11 +188,29 @@ void HUD::draw() {
 
 void HUD::onClick(ClickType clickType) {
     Ray toCrossHair = Ray::fromTo(m_player->cameraHead().position(), m_crossHair->worldPosition());
+    ObjectHudget* smallestTargetHudget = nullptr;
+    Hudget* otherHudget = nullptr;
+
     for (std::unique_ptr<Hudget>& hudget : m_elements->hudgets()) {
         if (hudget->isAt(toCrossHair) && hudget.get() != m_crossHair) {
-            hudget->onClick(clickType);
-            return;
+            ObjectHudget* targetHudget = dynamic_cast<ObjectHudget*>(hudget.get());
+
+            if (targetHudget) {
+                if (!smallestTargetHudget) {
+                    smallestTargetHudget = targetHudget;
+                } else if (smallestTargetHudget->openingAngle() > targetHudget->openingAngle()) {
+                    smallestTargetHudget = targetHudget;
+                }
+            } else {
+                otherHudget = hudget.get();
+            }
         }
+    }
+
+    if (smallestTargetHudget) {
+        smallestTargetHudget->onClick(clickType);
+    } else if (otherHudget) {
+        otherHudget->onClick(clickType);
     }
 }
 
@@ -233,7 +251,7 @@ void HUD::updateScanner(float deltaSec) {
         m_scanner->update(deltaSec, m_player->ship());
 
         for (WorldObject* worldObject : m_scanner->foundWorldObjects()) {
-            if (worldObject->objectInfo().showOnHud()) {
+            if (worldObject->info().showOnHud()) {
                 ObjectHudget* objectHudget = new ObjectHudget(this);
                 HUDObjectDelegate* objectDelgate = new HUDObjectDelegate(this, worldObject, objectHudget);
                 addObjectDelegate(objectDelgate);

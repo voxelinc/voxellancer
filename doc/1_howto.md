@@ -19,9 +19,11 @@ You can configure the controls as you want. The instructions are currently only 
 * F11 start keyboard configuration
 
 only for debugging:
+* T - show active leafs of worldtree
 * F8 - reload shader and configs
 * F9 - world status information
 * 1-9 - show framebuffer
+* F - toggle flycam
 
 ## Commandline parameters
 

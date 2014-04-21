@@ -27,7 +27,7 @@
 #include "voxel/voxel.h"
 #include "world/god.h"
 #include "player.h"
-#include "ui/objectinfo.h"
+#include "worldobject/worldobjectinfo.h"
 
 
 GameScenario::GameScenario(GamePlay* gamePlay):
@@ -44,8 +44,8 @@ void GameScenario::populateWorld() {
 
     Ship *testCluster = WorldObjectBuilder("f302").buildShip();
     testCluster->transform().setPosition(glm::vec3(0, 0, 10));
-    testCluster->objectInfo().setName("player");
-    testCluster->objectInfo().setShowOnHud(false);
+    testCluster->info().setName("player");
+    testCluster->info().setShowOnHud(false);
     m_world->god().scheduleSpawn(testCluster);
     World::instance()->player().setShip(testCluster);
 
@@ -62,13 +62,13 @@ void GameScenario::createArmada() {
             glm::vec3(900, 0, 0),
             glm::vec3(1500, 0, 0),
             glm::vec3(1400, 500, 0),
-        },500.0f));
+        }, 500.0f));
 
     Ship* chief = WorldObjectBuilder("normandy").buildShip();
     chief->transform().setPosition(glm::vec3(700, 0, 0));
-    chief->objectInfo().setName("Normandy");
-    chief->objectInfo().setShowOnHud(true);
-    chief->objectInfo().setCanLockOn(true);
+    chief->info().setName("Normandy");
+    chief->info().setShowOnHud(true);
+    chief->info().setCanLockOn(true);
     chief->squadLogic()->joinSquad(armada);
     chief->character()->setFaction(World::instance()->factionMatrix().policeFaction());
     m_world->god().scheduleSpawn(chief);
@@ -77,9 +77,9 @@ void GameScenario::createArmada() {
     for (int i = 0; i < memberCount; i++) {
         Ship *follower = i < 6 ? WorldObjectBuilder("mox").buildShip() : WorldObjectBuilder("smallpolice").buildShip();
         follower->transform().setPosition(glm::vec3(700, 50* (-memberCount / 2.0f + i), 0));
-        follower->objectInfo().setName("member");
-        follower->objectInfo().setShowOnHud(true);
-        follower->objectInfo().setCanLockOn(true);
+        follower->info().setName("member");
+        follower->info().setShowOnHud(true);
+        follower->info().setCanLockOn(true);
         follower->squadLogic()->joinSquad(armada);
         follower->character()->setFaction(World::instance()->factionMatrix().policeFaction());
         m_world->god().scheduleSpawn(follower);
@@ -99,18 +99,18 @@ void GameScenario::spawnPoliceFleet() {
     Ship* capital = WorldObjectBuilder("c306").buildShip();
     capital->character()->setFaction(World::instance()->factionMatrix().policeFaction());
     capital->transform().setPosition(glm::vec3(0, 0, -200));
-    capital->objectInfo().setName("Capital");
-    capital->objectInfo().setShowOnHud(true);
-    capital->objectInfo().setCanLockOn(true);
+    capital->info().setName("Capital");
+    capital->info().setShowOnHud(true);
+    capital->info().setCanLockOn(true);
     capital->squadLogic()->joinSquad(squadA);
     m_world->god().scheduleSpawn(capital);
 
     Ship* cruiser = WorldObjectBuilder("bc304").buildShip();
     cruiser->character()->setFaction(World::instance()->factionMatrix().policeFaction());
     cruiser->transform().setPosition(glm::vec3(-50, -50, -100));
-    cruiser->objectInfo().setName("Cruiser");
-    cruiser->objectInfo().setShowOnHud(true);
-    cruiser->objectInfo().setCanLockOn(true);
+    cruiser->info().setName("Cruiser");
+    cruiser->info().setShowOnHud(true);
+    cruiser->info().setCanLockOn(true);
     cruiser->squadLogic()->joinSquad(squadA);
     m_world->god().scheduleSpawn(cruiser);
 
@@ -119,9 +119,9 @@ void GameScenario::spawnPoliceFleet() {
         Ship *follower = WorldObjectBuilder("f302").buildShip();
         follower->transform().setPosition(glm::vec3(100 * (-nmember_count / 2.0f + i), 50, 0));
         follower->character()->setFaction(World::instance()->factionMatrix().policeFaction());
-        follower->objectInfo().setName("Fighter");
-        follower->objectInfo().setShowOnHud(true);
-        follower->objectInfo().setCanLockOn(true);
+        follower->info().setName("Fighter");
+        follower->info().setShowOnHud(true);
+        follower->info().setCanLockOn(true);
         follower->squadLogic()->joinSquad(squadA);
         m_world->god().scheduleSpawn(follower);
     }
@@ -136,9 +136,9 @@ void GameScenario::spawnPirateFleet() {
     Ship *leader = WorldObjectBuilder("pirateheavy").buildShip();
     leader->character()->setFaction(World::instance()->factionMatrix().pirateFaction());
     leader->transform().setPosition(glm::vec3(0, 200, -1000));
-    leader->objectInfo().setName("pirate heavy");
-    leader->objectInfo().setShowOnHud(true);
-    leader->objectInfo().setCanLockOn(true);
+    leader->info().setName("pirate heavy");
+    leader->info().setShowOnHud(true);
+    leader->info().setCanLockOn(true);
     leader->squadLogic()->joinSquad(squadB);
     m_world->god().scheduleSpawn(leader);
 
@@ -147,9 +147,9 @@ void GameScenario::spawnPirateFleet() {
         Ship *follower = WorldObjectBuilder("piratelight").buildShip();
         follower->character()->setFaction(World::instance()->factionMatrix().pirateFaction());
         follower->transform().setPosition(glm::vec3(100 * (-lmember_count / 2.0f + i), 200, -1000));
-        follower->objectInfo().setName("pirate light");
-        follower->objectInfo().setShowOnHud(true);
-        follower->objectInfo().setCanLockOn(true);
+        follower->info().setName("pirate light");
+        follower->info().setShowOnHud(true);
+        follower->info().setCanLockOn(true);
         follower->squadLogic()->joinSquadOf(leader);
         m_world->god().scheduleSpawn(follower);
     }
@@ -162,9 +162,9 @@ void GameScenario::spawnPirateFleet() {
     Ship *leader2 = WorldObjectBuilder("piratefrigatte").buildShip();
     leader2->character()->setFaction(World::instance()->factionMatrix().pirateFaction());
     leader2->transform().setPosition(glm::vec3(100, -200, -1000));
-    leader2->objectInfo().setName("pirate frigate");
-    leader2->objectInfo().setShowOnHud(true);
-    leader2->objectInfo().setCanLockOn(true);
+    leader2->info().setName("pirate frigate");
+    leader2->info().setShowOnHud(true);
+    leader2->info().setCanLockOn(true);
     leader2->squadLogic()->joinSquad(squadC);
     m_world->god().scheduleSpawn(leader2);
 
@@ -173,9 +173,9 @@ void GameScenario::spawnPirateFleet() {
         Ship *follower = WorldObjectBuilder("pirategunboat").buildShip();
         follower->character()->setFaction(World::instance()->factionMatrix().pirateFaction());
         follower->transform().setPosition(glm::vec3(200 * (-lmember_count / 2.0f + i), -200, -1000));
-        follower->objectInfo().setName("pirate gunboat");
-        follower->objectInfo().setShowOnHud(true);
-        follower->objectInfo().setCanLockOn(true);
+        follower->info().setName("pirate gunboat");
+        follower->info().setShowOnHud(true);
+        follower->info().setCanLockOn(true);
         follower->squadLogic()->joinSquadOf(leader2);
         m_world->god().scheduleSpawn(follower);
     }
@@ -192,9 +192,9 @@ void GameScenario::spawnStuff() {
             }
         }
     }
-    wall->objectInfo().setName("Wall");
-    wall->objectInfo().setShowOnHud(true);
-    wall->objectInfo().setCanLockOn(true);
+    wall->info().setName("Wall");
+    wall->info().setShowOnHud(true);
+    wall->info().setCanLockOn(true);
     m_world->god().scheduleSpawn(wall);
 
     WorldObject *planet = new WorldObject();
@@ -213,7 +213,7 @@ void GameScenario::spawnStuff() {
         }
     }
     planet->setCrucialVoxel(glm::ivec3(middle));
-    planet->objectInfo().setName("Planet");
+    planet->info().setName("Planet");
     m_world->god().scheduleSpawn(planet);
 
     for (int e = 0; e < 15; e++) {
@@ -228,9 +228,9 @@ void GameScenario::spawnStuff() {
                 }
             }
         }
-        enemy->objectInfo().setName("dummy");
-        enemy->objectInfo().setShowOnHud(false);
-        enemy->objectInfo().setCanLockOn(false);
+        enemy->info().setName("dummy");
+        enemy->info().setShowOnHud(false);
+        enemy->info().setCanLockOn(false);
         m_world->god().scheduleSpawn(enemy);
 
     }
