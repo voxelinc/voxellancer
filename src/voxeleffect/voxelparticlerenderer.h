@@ -31,7 +31,7 @@ public:
 
     void updateBuffer(int begin, int end, VoxelParticleData* data);
 
-    void draw(const Camera& camera);
+    void draw(const Camera& camera, bool transparentPass);
 
 
 protected:

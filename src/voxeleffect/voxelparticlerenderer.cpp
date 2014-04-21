@@ -40,7 +40,7 @@ void VoxelParticleRenderer::updateBuffer(int begin, int end, VoxelParticleData* 
     m_gpuParticleBuffer->setSubData(begin * sizeof(VoxelParticleData), byteCount, data);
 }
 
-void VoxelParticleRenderer::draw(const Camera& camera) {
+void VoxelParticleRenderer::draw(const Camera& camera, bool transparentPass) {
     if (!m_initialized) {
         initialize();
     }
@@ -52,6 +52,7 @@ void VoxelParticleRenderer::draw(const Camera& camera) {
     m_program->setUniform("viewProjection", camera.viewProjection());
     m_program->setUniform("time", m_engine->time());
     m_program->setUniform("lightdir", m_defaultLightDir.get());
+    m_program->setUniform("transparentPass", (transparentPass ? 1.0f : 0.0f));
 
     m_program->use();
 

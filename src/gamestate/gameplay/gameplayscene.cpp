@@ -127,7 +127,7 @@ void GamePlayScene::drawGame(const Camera& camera, bool transparentPass) const {
 
     m_voxelRenderer->afterDraw();
 
-    World::instance()->particleEngine().draw(camera);
+    World::instance()->particleEngine().draw(camera, transparentPass);
 
     if (m_worldTreeRendererEnabled) {
         m_worldTreeRenderer->draw(camera);
