@@ -1,5 +1,7 @@
 #include "gameplayscene.h"
 
+#include "glow/FrameBufferObject.h"
+
 #include "camera/camera.h"
 #include "camera/camerahead.h"
 
@@ -52,6 +54,7 @@ void GamePlayScene::draw(const Camera& camera, glow::FrameBufferObject* target, 
     }
 
     m_framebuffer->setResolution(camera.viewport());
+    m_framebuffer->get().clearBuffer(GL_COLOR, BufferNames::TransparencyAccumulation, glm::vec4(0.0f)); // clear accumulation buffer with 0
     m_framebuffer->setDrawBuffers({ BufferNames::Color, BufferNames::TransparencyAccumulation, BufferNames::NormalZ, BufferNames::Emissisiveness, BufferNames::TransparencyCount });
     m_framebuffer->clear();
     m_framebuffer->setDrawBuffers({ BufferNames::Color, BufferNames::NormalZ, BufferNames::Emissisiveness });
