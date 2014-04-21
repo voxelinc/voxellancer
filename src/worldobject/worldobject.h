@@ -99,12 +99,8 @@ protected:
     std::unique_ptr<WorldObjectInfo> m_info;
     std::unique_ptr<WorldObjectComponents> m_components;
 
-<<<<<<< HEAD
-=======
-    Handle<WorldObject> m_handle;
     std::unordered_map<glm::ivec3, Voxel*> m_cockpitVoxels;
     bool m_cockpitVoxelsDestroyed;
->>>>>>> 811d3ba458fb917840f094d40e82e6716da96d8c
     Voxel* m_crucialVoxel;
     bool m_crucialVoxelDestroyed;
     float m_collisionFieldOfDamage;
