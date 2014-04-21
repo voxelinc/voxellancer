@@ -2,5 +2,6 @@
 
 enum class ClickType {
     None,
-    Selection
+    Selection,
+    Fire
 };

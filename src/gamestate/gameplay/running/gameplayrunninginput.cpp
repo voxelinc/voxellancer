@@ -98,7 +98,8 @@ GamePlayRunningInput::GamePlayRunningInput():
 //    glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
     retrieveInputValues();
-    m_currentTimePressed = 0;
+    m_currentTimePressedRight = 0;
+    m_currentTimePressedLeft = 0;
 }
 
 void GamePlayRunningInput::resizeEvent(const unsigned int width, const unsigned int height) {
@@ -139,12 +140,16 @@ void GamePlayRunningInput::keyCallback(int key, int scancode, int action, int mo
 
 void GamePlayRunningInput::mouseButtonCallback(int button, int action, int mods) {
     if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_RELEASE) {
-        if (m_currentTimePressed > 0 && m_currentTimePressed < prop_maxClickTime) {
+        if (m_currentTimePressedRight > 0 && m_currentTimePressedRight < prop_maxClickTime) {
             World::instance()->player().hud().onClick(ClickType::Selection);
-        } else {
-
         }
-        m_currentTimePressed = 0;
+        m_currentTimePressedRight = 0;
+    }
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE) {
+        if (m_currentTimePressedLeft > 0 && m_currentTimePressedLeft < prop_maxClickTime) {
+            World::instance()->player().hud().onClick(ClickType::Selection);
+        }
+        m_currentTimePressedRight = 0;
     }
 }
 
@@ -241,7 +246,7 @@ void GamePlayRunningInput::processMouseUpdate(float deltaSec) {
     }
 
     if (glfwGetMouseButton(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS){
-        m_currentTimePressed += deltaSec;
+        m_currentTimePressedRight += deltaSec;
     }
 
     if (m_mouseControl || glfwGetMouseButton(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS &&  prop_maxClickTime < m_currentTimePressed) {
