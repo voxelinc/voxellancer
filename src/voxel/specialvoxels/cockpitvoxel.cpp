@@ -14,6 +14,7 @@ CockpitVoxel::CockpitVoxel(const glm::ivec3& gridCell, int index):
 
 void CockpitVoxel::addToObject(WorldObject* worldObject) {
     Voxel::addToObject(worldObject);
+    worldObject->addCockpitVoxel(m_gridCell);
 }
 
 void CockpitVoxel::onRemoval() {

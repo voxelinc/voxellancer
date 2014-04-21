@@ -96,7 +96,7 @@ void AimHelperHudget::calculateTargetPoint(WorldObject* targetObject) {
         HardpointAimHelper aimHelper(hardpoint.get(), targetObject);
         aimHelper.aim();
 
-        if (aimHelper.isHitable()) {
+        if (aimHelper.isHittable()) {
             m_targetPoint += aimHelper.point();
             hitableHardpointCount++;
         }

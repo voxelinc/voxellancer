@@ -6,6 +6,11 @@
 #include "gamestate/game.h"
 #include "gamestate/gameplay/gameplay.h"
 
+#include "player.h"
+#include "camera/camerahead.h"
+#include "sound/soundmanager.h"
+
+#include "camera/cameradolly.h"
 
 GamePlayPaused::GamePlayPaused(GamePlay* gamePlay):
     GameState("GamePlay Paused", gamePlay),
@@ -26,8 +31,10 @@ void GamePlayPaused::update(float deltaSec) {
 
 void GamePlayPaused::onEntered() {
     GameState::onEntered();
+    m_gamePlay->soundManager().activate();
 }
 
 void GamePlayPaused::onLeft() {
     GameState::onLeft();
+    m_gamePlay->soundManager().deactivate();
 }

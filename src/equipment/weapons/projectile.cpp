@@ -9,14 +9,18 @@
 #include "world/shockwave.h"
 #include "world/world.h"
 
+
 #include "worldtree/worldtreegeode.h"
 
+#include "worldobject/worldobjectinfo.h"
 
 
 Projectile::Projectile():
     m_creator(nullptr),
     m_lifetime(0.0f)
 {
+    m_info->setShowOnHud(false);
+    m_info->setCanLockOn(false);
 }
 
 WorldObject* Projectile::creator() {
@@ -41,6 +45,14 @@ float Projectile::lifetime() const {
 
 void Projectile::setLifetime(float lifetime) {
     m_lifetime = lifetime;
+}
+
+const SoundProperties& Projectile::hitSound() const {
+    return m_hitSound;
+}
+
+void Projectile::setHitSound(const SoundProperties& hitSound) {
+    m_hitSound = hitSound;
 }
 
 void Projectile::update(float deltaSec) {
