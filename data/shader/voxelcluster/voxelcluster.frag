@@ -1,6 +1,7 @@
 #version 330
 
 uniform float withBorder;
+uniform float transparentPass;
 
 layout(location = 0) out vec4 fragColor;
 layout(location = 1) out vec4 normalz;
@@ -19,6 +20,12 @@ vec4 voxelFragmenNormalZ(vec3 normal);
 
 
 void main() {
+	if (transparentPass > 0 && f_color.a > 0.9999) {
+			discard;
+	}
+	if (transparentPass == 0 && f_color.a < 0.9999) {
+			discard;
+	}
 	vec3 rgbColor = voxelFragmentColor(f_color.rgb, f_emissiveness, f_normal, f_modelposition);
     fragColor = vec4(rgbColor * f_color.a, f_color.a);
     emissiveness = voxelFragmentEmissiveness(f_color.rgb, f_emissiveness);

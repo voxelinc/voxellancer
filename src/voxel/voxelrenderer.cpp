@@ -34,13 +34,14 @@ VoxelRenderer::VoxelRenderer() :
     createAndSetupShaders();
 }
 
-void VoxelRenderer::prepareDraw(const Camera& camera, bool withBorder) {
+void VoxelRenderer::prepareDraw(const Camera& camera, bool withBorder, bool transparentPass) {
     glEnable(GL_DEPTH_TEST);
 
     m_program->setUniform("projection", camera.projection());
     m_program->setUniform("view", camera.view());
     m_program->setUniform("viewProjection", camera.viewProjection());
     m_program->setUniform("withBorder", (withBorder ? 1.0f : 0.0f));
+    m_program->setUniform("transparentPass", (transparentPass ? 1.0f : 0.0f));
 
     m_modelMatrixUniform = m_program->getUniform<glm::mat4>("model");
     m_emissivenessUniform = m_program->getUniform<float>("emissiveness");

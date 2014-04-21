@@ -59,8 +59,7 @@ void GamePlayScene::draw(const Camera& camera, glow::FrameBufferObject* target, 
     m_framebuffer->clear();
     m_framebuffer->setDrawBuffers({ BufferNames::Color, BufferNames::NormalZ, BufferNames::Emissisiveness });
 
-    drawGame(camera);    
-    
+    drawGame(camera, false);    
 
     m_framebuffer->setDrawBuffers({ BufferNames::TransparencyAccumulation, BufferNames::NormalZ, BufferNames::Emissisiveness, BufferNames::TransparencyCount });
     glDisable(GL_CULL_FACE);
@@ -71,7 +70,8 @@ void GamePlayScene::draw(const Camera& camera, glow::FrameBufferObject* target, 
     CheckGLError();
     glBlendFunc(GL_ONE, GL_ONE);
     CheckGLError();
-    drawGameAlpha(camera);
+    drawGame(camera, true);
+    //drawGameAlpha(camera);
     glEnable(GL_CULL_FACE);
     CheckGLError();
     glDepthMask(GL_TRUE);
@@ -110,12 +110,14 @@ void GamePlayScene::setOutputBuffer(int i) {
     glow::info("Switched to output-buffer: %;", bufferNames[m_currentOutputBuffer]);
 }
 
-void GamePlayScene::drawGame(const Camera& camera) const {
-    World::instance()->skybox().draw(camera);
+void GamePlayScene::drawGame(const Camera& camera, bool transparentPass) const {
+    if (!transparentPass) {
+        World::instance()->skybox().draw(camera);
+    }
 
     m_voxelRenderer->program()->setUniform("lightdir", m_defaultLightDir.get());
 
-    m_voxelRenderer->prepareDraw(camera);
+    m_voxelRenderer->prepareDraw(camera, true, transparentPass);
 
     for (WorldObject* worldObject : World::instance()->worldObjects()) {
         VoxelRenderer::instance()->draw(*worldObject);
