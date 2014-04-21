@@ -66,7 +66,12 @@ void VoxelRenderer::draw(VoxelCluster& cluster) {
     glVertexAttribDivisor(m_program->getAttributeLocation("v_vertex"), 0);
     glVertexAttribDivisor(m_program->getAttributeLocation("v_normal"), 0);
     glVertexAttribDivisor(m_program->getAttributeLocation("v_position"), 1);
-    glVertexAttribDivisor(m_program->getAttributeLocation("v_color"), 1);
+    glVertexAttribDivisor(m_program->getAttributeLocation("v_color[0]"), 1);
+    glVertexAttribDivisor(m_program->getAttributeLocation("v_color[1]"), 1);
+    glVertexAttribDivisor(m_program->getAttributeLocation("v_color[2]"), 1);
+    glVertexAttribDivisor(m_program->getAttributeLocation("v_color[3]"), 1);
+    glVertexAttribDivisor(m_program->getAttributeLocation("v_color[4]"), 1);
+    glVertexAttribDivisor(m_program->getAttributeLocation("v_color[5]"), 1);
     glVertexAttribDivisor(m_program->getAttributeLocation("v_emissiveness"), 1);
     renderData->vertexArrayObject()->drawArraysInstanced(GL_TRIANGLE_STRIP, 0, 14, renderData->voxelCount());
 }

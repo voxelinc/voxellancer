@@ -19,7 +19,7 @@
 namespace {
     struct VoxelData {
         glm::vec3 position;
-        uint32_t color;
+        uint32_t color[6];
         float emissiveness;
     };
 }
@@ -38,8 +38,13 @@ void VoxelRenderData::setupVertexAttributes() {
 
     VoxelRenderer::voxelMesh().bindTo(VoxelRenderer::program(), m_vertexArrayObject, 0);
     setupVertexAttribute(offsetof(VoxelData, position), "v_position", 3, GL_FLOAT, GL_FALSE, 2);
-    setupVertexAttribute(offsetof(VoxelData, color), "v_color", GL_BGRA, GL_UNSIGNED_BYTE, GL_TRUE, 3);
-    setupVertexAttribute(offsetof(VoxelData, emissiveness), "v_emissiveness", 1, GL_FLOAT, GL_FALSE, 4);
+    setupVertexAttribute(offsetof(VoxelData, color[0]), "v_color[0]", GL_BGRA, GL_UNSIGNED_BYTE, GL_TRUE, 3);
+    setupVertexAttribute(offsetof(VoxelData, color[1]), "v_color[1]", GL_BGRA, GL_UNSIGNED_BYTE, GL_TRUE, 4);
+    setupVertexAttribute(offsetof(VoxelData, color[2]), "v_color[2]", GL_BGRA, GL_UNSIGNED_BYTE, GL_TRUE, 5);
+    setupVertexAttribute(offsetof(VoxelData, color[3]), "v_color[3]", GL_BGRA, GL_UNSIGNED_BYTE, GL_TRUE, 6);
+    setupVertexAttribute(offsetof(VoxelData, color[4]), "v_color[4]", GL_BGRA, GL_UNSIGNED_BYTE, GL_TRUE, 7);
+    setupVertexAttribute(offsetof(VoxelData, color[5]), "v_color[5]", GL_BGRA, GL_UNSIGNED_BYTE, GL_TRUE, 8);
+    setupVertexAttribute(offsetof(VoxelData, emissiveness), "v_emissiveness", 1, GL_FLOAT, GL_FALSE, 9);
 }
 
 void VoxelRenderData::setupVertexAttribute(GLint offset, const std::string& name, int numPerVertex, GLenum type, GLboolean normalised, int bindingNum) {
@@ -51,6 +56,14 @@ void VoxelRenderData::setupVertexAttribute(GLint offset, const std::string& name
     binding->setFormat(numPerVertex, type, normalised, offset);
 
     m_vertexArrayObject->enable(location);
+}
+
+uint32_t VoxelRenderData::colorFor(Voxel* voxel, const glm::ivec3& offset) {
+    auto iter = m_voxel.find(voxel->gridCell() + offset);
+    if (iter != m_voxel.end() && iter->second->visuals().color() == voxel->visuals().color()) {
+        return 0x00000000;
+    }
+    return ColorHelper::flipColorForGPU(voxel->visuals().color());
 }
 
 void VoxelRenderData::updateBuffer() {
@@ -74,7 +87,14 @@ void VoxelRenderData::updateBuffer() {
     for (auto& pair : m_voxel) {
         Voxel *voxel = pair.second;
         assert(voxel != nullptr);
-        voxelData[i++] = VoxelData{ glm::vec3(voxel->gridCell()), ColorHelper::flipColorForGPU(voxel->visuals().color()), voxel->visuals().emissiveness() };
+        voxelData[i++] = VoxelData{ glm::vec3(voxel->gridCell()),
+                                        { colorFor(voxel, glm::ivec3(-1, 0, 0)), // order see voxelmesh
+                                        colorFor(voxel, glm::ivec3(1, 0, 0)), 
+                                        colorFor(voxel, glm::ivec3(0, -1, 0)), 
+                                        colorFor(voxel, glm::ivec3(0, 1, 0)), 
+                                        colorFor(voxel, glm::ivec3(0, 0, -1)), 
+                                        colorFor(voxel, glm::ivec3(0, 0, 1)) },
+                                    voxel->visuals().emissiveness() };
     }
 
     m_voxelDataBuffer->unmap();
