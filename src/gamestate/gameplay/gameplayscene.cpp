@@ -59,9 +59,22 @@ void GamePlayScene::draw(const Camera& camera, glow::FrameBufferObject* target, 
     m_framebuffer->get().clearBuffer(GL_COLOR, BufferNames::TransparencyAccumulation, glm::vec4(0.0f)); // clear accumulation buffer with 0
     m_framebuffer->setDrawBuffers({ BufferNames::Color, BufferNames::NormalZ, BufferNames::Emissisiveness });
 
-    drawGame(camera, false);    
+    //drawGame(camera, false);
+    // instead of the discard magic in the shader, clear the buffer here (eliminate sources)
+    //m_framebuffer->clear();
 
-    m_framebuffer->setDrawBuffers({ BufferNames::TransparencyAccumulation, BufferNames::NormalZ, BufferNames::Emissisiveness, BufferNames::TransparencyCount });
+
+    glDisable(GL_CULL_FACE);
+    CheckGLError();
+    glDepthMask(GL_FALSE);
+    CheckGLError();
+    drawGame(camera, false);
+    glEnable(GL_CULL_FACE);
+    CheckGLError();
+    glDepthMask(GL_TRUE);
+    CheckGLError();
+    // performance is as bad with this block as with the two lines above
+    /*m_framebuffer->setDrawBuffers({ BufferNames::TransparencyAccumulation, BufferNames::NormalZ, BufferNames::Emissisiveness, BufferNames::TransparencyCount });
     glDisable(GL_CULL_FACE);
     CheckGLError();
     glDepthMask(GL_FALSE);
@@ -77,9 +90,7 @@ void GamePlayScene::draw(const Camera& camera, glow::FrameBufferObject* target, 
     glDepthMask(GL_TRUE);
     CheckGLError();
     glDisable(GL_BLEND);
-    CheckGLError();
-    glDisable(GL_DEPTH_TEST);
-    CheckGLError();
+    CheckGLError();*/
 
 
     RenderMetaData metadata(camera, side);

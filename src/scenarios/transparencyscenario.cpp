@@ -80,7 +80,7 @@ void TransparencyScenario::populateWorld() {
     planet->info().setShowOnHud(true);
     planet->info().setCanLockOn(true);
     m_world->god().scheduleSpawn(planet);
-
+    /*
     for(int e = 0; e < 15; e++) {
         WorldObject *enemy = new WorldObject();
         int r = 80;
@@ -98,7 +98,7 @@ void TransparencyScenario::populateWorld() {
         enemy->info().setCanLockOn(false);
         m_world->god().scheduleSpawn(enemy);
 
-    }
+    }*/
 
     glow::debug("Initial spawn");
     m_world->god().spawn();
