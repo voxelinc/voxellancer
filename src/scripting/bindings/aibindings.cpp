@@ -165,7 +165,7 @@ int AiBindings::apiAddFightTaskTarget(apikey key, apikey worldObjectKey) {
     if (!worldObject) { return -1; }
 
 
-    fightTask->addTarget(worldObject->handle());
+    fightTask->addTarget(worldObject->handle<WorldObject>());
     return 0;
 }
 

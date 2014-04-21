@@ -1,7 +1,7 @@
 #pragma once
 
 
-
+class Event;
 
 class Observer {
 public:
@@ -9,3 +9,4 @@ public:
 
     virtual void notify(Event* event);
 };
+
