@@ -12,7 +12,7 @@ AimHelperHudgetVoxels::AimHelperHudgetVoxels(AimHelperHudget* aimHelperHudget):
     m_dot(new VoxelCluster(0.04f)),
     m_circle(new VoxelCluster(0.04f))
 {
-    int color = 0xFFAA00;
+    int color = 0xFFAA00E0;
     int radius = 5;
     int diameter = radius * 2;
 

@@ -39,7 +39,7 @@ void FuelVoxel::onDestruction() {
     generator.setScale(worldObject->transform().scale() / 2.0f);
     generator.setCount(30);
     generator.setEmissiveness(0.4f);
-    generator.setColor(0xFF0000);
+    generator.setColor(0xFF0000FF);
     generator.setForce(0.4f);
     generator.setLifetime(0.9f, 0.4f);
 

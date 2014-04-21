@@ -1,5 +1,7 @@
 #include "gameplayscene.h"
 
+#include "glow/FrameBufferObject.h"
+
 #include "camera/camera.h"
 #include "camera/camerahead.h"
 
@@ -17,6 +19,7 @@
 #include "sound/soundmanager.h"
 
 #include "ui/hud/hud.h"
+#include "ui/voxelfont.h"
 
 #include "voxel/voxelrenderer.h"
 #include "voxeleffect/voxelparticleengine.h"
@@ -51,10 +54,33 @@ void GamePlayScene::draw(const Camera& camera, glow::FrameBufferObject* target, 
     }
 
     m_framebuffer->setResolution(camera.viewport());
+    m_framebuffer->setDrawBuffers({ BufferNames::Color, BufferNames::TransparencyAccumulation, BufferNames::NormalZ, BufferNames::Emissisiveness, BufferNames::TransparencyCount });
     m_framebuffer->clear();
+    m_framebuffer->get().clearBuffer(GL_COLOR, BufferNames::TransparencyAccumulation, glm::vec4(0.0f)); // clear accumulation buffer with 0
     m_framebuffer->setDrawBuffers({ BufferNames::Color, BufferNames::NormalZ, BufferNames::Emissisiveness });
 
-    drawGame(camera);
+    drawGame(camera, false);    
+
+    m_framebuffer->setDrawBuffers({ BufferNames::TransparencyAccumulation, BufferNames::NormalZ, BufferNames::Emissisiveness, BufferNames::TransparencyCount });
+    glDisable(GL_CULL_FACE);
+    CheckGLError();
+    glDepthMask(GL_FALSE);
+    CheckGLError();
+    glEnable(GL_BLEND);
+    CheckGLError();
+    glBlendFunc(GL_ONE, GL_ONE);
+    CheckGLError();
+    drawGame(camera, true);
+    //drawGameAlpha(camera);
+    glEnable(GL_CULL_FACE);
+    CheckGLError();
+    glDepthMask(GL_TRUE);
+    CheckGLError();
+    glDisable(GL_BLEND);
+    CheckGLError();
+    glDisable(GL_DEPTH_TEST);
+    CheckGLError();
+
 
     RenderMetaData metadata(camera, side);
     m_renderPipeline->apply(*m_framebuffer, metadata);
@@ -84,12 +110,14 @@ void GamePlayScene::setOutputBuffer(int i) {
     glow::info("Switched to output-buffer: %;", bufferNames[m_currentOutputBuffer]);
 }
 
-void GamePlayScene::drawGame(const Camera& camera) const {
-    World::instance()->skybox().draw(camera);
+void GamePlayScene::drawGame(const Camera& camera, bool transparentPass) const {
+    if (!transparentPass) {
+        World::instance()->skybox().draw(camera);
+    }
 
     m_voxelRenderer->program()->setUniform("lightdir", m_defaultLightDir.get());
 
-    m_voxelRenderer->prepareDraw(camera);
+    m_voxelRenderer->prepareDraw(camera, true, transparentPass);
 
     for (WorldObject* worldObject : World::instance()->worldObjects()) {
         VoxelRenderer::instance()->draw(*worldObject);
@@ -99,10 +127,16 @@ void GamePlayScene::drawGame(const Camera& camera) const {
 
     m_voxelRenderer->afterDraw();
 
-    World::instance()->particleEngine().draw(camera);
+    World::instance()->particleEngine().draw(camera, transparentPass);
 
     if (m_worldTreeRendererEnabled) {
         m_worldTreeRenderer->draw(camera);
     }
 }
 
+void GamePlayScene::drawGameAlpha(const Camera& camera) const {
+    m_voxelRenderer->prepareDraw(camera, false);
+    m_voxelRenderer->program()->setUniform("lightdir", m_defaultLightDir.get());
+    VoxelFont::instance()->drawString("Voxellancer", glm::vec3(0, 0.5f, -1) * 40.f, glm::quat(), FontSize::SIZE5x7, 0.4f, FontAlign::CENTER);
+    m_voxelRenderer->afterDraw();
+}

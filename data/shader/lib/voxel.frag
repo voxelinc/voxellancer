@@ -7,7 +7,7 @@ const float borderWidth = 0.10;
 const float borderDarkness = 0.2;
 const float ambient = 0.3;
 
-vec4 voxelFragmentColor(vec3 color, float emissiveness, vec3 normal, vec3 positionInVoxel) {
+vec3 voxelFragmentColor(vec3 color, float emissiveness, vec3 normal, vec3 positionInVoxel) {
     // modelposition is between -0.5 and 0.5
     vec3 absPositionInModel = abs(positionInVoxel);
 
@@ -22,7 +22,7 @@ vec4 voxelFragmentColor(vec3 color, float emissiveness, vec3 normal, vec3 positi
     float diffuse = dot(n_normal, lightdir);
     diffuse = max(0, diffuse) + ambient;
 
-    return vec4(color * diffuse - vec3(border * float(withBorder)), 1.0);
+    return color * diffuse - vec3(border * float(withBorder));
 }
 
 vec4 voxelFragmentEmissiveness(vec3 color, float emissiveness) {

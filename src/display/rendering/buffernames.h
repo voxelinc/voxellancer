@@ -9,9 +9,10 @@ namespace {
         Color,
         FXAA,
         NormalZ,
-        Emissisiveness,
+        Emissisiveness, // later repurposed to blur
         BlurTmp,
-        Bloom,
+        TransparencyAccumulation,
+        TransparencyCount,
         BufferCount // should always be last member and not be used as a name
     };
 
@@ -23,6 +24,7 @@ namespace {
         "NormalZ",
         "Emissisiveness",
         "BlurTmp",
-        "Bloom",
+        "TransparencyAccumulation",
+        "TransparencyCount",
     };
 }

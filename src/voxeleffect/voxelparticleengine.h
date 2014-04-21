@@ -38,7 +38,7 @@ public:
     void removeParticle(int index);
 
     void update(float deltaSec);
-    void draw(const Camera& camera);
+    void draw(const Camera& camera, bool transparentPass);
 
 
 protected:

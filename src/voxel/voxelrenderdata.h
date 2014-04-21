@@ -2,6 +2,7 @@
 
 #include <unordered_map>
 #include <string>
+#include <stdint.h>
 
 #include <GL/glew.h>
 
@@ -35,6 +36,7 @@ protected:
     glow::ref_ptr<glow::Buffer> m_voxelDataBuffer;
     glow::ref_ptr<glow::VertexArrayObject> m_vertexArrayObject;
 
+    uint32_t colorFor(Voxel* voxel, const glm::ivec3& offset);
     void updateBuffer();
     void setupVertexAttributes();
     void setupVertexAttribute(GLint offset, const std::string& name, int numPerVertex, GLenum type, GLboolean normalised, int bindingNum);

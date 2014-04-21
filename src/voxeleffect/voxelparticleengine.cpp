@@ -77,7 +77,6 @@ void VoxelParticleEngine::removeParticle(int index) {
     VoxelParticleData& particle = m_cpuParticleBuffer[index];
     particle.status = VoxelParticleData::Status::Removed;
     m_freeParticleBufferIndices.push(index);
-    //particle.color = 0xff00ff;
 
     particleChanged(index);
 }
@@ -87,12 +86,12 @@ void VoxelParticleEngine::update(float deltaSec) {
     m_remover->update(deltaSec);
 }
 
-void VoxelParticleEngine::draw(const Camera& camera) {
+void VoxelParticleEngine::draw(const Camera& camera, bool transparentPass) {
     if (m_gpuParticleBufferInvalid) {
         updateGPUBuffers(m_gpuParticleBufferInvalidBegin, m_gpuParticleBufferInvalidEnd);
     }
 
-    m_renderer->draw(camera);
+    m_renderer->draw(camera, transparentPass);
 }
 
 void VoxelParticleEngine::particleChanged(int bufferIndex) {

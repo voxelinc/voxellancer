@@ -50,6 +50,7 @@ protected:
     int m_currentOutputBuffer;
 
 
-    void drawGame(const Camera& camera) const;
+    void drawGame(const Camera& camera, bool transparentPass) const;
+    void drawGameAlpha(const Camera& camera) const;
 };
 

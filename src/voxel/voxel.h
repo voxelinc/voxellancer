@@ -14,7 +14,7 @@ class Sphere;
 
 class Voxel {
 public:
-    Voxel(const glm::ivec3& gridCell, uint32_t color = 0xFFFFFF, float unscaledMatss = defaultUnscaledMass(), float hp = defaultHp(), float emissiveness = 0);
+    Voxel(const glm::ivec3& gridCell, uint32_t color = 0xFFFFFFFF, float unscaledMatss = defaultUnscaledMass(), float hp = defaultHp(), float emissiveness = 0);
     Voxel(const Voxel& other);
     virtual ~Voxel();
 
