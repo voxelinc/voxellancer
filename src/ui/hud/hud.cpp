@@ -15,9 +15,6 @@
 
 #include "display/view.h"
 
-#include "equipment/shield.h"
-#include "equipment/shieldslot.h"
-
 #include "gamestate/game.h"
 
 #include "geometry/ray.h"
@@ -157,22 +154,10 @@ void HUD::update(float deltaSec) {
     if (m_player->ship()) {
         m_elements->setSpeed(std::to_string((int)(glm::length(m_player->ship()->physics().speed().directional()))));
 
-        float shieldHP = 0;
-        float shieldMaxHP = 0;
-
-        for (std::shared_ptr<ShieldSlot>& shieldSlot : m_player->ship()->components().shieldSlots()) {
-            if (shieldSlot->shield()) {
-                shieldHP += shieldSlot->shield()->hp();
-                shieldMaxHP += shieldSlot->shield()->maxHP();
-            }
-        }
-
-        if (shieldMaxHP > 0.0f) {
-            int shieldPercent = static_cast<int>(shieldHP * 100 / shieldMaxHP);
-            m_elements->setShieldStatus(std::to_string(shieldPercent));
-        }
+            m_elements->setShieldStatus(m_player->ship()->info().shieldStatus());
     } else {
         m_elements->setSpeed("-");
+        m_elements->setShieldStatus("-");
     }
 
     Ray toCrossHair = Ray::fromTo(m_player->cameraHead().position(), m_crossHair->worldPosition());

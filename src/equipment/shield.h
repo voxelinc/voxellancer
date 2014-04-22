@@ -16,17 +16,21 @@ public:
     float hp() const;
     void setHP(float hp);
 
+    float maxHP() const;
+    void setMaxHP(float maxHP);
+
+    float regeneration() const;
+    void setRegeneration(float regeneration);
+
     float compensate(float damage);
-
-    virtual float maxHP() const = 0;
-
-    virtual float regeneration() const = 0;
 
     virtual void update(float deltaSec);
 
 
 protected:
     float m_hp;
+    float m_regeneration;
+    float m_maxHP;
     ShieldSlot* m_shieldSlot;
 
     virtual void onDamageTaken(float damage);

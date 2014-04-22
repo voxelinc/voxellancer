@@ -10,6 +10,8 @@
 Shield::Shield(const std::string& key):
     Equipment(key),
     m_hp(0.0f),
+    m_regeneration(0.0f),
+    m_maxHP(0.0f),
     m_shieldSlot(nullptr)
 {
 
@@ -34,6 +36,22 @@ void Shield::setHP(float hp) {
     m_hp = hp;
 }
 
+float Shield::maxHP() const {
+    return m_maxHP;
+}
+
+void Shield::setMaxHP(float maxHP) {
+    m_maxHP = maxHP;
+}
+
+float Shield::regeneration() const {
+    return m_regeneration;
+}
+
+void Shield::setRegeneration(float regeneration) {
+    m_regeneration = regeneration;
+}
+
 float Shield::compensate(float damage) {
     float compensatedDamage = std::min(m_hp, damage);
     float forwardedDamage = damage - compensatedDamage;
@@ -45,7 +63,6 @@ float Shield::compensate(float damage) {
 }
 
 void Shield::update(float deltaSec) {
-    std::cout << m_hp << " " << regeneration() << " " << maxHP() << " " << deltaSec << std::endl;
     m_hp += regeneration() * deltaSec;
     m_hp = std::min(m_hp, maxHP());
 }
