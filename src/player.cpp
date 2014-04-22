@@ -7,9 +7,6 @@
 
 #include "factions/factionmatrix.h"
 
-#include "gamestate/game.h"
-#include "gamestate/gameplay/gameplay.h"
-
 #include "ui/hud/hud.h"
 #include "ui/hud/hudget.h"
 #include "ui/hud/aimhelperhudget.h"
