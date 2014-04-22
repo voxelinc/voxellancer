@@ -13,13 +13,11 @@
 #include "equipment/shield.h"
 #include "equipment/shieldslot.h"
 #include "equipment/weapon.h"
-#include "equipment/weapons/genericbullet.h"
-#include "equipment/weapons/genericrocket.h"
 
-#include "ui/objectinfo.h"
+#include "equipment/weapons/bullet.h"
+#include "equipment/weapons/rocket.h"
 
-#include "worldobject/genericship.h"
-#include "worldobject/genericworldobject.h"
+#include "worldobject/worldobjectinfo.h"
 #include "worldobject/ship.h"
 #include "worldobject/worldobject.h"
 
@@ -54,7 +52,7 @@ WorldObject* WorldObjectBuilder::build() {
 }
 
 Bullet* WorldObjectBuilder::buildBullet() {
-    GenericBullet* bullet = makeWorldObject<GenericBullet>();
+    Bullet* bullet = makeWorldObject<Bullet>();
 
     bullet->setEmissiveness(Property<float>(m_name + ".general.emissiveness", 0.0f));
     bullet->setLifetime(Property<float>(m_name + ".general.lifetime"));
@@ -64,7 +62,7 @@ Bullet* WorldObjectBuilder::buildBullet() {
 }
 
 Rocket* WorldObjectBuilder::buildRocket() {
-    GenericRocket* rocket = makeWorldObject<GenericRocket>();
+    Rocket* rocket = makeWorldObject<Rocket>();
 
     rocket->setLifetime(Property<float>(m_name + ".general.lifetime"));
     rocket->setHitSound(SoundProperties::fromProperties(m_name + ".explosionsound"));
@@ -73,15 +71,18 @@ Rocket* WorldObjectBuilder::buildRocket() {
 }
 
 Ship* WorldObjectBuilder::buildShip() {
-    GenericShip* ship = makeWorldObject<GenericShip>();
+    Ship* ship = makeWorldObject<Ship>();
     if (ship->crucialVoxel() == nullptr) {
         glow::warning("WorldObjectBuilder: ship %; has no crucial voxel", m_name);
+    }
+    if (ship->cockpitVoxels().empty()) {
+        glow::warning("WorldObjectBuilder: ship %; has no cockpit voxel(s)", m_name);
     }
     return ship;
 }
 
 WorldObject* WorldObjectBuilder::buildWorldObject() {
-    GenericWorldObject* worldObject = makeWorldObject<GenericWorldObject>();
+    WorldObject* worldObject = makeWorldObject<WorldObject>();
     return worldObject;
 }
 
@@ -92,7 +93,7 @@ T* WorldObjectBuilder::makeWorldObject() {
     T* object = new T();
     WorldObject* worldObject = object;
 
-    worldObject->objectInfo().setName(m_name);
+    worldObject->info().setName(m_name);
 
     setupVoxelCluster(worldObject);
     setupComponents(worldObject->components());

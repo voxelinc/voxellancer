@@ -15,13 +15,16 @@
 
 #include "display/view.h"
 
+#include "equipment/shield.h"
+#include "equipment/shieldslot.h"
+
 #include "gamestate/game.h"
 
 #include "geometry/ray.h"
 
 #include "physics/physics.h"
 
-#include "ui/objectinfo.h"
+#include "worldobject/worldobjectinfo.h"
 
 #include "utils/tostring.h"
 #include "utils/geometryhelper.h"
@@ -34,6 +37,7 @@
 #include "worldtree/worldtreequery.h"
 
 #include "worldobject/ship.h"
+#include "worldobject/worldobjectcomponents.h"
 
 #include "hudelements.h"
 #include "hudget.h"
@@ -59,7 +63,7 @@ HUD::HUD(Player* player):
     m_drawHud("vfx.drawhud"),
     m_view(nullptr)
 {
-    m_scanner->setScanRadius(1050.0f);
+    m_scanner->setScanRadius(500.0f);
 
     m_elements->addHudget(m_aimHelper);
     m_elements->addHudget(m_crossHair);
@@ -145,13 +149,28 @@ void HUD::update(float deltaSec) {
     updateScanner(deltaSec);
 
     if (m_target.get()) {
-        m_elements->setTargetName(m_target->objectInfo().name());
+        m_elements->setTargetName(m_target->info().name());
     } else {
         m_elements->setTargetName("no target");
     }
 
     if (m_player->ship()) {
         m_elements->setSpeed(std::to_string((int)(glm::length(m_player->ship()->physics().speed().directional()))));
+
+        float shieldHP = 0;
+        float shieldMaxHP = 0;
+
+        for (std::shared_ptr<ShieldSlot>& shieldSlot : m_player->ship()->components().shieldSlots()) {
+            if (shieldSlot->shield()) {
+                shieldHP += shieldSlot->shield()->hp();
+                shieldMaxHP += shieldSlot->shield()->maxHP();
+            }
+        }
+
+        if (shieldMaxHP > 0.0f) {
+            int shieldPercent = static_cast<int>(shieldHP * 100 / shieldMaxHP);
+            m_elements->setShieldStatus(std::to_string(shieldPercent));
+        }
     } else {
         m_elements->setSpeed("-");
     }
@@ -180,11 +199,29 @@ void HUD::draw() {
 
 void HUD::onClick(ClickType clickType) {
     Ray toCrossHair = Ray::fromTo(m_player->cameraHead().position(), m_crossHair->worldPosition());
+    ObjectHudget* smallestTargetHudget = nullptr;
+    Hudget* otherHudget = nullptr;
+
     for (std::unique_ptr<Hudget>& hudget : m_elements->hudgets()) {
         if (hudget->isAt(toCrossHair) && hudget.get() != m_crossHair) {
-            hudget->onClick(clickType);
-            return;
+            ObjectHudget* targetHudget = dynamic_cast<ObjectHudget*>(hudget.get());
+
+            if (targetHudget) {
+                if (!smallestTargetHudget) {
+                    smallestTargetHudget = targetHudget;
+                } else if (smallestTargetHudget->openingAngle() > targetHudget->openingAngle()) {
+                    smallestTargetHudget = targetHudget;
+                }
+            } else {
+                otherHudget = hudget.get();
+            }
         }
+    }
+
+    if (smallestTargetHudget) {
+        smallestTargetHudget->onClick(clickType);
+    } else if (otherHudget) {
+        otherHudget->onClick(clickType);
     }
 }
 
@@ -225,7 +262,7 @@ void HUD::updateScanner(float deltaSec) {
         m_scanner->update(deltaSec, m_player->ship());
 
         for (WorldObject* worldObject : m_scanner->foundWorldObjects()) {
-            if (worldObject->objectInfo().showOnHud()) {
+            if (worldObject->info().showOnHud()) {
                 ObjectHudget* objectHudget = new ObjectHudget(this);
                 HUDObjectDelegate* objectDelgate = new HUDObjectDelegate(this, worldObject, objectHudget);
                 addObjectDelegate(objectDelgate);
@@ -257,5 +294,4 @@ void HUD::updateFov() {
 void HUD::setView(const View* view) {
     m_view = view;
 }
-
 

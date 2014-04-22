@@ -5,6 +5,10 @@
 
 #include <glm/glm.hpp>
 
+#include "display/rendering/visuals.h"
+
+#include "sound/soundproperties.h"
+
 #include "enginepower.h"
 #include "enginestate.h"
 #include "equipment.h"
@@ -12,8 +16,6 @@
 
 class EngineSlot;
 class EngineTrailGenerator;
-class Visuals;
-class SoundProperties;
 class Sound;
 
 class Engine: public Equipment {
@@ -21,14 +23,18 @@ public:
     Engine(const std::string& equipmentKey);
     virtual ~Engine();
 
-    virtual const Visuals& visuals() const = 0;
-    virtual const SoundProperties& sound() const = 0;
-    
+    const Visuals& visuals() const;
+    void setVisuals(const Visuals& visuals);
+
+    const SoundProperties& sound() const;
+    void setEngineSound(const SoundProperties& engineSound);
+
+    EnginePower power() const;
+    void setPower(const EnginePower& power);
+
     EngineSlot* engineSlot();
     const EngineSlot* engineSlot() const;
     void setEngineSlot(EngineSlot* engineSlot);
-
-    virtual EnginePower power() const = 0;
 
     const EngineState& state() const;
     void setState(const EngineState& state);
@@ -43,7 +49,10 @@ protected:
     std::shared_ptr<Sound> m_sound;
     EngineSlot* m_engineSlot;
     EngineState m_state;
-    
+    EnginePower m_power;
+    Visuals m_visuals;
+    SoundProperties m_engineSound;
+
 
     void setupTrail();
 };

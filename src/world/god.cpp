@@ -8,7 +8,7 @@
 
 #include "scripting/scriptengine.h"
 
-#include "ui/objectinfo.h"
+#include "worldobject/worldobjectinfo.h"
 
 #include "worldtree/worldtree.h"
 
@@ -56,7 +56,7 @@ void God::spawn() {
             std::list<VoxelCollision> collisions = worldObject->collisionDetector().checkCollisions();
 
             if (!collisions.empty()) {
-                glow::warning("Failed to spawn %;", worldObject->objectInfo().name());
+                glow::warning("Failed to spawn %;", worldObject->info().name());
 
                 World::instance()->worldTree().remove(worldObject->collisionDetector().geode());
 

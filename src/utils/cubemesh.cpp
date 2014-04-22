@@ -47,7 +47,7 @@ void CubeMesh::bindLinesTo(glow::Program& program, glow::VertexArrayObject& vao,
 void CubeMesh::initialize() {
     //assert(ContextProvider::instance()->available());
 
-    glow::Array<glm::vec3> array{
+    std::array<glm::vec3, 24> array {
         llf, llb, lrb, lrf, llf, lrf, llb, lrb,
         ulf, ulb, urb, urf, ulf, urf, ulb, urb,
         llf, ulf, llb, ulb, lrf, urf, lrb, urb

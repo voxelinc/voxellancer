@@ -12,8 +12,6 @@
 #include "equipment/weapons/gun.h"
 #include "equipment/weapons/rocketlauncher.h"
 
-#include "ui/objectinfo.h"
-
 
 WorldObjectComponents::WorldObjectComponents(WorldObject* worldObject):
     m_worldObject(worldObject)

@@ -8,8 +8,6 @@
 #include "equipment/shield.h"
 #include "equipment/shieldslot.h"
 
-#include "ui/objectinfo.h"
-
 #include "utils/tostring.h"
 
 #include "voxel/voxel.h"
@@ -38,8 +36,6 @@ void Damager::applyDamages(std::list<DamageImpact> &damageImpacts) {
         if (m_playerShipUndestroyable && World::instance()->player().ship() == damageImpact.worldObject()) {
             continue;
         }
-
-        std::cout << "Damager: " << damageImpact.worldObject()->objectInfo().name() << " gets " << toString(damageImpact.damageVec()) << std::endl;
 
         applyShields(damageImpact);
         if(damageImpact.damage() == 0) {
@@ -89,7 +85,7 @@ std::list<WorldObjectModification>& Damager::worldObjectModifications() {
     return m_worldObjectModifications;
 }
 
-DamageImpact Damager::dampDamageImpact(DamageImpact &undamped, float factor) { std::cout << "Dampening" << toString(undamped.damageVec()) << " by " << factor << std::endl;
+DamageImpact Damager::dampDamageImpact(DamageImpact &undamped, float factor) {
     return DamageImpact(undamped.worldObject(), undamped.voxel(), glm::normalize(undamped.damageVec()) * factor, undamped.fieldOfDamage());
 }
 

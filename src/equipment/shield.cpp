@@ -30,7 +30,7 @@ float Shield::hp() const {
 }
 
 void Shield::setHP(float hp) {
-    assert(hp <= maxHP());
+    assert(hp <= maxHP() && hp >= 0);
     m_hp = hp;
 }
 

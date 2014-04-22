@@ -44,5 +44,5 @@ void ScreenQuad::beforeContextDestroy() {
 }
 
 void ScreenQuad::afterContextRebuild() {
-    initialize();
+    // lazy init
 }
