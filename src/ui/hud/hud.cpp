@@ -7,7 +7,6 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 
-#include <glow/logging.hpp>
 #include <glow/Program.hpp>
 
 #include "camera/camerahead.h"
@@ -275,7 +274,7 @@ void HUD::updateFov() {
     m_fovx = glm::atan(glm::tan(m_fovy) * m_view->aspectRatio());
 }
 
-void HUD::setView(const View* view) { glow::debug() << "Set View " << view;
+void HUD::setView(const View* view) {
     m_view = view;
 }
 
