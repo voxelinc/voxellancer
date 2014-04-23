@@ -63,8 +63,6 @@ HUD::HUD(Player* player):
 
     m_elements->addHudget(m_aimHelper);
     m_elements->addHudget(m_crossHair);
-
-    glow::info() << "Created HUD" << this;
 }
 
 HUD::~HUD() = default;
