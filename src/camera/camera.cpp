@@ -3,8 +3,7 @@
 #include <glm/gtx/transform.hpp>
 
 
-Camera::Camera(int viewportWidth, int viewportHeight)
-{
+Camera::Camera(int viewportWidth, int viewportHeight) {
     setViewport(viewportWidth, viewportHeight);
 
     setFovy(glm::radians(60.0f));
@@ -20,6 +19,5 @@ glm::quat Camera::orientation() const {
 void Camera::setOrientation(const glm::quat& orientation) {
     glowutils::Camera::setUp(orientation * glm::vec3(0, 1, 0));
     glowutils::Camera::setCenter(eye() + orientation * glm::vec3(0, 0, -1));
-    m_orientation = orientation;
 }
 

@@ -15,9 +15,5 @@ public:
 
     glm::quat orientation() const;
     void setOrientation(const glm::quat& orientation);
-
-
-protected:
-    glm::quat m_orientation;
 };
 
