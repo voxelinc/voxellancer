@@ -89,9 +89,9 @@ void FrozenGameScenario::populateWorld() {
     WorldObject *wall = new WorldObject();
     wall->transform().move(glm::vec3(-30, 0, -50));
     wall->transform().rotate(glm::angleAxis(-90.f, glm::vec3(0, 1, 0)));
-    for(int x = 0; x < 20; x++) {
-        for(int y = 0; y < 15; y++) {
-            for(int z = 0; z < 3; z++) {
+    for(int x = 0; x < 30; x++) {
+        for(int y = 0; y < 40; y++) {
+            for(int z = 0; z < 10; z++) {
                 wall->addVoxel(new Voxel(glm::ivec3(z, x, y), 0xB47878));
             }
         }

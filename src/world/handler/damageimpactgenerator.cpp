@@ -30,13 +30,13 @@ void DamageImpactGenerator::parse(std::list<WorldObjectCollision>& worldObjectCo
             if (voxelCollision.a().worldObject()->spawnState() != SpawnState::RemovalScheduled) {
                 m_damageImpactAccumulator.parse(DamageImpact(voxelCollision.a().worldObject(),
                                                              voxelCollision.a().voxel(),
-                                                             (speedB - speedA) * (massPerImpactB),
+                                                             (speedB - speedA) * (massPerImpactB) * 10000.0f,
                                                              voxelCollision.b().worldObject()->collisionFieldOfDamage()));
             }
             if (voxelCollision.b().worldObject()->spawnState() != SpawnState::RemovalScheduled) {
                 m_damageImpactAccumulator.parse(DamageImpact(voxelCollision.b().worldObject(),
                                                              voxelCollision.b().voxel(),
-                                                             (speedA - speedB) * (massPerImpactA),
+                                                             (speedA - speedB) * (massPerImpactA)* 10000.0f,
                                                              voxelCollision.a().worldObject()->collisionFieldOfDamage()));
             }
         }
