@@ -55,6 +55,6 @@ void MonoView::draw(const Scene& scene, const CameraHead& cameraHead) {
     m_camera->setPosition(cameraHead.position());
     m_camera->setOrientation(cameraHead.orientation());
 
-    scene.draw(*m_camera, glow::FrameBufferObject::defaultFBO(), m_viewport);
+    scene.draw(*m_camera, glow::FrameBufferObject::defaultFBO(), m_viewport, EyeSide::None);
 }
 

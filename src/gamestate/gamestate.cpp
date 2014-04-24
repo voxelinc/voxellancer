@@ -1,6 +1,7 @@
 #include "gamestate.h"
 
 #include <cassert>
+#include <iostream>
 
 
 GameState::GameState(const std::string& name, GameState* parent):
@@ -14,11 +15,12 @@ GameState* GameState::parentGameState() {
 }
 
 const Scene& GameState::scene() const {
-    assert(parentState());
+    assert(m_parentGameState);
     return m_parentGameState->scene();
 }
 
 const CameraHead& GameState::cameraHead() const {
+    assert(m_parentGameState);
     return m_parentGameState->cameraHead();
 }
 

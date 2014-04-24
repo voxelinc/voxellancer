@@ -87,7 +87,6 @@ void VoxelFont::drawString(std::string text, glm::vec3 position, glm::quat orien
     }
 }
 
-
 int VoxelFont::letterWidth(FontSize size) {
     switch (size) {
         case FontSize::SIZE3x5:
