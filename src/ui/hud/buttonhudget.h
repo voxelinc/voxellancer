@@ -13,7 +13,7 @@ class TextFieldHudgetVoxels;
 
 class ButtonHudget : public Hudget {
 public:
-    ButtonHudget(HUD* hud, glm::vec3 direction, const std::function<void(ClickType clickType)>& callback, float scale = 0.5f, std::string content = "", FontSize fontSize = FontSize::SIZE5x7, bool bounds = true);
+    ButtonHudget(HUD* hud, glm::vec3 direction, const std::function<void(ClickType clickType)>& callback, TextOrientation textOrientation = TextOrientation::BACKWARDS, float scale = 0.5f, std::string content = "", FontSize fontSize = FontSize::SIZE5x7, ButtonStyle borderStyle = ButtonStyle::BORDERED);
     virtual ~ButtonHudget();
 
     virtual void update(float deltaSec) override;
@@ -26,6 +26,11 @@ public:
     virtual void setText(const std::string& content);
 
     void setCallback(const std::function<void(ClickType clickType)>& callback);
+
+    void setTextOrientation(TextOrientation textOrientation);
+
+    ButtonStyle buttonStyle();
+    void setButtonStyle(ButtonStyle buttonStyle);
 
 protected:
     std::function<void(ClickType clickType)> m_callback;

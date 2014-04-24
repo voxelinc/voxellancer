@@ -11,7 +11,7 @@ class VoxelCluster;
 
 class ButtonHudgetVoxels : public TextFieldHudgetVoxels {
 public:
-    ButtonHudgetVoxels(ButtonHudget* textFieldHudget, glm::vec3 direction, float scale = 0.5f, std::string content = "", FontSize fontSize = FontSize::SIZE5x7, bool bounds = true);
+    ButtonHudgetVoxels(ButtonHudget* textFieldHudget, glm::vec3 direction, TextOrientation textOrienation = TextOrientation::BACKWARDS, float scale = 0.5f, std::string content = "", FontSize fontSize = FontSize::SIZE5x7, ButtonStyle buttonStyle = ButtonStyle::BORDERED);
     ~ButtonHudgetVoxels();
 
     virtual void setText(const std::string& text);
@@ -20,9 +20,13 @@ public:
 
     virtual void draw() override;
 
+    ButtonStyle buttonStyle();
+    void setButtonStyle(ButtonStyle buttonStyle);
+
 protected:
     std::unique_ptr<VoxelCluster> m_buttonVoxels;
-    bool m_bounds;
     Hudget* m_hudget;
+
+    ButtonStyle m_buttonStyle;
 };
 

@@ -56,9 +56,9 @@ HUD::HUD(Player* player):
     m_crossHair(new CrossHair(this)),
     m_aimHelper(new AimHelperHudget(this)),
     m_scanner(new WorldTreeScanner()),
-    m_targetName(new TextFieldHudget(this, glm::normalize(glm::vec3(0, -1.1f, -2)), 0.025f, "")),
-    m_speedLabel(new TextFieldHudget(this, glm::normalize(glm::vec3(1.5f, -1.1f, -2)), 0.020f, "")),
-    m_menuButton(new ButtonHudget(this, glm::normalize(glm::vec3(-1.5f, 1.1f, -2)), (std::function<void(ClickType clickType)>)std::bind(&HUD::openMenu, this, std::placeholders::_1), 0.01f, "MENU")),
+    m_targetName(new TextFieldHudget(this, glm::normalize(glm::vec3(0, -1.1f, -2)), TextOrientation::BACKWARDS, 0.025f, "")),
+    m_speedLabel(new TextFieldHudget(this, glm::normalize(glm::vec3(1.5f, -1.1f, -2)), TextOrientation::BACKWARDS, 0.020f, "")),
+    m_resetButton(new ButtonHudget(this, glm::normalize(glm::vec3(-1.5f, 1.1f, -2)), (std::function<void(ClickType clickType)>)std::bind(&HUD::openMenu, this, std::placeholders::_1), TextOrientation::BACKWARDS, 0.01f, "RESET",FontSize::SIZE5x7,ButtonStyle::BORDERED)),
     m_elements(new HUDElements(*this)),
     m_target(nullptr),
     m_drawHud("vfx.drawhud"),
@@ -70,7 +70,7 @@ HUD::HUD(Player* player):
     m_elements->addHudget(m_crossHair);
     m_elements->addHudget(m_targetName);
     m_elements->addHudget(m_speedLabel);
-    m_elements->addHudget(m_menuButton);
+    m_elements->addHudget(m_resetButton);
 }
 
 HUD::~HUD() = default;
@@ -288,3 +288,6 @@ void HUD::openMenu(ClickType clicktype) {
     glow::debug("Not yet implemented");
 }
 
+ButtonHudget* HUD::resetButton() {
+	return m_resetButton;
+}

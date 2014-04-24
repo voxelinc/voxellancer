@@ -73,6 +73,8 @@ public:
     void showMissionMessage(const std::string& message);
     void showMessage(const std::string& message);
 
+	ButtonHudget* resetButton();
+
 
 protected:
     Player* m_player;
@@ -86,7 +88,7 @@ protected:
 
     TextFieldHudget* m_speedLabel;
     TextFieldHudget* m_targetName;
-    ButtonHudget* m_menuButton;
+    ButtonHudget* m_resetButton;
     CrossHair* m_crossHair;
     AimHelperHudget* m_aimHelper;
 

@@ -28,6 +28,7 @@
 #include "camera/camerahead.h"
 #include "camera/cameradolly.h"
 #include "ui/hud/hud.h"
+#include "ui/hud/buttonhudget.h"
 #include "display/viewer.h"
 
 #include "display/rendering/texturerenderer.h"
@@ -45,6 +46,7 @@ GamePlay::GamePlay(Game* game) :
     m_soundManager(new SoundManager()),
     m_scenario(new ScriptedScenario(this, "data/scripts/scenarios/demo.lua"))
 {
+	World::instance()->player().hud().resetButton()->setCallback((std::function<void(ClickType clickType)>)std::bind(&GamePlay::resetButtonCallback, this, std::placeholders::_1));
     updateView();
     setInitialSubState(m_runningState);
 
@@ -167,3 +169,6 @@ void GamePlay::updateView() {
     World::instance()->player().hud().setView(&m_game->viewer().view());
 }
 
+void GamePlay::resetButtonCallback(ClickType clickType){
+    m_scenario->reset();
+}

@@ -3,6 +3,7 @@
 #include <memory>
 
 #include "gamestate/gamestate.h"
+#include "ui/clicktype.h"
 
 
 class BaseScenario;
@@ -59,5 +60,7 @@ protected:
     std::unique_ptr<GamePlayNormalInput> m_normalInput;
     std::unique_ptr<GamePlayFreecamInput> m_freecamInput;
     bool m_freecamActive;
+
+	void resetButtonCallback(ClickType clickType);
 };
 

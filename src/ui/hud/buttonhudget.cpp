@@ -3,9 +3,9 @@
 #include "hud.h"
 #include "buttonhudgetvoxels.h"
 
-ButtonHudget::ButtonHudget(HUD* hud, glm::vec3 direction, const std::function<void(ClickType clickType)>& callback, float scale, std::string content, FontSize fontSize, bool bounds) :
+ButtonHudget::ButtonHudget(HUD* hud, glm::vec3 direction, const std::function<void(ClickType clickType)>& callback, TextOrientation textOrientation, float scale, std::string content, FontSize fontSize, ButtonStyle buttonStyle) :
     Hudget(hud),
-    m_buttonVoxels(new ButtonHudgetVoxels(this, direction, scale, content, fontSize, bounds)),
+    m_buttonVoxels(new ButtonHudgetVoxels(this, direction, textOrientation, scale, content, fontSize, buttonStyle)),
     m_callback(callback)
 {
     m_buttonVoxels->updateBounds();
@@ -35,4 +35,16 @@ void ButtonHudget::setCallback(const std::function<void(ClickType clickType)>& c
 
 void ButtonHudget::setText(const std::string& content) {
     m_buttonVoxels->setText(content);
+}
+
+void ButtonHudget::setTextOrientation(TextOrientation textOrientation) {
+    m_buttonVoxels->setTextOrientation(textOrientation);
+}
+
+ButtonStyle ButtonHudget::buttonStyle() {
+    return m_buttonVoxels->buttonStyle();
+}
+
+void ButtonHudget::setButtonStyle(ButtonStyle buttonStyle) {
+    m_buttonVoxels->setButtonStyle(buttonStyle);
 }

@@ -12,13 +12,14 @@
 
 #include "utils/geometryhelper.h"
 
-TextFieldHudgetVoxels::TextFieldHudgetVoxels(Hudget* textFieldHudget, const glm::vec3& direction, float scale, const std::string& text, FontSize fontSize) :
+TextFieldHudgetVoxels::TextFieldHudgetVoxels(Hudget* textFieldHudget, const glm::vec3& direction, TextOrientation textOrientation, float scale, const std::string& text, FontSize fontSize) :
     m_hudget(textFieldHudget),
     m_voxelFont(VoxelFont::instance()),
     m_text(text),
     m_direction(direction),
     m_scale(scale),
-    m_fontSize(fontSize)
+    m_fontSize(fontSize),
+    m_textOrientation(textOrientation)
 {
     m_width = m_voxelFont->letterWidth(fontSize) * m_scale;
     m_height = m_voxelFont->letterWidth(fontSize) * m_scale;
@@ -31,23 +32,27 @@ void TextFieldHudgetVoxels::setText(const std::string& text) {
 }
 
 void TextFieldHudgetVoxels::draw() {
-    m_voxelFont->drawString(m_text, worldPosition(), worldOrientation(), m_fontSize, m_scale, FontAlign::CENTER);
+    if (m_textOrientation == TextOrientation::BACKWARDS) {
+        m_voxelFont->drawString(m_text, worldPosition(), orientation(), m_fontSize, m_scale, FontAlign::CENTER);
+    } else if (m_textOrientation == TextOrientation::SPHERE_STRAIGHT) {
+        m_voxelFont->drawString(m_text, worldPosition(), orientation(), m_fontSize, m_scale, FontAlign::CENTER);
+    }
 }
 
 const glm::vec3 TextFieldHudgetVoxels::upperLeft() const {
-    return worldPosition() + worldOrientation() * offsetToCenter(true, true);
+    return worldPosition() + orientation() * offsetToCenter(true, true);
 }
 
 const glm::vec3 TextFieldHudgetVoxels::lowerLeft() const {
-    return worldPosition() + worldOrientation() * offsetToCenter(false, true);
+    return worldPosition() + orientation() * offsetToCenter(false, true);
 }
 
 const glm::vec3 TextFieldHudgetVoxels::upperRight() const {
-    return worldPosition() + worldOrientation() * offsetToCenter(true, false);
+    return worldPosition() + orientation() * offsetToCenter(true, false);
 }
 
 const glm::vec3 TextFieldHudgetVoxels::lowerRight() const {
-    return worldPosition() + worldOrientation() * offsetToCenter(false, false);
+    return worldPosition() + orientation() * offsetToCenter(false, false);
 }
 
 bool TextFieldHudgetVoxels::isAt(const Ray& ray) const {
@@ -90,3 +95,20 @@ glm::quat TextFieldHudgetVoxels::worldOrientation() const {
     return m_hudget->worldOrientation(m_direction);
 }
 
+TextOrientation TextFieldHudgetVoxels::textOrientation() {
+    return m_textOrientation;
+}
+
+glm::quat TextFieldHudgetVoxels::orientation() const {
+    switch (m_textOrientation) {
+    case TextOrientation::BACKWARDS:
+        return m_hudget->hud()->orientation();
+    case TextOrientation::SPHERE_STRAIGHT:
+        return worldOrientation();
+    }
+    return glm::quat();
+}
+
+void TextFieldHudgetVoxels::setTextOrientation(TextOrientation textOrientation) {
+    m_textOrientation = textOrientation;
+}

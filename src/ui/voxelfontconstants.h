@@ -10,3 +10,14 @@ enum class FontAlign {
     CENTER,
     RIGHT
 };
+
+enum class TextOrientation {
+    BACKWARDS,
+    SPHERE_STRAIGHT
+};
+
+enum class ButtonStyle {
+    PLAIN,
+    BORDERED,
+    BORDERED_FILLED
+};

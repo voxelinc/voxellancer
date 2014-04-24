@@ -88,8 +88,10 @@ bool InputConfigurator::isConfiguring() {
 
 void InputConfigurator::startConfiguration(InputClass inputClass) {
     if (inputClass == InputClass::Primary) {
+        World::instance()->player().hud().showMissionInfo("", "Starting configuration for primary input device (keyboard), Please follow the instructions");
         glow::info("Starting configuration for primary input device (keyboard), Please follow the instructions");
     } else {
+        World::instance()->player().hud().showMissionInfo("", "Starting configuration for secondary input device (gamepad/Joystick), Please follow the instructions");
         glow::info("Starting configuration for secondary input device (gamepad/Joystick), Please follow the instructions");
         m_idleValues.resize(m_secondaryInputValues->axisCnt);
         for(int a = 0; a < m_secondaryInputValues->axisCnt; a++) {
