@@ -98,7 +98,7 @@ void Gun::setupBullet(Bullet* bullet, const glm::vec3& point) {
         bulletTransform.rotateWorld(bulletOrientation); //then rotate towards target
     }
 
-    m_bulletLength = bullet->bounds().minimalGridAABB().extent(ZAxis) * bullet->transform().scale();
+    //m_bulletLength = bullet->bounds().minimalGridAABB().extent(ZAxis) * bullet->transform().scale();
     m_spawnDistance = glm::root_two<float>() * bullet->transform().scale();
     bulletTransform.setPosition(m_hardpoint->voxel()->position() + bulletDirection * (m_bulletLength / 2.0f + m_spawnDistance));
 
@@ -117,17 +117,13 @@ void Gun::setHardpoint(Hardpoint* hardpoint) {
     m_owner = m_hardpoint->components()->worldObject();
 }
 
-void Gun::setProjectileName(const std::string& name) {
-    Weapon::setProjectileName(name);
-    setBulletExtend();
-}
-
 void Gun::setBulletExtend() {
     Bullet* bullet = WorldObjectBuilder(projectileName()).buildBullet();
 
     m_bulletMaxWidth = glm::max(bullet->bounds().minimalGridAABB().extent(XAxis), bullet->bounds().minimalGridAABB().extent(YAxis))* bullet->transform().scale();
     m_bulletLength = bullet->bounds().minimalGridAABB().extent(ZAxis) * bullet->transform().scale();
     m_spawnDistance = glm::root_two<float>() * bullet->transform().scale();
+    delete(bullet);
 }
 
 bool Gun::isBulletPathClear(const glm::vec3& point, bool checkFriendlyFire) {
@@ -146,4 +142,8 @@ bool Gun::isBulletPathClear(const glm::vec3& point, bool checkFriendlyFire) {
         }
     }
     return true;
+}
+
+void Gun::onProjectileNameChanged() {
+    setBulletExtend();
 }

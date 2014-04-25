@@ -49,6 +49,7 @@ const std::string Weapon::projectileName() const {
 
 void Weapon::setProjectileName(const std::string& name) {
     m_projectileName = name;
+    onProjectileNameChanged();
 }
 
 WeaponType Weapon::type() const {
@@ -65,5 +66,9 @@ bool Weapon::canFire() {
 
 void Weapon::onFired() {
     m_cooldown = cooldownTime();
+}
+
+void Weapon::onProjectileNameChanged() {
+
 }
 

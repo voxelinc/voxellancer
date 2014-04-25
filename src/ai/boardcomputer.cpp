@@ -132,20 +132,16 @@ void BoardComputer::shootBullet(const std::vector<Handle<WorldObject>>& targets)
         if (const WorldObject* target = targetHandle.get()) {
             // Hardpoints check themselves whether they can fire, just tell everyone to shoot everything
             glm::vec3 targetDirection = target->position() - m_worldObject->position();
-            glm::vec3 shipDirection = m_worldObject->transform().orientation() * glm::vec3(0, 0, -1);
-            float angle = GeometryHelper::angleBetween(shipDirection, targetDirection);
-            if (glm::abs(angle) < max_angle) {
-                glm::vec3 offset = RandVec3::rand(0, 1) * glm::length(targetDirection) / 30.0f;
-                for (std::shared_ptr<Hardpoint> hardpoint : m_worldObject->components().hardpoints()) {
-                    if (hardpoint->weapon() && hardpoint->weapon()->type() == WeaponType::Gun) {
-                        Gun* gun = static_cast<Gun*>(hardpoint->weapon().get());
-                        if (gun->isBulletPathClear(target->position() + offset, true)) {
-                            gun->fireAtPoint(target->position() + offset);
-                        }
+            glm::vec3 inaccuracyOffset = RandVec3::rand(0, 1) * glm::length(targetDirection) / 30.0f;
+            for (std::shared_ptr<Hardpoint>& hardpoint : m_worldObject->components().hardpoints()) {
+                if (hardpoint->weapon() && hardpoint->weapon()->type() == WeaponType::Gun) {
+                    Gun* gun = static_cast<Gun*>(hardpoint->weapon().get());
+                    if (gun->isBulletPathClear(target->position() + inaccuracyOffset, true)) {
+                        gun->fireAtPoint(target->position() + inaccuracyOffset);
                     }
                 }
-                break;
             }
+            break;
         }
     }
 }

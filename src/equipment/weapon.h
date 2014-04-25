@@ -35,7 +35,9 @@ public:
     void setVisuals(const Visuals& visuals);
 
     const std::string projectileName() const;
-    virtual void setProjectileName(const std::string& name);
+    void setProjectileName(const std::string& name);
+
+    virtual void onProjectileNameChanged();
 
     WeaponType type() const;
 

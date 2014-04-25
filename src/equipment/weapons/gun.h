@@ -33,7 +33,7 @@ public:
 
     virtual bool isBulletPathClear(const glm::vec3& point, bool checkFriendlyFire = false);
 
-    virtual void setProjectileName(const std::string& name) override;
+    virtual void onProjectileNameChanged() override;
 
 
 protected:
