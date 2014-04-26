@@ -47,7 +47,7 @@ void DefendAreaTask::update(float deltaSec) {
                 updatePatrol();
             }
         }
-        
+
         // update called by the leader himself
     }
 }
@@ -89,7 +89,7 @@ bool DefendAreaTask::isEnemyInRange() {
 void DefendAreaTask::setPatrol() {
     updatePatrol();
     m_squad.leader()->character()->setTask(m_leaderFlyTask);
-    for (Ship* ship : m_squad.members()) {
+    for (Ship* ship : m_squad.followers()) {
         ship->character()->setTask(std::make_shared<FormationMemberTask>(*ship));
     }
     m_fighting = false;
@@ -98,7 +98,7 @@ void DefendAreaTask::setPatrol() {
 void DefendAreaTask::setFight() {
     m_leaderFightTask->setTargets(m_enemies);
     m_squad.leader()->character()->setTask(m_leaderFightTask);
-    for (Ship* ship : m_squad.members()) {
+    for (Ship* ship : m_squad.followers()) {
         ship->character()->setTask(std::make_shared<FightTask>(ship->boardComputer(), m_enemies));
     }
     m_fighting = true;
@@ -117,7 +117,6 @@ void DefendAreaTask::updatePatrol() {
 
 void DefendAreaTask::updateFight() {
     assert(m_fighting); // they already have FightTasks
-    m_leaderFightTask->setTargets(m_enemies);
     for (Ship* ship : m_squad.members()) {
         FightTask* task = dynamic_cast<FightTask*>(ship->character()->task().get());
         assert(task);

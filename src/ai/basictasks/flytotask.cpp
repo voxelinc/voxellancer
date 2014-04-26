@@ -12,6 +12,10 @@ FlyToTask::FlyToTask(BoardComputer* boardComputer) :
 {
 }
 
+const glm::vec3& FlyToTask::targetPoint() const {
+    return m_targetPoint;
+}
+
 void FlyToTask::setTargetPoint(const glm::vec3& point, const glm::vec3& up) {
     m_targetPoint = point;
     m_targetUp = up;

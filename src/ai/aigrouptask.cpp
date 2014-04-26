@@ -15,6 +15,10 @@ AiGroupTask::AiGroupTask(Squad& squad, AiGroupTask* parent):
     }
 }
 
+Squad& AiGroupTask::squad() {
+    return m_squad;
+}
+
 AiGroupTask* AiGroupTask::parent() {
     return m_parent;
 }
@@ -46,9 +50,10 @@ void AiGroupTask::setLeaderTask(std::shared_ptr<AiTask> task) {
 }
 
 void AiGroupTask::setMembersToFollowLeader() {
-    for (Ship* member : m_squad.members()) {
+    for (Ship* member : m_squad.followers()) {
         if (member != m_squad.leader()) {
             member->character()->setTask(std::make_shared<FormationMemberTask>(*member));
         }
     }
 }
+

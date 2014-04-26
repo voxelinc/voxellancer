@@ -22,9 +22,9 @@ Ship* Squad::leader() {
 void Squad::setLeader(Ship* leader) {
     assert(leader);
     if (m_leader) { // old leader becomes normal member
-        onMemberJoin(m_leader);
+        addMember(m_leader);
     }
-    std::vector<Ship*>::iterator it = std::find(m_members.begin(), m_members.end(), leader);
+    std::unordered_set<Ship*>::iterator it = std::find(m_members.begin(), m_members.end(), leader);
     if (it != m_members.end()) { // if leader was member, remove him
         m_members.erase(it);
         if (m_task)
@@ -45,37 +45,42 @@ void Squad::setTask(std::shared_ptr<AiGroupTask> task) {
     m_task = task;
 }
 
-const std::vector<Ship*>& Squad::members() {
+std::unordered_set<Ship*> Squad::members() {
     return m_members;
 }
 
-void Squad::onMemberJoin(Ship* member) {
-    assert(member);
+std::unordered_set<Ship*> followers() {
+    return m_followers;
+}
+
+void Squad::addMember(Ship* ship) {
     if (!m_leader) { // auto-promote first member to leader
-        m_leader = member;
+        m_leader = ship;
         if (m_task) {
-            m_task->onNewLeader(member);
+            m_task->onNewLeader(ship);
         }
     } else {
-        m_members.push_back(member);
-        if (m_task) {
-            m_task->onMemberJoin(member);
-        }
+        m_followers.insert(ship);
+    }
+
+    m_members.insert(ship);
+    if (m_task) {
+        m_task->onMemberJoin(ship);
     }
 }
 
-void Squad::onMemberLeave(Ship* member) {
-    if (member == m_leader) {
-        // the leader does not want to automatically become a member since he is about to leave
-        m_leader = nullptr;
+void Squad::removeMember(Ship* ship) {
+    m_followers.erase(it);
+    size_t removedMembers = m_members.erase(it);
+
+    assert(removedMembers > 0);
+
+    if (m_task) {
+        m_task->onMemberLeave(ship);
+    }
+
+    if (ship == m_leader) {
         chooseNewLeader();
-    } else {
-        std::vector<Ship*>::iterator it = std::find(m_members.begin(), m_members.end(), member);
-        assert(it != m_members.end());
-        m_members.erase(it);
-        if (m_task) {
-            m_task->onMemberLeave(member);
-        }
     }
 }
 
@@ -100,7 +105,7 @@ void Squad::chooseNewLeader() {
 
 glm::vec3 Squad::formationPositionFor(Ship* member) {
     assert(m_leader); // no position without a leader
-    std::vector<Ship*>::iterator it = std::find(m_members.begin(), m_members.end(), member);
+    std::unordered_set<Ship*>::iterator it = std::find(m_members.begin(), m_members.end(), member);
     assert(it != m_members.end());
     size_t position = it - m_members.begin();
 
@@ -122,3 +127,4 @@ glm::vec3 Squad::calculateFormationPosition(Ship* member, int position) {
     glm::vec3 direction = (position % 2) ? glm::vec3(1, 0, 1) : glm::vec3(-1, 0, 1);
     return m_leader->transform().position() + m_leader->physics().speed().directional() + m_leader->transform().orientation() * (distance * glm::normalize(direction));
 }
+

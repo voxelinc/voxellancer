@@ -30,12 +30,12 @@ void SquadLogic::joinSquad(std::shared_ptr<Squad> squad) {
     assert(m_squad.get() == nullptr);
     assert(squad.get());
     m_squad = squad;
-    m_squad->onMemberJoin(&m_ship);
+    m_squad->addMember(&m_ship);
 }
 
 void SquadLogic::leaveSquad() {
     assert(m_squad.get());
-    m_squad->onMemberLeave(&m_ship);
+    m_squad->removeMember(&m_ship);
     m_squad = nullptr;
 }
 

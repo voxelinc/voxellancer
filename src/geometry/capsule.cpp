@@ -35,7 +35,6 @@ void Capsule::setDirection(const glm::vec3& direction) {
     m_direction = direction;
 }
 
-
 const float Capsule::radius() const {
     return m_radius;
 }
@@ -73,9 +72,13 @@ bool Capsule::containedBy(const TAABB<int>& aabb) const {
         (m_direction.y < 0 ? -m_radius : m_radius),
         (m_direction.z < 0 ? -m_radius : m_radius));
 
-    //extend endpoints along axes
-    glm::vec3 normalizedDirection = glm::normalize(m_direction);
-    return aabb.contains(m_origin - extendDirection)
-        && aabb.contains(m_origin + m_direction + extendDirection);
+    if (glm::length(m_direction) != 0.0f) {
+        //extend endpoints along axes
+        glm::vec3 normalizedDirection = glm::normalize(m_direction);
+        return aabb.contains(m_origin - extendDirection)
+            && aabb.contains(m_origin + m_direction + extendDirection);
+    } else {
+        return Sphere(m_origin, m_radius).containedBy(aabb);
+    }
 }
 

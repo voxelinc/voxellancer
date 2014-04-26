@@ -31,6 +31,14 @@ glm::vec3 RandVec3::rand(float from, float to) {
     );
 }
 
+glm::vec3 RandVec3::rand(const glm::vec3& from, const glm::vec3& to) {
+    float x = RandFloat::rand(from.x, to.x);
+    float y = RandFloat::rand(from.y, to.y);
+    float z = RandFloat::rand(from.z, to.z);
+
+    return glm::vec3(x, y, z);
+}
+
 glm::vec3 RandVec3::randUnitVec() {
     float angX = RandFloat::rand(-glm::pi<float>(), glm::pi<float>());
     float angY = glm::acos(RandFloat::rand(-1.0f, 1.0f));

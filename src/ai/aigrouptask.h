@@ -6,6 +6,8 @@
 
 #include "scripting/scriptable.h"
 
+#include "squadobserver.h"
+
 
 class Squad;
 class AiTask;
@@ -18,6 +20,8 @@ class Ship;
 class AiGroupTask : public State, public Scriptable {
 public:
     AiGroupTask(Squad& squad, AiGroupTask* parent = nullptr);
+
+    Squad& squad();
 
     AiGroupTask* parent();
 
@@ -36,7 +40,7 @@ protected:
     void setMembersToFollowLeader();
 
 
-    AiGroupTask* m_parent;
     Squad& m_squad;
+    AiGroupTask* m_parent;
 };
 

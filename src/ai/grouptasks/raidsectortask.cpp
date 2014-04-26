@@ -1,5 +1,9 @@
 #include "raidsectortask.h"
 
+#include <glow/logging.h>
+
+#include "ai/squad.h"
+
 #include "squadseektask.h"
 #include "squaddestroytask.h"
 
