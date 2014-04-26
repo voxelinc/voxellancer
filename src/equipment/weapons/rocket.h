@@ -33,7 +33,7 @@ public:
     virtual void setCreator(WorldObject* creator) override;
 
     WorldObject* target();
-    void setTarget(WorldObject* targetObject);
+    virtual void setTarget(WorldObject* targetObject);
 
     virtual void update(float deltaSec) override;
 
