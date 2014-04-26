@@ -6,11 +6,14 @@
 #include "god.h"
 
 
-
 WorldLogic::WorldLogic(World &world):
     m_world(world)
 {
 
+}
+
+void WorldLogic::addDamageImpact(const DamageImpact& damageImpact) {
+    m_damageImpacts.push_back(damageImpact);
 }
 
 void WorldLogic::update(float deltaSecs) {
@@ -23,9 +26,12 @@ void WorldLogic::update(float deltaSecs) {
     m_voxelCollisionAccumulator.applyOnCollsionHooks();
 
     m_damageImpactGenerator.parse(m_voxelCollisionAccumulator.worldObjectCollisions());
+    m_damageImpactGenerator.parse(m_damageImpacts);
+
     m_elasticImpulseGenerator.parse(m_voxelCollisionAccumulator.worldObjectCollisions());
 
     m_elasticImpulsor.parse(m_elasticImpulseGenerator.worldObjectImpulses());
+
     damageForwardLoop(m_damageImpactGenerator.damageImpacts());
 
     m_splitDetector.searchSplitOffs(m_damager.worldObjectModifications());
@@ -45,6 +51,8 @@ void WorldLogic::update(float deltaSecs) {
 
     m_world.god().remove();
     m_world.god().spawn();
+
+    m_damageImpacts.clear();
 }
 
  DamageForwarder &WorldLogic::damageForwarder() {

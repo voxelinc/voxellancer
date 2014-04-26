@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#include "utils/handle/handle.h"
+#include "utils/handle/handleowner.h"
 
 
 class Bindings;
@@ -19,7 +19,7 @@ enum class ScriptState {
 /**
  *  Handle to a lua script
  */
-class Script {
+class Script : public HandleOwner {
 public:
     Script();
     ~Script();
@@ -36,15 +36,12 @@ public:
 
     LuaWrapper& lua();
 
-    Handle<Script>& handle();
-
     const std::string& debugStatus();
     int apiSetDebugStatus(const std::string& string);
 
 
 protected:
     std::unique_ptr<LuaWrapper> m_lua;
-    Handle<Script> m_handle;
     ScriptState m_state;
 
     std::string m_debugStatus;

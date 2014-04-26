@@ -1,5 +1,7 @@
 #pragma once
 
+#include "geometry/transform.h"
+
 #include "projectile.h"
 
 
@@ -13,14 +15,6 @@ class Bullet: public Projectile {
 public:
     Bullet();
 
-    virtual WorldObjectType objectType() const override;
-
-    virtual void update(float deltaSec) override;
-
-    virtual bool passiveForCollisionDetection();
-
-
-protected:
-    void spawnExplosion() override;
+    virtual float length() = 0;
 };
 

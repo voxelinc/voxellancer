@@ -6,6 +6,8 @@
 
 #include "display/rendering/visuals.h"
 
+#include "voxeldata.h"
+
 
 class VoxelCluster;
 class VoxelTreeNode;
@@ -22,6 +24,8 @@ public:
 
     glm::vec3 position() const;
 
+    VoxelData data() const;
+
     VoxelTreeNode *voxelTreeNode();
     void setVoxelTreeNode(VoxelTreeNode* voxelTreeNode);
 
@@ -32,11 +36,11 @@ public:
 
     float hp() const;
     void applyDamage(float deltaHp);
+
     virtual float damageForwardingDestructionDamage();
 
     /**
-     *  Mass of the voxel if it had a scale = 1.0f. Needs to be multiplied with scale^3 to get the
-     *  actual mass.
+     *  Mass of the voxel if it had a scale = 1.0f. Needs to be multiplied with scale^3 to get the actual mass.
      */
     float unscaledMass() const;
 

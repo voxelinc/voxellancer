@@ -27,8 +27,12 @@ bool CollisionFilter::isCollideableWith(const CollisionFilter* other) const {
 }
 
 bool CollisionFilter::areMasksCollidable(const CollisionFilter* other) const {
-    return (static_cast<uint32_t>(m_owner->objectType()) & other->collisionMask()) &&
-           (static_cast<uint32_t>(other->owner()->objectType()) & m_collisionMask);
+    if (m_owner && other->owner()) {
+        return (static_cast<uint32_t>(m_owner->objectType()) & other->collisionMask()) &&
+               (static_cast<uint32_t>(other->owner()->objectType()) & m_collisionMask);
+    } else {
+        return true;
+    }
 }
 
 bool CollisionFilter::specialIsCollideableWith(const CollisionFilter* other) const {

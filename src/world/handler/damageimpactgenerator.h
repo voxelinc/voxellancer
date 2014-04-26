@@ -10,6 +10,7 @@
 class DamageImpactGenerator {
 public:
     void parse(std::list<WorldObjectCollision>& worldObjectCollisions);
+    void parse(std::list<DamageImpact>& damageImpact);
 
     std::list<DamageImpact>& damageImpacts();
 

@@ -1,45 +1,49 @@
-#include "worldobjectbuilder.h"
+#include "worldelementbuilder.h"
 
 #include <cassert>
 #include <type_traits>
 
 #include <glow/logging.h>
 
-#include "property/property.h"
+#include "bulletengine/bulletengine.h"
+#include "bulletengine/instancedbullet.h"
+#include "bulletengine/genericinstancedbullet.h"
 
 #include "equipment/engine.h"
 #include "equipment/engineslot.h"
 #include "equipment/hardpoint.h"
 #include "equipment/weapon.h"
-#include "equipment/weapons/bullet.h"
+#include "equipment/weapons/worldobjectbullet.h"
 #include "equipment/weapons/rocket.h"
+
+#include "world/world.h"
 
 #include "worldobject/worldobjectinfo.h"
 #include "worldobject/ship.h"
 #include "worldobject/worldobject.h"
+#include "worldobject/worldobjectcomponents.h"
 
 #include "clustercache.h"
 #include "enginebuilder.h"
 #include "weaponbuilder.h"
-#include "worldobject/worldobjectcomponents.h"
 
 
-WorldObjectBuilder::WorldObjectBuilder(const std::string& name):
+WorldElementBuilder::WorldElementBuilder(const std::string& name):
     m_name(name)
 {
 }
 
-WorldObject* WorldObjectBuilder::build() {
+WorldObject* WorldElementBuilder::buildWorldObject() {
     std::string type = Property<std::string>(m_name + ".general.type");
 
     if(type == "bullet") {
-        return buildBullet();
+        return buildWorldObjectBullet();
     } else if(type == "rocket") {
         return buildRocket();
     } else if(type == "ship") {
         return buildShip();
     } else if(type == "other") {
-        return buildWorldObject();
+        return buildOther();
     } else {
         glow::fatal("Unknown WorldObject-Type '%;'", type);
         assert(0); // Never to be reached
@@ -47,17 +51,30 @@ WorldObject* WorldObjectBuilder::build() {
     return nullptr;
 }
 
-Bullet* WorldObjectBuilder::buildBullet() {
-    Bullet* bullet = makeWorldObject<Bullet>();
+Bullet* WorldElementBuilder::buildBullet() {
+    if (Property<bool>::get(m_name + ".general.instanced", false)) {
+        return buildInstancedBullet();
+    } else {
+        return buildWorldObjectBullet();
+    }
+}
+
+InstancedBullet* WorldElementBuilder::buildInstancedBullet() {
+    return World::instance()->bulletEngine().createBullet(m_name);
+}
+
+WorldObjectBullet* WorldElementBuilder::buildWorldObjectBullet() {
+    WorldObjectBullet* bullet = makeWorldObject<WorldObjectBullet>();
 
     bullet->setEmissiveness(Property<float>(m_name + ".general.emissiveness", 0.0f));
     bullet->setLifetime(Property<float>(m_name + ".general.lifetime"));
+
     bullet->setHitSound(SoundProperties::fromProperties(m_name + ".hitsound"));
 
     return bullet;
 }
 
-Rocket* WorldObjectBuilder::buildRocket() {
+Rocket* WorldElementBuilder::buildRocket() {
     Rocket* rocket = makeWorldObject<Rocket>();
 
     rocket->setLifetime(Property<float>(m_name + ".general.lifetime"));
@@ -66,24 +83,24 @@ Rocket* WorldObjectBuilder::buildRocket() {
     return rocket;
 }
 
-Ship* WorldObjectBuilder::buildShip() {
+Ship* WorldElementBuilder::buildShip() {
     Ship* ship = makeWorldObject<Ship>();
+
     if (ship->crucialVoxel() == nullptr) {
-        glow::warning("WorldObjectBuilder: ship %; has no crucial voxel", m_name);
+        glow::warning("WorldElementBuilder: ship %; has no crucial voxel", m_name);
     }
     if (ship->cockpitVoxels().empty()) {
-        glow::warning("WorldObjectBuilder: ship %; has no cockpit voxel(s)", m_name);
+        glow::warning("WorldElementBuilder: ship %; has no cockpit voxel(s)", m_name);
     }
     return ship;
 }
 
-WorldObject* WorldObjectBuilder::buildWorldObject() {
-    WorldObject* worldObject = makeWorldObject<WorldObject>();
-    return worldObject;
+WorldObject* WorldElementBuilder::buildOther() {
+    return makeWorldObject<WorldObject>();
 }
 
 template<typename T>
-T* WorldObjectBuilder::makeWorldObject() {
+T* WorldElementBuilder::makeWorldObject() {
     static_assert(std::is_base_of<WorldObject, T>::value, "T needs to be derived from WorldObject");
 
     T* object = new T();
@@ -106,7 +123,7 @@ T* WorldObjectBuilder::makeWorldObject() {
     return object;
 }
 
-void WorldObjectBuilder::equipSomehow(WorldObject* worldObject) {
+void WorldElementBuilder::equipSomehow(WorldObject* worldObject) {
     for (std::shared_ptr<Hardpoint> hardpoint : worldObject->components().hardpoints()) {
         if(!hardpoint->mountables().empty()) {
             Weapon* weapon = WeaponBuilder(hardpoint->mountables().front()).build();
@@ -121,7 +138,7 @@ void WorldObjectBuilder::equipSomehow(WorldObject* worldObject) {
     }
 }
 
-void WorldObjectBuilder::setupVoxelCluster(WorldObject* worldObject) {
+void WorldElementBuilder::setupVoxelCluster(WorldObject* worldObject) {
     Property<float> scale(m_name + ".general.scale", 1.0f);
     worldObject->transform().setScale(scale);
 
@@ -129,12 +146,12 @@ void WorldObjectBuilder::setupVoxelCluster(WorldObject* worldObject) {
     ClusterCache::instance()->fillObject(worldObject, std::string("data/voxelcluster/") + clusterFile);
 }
 
-void WorldObjectBuilder::setupComponents(WorldObjectComponents& components) {
+void WorldElementBuilder::setupComponents(WorldObjectComponents& components) {
     setupHardpoints(components);
     setupEngineSlots(components);
 }
 
-void WorldObjectBuilder::setupHardpoints(WorldObjectComponents& components) {
+void WorldElementBuilder::setupHardpoints(WorldObjectComponents& components) {
     for (std::shared_ptr<Hardpoint> hardpoint : components.hardpoints()) {
         std::string prefix = m_name + ".hardpoint" + std::to_string(hardpoint->index()) + ".";
 
@@ -148,7 +165,7 @@ void WorldObjectBuilder::setupHardpoints(WorldObjectComponents& components) {
     }
 }
 
-void WorldObjectBuilder::setupEngineSlots(WorldObjectComponents& components) {
+void WorldElementBuilder::setupEngineSlots(WorldObjectComponents& components) {
     for (std::shared_ptr<EngineSlot> engineSlot : components.engineSlots()) {
         std::string prefix = m_name + ".engineslot" + std::to_string(engineSlot->index()) + ".";
 

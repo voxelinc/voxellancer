@@ -7,8 +7,8 @@
 #include "collision/collisiondetector.h"
 
 #include "worldobject/worldobject.h"
-#include "worldtree/worldtree.h"
 
+#include "worldtree/worldtree.h"
 #include "worldtree/worldtreegeode.h"
 
 #include "world/world.h"
@@ -68,20 +68,11 @@ float Physics::maxMass() const {
     return m_maxUnscaledMass * std::pow(m_worldObject.transform().scale(), 3);
 }
 
-const Transform Physics::projectedTransformIn(float deltaSec){
-    Transform targetTransform(m_worldObject.transform());
-
-    targetTransform.moveWorld(m_speed.directional() * deltaSec);
-    targetTransform.rotateWorld(glm::quat(m_speed.angular() * deltaSec));
-
-    return targetTransform;
-}
-
 std::list<VoxelCollision> &Physics::move(float deltaSec) {
     updateSpeed(deltaSec);
 
     if (m_speed.directional() != glm::vec3(0.0f) || m_speed.angular() != glm::vec3(0.0f)) {
-        Transform targetTransform = projectedTransformIn(deltaSec);
+        Transform targetTransform = m_speed.moved(m_worldObject.transform(), deltaSec);
 
         Movement movement(m_worldObject, m_worldObject.transform(), targetTransform);
         movement.perform();

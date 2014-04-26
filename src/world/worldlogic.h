@@ -1,5 +1,7 @@
 #pragma once
 
+#include <list>
+
 #include "handler/mover.h"
 #include "handler/damageforwarder.h"
 #include "handler/damager.h"
@@ -16,10 +18,11 @@
 
 class World;
 
-class WorldLogic
-{
+class WorldLogic {
 public:
     WorldLogic(World &world);
+
+    void addDamageImpact(const DamageImpact& damageImpact);
 
     void update(float deltaSecs);
 
@@ -28,6 +31,7 @@ public:
 
 protected:
     World &m_world;
+    std::list<DamageImpact> m_damageImpacts;
 
     Mover m_mover;
     VoxelCollisionAccumulator m_voxelCollisionAccumulator;

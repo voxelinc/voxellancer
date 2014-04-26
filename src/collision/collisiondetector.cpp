@@ -15,7 +15,7 @@
 #include "voxel/voxelclusterbounds.h"
 
 
-CollisionDetector::CollisionDetector(WorldObject& worldObject) :
+CollisionDetector::CollisionDetector(WorldObject& worldObject):
     m_voxelTree(new VoxelTree(&worldObject)),
     m_worldTree(nullptr),
     m_geode(nullptr),
@@ -23,8 +23,7 @@ CollisionDetector::CollisionDetector(WorldObject& worldObject) :
 {
 }
 
-CollisionDetector::~CollisionDetector() {
-}
+CollisionDetector::~CollisionDetector() = default;
 
 void CollisionDetector::addVoxel(Voxel* voxel) {
     m_voxelTree->insert(voxel);
@@ -69,7 +68,7 @@ std::list<VoxelCollision>& CollisionDetector::checkCollisions() {
     m_collisions.clear();
 
     IAABB worldObjectAABB = m_worldObject.bounds().aabb();
-    std::unordered_set<WorldTreeGeode*> possibleColliders = WorldTreeQuery(m_worldTree, &worldObjectAABB, m_geode->containingNode(), &m_worldObject.collisionFilter()).nearGeodes();
+    std::unordered_set<WorldTreeGeode*> possibleColliders = WorldTreeQuery(m_worldTree, &worldObjectAABB, m_geode->hint().node(), &m_worldObject.collisionFilter()).nearGeodes();
     possibleColliders.erase(m_geode);
 
     for (WorldTreeGeode* possibleCollider : possibleColliders) {

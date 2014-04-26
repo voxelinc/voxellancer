@@ -4,10 +4,9 @@
 #include <glm/gtc/quaternion.hpp>
 
 
-/* General Object in our 3D world with position and orientation
-*/
-class Transform {
 
+
+class Transform {
 public:
     Transform(glm::vec3 center = glm::vec3(0), float scale = 1.0);
     Transform(const Transform& transform, const glm::vec3& positionDelta, const glm::quat& orientationDelta);
@@ -47,6 +46,5 @@ protected:
     glm::quat m_orientation;
     glm::vec3 m_center;
     float m_scale;
-
 };
 

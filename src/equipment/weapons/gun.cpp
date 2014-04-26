@@ -8,13 +8,14 @@
 
 #include "physics/physics.h"
 
-#include "resource/worldobjectbuilder.h"
+#include "resource/worldelementbuilder.h"
 
 #include "sound/soundmanager.h"
 
 #include "voxel/voxelclusterbounds.h"
 #include "voxel/specialvoxels/hardpointvoxel.h"
 
+#include "worldobject/worldobject.h"
 #include "worldobject/worldobjectcomponents.h"
 
 #include "world/world.h"
@@ -45,10 +46,10 @@ void Gun::setFireSound(const SoundProperties& fireSound) {
 
 void Gun::fireAtPoint(const glm::vec3& point) {
     if (canFire() && hardpoint()->inFieldOfAim(point)) {
-        Bullet *bullet =  WorldObjectBuilder(projectileName()).buildBullet();
+        Bullet *bullet =  WorldElementBuilder(projectileName()).buildBullet();
         setupBullet(bullet, point);
 
-        World::instance()->god().scheduleSpawn(bullet);
+        bullet->spawn();
 
         SoundManager::current()->play(fireSound(), hardpoint()->voxel()->position());
 
@@ -80,13 +81,13 @@ void Gun::setupBullet(Bullet* bullet, const glm::vec3& point) {
         bulletTransform.rotateWorld(bulletOrientation); //then rotate towards target
     }
 
-    float bulletLength = bullet->bounds().minimalGridAABB().extent(ZAxis) * bullet->transform().scale();
+    float bulletLength = bullet->length();
     float spawnDistance = glm::root_two<float>() * bullet->transform().scale();
     bulletTransform.setPosition(m_hardpoint->voxel()->position() + bulletDirection * (bulletLength / 2.0f + spawnDistance));
 
     bullet->setTransform(bulletTransform);
 
-    bullet->physics().setSpeed(Speed(
+    bullet->setSpeed(Speed(
         bulletDirection * bulletSpeed() /*+ firingWorldObject->physics().speed().directional()*/,
         bulletTransform.orientation() * glm::vec3(0, 0, 5.0f)
     ));

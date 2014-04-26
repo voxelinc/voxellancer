@@ -29,15 +29,11 @@ Movement::Movement(WorldObject& worldObject, const Transform& originalTransform,
 {
 }
 
-Movement::~Movement() {
-
-}
-
 bool Movement::perform() {
     assert(m_worldObject.collisionDetector().geode() != nullptr);
 
     IAABB phaseAABB = m_worldObject.bounds().aabb(m_originalTransform).united(m_worldObject.bounds().aabb(m_targetTransform));
-    WorldTreeNode* nodeHint = m_worldObject.collisionDetector().geode()->containingNode();
+    WorldTreeNode* nodeHint = m_worldObject.collisionDetector().geode()->hint().node();
 
     if (WorldTreeQuery(m_collisionDetector.worldTree(), &phaseAABB, nodeHint, &m_worldObject.collisionFilter()).areGeodesNear()) {
         glm::vec3 directionalStep = m_targetTransform.position() - m_originalTransform.position();

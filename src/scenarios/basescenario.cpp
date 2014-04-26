@@ -11,7 +11,7 @@
 
 #include "resource/clustercache.h"
 
-#include "resource/worldobjectbuilder.h"
+#include "resource/worldelementbuilder.h"
 #include "worldobject/ship.h"
 #include "scripting/scriptengine.h"
 #include "worldobject/worldobjectinfo.h"
