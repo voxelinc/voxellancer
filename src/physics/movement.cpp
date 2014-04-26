@@ -4,6 +4,8 @@
 
 #include <glm/glm.hpp>
 
+#include <glow/logging.h>
+
 #include "collision/collisiondetector.h"
 
 #include "worldobject/worldobject.h"
@@ -29,6 +31,8 @@ Movement::Movement(WorldObject& worldObject, const Transform& originalTransform,
 {
 }
 
+Movement::~Movement() = default;
+
 bool Movement::perform() {
     assert(m_worldObject.collisionDetector().geode() != nullptr);
 
@@ -42,7 +46,7 @@ bool Movement::perform() {
         if (m_distance > MAX_STEPPED_DISTANCE) {
             return performSplitted();
         } else {
-            return performStepped();
+            return performStepped(phaseAABB);
         }
     } else {
         m_worldObject.updateTransformAndGeode(m_targetTransform.position(), m_targetTransform.orientation());
@@ -52,10 +56,7 @@ bool Movement::perform() {
 }
 
 bool Movement::performSplitted() {
-    Transform pivotTransform;
-
-    pivotTransform.setOrientation(glm::slerp(m_originalTransform.orientation(), m_targetTransform.orientation(), 0.5f));
-    pivotTransform.setPosition(glm::mix(m_originalTransform.position(), m_targetTransform.position(), 0.5f));
+    Transform pivotTransform = m_originalTransform.mixed(m_targetTransform, 0.5f);
 
     Movement left(m_worldObject, m_originalTransform, pivotTransform);
     Movement right(m_worldObject, pivotTransform, m_targetTransform);
@@ -63,22 +64,30 @@ bool Movement::performSplitted() {
     return left.perform() && right.perform();
 }
 
-bool Movement::performStepped() {
+bool Movement::performStepped(const IAABB& phaseAABB) {
     int stepCount = calculateStepCount();
 
+    WorldTreeNode* nodeHint = m_worldObject.collisionDetector().geode()->hint().node();
+    std::unordered_set<WorldTreeGeode*> possibleColliders = WorldTreeQuery(m_collisionDetector.worldTree(), &phaseAABB, nodeHint, &m_worldObject.collisionFilter()).nearGeodes();
+
+    Transform intersectionFreeTransform = m_worldObject.transform();
+
     for (int s = 0; s < stepCount; s++) {
+        intersectionFreeTransform = m_worldObject.transform();
         Transform newTransform(calculateStep(s, stepCount));
-        Transform oldTransform = m_worldObject.transform();
 
-        m_worldObject.updateTransformAndGeode(newTransform.position(), newTransform.orientation());
+        m_worldObject.setTransform(newTransform);
 
-        const std::list<VoxelCollision>& collisions = m_collisionDetector.checkCollisions();
+        const std::list<VoxelCollision>& collisions = m_collisionDetector.checkCollisions(possibleColliders);
 
         if (!collisions.empty()) {
-            m_worldObject.updateTransformAndGeode(oldTransform.position(), oldTransform.orientation());
-            return false;
+            break;
+        } else {
+            intersectionFreeTransform = newTransform;
         }
     }
+
+    m_worldObject.updateTransformAndGeode(intersectionFreeTransform.position(), intersectionFreeTransform.orientation());
 
     return true;
 }
@@ -103,6 +112,9 @@ Transform Movement::calculateStep(int s, int stepCount) const {
 
     transform.setOrientation(glm::slerp(m_originalTransform.orientation(), m_targetTransform.orientation(), rel));
     transform.setPosition(glm::mix(m_originalTransform.position(), m_targetTransform.position(), rel));
+    transform.setScale(m_originalTransform.scale());
+    transform.setCenter(m_originalTransform.center());
 
     return transform;
 }
+
