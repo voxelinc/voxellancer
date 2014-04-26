@@ -89,6 +89,9 @@ Ship* WorldObjectBuilder::buildShip() {
     if (ship->crucialVoxel() == nullptr) {
         glow::warning("WorldObjectBuilder: ship %; has no crucial voxel", m_name);
     }
+    if (ship->cockpitVoxels().empty()) {
+        glow::warning("WorldObjectBuilder: ship %; has no cockpit voxel(s)", m_name);
+    }
     return ship;
 }
 

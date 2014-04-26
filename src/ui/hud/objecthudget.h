@@ -24,6 +24,8 @@ public:
 
     virtual void onClick(ClickType clickType) override;
 
+    float openingAngle() const;
+
     HUDObjectDelegate* objectDelegate();
     void setObjectDelegate(HUDObjectDelegate* objectDelegate);
 
