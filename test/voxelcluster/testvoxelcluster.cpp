@@ -35,17 +35,6 @@ go_bandit([](){
             cluster->removeVoxel(cluster->voxel(glm::ivec3(1, 2, 3)));
             AssertThat(cluster->voxel(glm::ivec3(1, 2, 3)) == nullptr, Equals(true));
         });
-
-        it("test generate texture", [&]() {
-            cluster->addVoxel(new Voxel(glm::ivec3('a', 'b', 'c'), 0xFF8000FF));
-            cluster->addVoxel(new Voxel(glm::ivec3(3, 4, 5), 0x808000FF));
-            cluster->addVoxel(new Voxel(glm::ivec3(1, 5, 3), 0xFF800066));
-
-            // cant assert anything usefull just verify that nothing crashes ;)
-            AssertThat(cluster->voxelRenderData()->opaqueVoxelCount(), Equals(2));
-            AssertThat(cluster->voxelRenderData()->transparentVoxelCount(), Equals(1));
-        });
-
     });
     describe("voxel hasher", []() {
         it("can hash glm::ivec3", [&]() {

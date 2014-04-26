@@ -92,14 +92,23 @@ void VoxelRenderData::updateBuffer() {
 }
 
 int VoxelRenderData::opaqueVoxelCount() {
+    if (m_isDirty) {
+        updateBuffer();
+    }
     return m_voxel.size() - m_transparentCount;
 }
 
 int VoxelRenderData::transparentVoxelCount() {
+    if (m_isDirty) {
+        updateBuffer();
+    }
     return m_transparentCount;
 }
 
 int VoxelRenderData::transparentVoxelBase() {
+    if (m_isDirty) {
+        updateBuffer();
+    }
     return m_bufferSize - m_transparentCount;
 }
 
