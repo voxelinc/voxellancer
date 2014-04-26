@@ -24,6 +24,8 @@
 
 
 SplitRocket::SplitRocket():
+    m_childrenSpeedBoost(0.0f),
+    m_childrenSpeedBoostRandomization(0.0f),
     m_splitDistance(150.0f),
     m_splitDirectionTolerance(30.0f),
     m_splitAngle(glm::quarter_pi<float>()),
@@ -49,6 +51,22 @@ void SplitRocket::setChildrenCount(int count) {
 
 void SplitRocket::setChildrenType(const std::string& type) {
     m_childrenType = type;
+}
+
+float SplitRocket::childrenSpeedBoost() const {
+    return m_childrenSpeedBoost;
+}
+
+void SplitRocket::setChildrenSpeedBoost(float childrenSpeedBoost) {
+    m_childrenSpeedBoost = childrenSpeedBoost;
+}
+
+float SplitRocket::childrenSpeedBoostRandomization() const {
+    return m_childrenSpeedBoostRandomization;
+}
+
+void SplitRocket::setChildrenSpeedBoostRandomization(float childrenSpeedBoostRandomization) {
+    m_childrenSpeedBoostRandomization = childrenSpeedBoostRandomization;
 }
 
 float SplitRocket::splitDistance() const {
@@ -115,9 +133,7 @@ void SplitRocket::spawnChildren() {
             child->transform().setOrientation(launchOrientation);
             child->transform().setPosition(rocketPosition);
 
-            Speed speed(physics().speed());
-            speed.setDirectional(launchOrientation * glm::vec3(0, 0, -1) * glm::length(speed.directional()));
-            child->physics().setSpeed(speed);
+            setChildSpeed(child, launchOrientation);
 
             if (child->objectType() == WorldObjectType::Rocket) {
                 static_cast<Rocket*>(child)->setCreator(m_creator);
@@ -134,6 +150,20 @@ void SplitRocket::spawnChildren() {
     }
 }
 
+void SplitRocket::setChildSpeed(WorldObject* child, const glm::quat& launchOrientation) {
+    Speed speed(physics().speed());
+
+    speed.setDirectional(launchOrientation * glm::vec3(0, 0, -1) * glm::length(speed.directional()));
+
+    if (glm::length(speed.directional()) > 0.0f) {
+        glm::vec3 boostDirection = glm::normalize(speed.directional());
+        glm::vec3 boost = boostDirection * RandFloatPool::randomize(m_childrenSpeedBoost, m_childrenSpeedBoostRandomization);
+        speed.setDirectional(speed.directional() + boost);
+    }
+
+    child->physics().setSpeed(speed);
+}
+
 void SplitRocket::spawnExplosion() {
     VoxelExplosionGenerator generator(this);
 
@@ -147,3 +177,4 @@ void SplitRocket::spawnExplosion() {
 
     generator.spawn();
 }
+
