@@ -53,6 +53,7 @@ void VoxelRenderer::prepareDraw(const Camera& camera, bool withBorder, bool tran
 
     glProvokingVertex(GL_LAST_VERTEX_CONVENTION);
 
+    m_transparentPass = transparentPass;
     m_prepared = true;
 }
 
@@ -68,7 +69,11 @@ void VoxelRenderer::draw(VoxelCluster& cluster) {
     glVertexAttribDivisor(m_program->getAttributeLocation("v_position"), 1);
     glVertexAttribDivisor(m_program->getAttributeLocation("v_color"), 1);
     glVertexAttribDivisor(m_program->getAttributeLocation("v_emissiveness"), 1);
-    renderData->vertexArrayObject()->drawArraysInstanced(GL_TRIANGLE_STRIP, 0, 14, renderData->voxelCount());
+    if (m_transparentPass) {
+        renderData->vertexArrayObject()->drawArraysInstancedBaseInstance(GL_TRIANGLE_STRIP, 0, 14, renderData->transparentVoxelCount(), renderData->transparentVoxelBase());
+    } else {
+        renderData->vertexArrayObject()->drawArraysInstanced(GL_TRIANGLE_STRIP, 0, 14, renderData->opaqueVoxelCount());
+    }
 }
 
 void VoxelRenderer::afterDraw() {

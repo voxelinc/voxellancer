@@ -27,7 +27,8 @@ namespace {
 VoxelRenderData::VoxelRenderData(std::unordered_map<glm::ivec3, Voxel*> &voxel) :
     m_voxel(voxel),
     m_isDirty(true),
-    m_bufferSize(0)
+    m_bufferSize(0),
+    m_transparentCount(0)
 {
 
 }
@@ -70,11 +71,19 @@ void VoxelRenderData::updateBuffer() {
     VoxelData* voxelData = static_cast<VoxelData*>(m_voxelDataBuffer->mapRange(0, m_voxel.size() * sizeof(VoxelData), GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT));
     assert(voxelData != nullptr);
 
-    int i = 0;
+    m_transparentCount = 0;
+    int i = 0; // counts from front, opaque voxels
+    int j = m_voxel.size() - 1; // counts from back, transparent voxels
     for (auto& pair : m_voxel) {
         Voxel *voxel = pair.second;
         assert(voxel != nullptr);
-        voxelData[i++] = VoxelData{ glm::vec3(voxel->gridCell()), ColorHelper::flipColorForGPU(voxel->visuals().color()), voxel->visuals().emissiveness() };
+        uint32_t color = voxel->visuals().color();
+        if ((color & 0x000000FF) == 0xFF) {
+            voxelData[i++] = VoxelData{ glm::vec3(voxel->gridCell()), ColorHelper::flipColorForGPU(voxel->visuals().color()), voxel->visuals().emissiveness() };
+        } else {
+            voxelData[j--] = VoxelData{ glm::vec3(voxel->gridCell()), ColorHelper::flipColorForGPU(voxel->visuals().color()), voxel->visuals().emissiveness() };
+            m_transparentCount++;
+        }
     }
 
     m_voxelDataBuffer->unmap();
@@ -82,8 +91,16 @@ void VoxelRenderData::updateBuffer() {
     m_isDirty = false;
 }
 
-int VoxelRenderData::voxelCount() {
-    return m_voxel.size();
+int VoxelRenderData::opaqueVoxelCount() {
+    return m_voxel.size() - m_transparentCount;
+}
+
+int VoxelRenderData::transparentVoxelCount() {
+    return m_transparentCount;
+}
+
+int VoxelRenderData::transparentVoxelBase() {
+    return m_bufferSize - m_transparentCount;
 }
 
 void VoxelRenderData::invalidate() {
