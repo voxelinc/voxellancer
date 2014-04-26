@@ -12,8 +12,11 @@
 #include "equipment/engine.h"
 #include "equipment/engineslot.h"
 #include "equipment/hardpoint.h"
+#include "equipment/shield.h"
+#include "equipment/shieldslot.h"
 #include "equipment/weapon.h"
 #include "equipment/weapons/worldobjectbullet.h"
+
 #include "equipment/weapons/bullet.h"
 #include "equipment/weapons/rocket.h"
 #include "equipment/weapons/splitrocket.h"
@@ -27,6 +30,7 @@
 
 #include "clustercache.h"
 #include "enginebuilder.h"
+#include "shieldbuilder.h"
 #include "weaponbuilder.h"
 
 
@@ -143,21 +147,6 @@ T* WorldElementBuilder::makeWorldObject() {
     return object;
 }
 
-void WorldElementBuilder::equipSomehow(WorldObject* worldObject) {
-    for (std::shared_ptr<Hardpoint> hardpoint : worldObject->components().hardpoints()) {
-        if(!hardpoint->mountables().empty()) {
-            Weapon* weapon = WeaponBuilder(hardpoint->mountables().front()).build();
-            hardpoint->setWeapon(std::shared_ptr<Weapon>(weapon));
-        }
-    }
-    for (std::shared_ptr<EngineSlot> engineSlot : worldObject->components().engineSlots()) {
-        if(!engineSlot->mountables().empty()) {
-            Engine* engine = EngineBuilder(engineSlot->mountables().front()).build();
-            engineSlot->setEngine(std::shared_ptr<Engine>(engine));
-        }
-    }
-}
-
 void WorldElementBuilder::setupVoxelCluster(WorldObject* worldObject) {
     Property<float> scale(m_name + ".general.scale", 1.0f);
     worldObject->transform().setScale(scale);
@@ -169,6 +158,7 @@ void WorldElementBuilder::setupVoxelCluster(WorldObject* worldObject) {
 void WorldElementBuilder::setupComponents(WorldObjectComponents& components) {
     setupHardpoints(components);
     setupEngineSlots(components);
+    setupShieldSlots(components);
 }
 
 void WorldElementBuilder::setupHardpoints(WorldObjectComponents& components) {
@@ -194,6 +184,44 @@ void WorldElementBuilder::setupEngineSlots(WorldObjectComponents& components) {
         std::list<std::string> mountableEngines = Property<std::list<std::string>>(prefix + "mountable");
         for(std::string& engine : mountableEngines) {
             engineSlot->setMountable(engine, true);
+        }
+    }
+}
+
+void WorldElementBuilder::setupShieldSlots(WorldObjectComponents& components) {
+    for (int i = 0; PropertyManager::instance()->hasGroup(m_name + ".shieldslot" + std::to_string(i)); i++) {
+        std::shared_ptr<ShieldSlot> shieldSlot = std::make_shared<ShieldSlot>(&components, i);
+
+        std::string prefix = m_name + ".shieldslot" + std::to_string(i) + ".";
+        std::list<std::string> mountableShields = Property<std::list<std::string>>(prefix + "mountable");
+
+        for(std::string& shield : mountableShields) {
+            shieldSlot->setMountable(shield, true);
+        }
+
+        components.addShieldSlot(shieldSlot);
+    }
+}
+
+void WorldElementBuilder::equipSomehow(WorldObject* worldObject) {
+    for (std::shared_ptr<Hardpoint>& hardpoint : worldObject->components().hardpoints()) {
+        if(!hardpoint->mountables().empty()) {
+            Weapon* weapon = WeaponBuilder(hardpoint->mountables().front()).build();
+            hardpoint->setWeapon(std::shared_ptr<Weapon>(weapon));
+        }
+    }
+
+    for (std::shared_ptr<EngineSlot>& engineSlot : worldObject->components().engineSlots()) {
+        if(!engineSlot->mountables().empty()) {
+            Engine* engine = EngineBuilder(engineSlot->mountables().front()).build();
+            engineSlot->setEngine(std::shared_ptr<Engine>(engine));
+        }
+    }
+
+    for (std::shared_ptr<ShieldSlot>& shieldSlot : worldObject->components().shieldSlots()) {
+        if(!shieldSlot->mountables().empty()) {
+            Shield* shield = ShieldBuilder(shieldSlot->mountables().front()).build();
+            shieldSlot->setShield(std::shared_ptr<Shield>(shield));
         }
     }
 }

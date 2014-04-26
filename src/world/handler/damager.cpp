@@ -1,21 +1,29 @@
 #include "damager.h"
 
+#include <iostream>
 #include <set>
+
 #include <glow/logging.h>
 
+#include "equipment/shield.h"
+#include "equipment/shieldslot.h"
+
 #include "utils/tostring.h"
+
 #include "voxel/voxel.h"
 
-#include "worldobject/worldobject.h"
 #include "worldobject/ship.h"
+#include "worldobject/worldobject.h"
+#include "worldobject/worldobjectcomponents.h"
 
 #include "world/world.h"
 #include "world/helper/damageimpact.h"
 
 #include "player.h"
 
+
 Damager::Damager() :
-    m_playerShipUndestroyable("general.playerShipUndestroyable") 
+    m_playerShipUndestroyable("general.playerShipUndestroyable")
 {
 }
 
@@ -26,6 +34,11 @@ void Damager::applyDamages(std::list<DamageImpact> &damageImpacts) {
 
     for(DamageImpact &damageImpact : damageImpacts) {
         if (m_playerShipUndestroyable && World::instance()->player().ship() == damageImpact.worldObject()) {
+            continue;
+        }
+
+        applyShields(damageImpact);
+        if(damageImpact.damage() == 0) {
             continue;
         }
 
@@ -73,10 +86,14 @@ std::list<WorldObjectModification>& Damager::worldObjectModifications() {
 }
 
 DamageImpact Damager::dampDamageImpact(DamageImpact &undamped, float factor) {
-    return DamageImpact(undamped.worldObject(), undamped.voxel(), undamped.damageVec() * factor, undamped.fieldOfDamage());
+    return DamageImpact(undamped.worldObject(), undamped.voxel(), glm::normalize(undamped.damageVec()) * factor, undamped.fieldOfDamage());
 }
 
 void Damager::reset() {
     m_worldObjectModificationMap.clear();
+}
+
+void Damager::applyShields(DamageImpact& damageImpact) {
+    damageImpact.setDamage(damageImpact.worldObject()->components().compensate(damageImpact.damage()));
 }
 

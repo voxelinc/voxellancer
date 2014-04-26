@@ -1,10 +1,13 @@
 #include "worldobjectcomponents.h"
 
 #include <algorithm>
+#include <iostream>
 
 #include "equipment/engineslot.h"
 #include "equipment/engine.h"
 #include "equipment/hardpoint.h"
+#include "equipment/shield.h"
+#include "equipment/shieldslot.h"
 #include "equipment/weapon.h"
 #include "equipment/weapons/gun.h"
 #include "equipment/weapons/rocketlauncher.h"
@@ -14,6 +17,8 @@ WorldObjectComponents::WorldObjectComponents(WorldObject* worldObject):
     m_worldObject(worldObject)
 {
 }
+
+WorldObjectComponents::~WorldObjectComponents() = default;
 
 WorldObject* WorldObjectComponents::worldObject() {
     return m_worldObject;
@@ -117,13 +122,41 @@ void WorldObjectComponents::fireAtObject(WorldObject* worldObject) {
     }
 }
 
+void WorldObjectComponents::addShieldSlot(std::shared_ptr<ShieldSlot>& shieldSlot) {
+    m_shieldSlots.push_back(shieldSlot);
+}
+
+std::list<std::shared_ptr<ShieldSlot>>& WorldObjectComponents::shieldSlots() {
+    return m_shieldSlots;
+}
+
+float WorldObjectComponents::compensate(float damage) {
+    for (std::shared_ptr<ShieldSlot>& shieldSlot : m_shieldSlots) {
+        std::shared_ptr<Shield>& shield = shieldSlot->shield();
+        if (!shield.get()) {
+            continue;
+        }
+
+        damage = shield->compensate(damage);
+        if (damage == 0) {
+            break;
+        }
+    }
+
+    return damage;
+}
+
 void WorldObjectComponents::update(float deltaSec) {
-    for (std::shared_ptr<Hardpoint> hardpoint : m_hardpoints) {
+    for (std::shared_ptr<Hardpoint>& hardpoint : m_hardpoints) {
         hardpoint->update(deltaSec);
     }
 
-    for (std::shared_ptr<EngineSlot> engineSlot : m_engineSlots) {
+    for (std::shared_ptr<EngineSlot>& engineSlot : m_engineSlots) {
         engineSlot->update(deltaSec);
+    }
+
+    for (std::shared_ptr<ShieldSlot>& shieldSlot : m_shieldSlots) {
+        shieldSlot->update(deltaSec);
     }
 }
 

@@ -78,8 +78,8 @@ void FrozenGameScenario::populateWorld() {
         m_world->god().scheduleSpawn(follower);
     }
 
+    Ship *testCluster = WorldElementBuilder("mox").buildShip();
 
-    Ship *testCluster = WorldElementBuilder("basicship").buildShip();
     testCluster->transform().setPosition(glm::vec3(0, 0, 10));
     testCluster->info().setName("basicship");
     testCluster->info().setShowOnHud(false);
