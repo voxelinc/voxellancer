@@ -17,14 +17,18 @@
 #include "world/world.h"
 
 
-GamePlayScript::GamePlayScript(ScriptEngine& scriptEngine):
+GamePlayScript::GamePlayScript(ScriptEngine& scriptEngine, World* world):
+    Script(world),
     m_scriptEngine(&scriptEngine)
 {
-    addBindings(new CommonBindings(*this));
-    addBindings(new WorldObjectBindings(*this));
-    addBindings(new AiBindings(*this));
-    addBindings(new SquadBindings(*this));
-    addBindings(new ExternalMissionBindings(*this));
+    addGamePlayBindings();
+}
+
+GamePlayScript::GamePlayScript(ScriptEngine& scriptEngine, WorldElement* parent):
+    Script(parent),
+    m_scriptEngine(&scriptEngine)
+{
+    addGamePlayBindings();
 }
 
 GamePlayScript::~GamePlayScript() {
@@ -60,3 +64,12 @@ void GamePlayScript::addLocal(Scriptable* scriptable) {
     scriptable->setScriptLocal(true);
     m_locals.push_back(scriptable->scriptKey());
 }
+
+void GamePlayScript::addGamePlayBindings() {
+    addBindings(new CommonBindings(*this));
+    addBindings(new WorldObjectBindings(*this));
+    addBindings(new AiBindings(*this));
+    addBindings(new SquadBindings(*this));
+    addBindings(new ExternalMissionBindings(*this));
+}
+

@@ -11,7 +11,8 @@
 #include "player.h"
 
 
-Mission::Mission(const std::string& path):
+Mission::Mission(World* world, const std::string& path):
+    WorldElement(world),
     m_script(new MissionScript(*this, World::instance()->scriptEngine())),
     m_state(MissionState::Idle)
 {
@@ -38,7 +39,8 @@ void Mission::succeed() {
 
     m_state = MissionState::Succeeded;
     m_script->onSuccess();
-    m_script->stop();
+
+    over();
 }
 
 void Mission::fail() {
@@ -46,10 +48,18 @@ void Mission::fail() {
 
     m_state = MissionState::Failed;
     m_script->onFailure();
-    m_script->stop();
+
+    over();
 }
 
 void Mission::update(float deltaSec) {
 
+}
+
+void Mission::over() {
+    m_script->stop();
+
+    assert(world());
+    world()->removeElement(this);
 }
 

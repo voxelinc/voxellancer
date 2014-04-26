@@ -13,7 +13,7 @@ HandleOwner* HandleImpl::owner() {
 }
 
 bool HandleImpl::valid() const {
-    return m_owner != nullptr;
+    return m_owner != nullptr ;
 }
 
 void HandleImpl::invalidate() {

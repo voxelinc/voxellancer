@@ -19,7 +19,7 @@
 #include "worldlogic.h"
 #include "god.h"
 #include "player.h"
-#include "missions/missionsystem.h"
+#include "worldelement.h"
 
 
 World *World::s_instance = nullptr;
@@ -36,7 +36,6 @@ World::World():
     m_particleEngine(new VoxelParticleEngine()),
     m_factionMatrix(new FactionMatrix()),
     m_eventPoller(new EventPoller()),
-    m_missionSystem(new MissionSystem()),
     m_bulletEngine(new BulletEngine())
 {
 }
@@ -81,10 +80,6 @@ EventPoller &World::eventPoller() {
     return *m_eventPoller;
 }
 
-MissionSystem& World::missionSystem() {
-    return *m_missionSystem;
-}
-
 BulletEngine& World::bulletEngine() {
     return *m_bulletEngine;
 }
@@ -106,11 +101,27 @@ void World::update(float deltaSecs) {
     m_scriptEngine->update(deltaSecs);
     m_eventPoller->update(deltaSecs);
     m_particleEngine->update(deltaSecs);
-    m_missionSystem->update(deltaSecs);
     m_bulletEngine->update(deltaSecs);
 
     for (WorldObject *worldObject : m_worldObjects) {
         worldObject->update(deltaSecs);
+    }
+
+    for (auto iter = m_elements.begin(); iter != m_elements.end(); ) {
+        WorldElement* element = *iter;
+
+        element->update(deltaSecs);
+
+        if (m_scheduledRemovals.find(element) != m_scheduledRemovals.end()) {
+            element->onRemovalFromWorld();
+            element->deregisterInWorldComponents();
+            m_scriptEngine->unregisterScriptable(element);
+            element->setWorld(nullptr);
+
+            iter = m_elements.erase(iter);
+        } else {
+            ++iter;
+        }
     }
 }
 
@@ -136,6 +147,24 @@ void World::reset(bool showWarning) {
     }
     delete s_instance;
     s_instance = nullptr;
+}
+
+void World::addElement(WorldElement* element) {
+    if (!element->isAddableToWorld(this)) {
+        glow::warning("World: Couldn't add WorldElement");
+        return;
+    }
+
+    m_elements.push_back(element);
+    m_scriptEngine->registerScriptable(element);
+
+    element->setWorld(this);
+    element->onAddToWorld();
+    element->registerInWorldComponents();
+}
+
+void  World::removeElement(WorldElement* element) {
+    m_scheduledRemovals.insert(element);
 }
 
 void World::addWorldObject(WorldObject* worldObject) {

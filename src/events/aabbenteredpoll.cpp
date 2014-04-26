@@ -18,7 +18,7 @@ bool AABBEnteredPoll::isDead() {
 }
 
 bool AABBEnteredPoll::poll() {
-    return m_worldObject->bounds().aabb().intersects(m_aabb);
+    return m_worldObject.valid() ? m_worldObject->bounds().aabb().intersects(m_aabb) : false;
 }
 
 void AABBEnteredPoll::specialOnCallback() {

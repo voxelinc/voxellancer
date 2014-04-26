@@ -19,6 +19,10 @@ public:
 
 
 protected:
+    void invalidate();
+
+
+protected:
     std::shared_ptr<HandleImpl> m_impl;
 };
 

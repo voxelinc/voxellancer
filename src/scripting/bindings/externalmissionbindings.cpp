@@ -3,8 +3,6 @@
 #include "events/eventpoller.h"
 #include "events/missionstatepoll.h"
 
-#include "missions/missionsystem.h"
-
 #include "scripting/scriptengine.h"
 #include "scripting/gameplayscript.h"
 #include "scripting/elematelua/luawrapper.h"
@@ -29,8 +27,8 @@ void ExternalMissionBindings::bind() {
 apikey ExternalMissionBindings::apiMissionStart(const std::string& name) {
     std::string path = std::string("data/scripts/missions/") + name + ".lua";
 
-    auto mission = std::make_shared<Mission>(path);
-    World::instance()->missionSystem().addMission(mission);
+    auto mission = new Mission(World::instance(), path);
+    mission->start();
 
     return mission->scriptKey();
 }
@@ -49,7 +47,7 @@ apikey ExternalMissionBindings::createStatePoll(apikey missionKey, MissionState 
        return -1;
     }
 
-    auto poll = std::make_shared<MissionStatePoll>(mission->handle<Mission>(), state, createCallback(callback, missionKey));
+    auto poll = std::make_shared<MissionStatePoll>(*mission, state, createCallback(callback, missionKey));
 
     World::instance()->eventPoller().addPoll(poll);
     m_script.addLocal(poll);

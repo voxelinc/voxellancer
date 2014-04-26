@@ -17,7 +17,8 @@ class WorldObject;
 
 class GamePlayScript: public Script {
 public:
-    GamePlayScript(ScriptEngine& scriptEngine);
+    GamePlayScript(ScriptEngine& scriptEngine, World* world = nullptr);
+    GamePlayScript(ScriptEngine& scriptEngine, WorldElement* parent);
     virtual ~GamePlayScript();
 
     ScriptEngine& scriptEngine();
@@ -35,7 +36,12 @@ public:
      *  this Scriptable becomes invalid and will be destroyed
      */
     void addLocal(Scriptable* scriptable);
-    
+
+
+protected:
+    void addGamePlayBindings();
+
+
 protected:
     ScriptEngine* m_scriptEngine;
     std::vector<int> m_locals;

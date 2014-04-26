@@ -1,5 +1,7 @@
 #pragma once
 
+#include <iostream>
+
 #include "scripting/elematelua/luawrapper.h"
 #include "scripting/script.h"
 

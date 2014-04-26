@@ -15,7 +15,7 @@ public:
 
 
 protected:
-    std::shared_ptr<Mission> m_mission;
+    Mission* m_mission;
 
     virtual void populateWorld() override;
 };

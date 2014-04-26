@@ -3,12 +3,13 @@
 #include <memory>
 #include <string>
 
-#include "utils/handle/handleowner.h"
-
 #include "scripting/scriptable.h"
+
+#include "world/worldelement.h"
 
 
 class MissionScript;
+class World;
 
 enum class MissionState {
     Idle,
@@ -17,9 +18,9 @@ enum class MissionState {
     Succeeded
 };
 
-class Mission : public Scriptable, public HandleOwner {
+class Mission : public WorldElement {
 public:
-    Mission(const std::string& path);
+    Mission(World* world, const std::string& path);
     ~Mission();
 
     void start();
@@ -39,6 +40,10 @@ public:
     void fail();
 
     void update(float deltaSec);
+
+
+protected:
+    void over();
 
 
 protected:
