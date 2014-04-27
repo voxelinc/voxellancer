@@ -130,10 +130,10 @@ std::list<std::shared_ptr<ShieldSlot>>& WorldObjectComponents::shieldSlots() {
     return m_shieldSlots;
 }
 
-float WorldObjectComponents::compensate(float damage) {
+float WorldObjectComponents::compensateDamage(float damage) {
     for (std::shared_ptr<ShieldSlot>& shieldSlot : m_shieldSlots) {
         std::shared_ptr<Shield>& shield = shieldSlot->shield();
-        if (!shield.get()) {
+        if (!shield) {
             continue;
         }
 

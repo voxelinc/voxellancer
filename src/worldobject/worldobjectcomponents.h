@@ -80,7 +80,7 @@ public:
 
     std::list<std::shared_ptr<ShieldSlot>>& shieldSlots();
 
-    float compensate(float damage);
+    float compensateDamage(float damage);
 
 
     /*
