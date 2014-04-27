@@ -55,6 +55,6 @@ std::string WorldObjectInfo::shieldStatus() {
         return std::to_string(shieldPercent);
     }
 
-    return "-";
+    return "";
 }
 
