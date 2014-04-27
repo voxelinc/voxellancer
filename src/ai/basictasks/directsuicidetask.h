@@ -16,7 +16,7 @@ public:
 
     void setTarget(WorldObject* target);
 
-    virtual void update(float deltaSec);
+    virtual void update(float deltaSec) override;
 
 
 protected:
