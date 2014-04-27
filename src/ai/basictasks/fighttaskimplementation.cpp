@@ -8,7 +8,8 @@
 FightTaskImplementation::FightTaskImplementation(BoardComputer* boardComputer, const std::vector<Handle<WorldObject>>& targets) :
     AiTask(boardComputer),
     m_targets(targets),
-    m_primaryTarget(nullptr)
+    m_primaryTarget(nullptr),
+    m_componentsInfo(boardComputer->worldObject()->componentsInfo())
 {
 }
 

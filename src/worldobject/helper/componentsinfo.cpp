@@ -7,48 +7,30 @@
 #include "equipment/weapons/gun.h"
 #include "equipment/weapons/rocketlauncher.h"
 #include "equipment/engine.h"
+#include "equipment/enginepower.h"
 
 ComponentsInfo::ComponentsInfo(WorldObject* worldObject) :
     m_worldObject(worldObject)  
 {
-    updateInfo();
     m_maxBulletRange = 0;
     m_maxForwardSpeed = 0;
-    m_maxRocketRange = 0;
 }
 
 void ComponentsInfo::updateInfo() {
-    m_maxBulletRange = 0;
-    m_maxForwardSpeed = 0;
-    m_maxRocketRange = 0;
     for (std::shared_ptr<Hardpoint> hardpoint : m_worldObject->components().hardpoints()) {
         if (hardpoint->weapon()) {
             if (hardpoint->weapon()->type() == WeaponType::Gun) {
-                glm::max(dynamic_cast<Gun*>(hardpoint->weapon().get())->bulletSpeed()*dynamic_cast<Gun*>(hardpoint->weapon().get())->bulletLifetime(), m_maxBulletRange);
-            }
-            if (hardpoint->weapon()->type() == WeaponType::RocketLauncher) {
-                glm::max(dynamic_cast<RocketLauncher*>(hardpoint->weapon().get())-> *dynamic_cast<Gun*>(hardpoint->weapon().get())->bulletLifetime(), m_maxBulletRange);
+                m_maxBulletRange = glm::max(dynamic_cast<Gun*>(hardpoint->weapon().get())->bulletSpeed()*dynamic_cast<Gun*>(hardpoint->weapon().get())->bulletLifetime(), m_maxBulletRange);
             }
         }
     }
+    m_maxForwardSpeed = m_worldObject->components().enginePower().directional().x;
 }
 
-float ComponentsInfo::maxBulletRange() {
+const float ComponentsInfo::maxBulletRange() const {
     return m_maxBulletRange;
 }
 
-float ComponentsInfo::maxRocketRange() {
-    return m_maxRocketRange;
-}
-
-float ComponentsInfo::maxForwardSpeed() {
+const float ComponentsInfo::maxForwardSpeed() const {
     return m_maxForwardSpeed;
 }
-    /*float maxBulletRange();
-    float maxRocketRange();
-    float maxForwardSpeed();
-
-    void updateInfo();
-
-private:
-    const WorldObject* worldObject;*/

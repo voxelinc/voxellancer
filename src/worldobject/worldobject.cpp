@@ -12,6 +12,7 @@
 #include "worldobject/worldobjectinfo.h"
 #include "voxel/voxel.h"
 #include "worldobjectcomponents.h"
+#include "helper/componentsinfo.h"
 
 WorldObject::WorldObject() :
     VoxelCluster(1.0f),
@@ -24,7 +25,8 @@ WorldObject::WorldObject() :
     m_handle(Handle<WorldObject>(this)),
     m_spawnState(SpawnState::None),
     m_collisionFilter(new CollisionFilter(this)),
-    m_crucialVoxelDestroyed(false)
+    m_crucialVoxelDestroyed(false),
+    m_componentsInfo(new ComponentsInfo(this))
 {
 }
 
@@ -168,3 +170,10 @@ bool WorldObject::passiveForCollisionDetection() {
     return false;
 }
 
+const ComponentsInfo& WorldObject::componentsInfo() const {
+    return *m_componentsInfo;
+}
+
+void WorldObject::updateComponentsInfo() {
+    m_componentsInfo->updateInfo();
+}

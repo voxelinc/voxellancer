@@ -19,6 +19,7 @@ class Physics;
 class WorldObjectInfo;
 class VoxelCollision;
 class WorldObjectComponents;
+class ComponentsInfo;
 
 enum class SpawnState {
     None,
@@ -86,6 +87,9 @@ public:
 
     virtual bool passiveForCollisionDetection();
 
+    const ComponentsInfo& componentsInfo() const;
+    void updateComponentsInfo();
+
 
 protected:
     std::unique_ptr<CollisionFilter> m_collisionFilter;
@@ -93,6 +97,7 @@ protected:
     std::unique_ptr<Physics> m_physics;
     std::unique_ptr<WorldObjectInfo> m_info;
     std::unique_ptr<WorldObjectComponents> m_components;
+    std::unique_ptr<ComponentsInfo> m_componentsInfo;
 
     Handle<WorldObject> m_handle;
     Voxel* m_crucialVoxel;

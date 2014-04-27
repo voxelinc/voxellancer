@@ -72,6 +72,7 @@ Ship* WorldObjectBuilder::buildShip() {
     if (ship->crucialVoxel() == nullptr) {
         glow::warning("WorldObjectBuilder: ship %; has no crucial voxel", m_name);
     }
+    ship->updateComponentsInfo();
     return ship;
 }
 
@@ -100,7 +101,6 @@ T* WorldObjectBuilder::makeWorldObject() {
     }
 
     equipSomehow(worldObject);
-
     return object;
 }
 

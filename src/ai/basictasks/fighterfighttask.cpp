@@ -5,13 +5,13 @@
 #include "utils/randfloat.h"
 #include "voxel/voxelclusterbounds.h"
 #include "worldobject/ship.h"
+#include "worldobject/helper/componentsinfo.h"
 
 
 FighterFightTask::FighterFightTask(BoardComputer* boardComputer, const std::vector<Handle<WorldObject>>& targets) :
     FightTaskImplementation(boardComputer, targets)
 {
     m_state = State::IDLE;
-    m_maxFireDistance = 150.0f;
     m_maxRocketDistance = 200.0f;
     m_minEnemyDistance = 100.0f;
     m_stateChanged = false;
@@ -46,7 +46,7 @@ void FighterFightTask::update(float deltaSec) {
                     boardComputer()->shootRockets(m_primaryTarget->handle());
                 }
             }
-            if (targetDistance() < m_maxFireDistance) {
+            if (targetDistance() < m_componentsInfo.maxBulletRange()) {
                 boardComputer()->shootBullet(m_targets);
             }
             break;
@@ -76,7 +76,7 @@ void FighterFightTask::updateState() {
             }
             break;
         case State::APPROACH:
-            if (targetDistance() < m_maxFireDistance) {
+            if (targetDistance() < m_componentsInfo.maxBulletRange()) {
                 setState(State::ENGAGE);
             }
             break;
@@ -95,7 +95,7 @@ void FighterFightTask::updateState() {
             if (targetDistance() < m_minEnemyDistance) {
                 break;
             }
-            if (targetDistance() < m_maxFireDistance) {
+            if (targetDistance() < m_componentsInfo.maxBulletRange()) {
                 setState(State::ENGAGE);
             } else {
                 setState(State::APPROACH);
