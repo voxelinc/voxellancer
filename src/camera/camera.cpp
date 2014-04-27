@@ -1,153 +1,41 @@
 #include "camera.h"
 
+#include <glow/logging.h>
+
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/matrix_inverse.hpp>
 
 #include <glm/gtx/transform.hpp>
 
 
 Camera::Camera(int viewportWidth, int viewportHeight):
-    m_fovy(glm::radians(60.f)),
-    m_aspect(1.f),
-    m_zNear(1),
-    m_zFar(9999)
+    m_orientationDirty(true)
 {
-    setViewport(glm::ivec2(viewportWidth, viewportHeight));
+    setViewport(viewportWidth, viewportHeight);
+
+    setFovy(glm::radians(60.0f));
+
+    setZNear(1.0f);
+    setZFar(10000.0f);
 }
 
-Camera::~Camera(){
-
-}
-
-void Camera::viewDirty() {
-    m_view = glm::mat4_cast(glm::inverse(m_orientation)) * glm::translate(-m_position);
-    m_viewProjection = m_projection * m_view;
-}
-
-void Camera::projectionDirty() {
-    m_projection = glm::perspective(m_fovy, m_aspect, m_zNear, m_zFar);
-    m_projection = glm::translate(m_projectionOffset) * m_projection;
-    m_viewProjection = m_projection * m_view;
-}
-
-void Camera::move(glm::vec3 dist){
-    Transform::move(dist);
-    viewDirty();
-}
-
-void Camera::setPosition(glm::vec3 pos){
-    Transform::setPosition(pos);
-    viewDirty();
-}
-
-void Camera::rotateX(float rot){
-    Transform::rotate(glm::angleAxis(rot, glm::vec3(1,0,0)));
-    viewDirty();
-}
-
-void Camera::rotateY(float rot){
-    Transform::rotate(glm::angleAxis(rot, glm::vec3(0, 1, 0)));
-    viewDirty();
-}
-
-void Camera::rotateZ(float rot){
-    Transform::rotate(glm::angleAxis(rot, glm::vec3(0, 0, -1)));
-    viewDirty();
-}
-
-void Camera::setOrientation(glm::quat quat){
-    Transform::setOrientation(quat);
-    viewDirty();
-}
-
-const glm::mat4& Camera::view()  const{
-    return m_view;
-}
-
-const glm::mat4& Camera::viewInverted() const {
-    return glm::inverse(m_view);
-}
-
-const glm::quat& Camera::orientation() const {
-    return Transform::orientation();
-}
-
-const glm::vec3& Camera::position() const {
-    return m_position;
-}
-
-float Camera::zNear() const {
-    return m_zNear;
-}
-
-void Camera::setZNear(const float zNear) {
-    if (zNear == m_zNear) {
-        return;
+glm::quat Camera::orientation() const {
+    if (m_orientationDirty) {
+        const_cast<glm::quat&>(m_orientation) = glm::quat_cast(glm::inverse(view()));
+        m_orientationDirty = false;
     }
-
-    m_zNear = zNear;
-    assert(m_zNear > 0.0);
-
-    projectionDirty();
+    return m_orientation;
 }
 
-float Camera::zFar() const {
-    return m_zFar;
+void Camera::setOrientation(const glm::quat& orientation) {
+    glowutils::Camera::setUp(orientation * glm::vec3(0, 1, 0));
+    glowutils::Camera::setCenter(eye() + orientation * glm::vec3(0, 0, -1));
+
+    // changed() will be called anyway, no need to set m_orientationDirty = true
 }
 
-void Camera::setZFar(const float zFar) {
-    if (zFar == m_zFar) {
-        return;
-    }
-
-    m_zFar = zFar;
-    assert(m_zFar > m_zNear);
-    projectionDirty();
+void Camera::changed() const {
+    glowutils::Camera::changed();
+    m_orientationDirty = true;
 }
 
-float Camera::fovy() const {
-    return m_fovy;
-}
-
-void Camera::setFovy(const float fovy) {
-    if (fovy == m_fovy) {
-        return;
-    }
-
-    m_fovy = fovy;
-    assert(m_fovy > 0.0);
-    projectionDirty();
-}
-
-const glm::ivec2 Camera::viewport() const {
-    return m_viewport;
-}
-
-void Camera::setViewport(const glm::ivec2& viewport) {
-    if (viewport == m_viewport) {
-        return;
-    }
-
-    m_aspect = viewport.x / glm::max(static_cast<float>(viewport.y), 1.f);
-    m_viewport = viewport;
-    projectionDirty();
-}
-
-const glm::vec3& Camera::projectionOffset() const {
-    return m_projectionOffset;
-}
-
-void Camera::setProjectionOffset(const glm::vec3& projectionOffset) {
-    m_projectionOffset = projectionOffset;
-    projectionDirty();
-}
-
-float Camera::aspectRatio() const {
-    return m_aspect;
-}
-
-const glm::mat4& Camera::projection() const {
-    return m_projection;
-}
-
-const glm::mat4& Camera::viewProjection() const {
-    return m_viewProjection;
-}

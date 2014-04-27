@@ -94,6 +94,6 @@ void Damager::reset() {
 }
 
 void Damager::applyShields(DamageImpact& damageImpact) {
-    damageImpact.setDamage(damageImpact.worldObject()->components().compensate(damageImpact.damage()));
+    damageImpact.setDamage(damageImpact.worldObject()->components().compensateDamage(damageImpact.damage()));
 }
 

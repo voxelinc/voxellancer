@@ -20,7 +20,7 @@ void ShieldSlot::setShield(const std::shared_ptr<Shield>& shield) {
 }
 
 void ShieldSlot::update(float deltaSec) {
-    if (m_shield.get()) {
+    if (m_shield) {
         m_shield->update(deltaSec);
     }
 }

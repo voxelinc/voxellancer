@@ -152,8 +152,7 @@ void HUD::update(float deltaSec) {
 
     if (m_player->ship()) {
         m_elements->setSpeed(std::to_string((int)(glm::length(m_player->ship()->physics().speed().directional()))));
-
-            m_elements->setShieldStatus(m_player->ship()->info().shieldStatus());
+        m_elements->setShieldStatus(m_player->ship()->info().shieldStatus());
     } else {
         m_elements->setSpeed("-");
         m_elements->setShieldStatus("-");

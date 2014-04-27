@@ -17,10 +17,8 @@ WeaponBuilder::WeaponBuilder(const std::string& name):
 }
 
 Weapon* WeaponBuilder::build() {
-    /**
-     *  Currently only decides whether the weapons going to be a Gun
-     *  or a RocketLauncher
-     */
+    // Currently only decides whether the weapons going to be a Gun
+    // or a RocketLauncher
     std::string type = Property<std::string>(m_name + ".general.type");
 
     if (type == "gun") {

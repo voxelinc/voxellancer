@@ -79,7 +79,6 @@ void FrozenGameScenario::populateWorld() {
     }
 
     Ship *testCluster = WorldElementBuilder("mox").buildShip();
-
     testCluster->transform().setPosition(glm::vec3(0, 0, 10));
     testCluster->info().setName("basicship");
     testCluster->info().setShowOnHud(false);
