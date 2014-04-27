@@ -70,7 +70,7 @@ FactionRelation& FactionMatrix::getRelationToPlayer(Faction& faction) {
 }
 
 void FactionMatrix::setupRelations() {
-    getRelation(playerFaction(), pirateFaction()).setFriendliness(-20.0f);
+    getRelation(playerFaction(), pirateFaction()).setFriendliness(-40.0f);
     getRelation(playerFaction(), policeFaction()).setFriendliness(10.0f);
     getRelation(policeFaction(), pirateFaction()).setFriendliness(-50.0f);
 }

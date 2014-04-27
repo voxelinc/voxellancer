@@ -245,6 +245,7 @@ int main(int argc, char* argv[]) {
                 game->viewer().switchToStereoView(StereoRenderInfo::dummy());
             }
         }
+        game->gamePlay().updateView();
 
         delete loadingScreen;
         delete initTimer;
