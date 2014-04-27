@@ -30,6 +30,30 @@ Engine::~Engine() {
     }
 }
 
+const Visuals& Engine::visuals() const {
+    return m_visuals;
+}
+
+void Engine::setVisuals(const Visuals& visuals) {
+    m_visuals = visuals;
+}
+
+const SoundProperties& Engine::sound() const {
+    return m_engineSound;
+}
+
+void Engine::setEngineSound(const SoundProperties& engineSound) {
+    m_engineSound = engineSound;
+}
+
+EnginePower Engine::power() const {
+    return m_power;
+}
+
+void Engine::setPower(const EnginePower& power) {
+    m_power = power;
+}
+
 EngineSlot* Engine::engineSlot() {
     return m_engineSlot;
 }

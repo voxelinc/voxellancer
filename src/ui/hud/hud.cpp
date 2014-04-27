@@ -7,7 +7,6 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 
-#include <glow/logging.hpp>
 #include <glow/Program.hpp>
 
 #include "camera/camerahead.h"
@@ -64,8 +63,6 @@ HUD::HUD(Player* player):
 
     m_elements->addHudget(m_aimHelper);
     m_elements->addHudget(m_crossHair);
-
-    glow::info() << "Created HUD" << this;
 }
 
 HUD::~HUD() = default;
@@ -183,11 +180,29 @@ void HUD::draw() {
 
 void HUD::onClick(ClickType clickType) {
     Ray toCrossHair = Ray::fromTo(m_player->cameraHead().position(), m_crossHair->worldPosition());
+    ObjectHudget* smallestTargetHudget = nullptr;
+    Hudget* otherHudget = nullptr;
+
     for (std::unique_ptr<Hudget>& hudget : m_elements->hudgets()) {
         if (hudget->isAt(toCrossHair) && hudget.get() != m_crossHair) {
-            hudget->onClick(clickType);
-            return;
+            ObjectHudget* targetHudget = dynamic_cast<ObjectHudget*>(hudget.get());
+
+            if (targetHudget) {
+                if (!smallestTargetHudget) {
+                    smallestTargetHudget = targetHudget;
+                } else if (smallestTargetHudget->openingAngle() > targetHudget->openingAngle()) {
+                    smallestTargetHudget = targetHudget;
+                }
+            } else {
+                otherHudget = hudget.get();
+            }
         }
+    }
+
+    if (smallestTargetHudget) {
+        smallestTargetHudget->onClick(clickType);
+    } else if (otherHudget) {
+        otherHudget->onClick(clickType);
     }
 }
 
@@ -257,7 +272,7 @@ void HUD::updateFov() {
     m_fovx = glm::atan(glm::tan(m_fovy) * m_view->aspectRatio());
 }
 
-void HUD::setView(const View* view) { glow::debug() << "Set View " << view;
+void HUD::setView(const View* view) {
     m_view = view;
 }
 
