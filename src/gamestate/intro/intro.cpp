@@ -56,7 +56,7 @@ void Intro::update(float deltaSec) {
     m_letterCountdown += deltaSec;
 
     while (m_letterCountdown > 0.0f && m_currentLine < INTRO_LINES.size()) {
-        m_letterCountdown -= 0.05;
+        m_letterCountdown -= 0.05f;
 
         if (m_currentLetter >= INTRO_LINES[m_currentLine].size()) {
             m_currentLine++;
