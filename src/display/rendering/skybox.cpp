@@ -55,7 +55,7 @@ void Skybox::initialize() {
         glm::vec3(-1, -1, 0),
         glm::vec3(1, -1, 0),
         glm::vec3(1, 1, 0),
-        glm::vec3(-1, 1, 0) 
+        glm::vec3(-1, 1, 0)
     };
 
     m_vertexArrayObject = new glow::VertexArrayObject();
