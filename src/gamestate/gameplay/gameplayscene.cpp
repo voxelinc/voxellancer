@@ -1,5 +1,6 @@
 #include "gameplayscene.h"
 
+#include <glow/logging.h>
 #include <glow/Program.h>
 
 #include "bulletengine/bulletengine.h"
@@ -51,6 +52,7 @@ bool GamePlayScene::worldTreeRendererEnabled() const {
 
 void GamePlayScene::setWorldTreeRendererEnabled(bool enabled) {
     m_worldTreeRendererEnabled = enabled;
+    glow::debug()<< "Drawing Worldtree " << enabled;
 }
 
 void GamePlayScene::drawImpl(const Camera& camera) const {
