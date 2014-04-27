@@ -21,7 +21,7 @@ Camera::Camera(int viewportWidth, int viewportHeight):
 
 glm::quat Camera::orientation() const {
     if (m_orientationDirty) {
-        m_orientation = glm::quat_cast(glm::inverse(view()));
+        const_cast<glm::quat&>(m_orientation) = glm::quat_cast(glm::inverse(view()));
         m_orientationDirty = false;
     }
     return m_orientation;
