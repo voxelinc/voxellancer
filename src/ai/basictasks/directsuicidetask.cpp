@@ -10,12 +10,12 @@
 
 DirectSuicideTask::DirectSuicideTask(BoardComputer* boardComputer, WorldObject* target) :
     AiTask(boardComputer),
-    m_target(target ? target->handle<WorldObject>() : Handle<WorldObject>())
+    m_target(target ? makeHandle(target) : Handle<WorldObject>())
 {
 }
 
 void DirectSuicideTask::setTarget(WorldObject* target) {
-    m_target = (target ? target->handle<WorldObject>() : Handle<WorldObject>());
+    m_target = (target ? makeHandle(target) : Handle<WorldObject>());
 }
 
 void DirectSuicideTask::update(float deltaSec) {

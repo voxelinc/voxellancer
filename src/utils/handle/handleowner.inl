@@ -15,3 +15,14 @@ Handle<T> HandleOwner::handle() {
     return Handle<T>(m_impl);
 }
 
+template<typename T>
+Handle<T> makeHandle(T* owner) {
+    return owner->template handle<T>();
+}
+
+
+template<typename T>
+Handle<T> makeHandle(T& owner) {
+    return owner.template handle<T>();
+}
+

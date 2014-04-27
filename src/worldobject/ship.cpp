@@ -35,7 +35,7 @@ void Ship::update(float deltaSec) {
 }
 
 void Ship::setTargetObject(WorldObject* target) {
-    m_targetObjectHandle = target ? target->handle<WorldObject>() : Handle<WorldObject>();
+    m_targetObjectHandle = target ? makeHandle(target) : Handle<WorldObject>();
 }
 
 WorldObject* Ship::targetObject() {

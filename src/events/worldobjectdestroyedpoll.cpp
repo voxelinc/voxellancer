@@ -5,7 +5,7 @@
 
 WorldObjectDestroyedPoll::WorldObjectDestroyedPoll(WorldObject* worldObject, const Callback& callback):
     EventPoll(callback),
-    m_worldObject(worldObject->handle<WorldObject>())
+    m_worldObject(makeHandle(worldObject))
 {
 }
 
