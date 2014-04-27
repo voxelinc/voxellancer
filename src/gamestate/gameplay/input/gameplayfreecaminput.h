@@ -19,11 +19,11 @@ class CameraDolly;
 
 class GamePlayFreecamInput : public GamePlayInput {
 public:
-    GamePlayFreecamInput();
+    GamePlayFreecamInput(GamePlay& gamePlay);
 
-    void resizeEvent(const unsigned int width, const unsigned int height) override;
-    //void keyCallback(int key, int scancode, int action, int mods);
-    //void mouseButtonCallback(int button, int action, int mods);
+    void onResizeEvent(const unsigned int width, const unsigned int height) override;
+    //void onKeyEvent(int key, int scancode, int action, int mods);
+    //void onMouseButtonEvent(int button, int action, int mods);
 	virtual void update(float deltaSec) override;
 
     const glm::vec3& position();

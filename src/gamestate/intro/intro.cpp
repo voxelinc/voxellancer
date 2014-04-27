@@ -10,6 +10,7 @@
 #include "utils/statemachine/trigger.h"
 
 #include "introscene.h"
+#include "introinput.h"
 
 
 namespace {
@@ -18,7 +19,7 @@ namespace {
        "earlier days of development",
        "Expect bugs, crashes and other nastiness",
        "-",
-       "Still, have fun playing around"
+       "Still, enjoy playing around"
     });
 }
 
@@ -28,6 +29,7 @@ Intro::Intro(Game* game):
     m_scene(new IntroScene(*this)),
     m_cameraDolly(new CameraDolly()),
     m_cameraHead(new CameraHead(m_cameraDolly.get())),
+    m_input(new IntroInput(*this)),
     m_overTrigger(new Trigger()),
     m_showCountdown(0.0f),
     m_currentLine(0),
@@ -44,6 +46,10 @@ const Scene& Intro::scene() const {
 
 const CameraHead& Intro::cameraHead() const {
     return *m_cameraHead;
+}
+
+InputHandler& Intro::inputHandler() {
+    return *m_input;
 }
 
 void Intro::update(float deltaSec) {

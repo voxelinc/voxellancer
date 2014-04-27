@@ -47,6 +47,12 @@ const CameraHead& Game::cameraHead() const {
     return subState->cameraHead();
 }
 
+InputHandler& Game::inputHandler() {
+    assert(currentSubState());
+    GameState* subState = dynamic_cast<GameState*>(currentSubState());
+    return subState->inputHandler();
+}
+
 HMDManager& Game::hmdManager() {
     return *m_hmdManager;
 }

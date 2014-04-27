@@ -1,21 +1,46 @@
 #include "gameplayinput.h"
 
-void GamePlayInput::resizeEvent(const unsigned int width, const unsigned int height) {
+#include "GLFW/glfw3.h"
+
+#include "gameplay.h"
+#include "gameplayscene.h"
+
+
+GamePlayInput::GamePlayInput(GamePlay& gamePlay):
+    m_gamePlay(gamePlay)
+{
+
 }
 
-/**
-*    Check here for single-time key-presses, that you do not want fired multiple times, e.g. toggles
-*    This only applies for menu events etc, for action events set the toggleAction attribute to true
-*/
-void GamePlayInput::keyCallback(int key, int scancode, int action, int mods) {
+void GamePlayInput::onResizeEvent(const unsigned int width, const unsigned int height) {
+
 }
 
+void GamePlayInput::onKeyEvent(int key, int scancode, int action, int mods) {
+    if (action == GLFW_PRESS) {
+        if (key == GLFW_KEY_F) {
+            m_gamePlay.setFreecamActive(!m_gamePlay.freecamActive());
+        }
 
-void GamePlayInput::mouseButtonCallback(int button, int action, int mods) {
+        if (key >= GLFW_KEY_1 && key <= GLFW_KEY_9) {
+            m_gamePlay.scene().setOutputBuffer(key - GLFW_KEY_1);
+        }
+
+        if (key == GLFW_KEY_T) {
+            m_gamePlay.scene().setWorldTreeRendererEnabled(!m_gamePlay.scene().worldTreeRendererEnabled());
+        }
+
+        if (key >= GLFW_KEY_F1 && key <= GLFW_KEY_F7) {
+            m_gamePlay.loadScenario(key - GLFW_KEY_F1);
+        }
+    }
 }
 
-/**
- *  Check here for every-frame events, e.g. view & movement controls
- */
+void GamePlayInput::onMouseButtonEvent(int button, int action, int mods) {
+
+}
+
 void GamePlayInput::update(float deltaSec) {
+
 }
+
