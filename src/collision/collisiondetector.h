@@ -18,8 +18,7 @@ class VoxelTree;
 class VoxelTreeNode;
 
 // this class contains datastructures for collision detection
-class CollisionDetector
-{
+class CollisionDetector {
 public:
     CollisionDetector(WorldObject& worldObject);
     ~CollisionDetector();
@@ -31,14 +30,14 @@ public:
      * Checks for collision against all objects inside worldObject->aabb() that
      * match worldObeject->collisionFilter()
      */
-    std::list<VoxelCollision> &checkCollisions();
+    std::list<VoxelCollision>& checkCollisions();
 
     /**
      * Check for collision against a caller-defined set of WorldObjects
      */
-    std::list<VoxelCollision> &checkCollisions(const std::unordered_set<WorldTreeGeode*>& possibleColliders);
+    std::list<VoxelCollision>& checkCollisions(const std::unordered_set<WorldTreeGeode*>& possibleColliders);
 
-    std::list<VoxelCollision> &lastCollisions();
+    std::list<VoxelCollision>& lastCollisions();
 
     void reset();
 

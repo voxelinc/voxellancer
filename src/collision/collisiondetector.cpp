@@ -77,7 +77,7 @@ std::list<VoxelCollision>& CollisionDetector::checkCollisions() {
 }
 
 
-std::list<VoxelCollision> &CollisionDetector::checkCollisions(const std::unordered_set<WorldTreeGeode*>& possibleColliders) {
+std::list<VoxelCollision>& CollisionDetector::checkCollisions(const std::unordered_set<WorldTreeGeode*>& possibleColliders) {
     for (WorldTreeGeode* possibleCollider : possibleColliders) {
         assert(possibleCollider->worldObject() != nullptr);
         WorldObject* other = possibleCollider->worldObject();
