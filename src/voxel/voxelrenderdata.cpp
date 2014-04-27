@@ -73,7 +73,7 @@ void VoxelRenderData::updateBuffer() {
 
     m_transparentCount = 0;
     int i = 0; // counts from front, opaque voxels
-    int j = m_voxel.size() - 1; // counts from back, transparent voxels
+    int j = m_bufferSize - 1; // counts from back, transparent voxels
     for (auto& pair : m_voxel) {
         Voxel *voxel = pair.second;
         assert(voxel != nullptr);
