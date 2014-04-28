@@ -53,10 +53,7 @@ bool Capsule::intersects(const Sphere& sphere) const {
 }
 
 bool Capsule::nearTo(const TAABB<int>& aabb) const {
-    glm::vec3 extendDirection(
-        (m_direction.x < 0 ? -m_radius : m_radius),
-        (m_direction.y < 0 ? -m_radius : m_radius),
-        (m_direction.z < 0 ? -m_radius : m_radius));
+    glm::vec3 extendDirection = this->extendDirection();
 
     glm::vec3 a(m_origin - extendDirection);
     glm::vec3 b(m_origin + m_direction + extendDirection);
@@ -68,13 +65,17 @@ bool Capsule::nearTo(const TAABB<int>& aabb) const {
 }
 
 bool Capsule::containedBy(const TAABB<int>& aabb) const {
-    glm::vec3 extendDirection(
-        (m_direction.x < 0 ? -m_radius : m_radius),
-        (m_direction.y < 0 ? -m_radius : m_radius),
-        (m_direction.z < 0 ? -m_radius : m_radius));
+    glm::vec3 extendDirection = this->extendDirection();
 
     //extend endpoints along axes
     return aabb.contains(m_origin - extendDirection)
         && aabb.contains(m_origin + m_direction + extendDirection);
+}
+
+glm::vec3 Capsule::extendDirection() const {
+    return glm::vec3(
+        (m_direction.x < 0 ? -m_radius : m_radius),
+        (m_direction.y < 0 ? -m_radius : m_radius),
+        (m_direction.z < 0 ? -m_radius : m_radius));
 }
 
