@@ -33,7 +33,8 @@ Intro::Intro(Game* game):
     m_overTrigger(new Trigger()),
     m_showCountdown(0.0f),
     m_currentLine(0),
-    m_currentLetter(0)
+    m_currentLetter(0),
+    m_letterCountdown(0.0f)
 {
 
 }
