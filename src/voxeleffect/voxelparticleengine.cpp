@@ -23,7 +23,7 @@ VoxelParticleEngine::VoxelParticleEngine():
     m_gpuParticleBufferInvalidEnd(0)
 {
     m_remover->addCheck(std::make_shared<VoxelParticleExpireCheck>(*this));
-    m_remover->addCheck(std::make_shared<VoxelParticleIntersectionCheck>(*this));
+    //m_remover->addCheck(std::make_shared<VoxelParticleIntersectionCheck>(*this));
 
     setBufferSize(1024);
 }

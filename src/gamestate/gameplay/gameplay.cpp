@@ -155,7 +155,7 @@ void GamePlay::update(float deltaSec) {
 void GamePlay::onEntered() {
     GameState::onEntered();
     m_soundManager->activate();
-    loadScenario(0);
+    loadScenario(1);
 }
 
 void GamePlay::onLeft() {

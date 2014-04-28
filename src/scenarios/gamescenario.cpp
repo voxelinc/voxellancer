@@ -42,8 +42,8 @@ void GameScenario::populateWorld() {
 
     spawnPirateFleet();
 
-    Ship *testCluster = WorldElementBuilder("f302").buildShip();
-    testCluster->transform().setPosition(glm::vec3(0, 0, 10));
+    Ship *testCluster = WorldElementBuilder("mox").buildShip();
+    testCluster->transform().setPosition(glm::vec3(100, 140, 50));
     testCluster->info().setName("player");
     testCluster->info().setShowOnHud(false);
     m_world->god().scheduleSpawn(testCluster);
@@ -59,7 +59,7 @@ void GameScenario::createArmada() {
     std::shared_ptr<Squad> armada = std::make_shared<Squad>();
     armada->setTask(std::make_shared<DefendAreaTask>(*armada,
         std::list<glm::vec3>{
-            glm::vec3(900, 0, 0),
+            glm::vec3(300, 0, 0),
             glm::vec3(1500, 0, 0),
             glm::vec3(1400, 500, 0),
         }, 500.0f));
@@ -73,7 +73,7 @@ void GameScenario::createArmada() {
     chief->character()->setFaction(World::instance()->factionMatrix().policeFaction());
     m_world->god().scheduleSpawn(chief);
 
-    int memberCount = 12;
+    int memberCount = 8;
     for (int i = 0; i < memberCount; i++) {
         Ship *follower = i < 6 ? WorldElementBuilder("mox").buildShip() : WorldElementBuilder("smallpolice").buildShip();
         follower->transform().setPosition(glm::vec3(700, 50* (-memberCount / 2.0f + i), 0));
@@ -114,9 +114,10 @@ void GameScenario::spawnPoliceFleet() {
     cruiser->squadLogic()->joinSquad(squadA);
     m_world->god().scheduleSpawn(cruiser);
 
-    int nmember_count = 5;
+    int nmember_count = 14;
     for (int i = 0; i < nmember_count; i++) {
-        Ship *follower = WorldElementBuilder("f302").buildShip();
+        std::string type = i < 6 ? (i < 3 ? "mox" : "f302") : "f301";
+        Ship *follower = WorldElementBuilder(type).buildShip();
         follower->transform().setPosition(glm::vec3(100 * (-nmember_count / 2.0f + i), 50, 0));
         follower->character()->setFaction(World::instance()->factionMatrix().policeFaction());
         follower->info().setName("Fighter");
@@ -142,7 +143,7 @@ void GameScenario::spawnPirateFleet() {
     leader->squadLogic()->joinSquad(squadB);
     m_world->god().scheduleSpawn(leader);
 
-    int lmember_count = 15;
+    int lmember_count = 6;
     for (int i = 0; i < lmember_count; i++) {
         Ship *follower = WorldElementBuilder("piratelight").buildShip();
         follower->character()->setFaction(World::instance()->factionMatrix().pirateFaction());
@@ -168,71 +169,74 @@ void GameScenario::spawnPirateFleet() {
     leader2->squadLogic()->joinSquad(squadC);
     m_world->god().scheduleSpawn(leader2);
 
-    int lmember_count2 = 7;
+    int lmember_count2 = 8;
     for (int i = 0; i < lmember_count2; i++) {
-        Ship *follower = WorldElementBuilder("pirategunboat").buildShip();
+        std::string type = i < 2 ? "pirategunboat" : "piratelight";
+
+        Ship *follower = WorldElementBuilder(type).buildShip();
         follower->character()->setFaction(World::instance()->factionMatrix().pirateFaction());
         follower->transform().setPosition(glm::vec3(200 * (-lmember_count / 2.0f + i), -200, -1000));
-        follower->info().setName("pirate gunboat");
+        follower->info().setName("pirate");
         follower->info().setShowOnHud(true);
         follower->info().setCanLockOn(true);
         follower->squadLogic()->joinSquadOf(leader2);
         m_world->god().scheduleSpawn(follower);
     }
+
+    std::shared_ptr<Squad> squadD = std::make_shared<Squad>();
+    squadD->setTask(std::make_shared<DefendAreaTask>(*squadD,
+        std::list<glm::vec3>{ glm::vec3(400, 0, 200), glm::vec3(-400, 0, -400),
+        glm::vec3(-600, 0, -400), glm::vec3(0, 100, -600),
+        glm::vec3(-100, 150, -900)}, 500.0f));
+
+    Ship *leader3 = WorldElementBuilder("piratelight").buildShip();
+    leader3->character()->setFaction(World::instance()->factionMatrix().pirateFaction());
+    leader3->transform().setPosition(glm::vec3(-1000, -200, -2400));
+    leader3->info().setName("pirate frigate");
+    leader3->info().setShowOnHud(true);
+    leader3->info().setCanLockOn(true);
+    leader3->squadLogic()->joinSquad(squadD);
+    m_world->god().scheduleSpawn(leader3);
+
+    int lmember_count3 = 5;
+    for (int i = 0; i < lmember_count3; i++) {
+        Ship *follower = WorldElementBuilder("piratelight").buildShip();
+        follower->character()->setFaction(World::instance()->factionMatrix().pirateFaction());
+        follower->transform().setPosition(glm::vec3(-1000 * (-lmember_count / 2.0f + i), -200, -1700));
+        follower->info().setName("pirate");
+        follower->info().setShowOnHud(true);
+        follower->info().setCanLockOn(true);
+        follower->squadLogic()->joinSquadOf(leader3);
+        m_world->god().scheduleSpawn(follower);
+    }
+
+    std::shared_ptr<Squad> squadE = std::make_shared<Squad>();
+    squadE->setTask(std::make_shared<DefendAreaTask>(*squadE,
+        std::list<glm::vec3>{ glm::vec3(0, 0, 0), glm::vec3(700, 0, 700) }, 1500.0f));
+
+    Ship *leader4 = WorldElementBuilder("piratelight").buildShip();
+    leader4->character()->setFaction(World::instance()->factionMatrix().pirateFaction());
+    leader4->transform().setPosition(glm::vec3(1000, -200, -3500));
+    leader4->info().setName("pirate frigate");
+    leader4->info().setShowOnHud(true);
+    leader4->info().setCanLockOn(true);
+    leader4->squadLogic()->joinSquad(squadE);
+    m_world->god().scheduleSpawn(leader4);
+
+    int lmember_count4 = 15;
+    for (int i = 0; i < lmember_count3; i++) {
+        Ship *follower = WorldElementBuilder("piratelight").buildShip();
+        follower->character()->setFaction(World::instance()->factionMatrix().pirateFaction());
+        follower->transform().setPosition(glm::vec3(1000 * (-lmember_count / 2.0f + i), -200, -3700));
+        follower->info().setName("pirate");
+        follower->info().setShowOnHud(true);
+        follower->info().setCanLockOn(true);
+        follower->squadLogic()->joinSquadOf(leader4);
+        m_world->god().scheduleSpawn(follower);
+    }
 }
 
 void GameScenario::spawnStuff() {
-    WorldObject *wall = new WorldObject();
-    wall->transform().move(glm::vec3(-30, 0, -50));
-    wall->transform().rotate(glm::angleAxis(-90.f, glm::vec3(0, 1, 0)));
-    for (int x = 0; x < 20; x++) {
-        for (int y = 0; y < 15; y++) {
-            for (int z = 0; z < 3; z++) {
-                wall->addVoxel(new Voxel(glm::ivec3(z, x, y), 0xB47878));
-            }
-        }
-    }
-    wall->info().setName("Wall");
-    wall->info().setShowOnHud(true);
-    wall->info().setCanLockOn(true);
-    m_world->god().scheduleSpawn(wall);
 
-    WorldObject *planet = new WorldObject();
-    planet->transform().move(glm::vec3(20, 10, -30));
-    int diameter = 24;
-    glm::vec3 middle(diameter / 2, diameter / 2, diameter / 2);
-    for (int x = 0; x < diameter; x++) {
-        for (int y = 0; y < diameter; y++) {
-            for (int z = 0; z < diameter; z++) {
-                glm::vec3 cell(x, y, z);
-
-                if (glm::length(cell - middle) < diameter / 2) {
-                    planet->addVoxel(new Voxel(glm::ivec3(x, y, z), 0x0055AA));
-                }
-            }
-        }
-    }
-    planet->setCrucialVoxel(glm::ivec3(middle));
-    planet->info().setName("Planet");
-    m_world->god().scheduleSpawn(planet);
-
-    for (int e = 0; e < 15; e++) {
-        WorldObject *enemy = new WorldObject();
-        int r = 80;
-        enemy->transform().move(glm::vec3(-80 + rand() % r - r / 2, rand() % r - r / 2, -20 + rand() % r - r / 2));
-
-        for (int x = 0; x < 4; x++) {
-            for (int y = 0; y < 2; y++) {
-                for (int z = 0; z < 8; z++) {
-                    enemy->addVoxel(new Voxel(glm::ivec3(x, y, z), 0xF0FF00));
-                }
-            }
-        }
-        enemy->info().setName("dummy");
-        enemy->info().setShowOnHud(false);
-        enemy->info().setCanLockOn(false);
-        m_world->god().scheduleSpawn(enemy);
-
-    }
 }
 
