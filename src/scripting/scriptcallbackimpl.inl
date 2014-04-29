@@ -15,7 +15,7 @@ void callHelper(ScriptCallbackImpl<Args...>* callback, const std::string& functi
 
 template<typename... Args>
 ScriptCallbackImpl<Args...>::ScriptCallbackImpl(Script& script, const std::string& function, Args... args):
-    m_script(script.handle<Script>()),
+    m_script(makeHandle(script)),
     m_function(function),
     m_call(std::bind(callHelper<Args...>, this, function, args...))
 {
