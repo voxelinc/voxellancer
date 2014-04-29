@@ -8,6 +8,7 @@
 #include "voxel/voxeltreenode.h"
 
 #include "voxel/voxelneighbourhelper.h"
+#include "utils/glmext/safenormalize.h"
 #include "utils/tostring.h"
 
 #include "worldobject/worldobject.h"
@@ -26,7 +27,7 @@ void DamageForwarder::forwardDamageImpacts(std::list<DamageImpact> &dampedDeadly
         const std::vector<Voxel*>& neighbours = nHelper.neighbours(deadVoxel);
 
         for(Voxel *neighbour : neighbours) {
-            glm::vec3 voxelVec = glm::normalize(static_cast<glm::vec3>(neighbour->gridCell() - deadVoxel->gridCell()));
+            glm::vec3 voxelVec = safeNormalize(static_cast<glm::vec3>(neighbour->gridCell() - deadVoxel->gridCell()));
             glm::vec3 damageImpactVec = glm::normalize(glm::inverse(m_currentWorldObject->transform().orientation()) * dampedDeadlyDamageImpact.damageVec());
 
             float distanceFactor = 1.0f;

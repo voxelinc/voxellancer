@@ -18,8 +18,11 @@
 
 #include "worldobject/worldobjectinfo.h"
 
+#include "utils/glmext/safenormalize.h"
+
 #include "world/world.h"
 
+#include "worldobject/worldobjectinfo.h"
 #include "worldobject/worldobject.h"
 #include "worldobject/ship.h"
 
@@ -148,9 +151,9 @@ glm::vec3 ObjectHudget::closestPointInsideFov() {
     glm::vec3 pointInsideFov;
 
     if (angleX < angleY) {
-        pointInsideFov = glm::normalize(intersectionX);
+        pointInsideFov = safeNormalize(intersectionX);
     } else {
-        pointInsideFov = glm::normalize(intersectionY);
+        pointInsideFov = safeNormalize(intersectionY);
     }
     pointInsideFov.x = glm::abs(pointInsideFov.x);
     pointInsideFov.y = glm::abs(pointInsideFov.y);

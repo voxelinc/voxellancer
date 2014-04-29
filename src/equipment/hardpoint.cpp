@@ -1,5 +1,6 @@
 #include "hardpoint.h"
 
+#include "utils/glmext/safenormalize.h"
 #include "utils/geometryhelper.h"
 
 #include "voxel/specialvoxels/hardpointvoxel.h"
@@ -37,8 +38,8 @@ const glm::vec3& Hardpoint::direction() const {
 }
 
 void Hardpoint::setDirection(const glm::vec3& direction) {
-    assert(glm::length(direction) > 0);
-    m_direction = glm::normalize(direction);
+    assert(normalizeable(direction));
+    m_direction = safeNormalize(direction);
 }
 
 float Hardpoint::fieldOfAim() const {

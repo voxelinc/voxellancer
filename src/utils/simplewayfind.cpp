@@ -4,6 +4,7 @@
 #include "geometry/capsule.h"
 #include "worldtree/worldtreequery.h"
 #include "worldobject/worldobject.h"
+#include "utils/glmext/safenormalize.h"
 #include "utils/worldobjectgeometryhelper.h"
 #include "collision/collisionfilter.h"
 #include "collision/collisiondetector.h"
@@ -38,8 +39,8 @@ glm::vec3 SimpleWayfind::calculateEvasionDirectionFor(WorldObject& self, WorldOb
     float dotP = glm::dot(toTarget, toObject);
     float cosAlpha = dotP / (glm::length(toTarget) * glm::length(toObject));
 
-    glm::vec3 crossPoint = self.transform().position() + (glm::normalize(toTarget) * cosAlpha * glm::length(toObject));
-    return glm::normalize(crossPoint - obstacle.transform().position());
+    glm::vec3 crossPoint = self.transform().position() + (safeNormalize(toTarget) * cosAlpha * glm::length(toObject));
+    return safeNormalize(crossPoint - obstacle.transform().position());
 }
 
 glm::vec3 SimpleWayfind::calculateEvasionPointFor(WorldObject& self, WorldObject& obstacle, const glm::vec3& targetPoint) {

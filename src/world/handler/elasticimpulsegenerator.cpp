@@ -4,6 +4,7 @@
 
 #include "worldobject/worldobject.h"
 
+#include "utils/glmext/safenormalize.h"
 #include "utils/tostring.h"
 #include "collision/voxelcollision.h"
 #include "voxel/voxel.h"
@@ -40,7 +41,7 @@ void ElasticImpulseGenerator::generateImpulse(VoxelCollisionParticipant &from, V
         glm::vec3(from.voxel()->gridCell())) -
         from.worldObject()->transform().applyTo(glm::vec3(from.voxel()->gridCell()));
 
-    glm::vec3 normal = glm::normalize(
+    glm::vec3 normal = safeNormalize(
         to.worldObject()->transform().applyTo(glm::vec3(to.voxel()->gridCell())) -
         from.worldObject()->transform().applyTo(glm::vec3(from.voxel()->gridCell())));
 
