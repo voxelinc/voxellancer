@@ -71,7 +71,7 @@ static void doSplitDetection(WorldObject* planet, WorldObjectModification &mod, 
 
 go_bandit([](){
     describe("VoxelTree", [](){
-        World *world;
+        //World *world;
         PropertyManager::instance()->reset();
         PropertyManager::instance()->load("data/config.ini");
         PropertyManager::instance()->load("data/voxels.ini", "voxels");
