@@ -4,21 +4,26 @@
 
 #include <glm/glm.hpp>
 
-#include "poweroftwo.h"
-
 
 template<typename T>
-SafeNormalize<T>::SafeNormalize(const T& v, const T& fallback) {
-    float sqr = powerOfTwo(v);
+SafeNormalize<T>::SafeNormalize(const T& v) {
+    float sqr = glm::dot(v, v);
 
     m_valid = sqr > 0.0f;
 
     if (m_valid) {
         m_normalized = v * glm::inversesqrt(sqr);
     } else {
-        glow::debug() << "SafeNormalize catched a illegal normalize()";
-        m_normalized = fallback;
+        glow::debug() << "SafeNormalize: Couldn't normalize " << v << ", no fallback provided";
     }
+}
+
+template<typename T>
+SafeNormalize<T>::SafeNormalize(const T& v, const T& fallback) {
+    float sqr = glm::dot(v, v);
+
+    m_valid = sqr > 0.0f;
+    m_normalized = m_valid ? v * glm::inversesqrt(sqr) : fallback;
 }
 
 template<typename T>
@@ -37,12 +42,17 @@ bool SafeNormalize<T>::valid() {
 }
 
 template<typename T>
+T safeNormalize(const T& v) {
+    return SafeNormalize<T>(v);
+}
+
+template<typename T>
 T safeNormalize(const T& v, const T& fallback) {
     return SafeNormalize<T>(v, fallback);
 }
 
 template<typename T>
 bool normalizeable(const T& v) {
-    return powerOfTwo(v) > 0.0f;
+    return glm::dot(v, v) > 0.0f;
 }
 

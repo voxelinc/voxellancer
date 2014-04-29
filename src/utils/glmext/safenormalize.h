@@ -8,7 +8,8 @@
 template<typename T>
 class SafeNormalize {
 public:
-    SafeNormalize(const T& v, const T& fallback = T(0.0f));
+    SafeNormalize(const T& v);
+    SafeNormalize(const T& v, const T& fallback);
 
     const T& get() const;
     operator T() const;
@@ -22,7 +23,10 @@ protected:
 };
 
 template<typename T>
-T safeNormalize(const T& v, const T& fallback = T(0.0f));
+T safeNormalize(const T& v);
+
+template<typename T>
+T safeNormalize(const T& v, const T& fallback);
 
 template<typename T>
 bool normalizeable(const T& v);
