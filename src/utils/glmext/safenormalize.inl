@@ -16,7 +16,7 @@ SafeNormalize<T>::SafeNormalize(const T& v, const T& fallback) {
     if (m_valid) {
         m_normalized = v * glm::inversesqrt(sqr);
     } else {
-        glow::debug() << "SafeNormalize catched a illegal normalize()";
+  //      glow::debug() << "SafeNormalize: " << v << " cannot be normalized";
         m_normalized = fallback;
     }
 }
