@@ -15,6 +15,8 @@
 #include "ui/hud/aimhelperhudget.h"
 #include "ui/hud/crosshair.h"
 
+#include "utils/glmext/safenormalize.h"
+
 #include "worldobject/worldobjectinfo.h"
 
 #include "utils/aimer.h"
@@ -69,6 +71,7 @@ CameraHead& Player::cameraHead() {
 HUD& Player::hud() {
     return *m_hud;
 }
+#include "utils/glmext/safenormalize.h"
 
 void Player::fire() {
     if (ship()) {
@@ -77,7 +80,7 @@ void Player::fire() {
         if(m_hud->aimHelper().hovered()) {
             targetPoint = m_hud->aimHelper().targetPoint();
         } else {
-            glm::vec3 shootDirection(glm::normalize(m_hud->crossHair().worldPosition() - cameraHead().position()));
+            glm::vec3 shootDirection(safeNormalize(m_hud->crossHair().worldPosition() - cameraHead().position()));
             Ray ray(m_hud->crossHair().worldPosition(), shootDirection);
             targetPoint = m_aimer->aim(ray);
         }

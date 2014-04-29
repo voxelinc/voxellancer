@@ -2,7 +2,7 @@
 
 #include <ctime>
 
-#include "world/world.h"
+#include "utils/glmext/safenormalize.h"
 #include "utils/randfloat.h"
 #include "utils/randfloatpool.h"
 #include "utils/randvec3.h"
@@ -10,6 +10,8 @@
 #include "voxelparticledata.h"
 #include "voxelparticlesetup.h"
 #include "voxelparticleengine.h"
+
+#include "world/world.h"
 
 
 VoxelExplosionGenerator::VoxelExplosionGenerator(const VoxelCluster* creator) :
@@ -41,7 +43,7 @@ void VoxelExplosionGenerator::spawn() {
         glm::vec3 directionalSpeed = createDirectionalSpeed();
 
         transform.setScale(createScale());
-        transform.setPosition(m_position + (m_radius * glm::normalize(directionalSpeed)));
+        transform.setPosition(m_position + (m_radius * safeNormalize(directionalSpeed)));
 
         Visuals visuals(m_color, m_emissiveness);
         Speed speed(directionalSpeed, createAngularSpeed());

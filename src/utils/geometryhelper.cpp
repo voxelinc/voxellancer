@@ -1,7 +1,10 @@
 #include "geometryhelper.h"
 
-#include "randvec3.h"
 #include "geometry/ray.h"
+
+#include "utils/glmext/safenormalize.h"
+
+#include "randvec3.h"
 
 
 bool GeometryHelper::intersectRectangle(const Ray* ray, const glm::vec3& p, const glm::vec3& q, const glm::vec3& r, const glm::vec3& s) {
@@ -27,7 +30,7 @@ glm::vec3 GeometryHelper::plane(const glm::vec3& p, const glm::vec3& q, const gl
 }
 
 float GeometryHelper::angleBetween(const glm::vec3& u, const glm::vec3& v) {
-    float angle = glm::acos(glm::clamp(glm::dot(glm::normalize(u), glm::normalize(v)), -1.0f, 1.0f));
+    float angle = glm::acos(glm::clamp(glm::dot(safeNormalize(u), safeNormalize(v)), -1.0f, 1.0f));
     assert(std::isfinite(angle));
     return angle;
 }
@@ -44,7 +47,7 @@ glm::quat GeometryHelper::quatFromTo(const glm::vec3& u, const glm::vec3& v) {
     if (w == glm::vec3(0)) {
         w = RandVec3::randUnitVec();
     }
-    return glm::angleAxis(angle, glm::normalize(w));
+    return glm::angleAxis(angle, safeNormalize(w));
 }
 
 glm::quat GeometryHelper::quatFromViewDirection(const glm::vec3& direction) {
@@ -57,5 +60,5 @@ glm::quat GeometryHelper::quatFromViewDirection(const glm::vec3& direction) {
         w = RandVec3::randUnitVec();
     }
 
-    return glm::angleAxis(angle, glm::normalize(w));
+    return glm::angleAxis(angle, safeNormalize(w));
 }

@@ -1,12 +1,17 @@
 #include "hardpointaimhelper.h"
 
-#include "voxel/specialvoxels/hardpointvoxel.h"
 
 #include "equipment/weapon.h"
 #include "equipment/hardpoint.h"
 #include "equipment/weapons/gun.h"
-#include "worldobject/worldobject.h"
+
 #include "physics/physics.h"
+
+#include "utils/glmext/safenormalize.h"
+
+#include "voxel/specialvoxels/hardpointvoxel.h"
+
+#include "worldobject/worldobject.h"
 
 
 HardpointAimHelper::HardpointAimHelper(Hardpoint* hardpoint, WorldObject* targetObject):
@@ -53,7 +58,7 @@ void HardpointAimHelper::aim() {
     } while(offset > 0.1f);
 
     m_hitable = true;
-    m_direction = glm::normalize(m_point - m_hardpointPosition);
+    m_direction = safeNormalize(m_point - m_hardpointPosition);
 
     m_aimed = true;
 }

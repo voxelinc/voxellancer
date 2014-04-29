@@ -13,6 +13,8 @@
 
 #include "input/inputmapping.h"
 
+#include "utils/glmext/safenormalize.h"
+
 
 GamePlayFreecamInput::GamePlayFreecamInput() :
     GamePlayInput(),
@@ -84,11 +86,11 @@ void GamePlayFreecamInput::applyUpdates() {
     // some actions can be triggered in different ways or multiple times
     // especially those done by the mouse
     // collect them and apply them here
-    
+
     if (glm::length(m_moveUpdate) > 1.0f) {
-        m_moveUpdate = glm::normalize(m_moveUpdate);
+        m_moveUpdate = safeNormalize(m_moveUpdate);
     }
-    
+
     m_position += m_orientation * (m_moveUpdate * prop_moveFactor.get());
     m_moveUpdate = glm::vec3(0);
 
