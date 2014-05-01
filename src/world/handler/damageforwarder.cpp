@@ -55,8 +55,14 @@ void DamageForwarder::forward(DamageImpact& damageImpact) {
         return;
     }
 
-    // Hacked fix to prevent damage from being lost during forwarding
-    float losslessFactor = (damageImpact.damage() / totalForwardedDamage) * (forwardedPerNeighbour.size() / 26.0f);
+    /* Hacked fix to prevent damage from being lost during forwarding
+        The former algorithm did a nice job distributing damage relatively. That means voxels in the direction
+        of the damageVec received more damage, incorporated nicely with the fieldOfDamage.
+        HOWEVER, damage energy is lost during the distribution to the surrounding gridCells.
+        The calculation and application of the losslessFactor compensates this by virtually determining how much
+        damage was relatively lost compared to the original damage and multiplicates that to every forwarding
+    */
+    float losslessFactor = ((damageImpact.damage() + m_currentDeadVoxel->damageForwardingDestructionDamage())  / totalForwardedDamage) * (forwardedPerNeighbour.size() / 26.0f);
 
     for (auto& pair : forwardedPerNeighbour) {
         DamageImpact forwarded( m_currentWorldObject,
@@ -75,18 +81,24 @@ glm::vec3 DamageForwarder::calculateForwardingToVoxel(Voxel* voxel) {
     glm::ivec3 gridStep = voxel->gridCell() - m_currentDeadVoxel->gridCell();
     glm::vec3 damageImpactVec = glm::normalize(glm::inverse(m_currentWorldObject->transform().orientation()) * m_currentDamageVec);
 
-    // diagonals get less damage
-    float distanceFactor;
-    int gridSteps = glm::abs(gridStep.x) + glm::abs(gridStep.y) + glm::abs(gridStep.z);
-    switch (gridSteps) {
-        case 1: distanceFactor = 1.00f; break;
-        case 2: distanceFactor = 0.70f; break;
-        case 3: distanceFactor = 0.58f; break;
-        case 4: assert(false); break;
-    }
-
+    float distanceFactor = calculateDistanceFactor(gridStep);
     float dotProduct = glm::dot(damageImpactVec, glm::normalize(glm::vec3(gridStep)));
+
     glm::vec3 forwardedDamage = m_currentDamageVec * forwardFactor(dotProduct, m_currentFieldOfDamage);
     glm::vec3 createdDamage = glm::vec3(gridStep) * m_currentDeadVoxel->damageForwardingDestructionDamage();
+
     return distanceFactor * (forwardedDamage + createdDamage);
 }
+
+float DamageForwarder::calculateDistanceFactor(const glm::ivec3& gridStep) const {
+    glm::ivec3 absStep = glm::abs(gridStep);
+
+    int gridSteps = absStep.x + absStep.y + absStep.z;
+    switch (gridSteps) {
+        case 1: return 1.00f;
+        case 2: return 0.70f;
+        case 3: return 0.58f;
+        case 4: assert(false); return 0.0f;
+    }
+}
+

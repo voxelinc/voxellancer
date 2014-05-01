@@ -28,5 +28,6 @@ protected:;
     void forward(DamageImpact& damageImpact);
     float forwardFactor(float dotProduct, float fieldOfDamage);
     glm::vec3 calculateForwardingToVoxel(Voxel* voxel);
+    float calculateDistanceFactor(const glm::ivec3& gridStep) const;
 };
 

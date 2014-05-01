@@ -34,7 +34,7 @@ void DamageImpactGenerator::parse(std::list<WorldObjectCollision>& worldObjectCo
             glm::vec3 v2 = targetTransformB.applyTo(glm::vec3(voxelCollision.b().voxel()->gridCell())) - voxelCollision.b().voxel()->position();
 
             float speedDiff = glm::length(v1 - v2);
-            float freedEnergy = ((m1 * m2) / (2*(m1 + m2))) * (speedDiff * speedDiff) * (1.0f - m_elasticity * m_elasticity) * 10000.0f;
+            float freedEnergy = ((m1 * m2) / (2*(m1 + m2))) * (speedDiff * speedDiff) * (1.0f - m_elasticity * m_elasticity);
 
             if (voxelCollision.a().worldObject()->spawnState() != SpawnState::RemovalScheduled) {
                 m_damageImpactAccumulator.parse(DamageImpact(voxelCollision.a().worldObject(),
