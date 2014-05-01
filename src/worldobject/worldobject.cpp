@@ -5,13 +5,12 @@
 
 #include "resource/clustercache.h"
 
-#include "utils/tostring.h"
-
 #include "utils/handle/handle.h"
 #include "physics/physics.h"
 #include "worldobject/worldobjectinfo.h"
 #include "voxel/voxel.h"
 #include "worldobjectcomponents.h"
+
 
 WorldObject::WorldObject() :
     VoxelCluster(1.0f),
