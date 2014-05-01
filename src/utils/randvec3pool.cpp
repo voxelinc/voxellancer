@@ -5,7 +5,7 @@
 /**
  *  this needs to be a power of 2!
  */
-const static int POOL_SIZE = 1024;
+const static int POOL_SIZE = 4096;
 
 std::vector<glm::vec3> RandVec3Pool::s_pool;
 int RandVec3Pool::s_iter(0);

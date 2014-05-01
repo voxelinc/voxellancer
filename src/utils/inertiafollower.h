@@ -7,7 +7,6 @@
  *  Follows a position and orientation with a given inertia between
  *  0 = instant follow and 100 = never moves
  */
-
 class InertiaFollower {
 public:
     InertiaFollower(float directionalInertia, float angularInertia);
