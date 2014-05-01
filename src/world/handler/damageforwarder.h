@@ -24,7 +24,9 @@ protected:;
 
     VoxelAccumulator<DamageImpact> m_damageImpactAccumulator;
 
+
     void forward(DamageImpact& damageImpact);
-    float forwardFactor(float dotProduct, float fieldOfDamage, int neighbours);
+    float forwardFactor(float dotProduct, float fieldOfDamage);
+    glm::vec3 calculateForwardingToVoxel(Voxel* voxel);
 };
 
