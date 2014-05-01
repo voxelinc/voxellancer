@@ -5,6 +5,8 @@
 
 #include <glm/glm.hpp>
 
+#include <glow/logging.h>
+
 #include "voxel/voxelcluster.h"
 #include "voxel/voxeltreenode.h"
 
@@ -44,7 +46,6 @@ void DamageForwarder::forward(DamageImpact& damageImpact) {
 
     for(Voxel* neighbour : neighbours) {
         glm::vec3 damageVec = calculateForwardingToVoxel(neighbour);
-
         totalForwardedDamage += glm::length(damageVec);
 
         forwardedPerNeighbour.push_back(std::make_pair(neighbour, damageVec));
@@ -56,8 +57,6 @@ void DamageForwarder::forward(DamageImpact& damageImpact) {
 
     // Hacked fix to prevent damage from being lost during forwarding
     float losslessFactor = (damageImpact.damage() / totalForwardedDamage) * (forwardedPerNeighbour.size() / 26.0f);
-
-    std::cout << "LosslessFactor is " <<  damageImpact.damage() << " " << totalForwardedDamage << " " <<forwardedPerNeighbour.size() << std::endl;
 
     for (auto& pair : forwardedPerNeighbour) {
         DamageImpact forwarded( m_currentWorldObject,
@@ -86,9 +85,8 @@ glm::vec3 DamageForwarder::calculateForwardingToVoxel(Voxel* voxel) {
         case 4: assert(false); break;
     }
 
-    float dotProduct = glm::dot(damageImpactVec, glm::vec3(gridStep));
+    float dotProduct = glm::dot(damageImpactVec, glm::normalize(glm::vec3(gridStep)));
     glm::vec3 forwardedDamage = m_currentDamageVec * forwardFactor(dotProduct, m_currentFieldOfDamage);
     glm::vec3 createdDamage = glm::vec3(gridStep) * m_currentDeadVoxel->damageForwardingDestructionDamage();
-
     return distanceFactor * (forwardedDamage + createdDamage);
 }
