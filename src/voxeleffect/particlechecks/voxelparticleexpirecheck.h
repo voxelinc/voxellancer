@@ -4,7 +4,7 @@
 #include "voxelparticleremovecheck.h"
 
 
-class VoxelParticleEngine;
+class VoxelParticleEngineImpl;
 struct VoxelParticleData;
 
 
@@ -15,11 +15,11 @@ struct VoxelParticleData;
 */
 class VoxelParticleExpireCheck: public VoxelParticleRemoveCheck {
 public:
-    VoxelParticleExpireCheck(const VoxelParticleEngine& engine);
+    VoxelParticleExpireCheck(const VoxelParticleEngineImpl& engine);
 
     virtual bool isDead(const VoxelParticleData& particle) override;
 
 protected:
-    const VoxelParticleEngine& m_particleEngine;
+    const VoxelParticleEngineImpl& m_particleEngine;
 };
 

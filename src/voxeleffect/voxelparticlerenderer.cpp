@@ -11,11 +11,11 @@
 
 #include "utils/math.h"
 
-#include "voxelparticleengine.h"
+#include "voxelparticleengineimpl.h"
 #include "voxelmesh.h"
 
 
-VoxelParticleRenderer::VoxelParticleRenderer(VoxelParticleEngine* engine):
+VoxelParticleRenderer::VoxelParticleRenderer(VoxelParticleEngineImpl* engine):
     m_initialized(false),
     m_engine(engine),
     m_bufferSize(0),

@@ -1,10 +1,10 @@
 #include "voxelparticleexpirecheck.h"
 
 #include "voxeleffect/voxelparticledata.h"
-#include "voxeleffect/voxelparticleengine.h"
+#include "voxeleffect/voxelparticleengineimpl.h"
 
 
-VoxelParticleExpireCheck::VoxelParticleExpireCheck(const VoxelParticleEngine& engine):
+VoxelParticleExpireCheck::VoxelParticleExpireCheck(const VoxelParticleEngineImpl& engine):
     m_particleEngine(engine)
 {
 }

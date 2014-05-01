@@ -11,7 +11,7 @@ class ThreadPool;
 
 class Player;
 struct VoxelParticleData;
-class VoxelParticleEngine;
+class VoxelParticleEngineImpl;
 class VoxelParticleRemoveCheck;
 
 /*
@@ -21,7 +21,7 @@ class VoxelParticleRemoveCheck;
 */
 class VoxelParticleRemover {
 public:
-    VoxelParticleRemover(VoxelParticleEngine* world);
+    VoxelParticleRemover(VoxelParticleEngineImpl* world);
     ~VoxelParticleRemover();
 
     void addCheck(std::shared_ptr<VoxelParticleRemoveCheck> checker);
@@ -35,7 +35,7 @@ public:
 
 
 protected:
-    VoxelParticleEngine* m_particleEngine;
+    VoxelParticleEngineImpl* m_particleEngine;
     std::vector<std::shared_ptr<VoxelParticleRemoveCheck>> m_checker;
     std::unique_ptr<ThreadPool<VoxelParticleData>> m_threadPool;
     

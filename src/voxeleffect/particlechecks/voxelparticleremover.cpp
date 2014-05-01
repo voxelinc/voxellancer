@@ -5,12 +5,12 @@
 #include "utils/threadpool.h"
 
 #include "voxeleffect/voxelparticledata.h"
-#include "voxeleffect/voxelparticleengine.h"
+#include "voxeleffect/voxelparticleengineimpl.h"
 
 #include "voxelparticleremovecheck.h"
 
 
-VoxelParticleRemover::VoxelParticleRemover(VoxelParticleEngine* world):
+VoxelParticleRemover::VoxelParticleRemover(VoxelParticleEngineImpl* world):
     m_particleEngine(world),
     m_currentIndex(0),
     m_interval("particle.checkinterval"),
