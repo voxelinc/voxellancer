@@ -23,16 +23,8 @@
 World *World::s_instance = nullptr;
 
 World::World():
-    m_player(new Player()),
-    m_scriptEngine(new ScriptEngine()),
-    m_skybox(new Skybox()),
-    m_worldLogic(new WorldLogic(*this)),
-    m_worldTree(new WorldTree()),
-    m_god(new God(*this)),
-    m_particleEngine(new VoxelParticleEngine()),
-    m_factionMatrix(new FactionMatrix()),
-    m_eventPoller(new EventPoller()),
-    m_missionSystem(new MissionSystem())
+    m_worldLogic(std::ref(*this)),
+    m_god(std::ref(*this))
 {
 }
 
