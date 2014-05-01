@@ -71,7 +71,6 @@ CameraHead& Player::cameraHead() {
 HUD& Player::hud() {
     return *m_hud;
 }
-#include "utils/glmext/safenormalize.h"
 
 void Player::fire() {
     if (ship()) {
