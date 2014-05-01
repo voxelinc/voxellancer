@@ -77,7 +77,7 @@ glm::vec3 DamageForwarder::calculateForwardingToVoxel(Voxel* voxel) {
 
     // diagonals get less damage
     float distanceFactor;
-    int gridSteps = gridStep.x + gridStep.y + gridStep.z;
+    int gridSteps = glm::abs(gridStep.x) + glm::abs(gridStep.y) + glm::abs(gridStep.z);
     switch (gridSteps) {
         case 1: distanceFactor = 1.00f; break;
         case 2: distanceFactor = 0.70f; break;
