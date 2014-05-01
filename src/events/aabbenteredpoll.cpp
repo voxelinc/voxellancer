@@ -14,7 +14,7 @@ AABBEnteredPoll::AABBEnteredPoll(WorldObject* worldObject, const AABB& aabb, con
 }
 
 bool AABBEnteredPoll::isDead() {
-    return m_entered;
+    return m_entered || !m_worldObject.valid();
 }
 
 bool AABBEnteredPoll::poll() {
