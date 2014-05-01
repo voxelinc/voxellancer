@@ -33,6 +33,15 @@ void AbstractMove::setAngular(const glm::vec3& angular) {
     m_angular = angular;
 }
 
+Transform AbstractMove::moved(const Transform& transform, float deltaSec) const {
+    Transform result(transform);
+
+    result.moveWorld(m_directional * deltaSec);
+    result.rotateWorld(glm::quat(m_angular * deltaSec));
+
+    return result;
+}
+
 AbstractMove& AbstractMove::operator+=(const AbstractMove& other) {
     m_directional += other.directional();
     m_angular += other.angular();
