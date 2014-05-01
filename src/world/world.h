@@ -3,19 +3,8 @@
 #include <memory>
 #include <unordered_set>
 
+#include "forward.h"
 
-class EventPoller;
-class FactionMatrix;
-class God;
-class MissionSystem;
-class Player;
-class Ship;
-class Skybox;
-class ScriptEngine;
-class VoxelParticleEngine;
-class WorldObject;
-class WorldLogic;
-class WorldTree;
 
 class World {
 public:
