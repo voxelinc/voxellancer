@@ -7,14 +7,13 @@
 
 #include <glow/logging.h>
 
+#include "utils/gridneighbourhelper.h"g
+
+#include "voxel/voxel.h"
 #include "voxel/voxelcluster.h"
 #include "voxel/voxeltreenode.h"
 
-#include "voxel/voxelneighbourhelper.h"
-
 #include "worldobject/worldobject.h"
-#include "voxel/voxel.h"
-
 
 
 void DamageForwarder::forwardDamageImpacts(std::list<DamageImpact> &dampedDeadlyDamageImpacts) {
@@ -39,16 +38,26 @@ void DamageForwarder::forward(DamageImpact& damageImpact) {
     m_currentDamageVec = damageImpact.damageVec();
     m_currentFieldOfDamage = damageImpact.fieldOfDamage();
 
-    std::vector<Voxel*> neighbours = VoxelNeighbourHelper(m_currentWorldObject, true).neighbours(m_currentDeadVoxel);
+    std::vector<glm::ivec3> neighbourCells = GridNeighbourHelper(m_currentDeadVoxel->gridCell(), true).neighbours();
 
     std::list<std::pair<Voxel*, glm::vec3>> forwardedPerNeighbour;
     float totalForwardedDamage = 0.0f;
+    int affectedNeighbourCount = 0;
 
-    for(Voxel* neighbour : neighbours) {
-        glm::vec3 damageVec = calculateForwardingToVoxel(neighbour);
+    for(glm::ivec3& neighbourCell : neighbourCells) {
+        glm::vec3 damageVec = calculateForwardingTo(neighbourCell);
+        if (damageVec == glm::vec3(0.0f)) {
+            continue;
+        }
+
+        affectedNeighbourCount++;
+
         totalForwardedDamage += glm::length(damageVec);
 
-        forwardedPerNeighbour.push_back(std::make_pair(neighbour, damageVec));
+        Voxel* neighbourVoxel = m_currentWorldObject->voxel(neighbourCell);
+        if (neighbourVoxel) {
+            forwardedPerNeighbour.push_back(std::make_pair(neighbourVoxel, damageVec));
+        }
     }
 
     if (forwardedPerNeighbour.empty() || totalForwardedDamage == 0.0f) {
@@ -62,7 +71,7 @@ void DamageForwarder::forward(DamageImpact& damageImpact) {
         The calculation and application of the losslessFactor compensates this by virtually determining how much
         damage was relatively lost compared to the original damage and multiplicates that to every forwarding
     */
-    float losslessFactor = ((damageImpact.damage() + m_currentDeadVoxel->damageForwardingDestructionDamage())  / totalForwardedDamage) * (forwardedPerNeighbour.size() / 26.0f);
+    float losslessFactor = ((damageImpact.damage() + m_currentDeadVoxel->damageForwardingDestructionDamage())  / totalForwardedDamage) * (forwardedPerNeighbour.size() / static_cast<float>(affectedNeighbourCount));
 
     for (auto& pair : forwardedPerNeighbour) {
         DamageImpact forwarded( m_currentWorldObject,
@@ -77,8 +86,8 @@ float DamageForwarder::forwardFactor(float dotProduct, float fieldOfDamage) {
     return glm::max(0.0f, (fieldOfDamage - std::acos(dotProduct)) / fieldOfDamage);
 }
 
-glm::vec3 DamageForwarder::calculateForwardingToVoxel(Voxel* voxel) {
-    glm::ivec3 gridStep = voxel->gridCell() - m_currentDeadVoxel->gridCell();
+glm::vec3 DamageForwarder::calculateForwardingTo(const glm::ivec3& neighbourCell) {
+    glm::ivec3 gridStep = neighbourCell - m_currentDeadVoxel->gridCell();
     glm::vec3 damageImpactVec = glm::normalize(glm::inverse(m_currentWorldObject->transform().orientation()) * m_currentDamageVec);
 
     float distanceFactor = calculateDistanceFactor(gridStep);
