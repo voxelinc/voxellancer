@@ -76,7 +76,6 @@ void FactionMatrix::changeFriedlinessToPlayer(Faction& faction, float difference
             float friendliness = getRelation(*it->second.get(), faction).friendliness();
             getRelation(*it->second.get(), playerFaction()).changeFriendliness(difference*(friendliness/100));
         }
-        printf("%s: %f\n", it->first, getRelationToPlayer(*it->second).friendliness());
     }
 }
 

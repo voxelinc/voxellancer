@@ -27,6 +27,7 @@ public:
     FactionRelationType type() const;
 
     static std::string typeName(FactionRelationType type);
+    static FactionRelationType type(float friendliness);
 
 
 protected:

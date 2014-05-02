@@ -23,6 +23,7 @@ Character::Character(Ship& ship, Faction& faction):
     m_faction(&faction),
     m_task(nullptr)
 {
+    m_friendlinessToPlayer = World::instance()->factionMatrix().getRelationToPlayer(*m_faction).friendliness();
 }
 
 Faction& Character::faction() {
@@ -78,6 +79,37 @@ void Character::onCollisionWith(WorldObject* worldObject) {
     if (relationModifier != 0) {
         float friendliness = m_faction->relationTo(World::instance()->factionMatrix().getFaction("player")).friendliness();
         relationModifier *= 2.0f - glm::abs(friendliness) / 100.0f;
-        World::instance()->factionMatrix().changeFriedlinessToPlayer(*m_faction, relationModifier);
+        changeFriendlinessToPlayer(relationModifier);
     }
+}
+
+void Character::onKilledBy(WorldObject* worldObject) {
+    if (worldObject == World::instance()->player().ship()) {
+        World::instance()->factionMatrix().changeFriedlinessToPlayer(*m_faction, -10);
+        m_ship.squadLogic()->squad()->propagadeFriendlinessToPlayer(-30);
+    }
+}
+
+FactionRelationType Character::relationTypeToPlayer() {
+    float friendliness = glm::min(m_friendlinessToPlayer, World::instance()->factionMatrix().getRelationToPlayer(*m_faction).friendliness());
+    return FactionRelation::type(friendliness);
+}
+
+FactionRelationType Character::relationTypeTo(Faction& other) {
+    if (other.key() == "player") {
+        return relationTypeToPlayer();
+    }
+    return m_faction->relationTo(other).type();
+}
+
+void Character::changeFriendlinessToPlayer(float difference) {
+    m_friendlinessToPlayer += difference;
+    if (FactionRelation::type(m_friendlinessToPlayer) == FactionRelationType::Enemy && m_ship.squadLogic()->squad().get()) {
+        m_ship.squadLogic()->squad()->propagadeFriendlinessToPlayer(m_friendlinessToPlayer);
+    }
+    World::instance()->factionMatrix().changeFriedlinessToPlayer(*m_faction, difference / 10.0f);
+}
+
+void Character::setFriendlinessToPlayer(float friendliness) {
+    m_friendlinessToPlayer = friendliness;
 }

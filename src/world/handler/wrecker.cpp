@@ -40,3 +40,9 @@ WorldObject* Wrecker::wreckFromObject(WorldObject* object) {
 
     return wreckage;
 }
+
+void Wrecker::applyOnWreckageHooks() {
+    for (WorldObject* worldObject : m_wreckedObjects) {
+        worldObject->onDeath();
+    }
+}

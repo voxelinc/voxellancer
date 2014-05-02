@@ -41,6 +41,7 @@ public:
     Character* character();
 
     virtual void onCollisionWith(WorldObject* worldObject) override;
+    virtual void onDeath() override;
 
 
 protected:

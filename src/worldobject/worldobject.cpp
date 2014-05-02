@@ -13,6 +13,10 @@
 #include "voxel/voxel.h"
 #include "worldobjectcomponents.h"
 
+#include "worldobject/ship.h"
+#include "equipment/weapons/bullet.h"
+#include "equipment/weapons/rocket.h"
+
 WorldObject::WorldObject() :
     VoxelCluster(1.0f),
     m_physics(new Physics(*this)),
@@ -154,6 +158,22 @@ void WorldObject::onCollision() {
 }
 
 void WorldObject::onCollisionWith(WorldObject* worldObject) {
+    switch (worldObject->objectType()) {
+        case WorldObjectType::Ship:
+            m_lastDamager = worldObject;
+        break;
+        case WorldObjectType::Bullet:
+            m_lastDamager = static_cast<Bullet*>(worldObject)->creator();
+        break;
+        case WorldObjectType::Rocket:
+            m_lastDamager = static_cast<Rocket*>(worldObject)->creator();
+        break;
+        default:
+            m_lastDamager = worldObject;
+    }
+}
+
+void WorldObject::onDeath() {
 
 }
 

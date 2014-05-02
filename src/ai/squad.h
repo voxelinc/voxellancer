@@ -26,6 +26,7 @@ public:
 
     const std::vector<Ship*>& members();
 
+    void propagadeFriendlinessToPlayer(float friendliness);
 
 protected:
     friend class SquadLogic;

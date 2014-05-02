@@ -2,6 +2,8 @@
 
 #include <memory>
 
+#include "factions/factionrelation.h"
+
 
 class AiTask;
 class Faction;
@@ -27,9 +29,19 @@ public:
 
     void onCollisionWith(WorldObject* worldObject);
 
+    void onKilledBy(WorldObject* worldObject);
+
+    FactionRelationType relationTypeToPlayer();
+
+    FactionRelationType relationTypeTo(Faction& other);
+
+    void setFriendlinessToPlayer(float friendliness);
+
 protected:
     Ship& m_ship;
     Faction* m_faction;
     std::shared_ptr<AiTask> m_task;
+    float m_friendlinessToPlayer;
+    void changeFriendlinessToPlayer(float difference);
 };
 

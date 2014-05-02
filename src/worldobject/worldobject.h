@@ -83,6 +83,7 @@ public:
 
     virtual void onCollision();
     virtual void onCollisionWith(WorldObject* collider);
+    virtual void onDeath();
     virtual void onSpawnFail();
     //virtual void onWrecked();
 
@@ -108,5 +109,6 @@ protected:
     bool m_crucialVoxelDestroyed;
     float m_collisionFieldOfDamage;
     SpawnState m_spawnState;
+    WorldObject* m_lastDamager;
 };
 
