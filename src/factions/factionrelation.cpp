@@ -3,6 +3,7 @@
 #include <cassert>
 
 #include "faction.h"
+#include "glm/glm.hpp"
 
 
 FactionRelation::FactionRelation(Faction& factionA, Faction& factionB, float friendliness):
@@ -54,5 +55,9 @@ std::string FactionRelation::typeName(FactionRelationType type) {
         default: assert(0);
     }
     return "";
+}
+
+void FactionRelation::changeFriendliness(float difference) {
+    m_friendliness = glm::max(-100.0f,glm::min(100.0f, m_friendliness + difference));
 }
 

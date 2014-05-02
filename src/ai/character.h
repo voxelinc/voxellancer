@@ -6,6 +6,7 @@
 class AiTask;
 class Faction;
 class Ship;
+class WorldObject;
 
 /**
  *  The Character is the Ship's pilot and executes his AiTask. He has a Faction which decides
@@ -23,6 +24,8 @@ public:
     std::shared_ptr<AiTask> task();
 
     virtual void update(float deltaSec);
+
+    void onCollisionWith(WorldObject* worldObject);
 
 protected:
     Ship& m_ship;

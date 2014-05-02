@@ -82,6 +82,7 @@ public:
     void updateTransformAndGeode(const glm::vec3& position, const glm::quat& orientation);
 
     virtual void onCollision();
+    virtual void onCollisionWith(WorldObject* collider);
     virtual void onSpawnFail();
     //virtual void onWrecked();
 

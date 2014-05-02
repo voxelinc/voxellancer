@@ -40,6 +40,8 @@ public:
     void setCharacter(Character* character);
     Character* character();
 
+    virtual void onCollisionWith(WorldObject* worldObject) override;
+
 
 protected:
     std::unique_ptr<Character> m_character;

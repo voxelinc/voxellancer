@@ -4,6 +4,8 @@
 #include "ai/character.h"
 #include "ai/squadlogic.h"
 
+#include "player.h"
+
 #include "factions/factionmatrix.h"
 
 #include "worldobject/worldobjectinfo.h"
@@ -66,4 +68,9 @@ SquadLogic* Ship::squadLogic() {
     return m_squadLogic.get();
 }
 
+void Ship::onCollisionWith(WorldObject* worldObject) {
+    if (this != World::instance()->player().ship()) {
+        m_character->onCollisionWith(worldObject);
+    }
+}
 

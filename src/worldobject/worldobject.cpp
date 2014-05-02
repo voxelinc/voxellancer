@@ -153,6 +153,10 @@ void WorldObject::onCollision() {
 
 }
 
+void WorldObject::onCollisionWith(WorldObject* worldObject) {
+
+}
+
 void WorldObject::onSpawnFail() {
 
 }

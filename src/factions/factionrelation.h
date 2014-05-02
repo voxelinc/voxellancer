@@ -22,6 +22,7 @@ public:
 
     float friendliness() const;
     void setFriendliness(float friendliness);
+    void changeFriendliness(float difference);
 
     FactionRelationType type() const;
 
