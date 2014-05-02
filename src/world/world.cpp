@@ -23,8 +23,8 @@
 World *World::s_instance = nullptr;
 
 World::World():
-    m_worldLogic(std::ref(*this)),
-    m_god(std::ref(*this))
+    m_worldLogic(*this),
+    m_god(*this)
 {
 }
 

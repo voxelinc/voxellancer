@@ -3,7 +3,7 @@
 
 template<typename T>
 template<typename... Args>
-Component<T>::Component(Args... args):
+Component<T>::Component(Args&... args):
     m_value(new T(args...))
 {
 }

@@ -7,7 +7,7 @@ template<typename T>
 class Component {
 public:
     template<typename... Args>
-    Component(Args... args);
+    Component(Args&... args);
 
     T& get();
 
