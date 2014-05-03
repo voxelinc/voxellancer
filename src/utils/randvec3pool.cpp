@@ -2,7 +2,7 @@
 
 #include "randvec3.h"
 
-/**
+/*
  * this needs to be a power of 2!
  */
 const static int POOL_SIZE = 4096;

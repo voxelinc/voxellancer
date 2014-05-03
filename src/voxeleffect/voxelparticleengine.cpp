@@ -110,7 +110,7 @@ void VoxelParticleEngine::particleChanged(int bufferIndex) {
         m_gpuParticleBufferInvalidBegin = bufferIndex;
         m_gpuParticleBufferInvalidEnd = bufferIndex;
     }
-    /**
+    /*
      * If the range of particles gets too big, probably because of too many
      * particles between two free positions, push the old range to the gpu
      */
@@ -137,7 +137,7 @@ void VoxelParticleEngine::setBufferSize(int bufferSize) {
 }
 
 
-/**
+/*
  * Update the GPU buffers of all components that use such
  */
 void VoxelParticleEngine::updateGPUBuffers(int begin, int end) {

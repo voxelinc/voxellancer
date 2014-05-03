@@ -11,7 +11,7 @@ EngineBuilder::EngineBuilder(const std::string& name):
 }
 
 Engine* EngineBuilder::build() {
-    /**
+    /*
      * Currently there are no special implementations, so every name
      * will be resolved to a normal Engine loaded from properties
      */

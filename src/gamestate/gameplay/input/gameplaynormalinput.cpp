@@ -33,7 +33,7 @@
 
 
 
-/**
+/*
  *  360 gamepad assignment: (direction given for positive values)
  *  - A0: left stick right                        move right
  *  - A1: left stick up                           move forward
@@ -42,7 +42,7 @@
  *  - A4: right stick right                       rotate up
  */
 
-/**
+/*
  *  Button assignment
  *  B0: A
  *  B1: B
