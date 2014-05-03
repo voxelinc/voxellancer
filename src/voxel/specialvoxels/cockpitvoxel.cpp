@@ -21,8 +21,3 @@ void CockpitVoxel::onRemoval() {
     //TODO: Tell my cockpit I'm gone
 }
 
-void CockpitVoxel::onDestruction() {
-    Voxel::onDestruction();
-    // Spawn dead pilot
-}
-

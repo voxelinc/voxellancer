@@ -42,7 +42,7 @@ public:
 
     // These hooks apply only for WorldObjects and do not need to be called by pure VoxelClusters
     virtual void onRemoval();
-    virtual void onDestruction();
+    virtual void onDestruction(float energy);
 
 
 

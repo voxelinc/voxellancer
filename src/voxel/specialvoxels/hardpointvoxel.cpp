@@ -38,8 +38,3 @@ void HardpointVoxel::onRemoval() {
     Voxel::onRemoval();
 }
 
-void HardpointVoxel::onDestruction() {
-    //Drop Ammo?
-    Voxel::onDestruction();
-}
-

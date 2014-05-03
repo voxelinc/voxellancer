@@ -28,8 +28,8 @@ void FuelVoxel::onRemoval() {
 
 }
 
-void FuelVoxel::onDestruction() {
-    Voxel::onDestruction();
+void FuelVoxel::onDestruction(float energy) {
+    Voxel::onDestruction(energy);
 
     WorldObject* worldObject = m_voxelTreeNode->voxelTree()->worldObject();
     // In addition to spawning debris, explode a little
@@ -40,7 +40,7 @@ void FuelVoxel::onDestruction() {
     generator.setCount(30);
     generator.setEmissiveness(0.4f);
     generator.setColor(0xFF0000);
-    generator.setForce(0.4f);
+    generator.setForce(0.004f * energy, 0.5f);
     generator.setLifetime(0.9f, 0.4f);
 
     generator.spawn();

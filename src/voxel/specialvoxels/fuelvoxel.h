@@ -12,6 +12,6 @@ public:
     virtual float damageForwardingDestructionDamage() override;
 
     virtual void onRemoval() override;
-    virtual void onDestruction() override;
+    virtual void onDestruction(float energy) override;
 };
 

@@ -56,9 +56,9 @@ void VoxelParticleEngine::setPlayer(Player& m_player) {
 void VoxelParticleEngine::addParticle(const VoxelParticleSetup& particleSetup, const VoxelCluster* creator) {
     VoxelParticleData particle = particleSetup.toData(m_time);
 
-    if (creator != nullptr && VoxelParticleFutureCheck::intersectsIn(particle, 0.5f, *creator)) {
-        return;
-    }
+    //if (creator != nullptr && VoxelParticleFutureCheck::intersectsIn(particle, 0.5f, *creator)) {
+    //    return;
+    //}
 
     if(m_freeParticleBufferIndices.empty()) {
         setBufferSize(m_cpuParticleBuffer.size() * 2);

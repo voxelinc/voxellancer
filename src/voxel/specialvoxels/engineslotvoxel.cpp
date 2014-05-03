@@ -36,7 +36,3 @@ void EngineSlotVoxel::onRemoval() {
     Voxel::onRemoval();
 }
 
-void EngineSlotVoxel::onDestruction() {
-    Voxel::onDestruction();
-}
-

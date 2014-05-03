@@ -23,7 +23,4 @@ void CrucialVoxel::onRemoval(){
     //TODO: Destroy ship / make wreckage?
 }
 
-void CrucialVoxel::onDestruction(){
-    Voxel::onDestruction();
-}
 
