@@ -27,7 +27,8 @@ Movement::Movement(WorldObject& worldObject, const Transform& originalTransform,
     m_collisionDetector(m_worldObject.collisionDetector()),
     m_originalTransform(originalTransform),
     m_targetTransform(targetTransform),
-    m_distance(0.0f)
+    m_distance(0.0f),
+    m_successful(true)
 {
 }
 
@@ -35,6 +36,8 @@ Movement::~Movement() = default;
 
 bool Movement::perform() {
     assert(m_worldObject.collisionDetector().geode() != nullptr);
+
+    m_successful = true;
 
     IAABB phaseAABB = m_worldObject.bounds().aabb(m_originalTransform).united(m_worldObject.bounds().aabb(m_targetTransform));
     WorldTreeNode* nodeHint = m_worldObject.collisionDetector().geode()->containingNode();
@@ -44,15 +47,17 @@ bool Movement::perform() {
         m_distance = glm::length(directionalStep);
 
         if (m_distance > MAX_STEPPED_DISTANCE) {
-            return performSplitted();
+            performSplitted();
         } else {
-            return performStepped(phaseAABB);
+            performStepped(phaseAABB);
         }
     } else {
-        m_worldObject.updateTransformAndGeode(m_targetTransform.position(), m_targetTransform.orientation());
-
-        return true;
+        m_intersectionFreeTransform = m_targetTransform;
     }
+
+    m_worldObject.updateTransformAndGeode(m_intersectionFreeTransform.position(), m_intersectionFreeTransform.orientation());
+
+    return m_successful;
 }
 
 bool Movement::performSplitted() {
@@ -61,7 +66,8 @@ bool Movement::performSplitted() {
     Movement left(m_worldObject, m_originalTransform, pivotTransform);
     Movement right(m_worldObject, pivotTransform, m_targetTransform);
 
-    return left.perform() && right.perform();
+    m_successful = left.perform() && right.perform();
+    m_intersectionFreeTransform = m_worldObject.transform();
 }
 
 bool Movement::performStepped(const IAABB& phaseAABB) {
@@ -70,10 +76,10 @@ bool Movement::performStepped(const IAABB& phaseAABB) {
     WorldTreeNode* nodeHint = m_worldObject.collisionDetector().geode()->containingNode();
     std::unordered_set<WorldTreeGeode*> possibleColliders = WorldTreeQuery(m_collisionDetector.worldTree(), &phaseAABB, nodeHint, &m_worldObject.collisionFilter()).nearGeodes();
 
-    Transform intersectionFreeTransform = m_worldObject.transform();
+    m_intersectionFreeTransform = m_worldObject.transform();
 
     for (int s = 0; s < stepCount; s++) {
-        intersectionFreeTransform = m_worldObject.transform();
+        m_intersectionFreeTransform = m_worldObject.transform();
         Transform newTransform(calculateStep(s, stepCount));
 
         m_worldObject.setTransform(newTransform);
@@ -81,15 +87,11 @@ bool Movement::performStepped(const IAABB& phaseAABB) {
         const std::list<VoxelCollision>& collisions = m_collisionDetector.checkCollisions(possibleColliders);
 
         if (!collisions.empty()) {
-            break;
+            m_successful = false;
         } else {
-            intersectionFreeTransform = newTransform;
+            m_intersectionFreeTransform = newTransform;
         }
     }
-
-    m_worldObject.updateTransformAndGeode(intersectionFreeTransform.position(), intersectionFreeTransform.orientation());
-
-    return true;
 }
 
 int Movement::calculateStepCount() {

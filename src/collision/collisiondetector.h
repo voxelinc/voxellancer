@@ -28,7 +28,7 @@ public:
 
     /**
      * Checks for collision against all objects inside worldObject->aabb() that
-     * match worldObeject->collisionFilter()
+     * match worldObject->collisionFilter()
      */
     std::list<VoxelCollision>& checkCollisions();
 

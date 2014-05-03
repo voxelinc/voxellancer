@@ -22,9 +22,13 @@ public:
 protected:
     WorldObject& m_worldObject;
     CollisionDetector& m_collisionDetector;
+
     Transform m_originalTransform;
+    Transform m_intersectionFreeTransform;
     Transform m_targetTransform;
+
     float m_distance;
+    bool m_successful;
 
 
     bool performSplitted();
