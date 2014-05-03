@@ -21,8 +21,8 @@ EngineTrailGenerator::EngineTrailGenerator(Engine& engine, const WorldObject& cr
     m_lastValid(false),
     m_stepRest(0.0f),
     m_timeSinceLastSpawn(0),
-    prop_stepDistance("vfx.engineTrailStepDistance"),
-    prop_idleTime("vfx.engineTrailIdleCooldown")
+    m_stepDistance("vfx.engineTrailStepDistance"),
+    m_idleTime("vfx.engineTrailIdleCooldown")
 {
     m_generator->setColor(0x6666FF);
     m_generator->setEmissiveness(0.4f);
@@ -54,7 +54,7 @@ void EngineTrailGenerator::update(float deltaSec) {
         if (m_engine.state().directional().z <= -0.05f) { //only when moving forward
             spawnTrail();
         } else {
-            if (m_timeSinceLastSpawn > prop_idleTime) { // When not moving, we still want some exhausts
+            if (m_timeSinceLastSpawn > m_idleTime) { // When not moving, we still want some exhausts
                 spawnAt(calculateSpawnPosition());
             }
         }
@@ -68,10 +68,10 @@ void EngineTrailGenerator::spawnTrail() {
 
     glm::vec3 newPosition = calculateSpawnPosition();
     glm::vec3 distance = newPosition - m_lastSpawnPoint;
-    glm::vec3 step = GeometryHelper::safeNormalize(distance) * prop_stepDistance.get();
+    glm::vec3 step = GeometryHelper::safeNormalize(distance) * m_stepDistance.get();
     glm::vec3 currentPosition = m_lastSpawnPoint;
 
-    float stepCount = glm::length(distance) / prop_stepDistance;
+    float stepCount = glm::length(distance) / m_stepDistance;
 
     m_stepRest += std::fmod(stepCount, 1.0f);
 
