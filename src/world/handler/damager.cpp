@@ -3,7 +3,6 @@
 #include <set>
 #include <glow/logging.h>
 
-#include "utils/tostring.h"
 #include "voxel/voxel.h"
 
 #include "worldobject/worldobject.h"
@@ -15,7 +14,7 @@
 #include "player.h"
 
 Damager::Damager() :
-    m_playerShipUndestroyable("general.playerShipUndestroyable") 
+    m_playerShipUndestroyable("general.playerShipUndestroyable")
 {
 }
 

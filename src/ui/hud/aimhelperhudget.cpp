@@ -3,7 +3,6 @@
 #include <glm/glm.hpp>
 
 #include "utils/geometryhelper.h"
-#include "utils/tostring.h"
 
 #include "worldobject/ship.h"
 

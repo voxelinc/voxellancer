@@ -1,7 +1,5 @@
 #include "collisiondetector.h"
 
-#include "utils/tostring.h"
-
 #include "voxel/voxeltreenode.h"
 
 #include "worldtree/worldtree.h"
