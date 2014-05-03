@@ -7,10 +7,10 @@
 class Transition;
 
 /**
-    Abstract State that can function as a StateMachine
-    This way you can nest states as you wish and still maintain the interface for the SubStates
-    that you specify in ActualState (see GameState for a usage-example)
-*/
+ * Abstract State that can function as a StateMachine
+ * This way you can nest states as you wish and still maintain the interface for the SubStates
+ * that you specify in ActualState (see GameState for a usage-example)
+ */
 class State {
 public:
     State(State* parent = nullptr);
@@ -48,21 +48,21 @@ public:
     void removeTransition(Transition* transition);
 
     /**
-        Performs a Transition from the currentSubState, if such
-        isPossible()
-    */
+     * Performs a Transition from the currentSubState, if such
+     * isPossible()
+     */
     virtual void update(float deltaSec);
 
     /**
-        Overrideable method that is called whenever a state or any of its substates come to be currentSubState
-        This happens recursively up to the root-state
-    */
+     * Overrideable method that is called whenever a state or any of its substates come to be currentSubState
+     * This happens recursively up to the root-state
+     */
     virtual void onEntered();
 
     /**
-        Overrideable method that is called whenever a state ceases to be currentSubState
-        This happens recursively up to the root-state
-    */
+     * Overrideable method that is called whenever a state ceases to be currentSubState
+     * This happens recursively up to the root-state
+     */
     virtual void onLeft();
 
 
@@ -79,16 +79,16 @@ protected:
 
 
     /**
-        Returns direct substate having &descendant as a descendant
-        Returns m_self if  descendant is substate of this
-        Returns nullptr if &descendant is no descendant of  this
-    */
+     * Returns direct substate having &descendant as a descendant
+     * Returns m_self if  descendant is substate of this
+     * Returns nullptr if &descendant is no descendant of  this
+     */
     State* pathToDescendant(State* descendant);
 
     /**
-        Ensures the graph of m_currentSubState points from the root to targt
-        calls onLeft() on every state left and onEntered() on every entered
-    */
+     * Ensures the graph of m_currentSubState points from the root to targt
+     * calls onLeft() on every state left and onEntered() on every entered
+     */
     void transit(State* target);
 
     void leave();

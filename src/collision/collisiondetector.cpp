@@ -1,7 +1,5 @@
 #include "collisiondetector.h"
 
-#include "utils/tostring.h"
-
 #include "voxel/voxeltreenode.h"
 
 #include "worldtree/worldtree.h"
@@ -70,8 +68,14 @@ std::list<VoxelCollision>& CollisionDetector::checkCollisions() {
 
     IAABB worldObjectAABB = m_worldObject.bounds().aabb();
     std::unordered_set<WorldTreeGeode*> possibleColliders = WorldTreeQuery(m_worldTree, &worldObjectAABB, m_geode->hint().node(), &m_worldObject.collisionFilter()).nearGeodes();
-    possibleColliders.erase(m_geode);
 
+    checkCollisions(possibleColliders);
+
+    return m_collisions;
+}
+
+
+std::list<VoxelCollision>& CollisionDetector::checkCollisions(const std::unordered_set<WorldTreeGeode*>& possibleColliders) {
     for (WorldTreeGeode* possibleCollider : possibleColliders) {
         assert(possibleCollider->worldObject() != nullptr);
         WorldObject* other = possibleCollider->worldObject();

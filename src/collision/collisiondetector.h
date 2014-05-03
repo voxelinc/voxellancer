@@ -2,10 +2,12 @@
 
 #include <memory>
 #include <list>
+#include <unordered_set>
 
 #include <glm/glm.hpp>
 
 #include "collision/voxelcollision.h"
+
 
 class Voxel;
 class WorldTree;
@@ -16,8 +18,7 @@ class VoxelTree;
 class VoxelTreeNode;
 
 // this class contains datastructures for collision detection
-class CollisionDetector
-{
+class CollisionDetector {
 public:
     CollisionDetector(WorldObject& worldObject);
     ~CollisionDetector();
@@ -25,8 +26,18 @@ public:
     void addVoxel(Voxel* voxel);
     void removeVoxel(Voxel* voxel);
 
-    std::list<VoxelCollision> &checkCollisions();
-    std::list<VoxelCollision> &lastCollisions();
+    /**
+     * Checks for collision against all objects inside worldObject->aabb() that
+     * match worldObject->collisionFilter()
+     */
+    std::list<VoxelCollision>& checkCollisions();
+
+    /**
+     * Check for collision against a caller-defined set of WorldObjects
+     */
+    std::list<VoxelCollision>& checkCollisions(const std::unordered_set<WorldTreeGeode*>& possibleColliders);
+
+    std::list<VoxelCollision>& lastCollisions();
 
     void reset();
 

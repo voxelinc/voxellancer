@@ -12,6 +12,10 @@ class WorldTreeShadowNode;
  */
 class WorldTreeHint {
 public:
+    /**
+     * This constructor shouldn't be called by the user directly.
+     * Instead use WorldTreeNode::hint() to acquire a WorldTreeHint
+     */
     WorldTreeHint(const std::shared_ptr<WorldTreeShadowNode>& shadowNode);
 
     WorldTreeNode* node();
