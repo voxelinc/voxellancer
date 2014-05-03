@@ -80,6 +80,17 @@ glm::vec3 Transform::inverseApplyTo(const glm::vec3 &vertex) const {
     return ((glm::inverse(m_orientation) * (vertex - m_position)) / m_scale) + m_center;
 }
 
+Transform Transform::mixed(const Transform& other, float v) {
+    Transform result;
+
+    result.setOrientation(glm::slerp(m_orientation, other.orientation(), v));
+    result.setPosition(glm::mix(m_position, other.position(), v));
+    result.setScale(glm::mix(m_scale, other.scale(), v));
+    result.setCenter(glm::mix(m_center, other.center(), v));
+
+    return result;
+}
+
 float Transform::scale() const {
     return m_scale;
 }
