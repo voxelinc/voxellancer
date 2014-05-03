@@ -4,10 +4,10 @@
 #include "triggerable.h"
 
 
-/*
-    Transition that is invokable by calling trigger
-    Useful for events like keypresses or reacting on an attack
-*/
+/**
+ * Transition that is invokable by calling trigger
+ * Useful for events like keypresses or reacting on an attack
+ */
 class TriggeredTransition: public Transition, public Triggerable {
 public:
     TriggeredTransition(State* from, State* to);

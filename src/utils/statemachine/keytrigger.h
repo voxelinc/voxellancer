@@ -6,10 +6,10 @@
 #include "trigger.h"
 
 
-/*
-    Triggers when the set key is pressed down after
-    the creation of this object
-*/
+/**
+ * Triggers when the set key is pressed down after
+ * the creation of this object
+ */
 class KeyTrigger : public Trigger {
 public:
     KeyTrigger();
