@@ -98,10 +98,10 @@ void EngineTrailGenerator::spawnAt(glm::vec3 position) {
 }
 
 /*
-    The worldobject and therefore the radius and scale of the particles
-    may change every frame, so the only way to really ensure safety here is to set
-    them very frame
-*/
+ * The worldobject and therefore the radius and scale of the particles
+ * may change every frame, so the only way to really ensure safety here is to set
+ * them very frame
+ */
 void EngineTrailGenerator::updateTrailSettings() {
     const WorldObject* worldObject = m_engine.engineSlot()->components()->worldObject();
 
