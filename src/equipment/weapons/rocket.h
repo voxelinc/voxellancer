@@ -26,7 +26,7 @@ public:
     virtual WorldObjectType objectType() const override;
 
     WorldObject* target();
-    void setTarget(WorldObject* targetObject);
+    virtual void setTarget(WorldObject* targetObject);
 
     virtual void update(float deltaSec) override;
 
@@ -36,5 +36,7 @@ protected:
     BoardComputer m_boardComputer;
     std::unique_ptr<AiTask> m_aiTask;
 
+    void spawnExplosion() override;
+    void onLifetimeOver() override;
 };
 

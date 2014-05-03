@@ -7,18 +7,21 @@
 
 AABBEnteredPoll::AABBEnteredPoll(WorldObject* worldObject, const AABB& aabb, const Callback& callback):
     EventPoll(callback),
-    m_worldObject(worldObject->handle<WorldObject>()),
+    m_worldObject(makeHandle(worldObject)),
     m_aabb(aabb),
     m_entered(false)
 {
 }
 
 bool AABBEnteredPoll::isDead() {
-    return m_entered;
+    return m_entered || !m_worldObject.valid();
 }
 
 bool AABBEnteredPoll::poll() {
-    return m_worldObject->bounds().aabb().intersects(m_aabb);
+    if (m_worldObject.valid()) {
+        return m_worldObject->bounds().aabb().intersects(m_aabb);
+    }
+    return false;
 }
 
 void AABBEnteredPoll::specialOnCallback() {

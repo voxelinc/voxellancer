@@ -162,10 +162,11 @@ int AiBindings::apiAddFightTaskTarget(apikey key, apikey worldObjectKey) {
     }
 
     WorldObject* worldObject = m_scriptEngine.get<WorldObject>(worldObjectKey);
-    if (!worldObject) { return -1; }
+    if (!worldObject){
+        return -1;
+    }
 
-
-    fightTask->addTarget(worldObject->handle<WorldObject>());
+    fightTask->addTarget(makeHandle(worldObject));
     return 0;
 }
 
