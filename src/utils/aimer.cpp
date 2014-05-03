@@ -2,6 +2,10 @@
 
 #include <glm/glm.hpp>
 
+#include "collision/collisiondetector.h"
+#include "collision/collisionfilter.h"
+
+#include "voxel/voxel.h"
 #include "voxel/voxeltree.h"
 #include "voxel/voxeltreenode.h"
 
@@ -9,9 +13,8 @@
 
 #include "worldobject/worldobject.h"
 
+#include "worldtree/worldtreegeode.h"
 #include "worldtree/worldtreequery.h"
-#include "collision/collisionfilter.h"
-#include "voxel/voxel.h"
 
 
 Aimer::Aimer(WorldObject* worldObject) :
@@ -33,18 +36,20 @@ void Aimer::setWorldObject(WorldObject* worldObject) {
 
 glm::vec3 Aimer::aim(const Ray& ray) {
     assert(m_worldObject);
+    assert(m_worldObject->collisionDetector().geode());
+
     glm::vec3 targetPoint;
 
-    WorldTreeQuery wordltreequery(&World::instance()->worldTree(), &ray, nullptr, &m_worldObject->collisionFilter());
+    WorldTreeQuery query(&World::instance()->worldTree(), &ray, m_worldObject->collisionDetector().geode()->hint(), &m_worldObject->collisionFilter());
 
-    std::unordered_set<Voxel*> intersectingVoxels = wordltreequery.intersectingVoxels();
+    std::unordered_set<Voxel*> intersectingVoxels = query.intersectingVoxels();
 
     if(!intersectingVoxels.empty()) {
         targetPoint = nearestTarget(intersectingVoxels, ray.origin());
     } else {
         targetPoint = infinity(ray);
     }
-    
+
     m_lastDistance = glm::length(ray.origin() - targetPoint);
     return targetPoint;
 }

@@ -10,8 +10,7 @@
 class WorldTreeNode;
 class WorldObject;
 
-class WorldTreeGeode
-{
+class WorldTreeGeode {
 public:
     WorldTreeGeode(WorldObject* worldObject);
     virtual ~WorldTreeGeode();

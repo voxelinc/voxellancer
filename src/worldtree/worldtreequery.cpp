@@ -17,9 +17,9 @@
 
 
 
-WorldTreeQuery::WorldTreeQuery(WorldTree* worldTree, const AbstractShape* shape, WorldTreeNode* nodeHint, CollisionFilter* collisionFilter):
+WorldTreeQuery::WorldTreeQuery(WorldTree* worldTree, const AbstractShape* shape, const WorldTreeHint& hint, CollisionFilter* collisionFilter):
     m_worldTree(worldTree),
-    m_nodeHint(nodeHint),
+    m_hint(hint),
     m_collisionFilter(collisionFilter),
     m_shape(shape),
     m_queryInterrupted(false)
@@ -97,7 +97,7 @@ std::unordered_set<WorldObject*> WorldTreeQuery::intersectingWorldObjects() {
 
 WorldTreeNode* WorldTreeQuery::getQueryRoot(WorldTreeNode* node) const {
     if(node == nullptr) {
-        node = m_nodeHint;
+        node = m_hint.node();
     }
 
     if (node == nullptr) {

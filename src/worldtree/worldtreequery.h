@@ -4,17 +4,20 @@
 #include <unordered_set>
 #include <set>
 
+#include "worldtreehint.h"
+
+
+class AbstractShape;
+class CollisionFilter;
 class Voxel;
+class WorldObject;
 class WorldTree;
 class WorldTreeNode;
 class WorldTreeGeode;
-class WorldObject;
-class CollisionFilter;
-class AbstractShape;
 
 class WorldTreeQuery {
 public:
-    WorldTreeQuery(WorldTree* worldTree, const AbstractShape* shape, WorldTreeNode* nodeHint = nullptr, CollisionFilter* collisionFilter = nullptr);
+    WorldTreeQuery(WorldTree* worldTree, const AbstractShape* shape, const WorldTreeHint& hint = WorldTreeHint(), CollisionFilter* collisionFilter = nullptr);
 
     bool areGeodesNear();
 
@@ -28,7 +31,7 @@ public:
 
 protected:
     WorldTree* m_worldTree;
-    WorldTreeNode* m_nodeHint;
+    WorldTreeHint m_hint;
     CollisionFilter* m_collisionFilter;
     const AbstractShape* m_shape;
     bool m_queryInterrupted;
