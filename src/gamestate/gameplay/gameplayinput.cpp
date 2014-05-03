@@ -4,9 +4,9 @@ void GamePlayInput::resizeEvent(const unsigned int width, const unsigned int hei
 }
 
 /**
-*    Check here for single-time key-presses, that you do not want fired multiple times, e.g. toggles
-*    This only applies for menu events etc, for action events set the toggleAction attribute to true
-*/
+ * Check here for single-time key-presses, that you do not want fired multiple times, e.g. toggles
+ * This only applies for menu events etc, for action events set the toggleAction attribute to true
+ */
 void GamePlayInput::keyCallback(int key, int scancode, int action, int mods) {
 }
 

@@ -4,10 +4,12 @@
 #include <glm/gtc/quaternion.hpp>
 
 
-/* General Object in our 3D world with position and orientation
-*/
+/**
+ * Holds position, orientation, scale and (rotation)center of an object
+ * applyTo() and inverseApplyTo() translate between the local coordinate
+ * system of the object and the world coordinate system.
+ */
 class Transform {
-
 public:
     Transform(glm::vec3 center = glm::vec3(0), float scale = 1.0);
     Transform(const Transform& transform, const glm::vec3& positionDelta, const glm::quat& orientationDelta);
