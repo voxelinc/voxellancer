@@ -1,6 +1,5 @@
 #include "enginetrailgenerator.h"
 
-#include "utils/tostring.h"
 #include "utils/geometryhelper.h"
 
 #include "voxel/specialvoxels/engineslotvoxel.h"
@@ -21,8 +20,8 @@ EngineTrailGenerator::EngineTrailGenerator(Engine& engine, const WorldObject& cr
     m_lastValid(false),
     m_stepRest(0.0f),
     m_timeSinceLastSpawn(0),
-    prop_stepDistance("vfx.engineTrailStepDistance"),
-    prop_idleTime("vfx.engineTrailIdleCooldown")
+    m_stepDistance("vfx.engineTrailStepDistance"),
+    m_idleTime("vfx.engineTrailIdleCooldown")
 {
     m_generator->setColor(0x6666FF);
     m_generator->setEmissiveness(0.4f);
@@ -54,7 +53,7 @@ void EngineTrailGenerator::update(float deltaSec) {
         if (m_engine.state().directional().z <= -0.05f) { //only when moving forward
             spawnTrail();
         } else {
-            if (m_timeSinceLastSpawn > prop_idleTime) { // When not moving, we still want some exhausts
+            if (m_timeSinceLastSpawn > m_idleTime) { // When not moving, we still want some exhausts
                 spawnAt(calculateSpawnPosition());
             }
         }
@@ -68,10 +67,10 @@ void EngineTrailGenerator::spawnTrail() {
 
     glm::vec3 newPosition = calculateSpawnPosition();
     glm::vec3 distance = newPosition - m_lastSpawnPoint;
-    glm::vec3 step = GeometryHelper::safeNormalize(distance) * prop_stepDistance.get();
+    glm::vec3 step = GeometryHelper::safeNormalize(distance) * m_stepDistance.get();
     glm::vec3 currentPosition = m_lastSpawnPoint;
 
-    float stepCount = glm::length(distance) / prop_stepDistance;
+    float stepCount = glm::length(distance) / m_stepDistance;
 
     m_stepRest += std::fmod(stepCount, 1.0f);
 
@@ -98,10 +97,10 @@ void EngineTrailGenerator::spawnAt(glm::vec3 position) {
 }
 
 /*
-    The worldobject and therefore the radius and scale of the particles
-    may change every frame, so the only way to really ensure safety here is to set
-    them very frame
-*/
+ * The worldobject and therefore the radius and scale of the particles
+ * may change every frame, so the only way to really ensure safety here is to set
+ * them very frame
+ */
 void EngineTrailGenerator::updateTrailSettings() {
     const WorldObject* worldObject = m_engine.engineSlot()->components()->worldObject();
 

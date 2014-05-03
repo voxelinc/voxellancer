@@ -23,7 +23,6 @@
 
 #include "worldobject/worldobjectinfo.h"
 
-#include "utils/tostring.h"
 #include "utils/geometryhelper.h"
 
 #include "voxel/voxelrenderer.h"
@@ -55,7 +54,6 @@ HUD::HUD(Player* player):
     m_aimHelper(new AimHelperHudget(this)),
     m_scanner(new WorldTreeScanner()),
     m_elements(new HUDElements(*this)),
-    m_target(nullptr),
     m_drawHud("vfx.drawhud"),
     m_view(nullptr)
 {
@@ -211,7 +209,7 @@ glm::vec3 HUD::applyTo(const glm::vec3 &vertex) const {
 }
 
 void HUD::setTarget(WorldObject* target) {
-    m_target = target ? target->handle() : Handle<WorldObject>(nullptr);
+    m_target = target ? makeHandle(target) : Handle<WorldObject>();
 }
 
 WorldObject* HUD::target() {

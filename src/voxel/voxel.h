@@ -7,14 +7,15 @@
 #include "display/rendering/visuals.h"
 
 
+class Sphere;
 class VoxelCluster;
+class VoxelExplosion;
 class VoxelTreeNode;
 class WorldObject;
-class Sphere;
 
 class Voxel {
 public:
-    Voxel(const glm::ivec3& gridCell, uint32_t color = 0xFFFFFF, float unscaledMatss = defaultUnscaledMass(), float hp = defaultHp(), float emissiveness = 0);
+    Voxel(const glm::ivec3& gridCell, uint32_t color = 0xFFFFFF, float density = defaultDensity(), float hp = defaultHp(), float emissiveness = 0);
     Voxel(const Voxel& other);
     virtual ~Voxel();
 
@@ -32,18 +33,16 @@ public:
 
     float hp() const;
     void applyDamage(float deltaHp);
+
     virtual float damageForwardingDestructionDamage();
 
-    /**
-     *  Mass of the voxel if it had a scale = 1.0f. Needs to be multiplied with scale^3 to get the
-     *  actual mass.
-     */
-    float unscaledMass() const;
+    float density() const;
 
-    // These hooks apply only for WorldObjects and do not need to be called by pure VoxelClusters
+    /**
+     * These hooks apply only for WorldObjects and do not need to be called by pure VoxelClusters
+     */
     virtual void onRemoval();
     virtual void onDestruction(float energy);
-
 
 
 protected:
@@ -51,12 +50,15 @@ protected:
     VoxelTreeNode *m_voxelTreeNode;
     Visuals m_visuals;
     float m_hp;
-    float m_unscaledMass;
+    float m_density;
 
-    static Property<float>* s_defaultUnscaledMass;
+    static Property<float>* s_defaultDensity;
     static Property<float>* s_defaultHp;
 
-    static float defaultUnscaledMass();
+
+    virtual std::shared_ptr<VoxelExplosion> destructionExplosion(float energy);
+
+    static float defaultDensity();
     static float defaultHp();
 };
 

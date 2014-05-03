@@ -135,10 +135,8 @@ void BoardComputer::shootBullet(const std::vector<Handle<WorldObject>>& targets)
     }
 }
 
-void BoardComputer::shootRockets(Handle<WorldObject>& target) {
-    if (target.valid()) {
-        m_worldObject->components().fireAtObject(target.get());
-    }
+void BoardComputer::shootRockets(WorldObject* target) {
+    m_worldObject->components().fireAtObject(target);
 }
 
 void BoardComputer::update(float deltaSec) {

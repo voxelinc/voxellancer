@@ -3,7 +3,7 @@
 #include <memory>
 #include <string>
 
-#include "utils/handle/handle.h"
+#include "utils/handle/handleowner.h"
 
 #include "scripting/scriptable.h"
 
@@ -17,7 +17,7 @@ enum class MissionState {
     Succeeded
 };
 
-class Mission : public Scriptable {
+class Mission : public Scriptable, public HandleOwner {
 public:
     Mission(const std::string& path);
     ~Mission();
@@ -27,25 +27,22 @@ public:
     MissionState state() const;
 
     /**
-     *  Mark the mission as successfully played.
-     *  Calls onSuccess() in the script
+     * Mark the mission as successfully played.
+     * Calls onSuccess() in the script
      */
     void succeed();
 
     /**
-     *  Mark the mission as failed.
-     *  Calls onFailure() in the script
+     * Mark the mission as failed.
+     * Calls onFailure() in the script
      */
     void fail();
-
-    Handle<Mission>& handle();
 
     void update(float deltaSec);
 
 
 protected:
     std::shared_ptr<MissionScript> m_script;
-    Handle<Mission> m_handle;
     MissionState m_state;
 };
 

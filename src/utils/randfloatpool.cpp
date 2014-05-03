@@ -5,8 +5,8 @@
 
 #include "randfloat.h"
 
-/**
- *  this needs to be a power of 2!
+/*
+ * this needs to be a power of 2!
  */
 const static int POOL_SIZE = 4096;
 

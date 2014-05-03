@@ -10,9 +10,9 @@
 class Voxel;
 class WorldObject;
 
-/*
-    Identifies the position of the voxel a worldObject is aiming at
-*/
+/**
+ * Identifies the position of the voxel a worldObject is aiming at
+ */
 class Aimer {
 public:
     Aimer(WorldObject* worldObject);
@@ -21,7 +21,7 @@ public:
     glm::vec3 aim(const Ray& ray);
 
     void setWorldObject(WorldObject* worldObject);
-    
+
 protected:
     WorldObject* m_worldObject;
     Property<float> m_infityAimDistance;

@@ -16,9 +16,9 @@
 class Sound;
 
 /**
- *   Base class for Projectiles that follow a target and attempt to crush into it.
- *   Also, currently explodes on any collision
-*/
+ * Base class for Projectiles that follow a target and attempt to crush into it.
+ * Also, currently explodes on any collision
+ */
 class Rocket: public Projectile {
 public:
     Rocket();
