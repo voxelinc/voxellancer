@@ -12,6 +12,9 @@ public:
     virtual float damageForwardingDestructionDamage() override;
 
     virtual void onRemoval() override;
-    virtual void onDestruction(float energy) override;
+
+
+protected:
+    std::shared_ptr<VoxelExplosion> destructionExplosion(float energy) override;
 };
 

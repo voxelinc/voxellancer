@@ -8,7 +8,7 @@
 
 #include "worldobject/worldobject.h"
 
-#include "voxeleffect/voxelexplosiongenerator.h"
+#include "voxeleffect/fuelvoxelexplosion.h"
 
 
 FuelVoxel::FuelVoxel(const glm::ivec3& gridCell, int index):
@@ -28,21 +28,7 @@ void FuelVoxel::onRemoval() {
 
 }
 
-void FuelVoxel::onDestruction(float energy) {
-    Voxel::onDestruction(energy);
-
-    WorldObject* worldObject = m_voxelTreeNode->voxelTree()->worldObject();
-    // In addition to spawning debris, explode a little
-    VoxelExplosionGenerator generator(worldObject);
-    generator.setPosition(position());
-    generator.setRadius(worldObject->transform().scale());
-    generator.setScale(worldObject->transform().scale() / 2.0f);
-    generator.setCount(30);
-    generator.setEmissiveness(0.4f);
-    generator.setColor(0xFF0000);
-    generator.setForce(0.004f * energy, 0.5f);
-    generator.setLifetime(0.9f, 0.4f);
-
-    generator.spawn();
+std::shared_ptr<VoxelExplosion> FuelVoxel::destructionExplosion(float /*energy*/) {
+    return std::shared_ptr<VoxelExplosion>(new FuelVoxelExplosion(*this));
 }
 

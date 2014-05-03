@@ -6,9 +6,9 @@
 #include "voxel/voxeltree.h"
 #include "voxel/voxeltreenode.h"
 
-#include "voxeleffect/voxeldebrisgenerator.h"
-
 #include "worldobject/worldobject.h"
+
+#include "voxeldebrisgenerator.h"
 
 
 VoxelShatterExplosion::VoxelShatterExplosion(Voxel& voxel, float energy):
@@ -23,10 +23,7 @@ void VoxelShatterExplosion::onSpawn() {
     assert(voxel().voxelTreeNode());
 
     WorldObject* worldObject = voxel().voxelTreeNode()->voxelTree()->worldObject();
-
-    if (!worldObject) {
-        return;
-    }
+    assert(worldObject);
 
     VoxelDebrisGenerator generator(worldObject);
     generator.setOrientation(worldObject->transform().orientation());
