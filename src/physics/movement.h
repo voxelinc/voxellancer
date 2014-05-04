@@ -31,8 +31,8 @@ protected:
     bool m_successful;
 
 
-    bool performSplitted();
-    bool performStepped(const IAABB& phaseAABB);
+    void performSplitted();
+    void performStepped(const IAABB& phaseAABB);
     int calculateStepCount();
     Transform calculateStep(int s, int stepCount) const;
 };
