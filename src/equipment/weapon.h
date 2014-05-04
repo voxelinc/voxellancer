@@ -37,7 +37,6 @@ public:
     const std::string projectileName() const;
     void setProjectileName(const std::string& name);
 
-
     WeaponType type() const;
 
     virtual void update(float deltaSec);
@@ -54,7 +53,6 @@ protected:
     float m_cooldownTime;
     Visuals m_visuals;
     std::string m_projectileName;
-
 
     virtual void onProjectileNameChanged();
 };

@@ -139,11 +139,7 @@ void BoardComputer::shootBullet(const std::vector<Handle<WorldObject>>& targets)
             for (std::shared_ptr<Hardpoint>& hardpoint : m_worldObject->components().hardpoints()) {
                 if (hardpoint->weapon() && hardpoint->weapon()->type() == WeaponType::Gun) {
                     Gun* gun = static_cast<Gun*>(hardpoint->weapon().get());
-                    if (gun->hardpoint()->inFieldOfAim(target->position())) {
-                        if (gun->isBulletPathClear(target->position(), true)) {
-                            gun->fireAtPoint(target->position() + inaccuracyNoise);
-                        }
-                    }
+                    gun->fireAtPoint(targetPoint, true);
                 }
             }
             break;

@@ -70,8 +70,8 @@ public:
         What of both will actually trigger an action depends on the weapons
         aimType
     */
-    void fireAtPoint(const glm::vec3& point, bool checkFriendlyFire = false);
-	
+    void fireAtPoint(const glm::vec3& point, bool checkFriendlyFire);
+
     void fireAtObject(WorldObject* worldObject);
 
     /**

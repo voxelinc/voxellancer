@@ -25,13 +25,10 @@ public:
     const SoundProperties& fireSound() const;
     void setFireSound(const SoundProperties& fireSound);
 
-    virtual void fireAtPoint(const glm::vec3& point);
+    virtual void fireAtPoint(const glm::vec3& point, bool checkFriendlyFire);
+    virtual bool isBulletPathClear(const glm::vec3& point, bool checkFriendlyFire);
 
     virtual void update(float deltaSec) override;
-
-    virtual bool isBulletPathClear(const glm::vec3& point, bool checkFriendlyFire = false);
-
-    virtual void onProjectileNameChanged() override;
 
 
 protected:
@@ -39,12 +36,14 @@ protected:
     Visuals m_visuals;
     SoundProperties m_fireSound;
 
-    void setupBullet(Bullet* bullet, const glm::vec3& point);
     WorldObject* m_owner;
 
-    void setBulletExtend();
     float m_spawnDistance;
     float m_bulletLength;
     float m_bulletMaxWidth;
+
+    void setupBullet(Bullet* bullet, const glm::vec3& point);
+    void setBulletExtend();
+    virtual void onProjectileNameChanged() override;
 };
 
