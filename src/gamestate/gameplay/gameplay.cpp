@@ -120,6 +120,8 @@ void GamePlay::loadScenario(int i) {
     }
 
     m_scenario->load();
+    World::instance()->player().hud().resetButton()->setCallback((std::function<void(ClickType clickType)>)std::bind(&GamePlay::resetButtonCallback, this, std::placeholders::_1));
+
 }
 
 void GamePlay::keyCallback(int key, int scancode, int action, int mods) {
@@ -170,5 +172,15 @@ void GamePlay::updateView() {
 }
 
 void GamePlay::resetButtonCallback(ClickType clickType){
-    m_scenario->reset();
+    printf("gameplay callback");
+    TextureRenderer loadRenderer("data/textures/loading.dds");
+    loadRenderer.display("Loading Scenario...");
+
+    m_soundManager->stopAll();
+    m_scenario->clear();
+    updateView();
+    //m_scenario.reset(new ScriptedScenario(this, "data/scripts/scenarios/demo.lua"));
+    m_scenario->load();
+    World::instance()->player().hud().resetButton()->setCallback((std::function<void(ClickType clickType)>)std::bind(&GamePlay::resetButtonCallback, this, std::placeholders::_1));
+
 }

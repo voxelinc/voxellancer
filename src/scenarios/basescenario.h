@@ -7,8 +7,8 @@ class BaseScenario {
 public:
     BaseScenario(GamePlay* gamePlay);
 
-    void load();
-    void clear();
+    virtual void load();
+    virtual void clear();
     void reset();
 
 
