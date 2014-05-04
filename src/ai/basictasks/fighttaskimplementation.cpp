@@ -2,6 +2,7 @@
 
 #include "ai/boardcomputer.h"
 #include "utils/worldobjectgeometryhelper.h"
+#include "worldobject/worldobject.h"
 
 
 FightTaskImplementation::FightTaskImplementation(BoardComputer* boardComputer, const std::vector<Handle<WorldObject>>& targets) :

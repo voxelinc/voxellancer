@@ -20,7 +20,8 @@ void ComponentsInfo::updateInfo() {
     for (std::shared_ptr<Hardpoint> hardpoint : m_worldObject->components().hardpoints()) {
         if (hardpoint->weapon()) {
             if (hardpoint->weapon()->type() == WeaponType::Gun) {
-                m_maxBulletRange = glm::max(dynamic_cast<Gun*>(hardpoint->weapon().get())->bulletSpeed()*dynamic_cast<Gun*>(hardpoint->weapon().get())->bulletLifetime(), m_maxBulletRange);
+                Gun* gun = static_cast<Gun*>(hardpoint->weapon().get());
+                m_maxBulletRange = glm::max(gun->bulletSpeed()*gun->bulletLifetime(), m_maxBulletRange);
             }
         }
     }

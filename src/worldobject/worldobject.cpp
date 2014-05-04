@@ -166,7 +166,6 @@ bool WorldObject::passiveForCollisionDetection() {
     return false;
 }
 
-<<<<<<< HEAD
 const ComponentsInfo& WorldObject::componentsInfo() const {
     return *m_componentsInfo;
 }
@@ -174,7 +173,7 @@ const ComponentsInfo& WorldObject::componentsInfo() const {
 void WorldObject::updateComponentsInfo() {
     m_componentsInfo->updateInfo();
 }
-=======
+
 std::unordered_map<glm::ivec3, Voxel*> WorldObject::cockpitVoxels() {
     return m_cockpitVoxels;
 }
@@ -187,5 +186,3 @@ void WorldObject::addCockpitVoxel(const glm::ivec3& cell) {
 bool WorldObject::areCockpitVoxelsDestroyed() {
     return m_cockpitVoxelsDestroyed;
 }
-
->>>>>>> ec7628fa9a69fca3d37e4b4c84541a9ec71cdebd
