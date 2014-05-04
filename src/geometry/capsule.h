@@ -34,5 +34,8 @@ protected:
     glm::vec3 m_origin;
     glm::vec3 m_direction;
     float m_radius;
+
+
+    glm::vec3 extendDirection() const;
 };
 
