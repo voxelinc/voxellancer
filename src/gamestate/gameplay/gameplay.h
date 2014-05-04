@@ -64,5 +64,7 @@ protected:
     bool m_freecamActive;
 
 	void resetButtonCallback(ClickType clickType);
+
+    void setResetCallback();
 };
 

@@ -17,7 +17,8 @@ public:
     ScriptedScenario(GamePlay* gamePlay, const std::string& path);
     virtual ~ScriptedScenario();
 
-    void load() override;
+    virtual void load() override;
+    virtual void clear() override;
 
 protected:
     std::shared_ptr<GamePlayScript> m_script;

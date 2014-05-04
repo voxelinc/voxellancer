@@ -136,13 +136,13 @@ void GamePlayNormalInput::keyCallback(int key, int scancode, int action, int mod
 
 void GamePlayNormalInput::mouseButtonCallback(int button, int action, int mods) {
     if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_RELEASE) {
-        if (m_currentTimePressedRight > 0 && m_currentTimePressedRight < prop_maxClickTime) {
+        if (m_currentTimePressedRight > 0 && m_currentTimePressedRight < m_maxClickTime) {
             World::instance()->player().hud().onClick(ClickType::Selection);
         }
         m_currentTimePressedRight = 0;
     }
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE) {
-        if (m_currentTimePressedLeft > 0 && m_currentTimePressedLeft < prop_maxClickTime) {
+        if (m_currentTimePressedLeft > 0 && m_currentTimePressedLeft < m_maxClickTime) {
             World::instance()->player().hud().onClick(ClickType::Selection);
         }
         m_currentTimePressedLeft = 0;
@@ -244,7 +244,7 @@ void GamePlayNormalInput::processMouseUpdate(float deltaSec) {
         m_currentTimePressedLeft += deltaSec;
     }
 
-    if (m_mouseControl || glfwGetMouseButton(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS &&  prop_maxClickTime < m_currentTimePressedRight) {
+    if (m_mouseControl || glfwGetMouseButton(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS &&  m_maxClickTime < m_currentTimePressedRight) {
         glm::vec3 rot;
         x = ContextProvider::instance()->resolution().width() / 2 - (int)floor(x);
         y = ContextProvider::instance()->resolution().height() / 2 - (int)floor(y);

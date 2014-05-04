@@ -38,7 +38,6 @@ ScriptedScenario::ScriptedScenario(GamePlay* gamePlay, const std::string& path):
     m_script(new GamePlayScript(World::instance()->scriptEngine())),
     m_path(path)
 {
-    //m_script->load(path);
 }
 
 ScriptedScenario::~ScriptedScenario() = default;
@@ -59,4 +58,9 @@ void ScriptedScenario::load() {
     m_script.reset(new GamePlayScript(World::instance()->scriptEngine()));
     m_script->load(m_path);
     BaseScenario::load();
+}
+
+void ScriptedScenario::clear() {
+    m_script->~GamePlayScript();
+    BaseScenario::clear();
 }
