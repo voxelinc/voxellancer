@@ -136,12 +136,8 @@ void BoardComputer::shootBullet(const std::vector<Handle<WorldObject>>& targets)
 
             glm::vec3 targetPoint = target->position() + inaccuracyNoise;
 
-            for (std::shared_ptr<Hardpoint>& hardpoint : m_worldObject->components().hardpoints()) {
-                if (hardpoint->weapon() && hardpoint->weapon()->type() == WeaponType::Gun) {
-                    Gun* gun = static_cast<Gun*>(hardpoint->weapon().get());
-                    gun->fireAtPoint(targetPoint, true);
-                }
-            }
+            m_worldObject->components().fireAtPoint(targetPoint, true);
+
             break;
         }
     }

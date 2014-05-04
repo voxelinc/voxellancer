@@ -85,12 +85,7 @@ void Player::fire() {
             targetPoint = m_aimer->aim(ray);
         }
 
-        for (std::shared_ptr<Hardpoint>& hardpoint : m_ship->components().hardpoints()) {
-            if (hardpoint->weapon() && hardpoint->weapon()->type() == WeaponType::Gun) {
-                Gun* gun = static_cast<Gun*>(hardpoint->weapon().get());
-                gun->fireAtPoint(targetPoint, false);
-            }
-        }
+        m_ship->components().fireAtPoint(targetPoint, false);
     }
 }
 
