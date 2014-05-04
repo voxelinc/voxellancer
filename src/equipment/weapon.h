@@ -26,7 +26,7 @@ public:
     Weapon(WeaponType type, const std::string& equipmentKey);
 
     Hardpoint* hardpoint();
-    virtual void setHardpoint(Hardpoint* hardpoint);
+    void setHardpoint(Hardpoint* hardpoint);
 
     float cooldownTime() const;
     void setCooldownTime(float cooldownTime);
@@ -37,7 +37,6 @@ public:
     const std::string projectileName() const;
     void setProjectileName(const std::string& name);
 
-    virtual void onProjectileNameChanged();
 
     WeaponType type() const;
 
@@ -55,5 +54,8 @@ protected:
     float m_cooldownTime;
     Visuals m_visuals;
     std::string m_projectileName;
+
+
+    virtual void onProjectileNameChanged();
 };
 

@@ -29,8 +29,6 @@ public:
 
     virtual void update(float deltaSec) override;
 
-    virtual void setHardpoint(Hardpoint* hardpoint) override;
-
     virtual bool isBulletPathClear(const glm::vec3& point, bool checkFriendlyFire = false);
 
     virtual void onProjectileNameChanged() override;

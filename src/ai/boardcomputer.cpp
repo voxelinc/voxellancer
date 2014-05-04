@@ -132,13 +132,16 @@ void BoardComputer::shootBullet(const std::vector<Handle<WorldObject>>& targets)
         if (const WorldObject* target = targetHandle.get()) {
             // Hardpoints check themselves whether they can fire, just tell everyone to shoot everything
             glm::vec3 targetDirection = target->position() - m_worldObject->position();
-            glm::vec3 inaccuracyOffset = RandVec3::rand(0, 1) * glm::length(targetDirection) / 30.0f;
+            glm::vec3 inaccuracyNoise = RandVec3::rand(0, 1) * glm::length(targetDirection) / 30.0f;
+
+            glm::vec3 targetPoint = target->position() + inaccuracyNoise;
+
             for (std::shared_ptr<Hardpoint>& hardpoint : m_worldObject->components().hardpoints()) {
                 if (hardpoint->weapon() && hardpoint->weapon()->type() == WeaponType::Gun) {
                     Gun* gun = static_cast<Gun*>(hardpoint->weapon().get());
                     if (gun->hardpoint()->inFieldOfAim(target->position())) {
                         if (gun->isBulletPathClear(target->position(), true)) {
-                            gun->fireAtPoint(target->position() + inaccuracyOffset);
+                            gun->fireAtPoint(target->position() + inaccuracyNoise);
                         }
                     }
                 }
