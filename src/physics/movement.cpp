@@ -59,7 +59,7 @@ bool Movement::perform() {
     return m_successful;
 }
 
-bool Movement::performSplitted() {
+void Movement::performSplitted() {
     Transform pivotTransform = m_originalTransform.mixed(m_targetTransform, 0.5f);
 
     Movement left(m_worldObject, m_originalTransform, pivotTransform);
@@ -69,7 +69,7 @@ bool Movement::performSplitted() {
     m_intersectionFreeTransform = m_worldObject.transform();
 }
 
-bool Movement::performStepped(const IAABB& phaseAABB) {
+void Movement::performStepped(const IAABB& phaseAABB) {
     int stepCount = calculateStepCount();
 
     WorldTreeNode* nodeHint = m_worldObject.collisionDetector().geode()->containingNode();
