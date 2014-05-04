@@ -65,11 +65,11 @@ public:
     std::shared_ptr<Hardpoint> hardpoint(int index);
     std::list<std::shared_ptr<Hardpoint>>& hardpoints();
 
-    /*
-        Fire all installed weapons either at a point or a WorldObject
-        What of both will actually trigger an action depends on the weapons
-        aimType
-    */
+    /**
+     * Fire all installed weapons either at a point or a WorldObject
+     * What of both will actually trigger an action depends on the weapons
+     * aimType
+     */
     void fireAtPoint(const glm::vec3& point, bool checkFriendlyFire);
 
     void fireAtObject(WorldObject* worldObject);
