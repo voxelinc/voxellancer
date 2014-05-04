@@ -23,7 +23,6 @@
 
 #include "worldobject/worldobjectinfo.h"
 
-#include "utils/tostring.h"
 #include "utils/geometryhelper.h"
 
 #include "voxel/voxelrenderer.h"
@@ -55,7 +54,6 @@ HUD::HUD(Player* player):
     m_aimHelper(new AimHelperHudget(this)),
     m_scanner(new WorldTreeScanner()),
     m_elements(new HUDElements(*this)),
-    m_target(nullptr),
     m_drawHud("vfx.drawhud"),
     m_view(nullptr)
 {
@@ -180,11 +178,29 @@ void HUD::draw() {
 
 void HUD::onClick(ClickType clickType) {
     Ray toCrossHair = Ray::fromTo(m_player->cameraHead().position(), m_crossHair->worldPosition());
+    ObjectHudget* smallestTargetHudget = nullptr;
+    Hudget* otherHudget = nullptr;
+
     for (std::unique_ptr<Hudget>& hudget : m_elements->hudgets()) {
         if (hudget->isAt(toCrossHair) && hudget.get() != m_crossHair) {
-            hudget->onClick(clickType);
-            return;
+            ObjectHudget* targetHudget = dynamic_cast<ObjectHudget*>(hudget.get());
+
+            if (targetHudget) {
+                if (!smallestTargetHudget) {
+                    smallestTargetHudget = targetHudget;
+                } else if (smallestTargetHudget->openingAngle() > targetHudget->openingAngle()) {
+                    smallestTargetHudget = targetHudget;
+                }
+            } else {
+                otherHudget = hudget.get();
+            }
         }
+    }
+
+    if (smallestTargetHudget) {
+        smallestTargetHudget->onClick(clickType);
+    } else if (otherHudget) {
+        otherHudget->onClick(clickType);
     }
 }
 
@@ -193,7 +209,7 @@ glm::vec3 HUD::applyTo(const glm::vec3 &vertex) const {
 }
 
 void HUD::setTarget(WorldObject* target) {
-    m_target = target ? target->handle() : Handle<WorldObject>(nullptr);
+    m_target = target ? makeHandle(target) : Handle<WorldObject>();
 }
 
 WorldObject* HUD::target() {

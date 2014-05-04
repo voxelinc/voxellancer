@@ -19,7 +19,6 @@ Skybox::Skybox() :
     m_vertexArrayObject(0),
     m_vertexBuffer(0)
 {
-
 }
 
 void Skybox::initialize() {
@@ -52,11 +51,12 @@ void Skybox::initialize() {
 
 
     /* Geometry */
-    auto vertices = glow::Array<glm::vec3>()
-        << glm::vec3(-1, -1, 0)
-        << glm::vec3(1, -1, 0)
-        << glm::vec3(1, 1, 0)
-        << glm::vec3(-1, 1, 0);
+    std::array<glm::vec3, 4> vertices {
+        glm::vec3(-1, -1, 0),
+        glm::vec3(1, -1, 0),
+        glm::vec3(1, 1, 0),
+        glm::vec3(-1, 1, 0)
+    };
 
     m_vertexArrayObject = new glow::VertexArrayObject();
 
@@ -77,6 +77,7 @@ void Skybox::draw(const Camera& camera){
     if (!m_texture) {
         initialize();
     }
+
     glDisable(GL_DEPTH_TEST);
 
     m_texture->bind();
@@ -100,5 +101,5 @@ void Skybox::beforeContextDestroy() {
 }
 
 void Skybox::afterContextRebuild() {
-    initialize();
+    // lazy init
 }

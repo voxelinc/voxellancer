@@ -2,7 +2,6 @@
 
 #include <algorithm>
 
-#include "utils/tostring.h"
 #include "worldobject/worldobject.h"
 #include "collision/collisiondetector.h"
 #include "worldtreenode.h"
@@ -25,9 +24,9 @@ WorldTreeNode* WorldTree::root() {
 
 WorldTreeGeode* WorldTree::insert(WorldObject* worldObject) {
     worldObject->collisionDetector().setWorldTree(this);
-    
+
     WorldTreeGeode* geode = new WorldTreeGeode(worldObject);
-    
+
     insert(geode);
 
     return geode;

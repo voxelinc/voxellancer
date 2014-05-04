@@ -5,14 +5,12 @@
 
 #include "resource/clustercache.h"
 
-#include "utils/tostring.h"
-
-#include "utils/handle/handle.h"
 #include "physics/physics.h"
 #include "worldobject/worldobjectinfo.h"
 #include "voxel/voxel.h"
 #include "worldobjectcomponents.h"
 #include "helper/componentsinfo.h"
+
 
 WorldObject::WorldObject() :
     VoxelCluster(1.0f),
@@ -22,10 +20,10 @@ WorldObject::WorldObject() :
     m_components(new WorldObjectComponents(this)),
     m_crucialVoxel(nullptr),
     m_collisionFieldOfDamage(glm::half_pi<float>()),
-    m_handle(Handle<WorldObject>(this)),
     m_spawnState(SpawnState::None),
     m_collisionFilter(new CollisionFilter(this)),
     m_crucialVoxelDestroyed(false),
+    m_cockpitVoxelsDestroyed(false),
     m_componentsInfo(new ComponentsInfo(this))
 {
 }
@@ -36,9 +34,7 @@ WorldObject::WorldObject(const Transform& transform) :
     setTransform(transform);
 }
 
-WorldObject::~WorldObject() {
-     m_handle.invalidate();
-}
+WorldObject::~WorldObject() = default;
 
 WorldObjectType WorldObject::objectType() const {
     return WorldObjectType::Other;
@@ -118,6 +114,10 @@ void WorldObject::removeVoxel(Voxel* voxel) {
         m_crucialVoxel = nullptr;
     }
 
+    if (m_cockpitVoxels.erase(voxel->gridCell())) {
+        m_cockpitVoxelsDestroyed = m_cockpitVoxels.empty();
+    }
+
     m_collisionDetector->removeVoxel(voxel);
     m_physics->removeVoxel(voxel);
 
@@ -154,10 +154,6 @@ void WorldObject::onSpawnFail() {
 
 }
 
-Handle<WorldObject>& WorldObject::handle() {
-    return m_handle;
-}
-
 float WorldObject::collisionFieldOfDamage() const {
     return m_collisionFieldOfDamage;
 }
@@ -170,6 +166,7 @@ bool WorldObject::passiveForCollisionDetection() {
     return false;
 }
 
+<<<<<<< HEAD
 const ComponentsInfo& WorldObject::componentsInfo() const {
     return *m_componentsInfo;
 }
@@ -177,3 +174,18 @@ const ComponentsInfo& WorldObject::componentsInfo() const {
 void WorldObject::updateComponentsInfo() {
     m_componentsInfo->updateInfo();
 }
+=======
+std::unordered_map<glm::ivec3, Voxel*> WorldObject::cockpitVoxels() {
+    return m_cockpitVoxels;
+}
+
+void WorldObject::addCockpitVoxel(const glm::ivec3& cell) {
+    m_cockpitVoxels[cell] = voxel(cell);
+    m_cockpitVoxelsDestroyed = false;
+}
+
+bool WorldObject::areCockpitVoxelsDestroyed() {
+    return m_cockpitVoxelsDestroyed;
+}
+
+>>>>>>> ec7628fa9a69fca3d37e4b4c84541a9ec71cdebd

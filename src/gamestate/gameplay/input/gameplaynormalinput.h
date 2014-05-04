@@ -3,10 +3,10 @@
 #include <vector>
 
 #include "input/inputmapping.h"
-
 #include "input/actionkeymapping.h"
-#include "utils/statemachine/trigger.h"
 
+#include "gamestate/gameplay/gameplayinput.h"
+#include "utils/statemachine/trigger.h"
 #include "property/property.h"
 
 
@@ -18,14 +18,14 @@ class HUD;
 class HMD;
 class Player;
 
-class GamePlayRunningInput {
+class GamePlayNormalInput : public GamePlayInput {
 public:
-    GamePlayRunningInput();
+    GamePlayNormalInput();
 
-    void resizeEvent(const unsigned int width, const unsigned int height);
-    void keyCallback(int key, int scancode, int action, int mods);
-    void mouseButtonCallback(int button, int action, int mods);
-	void update(float deltaSec);
+    virtual void resizeEvent(const unsigned int width, const unsigned int height) override;
+    virtual void keyCallback(int key, int scancode, int action, int mods) override;
+    virtual void mouseButtonCallback(int button, int action, int mods) override;
+    virtual void update(float deltaSec) override;
 
 
 protected:
@@ -55,15 +55,14 @@ protected:
     float getInputValue(InputMapping mapping);
 
     void addActionsToVector();
-    void setupJoystickControls();
     void retrieveInputValues();
 
     float m_currentTimePressed;
 
-    Property<float> prop_deadzoneMouse;
-    Property<float> prop_deadzoneGamepad;
+    Property<float> m_deadzoneMouse;
+    Property<float> m_deadzoneGamepad;
 
-    Property<float> prop_maxClickTime;
+    Property<float> m_maxClickTime;
 
     ActionKeyMapping fireAction;
     ActionKeyMapping rocketAction;

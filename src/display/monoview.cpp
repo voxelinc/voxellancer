@@ -52,7 +52,7 @@ void MonoView::draw(const Scene& scene, const CameraHead& cameraHead) {
     glViewport(m_viewport.x(), m_viewport.y(), sampleWidth, sampleHeight);
 
     m_camera->setViewport(glm::ivec2(sampleWidth, sampleHeight));
-    m_camera->setPosition(cameraHead.position());
+    m_camera->setEye(cameraHead.position());
     m_camera->setOrientation(cameraHead.orientation());
 
     scene.draw(*m_camera, glow::FrameBufferObject::defaultFBO(), m_viewport);

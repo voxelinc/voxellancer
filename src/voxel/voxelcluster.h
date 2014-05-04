@@ -10,14 +10,14 @@
 
 #include "utils/vec3hash.h"
 
-/**
- *  Base class for anything that consits of Voxels
-*/
 
 class Voxel;
 class VoxelRenderData;
 class VoxelClusterBounds;
 
+/**
+ * Base class for anything that consits of Voxels
+ */
 class VoxelCluster {
 public:
     VoxelCluster(float scale);
@@ -43,14 +43,15 @@ public:
 
     VoxelRenderData* voxelRenderData();
 
-    virtual float emissiveness() const;
+    float emissiveness() const;
+    void setEmissiveness(float emissiveness);
 
 
 protected:
     std::unordered_map<glm::ivec3, Voxel*> m_voxels;
     std::unique_ptr<VoxelRenderData> m_voxelRenderData;
     std::unique_ptr<VoxelClusterBounds> m_bounds;
-
+    float m_emissiveness;
     Transform m_transform;
 };
 

@@ -1,13 +1,16 @@
 #pragma once
 
+#include <unordered_map>
+#include <vector>
 #include <list>
 #include <memory>
 
 #include "scripting/scriptable.h"
 
-#include "utils/handle/handle.h"
+#include "utils/handle/handleowner.h"
 
 #include "voxel/voxelcluster.h"
+
 
 class CollisionDetector;
 class EngineVoxel;
@@ -37,11 +40,10 @@ enum class WorldObjectType {
 };
 
 /**
- *  A WorldObject is an Object in our World. Being the second level in the object hierarchy,
- *  it adds CollisionDetection, Physics and SpecialVoxels aka WorldObjectComponents
-*/
-
-class WorldObject : public VoxelCluster, public Scriptable {
+ * A WorldObject is an Object in our World. Being the second level in the object hierarchy,
+ * it adds CollisionDetection, Physics and SpecialVoxels aka WorldObjectComponents
+ */
+class WorldObject : public VoxelCluster, public Scriptable, public HandleOwner {
 public:
     WorldObject();
     WorldObject(const Transform& transform);
@@ -74,13 +76,15 @@ public:
     void setCrucialVoxel(const glm::ivec3& cell);
     bool isCrucialVoxelDestroyed();
 
+    std::unordered_map<glm::ivec3, Voxel*> cockpitVoxels();
+    void addCockpitVoxel(const glm::ivec3& cell);
+    bool areCockpitVoxelsDestroyed();
+
     void updateTransformAndGeode(const glm::vec3& position, const glm::quat& orientation);
 
     virtual void onCollision();
     virtual void onSpawnFail();
     //virtual void onWrecked();
-
-    Handle<WorldObject>& handle();
 
     float collisionFieldOfDamage() const;
     void setCollisionFieldOfDamage(float collisionFieldOfDamage);
@@ -99,7 +103,8 @@ protected:
     std::unique_ptr<WorldObjectComponents> m_components;
     std::unique_ptr<ComponentsInfo> m_componentsInfo;
 
-    Handle<WorldObject> m_handle;
+    std::unordered_map<glm::ivec3, Voxel*> m_cockpitVoxels;
+    bool m_cockpitVoxelsDestroyed;
     Voxel* m_crucialVoxel;
     bool m_crucialVoxelDestroyed;
     float m_collisionFieldOfDamage;

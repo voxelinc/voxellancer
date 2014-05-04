@@ -1,29 +1,49 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include <memory>
 
 #include "equipment/weapon.h"
 
+#include "sound/soundproperties.h"
 
-class SoundProperties;
+
 class Bullet;
+class Ray;
+class WorldTreeQuery;
+class Faction;
+class Ship;
 
 class Gun: public Weapon {
 public:
     Gun(const std::string& equipmentKey);
+    ~Gun();
 
-    virtual const SoundProperties& fireSound() const = 0;
-    
-    virtual float bulletLifetime() const = 0;
-    virtual float bulletSpeed() const = 0;
+    float bulletSpeed() const;
+    void setBulletSpeed(float bulletSpeed);
 
-    virtual void fireAtPoint(const glm::vec3& point);
+    const SoundProperties& fireSound() const;
+    void setFireSound(const SoundProperties& fireSound);
+
+    virtual void fireAtPoint(const glm::vec3& point, bool checkFriendlyFire);
+    virtual bool isBulletPathClear(const glm::vec3& point, bool checkFriendlyFire);
 
     virtual void update(float deltaSec) override;
 
 
 protected:
-    virtual Bullet* createBullet() = 0;
+    float m_bulletSpeed;
+    Visuals m_visuals;
+    SoundProperties m_fireSound;
+
+    WorldObject* m_owner;
+
+    float m_spawnDistance;
+    float m_bulletLength;
+    float m_bulletMaxWidth;
+
     void setupBullet(Bullet* bullet, const glm::vec3& point);
+    void setBulletExtend();
+    virtual void onProjectileNameChanged() override;
 };
 

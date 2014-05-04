@@ -8,10 +8,10 @@ class Hudget;
 class ObjectHudget;
 class WorldObject;
 
-/*
-    Handle to a WorldObject that also references the Hudget this
-    WorldObject is represented by on the HUD
-*/
+/**
+ * Handle to a WorldObject that also references the Hudget this
+ * WorldObject is represented by on the HUD
+ */
 class HUDObjectDelegate {
 public:
     HUDObjectDelegate(HUD* hud, WorldObject* worldObject, ObjectHudget* hudget);

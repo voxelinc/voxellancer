@@ -1,4 +1,3 @@
-#include <glow/Array.h>
 #include <glow/Shader.h>
 #include <glow/Texture.h>
 #include <glow/VertexArrayObject.h>
