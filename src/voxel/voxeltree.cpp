@@ -1,7 +1,5 @@
 #include "voxeltree.h"
 
-#include "utils/tostring.h"
-
 #include "worldobject/worldobject.h"
 
 #include "voxel.h"

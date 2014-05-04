@@ -11,10 +11,10 @@ class HudgetAnimation;
 class HudgetHideAnimation;
 class TextFieldHudget;
 
-/*
-    Class that holds all passive elements of the HUD, such
-    as labels etc., to lift some weight from the main HUD class
-*/
+/**
+ * Class that holds all passive elements of the HUD, such
+ * as labels etc., to lift some weight from the main HUD class
+ */
 class HUDElements {
 public:
     HUDElements(HUD& hud);

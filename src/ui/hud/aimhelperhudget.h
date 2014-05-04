@@ -13,20 +13,20 @@ class HUD;
 class WorldObject;
 class AimHelperHudgetVoxels;
 
-/*
-    Hudget drawn where player-bullets and target
-    will collide i.e. not actually on the hud-sphere but
-    in the world
-*/
+/**
+ * Hudget drawn where player-bullets and target
+ * will collide i.e. not actually on the hud-sphere but
+ * in the world
+ */
 class AimHelperHudget: public CircularHudget {
 public:
     AimHelperHudget(HUD* hud);
     virtual ~AimHelperHudget();
 
-    /*
-        The point the player should shoot at to hit
-        his current enemy
-    */
+    /**
+     * The point the player should shoot at to hit
+     * his current enemy
+     */
     const glm::vec3& targetPoint() const;
 
     virtual void update(float deltaSec) override;

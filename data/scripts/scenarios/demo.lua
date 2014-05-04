@@ -1,5 +1,10 @@
 function main()
 	reset(0)
+    
+    local normandy = createShip("normandy")
+    setPosition(normandy, vec3(50, 100, -170))
+    setOrientation(normandy, vec3(90, 0, 50))
+    spawn(normandy)
 end
 
 function startMission(player)

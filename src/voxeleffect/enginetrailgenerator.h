@@ -34,8 +34,8 @@ protected:
     double m_timeSinceLastSpawn;
     float m_spawnOffset;
 
-    Property<float> prop_stepDistance;
-    Property<float> prop_idleTime;
+    Property<float> m_stepDistance;
+    Property<float> m_idleTime;
     void spawnTrail();
     void updateTrailSettings();
     glm::vec3 calculateSpawnPosition();

@@ -4,8 +4,6 @@
 
 #include "geometry/transform.h"
 
-#include "utils/tostring.h"
-
 #include "sphere.h"
 
 

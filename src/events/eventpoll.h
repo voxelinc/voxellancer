@@ -13,9 +13,9 @@ public:
     EventPoll(const Callback& callback);
     ~EventPoll();
 
-    /*
-        Return true if the poll won't fire anymore
-    */
+    /**
+     * Return true if the poll won't fire anymore
+     */
     virtual bool isDead();
 
     virtual void update(float deltaSec);

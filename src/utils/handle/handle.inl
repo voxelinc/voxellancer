@@ -12,8 +12,8 @@ Handle<T>::Handle():
 
 template<typename T>
 Handle<T>::Handle(const std::shared_ptr<HandleImpl>& impl):
-    m_impl(impl),
-    m_referenced(static_cast<T*>(impl->owner()))
+    m_impl(impl ? impl : std::make_shared<HandleImpl>(nullptr)),
+    m_referenced(impl ? static_cast<T*>(impl->owner()) : nullptr)
 {
 }
 

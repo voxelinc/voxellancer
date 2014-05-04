@@ -17,7 +17,7 @@ enum class ScriptState {
 };
 
 /**
- *  Handle to a lua script
+ * Handle to a lua script
  */
 class Script : public WorldElement {
 public:

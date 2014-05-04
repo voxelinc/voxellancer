@@ -5,7 +5,7 @@
 
 AiTaskFinishedPoll::AiTaskFinishedPoll(AiTask* aitask, const Callback& callback):
     EventPoll(callback),
-    m_aiTask(aitask->handle<AiTask>())
+    m_aiTask(makeHandle(aitask))
 {
 }
 

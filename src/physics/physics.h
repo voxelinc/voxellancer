@@ -56,9 +56,9 @@ protected:
     Property<float> m_directionalDampening;
     Property<float> m_angularDampening;
 
-    float m_unscaledMass;
-    float m_maxUnscaledMass;
-    glm::vec3 m_accumulatedUnscaledMassVec; // For fast recalc of center of mass on voxel addition/removal
+    float m_densitySum;
+    float m_maxDensitySum;
+    glm::vec3 m_densitySumVec; // For fast recalc of center of mass on voxel addition/removal
 
     void voxelChanged(Voxel* voxel, bool isAdd);
     virtual void updateSpeed(float deltaSec);
