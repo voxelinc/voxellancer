@@ -15,8 +15,8 @@ class VoxelParticleSetup;
 class VoxelParticleEngineImpl;
 
 /**
- *  Interface abstraction for the two VoxelParticleEngineImpl's
- *  for opaque and transparent particles
+ * Interface abstraction for the two VoxelParticleEngineImpl's
+ * for opaque and transparent particles
 */
 class VoxelParticleEngine {
 public:

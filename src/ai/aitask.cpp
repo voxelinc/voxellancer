@@ -2,14 +2,11 @@
 
 
 AiTask::AiTask(BoardComputer* boardComputer):
-    m_handle(Handle<AiTask>(this)),
     m_boardComputer(boardComputer)
 {
 }
 
-AiTask::~AiTask() {
-    m_handle.invalidate();
-}
+AiTask::~AiTask() = default;
 
 BoardComputer* AiTask::boardComputer() {
     return m_boardComputer;
@@ -17,9 +14,5 @@ BoardComputer* AiTask::boardComputer() {
 
 bool AiTask::isFinished() {
     return false;
-}
-
-Handle<AiTask>& AiTask::handle() {
-    return m_handle;
 }
 

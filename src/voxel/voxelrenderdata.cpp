@@ -8,7 +8,6 @@
 #include <glow/Program.h>
 
 #include "utils/colorhelper.h"
-#include "utils/tostring.h"
 
 #include "voxelcluster.h"
 #include "voxeleffect/voxelmesh.h"

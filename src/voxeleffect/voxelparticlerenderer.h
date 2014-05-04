@@ -20,10 +20,10 @@ class Camera;
 class VoxelMesh;
 class VoxelParticleEngineImpl;
 
-/*
-    Component of a VoxelParticleEngineImpl responsible for rendering the particles
-    It holds its own GPU-Buffer and receives updates for the particles by updateBuffer()
-*/
+/**
+ * Component of a VoxelParticleEngineImpl responsible for rendering the particles
+ * It holds its own GPU-Buffer and receives updates for the particles by updateBuffer()
+ */
 class VoxelParticleRenderer :  public ContextDependant {
 public:
     VoxelParticleRenderer(VoxelParticleEngineImpl* engine);

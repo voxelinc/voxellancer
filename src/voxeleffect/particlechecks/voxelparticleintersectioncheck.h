@@ -11,9 +11,9 @@ class VoxelParticleEngineImpl;
 struct VoxelParticleData;
 
 
-/*
-    Regular check that removes particles that intersect with WorldObjects
-*/
+/**
+ *   Regular check that removes particles that intersect with WorldObjects
+ */
 class VoxelParticleIntersectionCheck: public VoxelParticleRemoveCheck {
 public:
     VoxelParticleIntersectionCheck(const VoxelParticleEngineImpl& engine);

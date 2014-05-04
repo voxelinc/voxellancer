@@ -34,7 +34,7 @@ void CruiserFightTask::update(float deltaSec) {
         }
 
         if (targetDistance() < m_maxRocketDistance) {
-            boardComputer()->shootRockets(m_primaryTarget->handle());
+            boardComputer()->shootRockets(m_primaryTarget);
         }
 
         if (anyTargetDistance() < m_maxFireDistance) {
@@ -76,7 +76,7 @@ void CruiserFightTask::updateState() {
 float CruiserFightTask::anyTargetDistance() {
     WorldObject* worldObject = boardComputer()->worldObject();
     WorldObject* closestTarget = WorldObjectGeometryHelper::closestObject(*worldObject, &m_targets);
-    
+
     if (closestTarget) {
         return glm::length(worldObject->transform().position() - closestTarget->transform().position())
             - worldObject->bounds().minimalGridSphere().radius() * worldObject->transform().scale()
