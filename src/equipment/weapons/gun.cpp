@@ -62,7 +62,7 @@ void Gun::setFireSound(const SoundProperties& fireSound) {
 }
 
 void Gun::fireAtPoint(const glm::vec3& point) {
-    if (canFire() && hardpoint()->inFieldOfAim(point)) {
+    if (canFire()) {
         Bullet *bullet =  WorldObjectBuilder(projectileName()).buildBullet();
         setupBullet(bullet, point);
 
