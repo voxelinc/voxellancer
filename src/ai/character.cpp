@@ -15,15 +15,20 @@
 #include "factions/factionRelation.h"
 #include "factions/factionMatrix.h"
 
+#include "ui/hud/hud.h"
+
+#include "worldobject/worldobjectinfo.h"
+
 #include "world/world.h"
 
 
 Character::Character(Ship& ship, Faction& faction):
     m_ship(ship),
     m_faction(&faction),
-    m_task(nullptr)
+    m_task(nullptr),
+    m_world(World::instance())
 {
-    m_friendlinessToPlayer = World::instance()->factionMatrix().getRelationToPlayer(*m_faction).friendliness();
+    m_friendlinessToPlayer = m_world->factionMatrix().getRelationToPlayer(*m_faction).friendliness();
 }
 
 Faction& Character::faction() {
@@ -53,45 +58,54 @@ void Character::update(float deltaSec) {
 
 void Character::onCollisionWith(WorldObject* worldObject) {
     float relationModifier = 0;
+    std::string warningMessage;
     switch (worldObject->objectType()) {
         case WorldObjectType::Ship: {
             Ship* ship = static_cast<Ship*>(worldObject);
-            if (ship == World::instance()->player().ship()) {
+            if (ship == m_world->player().ship()) {
                 relationModifier = -0.5f;
+                warningMessage = m_ship.info().name() + ": Watch where you're going!";
             }
         }
             break;
         case WorldObjectType::Bullet: {
             Bullet* bullet = static_cast<Bullet*>(worldObject);
-            if (bullet->creator() == World::instance()->player().ship()) {
+            if (bullet->creator() == m_world->player().ship()) {
                 relationModifier = -1;
+                warningMessage = m_ship.info().name() + ": Check your fire!";
             }
         }
             break;
         case WorldObjectType::Rocket:{
             Rocket* rocket = static_cast<Rocket*>(worldObject);
-            if (rocket->creator() == World::instance()->player().ship()) {
+            if (rocket->creator() == m_world->player().ship()) {
                 relationModifier = -1;
+                warningMessage = m_ship.info().name() + ": Check your fire!";
             }
         }
             break;
     }
     if (relationModifier != 0) {
-        float friendliness = m_faction->relationTo(World::instance()->factionMatrix().getFaction("player")).friendliness();
+        float friendliness = m_faction->relationTo(m_world->factionMatrix().getFaction("player")).friendliness();
         relationModifier *= 2.0f - glm::abs(friendliness) / 100.0f;
         changeFriendlinessToPlayer(relationModifier);
+    }
+    if (m_friendlinessToPlayer > -30.0f) {
+        m_world->player().hud().showCommunicationMessage(warningMessage);
     }
 }
 
 void Character::onKilledBy(WorldObject* worldObject) {
-    if (worldObject == World::instance()->player().ship()) {
-        World::instance()->factionMatrix().changeFriedlinessToPlayer(*m_faction, -10);
-        m_ship.squadLogic()->squad()->propagadeFriendlinessToPlayer(-30);
+    if (worldObject == m_world->player().ship()) {
+        m_world->factionMatrix().changeFriedlinessToPlayer(*m_faction, -10);
+        if (m_ship.squadLogic()->squad()) {
+            m_ship.squadLogic()->squad()->propagadeFriendlinessToPlayer(glm::min(-30.0f, m_world->factionMatrix().getRelationToPlayer(*m_faction).friendliness()));
+        }
     }
 }
 
 FactionRelationType Character::relationTypeToPlayer() {
-    float friendliness = glm::min(m_friendlinessToPlayer, World::instance()->factionMatrix().getRelationToPlayer(*m_faction).friendliness());
+    float friendliness = glm::min(m_friendlinessToPlayer, m_world->factionMatrix().getRelationToPlayer(*m_faction).friendliness());
     return FactionRelation::type(friendliness);
 }
 
@@ -107,7 +121,7 @@ void Character::changeFriendlinessToPlayer(float difference) {
     if (FactionRelation::type(m_friendlinessToPlayer) == FactionRelationType::Enemy && m_ship.squadLogic()->squad().get()) {
         m_ship.squadLogic()->squad()->propagadeFriendlinessToPlayer(m_friendlinessToPlayer);
     }
-    World::instance()->factionMatrix().changeFriedlinessToPlayer(*m_faction, difference / 10.0f);
+    m_world->factionMatrix().changeFriedlinessToPlayer(*m_faction, difference / 10.0f);
 }
 
 void Character::setFriendlinessToPlayer(float friendliness) {

@@ -18,17 +18,21 @@ HUDElements::HUDElements(HUD& hud):
     m_missionCaption(new TextFieldHudget(&m_hud, glm::normalize(glm::vec3(0.0f, 0.8f, -2)), 0.010f, "")),
     m_missionCaptionHider(new HudgetHideAnimation(*m_missionCaption)),
     m_missionMessage(new TextFieldHudget(&m_hud, glm::normalize(glm::vec3(-0.9f, -0.9f, -2)), 0.010f, "")),
-    m_missionMessageHider(new HudgetHideAnimation(*m_missionMessage))
+    m_missionMessageHider(new HudgetHideAnimation(*m_missionMessage)),
+    m_communicationMessage(new TextFieldHudget(&m_hud, glm::normalize(glm::vec3(-1.0f, 0.1f, -2)), 0.010f, "")),
+    m_communicationMessageHider(new HudgetHideAnimation(*m_communicationMessage))
 {
     addHudget(m_targetName);
     addHudget(m_speedLabel);
     addHudget(m_missionTitle);
     addHudget(m_missionCaption);
     addHudget(m_missionMessage);
+    addHudget(m_communicationMessage);
 
     addAnimation(m_missionTitleHider);
     addAnimation(m_missionCaptionHider);
     addAnimation(m_missionMessageHider);
+    addAnimation(m_communicationMessageHider);
 }
 
 HUD& HUDElements::hud() {
@@ -76,6 +80,11 @@ void HUDElements::showMissionMessage(const std::string& message) {
 
 void HUDElements::showMessage(const std::string& message) {
     showMissionMessage(message); // TODO: different box
+}
+
+void HUDElements::showCommunicationMessage(const std::string& message) {
+    m_communicationMessage->setText(message);
+    m_communicationMessageHider->hideIn(5);
 }
 
 void HUDElements::update(float deltaSec) {

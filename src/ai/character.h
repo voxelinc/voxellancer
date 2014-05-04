@@ -9,6 +9,7 @@ class AiTask;
 class Faction;
 class Ship;
 class WorldObject;
+class World;
 
 /**
  *  The Character is the Ship's pilot and executes his AiTask. He has a Faction which decides
@@ -38,6 +39,7 @@ public:
     void setFriendlinessToPlayer(float friendliness);
 
 protected:
+    World* m_world;
     Ship& m_ship;
     Faction* m_faction;
     std::shared_ptr<AiTask> m_task;

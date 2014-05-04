@@ -70,9 +70,7 @@ SquadLogic* Ship::squadLogic() {
 
 void Ship::onCollisionWith(WorldObject* worldObject) {
     WorldObject::onCollisionWith(worldObject);
-    if (this != World::instance()->player().ship()) {
-        m_character->onCollisionWith(worldObject);
-    }
+    m_character->onCollisionWith(worldObject);
 }
 
 void Ship::onDeath() {
