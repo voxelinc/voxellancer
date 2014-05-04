@@ -16,7 +16,7 @@ class VoxelRenderData;
 class VoxelClusterBounds;
 
 /**
- *  Base class for anything that consits of Voxels
+ * Base class for anything that consits of Voxels
  */
 class VoxelCluster {
 public:

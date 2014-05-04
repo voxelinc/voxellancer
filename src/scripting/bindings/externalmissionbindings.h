@@ -9,8 +9,8 @@
 
 
 /**
-    API to manage missions from the outside
-*/
+ * API to manage missions from the outside
+ */
 class ExternalMissionBindings : public Bindings {
 public:
     ExternalMissionBindings(GamePlayScript& script);

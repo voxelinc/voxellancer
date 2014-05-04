@@ -9,7 +9,6 @@
 
 
 CameraFollowHelper::CameraFollowHelper():
-    m_target(nullptr),
     m_cameraOffset("general.cameraOffset")
 {
 }
@@ -19,7 +18,7 @@ WorldObject* CameraFollowHelper::target() {
 }
 
 void CameraFollowHelper::setTarget(WorldObject* target) {
-    m_target = target->handle();
+    m_target = makeHandle(target);
 }
 
 glm::vec3 CameraFollowHelper::followPosition() {

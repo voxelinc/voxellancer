@@ -11,7 +11,7 @@ class WorldObject;
 class WorldObjectComponents;
 
 /**
- *    Sets up WorldObject by the settinsg provided by properties
+ *  Sets up WorldObject by the settings provided by properties
  */
 class WorldObjectBuilder {
 public:
@@ -38,10 +38,10 @@ protected:
     void setupEngineSlots(WorldObjectComponents& components);
 
 
-    /*
-        Little hack method that ensures all hardpoints and engine-points are equipped
-        with something
-    */
+    /**
+     * Little hack method that ensures all hardpoints and engine-points are equipped
+     * with something
+     */
     void equipSomehow(WorldObject* worldObject);
 };
 
