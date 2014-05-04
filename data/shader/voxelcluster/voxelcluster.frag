@@ -1,7 +1,7 @@
 #version 330
 
 uniform float withBorder;
-uniform float transparentPass;
+uniform bool transparentPass;
 
 layout(location = 0) out vec4 fragColor;
 layout(location = 1) out vec4 normalz;
@@ -23,7 +23,7 @@ void main() {
     vec3 rgbColor = voxelFragmentColor(f_color.rgb, f_emissiveness, f_normal, f_modelposition);
     fragColor = vec4(rgbColor * f_color.a, f_color.a);
     emissiveness = voxelFragmentEmissiveness(f_color.rgb, f_emissiveness);
-    if(transparentPass > 0) {
+    if(transparentPass) {
         normalz = vec4(0.0);
     } else {
         normalz = voxelFragmenNormalZ(f_normal);
