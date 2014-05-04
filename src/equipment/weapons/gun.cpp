@@ -62,15 +62,15 @@ void Gun::setFireSound(const SoundProperties& fireSound) {
 }
 
 void Gun::fireAtPoint(const glm::vec3& point, bool checkFriendlyFire) {
+    if (!canFire()) {
+        return;
+    }
+
     if (!m_hardpoint->inFieldOfAim(point)) {
         return;
     }
 
     if (!isBulletPathClear(point, checkFriendlyFire)) {
-        return;
-    }
-
-    if (!canFire()) {
         return;
     }
 

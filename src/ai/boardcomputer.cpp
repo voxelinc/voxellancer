@@ -137,8 +137,6 @@ void BoardComputer::shootBullet(const std::vector<Handle<WorldObject>>& targets)
             glm::vec3 targetPoint = target->position() + inaccuracyNoise;
 
             m_worldObject->components().fireAtPoint(targetPoint, true);
-
-            break;
         }
     }
 }
