@@ -31,8 +31,9 @@ struct AABBData {
 };
 
 /**
-    Able to render a set of AABBs, as wireframes only, currently
-*/
+ * Able to render a set of AABBs.
+ * As wireframes only, currently
+ */
 class AABBRenderer : public ContextDependant {
 public:
     AABBRenderer();

@@ -56,9 +56,9 @@
 GamePlayNormalInput::GamePlayNormalInput() :
     GamePlayInput(),
 
-    prop_deadzoneMouse("input.deadzoneMouse"),
-    prop_deadzoneGamepad("input.deadzoneGamepad"),
-    prop_maxClickTime("input.maxClickTime"),
+    m_deadzoneMouse("input.deadzoneMouse"),
+    m_deadzoneGamepad("input.deadzoneGamepad"),
+    m_maxClickTime("input.maxClickTime"),
 
     fireAction("input.mappingFirePrimary", "input.mappingFireSecondary", "Fire"),
     rocketAction("input.mappingRocketPrimary", "input.mappingRocketSecondary", "Launch Rockets"),
@@ -81,7 +81,7 @@ GamePlayNormalInput::GamePlayNormalInput() :
     m_secondaryInputValues(),
     m_actions(),
 
-    m_inputConfigurator(new InputConfigurator(&m_actions, &m_secondaryInputValues, &prop_deadzoneGamepad, &World::instance()->player().hud())),
+    m_inputConfigurator(new InputConfigurator(&m_actions, &m_secondaryInputValues, &m_deadzoneGamepad, &World::instance()->player().hud())),
     m_fireUpdate(false),
     m_rocketUpdate(false),
     m_moveUpdate(0),
@@ -253,7 +253,7 @@ void GamePlayNormalInput::processMouseUpdate(float deltaSec) {
         rot = glm::vec3(y, x, 0);
         rot /= m_cursorMaxDistance;
 
-        if (glm::length(rot) < prop_deadzoneMouse) {
+        if (glm::length(rot) < m_deadzoneMouse) {
             rot = glm::vec3(0);
         }
         m_rotateUpdate += rot;
@@ -318,7 +318,7 @@ float GamePlayNormalInput::getInputValue(InputMapping mapping) {
                 return 0;
             }
         case InputType::GamePadAxis:
-            if (m_secondaryInputValues.axisCnt > mapping.index() && glm::abs(m_secondaryInputValues.axisValues[mapping.index()]) > prop_deadzoneGamepad) {
+            if (m_secondaryInputValues.axisCnt > mapping.index() && glm::abs(m_secondaryInputValues.axisValues[mapping.index()]) > m_deadzoneGamepad) {
                 float relativeValue = m_secondaryInputValues.axisValues[mapping.index()] / mapping.maxValue();
                 if (relativeValue > 0) {
                     m_centerCrosshair = true;
@@ -364,7 +364,7 @@ void GamePlayNormalInput::processRotateActions() {
     rot.z = -getInputValue(&rotateClockwiseAction)
         + getInputValue(&rotateCClockwiseAction);
 
-    if (glm::length(rot) < prop_deadzoneGamepad) {
+    if (glm::length(rot) < m_deadzoneGamepad) {
         rot = glm::vec3(0);
     }
 

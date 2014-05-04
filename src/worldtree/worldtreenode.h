@@ -58,11 +58,12 @@ protected:
     std::list<WorldTreeNode*> m_activeSubnodes;
 
     /**
-     *  convert a leaf to a node with subnodes
+     * Convert a leaf to a node with subnodes
      */
     void convertToGroup(WorldTreeNode* initialSubnode = nullptr);
+
     /**
-     *  move a geode to the specified subnode if it is contained in its aabb
+     * Move a geode to the specified subnode if it is contained in its aabb
      */
     void moveToSubnode(WorldTreeGeode* geode, WorldTreeNode* subnode);
 

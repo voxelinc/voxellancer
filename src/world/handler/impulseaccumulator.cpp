@@ -11,7 +11,9 @@ void ImpulseAccumulator::clear() {
     m_impulses.clear();
 }
 
-/* Makes sure every voxel only receives one impulse */
+/*
+ * Makes sure every voxel only receives one impulse
+ */
 void ImpulseAccumulator::parse(const std::list<Impulse> &impulses) {
     for(const Impulse& impulse : impulses) {
         std::map<const Voxel*, Impulse>::iterator i = m_voxelImpulseMap.find(impulse.voxel());

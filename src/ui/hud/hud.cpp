@@ -24,7 +24,6 @@
 
 #include "worldobject/worldobjectinfo.h"
 
-#include "utils/tostring.h"
 #include "utils/geometryhelper.h"
 
 #include "voxel/voxelrenderer.h"
@@ -60,7 +59,6 @@ HUD::HUD(Player* player):
     m_speedLabel(new TextFieldHudget(this, glm::normalize(glm::vec3(1.5f, -1.1f, -2)), TextOrientation::BACKWARDS, 0.020f, "")),
     m_resetButton(new ButtonHudget(this, glm::normalize(glm::vec3(-1.5f, 1.1f, -2)), (std::function<void(ClickType clickType)>)std::bind(&HUD::openMenu, this, std::placeholders::_1), TextOrientation::BACKWARDS, 0.01f, "RESET",FontSize::SIZE5x7,ButtonStyle::BORDERED)),
     m_elements(new HUDElements(*this)),
-    m_target(nullptr),
     m_drawHud("vfx.drawhud"),
     m_view(nullptr)
 {
@@ -219,7 +217,7 @@ glm::vec3 HUD::applyTo(const glm::vec3 &vertex) const {
 }
 
 void HUD::setTarget(WorldObject* target) {
-    m_target = target ? target->handle() : Handle<WorldObject>(nullptr);
+    m_target = target ? makeHandle(target) : Handle<WorldObject>();
 }
 
 WorldObject* HUD::target() {
