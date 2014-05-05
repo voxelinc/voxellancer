@@ -12,8 +12,8 @@
 #include "player.h"
 
 #include "factions/faction.h"
-#include "factions/factionRelation.h"
-#include "factions/factionMatrix.h"
+#include "factions/factionrelation.h"
+#include "factions/factionmatrix.h"
 
 #include "ui/hud/hud.h"
 
