@@ -14,6 +14,8 @@ public:
     Capsule();
     Capsule(const glm::vec3& origin, const glm::vec3& direction, const float radius);
 
+    static Capsule fromTo(const glm::vec3& from, const glm::vec3& to, const float radius);
+
     const glm::vec3& origin() const;
     void setOrigin(const glm::vec3& origin);
 
@@ -32,5 +34,8 @@ protected:
     glm::vec3 m_origin;
     glm::vec3 m_direction;
     float m_radius;
+
+
+    glm::vec3 extendDirection() const;
 };
 
