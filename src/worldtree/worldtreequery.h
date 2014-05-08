@@ -17,7 +17,7 @@ class WorldTreeGeode;
 
 class WorldTreeQuery {
 public:
-    WorldTreeQuery(WorldTree* worldTree, const AbstractShape* shape, const WorldTreeHint& hint = WorldTreeHint(), CollisionFilter* collisionFilter = nullptr);
+    WorldTreeQuery(WorldTree* worldTree, const AbstractShape* shape, const WorldTreeHint& hint = WorldTreeHint(), const CollisionFilter* collisionFilter = nullptr);
 
     bool areGeodesNear();
 
@@ -32,7 +32,7 @@ public:
 protected:
     WorldTree* m_worldTree;
     WorldTreeHint m_hint;
-    CollisionFilter* m_collisionFilter;
+    const CollisionFilter* m_collisionFilter;
     const AbstractShape* m_shape;
     bool m_queryInterrupted;
 
