@@ -38,6 +38,7 @@ protected:
     glow::ref_ptr<glow::Program> m_program;
     std::unique_ptr<VoxelMesh> m_voxelMesh;
     bool m_prepared;
+    bool m_transparentPass;
 
     glow::Uniform<glm::mat4>* m_modelMatrixUniform;
     glow::Uniform<float>* m_emissivenessUniform;

@@ -30,3 +30,6 @@ VoxelParticleData VoxelParticleSetup::toData(float timeSecs) const {
     return particle;
 }
 
+Visuals VoxelParticleSetup::visuals() const {
+    return m_visuals;
+}

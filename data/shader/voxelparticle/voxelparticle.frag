@@ -2,7 +2,7 @@
 
 uniform float time;
 uniform float withBorder;
-uniform float transparentPass;
+uniform bool transparentPass;
 
 layout(location = 0) out vec4 fragColor;
 layout(location = 1) out vec4 normalz;
@@ -25,17 +25,21 @@ void main() {
     if (time >= f_deathTime) {
         discard;
     }
-	if (transparentPass > 0 && f_color.a > 0.9999) {
-			discard;
-	}
-	if (transparentPass == 0 && f_color.a < 0.9999) {
-			discard;
-	}
-	
-	vec3 rgbColor = voxelFragmentColor(f_color.rgb, f_emissiveness, f_normal, f_modelposition);
+    if (transparentPass && f_color.a > 0.9999) {
+        discard;
+    }
+    if (!transparentPass && f_color.a < 0.9999) {
+        discard;
+    }
+    
+    vec3 rgbColor = voxelFragmentColor(f_color.rgb, f_emissiveness, f_normal, f_modelposition);
     fragColor = vec4(rgbColor * f_color.a, f_color.a);
     emissiveness = voxelFragmentEmissiveness(f_color.xyz, f_emissiveness);
-    normalz = voxelFragmenNormalZ(f_normal);
-	count = vec4(1.0/255.0, 0.0, f_color.a, 1.0);
+    if(transparentPass) {
+        normalz = vec4(0.0);
+    } else {
+        normalz = voxelFragmenNormalZ(f_normal);
+    }
+    count = vec4(1.0/255.0, 0.0, f_color.a, 1.0);
 }
 
