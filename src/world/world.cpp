@@ -102,8 +102,6 @@ void World::update(float deltaSecs) {
         element->update(deltaSecs);
 
         if (m_scheduledRemovals.find(element) != m_scheduledRemovals.end()) {
-            element->onRemovalFromWorld();
-            element->deregisterInWorldComponents();
             m_scriptEngine->unregisterScriptable(element);
             element->setWorld(nullptr);
 
@@ -135,17 +133,10 @@ void World::reset(bool showWarning) {
 }
 
 void World::addElement(WorldElement* element) {
-    if (!element->isAddableToWorld(this)) {
-        glow::warning("World: Couldn't add WorldElement");
-        return;
-    }
-
     m_elements.push_back(element);
     m_scriptEngine->registerScriptable(element);
 
     element->setWorld(this);
-    element->onAddToWorld();
-    element->registerInWorldComponents();
 }
 
 void  World::removeElement(WorldElement* element) {

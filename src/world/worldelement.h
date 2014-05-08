@@ -20,14 +20,6 @@ public:
     World* world();
     void setWorld(World* world);
 
-    virtual bool isAddableToWorld(World* world) const;
-
-    virtual void onAddToWorld();
-    virtual void onRemovalFromWorld();
-
-    virtual void registerInWorldComponents();
-    virtual void deregisterInWorldComponents();
-
     virtual void update(float deltaSec);
 
 
