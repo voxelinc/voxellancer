@@ -8,8 +8,8 @@
 class MissionScript;
 
 /**
-    API available to MissionScript
-*/
+ * API available to MissionScript
+ */
 class InternalMissionBindings : public Bindings {
 public:
     InternalMissionBindings(MissionScript& script);

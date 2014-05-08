@@ -22,7 +22,7 @@ vec3 voxelFragmentColor(vec3 color, float emissiveness, vec3 normal, vec3 positi
     float diffuse = dot(n_normal, lightdir);
     diffuse = max(0, diffuse) + ambient;
 
-    return color * diffuse - vec3(border * float(withBorder));
+    return min(color * diffuse, vec3(1.0)) - vec3(border * float(withBorder));
 }
 
 vec4 voxelFragmentEmissiveness(vec3 color, float emissiveness) {

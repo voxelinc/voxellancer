@@ -8,10 +8,10 @@ class Script;
 class Scriptable;
 
 /**
-    Main class for accessing scripts during gameplay.
-    The ScriptEngine connects Scripts with the World by tunneling events from World to the Script
-    and all sorts of actions (Objectcreation, Tasks) back to the World.
-*/
+ * Main class for accessing scripts during gameplay.
+ * The ScriptEngine connects Scripts with the World by tunneling events from World to the Script
+ * and all sorts of actions (Objectcreation, Tasks) back to the World.
+ */
 class ScriptEngine {
 public:
     ScriptEngine();
@@ -20,14 +20,14 @@ public:
     void addScript(std::shared_ptr<Script> script);
 
     /**
-        start (call the "main" function) all added scripts and all future
-        added scripts until stop is called
-    */
+     * Start (call the "main" function) all added scripts and all future
+     * added scripts until stop is called
+     */
     void start();
 
     /**
-        Stops the ScriptEngine, continuing to update after start() is called again.
-    */
+     * Stops the ScriptEngine, continuing to update after start() is called again.
+     */
     void stop();
 
     void registerScriptable(Scriptable* scriptable);

@@ -2,7 +2,6 @@
 
 #include <algorithm>
 
-#include "utils/tostring.h"
 #include "worldobject/worldobject.h"
 #include "collision/collisiondetector.h"
 #include "worldtreenode.h"
@@ -25,9 +24,9 @@ WorldTreeNode* WorldTree::root() {
 
 WorldTreeGeode* WorldTree::insert(WorldObject* worldObject) {
     worldObject->collisionDetector().setWorldTree(this);
-    
+
     WorldTreeGeode* geode = new WorldTreeGeode(worldObject);
-    
+
     insert(geode);
 
     return geode;
@@ -43,16 +42,17 @@ void WorldTree::insert(WorldTreeGeode* geode) {
 }
 
 void WorldTree::remove(WorldTreeGeode* geode) {
-    geode->containingNode()->remove(geode);
-
+    WorldTreeNode* node = geode->hint().node();
+    node = node ? node : m_root;
+    node->remove(geode);
 }
 
 void WorldTree::aabbChanged(WorldTreeGeode* geode) {
-    assert(geode->containingNode());
+    assert(geode->hint().node());
 
-    WorldTreeNode* newContainingNode = containingNode(geode->aabb(), geode->containingNode());
+    WorldTreeNode* newContainingNode = containingNode(geode->aabb(), geode->hint().node());
 
-    if (newContainingNode != geode->containingNode() || !newContainingNode->isLeaf()) {
+    if (newContainingNode != geode->hint().node() || !newContainingNode->isLeaf()) {
         geode->intersectingLeafs().remove_if([&](WorldTreeNode* intersectingLeaf) {
             if (!intersectingLeaf->aabb().intersects(geode->aabb())) {
                 intersectingLeaf->remove(geode);
@@ -63,7 +63,7 @@ void WorldTree::aabbChanged(WorldTreeGeode* geode) {
         newContainingNode->insert(geode);
     }
 
-    geode->setContainingNode(newContainingNode);
+    geode->setHint(newContainingNode->hint());
 }
 
 void WorldTree::extend(const IAABB& aabb) {

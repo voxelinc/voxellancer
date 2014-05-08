@@ -1,8 +1,7 @@
 #include "fighttaskimplementation.h"
 
 #include "ai/boardcomputer.h"
-#include "voxel/voxelclusterbounds.h"
-#include "worldobject/worldobject.h"
+#include "utils/worldobjectgeometryhelper.h"
 
 
 FightTaskImplementation::FightTaskImplementation(BoardComputer* boardComputer, const std::vector<Handle<WorldObject>>& targets) :
@@ -41,8 +40,6 @@ void FightTaskImplementation::updateTargets() {
 }
 
 float FightTaskImplementation::targetDistance() {
-    WorldObject* worldObject = boardComputer()->worldObject();
-    return glm::length(worldObject->transform().position() - m_primaryTarget->transform().position())
-        - worldObject->bounds().minimalGridSphere().radius() * worldObject->transform().scale()
-        - m_primaryTarget->bounds().minimalGridSphere().radius() * m_primaryTarget->transform().scale();
+    return WorldObjectGeometryHelper::sphereToSphereDistance(boardComputer()->worldObject(), m_primaryTarget);
 }
+

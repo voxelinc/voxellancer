@@ -16,10 +16,10 @@ class VoxelParticleRenderer;
 class VoxelParticleRemover;
 class VoxelCluster;
 
-/*
-    Main class for managing and displaying the VoxelParticles of
-    a World.
-*/
+/**
+ * Main class for managing and displaying the VoxelParticles of
+ * a World.
+ */
 class VoxelParticleEngine : ContextDependant {
 public:
     VoxelParticleEngine();
