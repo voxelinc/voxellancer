@@ -239,3 +239,4 @@ std::list<WorldTreeGeode*>& WorldTreeNode::geodesList(WorldTreeGeode* geode) {
         return m_normalGeodes;
     }
 }
+

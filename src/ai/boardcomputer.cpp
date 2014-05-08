@@ -13,6 +13,10 @@
 #include "worldobject/ship.h"
 #include "worldobject/worldobjectcomponents.h"
 
+#include "equipment/hardpoint.h"
+#include "equipment/weapon.h"
+#include "equipment/weapons/gun.h"
+
 
 static const float s_minActDistance = 0.5f;
 static const float s_minActAngle = glm::radians(2.0f);
@@ -128,9 +132,11 @@ void BoardComputer::shootBullet(const std::vector<Handle<WorldObject>>& targets)
         if (const WorldObject* target = targetHandle.get()) {
             // Hardpoints check themselves whether they can fire, just tell everyone to shoot everything
             glm::vec3 targetDirection = target->position() - m_worldObject->position();
+            glm::vec3 inaccuracyNoise = RandVec3::rand(0, 1) * glm::length(targetDirection) / 30.0f;
 
-            glm::vec3 offset = RandVec3::rand(0, 1) * glm::length(targetDirection) / 30.0f;
-            m_worldObject->components().fireAtPoint(target->position() + offset);
+            glm::vec3 targetPoint = target->position() + inaccuracyNoise;
+
+            m_worldObject->components().fireAtPoint(targetPoint, true);
         }
     }
 }
@@ -146,4 +152,5 @@ void BoardComputer::update(float deltaSec) {
     m_engineState.clear();
     m_overwriteEngineState = false;
 }
+
 

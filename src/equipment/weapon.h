@@ -53,5 +53,7 @@ protected:
     float m_cooldownTime;
     Visuals m_visuals;
     std::string m_projectileName;
+
+    virtual void onProjectileNameChanged();
 };
 
