@@ -4,18 +4,7 @@
 #include "scripting/elematelua/luawrapper.h"
 
 
-Script::Script(World* world):
-    WorldElement(world),
-    m_lua(new LuaWrapper()),
-    m_state(ScriptState::Idle),
-    m_debugStatus("")
-{
-    m_lua->Register("setDebugStatus", this, &Script::apiSetDebugStatus);
-    load("data/scripts/vec3.lua");
-}
-
-Script::Script(WorldElement* parent):
-    WorldElement(parent),
+Script::Script():
     m_lua(new LuaWrapper()),
     m_state(ScriptState::Idle),
     m_debugStatus("")

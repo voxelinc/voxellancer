@@ -11,8 +11,7 @@
 #include "player.h"
 
 
-Mission::Mission(World* world, const std::string& path):
-    WorldElement(world),
+Mission::Mission(const std::string& path):
     m_script(new MissionScript(*this, World::instance()->scriptEngine())),
     m_state(MissionState::Idle)
 {

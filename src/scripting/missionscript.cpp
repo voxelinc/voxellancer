@@ -10,7 +10,7 @@
 
 
 MissionScript::MissionScript(Mission& mission, ScriptEngine& scriptEngine):
-    GamePlayScript(scriptEngine, &mission),
+    GamePlayScript(scriptEngine),
     m_mission(mission)
 {
     addBindings(new InternalMissionBindings(*this));

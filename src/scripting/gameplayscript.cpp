@@ -17,15 +17,7 @@
 #include "world/world.h"
 
 
-GamePlayScript::GamePlayScript(ScriptEngine& scriptEngine, World* world):
-    Script(world),
-    m_scriptEngine(&scriptEngine)
-{
-    addGamePlayBindings();
-}
-
-GamePlayScript::GamePlayScript(ScriptEngine& scriptEngine, WorldElement* parent):
-    Script(parent),
+GamePlayScript::GamePlayScript(ScriptEngine& scriptEngine):
     m_scriptEngine(&scriptEngine)
 {
     addGamePlayBindings();

@@ -15,9 +15,9 @@
 
 MissionScenario::MissionScenario(GamePlay* gamePlay, const std::string& path):
     BaseScenario(gamePlay),
-    m_mission(new Mission(World::instance(), path))
+    m_mission(new Mission(path))
 {
-
+    World::instance()->addElement(m_mission);
 }
 
 void MissionScenario::populateWorld() {

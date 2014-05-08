@@ -14,8 +14,7 @@ class World;
 
 class WorldElement : public glow::Referenced, public HandleOwner, public Scriptable {
 public:
-    explicit WorldElement(World* world);
-    explicit WorldElement(WorldElement* parent);
+    WorldElement();
     virtual ~WorldElement();
 
     World* world();
@@ -29,17 +28,10 @@ public:
     virtual void registerInWorldComponents();
     virtual void deregisterInWorldComponents();
 
-    std::list<WorldElement*> children() const;
-
-    void addChild(WorldElement* child);
-    void removeChild(WorldElement* child);
-
     virtual void update(float deltaSec);
 
 
 protected:
     World* m_world;
-    WorldElement* m_parent;
-    std::list<glow::ref_ptr<WorldElement>> m_children;
 };
 

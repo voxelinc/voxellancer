@@ -17,8 +17,7 @@ class WorldObject;
 
 class GamePlayScript: public Script {
 public:
-    GamePlayScript(ScriptEngine& scriptEngine, World* world = nullptr);
-    GamePlayScript(ScriptEngine& scriptEngine, WorldElement* parent);
+    GamePlayScript(ScriptEngine& scriptEngine);
     virtual ~GamePlayScript();
 
     ScriptEngine& scriptEngine();

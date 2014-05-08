@@ -20,7 +20,7 @@ enum class MissionState {
 
 class Mission : public WorldElement {
 public:
-    Mission(World* world, const std::string& path);
+    Mission(const std::string& path);
     ~Mission();
 
     void start();
