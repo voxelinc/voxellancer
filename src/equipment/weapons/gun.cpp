@@ -90,7 +90,7 @@ bool Gun::isBulletPathClear(const glm::vec3& point, bool checkFriendlyFire) {
     glm::vec3 direction = glm::normalize(point - m_hardpoint->voxel()->position());
     Capsule capsuleToTarget = Capsule::fromTo(m_hardpoint->voxel()->position() + direction * (m_bulletLength / 2.0f + m_spawnDistance), point, m_bulletMaxWidth / 2);
 
-    WorldTreeQuery fireDirectionQuery(&World::instance()->worldTree(), &capsuleToTarget, owner->collisionDetector().geode()->containingNode(), nullptr);
+    WorldTreeQuery fireDirectionQuery(&World::instance()->worldTree(), &capsuleToTarget, owner->collisionDetector().geode()->hint(), nullptr);
 
     for (WorldObject* object : fireDirectionQuery.intersectingWorldObjects()) {
         if (object == m_hardpoint->components()->worldObject()) {
