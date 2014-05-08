@@ -2,7 +2,9 @@
 
 #include <iostream>
 
+#include "geometry/aabb.h"
 #include "geometry/capsule.h"
+#include "geometry/sphere.h"
 
 #include "../bandit_extension/vec3helper.h"
 

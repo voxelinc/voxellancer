@@ -43,7 +43,7 @@ void FighterFightTask::update(float deltaSec) {
                 boardComputer()->rotateTo(m_primaryTarget->transform().position());
                 boardComputer()->moveTo(m_primaryTarget->transform().position());
                 if (angleToTarget() < 15.0f && targetDistance() < m_maxRocketDistance) {
-                    boardComputer()->shootRockets(m_primaryTarget->handle());
+                    boardComputer()->shootRockets(m_primaryTarget);
                 }
             }
             if (targetDistance() < m_maxFireDistance) {

@@ -11,8 +11,8 @@ class HMDManager;
 class Viewer;
 
 /**
- *  Mainstate of the Game, entered once when libraries and context are setup
- *  and left just before they are teared down again
+ * Mainstate of the Game, entered once when libraries and context are setup
+ * and left just before they are teared down again
  */
 class Game: public GameState {
 public:
