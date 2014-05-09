@@ -6,7 +6,6 @@
 #include "ai/character.h"
 
 #include "events/aitaskfinishedpoll.h"
-#include "events/eventpoller.h"
 
 #include "factions/faction.h"
 #include "factions/factionmatrix.h"
@@ -93,9 +92,9 @@ apikey AiBindings::apiOnAiTaskFinished(apikey key, const std::string& callback) 
         return -1;
     }
 
-    auto finishedPoll = std::make_shared<AiTaskFinishedPoll>(aiTask, createCallback(callback, key));
+    auto finishedPoll = new AiTaskFinishedPoll(aiTask, createCallback(callback, key));
 
-    World::instance()->eventPoller().addPoll(finishedPoll);
+    World::instance()->addElement(finishedPoll);
     m_script.addLocal(finishedPoll);
 
     return finishedPoll->scriptKey();

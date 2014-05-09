@@ -10,10 +10,6 @@ EventPoll::EventPoll(const Callback& callback):
 
 EventPoll::~EventPoll() = default;
 
-bool EventPoll::isDead() {
-    return false;
-}
-
 bool EventPoll::isActive() const {
     return m_active;
 }

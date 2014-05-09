@@ -24,13 +24,6 @@ public:
     LuaWrapper& luaWrapper();
 
     /**
-     * The Script holds a weak_ptr to all EventPolls to remove them
-     * from the EventPoller when the Script is destroyed.
-     * Calls addLocal(Scriptable*).
-     */
-    void addLocal(std::shared_ptr<EventPoll> poll);
-
-    /**
      *  Add a Scriptable to be held by this script. On destruction of the script
      *  this Scriptable becomes invalid and will be destroyed
      */
@@ -40,7 +33,6 @@ public:
 protected:
     ScriptEngine* m_scriptEngine;
     std::vector<int> m_locals;
-    std::vector<std::weak_ptr<EventPoll>> m_eventPolls;
 
     void addGamePlayBindings();
 };

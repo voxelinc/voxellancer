@@ -13,8 +13,6 @@ class AABBEnteredPoll : public EventPoll {
 public:
     AABBEnteredPoll(WorldObject* worldObject, const AABB& aabb, const Callback& callback);
 
-    virtual bool isDead() override;
-
 
 protected:
     Handle<WorldObject> m_worldObject;

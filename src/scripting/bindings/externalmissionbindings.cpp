@@ -1,6 +1,5 @@
 #include "externalmissionbindings.h"
 
-#include "events/eventpoller.h"
 #include "events/missionstatepoll.h"
 
 #include "scripting/scriptengine.h"
@@ -49,9 +48,9 @@ apikey ExternalMissionBindings::createStatePoll(apikey missionKey, MissionState 
        return -1;
     }
 
-    auto poll = std::make_shared<MissionStatePoll>(*mission, state, createCallback(callback, missionKey));
+    auto poll = new MissionStatePoll(*mission, state, createCallback(callback, missionKey));
 
-    World::instance()->eventPoller().addPoll(poll);
+    World::instance()->addElement(poll);
     m_script.addLocal(poll);
 
     return poll->scriptKey();

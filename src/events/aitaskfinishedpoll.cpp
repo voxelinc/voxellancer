@@ -5,15 +5,22 @@
 
 AiTaskFinishedPoll::AiTaskFinishedPoll(AiTask* aitask, const Callback& callback):
     EventPoll(callback),
-    m_aiTask(makeHandle(aitask))
+    m_aiTask(makeHandle(aitask)),
+    m_fired(false)
 {
 }
 
 bool AiTaskFinishedPoll::poll() {
-    return m_aiTask.valid() ? m_aiTask->isFinished() : false;
+    if (m_aiTask.valid()) {
+        return m_aiTask->isFinished() && !m_fired;
+    } else {
+        return false;
+    }
 }
 
-bool AiTaskFinishedPoll::isDead() {
-    return poll();
+void AiTaskFinishedPoll::specialOnCallback() {
+    EventPoll::specialOnCallback();
+    m_fired = true;
+    kill();
 }
 

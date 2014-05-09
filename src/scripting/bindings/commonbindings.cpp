@@ -1,6 +1,5 @@
 #include "commonbindings.h"
 
-#include "events/eventpoller.h"
 #include "events/singleshottimer.h"
 #include "events/loopingtimer.h"
 #include "events/aabbenteredpoll.h"
@@ -67,18 +66,18 @@ int CommonBindings::apiSetEventActive(apikey eventPoll, bool active) {
 }
 
 apikey CommonBindings::apiCreateSingleShotTimer(const std::string& callback, float delta) {
-    auto timer = std::make_shared<SingleShotTimer>(delta, createCallback(callback));
+    auto timer = new SingleShotTimer(delta, createCallback(callback));
 
-    World::instance()->eventPoller().addPoll(timer);
+    World::instance()->addElement(timer);
     m_script.addLocal(timer);
 
     return timer->scriptKey();
 }
 
 apikey CommonBindings::apiCreateLoopingTimer(const std::string& callback, float delta) {
-    auto timer = std::make_shared<LoopingTimer>(delta, createCallback(callback));
+    auto timer = new LoopingTimer(delta, createCallback(callback));
 
-    World::instance()->eventPoller().addPoll(timer);
+    World::instance()->addElement(timer);
     m_script.addLocal(timer);
 
     return timer->scriptKey();

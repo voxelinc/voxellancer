@@ -12,8 +12,6 @@
 #include "ai/squadlogic.h"
 #include "ai/grouptasks/defendareatask.h"
 
-#include "events/eventpoller.h"
-
 #include "gamestate/game.h"
 #include "gamestate/gameplay/gameplay.h"
 
@@ -153,15 +151,15 @@ go_bandit([](){
                 script->loadString(R"(
                     onAABBEntered(playerShip(), vec3(-50,-50,-150), vec3(50,50,-100), "callback")
                 )");
-                World::instance()->eventPoller().update(1.0f);
+                World::instance()->update(1.0f);
                 AssertThat(script->debugStatus(), Equals(""));
 
                 ship->transform().setPosition(glm::vec3(0, 0, -110));
-                World::instance()->eventPoller().update(1.0f);
+                World::instance()->update(1.0f);
                 AssertThat(script->debugStatus(), Equals("callback!"));
 
                 script->apiSetDebugStatus("");
-                World::instance()->eventPoller().update(1.0f);
+                World::instance()->update(1.0f);
                 AssertThat(script->debugStatus(), Equals(""));
             });
 
@@ -173,15 +171,15 @@ go_bandit([](){
                 )");
                 AssertThat(ship->character()->task()->isFinished(), Equals(false));
 
-                World::instance()->eventPoller().update(1.0f);
+                World::instance()->update(1.0f);
                 AssertThat(script->debugStatus(), Equals(""));
 
                 ship->transform().setPosition(glm::vec3(0, 0, 9.8));
-                World::instance()->eventPoller().update(1.0f);
+                World::instance()->update(1.0f);
                 AssertThat(script->debugStatus(), Equals("callback!"));
 
                 script->apiSetDebugStatus("");
-                World::instance()->eventPoller().update(1.0f);
+                World::instance()->update(1.0f);
                 AssertThat(script->debugStatus(), Equals(""));
             });
 
@@ -192,11 +190,11 @@ go_bandit([](){
                     onWorldObjectDestroyed(playerShip(), "callback")
                 )");
 
-                World::instance()->eventPoller().update(1.0f);
+                World::instance()->update(1.0f);
                 AssertThat(script->debugStatus(), Equals(""));
 
                 ship->removeVoxel(ship->crucialVoxel());
-                World::instance()->eventPoller().update(1.0f);
+                World::instance()->update(1.0f);
                 AssertThat(script->debugStatus(), Equals("callback!"));
             });
 
@@ -208,11 +206,11 @@ go_bandit([](){
                     onWorldObjectDestroyed(playerShip(), "callback")
                 )");
 
-                World::instance()->eventPoller().update(1.0f);
+                World::instance()->update(1.0f);
                 AssertThat(script->debugStatus(), Equals(""));
 
                 ship.reset(nullptr);
-                World::instance()->eventPoller().update(1.0f);
+                World::instance()->update(1.0f);
                 AssertThat(script->debugStatus(), Equals("callback!"));
             });
 

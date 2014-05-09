@@ -3,7 +3,6 @@
 #include <memory>
 
 #include "events/worldobjectdestroyedpoll.h"
-#include "events/eventpoller.h"
 #include "events/aabbenteredpoll.h"
 
 #include "gamestate/gameplay/gameplay.h"
@@ -186,9 +185,9 @@ apikey WorldObjectBindings::apiOnWorldObjectDestroyed(apikey key, const std::str
         return -1;
     }
 
-    auto destructionPoll = std::make_shared<WorldObjectDestroyedPoll>(worldObject, createCallback(callback, key));
+    auto destructionPoll = new WorldObjectDestroyedPoll(worldObject, createCallback(callback, key));
 
-    World::instance()->eventPoller().addPoll(destructionPoll);
+    World::instance()->addElement(destructionPoll);
     m_script.addLocal(destructionPoll);
 
     return destructionPoll->scriptKey();
@@ -201,9 +200,9 @@ apikey WorldObjectBindings::apiOnAABBEntered(apikey key, const glm::vec3& llf, c
         return -1;
     }
 
-    auto enteredPoll = std::make_shared<AABBEnteredPoll>(worldObject, AABB(llf, urb), createCallback(callback, key));
+    auto enteredPoll = new AABBEnteredPoll(worldObject, AABB(llf, urb), createCallback(callback, key));
 
-    World::instance()->eventPoller().addPoll(enteredPoll);
+    World::instance()->addElement(enteredPoll);
     m_script.addLocal(enteredPoll);
 
     return enteredPoll->scriptKey();

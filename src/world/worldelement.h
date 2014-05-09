@@ -20,10 +20,14 @@ public:
     World* world();
     void setWorld(World* world);
 
+    bool alive() const;
+    void kill();
+
     virtual void update(float deltaSec);
 
 
 protected:
     World* m_world;
+    bool m_alive;
 };
 

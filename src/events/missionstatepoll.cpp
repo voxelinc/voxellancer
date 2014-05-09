@@ -5,19 +5,21 @@ MissionStatePoll::MissionStatePoll(Mission& mission, MissionState state, const C
     EventPoll(callback),
     m_mission(&mission),
     m_state(state),
-    m_dead(false)
+    m_fired(false)
 {
 }
 
-bool MissionStatePoll::isDead() {
-    return m_dead;
-}
-
 bool MissionStatePoll::poll() {
-    return m_mission->state() == m_state;
+    if (m_fired) {
+        return false;
+    } else {
+        return m_mission->state() == m_state;
+    }
 }
 
 void MissionStatePoll::specialOnCallback() {
-    m_dead = true;
+    EventPoll::specialOnCallback();
+    m_fired = true;
+    kill();
 }
 

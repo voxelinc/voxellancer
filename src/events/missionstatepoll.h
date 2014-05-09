@@ -13,13 +13,11 @@ class MissionStatePoll : public EventPoll {
 public:
     MissionStatePoll(Mission& mission, MissionState state, const Callback& callback);
 
-    virtual bool isDead() override;
-
 
 protected:
     const glow::ref_ptr<Mission> m_mission;
     MissionState m_state;
-    bool m_dead;
+    bool m_fired;
 
 
     virtual bool poll() override;

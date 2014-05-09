@@ -7,7 +7,6 @@
 #include <glow/ref_ptr.h>
 
 
-class EventPoller;
 class FactionMatrix;
 class God;
 class Player;
@@ -33,7 +32,6 @@ public:
     ScriptEngine& scriptEngine();
     VoxelParticleEngine& particleEngine();
     FactionMatrix& factionMatrix();
-    EventPoller& eventPoller();
 
     std::unordered_set<WorldObject*>& worldObjects();
     std::unordered_set<Ship*>& ships();
@@ -72,7 +70,6 @@ protected:
     std::unique_ptr<God> m_god;
     std::unique_ptr<VoxelParticleEngine> m_particleEngine;
     std::unique_ptr<FactionMatrix> m_factionMatrix;
-    std::unique_ptr<EventPoller> m_eventPoller;
 
     std::list<glow::ref_ptr<WorldElement>> m_elements;
     std::unordered_set<WorldElement*> m_scheduledRemovals;

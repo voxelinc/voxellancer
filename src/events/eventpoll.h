@@ -2,23 +2,17 @@
 
 #include <memory>
 
-#include "scripting/scriptable.h"
-
 #include "utils/callback.h"
-#include "utils/handle/handleowner.h"
+
+#include "world/worldelement.h"
 
 
-class EventPoll: public Scriptable, public HandleOwner {
+class EventPoll: public WorldElement {
 public:
     EventPoll(const Callback& callback);
-    ~EventPoll();
+    virtual ~EventPoll() override;
 
-    /**
-     * Return true if the poll won't fire anymore
-     */
-    virtual bool isDead();
-
-    virtual void update(float deltaSec);
+    virtual void update(float deltaSec) override;
 
     bool isActive() const;
     void setActive(bool active);

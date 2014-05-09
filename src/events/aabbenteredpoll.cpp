@@ -13,15 +13,17 @@ AABBEnteredPoll::AABBEnteredPoll(WorldObject* worldObject, const AABB& aabb, con
 {
 }
 
-bool AABBEnteredPoll::isDead() {
-    return m_entered || !m_worldObject.valid();
-}
-
 bool AABBEnteredPoll::poll() {
-    return m_worldObject.valid() ? m_worldObject->bounds().aabb().intersects(m_aabb) : false;
+    if (m_worldObject.valid()) {
+        return !m_entered && m_worldObject->bounds().aabb().intersects(m_aabb);
+    } else {
+        kill();
+        return false;
+    }
 }
 
 void AABBEnteredPoll::specialOnCallback() {
+    EventPoll::specialOnCallback();
     m_entered = true;
 }
 

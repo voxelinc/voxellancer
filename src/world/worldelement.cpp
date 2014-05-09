@@ -9,7 +9,8 @@
 
 
 WorldElement::WorldElement():
-    m_world(nullptr)
+    m_world(nullptr),
+    m_alive(true)
 {
 
 }
@@ -22,6 +23,14 @@ World* WorldElement::world() {
 
 void WorldElement::setWorld(World* world) {
     m_world = world;
+}
+
+bool WorldElement::alive() const {
+    return m_alive;
+}
+
+void WorldElement::kill() {
+    m_alive = false;
 }
 
 void WorldElement::update(float deltaSec) {

@@ -33,7 +33,7 @@ MissionState Mission::state() const {
     return m_state;
 }
 
-void Mission::succeed() {
+void Mission::succeed() { std::cout << "Mission succeed " << this << std::endl;
     assert(m_state == MissionState::Running);
 
     m_state = MissionState::Succeeded;

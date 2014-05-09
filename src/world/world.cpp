@@ -1,7 +1,5 @@
 #include "world.h"
 
-#include "events/eventpoller.h"
-
 #include "factions/factionmatrix.h"
 
 #include "voxeleffect/voxelparticleengine.h"
@@ -30,8 +28,7 @@ World::World():
     m_worldTree(new WorldTree()),
     m_god(new God(*this)),
     m_particleEngine(new VoxelParticleEngine()),
-    m_factionMatrix(new FactionMatrix()),
-    m_eventPoller(new EventPoller())
+    m_factionMatrix(new FactionMatrix())
 {
 }
 
@@ -71,10 +68,6 @@ FactionMatrix &World::factionMatrix() {
     return *m_factionMatrix;
 }
 
-EventPoller &World::eventPoller() {
-    return *m_eventPoller;
-}
-
 std::unordered_set<WorldObject*> &World::worldObjects() {
     return m_worldObjects;
 }
@@ -89,7 +82,6 @@ void World::update(float deltaSecs) {
     m_player->update(deltaSecs);
     m_worldLogic->update(deltaSecs);
     m_scriptEngine->update(deltaSecs);
-    m_eventPoller->update(deltaSecs);
     m_particleEngine->update(deltaSecs);
 
     for (WorldObject *worldObject : m_worldObjects) {
@@ -101,7 +93,7 @@ void World::update(float deltaSecs) {
 
         element->update(deltaSecs);
 
-        if (m_scheduledRemovals.find(element) != m_scheduledRemovals.end()) {
+        if (m_scheduledRemovals.find(element) != m_scheduledRemovals.end() || !element->alive()) { std::cout << "Removing " << element << std::endl;
             m_scriptEngine->unregisterScriptable(element);
             element->setWorld(nullptr);
 

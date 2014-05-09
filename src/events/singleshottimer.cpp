@@ -3,16 +3,21 @@
 
 SingleShotTimer::SingleShotTimer(float interval, const Callback& callback):
     Timer(interval, callback),
-    m_ticking(true)
+    m_fired(false)
 {
 }
 
-bool SingleShotTimer::isDead() {
-    return !m_ticking;
+bool SingleShotTimer::poll() {
+    if (m_fired) {
+        return false;
+    } else {
+        return Timer::poll();
+    }
 }
 
 void SingleShotTimer::specialOnCallback() {
     Timer::specialOnCallback();
-    m_ticking = false;
+    m_fired = true;
+    kill();
 }
 
