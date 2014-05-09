@@ -38,6 +38,6 @@ void VoxelParticleEngine::draw(const Camera& camera, bool transparentPass) {
     if (transparentPass) {
         m_transparentEngine->draw(camera, true);
     } else {
-        m_transparentEngine->draw(camera, false);
+        m_opaqueEngine->draw(camera, false);
     }
 }

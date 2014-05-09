@@ -71,16 +71,17 @@ void VoxelRenderData::updateBuffer() {
     assert(voxelData != nullptr);
 
     m_transparentCount = 0;
-    int i = 0; // counts from front, opaque voxels
-    int j = m_bufferSize - 1; // counts from back, transparent voxels
+    int opaqueCursor = 0; // counts from front, opaque voxels
+    int transparentCursor = m_bufferSize - 1; // counts from back, transparent voxels
     for (auto& pair : m_voxel) {
         Voxel *voxel = pair.second;
         assert(voxel != nullptr);
         uint32_t color = voxel->visuals().color();
+        VoxelData data = VoxelData{ glm::vec3(voxel->gridCell()), ColorHelper::flipColorForGPU(color), voxel->visuals().emissiveness() };
         if ((color & 0x000000FF) == 0xFF) {
-            voxelData[i++] = VoxelData{ glm::vec3(voxel->gridCell()), ColorHelper::flipColorForGPU(voxel->visuals().color()), voxel->visuals().emissiveness() };
+            voxelData[opaqueCursor++] = data;
         } else {
-            voxelData[j--] = VoxelData{ glm::vec3(voxel->gridCell()), ColorHelper::flipColorForGPU(voxel->visuals().color()), voxel->visuals().emissiveness() };
+            voxelData[transparentCursor--] = data;
             m_transparentCount++;
         }
     }

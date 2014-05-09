@@ -25,12 +25,6 @@ void main() {
     if (time >= f_deathTime) {
         discard;
     }
-    if (transparentPass && f_color.a > 0.9999) {
-        discard;
-    }
-    if (!transparentPass && f_color.a < 0.9999) {
-        discard;
-    }
     
     vec3 rgbColor = voxelFragmentColor(f_color.rgb, f_emissiveness, f_normal, f_modelposition);
     fragColor = vec4(rgbColor * f_color.a, f_color.a);

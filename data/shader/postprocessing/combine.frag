@@ -11,7 +11,7 @@ in vec2 v_uv;
 
 layout(location=0) out vec4 fragColor;
 
-void main() {    
+void main() {
     vec4 opaque = texture(color, v_uv) + texture(bloom, v_uv);
     vec4 accumulated = texture(transparencyAcc, v_uv);
     accumulated.a = texture(transparencyCnt, v_uv).z; // Why is Acc.a always 1?!
