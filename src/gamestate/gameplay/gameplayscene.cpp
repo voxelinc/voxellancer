@@ -1,6 +1,7 @@
 #include "gameplayscene.h"
 
 #include "glow/FrameBufferObject.h"
+#include "glow/State.h"
 
 #include "camera/camera.h"
 #include "camera/camerahead.h"
@@ -41,7 +42,8 @@ GamePlayScene::GamePlayScene(GamePlay& gamePlay):
     m_worldTreeRenderer(new WorldTreeRenderer()),
     m_framebuffer(nullptr),
     m_currentOutputBuffer(0),
-    m_defaultLightDir("vfx.lightdir")
+    m_defaultLightDir("vfx.lightdir"),
+    m_glState(new glow::State())
 {
     m_renderPipeline->add(m_starField, 0);
 }
@@ -63,24 +65,17 @@ void GamePlayScene::draw(const Camera& camera, glow::FrameBufferObject* target, 
 
     // the shaders [render 0 (added) =>] nothing to the normalZ buffer, but it must be listed here so the same shaders can be used for the opaque and transparent pass
     m_framebuffer->setDrawBuffers({ BufferNames::TransparencyAccumulation, BufferNames::NormalZ, BufferNames::Emissisiveness, BufferNames::TransparencyCount });
-    glDisable(GL_CULL_FACE);
-    CheckGLError();
-    glDepthMask(GL_FALSE);
-    CheckGLError();
-    glEnable(GL_BLEND);
-    CheckGLError();
-    glBlendFunc(GL_ONE, GL_ONE);
-    CheckGLError();
+    m_glState->disable(GL_CULL_FACE);
+    m_glState->depthMask(GL_FALSE);
+    m_glState->enable(GL_BLEND);
+    m_glState->blendFunc(GL_ONE, GL_ONE);
     drawGame(camera, true);
-    glEnable(GL_CULL_FACE);
-    CheckGLError();
-    glDepthMask(GL_TRUE);
-    CheckGLError();
-    glDisable(GL_BLEND);
-    CheckGLError();
-    glDisable(GL_DEPTH_TEST);
-    CheckGLError();
+    m_glState->disable(GL_BLEND);
+    m_glState->depthMask(GL_TRUE);
+    m_glState->enable(GL_CULL_FACE);
 
+    // Apply renderpipeline
+    //m_glState->disable(GL_DEPTH_TEST);
     RenderMetaData metadata(camera, side);
     m_renderPipeline->apply(*m_framebuffer, metadata);
 

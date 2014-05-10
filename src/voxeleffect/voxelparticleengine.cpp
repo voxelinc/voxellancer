@@ -4,7 +4,7 @@
 #include "voxelparticlesetup.h"
 
 
-VoxelParticleEngine::VoxelParticleEngine() :
+VoxelParticleEngine::VoxelParticleEngine():
     m_opaqueEngine(new VoxelParticleEngineImpl()),
     m_transparentEngine(new VoxelParticleEngineImpl())
 {

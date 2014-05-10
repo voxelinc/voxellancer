@@ -19,6 +19,9 @@ class RenderPipeline;
 class Player;
 class Starfield;
 class WorldTreeRenderer;
+namespace glow {
+    class State;
+}
 
 class GamePlayScene: public Scene {
 public:
@@ -40,6 +43,7 @@ protected:
     mutable std::unique_ptr<FrameBuffer> m_framebuffer;
     std::shared_ptr<VoxelRenderer> m_voxelRenderer;
     std::shared_ptr<Starfield> m_starField;
+    mutable glow::ref_ptr<glow::State> m_glState;
 
     bool m_worldTreeRendererEnabled;
     std::unique_ptr<WorldTreeRenderer> m_worldTreeRenderer;
