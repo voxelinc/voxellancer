@@ -51,6 +51,5 @@ protected:
 
 
     void drawGame(const Camera& camera, bool transparentPass) const;
-    void drawGameAlpha(const Camera& camera) const;
 };
 

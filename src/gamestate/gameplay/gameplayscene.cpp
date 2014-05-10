@@ -72,7 +72,6 @@ void GamePlayScene::draw(const Camera& camera, glow::FrameBufferObject* target, 
     glBlendFunc(GL_ONE, GL_ONE);
     CheckGLError();
     drawGame(camera, true);
-    //drawGameAlpha(camera);
     glEnable(GL_CULL_FACE);
     CheckGLError();
     glDepthMask(GL_TRUE);
