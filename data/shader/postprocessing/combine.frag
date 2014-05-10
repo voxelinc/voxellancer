@@ -16,7 +16,7 @@ void main() {
     // see http://www.slideshare.net/acbess/order-independent-transparency-presentation slide 27
     // and http://jcgt.org/published/0002/02/09/paper.pdf p 127
     
-    vec4 opaque = texture(color, v_uv) + texture(bloom, v_uv);
+    vec4 opaque = texture(color, v_uv);
     vec4 accumulated = texture(transparencyAcc, v_uv);
     // HACK: actually accumulated.a should be the accumulation of the a values
     // It seems to always be 1, while using the count-buffer's z for the same purpose works
@@ -32,7 +32,8 @@ void main() {
     
     // blend the transparent average over the opaque surface
     // the more transparent fragments there were, the fewer of the background is taken into account
+	// finally add the bloom on top. Note the bloom of obscured opaque surfaces will "shine through" entirely
     weightedAverage.a = pow(1.0 - weightedAverage.a, nTransparentLayers);
-    fragColor = weightedAverage * (1.0 - weightedAverage.a) + opaque * weightedAverage.a;
+    fragColor = weightedAverage * (1.0 - weightedAverage.a) + opaque * weightedAverage.a  + texture(bloom, v_uv);
 
 }
