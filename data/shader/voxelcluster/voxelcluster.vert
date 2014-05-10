@@ -24,6 +24,7 @@ out vec3 f_modelposition;
 
 
 void main() {
+    // to avoid z-fighting, minimally shrink all cubes
     gl_Position = viewProjection * model * (vec4(v_position + v_vertex * 0.999, 1.0));
 
     f_normal = (model * vec4(v_normal, 0.0)).xyz;

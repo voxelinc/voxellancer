@@ -12,17 +12,27 @@ in vec2 v_uv;
 layout(location=0) out vec4 fragColor;
 
 void main() {
+    // Implements Weighted Average
+    // see http://www.slideshare.net/acbess/order-independent-transparency-presentation slide 27
+    // and http://jcgt.org/published/0002/02/09/paper.pdf p 127
+    
     vec4 opaque = texture(color, v_uv) + texture(bloom, v_uv);
     vec4 accumulated = texture(transparencyAcc, v_uv);
-    accumulated.a = texture(transparencyCnt, v_uv).z; // Why is Acc.a always 1?!
-    uint currentN = uint(texture(transparencyCnt, v_uv).x * 255);
+    // HACK: actually accumulated.a should be the accumulation of the a values
+    // It seems to always be 1, while using the count-buffer's z for the same purpose works
+    accumulated.a = texture(transparencyCnt, v_uv).z;
+    
+    uint nTransparentLayers = uint(texture(transparencyCnt, v_uv).x * 255);
 
     vec4 weightedAverage = vec4(0.0);
-    if (currentN > uint(0)) {
-        weightedAverage = vec4(accumulated.rgb / accumulated.a, accumulated.a / currentN);
+    // build the weighted average of the transparent colors, where the alpha value is the weight
+    if (nTransparentLayers > uint(0)) {
+        weightedAverage = vec4(accumulated.rgb / accumulated.a, accumulated.a / nTransparentLayers);
     }
-    weightedAverage.a = pow(1 - weightedAverage.a, currentN);
-
-    fragColor = weightedAverage * (1 - weightedAverage.a) + opaque * weightedAverage.a;
+    
+    // blend the transparent average over the opaque surface
+    // the more transparent fragments there were, the fewer of the background is taken into account
+    weightedAverage.a = pow(1.0 - weightedAverage.a, nTransparentLayers);
+    fragColor = weightedAverage * (1.0 - weightedAverage.a) + opaque * weightedAverage.a;
 
 }
