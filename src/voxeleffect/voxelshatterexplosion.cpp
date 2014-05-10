@@ -31,7 +31,7 @@ void VoxelShatterExplosion::onSpawn() {
     generator.setScale(worldObject->transform().scale() * 0.8, 0.2f);
     generator.setColor(voxel().visuals().color());
     generator.setEmissiveness(voxel().visuals().emissiveness());
-    generator.setForce(0.0015f * m_energy + 0.4f, 0.5f);
+    generator.setForce(0.0008f * m_energy + 4.0f, 0.5f);
     generator.setSpawnProbability(0.8f);
     generator.setLifetime(Property<float>("vfx.debrisLifetime"), 0.9f);
     generator.spawn();

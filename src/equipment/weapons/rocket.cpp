@@ -10,7 +10,7 @@
 #include "sound/sound.h"
 #include "sound/soundmanager.h"
 
-#include "voxeleffect/voxelexplosiongenerator.h"
+#include "voxeleffect/explosion.h"
 
 #include "worldobject/worldobjectcomponents.h"
 
@@ -58,21 +58,9 @@ void Rocket::update(float deltaSec) {
     }
 }
 
-void Rocket::spawnExplosion() {
-    VoxelExplosionGenerator generator(this);
-
-    generator.setPosition(m_transform.position());
-    generator.setScale(m_transform.scale() / 3.0f);
-    generator.setColor(0xFF0000);
-    generator.setEmissiveness(0.4f);
-    generator.setCount(150);
-    generator.setLifetime(1.0f, 0.2f);
-    generator.setForce(1.5f);
-
-    generator.spawn();
-}
-
 void Rocket::onLifetimeOver() {
-    spawnExplosion();
+    if(explosion()) {
+        explosion()->spawn(transform().position());
+    }
 }
 

@@ -65,6 +65,5 @@ protected:
 
     void spawnChildren();
     void setChildSpeed(WorldObject* child, const glm::quat& launchOrientation);
-    virtual void spawnExplosion() override;
 };
 

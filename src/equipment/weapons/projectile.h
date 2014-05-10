@@ -1,10 +1,13 @@
 #pragma once
 
+#include <memory>
+
 #include "sound/soundproperties.h"
 
 #include "worldobject/worldobject.h"
 
 
+class Explosion;
 class SoundProperties;
 
 /**
@@ -25,6 +28,9 @@ public:
     const SoundProperties& hitSound() const;
     void setHitSound(const SoundProperties& hitSound);
 
+    Explosion* explosion();
+    void setExplosion(const std::shared_ptr<Explosion>& explosion);
+
     virtual void update(float deltaSec) override;
 
     virtual void onCollision() override;
@@ -36,8 +42,8 @@ protected:
     float m_lifetime;
     SoundProperties m_hitSound;
     float m_emissiveness;
+    std::shared_ptr<Explosion> m_explosion;
 
     virtual void onLifetimeOver();
-    virtual void spawnExplosion() = 0;
 };
 

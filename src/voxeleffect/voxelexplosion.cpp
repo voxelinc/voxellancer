@@ -1,5 +1,6 @@
 #include "voxelexplosion.h"
 
+
 VoxelExplosion::VoxelExplosion(Voxel& voxel):
     m_voxel(voxel)
 {

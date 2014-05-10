@@ -21,7 +21,7 @@ void FuelVoxel::addToObject(WorldObject* worldObject) {
 }
 
 float FuelVoxel::damageForwardingDestructionDamage() {
-    return 100.0f;
+    return 10000000.0f;
 }
 
 void FuelVoxel::onRemoval() {

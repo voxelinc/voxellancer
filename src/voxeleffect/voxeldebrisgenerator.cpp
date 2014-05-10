@@ -33,7 +33,6 @@ VoxelDebrisGenerator::VoxelDebrisGenerator(const VoxelCluster* creator) :
 VoxelDebrisGenerator::~VoxelDebrisGenerator() {
 }
 
-
 void VoxelDebrisGenerator::setOrientation(const glm::quat& orientation) {
     m_orientation = orientation;
 }

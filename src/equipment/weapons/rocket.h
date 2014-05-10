@@ -36,7 +36,6 @@ protected:
     BoardComputer m_boardComputer;
     std::unique_ptr<AiTask> m_aiTask;
 
-    void spawnExplosion() override;
     void onLifetimeOver() override;
 };
 

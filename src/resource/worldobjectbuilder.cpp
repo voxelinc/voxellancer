@@ -19,11 +19,13 @@
 #include "worldobject/worldobjectinfo.h"
 #include "worldobject/ship.h"
 #include "worldobject/worldobject.h"
+#include "worldobject/worldobjectcomponents.h"
 
 #include "clustercache.h"
 #include "enginebuilder.h"
+#include "explosionbuilder.h"
 #include "weaponbuilder.h"
-#include "worldobject/worldobjectcomponents.h"
+
 
 
 WorldObjectBuilder::WorldObjectBuilder(const std::string& name):
@@ -55,6 +57,7 @@ Bullet* WorldObjectBuilder::buildBullet() {
     bullet->setEmissiveness(Property<float>(m_name + ".general.emissiveness", 0.0f));
     bullet->setLifetime(Property<float>(m_name + ".general.lifetime"));
     bullet->setHitSound(SoundProperties::fromProperties(m_name + ".hitsound"));
+    bullet->setExplosion(ExplosionBuilder(m_name + ".explosion").build());
 
     return bullet;
 }
@@ -83,6 +86,8 @@ Rocket* WorldObjectBuilder::buildRocket() {
 
     rocket->setLifetime(Property<float>(m_name + ".general.lifetime"));
     rocket->setHitSound(SoundProperties::fromProperties(m_name + ".explosionsound"));
+    rocket->setExplosion(ExplosionBuilder(m_name).build());
+
     return rocket;
 }
 

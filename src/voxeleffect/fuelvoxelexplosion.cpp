@@ -27,13 +27,28 @@ void FuelVoxelExplosion::onSpawn() {
     VoxelExplosionGenerator generator(worldObject);
     generator.setPosition(voxel().position());
     generator.setRadius(worldObject->transform().scale());
-    generator.setScale(worldObject->transform().scale() / 2.0f);
-    generator.setCount(30);
-    generator.setEmissiveness(0.4f);
+    generator.setScale(worldObject->transform().scale() / 1.5f);
+    generator.setCount(100);
+    generator.setEmissiveness(1.2f);
     generator.setColor(0xFF0000);
-    generator.setForce(0.3f, 0.5f);
-    generator.setLifetime(0.9f, 0.4f);
+    generator.setForce(3.0f, 0.6f);
+    generator.setLifetime(1.0f, 1.0f);
+    generator.spawn();
 
+    generator.setScale(worldObject->transform().scale() / 3.0f);
+    generator.setCount(50);
+    generator.setEmissiveness(0.8f);
+    generator.setColor(0xFF9900);
+    generator.setForce(12.0f, 0.4f);
+    generator.setLifetime(1.4f, 0.7f);
+    generator.spawn();
+
+    generator.setScale(worldObject->transform().scale() * 1.3f);
+    generator.setCount(3);
+    generator.setEmissiveness(1.8f);
+    generator.setColor(0xFF3300);
+    generator.setForce(70.0f, 0.4f);
+    generator.setLifetime(2.4f, 0.7f);
     generator.spawn();
 }
 

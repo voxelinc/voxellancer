@@ -111,7 +111,6 @@ void SplitRocket::setMinFlytimeBeforeSplit(float minFlytimeBeforeSplit) {
 
 void SplitRocket::split() {
     spawnChildren();
-    spawnExplosion();
 
     World::instance()->god().scheduleRemoval(this);
 }
@@ -164,17 +163,4 @@ void SplitRocket::setChildSpeed(WorldObject* child, const glm::quat& launchOrien
     child->physics().setSpeed(speed);
 }
 
-void SplitRocket::spawnExplosion() {
-    VoxelExplosionGenerator generator(this);
-
-    generator.setPosition(m_transform.position());
-    generator.setScale(m_transform.scale() / 3.0f);
-    generator.setColor(0xFFAA00);
-    generator.setEmissiveness(0.4f);
-    generator.setCount(300);
-    generator.setLifetime(1.5f, 0.2f);
-    generator.setForce(0.5f);
-
-    generator.spawn();
-}
 

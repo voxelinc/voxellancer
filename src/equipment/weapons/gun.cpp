@@ -23,7 +23,7 @@
 
 Gun::Gun(const std::string& equipmentKey):
     Weapon(WeaponType::Gun, equipmentKey),
-    m_bulletSpeed(100)
+    m_bulletSpeed(100.0f)
 {
 }
 
