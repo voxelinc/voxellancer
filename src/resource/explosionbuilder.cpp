@@ -3,6 +3,8 @@
 #include "property/property.h"
 
 #include "voxeleffect/noexplosion.h"
+#include "voxeleffect/dummyexplosion.h"
+#include "voxeleffect/ringexplosion.h"
 #include "voxeleffect/scatterexplosion.h"
 
 
@@ -12,14 +14,18 @@ ExplosionBuilder::ExplosionBuilder(const std::string& prefix):
 }
 
 std::shared_ptr<Explosion> ExplosionBuilder::build() {
-    std::string name = Property<std::string>::get(m_prefix + ".type", "none");
+    std::string type = Property<std::string>::get(m_prefix + ".type", "dummy");
 
-    if (name == "scatter") {
+    if (type == "scatter") {
         return buildScatterExplosion();
-    } else if (name == "none") {
+    } else if (type == "dummy") {
+        return std::make_shared<DummyExplosion>();
+    } else if (type == "ring") {
+        return std::make_shared<RingExplosion>();
+    } else if (type == "none") {
         return std::make_shared<NoExplosion>();
     } else {
-        throw std::runtime_error("No such explosion named '" + name + "'");
+        throw std::runtime_error("No such explosion of type '" + type + "'");
     }
 }
 
@@ -37,4 +43,11 @@ std::shared_ptr<Explosion> ExplosionBuilder::buildScatterExplosion() {
 
     return explosion;
 }
+
+std::shared_ptr<Explosion> ExplosionBuilder::buildRingExplosion() {
+    auto explosion = std::make_shared<RingExplosion>();
+
+    return explosion;
+}
+
 

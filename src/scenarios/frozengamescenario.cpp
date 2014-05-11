@@ -79,7 +79,7 @@ void FrozenGameScenario::populateWorld() {
     }
 
     Ship *testCluster = WorldObjectBuilder("specialbasicship").buildShip();
-    testCluster->transform().setPosition(glm::vec3(0, 0, 10));
+    testCluster->transform().setPosition(glm::vec3(0, 0, 100));
     testCluster->info().setName("basicship");
     testCluster->info().setShowOnHud(false);
     m_world->god().scheduleSpawn(testCluster);
@@ -89,9 +89,9 @@ void FrozenGameScenario::populateWorld() {
     WorldObject *wall = new WorldObject();
     wall->transform().move(glm::vec3(-30, 0, -50));
     wall->transform().rotate(glm::angleAxis(-90.f, glm::vec3(0, 1, 0)));
-    for(int x = 0; x < 30; x++) {
-        for(int y = 0; y < 30; y++) {
-            for(int z = 0; z < 30; z++) {
+    for(int x = 0; x < 10; x++) {
+        for(int y = 0; y < 10; y++) {
+            for(int z = 0; z < 2; z++) {
                 wall->addVoxel(new Voxel(glm::ivec3(z, x, y), 0xB47878));
             }
         }
@@ -104,7 +104,7 @@ void FrozenGameScenario::populateWorld() {
     glow::debug("Create Planet");
     WorldObject *planet = new WorldObject();
     planet->transform().move(glm::vec3(20, 10, -30));
-    int diameter = 24;
+    int diameter = 13;
     glm::vec3 middle(diameter/2, diameter/2, diameter/2);
     for(int x = 0; x < diameter; x++) {
         for(int y = 0; y < diameter; y++) {
@@ -136,8 +136,8 @@ void FrozenGameScenario::populateWorld() {
             }
         }
         enemy->info().setName("enemy");
-        enemy->info().setShowOnHud(false);
-        enemy->info().setCanLockOn(false);
+        enemy->info().setShowOnHud(true);
+        enemy->info().setCanLockOn(true);
         m_world->god().scheduleSpawn(enemy);
 
     }

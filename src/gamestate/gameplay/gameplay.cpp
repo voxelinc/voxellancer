@@ -44,7 +44,7 @@ GamePlay::GamePlay(Game* game) :
     m_freecamActive(false),
     m_scene(new GamePlayScene(*this)),
     m_soundManager(new SoundManager()),
-    m_scenario(new ScriptedScenario(this, "data/scripts/scenarios/demo.lua"))
+    m_scenario(new FrozenGameScenario(this))
 {
     updateView();
     setInitialSubState(m_runningState);
@@ -127,7 +127,7 @@ void GamePlay::loadScenario(int i) {
 void GamePlay::keyCallback(int key, int scancode, int action, int mods) {
     if (action == GLFW_PRESS) {
         switch (key) {
-        case GLFW_KEY_F:        
+        case GLFW_KEY_F:
             m_freecamActive = !m_freecamActive;
             if (m_freecamActive) {
                 m_freecamInput->setPosition(World::instance()->player().cameraHead().cameraDolly()->position());

@@ -19,5 +19,6 @@ protected:
     std::string m_prefix;
 
     std::shared_ptr<Explosion> buildScatterExplosion();
+    std::shared_ptr<Explosion> buildRingExplosion();
 };
 
