@@ -12,16 +12,16 @@
 class Voxel;
 class VoxelCluster;
 
-/*
-    This class stores and calculates bound-informations of
-    a voxelcluster. It is optimized for speed which means:
-
-    * It uses sorted sets on each axis to be able to recalc the GridAABBB fast on voxel addition or removal
-    * The aabb is only recalculated if the cluster or the passed transform changes, since it is very likely that
-        the same transform will be queried multiple times during e.g. Worldtreequeries and collisiondetection
-    * The aabb is stored in an I(nteger)AABB because it is only an estimation anyway and calculation on integers
-        are faster than on float AND this function is queried quite frequently
-*/
+/**
+ * This class stores and calculates bound-informations of
+ * a voxelcluster. It is optimized for speed which means:
+ *
+ * -> It uses sorted sets on each axis to be able to recalc the GridAABBB fast on voxel addition or removal
+ * -> The aabb is only recalculated if the cluster or the passed transform changes, since it is very likely that
+ *    the same transform will be queried multiple times during e.g. Worldtreequeries and collisiondetection
+ * -> The aabb is stored in an I(nteger)AABB because it is only an estimation anyway and calculation on integers
+ *     are faster than on float AND this function is queried quite frequently
+ */
 class VoxelClusterBounds {
 public:
     VoxelClusterBounds(VoxelCluster* voxelCluster);
@@ -32,16 +32,15 @@ public:
     const GridAABB& minimalGridAABB();
     const Sphere& minimalGridSphere();
 
-    /*
-        The aabb is stored in an I(nteger)AABB because it is only an estimation anyway and calculation on integers
-        are faster than on float AND this function is queried quite frequently
-    */
+    /**
+     * The aabb is stored in an I(nteger)AABB because it is only an estimation anyway and calculation on integers
+     * are faster than on float AND this function is queried quite frequently
+     */
     const IAABB& aabb();
     IAABB aabb(const Transform& transform);
 
     const Sphere& sphere();
     Sphere sphere(const Transform& transform);
-
 
 
 protected:

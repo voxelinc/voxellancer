@@ -6,6 +6,8 @@
 #include <map>
 #include <vector>
 
+#include "geometry/axis.h"
+
 
 class Voxel;
 class VoxelCluster;
@@ -24,6 +26,7 @@ public:
 
     static ClusterCache *instance();
 
+    float gridExtend(const std::string& filename, Axis axis);
 
 protected:
     std::vector<Voxel*> * getOrCreate(const std::string& filename);

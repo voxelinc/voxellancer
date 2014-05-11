@@ -2,7 +2,6 @@
 
 #include <algorithm>
 
-#include "utils/tostring.h"
 #include "worldobject/worldobject.h"
 #include "collision/collisiondetector.h"
 #include "worldtreenode.h"

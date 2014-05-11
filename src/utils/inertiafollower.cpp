@@ -1,9 +1,9 @@
 #include "inertiafollower.h"
 
+#include <algorithm>
+
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
-
-#include "utils/tostring.h"
 
 
 InertiaFollower::InertiaFollower(float directionalInertia, float angularInertia):

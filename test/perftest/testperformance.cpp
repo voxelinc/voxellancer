@@ -12,7 +12,6 @@
 
 #include "geometry/acceleration.h"
 #include "worldobject/worldobjectinfo.h"
-#include "utils/tostring.h"
 #include "player.h"
 #include "physics/physics.h"
 #include "resource/clustercache.h"
@@ -71,7 +70,6 @@ static void doSplitDetection(WorldObject* planet, WorldObjectModification &mod, 
 
 go_bandit([](){
     describe("VoxelTree", [](){
-        World *world;
         PropertyManager::instance()->reset();
         PropertyManager::instance()->load("data/config.ini");
         PropertyManager::instance()->load("data/voxels.ini", "voxels");
@@ -219,7 +217,7 @@ go_bandit([](){
                 for (int i = 0; i < 1000; i++) {
                     ship->setTargetObject(planet);
                     //ship->fireAtObject();
-                    ship->components().fireAtPoint(planet->transform().position());
+                    ship->components().fireAtPoint(planet->transform().position(), false);
                     World::instance()->update(0.016f);
                 }
             }

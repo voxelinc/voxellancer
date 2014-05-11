@@ -65,7 +65,7 @@ WorldObject* Rocket::target() {
 
 void Rocket::setTarget(WorldObject* targetObject) {
     if (targetObject) {
-        m_targetHandle = targetObject->handle<WorldObject>();
+        m_targetHandle = makeHandle(targetObject);
         m_aiTask.reset(new DirectSuicideTask(&m_boardComputer, targetObject));
     } else {
         m_targetHandle = Handle<WorldObject>();

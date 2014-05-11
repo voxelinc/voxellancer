@@ -4,8 +4,11 @@
 #include <glm/gtc/quaternion.hpp>
 
 
-
-
+/**
+ * Holds position, orientation, scale and (rotation)center of an object
+ * applyTo() and inverseApplyTo() translate between the local coordinate
+ * system of the object and the world coordinate system.
+ */
 class Transform {
 public:
     Transform(glm::vec3 center = glm::vec3(0), float scale = 1.0);
@@ -39,6 +42,7 @@ public:
     glm::vec3 applyTo(const glm::vec3 &vertex) const;
     glm::vec3 inverseApplyTo(const glm::vec3 &vertex) const;
 
+    Transform mixed(const Transform& other, float v);
 
 
 protected:

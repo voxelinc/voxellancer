@@ -17,14 +17,14 @@
 
 
 
-WorldTreeQuery::WorldTreeQuery(WorldTree* worldTree, WorldTreeNode* nodeHint, CollisionFilter* collisionFilter):
-    WorldTreeQuery(worldTree, nullptr, nodeHint, collisionFilter)
+WorldTreeQuery::WorldTreeQuery(WorldTree* worldTree, const WorldTreeHint& hint, const CollisionFilter* collisionFilter):
+    WorldTreeQuery(worldTree, nullptr, hint, collisionFilter)
 {
 }
 
-WorldTreeQuery::WorldTreeQuery(WorldTree* worldTree, const AbstractShape* shape, WorldTreeNode* nodeHint, CollisionFilter* collisionFilter):
+WorldTreeQuery::WorldTreeQuery(WorldTree* worldTree, const AbstractShape* shape, const WorldTreeHint& hint, const CollisionFilter* collisionFilter):
     m_worldTree(worldTree),
-    m_nodeHint(nodeHint),
+    m_hint(hint),
     m_collisionFilter(collisionFilter),
     m_shape(shape),
     m_queryInterrupted(false),
@@ -113,7 +113,7 @@ WorldTreeNode* WorldTreeQuery::containingNode() {
 }
 
 WorldTreeNode* WorldTreeQuery::getQueryRoot() const {
-    return getQueryRoot(m_nodeHint);
+    return getQueryRoot(m_hint.node());
 }
 
 WorldTreeNode* WorldTreeQuery::getQueryRoot(WorldTreeNode* node) const {

@@ -13,8 +13,10 @@
 #include "equipment/engineslot.h"
 #include "equipment/hardpoint.h"
 #include "equipment/weapon.h"
+#include "equipment/weapons/bullet.h"
 #include "equipment/weapons/worldobjectbullet.h"
 #include "equipment/weapons/rocket.h"
+#include "equipment/weapons/splitrocket.h"
 
 #include "world/world.h"
 
@@ -47,8 +49,8 @@ WorldObject* WorldElementBuilder::buildWorldObject() {
     } else {
         glow::fatal("Unknown WorldObject-Type '%;'", type);
         assert(0); // Never to be reached
+        return nullptr;
     }
-    return nullptr;
 }
 
 Bullet* WorldElementBuilder::buildBullet() {
@@ -75,11 +77,29 @@ WorldObjectBullet* WorldElementBuilder::buildWorldObjectBullet() {
 }
 
 Rocket* WorldElementBuilder::buildRocket() {
-    Rocket* rocket = makeWorldObject<Rocket>();
+    Rocket* rocket;
+
+    std::string subtype = Property<std::string>(m_name + ".general.subtype", "");
+    if (subtype == "split") {
+        SplitRocket* splitRocket = makeWorldObject<SplitRocket>();
+
+        splitRocket->setChildrenCount(Property<int>(m_name + ".special.childrenCount"));
+        splitRocket->setChildrenType(Property<std::string>(m_name + ".special.childrenType"));
+        splitRocket->setChildrenSpeedBoost(Property<float>(m_name + ".special.childrenSpeedBoost", 0.0f));
+        splitRocket->setChildrenSpeedBoostRandomization(Property<float>(m_name + ".special.childrenSpeedBoostRandomization", 0.0f));
+        splitRocket->setSplitDistance(Property<float>(m_name + ".special.splitDistance"));
+        splitRocket->setSplitDirectionTolerance(Property<float>(m_name + ".special.splitDirectionTolerance"));
+        splitRocket->setSplitAngle(Property<float>(m_name + ".special.splitAngle"));
+        splitRocket->setSplitAngleRandomization(Property<float>(m_name + ".special.splitAngleRandomization", 0.0f));
+        splitRocket->setMinFlytimeBeforeSplit(Property<float>(m_name + ".special.minFlytimeBeforeSplit"));
+
+        rocket = splitRocket;
+    } else {
+        rocket = makeWorldObject<Rocket>();
+    }
 
     rocket->setLifetime(Property<float>(m_name + ".general.lifetime"));
     rocket->setHitSound(SoundProperties::fromProperties(m_name + ".explosionsound"));
-
     return rocket;
 }
 

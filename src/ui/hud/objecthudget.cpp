@@ -158,6 +158,10 @@ void ObjectHudget::onClick(ClickType clickType) {
     }
 }
 
+float ObjectHudget::openingAngle() const {
+    return m_objectVoxels->openingAngle();
+}
+
 void ObjectHudget::updateTargeted() {
     bool currentlyTargeted = m_hud->target() == m_objectDelegate->worldObject();
     if (m_targeted != currentlyTargeted) {

@@ -10,10 +10,9 @@
 struct GLFWmonitor;
 
 /**
- *  The ContextProvider manages the use of the GL context, especially its recreation
- *  when switching fullscreen and windowed mode
+ * The ContextProvider manages the use of the GL context, especially its recreation
+ * when switching fullscreen and windowed mode
  */
-
 class ContextProvider {
 public:
     static ContextProvider* instance();

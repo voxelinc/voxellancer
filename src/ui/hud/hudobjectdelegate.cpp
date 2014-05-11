@@ -9,7 +9,7 @@
 
 HUDObjectDelegate::HUDObjectDelegate(HUD* hud, WorldObject* worldObject, ObjectHudget* hudget):
     m_hud(hud),
-    m_worldObjectHandle(worldObject->handle<WorldObject>()),
+    m_worldObjectHandle(makeHandle(worldObject)),
     m_hudget(hudget)
 {
     hudget->setObjectDelegate(this);

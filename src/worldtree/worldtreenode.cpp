@@ -3,8 +3,6 @@
 #include <assert.h>
 #include <algorithm>
 
-#include "utils/tostring.h"
-
 #include "voxel/voxel.h"
 #include "worldobject/worldobject.h"
 
@@ -241,3 +239,4 @@ std::list<WorldTreeGeode*>& WorldTreeNode::geodesList(WorldTreeGeode* geode) {
         return m_normalGeodes;
     }
 }
+

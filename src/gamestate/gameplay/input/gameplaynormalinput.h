@@ -59,10 +59,10 @@ protected:
 
     float m_currentTimePressed;
 
-    Property<float> prop_deadzoneMouse;
-    Property<float> prop_deadzoneGamepad;
+    Property<float> m_deadzoneMouse;
+    Property<float> m_deadzoneGamepad;
 
-    Property<float> prop_maxClickTime;
+    Property<float> m_maxClickTime;
 
     ActionKeyMapping fireAction;
     ActionKeyMapping rocketAction;

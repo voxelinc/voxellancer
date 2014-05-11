@@ -22,5 +22,11 @@ protected:
     std::shared_ptr<HandleImpl> m_impl;
 };
 
+template<typename T>
+Handle<T> makeHandle(T* owner);
+
+template<typename T>
+Handle<T> makeHandle(T& owner);
+
 
 #include "handleowner.inl"

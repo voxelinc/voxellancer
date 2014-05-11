@@ -7,8 +7,6 @@
 #include <glow/Buffer.h>
 #include <glow/Program.h>
 
-#include "utils/tostring.h"
-
 #include "voxelcluster.h"
 #include "voxeleffect/voxelmesh.h"
 #include "voxelrenderer.h"

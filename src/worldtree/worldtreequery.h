@@ -4,19 +4,21 @@
 #include <unordered_set>
 #include <set>
 
+#include "worldtreehint.h"
 
+
+class AbstractShape;
+class CollisionFilter;
 class Voxel;
+class WorldObject;
 class WorldTree;
 class WorldTreeNode;
 class WorldTreeGeode;
-class WorldObject;
-class CollisionFilter;
-class AbstractShape;
 
 class WorldTreeQuery {
 public:
-    WorldTreeQuery(WorldTree* worldTree, WorldTreeNode* nodeHint = nullptr, CollisionFilter* collisionFilter = nullptr);
-    WorldTreeQuery(WorldTree* worldTree, const AbstractShape* shape, WorldTreeNode* nodeHint = nullptr, CollisionFilter* collisionFilter = nullptr);
+    WorldTreeQuery(WorldTree* worldTree, const WorldTreeHint& hint = WorldTreeHint(), const CollisionFilter* collisionFilter = nullptr);
+    WorldTreeQuery(WorldTree* worldTree, const AbstractShape* shape, const WorldTreeHint& hint = WorldTreeHint(), const CollisionFilter* collisionFilter = nullptr);
 
     const AbstractShape* shape() const;
     void setShape(const AbstractShape* shape);
@@ -35,8 +37,8 @@ public:
 
 protected:
     WorldTree* m_worldTree;
-    WorldTreeNode* m_nodeHint;
-    CollisionFilter* m_collisionFilter;
+    WorldTreeHint m_hint;
+    const CollisionFilter* m_collisionFilter;
     const AbstractShape* m_shape;
     WorldTreeNode* m_containingNode;
     bool m_queryInterrupted;

@@ -12,7 +12,6 @@ class WorldObject;
 /**
  *  Basic unit for AI. A Ship's Character can always execute only one task.
  */
-
 class AiTask : public Scriptable, public HandleOwner {
 public:
     AiTask(BoardComputer* boardComputer);

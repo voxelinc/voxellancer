@@ -8,13 +8,19 @@ class WorldTreeShadowNode;
 
 /**
  * Returns the deepest active and undeleted node starting from the WorldTreeNode
- * it was obtained from
+ * it was obtained from.
  */
 class WorldTreeHint {
 public:
+    WorldTreeHint(WorldTreeNode* node = nullptr);
+
+    /**
+     * This constructor shouldn't be called by the user directly.
+     * Instead use WorldTreeNode::hint() to acquire a WorldTreeHint
+     */
     WorldTreeHint(const std::shared_ptr<WorldTreeShadowNode>& shadowNode);
 
-    WorldTreeNode* node();
+    WorldTreeNode* node() const;
 
 
 protected:
