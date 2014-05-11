@@ -10,13 +10,6 @@
 #include "utils/statemachine/trigger.h"
 #include "utils/statemachine/triggeredtransition.h"
 
-#include "scenarios/basescenario.h"
-#include "scenarios/battlescenario.h"
-#include "scenarios/gamescenario.h"
-#include "scenarios/frozengamescenario.h"
-#include "scenarios/friendlyfirescenario.h"
-#include "scenarios/missionscenario.h"
-#include "scenarios/scriptedscenario.h"
 #include "scenarios/piratescenario.h"
 
 #include "sound/soundmanager.h"
@@ -44,7 +37,7 @@ GamePlay::GamePlay(Game* game) :
     m_freecamActive(false),
     m_scene(new GamePlayScene(*this)),
     m_soundManager(new SoundManager()),
-    m_scenario(new ScriptedScenario(this, "data/scripts/scenarios/demo.lua"))
+    m_scenario(new PirateScenario(this))
 {
     updateView();
     setInitialSubState(m_runningState);
@@ -100,22 +93,7 @@ void GamePlay::loadScenario(int i) {
 
     switch (i) {
     case 0:
-        m_scenario.reset(new ScriptedScenario(this, "data/scripts/scenarios/demo.lua"));
-        break;
-    case 1:
-        m_scenario.reset(new GameScenario(this));
-        break;
-    case 2:
-        m_scenario.reset(new BattleScenario(this));
-        break;
-    case 3:
-        m_scenario.reset(new FrozenGameScenario(this));
-        break;
-    case 4:
         m_scenario.reset(new PirateScenario(this));
-        break;
-    case 5:
-        m_scenario.reset(new FriendlyFireScenario(this));
         break;
     default:
         m_scenario.reset(new BaseScenario(this));
@@ -127,7 +105,7 @@ void GamePlay::loadScenario(int i) {
 void GamePlay::keyCallback(int key, int scancode, int action, int mods) {
     if (action == GLFW_PRESS) {
         switch (key) {
-        case GLFW_KEY_F:        
+        case GLFW_KEY_F:
             m_freecamActive = !m_freecamActive;
             if (m_freecamActive) {
                 m_freecamInput->setPosition(World::instance()->player().cameraHead().cameraDolly()->position());
