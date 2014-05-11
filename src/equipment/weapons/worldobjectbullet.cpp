@@ -65,8 +65,8 @@ void WorldObjectBullet::spawn() {
     World::instance()->god().scheduleSpawn(this);
 }
 
-float WorldObjectBullet::length() {
-    return bounds().minimalGridAABB().extent(ZAxis) * transform().scale();
+glm::vec3 WorldObjectBullet::extent() {
+    return glm::vec3(VoxelCluster::bounds().minimalGridAABB().extent()) * transform().scale();
 }
 
 bool WorldObjectBullet::passiveForCollisionDetection() {

@@ -7,7 +7,6 @@
 
 #include "bulletengine/bulletengine.h"
 #include "bulletengine/instancedbullet.h"
-#include "bulletengine/genericinstancedbullet.h"
 
 #include "equipment/engine.h"
 #include "equipment/engineslot.h"

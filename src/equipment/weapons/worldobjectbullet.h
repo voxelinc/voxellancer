@@ -23,7 +23,8 @@ public:
     virtual void update(float deltaSec);
 
     virtual void spawn() override;
-    virtual float length() override;
+
+    virtual glm::vec3 extent() override;
 
     virtual bool passiveForCollisionDetection() override;
 

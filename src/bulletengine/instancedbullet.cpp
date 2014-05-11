@@ -15,6 +15,8 @@
 #include "voxel/voxeltree.h"
 #include "voxel/voxeltreenode.h"
 
+#include "voxeleffect/voxelexplosiongenerator.h"
+
 #include "world/helper/damageimpact.h"
 #include "world/world.h"
 #include "world/worldlogic.h"
@@ -143,9 +145,9 @@ void InstancedBullet::remove() {
     m_alive = false;
 }
 
-float InstancedBullet::length() {
+glm::vec3 InstancedBullet::extent() {
     assert(m_container.valid());
-    return m_container->prototype().length();
+    return m_container->prototype().extent();
 }
 
 void InstancedBullet::updateData() {
@@ -162,7 +164,7 @@ void InstancedBullet::updateData() {
 }
 
 void InstancedBullet::updateCollisionPoint() {
-    m_collisionPoint = m_transform.position() + m_transform.orientation() * glm::vec3(0, 0, -length());
+    m_collisionPoint = m_transform.position() + m_transform.orientation() * glm::vec3(0, 0, -extent().z);
 }
 
 void InstancedBullet::applyDamage(Voxel* voxel) {
@@ -187,5 +189,20 @@ Voxel* InstancedBullet::nearestVoxel(const std::unordered_set<Voxel*> voxels, co
     }
 
     return nearestVoxel;
+}
+
+void InstancedBullet::spawnExplosion() {
+    VoxelExplosionGenerator generator(nullptr);
+
+    generator.setPosition(transform().position());
+    generator.setRadius(transform().scale());
+    generator.setScale(transform().scale() / 2.0f);
+    generator.setCount(16);
+    generator.setEmissiveness(0.4f);
+    generator.setColor(0xFF0000);
+    generator.setForce(0.6f);
+    generator.setLifetime(0.7f, 0.2f);
+
+    generator.spawn();
 }
 

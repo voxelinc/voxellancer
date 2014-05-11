@@ -24,8 +24,12 @@ Transform::Transform(const Transform& transform, const glm::vec3& positionDelta,
     assert(std::isfinite(m_orientation));
 }
 
-Transform::~Transform() {
-
+Transform::Transform(const glm::vec3& position, const glm::quat& orientation, const glm::vec3& center, float scale):
+    m_position(position),
+    m_orientation(orientation),
+    m_center(center),
+    m_scale(scale)
+{
 }
 
 const glm::quat& Transform::orientation() const {

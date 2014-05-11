@@ -40,7 +40,10 @@
 
 Gun::Gun(const std::string& equipmentKey):
     Weapon(WeaponType::Gun, equipmentKey),
-    m_bulletSpeed(100)
+    m_bulletSpeed(100),
+    m_spawnDistance(0.0f),
+    m_bulletLength(0.0f),
+    m_bulletCapsuleRadius(0.0f)
 {
 }
 
@@ -89,7 +92,7 @@ bool Gun::isBulletPathClear(const glm::vec3& point, bool checkFriendlyFire) {
     WorldObject* owner = m_hardpoint->components()->worldObject();
 
     glm::vec3 direction = glm::normalize(point - m_hardpoint->voxel()->position());
-    Capsule capsuleToTarget = Capsule::fromTo(m_hardpoint->voxel()->position() + direction * (m_bulletLength / 2.0f + m_spawnDistance), point, m_bulletMaxWidth / 2);
+    Capsule capsuleToTarget = Capsule::fromTo(m_hardpoint->voxel()->position() + direction * (m_bulletLength / 2.0f + m_spawnDistance), point, m_bulletCapsuleRadius / 2);
 
     WorldTreeQuery fireDirectionQuery(&World::instance()->worldTree(), &capsuleToTarget, owner->collisionDetector().geode()->hint(), nullptr);
 
@@ -133,7 +136,7 @@ void Gun::setupBullet(Bullet* bullet, const glm::vec3& point) {
     }
 
     m_spawnDistance = glm::root_two<float>() * bullet->transform().scale();
-    bulletTransform.setPosition(m_hardpoint->voxel()->position() + bulletDirection * (bullet->length() / 2.0f + m_spawnDistance));
+    bulletTransform.setPosition(m_hardpoint->voxel()->position() + bulletDirection * (bullet->extent().z / 2.0f + m_spawnDistance));
 
     bullet->setTransform(bulletTransform);
 
@@ -148,8 +151,8 @@ void Gun::setupBullet(Bullet* bullet, const glm::vec3& point) {
 void Gun::setBulletExtend() {
     Bullet* bullet = WorldElementBuilder(projectileName()).buildBullet();
 
-    m_bulletMaxWidth = 2.0f;//glm::max(bullet->bounds().minimalGridAABB().extent(XAxis), bullet->bounds().minimalGridAABB().extent(YAxis))* bullet->transform().scale();
-    m_bulletLength = bullet->length();//bullet->bounds().minimalGridAABB().extent(ZAxis) * bullet->transform().scale();
+    m_bulletCapsuleRadius = glm::max(bullet->extent().x, bullet->extent().y) * bullet->transform().scale();
+    m_bulletLength = bullet->extent().z;
     m_spawnDistance = glm::root_two<float>() * bullet->transform().scale();
 
     delete bullet;

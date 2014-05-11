@@ -40,7 +40,7 @@ protected:
 
     float m_spawnDistance;
     float m_bulletLength;
-    float m_bulletMaxWidth;
+    float m_bulletCapsuleRadius;
 
     void setupBullet(Bullet* bullet, const glm::vec3& point);
     void setBulletExtend();

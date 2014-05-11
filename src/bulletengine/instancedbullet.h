@@ -68,14 +68,7 @@ public:
     virtual void spawn() override;
     virtual void remove() override;
 
-    virtual float length() override;
-
-
-protected:
-    void updateData();
-    void updateCollisionPoint();
-    Voxel* nearestVoxel(const std::unordered_set<Voxel*> voxels, const glm::vec3& point) const;
-    void applyDamage(Voxel* voxel);
+    virtual glm::vec3 extent() override;
 
 
 protected:
@@ -94,5 +87,12 @@ protected:
     glm::vec3 m_collisionPoint;
     std::unique_ptr<CollisionFilter> m_collisionFilter;
     WorldTreeHint m_worldTreeHint;
+
+
+    void updateData();
+    void updateCollisionPoint();
+    Voxel* nearestVoxel(const std::unordered_set<Voxel*> voxels, const glm::vec3& point) const;
+    void applyDamage(Voxel* voxel);
+    virtual void spawnExplosion() override;
 };
 

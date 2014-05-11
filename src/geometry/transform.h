@@ -9,11 +9,11 @@
  * applyTo() and inverseApplyTo() translate between the local coordinate
  * system of the object and the world coordinate system.
  */
-class Transform {
+class Transform final {
 public:
     Transform(glm::vec3 center = glm::vec3(0), float scale = 1.0);
     Transform(const Transform& transform, const glm::vec3& positionDelta, const glm::quat& orientationDelta);
-    virtual ~Transform();
+    Transform(const glm::vec3& position, const glm::quat& orientation, const glm::vec3& center, float scale);
 
     const glm::vec3 &position() const;
     void setPosition(const glm::vec3 &pos);

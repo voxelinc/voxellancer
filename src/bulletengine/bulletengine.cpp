@@ -5,7 +5,7 @@
 #include "equipment/weapons/worldobjectbullet.h"
 
 #include "bulletenginerenderer.h"
-#include "genericinstancedbullet.h"
+#include "instancedbullet.h"
 #include "instancedbulletcontainer.h"
 #include "instancedbulletcontainerrenderer.h"
 
@@ -36,7 +36,7 @@ InstancedBulletContainer* BulletEngine::container(const std::string& name) {
 }
 
 InstancedBullet* BulletEngine::createBullet(const std::string& name) {
-    return new GenericInstancedBullet(container(name)->handle<InstancedBulletContainer>(), name);
+    return new InstancedBullet(container(name)->handle<InstancedBulletContainer>(), name);
 }
 
 void BulletEngine::update(float deltaSec) {

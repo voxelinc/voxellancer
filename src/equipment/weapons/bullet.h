@@ -15,6 +15,6 @@ class Bullet: public Projectile {
 public:
     Bullet();
 
-    virtual float length() = 0;
+    virtual glm::vec3 extent() = 0;
 };
 

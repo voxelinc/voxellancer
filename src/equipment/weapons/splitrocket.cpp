@@ -131,8 +131,7 @@ void SplitRocket::spawnChildren() {
             glm::vec3 spawnOffset = transform().orientation() * circleOrientation * glm::vec3(0, 1, 0);
             glm::vec3 rocketPosition = position() + circleOrientation * spawnOffset;
 
-            child->transform().setOrientation(launchOrientation);
-            child->transform().setPosition(rocketPosition);
+            child->setTransform(Transform(rocketPosition, launchOrientation, child->transform().center(), child->transform().scale()));
 
             setChildSpeed(child, launchOrientation);
 
