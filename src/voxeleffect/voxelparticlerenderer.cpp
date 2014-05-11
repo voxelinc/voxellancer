@@ -63,7 +63,6 @@ void VoxelParticleRenderer::draw(const Camera& camera) {
 }
 
 void VoxelParticleRenderer::loadProgram() {
-//    std::cout << "VoxelParticleRenderer::loadProgram" << std::endl;
     m_program->attach(
         glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/shader/voxelparticle/voxelparticle.vert"),
         glowutils::createShaderFromFile(GL_VERTEX_SHADER, "data/shader/lib/quaternion.glsl"),
