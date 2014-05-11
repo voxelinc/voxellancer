@@ -217,7 +217,7 @@ go_bandit([](){
                 for (int i = 0; i < 1000; i++) {
                     ship->setTargetObject(planet);
                     //ship->fireAtObject();
-                    ship->components().fireAtPoint(planet->transform().position());
+                    ship->components().fireAtPoint(planet->transform().position(), false);
                     World::instance()->update(0.016f);
                 }
             }
