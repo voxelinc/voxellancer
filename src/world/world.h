@@ -16,7 +16,7 @@ class ScriptEngine;
 class VoxelParticleEngine;
 class WorldObject;
 class WorldLogic;
-class WorldElement;
+class UniverseElement;
 class WorldTree;
 
 class World {
@@ -46,8 +46,8 @@ public:
 
     static void reset(bool showWarning = true);
 
-    void addElement(WorldElement* element);
-    void removeElement(WorldElement* element);
+    void addElement(UniverseElement* element);
+    void removeElement(UniverseElement* element);
 
 
 protected:
@@ -71,8 +71,8 @@ protected:
     std::unique_ptr<VoxelParticleEngine> m_particleEngine;
     std::unique_ptr<FactionMatrix> m_factionMatrix;
 
-    std::list<glow::ref_ptr<WorldElement>> m_elements;
-    std::unordered_set<WorldElement*> m_scheduledRemovals;
+    std::list<glow::ref_ptr<UniverseElement>> m_elements;
+    std::unordered_set<UniverseElement*> m_scheduledRemovals;
 
     std::unordered_set<WorldObject*> m_worldObjects;
     std::unordered_set<Ship*> m_ships;

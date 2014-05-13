@@ -45,7 +45,9 @@ public:
 
     virtual void onEntered() override;
     virtual void onLeft() override;
+
     void updateView();
+
 
 protected:
     Game* m_game;

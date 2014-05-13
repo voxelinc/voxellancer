@@ -15,7 +15,7 @@
 #include "worldlogic.h"
 #include "god.h"
 #include "player.h"
-#include "worldelement.h"
+#include "universeelement.h"
 
 
 World *World::s_instance = nullptr;
@@ -89,7 +89,7 @@ void World::update(float deltaSecs) {
     }
 
     for (auto iter = m_elements.begin(); iter != m_elements.end(); ) {
-        WorldElement* element = *iter;
+        UniverseElement* element = *iter;
 
         element->update(deltaSecs);
 
@@ -124,14 +124,14 @@ void World::reset(bool showWarning) {
     s_instance = nullptr;
 }
 
-void World::addElement(WorldElement* element) {
+void World::addElement(UniverseElement* element) {
     m_elements.push_back(element);
     m_scriptEngine->registerScriptable(element);
 
     element->setWorld(this);
 }
 
-void  World::removeElement(WorldElement* element) {
+void  World::removeElement(UniverseElement* element) {
     m_scheduledRemovals.insert(element);
 }
 

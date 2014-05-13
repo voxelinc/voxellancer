@@ -4,10 +4,10 @@
 
 #include "utils/callback.h"
 
-#include "world/worldelement.h"
+#include "world/universeelement.h"
 
 
-class EventPoll: public WorldElement {
+class EventPoll: public UniverseElement {
 public:
     EventPoll(const Callback& callback);
     virtual ~EventPoll() override;

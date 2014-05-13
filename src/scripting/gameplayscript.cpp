@@ -25,7 +25,7 @@ GamePlayScript::GamePlayScript(ScriptEngine& scriptEngine):
 GamePlayScript::~GamePlayScript() {
     for (int key : m_locals) {
         if (m_scriptEngine->keyValid(key)) {
-            World::instance()->removeElement(m_scriptEngine->get<WorldElement>(key));
+            World::instance()->removeElement(m_scriptEngine->get<UniverseElement>(key));
         }
     }
 }
