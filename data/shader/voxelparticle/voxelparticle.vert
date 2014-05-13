@@ -1,8 +1,8 @@
 #version 330
 
 // Input
-layout(location = 0) in vec3 v_vertex;
-layout(location = 1) in vec3 v_normal;
+layout(location = 0) in vec4 v_vertex;
+layout(location = 1) in vec4 v_normal;
 
 layout(location = 2) in vec3 creationPosition;
 layout(location = 3) in vec3 creationEulers;
@@ -38,9 +38,9 @@ void main() {
     vec4 particleOrientation = quat(particleEulers);
     f_color = color;
     f_emissiveness = emissiveness;
-    f_modelposition = v_vertex;
-    f_normal = qtransform(particleOrientation, v_normal);
+    f_modelposition = v_vertex.xyz;
+    f_normal = qtransform(particleOrientation, v_normal.xyz);
 
-    gl_Position = viewProjection * vec4(qtransform(particleOrientation, v_vertex) * scale + particlePosition, 1.0);
+    gl_Position = viewProjection * vec4(qtransform(particleOrientation, v_vertex.xyz) * scale + particlePosition, 1.0);
 }
 

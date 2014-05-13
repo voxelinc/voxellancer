@@ -5,22 +5,22 @@
 #include <glow/VertexAttributeBinding.h>
 #include <glow/Program.h>
 
-static const glm::vec3 llf(-0.5f, -0.5f, -0.5f);
-static const glm::vec3 llb(-0.5f, -0.5f,  0.5f);
-static const glm::vec3 luf(-0.5f,  0.5f, -0.5f);
-static const glm::vec3 lub(-0.5f,  0.5f,  0.5f);
-static const glm::vec3 rlf( 0.5f, -0.5f, -0.5f);
-static const glm::vec3 rlb( 0.5f, -0.5f,  0.5f);
-static const glm::vec3 ruf( 0.5f,  0.5f, -0.5f);
-static const glm::vec3 urb( 0.5f,  0.5f,  0.5f);
+static const glm::vec4 llf(-0.5f, -0.5f, -0.5f, 0);
+static const glm::vec4 llb(-0.5f, -0.5f,  0.5f, 0);
+static const glm::vec4 luf(-0.5f,  0.5f, -0.5f, 0);
+static const glm::vec4 lub(-0.5f,  0.5f,  0.5f, 0);
+static const glm::vec4 rlf( 0.5f, -0.5f, -0.5f, 0);
+static const glm::vec4 rlb( 0.5f, -0.5f,  0.5f, 0);
+static const glm::vec4 ruf( 0.5f,  0.5f, -0.5f, 0);
+static const glm::vec4 urb( 0.5f,  0.5f,  0.5f, 0);
 
-static const glm::vec3 left(-1, 0, 0);
-static const glm::vec3 right(1, 0, 0);
-static const glm::vec3 bottom(0, -1, 0);
-static const glm::vec3 top(0, 1, 0);
-static const glm::vec3 front(0, 0, -1);
-static const glm::vec3 back(0, 0, 1);
-static const glm::vec3 dummy(0, 0, 0);
+static const glm::vec4 left(-1, 0, 0, 0);
+static const glm::vec4 right(1, 0, 0, 1);
+static const glm::vec4 bottom(0, -1, 0, 2);
+static const glm::vec4 top(0, 1, 0, 3);
+static const glm::vec4 front(0, 0, -1, 4);
+static const glm::vec4 back(0, 0, 1, 5);
+static const glm::vec4 dummy(0, 0, 0, 0);
 
 
 VoxelMesh::VoxelMesh():
@@ -38,11 +38,11 @@ void VoxelMesh::bindTo(
     }
 
     setupVertexAttribute(program, vao, "v_vertex", GL_FALSE, bindingIndex + 0, 0);
-    setupVertexAttribute(program, vao, "v_normal", GL_TRUE,  bindingIndex + 1, sizeof(glm::vec3));
+    setupVertexAttribute(program, vao, "v_normal", GL_TRUE,  bindingIndex + 1, sizeof(glm::vec4));
 }
 
 void VoxelMesh::initialize() {
-    std::array<glm::vec3, 28> array {
+    std::array<glm::vec4, 28> array {
         urb, dummy,
         lub, dummy,
         rlb, back,
@@ -71,8 +71,8 @@ void VoxelMesh::setupVertexAttribute(glow::Program* program, glow::VertexArrayOb
     assert(location >= 0);
 
     binding->setAttribute(location);
-    binding->setBuffer(m_vertexBuffer, 0, sizeof(glm::vec3) * 2);
-    binding->setFormat(3, GL_FLOAT, normalised, offset);
+    binding->setBuffer(m_vertexBuffer, 0, sizeof(glm::vec4) * 2);
+    binding->setFormat(4, GL_FLOAT, normalised, offset);
 
     vao->enable(location);
 }
