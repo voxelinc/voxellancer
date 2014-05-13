@@ -9,7 +9,7 @@ layout(location = 2) out vec4 emissiveness;
 layout(location = 3) out vec4 count;
 
 flat in vec3 f_normal;
-in vec4 f_color;
+flat in vec4 f_color;
 in float f_emissiveness;
 in vec3 f_modelposition;
 

@@ -20,6 +20,7 @@ namespace {
         glm::vec3 position;
         uint32_t color;
         float emissiveness;
+        uint32_t faces;
     };
 }
 
@@ -40,6 +41,7 @@ void VoxelRenderData::setupVertexAttributes() {
     setupVertexAttribute(offsetof(VoxelData, position), "v_position", 3, GL_FLOAT, GL_FALSE, 2);
     setupVertexAttribute(offsetof(VoxelData, color), "v_color", GL_BGRA, GL_UNSIGNED_BYTE, GL_TRUE, 3);
     setupVertexAttribute(offsetof(VoxelData, emissiveness), "v_emissiveness", 1, GL_FLOAT, GL_FALSE, 4);
+    setupVertexAttribute(offsetof(VoxelData, faces), "v_faces", 1, GL_UNSIGNED_INT, GL_FALSE, 5);
 }
 
 void VoxelRenderData::setupVertexAttribute(GLint offset, const std::string& name, int numPerVertex, GLenum type, GLboolean normalised, int bindingNum) {
@@ -77,7 +79,8 @@ void VoxelRenderData::updateBuffer() {
         Voxel *voxel = pair.second;
         assert(voxel != nullptr);
         uint32_t color = voxel->visuals().color();
-        VoxelData data = VoxelData{ glm::vec3(voxel->gridCell()), ColorHelper::flipColorForGPU(color), voxel->visuals().emissiveness() };
+        uint32_t faces = 2;
+        VoxelData data = VoxelData{ glm::vec3(voxel->gridCell()), ColorHelper::flipColorForGPU(color), voxel->visuals().emissiveness(), faces };
         if ((color & 0x000000FF) == 0xFF) {
             voxelData[opaqueCursor++] = data;
         } else {
