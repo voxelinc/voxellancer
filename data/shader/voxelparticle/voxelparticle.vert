@@ -10,9 +10,12 @@ layout(location = 4) in vec3 directionalSpeed;
 layout(location = 5) in vec3 angularSpeed;
 layout(location = 6) in float creationTime;
 layout(location = 7) in float deathTime;
-layout(location = 8) in float scale;
-layout(location = 9) in vec4 color;
-layout(location = 10) in float emissiveness;
+layout(location = 8) in float creationScale;
+layout(location = 9) in float deathScale;
+layout(location = 10) in vec4 creationColor;
+layout(location = 11) in vec4 deathColor;
+layout(location = 12) in float emissiveness;
+
 // Output
 out vec3 f_color;
 flat out vec3 f_normal;
@@ -36,10 +39,12 @@ void main() {
     vec3 particlePosition = directionalSpeed * timeDelta + creationPosition;
     vec3 particleEulers = angularSpeed * timeDelta + creationEulers;
     vec4 particleOrientation = quat(particleEulers);
-    f_color = color.xyz;
+    f_color = mix(creationColor.xyz, deathColor.xyz, timeDelta / (deathTime - creationTime));
     f_emissiveness = emissiveness;
     f_modelposition = v_vertex;
     f_normal = qtransform(particleOrientation, v_normal);
+
+    float scale = mix(creationScale, deathScale, timeDelta / (deathTime - creationTime));
 
     gl_Position = viewProjection * vec4(qtransform(particleOrientation, v_vertex) * scale + particlePosition, 1.0);
 }

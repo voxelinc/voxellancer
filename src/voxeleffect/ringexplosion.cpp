@@ -24,12 +24,12 @@ RingExplosion::~RingExplosion() = default;
 
 void RingExplosion::spawn(const glm::vec3& position) {
     glm::quat planeOrientation(glm::vec3(RandFloatPool::rand(0, glm::pi<float>() * 4), RandFloatPool::rand(0, glm::pi<float>() * 4), RandFloatPool::rand(0, glm::pi<float>() * 4)));
-    int count = 160;
+    int count = 320;
     uint32_t color = 0xFF5500;
     float openingAngle = glm::radians(0.0f);
     float force = 500.0f;
     float forceRandomization = 0.02f;
-    float lifetime = 1.5f;
+    float lifetime = 0.4f;
     float lifetimeRandomization = 0.3f;
     float scale = 0.30f;
     float scaleRandomization = 0.4f;

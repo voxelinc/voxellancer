@@ -85,8 +85,10 @@ void VoxelParticleRenderer::setupVertexAttributes() {
     setupVertexAttribute(offsetof(VoxelParticleData, angularSpeed), "angularSpeed", 3, GL_FLOAT, GL_FALSE, b++);
     setupVertexAttribute(offsetof(VoxelParticleData, creationTime), "creationTime", 1, GL_FLOAT, GL_FALSE, b++);
     setupVertexAttribute(offsetof(VoxelParticleData, deathTime), "deathTime", 1, GL_FLOAT, GL_FALSE, b++);
-    setupVertexAttribute(offsetof(VoxelParticleData, scale), "scale", 1, GL_FLOAT, GL_FALSE, b++);
-    setupVertexAttribute(offsetof(VoxelParticleData, color), "color", GL_BGRA, GL_UNSIGNED_BYTE, GL_TRUE, b++);
+    setupVertexAttribute(offsetof(VoxelParticleData, creationScale), "creationScale", 1, GL_FLOAT, GL_FALSE, b++);
+    setupVertexAttribute(offsetof(VoxelParticleData, deathScale), "deathScale", 1, GL_FLOAT, GL_FALSE, b++);
+    setupVertexAttribute(offsetof(VoxelParticleData, creationColor), "creationColor", GL_BGRA, GL_UNSIGNED_BYTE, GL_TRUE, b++);
+    setupVertexAttribute(offsetof(VoxelParticleData, deathColor), "deathColor", GL_BGRA, GL_UNSIGNED_BYTE, GL_TRUE, b++);
     setupVertexAttribute(offsetof(VoxelParticleData, emissiveness), "emissiveness", 1, GL_FLOAT, GL_FALSE, b++);
 }
 
@@ -108,8 +110,10 @@ void VoxelParticleRenderer::setupVertexAttribDivisors() {
     glVertexAttribDivisor(m_program->getAttributeLocation("angularSpeed"), 1);
     glVertexAttribDivisor(m_program->getAttributeLocation("creationTime"), 1);
     glVertexAttribDivisor(m_program->getAttributeLocation("deathTime"), 1);
-    glVertexAttribDivisor(m_program->getAttributeLocation("scale"), 1);
-    glVertexAttribDivisor(m_program->getAttributeLocation("color"), 1);
+    glVertexAttribDivisor(m_program->getAttributeLocation("creationScale"), 1);
+    glVertexAttribDivisor(m_program->getAttributeLocation("deathScale"), 1);
+    glVertexAttribDivisor(m_program->getAttributeLocation("creationColor"), 1);
+    glVertexAttribDivisor(m_program->getAttributeLocation("deathColor"), 1);
     glVertexAttribDivisor(m_program->getAttributeLocation("emissiveness"), 1);
 }
 

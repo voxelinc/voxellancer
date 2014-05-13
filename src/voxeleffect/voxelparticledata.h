@@ -22,8 +22,10 @@ struct VoxelParticleData {
     glm::vec3 angularSpeed;
     float creationTime;
     float deathTime;
-    float scale;
-    uint32_t color;
+    float creationScale;
+    float deathScale;
+    uint32_t creationColor;
+    uint32_t deathColor;
     float emissiveness;
 };
 

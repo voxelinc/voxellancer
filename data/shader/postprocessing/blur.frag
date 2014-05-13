@@ -12,13 +12,13 @@ const float gaussFilter[gaussRadius] = float[gaussRadius](
 in vec2 v_uv;
 
 layout(location=0) out vec4 fragColor;
- 
+
 void main() {
     vec2 shift = direction * 1/viewport;
     vec2 texCoord = v_uv - floor(gaussRadius/2.0) * shift;
-    vec3 color = vec3(0); 
-    for (int i=0; i<gaussRadius; ++i) { 
-        color += gaussFilter[i] * texture(source, texCoord).xyz;
+    vec3 color = vec3(0);
+    for (int i=0; i<gaussRadius; ++i) {
+        color += gaussFilter[i] * 1.5 * texture(source, texCoord).xyz;
         texCoord += shift;
     }
     fragColor = vec4(color,1.0);
