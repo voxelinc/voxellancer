@@ -1,7 +1,6 @@
 #include "worldobjectcomponents.h"
 
 #include <algorithm>
-#include <iostream>
 
 #include "equipment/engineslot.h"
 #include "equipment/engine.h"

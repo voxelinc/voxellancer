@@ -1,5 +1,7 @@
 #include "streamredirect.h"
 
+#include <iostream>
+
 
 StreamRedirect::StreamRedirect(std::ostream &stream, HUD *hud, bool copy) :
     m_stream(stream)
