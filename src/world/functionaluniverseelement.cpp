@@ -1,5 +1,7 @@
 #include "functionaluniverseelement.h"
 
+#include <cassert>
+
 #include "universe.h"
 #include "sector.h"
 
