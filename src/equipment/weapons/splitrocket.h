@@ -4,7 +4,7 @@
 
 
 /**
- *   A special Rocket that detonates before reaching the target and spawns other rockets
+ * A special Rocket that detonates before reaching the target and spawns other rockets
  */
 class SplitRocket: public Rocket {
 public:

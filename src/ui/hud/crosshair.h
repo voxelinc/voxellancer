@@ -16,10 +16,10 @@ public:
     CrossHair(HUD* hud);
     virtual ~CrossHair();
 
-    /*
-        True if the left mousebutton or the firebutton in the gamepad
-        is pressed
-    */
+    /**
+     * True if the left mousebutton or the firebutton in the gamepad
+     * is pressed
+     */
     bool actionActive() const;
     void setActionActive(bool actionActive);
 

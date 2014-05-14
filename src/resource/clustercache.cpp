@@ -2,9 +2,13 @@
 
 #include "voxel/voxel.h"
 #include "voxel/voxelcluster.h"
+
 #include "worldobject/worldobject.h"
+
 #include "clusterloader.h"
 #include "colorcoder.h"
+
+#include "voxel/voxelclusterbounds.h"
 
 
 ClusterCache *ClusterCache::s_instance = nullptr;
@@ -44,6 +48,12 @@ void ClusterCache::fillObject(WorldObject *worldObject, const std::string& filen
         Voxel* clonedVoxel = m_colorCoder->newCodedVoxel(*voxel);
         clonedVoxel->addToObject(worldObject);
     }
+}
+
+float ClusterCache::gridExtend(const std::string& filename, Axis axis) {
+    VoxelCluster* cluster = new VoxelCluster(1);
+    fillCluster(cluster, filename);
+    return (float)cluster->bounds().minimalGridAABB().extent(axis);
 }
 
 std::vector<Voxel*>* ClusterCache::getOrCreate(const std::string& filename) {

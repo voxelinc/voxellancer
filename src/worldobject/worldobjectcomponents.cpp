@@ -101,11 +101,11 @@ std::list<std::shared_ptr<Hardpoint>>& WorldObjectComponents::hardpoints() {
     return m_hardpoints;
 }
 
-void WorldObjectComponents::fireAtPoint(const glm::vec3& point) {
+void WorldObjectComponents::fireAtPoint(const glm::vec3& point, bool checkFriendlyFire) {
     for (std::shared_ptr<Hardpoint> hardpoint : m_hardpoints) {
         if (hardpoint->weapon() && hardpoint->weapon()->type() == WeaponType::Gun) {
             Gun& gun = dynamic_cast<Gun&>(*hardpoint->weapon().get());
-            gun.fireAtPoint(point);
+            gun.fireAtPoint(point, checkFriendlyFire);
         }
     }
 }

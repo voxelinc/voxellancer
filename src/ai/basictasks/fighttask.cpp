@@ -35,3 +35,4 @@ void FightTask::setTargets(const std::vector<Handle<WorldObject>>& targets) {
 bool FightTask::isFinished() {
     return m_task->isFinished();
 }
+

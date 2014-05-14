@@ -14,6 +14,7 @@
 #include "ui/hud/hudget.h"
 #include "ui/hud/aimhelperhudget.h"
 #include "ui/hud/crosshair.h"
+#include "ui/targetselector.h"
 
 #include "worldobject/worldobjectinfo.h"
 
@@ -25,13 +26,15 @@
 
 #include "worldobject/ship.h"
 #include "worldobject/worldobjectcomponents.h"
-#include "ui/targetselector.h"
+
+#include "equipment/hardpoint.h"
+#include "equipment/weapon.h"
+#include "equipment/weapons/gun.h"
 
 
 Player::Player():
     m_aimer(new Aimer(nullptr)),
     m_hud(new HUD(this)),
-    m_ship(nullptr),
     m_cameraDolly(new CameraDolly()),
     m_targetSelector(new TargetSelector(this))
 {
@@ -45,7 +48,7 @@ Ship* Player::ship() {
 }
 
 void Player::setShip(Ship* ship) {
-    m_ship = ship->handle();
+    m_ship = makeHandle(ship);
     m_ship->character()->setFaction(World::instance()->factionMatrix().playerFaction());
     m_ship->info().setShowOnHud(false);
     m_cameraDolly->followWorldObject(ship);
@@ -57,8 +60,8 @@ void Player::update(float deltaSec) {
     m_hud->update(deltaSec);
     m_aimer->update(deltaSec);
 
-    if (Ship* ship = m_ship.get()) {
-        ship->components().setEngineState(m_engineState);
+    if (m_ship.valid()) {
+        m_ship->components().setEngineState(m_engineState);
     }
 }
 
@@ -82,7 +85,7 @@ void Player::fire() {
             targetPoint = m_aimer->aim(ray);
         }
 
-        ship()->components().fireAtPoint(targetPoint);
+        m_ship->components().fireAtPoint(targetPoint, false);
     }
 }
 

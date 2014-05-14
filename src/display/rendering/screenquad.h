@@ -26,7 +26,7 @@ protected:
     glow::ref_ptr<glow::Buffer> m_vertexBuffer;
 
     void initialize();
-    void beforeContextDestroy() override;
-    void afterContextRebuild() override;
+    virtual void beforeContextDestroy() override;
+    virtual void afterContextRebuild() override;
 };
 

@@ -8,8 +8,6 @@
 #include "equipment/shield.h"
 #include "equipment/shieldslot.h"
 
-#include "utils/tostring.h"
-
 #include "voxel/voxel.h"
 
 #include "worldobject/ship.h"

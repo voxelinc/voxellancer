@@ -10,16 +10,16 @@
 
 
 /**
- *   Base class for every Weapon that shoots rockets,
- *   i.e. projectiles that follow a target
-*/
+ * Base class for every Weapon that shoots rockets,
+ * i.e. projectiles that follow a target
+ */
 class RocketLauncher: public Weapon {
 public:
     RocketLauncher(const std::string& equipmentKey);
 
     void fireAtObject(WorldObject* target);
 
-    void update(float deltaSec) override;
+    virtual void update(float deltaSec) override;
 
 
 protected:

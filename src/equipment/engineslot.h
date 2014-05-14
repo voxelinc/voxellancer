@@ -11,9 +11,9 @@ class Engine;
 class EngineSlotVoxel;
 class WorldObjectComponents;
 
-/*
-    Slot with interchangeable engines
-*/
+/**
+ *   Slot with interchangeable engines
+ */
 class EngineSlot: public WorldObjectSlot {
 public:
     EngineSlot(WorldObjectComponents* components, EngineSlotVoxel* voxel);
