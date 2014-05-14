@@ -24,8 +24,8 @@ VoxelParticleData VoxelParticleSetup::toData(float timeSecs) const {
     particle.creationScale = m_transform.scale();
     particle.deathScale = m_transform.scale();
     particle.creationColor = m_visuals.color();
-    particle.deathColor = 0xFF0000;
-    particle.emissiveness = 1.0f;//m_visuals.emissiveness();
+    particle.deathColor = m_visuals.color();
+    particle.emissiveness = m_visuals.emissiveness();
 
     return particle;
 }
