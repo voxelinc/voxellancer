@@ -15,6 +15,7 @@ class GamePlayNormalInput;
 class GamePlayFreecamInput;
 class Player;
 class SoundManager;
+class Universe;
 
 /**
  * State that is active whenever the the game is actually played and not
@@ -51,6 +52,8 @@ public:
 
 protected:
     Game* m_game;
+
+    std::unique_ptr<Universe> m_universe;
 
     std::unique_ptr<GamePlayScene> m_scene;
     std::unique_ptr<BaseScenario> m_scenario;
