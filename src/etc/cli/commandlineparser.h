@@ -14,6 +14,7 @@ public:
     bool hmd() const;
     bool stereoView() const;
     bool fullScreen() const;
+    bool showIntro() const;
 
 private:
     std::unordered_map<std::string, std::string> m_options;

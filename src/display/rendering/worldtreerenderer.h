@@ -3,13 +3,14 @@
 #include "utils/aabbrenderer.h"
 
 
+class WorldTree;
 
 class WorldTreeRenderer {
 public:
     WorldTreeRenderer();
     ~WorldTreeRenderer();
 
-    void draw(const Camera& camera);
+    void draw(const Camera& camera, const WorldTree& tree);
 
 
 protected:

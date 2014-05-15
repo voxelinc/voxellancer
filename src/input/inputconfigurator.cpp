@@ -123,7 +123,7 @@ void InputConfigurator::setupControls(InputClass inputClass) {
     if (!m_displayedInstructions) {
         std::string message = "Please press Key for action: " + m_actions->at(configurationState(inputClass))->name();
         glow::info(message.c_str());
-        World::instance()->player().hud().showMessage(message);
+        m_hud->showMessage(message);
         m_displayedInstructions = true;
     }
     if (!isLastInputValid(inputClass)) {
@@ -134,12 +134,12 @@ void InputConfigurator::setupControls(InputClass inputClass) {
     incrementConfigurationState(inputClass);
     if (configurationState(inputClass) >= m_actions->size()) {
         glow::info("Setup complete");
-        World::instance()->player().hud().showMessage("Setup complete");
+        m_hud->showMessage("Setup complete");
         writeConfig();
         setConfigurationState(-1, inputClass);
     } else {
         glow::info(" ...done");
-        World::instance()->player().hud().showMessage("...done");
+        m_hud->showMessage("...done");
     }
     m_beginningKeyConfiguration = true;
     m_displayedInstructions = false;

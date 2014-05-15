@@ -71,7 +71,8 @@ void DefendAreaTask::onMemberJoin(Ship* member) {
 bool DefendAreaTask::isEnemyInRange() {
     m_enemies.clear();
     Sphere sphere(m_squad.leader()->transform().position(), m_defendRange);
-    WorldTreeQuery query(&(World::instance()->worldTree()), &sphere, nullptr, m_collisionFilter.get());
+    WorldTreeQuery query(&(m_squad.leader()->sector()->worldTree()), &sphere, nullptr, m_collisionFilter.get());
+
     for (WorldObject *worldObject : query.intersectingWorldObjects()) {
         Ship* ship = dynamic_cast<Ship*>(worldObject);
         if (ship) {

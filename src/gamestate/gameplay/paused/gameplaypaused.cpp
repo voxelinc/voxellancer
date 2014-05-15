@@ -38,3 +38,4 @@ void GamePlayPaused::onLeft() {
     GameState::onLeft();
     m_gamePlay->soundManager().deactivate();
 }
+

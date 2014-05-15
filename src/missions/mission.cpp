@@ -23,7 +23,7 @@ Mission::~Mission() = default;
 
 void Mission::start() {
     m_state = MissionState::Running;
-    World::instance()->player().hud().showMissionInfo(
+    universe()->player().hud().showMissionInfo(
         m_script->luaWrapper().call<std::string>("missionTitle"),
         m_script->luaWrapper().call<std::string>("missionCaption")
     );

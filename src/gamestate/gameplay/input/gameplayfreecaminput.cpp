@@ -14,8 +14,8 @@
 #include "input/inputmapping.h"
 
 
-GamePlayFreecamInput::GamePlayFreecamInput() :
-    GamePlayInput(),
+GamePlayFreecamInput::GamePlayFreecamInput(GamePlay& gamePlay) :
+    GamePlayInput(gamePlay),
 
     m_cameraDolly(new CameraDolly()),
 
@@ -55,7 +55,7 @@ GamePlayFreecamInput::GamePlayFreecamInput() :
 }
 
 
-void GamePlayFreecamInput::resizeEvent(const unsigned int width, const unsigned int height) {
+void GamePlayFreecamInput::onResizeEvent(const unsigned int width, const unsigned int height) {
     m_lastfocus = false; // through window resize the cursor position is scrambled
     m_cursorMaxDistance = glm::min(ContextProvider::instance()->resolution().width(), ContextProvider::instance()->resolution().height()) / 2.0f;
 }
@@ -90,6 +90,7 @@ void GamePlayFreecamInput::applyUpdates() {
     }
 
     m_position += m_orientation * (m_moveUpdate * m_moveFactor.get());
+
     m_moveUpdate = glm::vec3(0);
 
     m_orientation = m_orientation * glm::quat(m_rotateUpdate * m_rotateFactor.get());

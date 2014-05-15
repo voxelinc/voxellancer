@@ -44,7 +44,6 @@ void AiBindings::bind() {
     m_lua.Register("taskExecutor", this, &AiBindings::apiTaskExecutor);
 }
 
-
 std::string AiBindings::apiGetFaction(apikey key) {
     Ship* ship = m_scriptEngine.get<Ship>(key);
 
@@ -64,20 +63,20 @@ int AiBindings::apiSetFaction(apikey key, const std::string& faction) {
         return -1;
     }
 
-    Faction& f = World::instance()->factionMatrix().getFaction(faction);
+    Faction& f = m_script.universe()->factionMatrix().getFaction(faction);
     ship->character()->setFaction(f);
     return 0;
 }
 
 float AiBindings::apiGetFactionRelation(const std::string& factionA, const std::string& factionB) {
-    FactionMatrix& factions = World::instance()->factionMatrix();
+    FactionMatrix& factions = m_script.universe()->factionMatrix();
     Faction& fA = factions.getFaction(factionA);
     Faction& fB = factions.getFaction(factionB);
     return factions.getRelation(fA, fB).friendliness();
 }
 
 int AiBindings::apiSetFactionRelation(const std::string& factionA, const std::string& factionB, float friendliness) {
-    FactionMatrix& factions = World::instance()->factionMatrix();
+    FactionMatrix& factions = m_script.universe()->factionMatrix();
     Faction& fA = factions.getFaction(factionA);
     Faction& fB = factions.getFaction(factionB);
     factions.getRelation(fA, fB).setFriendliness(friendliness);
@@ -94,7 +93,7 @@ apikey AiBindings::apiOnAiTaskFinished(apikey key, const std::string& callback) 
 
     auto finishedPoll = new AiTaskFinishedPoll(aiTask, createCallback(callback, key));
 
-    World::instance()->addElement(finishedPoll);
+    m_script.universe()->addElement(finishedPoll);
     m_script.addLocal(finishedPoll);
 
     return finishedPoll->scriptKey();

@@ -47,9 +47,12 @@ go_bandit([](){
 
         std::string callbackFunction = R"( function callback() setDebugStatus("callback!") end )";
 
+        std::unique_ptr<Universe> m_universe;
+        Sector* sector;
 
-        before_each([&](){
-            World::reset(false);
+        before_each([&]() {
+            m_universe.reset(new Universe());
+            sector = new Sector("test", m_universe.get());
             script.reset(new GamePlayScript(World::instance()->scriptEngine()));
             script->loadString(callbackFunction);
         });
@@ -72,7 +75,7 @@ go_bandit([](){
                 spawn(ship)
             )");
 
-            AssertThat(World::instance()->ships().size(), Equals(1));
+            AssertThat(m_universe->ships().size(), Equals(1));
         });
 
         it("can access non existing playership", [&]() {
@@ -90,8 +93,8 @@ go_bandit([](){
 
             before_each([&]() {
                 ship.reset(new Ship());
-                World::instance()->player().setShip(ship.get());
-                World::instance()->scriptEngine().registerScriptable(ship.get());
+                m_universe->player().setShip(ship.get());
+                m_universe->scriptEngine().registerScriptable(ship.get());
             });
 
             after_each([&] () {
@@ -99,7 +102,7 @@ go_bandit([](){
             });
 
             it("can access unscriptable playership", [&]() {
-                World::instance()->scriptEngine().unregisterScriptable(ship.get());
+                m_universe->scriptEngine().unregisterScriptable(ship.get());
                 script->loadString(R"(
                     ship = playerShip()
                     setDebugStatus(ship)
@@ -151,15 +154,15 @@ go_bandit([](){
                 script->loadString(R"(
                     onAABBEntered(playerShip(), vec3(-50,-50,-150), vec3(50,50,-100), "callback")
                 )");
-                World::instance()->update(1.0f);
+                m_universe->update(1.0f);
                 AssertThat(script->debugStatus(), Equals(""));
 
                 ship->transform().setPosition(glm::vec3(0, 0, -110));
-                World::instance()->update(1.0f);
+                m_universe->update(1.0f);
                 AssertThat(script->debugStatus(), Equals("callback!"));
 
                 script->apiSetDebugStatus("");
-                World::instance()->update(1.0f);
+                m_universe->update(1.0f);
                 AssertThat(script->debugStatus(), Equals(""));
             });
 
@@ -171,15 +174,15 @@ go_bandit([](){
                 )");
                 AssertThat(ship->character()->task()->isFinished(), Equals(false));
 
-                World::instance()->update(1.0f);
+                m_universe->update(1.0f);
                 AssertThat(script->debugStatus(), Equals(""));
 
                 ship->transform().setPosition(glm::vec3(0, 0, 9.8));
-                World::instance()->update(1.0f);
+                m_universe->update(1.0f);
                 AssertThat(script->debugStatus(), Equals("callback!"));
 
                 script->apiSetDebugStatus("");
-                World::instance()->update(1.0f);
+                m_universe->update(1.0f);
                 AssertThat(script->debugStatus(), Equals(""));
             });
 
@@ -190,11 +193,11 @@ go_bandit([](){
                     onWorldObjectDestroyed(playerShip(), "callback")
                 )");
 
-                World::instance()->update(1.0f);
+                m_universe->update(1.0f);
                 AssertThat(script->debugStatus(), Equals(""));
 
                 ship->removeVoxel(ship->crucialVoxel());
-                World::instance()->update(1.0f);
+                m_universe->update(1.0f);
                 AssertThat(script->debugStatus(), Equals("callback!"));
             });
 
@@ -206,11 +209,11 @@ go_bandit([](){
                     onWorldObjectDestroyed(playerShip(), "callback")
                 )");
 
-                World::instance()->update(1.0f);
+                m_universe->update(1.0f);
                 AssertThat(script->debugStatus(), Equals(""));
 
                 ship.reset(nullptr);
-                World::instance()->update(1.0f);
+                m_universe->update(1.0f);
                 AssertThat(script->debugStatus(), Equals("callback!"));
             });
 

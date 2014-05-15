@@ -17,15 +17,18 @@ class CameraDolly;
 class HUD;
 class Mission;
 class MissionSystem;
+class Sector;
 class TargetSelector;
 
 class Player {
 public:
-    Player();
-    ~Player();
+    Player(Universe& universe);
+    virtual ~Player();
 
     Ship* ship();
     void setShip(Ship *ship);
+
+    Sector* sector();
 
     void update(float deltaSec);
 
@@ -43,7 +46,9 @@ public:
 
 
 protected:
+    Universe& m_universe;
     Handle<Ship> m_ship;
+    Sector* m_sector;
     std::unique_ptr<CameraDolly> m_cameraDolly;
     std::unique_ptr<HUD> m_hud;
     std::unique_ptr<TargetSelector> m_targetSelector;

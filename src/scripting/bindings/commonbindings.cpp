@@ -36,7 +36,6 @@ void CommonBindings::bind() {
 
     m_lua.Register("createSingleShotTimer", this, &CommonBindings::apiCreateSingleShotTimer);
     m_lua.Register("createLoopingTimer", this, &CommonBindings::apiCreateLoopingTimer);
-
 }
 
 bool CommonBindings::apiValid(apikey key) {
@@ -44,7 +43,7 @@ bool CommonBindings::apiValid(apikey key) {
 }
 
 int CommonBindings::apiShowMessage(const std::string& message) {
-    World::instance()->player().hud().showMissionMessage(message);
+    m_script.universe()->player().hud().showMissionMessage(message);
     return 0;
 }
 
@@ -68,7 +67,7 @@ int CommonBindings::apiSetEventActive(apikey eventPoll, bool active) {
 apikey CommonBindings::apiCreateSingleShotTimer(const std::string& callback, float delta) {
     auto timer = new SingleShotTimer(delta, createCallback(callback));
 
-    World::instance()->addElement(timer);
+    m_script.universe()->addElement(timer);
     m_script.addLocal(timer);
 
     return timer->scriptKey();
@@ -77,7 +76,7 @@ apikey CommonBindings::apiCreateSingleShotTimer(const std::string& callback, flo
 apikey CommonBindings::apiCreateLoopingTimer(const std::string& callback, float delta) {
     auto timer = new LoopingTimer(delta, createCallback(callback));
 
-    World::instance()->addElement(timer);
+    m_script.universe()->addElement(timer);
     m_script.addLocal(timer);
 
     return timer->scriptKey();

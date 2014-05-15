@@ -50,17 +50,17 @@ int InternalMissionBindings::apiMissionFail() {
 }
 
 int InternalMissionBindings::apiMissionMessage(const std::string& message) {
-    World::instance()->player().hud().showMissionMessage(message);
+    m_script.universe()->player().hud().showMissionMessage(message);
     return 0;
 }
 
 int InternalMissionBindings::apiMissionFailureMessage(const std::string& message) {
-    World::instance()->player().hud().showMissionMessage(message);
+    m_script.universe()->player().hud().showMissionMessage(message);
     return 0;
 }
 
 int InternalMissionBindings::apiMissionSuccessMessage(const std::string& message) {
-    World::instance()->player().hud().showMissionMessage(message);
+    m_script.universe()->player().hud().showMissionMessage(message);
     return 0;
 }
 

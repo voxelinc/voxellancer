@@ -56,7 +56,7 @@ void Projectile::update(float deltaSec) {
     m_lifetime -= deltaSec;
 
     if (m_lifetime <= 0.0f) {
-        World::instance()->god().scheduleRemoval(this);
+        scheduleRemoval();
         onLifetimeOver();
     }
 }
@@ -68,7 +68,7 @@ void Projectile::onLifetimeOver() {
 void Projectile::onCollision() {
     SoundManager::current()->play(hitSound(), position());
 
-    World::instance()->god().scheduleRemoval(this);
+    scheduleRemoval();
     spawnExplosion();
 }
 

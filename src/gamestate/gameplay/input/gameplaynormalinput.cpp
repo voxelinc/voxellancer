@@ -56,8 +56,8 @@
  *  B9: right stick
  */
 
-GamePlayNormalInput::GamePlayNormalInput() :
-    GamePlayInput(),
+GamePlayNormalInput::GamePlayNormalInput(GamePlay& gamePlay) :
+    GamePlayInput(gamePlay),
 
     m_deadzoneMouse("input.deadzoneMouse"),
     m_deadzoneGamepad("input.deadzoneGamepad"),
@@ -84,7 +84,7 @@ GamePlayNormalInput::GamePlayNormalInput() :
     m_secondaryInputValues(),
     m_actions(),
 
-    m_inputConfigurator(new InputConfigurator(&m_actions, &m_secondaryInputValues, &m_deadzoneGamepad, &World::instance()->player().hud())),
+    m_inputConfigurator(new InputConfigurator(&m_actions, &m_secondaryInputValues, &m_deadzoneGamepad, &gamePlay.player().hud())),
     m_fireUpdate(false),
     m_rocketUpdate(false),
     m_moveUpdate(0),
@@ -103,12 +103,14 @@ GamePlayNormalInput::GamePlayNormalInput() :
     m_currentTimePressed = 0;
 }
 
-void GamePlayNormalInput::resizeEvent(const unsigned int width, const unsigned int height) {
+void GamePlayNormalInput::onResizeEvent(const unsigned int width, const unsigned int height) {
     m_lastfocus = false; // through window resize everything becomes scrambled
     m_cursorMaxDistance = glm::min(ContextProvider::instance()->resolution().width(), ContextProvider::instance()->resolution().height()) / 2;
 }
 
-void GamePlayNormalInput::keyCallback(int key, int scancode, int action, int mods) {
+void GamePlayNormalInput::onKeyEvent(int key, int scancode, int action, int mods) {
+    GamePlayInput::onKeyEvent(key, scancode, action, mods);
+
     if (action == GLFW_PRESS) {
         m_inputConfigurator->setLastInput(InputClass::Primary, InputMapping(InputType::Keyboard, key, 1, 0.0f));
     } else {
@@ -136,11 +138,10 @@ void GamePlayNormalInput::keyCallback(int key, int scancode, int action, int mod
 }
 
 
-void GamePlayNormalInput::mouseButtonCallback(int button, int action, int mods) {
+void GamePlayNormalInput::onMouseButtonEvent(int button, int action, int mods) {
     if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_RELEASE) {
         if (m_currentTimePressed > 0 && m_currentTimePressed < m_maxClickTime) {
-            World::instance()->player().hud().onClick(ClickType::Selection);
-        } else {
+            m_gamePlay.universe().player().hud().onClick(ClickType::Selection);
         }
         m_currentTimePressed = 0;
     }
@@ -172,25 +173,25 @@ void GamePlayNormalInput::applyUpdates() {
     // collect them and apply them here
 
     if (m_fireUpdate){
-        World::instance()->player().fire(); // fire checks for existence of ship
+        m_gamePlay.universe().player().fire(); // fire checks for existence of ship
     }
     m_fireUpdate = false;
 
-    if (m_rocketUpdate && World::instance()->player().ship()) {
-        World::instance()->player().ship()->components().fireAtObject(World::instance()->player().ship()->targetObject());
+    if (m_rocketUpdate && m_gamePlay.universe().player().ship()) {
+        m_gamePlay.universe().player().ship()->components().fireAtObject(m_gamePlay.universe().player().ship()->targetObject());
     }
     m_rocketUpdate = false;
 
     if (glm::length(m_moveUpdate) > 1.0f) {
         m_moveUpdate = glm::normalize(m_moveUpdate);
     }
-    World::instance()->player().move(m_moveUpdate);
+    m_gamePlay.universe().player().move(m_moveUpdate);
     m_moveUpdate = glm::vec3(0);
 
     if (glm::length(m_rotateUpdate) > 1.0f) {
         m_rotateUpdate = glm::normalize(m_rotateUpdate);
     }
-    World::instance()->player().rotate(m_rotateUpdate);
+    m_gamePlay.universe().player().rotate(m_rotateUpdate);
     m_rotateUpdate = glm::vec3(0);
 }
 
@@ -216,7 +217,7 @@ void GamePlayNormalInput::processMouseUpdate(float deltaSec) {
 
     bool pressed = glfwGetMouseButton(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS;
 
-    World::instance()->player().hud().crossHair().setActionActive(pressed);
+    m_gamePlay.universe().player().hud().crossHair().setActionActive(pressed);
 
     glm::vec2 mousePos(x, y);
     if (glm::length(m_lastMousePos - mousePos) > 0.01f) {
@@ -225,7 +226,7 @@ void GamePlayNormalInput::processMouseUpdate(float deltaSec) {
     }
 
     if (m_centerCrosshair) {
-        World::instance()->player().hud().crossHair().pointToLocalPoint(glm::vec3(0, 0, -1));
+        m_gamePlay.universe().player().hud().crossHair().pointToLocalPoint(glm::vec3(0, 0, -1));
     } else {
         placeCrossHair(x, y);
     }
@@ -257,9 +258,9 @@ void GamePlayNormalInput::processMouseUpdate(float deltaSec) {
 
 void GamePlayNormalInput::processHMDUpdate() {
     if (HMDManager::instance()->hmd()) {
-        World::instance()->player().cameraHead().setRelativeOrientation(HMDManager::instance()->hmd()->orientation());
+        m_gamePlay.universe().player().cameraHead().setRelativeOrientation(HMDManager::instance()->hmd()->orientation());
     } else {
-        World::instance()->player().cameraHead().setRelativeOrientation(glm::quat());
+       m_gamePlay.universe().player().cameraHead().setRelativeOrientation(glm::quat());
     }
 }
 
@@ -328,7 +329,7 @@ float GamePlayNormalInput::getInputValue(InputMapping mapping) {
 }
 
 void GamePlayNormalInput::processFireActions() {
-    World::instance()->player().hud().crossHair().setActionActive(getInputValue(&fireAction) > 0.001);
+    m_gamePlay.universe().player().hud().crossHair().setActionActive(getInputValue(&fireAction) > 0.001);
 
     if (getInputValue(&fireAction)) {
         m_fireUpdate = true;
@@ -367,15 +368,16 @@ void GamePlayNormalInput::processRotateActions() {
 
 void GamePlayNormalInput::processTargetSelectActions() {
     if (getInputValue(&selectNextAction)) {
-        World::instance()->player().selectTarget(true);
+        m_gamePlay.universe().player().selectTarget(true);
     }
     if (getInputValue(&selectPreviousAction)) {
-        World::instance()->player().selectTarget(false);
+        m_gamePlay.universe().player().selectTarget(false);
     }
 }
 
 void GamePlayNormalInput::placeCrossHair(double winX, double winY) {
     int width, height;
     glfwGetWindowSize(glfwGetCurrentContext(), &width, &height);
-    World::instance()->player().hud().setCrossHairOffset(glm::vec2((winX - (width/2))/(width/2), -(winY - (height/2))/(height/2)));
+    m_gamePlay.universe().player().hud().setCrossHairOffset(glm::vec2((winX - (width/2))/(width/2), -(winY - (height/2))/(height/2)));
 }
+

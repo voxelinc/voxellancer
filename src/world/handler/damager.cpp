@@ -24,10 +24,6 @@ void Damager::applyDamages(std::list<DamageImpact> &damageImpacts) {
     m_deadVoxels.clear();
 
     for(DamageImpact &damageImpact : damageImpacts) {
-        if (m_playerShipUndestroyable && World::instance()->player().ship() == damageImpact.worldObject()) {
-            continue;
-        }
-
         Voxel *voxel = damageImpact.voxel();
 
         float hpBeforeDamage = voxel->hp();

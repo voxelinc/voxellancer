@@ -32,7 +32,9 @@
 #include "equipment/weapons/gun.h"
 
 
-Player::Player():
+Player::Player(Universe& universe):
+    m_universe(universe),
+    m_sector(nullptr),
     m_aimer(new Aimer(nullptr)),
     m_hud(new HUD(this)),
     m_cameraDolly(new CameraDolly()),
@@ -49,10 +51,15 @@ Ship* Player::ship() {
 
 void Player::setShip(Ship* ship) {
     m_ship = makeHandle(ship);
-    m_ship->character()->setFaction(World::instance()->factionMatrix().playerFaction());
+    m_sector = m_ship->sector();
+    m_ship->character()->setFaction(m_universe.factionMatrix().playerFaction());
     m_ship->info().setShowOnHud(false);
     m_cameraDolly->followWorldObject(ship);
     m_aimer->setWorldObject(ship);
+}
+
+Sector* Player::sector() {
+    return m_sector;
 }
 
 void Player::update(float deltaSec) {
@@ -62,6 +69,7 @@ void Player::update(float deltaSec) {
 
     if (m_ship.valid()) {
         m_ship->components().setEngineState(m_engineState);
+        m_sector = m_ship->sector();
     }
 }
 

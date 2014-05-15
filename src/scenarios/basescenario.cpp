@@ -7,53 +7,47 @@
 
 #include "ai/character.h"
 
-#include "gamestate/gameplay/gameplay.h"
-
-#include "resource/clustercache.h"
-
 #include "resource/worldobjectbuilder.h"
-#include "worldobject/ship.h"
+
 #include "scripting/scriptengine.h"
-#include "worldobject/worldobjectinfo.h"
-#include "sound/soundmanager.h"
-#include "world/god.h"
-#include "world/world.h"
-#include "world/god.h"
-#include "player.h"
+
+#include "world/universe.h"
+#include "world/sector.h"
 
 
-BaseScenario::BaseScenario(GamePlay* gamePlay) :
-    m_gamePlay(gamePlay),
-    m_world(nullptr)
+BaseScenario::BaseScenario(Universe* universe) :
+    m_universe(universe)
 {
 }
 
 void BaseScenario::load() {
-    createWorld();
+    glowutils::AutoTimer timer("Loading Scenario");
 
-    {
-        glowutils::AutoTimer timer("Populating World");
-        populateWorld();
-        m_world->god().spawn();
-        m_world->scriptEngine().start();
-    }
+    createUniverse();
+    populateUniverse();
+
+    m_universe->scriptEngine().start();
 }
 
-void BaseScenario::clear() {
-    m_world->reset();
+void BaseScenario::createUniverse() {
+    Sector* backen = new Sector("backen", m_universe);
+    Sector* wlf = new Sector("withlesserforce", m_universe);
+    Sector* winterbreeze = new Sector("winterbreeze", m_universe);
+
+    m_universe->addSector(backen);
+    m_universe->addSector(wlf);
+    m_universe->addSector(winterbreezeS);
 }
 
-void BaseScenario::reset() {
-    clear();
-    load();
-}
+void BaseScenario::populateUniverse() {
+    Ship *playership = WorldObjectBuilder("pirateheavy").buildShip();
+    playership->setUniverse(universe);
+    playership->setSector(universe->sector("backen"))
+    playership->transform().setPosition(glm::vec3(0, 0, 10));
+    playership->info().setName("metdelivery");
+    playership->spawn();
 
-void BaseScenario::createWorld() {
-    m_world = World::instance();
-}
-
-void BaseScenario::populateWorld() {
-
+    m_universe->player().setShip(testCluster);
 }
 
 

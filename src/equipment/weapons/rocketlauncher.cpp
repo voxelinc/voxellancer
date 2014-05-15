@@ -37,7 +37,7 @@ void RocketLauncher::fireAtObject(WorldObject* target) {
         Rocket* rocket = WorldObjectBuilder(projectileName()).buildRocket();
         setupRocket(rocket, target);
 
-        World::instance()->god().scheduleSpawn(rocket);
+        rocket->spawn();
         onFired();
     }
 }
@@ -48,6 +48,10 @@ void RocketLauncher::update(float deltaSec) {
 
 void RocketLauncher::setupRocket(Rocket* rocket, WorldObject* target) {
     WorldObject* worldObject = hardpoint()->components()->worldObject();
+
+    rocket->setUniverse(worldObject->universe());
+    rocket->setSector(worldObject->sector());
+
     glm::quat launchOrientation = worldObject->transform().orientation() * GeometryHelper::quatFromViewDirection(hardpoint()->direction());
     float rocketLength = rocket->bounds().minimalGridAABB().extent(ZAxis) * rocket->transform().scale();
     glm::vec3 rocketPosition = hardpoint()->voxel()->position() + launchOrientation * glm::vec3(0, 0, -rocketLength / 2.0f);

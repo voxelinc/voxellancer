@@ -7,6 +7,7 @@
 
 
 class ActionKeyMapping;
+class GamePlay;
 struct SecondaryInputValues;
 
 class HUD;
@@ -58,5 +59,5 @@ private:
     void setConfigurationState(int state, InputClass inputClass);
 
     void writeConfig();
-
 };
+

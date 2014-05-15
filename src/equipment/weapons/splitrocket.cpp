@@ -113,7 +113,7 @@ void SplitRocket::split() {
     spawnChildren();
     spawnExplosion();
 
-    World::instance()->god().scheduleRemoval(this);
+    scheduleRemoval();
 }
 
 void SplitRocket::spawnChildren() {
@@ -144,8 +144,10 @@ void SplitRocket::spawnChildren() {
                 static_cast<Bullet*>(child)->setCreator(m_creator);
             }
 
+            child->setUniverse(universe());
+            child->setSector(sector());
 
-            World::instance()->god().scheduleSpawn(child);
+            child->spawn();
         }
     }
 }

@@ -40,7 +40,7 @@ glm::vec3 Aimer::aim(const Ray& ray) {
 
     glm::vec3 targetPoint;
 
-    WorldTreeQuery query(&World::instance()->worldTree(), &ray, m_worldObject->collisionDetector().geode()->hint(), &m_worldObject->collisionFilter());
+    WorldTreeQuery query(&m_worldObject->sector()->worldTree(), &ray, m_worldObject->collisionDetector().geode()->hint(), &m_worldObject->collisionFilter());
 
     std::unordered_set<Voxel*> intersectingVoxels = query.intersectingVoxels();
 

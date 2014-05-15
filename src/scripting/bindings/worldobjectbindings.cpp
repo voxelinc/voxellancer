@@ -54,8 +54,8 @@ void WorldObjectBindings::bind() {
 }
 
 apikey WorldObjectBindings::apiPlayerShip() {
-    if (World::instance()->player().ship()) {
-        return World::instance()->player().ship()->scriptKey();
+    if (m_script.universe()->player().ship()) {
+        return m_script.universe()->player().ship()->scriptKey();
     } else {
         return 0;
     }
@@ -94,8 +94,7 @@ int WorldObjectBindings::apiSpawn(apikey worldObjectKey) {
         return -1;
     }
 
-    World::instance()->god().scheduleSpawn(SpawnRequest(worldObject, false));
-    World::instance()->god().spawn(); // should this really happen?
+    worldObject->spawn();
 
     return worldObject->spawnState() == SpawnState::Spawned;
 }
@@ -107,8 +106,7 @@ int WorldObjectBindings::apiRemove(apikey worldObjectKey) {
         return -1;
     }
 
-    World::instance()->god().scheduleRemoval(worldObject);
-    World::instance()->god().remove();
+    scheduleRemoval();
 
     return 0;
 }
@@ -187,7 +185,7 @@ apikey WorldObjectBindings::apiOnWorldObjectDestroyed(apikey key, const std::str
 
     auto destructionPoll = new WorldObjectDestroyedPoll(worldObject, createCallback(callback, key));
 
-    World::instance()->addElement(destructionPoll);
+    m_script.universe()->addElement(destructionPoll);
     m_script.addLocal(destructionPoll);
 
     return destructionPoll->scriptKey();
@@ -202,7 +200,7 @@ apikey WorldObjectBindings::apiOnAABBEntered(apikey key, const glm::vec3& llf, c
 
     auto enteredPoll = new AABBEnteredPoll(worldObject, AABB(llf, urb), createCallback(callback, key));
 
-    World::instance()->addElement(enteredPoll);
+    m_script.universe()->addElement(enteredPoll);
     m_script.addLocal(enteredPoll);
 
     return enteredPoll->scriptKey();

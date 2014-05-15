@@ -75,8 +75,12 @@ go_bandit([](){
         PropertyManager::instance()->load("data/voxels.ini", "voxels");
         SoundManager soundManager;
 
+        std::unique_ptr<Universe> m_universe;
+        Sector* sector;
+
         before_each([&]() {
-            World::reset();
+            m_universe.reset(new Universe());
+            sector = new Sector("test", m_universe.get());
         });
 
         after_each([&]() {
@@ -177,19 +181,25 @@ go_bandit([](){
                 glowutils::AutoTimer t("init perftest");
 
                 normandy = new Ship();
+                normandy->setUniverse(m_universe.get());
+                normandy->setSector(sector);
                 ClusterCache::instance()->fillObject(normandy, "data/voxelcluster/normandy.csv");
                 normandy->transform().setPosition(glm::vec3(0, 0, -100));
                 normandy->info().setName("Normandy");
-                World::instance()->god().scheduleSpawn(normandy);
+                normandy->spawn();
 
                 ship = new Ship();
+                ship->setUniverse(m_universe.get());
+                ship->setSector(sector);
                 ClusterCache::instance()->fillObject(ship, "data/voxelcluster/basicship.csv");
                 ship->transform().setPosition(glm::vec3(0, 0, 10));
                 ship->info().setName("basicship");
                 ship->info().setShowOnHud(false);
-                World::instance()->god().scheduleSpawn(ship);
+                ship->spawn();
 
                 WorldObject *wall = new WorldObject();
+                wall->setUniverse(m_universe.get());
+                wall->setSector(sector);
                 wall->transform().move(glm::vec3(-20, 0, -50));
                 wall->transform().rotate(glm::angleAxis(-90.f, glm::vec3(0, 1, 0)));
 
@@ -201,14 +211,15 @@ go_bandit([](){
                     }
                 }
                 wall->info().setName("Wall");
-                World::instance()->god().scheduleSpawn(wall);
+                wall->spawn();
 
                 planet = createPlanet(28);
+                planet->setUniverse(m_universe.get());
+                planet->setSector(sector);
                 planet->transform().move(glm::vec3(20, 10, -130));
-                World::instance()->god().scheduleSpawn(planet);
+                planet->spawn();
 
                 glow::debug("Initial spawn");
-                World::instance()->god().spawn();
             }
             normandy->physics().setAcceleration(Acceleration(glm::vec3(0, 0, 1), glm::vec3(0.0f)));
             ship->physics().setAcceleration(Acceleration(glm::vec3(0, 0, 1), glm::vec3(0.0f)));
@@ -218,7 +229,7 @@ go_bandit([](){
                     ship->setTargetObject(planet);
                     //ship->fireAtObject();
                     ship->components().fireAtPoint(planet->transform().position(), false);
-                    World::instance()->update(0.016f);
+                    m_universe->update(0.016f);
                 }
             }
             glow::debug("simulation done");

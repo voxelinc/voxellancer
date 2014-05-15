@@ -25,12 +25,12 @@ void TargetSelector::selectTarget(bool next) {
 }
 
 void TargetSelector::selectNextTarget() {
-    std::unordered_set<WorldObject*>& worldObjects = World::instance()->worldObjects();
+    std::unordered_set<WorldObject*>& worldObjects = player->universe().worldObjects();
     m_player->setTarget(findNextTarget(worldObjects.begin(), worldObjects.end()));
 }
 
 void TargetSelector::selectPreviousTarget() {
-    std::unordered_set<WorldObject*>& worldObjects = World::instance()->worldObjects();
+    std::unordered_set<WorldObject*>& worldObjects = player->universe().worldObjects();
     // HACK: unordered sets don't have reverse iterators (on linux)
     // since this algorithm has to be improved anyway, for the moment previous will also go forward
     m_player->setTarget(findNextTarget(worldObjects.begin(), worldObjects.end()));

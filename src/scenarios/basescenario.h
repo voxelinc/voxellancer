@@ -1,22 +1,20 @@
 #pragma once
 
+
 class World;
 class GamePlay;
 
 class BaseScenario {
 public:
-    BaseScenario(GamePlay* gamePlay);
+    BaseScenario(Universe* universe);
 
     void load();
-    void clear();
-    void reset();
 
 
 protected:
-    GamePlay* m_gamePlay;
-    World* m_world;
+    Universe* m_universe;
 
-    virtual void createWorld();
-    virtual void populateWorld();
+    virtual void createUniverse();
+    virtual void populateUniverse();
 };
 

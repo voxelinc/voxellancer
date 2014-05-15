@@ -6,7 +6,6 @@
 #include "sector.h"
 
 
-
 Universe::Universe() = default;
 Universe::~Universe() = default;
 

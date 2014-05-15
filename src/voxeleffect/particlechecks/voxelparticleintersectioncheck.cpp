@@ -19,6 +19,7 @@
 #include "player.h"
 #include "camera/camerahead.h"
 
+
 VoxelParticleIntersectionCheck::VoxelParticleIntersectionCheck(const VoxelParticleEngine& engine) :
     m_particleEngine(engine)
 {
@@ -32,11 +33,17 @@ bool VoxelParticleIntersectionCheck::isDead(const VoxelParticleData& particleDat
         return false;
     }
 
-    WorldObject* object = World::instance()->player().ship();
-    glm::ivec3 cell = glm::ivec3(object->transform().inverseApplyTo(position));
-    if (object->voxel(cell)) {
-        return true;
-    }    
+    if (m_particleEngine.sector() == m_particleEngine.sector().universe().player().sector()) {
+        WorldObject* object = m_particleEngine.sector().universe().player().ship();
+
+        if (object) {
+            glm::ivec3 cell = glm::ivec3(object->transform().inverseApplyTo(position));
+            if (object->voxel(cell)) {
+                return true;
+            }
+        }
+    }
+
 
     return false;
 }
@@ -44,7 +51,7 @@ bool VoxelParticleIntersectionCheck::isDead(const VoxelParticleData& particleDat
 
 void VoxelParticleIntersectionCheck::beforeCheck() {
     if (World::instance()->player().ship()) {
-        m_Sphere = World::instance()->player().ship()->bounds().sphere();
+        m_Sphere = m_particleEngine.sector().universe().player().ship()->bounds().sphere();
     } else {
         m_Sphere = Sphere();
     }

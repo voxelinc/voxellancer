@@ -15,10 +15,10 @@ WorldTreeRenderer::WorldTreeRenderer():
 
 WorldTreeRenderer::~WorldTreeRenderer() = default;
 
-void WorldTreeRenderer::draw(const Camera& camera) {
+void WorldTreeRenderer::draw(const Camera& camera, const WorldTree& tree) {
     m_renderer->clear();
 
-    WorldTreeNode* root = World::instance()->worldTree().root();
+    WorldTreeNode* root = tree.root();
     poll(root);
 
     m_renderer->draw(camera);

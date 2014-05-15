@@ -27,7 +27,7 @@ apikey ExternalMissionBindings::apiMissionStart(const std::string& name) {
     std::string path = std::string("data/scripts/missions/") + name + ".lua";
 
     auto mission = new Mission(path);
-    World::instance()->addElement(mission);
+    m_script.universe()->addElement(mission);
 
     mission->start();
 
@@ -50,7 +50,7 @@ apikey ExternalMissionBindings::createStatePoll(apikey missionKey, MissionState 
 
     auto poll = new MissionStatePoll(*mission, state, createCallback(callback, missionKey));
 
-    World::instance()->addElement(poll);
+    m_script.universe()->addElement(poll);
     m_script.addLocal(poll);
 
     return poll->scriptKey();

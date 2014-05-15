@@ -77,7 +77,7 @@ void Gun::fireAtPoint(const glm::vec3& point, bool checkFriendlyFire) {
     Bullet *bullet =  WorldObjectBuilder(projectileName()).buildBullet();
     setupBullet(bullet, point);
 
-    World::instance()->god().scheduleSpawn(bullet);
+    bullet->spawn();
 
     SoundManager::current()->play(fireSound(), hardpoint()->voxel()->position());
 
@@ -90,7 +90,7 @@ bool Gun::isBulletPathClear(const glm::vec3& point, bool checkFriendlyFire) {
     glm::vec3 direction = glm::normalize(point - m_hardpoint->voxel()->position());
     Capsule capsuleToTarget = Capsule::fromTo(m_hardpoint->voxel()->position() + direction * (m_bulletLength / 2.0f + m_spawnDistance), point, m_bulletMaxWidth / 2);
 
-    WorldTreeQuery fireDirectionQuery(&World::instance()->worldTree(), &capsuleToTarget, owner->collisionDetector().geode()->hint(), nullptr);
+    WorldTreeQuery fireDirectionQuery(&owner->sector()->worldTree(), &capsuleToTarget, owner->collisionDetector().geode()->hint(), nullptr);
 
     for (WorldObject* object : fireDirectionQuery.intersectingWorldObjects()) {
         if (object == m_hardpoint->components()->worldObject()) {
@@ -113,6 +113,11 @@ void Gun::update(float deltaSec) {
 }
 
 void Gun::setupBullet(Bullet* bullet, const glm::vec3& point) {
+    WorldObject* owner = m_hardpoint->components()->worldObject();
+
+    bullet->setUniverse(owner->universe());
+    bullet->setSector(owner->sector());
+
     Transform bulletTransform(bullet->transform());
 
     WorldObject* firingWorldObject = m_hardpoint->components()->worldObject();

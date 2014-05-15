@@ -7,7 +7,8 @@
 #include "world/world.h"
 
 
-Faction::Faction(const std::string& key, const std::string& printName):
+Faction::Faction(Universe* universe, const std::string& key, const std::string& printName):
+    m_universe(universe),
     m_key(key),
     m_printName(printName)
 {
@@ -27,5 +28,6 @@ const std::string& Faction::printName() const {
 }
 
 FactionRelation& Faction::relationTo(Faction& other) {
-    return World::instance()->factionMatrix().getRelation(*this, other);
+    return m_universe->factionMatrix().getRelation(*this, other);
 }
+
