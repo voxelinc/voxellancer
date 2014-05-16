@@ -66,7 +66,7 @@ void Rocket::spawnExplosion() {
     generator.setLifetime(1.0f, 0.2f);
     generator.setForce(1.5f);
 
-    generator.spawn();
+    generator.spawn(sector());
 }
 
 void Rocket::onLifetimeOver() {

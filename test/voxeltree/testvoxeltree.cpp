@@ -13,9 +13,8 @@
 #include "../bandit_extension/vec3helper.h"
 #include "voxel/voxel.h"
 
+
 using namespace bandit;
-
-
 
 go_bandit([](){
     describe("VoxelTree", [](){

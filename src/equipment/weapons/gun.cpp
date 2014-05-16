@@ -61,11 +61,9 @@ void Gun::fireAtPoint(const glm::vec3& point, bool checkFriendlyFire) {
     if (!canFire()) {
         return;
     }
-
     if (!m_hardpoint->inFieldOfAim(point)) {
         return;
     }
-
     if (!isBulletPathClear(point, checkFriendlyFire)) {
         return;
     }
@@ -73,7 +71,7 @@ void Gun::fireAtPoint(const glm::vec3& point, bool checkFriendlyFire) {
     Bullet *bullet =  WorldObjectBuilder(projectileName()).buildBullet();
     setupBullet(bullet, point);
 
-    bullet->spawn();
+    bullet->spawn(m_hardpoint->components()->worldObject()->sector());
 
     SoundManager::current()->play(fireSound(), hardpoint()->voxel()->position());
 
@@ -118,9 +116,6 @@ void Gun::update(float deltaSec) {
 
 void Gun::setupBullet(Bullet* bullet, const glm::vec3& point) {
     WorldObject* owner = m_hardpoint->components()->worldObject();
-
-    bullet->setUniverse(owner->universe());
-    bullet->setSector(owner->sector());
 
     Transform bulletTransform(bullet->transform());
 

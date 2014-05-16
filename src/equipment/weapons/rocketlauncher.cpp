@@ -34,7 +34,7 @@ void RocketLauncher::fireAtObject(WorldObject* target) {
         Rocket* rocket = WorldObjectBuilder(projectileName()).buildRocket();
         setupRocket(rocket, target);
 
-        rocket->spawn();
+        rocket->spawn(hardpoint()->components()->worldObject()->sector());
         onFired();
     }
 }
@@ -45,9 +45,6 @@ void RocketLauncher::update(float deltaSec) {
 
 void RocketLauncher::setupRocket(Rocket* rocket, WorldObject* target) {
     WorldObject* worldObject = hardpoint()->components()->worldObject();
-
-    rocket->setUniverse(worldObject->universe());
-    rocket->setSector(worldObject->sector());
 
     glm::quat launchOrientation = worldObject->transform().orientation() * GeometryHelper::quatFromViewDirection(hardpoint()->direction());
     float rocketLength = rocket->bounds().minimalGridAABB().extent(ZAxis) * rocket->transform().scale();

@@ -14,16 +14,8 @@ Universe* UniverseElement::universe() {
     return m_universe;
 }
 
-void UniverseElement::setUniverse(Universe* universe) {
-    m_universe = universe;
-}
-
 Sector* UniverseElement::sector() {
     return m_sector;
-}
-
-void UniverseElement::setSector(Sector* sector) {
-    m_sector = sector;
 }
 
 bool UniverseElement::removalScheduled() const {
@@ -36,5 +28,13 @@ void UniverseElement::scheduleRemoval() {
 
 void UniverseElement::update(float deltaSecs) {
 
+}
+
+void UniverseElement::spawn(Universe* universe) {
+    doSpawn(universe, nullptr);
+}
+
+void UniverseElement::spawn(Sector* sector) {
+    doSpawn(sector->universe(), sector);
 }
 

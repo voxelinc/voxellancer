@@ -10,7 +10,6 @@ Faction::Faction(Universe* universe, const std::string& key, const std::string& 
     m_key(key),
     m_printName(printName)
 {
-
 }
 
 const std::string& Faction::key() const {

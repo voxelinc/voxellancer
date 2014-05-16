@@ -5,8 +5,6 @@
 #include "worldobject/ship.h"
 #include "worldobject/worldobjectinfo.h"
 
-#include "world/world.h"
-
 #include "player.h"
 
 

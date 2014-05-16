@@ -68,21 +68,7 @@ bool ScriptEngine::keyValid(int key) const {
 }
 
 void ScriptEngine::update(float deltaSec) {
-    if (m_running) {
-        for (std::list<std::shared_ptr<Script>>::iterator iter = m_scripts.begin(); iter != m_scripts.end();) {
-            Script* script = iter->get();
 
-            if (script->state() == ScriptState::Running) {
-                script->update(deltaSec);
-            }
-
-            if (script->state() == ScriptState::Stopped) {
-                iter = m_scripts.erase(iter);
-            } else {
-                ++iter;
-            }
-        }
-    }
 }
 
 Scriptable* ScriptEngine::getScriptable(int key) {

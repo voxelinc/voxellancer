@@ -41,11 +41,9 @@ void BaseScenario::createUniverse() {
 
 void BaseScenario::populateUniverse() {
     Ship *playership = WorldObjectBuilder("pirateheavy").buildShip();
-    playership->setUniverse(universe);
-    playership->setSector(universe->sector("backen"))
     playership->transform().setPosition(glm::vec3(0, 0, 10));
     playership->info().setName("metdelivery");
-    playership->spawn();
+    playership->spawn(m_universe->sector("backen"));
 
     m_universe->player().setShip(testCluster);
 }

@@ -91,7 +91,7 @@ void EngineTrailGenerator::spawnAt(glm::vec3 position) {
     m_generator->setPosition(position);
     m_generator->setImpactVector(m_creator.transform().orientation() * (glm::vec3(0, 0, 0.1f) * glm::abs(m_creator.physics().acceleration().directional()) / 5.0f));
 
-    m_generator->spawn();
+    m_generator->spawn(m_creator.sector());
     m_timeSinceLastSpawn = 0.0f;
     m_lastSpawnPoint = position;
 }

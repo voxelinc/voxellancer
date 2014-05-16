@@ -34,9 +34,6 @@ void Wrecker::createWreckFromObject(WorldObject* object) {
         wreckage->addVoxel(new Voxel(*pair.second));
     }
 
-    wreckage->setUniverse(object->universe());
-    wreckage->setSector(object->sector());
-
-    wreckage->spawn();
+    wreckage->spawn(object->sector());
 }
 

@@ -18,8 +18,8 @@ using namespace bandit;
 
 go_bandit([](){
     describe("CollisionDetector", [](){
-        std::shared_ptr<Universe> m_universe;
-        std::shared_ptr<Sector> m_sector;
+        std::shared_ptr<Universe> universe;
+        std::shared_ptr<Sector> sector;
         WorldObject *a, *b;
         CollisionDetector *d;
 
@@ -28,11 +28,12 @@ go_bandit([](){
         PropertyManager::instance()->load("data/voxels.ini", "voxels");
 
         before_each([&](){
-            m_universe.reset(new Universe());
-            m_sector.reset(new Sector("bla", m_universe.get()));
+            universe.reset(new Universe());
+            sector.reset(new Sector("bla", universe.get()));
+            universe->addSector(*sector);
 
-            a = new WorldObject(); a->setUniverse(m_universe.get()); a->setSector(m_sector.get()); a->spawn();
-            b = new WorldObject(); b->setUniverse(m_universe.get()); b->setSector(m_sector.get()); b->spawn();
+            a = new WorldObject(); a->spawn(sector.get());
+            b = new WorldObject(); b->spawn(sector.get());
 
             d = &a->collisionDetector();
         });

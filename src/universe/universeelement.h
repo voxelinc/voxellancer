@@ -19,22 +19,22 @@ public:
     virtual ~UniverseElement();
 
     Universe* universe();
-    void setUniverse(Universe* universe);
-
     Sector* sector();
-    void setSector(Sector* sector);
 
     bool removalScheduled() const;
     void scheduleRemoval();
 
     virtual void update(float deltaSecs);
 
-    virtual void spawn() = 0;
+    void spawn(Universe* universe);
+    void spawn(Sector* sector);
 
 
 protected:
     Universe* m_universe;
     Sector* m_sector;
     bool m_removalScheduled;
+
+    virtual void doSpawn() = 0;
 };
 

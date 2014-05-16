@@ -40,6 +40,6 @@ void Bullet::spawnExplosion() {
     generator.setForce(0.6f);
     generator.setLifetime(0.7f, 0.2f);
 
-    generator.spawn();
+    generator.spawn(sector());
 }
 

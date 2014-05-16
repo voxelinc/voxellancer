@@ -38,10 +38,7 @@ void Splitter::createWorldObjectFromSplitOff(std::shared_ptr<SplitData> split) {
         worldObject->addVoxel(voxelClone);
     }
 
-    worldObject->setUniverse(split.exWorldObject()->universe());
-    worldObject->setSector(split.exWorldObject()->sector());
-
-    worldObject->spawn();
+    worldObject->spawn(split.exWorldObject()->sector());
 }
 
 void Splitter::removeExtractedVoxelsFromEx(std::shared_ptr<SplitData> split) {

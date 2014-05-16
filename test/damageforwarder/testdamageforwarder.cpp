@@ -9,8 +9,8 @@ namespace bandit
 {
 go_bandit([]() {
     describe("DamageForwarder", [](){
-        std::shared_ptr<Universe> m_universe;
-        std::shared_ptr<Sector> m_sector;
+        std::shared_ptr<Universe> universe;
+        std::shared_ptr<Sector> sector;
 
         WorldObject* a;
         WorldObject* b;
@@ -21,12 +21,13 @@ go_bandit([]() {
         PropertyManager::instance()->load("data/voxels.ini", "voxels");
 
         before_each([&] {
-            m_universe.reset(new Universe());
-            m_sector.reset(new Sector("bla", m_universe.get()));
+            universe.reset(new Universe());
+            sector.reset(new Sector("bla", universe.get()));
+            universe->addSector(*sector);
 
             a = new WorldObject();
             b = new WorldObject();
-            df = &m_sector->worldLogic().damageForwarder();
+            df = &sector->worldLogic().damageForwarder();
 
             a->addVoxel(new Voxel(glm::ivec3(0, 0, 0)));
             a->addVoxel(new Voxel(glm::ivec3(1, 0, 0)));
@@ -39,8 +40,8 @@ go_bandit([]() {
             b->addVoxel(new Voxel(glm::ivec3(0, 0, 3)));
             b->addVoxel(new Voxel(glm::ivec3(2, 0, 0)));
 
-            a->setUniverse(m_universe.get()); a->setSector(m_sector.get()); a->spawn();
-            b->setUniverse(m_universe.get()); b->setSector(m_sector.get()); b->spawn();
+            a->spawn(sector.get());
+            b->spawn(sector.get());
         });
 
         after_each([&] {

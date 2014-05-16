@@ -7,7 +7,6 @@
 #include "voxelparticlespawnbase.h"
 
 
-
 class Transform;
 class VoxelCluster;
 
@@ -19,7 +18,7 @@ public:
     void setRadius(float radius);
     void setCount(int count);
 
-    void spawn();
+    void spawn(Sector* sector);
 
 
 protected:

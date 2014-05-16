@@ -141,10 +141,7 @@ void SplitRocket::spawnChildren() {
                 static_cast<Bullet*>(child)->setCreator(m_creator);
             }
 
-            child->setUniverse(universe());
-            child->setSector(sector());
-
-            child->spawn();
+            child->spawn(sector());
         }
     }
 }
@@ -174,6 +171,6 @@ void SplitRocket::spawnExplosion() {
     generator.setLifetime(1.5f, 0.2f);
     generator.setForce(0.5f);
 
-    generator.spawn();
+    generator.spawn(sector());
 }
 
