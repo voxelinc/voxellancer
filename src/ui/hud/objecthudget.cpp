@@ -44,10 +44,12 @@ ObjectHudget::~ObjectHudget() = default;
 void ObjectHudget::update(float deltaSec) {
     updateTargeted();
     updateFov();
+
     m_insideFov = isInsideFov();
     bool targetHighlight = false;
     FactionRelationType relationType = FactionRelationType::Neutral;
     WorldObject* worldObject = m_objectDelegate->worldObject();
+
     if(worldObject) {
         calculateOpeningAngle();
         pointToWorldPoint(worldObject->transform().position());
@@ -59,11 +61,15 @@ void ObjectHudget::update(float deltaSec) {
             // TODO: Replace the following two lines with proper WorldObjectType mechanism
             Ship* ship = dynamic_cast<Ship*>(worldObject);
             if (ship) {
-                Faction& faction = ship->character()->faction();
-                relationType = m_hud->player()->universe().factionMatrix().getRelationToPlayer(faction).type();
+                Faction* faction = ship->character()->faction();
+
+                if(faction) {
+                    relationType = m_hud->player()->universe().factionMatrix().getRelationToPlayer(*faction).type();
+                }
             }
         }
     }
+
     if (!m_insideFov) {
         m_arrowVoxels->updateDirection(closestPointInsideFov());
     }

@@ -5,19 +5,21 @@
 #include "property/property.h"
 #include "voxelparticlespawnbase.h"
 
+
+class Sector;
 class Transform;
 class VoxelCluster;
 
 class VoxelDebrisGenerator : public VoxelParticleSpawnBase {
 public:
-    VoxelDebrisGenerator(const VoxelCluster* creator);
+    VoxelDebrisGenerator(Sector& sector, const VoxelCluster* creator);
     virtual ~VoxelDebrisGenerator();
 
     void setOrientation(const glm::quat& orientation);
     void setDensity(int density);
     void setSpawnProbability(float spawnProbability);
 
-    void spawn();
+    void spawn(Sector& sector);
 
 
 protected:

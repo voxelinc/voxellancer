@@ -22,7 +22,7 @@ public:
 
 protected:
     const VoxelParticleEngine& m_particleEngine;
-    Sphere m_Sphere;
+    Sphere m_sphere;
 
     virtual void beforeCheck();
 

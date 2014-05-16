@@ -19,7 +19,7 @@
 
 
 VoxelDebrisGenerator::VoxelDebrisGenerator(const VoxelCluster* creator) :
-    VoxelParticleSpawnBase(creator,
+    VoxelParticleSpawnBase(sector, creator,
                            "physics.debrisDirectionalDampening",
                            "physics.debrisAngularDampening",
                            "physics.debrisBaseForce",
@@ -30,9 +30,7 @@ VoxelDebrisGenerator::VoxelDebrisGenerator(const VoxelCluster* creator) :
 {
 }
 
-VoxelDebrisGenerator::~VoxelDebrisGenerator() {
-}
-
+VoxelDebrisGenerator::~VoxelDebrisGenerator() = default;
 
 void VoxelDebrisGenerator::setOrientation(const glm::quat& orientation) {
     m_orientation = orientation;
@@ -46,7 +44,7 @@ void VoxelDebrisGenerator::setSpawnProbability(float spawnProbability) {
     m_spawnProbability = spawnProbability;
 }
 
-void VoxelDebrisGenerator::spawn() {
+void VoxelDebrisGenerator::spawn(Sector& sector) {
     Transform gridTransform;
     Transform particleTransform;
 
@@ -77,7 +75,7 @@ void VoxelDebrisGenerator::spawn() {
                     createLifetime()
                 );
 
-                World::instance()->particleEngine().addParticle(particleSetup, m_creator);
+                sector.particleEngine().addParticle(particleSetup, m_creator);
             }
         }
     }

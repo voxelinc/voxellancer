@@ -22,7 +22,6 @@ VoxelParticleRemover::VoxelParticleRemover(VoxelParticleEngine* world):
 
 VoxelParticleRemover::~VoxelParticleRemover() = default;
 
-
 void VoxelParticleRemover::update(float deltaSec) {
     assert(m_interval > 0.0f);
 

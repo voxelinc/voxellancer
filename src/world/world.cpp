@@ -38,7 +38,7 @@ Skybox &World::skybox() {
     return *m_skybox;
 }
 
-WorldLogic &World::worldLogic() {
+SectorLogic &World::worldLogic() {
     return *m_worldLogic;
 }
 

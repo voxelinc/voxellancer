@@ -14,12 +14,12 @@
 #include "handler/splitdetector.h"
 
 
-class World;
+class Sector;
 
-class WorldLogic
+class SectorLogic
 {
 public:
-    WorldLogic(World &world);
+    SectorLogic(Sector& sector);
 
     void update(float deltaSecs);
 
@@ -27,7 +27,7 @@ public:
 
 
 protected:
-    World &m_world;
+    Sector& m_sector;
 
     Mover m_mover;
     VoxelCollisionAccumulator m_voxelCollisionAccumulator;

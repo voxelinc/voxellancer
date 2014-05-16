@@ -12,16 +12,16 @@
 
 
 Mission::Mission(const std::string& path):
-    m_script(new MissionScript(*this, World::instance()->scriptEngine())),
+    m_scriptPath(path),
     m_state(MissionState::Idle)
 {
-    m_script->load(path);
-    World::instance()->scriptEngine().addScript(m_script);
 }
 
 Mission::~Mission() = default;
 
 void Mission::start() {
+    assert(universe());
+
     m_state = MissionState::Running;
     universe()->player().hud().showMissionInfo(
         m_script->luaWrapper().call<std::string>("missionTitle"),
@@ -33,7 +33,7 @@ MissionState Mission::state() const {
     return m_state;
 }
 
-void Mission::succeed() { std::cout << "Mission succeed " << this << std::endl;
+void Mission::succeed() {
     assert(m_state == MissionState::Running);
 
     m_state = MissionState::Succeeded;
@@ -53,6 +53,16 @@ void Mission::fail() {
 
 void Mission::update(float deltaSec) {
 
+}
+
+void Mission::spawn() {
+    assert(universe());
+
+    m_script.reset(new MissionScript(*this, universe()->scriptEngine()));
+    m_script->load(m_scriptPath);
+    universe()->scriptEngine().addScript(m_script);
+
+    universe()->addFunctionalElement(this);
 }
 
 void Mission::over() {

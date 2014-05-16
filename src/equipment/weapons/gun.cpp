@@ -87,6 +87,10 @@ void Gun::fireAtPoint(const glm::vec3& point, bool checkFriendlyFire) {
 bool Gun::isBulletPathClear(const glm::vec3& point, bool checkFriendlyFire) {
     WorldObject* owner = m_hardpoint->components()->worldObject();
 
+    Faction* ownerFaction = owner->objectType() == WorldObjectType::Ship ?
+                                static_cast<Ship*>(owner)->character()->faction() :
+                                nullptr;
+
     glm::vec3 direction = glm::normalize(point - m_hardpoint->voxel()->position());
     Capsule capsuleToTarget = Capsule::fromTo(m_hardpoint->voxel()->position() + direction * (m_bulletLength / 2.0f + m_spawnDistance), point, m_bulletMaxWidth / 2);
 
@@ -97,14 +101,18 @@ bool Gun::isBulletPathClear(const glm::vec3& point, bool checkFriendlyFire) {
             return false;
         }
 
-        if (checkFriendlyFire &&
-			owner->objectType() == WorldObjectType::Ship &&
-            object->objectType() == WorldObjectType::Ship &&
-            static_cast<Ship*>(object)->character()->faction().relationTo(static_cast<Ship*>(owner)->character()->faction()).isFriendly())
-        {
-            return false;
+        if (checkFriendlyFire) {
+            Faction* objectFaction = owner->objectType() == WorldObjectType::Ship ?
+                                        static_cast<Ship*>(owner)->character()->faction() :
+                                        nullptr;
+            if (ownerFaction && objectFaction) {
+                if (ownerFaction->relationTo(*objectFaction).isFriendly()) {
+                    return false;
+                }
+            }
         }
     }
+
     return true;
 }
 

@@ -58,12 +58,12 @@ void Sector::draw(const Camera& camera) {
 
     m_voxelRenderer->prepareDraw(camera);
 
-    for (WorldObject* worldObject : World::instance()->worldObjects()) {
+    for (WorldObject* worldObject : m_worldObjects) {
         VoxelRenderer::instance()->draw(*worldObject);
     }
 
     m_voxelRenderer->afterDraw();
 
-    World::instance()->particleEngine().draw(camera);
+    m_worldObjects->particleEngine().draw(camera);
 }
 

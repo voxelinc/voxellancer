@@ -6,29 +6,22 @@
 #include "physics/physics.h"
 #include "voxel/voxel.h"
 
+
 void Wrecker::detectWreckedObjects(std::list<WorldObjectModification>& worldObjectModifications) {
     m_wreckedObjects.clear();
     m_newWreckages.clear();
 
     for (WorldObjectModification& modification : worldObjectModifications) {
         WorldObject* object = modification.worldObject();
+
         if (object->isCrucialVoxelDestroyed()) {
-            m_wreckedObjects.push_back(object);
-            m_newWreckages.push_back(wreckFromObject(object));
+            object->scheduleRemoval();
+            createWreckFromObject(object);
         }
     }
-
 }
 
-std::list<WorldObject*>& Wrecker::wreckedObjects() {
-    return m_wreckedObjects;
-}
-
-std::list<WorldObject*>& Wrecker::newWreckages() {
-    return m_newWreckages;
-}
-
-WorldObject* Wrecker::wreckFromObject(WorldObject* object) {
+void Wrecker::createWreckFromObject(WorldObject* object) {
     WorldObject* wreckage = new WorldObject(object->transform());
 
     wreckage->info().setName(object->info().name() + " - wreck");
@@ -38,5 +31,9 @@ WorldObject* Wrecker::wreckFromObject(WorldObject* object) {
         wreckage->addVoxel(new Voxel(*pair.second));
     }
 
-    return wreckage;
+    wreckage->setUniverse(object->universe());
+    wreckage->setSector(object->sector());
+
+    wreckage->spawn();
 }
+

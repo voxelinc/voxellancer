@@ -1,7 +1,6 @@
 #include "splitter.h"
 #include <unordered_set>
 
-
 #include "world/helper/splitdata.h"
 
 #include "voxel/voxel.h"
@@ -9,24 +8,19 @@
 #include "worldobject/worldobjectinfo.h"
 #include "worldobject/worldobject.h"
 
+
 void Splitter::split(std::vector<std::shared_ptr<SplitData>> &splits) {
     std::unordered_set<WorldObject*> splittedWorldObjects;
 
-    m_splitOffWorldObjects.clear();
-
     for (std::shared_ptr<SplitData> split : splits) {
-        WorldObject *worldObject = createWorldObjectFromSplitOff(split);
-        m_splitOffWorldObjects.push_back(worldObject);
+        createWorldObjectFromSplitOff(split);
+
         splittedWorldObjects.insert(split->exWorldObject());
         removeExtractedVoxelsFromEx(split);
     }
 }
 
-std::list<WorldObject*> &Splitter::splitOffWorldObjects() {
-    return m_splitOffWorldObjects;
-}
-
-WorldObject* Splitter::createWorldObjectFromSplitOff(std::shared_ptr<SplitData> split) {
+void Splitter::createWorldObjectFromSplitOff(std::shared_ptr<SplitData> split) {
     WorldObject *worldObject;
     Transform transform = split->exWorldObject()->transform();
     transform.setCenter(transform.center()/* - glm::vec3(split->llf())*/);
@@ -41,7 +35,10 @@ WorldObject* Splitter::createWorldObjectFromSplitOff(std::shared_ptr<SplitData> 
         worldObject->addVoxel(voxelClone);
     }
 
-    return worldObject;
+    worldObject->setUniverse(split.exWorldObject()->universe());
+    worldObject->setSector(split.exWorldObject()->sector());
+
+    worldObject->spawn();
 }
 
 void Splitter::removeExtractedVoxelsFromEx(std::shared_ptr<SplitData> split) {

@@ -41,12 +41,15 @@ public:
 
     void update(float deltaSec);
 
+    virtual void spawn() override;
+
 
 protected:
     void over();
 
 
 protected:
+    std::string m_scriptPath;
     std::shared_ptr<MissionScript> m_script;
     MissionState m_state;
 };

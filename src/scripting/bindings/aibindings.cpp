@@ -52,7 +52,7 @@ std::string AiBindings::apiGetFaction(apikey key) {
         return "";
     }
 
-    return ship->character()->faction().key();
+    return ship->character()->faction() ? ship->character()->faction()->key() : Scriptable::INVALID_KEY;
 }
 
 int AiBindings::apiSetFaction(apikey key, const std::string& faction) {
@@ -63,8 +63,9 @@ int AiBindings::apiSetFaction(apikey key, const std::string& faction) {
         return -1;
     }
 
-    Faction& f = m_script.universe()->factionMatrix().getFaction(faction);
-    ship->character()->setFaction(f);
+    Faction& faction = m_script.universe()->factionMatrix().getFaction(faction);
+    ship->character()->setFaction(&faction);
+
     return 0;
 }
 

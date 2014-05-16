@@ -70,17 +70,25 @@ void DefendAreaTask::onMemberJoin(Ship* member) {
 
 bool DefendAreaTask::isEnemyInRange() {
     m_enemies.clear();
+
+    Faction* squadFaction = m_squad.leader()->character()->faction();
+    if (!squadFaction) {
+        return false;
+    }
+
     Sphere sphere(m_squad.leader()->transform().position(), m_defendRange);
     WorldTreeQuery query(&(m_squad.leader()->sector()->worldTree()), &sphere, nullptr, m_collisionFilter.get());
 
     for (WorldObject *worldObject : query.intersectingWorldObjects()) {
         Ship* ship = dynamic_cast<Ship*>(worldObject);
         if (ship) {
-            Faction& enemyFaction = ship->character()->faction();
-            if (enemyFaction.relationTo(m_squad.leader()->character()->faction()).type() == FactionRelationType::Enemy) {
-                m_enemies.push_back(makeHandle(worldObject));
-            } else {
+            Faction* enemyFaction = ship->character()->faction();
+            if (!enemyFaction) {
                 continue;
+            }
+
+            if (enemyFaction->relationTo(squadFaction).type() == FactionRelationType::Enemy) {
+                m_enemies.push_back(makeHandle(worldObject));
             }
         }
     }

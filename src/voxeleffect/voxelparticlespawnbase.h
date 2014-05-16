@@ -8,12 +8,14 @@
 
 
 class RandVec3Pool;
+class Sector;
 class Transform;
 class VoxelCluster;
 
 class VoxelParticleSpawnBase {
 public:
-    ~VoxelParticleSpawnBase();
+    VoxelParticleSpawnBase(Sector& sector);
+    virtual ~VoxelParticleSpawnBase();
 
     void setPosition(const glm::vec3& position);
     void setOrientation(const glm::quat& orientation);
@@ -26,11 +28,13 @@ public:
 
 
 protected:
-    VoxelParticleSpawnBase(const VoxelCluster* creator,
+    VoxelParticleSpawnBase(Sector& sector, const VoxelCluster* creator,
                            char* dampeningName,
                            char* angularDampeningName,
                            char* baseForceName,
                            char* angularBaseForceName);
+
+    Sector& m_sector;
 
     const VoxelCluster* m_creator;
 

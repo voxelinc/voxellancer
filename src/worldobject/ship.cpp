@@ -13,7 +13,7 @@
 
 Ship::Ship():
     WorldObject(),
-    m_character(new Character(*this, World::instance()->factionMatrix().unknownFaction())),
+    m_character(new Character(*this, nullptr)),
     m_boardComputer(new BoardComputer(this)),
     m_squadLogic(new SquadLogic(*this))
 {

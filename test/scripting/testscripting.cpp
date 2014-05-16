@@ -53,7 +53,8 @@ go_bandit([](){
         before_each([&]() {
             m_universe.reset(new Universe());
             sector = new Sector("test", m_universe.get());
-            script.reset(new GamePlayScript(World::instance()->scriptEngine()));
+
+            script.reset(new GamePlayScript(m_universe->scriptEngine()));
             script->loadString(callbackFunction);
         });
 

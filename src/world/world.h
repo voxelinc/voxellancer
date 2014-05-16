@@ -16,7 +16,7 @@ class Skybox;
 class ScriptEngine;
 class VoxelParticleEngine;
 class WorldObject;
-class WorldLogic;
+class SectorLogic;
 class UniverseElement;
 class WorldTree;
 
@@ -27,7 +27,7 @@ public:
 
     Player& player();
     Skybox& skybox();
-    WorldLogic& worldLogic();
+    SectorLogic& worldLogic();
     God& god();
     WorldTree& worldTree();
     ScriptEngine& scriptEngine();
@@ -67,7 +67,7 @@ protected:
     Component<ScriptEngine> m_scriptEngine;
     Component<Skybox> m_skybox;
     Component<WorldTree> m_worldTree;
-    Component<WorldLogic> m_worldLogic;
+    Component<SectorLogic> m_worldLogic;
     Component<God> m_god;
     Component<VoxelParticleEngine> m_particleEngine;
     Component<FactionMatrix> m_factionMatrix;

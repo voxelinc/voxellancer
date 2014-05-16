@@ -1,13 +1,16 @@
 #pragma once
 
 #include <list>
+
 #include "collision/voxelcollision.h"
 #include "physics/impulse.h"
 
-class Mover
-{
+
+class WorldObject,
+
+class Mover {
 public:
-    void moveWorldObjects(float deltaSec);
+    void moveWorldObjects(const std::list<WorldObject*>& objects, float deltaSec);
 
     std::list<VoxelCollision>& voxelCollisions();
 

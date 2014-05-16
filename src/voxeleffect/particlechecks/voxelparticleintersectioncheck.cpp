@@ -29,7 +29,7 @@ bool VoxelParticleIntersectionCheck::isDead(const VoxelParticleData& particleDat
     float timeDelta = m_particleEngine.time() - particleData.creationTime;
     glm::vec3 position = particleData.directionalSpeed * timeDelta + particleData.creationPosition;
 
-    if (!m_Sphere.intersects(Sphere(position, particleData.scale))) {
+    if (!m_sphere.intersects(Sphere(position, particleData.scale))) {
         return false;
     }
 
@@ -48,12 +48,12 @@ bool VoxelParticleIntersectionCheck::isDead(const VoxelParticleData& particleDat
     return false;
 }
 
-
 void VoxelParticleIntersectionCheck::beforeCheck() {
-    if (World::instance()->player().ship()) {
-        m_Sphere = m_particleEngine.sector().universe().player().ship()->bounds().sphere();
+    if (m_particleEngine.sector().universe().player().ship()) {
+        m_sphere = m_particleEngine.sector().universe().player().ship()->bounds().sphere();
     } else {
-        m_Sphere = Sphere();
+        m_sphere = Sphere();
     }
 
 }
+
