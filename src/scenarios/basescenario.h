@@ -1,7 +1,6 @@
 #pragma once
 
 
-class World;
 class GamePlay;
 
 class BaseScenario {

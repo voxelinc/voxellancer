@@ -3,17 +3,15 @@
 #include "../bandit_extension/vec3helper.h"
 
 #include "worldobject/worldobject.h"
-#include "world/world.h"
-#include "world/worldlogic.h"
-#include "world/god.h"
-#include "world/handler/damageforwarder.h"
 #include "voxel/voxel.h"
 
 namespace bandit
 {
 go_bandit([]() {
     describe("DamageForwarder", [](){
-        World* world;
+        std::shared_ptr<Universe> m_universe;
+        std::shared_ptr<Sector> m_sector;
+
         WorldObject* a;
         WorldObject* b;
         DamageForwarder* df;
@@ -23,7 +21,9 @@ go_bandit([]() {
         PropertyManager::instance()->load("data/voxels.ini", "voxels");
 
         before_each([&] {
-            world = new World();
+            m_universe.reset(new Universe());
+            m_sector.reset(new Sector("bla", m_universe.get()));
+
             a = new WorldObject();
             b = new WorldObject();
             df = &world->worldLogic().damageForwarder();
@@ -39,10 +39,8 @@ go_bandit([]() {
             b->addVoxel(new Voxel(glm::ivec3(0, 0, 3)));
             b->addVoxel(new Voxel(glm::ivec3(2, 0, 0)));
 
-            world->god().scheduleSpawn(a);
-            world->god().scheduleSpawn(b);
-
-            world->god().spawn();
+            a->setUniverse(m_universe.get()); a->setSector(m_sector.get()); a->spawn();
+            b->setUniverse(m_universe.get()); b->setSector(m_sector.get()); b->spawn();
         });
 
         after_each([&] {

@@ -9,7 +9,6 @@
 
 
 class MissionScript;
-class World;
 
 enum class MissionState {
     Idle,

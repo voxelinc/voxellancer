@@ -18,7 +18,7 @@ class VoxelCluster;
 
 /**
  * Main class for managing and displaying the VoxelParticles of
- * a World.
+ * a Sector.
  */
 class VoxelParticleEngine : ContextDependant {
 public:

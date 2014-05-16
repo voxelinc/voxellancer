@@ -9,8 +9,8 @@ class Scriptable;
 
 /**
  * Main class for accessing scripts during gameplay.
- * The ScriptEngine connects Scripts with the World by tunneling events from World to the Script
- * and all sorts of actions (Objectcreation, Tasks) back to the World.
+ * The ScriptEngine connects Scripts with the Universe by tunneling events from Universe to the Script
+ * and all sorts of actions (Objectcreation, Tasks) back to the Universe.
  */
 class ScriptEngine {
 public:

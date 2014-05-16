@@ -7,8 +7,6 @@
 #include "property/property.h"
 
 
-class World;
-class God;
 class Hardpoint;
 class Engine;
 class Character;

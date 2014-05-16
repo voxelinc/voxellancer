@@ -7,8 +7,6 @@
 #include "voxel/voxel.h"
 #include "collision/collisiondetector.h"
 #include "worldobject/worldobject.h"
-#include "world/world.h"
-#include "world/god.h"
 #include "../bandit_extension/aabbhelper.h"
 #include "voxel/voxelclusterbounds.h"
 
@@ -20,7 +18,8 @@ using namespace bandit;
 
 go_bandit([](){
     describe("CollisionDetector", [](){
-        World *world;
+        std::shared_ptr<Universe> m_universe;
+        std::shared_ptr<Sector> m_sector;
         WorldObject *a, *b;
         CollisionDetector *d;
 
@@ -29,11 +28,13 @@ go_bandit([](){
         PropertyManager::instance()->load("data/voxels.ini", "voxels");
 
         before_each([&](){
-            world = new World();
-            a = new WorldObject(); world->god().scheduleSpawn(a);
-            b = new WorldObject(); world->god().scheduleSpawn(b);
+            m_universe.reset(new Universe());
+            m_sector.reset(new Sector("bla", m_universe.get()));
+
+            a = new WorldObject(); a->setUniverse(m_universe.get()); a->setSector(m_sector.get()); a->spawn();
+            b = new WorldObject(); b->setUniverse(m_universe.get()); b->setSector(m_sector.get()); b->spawn();
+
             d = &a->collisionDetector();
-            world->god().spawn();
         });
 
         it("works in most basic conditions", [&]() {
