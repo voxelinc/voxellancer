@@ -1,10 +1,13 @@
 #include "wrecker.h"
 
-#include "world/helper/worldobjectmodification.h"
+#include "physics/physics.h"
+
+#include "voxel/voxel.h"
+
+#include "universe/helper/worldobjectmodification.h"
+
 #include "worldobject/worldobject.h"
 #include "worldobject/worldobjectinfo.h"
-#include "physics/physics.h"
-#include "voxel/voxel.h"
 
 
 void Wrecker::detectWreckedObjects(std::list<WorldObjectModification>& worldObjectModifications) {

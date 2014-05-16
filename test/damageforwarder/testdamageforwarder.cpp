@@ -26,7 +26,7 @@ go_bandit([]() {
 
             a = new WorldObject();
             b = new WorldObject();
-            df = &world->worldLogic().damageForwarder();
+            df = &m_sector->worldLogic().damageForwarder();
 
             a->addVoxel(new Voxel(glm::ivec3(0, 0, 0)));
             a->addVoxel(new Voxel(glm::ivec3(1, 0, 0)));
@@ -44,7 +44,6 @@ go_bandit([]() {
         });
 
         after_each([&] {
-            delete world;
         });
 
         it("Most basic test", [&] {

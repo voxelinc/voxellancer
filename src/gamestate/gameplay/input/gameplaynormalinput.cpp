@@ -20,7 +20,6 @@
 #include "input/inputmapping.h"
 #include "input/inputconfigurator.h"
 
-#include "world/world.h"
 #include "worldobject/worldobject.h"
 #include "worldobject/worldobjectcomponents.h"
 #include "worldobject/ship.h"

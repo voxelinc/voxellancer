@@ -20,7 +20,6 @@
 
 #include "voxeleffect/voxelparticleengine.h"
 
-#include "world/world.h"
 #include "worldobject/worldobject.h"
 
 #include "player.h"

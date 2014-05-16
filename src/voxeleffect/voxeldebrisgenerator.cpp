@@ -14,9 +14,6 @@
 #include "voxelparticleengine.h"
 #include "voxelparticlesetup.h"
 
-#include "world/world.h"
-
-
 
 VoxelDebrisGenerator::VoxelDebrisGenerator(const VoxelCluster* creator) :
     VoxelParticleSpawnBase(sector, creator,

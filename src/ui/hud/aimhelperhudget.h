@@ -16,7 +16,7 @@ class AimHelperHudgetVoxels;
 /**
  * Hudget drawn where player-bullets and target
  * will collide i.e. not actually on the hud-sphere but
- * in the world
+ * in the sector
  */
 class AimHelperHudget: public CircularHudget {
 public:

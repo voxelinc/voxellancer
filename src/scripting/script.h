@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#include "world/universeelement.h"
+#include "universe/universeelement.h"
 
 
 class Bindings;

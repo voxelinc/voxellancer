@@ -1,10 +1,13 @@
 #include "splitter.h"
+
 #include <unordered_set>
 
-#include "world/helper/splitdata.h"
+#include "universe/helper/splitdata.h"
+
+#include "physics/physics.h"
 
 #include "voxel/voxel.h"
-#include "physics/physics.h"
+
 #include "worldobject/worldobjectinfo.h"
 #include "worldobject/worldobject.h"
 

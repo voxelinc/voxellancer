@@ -10,7 +10,6 @@
 #include "voxel/voxelclusterbounds.h"
 #include "worldtree/worldtreequery.h"
 #include "geometry/sphere.h"
-#include "world/world.h"
 #include "worldtree/worldtree.h"
 #include "collision/collisionfilter.h"
 #include "factions/faction.h"

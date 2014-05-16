@@ -15,6 +15,8 @@
 
 #include "ui/hud/hud.h"
 
+#include "universe/universe.h"
+
 #include "utils/statemachine/trigger.h"
 #include "utils/statemachine/triggeredtransition.h"
 
@@ -23,8 +25,6 @@
 #include "sound/soundmanager.h"
 
 #include "voxeleffect/voxelparticleengine.h"
-
-#include "world/universe.h"
 
 #include "player.h"
 

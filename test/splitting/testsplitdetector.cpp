@@ -5,10 +5,10 @@
 
 #include "../bandit_extension/vec3helper.h"
 #include "worldobject/worldobject.h"
-#include "world/handler/splitdetector.h"
-#include "world/handler/splitter.h"
+#include "universe/handler/splitdetector.h"
+#include "universe/handler/splitter.h"
 #include "property/propertymanager.h"
-#include "world/helper/splitdata.h"
+#include "universe/helper/splitdata.h"
 #include "voxel/voxel.h"
 
 using namespace bandit;

@@ -13,12 +13,9 @@
 #include "utils/geometryhelper.h"
 #include "utils/randfloatpool.h"
 
-#include "voxeleffect/voxelexplosiongenerator.h"
-
 #include "voxel/voxelclusterbounds.h"
 
-#include "world/god.h"
-#include "world/world.h"
+#include "voxeleffect/voxelexplosiongenerator.h"
 
 #include "worldobject/worldobject.h"
 

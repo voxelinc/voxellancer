@@ -27,8 +27,6 @@
 
 #include "voxel/voxelrenderer.h"
 
-#include "world/world.h"
-
 #include "worldtree/worldtreescanner.h"
 #include "worldtree/worldtreequery.h"
 

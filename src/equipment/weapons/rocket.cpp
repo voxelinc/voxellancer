@@ -14,9 +14,6 @@
 
 #include "worldobject/worldobjectcomponents.h"
 
-#include "world/god.h"
-#include "world/world.h"
-
 
 Rocket::Rocket():
     Projectile(),

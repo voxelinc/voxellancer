@@ -21,7 +21,7 @@ class VoxelParticleRemoveCheck;
  */
 class VoxelParticleRemover {
 public:
-    VoxelParticleRemover(VoxelParticleEngine* world);
+    VoxelParticleRemover(VoxelParticleEngine* engine);
     ~VoxelParticleRemover();
 
     void addCheck(std::shared_ptr<VoxelParticleRemoveCheck> checker);

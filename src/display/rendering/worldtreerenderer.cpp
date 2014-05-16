@@ -2,8 +2,6 @@
 
 #include "utils/aabbrenderer.h"
 
-#include "world/world.h"
-
 #include "worldtree/worldtree.h"
 #include "worldtree/worldtreenode.h"
 

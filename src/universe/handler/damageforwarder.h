@@ -2,13 +2,11 @@
 
 #include <list>
 
+#include "universe/helper/damageimpact.h"
+#include "universe/helper/voxelaccumulator.h"
 
-#include "world/helper/damageimpact.h"
-#include "world/helper/voxelaccumulator.h"
 
-
-class DamageForwarder
-{
+class DamageForwarder {
 public:
     void forwardDamageImpacts(std::list<DamageImpact> &dampedDeadlyDamageImpacts);
     void dontForwardTo(std::list<Voxel*> &deadVoxels);

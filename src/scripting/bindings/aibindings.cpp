@@ -19,7 +19,6 @@
 #include "scripting/gameplayscript.h"
 
 #include "worldobject/ship.h"
-#include "world/world.h"
 
 
 AiBindings::AiBindings(GamePlayScript& script):

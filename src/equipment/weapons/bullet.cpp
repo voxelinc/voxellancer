@@ -8,9 +8,6 @@
 
 #include "voxeleffect/voxelexplosiongenerator.h"
 
-#include "world/god.h"
-#include "world/world.h"
-
 
 Bullet::Bullet() {
     collisionFilter().setCollideableWith(WorldObjectType::Bullet, false);

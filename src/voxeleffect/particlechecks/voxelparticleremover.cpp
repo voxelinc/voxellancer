@@ -10,8 +10,8 @@
 #include "voxelparticleremovecheck.h"
 
 
-VoxelParticleRemover::VoxelParticleRemover(VoxelParticleEngine* world):
-    m_particleEngine(world),
+VoxelParticleRemover::VoxelParticleRemover(VoxelParticleEngine* engine):
+    m_particleEngine(engine),
     m_currentIndex(0),
     m_interval("particle.checkinterval"),
     m_multithreaded("particle.multithreaded"),

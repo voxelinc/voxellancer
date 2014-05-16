@@ -6,8 +6,6 @@
 #include "scripting/gameplayscript.h"
 #include "scripting/elematelua/luawrapper.h"
 
-#include "world/world.h"
-
 #include "player.h"
 
 

@@ -10,7 +10,6 @@
 #include "input/actionkeymapping.h"
 #include "input/inputconfigwriter.h"
 #include "utils/filesystem.h"
-#include "world/world.h"
 #include "player.h"
 
 

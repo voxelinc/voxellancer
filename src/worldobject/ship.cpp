@@ -8,8 +8,6 @@
 
 #include "worldobject/worldobjectinfo.h"
 
-#include "world/world.h"
-
 
 Ship::Ship():
     WorldObject(),

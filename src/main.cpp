@@ -40,9 +40,8 @@
 #include "gamestate/game.h"
 #include "gamestate/gameplay/gameplayscene.h"
 
-#include "world/world.h"
-
 #include "display/rendering/texturerenderer.h"
+
 
 static GLint MajorVersionRequire = 3;
 static GLint MinorVersionRequire = 1;

@@ -1,6 +1,5 @@
 #include "simplewayfind.h"
 
-#include "world/world.h"
 #include "geometry/capsule.h"
 #include "worldtree/worldtreequery.h"
 #include "worldobject/worldobject.h"

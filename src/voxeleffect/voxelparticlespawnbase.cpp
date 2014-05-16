@@ -2,8 +2,6 @@
 
 #include <ctime>
 
-#include "world/god.h"
-#include "world/world.h"
 #include "utils/randvec3.h"
 #include "utils/randvec3pool.h"
 #include "utils/randfloatpool.h"

@@ -3,8 +3,8 @@
 #include <list>
 
 #include "collision/worldobjectcollision.h"
-#include "world/helper/damageimpact.h"
-#include "world/helper/voxelaccumulator.h"
+#include "universe/helper/damageimpact.h"
+#include "universe/helper/voxelaccumulator.h"
 
 
 class DamageImpactGenerator {
@@ -17,3 +17,4 @@ public:
 protected:
     VoxelAccumulator<DamageImpact> m_damageImpactAccumulator;
 };
+

@@ -13,8 +13,6 @@
 #include "scripting/scriptable.h"
 #include "scripting/scriptengine.h"
 
-#include "world/world.h"
-
 
 GamePlayScript::GamePlayScript(ScriptEngine& scriptEngine):
     m_scriptEngine(&scriptEngine)

@@ -11,19 +11,16 @@
 
 #include "resource/worldobjectbuilder.h"
 
+#include "utils/geometryhelper.h"
+
+#include "physics/physics.h"
+
+#include "sound/soundmanager.h"
+
 #include "voxel/voxelclusterbounds.h"
 #include "voxel/specialvoxels/hardpointvoxel.h"
 
 #include "worldobject/worldobjectcomponents.h"
-
-#include "world/world.h"
-#include "world/god.h"
-
-#include "physics/physics.h"
-#include "voxel/voxelclusterbounds.h"
-#include "utils/geometryhelper.h"
-
-#include "sound/soundmanager.h"
 
 
 RocketLauncher::RocketLauncher(const std::string& equipmentKey):

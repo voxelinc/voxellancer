@@ -6,8 +6,6 @@
 
 #include "ui/hud/hud.h"
 
-#include "world/world.h"
-
 #include "player.h"
 
 
@@ -68,7 +66,7 @@ void Mission::spawn() {
 void Mission::over() {
     m_script->stop();
 
-    assert(world());
-    world()->removeElement(this);
+    assert(universe());
+    universe()->removeElement(this);
 }
 

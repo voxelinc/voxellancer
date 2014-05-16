@@ -4,9 +4,6 @@
 
 #include "sound/soundmanager.h"
 
-#include "world/god.h"
-#include "world/world.h"
-
 #include "worldobject/worldobjectinfo.h"
 
 

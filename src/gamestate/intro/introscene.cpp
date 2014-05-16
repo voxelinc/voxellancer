@@ -10,8 +10,6 @@
 
 #include "voxel/voxelrenderer.h"
 
-#include "world/world.h"
-
 #include "intro.h"
 
 

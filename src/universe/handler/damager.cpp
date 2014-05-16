@@ -8,10 +8,10 @@
 #include "worldobject/worldobject.h"
 #include "worldobject/ship.h"
 
-#include "world/world.h"
-#include "world/helper/damageimpact.h"
+#include "universe/helper/damageimpact.h"
 
 #include "player.h"
+
 
 Damager::Damager() :
     m_playerShipUndestroyable("general.playerShipUndestroyable")

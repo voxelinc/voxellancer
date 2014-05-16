@@ -20,10 +20,6 @@
 #include "scripting/gameplayscript.h"
 #include "scripting/scriptcallback.h"
 
-#include "world/world.h"
-#include "world/god.h"
-#include "world/spawnrequest.h"
-
 #include "worldobject/ship.h"
 #include "scripting/scriptengine.h"
 

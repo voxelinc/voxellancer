@@ -5,7 +5,6 @@
 
 #include <glm/glm.hpp>
 
-#include "world/world.h"
 #include "voxel/voxeltreequery.h"
 #include "voxel/voxeltree.h"
 #include "voxel/voxeltreenode.h"

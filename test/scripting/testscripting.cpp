@@ -15,7 +15,6 @@
 #include "gamestate/game.h"
 #include "gamestate/gameplay/gameplay.h"
 
-#include "player.h"
 
 #include "property/propertydirectory.h"
 #include "property/propertymanager.h"
@@ -25,9 +24,10 @@
 
 #include "voxel/voxel.h"
 
-#include "world/world.h"
 #include "worldobject/worldobject.h"
 #include "worldobject/ship.h"
+
+#include "player.h"
 
 
 using namespace bandit;

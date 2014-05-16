@@ -2,7 +2,6 @@
 
 #include <cassert>
 
-#include "world/world.h"
 #include "scriptengine.h"
 
 

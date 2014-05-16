@@ -2,26 +2,24 @@
 
 #include <limits>
 
-#include "world/helper/splitdata.h"
+#include "universe/helper/splitdata.h"
 
 #include "voxel/voxel.h"
+#include "voxel/voxelclusterbounds.h"
 #include "voxel/voxelneighbourhelper.h"
 
 #include "worldobject/worldobject.h"
-#include "voxel/voxelclusterbounds.h"
 
 
 static const int FIRST_GROUP = 0;
 static const int VISITED = -1;
 static const int UNKNOWN = -2;
 
-
 SplitDetector::VoxelGroup::VoxelGroup():
     voxel(nullptr),
     groupId(UNKNOWN)
 {
 }
-
 
 void SplitDetector::searchSplitOffs(std::list<WorldObjectModification>& worldObjectModifications) {
     clear();
@@ -33,7 +31,6 @@ void SplitDetector::searchSplitOffs(std::list<WorldObjectModification>& worldObj
         }
     }
 }
-
 
 void SplitDetector::findSplits(WorldObject* worldObject) {
     init(worldObject);
@@ -108,7 +105,6 @@ void SplitDetector::fillColor(const glm::ivec3& start, int color) {
     }
 }
 
-
 void SplitDetector::visit(const glm::ivec3& p) {
     if (p.x < 0 || p.y < 0 || p.z < 0 || p.x >= m_size.x || p.y >= m_size.y || p.z >= m_size.z){
         return;
@@ -120,7 +116,6 @@ void SplitDetector::visit(const glm::ivec3& p) {
     v->groupId = VISITED;
     m_stack.push(p);
 }
-
 
 void SplitDetector::createSplitData(WorldObject* worldObject) {
     std::vector<std::shared_ptr<SplitData>> splitDataList;
@@ -159,7 +154,6 @@ void SplitDetector::createSplitData(WorldObject* worldObject) {
         m_splitDataList.push_back(splitData);
     }
 }
-
 
 int SplitDetector::address(const glm::ivec3 &pos) {
     return pos.z * m_xy + pos.y * m_x + pos.x;

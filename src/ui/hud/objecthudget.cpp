@@ -6,28 +6,27 @@
 
 #include "ai/character.h"
 
+#include "display/viewer.h"
+#include "display/view.h"
+
 #include "factions/factionrelation.h"
 #include "factions/factionmatrix.h"
 
 #include "utils/geometryhelper.h"
+
+#include "voxel/voxelclusterbounds.h"
+
 #include "worldobject/worldobjectinfo.h"
-
-#include "world/world.h"
-
 #include "worldobject/worldobject.h"
 #include "worldobject/ship.h"
 
 #include "player.h"
 
-#include "hudobjectdelegate.h"
 #include "hud.h"
-#include "voxel/voxelclusterbounds.h"
+#include "hudobjectdelegate.h"
 #include "hudobjectdelegate.h"
 #include "objecthudgetvoxels.h"
 #include "arrowhudgetvoxels.h"
-
-#include "display/viewer.h"
-#include "display/view.h"
 
 
 ObjectHudget::ObjectHudget(HUD* hud):

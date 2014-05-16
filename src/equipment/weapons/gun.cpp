@@ -1,16 +1,25 @@
 #include "gun.h"
 
-#include "utils/geometryhelper.h"
+#include "ai/character.h"
 
-#include "bullet.h"
+#include "collision/collisiondetector.h"
 
 #include "equipment/hardpoint.h"
 
+#include "factions/faction.h"
+#include "factions/factionmatrix.h"
+#include "factions/factionrelation.h"
+
+#include "geometry/capsule.h"
+
 #include "physics/physics.h"
 
+#include "resource/clustercache.h"
 #include "resource/worldobjectbuilder.h"
 
 #include "sound/soundmanager.h"
+
+#include "utils/geometryhelper.h"
 
 #include "voxel/voxelclusterbounds.h"
 #include "voxel/specialvoxels/hardpointvoxel.h"
@@ -18,23 +27,10 @@
 #include "worldobject/worldobjectcomponents.h"
 #include "worldobject/ship.h"
 
-#include "collision/collisiondetector.h"
-
-#include "geometry/capsule.h"
-
-#include "factions/faction.h"
-#include "factions/factionmatrix.h"
-#include "factions/factionrelation.h"
-
-#include "ai/character.h"
-
 #include "worldtree/worldtreequery.h"
 #include "worldtree/worldtreegeode.h"
 
-#include "world/world.h"
-#include "world/god.h"
-
-#include "resource/clustercache.h"
+#include "bullet.h"
 
 
 Gun::Gun(const std::string& equipmentKey):

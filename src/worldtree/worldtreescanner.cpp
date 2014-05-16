@@ -4,17 +4,16 @@
 #include <cassert>
 #include <unordered_set>
 
+#include "collision/collisiondetector.h"
+
 #include "geometry/sphere.h"
 
 #include "voxel/voxeltreequery.h"
-
-#include "world/world.h"
 
 #include "worldobject/worldobject.h"
 
 #include "worldtree/worldtreequery.h"
 #include "worldtree/worldtreegeode.h"
-#include "collision/collisiondetector.h"
 
 
 WorldTreeScanner::WorldTreeScanner():

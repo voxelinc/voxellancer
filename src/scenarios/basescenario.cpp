@@ -11,8 +11,8 @@
 
 #include "scripting/scriptengine.h"
 
-#include "world/universe.h"
-#include "world/sector.h"
+#include "universe/universe.h"
+#include "universe/sector.h"
 
 
 BaseScenario::BaseScenario(Universe* universe) :

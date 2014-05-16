@@ -4,8 +4,6 @@
 
 #include "factionmatrix.h"
 
-#include "world/world.h"
-
 
 Faction::Faction(Universe* universe, const std::string& key, const std::string& printName):
     m_universe(universe),

@@ -13,7 +13,6 @@
 #include "scripting/scriptcallback.h"
 #include "scripting/scriptengine.h"
 
-#include "world/world.h"
 #include "worldobject/worldobject.h"
 
 #include "sound/soundmanager.h"

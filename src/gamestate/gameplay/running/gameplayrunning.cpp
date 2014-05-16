@@ -6,7 +6,6 @@
 
 #include "camera/camerahead.h"
 #include "camera/cameradolly.h"
-#include "world/world.h"
 #include "player.h"
 #include "sound/soundmanager.h"
 

@@ -9,8 +9,6 @@
 #include "voxel/voxeltree.h"
 #include "voxel/voxeltreenode.h"
 
-#include "world/world.h"
-
 #include "worldobject/worldobject.h"
 
 #include "worldtree/worldtreegeode.h"

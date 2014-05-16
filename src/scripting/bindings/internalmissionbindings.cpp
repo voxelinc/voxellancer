@@ -9,8 +9,6 @@
 
 #include "ui/hud/hud.h"
 
-#include "world/world.h"
-
 #include "player.h"
 
 

@@ -11,9 +11,8 @@
 
 #include "worldtree/worldtreegeode.h"
 
-#include "world/world.h"
-
 #include "voxel/voxel.h"
+
 #include "movement.h"
 
 

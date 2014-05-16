@@ -10,8 +10,6 @@
 #include "particlechecks/voxelparticleexpirecheck.h"
 #include "particlechecks/voxelparticlefuturecheck.h"
 
-#include "world/world.h"
-
 
 VoxelParticleEngine::VoxelParticleEngine():
     m_time(0.0f),

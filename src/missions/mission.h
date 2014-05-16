@@ -5,7 +5,7 @@
 
 #include "scripting/scriptable.h"
 
-#include "world/universeelement.h"
+#include "universe/universeelement.h"
 
 
 class MissionScript;

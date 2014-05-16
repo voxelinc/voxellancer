@@ -22,8 +22,6 @@
 
 #include "physics/physics.h"
 
-#include "world/world.h"
-
 #include "worldobject/ship.h"
 #include "worldobject/worldobjectcomponents.h"
 

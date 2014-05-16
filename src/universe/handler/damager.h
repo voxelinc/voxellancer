@@ -3,16 +3,15 @@
 #include <map>
 #include <list>
 
-#include "world/helper/damageimpact.h"
-#include "world/helper/worldobjectmodification.h"
+#include "universe/helper/damageimpact.h"
+#include "universe/helper/worldobjectmodification.h"
 
 #include "property/property.h"
 
 
 class WorldObject;
 
-class Damager
-{
+class Damager {
 public:
     Damager();
 

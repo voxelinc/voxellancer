@@ -1,23 +1,22 @@
 #include "voxelparticleintersectioncheck.h"
 
+#include "camera/camerahead.h"
+
 #include "geometry/point.h"
 #include "geometry/sphere.h"
 #include "geometry/transform.h"
-
-#include "world/world.h"
-
-#include "worldobject/ship.h"
-
-#include "worldtree/worldtreegeode.h"
-#include "worldtree/worldtreequery.h"
 
 #include "voxel/voxelclusterbounds.h"
 
 #include "voxeleffect/voxelparticledata.h"
 #include "voxeleffect/voxelparticleengine.h"
 
+#include "worldobject/ship.h"
+
+#include "worldtree/worldtreegeode.h"
+#include "worldtree/worldtreequery.h"
+
 #include "player.h"
-#include "camera/camerahead.h"
 
 
 VoxelParticleIntersectionCheck::VoxelParticleIntersectionCheck(const VoxelParticleEngine& engine) :
