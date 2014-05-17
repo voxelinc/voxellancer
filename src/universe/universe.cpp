@@ -30,7 +30,7 @@ void Universe::update(float deltaSec) {
     }
 
     for (auto& iter = m_functionalElements.begin(); iter != m_functionalElements.end();) {
-        FunctionalUniverseElement* element = *iter;
+        FunctionalObject* element = *iter;
 
         if (!element->removalScheduled()) {
             element->update(deltaSec);

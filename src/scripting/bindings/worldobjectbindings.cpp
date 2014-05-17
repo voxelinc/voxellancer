@@ -83,14 +83,16 @@ apikey WorldObjectBindings::apiCreateWorldObject(const std::string& name) {
     return worldObject->scriptKey();
 }
 
-int WorldObjectBindings::apiSpawn(apikey worldObjectKey) {
+int WorldObjectBindings::apiSpawn(apikey worldObjectKey, const std::string& sectorName) {
     WorldObject* worldObject = m_scriptEngine.get<WorldObject>(worldObjectKey);
 
     if (!worldObject) {
         return -1;
     }
 
-    worldObject->spawn();
+    Sector* sector = m_script.universe().sector(sectorName);
+
+    worldObject->spawn(sector);
 
     return worldObject->spawnState() == SpawnState::Spawned;
 }
@@ -102,7 +104,7 @@ int WorldObjectBindings::apiRemove(apikey worldObjectKey) {
         return -1;
     }
 
-    scheduleRemoval();
+    worldObject->scheduleRemoval();
 
     return 0;
 }

@@ -23,7 +23,7 @@ GamePlayScript::GamePlayScript(ScriptEngine& scriptEngine):
 GamePlayScript::~GamePlayScript() {
     for (int key : m_locals) {
         if (m_scriptEngine->keyValid(key)) {
-            m_scriptEngine->get<UniverseElement>(key)->scheduleRemoval();
+            m_scriptEngine->get<GameObject>(key)->scheduleRemoval();
         }
     }
 }

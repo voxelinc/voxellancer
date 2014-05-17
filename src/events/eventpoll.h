@@ -4,10 +4,10 @@
 
 #include "utils/callback.h"
 
-#include "universe/universeelement.h"
+#include "universe/gameobject.h"
 
 
-class EventPoll: public UniverseElement {
+class EventPoll: public GameObject {
 public:
     EventPoll(const Callback& callback);
     virtual ~EventPoll() override;

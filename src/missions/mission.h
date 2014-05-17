@@ -5,7 +5,7 @@
 
 #include "scripting/scriptable.h"
 
-#include "universe/universeelement.h"
+#include "universe/gameobject.h"
 
 
 class MissionScript;
@@ -17,7 +17,7 @@ enum class MissionState {
     Succeeded
 };
 
-class Mission : public UniverseElement {
+class Mission : public GameObject {
 public:
     Mission(const std::string& path);
     ~Mission();

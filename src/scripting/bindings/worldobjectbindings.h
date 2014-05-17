@@ -17,7 +17,7 @@ protected:
     apikey apiPlayerShip();
     apikey apiCreateShip(const std::string& name);
     apikey apiCreateWorldObject(const std::string& name);
-    int apiSpawn(apikey worldObject);
+    int apiSpawn(apikey worldObject, const std::string& sectorName);
     int apiRemove(apikey worldObject);
 
     int apiSetPosition(apikey worldObject, const glm::vec3& position);

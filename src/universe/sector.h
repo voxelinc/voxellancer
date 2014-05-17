@@ -39,7 +39,7 @@ protected:
 
     std::unique_ptr<WorldTree> m_worldTree;
 
-    std::list<glow::ref_ptr<UniverseElements>> m_functionalElements;
+    std::list<glow::ref_ptr<GameObjects>> m_functionalElements;
     std::list<glow::ref_ptr<PhysicalWorldElement>> m_physicalElements;
 
     std::unique_ptr<Skybox> m_skybox;

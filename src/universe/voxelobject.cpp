@@ -1,9 +1,9 @@
-#include "physicaluniverseelement.h"
+#include "physicalgameobject.h"
 
 #include <cassert>
 
 
-void PhysicalUniverseElement::spawn() {
+void VoxelObject::spawn() {
     assert(universe());
     assert(sector());
 

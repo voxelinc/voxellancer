@@ -13,10 +13,10 @@
 class Sector;
 class Universe;
 
-class UniverseElement : public glow::Referenced, public HandleOwner, public Scriptable {
+class GameObject : public glow::Referenced, public HandleOwner, public Scriptable {
 public:
-    UniverseElement();
-    virtual ~UniverseElement();
+    GameObject();
+    virtual ~GameObject();
 
     Universe* universe();
     Sector* sector();

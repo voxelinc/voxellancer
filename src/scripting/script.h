@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#include "universe/universeelement.h"
+#include "universe/gameobject.h"
 
 
 class Bindings;
@@ -19,7 +19,7 @@ enum class ScriptState {
 /**
  * Handle to a lua script
  */
-class Script : public UniverseElement {
+class Script : public GameObject {
 public:
     explicit Script();
     ~Script();
