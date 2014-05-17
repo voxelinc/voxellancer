@@ -28,7 +28,7 @@ void main() {
     // to avoid z-fighting, minimally shrink all cubes
     gl_Position = viewProjection * model * (vec4(v_position.xyz + v_vertex.xyz * 0.999, 1.0));
 
-    f_normal = (model * vec4(v_normal.xyz, 0.0)).xyz * v_color.xyz;
+    f_normal = (model * vec4(v_normal.xyz, 0.0)).xyz;
 	if ((uint(v_faces) & (uint(0x1) << uint(v_normal.w))) != uint(0x0)) {
 		f_color = vec4(0,0,0,0);
 	} else {
