@@ -20,6 +20,9 @@ vec4 voxelFragmenNormalZ(vec3 normal);
 
 
 void main() {
+    if(f_color.a == 0.0) {
+        discard;
+	}
     vec3 rgbColor = voxelFragmentColor(f_color.rgb, f_emissiveness, f_normal, f_modelposition);
     fragColor = vec4(rgbColor * f_color.a, f_color.a);
     emissiveness = voxelFragmentEmissiveness(f_color.rgb, f_emissiveness);
@@ -28,6 +31,6 @@ void main() {
     } else {
         normalz = voxelFragmenNormalZ(f_normal);
     }
-    count = vec4(1.0/255.0, 0.0, f_color.a, 1.0);
+    count = vec4(1.0/256.0, 0.0, f_color.a, 1.0);
 }
 

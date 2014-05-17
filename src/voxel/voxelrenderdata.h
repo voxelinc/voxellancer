@@ -2,6 +2,7 @@
 
 #include <unordered_map>
 #include <string>
+#include <stdint.h>
 
 #include <GL/glew.h>
 
@@ -41,6 +42,8 @@ protected:
     void updateBuffer();
     void setupVertexAttributes();
     void setupVertexAttribute(GLint offset, const std::string& name, int numPerVertex, GLenum type, GLboolean normalised, int bindingNum);
+    bool isSameColoredVoxelAt(const glm::ivec3 position, const Voxel* voxel);
+    uint32_t calculateFaces(Voxel* voxel);
 
     virtual void beforeContextDestroy() override;
     virtual void afterContextRebuild() override;

@@ -50,7 +50,11 @@ void VoxelRenderData::setupVertexAttribute(GLint offset, const std::string& name
 
     binding->setAttribute(location);
     binding->setBuffer(m_voxelDataBuffer, 0, sizeof(VoxelData));
-    binding->setFormat(numPerVertex, type, normalised, offset);
+    if (type == GL_UNSIGNED_INT) {
+        binding->setIFormat(numPerVertex, type, offset);
+    } else {
+        binding->setFormat(numPerVertex, type, normalised, offset);
+    }
 
     m_vertexArrayObject->enable(location);
 }
@@ -79,7 +83,7 @@ void VoxelRenderData::updateBuffer() {
         Voxel *voxel = pair.second;
         assert(voxel != nullptr);
         uint32_t color = voxel->visuals().color();
-        uint32_t faces = 2;
+        uint32_t faces = calculateFaces(voxel);
         VoxelData data = VoxelData{ glm::vec3(voxel->gridCell()), ColorHelper::flipColorForGPU(color), voxel->visuals().emissiveness(), faces };
         if ((color & 0x000000FF) == 0xFF) {
             voxelData[opaqueCursor++] = data;
@@ -92,6 +96,24 @@ void VoxelRenderData::updateBuffer() {
     m_voxelDataBuffer->unmap();
 
     m_isDirty = false;
+}
+
+bool VoxelRenderData::isSameColoredVoxelAt(const glm::ivec3 position, const Voxel* voxel) {
+    std::unordered_map<glm::ivec3, Voxel*>::iterator iterator;
+    iterator = m_voxel.find(position);
+    return (iterator != m_voxel.end()) && (iterator->second->visuals().color() == voxel->visuals().color());
+}
+
+uint32_t VoxelRenderData::calculateFaces(Voxel* voxel) {
+    // a bit at position i indicates face i is to be hidden (the positions are encoded with the normals)
+    uint32_t out = 0;
+    if (isSameColoredVoxelAt(voxel->gridCell() + glm::ivec3(-1, 0, 0), voxel)) out |= 0x1;
+    if (isSameColoredVoxelAt(voxel->gridCell() + glm::ivec3( 1, 0, 0), voxel)) out |= 0x2;
+    if (isSameColoredVoxelAt(voxel->gridCell() + glm::ivec3( 0,-1, 0), voxel)) out |= 0x4;
+    if (isSameColoredVoxelAt(voxel->gridCell() + glm::ivec3( 0, 1, 0), voxel)) out |= 0x8;
+    if (isSameColoredVoxelAt(voxel->gridCell() + glm::ivec3( 0, 0,-1), voxel)) out |= 0x10;
+    if (isSameColoredVoxelAt(voxel->gridCell() + glm::ivec3( 0, 0, 1), voxel)) out |= 0x20;     
+    return out;
 }
 
 int VoxelRenderData::opaqueVoxelCount() {

@@ -22,12 +22,13 @@ void main() {
     // It seems to always be 1, while using the count-buffer's z for the same purpose works
     accumulated.a = texture(transparencyCnt, v_uv).z;
     
-    uint nTransparentLayers = uint(texture(transparencyCnt, v_uv).x * 255);
+    uint nTransparentLayers = uint(texture(transparencyCnt, v_uv).x * 256);
 
     vec4 weightedAverage = vec4(0.0);
     // build the weighted average of the transparent colors, where the alpha value is the weight
     if (nTransparentLayers > uint(0)) {
         weightedAverage = vec4(accumulated.rgb / accumulated.a, accumulated.a / nTransparentLayers);
+		//weightedAverage = vec4(1,1,1,1);
     }
     
     // blend the transparent average over the opaque surface

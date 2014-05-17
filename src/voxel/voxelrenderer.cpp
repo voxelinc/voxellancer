@@ -69,6 +69,7 @@ void VoxelRenderer::draw(VoxelCluster& cluster) {
     glVertexAttribDivisor(m_program->getAttributeLocation("v_position"), 1);
     glVertexAttribDivisor(m_program->getAttributeLocation("v_color"), 1);
     glVertexAttribDivisor(m_program->getAttributeLocation("v_emissiveness"), 1);
+    glVertexAttribDivisor(m_program->getAttributeLocation("v_faces"), 1);
     if (m_transparentPass) {
         renderData->vertexArrayObject()->drawArraysInstancedBaseInstance(GL_TRIANGLE_STRIP, 0, 14, renderData->transparentVoxelCount(), renderData->transparentVoxelBase());
     } else {

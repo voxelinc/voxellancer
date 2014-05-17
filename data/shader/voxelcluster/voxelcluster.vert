@@ -29,10 +29,8 @@ void main() {
     gl_Position = viewProjection * model * (vec4(v_position.xyz + v_vertex.xyz * 0.999, 1.0));
 
     f_normal = (model * vec4(v_normal.xyz, 0.0)).xyz * v_color.xyz;
-    //if ((v_faces & (uint(0x10000000) >> uint(v_normal.w))) != uint(0x00000000)){ //(0x1 >> uint(v_normal.w))
-	//if ((uint(0x2) & (uint(0x1) << uint(v_normal.w))) != uint(0x0)) {
-	if (v_faces == uint(2)) {
-		f_color = vec4(1.0, 0.0, v_faces, 1.0);
+	if ((uint(v_faces) & (uint(0x1) << uint(v_normal.w))) != uint(0x0)) {
+		f_color = vec4(0,0,0,0);
 	} else {
 		f_color = v_color;
 	}
