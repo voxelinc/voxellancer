@@ -1,5 +1,8 @@
 #include "gameplayscene.h"
 
+#include "glow/FrameBufferObject.h"
+#include "glow/State.h"
+
 #include "camera/camera.h"
 #include "camera/camerahead.h"
 
@@ -17,6 +20,7 @@
 #include "sound/soundmanager.h"
 
 #include "ui/hud/hud.h"
+#include "ui/voxelfont.h"
 
 #include "voxel/voxelrenderer.h"
 #include "voxeleffect/voxelparticleengine.h"
@@ -38,7 +42,8 @@ GamePlayScene::GamePlayScene(GamePlay& gamePlay):
     m_worldTreeRenderer(new WorldTreeRenderer()),
     m_framebuffer(nullptr),
     m_currentOutputBuffer(0),
-    m_defaultLightDir("vfx.lightdir")
+    m_defaultLightDir("vfx.lightdir"),
+    m_glState(new glow::State())
 {
     m_renderPipeline->add(m_starField, 0);
 }
@@ -51,11 +56,26 @@ void GamePlayScene::draw(const Camera& camera, glow::FrameBufferObject* target, 
     }
 
     m_framebuffer->setResolution(camera.viewport());
+    m_framebuffer->setDrawBuffers({ BufferNames::Color, BufferNames::TransparencyAccumulation, BufferNames::NormalZ, BufferNames::Emissisiveness, BufferNames::TransparencyCount });
     m_framebuffer->clear();
-    m_framebuffer->setDrawBuffers({ BufferNames::Color, BufferNames::NormalZ, BufferNames::Emissisiveness });
+    m_framebuffer->get().clearBuffer(GL_COLOR, BufferNames::TransparencyAccumulation, glm::vec4(0.0f)); // clear accumulation buffer with 0
+    m_framebuffer->setDrawBuffers({ BufferNames::Color, BufferNames::NormalZ, BufferNames::Emissisiveness, /* the last buffer can silently be omitted */ });
 
-    drawGame(camera);
+    drawGame(camera, false);
 
+    // the shaders [render 0 (added) =>] nothing to the normalZ buffer, but it must be listed here so the same shaders can be used for the opaque and transparent pass
+    m_framebuffer->setDrawBuffers({ BufferNames::TransparencyAccumulation, BufferNames::NormalZ, BufferNames::Emissisiveness, BufferNames::TransparencyCount });
+    m_glState->disable(GL_CULL_FACE);
+    m_glState->depthMask(GL_FALSE);
+    m_glState->enable(GL_BLEND);
+    m_glState->blendFunc(GL_ONE, GL_ONE);
+    drawGame(camera, true);
+    m_glState->disable(GL_BLEND);
+    m_glState->depthMask(GL_TRUE);
+    m_glState->enable(GL_CULL_FACE);
+
+    // Apply renderpipeline
+    //m_glState->disable(GL_DEPTH_TEST);
     RenderMetaData metadata(camera, side);
     m_renderPipeline->apply(*m_framebuffer, metadata);
 
@@ -84,12 +104,14 @@ void GamePlayScene::setOutputBuffer(int i) {
     glow::info("Switched to output-buffer: %;", bufferNames[m_currentOutputBuffer]);
 }
 
-void GamePlayScene::drawGame(const Camera& camera) const {
-    World::instance()->skybox().draw(camera);
+void GamePlayScene::drawGame(const Camera& camera, bool transparentPass) const {
+    if (!transparentPass) {
+        World::instance()->skybox().draw(camera);
+    }
 
     m_voxelRenderer->program()->setUniform("lightdir", m_defaultLightDir.get());
 
-    m_voxelRenderer->prepareDraw(camera);
+    m_voxelRenderer->prepareDraw(camera, true, transparentPass);
 
     for (WorldObject* worldObject : World::instance()->worldObjects()) {
         VoxelRenderer::instance()->draw(*worldObject);
@@ -99,10 +121,9 @@ void GamePlayScene::drawGame(const Camera& camera) const {
 
     m_voxelRenderer->afterDraw();
 
-    World::instance()->particleEngine().draw(camera);
+    World::instance()->particleEngine().draw(camera, transparentPass);
 
     if (m_worldTreeRendererEnabled) {
         m_worldTreeRenderer->draw(camera);
     }
 }
-

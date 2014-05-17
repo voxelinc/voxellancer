@@ -10,8 +10,8 @@
 
 
 /**
- * Setup for a particle used for its spawning by the VoxelParticlewWorld.
- * Note that the VoxelParticlewWorld itsself stores the Particle optimized
+ * Setup for a particle used for its spawning by the VoxelParticleWorld.
+ * Note that the VoxelParticleWorld itself stores the Particle optimized
  * inside a buffer of VoxelParticleData, which is a data-only-structure
  */
 class VoxelParticleSetup {
@@ -19,6 +19,8 @@ public:
     VoxelParticleSetup(const Transform& transform, const Visuals& visuals, const Speed& speed, float lifetime);
 
     VoxelParticleData toData(float timeSecs) const;
+
+    Visuals visuals() const;
 
 
 protected:

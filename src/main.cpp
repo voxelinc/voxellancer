@@ -129,7 +129,7 @@ void setGLFWCallbacks(GLFWwindow* window) {
 static void miscSettings() {
     OVR::System::Init(OVR::Log::ConfigureDefaultLog(OVR::LogMask_All));
 
-    glClearColor(0.0f, 0.0f, 0.3f, 1.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 #ifdef WIN32 // TODO: find a way to correctly detect debug extension in linux
     glow::debugmessageoutput::enable();
