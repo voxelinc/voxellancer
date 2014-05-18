@@ -16,11 +16,8 @@
 #include "ui/hud/crosshair.h"
 #include "ui/targetselector.h"
 
-#include "utils/safenormalize.h"
-
-#include "worldobject/worldobjectinfo.h"
-
 #include "utils/aimer.h"
+#include "utils/safenormalize.h"
 
 #include "physics/physics.h"
 
@@ -28,6 +25,7 @@
 
 #include "worldobject/ship.h"
 #include "worldobject/worldobjectcomponents.h"
+#include "worldobject/worldobjectinfo.h"
 
 #include "equipment/hardpoint.h"
 #include "equipment/weapon.h"
@@ -74,7 +72,6 @@ CameraHead& Player::cameraHead() {
 HUD& Player::hud() {
     return *m_hud;
 }
-#include "utils/safenormalize.h"
 
 void Player::fire() {
     if (ship()) {
@@ -83,7 +80,7 @@ void Player::fire() {
         if(m_hud->aimHelper().hovered()) {
             targetPoint = m_hud->aimHelper().targetPoint();
         } else {
-            glm::vec3 shootDirection(safeNormalize(m_hud->crossHair().worldPosition() - cameraHead().position()));
+            glm::vec3 shootDirection(safeNormalize(m_hud->crossHair().worldPosition() - cameraHead().position(), glm::vec3(0.0f, 0.0f, -1.0f)));
             Ray ray(m_hud->crossHair().worldPosition(), shootDirection);
             targetPoint = m_aimer->aim(ray);
         }

@@ -135,7 +135,7 @@ void FighterFightTask::setState(State newState) {
 float FighterFightTask::angleToTarget() {
     WorldObject* worldObject = boardComputer()->worldObject();
     glm::vec3 shipDirection = glm::vec3(0, 0, -1);
-    glm::vec3 targetDirection = glm::inverse(worldObject->transform().orientation()) * safeNormalize(m_primaryTarget->transform().position() - worldObject->transform().position());
+    glm::vec3 targetDirection = glm::inverse(worldObject->transform().orientation()) * safeNormalize(m_primaryTarget->transform().position() - worldObject->transform().position(), glm::vec3(0, 0, 1));
     float angle = GeometryHelper::angleBetween(shipDirection, targetDirection);
     return glm::degrees(angle);
 }

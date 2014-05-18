@@ -126,7 +126,7 @@ void Gun::setupBullet(Bullet* bullet, const glm::vec3& point) {
     bulletTransform.setOrientation(m_hardpoint->components()->worldObject()->transform().orientation());
 
     if (normalizeable(bulletUp)) {
-        glm::vec3 rotationAxis = safeNormalize(bulletUp);
+        glm::vec3 rotationAxis = glm::normalize(bulletUp);
         float angle = GeometryHelper::angleBetween(bulletDirection, hardpointDirection);
         glm::quat bulletOrientation = glm::angleAxis(-angle, rotationAxis);
         bulletTransform.rotateWorld(bulletOrientation); //then rotate towards target

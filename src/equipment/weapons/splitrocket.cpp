@@ -157,7 +157,7 @@ void SplitRocket::setChildSpeed(WorldObject* child, const glm::quat& launchOrien
     speed.setDirectional(launchOrientation * glm::vec3(0, 0, -1) * glm::length(speed.directional()));
 
     if (normalizeable(speed.directional())) {
-        glm::vec3 boostDirection = safeNormalize(speed.directional());
+        glm::vec3 boostDirection = glm::normalize(speed.directional());
         glm::vec3 boost = boostDirection * RandFloatPool::randomize(m_childrenSpeedBoost, m_childrenSpeedBoostRandomization);
         speed.setDirectional(speed.directional() + boost);
     }

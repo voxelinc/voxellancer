@@ -88,7 +88,7 @@ void GamePlayFreecamInput::applyUpdates() {
     // collect them and apply them here
 
     if (glm::length(m_moveUpdate) > 1.0f) {
-        m_moveUpdate = safeNormalize(m_moveUpdate);
+        m_moveUpdate = safeNormalize(m_moveUpdate, glm::vec3(0.0f));
     }
 
     m_position += m_orientation * (m_moveUpdate * m_moveFactor.get());

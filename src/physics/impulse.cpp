@@ -10,7 +10,7 @@ Impulse::Impulse(WorldObject* worldObject, Voxel* voxel, const glm::vec3& speed,
     m_voxel(voxel),
     m_speed(speed),
     m_mass(mass),
-    m_normal(safeNormalize(normal))
+    m_normal(safeNormalize(normal, glm::vec3(0, 0, 1)))
 {
     assert(m_voxel);
 }

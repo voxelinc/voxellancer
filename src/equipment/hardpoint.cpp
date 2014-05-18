@@ -39,7 +39,7 @@ const glm::vec3& Hardpoint::direction() const {
 
 void Hardpoint::setDirection(const glm::vec3& direction) {
     assert(normalizeable(direction));
-    m_direction = safeNormalize(direction);
+    m_direction = glm::normalize(direction);
 }
 
 float Hardpoint::fieldOfAim() const {

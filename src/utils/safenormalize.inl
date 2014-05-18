@@ -13,8 +13,6 @@ SafeNormalize<T>::SafeNormalize(const T& v) {
 
     if (m_valid) {
         m_normalized = v * glm::inversesqrt(sqr);
-    } else {
-        glow::debug() << "SafeNormalize: Couldn't normalize " << v << ", no fallback provided";
     }
 }
 
@@ -42,7 +40,7 @@ bool SafeNormalize<T>::valid() {
 }
 
 template<typename T>
-T safeNormalize(const T& v) {
+SafeNormalize<T> safeNormalize(const T& v) {
     return SafeNormalize<T>(v);
 }
 

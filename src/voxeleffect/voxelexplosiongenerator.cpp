@@ -43,7 +43,7 @@ void VoxelExplosionGenerator::spawn() {
         glm::vec3 directionalSpeed = createDirectionalSpeed();
 
         transform.setScale(createScale());
-        transform.setPosition(m_position + (m_radius * safeNormalize(directionalSpeed)));
+        transform.setPosition(m_position + (m_radius * safeNormalize(directionalSpeed, glm::vec3(0.0f))));
 
         Visuals visuals(m_color, m_emissiveness);
         Speed speed(directionalSpeed, createAngularSpeed());

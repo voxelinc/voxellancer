@@ -23,7 +23,7 @@ protected:
 };
 
 template<typename T>
-T safeNormalize(const T& v);
+SafeNormalize<T> safeNormalize(const T& v);
 
 template<typename T>
 T safeNormalize(const T& v, const T& fallback);

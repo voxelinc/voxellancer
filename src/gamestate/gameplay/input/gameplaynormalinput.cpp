@@ -185,18 +185,18 @@ void GamePlayNormalInput::applyUpdates() {
     m_rocketUpdate = false;
 
     if (glm::length(m_moveUpdate) > 1.0f) {
-        m_moveUpdate = safeNormalize(m_moveUpdate);
+        m_moveUpdate = safeNormalize(m_moveUpdate, glm::vec3(0.0f));
     }
+
     World::instance()->player().move(m_moveUpdate);
     m_moveUpdate = glm::vec3(0);
 
     if (glm::length(m_rotateUpdate) > 1.0f) {
-        m_rotateUpdate = safeNormalize(m_rotateUpdate);
+        m_rotateUpdate = safeNormalize(m_rotateUpdate, glm::vec3(0.0f));
     }
     World::instance()->player().rotate(m_rotateUpdate);
     m_rotateUpdate = glm::vec3(0);
 }
-
 
 void GamePlayNormalInput::retrieveInputValues() {
     m_secondaryInputValues.buttonCnt = 0;

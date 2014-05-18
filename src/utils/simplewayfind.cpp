@@ -39,8 +39,8 @@ glm::vec3 SimpleWayfind::calculateEvasionDirectionFor(WorldObject& self, WorldOb
     float dotP = glm::dot(toTarget, toObject);
     float cosAlpha = dotP / (glm::length(toTarget) * glm::length(toObject));
 
-    glm::vec3 crossPoint = self.transform().position() + (safeNormalize(toTarget) * cosAlpha * glm::length(toObject));
-    return safeNormalize(crossPoint - obstacle.transform().position());
+    glm::vec3 crossPoint = self.transform().position() + (safeNormalize(toTarget, glm::vec3(0.0f)) * cosAlpha * glm::length(toObject));
+    return safeNormalize(crossPoint - obstacle.transform().position(), glm::vec3(0.0f, 0.0f, 1.0f));
 }
 
 glm::vec3 SimpleWayfind::calculateEvasionPointFor(WorldObject& self, WorldObject& obstacle, const glm::vec3& targetPoint) {

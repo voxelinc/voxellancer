@@ -53,13 +53,13 @@ void BoardComputer::moveTo(const glm::vec3& position, bool decelerate) {
                 // the projection is already past the target, but we don't want to deaccelerate
                 // instead, project the target from our current position to a sphere around our position
                 float projectionDistance = glm::length(projectedPosition - currentPosition);
-                glm::vec3 fakePosition = currentPosition + safeNormalize(position - currentPosition) * 1.5f * projectionDistance;
+                glm::vec3 fakePosition = currentPosition + safeNormalize(position - currentPosition, glm::vec3(0, 0, 0)) * 1.5f * projectionDistance;
 
                 delta = fakePosition - projectedPosition;
             }
         }
 
-        glm::vec3 direction = glm::inverse(m_worldObject->transform().orientation()) * safeNormalize(delta);
+        glm::vec3 direction = glm::inverse(m_worldObject->transform().orientation()) * safeNormalize(delta, glm::vec3(0, 0, 0));
         m_engineState.setDirectional(direction);
     }
 
@@ -77,11 +77,14 @@ void BoardComputer::rotateTo(const glm::vec3& position, const glm::vec3& up) {
     if (position == m_worldObject->transform().position()) {
         return;
     }
-    glm::vec3 targetDirection = glm::inverse(m_worldObject->transform().orientation()) * safeNormalize(position - m_worldObject->transform().position());
+
+    auto deltaToTarget = safeNormalize(position - m_worldObject->transform().position());
+    glm::vec3 targetDirection = deltaToTarget.valid() ?
+                                    glm::inverse(m_worldObject->transform().orientation()) * deltaToTarget.get() :
+                                    glm::vec3(0, 0, 1);
 
     // The rotation that needs to be performed, in the local coordinate-sys
     glm::quat rotation = GeometryHelper::quatFromTo(projectedDirection, targetDirection);
-
 
     if (glm::abs(glm::angle(rotation)) > s_minActAngle) {
         accumulatedEuler = glm::eulerAngles(rotation);
@@ -107,7 +110,7 @@ glm::vec3 BoardComputer::rotateUpTo(const glm::vec3& up) {
 
     if (glm::abs(glm::angle(upRotation)) > s_minActAngle) {
         glm::vec3 euler = glm::eulerAngles(upRotation);
-        return (safeNormalize(euler) * 0.5f);
+        return euler * 0.5f;
     }
 
     return glm::vec3(0.0f);
@@ -121,7 +124,7 @@ glm::vec3 BoardComputer::rotateUpAuto(const glm::quat& rotation) {
         glm::quat upRotation = GeometryHelper::quatFromTo(upDirection, newUpDirection);
         glm::vec3 euler = glm::eulerAngles(upRotation);
 
-        return (safeNormalize(euler) * 0.5f);
+        return euler * 0.5f;
     }
 
     return glm::vec3(0.0f);
