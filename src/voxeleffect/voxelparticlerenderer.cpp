@@ -11,6 +11,8 @@
 
 #include "utils/math.h"
 
+#include "world/world.h"
+
 #include "voxelparticleengine.h"
 #include "voxelmesh.h"
 
@@ -50,7 +52,7 @@ void VoxelParticleRenderer::draw(const Camera& camera) {
     }
 
     m_program->setUniform("viewProjection", camera.viewProjection());
-    m_program->setUniform("time", m_engine->time());
+    m_program->setUniform("time", World::instance()->time());
     m_program->setUniform("lightdir", m_defaultLightDir.get());
 
     m_program->use();

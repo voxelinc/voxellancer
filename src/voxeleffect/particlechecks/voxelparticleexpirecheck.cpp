@@ -3,6 +3,8 @@
 #include "voxeleffect/voxelparticledata.h"
 #include "voxeleffect/voxelparticleengine.h"
 
+#include "world/world.h"
+
 
 VoxelParticleExpireCheck::VoxelParticleExpireCheck(const VoxelParticleEngine& engine):
     m_particleEngine(engine)
@@ -11,6 +13,6 @@ VoxelParticleExpireCheck::VoxelParticleExpireCheck(const VoxelParticleEngine& en
 
 
 bool VoxelParticleExpireCheck::isDead(const VoxelParticleData& particleData) {
-	return particleData.deathTime <= m_particleEngine.time();
+	return particleData.deathTime <= World::instance()->time();
 }
 

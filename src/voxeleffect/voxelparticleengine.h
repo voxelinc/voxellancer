@@ -20,12 +20,10 @@ class VoxelCluster;
  * Main class for managing and displaying the VoxelParticles of
  * a World.
  */
-class VoxelParticleEngine : ContextDependant {
+class VoxelParticleEngine : public ContextDependant {
 public:
     VoxelParticleEngine();
-    ~VoxelParticleEngine();
-
-    float time() const;
+    virtual ~VoxelParticleEngine();
 
     int particleCount() const;
     int particleDataCount() const;
@@ -42,7 +40,6 @@ public:
 
 
 protected:
-    float m_time;
     bool m_initialized;
 
     std::unique_ptr<VoxelParticleRenderer> m_renderer;

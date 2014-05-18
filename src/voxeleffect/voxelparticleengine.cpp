@@ -14,7 +14,6 @@
 
 
 VoxelParticleEngine::VoxelParticleEngine():
-    m_time(0.0f),
     m_initialized(false),
     m_renderer(new VoxelParticleRenderer(this)),
     m_remover(new VoxelParticleRemover(this)),
@@ -29,10 +28,6 @@ VoxelParticleEngine::VoxelParticleEngine():
 }
 
 VoxelParticleEngine::~VoxelParticleEngine() = default;
-
-float VoxelParticleEngine::time() const {
-    return m_time;
-}
 
 int VoxelParticleEngine::particleDataCount() const {
     return m_cpuParticleBuffer.size();
@@ -55,7 +50,7 @@ void VoxelParticleEngine::setPlayer(Player& m_player) {
 }
 
 void VoxelParticleEngine::addParticle(const VoxelParticleSetup& particleSetup, const VoxelCluster* creator) {
-    VoxelParticleData particle = particleSetup.toData(m_time);
+    VoxelParticleData particle = particleSetup.toData(World::instance()->time());
 
     if (creator != nullptr && VoxelParticleFutureCheck::intersectsIn(particle, 0.5f, *creator)) {
         return;
@@ -78,13 +73,11 @@ void VoxelParticleEngine::removeParticle(int index) {
     VoxelParticleData& particle = m_cpuParticleBuffer[index];
     particle.status = VoxelParticleData::Status::Removed;
     m_freeParticleBufferIndices.push(index);
-    //particle.color = 0xff00ff;
 
     particleChanged(index);
 }
 
 void VoxelParticleEngine::update(float deltaSec) {
-    m_time += deltaSec;
     m_remover->update(deltaSec);
 }
 
@@ -136,7 +129,6 @@ void VoxelParticleEngine::setBufferSize(int bufferSize) {
     m_gpuParticleBufferInvalidBegin = 0;
     m_gpuParticleBufferInvalidEnd = bufferSize - 1;
 }
-
 
 /*
  * Update the GPU buffers of all components that use such
