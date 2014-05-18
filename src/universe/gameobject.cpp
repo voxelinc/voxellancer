@@ -31,10 +31,16 @@ void GameObject::update(float deltaSecs) {
 }
 
 void GameObject::spawn(Universe* universe) {
-    doSpawn(universe, nullptr);
+    m_universe = universe;
+    m_sector = nullptr;
+
+    doSpawn();
 }
 
 void GameObject::spawn(Sector* sector) {
-    doSpawn(sector->universe(), sector);
+    m_universe = sector->universe();
+    m_sector = sector;
+
+    doSpawn();
 }
 

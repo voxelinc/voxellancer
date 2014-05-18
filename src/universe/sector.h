@@ -6,10 +6,11 @@
 #include <glm/glm.hpp>
 
 
-class FunctionalWorldElement;
-class PhysicalWorldElement;
+class FunctionalObject;
+template<typename> class GameObjectManager;
 class Skybox;
 class Universe;
+class WorldObject;
 class WorldTree;
 
 class Sector {
@@ -22,11 +23,11 @@ public:
 
     WorldTree& worldTree();
 
-    std::list<glow::ref_ptr<FunctionalWorldElement>>& functionalElements();
-    std::list<glow::ref_ptr<FunctionalWorldElement>>& physicalElements();
+    std::list<glow::ref_ptr<FunctionalObject>>& functionalObjects();
+    std::list<glow::ref_ptr<WorldObject>>& worldObjects();
 
-    void addElement(FunctionalWorldElement* element);
-    void addElement(PhysicalWorldElement* element);
+    void addFunctionalObject(FunctionalObject* object);
+    void addWorldObject(WorldObject* object);
 
     void update(float deltaSec);
 
@@ -39,11 +40,13 @@ protected:
 
     std::unique_ptr<WorldTree> m_worldTree;
 
-    std::list<glow::ref_ptr<GameObjects>> m_functionalElements;
-    std::list<glow::ref_ptr<PhysicalWorldElement>> m_physicalElements;
+    Component<GameObjectManager<FunctionalObject>> m_functionalObjects;
+    Component<GameObjectManager<WorldObject>> m_worldObjects;
 
-    std::unique_ptr<Skybox> m_skybox;
-    glm::vec3 m_lightDir;
+    Component<Skybox> m_skybox;
+    Component<VoxelParticleEngine> m_particleEngine;
+
     std::shared_ptr<VoxelRenderer> m_voxelRenderer;
+    glm::vec3 m_lightDir;
 };
 

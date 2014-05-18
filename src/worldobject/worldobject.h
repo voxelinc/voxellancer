@@ -42,7 +42,7 @@ enum class WorldObjectType {
  * A WorldObject is an Object in our Universe. Being the second level in the voxelobject hierarchy,
  * it adds CollisionDetection, Physics and SpecialVoxels aka WorldObjectComponents
  */
-class WorldObject : public VoxelCluster, public Scriptable, public HandleOwner {
+class WorldObject : public VoxelCluster, public GameObject {
 public:
     WorldObject();
     WorldObject(const Transform& transform);
@@ -104,5 +104,8 @@ protected:
     bool m_crucialVoxelDestroyed;
     float m_collisionFieldOfDamage;
     SpawnState m_spawnState;
+
+
+    virtual void doSpawn() override;
 };
 

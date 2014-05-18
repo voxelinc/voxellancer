@@ -17,7 +17,7 @@ bool AABBEnteredPoll::poll() {
     if (m_worldObject.valid()) {
         return !m_entered && m_worldObject->bounds().aabb().intersects(m_aabb);
     } else {
-        kill();
+        scheduleRemoval();
         return false;
     }
 }
@@ -25,5 +25,10 @@ bool AABBEnteredPoll::poll() {
 void AABBEnteredPoll::specialOnCallback() {
     EventPoll::specialOnCallback();
     m_entered = true;
+}
+
+void AABBEnteredPoll::doSpawn() {
+    assert(sector());
+    sector()->addFunctionalObject(this);
 }
 

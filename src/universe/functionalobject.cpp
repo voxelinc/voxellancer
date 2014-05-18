@@ -14,9 +14,9 @@ void FunctionalObject::spawn() {
     assert(universe());
 
     if (sector()) {
-        sector()->addElement(this);
+        sector()->addFunctionalObject(this);
     } else {
-        universe()->addElement(this);
+        universe()->addFunctionalObject(this);
     }
 }
 

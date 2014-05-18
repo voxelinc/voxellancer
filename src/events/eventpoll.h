@@ -25,5 +25,7 @@ protected:
     void doCallback();
     virtual bool poll() = 0;
     virtual void specialOnCallback();
+
+    virtual void doSpawn() override;
 };
 

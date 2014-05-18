@@ -5,6 +5,7 @@
 #include "utils/component.h"
 
 
+class GameObjectManager;
 class Player;
 class ScriptEngine;
 class Sector;
@@ -16,10 +17,11 @@ public:
 
     Player& player();
     ScriptEngine& scriptEngine();
+    FactionMatrix& factionMatrix();
 
     void addSector(const std::shared_ptr<Sector>& sector);
 
-    void addElement(FunctionalWorldElement* element);
+    void addFunctionalObject(FunctionalObject* object);
 
     void update(float deltaSec);
 
@@ -27,9 +29,9 @@ public:
 protected:
     std::list<std::shared_ptr<Sector>> m_sectors;
 
+    Component<GameObjectManager<FunctionalObject>> m_functionalObjects;
     Component<Player> m_player;
     Component<ScriptEngine> m_scriptEngine;
-
-    std::list<glow::ref_ptr<FunctionalWorldElement>> m_functionalElements;
+    Component<FactionMatrix> m_factionMatrix;
 };
 

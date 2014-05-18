@@ -177,3 +177,8 @@ bool WorldObject::areCockpitVoxelsDestroyed() {
     return m_cockpitVoxelsDestroyed;
 }
 
+void WorldObject::doSpawn() {
+    assert(sector());
+    sector()->addWorldObject(this);
+}
+

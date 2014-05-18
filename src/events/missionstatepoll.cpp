@@ -20,6 +20,6 @@ bool MissionStatePoll::poll() {
 void MissionStatePoll::specialOnCallback() {
     EventPoll::specialOnCallback();
     m_fired = true;
-    kill();
+    scheduleFinished();
 }
 

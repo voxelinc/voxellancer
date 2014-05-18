@@ -36,3 +36,6 @@ void EventPoll::specialOnCallback() {
 
 }
 
+void EventPoll::doSpawn() {
+    universe()->addFunctionalObject();
+}

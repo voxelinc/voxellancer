@@ -28,19 +28,5 @@ void Universe::update(float deltaSec) {
     for (std::shared_ptr<Sector>& sector : m_sectors) {
         sector->update(deltaSec);
     }
-
-    for (auto& iter = m_functionalElements.begin(); iter != m_functionalElements.end();) {
-        FunctionalObject* element = *iter;
-
-        if (!element->removalScheduled()) {
-            element->update(deltaSec);
-        }
-
-        if (element->removalScheduled()) {
-            iter = m_functionalElements.erase(iter);
-        } else {
-            ++iter;
-        }
-    }
 }
 
