@@ -13,7 +13,7 @@
 
 #include "input/inputmapping.h"
 
-#include "utils/glmext/safenormalize.h"
+#include "utils/safenormalize.h"
 
 
 GamePlayFreecamInput::GamePlayFreecamInput() :

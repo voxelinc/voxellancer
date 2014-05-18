@@ -2,7 +2,7 @@
 
 #include "ai/boardcomputer.h"
 #include "utils/geometryhelper.h"
-#include "utils/glmext/safenormalize.h"
+#include "utils/safenormalize.h"
 #include "utils/randfloat.h"
 #include "voxel/voxelclusterbounds.h"
 #include "worldobject/ship.h"

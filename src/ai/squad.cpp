@@ -2,7 +2,7 @@
 
 #include "worldobject/ship.h"
 #include "ai/aigrouptask.h"
-#include "utils/glmext/safenormalize.h"
+#include "utils/safenormalize.h"
 #include "physics/physics.h"
 #include "voxel/voxelclusterbounds.h"
 

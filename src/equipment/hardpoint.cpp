@@ -1,6 +1,6 @@
 #include "hardpoint.h"
 
-#include "utils/glmext/safenormalize.h"
+#include "utils/safenormalize.h"
 #include "utils/geometryhelper.h"
 
 #include "voxel/specialvoxels/hardpointvoxel.h"

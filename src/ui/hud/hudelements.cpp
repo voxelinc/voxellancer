@@ -1,6 +1,6 @@
 #include "hudelements.h"
 
-#include "utils/glmext/safenormalize.h"
+#include "utils/safenormalize.h"
 
 #include "voxel/voxelrenderer.h"
 

@@ -6,7 +6,7 @@
 
 #include "collision/collisionfilter.h"
 
-#include "utils/glmext/safenormalize.h"
+#include "utils/safenormalize.h"
 #include "utils/randvec3.h"
 #include "utils/geometryhelper.h"
 

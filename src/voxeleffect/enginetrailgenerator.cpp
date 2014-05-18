@@ -1,6 +1,6 @@
 #include "enginetrailgenerator.h"
 
-#include "utils/glmext/safenormalize.h"
+#include "utils/safenormalize.h"
 #include "utils/geometryhelper.h"
 
 #include "voxel/specialvoxels/engineslotvoxel.h"

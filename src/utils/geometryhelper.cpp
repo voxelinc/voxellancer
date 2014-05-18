@@ -2,7 +2,7 @@
 
 #include "geometry/ray.h"
 
-#include "utils/glmext/safenormalize.h"
+#include "utils/safenormalize.h"
 
 #include "randvec3.h"
 

@@ -11,7 +11,7 @@
 #include "resource/worldobjectbuilder.h"
 
 #include "utils/geometryhelper.h"
-#include "utils/glmext/safenormalize.h"
+#include "utils/safenormalize.h"
 #include "utils/randfloatpool.h"
 
 #include "voxeleffect/voxelexplosiongenerator.h"

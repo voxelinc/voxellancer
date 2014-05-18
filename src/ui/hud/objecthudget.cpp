@@ -10,7 +10,7 @@
 #include "factions/factionmatrix.h"
 
 #include "utils/geometryhelper.h"
-#include "utils/glmext/safenormalize.h"
+#include "utils/safenormalize.h"
 
 #include "world/world.h"
 

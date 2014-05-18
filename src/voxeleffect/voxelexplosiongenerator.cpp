@@ -2,7 +2,7 @@
 
 #include <ctime>
 
-#include "utils/glmext/safenormalize.h"
+#include "utils/safenormalize.h"
 #include "utils/randfloat.h"
 #include "utils/randfloatpool.h"
 #include "utils/randvec3.h"

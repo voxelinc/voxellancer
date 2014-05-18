@@ -2,7 +2,7 @@
 
 #include <cassert>
 
-#include "utils/glmext/safenormalize.h"
+#include "utils/safenormalize.h"
 
 
 Impulse::Impulse(WorldObject* worldObject, Voxel* voxel, const glm::vec3& speed, float mass, const glm::vec3& normal):

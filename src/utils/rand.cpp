@@ -7,7 +7,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 
-#include "utils/glmext/safenormalize.h"
+#include "utils/safenormalize.h"
 
 
 bool RandBool::rand(float trueProbability) {

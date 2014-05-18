@@ -24,7 +24,7 @@
 #include "ui/targetselector.h"
 #include "ui/hud/crosshair.h"
 
-#include "utils/glmext/safenormalize.h"
+#include "utils/safenormalize.h"
 
 
 #include "world/world.h"

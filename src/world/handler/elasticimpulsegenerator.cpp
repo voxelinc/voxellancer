@@ -6,7 +6,7 @@
 
 #include "physics/physics.h"
 
-#include "utils/glmext/safenormalize.h"
+#include "utils/safenormalize.h"
 
 #include "voxel/voxel.h"
 

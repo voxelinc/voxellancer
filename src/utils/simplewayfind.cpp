@@ -4,7 +4,7 @@
 #include "geometry/capsule.h"
 #include "worldtree/worldtreequery.h"
 #include "worldobject/worldobject.h"
-#include "utils/glmext/safenormalize.h"
+#include "utils/safenormalize.h"
 #include "utils/worldobjectgeometryhelper.h"
 #include "collision/collisionfilter.h"
 #include "collision/collisiondetector.h"

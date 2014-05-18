@@ -16,7 +16,7 @@
 #include "ui/hud/crosshair.h"
 #include "ui/targetselector.h"
 
-#include "utils/glmext/safenormalize.h"
+#include "utils/safenormalize.h"
 
 #include "worldobject/worldobjectinfo.h"
 
@@ -74,7 +74,7 @@ CameraHead& Player::cameraHead() {
 HUD& Player::hud() {
     return *m_hud;
 }
-#include "utils/glmext/safenormalize.h"
+#include "utils/safenormalize.h"
 
 void Player::fire() {
     if (ship()) {
