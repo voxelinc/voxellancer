@@ -21,6 +21,6 @@ public:
 
 
 protected:
-    void spawnExplosion() override;
+    virtual void spawnExplosion() override;
 };
 

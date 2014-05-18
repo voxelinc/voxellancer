@@ -11,6 +11,7 @@
 #include "ui/hud/hudget.h"
 #include "ui/hud/aimhelperhudget.h"
 #include "ui/hud/crosshair.h"
+#include "ui/targetselector.h"
 
 #include "worldobject/worldobjectinfo.h"
 
@@ -22,7 +23,10 @@
 
 #include "worldobject/ship.h"
 #include "worldobject/worldobjectcomponents.h"
-#include "ui/targetselector.h"
+
+#include "equipment/hardpoint.h"
+#include "equipment/weapon.h"
+#include "equipment/weapons/gun.h"
 
 
 Player::Player():
@@ -53,8 +57,8 @@ void Player::update(float deltaSec) {
     m_hud->update(deltaSec);
     m_aimer->update(deltaSec);
 
-    if (Ship* ship = m_ship.get()) {
-        ship->components().setEngineState(m_engineState);
+    if (m_ship.valid()) {
+        m_ship->components().setEngineState(m_engineState);
     }
 }
 
@@ -78,7 +82,7 @@ void Player::fire() {
             targetPoint = m_aimer->aim(ray);
         }
 
-        ship()->components().fireAtPoint(targetPoint);
+        m_ship->components().fireAtPoint(targetPoint, false);
     }
 }
 
