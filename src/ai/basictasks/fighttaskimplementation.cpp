@@ -42,3 +42,4 @@ void FightTaskImplementation::updateTargets() {
 float FightTaskImplementation::targetDistance() {
     return WorldObjectGeometryHelper::sphereToSphereDistance(boardComputer()->worldObject(), m_primaryTarget);
 }
+

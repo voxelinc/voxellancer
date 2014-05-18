@@ -7,10 +7,10 @@
 
 class WorldObjectComponents;
 
-/*
-    Base class for everything on a worldobject that behaves like a slot
-    that can be (or cannot) be equipped with equipment
-*/
+/**
+ * Base class for everything on a worldobject that behaves like a slot
+ * that can be (or cannot) be equipped with equipment
+ */
 class WorldObjectSlot {
 public:
     WorldObjectSlot(WorldObjectComponents* components, int index);

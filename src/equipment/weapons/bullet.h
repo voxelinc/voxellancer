@@ -6,8 +6,8 @@
 class SoundProperties;
 
 /**
- *   Base class for every Projectile that flies with a constant undamped speed
- *   and is destroyed on collision. Also, not displayed on HUD.
+ * Base class for every Projectile that flies with a constant undamped speed
+ * and is destroyed on collision. Also, not displayed on HUD.
  */
 class Bullet: public Projectile {
 public:
@@ -21,6 +21,6 @@ public:
 
 
 protected:
-    void spawnExplosion() override;
+    virtual void spawnExplosion() override;
 };
 

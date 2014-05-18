@@ -62,9 +62,9 @@
 GamePlayNormalInput::GamePlayNormalInput() :
     GamePlayInput(),
 
-    prop_deadzoneMouse("input.deadzoneMouse"),
-    prop_deadzoneGamepad("input.deadzoneGamepad"),
-    prop_maxClickTime("input.maxClickTime"),
+    m_deadzoneMouse("input.deadzoneMouse"),
+    m_deadzoneGamepad("input.deadzoneGamepad"),
+    m_maxClickTime("input.maxClickTime"),
 
     fireAction("input.mappingFirePrimary", "input.mappingFireSecondary", "Fire"),
     rocketAction("input.mappingRocketPrimary", "input.mappingRocketSecondary", "Launch Rockets"),
@@ -87,7 +87,7 @@ GamePlayNormalInput::GamePlayNormalInput() :
     m_secondaryInputValues(),
     m_actions(),
 
-    m_inputConfigurator(new InputConfigurator(&m_actions, &m_secondaryInputValues, &prop_deadzoneGamepad, &World::instance()->player().hud())),
+    m_inputConfigurator(new InputConfigurator(&m_actions, &m_secondaryInputValues, &m_deadzoneGamepad, &World::instance()->player().hud())),
     m_fireUpdate(false),
     m_rocketUpdate(false),
     m_moveUpdate(0),
@@ -141,7 +141,7 @@ void GamePlayNormalInput::keyCallback(int key, int scancode, int action, int mod
 
 void GamePlayNormalInput::mouseButtonCallback(int button, int action, int mods) {
     if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_RELEASE) {
-        if (m_currentTimePressed > 0 && m_currentTimePressed < prop_maxClickTime) {
+        if (m_currentTimePressed > 0 && m_currentTimePressed < m_maxClickTime) {
             World::instance()->player().hud().onClick(ClickType::Selection);
         } else {
         }
@@ -241,7 +241,7 @@ void GamePlayNormalInput::processMouseUpdate(float deltaSec) {
         m_currentTimePressed += deltaSec;
     }
 
-    if (m_mouseControl || glfwGetMouseButton(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS &&  prop_maxClickTime < m_currentTimePressed) {
+    if (m_mouseControl || glfwGetMouseButton(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS &&  m_maxClickTime < m_currentTimePressed) {
         glm::vec3 rot;
         x = ContextProvider::instance()->resolution().width() / 2 - (int)floor(x);
         y = ContextProvider::instance()->resolution().height() / 2 - (int)floor(y);
@@ -250,7 +250,7 @@ void GamePlayNormalInput::processMouseUpdate(float deltaSec) {
         rot = glm::vec3(y, x, 0);
         rot /= m_cursorMaxDistance;
 
-        if (glm::length(rot) < prop_deadzoneMouse) {
+        if (glm::length(rot) < m_deadzoneMouse) {
             rot = glm::vec3(0);
         }
         m_rotateUpdate += rot;
@@ -315,7 +315,7 @@ float GamePlayNormalInput::getInputValue(InputMapping mapping) {
                 return 0;
             }
         case InputType::GamePadAxis:
-            if (m_secondaryInputValues.axisCnt > mapping.index() && glm::abs(m_secondaryInputValues.axisValues[mapping.index()]) > prop_deadzoneGamepad) {
+            if (m_secondaryInputValues.axisCnt > mapping.index() && glm::abs(m_secondaryInputValues.axisValues[mapping.index()]) > m_deadzoneGamepad) {
                 float relativeValue = m_secondaryInputValues.axisValues[mapping.index()] / mapping.maxValue();
                 if (relativeValue > 0) {
                     m_centerCrosshair = true;
@@ -361,7 +361,7 @@ void GamePlayNormalInput::processRotateActions() {
     rot.z = -getInputValue(&rotateClockwiseAction)
         + getInputValue(&rotateCClockwiseAction);
 
-    if (glm::length(rot) < prop_deadzoneGamepad) {
+    if (glm::length(rot) < m_deadzoneGamepad) {
         rot = glm::vec3(0);
     }
 

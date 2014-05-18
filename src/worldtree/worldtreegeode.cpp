@@ -10,9 +10,9 @@
 
 WorldTreeGeode::WorldTreeGeode(WorldObject* worldObject) :
     m_worldObject(worldObject),
-    m_containingNode(nullptr),
     m_aabb(worldObject->bounds().aabb()),
-    m_passive(false)
+    m_passive(false),
+    m_hint(nullptr)
 {
     m_worldObject->collisionDetector().setGeode(this);
     if (worldObject->passiveForCollisionDetection()) {
@@ -20,32 +20,18 @@ WorldTreeGeode::WorldTreeGeode(WorldObject* worldObject) :
     }
 }
 
-WorldTreeGeode::~WorldTreeGeode() {
-
-}
+WorldTreeGeode::~WorldTreeGeode() = default;
 
 WorldObject* WorldTreeGeode::worldObject() {
     return m_worldObject;
 }
 
-const WorldObject* WorldTreeGeode::worldObject() const {
-    return m_worldObject;
+WorldTreeHint& WorldTreeGeode::hint() {
+    return m_hint;
 }
 
-void WorldTreeGeode::setWorldObject(WorldObject* worldObject) {
-    m_worldObject = worldObject;
-}
-
-WorldTreeNode* WorldTreeGeode::containingNode() {
-    return m_containingNode;
-}
-
-const WorldTreeNode* WorldTreeGeode::containingNode() const {
-    return m_containingNode;
-}
-
-void WorldTreeGeode::setContainingNode(WorldTreeNode* node) {
-    m_containingNode = node;
+void WorldTreeGeode::setHint(const WorldTreeHint& hint) {
+    m_hint = hint;
 }
 
 const IAABB& WorldTreeGeode::aabb() const {

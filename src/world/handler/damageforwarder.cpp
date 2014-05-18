@@ -8,8 +8,11 @@
 #include "voxel/voxeltreenode.h"
 
 #include "voxel/voxelneighbourhelper.h"
+<<<<<<< HEAD
 #include "utils/glmext/safenormalize.h"
 #include "utils/tostring.h"
+=======
+>>>>>>> c7b51c55a07216b5b640f175255e369045b4c212
 
 #include "worldobject/worldobject.h"
 #include "voxel/voxel.h"

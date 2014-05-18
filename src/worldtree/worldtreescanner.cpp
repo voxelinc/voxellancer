@@ -108,7 +108,7 @@ std::unordered_set<WorldObject*> WorldTreeScanner::worldObjectsInRange(WorldObje
     std::unordered_set<WorldObject*> result;
     Sphere scanSphere(position, m_scanRadius);
 
-    WorldTreeQuery worldTreeQuery(&World::instance()->worldTree(), &scanSphere, worldObject->collisionDetector().geode()->containingNode(), &worldObject->collisionFilter());
+    WorldTreeQuery worldTreeQuery(&World::instance()->worldTree(), &scanSphere, worldObject->collisionDetector().geode()->hint(), &worldObject->collisionFilter());
     std::unordered_set<WorldTreeGeode*> foundGeodes = worldTreeQuery.nearGeodes();
 
     for (WorldTreeGeode* foundGeode : foundGeodes) {

@@ -7,7 +7,7 @@
 /**
  *   Provides all attributes needed to render *something*
  *   with all currently implemented visual effects
-*/
+ */
 class Visuals {
 public:
     Visuals();

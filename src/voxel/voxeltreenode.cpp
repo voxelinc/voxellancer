@@ -2,8 +2,6 @@
 
 #include <cassert>
 
-#include "utils/tostring.h"
-
 #include "voxel/voxeltree.h"
 
 #include "worldobject/worldobject.h"

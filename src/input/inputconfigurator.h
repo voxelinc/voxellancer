@@ -35,14 +35,14 @@ private:
 
     HUD* m_hud;
 
-    Property<float>* prop_deadzoneGamepad;
+    Property<float>* m_deadzoneGamepad;
 
     InputMapping lastPrimaryInput;
     InputMapping lastSecondaryInput;
 
     int m_secondaryConfigurationState;
     int m_primaryConfigurationState;
-    
+
     bool m_beginningKeyConfiguration = true;
     bool m_displayedInstructions = false;
 
