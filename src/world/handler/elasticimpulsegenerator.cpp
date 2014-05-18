@@ -2,16 +2,15 @@
 
 #include <cassert>
 
-#include "worldobject/worldobject.h"
-
-<<<<<<< HEAD
-#include "utils/glmext/safenormalize.h"
-#include "utils/tostring.h"
-=======
->>>>>>> c7b51c55a07216b5b640f175255e369045b4c212
 #include "collision/voxelcollision.h"
-#include "voxel/voxel.h"
+
 #include "physics/physics.h"
+
+#include "utils/glmext/safenormalize.h"
+
+#include "voxel/voxel.h"
+
+#include "worldobject/worldobject.h"
 
 
 void ElasticImpulseGenerator::parse(std::list<WorldObjectCollision>& worldObjectCollisions) {

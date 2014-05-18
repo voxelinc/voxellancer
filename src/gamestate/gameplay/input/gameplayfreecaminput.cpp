@@ -91,11 +91,8 @@ void GamePlayFreecamInput::applyUpdates() {
         m_moveUpdate = safeNormalize(m_moveUpdate);
     }
 
-<<<<<<< HEAD
-    m_position += m_orientation * (m_moveUpdate * prop_moveFactor.get());
-=======
     m_position += m_orientation * (m_moveUpdate * m_moveFactor.get());
->>>>>>> c7b51c55a07216b5b640f175255e369045b4c212
+
     m_moveUpdate = glm::vec3(0);
 
     m_orientation = m_orientation * glm::quat(m_rotateUpdate * m_rotateFactor.get());
@@ -253,3 +250,4 @@ void GamePlayFreecamInput::setOrientation(const glm::quat& orientation) {
 CameraHead& GamePlayFreecamInput::cameraHead() {
     return m_cameraDolly->cameraHead();
 }
+
