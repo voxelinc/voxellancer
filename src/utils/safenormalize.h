@@ -19,6 +19,7 @@ public:
 
 protected:
     bool m_valid;
+    bool m_hasFallback;
     T m_normalized;
 };
 

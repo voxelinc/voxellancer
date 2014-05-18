@@ -58,7 +58,7 @@ void HardpointAimHelper::aim() {
     } while(offset > 0.1f);
 
     m_hitable = true;
-    m_direction = safeNormalize(m_point - m_hardpointPosition);
+    m_direction = safeNormalize(m_point - m_hardpointPosition, glm::vec3(0.0f, 0.0f, -1.0f));
 
     m_aimed = true;
 }

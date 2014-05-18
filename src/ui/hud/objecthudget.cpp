@@ -134,19 +134,25 @@ glm::vec3 ObjectHudget::closestPointInsideFov() {
     glm::vec3 pointInsideFov;
 
     if (angleX < angleY) {
-        pointInsideFov = safeNormalize(intersectionX);
+        assert(normalizeable(intersectionX));
+        pointInsideFov = glm::normalize(intersectionX);
     } else {
-        pointInsideFov = safeNormalize(intersectionY);
+        assert(normalizeable(intersectionY));
+        pointInsideFov = glm::normalize(intersectionY);
     }
+
     pointInsideFov.x = glm::abs(pointInsideFov.x);
     pointInsideFov.y = glm::abs(pointInsideFov.y);
-    pointInsideFov.z = glm::abs(pointInsideFov.z)*-1;
+    pointInsideFov.z = -glm::abs(pointInsideFov.z);
+
     if (localDirection().x < 0) {
         pointInsideFov.x *= -1;
     }
+
     if (localDirection().y < 0) {
         pointInsideFov.y *= -1;
     }
+
     return pointInsideFov;
 }
 

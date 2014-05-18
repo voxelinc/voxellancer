@@ -6,7 +6,9 @@
 
 
 template<typename T>
-SafeNormalize<T>::SafeNormalize(const T& v) {
+SafeNormalize<T>::SafeNormalize(const T& v):
+    m_hasFallback(false)
+{
     float sqr = glm::dot(v, v);
 
     m_valid = sqr > 0.0f;
@@ -17,7 +19,9 @@ SafeNormalize<T>::SafeNormalize(const T& v) {
 }
 
 template<typename T>
-SafeNormalize<T>::SafeNormalize(const T& v, const T& fallback) {
+SafeNormalize<T>::SafeNormalize(const T& v, const T& fallback):
+    m_hasFallback(true)
+{
     float sqr = glm::dot(v, v);
 
     m_valid = sqr > 0.0f;
@@ -26,12 +30,13 @@ SafeNormalize<T>::SafeNormalize(const T& v, const T& fallback) {
 
 template<typename T>
 const T& SafeNormalize<T>::get() const {
+    assert (m_valid  || m_hasFallback);
     return m_normalized;
 }
 
 template<typename T>
 SafeNormalize<T>::operator T() const {
-    return m_normalized;
+    return get();
 }
 
 template<typename T>
