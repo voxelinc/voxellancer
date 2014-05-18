@@ -39,7 +39,7 @@ bool Movement::perform() {
     m_successful = true;
 
     IAABB phaseAABB = m_worldObject.bounds().aabb(m_originalTransform).united(m_worldObject.bounds().aabb(m_targetTransform));
-    WorldTreeNode* nodeHint = m_worldObject.collisionDetector().geode()->containingNode();
+    WorldTreeHint nodeHint = m_worldObject.collisionDetector().geode()->hint();
 
     if (WorldTreeQuery(m_collisionDetector.worldTree(), &phaseAABB, nodeHint, &m_worldObject.collisionFilter()).areGeodesNear()) {
         glm::vec3 directionalStep = m_targetTransform.position() - m_originalTransform.position();
@@ -72,8 +72,8 @@ void Movement::performSplitted() {
 void Movement::performStepped(const IAABB& phaseAABB) {
     int stepCount = calculateStepCount();
 
-    WorldTreeNode* nodeHint = m_worldObject.collisionDetector().geode()->containingNode();
-    std::unordered_set<WorldTreeGeode*> possibleColliders = WorldTreeQuery(m_collisionDetector.worldTree(), &phaseAABB, nodeHint, &m_worldObject.collisionFilter()).nearGeodes();
+    WorldTreeHint hint = m_worldObject.collisionDetector().geode()->hint();
+    std::unordered_set<WorldTreeGeode*> possibleColliders = WorldTreeQuery(m_collisionDetector.worldTree(), &phaseAABB, hint, &m_worldObject.collisionFilter()).nearGeodes();
 
     m_intersectionFreeTransform = m_worldObject.transform();
 
