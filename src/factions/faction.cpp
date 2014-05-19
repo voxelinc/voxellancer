@@ -29,3 +29,7 @@ const std::string& Faction::printName() const {
 FactionRelation& Faction::relationTo(Faction& other) {
     return World::instance()->factionMatrix().getRelation(*this, other);
 }
+
+void Faction::changeFriendlinessToFaction(Faction& other, float friendliness) {
+    World::instance()->factionMatrix().changeFriendlinessToFaction(*this, other, friendliness);
+}

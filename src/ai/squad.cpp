@@ -124,9 +124,16 @@ glm::vec3 Squad::calculateFormationPosition(Ship* member, int position) {
     return m_leader->transform().position() + m_leader->physics().speed().directional() + m_leader->transform().orientation() * (distance * glm::normalize(direction));
 }
 
-void Squad::propagadeFriendlinessToPlayer(float friendliness) {
+/*void Squad::propagadeFriendlinessToPlayer(float friendliness) {
     m_leader->character()->setFriendlinessToPlayer(friendliness);
     for(Ship* ship : m_members) {
         ship->character()->setFriendlinessToPlayer(friendliness);
+    }
+}*/
+
+void Squad::propagadeFriendlinessToWorldObject(WorldObject* worldObject, float friendliness) {
+    m_leader->character()->setFriendlinessToWorldObject(worldObject, friendliness);
+    for (Ship* ship : m_members) {
+        ship->character()->setFriendlinessToWorldObject(worldObject, friendliness);
     }
 }

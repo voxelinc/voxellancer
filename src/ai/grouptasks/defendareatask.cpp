@@ -76,7 +76,7 @@ bool DefendAreaTask::isEnemyInRange() {
     for (WorldObject *worldObject : query.intersectingWorldObjects()) {
         Ship* ship = dynamic_cast<Ship*>(worldObject);
         if (ship) {
-            if (m_squad.leader()->character()->relationTypeTo(ship->character()->faction()) == FactionRelationType::Enemy) {
+            if (m_squad.leader()->character()->relationTypeTo(ship) == FactionRelationType::Enemy) {
                 m_enemies.push_back(worldObject->handle());
             } else {
                 continue;

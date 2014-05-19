@@ -39,6 +39,7 @@ public:
 
     void setCharacter(Character* character);
     Character* character();
+    Character* character() const;
 
     virtual void onCollisionWith(WorldObject* worldObject) override;
     virtual void onDeath() override;

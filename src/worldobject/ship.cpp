@@ -60,6 +60,10 @@ Character* Ship::character() {
     return m_character.get();
 }
 
+Character* Ship::character() const {
+    return m_character.get();
+}
+
 BoardComputer* Ship::boardComputer() {
     return m_boardComputer.get();
 }

@@ -17,6 +17,8 @@ public:
     
     FactionRelation& relationTo(Faction& other);
 
+    void changeFriendlinessToFaction(Faction& other, float difference);
+
 protected:
     std::string m_key;
     std::string m_printName;

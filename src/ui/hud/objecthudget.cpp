@@ -59,7 +59,7 @@ void ObjectHudget::update(float deltaSec) {
             // TODO: Replace the following two lines with proper WorldObjectType mechanism
             Ship* ship = dynamic_cast<Ship*>(worldObject);
             if (ship) {
-                relationType = ship->character()->relationTypeToPlayer();
+                relationType = ship->character()->relationTypeTo(m_hud->player()->ship());
             }
         }
     }

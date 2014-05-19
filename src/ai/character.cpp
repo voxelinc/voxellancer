@@ -28,7 +28,6 @@ Character::Character(Ship& ship, Faction& faction):
     m_task(nullptr),
     m_world(World::instance())
 {
-    m_friendlinessToPlayer = m_world->factionMatrix().getRelationToPlayer(*m_faction).friendliness();
 }
 
 Faction& Character::faction() {
@@ -54,76 +53,121 @@ void Character::update(float deltaSec) {
     if (m_task.get()) {
         m_task->update(deltaSec);
     }
+    resetFriendliness(deltaSec);
 }
 
 void Character::onCollisionWith(WorldObject* worldObject) {
     float relationModifier = 0;
     std::string warningMessage;
+    WorldObject* aggressor;
     switch (worldObject->objectType()) {
         case WorldObjectType::Ship: {
             Ship* ship = static_cast<Ship*>(worldObject);
-            if (ship == m_world->player().ship()) {
-                relationModifier = -0.5f;
-                warningMessage = m_ship.info().name() + ": Watch where you're going!";
-            }
+            aggressor = ship;
+            relationModifier = -0.5f;
+            warningMessage = m_ship.info().name() + ": Watch where you're going!";
         }
             break;
         case WorldObjectType::Bullet: {
             Bullet* bullet = static_cast<Bullet*>(worldObject);
-            if (bullet->creator() == m_world->player().ship()) {
-                relationModifier = -1;
-                warningMessage = m_ship.info().name() + ": Check your fire!";
-            }
+            aggressor = bullet->creator();
+            relationModifier = -1;
+            warningMessage = m_ship.info().name() + ": Check your fire!";
         }
             break;
         case WorldObjectType::Rocket:{
             Rocket* rocket = static_cast<Rocket*>(worldObject);
-            if (rocket->creator() == m_world->player().ship()) {
-                relationModifier = -1;
-                warningMessage = m_ship.info().name() + ": Check your fire!";
-            }
+            aggressor = rocket->creator();
+            relationModifier = -1;
+            warningMessage = m_ship.info().name() + ": Check your fire!";
         }
             break;
     }
-    if (relationModifier != 0) {
-        float friendliness = m_faction->relationTo(m_world->factionMatrix().getFaction("player")).friendliness();
-        relationModifier *= 2.0f - glm::abs(friendliness) / 100.0f;
-        changeFriendlinessToPlayer(relationModifier);
+    if (aggressor != m_world->player().ship()) {
+        return;
     }
-    if (m_friendlinessToPlayer > -30.0f) {
-        m_world->player().hud().showCommunicationMessage(warningMessage);
+    onAggressionBy(aggressor, relationModifier);
+}
+
+void Character::onAggressionBy(WorldObject* aggressor, float relationModifier) {
+    if (aggressor->objectType() != WorldObjectType::Ship) {
+        return;
     }
+    Ship* ship = static_cast<Ship*>(aggressor);
+    float friendlinessToAggressorFaction = m_faction->relationTo(ship->character()->faction()).friendliness();
+    relationModifier *= 2.0f - glm::abs(friendlinessToAggressorFaction) / 100.0f;
+    changeFriendlinessToAggressor(ship, relationModifier);
 }
 
 void Character::onKilledBy(WorldObject* worldObject) {
-    if (worldObject == m_world->player().ship()) {
-        m_world->factionMatrix().changeFriedlinessToPlayer(*m_faction, -10);
-        if (m_ship.squadLogic()->squad()) {
-            m_ship.squadLogic()->squad()->propagadeFriendlinessToPlayer(glm::min(-30.0f, m_world->factionMatrix().getRelationToPlayer(*m_faction).friendliness()));
-        }
+    if (worldObject->objectType() != WorldObjectType::Ship) {
+        return;
     }
-}
-
-FactionRelationType Character::relationTypeToPlayer() {
-    float friendliness = glm::min(m_friendlinessToPlayer, m_world->factionMatrix().getRelationToPlayer(*m_faction).friendliness());
-    return FactionRelation::type(friendliness);
+    Ship* ship = static_cast<Ship*>(worldObject);
+    if (ship != m_world->player().ship()) {
+        return;
+    }
+    m_faction->changeFriendlinessToFaction(ship->character()->faction(), -10);
+    if (m_ship.squadLogic()->squad()) {
+        m_ship.squadLogic()->squad()->propagadeFriendlinessToWorldObject(ship, glm::min(-30.0f, m_faction->relationTo(ship->character()->faction()).friendliness()));
+    }
 }
 
 FactionRelationType Character::relationTypeTo(Faction& other) {
-    if (other.key() == "player") {
-        return relationTypeToPlayer();
-    }
     return m_faction->relationTo(other).type();
 }
 
-void Character::changeFriendlinessToPlayer(float difference) {
-    m_friendlinessToPlayer += difference;
-    if (FactionRelation::type(m_friendlinessToPlayer) == FactionRelationType::Enemy && m_ship.squadLogic()->squad().get()) {
-        m_ship.squadLogic()->squad()->propagadeFriendlinessToPlayer(m_friendlinessToPlayer);
+FactionRelationType Character::relationTypeTo(WorldObject* worldObject) {
+    if (m_friendlinessToWorldObject.count(worldObject->handle()) > 0) {
+        return FactionRelation::type(m_friendlinessToWorldObject[worldObject->handle()]);
     }
-    m_world->factionMatrix().changeFriedlinessToPlayer(*m_faction, difference / 10.0f);
+    if (worldObject->objectType() != WorldObjectType::Ship) {
+        return FactionRelationType::Neutral;
+    }
+    return m_faction->relationTo(static_cast<Ship*>(worldObject)->character()->faction()).type();
 }
 
-void Character::setFriendlinessToPlayer(float friendliness) {
-    m_friendlinessToPlayer = friendliness;
+void Character::setFriendlinessToWorldObject(WorldObject* worldObject, float friendliness) {
+    m_friendlinessToWorldObject[worldObject->handle()] = friendliness;
+}
+
+void Character::changeFriendlinessToAggressor(WorldObject* aggressor, float difference) {
+    if (aggressor->objectType() != WorldObjectType::Ship) {
+        return;
+    }
+    Ship* ship = static_cast<Ship*>(aggressor);
+    float friendliness = m_friendlinessToWorldObject[aggressor->handle()];
+    if (friendliness == 0.0f) {
+        friendliness = m_faction->relationTo(ship->character()->faction()).friendliness();
+    }
+    friendliness += difference;
+    if (FactionRelation::type(friendliness) == FactionRelationType::Enemy && m_ship.squadLogic()->squad().get()) {
+        m_ship.squadLogic()->squad()->propagadeFriendlinessToWorldObject(aggressor, friendliness);
+    }
+    m_world->factionMatrix().changeFriendlinessToFaction(*m_faction, ship->character()->faction(),  difference / 10.0f);
+    m_friendlinessToWorldObject[aggressor->handle()] = friendliness;
+}
+
+void Character::resetFriendliness(float deltaSec) {
+    for (auto& it = m_friendlinessToWorldObject.begin(); it != m_friendlinessToWorldObject.end();) {
+        float friendliness = it->second;
+        if (!it->first.valid()) {
+            it = m_friendlinessToWorldObject.erase(it);
+            continue;
+        }
+        if (it->first->objectType() != WorldObjectType::Ship) {
+            return;
+        }
+        const Ship* ship = static_cast<const Ship*>(it->first.get());
+        if (m_faction->relationTo(ship->character()->faction()).friendliness() > friendliness) {
+            it->second += deltaSec;
+        } else {
+            it->second -= deltaSec;
+        }
+        if (glm::abs(m_faction->relationTo(ship->character()->faction()).friendliness() - it->second) < 0.1f) {
+            it = m_friendlinessToWorldObject.erase(it);
+        } else {
+            it++;
+        }
+    }
 }

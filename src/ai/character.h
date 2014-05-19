@@ -1,8 +1,10 @@
 #pragma once
 
 #include <memory>
+#include <unordered_map>
 
 #include "factions/factionrelation.h"
+#include "utils/handle/handle.h"
 
 
 class AiTask;
@@ -32,18 +34,21 @@ public:
 
     void onKilledBy(WorldObject* worldObject);
 
-    FactionRelationType relationTypeToPlayer();
+    void onAggressionBy(WorldObject* aggressor, float friendlinessModifier);
 
     FactionRelationType relationTypeTo(Faction& other);
+    FactionRelationType relationTypeTo(WorldObject* worldObject);
 
-    void setFriendlinessToPlayer(float friendliness);
+    void setFriendlinessToWorldObject(WorldObject* worldObject, float friendliness);
 
 protected:
     World* m_world;
     Ship& m_ship;
     Faction* m_faction;
     std::shared_ptr<AiTask> m_task;
-    float m_friendlinessToPlayer;
-    void changeFriendlinessToPlayer(float difference);
+
+    void resetFriendliness(float deltaSec);
+    std::unordered_map<Handle<WorldObject>, float> m_friendlinessToWorldObject;
+    void changeFriendlinessToAggressor(WorldObject* aggressor, float difference);
 };
 
