@@ -21,3 +21,4 @@ T* ScriptEngine::get(int key) {
         throw new std::runtime_error("ScriptEngine: invalid type requested");
     }
 }
+

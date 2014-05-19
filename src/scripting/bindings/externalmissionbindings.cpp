@@ -6,6 +6,8 @@
 #include "scripting/gameplayscript.h"
 #include "scripting/elematelua/luawrapper.h"
 
+#include "universe/universe.h"
+
 #include "player.h"
 
 
@@ -25,9 +27,7 @@ apikey ExternalMissionBindings::apiMissionStart(const std::string& name) {
     std::string path = std::string("data/scripts/missions/") + name + ".lua";
 
     auto mission = new Mission(path);
-    m_script.universe()->addElement(mission);
-
-    mission->start();
+    mission->spawn(m_script.universe());
 
     return mission->scriptKey();
 }
@@ -47,9 +47,7 @@ apikey ExternalMissionBindings::createStatePoll(apikey missionKey, MissionState 
     }
 
     auto poll = new MissionStatePoll(*mission, state, createCallback(callback, missionKey));
-
-    m_script.universe()->addElement(poll);
-    m_script.addLocal(poll);
+    poll->spawn(m_script.universe());
 
     return poll->scriptKey();
 }

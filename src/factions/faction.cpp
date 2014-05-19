@@ -2,11 +2,13 @@
 
 #include <cassert>
 
+#include "universe/universe.h"
+
 #include "factionmatrix.h"
 
 
-Faction::Faction(Universe* universe, const std::string& key, const std::string& printName):
-    m_universe(universe),
+Faction::Faction(FactionMatrix& matrix, const std::string& key, const std::string& printName):
+    m_matrix(matrix),
     m_key(key),
     m_printName(printName)
 {
@@ -25,6 +27,6 @@ const std::string& Faction::printName() const {
 }
 
 FactionRelation& Faction::relationTo(Faction& other) {
-    return m_universe->factionMatrix().getRelation(*this, other);
+    return m_matrix.getRelation(*this, other);
 }
 

@@ -16,7 +16,6 @@
 #include "collision/collisiondetector.h"
 
 
-
 WorldTreeQuery::WorldTreeQuery(WorldTree* worldTree, const AbstractShape* shape, const WorldTreeHint& hint, const CollisionFilter* collisionFilter):
     m_worldTree(worldTree),
     m_hint(hint),

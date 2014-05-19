@@ -5,6 +5,8 @@
 #include "collision/collisiondetector.h"
 #include "collision/collisionfilter.h"
 
+#include "universe/sector.h"
+
 #include "voxel/voxel.h"
 #include "voxel/voxeltree.h"
 #include "voxel/voxeltreenode.h"

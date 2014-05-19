@@ -15,6 +15,7 @@
 #include "factions/faction.h"
 #include "factions/factionmatrix.h"
 #include "factions/factionrelation.h"
+#include "universe/sector.h"
 
 
 DefendAreaTask::DefendAreaTask(Squad& squad, std::list<glm::vec3> points, float defendRange) :
@@ -86,7 +87,7 @@ bool DefendAreaTask::isEnemyInRange() {
                 continue;
             }
 
-            if (enemyFaction->relationTo(squadFaction).type() == FactionRelationType::Enemy) {
+            if (enemyFaction->relationTo(*squadFaction).type() == FactionRelationType::Enemy) {
                 m_enemies.push_back(makeHandle(worldObject));
             }
         }

@@ -10,10 +10,7 @@
 #include "worldobject/worldobjectinfo.h"
 
 
-void Wrecker::detectWreckedObjects(std::list<WorldObjectModification>& worldObjectModifications) {
-    m_wreckedObjects.clear();
-    m_newWreckages.clear();
-
+void Wrecker::wreck(std::list<WorldObjectModification>& worldObjectModifications) {
     for (WorldObjectModification& modification : worldObjectModifications) {
         WorldObject* object = modification.worldObject();
 

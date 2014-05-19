@@ -22,12 +22,6 @@ void Script::start() {
     m_state = ScriptState::Running;
 }
 
-void Script::stop() {
-    assert(m_state == ScriptState::Running);
-
-    m_state = ScriptState::Stopped;
-}
-
 ScriptState Script::state() const {
     return m_state;
 }
@@ -45,6 +39,9 @@ LuaWrapper& Script::lua() {
 }
 
 void Script::update(float deltaSec) {
+    if (m_state != ScriptState::Running) {
+        return;
+    }
     if (m_lua->hasFunction("update")) {
         m_lua->call("update", deltaSec);
     }

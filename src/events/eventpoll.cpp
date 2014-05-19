@@ -19,23 +19,21 @@ void EventPoll::setActive(bool active) {
 }
 
 void EventPoll::update(float deltaSec) {
+    if (m_callback.dead()) {
+        scheduleRemoval();
+    }
+
     if (!m_active) {
         return;
     }
+
     if (poll()) {
-        doCallback();
+        m_callback.call();
         specialOnCallback();
     }
-}
-
-void EventPoll::doCallback() {
-    m_callback.call();
 }
 
 void EventPoll::specialOnCallback() {
 
 }
 
-void EventPoll::doSpawn() {
-    universe()->addFunctionalObject();
-}

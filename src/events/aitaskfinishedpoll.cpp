@@ -21,6 +21,6 @@ bool AiTaskFinishedPoll::poll() {
 void AiTaskFinishedPoll::specialOnCallback() {
     EventPoll::specialOnCallback();
     m_fired = true;
-    scheduleFinished();
+    scheduleRemoval();
 }
 

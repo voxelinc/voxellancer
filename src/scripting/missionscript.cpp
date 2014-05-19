@@ -4,6 +4,7 @@
 
 #include "bindings/internalmissionbindings.h"
 
+#include "scripting/scriptengine.h"
 #include "scripting/elematelua/luawrapper.h"
 
 #include "missions/mission.h"
@@ -30,5 +31,10 @@ void MissionScript::onFailure() {
     if (m_lua->hasFunction("onFailure")) {
         m_lua->call("onFailure");
      }
+}
+
+void MissionScript::doSpawn() {
+    m_scriptEngine->registerScriptable(this);
+    // do not register in sector or universe, MissionScripts are managed by their mission
 }
 

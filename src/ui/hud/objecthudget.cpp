@@ -12,6 +12,8 @@
 #include "factions/factionrelation.h"
 #include "factions/factionmatrix.h"
 
+#include "universe/universe.h"
+
 #include "utils/geometryhelper.h"
 
 #include "voxel/voxelclusterbounds.h"

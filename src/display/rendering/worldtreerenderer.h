@@ -10,7 +10,7 @@ public:
     WorldTreeRenderer();
     ~WorldTreeRenderer();
 
-    void draw(const Camera& camera, const WorldTree& tree);
+    void draw(const Camera& camera, WorldTree& tree);
 
 
 protected:

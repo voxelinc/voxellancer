@@ -11,7 +11,8 @@
 #include "particlechecks/voxelparticlefuturecheck.h"
 
 
-VoxelParticleEngine::VoxelParticleEngine():
+VoxelParticleEngine::VoxelParticleEngine(Sector& sector):
+    m_sector(sector),
     m_time(0.0f),
     m_initialized(false),
     m_renderer(new VoxelParticleRenderer(this)),
@@ -26,6 +27,10 @@ VoxelParticleEngine::VoxelParticleEngine():
 }
 
 VoxelParticleEngine::~VoxelParticleEngine() = default;
+
+Sector& VoxelParticleEngine::sector() const {
+    return m_sector;
+}
 
 float VoxelParticleEngine::time() const {
     return m_time;

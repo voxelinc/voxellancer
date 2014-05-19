@@ -1,11 +1,16 @@
 #pragma once
 
+#include <list>
 #include <memory>
+#include <string>
 
 #include "utils/component.h"
 
+#include "functionalobject.h"
 
-class GameObjectManager;
+
+class FactionMatrix;
+template<typename> class GameObjectManager;
 class Player;
 class ScriptEngine;
 class Sector;
@@ -20,6 +25,7 @@ public:
     FactionMatrix& factionMatrix();
 
     void addSector(const std::shared_ptr<Sector>& sector);
+    Sector* sector(const std::string& name);
 
     void addFunctionalObject(FunctionalObject* object);
 

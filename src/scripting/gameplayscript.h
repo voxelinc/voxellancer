@@ -23,16 +23,9 @@ public:
     ScriptEngine& scriptEngine();
     LuaWrapper& luaWrapper();
 
-    /**
-     *  Add a Scriptable to be held by this script. On destruction of the script
-     *  this Scriptable becomes invalid and will be destroyed
-     */
-    void addLocal(Scriptable* scriptable);
-
 
 protected:
     ScriptEngine* m_scriptEngine;
-    std::vector<int> m_locals;
 
     void addGamePlayBindings();
 };

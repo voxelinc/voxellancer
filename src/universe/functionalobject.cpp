@@ -1,4 +1,4 @@
-#include "functionalgameobject.h"
+#include "functionalobject.h"
 
 #include <cassert>
 
@@ -10,7 +10,7 @@ FunctionalObject::FunctionalObject() = default;
 
 FunctionalObject::~FunctionalObject() = default;
 
-void FunctionalObject::spawn() {
+void FunctionalObject::doSpawn() {
     assert(universe());
 
     if (sector()) {

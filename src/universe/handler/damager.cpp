@@ -13,10 +13,7 @@
 #include "player.h"
 
 
-Damager::Damager() :
-    m_playerShipUndestroyable("general.playerShipUndestroyable")
-{
-}
+Damager::Damager() = default;
 
 void Damager::applyDamages(std::list<DamageImpact> &damageImpacts) {
     m_dampedDeadlyDamageImpacts.clear();

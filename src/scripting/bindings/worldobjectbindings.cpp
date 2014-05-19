@@ -19,9 +19,12 @@
 #include "scripting/elematelua/luawrapper.h"
 #include "scripting/gameplayscript.h"
 #include "scripting/scriptcallback.h"
+#include "scripting/scriptengine.h"
+
+#include "universe/sector.h"
+#include "universe/universe.h"
 
 #include "worldobject/ship.h"
-#include "scripting/scriptengine.h"
 
 
 
@@ -90,8 +93,7 @@ int WorldObjectBindings::apiSpawn(apikey worldObjectKey, const std::string& sect
         return -1;
     }
 
-    Sector* sector = m_script.universe().sector(sectorName);
-
+    Sector* sector = m_script.universe()->sector(sectorName);
     worldObject->spawn(sector);
 
     return worldObject->spawnState() == SpawnState::Spawned;
@@ -182,25 +184,27 @@ apikey WorldObjectBindings::apiOnWorldObjectDestroyed(apikey key, const std::str
     }
 
     auto destructionPoll = new WorldObjectDestroyedPoll(worldObject, createCallback(callback, key));
-
-    m_script.universe()->addElement(destructionPoll);
-    m_script.addLocal(destructionPoll);
+    destructionPoll->spawn(m_script.universe());
 
     return destructionPoll->scriptKey();
 }
 
-apikey WorldObjectBindings::apiOnAABBEntered(apikey key, const glm::vec3& llf, const glm::vec3& urb, const std::string& callback) {
+apikey WorldObjectBindings::apiOnAABBEntered(apikey key, const glm::vec3& llf, const glm::vec3& urb, const std::string& sectorName, const std::string& callback) {
     WorldObject* worldObject = m_scriptEngine.get<WorldObject>(key);
 
     if (!worldObject) {
         return -1;
     }
 
-    auto enteredPoll = new AABBEnteredPoll(worldObject, AABB(llf, urb), createCallback(callback, key));
+    Sector* sector = m_script.universe()->sector(sectorName);
 
-    m_script.universe()->addElement(enteredPoll);
-    m_script.addLocal(enteredPoll);
+    if (sector) {
+        auto enteredPoll = new AABBEnteredPoll(worldObject, AABB(llf, urb), createCallback(callback, key));
+        enteredPoll->spawn(sector);
 
-    return enteredPoll->scriptKey();
+        return enteredPoll->scriptKey();
+    } else {
+        return Scriptable::INVALID_KEY;
+    }
 }
 

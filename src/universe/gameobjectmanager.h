@@ -1,6 +1,6 @@
 #pragma once
 
-#include <type_traits>s
+#include <type_traits>
 
 #include <glow/ref_ptr.h>
 
@@ -9,14 +9,14 @@
 
 template<typename GameObjectType>
 class GameObjectManager {
-    static_assert(std::is_base_of<GameObjectType, GameObject>::value, "Needs to be derived from GameObject");
+    static_assert(std::is_base_of<GameObject, GameObjectType>::value, "Needs to be derived from GameObject");
 
 public:
     GameObjectManager();
     virtual ~GameObjectManager();
 
     void addObject(GameObjectType* object);
-    std::list<glow::ref_ptr<GameObjectType>> objects();
+    std::list<glow::ref_ptr<GameObjectType>>& objects();
 
     void update(float deltaSec);
 

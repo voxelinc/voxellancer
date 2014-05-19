@@ -28,13 +28,11 @@ public:
 
 
 protected:
-    VoxelParticleSpawnBase(Sector& sector, const VoxelCluster* creator,
+    VoxelParticleSpawnBase(const VoxelCluster* creator,
                            char* dampeningName,
                            char* angularDampeningName,
                            char* baseForceName,
                            char* angularBaseForceName);
-
-    Sector& m_sector;
 
     const VoxelCluster* m_creator;
 

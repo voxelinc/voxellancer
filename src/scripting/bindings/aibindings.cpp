@@ -18,6 +18,8 @@
 #include "scripting/scriptengine.h"
 #include "scripting/gameplayscript.h"
 
+#include "universe/universe.h"
+
 #include "worldobject/ship.h"
 
 
@@ -51,10 +53,10 @@ std::string AiBindings::apiGetFaction(apikey key) {
         return "";
     }
 
-    return ship->character()->faction() ? ship->character()->faction()->key() : Scriptable::INVALID_KEY;
+    return ship->character()->faction() != nullptr ? ship->character()->faction()->key() : "";
 }
 
-int AiBindings::apiSetFaction(apikey key, const std::string& faction) {
+int AiBindings::apiSetFaction(apikey key, const std::string& factionName) {
     Ship* ship = m_scriptEngine.get<Ship>(key);
 
     if (!ship) {
@@ -62,7 +64,7 @@ int AiBindings::apiSetFaction(apikey key, const std::string& faction) {
         return -1;
     }
 
-    Faction& faction = m_script.universe()->factionMatrix().getFaction(faction);
+    Faction& faction = m_script.universe()->factionMatrix().getFaction(factionName);
     ship->character()->setFaction(&faction);
 
     return 0;
@@ -92,9 +94,7 @@ apikey AiBindings::apiOnAiTaskFinished(apikey key, const std::string& callback) 
     }
 
     auto finishedPoll = new AiTaskFinishedPoll(aiTask, createCallback(callback, key));
-
-    m_script.universe()->addElement(finishedPoll);
-    m_script.addLocal(finishedPoll);
+    finishedPoll->spawn(m_script.universe());
 
     return finishedPoll->scriptKey();
 }

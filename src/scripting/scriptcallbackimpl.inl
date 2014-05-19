@@ -25,6 +25,11 @@ template<typename... Args>
 ScriptCallbackImpl<Args...>::~ScriptCallbackImpl() = default;
 
 template<typename... Args>
+bool ScriptCallbackImpl<Args...>::dead() const {
+    return m_script.valid();
+}
+
+template<typename... Args>
 Handle<Script>& ScriptCallbackImpl<Args...>::script() {
     return m_script;
 }

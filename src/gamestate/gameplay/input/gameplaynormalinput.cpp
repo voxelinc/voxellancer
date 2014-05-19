@@ -13,6 +13,7 @@
 #include "etc/hmd/hmdmanager.h"
 
 #include "gamestate/gamestate.h"
+#include "gamestate/gameplay/gameplay.h"
 
 #include "camera/camerahead.h"
 #include "camera/cameradolly.h"
@@ -29,6 +30,8 @@
 #include "ui/hud/hud.h"
 #include "ui/targetselector.h"
 #include "ui/hud/crosshair.h"
+
+#include "universe/universe.h"
 
 
 
@@ -83,7 +86,7 @@ GamePlayNormalInput::GamePlayNormalInput(GamePlay& gamePlay) :
     m_secondaryInputValues(),
     m_actions(),
 
-    m_inputConfigurator(new InputConfigurator(&m_actions, &m_secondaryInputValues, &m_deadzoneGamepad, &gamePlay.player().hud())),
+    m_inputConfigurator(new InputConfigurator(&m_actions, &m_secondaryInputValues, &m_deadzoneGamepad, &gamePlay.universe().player().hud())),
     m_fireUpdate(false),
     m_rocketUpdate(false),
     m_moveUpdate(0),

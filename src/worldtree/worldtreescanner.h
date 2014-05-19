@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 
 
+class Sector;
 class WorldTree;
 class WorldObject;
 
@@ -23,7 +24,7 @@ public:
     const std::unordered_set<WorldObject*>& lostWorldObjects();
 
     void update(float deltaSec, WorldObject* worldObject);
-    void update(float deltaSec, const glm::vec3& position);
+    void update(float deltaSec, Sector* sector, const glm::vec3& position);
 
     virtual void onFoundWorldObject(WorldObject* worldObject);
     virtual void onLostWorldObject(WorldObject* worldObject);
@@ -41,8 +42,8 @@ protected:
     std::unordered_set<WorldObject*> m_lostWorldObjects;
 
 
-    void update(float deltaSec, WorldObject* worldObject, const glm::vec3& position);
-    void scan(WorldObject* worldObject, const glm::vec3& position);
-    std::unordered_set<WorldObject*> worldObjectsInRange(WorldObject* worldObject, const glm::vec3& position);
+    void update(float deltaSec, WorldObject* worldObject, Sector* sector, const glm::vec3& position);
+    void scan(WorldObject* worldObject, Sector* sector, const glm::vec3& position);
+    std::unordered_set<WorldObject*> worldObjectsInRange(WorldObject* worldObject, Sector* sector, const glm::vec3& position);
 };
 

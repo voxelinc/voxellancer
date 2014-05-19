@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#include "universe/gameobject.h"
+#include "universe/functionalobject.h"
 
 
 class Bindings;
@@ -12,17 +12,16 @@ class LuaWrapper;
 
 enum class ScriptState {
     Idle,
-    Running,
-    Stopped
+    Running
 };
 
 /**
  * Handle to a lua script
  */
-class Script : public GameObject {
+class Script : public FunctionalObject {
 public:
-    explicit Script();
-    ~Script();
+    Script();
+    virtual ~Script();
 
     void start();
     void stop();

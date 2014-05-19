@@ -13,13 +13,16 @@
 #include "scripting/scriptcallback.h"
 #include "scripting/scriptengine.h"
 
-#include "worldobject/worldobject.h"
-
 #include "sound/soundmanager.h"
 #include "sound/sound.h"
 
-#include "player.h"
 #include "ui/hud/hud.h"
+
+#include "universe/universe.h"
+
+#include "worldobject/worldobject.h"
+
+#include "player.h"
 
 
 CommonBindings::CommonBindings(GamePlayScript& script):
@@ -60,23 +63,20 @@ int CommonBindings::apiSetEventActive(apikey eventPoll, bool active) {
     }
 
     poll->setActive(active);
+
     return 0;
 }
 
 apikey CommonBindings::apiCreateSingleShotTimer(const std::string& callback, float delta) {
     auto timer = new SingleShotTimer(delta, createCallback(callback));
-
-    m_script.universe()->addElement(timer);
-    m_script.addLocal(timer);
+    timer->spawn(m_script.universe());
 
     return timer->scriptKey();
 }
 
 apikey CommonBindings::apiCreateLoopingTimer(const std::string& callback, float delta) {
     auto timer = new LoopingTimer(delta, createCallback(callback));
-
-    m_script.universe()->addElement(timer);
-    m_script.addLocal(timer);
+    timer->spawn(m_script.universe());
 
     return timer->scriptKey();
 }

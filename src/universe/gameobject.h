@@ -18,8 +18,8 @@ public:
     GameObject();
     virtual ~GameObject();
 
-    Universe* universe();
-    Sector* sector();
+    Universe* universe() const;
+    Sector* sector() const;
 
     bool removalScheduled() const;
     void scheduleRemoval();

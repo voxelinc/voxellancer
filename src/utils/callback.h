@@ -15,6 +15,8 @@ class Callback {
 public:
     virtual ~Callback();
 
+    bool dead() const;
+
     void call();
 
 

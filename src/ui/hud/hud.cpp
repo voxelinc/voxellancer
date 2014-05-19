@@ -9,6 +9,7 @@
 
 #include <glow/Program.hpp>
 
+#include "camera/camera.h"
 #include "camera/camerahead.h"
 
 #include "collision/collisionfilter.h"
@@ -53,7 +54,8 @@ HUD::HUD(Player* player):
     m_scanner(new WorldTreeScanner()),
     m_elements(new HUDElements(*this)),
     m_drawHud("vfx.drawhud"),
-    m_view(nullptr)
+    m_view(nullptr),
+    m_voxelRenderer(VoxelRenderer::instance())
 {
     m_scanner->setScanRadius(500.0f);
 
@@ -160,7 +162,7 @@ void HUD::update(float deltaSec) {
     m_elements->update(deltaSec);
 }
 
-void HUD::draw() {
+void HUD::draw(const Camera& camera) {
     if (!m_drawHud) {
         return;
     }
@@ -169,7 +171,9 @@ void HUD::draw() {
     glm::vec3 oldLightdir = lightuniform->value();
     lightuniform->set(m_player->cameraHead().orientation() * glm::vec3(0,0,1));
 
+    m_voxelRenderer->prepareDraw(camera);
     m_elements->draw();
+    m_voxelRenderer->afterDraw();
 
     lightuniform->set(oldLightdir);
 }

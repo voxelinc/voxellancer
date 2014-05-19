@@ -1,26 +1,26 @@
 #pragma once
 
 template<typename GameObjectType>
-GameObjectManager::GameObjectManager() {
+GameObjectManager<GameObjectType>::GameObjectManager() {
 
 }
 
 template<typename GameObjectType>
-GameObjectManager::~GameObjectManager() = default;
+GameObjectManager<GameObjectType>::~GameObjectManager() = default;
 
 template<typename GameObjectType>
-void GameObjectManager::addObject(GameObjectType* object) {
-
+void GameObjectManager<GameObjectType>::addObject(GameObjectType* object) {
+    m_objects.push_back(object);
 }
 
 template<typename GameObjectType>
-std::list<glow::ref_ptr<GameObjectType>> GameObjectManager::objects() {
-
+std::list<glow::ref_ptr<GameObjectType>>& GameObjectManager<GameObjectType>::objects() {
+    return m_objects;
 }
 
 template<typename GameObjectType>
-void GameObjectManager::update(float deltaSec) {
-    for (auto& iter = m_objects.begin(); iter != m_objects.end();) {
+void GameObjectManager<GameObjectType>::update(float deltaSec) {
+    for (auto iter = m_objects.begin(); iter != m_objects.end();) {
         GameObjectType* object = *iter;
 
         if (!object->removalScheduled()) {

@@ -32,7 +32,5 @@ protected:
     std::list<WorldObjectModification> m_worldObjectModifications;
 
     DamageImpact dampDamageImpact(DamageImpact &undamped, float factor);
-
-    Property<bool> m_playerShipUndestroyable;
 };
 

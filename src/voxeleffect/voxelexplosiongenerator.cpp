@@ -2,6 +2,8 @@
 
 #include <ctime>
 
+#include "universe/sector.h"
+
 #include "utils/randfloat.h"
 #include "utils/randfloatpool.h"
 #include "utils/randvec3.h"

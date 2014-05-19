@@ -14,7 +14,7 @@ class FactionRelation;
 class FactionMatrix {
 public:
     FactionMatrix();
-    ~FactionMatrix();
+    virtual ~FactionMatrix();
 
     Faction& pirateFaction();
     Faction& policeFaction();
@@ -26,6 +26,7 @@ public:
 
     FactionRelation& getRelation(Faction& factionA, Faction& factionB);
     FactionRelation& getRelationToPlayer(Faction& faction);
+
 
 protected:
     std::unordered_map<std::string, std::shared_ptr<Faction>> m_factions;

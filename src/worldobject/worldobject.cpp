@@ -6,9 +6,13 @@
 #include "resource/clustercache.h"
 
 #include "physics/physics.h"
-#include "worldobject/worldobjectinfo.h"
+
+#include "universe/sector.h"
+
 #include "voxel/voxel.h"
+
 #include "worldobjectcomponents.h"
+#include "worldobjectinfo.h"
 
 
 WorldObject::WorldObject() :

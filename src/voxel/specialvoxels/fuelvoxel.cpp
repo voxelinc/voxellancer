@@ -43,6 +43,6 @@ void FuelVoxel::onDestruction() {
     generator.setForce(0.4f);
     generator.setLifetime(0.9f, 0.4f);
 
-    generator.spawn(sector());
+    generator.spawn(worldObject->sector());
 }
 

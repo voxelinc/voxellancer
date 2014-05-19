@@ -7,7 +7,11 @@
 
 Callback::~Callback() = default;
 
-void Callback::call() {
-    assert(m_impl.get());
-    m_impl.get()->call();
+bool Callback::dead() const {
+    return m_impl->dead();
 }
+
+void Callback::call() {
+    m_impl->call();
+}
+

@@ -9,6 +9,8 @@
 #include "utils/randfloat.h"
 #include "utils/randbool.h"
 
+#include "universe/sector.h"
+
 #include "display/rendering/visuals.h"
 
 #include "voxelparticleengine.h"
@@ -16,7 +18,7 @@
 
 
 VoxelDebrisGenerator::VoxelDebrisGenerator(const VoxelCluster* creator) :
-    VoxelParticleSpawnBase(sector, creator,
+    VoxelParticleSpawnBase(creator,
                            "physics.debrisDirectionalDampening",
                            "physics.debrisAngularDampening",
                            "physics.debrisBaseForce",

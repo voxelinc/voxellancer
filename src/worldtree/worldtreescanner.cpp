@@ -8,6 +8,9 @@
 
 #include "geometry/sphere.h"
 
+#include "universe/sector.h"
+#include "universe/universe.h"
+
 #include "voxel/voxeltreequery.h"
 
 #include "worldobject/worldobject.h"
@@ -47,11 +50,11 @@ const std::unordered_set<WorldObject*>& WorldTreeScanner::worldObjects() {
 }
 
 void WorldTreeScanner::update(float deltaSec, WorldObject* worldObject) {
-    update(deltaSec, worldObject, worldObject->transform().position());
+    update(deltaSec, worldObject, worldObject->sector(), worldObject->transform().position());
 }
 
-void WorldTreeScanner::update(float deltaSec, const glm::vec3& position) {
-    update(deltaSec, nullptr, position);
+void WorldTreeScanner::update(float deltaSec, Sector* sector, const glm::vec3& position) {
+    update(deltaSec, nullptr, sector, position);
 }
 
 const std::unordered_set<WorldObject*>& WorldTreeScanner::foundWorldObjects() {
@@ -70,22 +73,22 @@ void WorldTreeScanner::onLostWorldObject(WorldObject* worldObject) {
 
 }
 
-void WorldTreeScanner::update(float deltaSec, WorldObject* worldObject, const glm::vec3& position) {
+void WorldTreeScanner::update(float deltaSec, WorldObject* worldObject, Sector* sector, const glm::vec3& position) {
     m_foundWorldObjects.clear();
     m_lostWorldObjects.clear();
 
     m_scanCountdown -= deltaSec;
     if(m_scanCountdown < 0) {
         m_scanCountdown = m_scanInterval;
-        scan(worldObject, position);
+        scan(worldObject, sector, position);
     }
 }
 
-void WorldTreeScanner::scan(WorldObject* worldObject, const glm::vec3& position) {
+void WorldTreeScanner::scan(WorldObject* worldObject, Sector* sector, const glm::vec3& position) {
     m_foundWorldObjects.clear();
     m_lostWorldObjects = std::move(m_worldObjects);
 
-    m_worldObjects = worldObjectsInRange(worldObject, position);
+    m_worldObjects = worldObjectsInRange(worldObject, sector, position);
 
     for (WorldObject* worldObject : m_worldObjects) {
         bool existed = m_lostWorldObjects.erase(worldObject) > 0;
@@ -103,12 +106,19 @@ void WorldTreeScanner::scan(WorldObject* worldObject, const glm::vec3& position)
     }
 }
 
-std::unordered_set<WorldObject*> WorldTreeScanner::worldObjectsInRange(WorldObject* worldObject, const glm::vec3& position) {
+std::unordered_set<WorldObject*> WorldTreeScanner::worldObjectsInRange(WorldObject* worldObject, Sector* sector, const glm::vec3& position) {
     std::unordered_set<WorldObject*> result;
     Sphere scanSphere(position, m_scanRadius);
 
-    WorldTreeQuery worldTreeQuery(&worldObject->sector()->worldTree(), &scanSphere, worldObject->collisionDetector().geode()->hint(), &worldObject->collisionFilter());
-    std::unordered_set<WorldTreeGeode*> foundGeodes = worldTreeQuery.nearGeodes();
+    std::unordered_set<WorldTreeGeode*> foundGeodes;
+
+    if (worldObject) {
+        WorldTreeQuery worldTreeQuery(&sector->worldTree(), &scanSphere, worldObject->collisionDetector().geode()->hint(), &worldObject->collisionFilter());
+        foundGeodes = worldTreeQuery.nearGeodes();
+    } else {
+        WorldTreeQuery worldTreeQuery(&sector->worldTree(), &scanSphere, WorldTreeHint());
+        foundGeodes = worldTreeQuery.nearGeodes();
+    }
 
     for (WorldTreeGeode* foundGeode : foundGeodes) {
         WorldObject* worldObject = foundGeode->worldObject();

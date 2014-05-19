@@ -13,10 +13,10 @@ FactionMatrix::FactionMatrix():
     m_factions()
 {
     // create default factions
-    addFaction(std::make_shared<Faction>("player", "Player"));
-    addFaction(std::make_shared<Faction>("pirate", "Pirate"));
-    addFaction(std::make_shared<Faction>("police", "Police"));
-    addFaction(std::make_shared<Faction>("unknown", "Unknown"));
+    addFaction(std::make_shared<Faction>(*this, "player", "Player"));
+    addFaction(std::make_shared<Faction>(*this, "pirate", "Pirate"));
+    addFaction(std::make_shared<Faction>(*this, "police", "Police"));
+    addFaction(std::make_shared<Faction>(*this, "unknown", "Unknown"));
 
     setupRelations();
 }
@@ -43,7 +43,7 @@ Faction& FactionMatrix::getFaction(const std::string& factionName) {
     auto iter = m_factions.find(factionName);
     if (iter == m_factions.end()) {
         glow::warning("FactionMatrix: created non existing faction %;", factionName);
-        addFaction(std::make_shared<Faction>(factionName, factionName));
+        addFaction(std::make_shared<Faction>(*this, factionName, factionName));
         return getFaction(factionName);
     }
     return *iter->second;

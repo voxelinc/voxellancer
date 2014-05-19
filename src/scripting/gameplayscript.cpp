@@ -20,13 +20,7 @@ GamePlayScript::GamePlayScript(ScriptEngine& scriptEngine):
     addGamePlayBindings();
 }
 
-GamePlayScript::~GamePlayScript() {
-    for (int key : m_locals) {
-        if (m_scriptEngine->keyValid(key)) {
-            m_scriptEngine->get<GameObject>(key)->scheduleRemoval();
-        }
-    }
-}
+GamePlayScript::~GamePlayScript() = default;
 
 ScriptEngine& GamePlayScript::scriptEngine() {
     return *m_scriptEngine;
@@ -34,13 +28,6 @@ ScriptEngine& GamePlayScript::scriptEngine() {
 
 LuaWrapper& GamePlayScript::luaWrapper() {
     return *m_lua;
-}
-
-void GamePlayScript::addLocal(Scriptable* scriptable) {
-    assert(m_scriptEngine->keyValid(scriptable->scriptKey()));
-
-    scriptable->setScriptLocal(true);
-    m_locals.push_back(scriptable->scriptKey());
 }
 
 void GamePlayScript::addGamePlayBindings() {

@@ -3,11 +3,13 @@
 #include "gameobject.h"
 
 
-class FunctionalObject {
+class FunctionalObject : public GameObject {
 public:
     FunctionalObject();
     virtual ~FunctionalObject();
 
-    virtual void spawn() override;
+
+protected:
+    virtual void doSpawn() override;
 };
 

@@ -18,6 +18,9 @@
 
 #include "ui/hud/hud.h"
 
+#include "universe/sector.h"
+#include "universe/universe.h"
+
 #include "voxeleffect/voxelparticleengine.h"
 
 #include "worldobject/worldobject.h"
@@ -49,7 +52,7 @@ void GamePlayScene::setWorldTreeRendererEnabled(bool enabled) {
 }
 
 void GamePlayScene::drawImpl(const Camera& camera) const {
-    Sector* sector = m_gamePlay.universe()->player().sector();
+    Sector* sector = m_gamePlay.universe().player().sector();
 
     if (sector) {
         sector->draw(camera);
@@ -59,6 +62,6 @@ void GamePlayScene::drawImpl(const Camera& camera) const {
         }
     }
 
-    m_gamePlay.universe()->player().hud().draw();
+    m_gamePlay.universe().player().hud().draw(camera);
 }
 

@@ -5,6 +5,10 @@
 #include "camera/cameradolly.h"
 #include "camera/camerahead.h"
 
+#include "equipment/hardpoint.h"
+#include "equipment/weapon.h"
+#include "equipment/weapons/gun.h"
+
 #include "factions/factionmatrix.h"
 
 #include "gamestate/game.h"
@@ -18,6 +22,8 @@
 
 #include "worldobject/worldobjectinfo.h"
 
+#include "universe/universe.h"
+
 #include "utils/aimer.h"
 
 #include "physics/physics.h"
@@ -25,9 +31,6 @@
 #include "worldobject/ship.h"
 #include "worldobject/worldobjectcomponents.h"
 
-#include "equipment/hardpoint.h"
-#include "equipment/weapon.h"
-#include "equipment/weapons/gun.h"
 
 
 Player::Player(Universe& universe):
@@ -50,7 +53,7 @@ Ship* Player::ship() {
 void Player::setShip(Ship* ship) {
     m_ship = makeHandle(ship);
     m_sector = m_ship->sector();
-    m_ship->character()->setFaction(m_universe.factionMatrix().playerFaction());
+    m_ship->character()->setFaction(&m_universe.factionMatrix().playerFaction());
     m_ship->info().setShowOnHud(false);
     m_cameraDolly->followWorldObject(ship);
     m_aimer->setWorldObject(ship);
@@ -58,6 +61,10 @@ void Player::setShip(Ship* ship) {
 
 Sector* Player::sector() {
     return m_sector;
+}
+
+Universe& Player::universe() {
+    return m_universe;
 }
 
 void Player::update(float deltaSec) {

@@ -16,6 +16,7 @@
 IntroScene::IntroScene(Intro& intro):
     m_intro(intro),
     m_font(VoxelFont::instance()),
+    m_skybox(new Skybox()),
     m_voxelRenderer(VoxelRenderer::instance())
 {
 
@@ -28,6 +29,8 @@ void IntroScene::update(float deltaSec) {
 }
 
 void IntroScene::drawImpl(const Camera& camera) const {
+    m_skybox->draw(camera);
+
     m_voxelRenderer->program()->setUniform("lightdir", glm::vec3(0, 0, 1));
 
     m_voxelRenderer->prepareDraw(camera, false);

@@ -14,6 +14,11 @@
 #include "universe/universe.h"
 #include "universe/sector.h"
 
+#include "worldobject/ship.h"
+#include "worldobject/worldobjectinfo.h"
+
+#include "player.h"
+
 
 BaseScenario::BaseScenario(Universe* universe) :
     m_universe(universe)
@@ -25,18 +30,16 @@ void BaseScenario::load() {
 
     createUniverse();
     populateUniverse();
-
-    m_universe->scriptEngine().start();
 }
 
 void BaseScenario::createUniverse() {
-    Sector* backen = new Sector("backen", m_universe);
-    Sector* wlf = new Sector("withlesserforce", m_universe);
-    Sector* winterbreeze = new Sector("winterbreeze", m_universe);
+    auto backen = std::make_shared<Sector>("backen", *m_universe);
+    auto wlf = std::make_shared<Sector>("withlesserforce", *m_universe);
+    auto winterbreeze = std::make_shared<Sector>("winterbreeze", *m_universe);
 
     m_universe->addSector(backen);
     m_universe->addSector(wlf);
-    m_universe->addSector(winterbreezeS);
+    m_universe->addSector(winterbreeze);
 }
 
 void BaseScenario::populateUniverse() {
@@ -45,7 +48,7 @@ void BaseScenario::populateUniverse() {
     playership->info().setName("metdelivery");
     playership->spawn(m_universe->sector("backen"));
 
-    m_universe->player().setShip(testCluster);
+    m_universe->player().setShip(playership);
 }
 
 

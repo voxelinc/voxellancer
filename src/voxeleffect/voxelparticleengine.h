@@ -10,6 +10,7 @@
 
 class Player;
 class Camera;
+class Sector;
 struct VoxelParticleData;
 class VoxelParticleSetup;
 class VoxelParticleRenderer;
@@ -20,10 +21,12 @@ class VoxelCluster;
  * Main class for managing and displaying the VoxelParticles of
  * a Sector.
  */
-class VoxelParticleEngine : ContextDependant {
+class VoxelParticleEngine : public ContextDependant {
 public:
-    VoxelParticleEngine();
-    ~VoxelParticleEngine();
+    VoxelParticleEngine(Sector& sector);
+    virtual ~VoxelParticleEngine();
+
+    Sector& sector() const;
 
     float time() const;
 
@@ -42,6 +45,8 @@ public:
 
 
 protected:
+    Sector& m_sector;
+
     float m_time;
     bool m_initialized;
 

@@ -13,7 +13,7 @@ WorldTreeRenderer::WorldTreeRenderer():
 
 WorldTreeRenderer::~WorldTreeRenderer() = default;
 
-void WorldTreeRenderer::draw(const Camera& camera, const WorldTree& tree) {
+void WorldTreeRenderer::draw(const Camera& camera, WorldTree& tree) {
     m_renderer->clear();
 
     WorldTreeNode* root = tree.root();

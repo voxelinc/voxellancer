@@ -11,6 +11,8 @@
 
 #include "voxel/voxelcluster.h"
 
+#include "universe/gameobject.h"
+
 
 class CollisionDetector;
 class EngineVoxel;

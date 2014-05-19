@@ -5,7 +5,7 @@
 
 #include "scripting/scriptable.h"
 
-#include "universe/gameobject.h"
+#include "universe/functionalobject.h"
 
 
 class MissionScript;
@@ -17,12 +17,10 @@ enum class MissionState {
     Succeeded
 };
 
-class Mission : public GameObject {
+class Mission : public FunctionalObject {
 public:
     Mission(const std::string& path);
-    ~Mission();
-
-    void start();
+    virtual ~Mission();
 
     MissionState state() const;
 
@@ -40,16 +38,14 @@ public:
 
     void update(float deltaSec);
 
-    virtual void spawn() override;
-
-
-protected:
-    void over();
-
 
 protected:
     std::string m_scriptPath;
-    std::shared_ptr<MissionScript> m_script;
+    glow::ref_ptr<MissionScript> m_script;
     MissionState m_state;
+
+    void over();
+
+    void doSpawn();
 };
 

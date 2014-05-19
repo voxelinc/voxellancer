@@ -15,7 +15,7 @@ protected:
     virtual void bind() override;
 
     std::string apiGetFaction(apikey ship);
-    int apiSetFaction(apikey ship, const std::string& faction);
+    int apiSetFaction(apikey ship, const std::string& factionName);
     float apiGetFactionRelation(const std::string& factionA, const std::string& factionB);
     int apiSetFactionRelation(const std::string& factionA, const std::string& factionB, float friendliness);
 

@@ -10,8 +10,7 @@
 
 
 ScriptEngine::ScriptEngine():
-    m_nextKey(1),
-    m_running(false)
+    m_nextKey(1)
 {
 }
 
@@ -19,27 +18,6 @@ ScriptEngine::~ScriptEngine() {
     for (auto pair : m_scriptables) {
         pair.second->setScriptKey(Scriptable::INVALID_KEY);
     }
-    m_scripts.clear(); // delete scripts before scriptengine
-}
-
-void ScriptEngine::addScript(std::shared_ptr<Script> script) {
-    m_scripts.push_back(script);
-    if (m_running) {
-        script->start();
-    }
-}
-
-void ScriptEngine::start() {
-    m_running = true;
-    for (std::shared_ptr<Script>& script : m_scripts) {
-        if (script->state() == ScriptState::Idle) {
-            script->start();
-        }
-    }
-}
-
-void ScriptEngine::stop() {
-    m_running = false;
 }
 
 void ScriptEngine::registerScriptable(Scriptable* scriptable) {

@@ -19,6 +19,7 @@ class Mission;
 class MissionSystem;
 class Sector;
 class TargetSelector;
+class Universe;
 
 class Player {
 public:
@@ -29,6 +30,7 @@ public:
     void setShip(Ship *ship);
 
     Sector* sector();
+    Universe& universe();
 
     void update(float deltaSec);
 

@@ -1,25 +1,27 @@
 #include "gameobject.h"
 
+#include "sector.h"
+
 
 GameObject::GameObject():
     m_universe(nullptr),
-    m_sector(nullptr)
+    m_sector(nullptr),
     m_removalScheduled(false)
 {
 }
 
 GameObject::~GameObject() = default;
 
-Universe* GameObject::universe() {
+Universe* GameObject::universe() const {
     return m_universe;
 }
 
-Sector* GameObject::sector() {
+Sector* GameObject::sector() const {
     return m_sector;
 }
 
 bool GameObject::removalScheduled() const {
-    return m_removalScheduled
+    return m_removalScheduled;
 }
 
 void GameObject::scheduleRemoval() {
@@ -38,7 +40,7 @@ void GameObject::spawn(Universe* universe) {
 }
 
 void GameObject::spawn(Sector* sector) {
-    m_universe = sector->universe();
+    m_universe = &sector->universe();
     m_sector = sector;
 
     doSpawn();

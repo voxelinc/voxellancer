@@ -18,6 +18,7 @@ enum class ClickType {
     Selection
 };
 
+class Camera;
 class Player;
 class Hudget;
 class WorldObject;
@@ -31,6 +32,7 @@ class WorldTreeScanner;
 class CrossHair;
 class TextFieldHudget;
 class View;
+class VoxelRenderer;
 
 class HUD {
 public:
@@ -65,7 +67,7 @@ public:
     void onClick(ClickType clickType);
 
     void update(float deltaSec);
-    void draw();
+    void draw(const Camera& camera);
 
     glm::vec3 applyTo(const glm::vec3 &vertex) const;
 
@@ -95,6 +97,7 @@ protected:
 
     std::map<WorldObject*, HUDObjectDelegate*> m_objectDelegates;
 
+    std::shared_ptr<VoxelRenderer> m_voxelRenderer;
 
     void updateScanner(float deltaSec);
     void updateFov();

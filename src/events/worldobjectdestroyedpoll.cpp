@@ -23,6 +23,6 @@ bool WorldObjectDestroyedPoll::poll() {
 void WorldObjectDestroyedPoll::specialOnCallback() {
     EventPoll::specialOnCallback();
     m_fired = true;
-    kill();
+    scheduleRemoval();
 }
 

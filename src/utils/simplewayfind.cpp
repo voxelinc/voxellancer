@@ -7,6 +7,7 @@
 #include "collision/collisionfilter.h"
 #include "collision/collisiondetector.h"
 #include "worldtree/worldtreegeode.h"
+#include "universe/sector.h"
 #include "voxel/voxelclusterbounds.h"
 
 

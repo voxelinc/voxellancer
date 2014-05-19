@@ -14,6 +14,8 @@ public:
     ScriptCallbackImpl(Script& script, const std::string& function, Args... args);
     virtual ~ScriptCallbackImpl();
 
+    virtual bool dead() const override;
+
     virtual void call() override;
 
     Handle<Script>& script();

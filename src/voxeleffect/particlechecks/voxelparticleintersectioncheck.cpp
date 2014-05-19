@@ -6,6 +6,9 @@
 #include "geometry/sphere.h"
 #include "geometry/transform.h"
 
+#include "universe/sector.h"
+#include "universe/universe.h"
+
 #include "voxel/voxelclusterbounds.h"
 
 #include "voxeleffect/voxelparticledata.h"
@@ -32,7 +35,7 @@ bool VoxelParticleIntersectionCheck::isDead(const VoxelParticleData& particleDat
         return false;
     }
 
-    if (m_particleEngine.sector() == m_particleEngine.sector().universe().player().sector()) {
+    if (&m_particleEngine.sector() == m_particleEngine.sector().universe().player().sector()) {
         WorldObject* object = m_particleEngine.sector().universe().player().ship();
 
         if (object) {

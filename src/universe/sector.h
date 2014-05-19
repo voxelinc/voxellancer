@@ -1,27 +1,39 @@
 #pragma once
 
+#include <list>
 #include <memory>
 #include <string>
 
 #include <glm/glm.hpp>
 
+#include <glow/ref_ptr.h>
 
-class FunctionalObject;
+#include "utils/component.h"
+
+#include "worldobject/worldobject.h"
+
+#include "functionalobject.h"
+
+
+class Camera;
 template<typename> class GameObjectManager;
+class SectorLogic;
 class Skybox;
 class Universe;
-class WorldObject;
+class VoxelParticleEngine;
+class VoxelRenderer;
 class WorldTree;
 
 class Sector {
 public:
-    Sector(const std::string& name, Universe* universe);
+    Sector(const std::string& name, Universe& universe);
     virtual ~Sector();
 
     const std::string& name() const;
-    Universe* universe();
+    Universe& universe();
 
     WorldTree& worldTree();
+    VoxelParticleEngine& particleEngine();
 
     std::list<glow::ref_ptr<FunctionalObject>>& functionalObjects();
     std::list<glow::ref_ptr<WorldObject>>& worldObjects();
@@ -36,15 +48,16 @@ public:
 
 protected:
     std::string m_name;
-    Universe* m_universe;
+    Universe& m_universe;
 
-    std::unique_ptr<WorldTree> m_worldTree;
+    Component<WorldTree> m_worldTree;
 
     Component<GameObjectManager<FunctionalObject>> m_functionalObjects;
     Component<GameObjectManager<WorldObject>> m_worldObjects;
 
     Component<Skybox> m_skybox;
     Component<VoxelParticleEngine> m_particleEngine;
+    Component<SectorLogic> m_sectorLogic;
 
     std::shared_ptr<VoxelRenderer> m_voxelRenderer;
     glm::vec3 m_lightDir;

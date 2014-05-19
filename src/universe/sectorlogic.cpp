@@ -1,4 +1,4 @@
-#include "physiclogic.h"
+#include "sectorlogic.h"
 
 #include "sector.h"
 
@@ -25,7 +25,7 @@ void SectorLogic::update(float deltaSecs) {
 
     m_wrecker.wreck(m_damager.worldObjectModifications());
 
-    m_garbageCollector.check(m_world.worldObjects());
+    m_garbageCollector.check(m_sector.worldObjects());
 }
 
  DamageForwarder &SectorLogic::damageForwarder() {

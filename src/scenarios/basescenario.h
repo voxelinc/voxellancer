@@ -2,6 +2,7 @@
 
 
 class GamePlay;
+class Universe;
 
 class BaseScenario {
 public:

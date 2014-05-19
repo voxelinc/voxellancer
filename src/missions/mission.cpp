@@ -6,6 +6,8 @@
 
 #include "ui/hud/hud.h"
 
+#include "universe/universe.h"
+
 #include "player.h"
 
 
@@ -16,16 +18,6 @@ Mission::Mission(const std::string& path):
 }
 
 Mission::~Mission() = default;
-
-void Mission::start() {
-    assert(universe());
-
-    m_state = MissionState::Running;
-    universe()->player().hud().showMissionInfo(
-        m_script->luaWrapper().call<std::string>("missionTitle"),
-        m_script->luaWrapper().call<std::string>("missionCaption")
-    );
-}
 
 MissionState Mission::state() const {
     return m_state;
@@ -50,23 +42,29 @@ void Mission::fail() {
 }
 
 void Mission::update(float deltaSec) {
-
+    m_script->update(deltaSec);
 }
 
-void Mission::spawn() {
+void Mission::doSpawn() {
     assert(universe());
 
-    m_script.reset(new MissionScript(*this, universe()->scriptEngine()));
+    m_script = new MissionScript(*this, universe()->scriptEngine());
     m_script->load(m_scriptPath);
-    universe()->scriptEngine().addScript(m_script);
+    m_script->start();
 
-    universe()->addFunctionalElement(this);
+    universe()->addFunctionalObject(this);
+
+    m_state = MissionState::Running;
+
+    universe()->player().hud().showMissionInfo(
+        m_script->luaWrapper().call<std::string>("missionTitle"),
+        m_script->luaWrapper().call<std::string>("missionCaption")
+    );
 }
 
 void Mission::over() {
-    m_script->stop();
-
-    assert(universe());
-    universe()->removeElement(this);
+    scheduleRemoval();
 }
+
+
 

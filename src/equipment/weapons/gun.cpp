@@ -19,6 +19,8 @@
 
 #include "sound/soundmanager.h"
 
+#include "universe/sector.h"
+
 #include "utils/geometryhelper.h"
 
 #include "voxel/voxelclusterbounds.h"

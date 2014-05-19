@@ -20,7 +20,6 @@ protected:
 
     bool m_entered;
 
-
     virtual bool poll() override;
     virtual void specialOnCallback() override;
 

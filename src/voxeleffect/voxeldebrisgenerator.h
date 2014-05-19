@@ -12,7 +12,7 @@ class VoxelCluster;
 
 class VoxelDebrisGenerator : public VoxelParticleSpawnBase {
 public:
-    VoxelDebrisGenerator(Sector& sector, const VoxelCluster* creator);
+    VoxelDebrisGenerator(const VoxelCluster* creator);
     virtual ~VoxelDebrisGenerator();
 
     void setOrientation(const glm::quat& orientation);

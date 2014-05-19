@@ -91,7 +91,7 @@ void Voxel::onDestruction() {
     WorldObject* worldObject = m_voxelTreeNode->voxelTree()->worldObject();
 
     if (m_voxelTreeNode && worldObject) {
-        VoxelDebrisGenerator generator(*worldObject->sector(), worldObject);
+        VoxelDebrisGenerator generator(worldObject);
 
         generator.setOrientation(worldObject->transform().orientation());
         generator.setPosition(worldObject->transform().applyTo(glm::vec3(m_gridCell)));

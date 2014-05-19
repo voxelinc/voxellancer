@@ -5,10 +5,10 @@
 #include "worldobject/worldobject.h"
 
 
-void Mover::moveWorldObjects(const std::list<WorldObject*>& objects, float deltaSec) {
+void Mover::moveWorldObjects(const std::list<glow::ref_ptr<WorldObject>>& objects, float deltaSec) {
     m_voxelCollisions.clear();
 
-    for (WorldObject* object : objects) {
+    for (glow::ref_ptr<WorldObject> object : objects) {
         std::list<VoxelCollision> &collisions = object->physics().move(deltaSec);
         m_voxelCollisions.splice(m_voxelCollisions.end(), collisions);
     }

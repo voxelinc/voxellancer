@@ -4,13 +4,13 @@
 
 #include "utils/callback.h"
 
-#include "universe/gameobject.h"
+#include "universe/functionalobject.h"
 
 
-class EventPoll: public GameObject {
+class EventPoll: public FunctionalObject {
 public:
     EventPoll(const Callback& callback);
-    virtual ~EventPoll() override;
+    virtual ~EventPoll();
 
     virtual void update(float deltaSec) override;
 
@@ -22,10 +22,7 @@ protected:
     Callback m_callback;
     bool m_active;
 
-    void doCallback();
     virtual bool poll() = 0;
     virtual void specialOnCallback();
-
-    virtual void doSpawn() override;
 };
 
