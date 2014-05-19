@@ -5,6 +5,7 @@
 
 #include "factions/factionrelation.h"
 #include "utils/handle/handle.h"
+#include "utils/handle/handlehash.h"
 
 
 class AiTask;
