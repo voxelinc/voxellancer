@@ -2,6 +2,8 @@
 
 #include <list>
 
+#include <glow/Referenced.h>
+
 #include "geometry/aabb.h"
 
 #include "utils/handle/handle.h"
@@ -12,7 +14,7 @@
 class WorldTreeNode;
 class WorldObject;
 
-class WorldTreeGeode {
+class WorldTreeGeode : public glow::Referenced {
 public:
     WorldTreeGeode(WorldObject* worldObject);
     virtual ~WorldTreeGeode();

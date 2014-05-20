@@ -117,7 +117,7 @@ WorldTreeNode* WorldTreeQuery::getQueryRoot(WorldTreeNode* node) const {
 
 void WorldTreeQuery::query(WorldTreeNode* node, std::function<void(WorldTreeGeode*)> onGeodeInteraction) {
     if(node->isLeaf()) {
-        for (WorldTreeGeode* geode : node->geodes()) {
+        for (glow::ref_ptr<WorldTreeGeode>& geode : node->geodes()) {
             assert(geode->aabb().intersects(node->aabb()));
             assert(geode->worldObject() != nullptr);
 

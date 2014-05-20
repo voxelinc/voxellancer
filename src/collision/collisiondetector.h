@@ -6,6 +6,8 @@
 
 #include <glm/glm.hpp>
 
+#include <glow/ref_ptr.h>
+
 #include "collision/voxelcollision.h"
 
 
@@ -21,7 +23,7 @@ class VoxelTreeNode;
 class CollisionDetector {
 public:
     CollisionDetector(WorldObject& worldObject);
-    ~CollisionDetector();
+    virtual ~CollisionDetector();
 
     void addVoxel(Voxel* voxel);
     void removeVoxel(Voxel* voxel);
@@ -55,7 +57,7 @@ public:
 protected:
     std::unique_ptr<VoxelTree> m_voxelTree;
     WorldObject& m_worldObject;
-    WorldTreeGeode* m_geode;
+    glow::ref_ptr<WorldTreeGeode> m_geode;
     WorldTree* m_worldTree;
     std::list<VoxelCollision> m_collisions;
 

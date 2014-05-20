@@ -4,6 +4,8 @@
 #include <set>
 #include <vector>
 
+#include <glow/ref_ptr.h>
+
 #include "geometry/aabb.h"
 
 #include "utils/handle/handleowner.h"
@@ -33,8 +35,8 @@ public:
     bool active() const;
     void setActive(bool active);
 
-    const std::list<WorldTreeGeode*>& geodes() const;
-    const std::list<WorldTreeNode*>& subnodes() const;
+    std::list<glow::ref_ptr<WorldTreeGeode>>& geodes();
+    std::list<WorldTreeNode*>& subnodes();
 
     bool isLeaf() const;
     bool isEmpty() const;
@@ -57,8 +59,8 @@ protected:
     float m_extent;
     bool m_active;
 
-    std::list<WorldTreeGeode*> m_normalGeodes;
-    std::list<WorldTreeGeode*> m_passiveGeodes;
+    std::list<glow::ref_ptr<WorldTreeGeode>> m_normalGeodes;
+    std::list<glow::ref_ptr<WorldTreeGeode>> m_passiveGeodes;
     std::vector<WorldTreeNode*> m_subnodes;
     std::list<WorldTreeNode*> m_activeSubnodes;
 
@@ -78,7 +80,6 @@ protected:
     void subnodeActivated(WorldTreeNode* subnode);
     void subnodeDeactivated(WorldTreeNode* subnode);
 
-    std::list<WorldTreeGeode*>& geodesList(WorldTreeGeode* geode);
-
+    std::list<glow::ref_ptr<WorldTreeGeode>>& geodesList(WorldTreeGeode* geode);
 };
 

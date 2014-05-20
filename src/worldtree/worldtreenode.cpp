@@ -93,11 +93,11 @@ void WorldTreeNode::setActive(bool active) {
     }
 }
 
-const std::list<WorldTreeGeode*>& WorldTreeNode::geodes() const {
+std::list<glow::ref_ptr<WorldTreeGeode>>& WorldTreeNode::geodes() {
     return m_normalGeodes;
 }
 
-const std::list<WorldTreeNode*>& WorldTreeNode::subnodes() const {
+std::list<WorldTreeNode*>& WorldTreeNode::subnodes() {
     return m_activeSubnodes;
 }
 
@@ -130,10 +130,10 @@ void WorldTreeNode::insert(WorldTreeGeode* geode) {
         assert(isLeaf());
     }
 
-    std::list<WorldTreeGeode*>& geodes = geodesList(geode);
+    std::list<glow::ref_ptr<WorldTreeGeode>>& geodes = geodesList(geode);
 
     if (isLeaf()) {
-        if (std::find(geodes.begin(), geodes.end(), geode) == geodes.end()) {
+        if (std::find(geodes.begin(), geodes.end(), glow::ref_ptr<WorldTreeGeode>(geode)) == geodes.end()) {
             geodes.push_back(geode);
             geode->addIntersectingLeaf(this);
             setActive(true);
@@ -154,7 +154,7 @@ void WorldTreeNode::insert(WorldTreeGeode* geode) {
 
 void WorldTreeNode::remove(WorldTreeGeode* geode) {
     if(isLeaf()) {
-        geodesList(geode).remove(geode);
+        geodesList(geode).remove(glow::ref_ptr<WorldTreeGeode>(geode));
 
         if(isEmpty()) {
             setActive(false);
@@ -195,12 +195,12 @@ void WorldTreeNode::convertToGroup(WorldTreeNode* initialSubnode) {
             m_subnodes[n] = new WorldTreeNode(n, this, subnodeAABB);
         }
 
-        for (WorldTreeGeode* geode : m_normalGeodes) {
+        for (glow::ref_ptr<WorldTreeGeode>& geode : m_normalGeodes) {
             if (geode->aabb().intersects(m_subnodes[n]->aabb())) {
                 moveToSubnode(geode, m_subnodes[n]);
             }
         }
-        for (WorldTreeGeode* geode : m_passiveGeodes) {
+        for (glow::ref_ptr<WorldTreeGeode>& geode : m_passiveGeodes) {
             if (geode->aabb().intersects(m_subnodes[n]->aabb())) {
                 moveToSubnode(geode, m_subnodes[n]);
             }
@@ -232,7 +232,7 @@ void WorldTreeNode::subnodeDeactivated(WorldTreeNode* subnode) {
     }
 }
 
-std::list<WorldTreeGeode*>& WorldTreeNode::geodesList(WorldTreeGeode* geode) {
+std::list<glow::ref_ptr<WorldTreeGeode>>& WorldTreeNode::geodesList(WorldTreeGeode* geode) {
     if (geode->isPassive()) {
         return m_passiveGeodes;
     } else {

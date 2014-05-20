@@ -52,7 +52,7 @@ WorldTree* CollisionDetector::worldTree() {
 }
 
 void CollisionDetector::updateGeode() {
-    if(m_geode != nullptr) {
+    if(m_geode.get() != nullptr) {
         assert(m_worldTree);
 
         m_geode->setAABB(m_worldObject.bounds().aabb());
@@ -61,7 +61,7 @@ void CollisionDetector::updateGeode() {
 }
 
 std::list<VoxelCollision>& CollisionDetector::checkCollisions() {
-    assert(m_geode != nullptr);
+    assert(m_geode.get() != nullptr);
 
     m_collisions.clear();
 
