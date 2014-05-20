@@ -4,6 +4,8 @@
 
 #include "geometry/aabb.h"
 
+#include "utils/handle/handle.h"
+
 #include "worldtreehint.h"
 
 
@@ -31,7 +33,7 @@ public:
 
 
 protected:
-    WorldObject* m_worldObject;
+    Handle<WorldObject> m_worldObject;
     WorldTreeHint m_hint;
     IAABB m_aabb;
     bool m_passive;

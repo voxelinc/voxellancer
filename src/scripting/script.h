@@ -24,7 +24,6 @@ public:
     virtual ~Script();
 
     void start();
-    void stop();
 
     ScriptState state() const;
 

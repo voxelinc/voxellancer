@@ -16,5 +16,6 @@ protected:
 
     virtual void createUniverse();
     virtual void populateUniverse();
+    virtual void startScripts();
 };
 

@@ -21,8 +21,7 @@ CollisionDetector::CollisionDetector(WorldObject& worldObject) :
 {
 }
 
-CollisionDetector::~CollisionDetector() {
-}
+CollisionDetector::~CollisionDetector() = default;
 
 void CollisionDetector::addVoxel(Voxel* voxel) {
     m_voxelTree->insert(voxel);

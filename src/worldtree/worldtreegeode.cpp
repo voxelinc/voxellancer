@@ -2,17 +2,19 @@
 
 #include <cassert>
 
-#include "worldtreenode.h"
-#include "worldobject/worldobject.h"
 #include "collision/collisiondetector.h"
+
 #include "voxel/voxelclusterbounds.h"
+
+#include "worldobject/worldobject.h"
+
+#include "worldtreenode.h"
 
 
 WorldTreeGeode::WorldTreeGeode(WorldObject* worldObject) :
-    m_worldObject(worldObject),
+    m_worldObject(makeHandle(worldObject)),
     m_aabb(worldObject->bounds().aabb()),
-    m_passive(false),
-    m_hint(nullptr)
+    m_passive(false)
 {
     m_worldObject->collisionDetector().setGeode(this);
     if (worldObject->passiveForCollisionDetection()) {
@@ -23,7 +25,8 @@ WorldTreeGeode::WorldTreeGeode(WorldObject* worldObject) :
 WorldTreeGeode::~WorldTreeGeode() = default;
 
 WorldObject* WorldTreeGeode::worldObject() {
-    return m_worldObject;
+    assert(m_worldObject.valid());
+    return m_worldObject.get();
 }
 
 WorldTreeHint& WorldTreeGeode::hint() {

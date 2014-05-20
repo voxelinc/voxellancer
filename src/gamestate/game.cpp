@@ -7,6 +7,8 @@
 
 #include "display/viewer.h"
 
+#include "property/property.h"
+
 #include "utils/statemachine/trigger.h"
 #include "utils/statemachine/triggeredtransition.h"
 
@@ -21,7 +23,7 @@ Game::Game(bool showIntro):
     m_gamePlay(new GamePlay(this)),
     m_intro(new Intro(this))
 {
-    if (showIntro) {
+    if (showIntro && Property<bool>::get("general.showIntro", false)) {
         setInitialSubState(m_intro);
         m_intro->overTrigger().setTarget(new TriggeredTransition(m_intro, m_gamePlay));
     } else {

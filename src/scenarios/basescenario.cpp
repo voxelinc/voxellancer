@@ -9,6 +9,7 @@
 
 #include "resource/worldobjectbuilder.h"
 
+#include "scripting/gameplayscript.h"
 #include "scripting/scriptengine.h"
 
 #include "universe/universe.h"
@@ -30,6 +31,7 @@ void BaseScenario::load() {
 
     createUniverse();
     populateUniverse();
+    startScripts();
 }
 
 void BaseScenario::createUniverse() {
@@ -44,11 +46,17 @@ void BaseScenario::createUniverse() {
 
 void BaseScenario::populateUniverse() {
     Ship *playership = WorldObjectBuilder("pirateheavy").buildShip();
-    playership->transform().setPosition(glm::vec3(0, 0, 10));
+    playership->transform().setPosition(glm::vec3(0, 0, 0));
     playership->info().setName("metdelivery");
     playership->spawn(m_universe->sector("backen"));
 
     m_universe->player().setShip(playership);
 }
 
+void BaseScenario::startScripts() {
+    GamePlayScript* demo = new GamePlayScript(m_universe->scriptEngine());
+    demo->load("data/scripts/scenarios/demo.lua");
+    demo->spawn(m_universe);
+    demo->start();
+}
 
