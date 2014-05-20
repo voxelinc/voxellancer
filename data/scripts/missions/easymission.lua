@@ -19,7 +19,7 @@ function main()
 		task = createFightTask(ship)
 		addFightTaskTarget(task, playerShip())		
 		
-		spawn(ship)
+		spawn(ship, sector(playerShip()))
 		ships[i] = ship
 				
 		onWorldObjectDestroyed(ship, "destroyed")

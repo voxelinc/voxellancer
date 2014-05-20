@@ -41,6 +41,8 @@ void WorldObjectBindings::bind() {
     m_lua.Register("spawn", this, &WorldObjectBindings::apiSpawn);
     m_lua.Register("remove", this, &WorldObjectBindings::apiRemove);
 
+    m_lua.Register("sector", this, &WorldObjectBindings::apiSector);
+
     m_lua.Register("position", this, &WorldObjectBindings::apiPosition);
     m_lua.Register("orientation", this, &WorldObjectBindings::apiOrientation);
     m_lua.Register("setPosition", this, &WorldObjectBindings::apiSetPosition);
@@ -109,6 +111,23 @@ int WorldObjectBindings::apiRemove(apikey worldObjectKey) {
     worldObject->scheduleRemoval();
 
     return 0;
+}
+
+std::string WorldObjectBindings::apiSector(apikey worldObjectKey) {
+    WorldObject* worldObject = m_scriptEngine.get<WorldObject>(worldObjectKey);
+
+    if (!worldObject) {
+        return "";
+    }
+
+    Sector* sector = worldObject->sector();
+
+    if (!sector) {
+        glow::warning() << "WorldObjectBindings: WorldObject '" << worldObject->info().name() << "' is not spawned in a sector";
+        return "";
+    }
+
+    return sector->name();
 }
 
 glm::vec3 WorldObjectBindings::apiOrientation(apikey worldObjectKey) {

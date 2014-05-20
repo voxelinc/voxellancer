@@ -20,6 +20,8 @@ protected:
     int apiSpawn(apikey worldObject, const std::string& sectorName);
     int apiRemove(apikey worldObject);
 
+    std::string apiSector(apikey worldObject);
+
     int apiSetPosition(apikey worldObject, const glm::vec3& position);
     int apiSetOrientation(apikey worldObject, const glm::vec3& orientation);
     glm::vec3 apiPosition(apikey worldObject);

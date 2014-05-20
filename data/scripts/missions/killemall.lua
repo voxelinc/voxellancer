@@ -18,7 +18,7 @@ function main()
 		
 		flyAnywhere(ship)		
 		
-		spawn(ship)
+		spawn(ship, sector(playerShip()))
 		ships[i] = ship
 				
 		onWorldObjectDestroyed(ship, "destroyed")
