@@ -22,6 +22,7 @@ class Skybox;
 class Universe;
 class VoxelParticleEngine;
 class VoxelRenderer;
+class WorldObjectManager;
 class WorldTree;
 
 class Sector {
@@ -53,7 +54,7 @@ protected:
     Component<WorldTree> m_worldTree;
 
     Component<GameObjectManager<FunctionalObject>> m_functionalObjects;
-    Component<GameObjectManager<WorldObject>> m_worldObjects;
+    Component<WorldObjectManager> m_worldObjects;
 
     Component<Skybox> m_skybox;
     Component<VoxelParticleEngine> m_particleEngine;

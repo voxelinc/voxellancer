@@ -32,6 +32,10 @@ WorldTreeGeode* WorldTree::insert(WorldObject* worldObject) {
     return geode;
 }
 
+void WorldTree::remove(WorldObject* worldObject) {
+    remove(worldObject->collisionDetector().geode());
+}
+
 void WorldTree::insert(WorldTreeGeode* geode) {
     if (m_root->aabb().contains(geode->aabb())) {
         m_root->insert(geode);

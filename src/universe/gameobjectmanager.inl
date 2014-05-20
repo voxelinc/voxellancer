@@ -1,9 +1,8 @@
 #pragma once
 
-template<typename GameObjectType>
-GameObjectManager<GameObjectType>::GameObjectManager() {
 
-}
+template<typename GameObjectType>
+GameObjectManager<GameObjectType>::GameObjectManager() = default;
 
 template<typename GameObjectType>
 GameObjectManager<GameObjectType>::~GameObjectManager() = default;
@@ -11,6 +10,7 @@ GameObjectManager<GameObjectType>::~GameObjectManager() = default;
 template<typename GameObjectType>
 void GameObjectManager<GameObjectType>::addObject(GameObjectType* object) {
     m_objects.push_back(object);
+    onObjectAddtition(object);
 }
 
 template<typename GameObjectType>
@@ -28,10 +28,21 @@ void GameObjectManager<GameObjectType>::update(float deltaSec) {
         }
 
         if (object->removalScheduled()) {
+            onObjectRemoval(object);
             iter = m_objects.erase(iter);
         } else {
             ++iter;
         }
     }
+}
+
+template<typename GameObjectType>
+void GameObjectManager<GameObjectType>::onObjectAddtition(GameObjectType* object) {
+
+}
+
+template<typename GameObjectType>
+void GameObjectManager<GameObjectType>::onObjectRemoval(GameObjectType* object) {
+
 }
 

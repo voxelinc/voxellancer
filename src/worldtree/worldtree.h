@@ -14,11 +14,13 @@ class WorldTree
 {
 public:
     WorldTree();
-    ~WorldTree();
+    virtual ~WorldTree();
 
     WorldTreeNode* root();
 
     WorldTreeGeode* insert(WorldObject* worldObject);
+    void remove(WorldObject* worldObject);
+
     void insert(WorldTreeGeode* geode);
     void remove(WorldTreeGeode* geode);
 

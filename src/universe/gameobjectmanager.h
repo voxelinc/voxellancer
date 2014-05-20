@@ -23,6 +23,9 @@ public:
 
 protected:
     std::list<glow::ref_ptr<GameObjectType>> m_objects;
+
+    virtual void onObjectAddtition(GameObjectType* object);
+    virtual void onObjectRemoval(GameObjectType* object);
 };
 
 

@@ -10,9 +10,9 @@
 
 #include "worldtree/worldtree.h"
 
-#include "universe/gameobjectmanager.h"
-
+#include "gameobjectmanager.h"
 #include "sectorlogic.h"
+#include "worldobjectmanager.h"
 
 
 Sector::Sector(const std::string& name, Universe& universe):
@@ -21,7 +21,8 @@ Sector::Sector(const std::string& name, Universe& universe):
     m_particleEngine(*this),
     m_sectorLogic(*this),
     m_voxelRenderer(VoxelRenderer::instance()),
-    m_lightDir(0.3f, 0.5f, 1.0f)
+    m_lightDir(0.3f, 0.5f, 1.0f),
+    m_worldObjects(*this)
 {
 
 }
@@ -58,7 +59,6 @@ void Sector::addFunctionalObject(FunctionalObject* object) {
 
 void Sector::addWorldObject(WorldObject* object) {
     m_worldObjects->addObject(object);
-    m_worldTree->insert(object);
 }
 
 void Sector::update(float deltaSec) {
