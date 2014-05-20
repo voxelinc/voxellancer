@@ -4,13 +4,14 @@
 #include <memory>
 #include <unordered_map>
 
+
 class Script;
 class Scriptable;
 
 /**
  * Main class for accessing scripts during gameplay.
- * The ScriptEngine connects Scripts with the Universe by tunneling events from Universe to the Script
- * and all sorts of actions (Objectcreation, Tasks) back to the Universe.
+ * The ScriptEngine makes Scriptables available to Scripts
+ * via int-Handles
  */
 class ScriptEngine {
 public:

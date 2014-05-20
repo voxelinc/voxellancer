@@ -13,7 +13,8 @@
 
 
 Universe::Universe():
-    m_player(*this)
+    m_player(*this),
+    m_functionalObjects(*this)
 {
 
 }

@@ -1,8 +1,15 @@
 #pragma once
 
+#include "scripting/scriptengine.h"
+
+#include "universe/universe.h"
+
 
 template<typename GameObjectType>
-GameObjectManager<GameObjectType>::GameObjectManager() = default;
+GameObjectManager<GameObjectType>::GameObjectManager(Universe& universe):
+    m_universe(universe)
+{
+}
 
 template<typename GameObjectType>
 GameObjectManager<GameObjectType>::~GameObjectManager() = default;
@@ -10,6 +17,7 @@ GameObjectManager<GameObjectType>::~GameObjectManager() = default;
 template<typename GameObjectType>
 void GameObjectManager<GameObjectType>::addObject(GameObjectType* object) {
     m_objects.push_back(object);
+    m_universe.scriptEngine().registerScriptable(object);
     onObjectAddtition(object);
 }
 
@@ -28,6 +36,7 @@ void GameObjectManager<GameObjectType>::update(float deltaSec) {
         }
 
         if (object->removalScheduled()) {
+            m_universe.scriptEngine().unregisterScriptable(object);
             onObjectRemoval(object);
             iter = m_objects.erase(iter);
         } else {

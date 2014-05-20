@@ -12,6 +12,7 @@
 
 #include "gameobjectmanager.h"
 #include "sectorlogic.h"
+#include "universe.h"
 #include "worldobjectmanager.h"
 
 
@@ -22,6 +23,7 @@ Sector::Sector(const std::string& name, Universe& universe):
     m_sectorLogic(*this),
     m_voxelRenderer(VoxelRenderer::instance()),
     m_lightDir(0.3f, 0.5f, 1.0f),
+    m_functionalObjects(universe),
     m_worldObjects(*this)
 {
 

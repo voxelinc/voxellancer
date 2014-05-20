@@ -1,5 +1,6 @@
 #include "eventpoll.h"
 
+#include <iostream>
 
 EventPoll::EventPoll(const Callback& callback):
     m_callback(callback),

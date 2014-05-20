@@ -50,6 +50,7 @@ void Mission::doSpawn() {
 
     m_script = new MissionScript(*this, universe()->scriptEngine());
     m_script->load(m_scriptPath);
+    m_script->spawn(universe());
     m_script->start();
 
     universe()->addFunctionalObject(this);

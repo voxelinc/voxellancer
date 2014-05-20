@@ -46,9 +46,9 @@ bool CommonBindings::apiValid(apikey key) {
 
 int CommonBindings::apiShowMessage(const std::string& message) {
     m_script.universe()->player().hud().showMissionMessage(message);
+
     return 0;
 }
-
 
 int CommonBindings::apiPlayVoice(const std::string& soundFile) {
     std::shared_ptr<Sound> sound = SoundManager::current()->play(soundFile, glm::vec3(0, 0, -1), true);
