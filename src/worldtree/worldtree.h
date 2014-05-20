@@ -18,7 +18,7 @@ public:
 
     WorldTreeNode* root();
 
-    WorldTreeGeode* insert(WorldObject* worldObject);
+    void insert(WorldObject* worldObject);
     void remove(WorldObject* worldObject);
 
     void insert(WorldTreeGeode* geode);

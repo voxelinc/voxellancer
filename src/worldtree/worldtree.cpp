@@ -22,17 +22,15 @@ WorldTreeNode* WorldTree::root() {
     return m_root;
 }
 
-WorldTreeGeode* WorldTree::insert(WorldObject* worldObject) {
+void WorldTree::insert(WorldObject* worldObject) {
     worldObject->collisionDetector().setWorldTree(this);
-
     WorldTreeGeode* geode = new WorldTreeGeode(worldObject);
 
     insert(geode);
-
-    return geode;
 }
 
 void WorldTree::remove(WorldObject* worldObject) {
+    worldObject->collisionDetector().setWorldTree(nullptr);
     remove(worldObject->collisionDetector().geode());
 }
 
