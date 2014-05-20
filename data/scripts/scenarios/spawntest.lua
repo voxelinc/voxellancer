@@ -24,7 +24,7 @@ function main()
 	while true do
 		z = z + 1
 		setPosition(ship1, vec3(0, 0, z))
-		s = spawn(ship1)
+		s = spawn(ship1, sector(playerShip()))
 		if s then
 			break
 		end		
@@ -41,11 +41,11 @@ function another()
 	print("Spawning another 2 ship")
 	ship0 = createShip('eagle')
 	setPosition(ship0, vec3(-10, 0, anotherZ))
-	spawn(ship0)
+	spawn(ship0, sector(playerShip()))
 	
 	ship1 = createShip('eagle')
 	setPosition(ship1, vec3(10, 0, anotherZ))
-	spawn(ship1)
+	spawn(ship1, sector(playerShip()))
 	
 	anotherZ = anotherZ - 25
 end

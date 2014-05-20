@@ -7,6 +7,6 @@ function action(object)
 	for i = 0, 10 do	
 		s = createShip("basicship")
 		setPosition(s, vec3(p.x - 50 + i * 10, p.y, p.z - 50))
-		spawn(s)
+		spawn(s, sector(playerShip())ba)
 	end
 end

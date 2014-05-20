@@ -5,7 +5,6 @@ function main()
 end
 
 function welcome()
-    showText("Welcome to the Flyto Scenario")
     playVoice("data/sound/mission/youre_awesome.ogg")
 end
 
@@ -16,7 +15,7 @@ function spawnNextShip()
 	setTargetPoint(task, vec3(-20, -20, z))
 	
 	setPosition(ship, vec3(0, 0, -40))
-	spawn(ship)
+	spawn(ship, sector(playerShip()))
 	
 	z = z - 30
 end

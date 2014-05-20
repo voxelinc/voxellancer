@@ -12,7 +12,7 @@ function newShip()
 	
 	otherShip = createShip('eagle')
 	setPosition(otherShip, vec3(x * d - d * width/2, -30 + z * 5, -100 - z * d))
-	spawn(otherShip)
+	spawn(otherShip, sector(playerShip()))
 	
 	count = count + 1
 end

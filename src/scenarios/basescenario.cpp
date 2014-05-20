@@ -58,5 +58,10 @@ void BaseScenario::startScripts() {
     demo->load("data/scripts/scenarios/demo.lua");
     demo->spawn(m_universe);
     demo->start();
+
+    GamePlayScript* timertest = new GamePlayScript(m_universe->scriptEngine());
+    timertest->load("data/scripts/scenarios/timertest.lua");
+    timertest->spawn(m_universe);
+    timertest->start();
 }
 
