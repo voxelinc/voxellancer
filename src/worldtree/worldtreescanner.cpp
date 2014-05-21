@@ -29,6 +29,8 @@ WorldTreeScanner::WorldTreeScanner():
 {
 }
 
+WorldTreeScanner::~WorldTreeScanner() = default;
+
 float WorldTreeScanner::scanInterval() const {
     return m_scanInterval;
 }
@@ -77,18 +79,22 @@ void WorldTreeScanner::update(float deltaSec, WorldObject* worldObject, Sector* 
     m_foundWorldObjects.clear();
     m_lostWorldObjects.clear();
 
+    m_worldObject = worldObject;
+    m_sector = sector;
+    m_position = position;
+
     m_scanCountdown -= deltaSec;
     if(m_scanCountdown < 0) {
         m_scanCountdown = m_scanInterval;
-        scan(worldObject, sector, position);
+        scan();
     }
 }
 
-void WorldTreeScanner::scan(WorldObject* worldObject, Sector* sector, const glm::vec3& position) {
+void WorldTreeScanner::scan() {
     m_foundWorldObjects.clear();
     m_lostWorldObjects = std::move(m_worldObjects);
 
-    m_worldObjects = worldObjectsInRange(worldObject, sector, position);
+    m_worldObjects = worldObjectsInRange();
 
     for (WorldObject* worldObject : m_worldObjects) {
         bool existed = m_lostWorldObjects.erase(worldObject) > 0;
@@ -106,17 +112,17 @@ void WorldTreeScanner::scan(WorldObject* worldObject, Sector* sector, const glm:
     }
 }
 
-std::unordered_set<WorldObject*> WorldTreeScanner::worldObjectsInRange(WorldObject* worldObject, Sector* sector, const glm::vec3& position) {
+std::unordered_set<WorldObject*> WorldTreeScanner::worldObjectsInRange() {
     std::unordered_set<WorldObject*> result;
-    Sphere scanSphere(position, m_scanRadius);
+    Sphere scanSphere(m_position, m_scanRadius);
 
     std::unordered_set<WorldTreeGeode*> foundGeodes;
 
-    if (worldObject) {
-        WorldTreeQuery worldTreeQuery(&sector->worldTree(), &scanSphere, worldObject->collisionDetector().geode()->hint(), &worldObject->collisionFilter());
+    if (m_worldObject) {
+        WorldTreeQuery worldTreeQuery(&m_sector->worldTree(), &scanSphere, m_worldObject->collisionDetector().geode()->hint(), &m_worldObject->collisionFilter());
         foundGeodes = worldTreeQuery.nearGeodes();
     } else {
-        WorldTreeQuery worldTreeQuery(&sector->worldTree(), &scanSphere, WorldTreeHint());
+        WorldTreeQuery worldTreeQuery(&m_sector->worldTree(), &scanSphere, WorldTreeHint());
         foundGeodes = worldTreeQuery.nearGeodes();
     }
 

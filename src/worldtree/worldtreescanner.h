@@ -12,6 +12,7 @@ class WorldObject;
 class WorldTreeScanner {
 public:
     WorldTreeScanner();
+    virtual ~WorldTreeScanner();
 
     float scanInterval() const;
     void setScanInterval(float scanInterval);
@@ -41,9 +42,13 @@ protected:
     std::unordered_set<WorldObject*> m_foundWorldObjects;
     std::unordered_set<WorldObject*> m_lostWorldObjects;
 
+    WorldObject* m_worldObject;
+    Sector* m_sector;
+    glm::vec3 m_position;
+
 
     void update(float deltaSec, WorldObject* worldObject, Sector* sector, const glm::vec3& position);
-    void scan(WorldObject* worldObject, Sector* sector, const glm::vec3& position);
-    std::unordered_set<WorldObject*> worldObjectsInRange(WorldObject* worldObject, Sector* sector, const glm::vec3& position);
+    void scan();
+    std::unordered_set<WorldObject*> worldObjectsInRange();
 };
 
