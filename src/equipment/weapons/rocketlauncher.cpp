@@ -34,7 +34,7 @@ void RocketLauncher::fireAtObject(WorldObject* target) {
         Rocket* rocket = WorldObjectBuilder(projectileName()).buildRocket();
         setupRocket(rocket, target);
 
-        rocket->spawn(hardpoint()->components()->worldObject()->sector());
+        rocket->spawn(*hardpoint()->components()->worldObject()->sector());
         onFired();
     }
 }

@@ -185,7 +185,7 @@ bool WorldObject::doCanSpawnFail() const {
     return true;
 }
 
-bool WorldObject::doCanSpawn(Universe* universe, Sector* sector) const {
+bool WorldObject::doCanSpawn(Universe& universe, Sector* sector) const {
     assert(sector);
     return sector->canAddWorldObject(this);
 }

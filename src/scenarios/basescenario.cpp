@@ -21,7 +21,7 @@
 #include "player.h"
 
 
-BaseScenario::BaseScenario(Universe* universe) :
+BaseScenario::BaseScenario(Universe& universe) :
     m_universe(universe)
 {
 }
@@ -35,31 +35,37 @@ void BaseScenario::load() {
 }
 
 void BaseScenario::createUniverse() {
-    auto backen = std::make_shared<Sector>("backen", *m_universe);
-    auto wlf = std::make_shared<Sector>("withlesserforce", *m_universe);
-    auto winterbreeze = std::make_shared<Sector>("winterbreeze", *m_universe);
+    auto backen = std::make_shared<Sector>("backen", m_universe);
+    auto wlf = std::make_shared<Sector>("withlesserforce", m_universe);
+    auto winterbreeze = std::make_shared<Sector>("winterbreeze", m_universe);
 
-    m_universe->addSector(backen);
-    m_universe->addSector(wlf);
-    m_universe->addSector(winterbreeze);
+    m_universe.addSector(backen);
+    m_universe.addSector(wlf);
+    m_universe.addSector(winterbreeze);
 }
 
 void BaseScenario::populateUniverse() {
     Ship *playership = WorldObjectBuilder("pirateheavy").buildShip();
     playership->transform().setPosition(glm::vec3(0, 0, 0));
     playership->info().setName("metdelivery");
-    playership->spawn(m_universe->sector("backen"));
 
-    m_universe->player().setShip(playership);
+    Sector& sector = *m_universe.sector("backen");
+
+    if (playership->canSpawn(sector)) {
+        playership->spawn(sector);
+        m_universe.player().setShip(playership);
+    } else {
+        glow::warning() << "Failed to spawn playership";
+    }
 }
 
 void BaseScenario::startScripts() {
-    GamePlayScript* demo = new GamePlayScript(m_universe->scriptEngine());
+    GamePlayScript* demo = new GamePlayScript(m_universe.scriptEngine());
     demo->load("data/scripts/scenarios/demo.lua");
     demo->spawn(m_universe);
     demo->start();
 
-    GamePlayScript* timertest = new GamePlayScript(m_universe->scriptEngine());
+    GamePlayScript* timertest = new GamePlayScript(m_universe.scriptEngine());
     timertest->load("data/scripts/scenarios/timertest.lua");
     timertest->spawn(m_universe);
     timertest->start();

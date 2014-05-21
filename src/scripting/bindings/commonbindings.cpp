@@ -69,14 +69,14 @@ int CommonBindings::apiSetEventActive(apikey eventPoll, bool active) {
 
 apikey CommonBindings::apiCreateSingleShotTimer(const std::string& callback, float delta) {
     auto timer = new SingleShotTimer(delta, createCallback(callback));
-    timer->spawn(m_script.universe());
+    timer->spawn(*m_script.universe());
 
     return timer->scriptKey();
 }
 
 apikey CommonBindings::apiCreateLoopingTimer(const std::string& callback, float delta) {
     auto timer = new LoopingTimer(delta, createCallback(callback));
-    timer->spawn(m_script.universe());
+    timer->spawn(*m_script.universe());
 
     return timer->scriptKey();
 }

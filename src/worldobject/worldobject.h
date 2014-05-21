@@ -109,7 +109,7 @@ protected:
 
 
     virtual bool doCanSpawnFail() const override;
-    virtual bool doCanSpawn(Universe* universe, Sector* sector) const override;
+    virtual bool doCanSpawn(Universe& universe, Sector* sector) const override;
     virtual void doSpawn() override;
 };
 

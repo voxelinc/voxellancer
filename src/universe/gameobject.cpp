@@ -36,24 +36,24 @@ bool GameObject::canSpawnFail() const {
     return doCanSpawnFail();
 }
 
-bool GameObject::canSpawn(Universe* universe) const {
+bool GameObject::canSpawn(Universe& universe) const {
     return doCanSpawn(universe, nullptr);
 }
 
-bool GameObject::canSpawn(Sector* sector) const {
-    return doCanSpawn(&sector->universe(), sector);
+bool GameObject::canSpawn(Sector& sector) const {
+    return doCanSpawn(sector.universe(), &sector);
 }
 
-void GameObject::spawn(Universe* universe) {
-    m_universe = universe;
+void GameObject::spawn(Universe& universe) {
+    m_universe = &universe;
     m_sector = nullptr;
 
     doSpawn();
 }
 
-void GameObject::spawn(Sector* sector) {
-    m_universe = &sector->universe();
-    m_sector = sector;
+void GameObject::spawn(Sector& sector) {
+    m_universe = &sector.universe();
+    m_sector = &sector;
 
     doSpawn();
 }
@@ -62,7 +62,7 @@ bool GameObject::doCanSpawnFail() const {
     return false;
 }
 
-bool GameObject::doCanSpawn(Universe* universe, Sector* sector) const {
+bool GameObject::doCanSpawn(Universe& universe, Sector* sector) const {
     return false;
 }
 

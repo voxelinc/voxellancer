@@ -94,7 +94,7 @@ apikey AiBindings::apiOnAiTaskFinished(apikey key, const std::string& callback) 
     }
 
     auto finishedPoll = new AiTaskFinishedPoll(aiTask, createCallback(callback, key));
-    finishedPoll->spawn(m_script.universe());
+    finishedPoll->spawn(*m_script.universe());
 
     return finishedPoll->scriptKey();
 }

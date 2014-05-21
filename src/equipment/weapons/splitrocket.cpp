@@ -141,7 +141,7 @@ void SplitRocket::spawnChildren() {
                 static_cast<Bullet*>(child)->setCreator(m_creator);
             }
 
-            child->spawn(sector());
+            child->spawn(*sector());
         }
     }
 }

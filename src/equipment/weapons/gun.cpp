@@ -73,7 +73,7 @@ void Gun::fireAtPoint(const glm::vec3& point, bool checkFriendlyFire) {
     Bullet *bullet =  WorldObjectBuilder(projectileName()).buildBullet();
     setupBullet(bullet, point);
 
-    bullet->spawn(m_hardpoint->components()->worldObject()->sector());
+    bullet->spawn(*m_hardpoint->components()->worldObject()->sector());
 
     SoundManager::current()->play(fireSound(), hardpoint()->voxel()->position());
 

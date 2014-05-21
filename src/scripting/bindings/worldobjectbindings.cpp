@@ -100,11 +100,12 @@ int WorldObjectBindings::apiSpawn(apikey worldObjectKey, const std::string& sect
         return false;
     }
 
-    if (worldObject->canSpawn(sector)) {
-        worldObject->spawn(sector);
-        return true;
+    bool canSpawn = worldObject->canSpawn(*sector);
+
+    if (canSpawn) {
+        worldObject->spawn(*sector);
     } else {
-        return false;
+        glow::warning() << "WorldObjectBindings: Failed to spawn '" << worldObject->info().name() << "'";
     }
 }
 
@@ -210,7 +211,7 @@ apikey WorldObjectBindings::apiOnWorldObjectDestroyed(apikey key, const std::str
     }
 
     auto destructionPoll = new WorldObjectDestroyedPoll(worldObject, createCallback(callback, key));
-    destructionPoll->spawn(m_script.universe());
+    destructionPoll->spawn(*m_script.universe());
 
     return destructionPoll->scriptKey();
 }
@@ -226,7 +227,7 @@ apikey WorldObjectBindings::apiOnAABBEntered(apikey key, const glm::vec3& llf, c
 
     if (sector) {
         auto enteredPoll = new AABBEnteredPoll(worldObject, AABB(llf, urb), createCallback(callback, key));
-        enteredPoll->spawn(sector);
+        enteredPoll->spawn(*sector);
 
         return enteredPoll->scriptKey();
     } else {

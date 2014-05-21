@@ -4,8 +4,6 @@ function main()
     local normandy = createShip("normandy")
     setPosition(normandy, vec3(50, 100, -170))
     setOrientation(normandy, vec3(90, 0, 50))
-    print("PlayerShip: ", playerShip())
-    print("PlayerSector: ", sector(playerShip()))
     spawn(normandy, sector(playerShip()))
 end
 

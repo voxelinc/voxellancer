@@ -117,7 +117,7 @@ void GamePlay::loadScenario(int i) {
 
     switch (i) {
     default:
-        m_scenario.reset(new BaseScenario(m_universe.get()));
+        m_scenario.reset(new BaseScenario(*m_universe.get()));
     }
 
     m_scenario->load();

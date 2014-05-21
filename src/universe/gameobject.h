@@ -28,11 +28,11 @@ public:
 
     bool canSpawnFail() const;
 
-    bool canSpawn(Universe* universe) const;
-    bool canSpawn(Sector* sector) const;
+    bool canSpawn(Universe& universe) const;
+    bool canSpawn(Sector& sector) const;
 
-    void spawn(Universe* universe);
-    void spawn(Sector* sector);
+    void spawn(Universe& universe);
+    void spawn(Sector& sector);
 
 
 protected:
@@ -42,7 +42,7 @@ protected:
 
 
     virtual bool doCanSpawnFail() const;
-    virtual bool doCanSpawn(Universe* universe, Sector* sector) const;
+    virtual bool doCanSpawn(Universe& universe, Sector* sector) const;
 
     virtual void doSpawn() = 0;
 };
