@@ -1,5 +1,7 @@
 #include "sector.h"
 
+#include <stdexcept>
+
 #include <glow/Program.h>
 
 #include "collision/collisiondetector.h"
@@ -64,23 +66,27 @@ void Sector::addFunctionalObject(FunctionalObject* object) {
     m_functionalObjects->addObject(object);
 }
 
-bool Sector::addWorldObject(WorldObject* object) {
-    m_worldTree->insert(object);
-    std::list<VoxelCollision> collisions = object->collisionDetector().checkCollisions();
-    m_worldTree->remove(object);
+bool Sector::canAddWorldObject(const WorldObject* _object) const {
+    /*
+     * Acquire a mutable pointer to the tree and object - this shouldn't hurt as insert(object);
+     * remove(object); leaves them unaffected in the end
+     */
+    WorldTree* tree = const_cast<WorldTree*>(m_worldTree.get());
+    WorldObject* object = const_cast<WorldObject*>(_object);
 
-    if (collisions.empty()) {
+    tree->insert(object);
+    std::list<VoxelCollision> collisions = object->collisionDetector().checkCollisions();
+    tree->remove(object);
+
+    return collisions.empty();
+}
+
+void Sector::addWorldObject(WorldObject* object) {
+    if (canAddWorldObject(object)) {
         object->setSpawnState(SpawnState::Spawned);
         m_worldObjects->addObject(object);
-
-        return true;
     } else {
-        glow::warning("Failed to spawn %;", object->info().name());
-
-        object->setSpawnState(SpawnState::Rejected);
-        object->onSpawnFail();
-
-        return false;
+        throw std::runtime_error("Failed to spawn '" + object->info().name() + "'");
     }
 }
 

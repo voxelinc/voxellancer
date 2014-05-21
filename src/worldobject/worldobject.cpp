@@ -181,8 +181,17 @@ bool WorldObject::areCockpitVoxelsDestroyed() {
     return m_cockpitVoxelsDestroyed;
 }
 
-bool WorldObject::doSpawn() {
+bool WorldObject::doCanSpawnFail() const {
+    return true;
+}
+
+bool WorldObject::doCanSpawn(Universe* universe, Sector* sector) const {
+    assert(sector);
+    return sector->canAddWorldObject(this);
+}
+
+void WorldObject::doSpawn() {
     assert(sector());
-    return sector()->addWorldObject(this);
+    sector()->addWorldObject(this);
 }
 

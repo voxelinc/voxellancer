@@ -9,8 +9,13 @@ Component<T>::Component(Args&... args):
 }
 
 template<typename T>
-T& Component<T>::get() {
-    return *m_value;
+T* Component<T>::get() {
+    return m_value.get();
+}
+
+template<typename T>
+const T* Component<T>::get() const {
+    return m_value.get();
 }
 
 template<typename T>

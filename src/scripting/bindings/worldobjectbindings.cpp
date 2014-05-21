@@ -90,15 +90,22 @@ apikey WorldObjectBindings::apiCreateWorldObject(const std::string& name) {
 
 int WorldObjectBindings::apiSpawn(apikey worldObjectKey, const std::string& sectorName) {
     WorldObject* worldObject = m_scriptEngine.get<WorldObject>(worldObjectKey);
-
     if (!worldObject) {
         return -1;
     }
 
     Sector* sector = m_script.universe()->sector(sectorName);
-    worldObject->spawn(sector);
+    if (!sector) {
+        glow::warning() << "WorldObjectBindings: No such sector '"  << sectorName << "'";
+        return false;
+    }
 
-    return worldObject->spawnState() == SpawnState::Spawned;
+    if (worldObject->canSpawn(sector)) {
+        worldObject->spawn(sector);
+        return true;
+    } else {
+        return false;
+    }
 }
 
 int WorldObjectBindings::apiRemove(apikey worldObjectKey) {

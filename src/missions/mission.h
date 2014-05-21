@@ -46,6 +46,6 @@ protected:
 
     void over();
 
-    virtual bool doSpawn() override;
+    virtual void doSpawn() override;
 };
 

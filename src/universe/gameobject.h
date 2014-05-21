@@ -26,8 +26,13 @@ public:
 
     virtual void update(float deltaSecs);
 
-    bool spawn(Universe* universe);
-    bool spawn(Sector* sector);
+    bool canSpawnFail() const;
+
+    bool canSpawn(Universe* universe) const;
+    bool canSpawn(Sector* sector) const;
+
+    void spawn(Universe* universe);
+    void spawn(Sector* sector);
 
 
 protected:
@@ -35,6 +40,10 @@ protected:
     Sector* m_sector;
     bool m_removalScheduled;
 
-    virtual bool doSpawn() = 0;
+
+    virtual bool doCanSpawnFail() const;
+    virtual bool doCanSpawn(Universe* universe, Sector* sector) const;
+
+    virtual void doSpawn() = 0;
 };
 

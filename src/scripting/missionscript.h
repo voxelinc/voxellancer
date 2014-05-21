@@ -17,6 +17,6 @@ public:
 protected:
     Mission& m_mission;
 
-    virtual bool doSpawn() override;
+    virtual void doSpawn() override;
 };
 

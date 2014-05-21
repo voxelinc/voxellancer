@@ -9,7 +9,8 @@ public:
     template<typename... Args>
     Component(Args&... args);
 
-    T& get();
+    T* get();
+    const T* get() const;
 
     operator T&();
 

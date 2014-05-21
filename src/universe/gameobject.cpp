@@ -32,17 +32,37 @@ void GameObject::update(float deltaSecs) {
 
 }
 
-bool GameObject::spawn(Universe* universe) {
+bool GameObject::canSpawnFail() const {
+    return doCanSpawnFail();
+}
+
+bool GameObject::canSpawn(Universe* universe) const {
+    return doCanSpawn(universe, nullptr);
+}
+
+bool GameObject::canSpawn(Sector* sector) const {
+    return doCanSpawn(&sector->universe(), sector);
+}
+
+void GameObject::spawn(Universe* universe) {
     m_universe = universe;
     m_sector = nullptr;
 
-    return doSpawn();
+    doSpawn();
 }
 
-bool GameObject::spawn(Sector* sector) {
+void GameObject::spawn(Sector* sector) {
     m_universe = &sector->universe();
     m_sector = sector;
 
-    return doSpawn();
+    doSpawn();
+}
+
+bool GameObject::doCanSpawnFail() const {
+    return false;
+}
+
+bool GameObject::doCanSpawn(Universe* universe, Sector* sector) const {
+    return false;
 }
 

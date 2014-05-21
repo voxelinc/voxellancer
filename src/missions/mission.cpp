@@ -49,7 +49,7 @@ void Mission::over() {
     scheduleRemoval();
 }
 
-bool Mission::doSpawn() {
+void Mission::doSpawn() {
     assert(universe());
 
     m_script = new MissionScript(*this, universe()->scriptEngine());
@@ -65,8 +65,6 @@ bool Mission::doSpawn() {
         m_script->luaWrapper().call<std::string>("missionTitle"),
         m_script->luaWrapper().call<std::string>("missionCaption")
     );
-
-    return true;
 }
 
 

@@ -10,7 +10,7 @@ FunctionalObject::FunctionalObject() = default;
 
 FunctionalObject::~FunctionalObject() = default;
 
-bool FunctionalObject::doSpawn() {
+void FunctionalObject::doSpawn() {
     assert(universe());
 
     if (sector()) {
@@ -18,7 +18,5 @@ bool FunctionalObject::doSpawn() {
     } else {
         universe()->addFunctionalObject(this);
     }
-
-    return true;
 }
 
