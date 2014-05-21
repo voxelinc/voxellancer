@@ -33,8 +33,10 @@ void MissionScript::onFailure() {
      }
 }
 
-void MissionScript::doSpawn() {
+bool MissionScript::doSpawn() {
     m_scriptEngine->registerScriptable(this);
     // do not register in sector or universe, MissionScripts are managed by their mission
+
+    return true;
 }
 

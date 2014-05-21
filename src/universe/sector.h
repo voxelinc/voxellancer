@@ -40,7 +40,7 @@ public:
     std::list<glow::ref_ptr<WorldObject>>& worldObjects();
 
     void addFunctionalObject(FunctionalObject* object);
-    void addWorldObject(WorldObject* object);
+    bool addWorldObject(WorldObject* object);
 
     void update(float deltaSec);
 

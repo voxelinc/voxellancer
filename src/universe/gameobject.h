@@ -26,8 +26,8 @@ public:
 
     virtual void update(float deltaSecs);
 
-    void spawn(Universe* universe);
-    void spawn(Sector* sector);
+    bool spawn(Universe* universe);
+    bool spawn(Sector* sector);
 
 
 protected:
@@ -35,6 +35,6 @@ protected:
     Sector* m_sector;
     bool m_removalScheduled;
 
-    virtual void doSpawn() = 0;
+    virtual bool doSpawn() = 0;
 };
 

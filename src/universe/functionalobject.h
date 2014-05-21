@@ -10,6 +10,6 @@ public:
 
 
 protected:
-    virtual void doSpawn() override;
+    virtual bool doSpawn() override;
 };
 

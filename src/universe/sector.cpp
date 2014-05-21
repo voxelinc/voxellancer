@@ -2,11 +2,16 @@
 
 #include <glow/Program.h>
 
+#include "collision/collisiondetector.h"
+#include "collision/voxelcollision.h"
+
 #include "display/rendering/skybox.h"
 
 #include "voxel/voxelrenderer.h"
 
 #include "voxeleffect/voxelparticleengine.h"
+
+#include "worldobject/worldobjectinfo.h"
 
 #include "worldtree/worldtree.h"
 
@@ -59,8 +64,24 @@ void Sector::addFunctionalObject(FunctionalObject* object) {
     m_functionalObjects->addObject(object);
 }
 
-void Sector::addWorldObject(WorldObject* object) {
-    m_worldObjects->addObject(object);
+bool Sector::addWorldObject(WorldObject* object) {
+    m_worldTree->insert(object);
+    std::list<VoxelCollision> collisions = object->collisionDetector().checkCollisions();
+    m_worldTree->remove(object);
+
+    if (collisions.empty()) {
+        object->setSpawnState(SpawnState::Spawned);
+        m_worldObjects->addObject(object);
+
+        return true;
+    } else {
+        glow::warning("Failed to spawn %;", object->info().name());
+
+        object->setSpawnState(SpawnState::Rejected);
+        object->onSpawnFail();
+
+        return false;
+    }
 }
 
 void Sector::update(float deltaSec) {

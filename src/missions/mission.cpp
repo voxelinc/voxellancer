@@ -45,7 +45,11 @@ void Mission::update(float deltaSec) {
     m_script->update(deltaSec);
 }
 
-void Mission::doSpawn() {
+void Mission::over() {
+    scheduleRemoval();
+}
+
+bool Mission::doSpawn() {
     assert(universe());
 
     m_script = new MissionScript(*this, universe()->scriptEngine());
@@ -61,11 +65,8 @@ void Mission::doSpawn() {
         m_script->luaWrapper().call<std::string>("missionTitle"),
         m_script->luaWrapper().call<std::string>("missionCaption")
     );
-}
 
-void Mission::over() {
-    scheduleRemoval();
+    return true;
 }
-
 
 

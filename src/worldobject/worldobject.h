@@ -108,6 +108,6 @@ protected:
     SpawnState m_spawnState;
 
 
-    virtual void doSpawn() override;
+    virtual bool doSpawn() override;
 };
 

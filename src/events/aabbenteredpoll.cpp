@@ -31,8 +31,10 @@ void AABBEnteredPoll::specialOnCallback() {
     m_entered = true;
 }
 
-void AABBEnteredPoll::doSpawn() {
+bool AABBEnteredPoll::doSpawn() {
     assert(sector());
     sector()->addFunctionalObject(this);
+
+    return true;
 }
 
