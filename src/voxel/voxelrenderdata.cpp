@@ -28,6 +28,7 @@ VoxelRenderData::VoxelRenderData(std::unordered_map<glm::ivec3, Voxel*> &voxel) 
     m_voxel(voxel),
     m_isDirty(true),
     m_bufferSize(0),
+    m_opaqueCount(0),
     m_transparentCount(0)
 {
 
@@ -77,6 +78,7 @@ void VoxelRenderData::updateBuffer() {
     assert(voxelData != nullptr);
 
     m_transparentCount = 0;
+    m_opaqueCount = 0;
     int opaqueCursor = 0; // counts from front, opaque voxels
     int transparentCursor = m_bufferSize - 1; // counts from back, transparent voxels
     for (auto& pair : m_voxel) {
@@ -84,9 +86,12 @@ void VoxelRenderData::updateBuffer() {
         assert(voxel != nullptr);
         uint32_t color = voxel->visuals().color();
         uint32_t faces = calculateFaces(voxel);
+        if (faces == 0x3F) // this voxel has no visible face
+            continue;
         VoxelData data = VoxelData{ glm::vec3(voxel->gridCell()), ColorHelper::flipColorForGPU(color), voxel->visuals().emissiveness(), faces };
         if ((color & 0x000000FF) == 0xFF) {
             voxelData[opaqueCursor++] = data;
+            m_opaqueCount++;
         } else {
             voxelData[transparentCursor--] = data;
             m_transparentCount++;
@@ -120,7 +125,7 @@ int VoxelRenderData::opaqueVoxelCount() {
     if (m_isDirty) {
         updateBuffer();
     }
-    return m_voxel.size() - m_transparentCount;
+    return m_opaqueCount;
 }
 
 int VoxelRenderData::transparentVoxelCount() {

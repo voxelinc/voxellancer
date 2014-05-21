@@ -34,6 +34,7 @@ protected:
     std::unordered_map<glm::ivec3, Voxel*> &m_voxel;
     bool m_isDirty;
     int m_bufferSize;
+    int m_opaqueCount;
     int m_transparentCount;
 
     glow::ref_ptr<glow::Buffer> m_voxelDataBuffer;
