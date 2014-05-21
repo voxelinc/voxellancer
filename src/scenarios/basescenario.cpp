@@ -12,6 +12,7 @@
 #include "scripting/gameplayscript.h"
 #include "scripting/scriptengine.h"
 
+#include "universe/jumpgate.h"
 #include "universe/universe.h"
 #include "universe/sector.h"
 
@@ -42,6 +43,18 @@ void BaseScenario::createUniverse() {
     m_universe.addSector(backen);
     m_universe.addSector(wlf);
     m_universe.addSector(winterbreeze);
+
+    glow::ref_ptr<Jumpgate> backenJumpgate(WorldObjectBuilder("jumpgate").buildJumpgate());
+    glow::ref_ptr<Jumpgate> winterbreezeJumpgate(WorldObjectBuilder("jumpgate").buildJumpgate());
+
+    backenJumpgate->setBuddy(winterbreezeJumpgate);
+    winterbreezeJumpgate->setBuddy(backenJumpgate);
+
+    backenJumpgate->transform().setPosition(glm::vec3(-60, 0, -160));
+    winterbreezeJumpgate->transform().setPosition(glm::vec3(-60, 0, -160));
+
+    backenJumpgate->spawn(*backen);
+    winterbreezeJumpgate->spawn(*winterbreeze);
 }
 
 void BaseScenario::populateUniverse() {

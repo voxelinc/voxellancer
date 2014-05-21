@@ -4,6 +4,7 @@
 
 
 class Bullet;
+class Jumpgate;
 class Rocket;
 class Ship;
 class VoxelCluster;
@@ -22,7 +23,9 @@ public:
     Bullet* buildBullet();
     Rocket* buildRocket();
     Ship* buildShip();
+    Jumpgate* buildJumpgate();
     WorldObject* buildWorldObject();
+
 
 
 

@@ -16,6 +16,8 @@
 #include "equipment/weapons/rocket.h"
 #include "equipment/weapons/splitrocket.h"
 
+#include "universe/jumpgate.h"
+
 #include "worldobject/worldobjectinfo.h"
 #include "worldobject/ship.h"
 #include "worldobject/worldobject.h"
@@ -40,6 +42,8 @@ WorldObject* WorldObjectBuilder::build() {
         return buildRocket();
     } else if(type == "ship") {
         return buildShip();
+    } else if(type == "jumpgate") {
+        return buildJumpgate();
     } else if(type == "other") {
         return buildWorldObject();
     } else {
@@ -95,6 +99,10 @@ Ship* WorldObjectBuilder::buildShip() {
         glow::warning("WorldObjectBuilder: ship %; has no cockpit voxel(s)", m_name);
     }
     return ship;
+}
+
+Jumpgate* WorldObjectBuilder::buildJumpgate() {
+    return makeWorldObject<Jumpgate>();
 }
 
 WorldObject* WorldObjectBuilder::buildWorldObject() {
