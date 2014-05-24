@@ -149,7 +149,7 @@ void Character::changeFriendlinessToAggressor(WorldObject* aggressor, float diff
 }
 
 void Character::resetFriendliness(float deltaSec) {
-    for (auto& it = m_friendlinessToWorldObject.begin(); it != m_friendlinessToWorldObject.end();) {
+    for (auto it = m_friendlinessToWorldObject.begin(); it != m_friendlinessToWorldObject.end();) {
         float friendliness = it->second;
         if (!it->first.valid()) {
             it = m_friendlinessToWorldObject.erase(it);
