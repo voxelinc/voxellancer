@@ -110,7 +110,7 @@ void SplitRocket::split() {
     spawnChildren();
     spawnExplosion();
 
-    scheduleRemoval();
+    unspawn();
 }
 
 void SplitRocket::spawnChildren() {

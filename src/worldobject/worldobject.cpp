@@ -23,7 +23,6 @@ WorldObject::WorldObject() :
     m_components(new WorldObjectComponents(this)),
     m_crucialVoxel(nullptr),
     m_collisionFieldOfDamage(glm::half_pi<float>()),
-    m_spawnState(SpawnState::None),
     m_collisionFilter(new CollisionFilter(this)),
     m_crucialVoxelDestroyed(false),
     m_cockpitVoxelsDestroyed(false)
@@ -40,14 +39,6 @@ WorldObject::~WorldObject() = default;
 
 WorldObjectType WorldObject::objectType() const {
     return WorldObjectType::Other;
-}
-
-SpawnState WorldObject::spawnState() const {
-    return m_spawnState;
-}
-
-void WorldObject::setSpawnState(SpawnState spawnState) {
-    m_spawnState = spawnState;
 }
 
 CollisionDetector& WorldObject::collisionDetector() {
@@ -194,4 +185,17 @@ void WorldObject::doSpawn() {
     assert(sector());
     sector()->addWorldObject(this);
 }
+
+void WorldObject::doUnspawn() {
+    assert(sector());
+    sector()->removeWorldObject(this);
+}
+
+void WorldObject::doWarp(Sector& sector) {
+    assert(this->sector());
+    this->sector()->removeWorldObject(this);
+    spawn(sector);
+}
+
+
 

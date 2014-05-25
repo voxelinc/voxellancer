@@ -12,7 +12,7 @@ function newShip()
 	
 	otherShip = createShip('eagle')
 	setPosition(otherShip, vec3(x * distance - distance * width/2, -30 + z * 5, -100 - z * distance))
-	spawn(otherShip, sector(playerShip()))
+	spawn(otherShip, "backen")
     
     task = createFlyToTask(otherShip)	
 	setTargetPoint(task, vec3(-20 + distance*5000, -20, -100 - z*distance*13))

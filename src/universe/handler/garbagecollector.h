@@ -5,10 +5,18 @@
 
 #include <glow/ref_ptr.h>
 
+
+class Sector;
 class WorldObject;
 
-class GarbageCollector {
+class GarbageCollector final {
 public:
-    void check(std::list<glow::ref_ptr<WorldObject>>& objects);
+    GarbageCollector(Sector& sector);
+
+    void check();
+
+
+protected:
+    Sector& m_sector;
 };
 

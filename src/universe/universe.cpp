@@ -49,6 +49,10 @@ void Universe::addFunctionalObject(FunctionalObject* object) {
     m_functionalObjects->addObject(object);
 }
 
+void Universe::removeFunctionalObject(FunctionalObject* object) {
+    m_functionalObjects->removeObject(object);
+}
+
 void Universe::update(float deltaSec) {
     m_functionalObjects->update(deltaSec);
 

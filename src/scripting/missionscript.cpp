@@ -38,3 +38,7 @@ void MissionScript::doSpawn() {
     // do not register in sector or universe, MissionScripts are managed by their mission
 }
 
+void MissionScript::doUnspawn() {
+    m_scriptEngine->unregisterScriptable(this);
+}
+

@@ -2,6 +2,8 @@
 
 #include <glm/glm.hpp>
 
+#include <glow/ref_ptr.h>
+
 
 class Voxel;
 class WorldObject;
@@ -27,7 +29,7 @@ public:
 
 
 protected:
-    WorldObject* m_worldObject;
+    glow::ref_ptr<WorldObject> m_worldObject;
     Voxel* m_voxel;
     glm::vec3 m_damageVec;
     float m_fieldOfDamage;

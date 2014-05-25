@@ -116,7 +116,7 @@ int WorldObjectBindings::apiRemove(apikey worldObjectKey) {
         return -1;
     }
 
-    worldObject->scheduleRemoval();
+    worldObject->unspawn();
 
     return 0;
 }

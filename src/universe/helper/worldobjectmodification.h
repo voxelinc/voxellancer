@@ -4,21 +4,23 @@
 
 #include <glm/glm.hpp>
 
+#include <glow/ref_ptr.h>
+
 
 class WorldObject;
 
-class WorldObjectModification
-{
+class WorldObjectModification {
 public:
-    WorldObjectModification(WorldObject *worldObject);
+    WorldObjectModification(WorldObject* worldObject);
 
-    WorldObject *worldObject();
+    WorldObject* worldObject();
 
     void removedVoxel(const glm::ivec3 &pos);
     const std::vector<glm::ivec3> &removedVoxels();
 
 
 protected:
-    WorldObject *m_worldObject;
+    glow::ref_ptr<WorldObject> m_worldObject;
     std::vector<glm::ivec3> m_removedVoxels;
 };
+

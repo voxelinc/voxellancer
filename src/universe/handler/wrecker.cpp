@@ -15,7 +15,7 @@ void Wrecker::wreck(std::list<WorldObjectModification>& worldObjectModifications
         WorldObject* object = modification.worldObject();
 
         if (object->isCrucialVoxelDestroyed()) {
-            object->scheduleRemoval();
+            object->unspawn();
             createWreckFromObject(object);
         }
     }

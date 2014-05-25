@@ -11,12 +11,22 @@ FunctionalObject::FunctionalObject() = default;
 FunctionalObject::~FunctionalObject() = default;
 
 void FunctionalObject::doSpawn() {
-    assert(universe());
-
     if (sector()) {
         sector()->addFunctionalObject(this);
     } else {
         universe()->addFunctionalObject(this);
     }
+}
+
+void FunctionalObject::doUnspawn() {
+    if (sector()) {
+        sector()->removeFunctionalObject(this);
+    } else {
+        universe()->removeFunctionalObject(this);
+    }
+}
+
+void FunctionalObject::doWarp(Sector& sector) {
+    abort();
 }
 

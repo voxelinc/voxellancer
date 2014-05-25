@@ -11,5 +11,9 @@ public:
 
 protected:
     virtual void doSpawn() override;
+
+    virtual void doUnspawn() override;
+
+    virtual void doWarp(Sector& sector) override;
 };
 

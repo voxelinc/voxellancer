@@ -8,16 +8,20 @@
 #include "physics/impulse.h"
 
 
+class Sector;
 class WorldObject;
 
-class Mover {
+class Mover final {
 public:
-    void moveWorldObjects(const std::list<glow::ref_ptr<WorldObject>>& objects, float deltaSec);
+    Mover(Sector& sector);
+
+    void moveWorldObjects(float deltaSec);
 
     std::list<VoxelCollision>& voxelCollisions();
 
 
 protected:
+    Sector& m_sector;
     std::list<VoxelCollision> m_voxelCollisions;
 };
 

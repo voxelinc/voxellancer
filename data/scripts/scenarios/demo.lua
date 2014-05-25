@@ -4,7 +4,7 @@ function main()
     local normandy = createShip("normandy")
     setPosition(normandy, vec3(50, 100, -170))
     setOrientation(normandy, vec3(90, 0, 50))
-    spawn(normandy, sector(playerShip()))
+    spawn(normandy, "backen")
 end
 
 function startMission(player)
@@ -32,9 +32,9 @@ function reset(dummy)
 	setCanLockOn(missionStartBanner, false)
 
 	setPosition(missionStartBanner, vec3(-40, 50, -100))
-	spawn(missionStartBanner, sector(playerShip()))
+	spawn(missionStartBanner, "backen")
 	
-	onAABBEntered(playerShip(), vec3(-60, 30, -120), vec3(-20, 70, -80), sector(playerShip()), "startMission")
+	onAABBEntered(playerShip(), vec3(-60, 30, -120), vec3(-20, 70, -80), "backen", "startMission")
 end
 
 function firstChallengeTaken(dummy)
@@ -52,17 +52,17 @@ function initDifficultSecondChallenge()
 	setCanLockOn(dareyouBanner, false)
 
 	setPosition(dareyouBanner, vec3(-100, 50, -360))
-	spawn(dareyouBanner, sector(playerShip()))
+	spawn(dareyouBanner, "backen")
 	
-	onAABBEntered(playerShip(), vec3(-120, 30, -380), vec3(-80, 70, -340), sector(playerShip()), "startFightingMission")
+	onAABBEntered(playerShip(), vec3(-120, 30, -380), vec3(-80, 70, -340), "backen", "startFightingMission")
 end
 
 function initEasySecondChallenge() 
     tortess = createShip("startortress")    
 	setPosition(tortess, vec3(200, 50, -300))
-	spawn(tortess, sector(playerShip()))
+	spawn(tortess, "backen")
         
-	onAABBEntered(playerShip(), vec3(180, 30, -320), vec3(220, 70, -280), sector(playerShip()), "startEasyFightingMission")
+	onAABBEntered(playerShip(), vec3(180, 30, -320), vec3(220, 70, -280), "backen", "startEasyFightingMission")
 end
 
 function secondChallengeTaken(dummy) 
@@ -77,5 +77,5 @@ function firework()
 	setPosition(cake, vec3(0,0,-1000))
 	setShowOnHud(cake, true)
 	setCanLockOn(cake, false)
-	spawn(cake, sector(playerShip()))
+	spawn(cake, "backen")
 end

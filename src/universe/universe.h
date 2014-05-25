@@ -28,6 +28,7 @@ public:
     Sector* sector(const std::string& name);
 
     void addFunctionalObject(FunctionalObject* object);
+    void removeFunctionalObject(FunctionalObject* object);
 
     void update(float deltaSec);
 

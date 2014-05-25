@@ -1,5 +1,7 @@
 #include "impulse.h"
 
+#include "worldobject/worldobject.h"
+
 #include <cassert>
 
 

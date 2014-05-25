@@ -1,5 +1,6 @@
 #pragma once
 
+#include <list>
 #include <type_traits>
 
 #include <glow/ref_ptr.h>
@@ -18,14 +19,18 @@ public:
     virtual ~GameObjectManager();
 
     void addObject(GameObjectType* object);
-    std::list<glow::ref_ptr<GameObjectType>>& objects();
+    void removeObject(GameObjectType* object);
+
+    void foreachObject(const std::function<void(glow::ref_ptr<GameObjectType>& object)>& function);
 
     void update(float deltaSec);
 
 
 protected:
     Universe& m_universe;
+
     std::list<glow::ref_ptr<GameObjectType>> m_objects;
+    std::list<glow::ref_ptr<GameObjectType>> m_removals;
 
     virtual void onObjectAddtition(GameObjectType* object);
     virtual void onObjectRemoval(GameObjectType* object);

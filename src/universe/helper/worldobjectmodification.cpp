@@ -1,5 +1,8 @@
 #include "worldobjectmodification.h"
 
+#include "worldobject/worldobject.h"
+
+
 WorldObjectModification::WorldObjectModification(WorldObject *worldObject):
     m_worldObject(worldObject)
 {

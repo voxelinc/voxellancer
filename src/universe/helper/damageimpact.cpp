@@ -2,6 +2,8 @@
 
 #include <cassert>
 
+#include "worldobject/worldobject.h"
+
 
 DamageImpact::DamageImpact(WorldObject* worldObject, Voxel* voxel, const glm::vec3& damageVec, float fieldOfDamage):
     m_worldObject(worldObject),

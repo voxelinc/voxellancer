@@ -1,5 +1,8 @@
 #include "splitdata.h"
+
 #include "voxel/voxel.h"
+
+#include "worldobject/worldobject.h"
 
 
 SplitData::SplitData(WorldObject* worldObject):
@@ -10,12 +13,12 @@ SplitData::SplitData(WorldObject* worldObject):
 
 }
 
-void SplitData::addVoxel(Voxel *voxel) {
+void SplitData::addVoxel(Voxel* voxel) {
     m_splitOffVoxels.push_back(voxel);
     m_llf = glm::min(m_llf, voxel->gridCell());
 }
 
-WorldObject *SplitData::exWorldObject() {
+WorldObject* SplitData::exWorldObject() {
     return m_exWorldObject;
 }
 
@@ -26,3 +29,4 @@ std::vector<Voxel*> SplitData::splitOffVoxels() {
 glm::ivec3 SplitData::llf() {
     return m_llf;
 }
+

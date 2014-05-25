@@ -24,5 +24,6 @@ protected:
     virtual void specialOnCallback() override;
 
     virtual void doSpawn() override;
+    virtual void doUnspawn() override;
 };
 

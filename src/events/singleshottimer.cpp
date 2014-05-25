@@ -18,6 +18,6 @@ bool SingleShotTimer::poll() {
 void SingleShotTimer::specialOnCallback() {
     Timer::specialOnCallback();
     m_fired = true;
-    scheduleRemoval();
+    unspawn();
 }
 

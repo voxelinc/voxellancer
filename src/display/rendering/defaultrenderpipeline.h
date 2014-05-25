@@ -32,7 +32,7 @@ public:
 
 protected:
     std::shared_ptr<ScreenQuad> m_quad;
-    
+
     std::shared_ptr<PostProcessingPass> m_fxaa;
     std::shared_ptr<PostProcessingPass> m_finalization;
     Property<std::string> m_antialiasing;

@@ -22,10 +22,7 @@
 WorldTreeScanner::WorldTreeScanner():
     m_scanInterval(0.0f),
     m_scanCountdown(0.0f),
-    m_scanRadius(0.0f),
-    m_worldObjects(),
-    m_foundWorldObjects(),
-    m_lostWorldObjects()
+    m_scanRadius(0.0f)
 {
 }
 
@@ -40,6 +37,7 @@ void WorldTreeScanner::setScanInterval(float scanInterval) {
 }
 
 float WorldTreeScanner::scanRadius() const {
+
     return m_scanRadius;
 }
 

@@ -71,6 +71,8 @@ void VoxelCollisionAccumulator::applyOnCollsionHooks(){
 std::list<WorldObjectCollision>& VoxelCollisionAccumulator::worldObjectCollisions() {
     return m_worldObjectCollisions;
 }
+
 std::list<WorldObject*>& VoxelCollisionAccumulator::worldObjects() {
     return m_worldObjects;
 }
+

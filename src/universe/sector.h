@@ -36,13 +36,14 @@ public:
     WorldTree& worldTree();
     VoxelParticleEngine& particleEngine();
 
-    std::list<glow::ref_ptr<FunctionalObject>>& functionalObjects();
-    std::list<glow::ref_ptr<WorldObject>>& worldObjects();
+    void foreachWorldObject(const std::function<void(glow::ref_ptr<WorldObject>& object)>& function);
 
     void addFunctionalObject(FunctionalObject* object);
+    void removeFunctionalObject(FunctionalObject* object);
 
     bool canAddWorldObject(const WorldObject* object) const;
     void addWorldObject(WorldObject* object);
+    void removeWorldObject(WorldObject* object);
 
     void update(float deltaSec);
 

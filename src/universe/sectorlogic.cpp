@@ -4,12 +4,14 @@
 
 
 SectorLogic::SectorLogic(Sector& sector):
-    m_sector(sector)
+    m_sector(sector),
+    m_mover(sector),
+    m_garbageCollector(sector)
 {
 }
 
 void SectorLogic::update(float deltaSecs) {
-    m_mover.moveWorldObjects(m_sector.worldObjects(), deltaSecs);
+    m_mover.moveWorldObjects(deltaSecs);
 
     m_voxelCollisionAccumulator.parse(m_mover.voxelCollisions());
     m_voxelCollisionAccumulator.applyOnCollsionHooks();
@@ -25,7 +27,7 @@ void SectorLogic::update(float deltaSecs) {
 
     m_wrecker.wreck(m_damager.worldObjectModifications());
 
-    m_garbageCollector.check(m_sector.worldObjects());
+    m_garbageCollector.check();
 }
 
  DamageForwarder &SectorLogic::damageForwarder() {

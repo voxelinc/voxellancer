@@ -46,12 +46,10 @@ void Mission::update(float deltaSec) {
 }
 
 void Mission::over() {
-    scheduleRemoval();
+    unspawn();
 }
 
 void Mission::doSpawn() {
-    assert(universe());
-
     m_script = new MissionScript(*this, universe()->scriptEngine());
     m_script->load(m_scriptPath);
     m_script->spawn(*universe());

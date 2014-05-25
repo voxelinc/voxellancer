@@ -21,7 +21,7 @@ void EventPoll::setActive(bool active) {
 
 void EventPoll::update(float deltaSec) {
     if (m_callback.dead()) {
-        scheduleRemoval();
+        unspawn();
     }
 
     if (!m_active) {

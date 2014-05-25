@@ -25,13 +25,6 @@ class WorldObjectInfo;
 class VoxelCollision;
 class WorldObjectComponents;
 
-enum class SpawnState {
-    None,
-    SpawnScheduled,
-    Spawned,
-    Rejected,
-    RemovalScheduled,
-};
 
 enum class WorldObjectType {
     Ship        = 1 << 0,
@@ -51,9 +44,6 @@ public:
     virtual ~WorldObject();
 
     virtual WorldObjectType objectType() const;
-
-    SpawnState spawnState() const;
-    void setSpawnState(SpawnState spawnState);
 
     CollisionFilter& collisionFilter();
     void setCollisionFilter(CollisionFilter* collisionFilter);
@@ -105,11 +95,14 @@ protected:
     Voxel* m_crucialVoxel;
     bool m_crucialVoxelDestroyed;
     float m_collisionFieldOfDamage;
-    SpawnState m_spawnState;
 
 
     virtual bool doCanSpawnFail() const override;
     virtual bool doCanSpawn(Universe& universe, Sector* sector) const override;
     virtual void doSpawn() override;
+
+    virtual void doUnspawn() override;
+
+    virtual void doWarp(Sector& sector) override;
 };
 

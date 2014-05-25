@@ -54,21 +54,21 @@ VoxelParticleEngine& Sector::particleEngine() {
     return m_particleEngine;
 }
 
-std::list<glow::ref_ptr<FunctionalObject>>& Sector::functionalObjects() {
-    return m_functionalObjects->objects();
-}
-
-std::list<glow::ref_ptr<WorldObject>>& Sector::worldObjects() {
-    return m_worldObjects->objects();
+void Sector::foreachWorldObject(const std::function<void(glow::ref_ptr<WorldObject>& object)>& function) {
+    m_worldObjects->foreachObject(function);
 }
 
 void Sector::addFunctionalObject(FunctionalObject* object) {
     m_functionalObjects->addObject(object);
 }
 
+void Sector::removeFunctionalObject(FunctionalObject* object) {
+    m_functionalObjects->removeObject(object);
+}
+
 bool Sector::canAddWorldObject(const WorldObject* _object) const {
     /*
-     * Acquire a mutable pointer to the tree and object - this shouldn't hurt as insert(object);
+     * Acquire a mutable pointer to the tree and object - this doesn't hurt as insert(object);
      * remove(object); leaves them unaffected in the end
      */
     WorldTree* tree = const_cast<WorldTree*>(m_worldTree.get());
@@ -83,11 +83,14 @@ bool Sector::canAddWorldObject(const WorldObject* _object) const {
 
 void Sector::addWorldObject(WorldObject* object) {
     if (canAddWorldObject(object)) {
-        object->setSpawnState(SpawnState::Spawned);
         m_worldObjects->addObject(object);
     } else {
         throw std::runtime_error("Failed to spawn '" + object->info().name() + "'");
     }
+}
+
+void Sector::removeWorldObject(WorldObject* object) {
+    m_worldObjects->removeObject(object);
 }
 
 void Sector::update(float deltaSec) {
@@ -106,9 +109,9 @@ void Sector::draw(const Camera& camera) {
 
     m_voxelRenderer->prepareDraw(camera);
 
-    for (glow::ref_ptr<WorldObject>& worldObject : m_worldObjects->objects()) {
+    m_worldObjects->foreachObject( [&] (glow::ref_ptr<WorldObject>& worldObject) {
         VoxelRenderer::instance()->draw(*worldObject);
-    }
+    });
 
     m_voxelRenderer->afterDraw();
 

@@ -2,11 +2,13 @@
 
 #include <list>
 
+#include <glow/ref_ptr.h>
+
 #include "voxelcollision.h"
+
 
 class WorldObject;
 class WorldObjectCollision;
-
 
 class WorldObjectCollision {
 public:
@@ -20,7 +22,8 @@ public:
 
 
 protected:
-    WorldObject* m_worldObjectA;
-    WorldObject* m_worldObjectB;
+    glow::ref_ptr<WorldObject> m_worldObjectA;
+    glow::ref_ptr<WorldObject> m_worldObjectB;
     std::list<VoxelCollision> m_voxelCollisions;
 };
+
