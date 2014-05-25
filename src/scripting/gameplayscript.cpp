@@ -20,11 +20,7 @@
 GamePlayScript::GamePlayScript(ScriptEngine& scriptEngine):
     m_scriptEngine(&scriptEngine)
 {
-    addBindings(new CommonBindings(*this));
-    addBindings(new WorldObjectBindings(*this));
-    addBindings(new AiBindings(*this));
-    addBindings(new SquadBindings(*this));
-    addBindings(new ExternalMissionBindings(*this));
+    addGamePlayBindings();
 }
 
 GamePlayScript::~GamePlayScript() {
@@ -60,3 +56,12 @@ void GamePlayScript::addLocal(Scriptable* scriptable) {
     scriptable->setScriptLocal(true);
     m_locals.push_back(scriptable->scriptKey());
 }
+
+void GamePlayScript::addGamePlayBindings() {
+    addBindings(new CommonBindings(*this));
+    addBindings(new WorldObjectBindings(*this));
+    addBindings(new AiBindings(*this));
+    addBindings(new SquadBindings(*this));
+    addBindings(new ExternalMissionBindings(*this));
+}
+

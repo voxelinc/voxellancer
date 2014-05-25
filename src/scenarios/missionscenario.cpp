@@ -1,7 +1,6 @@
 #include "missionscenario.h"
 
 #include "missions/mission.h"
-#include "missions/missionsystem.h"
 
 #include "player.h"
 
@@ -18,7 +17,7 @@ MissionScenario::MissionScenario(GamePlay* gamePlay, const std::string& path):
     BaseScenario(gamePlay),
     m_mission(new Mission(path))
 {
-
+    World::instance()->addElement(m_mission);
 }
 
 void MissionScenario::populateWorld() {
@@ -28,6 +27,7 @@ void MissionScenario::populateWorld() {
     m_world->god().scheduleSpawn(playerShip);
 
     World::instance()->player().setShip(playerShip);
-    World::instance()->missionSystem().addMission(m_mission);
+
+    m_mission->start();
 }
 

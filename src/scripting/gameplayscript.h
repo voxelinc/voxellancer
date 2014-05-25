@@ -36,9 +36,12 @@ public:
      */
     void addLocal(Scriptable* scriptable);
 
+
 protected:
     ScriptEngine* m_scriptEngine;
     std::vector<int> m_locals;
     std::vector<std::weak_ptr<EventPoll>> m_eventPolls;
+
+    void addGamePlayBindings();
 };
 

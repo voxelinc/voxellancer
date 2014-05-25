@@ -1,5 +1,7 @@
 #pragma once
 
+#include <glow/ref_ptr.h>
+
 #include "missions/mission.h"
 
 #include "utils/handle/handle.h"
@@ -9,13 +11,13 @@
 
 class MissionStatePoll : public EventPoll {
 public:
-    MissionStatePoll(const Handle<Mission>& mission, MissionState state, const Callback& callback);
+    MissionStatePoll(Mission& mission, MissionState state, const Callback& callback);
 
     virtual bool isDead() override;
 
 
 protected:
-    Handle<Mission> m_mission;
+    const glow::ref_ptr<Mission> m_mission;
     MissionState m_state;
     bool m_dead;
 

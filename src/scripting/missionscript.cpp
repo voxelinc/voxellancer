@@ -4,6 +4,8 @@
 
 #include "scripting/elematelua/luawrapper.h"
 
+#include "missions/mission.h"
+
 
 MissionScript::MissionScript(Mission& mission, ScriptEngine& scriptEngine):
     GamePlayScript(scriptEngine),
@@ -25,6 +27,6 @@ void MissionScript::onSuccess() {
 void MissionScript::onFailure() {
     if (m_lua->hasFunction("onFailure")) {
         m_lua->call("onFailure");
-    }
+     }
 }
 

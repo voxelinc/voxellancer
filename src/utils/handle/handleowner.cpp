@@ -9,3 +9,8 @@ HandleOwner::HandleOwner():
 HandleOwner::~HandleOwner() {
     m_impl->invalidate();
 }
+
+void HandleOwner::invalidate() {
+    m_impl->invalidate();
+}
+
