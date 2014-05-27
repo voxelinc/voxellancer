@@ -59,3 +59,4 @@ glm::quat GeometryHelper::quatFromViewDirection(const glm::vec3& direction) {
 
     return glm::angleAxis(angle, glm::normalize(w));
 }
+

@@ -4,6 +4,8 @@
 
 #include "collision/collisiondetector.h"
 
+#include "geometry/line.h"
+#include "geometry/plane.h"
 #include "geometry/sphere.h"
 
 #include "universe/sector.h"
@@ -12,8 +14,7 @@
 
 #include "worldobject/worldobjectinfo.h"
 
-#include "worldtree/worldtreegeode.h"
-#include "worldtree/worldtreequery.h"
+#include "worldtree/worldtreescanner.h"
 
 
 Jumpgate::Jumpgate() = default;
@@ -31,16 +32,35 @@ void Jumpgate::setBuddy(Jumpgate* buddy) {
 void Jumpgate::update(float deltaSec) {
     WorldObject::update(deltaSec);
 
-    m_sphere = Sphere(bounds().sphere().position(), bounds().sphere().radius()/2.0f);
+    m_scanner->setScanRadius(bounds().sphere().radius() * 2.0f);
+    m_scanner->update(deltaSec, this);
 
-    for (WorldObject* object : scan()) {
-        transfer(object);
+    for (WorldObject* object : m_scanner->worldObjects()) {
+        if (m_lastPositions.find(object) != m_lastPositions.end()) {
+            Line line(m_lastPositions[object], object->transform().position());
+
+            if (crossesWarpzone(line)) {
+                transfer(object);
+            }
+        }
+
+        m_lastPositions[object] = object->transform().position();
     }
 }
 
-std::unordered_set<WorldObject*> Jumpgate::scan() {
-    WorldTreeQuery query(&sector()->worldTree(), &m_sphere, collisionDetector().geode()->hint(), &collisionFilter());
-    return query.intersectingWorldObjects();
+bool Jumpgate::crossesWarpzone(const Line& line) {
+    Plane plane (transform().position(), transform().orientation() * glm::vec3(0.0f, 0.0f, -1.0f));
+
+    bool intersects;
+    glm::vec3 point(plane.intersectionPoint(line, intersects));
+
+    if (intersects) { std::cout << "Interssda" << std::endl;
+        if (glm::length(point - transform().position()) < bounds().sphere().radius() * 0.5f) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 void Jumpgate::transfer(WorldObject* object) {

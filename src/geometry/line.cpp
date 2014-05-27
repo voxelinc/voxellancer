@@ -32,6 +32,10 @@ void Line::setB(const glm::vec3& b) {
     m_b = b;
 }
 
+float Line::length() const {
+    return glm::length(m_a - m_b);
+}
+
 bool Line::intersects(const Sphere& sphere) const {
     Ray r1(m_a, m_b - m_a);
     Ray r2(m_b, m_a - m_b);

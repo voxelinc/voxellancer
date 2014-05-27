@@ -13,7 +13,7 @@ void ElasticImpulseGenerator::parse(std::list<WorldObjectCollision>& worldObject
     m_worldObjectImpulses.clear();
 
     for(WorldObjectCollision& worldObjectCollision : worldObjectCollisions) {
-        assert(worldObjectCollision.voxelCollisions().size() > 0);
+        assert(!worldObjectCollision.voxelCollisions().empty());
 
         VoxelCollision voxelCollision = worldObjectCollision.voxelCollisions().front();
 

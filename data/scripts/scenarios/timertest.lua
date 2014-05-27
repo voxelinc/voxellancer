@@ -1,6 +1,6 @@
 function main() 	
 	count = 0
-	createLoopingTimer('newShip', 5.0)
+	--createLoopingTimer('newShip', 5.0)
 end
 
 function newShip() 
