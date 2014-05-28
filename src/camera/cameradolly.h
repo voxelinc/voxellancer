@@ -19,7 +19,10 @@ public:
 
     void followWorldObject(WorldObject* m_followWorldObject);
 
+    void warpToDestination();
+
     void update(float deltaSec);
+
 
 protected:
     std::unique_ptr<CameraHead> m_cameraHead;

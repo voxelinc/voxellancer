@@ -8,6 +8,8 @@
 #include "geometry/line.h"
 #include "geometry/sphere.h"
 
+#include "physics/physics.h"
+
 #include "universe/sector.h"
 
 #include "voxel/voxelclusterbounds.h"
@@ -54,9 +56,14 @@ bool Jumpgate::crossesWarpzone(const Line& line) {
 }
 
 void Jumpgate::transfer(WorldObject* object) {
-    glow::ref_ptr<WorldObject> l (object);
+    // think of this as the hyperspace. somebody has to hold the object while it switches sectors otherwise its refCount will frop to 0
+    glow::ref_ptr<WorldObject> objectHolder(object);
 
-    object->transform().setPosition(m_buddy->transform().position() + glm::vec3(0, 0, -2));
+    object->transform().setPosition(m_buddy->transform().position() + glm::vec3(0, 0, -1.0f));
+    object->transform().setOrientation(m_buddy->transform().orientation());
+
+    object->physics().setSpeed(Speed(m_buddy->transform().orientation() * glm::vec3(0, 0, -13), glm::vec3()));
+
     object->warp(*m_buddy->sector());
 }
 

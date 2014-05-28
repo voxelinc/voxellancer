@@ -1,6 +1,7 @@
 #include "universe.h"
 
 #include <algorithm>
+#include <iostream>
 
 #include "factions/factionmatrix.h"
 
@@ -45,11 +46,11 @@ Sector* Universe::sector(const std::string& name) {
     return iter == m_sectors.end() ? nullptr : iter->get();
 }
 
-void Universe::addFunctionalObject(FunctionalObject* object) {
+void Universe::addFunctionalObject(FunctionalObject* object) { std::cout << "Add functional: " << object << std::endl;
     m_functionalObjects->addObject(object);
 }
 
-void Universe::removeFunctionalObject(FunctionalObject* object) {
+void Universe::removeFunctionalObject(FunctionalObject* object) { std::cout << "Remove functional: " << object << std::endl;
     m_functionalObjects->removeObject(object);
 }
 

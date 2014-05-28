@@ -6,7 +6,7 @@
 
 
 CameraDolly::CameraDolly():
-    InertiaFollower(80.0f, 80.0f),
+    InertiaFollower(90.0f, 90.0f),
     m_cameraHead(new CameraHead(this)),
     m_followHelper(new CameraFollowHelper())
 {
@@ -26,6 +26,15 @@ void CameraDolly::followWorldObject(WorldObject* followWorldObject) {
     m_followHelper->setTarget(followWorldObject);
 }
 
+void CameraDolly::warpToDestination() {
+    WorldObject* followWorldObject = m_followHelper->target();
+
+    if(followWorldObject) {
+        setPosition(m_followHelper->followPosition());
+        setOrientation(followWorldObject->transform().orientation());
+    }
+}
+
 void CameraDolly::update(float deltaSec) {
     WorldObject* followWorldObject = m_followHelper->target();
 
@@ -33,3 +42,4 @@ void CameraDolly::update(float deltaSec) {
         follow(m_followHelper->followPosition(), followWorldObject->transform().orientation(), deltaSec);
     }
 }
+

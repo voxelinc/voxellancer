@@ -53,9 +53,13 @@ Ship* Player::ship() {
 void Player::setShip(Ship* ship) {
     m_ship = makeHandle(ship);
     m_sector = m_ship->sector();
+
     m_ship->character()->setFaction(&m_universe.factionMatrix().playerFaction());
     m_ship->info().setShowOnHud(false);
+
     m_cameraDolly->followWorldObject(ship);
+    m_cameraDolly->warpToDestination();
+
     m_aimer->setWorldObject(ship);
 }
 

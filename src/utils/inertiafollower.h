@@ -5,7 +5,7 @@
 
 /**
  * Follows a position and orientation with a given inertia between
- * 0 = instant follow and 100 = never moves
+ * 0 = instant follow and 1 = never moves
  */
 class InertiaFollower {
 public:
@@ -29,3 +29,4 @@ protected:
     glm::quat m_orientation;
     float m_angularInertia;
 };
+

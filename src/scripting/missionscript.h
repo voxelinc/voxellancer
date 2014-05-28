@@ -10,6 +10,8 @@ public:
 
     Mission& mission();
 
+    virtual void update(float deltaSec) override;
+
     void onSuccess();
     void onFailure();
 

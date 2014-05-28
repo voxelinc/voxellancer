@@ -9,6 +9,7 @@
 namespace {
 template<typename... Args>
 void callHelper(ScriptCallbackImpl<Args...>* callback, const std::string& function, Args... args) {
+     std::cout << "Calling script back: " << function << " " << callback->script()->refCounter() << std::endl;
     callback->script()->lua().call(function, args...);
 }
 }
