@@ -8,10 +8,12 @@
 #include "equipment/weapon.h"
 #include "equipment/weapons/gun.h"
 #include "equipment/weapons/rocketlauncher.h"
+#include "worldobject/helper/componentsinfo.h"
 
 
 WorldObjectComponents::WorldObjectComponents(WorldObject* worldObject):
-    m_worldObject(worldObject)
+    m_worldObject(worldObject),
+    m_componentsInfo(new ComponentsInfo(this))
 {
 }
 
@@ -29,7 +31,7 @@ void WorldObjectComponents::addEngineSlot(std::shared_ptr<EngineSlot> engineSlot
 
 void WorldObjectComponents::removeEngineSlot(const EngineSlot* engineSlot) {
     m_engineSlots.remove_if([&](std::shared_ptr<EngineSlot> slot) { return slot.get() == engineSlot; });
-    m_worldObject->updateComponentsInfo();
+    notifyObservers();
 }
 
 std::shared_ptr<EngineSlot> WorldObjectComponents::engineSlot(int index) {
@@ -84,7 +86,7 @@ void WorldObjectComponents::addHardpoint(std::shared_ptr<Hardpoint> hardpoint) {
 
 void WorldObjectComponents::removeHardpoint(const Hardpoint* hardpoint) {
     m_hardpoints.remove_if([&](std::shared_ptr<Hardpoint> hp) { return hp.get() == hardpoint; });
-    m_worldObject->updateComponentsInfo();
+    notifyObservers();
 }
 
 std::shared_ptr<Hardpoint> WorldObjectComponents::hardpoint(int index) {
@@ -129,4 +131,7 @@ void WorldObjectComponents::update(float deltaSec) {
     }
 }
 
+const ComponentsInfo& WorldObjectComponents::componentsInfo() const {
+    return *m_componentsInfo;
+}
 

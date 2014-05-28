@@ -41,7 +41,6 @@ protected:
 
     State m_state;
     bool m_stateChanged;
-    float m_maxRocketDistance;
     float m_minEnemyDistance;
     glm::vec3 m_positionBehindTarget;
 };

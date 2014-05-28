@@ -23,8 +23,7 @@ WorldObject::WorldObject() :
     m_spawnState(SpawnState::None),
     m_collisionFilter(new CollisionFilter(this)),
     m_crucialVoxelDestroyed(false),
-    m_cockpitVoxelsDestroyed(false),
-    m_componentsInfo(new ComponentsInfo(this))
+    m_cockpitVoxelsDestroyed(false)
 {
 }
 
@@ -164,14 +163,6 @@ void WorldObject::setCollisionFieldOfDamage(float collisionFieldOfDamage) {
 
 bool WorldObject::passiveForCollisionDetection() {
     return false;
-}
-
-const ComponentsInfo& WorldObject::componentsInfo() const {
-    return *m_componentsInfo;
-}
-
-void WorldObject::updateComponentsInfo() {
-    m_componentsInfo->updateInfo();
 }
 
 std::unordered_map<glm::ivec3, Voxel*> WorldObject::cockpitVoxels() {

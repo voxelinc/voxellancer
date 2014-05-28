@@ -1,19 +1,27 @@
+#include "util/observer.h"
 
+class WorldObjectComponents;
 
-class WorldObject;
-
-class ComponentsInfo {
+class ComponentsInfo : public Observer {
 public:
-    ComponentsInfo(WorldObject* worldObject);
+    ComponentsInfo(WorldObjectComponents* worldObject);
 
-    const float maxBulletRange() const;
-    const float maxForwardSpeed() const;
+    float maxBulletRange() const;
+    float maxForwardSpeed() const;
+    float maxRocketRange() const;
 
     void updateInfo();
 
+    void updateObserver();
+
 private:
-    WorldObject* m_worldObject;
+    WorldObjectComponents* m_components;
+
+    void calculateBulletRange();
+    void calculateForwardSpeed();
+    void calculateRocketRange();
 
     float m_maxBulletRange;
     float m_maxForwardSpeed;
+    float m_maxRocketRange;
 };

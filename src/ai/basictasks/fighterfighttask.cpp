@@ -12,7 +12,6 @@ FighterFightTask::FighterFightTask(BoardComputer* boardComputer, const std::vect
     FightTaskImplementation(boardComputer, targets)
 {
     m_state = State::IDLE;
-    m_maxRocketDistance = 200.0f;
     m_minEnemyDistance = 100.0f;
     m_stateChanged = false;
 }
@@ -42,7 +41,7 @@ void FighterFightTask::update(float deltaSec) {
             } else {
                 boardComputer()->rotateTo(m_primaryTarget->transform().position());
                 boardComputer()->moveTo(m_primaryTarget->transform().position());
-                if (angleToTarget() < 15.0f && targetDistance() < m_maxRocketDistance) {
+                if (angleToTarget() < 15.0f && targetDistance() < m_componentsInfo.maxRocketRange()) {
                     boardComputer()->shootRockets(m_primaryTarget);
                 }
             }

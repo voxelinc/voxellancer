@@ -6,11 +6,16 @@
 #include "equipment/enginepower.h"
 #include "equipment/enginestate.h"
 
+#include "worldobjectinfo.h"
+
+#include "util/observable.h"
+
 
 class EngineSlot;
 class Hardpoint;
 class HardpointVoxel;
 class WorldObject;
+class ComponentsInfo;
 
 /**
  * Module of the WorldObject that is responsible for managing all
@@ -19,7 +24,7 @@ class WorldObject;
  * Also provides functions to trigger actions or retrieve values from
  * a whole category of components. (like, fire all weapons, set all engines)
  */
-class WorldObjectComponents {
+class WorldObjectComponents : public Observable {
 public:
     WorldObjectComponents(WorldObject* worldObject);
 
@@ -79,6 +84,8 @@ public:
      */
     void update(float deltaSec);
 
+    const ComponentsInfo& componentsInfo() const;
+
 
 
 protected:
@@ -86,6 +93,8 @@ protected:
 
     std::list<std::shared_ptr<EngineSlot>> m_engineSlots;
     std::list<std::shared_ptr<Hardpoint>> m_hardpoints;
+
+    std::unique_ptr<ComponentsInfo> m_componentsInfo;
 
     EngineState m_engineState;
 };

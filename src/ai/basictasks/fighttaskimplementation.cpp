@@ -3,13 +3,15 @@
 #include "ai/boardcomputer.h"
 #include "utils/worldobjectgeometryhelper.h"
 #include "worldobject/worldobject.h"
+#include "worldobject/worldobjectcomponents.h"
+#include "worldobject/helper/componentsinfo.h"
 
 
 FightTaskImplementation::FightTaskImplementation(BoardComputer* boardComputer, const std::vector<Handle<WorldObject>>& targets) :
     AiTask(boardComputer),
     m_targets(targets),
     m_primaryTarget(nullptr),
-    m_componentsInfo(boardComputer->worldObject()->componentsInfo())
+    m_componentsInfo(boardComputer->worldObject()->components().componentsInfo())
 {
 }
 
