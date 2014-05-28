@@ -3,9 +3,7 @@
 #include "sphere.h"
 
 
-Point::Point() {
-
-}
+Point::Point() = default;
 
 Point::Point(const glm::vec3& pos):
     m_position(pos)

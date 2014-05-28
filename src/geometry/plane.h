@@ -2,6 +2,8 @@
 
 #include <glm/glm.hpp>
 
+#include "pointintersection.h"
+
 
 class Line;
 class Ray;
@@ -11,8 +13,14 @@ public:
     Plane();
     Plane(const glm::vec3& position, const glm::vec3& normal);
 
-    glm::vec3 intersectionPoint(const Ray& ray, bool& intersects) const;
-    glm::vec3 intersectionPoint(const Line& line, bool& intersects) const;
+    const glm::vec3& position() const;
+    void setPosition(const glm::vec3& position);
+
+    const glm::vec3& normal() const;
+    void setNormal(const glm::vec3& normal);
+
+    PointIntersection intersectionWith(const Ray& ray) const;
+    PointIntersection intersectionWith(const Line& line) const;
 
 
 protected:

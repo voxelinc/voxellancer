@@ -6,9 +6,7 @@
 #include "ray.h"
 
 
-Plane::Plane() {
-
-}
+Plane::Plane() = default;
 
 Plane::Plane(const glm::vec3& position, const glm::vec3& normal):
     m_position(position),
@@ -17,41 +15,52 @@ Plane::Plane(const glm::vec3& position, const glm::vec3& normal):
 
 }
 
-glm::vec3 Plane::intersectionPoint(const Ray& ray, bool& intersects) const {glow::debug() << "Checking " << ray.origin() << " " << ray.direction() << " against " << m_position << "/" << m_normal;
+const glm::vec3& Plane::position() const {
+    return m_position;
+}
+
+void Plane::setPosition(const glm::vec3& position) {
+    m_position = position;
+}
+
+const glm::vec3& Plane::normal() const {
+    return m_normal;
+}
+
+void Plane::setNormal(const glm::vec3& normal) {
+    m_normal = normal;
+}
+
+PointIntersection Plane::intersectionWith(const Ray& ray) const {
     float dot = glm::dot(ray.direction(), m_normal);
 
     if (dot == 0.0f) {
-        intersects = false;
-        return glm::vec3();
+        return PointIntersection();
     }
 
-    float t = -(glm::dot(ray.origin(), m_normal) + glm::dot(m_position, m_normal)) / dot;
-    glow::debug() << "T: " << t;
+    float t = (glm::dot(m_position, m_normal) - glm::dot(ray.origin(), m_normal)) / dot;
+
     if (t < 0.0f) {
-        intersects = false;
-        return glm::vec3();
+        return PointIntersection();
     }
-    glow::debug() << "  intersect at " << glm::vec3(ray.origin() + t * ray.direction());
-    intersects = true;
-    return glm::vec3(ray.origin() + t * ray.direction());
+
+    return PointIntersection(ray.origin() + t * ray.direction());
 }
 
-glm::vec3 Plane::intersectionPoint(const Line& line, bool& intersects) const {
+PointIntersection Plane::intersectionWith(const Line& line) const {
     if (line.length() == 0.0f) {
-        intersects = false;
-        return glm::vec3();
+        return PointIntersection();
     }
 
     Ray ray(Ray::fromTo(line.a(), line.b()));
-    glm::vec3 point = intersectionPoint(ray, intersects);
+    PointIntersection intersection = intersectionWith(ray);
 
-    if (!intersects) {
-        return glm::vec3();
+    if (!intersection) {
+        return PointIntersection();
     }
 
     ray = Ray::fromTo(line.b(), line.a());
-    intersectionPoint(ray, intersects);
 
-    return point;
+    return intersectionWith(ray);
 }
 

@@ -4,8 +4,8 @@
 
 #include "collision/collisiondetector.h"
 
+#include "geometry/disk.h"
 #include "geometry/line.h"
-#include "geometry/plane.h"
 #include "geometry/sphere.h"
 
 #include "universe/sector.h"
@@ -49,26 +49,14 @@ void Jumpgate::update(float deltaSec) {
 }
 
 bool Jumpgate::crossesWarpzone(const Line& line) {
-    Plane plane (transform().position(), transform().orientation() * glm::vec3(0.0f, 0.0f, -1.0f));
-
-    bool intersects;
-    glm::vec3 point(plane.intersectionPoint(line, intersects));
-
-    if (intersects) { std::cout << "Interssda" << std::endl;
-        if (glm::length(point - transform().position()) < bounds().sphere().radius() * 0.5f) {
-            return true;
-        }
-    }
-
-    return false;
+    Disk disk(transform().position(), transform().orientation() * glm::vec3(0.0f, 0.0f, -1.0f), transform().scale() * 4.0f);
+    return disk.intersectionWith(line);
 }
 
 void Jumpgate::transfer(WorldObject* object) {
-    std::cout << "Transfering " << object->info().name() << " to " << m_buddy->sector()->name() << std::endl;
-
     glow::ref_ptr<WorldObject> l (object);
 
-    object->transform().setPosition(m_buddy->transform().position() + glm::vec3(0, 0, -100));
+    object->transform().setPosition(m_buddy->transform().position() + glm::vec3(0, 0, -2));
     object->warp(*m_buddy->sector());
 }
 

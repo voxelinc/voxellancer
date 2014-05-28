@@ -21,6 +21,7 @@ public:
     virtual bool nearTo(const TAABB<int>& aabb) const override;
     virtual bool containedBy(const TAABB<int>& aabb) const override;
 
+
 protected:
     glm::vec3 m_position;
 };
