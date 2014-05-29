@@ -28,8 +28,15 @@ const std::shared_ptr<Weapon>& Hardpoint::weapon() {
 }
 
 void Hardpoint::setWeapon(const std::shared_ptr<Weapon>& weapon) {
+    if (m_weapon != weapon && m_weapon) {
+        m_weapon->setHardpoint(nullptr);
+    }
+
     m_weapon = weapon;
-    m_weapon->setHardpoint(this);
+
+    if (m_weapon) {
+        m_weapon->setHardpoint(this);
+    }
 }
 
 const glm::vec3& Hardpoint::direction() const {

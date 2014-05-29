@@ -33,8 +33,16 @@ const std::shared_ptr<Engine>& EngineSlot::engine() {
 
 void EngineSlot::setEngine(const std::shared_ptr<Engine>& engine) {
     assert(mountable(engine->equipmentKey()));
+
+    if (m_engine != engine && m_engine) {
+        m_engine->setEngineSlot(nullptr);
+    }
+
     m_engine = engine;
-    m_engine->setEngineSlot(this);
+
+    if (m_engine) {
+        m_engine->setEngineSlot(this);
+    }
 }
 
 void EngineSlot::update(float deltaSec) {
