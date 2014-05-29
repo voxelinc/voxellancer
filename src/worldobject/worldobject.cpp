@@ -3,29 +3,28 @@
 #include "collision/collisiondetector.h"
 #include "collision/collisionfilter.h"
 
-#include "resource/clustercache.h"
-
-#include "utils/tostring.h"
-
-#include "utils/handle/handle.h"
-#include "physics/physics.h"
-#include "worldobject/worldobjectinfo.h"
-#include "voxel/voxel.h"
-#include "worldobjectcomponents.h"
-
-#include "worldobject/ship.h"
 #include "equipment/weapons/bullet.h"
 #include "equipment/weapons/rocket.h"
+
+#include "resource/clustercache.h"
+
+#include "physics/physics.h"
+
+#include "voxel/voxel.h"
+
+#include "worldobject/ship.h"
+#include "worldobject/worldobjectinfo.h"
+#include "worldobjectcomponents.h"
+
 
 WorldObject::WorldObject() :
     VoxelCluster(1.0f),
     m_physics(new Physics(*this)),
     m_collisionDetector(new CollisionDetector(*this)),
-    m_info(new WorldObjectInfo()),
+    m_info(new WorldObjectInfo(*this)),
     m_components(new WorldObjectComponents(this)),
     m_crucialVoxel(nullptr),
     m_collisionFieldOfDamage(glm::half_pi<float>()),
-    m_handle(Handle<WorldObject>(this)),
     m_spawnState(SpawnState::None),
     m_collisionFilter(new CollisionFilter(this)),
     m_crucialVoxelDestroyed(false),
@@ -39,9 +38,7 @@ WorldObject::WorldObject(const Transform& transform) :
     setTransform(transform);
 }
 
-WorldObject::~WorldObject() {
-     m_handle.invalidate();
-}
+WorldObject::~WorldObject() = default;
 
 WorldObjectType WorldObject::objectType() const {
     return WorldObjectType::Other;
@@ -179,10 +176,6 @@ void WorldObject::onDeath() {
 
 void WorldObject::onSpawnFail() {
 
-}
-
-Handle<WorldObject>& WorldObject::handle() {
-    return m_handle;
 }
 
 float WorldObject::collisionFieldOfDamage() const {

@@ -118,8 +118,8 @@ FactionRelationType Character::relationTypeTo(Faction& other) {
 }
 
 FactionRelationType Character::relationTypeTo(WorldObject* worldObject) {
-    if (m_friendlinessToWorldObject.count(worldObject->handle()) > 0) {
-        return FactionRelation::type(m_friendlinessToWorldObject[worldObject->handle()]);
+    if (m_friendlinessToWorldObject.count(makeHandle(worldObject)) > 0) {
+        return FactionRelation::type(m_friendlinessToWorldObject[makeHandle(worldObject)]);
     }
     if (worldObject->objectType() != WorldObjectType::Ship) {
         return FactionRelationType::Neutral;
@@ -128,7 +128,7 @@ FactionRelationType Character::relationTypeTo(WorldObject* worldObject) {
 }
 
 void Character::setFriendlinessToWorldObject(WorldObject* worldObject, float friendliness) {
-    m_friendlinessToWorldObject[worldObject->handle()] = friendliness;
+    m_friendlinessToWorldObject[makeHandle(worldObject)] = friendliness;
 }
 
 void Character::changeFriendlinessToAggressor(WorldObject* aggressor, float difference) {
@@ -136,7 +136,7 @@ void Character::changeFriendlinessToAggressor(WorldObject* aggressor, float diff
         return;
     }
     Ship* ship = static_cast<Ship*>(aggressor);
-    float friendliness = m_friendlinessToWorldObject[aggressor->handle()];
+    float friendliness = m_friendlinessToWorldObject[makeHandle(aggressor)];
     if (friendliness == 0.0f) {
         friendliness = m_faction->relationTo(ship->character()->faction()).friendliness();
     }
@@ -145,7 +145,7 @@ void Character::changeFriendlinessToAggressor(WorldObject* aggressor, float diff
         m_ship.squadLogic()->squad()->propagadeFriendlinessToWorldObject(aggressor, friendliness);
     }
     m_world->factionMatrix().changeFriendlinessToFaction(*m_faction, ship->character()->faction(),  difference / 10.0f);
-    m_friendlinessToWorldObject[aggressor->handle()] = friendliness;
+    m_friendlinessToWorldObject[makeHandle(aggressor)] = friendliness;
 }
 
 void Character::resetFriendliness(float deltaSec) {

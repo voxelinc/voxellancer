@@ -26,6 +26,9 @@ public:
 
     FactionRelationType type() const;
 
+    bool isHostile() const;
+    bool isFriendly() const;
+
     static std::string typeName(FactionRelationType type);
     static FactionRelationType type(float friendliness);
 

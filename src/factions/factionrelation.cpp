@@ -29,6 +29,14 @@ void FactionRelation::setFriendliness(float friendliness) {
     m_friendliness = friendliness;
 }
 
+bool FactionRelation::isHostile() const {
+    return m_friendliness <= -30.0f;
+}
+
+bool FactionRelation::isFriendly() const {
+    return m_friendliness >= 30.0f;
+}
+
 FactionRelationType FactionRelation::type() const {
     return type(m_friendliness);
 }

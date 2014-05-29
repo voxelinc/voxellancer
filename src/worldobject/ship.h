@@ -17,9 +17,8 @@ class SquadLogic;
 class BoardComputer;
 
 /**
- *  A Ship is a WorldObject with a Pilot (Character), thus can have an AiTask and a Squad membership
-*/
-
+ * A Ship is a WorldObject with a Pilot (Character), thus can have an AiTask and a Squad membership
+ */
 class Ship: public WorldObject {
 public:
     Ship();
@@ -28,8 +27,6 @@ public:
     virtual WorldObjectType objectType() const override;
 
     virtual void update(float deltaSec) override;
-
-    Handle<Ship>& handle();
 
     void setTargetObject(WorldObject* target);
     WorldObject* targetObject();
@@ -51,7 +48,6 @@ protected:
 
     std::unique_ptr<SquadLogic> m_squadLogic;
 
-    Handle<Ship> m_shipHandle;
     Handle<WorldObject> m_targetObjectHandle;
 
 

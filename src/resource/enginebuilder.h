@@ -6,9 +6,9 @@
 class Engine;
 
 /**
- *   Dedicated to load either a normal Engine from a given property-prefix
- *   or - if any is known by that name - a special engine that has its own
- *   non-generic implementation
+ * Dedicated to load either a normal Engine from a given property-prefix
+ * or - if any is known by that name - a special engine that has its own
+ * non-generic implementation
  */
 class EngineBuilder {
 public:

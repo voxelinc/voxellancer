@@ -48,7 +48,7 @@ void DefendAreaTask::update(float deltaSec) {
                 updatePatrol();
             }
         }
-        
+
         // update called by the leader himself
     }
 }
@@ -76,8 +76,9 @@ bool DefendAreaTask::isEnemyInRange() {
     for (WorldObject *worldObject : query.intersectingWorldObjects()) {
         Ship* ship = dynamic_cast<Ship*>(worldObject);
         if (ship) {
-            if (m_squad.leader()->character()->relationTypeTo(ship) == FactionRelationType::Enemy) {
-                m_enemies.push_back(worldObject->handle());
+            Faction& enemyFaction = ship->character()->faction();
+            if (enemyFaction.relationTo(m_squad.leader()->character()->faction()).isHostile()) {
+                m_enemies.push_back(makeHandle(worldObject));
             } else {
                 continue;
             }

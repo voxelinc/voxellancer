@@ -1,7 +1,5 @@
 #include "internalmissionbindings.h"
 
-#include <iostream>
-
 #include "missions/mission.h"
 
 #include "scripting/elematelua/luawrapper.h"

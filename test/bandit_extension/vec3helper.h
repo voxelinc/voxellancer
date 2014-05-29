@@ -7,8 +7,6 @@
 #include <glm/glm.hpp>
 #include <bandit/assertion_frameworks/snowhouse/snowhouse/stringize.h>
 
-#include "utils/tostring.h"
-
 
 // adds vec3 support to bandit
 
@@ -21,7 +19,7 @@ namespace snowhouse {
     struct Stringizer<glm::vec3>
     {
         static std::string ToString(const glm::vec3& value) {
-            return toString(value);
+            return "(" + std::to_string(value.x) + "/" + std::to_string(value.y) + "/" + std::to_string(value.z) + ")";
         }
     };
 }

@@ -18,7 +18,6 @@ class World;
  *  The Character is the Ship's pilot and executes his AiTask. He has a Faction which decides
  *  who is a friend or foe to him
  */
-
 class Character {
 public:
     Character(Ship& ship, Faction& faction);
@@ -47,9 +46,9 @@ protected:
     Ship& m_ship;
     Faction* m_faction;
     std::shared_ptr<AiTask> m_task;
+    std::unordered_map<Handle<WorldObject>, float> m_friendlinessToWorldObject;
 
     void resetFriendliness(float deltaSec);
-    std::unordered_map<Handle<WorldObject>, float> m_friendlinessToWorldObject;
     void changeFriendlinessToAggressor(WorldObject* aggressor, float difference);
 };
 
