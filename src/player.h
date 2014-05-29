@@ -9,6 +9,8 @@
 
 #include "utils/handle/handle.h"
 
+#include "ai/character.h"
+
 
 class Aimer;
 class Camera;
@@ -19,13 +21,10 @@ class Mission;
 class MissionSystem;
 class TargetSelector;
 
-class Player {
+class Player : public Character {
 public:
     Player();
-    ~Player();
-
-    Ship* ship();
-    void setShip(Ship *ship);
+    virtual ~Player();
 
     void update(float deltaSec);
 
@@ -43,11 +42,12 @@ public:
 
 
 protected:
-    Handle<Ship> m_ship;
     std::unique_ptr<CameraDolly> m_cameraDolly;
     std::unique_ptr<HUD> m_hud;
     std::unique_ptr<TargetSelector> m_targetSelector;
     std::unique_ptr<Aimer> m_aimer;
     EngineState m_engineState;
+
+    virtual void onShipChanged(Ship* oldShip) override;
 };
 

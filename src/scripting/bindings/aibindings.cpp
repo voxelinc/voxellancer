@@ -54,7 +54,7 @@ std::string AiBindings::apiGetFaction(apikey key) {
         return "";
     }
 
-    return ship->character()->faction().key();
+    return ship->character()->faction()->key();
 }
 
 int AiBindings::apiSetFaction(apikey key, const std::string& faction) {
@@ -66,7 +66,7 @@ int AiBindings::apiSetFaction(apikey key, const std::string& faction) {
     }
 
     Faction& f = World::instance()->factionMatrix().getFaction(faction);
-    ship->character()->setFaction(f);
+    ship->character()->setFaction(&f);
     return 0;
 }
 

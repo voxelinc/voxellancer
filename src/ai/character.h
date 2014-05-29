@@ -1,6 +1,6 @@
 #pragma once
 
-#include <memory>
+#include "utils/handle/handle.h"
 
 
 class AiTask;
@@ -8,24 +8,31 @@ class Faction;
 class Ship;
 
 /**
- *  The Character is the Ship's pilot and executes his AiTask. He has a Faction which decides
+ *  The Character is the Ship's pilot. He has a Faction which decides
  *  who is a friend or foe to him
  */
 class Character {
 public:
-    Character(Ship& ship, Faction& faction);
+    Character();
+    virtual ~Character();
 
-    Faction& faction();
-    void setFaction(Faction& faction);
+    Faction* faction();
+    void setFaction(Faction* faction);
 
+    Ship* ship();
+    void setShip(Ship *ship);
+
+    std::shared_ptr<AiTask>& task();
     void setTask(std::shared_ptr<AiTask> task);
-    std::shared_ptr<AiTask> task();
 
     virtual void update(float deltaSec);
 
+
 protected:
-    Ship& m_ship;
+    Handle<Ship> m_ship;
     Faction* m_faction;
     std::shared_ptr<AiTask> m_task;
+
+    virtual void onShipChanged(Ship* oldShip);
 };
 

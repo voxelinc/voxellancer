@@ -1,7 +1,7 @@
 #include "ship.h"
 
 #include "ai/boardcomputer.h"
-#include "ai/character.h"
+#include "ai/nonplayercharacter.h"
 #include "ai/squadlogic.h"
 
 #include "factions/factionmatrix.h"
@@ -13,10 +13,12 @@
 
 Ship::Ship():
     WorldObject(),
-    m_character(new Character(*this, World::instance()->factionMatrix().unknownFaction())),
+    m_character(new NonPlayerCharacter()),
     m_boardComputer(new BoardComputer(this)),
     m_squadLogic(new SquadLogic(*this))
 {
+    m_character->setShip(this);
+
     m_info->setShowOnHud(true);
     m_info->setCanLockOn(true);
 }

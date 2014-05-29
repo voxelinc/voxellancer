@@ -44,7 +44,7 @@ void FriendlyFireScenario::populateWorld() {
     victim->info().setName("member");
     victim->info().setShowOnHud(true);
     victim->info().setCanLockOn(true);
-    victim->character()->setFaction(World::instance()->factionMatrix().policeFaction());
+    victim->character()->setFaction(&World::instance()->factionMatrix().policeFaction());
     m_world->god().scheduleSpawn(victim);
 
     std::shared_ptr<Squad> attacker = std::make_shared<Squad>();
@@ -56,7 +56,7 @@ void FriendlyFireScenario::populateWorld() {
     pirate->info().setName("pirate");
     pirate->info().setShowOnHud(true);
     pirate->info().setCanLockOn(true);
-    pirate->character()->setFaction(World::instance()->factionMatrix().pirateFaction());
+    pirate->character()->setFaction(&World::instance()->factionMatrix().pirateFaction());
     pirate->squadLogic()->joinSquad(attacker);
     m_world->god().scheduleSpawn(pirate);
 
@@ -66,7 +66,7 @@ void FriendlyFireScenario::populateWorld() {
     bigship->info().setName("big");
     bigship->info().setShowOnHud(true);
     bigship->info().setShowOnHud(true);
-    bigship->character()->setFaction(World::instance()->factionMatrix().pirateFaction());
+    bigship->character()->setFaction(&World::instance()->factionMatrix().pirateFaction());
     m_world->god().scheduleSpawn(bigship);
 
     Ship *playerShip = WorldObjectBuilder("basicship").buildShip();

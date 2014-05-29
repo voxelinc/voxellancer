@@ -43,18 +43,6 @@ Player::Player():
 
 Player::~Player() = default;
 
-Ship* Player::ship() {
-    return m_ship.get();
-}
-
-void Player::setShip(Ship* ship) {
-    m_ship = makeHandle(ship);
-    m_ship->character()->setFaction(World::instance()->factionMatrix().playerFaction());
-    m_ship->info().setShowOnHud(false);
-    m_cameraDolly->followWorldObject(ship);
-    m_aimer->setWorldObject(ship);
-}
-
 void Player::update(float deltaSec) {
     m_cameraDolly->update(deltaSec);
     m_hud->update(deltaSec);
@@ -105,4 +93,12 @@ void Player::setTarget(WorldObject* target) {
     m_ship->setTargetObject(target);
     m_hud->setTarget(target);
 }
+
+void Player::onShipChanged(Ship* oldShip) {
+    m_ship->character()->setFaction(&World::instance()->factionMatrix().playerFaction());
+    m_ship->info().setShowOnHud(false);
+    m_cameraDolly->followWorldObject(m_ship.get());
+    m_aimer->setWorldObject(m_ship.get());
+}
+
 
