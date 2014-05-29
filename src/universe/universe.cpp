@@ -46,11 +46,11 @@ Sector* Universe::sector(const std::string& name) {
     return iter == m_sectors.end() ? nullptr : iter->get();
 }
 
-void Universe::addFunctionalObject(FunctionalObject* object) { std::cout << "Add functional: " << object << std::endl;
+void Universe::addFunctionalObject(FunctionalObject* object) {
     m_functionalObjects->addObject(object);
 }
 
-void Universe::removeFunctionalObject(FunctionalObject* object) { std::cout << "Remove functional: " << object << std::endl;
+void Universe::removeFunctionalObject(FunctionalObject* object) {
     m_functionalObjects->removeObject(object);
 }
 

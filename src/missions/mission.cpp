@@ -41,7 +41,7 @@ void Mission::fail() {
     over();
 }
 
-void Mission::update(float deltaSec) {std::cout << this << "update " << m_script->refCounter() << std::endl;
+void Mission::update(float deltaSec) {
     m_script->update(deltaSec);
 }
 

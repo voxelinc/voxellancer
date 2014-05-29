@@ -1,7 +1,5 @@
 #include "missionscript.h"
 
-#include <iostream>
-
 #include "bindings/internalmissionbindings.h"
 
 #include "scripting/scriptengine.h"
@@ -21,10 +19,6 @@ Mission& MissionScript::mission() {
     return m_mission;
 }
 
-void MissionScript::update(float deltaSec) {
-    std::cout << this << " MissionScript::update " << deltaSec << std::endl;
-}
-
 void MissionScript::onSuccess() {
     if (m_lua->hasFunction("onSuccess")) {
         m_lua->call("onSuccess");
@@ -37,7 +31,7 @@ void MissionScript::onFailure() {
      }
 }
 
-void MissionScript::doSpawn() { std::cout << "MissionScript::doSpawn" << std::endl;
+void MissionScript::doSpawn() {
     m_scriptEngine->registerScriptable(this);
     // do not register in sector or universe, MissionScripts are managed by their mission
 }
