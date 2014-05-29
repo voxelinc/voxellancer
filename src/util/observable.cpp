@@ -2,6 +2,11 @@
 
 #include "observer.h"
 
+
+Observable::Observable() = default;
+
+Observable::~Observable() = default;
+
 void Observable::addObserver(Observer* observer) {
     m_observers.push_back(observer);
 }
@@ -15,3 +20,4 @@ void Observable::notifyObservers() {
         observer->updateObserver();
     }
 }
+

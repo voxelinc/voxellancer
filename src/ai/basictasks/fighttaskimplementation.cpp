@@ -10,8 +10,7 @@
 FightTaskImplementation::FightTaskImplementation(BoardComputer* boardComputer, const std::vector<Handle<WorldObject>>& targets) :
     AiTask(boardComputer),
     m_targets(targets),
-    m_primaryTarget(nullptr),
-    m_componentsInfo(boardComputer->worldObject()->components().componentsInfo())
+    m_primaryTarget(nullptr)
 {
 }
 
@@ -36,6 +35,7 @@ void FightTaskImplementation::updateTargets() {
             iterator++;
         }
     }
+
     if (!m_targets.empty()) {
         m_primaryTarget = m_targets.front().get();
     } else {
@@ -45,5 +45,9 @@ void FightTaskImplementation::updateTargets() {
 
 float FightTaskImplementation::targetDistance() {
     return WorldObjectGeometryHelper::sphereToSphereDistance(boardComputer()->worldObject(), m_primaryTarget);
+}
+
+const ComponentsInfo& FightTaskImplementation::componentsInfo() {
+    return boardComputer()->worldObject()->components().componentsInfo();
 }
 

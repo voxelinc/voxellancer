@@ -94,7 +94,6 @@ Ship* WorldObjectBuilder::buildShip() {
     if (ship->cockpitVoxels().empty()) {
         glow::warning("WorldObjectBuilder: ship %; has no cockpit voxel(s)", m_name);
     }
-    ship->components().notifyObservers();
     return ship;
 }
 

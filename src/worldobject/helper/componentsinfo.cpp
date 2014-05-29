@@ -1,5 +1,7 @@
 #include "componentsinfo.h"
 
+#include <iostream>
+
 #include "worldobject/worldobject.h"
 #include "worldobject/worldobjectcomponents.h"
 
@@ -9,13 +11,15 @@
 #include "equipment/engine.h"
 #include "equipment/enginepower.h"
 
+
 ComponentsInfo::ComponentsInfo(WorldObjectComponents* components) :
-    m_components(components)  
+    m_components(components),
+    m_maxRocketRange(0.0f),
+    m_maxBulletRange(0.0f),
+    m_maxForwardSpeed(0.0f)
 {
     components->addObserver(this);
-    m_maxRocketRange = 0;
-    m_maxBulletRange = 0;
-    m_maxForwardSpeed = 0;
+    updateInfo();
 }
 
 void ComponentsInfo::updateInfo() {
@@ -23,13 +27,14 @@ void ComponentsInfo::updateInfo() {
         if (hardpoint->weapon()) {
             if (hardpoint->weapon()->type() == WeaponType::Gun) {
                 Gun* gun = static_cast<Gun*>(hardpoint->weapon().get());
-                m_maxBulletRange = glm::max(gun->bulletSpeed()*gun->bulletLifetime(), m_maxBulletRange);
+                m_maxBulletRange = glm::max(gun->bulletSpeed() * gun->bulletLifetime(), m_maxBulletRange);
             } else if (hardpoint->weapon()->type() == WeaponType::RocketLauncher) {
                 RocketLauncher* launcher = static_cast<RocketLauncher*>(hardpoint->weapon().get());
                 m_maxRocketRange = glm::max(launcher->rocketRange(), m_maxRocketRange);
             }
         }
     }
+
     m_maxForwardSpeed = m_components->enginePower().directional().x;
 }
 
@@ -48,3 +53,4 @@ float ComponentsInfo::maxRocketRange() const {
 void ComponentsInfo::updateObserver() {
     updateInfo();
 }
+

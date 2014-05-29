@@ -45,7 +45,6 @@ protected:
     float m_bulletMaxWidth;
     float m_bulletLifetime;
 
-    void setBulletLifetime();
 
     void setupBullet(Bullet* bullet, const glm::vec3& point);
     void setBulletExtend();

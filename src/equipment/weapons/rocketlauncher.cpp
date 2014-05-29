@@ -67,3 +67,4 @@ float RocketLauncher::rocketRange() {
     delete rocket;
     return range;
 }
+

@@ -8,6 +8,7 @@
 
 #include "worldobjectinfo.h"
 
+#include "util/observer.h"
 #include "util/observable.h"
 
 
@@ -24,7 +25,7 @@ class ComponentsInfo;
  * Also provides functions to trigger actions or retrieve values from
  * a whole category of components. (like, fire all weapons, set all engines)
  */
-class WorldObjectComponents : public Observable {
+class WorldObjectComponents : public Observable, public Observer {
 public:
     WorldObjectComponents(WorldObject* worldObject);
 
@@ -32,7 +33,7 @@ public:
     const WorldObject* worldObject() const;
 
     void addEngineSlot(std::shared_ptr<EngineSlot> engineSlot);
-    void removeEngineSlot(const EngineSlot* engineSlot);
+    void removeEngineSlot(EngineSlot* engineSlot);
 
     /**
      * Access EngineSlots either by index in the model or all of them
@@ -61,7 +62,7 @@ public:
 
 
     void addHardpoint(std::shared_ptr<Hardpoint> hardpoint);
-    void removeHardpoint(const Hardpoint* hardpoint);
+    void removeHardpoint(Hardpoint* hardpoint);
 
     /**
      * Access Hardpoints either by index in the model or all of them
@@ -97,5 +98,8 @@ protected:
     std::unique_ptr<ComponentsInfo> m_componentsInfo;
 
     EngineState m_engineState;
+
+
+    virtual void updateObserver();
 };
 

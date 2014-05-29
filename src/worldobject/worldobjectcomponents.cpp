@@ -27,10 +27,12 @@ const WorldObject* WorldObjectComponents::worldObject() const {
 
 void WorldObjectComponents::addEngineSlot(std::shared_ptr<EngineSlot> engineSlot) {
     m_engineSlots.push_back(engineSlot);
+    engineSlot->addObserver(this);
 }
 
-void WorldObjectComponents::removeEngineSlot(const EngineSlot* engineSlot) {
+void WorldObjectComponents::removeEngineSlot(EngineSlot* engineSlot) {
     m_engineSlots.remove_if([&](std::shared_ptr<EngineSlot> slot) { return slot.get() == engineSlot; });
+    engineSlot->removeObserver(this);
     notifyObservers();
 }
 
@@ -82,10 +84,12 @@ void WorldObjectComponents::setEngineState(const EngineState& engineState) {
 
 void WorldObjectComponents::addHardpoint(std::shared_ptr<Hardpoint> hardpoint) {
     m_hardpoints.push_back(hardpoint);
+    hardpoint->addObserver(this);
 }
 
-void WorldObjectComponents::removeHardpoint(const Hardpoint* hardpoint) {
+void WorldObjectComponents::removeHardpoint(Hardpoint* hardpoint) {
     m_hardpoints.remove_if([&](std::shared_ptr<Hardpoint> hp) { return hp.get() == hardpoint; });
+    hardpoint->removeObserver(this);
     notifyObservers();
 }
 
@@ -133,5 +137,9 @@ void WorldObjectComponents::update(float deltaSec) {
 
 const ComponentsInfo& WorldObjectComponents::componentsInfo() const {
     return *m_componentsInfo;
+}
+
+void WorldObjectComponents::updateObserver() {
+    notifyObservers();
 }
 

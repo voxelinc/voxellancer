@@ -23,6 +23,7 @@ public:
 
     virtual bool isFinished() override;
 
+
 protected:
     enum class State {
         IDLE,

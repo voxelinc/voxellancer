@@ -34,6 +34,6 @@ protected:
     void updateTargets();
     float targetDistance();
 
-    const ComponentsInfo& m_componentsInfo;
+    const ComponentsInfo& componentsInfo();
 };
 

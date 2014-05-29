@@ -37,7 +37,7 @@ void CruiserFightTask::update(float deltaSec) {
             boardComputer()->shootRockets(m_primaryTarget);
         }
 
-        if (anyTargetDistance() < m_componentsInfo.maxBulletRange()) {
+        if (anyTargetDistance() < componentsInfo().maxBulletRange()) {
             boardComputer()->shootBullet(m_targets);
         }
         break;

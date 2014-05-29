@@ -7,6 +7,7 @@ WorldObjectSlot::WorldObjectSlot(WorldObjectComponents* components, int index):
 {
 }
 
+WorldObjectSlot::~WorldObjectSlot() = default;
 
 std::list<std::string> WorldObjectSlot::mountables() const {
     std::list<std::string> result;

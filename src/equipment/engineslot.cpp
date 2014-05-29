@@ -35,6 +35,7 @@ void EngineSlot::setEngine(const std::shared_ptr<Engine>& engine) {
     assert(mountable(engine->equipmentKey()));
     m_engine = engine;
     m_engine->setEngineSlot(this);
+    notifyObservers();
 }
 
 void EngineSlot::update(float deltaSec) {
