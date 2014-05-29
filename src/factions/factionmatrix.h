@@ -19,13 +19,13 @@ public:
     Faction& pirateFaction();
     Faction& policeFaction();
     Faction& playerFaction();
-    Faction& unknownFaction();
 
     Faction& getFaction(const std::string& factionName);
     void addFaction(std::shared_ptr<Faction> faction);
 
     FactionRelation& getRelation(Faction& factionA, Faction& factionB);
     FactionRelation& getRelationToPlayer(Faction& faction);
+
 
 protected:
     std::unordered_map<std::string, std::shared_ptr<Faction>> m_factions;

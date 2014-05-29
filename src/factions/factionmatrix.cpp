@@ -16,7 +16,6 @@ FactionMatrix::FactionMatrix():
     addFaction(std::make_shared<Faction>("player", "Player"));
     addFaction(std::make_shared<Faction>("pirate", "Pirate"));
     addFaction(std::make_shared<Faction>("police", "Police"));
-    addFaction(std::make_shared<Faction>("unknown", "Unknown"));
 
     setupRelations();
 }
@@ -33,10 +32,6 @@ Faction& FactionMatrix::policeFaction() {
 
 Faction& FactionMatrix::playerFaction() {
     return getFaction("player");
-}
-
-Faction& FactionMatrix::unknownFaction() {
-    return getFaction("unknown");
 }
 
 Faction& FactionMatrix::getFaction(const std::string& factionName) {
