@@ -40,7 +40,7 @@ void BattleScenario::populateWorld() {
 
     glow::debug("Create WorldObjects");
 
-    Ship *playerShip = WorldObjectBuilder("specialbasicship").buildShip();
+    Ship *playerShip = WorldObjectBuilder("mox").buildShip();
     playerShip->transform().setPosition(glm::vec3(0, 0, 10));
     playerShip->info().setName("basicship");
     playerShip->info().setShowOnHud(false);

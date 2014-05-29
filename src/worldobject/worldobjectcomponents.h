@@ -15,6 +15,7 @@
 class EngineSlot;
 class Hardpoint;
 class HardpointVoxel;
+class ShieldSlot;
 class WorldObject;
 class ComponentsInfo;
 
@@ -28,6 +29,7 @@ class ComponentsInfo;
 class WorldObjectComponents : public Observable, public Observer {
 public:
     WorldObjectComponents(WorldObject* worldObject);
+    ~WorldObjectComponents();
 
     WorldObject* worldObject();
     const WorldObject* worldObject() const;
@@ -80,6 +82,14 @@ public:
 
     void fireAtObject(WorldObject* worldObject);
 
+
+    void addShieldSlot(std::shared_ptr<ShieldSlot>& shieldSlot);
+
+    std::list<std::shared_ptr<ShieldSlot>>& shieldSlots();
+
+    float compensateDamage(float damage);
+
+
     /**
      * Update all components
      */
@@ -94,6 +104,7 @@ protected:
 
     std::list<std::shared_ptr<EngineSlot>> m_engineSlots;
     std::list<std::shared_ptr<Hardpoint>> m_hardpoints;
+    std::list<std::shared_ptr<ShieldSlot>> m_shieldSlots;
 
     std::unique_ptr<ComponentsInfo> m_componentsInfo;
 
