@@ -17,6 +17,11 @@ std::shared_ptr<Shield>& ShieldSlot::shield() {
 
 void ShieldSlot::setShield(const std::shared_ptr<Shield>& shield) {
     m_shield = shield;
+    if (m_shield) {
+        m_shield->addObserver(this);
+    }
+
+    notifyObservers();
 }
 
 void ShieldSlot::update(float deltaSec) {

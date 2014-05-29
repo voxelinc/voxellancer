@@ -131,6 +131,7 @@ void WorldObjectComponents::fireAtObject(WorldObject* worldObject) {
 
 void WorldObjectComponents::addShieldSlot(std::shared_ptr<ShieldSlot>& shieldSlot) {
     m_shieldSlots.push_back(shieldSlot);
+    notifyObservers();
 }
 
 std::list<std::shared_ptr<ShieldSlot>>& WorldObjectComponents::shieldSlots() {
