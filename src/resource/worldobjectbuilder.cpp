@@ -144,7 +144,7 @@ void WorldObjectBuilder::setupComponents(WorldObjectComponents& components) {
 
 void WorldObjectBuilder::setupHardpoints(WorldObjectComponents& components) {
     for (std::shared_ptr<Hardpoint> hardpoint : components.hardpoints()) {
-        std::string prefix = m_name + ".hardpoint" + std::to_string(hardpoint->group()) + ".";
+        std::string prefix = m_name + ".hardpointGroup" + std::to_string(hardpoint->group()) + ".";
 
         hardpoint->setDirection(Property<glm::vec3>(prefix + "direction"));
         hardpoint->setFieldOfAim(Property<float>(prefix + "fieldOfAim"));
@@ -158,7 +158,7 @@ void WorldObjectBuilder::setupHardpoints(WorldObjectComponents& components) {
 
 void WorldObjectBuilder::setupEngineSlots(WorldObjectComponents& components) {
     for (std::shared_ptr<EngineSlot> engineSlot : components.engineSlots()) {
-        std::string prefix = m_name + ".engineslot" + std::to_string(engineSlot->group()) + ".";
+        std::string prefix = m_name + ".engineslotGroup" + std::to_string(engineSlot->group()) + ".";
 
         engineSlot->setDirection(Property<glm::vec3>(prefix + "direction"));
 
