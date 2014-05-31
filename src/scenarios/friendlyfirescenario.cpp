@@ -74,7 +74,6 @@ void FriendlyFireScenario::populateWorld() {
     playerShip->transform().setOrientation(glm::quat(glm::vec3(0, glm::radians(70.0f), 0)));
     playerShip->info().setName("player");
     World::instance()->player().setShip(playerShip);
-    m_world->god().scheduleSpawn(playerShip);
 
     World::instance()->factionMatrix().getRelationToPlayer(World::instance()->factionMatrix().pirateFaction()).setFriendliness(100);
 

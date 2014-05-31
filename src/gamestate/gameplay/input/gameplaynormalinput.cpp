@@ -128,6 +128,10 @@ void GamePlayNormalInput::keyCallback(int key, int scancode, int action, int mod
                 m_inputConfigurator->setLastInput(InputClass::Primary, InputMapping());
             break;
 
+            case GLFW_KEY_O:
+                World::instance()->player().joinSelectedSquad();
+                break;
+
             case GLFW_KEY_SPACE:
                 m_mouseControl = !m_mouseControl;
             break;
@@ -177,7 +181,7 @@ void GamePlayNormalInput::applyUpdates() {
     m_fireUpdate = false;
 
     if (m_rocketUpdate && World::instance()->player().ship()) {
-        World::instance()->player().ship()->components().fireAtObject(World::instance()->player().ship()->targetObject());
+        World::instance()->player().fireRocket();
     }
     m_rocketUpdate = false;
 

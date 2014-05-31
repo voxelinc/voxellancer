@@ -46,8 +46,9 @@ void BattleScenario::populateWorld() {
     playerShip->info().setShowOnHud(false);
     playerShip->info().setCanLockOn(false);
 
-    m_world->god().scheduleSpawn(playerShip);
     World::instance()->player().setShip(playerShip);
+
+    m_world->god().scheduleSpawn(playerShip);
 
     // create enemy ai driven ship
     Ship *aitester = WorldObjectBuilder("basicship").buildShip();

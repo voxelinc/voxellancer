@@ -36,7 +36,12 @@ const EngineState& BoardComputer::engineState() const {
     return m_engineState;
 }
 
-void BoardComputer::moveTo(const glm::vec3& position, bool decelerate) {
+void BoardComputer::moveTo(const glm::vec3& position, bool decelerate, OrderPriority priority) {
+    if (!isMoveOrderAllowed(priority)) {
+        return;
+    } else {
+        setMoveOrderPriority(priority);
+    }
     glm::vec3 projectedPosition = m_worldObject->physics().projectedTransformIn(1.0f).position();
     glm::vec3 delta = position - projectedPosition;
     float distance = glm::length(delta);
@@ -61,10 +66,14 @@ void BoardComputer::moveTo(const glm::vec3& position, bool decelerate) {
         m_engineState.setDirectional(direction);
     }
 
-    m_overwriteEngineState = true;
 }
 
-void BoardComputer::rotateTo(const glm::vec3& position, const glm::vec3& up) {
+void BoardComputer::rotateTo(const glm::vec3& position, const glm::vec3& up, OrderPriority priority) {
+    if (!isMoveOrderAllowed(priority)) {
+        return;
+    } else {
+        setMoveOrderPriority(priority);
+    }
     glm::vec3 accumulatedEuler;
 
     // A guess (hack) where the WorldObject will point to in one second, in the local coordinate-sys
@@ -95,7 +104,6 @@ void BoardComputer::rotateTo(const glm::vec3& position, const glm::vec3& up) {
     accumulatedEuler = glm::sign(accumulatedEuler);
     m_engineState.setAngular(accumulatedEuler);
 
-    m_overwriteEngineState = true;
 }
 
 glm::vec3 BoardComputer::rotateUpTo(const glm::vec3& up) {
@@ -125,7 +133,12 @@ glm::vec3 BoardComputer::rotateUpAuto(const glm::quat& rotation) {
     return glm::vec3(0.0f);
 }
 
-void BoardComputer::shootBullet(const std::vector<Handle<WorldObject>>& targets) {
+void BoardComputer::shootBullet(const std::vector<Handle<WorldObject>>& targets, OrderPriority priority) {
+    if (!isFireOrderAllowed(priority)) {
+        return;
+    } else {
+        setFireOrderPriority(priority);
+    }
     float max_angle = glm::radians(45.0f);
 
     for (auto& targetHandle : targets) {
@@ -141,16 +154,39 @@ void BoardComputer::shootBullet(const std::vector<Handle<WorldObject>>& targets)
     }
 }
 
-void BoardComputer::shootRockets(WorldObject* target) {
+void BoardComputer::shootRockets(WorldObject* target, OrderPriority priority) {
+    if (!isFireOrderAllowed(priority)) {
+        return;
+    } else {
+        setFireOrderPriority(priority);
+    }
     m_worldObject->components().fireAtObject(target);
 }
 
 void BoardComputer::update(float deltaSec) {
-    if(m_overwriteEngineState) {
-        m_worldObject->components().setEngineState(m_engineState);
-    }
+    m_worldObject->components().setEngineState(m_engineState);
     m_engineState.clear();
     m_overwriteEngineState = false;
+    setGeneralOrderPriority(OrderPriority::NONE);
 }
 
+bool BoardComputer::isFireOrderAllowed(OrderPriority priority) {
+    return priority >= m_fireOrderPriority;
+}
 
+bool BoardComputer::isMoveOrderAllowed(OrderPriority priority) {
+    return priority >= m_moveOrderPriority;
+}
+
+void BoardComputer::setFireOrderPriority(OrderPriority priority) {
+    m_fireOrderPriority = priority;
+}
+
+void BoardComputer::setMoveOrderPriority(OrderPriority priority) {
+    m_moveOrderPriority = priority;
+}
+
+void BoardComputer::setGeneralOrderPriority(OrderPriority priority) {
+    m_fireOrderPriority = priority;
+    m_moveOrderPriority = priority;
+}

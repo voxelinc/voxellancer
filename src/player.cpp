@@ -1,39 +1,34 @@
 #include "player.h"
 
 #include "ai/character.h"
+#include "ai/playerboardcomputer.h"
+#include "ai/squadlogic.h"
 
 #include "camera/cameradolly.h"
 #include "camera/camerahead.h"
 
 #include "factions/factionmatrix.h"
+#include "factions/faction.h"
 
 #include "gamestate/game.h"
 #include "gamestate/gameplay/gameplay.h"
 
 #include "ui/hud/hud.h"
 #include "ui/hud/hudget.h"
-#include "ui/hud/aimhelperhudget.h"
 #include "ui/hud/crosshair.h"
 #include "ui/targetselector.h"
 
 #include "worldobject/worldobjectinfo.h"
-
-#include "utils/aimer.h"
-
-#include "physics/physics.h"
 
 #include "world/world.h"
 
 #include "worldobject/ship.h"
 #include "worldobject/worldobjectcomponents.h"
 
-#include "equipment/hardpoint.h"
-#include "equipment/weapon.h"
-#include "equipment/weapons/gun.h"
 
 
-Player::Player():
-    m_aimer(new Aimer(nullptr)),
+Player::Player() :
+    Character(),
     m_hud(new HUD(this)),
     m_cameraDolly(new CameraDolly()),
     m_targetSelector(new TargetSelector(this))
@@ -43,26 +38,19 @@ Player::Player():
 
 Player::~Player() = default;
 
-Ship* Player::ship() {
-    return m_ship.get();
-}
-
 void Player::setShip(Ship* ship) {
-    m_ship = makeHandle(ship);
-    m_ship->character()->setFaction(World::instance()->factionMatrix().playerFaction());
+    Character::setShip(ship);
+    setFaction(World::instance()->factionMatrix().playerFaction());
+    m_boardComputer = new PlayerBoardComputer(ship, m_hud.get(),m_targetSelector.get());
+    ship->setBoardComputer(m_boardComputer);
     m_ship->info().setShowOnHud(false);
     m_cameraDolly->followWorldObject(ship);
-    m_aimer->setWorldObject(ship);
 }
 
 void Player::update(float deltaSec) {
+    Character::update(deltaSec);
     m_cameraDolly->update(deltaSec);
     m_hud->update(deltaSec);
-    m_aimer->update(deltaSec);
-
-    if (m_ship.valid()) {
-        m_ship->components().setEngineState(m_engineState);
-    }
 }
 
 CameraHead& Player::cameraHead() {
@@ -75,26 +63,26 @@ HUD& Player::hud() {
 
 void Player::fire() {
     if (ship()) {
-        glm::vec3 targetPoint;
+        m_boardComputer->fire(glm::normalize(m_hud->crossHair().worldPosition() - cameraHead().position()));
+    }
+}
 
-        if(m_hud->aimHelper().hovered()) {
-            targetPoint = m_hud->aimHelper().targetPoint();
-        } else {
-            glm::vec3 shootDirection(glm::normalize(m_hud->crossHair().worldPosition() - cameraHead().position()));
-            Ray ray(m_hud->crossHair().worldPosition(), shootDirection);
-            targetPoint = m_aimer->aim(ray);
-        }
-
-        m_ship->components().fireAtPoint(targetPoint, false);
+void Player::fireRocket() {
+    if (ship()) {
+        m_boardComputer->fireRocket();
     }
 }
 
 void Player::move(const glm::vec3& vec) {
-    m_engineState.setDirectional(vec);
+    if (ship() && glm::length(vec) > 0) {
+        m_boardComputer->move(vec);
+    }
 }
 
 void Player::rotate(const glm::vec3& euler) {
-    m_engineState.setAngular(euler);
+    if (ship() && glm::length(euler) > 0) {
+        m_boardComputer->rotate(euler);
+    }
 }
 
 void Player::selectTarget(bool next) {
@@ -106,3 +94,9 @@ void Player::setTarget(WorldObject* target) {
     m_hud->setTarget(target);
 }
 
+void Player::joinSelectedSquad() {
+    Ship* targetShip = dynamic_cast<Ship*>(m_ship->targetObject());
+    if (targetShip && targetShip->squadLogic()->squad()) {
+        m_ship->squadLogic()->joinSquadOf(targetShip);
+    }
+}

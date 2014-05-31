@@ -95,9 +95,12 @@ void PirateScenario::populateWorld() {
     testCluster->transform().setPosition(glm::vec3(0, 0, 10));
     testCluster->info().setName("basicship");
     testCluster->info().setShowOnHud(false);
-    m_world->god().scheduleSpawn(testCluster);
 
     World::instance()->player().setShip(testCluster);
+    testCluster->squadLogic()->joinSquadOf(leader);
+
+    m_world->god().scheduleSpawn(testCluster);
+
 
     WorldObject *wall = new WorldObject();
     wall->transform().move(glm::vec3(-30, 0, -50));

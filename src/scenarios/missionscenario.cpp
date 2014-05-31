@@ -28,6 +28,7 @@ void MissionScenario::populateWorld() {
     m_world->god().scheduleSpawn(playerShip);
 
     World::instance()->player().setShip(playerShip);
+
     World::instance()->missionSystem().addMission(m_mission);
 }
 

@@ -34,6 +34,8 @@ public:
     BoardComputer* boardComputer();
     SquadLogic* squadLogic();
 
+    void setBoardComputer(BoardComputer* boardComputer);
+
     void setCharacter(Character* character);
     Character* character();
 

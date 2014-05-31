@@ -7,12 +7,22 @@
 
 #include "worldobject/ship.h"
 
+#include "world/world.h"
 
-Character::Character(Ship& ship, Faction& faction):
-    m_ship(ship),
-    m_faction(&faction),
+#include "factions/factionmatrix.h"
+
+
+Character::Character(Ship* ship) :
     m_task(nullptr)
 {
+    m_faction = &World::instance()->factionMatrix().unknownFaction();
+    m_ship = makeHandle(ship);
+}
+
+Character::Character() : 
+    m_task(nullptr) 
+{
+
 }
 
 Faction& Character::faction() {
@@ -32,10 +42,19 @@ std::shared_ptr<AiTask> Character::task() {
 }
 
 void Character::update(float deltaSec) {
-    if (m_ship.squadLogic()->isSquadLeader() && m_ship.squadLogic()->squad()->task().get()) {
-        m_ship.squadLogic()->squad()->task()->update(deltaSec);
+    if (m_ship->squadLogic()->isSquadLeader() && m_ship->squadLogic()->squad()->task().get()) {
+        m_ship->squadLogic()->squad()->task()->update(deltaSec);
     }
     if (m_task.get()) {
         m_task->update(deltaSec);
     }
+}
+
+Ship* Character::ship() {
+    return m_ship.get();
+}
+
+void Character::setShip(Ship* ship) {
+    m_ship = makeHandle(ship);
+    ship->setCharacter(this);
 }

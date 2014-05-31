@@ -13,7 +13,7 @@
 
 Ship::Ship():
     WorldObject(),
-    m_character(new Character(*this, World::instance()->factionMatrix().unknownFaction())),
+    m_character(new Character(this)),
     m_boardComputer(new BoardComputer(this)),
     m_squadLogic(new SquadLogic(*this))
 {
@@ -58,4 +58,6 @@ SquadLogic* Ship::squadLogic() {
     return m_squadLogic.get();
 }
 
-
+void Ship::setBoardComputer(BoardComputer* boardComputer) {
+    m_boardComputer.reset(boardComputer);
+}

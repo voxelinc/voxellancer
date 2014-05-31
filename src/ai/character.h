@@ -1,5 +1,7 @@
 #pragma once
 
+#include "utils/handle/handle.h"
+
 #include <memory>
 
 
@@ -13,7 +15,8 @@ class Ship;
  */
 class Character {
 public:
-    Character(Ship& ship, Faction& faction);
+    Character(Ship* ship);
+    Character();
 
     Faction& faction();
     void setFaction(Faction& faction);
@@ -23,8 +26,11 @@ public:
 
     virtual void update(float deltaSec);
 
+    virtual void setShip(Ship* ship);
+    Ship* ship();
+
 protected:
-    Ship& m_ship;
+    Handle<Ship> m_ship;
     Faction* m_faction;
     std::shared_ptr<AiTask> m_task;
 };

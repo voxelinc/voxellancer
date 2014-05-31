@@ -17,7 +17,7 @@ public:
     ~SquadLogic();
     Ship* ship();
 
-    void joinSquadOf(Ship* leader);
+    void joinSquadOf(Ship* member);
     void joinSquad(std::shared_ptr<Squad> squad);
     void leaveSquad();
     std::shared_ptr<Squad> squad();

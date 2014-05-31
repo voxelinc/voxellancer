@@ -20,10 +20,10 @@ Ship* SquadLogic::ship() {
     return &m_ship;
 }
 
-void SquadLogic::joinSquadOf(Ship* leader) {
-    assert(leader);
-    assert(leader->squadLogic()->squad()); // leader must be in a squad
-    joinSquad(leader->squadLogic()->squad());
+void SquadLogic::joinSquadOf(Ship* member) {
+    assert(member);
+    assert(member->squadLogic()->squad()); // leader must be in a squad
+    joinSquad(member->squadLogic()->squad());
 }
 
 void SquadLogic::joinSquad(std::shared_ptr<Squad> squad) {
