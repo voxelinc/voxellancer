@@ -32,7 +32,6 @@ PropertyManager::~PropertyManager() {
 
 }
 
-
 void PropertyManager::load(const std::string& file, const std::string& prefix) {
     std::ifstream input(file);
     std::string line;
@@ -53,6 +52,7 @@ void PropertyManager::load(const std::string& file, const std::string& prefix) {
         bool isTitle = regexns::regex_match(line, matches, title_regex());
         if (isTitle) {
             title = matches[1];
+            m_groups.insert(keyPrefix + title);
             continue;
         }
 
@@ -69,7 +69,7 @@ void PropertyManager::load(const std::string& file, const std::string& prefix) {
                     success++;
                 }
             }
-            
+
             if (success == 0) {
                 glow::warning("PropertyManager: no match %;: %; (line: %;)", key, value, line);
             }
@@ -92,6 +92,10 @@ void PropertyManager::reset() {
         delete s_instance;
         s_instance = nullptr;
     }
+}
+
+bool PropertyManager::hasGroup(const std::string& name) {
+    return m_groups.find(name) != m_groups.end();
 }
 
 PropertyManager* PropertyManager::s_instance;
