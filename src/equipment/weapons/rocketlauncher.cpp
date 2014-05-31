@@ -61,3 +61,10 @@ void RocketLauncher::setupRocket(Rocket* rocket, WorldObject* target) {
     rocket->physics().setSpeed(worldObject->physics().speed());
 }
 
+float RocketLauncher::rocketRange() {
+    Rocket* rocket = WorldElementBuilder(projectileName()).buildRocket();
+    float range = rocket->lifetime() * rocket->components().enginePower().directional().x;
+    delete rocket;
+    return range;
+}
+

@@ -154,11 +154,16 @@ void Gun::setBulletExtend() {
     m_bulletCapsuleRadius = glm::max(bullet->extent().x, bullet->extent().y) * bullet->transform().scale();
     m_bulletLength = bullet->extent().z;
     m_spawnDistance = glm::root_two<float>() * bullet->transform().scale();
+    m_bulletLifetime = bullet->lifetime();
 
     delete bullet;
 }
 
 void Gun::onProjectileNameChanged() {
     setBulletExtend();
+}
+
+float Gun::bulletLifetime() const {
+    return m_bulletLifetime;
 }
 

@@ -17,10 +17,12 @@ class Ship;
 class Gun: public Weapon {
 public:
     Gun(const std::string& equipmentKey);
-    ~Gun();
+    virtual ~Gun();
 
     float bulletSpeed() const;
     void setBulletSpeed(float bulletSpeed);
+
+    float bulletLifetime() const;
 
     const SoundProperties& fireSound() const;
     void setFireSound(const SoundProperties& fireSound);
@@ -41,6 +43,8 @@ protected:
     float m_spawnDistance;
     float m_bulletLength;
     float m_bulletCapsuleRadius;
+    float m_bulletLifetime;
+
 
     void setupBullet(Bullet* bullet, const glm::vec3& point);
     void setBulletExtend();

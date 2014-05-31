@@ -40,7 +40,7 @@ void BattleScenario::populateWorld() {
 
     glow::debug("Create WorldObjects");
 
-    Ship *playerShip = WorldElementBuilder("specialbasicship").buildShip();
+    Ship *playerShip = WorldElementBuilder("mox").buildShip();
     playerShip->transform().setPosition(glm::vec3(0, 0, 10));
     playerShip->info().setName("basicship");
     playerShip->info().setShowOnHud(false);
@@ -65,7 +65,7 @@ void BattleScenario::populateWorld() {
     banner->transform().move(glm::vec3(0, 0, -600));
     banner->info().setShowOnHud(false);
     banner->info().setCanLockOn(false);
-    m_world->god().scheduleSpawn(banner);
+    //m_world->god().scheduleSpawn(banner);
 
     // create two opposing enemy forces
     populateBattle(3, 3);

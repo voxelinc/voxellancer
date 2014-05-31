@@ -22,6 +22,7 @@ class Physics;
 class WorldObjectInfo;
 class VoxelCollision;
 class WorldObjectComponents;
+class ComponentsInfo;
 
 enum class SpawnState {
     None,
@@ -89,7 +90,7 @@ public:
     void setCollisionFieldOfDamage(float collisionFieldOfDamage);
 
     virtual bool passiveForCollisionDetection();
-
+    
 
 protected:
     std::unique_ptr<CollisionFilter> m_collisionFilter;
@@ -97,7 +98,7 @@ protected:
     std::unique_ptr<Physics> m_physics;
     std::unique_ptr<WorldObjectInfo> m_info;
     std::unique_ptr<WorldObjectComponents> m_components;
-
+    
     std::unordered_map<glm::ivec3, Voxel*> m_cockpitVoxels;
     bool m_cockpitVoxelsDestroyed;
     Voxel* m_crucialVoxel;

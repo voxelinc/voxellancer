@@ -1,7 +1,5 @@
 #include "worldtreeshadownode.h"
 
-#include <iostream>
-
 #include "worldtreenode.h"
 
 
