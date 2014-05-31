@@ -14,12 +14,12 @@
 #include "voxel/voxelclusterbounds.h"
 
 #include "voxeleffect/voxelparticledata.h"
-#include "voxeleffect/voxelparticleengine.h"
+#include "voxeleffect/voxelparticleengineimpl.h"
 
 #include "player.h"
 #include "camera/camerahead.h"
 
-VoxelParticleIntersectionCheck::VoxelParticleIntersectionCheck(const VoxelParticleEngine& engine) :
+VoxelParticleIntersectionCheck::VoxelParticleIntersectionCheck(const VoxelParticleEngineImpl& engine) :
     m_particleEngine(engine)
 {
 }

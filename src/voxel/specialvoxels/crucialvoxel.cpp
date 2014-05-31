@@ -8,7 +8,7 @@
 
 
 CrucialVoxel::CrucialVoxel(const glm::ivec3& gridCell, int index):
-    SpecialVoxel(gridCell, Property<uint32_t>::get("voxels.crucial.color"), index, Property<float>::get("voxels.crucial.density"), Property<float>::get("voxels.crucial.hp"))
+    SpecialVoxel(gridCell, index, Property<uint32_t>::get("voxels.crucial.color"), Property<float>::get("voxels.crucial.density"), Property<float>::get("voxels.crucial.hp"))
 {
 }
 
@@ -26,4 +26,3 @@ void CrucialVoxel::onRemoval(){
 void CrucialVoxel::onDestruction(){
     Voxel::onDestruction();
 }
-

@@ -39,7 +39,7 @@ void FrameBuffer::setupFBO() {
         glow::Texture* texture = new glow::Texture(GL_TEXTURE_2D);
         texture->bind();
 
-        texture->image2D(0, GL_RGB, m_resolution.x, m_resolution.y, 0, GL_RGB, GL_FLOAT, nullptr);
+        texture->image2D(0, GL_RGBA, m_resolution.x, m_resolution.y, 0, GL_RGBA, GL_FLOAT, nullptr);
 
         texture->setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         texture->setParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);

@@ -2,6 +2,7 @@
 
 #include <unordered_map>
 #include <string>
+#include <stdint.h>
 
 #include <GL/glew.h>
 
@@ -23,7 +24,9 @@ public:
     VoxelRenderData(std::unordered_map<glm::ivec3, Voxel*> &voxel);
 
     void invalidate();
-    int voxelCount();
+    int opaqueVoxelCount();
+    int transparentVoxelCount();
+    int transparentVoxelBase();
 
     glow::VertexArrayObject* vertexArrayObject();
 
@@ -31,6 +34,8 @@ protected:
     std::unordered_map<glm::ivec3, Voxel*> &m_voxel;
     bool m_isDirty;
     int m_bufferSize;
+    int m_opaqueCount;
+    int m_transparentCount;
 
     glow::ref_ptr<glow::Buffer> m_voxelDataBuffer;
     glow::ref_ptr<glow::VertexArrayObject> m_vertexArrayObject;
@@ -38,6 +43,8 @@ protected:
     void updateBuffer();
     void setupVertexAttributes();
     void setupVertexAttribute(GLint offset, const std::string& name, int numPerVertex, GLenum type, GLboolean normalised, int bindingNum);
+    bool isSameColoredVoxelAt(const glm::ivec3 position, const Voxel* voxel);
+    uint32_t calculateFaces(Voxel* voxel);
 
     virtual void beforeContextDestroy() override;
     virtual void afterContextRebuild() override;
