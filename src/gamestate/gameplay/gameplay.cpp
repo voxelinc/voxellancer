@@ -43,8 +43,7 @@ GamePlay::GamePlay(Game* game) :
     m_freecamInput(new GamePlayFreecamInput(*this)),
     m_freecamActive(false),
     m_scene(new GamePlayScene(*this)),
-    m_soundManager(new SoundManager()),
-    m_scenario(new ScriptedScenario(this, "data/scripts/scenarios/demo.lua"))
+    m_soundManager(new SoundManager())
 {
     updateView();
     setInitialSubState(m_runningState);
