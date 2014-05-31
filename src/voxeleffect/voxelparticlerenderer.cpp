@@ -11,11 +11,11 @@
 
 #include "utils/math.h"
 
-#include "voxelparticleengine.h"
+#include "voxelparticleengineimpl.h"
 #include "voxelmesh.h"
 
 
-VoxelParticleRenderer::VoxelParticleRenderer(VoxelParticleEngine* engine):
+VoxelParticleRenderer::VoxelParticleRenderer(VoxelParticleEngineImpl* engine):
     m_initialized(false),
     m_engine(engine),
     m_bufferSize(0),
@@ -40,7 +40,7 @@ void VoxelParticleRenderer::updateBuffer(int begin, int end, VoxelParticleData* 
     m_gpuParticleBuffer->setSubData(begin * sizeof(VoxelParticleData), byteCount, data);
 }
 
-void VoxelParticleRenderer::draw(const Camera& camera) {
+void VoxelParticleRenderer::draw(const Camera& camera, bool transparentPass) {
     if (!m_initialized) {
         initialize();
     }
@@ -52,6 +52,7 @@ void VoxelParticleRenderer::draw(const Camera& camera) {
     m_program->setUniform("viewProjection", camera.viewProjection());
     m_program->setUniform("time", m_engine->time());
     m_program->setUniform("lightdir", m_defaultLightDir.get());
+    m_program->setUniform("transparentPass", transparentPass);
 
     m_program->use();
 

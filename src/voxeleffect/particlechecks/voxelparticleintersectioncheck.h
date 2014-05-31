@@ -7,7 +7,7 @@
 #include "geometry/sphere.h"
 
 class Player;
-class VoxelParticleEngine;
+class VoxelParticleEngineImpl;
 struct VoxelParticleData;
 
 
@@ -16,12 +16,12 @@ struct VoxelParticleData;
  */
 class VoxelParticleIntersectionCheck: public VoxelParticleRemoveCheck {
 public:
-    VoxelParticleIntersectionCheck(const VoxelParticleEngine& engine);
+    VoxelParticleIntersectionCheck(const VoxelParticleEngineImpl& engine);
 
     virtual bool isDead(const VoxelParticleData& particle) override;
 
 protected:
-    const VoxelParticleEngine& m_particleEngine;
+    const VoxelParticleEngineImpl& m_particleEngine;
     Sphere m_Sphere;
 
     virtual void beforeCheck();

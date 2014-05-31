@@ -25,7 +25,7 @@ public:
 };
 
 static CrossHairElement* newStick() {
-    int color = 0x33FF00;
+    int color = 0x33FF00FF;
 
     CrossHairElement* stick = new CrossHairElement();
 
@@ -38,7 +38,7 @@ static CrossHairElement* newStick() {
 
 static CrossHairElement* newDot() {
     CrossHairElement* dot = new CrossHairElement();
-    dot->addVoxel(new Voxel(glm::ivec3(0, 0, 0), 0x33FF00));
+    dot->addVoxel(new Voxel(glm::ivec3(0, 0, 0), 0x33FF00FF));
     return dot;
 }
 

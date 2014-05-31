@@ -7,6 +7,8 @@
 #include <glow/Buffer.h>
 #include <glow/Program.h>
 
+#include "utils/colorhelper.h"
+
 #include "voxelcluster.h"
 #include "voxeleffect/voxelmesh.h"
 #include "voxelrenderer.h"
@@ -24,7 +26,8 @@ namespace {
 VoxelRenderData::VoxelRenderData(std::unordered_map<glm::ivec3, Voxel*> &voxel) :
     m_voxel(voxel),
     m_isDirty(true),
-    m_bufferSize(0)
+    m_bufferSize(0),
+    m_transparentCount(0)
 {
 
 }
@@ -67,11 +70,20 @@ void VoxelRenderData::updateBuffer() {
     VoxelData* voxelData = static_cast<VoxelData*>(m_voxelDataBuffer->mapRange(0, m_voxel.size() * sizeof(VoxelData), GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT));
     assert(voxelData != nullptr);
 
-    int i = 0;
+    m_transparentCount = 0;
+    int opaqueCursor = 0; // counts from front, opaque voxels
+    int transparentCursor = m_bufferSize - 1; // counts from back, transparent voxels
     for (auto& pair : m_voxel) {
         Voxel *voxel = pair.second;
         assert(voxel != nullptr);
-        voxelData[i++] = VoxelData{ glm::vec3(voxel->gridCell()), voxel->visuals().color(), voxel->visuals().emissiveness() };
+        uint32_t color = voxel->visuals().color();
+        VoxelData data = VoxelData{ glm::vec3(voxel->gridCell()), ColorHelper::flipColorForGPU(color), voxel->visuals().emissiveness() };
+        if ((color & 0x000000FF) == 0xFF) {
+            voxelData[opaqueCursor++] = data;
+        } else {
+            voxelData[transparentCursor--] = data;
+            m_transparentCount++;
+        }
     }
 
     m_voxelDataBuffer->unmap();
@@ -79,8 +91,25 @@ void VoxelRenderData::updateBuffer() {
     m_isDirty = false;
 }
 
-int VoxelRenderData::voxelCount() {
-    return m_voxel.size();
+int VoxelRenderData::opaqueVoxelCount() {
+    if (m_isDirty) {
+        updateBuffer();
+    }
+    return m_voxel.size() - m_transparentCount;
+}
+
+int VoxelRenderData::transparentVoxelCount() {
+    if (m_isDirty) {
+        updateBuffer();
+    }
+    return m_transparentCount;
+}
+
+int VoxelRenderData::transparentVoxelBase() {
+    if (m_isDirty) {
+        updateBuffer();
+    }
+    return m_bufferSize - m_transparentCount;
 }
 
 void VoxelRenderData::invalidate() {
@@ -105,3 +134,4 @@ void VoxelRenderData::beforeContextDestroy() {
 void VoxelRenderData::afterContextRebuild() {
     // lazy init
 }
+

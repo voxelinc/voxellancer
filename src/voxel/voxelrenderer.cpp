@@ -34,13 +34,14 @@ VoxelRenderer::VoxelRenderer() :
     createAndSetupShaders();
 }
 
-void VoxelRenderer::prepareDraw(const Camera& camera, bool withBorder) {
+void VoxelRenderer::prepareDraw(const Camera& camera, bool withBorder, bool transparentPass) {
     glEnable(GL_DEPTH_TEST);
 
     m_program->setUniform("projection", camera.projection());
     m_program->setUniform("view", camera.view());
     m_program->setUniform("viewProjection", camera.viewProjection());
     m_program->setUniform("withBorder", (withBorder ? 1.0f : 0.0f));
+    m_program->setUniform("transparentPass", transparentPass);
 
     m_modelMatrixUniform = m_program->getUniform<glm::mat4>("model");
     m_emissivenessUniform = m_program->getUniform<float>("emissiveness");
@@ -52,6 +53,7 @@ void VoxelRenderer::prepareDraw(const Camera& camera, bool withBorder) {
 
     glProvokingVertex(GL_LAST_VERTEX_CONVENTION);
 
+    m_transparentPass = transparentPass;
     m_prepared = true;
 }
 
@@ -67,7 +69,11 @@ void VoxelRenderer::draw(VoxelCluster& cluster) {
     glVertexAttribDivisor(m_program->getAttributeLocation("v_position"), 1);
     glVertexAttribDivisor(m_program->getAttributeLocation("v_color"), 1);
     glVertexAttribDivisor(m_program->getAttributeLocation("v_emissiveness"), 1);
-    renderData->vertexArrayObject()->drawArraysInstanced(GL_TRIANGLE_STRIP, 0, 14, renderData->voxelCount());
+    if (m_transparentPass) {
+        renderData->vertexArrayObject()->drawArraysInstancedBaseInstance(GL_TRIANGLE_STRIP, 0, 14, renderData->transparentVoxelCount(), renderData->transparentVoxelBase());
+    } else {
+        renderData->vertexArrayObject()->drawArraysInstanced(GL_TRIANGLE_STRIP, 0, 14, renderData->opaqueVoxelCount());
+    }
 }
 
 void VoxelRenderer::afterDraw() {

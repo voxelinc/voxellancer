@@ -18,16 +18,17 @@ layout(location = 4) in float v_emissiveness;
 
 
 flat out vec3 f_normal;
-out vec3 f_color;
+out vec4 f_color;
 out float f_emissiveness;
 out vec3 f_modelposition;
 
 
 void main() {
-    gl_Position = viewProjection * model * (vec4(v_vertex + v_position, 1.0));
+    // to avoid z-fighting, minimally shrink all cubes
+    gl_Position = viewProjection * model * (vec4(v_position + v_vertex * 0.999, 1.0));
 
     f_normal = (model * vec4(v_normal, 0.0)).xyz;
-    f_color = v_color.rgb;
+    f_color = v_color;
     f_emissiveness = clamp(emissiveness + v_emissiveness, 0, 1);
     f_modelposition = v_vertex;
 }

@@ -18,27 +18,27 @@ namespace glow {
 
 class Camera;
 class VoxelMesh;
-class VoxelParticleEngine;
+class VoxelParticleEngineImpl;
 
 /**
- * Component of a VoxelParticleEngine responsible for rendering the particles
+ * Component of a VoxelParticleEngineImpl responsible for rendering the particles
  * It holds its own GPU-Buffer and receives updates for the particles by updateBuffer()
  */
 class VoxelParticleRenderer :  public ContextDependant {
 public:
-    VoxelParticleRenderer(VoxelParticleEngine* engine);
+    VoxelParticleRenderer(VoxelParticleEngineImpl* engine);
     ~VoxelParticleRenderer();
 
     void updateBuffer(int begin, int end, VoxelParticleData* data);
 
-    void draw(const Camera& camera);
+    void draw(const Camera& camera, bool transparentPass);
 
 
 protected:
     std::unique_ptr<VoxelMesh> m_voxelMesh;
 
     bool m_initialized;
-    VoxelParticleEngine* m_engine;
+    VoxelParticleEngineImpl* m_engine;
     int m_bufferSize;
 
     Property<glm::vec3> m_defaultLightDir;

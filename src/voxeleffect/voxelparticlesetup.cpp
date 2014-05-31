@@ -2,6 +2,8 @@
 
 #include <glm/gtx/quaternion.hpp>
 
+#include "utils/colorhelper.h"
+
 
 VoxelParticleSetup::VoxelParticleSetup(const Transform& transform, const Visuals& visuals, const Speed& speed, float lifetime):
     m_transform(transform),
@@ -22,9 +24,12 @@ VoxelParticleData VoxelParticleSetup::toData(float timeSecs) const {
     particle.creationTime = timeSecs;
     particle.deathTime = timeSecs + m_lifetime;
     particle.scale = m_transform.scale();
-    particle.color = m_visuals.color();
+    particle.color = ColorHelper::flipColorForGPU(m_visuals.color());
     particle.emissiveness = m_visuals.emissiveness();
 
     return particle;
 }
 
+Visuals VoxelParticleSetup::visuals() const {
+    return m_visuals;
+}

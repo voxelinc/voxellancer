@@ -14,7 +14,7 @@ layout(location = 8) in float scale;
 layout(location = 9) in vec4 color;
 layout(location = 10) in float emissiveness;
 // Output
-out vec3 f_color;
+out vec4 f_color;
 flat out vec3 f_normal;
 out float f_deathTime;
 out float f_emissiveness;
@@ -36,7 +36,7 @@ void main() {
     vec3 particlePosition = directionalSpeed * timeDelta + creationPosition;
     vec3 particleEulers = angularSpeed * timeDelta + creationEulers;
     vec4 particleOrientation = quat(particleEulers);
-    f_color = color.xyz;
+    f_color = color;
     f_emissiveness = emissiveness;
     f_modelposition = v_vertex;
     f_normal = qtransform(particleOrientation, v_normal);

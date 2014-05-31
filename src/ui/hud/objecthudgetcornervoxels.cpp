@@ -18,16 +18,16 @@ ObjectHudgetCornerVoxels::ObjectHudgetCornerVoxels(ObjectHudgetVoxels* objectHud
     float normalScale = 0.02f;
     float highlightScale = 0.04f;
 
-    addIndex(0, 0xFF0000, normalScale);
-    addIndex(1, 0xFF0000, highlightScale);
-    addIndex(2, 0xCC6600, normalScale);
-    addIndex(3, 0xCC6600, highlightScale);
-    addIndex(4, 0x66AAFF, normalScale);
-    addIndex(5, 0x66AAFF, highlightScale);
-    addIndex(6, 0x33AA00, normalScale);
-    addIndex(7, 0x33AA00, highlightScale);
-    addIndex(8, 0x11CC00, normalScale);
-    addIndex(9, 0x11CC00, highlightScale);
+    addIndex(0, 0xFF0000A0, normalScale);
+    addIndex(1, 0xFF0000E0, highlightScale);
+    addIndex(2, 0xCC6600A0, normalScale);
+    addIndex(3, 0xCC6600E0, highlightScale);
+    addIndex(4, 0x66AAFFA0, normalScale);
+    addIndex(5, 0x66AAFFE0, highlightScale);
+    addIndex(6, 0x33AA00A0, normalScale);
+    addIndex(7, 0x33AA00E0, highlightScale);
+    addIndex(8, 0x11CC00A0, normalScale);
+    addIndex(9, 0x11CC00E0, highlightScale);
 }
 
 const glm::vec3& ObjectHudgetCornerVoxels::position() const {
