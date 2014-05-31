@@ -13,7 +13,8 @@ class TextFieldHudgetVoxels{
 public:
     TextFieldHudgetVoxels(Hudget* textFieldHudget, const glm::vec3& direction, TextOrientation textOrientation = TextOrientation::BACKWARDS, float scale = 0.5f, const std::string& text = "", FontSize fontSize = FontSize::SIZE5x7);
 
-    virtual void setText(const std::string& text);
+    void setText(const std::string& text);
+    void setDirection(const glm::vec3& direction);
 
     virtual void draw();
 

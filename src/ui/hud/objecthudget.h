@@ -11,6 +11,7 @@
 class ObjectHudgetVoxels;
 class HUDObjectDelegate;
 class ArrowHudgetVoxels;
+class TextFieldHudget;
 
 class ObjectHudget: public Hudget {
 public:
@@ -34,6 +35,7 @@ protected:
     HUDObjectDelegate* m_objectDelegate;
     std::unique_ptr<ObjectHudgetVoxels> m_objectVoxels;
     std::unique_ptr<ArrowHudgetVoxels> m_arrowVoxels;
+    std::unique_ptr<TextFieldHudget> m_shieldLabel;
 
     bool m_targeted;
     void updateTargeted();

@@ -27,6 +27,10 @@ void TextFieldHudget::setText(const std::string& text) {
     m_voxels->setText(text);
 }
 
+void TextFieldHudget::setDirection(const glm::vec3& direction) {
+    m_voxels->setDirection(direction);
+}
+
 bool TextFieldHudget::isAt(const Ray& ray) const {
     return m_voxels->isAt(ray);
 }

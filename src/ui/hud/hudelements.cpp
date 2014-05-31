@@ -15,6 +15,7 @@ HUDElements::HUDElements(HUD& hud):
     m_targetName(new TextFieldHudget(&m_hud, glm::normalize(glm::vec3(0, -1.1f, -2)), TextOrientation::BACKWARDS, 0.025f, "")),
     m_speedLabel(new TextFieldHudget(&m_hud, glm::normalize(glm::vec3(1.5f, -1.1f, -2)), TextOrientation::BACKWARDS, 0.020f, "")),
     m_missionTitle(new TextFieldHudget(&m_hud, glm::normalize(glm::vec3(0.0f, 1.0f, -2)), TextOrientation::BACKWARDS, 0.020f, "")),
+    m_shieldLabel(new TextFieldHudget(&m_hud, glm::normalize(glm::vec3(-1.5f, -1.1f, -2)), TextOrientation::BACKWARDS, 0.020f, "")),
     m_missionTitleHider(new HudgetHideAnimation(*m_missionTitle)),
     m_missionCaption(new TextFieldHudget(&m_hud, glm::normalize(glm::vec3(0.0f, 0.8f, -2)), TextOrientation::SPHERE_STRAIGHT, 0.010f, "")),
     m_missionCaptionHider(new HudgetHideAnimation(*m_missionCaption)),
@@ -23,6 +24,7 @@ HUDElements::HUDElements(HUD& hud):
 {
     addHudget(m_targetName);
     addHudget(m_speedLabel);
+    addHudget(m_shieldLabel);
     addHudget(m_missionTitle);
     addHudget(m_missionCaption);
     addHudget(m_missionMessage);
@@ -60,6 +62,10 @@ void HUDElements::setTargetName(const std::string& name) {
 
 void HUDElements::setSpeed(const std::string& speed) {
     m_speedLabel->setText(speed);
+}
+
+void HUDElements::setShieldStatus(const std::string& shieldStatus) {
+    m_shieldLabel->setText(shieldStatus);
 }
 
 void HUDElements::showMissionInfo(const std::string& title, const std::string& caption) {

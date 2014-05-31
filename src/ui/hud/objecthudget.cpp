@@ -6,10 +6,16 @@
 
 #include "ai/character.h"
 
+#include "display/viewer.h"
+#include "display/view.h"
+
 #include "factions/factionrelation.h"
 #include "factions/factionmatrix.h"
 
+#include "ui/hud/textfieldhudget.h"
+
 #include "utils/geometryhelper.h"
+
 #include "worldobject/worldobjectinfo.h"
 
 #include "world/world.h"
@@ -26,15 +32,14 @@
 #include "objecthudgetvoxels.h"
 #include "arrowhudgetvoxels.h"
 
-#include "display/viewer.h"
-#include "display/view.h"
 
 
 ObjectHudget::ObjectHudget(HUD* hud):
     Hudget(hud),
     m_objectDelegate(nullptr),
     m_objectVoxels(new ObjectHudgetVoxels(this)),
-    m_arrowVoxels(new ArrowHudgetVoxels(this))
+    m_arrowVoxels(new ArrowHudgetVoxels(this)),
+    m_shieldLabel(new TextFieldHudget(hud, glm::vec3(), TextOrientation::BACKWARDS, 0.010f))
 {
     m_insideFov = false;
 }
@@ -75,10 +80,20 @@ void ObjectHudget::update(float deltaSec) {
 
 void ObjectHudget::draw() {
     m_objectVoxels->draw();
+
     if (!m_insideFov) {
         m_arrowVoxels->draw();
     }
 
+    WorldObject* worldObject = m_objectDelegate->worldObject();
+    if(worldObject) {
+        glm::vec3 euler = glm::vec3(-1.2, -1, 0) * (m_objectVoxels->openingAngle());
+        glm::vec3 direction = GeometryHelper::quatFromViewDirection(localDirection()) * glm::quat(euler) * glm::vec3(0, 0, -1);
+
+        m_shieldLabel->setDirection(direction);
+        m_shieldLabel->setText(worldObject->info().shieldStatus());
+        m_shieldLabel->draw();
+    }
 }
 
 void ObjectHudget::calculateOpeningAngle() {
@@ -174,3 +189,4 @@ void ObjectHudget::updateFov() {
     m_fovy = m_hud->fovy()*0.97f;
     m_fovx = m_hud->fovx()*0.98f;
 }
+

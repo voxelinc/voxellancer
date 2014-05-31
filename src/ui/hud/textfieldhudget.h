@@ -15,6 +15,7 @@ public:
     virtual ~TextFieldHudget();
 
     void setText(const std::string& content);
+    void setDirection(const glm::vec3& direction);
 
     virtual void update(float deltaSec) override;
     virtual void draw() override;

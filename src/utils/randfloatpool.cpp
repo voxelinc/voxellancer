@@ -1,7 +1,6 @@
 #include "randfloatpool.h"
 
 #include <cassert>
-#include <iostream>
 
 #include "randfloat.h"
 

@@ -31,6 +31,10 @@ void TextFieldHudgetVoxels::setText(const std::string& text) {
     m_offset = -1.f * ((m_text.length() - 1) / 2.0f) * m_width;
 }
 
+void TextFieldHudgetVoxels::setDirection(const glm::vec3& direction) {
+    m_direction = direction;
+}
+
 void TextFieldHudgetVoxels::draw() {
     if (m_textOrientation == TextOrientation::BACKWARDS) {
         m_voxelFont->drawString(m_text, worldPosition(), orientation(), m_fontSize, m_scale, FontAlign::CENTER);
