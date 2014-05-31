@@ -17,6 +17,7 @@ public:
 
     void insert(const std::vector<std::string>& path);
     const PropertyNode* find(const std::vector<std::string>& path) const;
+    bool pathExists(const std::vector<std::string>& path) const;
 
 
 protected:

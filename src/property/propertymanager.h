@@ -43,6 +43,7 @@ public:
     template<typename T> T get(const std::string& name);
     template<typename T> T get(const std::string& name, const T& defaultValue);
 
+    bool hasGroup(const std::string& name) const;
     std::vector<std::string> groups(const std::string& prefix) const;
 
 

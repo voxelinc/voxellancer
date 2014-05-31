@@ -95,6 +95,10 @@ void PropertyManager::reset() {
     }
 }
 
+bool PropertyManager::hasGroup(const std::string& name) const {
+    return m_rootNode.pathExists(StringHelper(prefix).split('.'));
+}
+
 std::vector<std::string> PropertyManager::groups(const std::string& prefix) const {
     const PropertyNode* node = m_rootNode.find(StringHelper(prefix).split('.'));
 

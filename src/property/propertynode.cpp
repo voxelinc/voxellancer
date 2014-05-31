@@ -57,3 +57,18 @@ const PropertyNode* PropertyNode::find(const std::vector<std::string>& path) con
     }
 }
 
+bool PropertyNode::pathExists(const std::vector<std::string>& path) const {
+    if (path.empty()) {
+        return true;       
+    }
+
+    auto iter = m_children.find(path[0]);
+
+    if (iter == m_children.end()) {
+        return false;
+    } else {
+        return iter->second->pathExists(std::vector<std::string>(path.begin() + 1, path.end()));
+    }
+}
+
+

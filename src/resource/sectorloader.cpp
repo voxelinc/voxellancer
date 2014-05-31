@@ -36,6 +36,14 @@ void SectorLoader::loadLight() {
 }
 
 void SectorLoader::loadJumpgates() {
-    
+    for (int i = 0; PropertyManager::instance()->hasGroup(prefix + "." + name + ".general.jumpgate" + std::to_string(i); i++) {
+        loadJumpgate(i);
+    }
 }
+
+void SectorLoader::loadJumpgate(int index) {
+    Jumpgate* jumpgate = WorldObjectBuilder("jumpgate").buildJumpgate();
+    jumpgate->transform().setPosition();
+}
+
 
