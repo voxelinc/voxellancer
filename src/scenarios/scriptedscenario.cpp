@@ -61,6 +61,6 @@ void ScriptedScenario::load() {
 }
 
 void ScriptedScenario::clear() {
-    m_script->~GamePlayScript();
+    m_script.reset();
     BaseScenario::clear();
 }
