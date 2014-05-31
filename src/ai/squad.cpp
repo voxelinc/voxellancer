@@ -2,6 +2,7 @@
 
 #include "worldobject/ship.h"
 #include "ai/aigrouptask.h"
+#include "utils/safenormalize.h"
 #include "physics/physics.h"
 #include "voxel/voxelclusterbounds.h"
 
@@ -120,5 +121,7 @@ glm::vec3 Squad::calculateFormationPosition(Ship* member, int position) {
     }
     distance += member->bounds().sphere().radius() + 10;
     glm::vec3 direction = (position % 2) ? glm::vec3(1, 0, 1) : glm::vec3(-1, 0, 1);
+
     return m_leader->transform().position() + m_leader->physics().speed().directional() + m_leader->transform().orientation() * (distance * glm::normalize(direction));
 }
+
