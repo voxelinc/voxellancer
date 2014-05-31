@@ -59,8 +59,8 @@
  *  B9: right stick
  */
 
-GamePlayNormalInput::GamePlayNormalInput() :
-    GamePlayInput(),
+GamePlayNormalInput::GamePlayNormalInput(GamePlay& gamePlay) :
+    GamePlayInput(gamePlay),
 
     m_deadzoneMouse("input.deadzoneMouse"),
     m_deadzoneGamepad("input.deadzoneGamepad"),
@@ -106,12 +106,14 @@ GamePlayNormalInput::GamePlayNormalInput() :
     m_currentTimePressed = 0;
 }
 
-void GamePlayNormalInput::resizeEvent(const unsigned int width, const unsigned int height) {
+void GamePlayNormalInput::onResizeEvent(const unsigned int width, const unsigned int height) {
     m_lastfocus = false; // through window resize everything becomes scrambled
     m_cursorMaxDistance = glm::min(ContextProvider::instance()->resolution().width(), ContextProvider::instance()->resolution().height()) / 2;
 }
 
-void GamePlayNormalInput::keyCallback(int key, int scancode, int action, int mods) {
+void GamePlayNormalInput::onKeyEvent(int key, int scancode, int action, int mods) {
+    GamePlayInput::onKeyEvent(key, scancode, action, mods);
+
     if (action == GLFW_PRESS) {
         m_inputConfigurator->setLastInput(InputClass::Primary, InputMapping(InputType::Keyboard, key, 1, 0.0f));
     } else {
@@ -139,7 +141,7 @@ void GamePlayNormalInput::keyCallback(int key, int scancode, int action, int mod
 }
 
 
-void GamePlayNormalInput::mouseButtonCallback(int button, int action, int mods) {
+void GamePlayNormalInput::onMouseButtonEvent(int button, int action, int mods) {
     if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_RELEASE) {
         if (m_currentTimePressed > 0 && m_currentTimePressed < m_maxClickTime) {
             World::instance()->player().hud().onClick(ClickType::Selection);
