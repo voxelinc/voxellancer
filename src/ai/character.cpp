@@ -86,6 +86,7 @@ void Character::onCollisionWith(WorldObject* worldObject) {
     if (aggressor != m_world->player().ship()) {
         return;
     }
+    m_world->player().hud().showMessage(warningMessage);
     onAggressionBy(aggressor, relationModifier);
 }
 
