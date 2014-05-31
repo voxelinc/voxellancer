@@ -16,7 +16,7 @@
 #include "gamestate/gameplay/gameplay.h"
 
 #include "resource/clustercache.h"
-#include "resource/worldelementbuilder.h"
+#include "resource/voxelobjectbuilder.h"
 
 #include "worldobject/ship.h"
 
@@ -43,7 +43,7 @@ ScriptedScenario::ScriptedScenario(GamePlay* gamePlay, const std::string& path):
 ScriptedScenario::~ScriptedScenario() = default;
 
 void ScriptedScenario::populateWorld() {
-    Ship *playerShip = WorldElementBuilder("mox").buildShip();
+    Ship *playerShip = VoxelObjectBuilder("mox").buildShip();
     playerShip->transform().setPosition(glm::vec3(0, 0, 10));
     playerShip->info().setName("mox");
     playerShip->info().setShowOnHud(false);

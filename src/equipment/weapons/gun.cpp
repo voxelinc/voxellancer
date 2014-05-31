@@ -8,7 +8,7 @@
 
 #include "physics/physics.h"
 
-#include "resource/worldelementbuilder.h"
+#include "resource/voxelobjectbuilder.h"
 
 #include "sound/soundmanager.h"
 
@@ -78,7 +78,7 @@ void Gun::fireAtPoint(const glm::vec3& point, bool checkFriendlyFire) {
         return;
     }
 
-    Bullet *bullet =  WorldElementBuilder(projectileName()).buildBullet();
+    Bullet *bullet =  VoxelObjectBuilder(projectileName()).buildBullet();
     setupBullet(bullet, point);
 
     bullet->spawn();
@@ -149,7 +149,7 @@ void Gun::setupBullet(Bullet* bullet, const glm::vec3& point) {
 }
 
 void Gun::setBulletExtend() {
-    Bullet* bullet = WorldElementBuilder(projectileName()).buildBullet();
+    Bullet* bullet = VoxelObjectBuilder(projectileName()).buildBullet();
 
     m_bulletCapsuleRadius = glm::max(bullet->extent().x, bullet->extent().y) * bullet->transform().scale();
     m_bulletLength = bullet->extent().z;

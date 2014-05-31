@@ -7,7 +7,7 @@
 #include "ai/character.h"
 #include "ai/basictasks/fighttask.h"
 
-#include "resource/worldelementbuilder.h"
+#include "resource/voxelobjectbuilder.h"
 
 #include "equipment/hardpoint.h"
 #include "equipment/engineslot.h"
@@ -40,7 +40,7 @@ void BattleScenario::populateWorld() {
 
     glow::debug("Create WorldObjects");
 
-    Ship *playerShip = WorldElementBuilder("mox").buildShip();
+    Ship *playerShip = VoxelObjectBuilder("mox").buildShip();
     playerShip->transform().setPosition(glm::vec3(0, 0, 10));
     playerShip->info().setName("basicship");
     playerShip->info().setShowOnHud(false);
@@ -50,7 +50,7 @@ void BattleScenario::populateWorld() {
     World::instance()->player().setShip(playerShip);
 
     // create enemy ai driven ship
-    Ship *aitester = WorldElementBuilder("basicship").buildShip();
+    Ship *aitester = VoxelObjectBuilder("basicship").buildShip();
     aitester->transform().setPosition(glm::vec3(0, 0, 10));
 
     aitester->info().setName("basicship");
@@ -60,7 +60,7 @@ void BattleScenario::populateWorld() {
     //m_world->god().scheduleSpawn(aitester);
 
 
-    WorldObject* banner = WorldElementBuilder("banner").buildWorldObject();
+    WorldObject* banner = VoxelObjectBuilder("banner").buildWorldObject();
     banner->transform().setScale(30.0f);
     banner->transform().move(glm::vec3(0, 0, -600));
     banner->info().setShowOnHud(false);
@@ -78,7 +78,7 @@ void BattleScenario::populateBattle(int numberOfEnemies1, int numberOfEnemies2) 
     std::vector<Ship*> fleet1;
     std::vector<Ship*> fleet2;
     for (int e = 0; e < numberOfEnemies1; e++) {
-        Ship *ship = WorldElementBuilder("basicship").buildShip();
+        Ship *ship = VoxelObjectBuilder("basicship").buildShip();
         float r = 600;
         ship->transform().move(RandVec3::rand(0.0f, r) + glm::vec3(-200, 0, -200));
 
@@ -90,7 +90,7 @@ void BattleScenario::populateBattle(int numberOfEnemies1, int numberOfEnemies2) 
         fleet2.push_back(ship);
     }
     for (int e = 0; e < numberOfEnemies2; e++) {
-        Ship *ship = WorldElementBuilder("basicship").buildShip();
+        Ship *ship = VoxelObjectBuilder("basicship").buildShip();
         float r = 600;
         ship->transform().move(RandVec3::rand(0.0f, r) + glm::vec3(200, 0, -200));
         ship->info().setName("enemy1");
@@ -107,7 +107,7 @@ void BattleScenario::populateBattle(int numberOfEnemies1, int numberOfEnemies2) 
 }
 
 void BattleScenario::spawnCapital(const std::vector<Ship*>& enemies) {
-    Ship *ship = WorldElementBuilder("normandy").buildShip();
+    Ship *ship = VoxelObjectBuilder("normandy").buildShip();
     ship->info().setShowOnHud(true);
     ship->info().setCanLockOn(true);
 

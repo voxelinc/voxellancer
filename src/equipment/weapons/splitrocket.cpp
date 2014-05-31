@@ -9,7 +9,7 @@
 
 #include "physics/physics.h"
 
-#include "resource/worldelementbuilder.h"
+#include "resource/voxelobjectbuilder.h"
 
 #include "utils/geometryhelper.h"
 #include "utils/randfloatpool.h"
@@ -120,7 +120,7 @@ void SplitRocket::split() {
 void SplitRocket::spawnChildren() {
     if (m_targetHandle.valid()) {
         for (int i = 0; i < m_childrenCount; i++) {
-            WorldObject* child = WorldElementBuilder(m_childrenType).buildWorldObject();
+            WorldObject* child = VoxelObjectBuilder(m_childrenType).buildWorldObject();
 
             float splitAngle = RandFloatPool::randomize(m_splitAngle, m_splitAngleRandomization);
 

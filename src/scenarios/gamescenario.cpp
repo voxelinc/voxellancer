@@ -18,7 +18,7 @@
 
 #include "factions/factionmatrix.h"
 
-#include "resource/worldelementbuilder.h"
+#include "resource/voxelobjectbuilder.h"
 
 #include "worldobject/ship.h"
 #include "sound/soundmanager.h"
@@ -42,7 +42,7 @@ void GameScenario::populateWorld() {
 
     spawnPirateFleet();
 
-    Ship *testCluster = WorldElementBuilder("f302").buildShip();
+    Ship *testCluster = VoxelObjectBuilder("f302").buildShip();
     testCluster->transform().setPosition(glm::vec3(0, 0, 10));
     testCluster->info().setName("player");
     testCluster->info().setShowOnHud(false);
@@ -64,7 +64,7 @@ void GameScenario::createArmada() {
             glm::vec3(1400, 500, 0),
         }, 500.0f));
 
-    Ship* chief = WorldElementBuilder("normandy").buildShip();
+    Ship* chief = VoxelObjectBuilder("normandy").buildShip();
     chief->transform().setPosition(glm::vec3(700, 0, 0));
     chief->info().setName("Normandy");
     chief->info().setShowOnHud(true);
@@ -75,7 +75,7 @@ void GameScenario::createArmada() {
 
     int memberCount = 12;
     for (int i = 0; i < memberCount; i++) {
-        Ship *follower = i < 6 ? WorldElementBuilder("mox").buildShip() : WorldElementBuilder("smallpolice").buildShip();
+        Ship *follower = i < 6 ? VoxelObjectBuilder("mox").buildShip() : VoxelObjectBuilder("smallpolice").buildShip();
         follower->transform().setPosition(glm::vec3(700, 50* (-memberCount / 2.0f + i), 0));
         follower->info().setName("member");
         follower->info().setShowOnHud(true);
@@ -96,7 +96,7 @@ void GameScenario::spawnPoliceFleet() {
         glm::vec3(-600, 0, -400), glm::vec3(0, 100, -600),
         glm::vec3(-100, 150, -900) }, 500.0f));
 
-    Ship* capital = WorldElementBuilder("normandy").buildShip();
+    Ship* capital = VoxelObjectBuilder("normandy").buildShip();
     capital->character()->setFaction(World::instance()->factionMatrix().policeFaction());
     capital->transform().setPosition(glm::vec3(0, 0, -200));
     capital->info().setName("Capital");
@@ -105,7 +105,7 @@ void GameScenario::spawnPoliceFleet() {
     capital->squadLogic()->joinSquad(squadA);
     m_world->god().scheduleSpawn(capital);
 
-    Ship* cruiser = WorldElementBuilder("bc304").buildShip();
+    Ship* cruiser = VoxelObjectBuilder("bc304").buildShip();
     cruiser->character()->setFaction(World::instance()->factionMatrix().policeFaction());
     cruiser->transform().setPosition(glm::vec3(-50, -50, -100));
     cruiser->info().setName("Cruiser");
@@ -116,7 +116,7 @@ void GameScenario::spawnPoliceFleet() {
 
     int nmember_count = 5;
     for (int i = 0; i < nmember_count; i++) {
-        Ship *follower = WorldElementBuilder("f302").buildShip();
+        Ship *follower = VoxelObjectBuilder("f302").buildShip();
         follower->transform().setPosition(glm::vec3(100 * (-nmember_count / 2.0f + i), 50, 0));
         follower->character()->setFaction(World::instance()->factionMatrix().policeFaction());
         follower->info().setName("Fighter");
@@ -133,7 +133,7 @@ void GameScenario::spawnPirateFleet() {
         std::list<glm::vec3>{ glm::vec3(500, 0, 500), glm::vec3(500, 0, -500),
         glm::vec3(-500, 0, -500), glm::vec3(-500, 0, 500) }, 500.0f));
 
-    Ship *leader = WorldElementBuilder("pirateheavy").buildShip();
+    Ship *leader = VoxelObjectBuilder("pirateheavy").buildShip();
     leader->character()->setFaction(World::instance()->factionMatrix().pirateFaction());
     leader->transform().setPosition(glm::vec3(0, 200, -1000));
     leader->info().setName("pirate heavy");
@@ -144,7 +144,7 @@ void GameScenario::spawnPirateFleet() {
 
     int lmember_count = 15;
     for (int i = 0; i < lmember_count; i++) {
-        Ship *follower = WorldElementBuilder("piratelight").buildShip();
+        Ship *follower = VoxelObjectBuilder("piratelight").buildShip();
         follower->character()->setFaction(World::instance()->factionMatrix().pirateFaction());
         follower->transform().setPosition(glm::vec3(100 * (-lmember_count / 2.0f + i), 200, -1000));
         follower->info().setName("pirate light");
@@ -159,7 +159,7 @@ void GameScenario::spawnPirateFleet() {
         std::list<glm::vec3>{ glm::vec3(500, 0, 500), glm::vec3(500, 0, -500),
         glm::vec3(-500, 0, -500), glm::vec3(-500, 0, 500) }, 500.0f));
 
-    Ship *leader2 = WorldElementBuilder("piratefrigatte").buildShip();
+    Ship *leader2 = VoxelObjectBuilder("piratefrigatte").buildShip();
     leader2->character()->setFaction(World::instance()->factionMatrix().pirateFaction());
     leader2->transform().setPosition(glm::vec3(100, -200, -1000));
     leader2->info().setName("pirate frigate");
@@ -170,7 +170,7 @@ void GameScenario::spawnPirateFleet() {
 
     int lmember_count2 = 7;
     for (int i = 0; i < lmember_count2; i++) {
-        Ship *follower = WorldElementBuilder("pirategunboat").buildShip();
+        Ship *follower = VoxelObjectBuilder("pirategunboat").buildShip();
         follower->character()->setFaction(World::instance()->factionMatrix().pirateFaction());
         follower->transform().setPosition(glm::vec3(200 * (-lmember_count / 2.0f + i), -200, -1000));
         follower->info().setName("pirate gunboat");

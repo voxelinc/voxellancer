@@ -6,7 +6,7 @@
 #include <glow/logging.h>
 #include <glow/Program.h>
 
-#include "resource/worldelementbuilder.h"
+#include "resource/voxelobjectbuilder.h"
 
 #include "equipment/weapons/worldobjectbullet.h"
 
@@ -21,7 +21,7 @@ InstancedBulletContainer::InstancedBulletContainer(BulletEngine& engine, const s
     m_name(name),
     m_renderer(new InstancedBulletContainerRenderer(*this))
 {
-    m_prototype.reset(WorldElementBuilder(m_name).buildWorldObjectBullet());
+    m_prototype.reset(VoxelObjectBuilder(m_name).buildWorldObjectBullet());
 
     for (auto& pair : m_prototype->voxelMap()) {
         m_gridPrototype.push_back(pair.second->data());

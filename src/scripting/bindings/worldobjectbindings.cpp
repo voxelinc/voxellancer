@@ -14,7 +14,7 @@
 
 #include "player.h"
 
-#include "resource/worldelementbuilder.h"
+#include "resource/voxelobjectbuilder.h"
 
 #include "scripting/gameplayscript.h"
 #include "scripting/elematelua/luawrapper.h"
@@ -63,7 +63,7 @@ apikey WorldObjectBindings::apiPlayerShip() {
 }
 
 apikey WorldObjectBindings::apiCreateShip(const std::string& name) {
-    Ship* ship = WorldElementBuilder(name).buildShip();
+    Ship* ship = VoxelObjectBuilder(name).buildShip();
 
     if (!ship) {
         glow::warning("WorldObjectBindings: Couldn't create ship '%;'", name);
@@ -76,7 +76,7 @@ apikey WorldObjectBindings::apiCreateShip(const std::string& name) {
 }
 
 apikey WorldObjectBindings::apiCreateWorldObject(const std::string& name) {
-    WorldObject* worldObject = WorldElementBuilder(name).buildWorldObject();
+    WorldObject* worldObject = VoxelObjectBuilder(name).buildWorldObject();
 
     if (!worldObject) {
         glow::warning("WorldObjectBindings: Couldn't create worldObject '%;'", name);

@@ -15,9 +15,9 @@ class WorldObjectComponents;
 /**
  *  Sets up WorldObject by the settings provided by properties
  */
-class WorldElementBuilder {
+class VoxelObjectBuilder {
 public:
-    WorldElementBuilder(const std::string& name);
+    VoxelObjectBuilder(const std::string& name);
 
     WorldObject* buildWorldObject();
 

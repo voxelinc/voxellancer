@@ -9,7 +9,7 @@
 
 #include "property/property.h"
 
-#include "resource/worldelementbuilder.h"
+#include "resource/voxelobjectbuilder.h"
 
 #include "voxel/voxelclusterbounds.h"
 #include "voxel/specialvoxels/hardpointvoxel.h"
@@ -34,7 +34,7 @@ RocketLauncher::RocketLauncher(const std::string& equipmentKey):
 
 void RocketLauncher::fireAtObject(WorldObject* target) {
     if (canFire()) {
-        Rocket* rocket = WorldElementBuilder(projectileName()).buildRocket();
+        Rocket* rocket = VoxelObjectBuilder(projectileName()).buildRocket();
         setupRocket(rocket, target);
 
         World::instance()->god().scheduleSpawn(rocket);
@@ -62,7 +62,7 @@ void RocketLauncher::setupRocket(Rocket* rocket, WorldObject* target) {
 }
 
 float RocketLauncher::rocketRange() {
-    Rocket* rocket = WorldElementBuilder(projectileName()).buildRocket();
+    Rocket* rocket = VoxelObjectBuilder(projectileName()).buildRocket();
     float range = rocket->lifetime() * rocket->components().enginePower().directional().x;
     delete rocket;
     return range;

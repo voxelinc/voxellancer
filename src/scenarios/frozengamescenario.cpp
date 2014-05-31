@@ -12,7 +12,7 @@
 #include "ai/squad.h"
 
 #include "resource/clustercache.h"
-#include "resource/worldelementbuilder.h"
+#include "resource/voxelobjectbuilder.h"
 
 #include "worldobject/ship.h"
 #include "equipment/engineslot.h"
@@ -37,7 +37,7 @@ void FrozenGameScenario::populateWorld() {
     glow::debug("Create WorldObjects");
     std::shared_ptr<Squad> squadA = std::make_shared<Squad>();
 
-    Ship* normandy = WorldElementBuilder("normandy").buildShip();
+    Ship* normandy = VoxelObjectBuilder("normandy").buildShip();
     normandy->transform().setPosition(glm::vec3(0, 0, -100));
     normandy->info().setName("Normandy");
     normandy->info().setShowOnHud(true);
@@ -47,7 +47,7 @@ void FrozenGameScenario::populateWorld() {
 
     int nmember_count = 4;
     for (int i = 0; i < nmember_count; i++) {
-        Ship *follower = WorldElementBuilder("basicship").buildShip();
+        Ship *follower = VoxelObjectBuilder("basicship").buildShip();
         follower->transform().setPosition(glm::vec3(100 * (-nmember_count / 2.0f + i), 50, 0));
         follower->info().setName("member");
         follower->info().setShowOnHud(true);
@@ -59,7 +59,7 @@ void FrozenGameScenario::populateWorld() {
 
     std::shared_ptr<Squad> squadB = std::make_shared<Squad>();
 
-    Ship *leader = WorldElementBuilder("eagle").buildShip();
+    Ship *leader = VoxelObjectBuilder("eagle").buildShip();
     leader->transform().setPosition(glm::vec3(0, 200, -100));
     leader->info().setName("leader");
     leader->info().setShowOnHud(true);
@@ -69,7 +69,7 @@ void FrozenGameScenario::populateWorld() {
 
     int lmember_count = 2;
     for (int i = 0; i < lmember_count; i++) {
-        Ship *follower = WorldElementBuilder("basicship").buildShip();
+        Ship *follower = VoxelObjectBuilder("basicship").buildShip();
         follower->transform().setPosition(glm::vec3(100 * (-lmember_count / 2.0f + i), 200, 0));
         follower->info().setName("member");
         follower->info().setShowOnHud(true);
@@ -78,7 +78,7 @@ void FrozenGameScenario::populateWorld() {
         m_world->god().scheduleSpawn(follower);
     }
 
-    Ship *testCluster = WorldElementBuilder("mox").buildShip();
+    Ship *testCluster = VoxelObjectBuilder("mox").buildShip();
     testCluster->transform().setPosition(glm::vec3(0, 0, 10));
     testCluster->info().setName("basicship");
     testCluster->info().setShowOnHud(false);
