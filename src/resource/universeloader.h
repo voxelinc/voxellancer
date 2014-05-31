@@ -17,6 +17,7 @@ protected:
     std::string m_path;
     std::string m_prefix;
     Universe* m_universe;
+    std::unordered_map<std::string, std::shared_ptr<LoadedSector>> m_loadedSectors;
 
     void loadSectors();
 };
