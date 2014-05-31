@@ -1,6 +1,7 @@
 #pragma once
 
 #include "utils/handle/handle.h"
+#include "utils/handle/handleowner.h"
 
 #include <memory>
 
@@ -13,7 +14,7 @@ class Ship;
  *  The Character is the Ship's pilot and executes his AiTask. He has a Faction which decides
  *  who is a friend or foe to him
  */
-class Character {
+class Character : public HandleOwner {
 public:
     Character(Ship* ship);
     Character();

@@ -28,27 +28,30 @@
 
 
 Player::Player() :
-    Character(),
     m_hud(new HUD(this)),
+    m_character(makeHandle(new Character())),
     m_cameraDolly(new CameraDolly()),
     m_targetSelector(new TargetSelector(this))
 {
-
 }
 
 Player::~Player() = default;
 
 void Player::setShip(Ship* ship) {
-    Character::setShip(ship);
-    setFaction(World::instance()->factionMatrix().playerFaction());
+    m_ship = makeHandle(ship);
+    m_character = makeHandle(new Character());
+    m_character->setShip(ship);
+    m_character->setFaction(World::instance()->factionMatrix().playerFaction());
     m_boardComputer = new PlayerBoardComputer(ship, m_hud.get(),m_targetSelector.get());
     ship->setBoardComputer(m_boardComputer);
-    m_ship->info().setShowOnHud(false);
+    ship->info().setShowOnHud(false);
     m_cameraDolly->followWorldObject(ship);
 }
 
 void Player::update(float deltaSec) {
-    Character::update(deltaSec);
+    if (m_character.valid()) {
+        m_character->update(deltaSec);
+    }
     m_cameraDolly->update(deltaSec);
     m_hud->update(deltaSec);
 }
@@ -61,30 +64,6 @@ HUD& Player::hud() {
     return *m_hud;
 }
 
-void Player::fire() {
-    if (ship()) {
-        m_boardComputer->fire(glm::normalize(m_hud->crossHair().worldPosition() - cameraHead().position()));
-    }
-}
-
-void Player::fireRocket() {
-    if (ship()) {
-        m_boardComputer->fireRocket();
-    }
-}
-
-void Player::move(const glm::vec3& vec) {
-    if (ship() && glm::length(vec) > 0) {
-        m_boardComputer->move(vec);
-    }
-}
-
-void Player::rotate(const glm::vec3& euler) {
-    if (ship() && glm::length(euler) > 0) {
-        m_boardComputer->rotate(euler);
-    }
-}
-
 void Player::selectTarget(bool next) {
     m_targetSelector->selectTarget(next);
 }
@@ -95,8 +74,29 @@ void Player::setTarget(WorldObject* target) {
 }
 
 void Player::joinSelectedSquad() {
+    if (m_ship->squadLogic()->squad()) {
+        m_ship->squadLogic()->leaveSquad();
+    }
     Ship* targetShip = dynamic_cast<Ship*>(m_ship->targetObject());
     if (targetShip && targetShip->squadLogic()->squad()) {
         m_ship->squadLogic()->joinSquadOf(targetShip);
+    }
+}
+
+PlayerBoardComputer& Player::playerBoardComputer() {
+    return *m_boardComputer;
+}
+
+bool Player::hasShip() {
+    return m_ship.valid();
+}
+
+Ship* Player::ship() {
+    return m_ship.get();
+}
+
+void Player::leaveSquad() {
+    if (m_ship->squadLogic()->squad()) {
+        m_ship->squadLogic()->leaveSquad();
     }
 }

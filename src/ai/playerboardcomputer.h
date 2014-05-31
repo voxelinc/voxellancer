@@ -10,7 +10,7 @@ class PlayerBoardComputer : public BoardComputer {
 public:
     PlayerBoardComputer(Ship* ship, HUD* hud, TargetSelector* targetSelector);
 
-    void fire(glm::vec3 shootDirection);
+    void fire(glm::vec3 from);
     void fireRocket();
 
     void move(const glm::vec3& vec);
@@ -19,6 +19,7 @@ public:
     void setShip(Ship* ship);
 
     virtual void update(float deltaSec) override;
+
 
 protected:
     HUD* m_hud;

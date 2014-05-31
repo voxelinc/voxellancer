@@ -22,12 +22,14 @@ class MissionSystem;
 class TargetSelector;
 class PlayerBoardComputer;
 
-class Player : public Character {
+class Player {
 public:
     Player();
     ~Player();
 
+    Ship* ship();
     void setShip(Ship *ship);
+    bool hasShip();
 
     void update(float deltaSec);
 
@@ -35,22 +37,23 @@ public:
 
     HUD& hud();
 
-    void fire();
-    void fireRocket();
-
-    void move(const glm::vec3& vec);
-    void rotate(const glm::vec3& euler);
-
     void selectTarget(bool next);
     void setTarget(WorldObject* target);
 
     void joinSelectedSquad();
+    void leaveSquad();
+
+    Character& character();
+    PlayerBoardComputer& playerBoardComputer();
 
 protected:
     std::unique_ptr<CameraDolly> m_cameraDolly;
     std::unique_ptr<HUD> m_hud;
     std::unique_ptr<TargetSelector> m_targetSelector;
+
+    Handle<Ship> m_ship;
     PlayerBoardComputer* m_boardComputer;
     
+    Handle<Character> m_character;
 };
 

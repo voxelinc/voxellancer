@@ -10,6 +10,10 @@
 #include "worldobject/ship.h"
 #include "worldobject/worldobjectcomponents.h"
 
+#include "world/world.h"
+
+#include "camera/camerahead.h"
+
 #include "utils/aimer.h"
 
 PlayerBoardComputer::PlayerBoardComputer(Ship* ship, HUD* hud, TargetSelector* targetSelector) :
@@ -22,7 +26,7 @@ m_aimer(new Aimer(ship))
 {    
 }
 
-void PlayerBoardComputer::fire(glm::vec3 shootDirection) {
+void PlayerBoardComputer::fire(glm::vec3 from) {
     if (!isFireOrderAllowed(m_playerOrderPriority)) {
         return;
     } else {
@@ -34,6 +38,7 @@ void PlayerBoardComputer::fire(glm::vec3 shootDirection) {
     if (m_hud->aimHelper().hovered()) {
         targetPoint = m_hud->aimHelper().targetPoint();
     } else {
+        glm::vec3 shootDirection(glm::normalize(m_hud->crossHair().worldPosition() - from));
         Ray ray(m_hud->crossHair().worldPosition(), shootDirection);
         targetPoint = m_aimer->aim(ray);
     }
@@ -52,7 +57,7 @@ void PlayerBoardComputer::fireRocket() {
 }
 
 void PlayerBoardComputer::move(const glm::vec3& vec) {
-    if (!isMoveOrderAllowed(m_playerOrderPriority)) {
+    if (glm::length(vec) == 0 || !isMoveOrderAllowed(m_playerOrderPriority)) {
         return;
     } else {
         setMoveOrderPriority(m_playerOrderPriority);
@@ -62,7 +67,7 @@ void PlayerBoardComputer::move(const glm::vec3& vec) {
 }
 
 void PlayerBoardComputer::rotate(const glm::vec3& euler) {
-    if (!isMoveOrderAllowed(m_playerOrderPriority)) {
+    if (glm::length(euler) == 0 || !isMoveOrderAllowed(m_playerOrderPriority)) {
         return;
     } else {
         setMoveOrderPriority(m_playerOrderPriority);

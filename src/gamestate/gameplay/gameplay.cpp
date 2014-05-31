@@ -133,8 +133,8 @@ void GamePlay::keyCallback(int key, int scancode, int action, int mods) {
                 m_freecamInput->setPosition(World::instance()->player().cameraHead().cameraDolly()->position());
                 m_freecamInput->setOrientation(World::instance()->player().cameraHead().cameraDolly()->orientation());
 
-                World::instance()->player().move(glm::vec3(0));
-                World::instance()->player().rotate(glm::vec3(0));
+                //World::instance()->player().playerBoardComputer.move(glm::vec3(0));
+                //World::instance()->player().playerBoardComputer.rotate(glm::vec3(0));
                 Property<bool>("vfx.drawhud").set(false);
             } else {
                 Property<bool>("vfx.drawhud").set(true);

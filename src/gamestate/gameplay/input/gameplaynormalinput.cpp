@@ -31,6 +31,9 @@
 #include "ui/targetselector.h"
 #include "ui/hud/crosshair.h"
 
+#include "ai/playerboardcomputer.h"
+#include "ai/squadlogic.h"
+
 
 
 /*
@@ -129,9 +132,12 @@ void GamePlayNormalInput::keyCallback(int key, int scancode, int action, int mod
             break;
 
             case GLFW_KEY_O:
-                World::instance()->player().joinSelectedSquad();
+                if (World::instance()->player().ship()->squadLogic()->squad()) {
+                    World::instance()->player().leaveSquad();
+                } else {
+                    World::instance()->player().joinSelectedSquad();
+                }
                 break;
-
             case GLFW_KEY_SPACE:
                 m_mouseControl = !m_mouseControl;
             break;
@@ -175,27 +181,29 @@ void GamePlayNormalInput::applyUpdates() {
     // especially those done by the mouse
     // collect them and apply them here
 
-    if (m_fireUpdate){
-        World::instance()->player().fire(); // fire checks for existence of ship
-    }
-    m_fireUpdate = false;
+    if (World::instance()->player().hasShip()) {
+        if (m_fireUpdate) {
+            World::instance()->player().playerBoardComputer().fire(World::instance()->player().cameraHead().position()); 
+        }
+        m_fireUpdate = false;
 
-    if (m_rocketUpdate && World::instance()->player().ship()) {
-        World::instance()->player().fireRocket();
-    }
-    m_rocketUpdate = false;
+        if (m_rocketUpdate) {
+            World::instance()->player().playerBoardComputer().fireRocket();
+        }
+        m_rocketUpdate = false;
 
-    if (glm::length(m_moveUpdate) > 1.0f) {
-        m_moveUpdate = glm::normalize(m_moveUpdate);
-    }
-    World::instance()->player().move(m_moveUpdate);
-    m_moveUpdate = glm::vec3(0);
+        if (glm::length(m_moveUpdate) > 1.0f) {
+            m_moveUpdate = glm::normalize(m_moveUpdate);
+        }
+        World::instance()->player().playerBoardComputer().move(m_moveUpdate);
+        m_moveUpdate = glm::vec3(0);
 
-    if (glm::length(m_rotateUpdate) > 1.0f) {
-        m_rotateUpdate = glm::normalize(m_rotateUpdate);
+        if (glm::length(m_rotateUpdate) > 1.0f) {
+            m_rotateUpdate = glm::normalize(m_rotateUpdate);
+        }
+        World::instance()->player().playerBoardComputer().rotate(m_rotateUpdate);
+        m_rotateUpdate = glm::vec3(0);
     }
-    World::instance()->player().rotate(m_rotateUpdate);
-    m_rotateUpdate = glm::vec3(0);
 }
 
 
