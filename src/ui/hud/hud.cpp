@@ -33,6 +33,7 @@
 #include "worldtree/worldtreequery.h"
 
 #include "worldobject/ship.h"
+#include "worldobject/worldobjectcomponents.h"
 
 #include "hudelements.h"
 #include "hudget.h"
@@ -150,8 +151,10 @@ void HUD::update(float deltaSec) {
 
     if (m_player->ship()) {
         m_elements->setSpeed(std::to_string((int)(glm::length(m_player->ship()->physics().speed().directional()))));
+        m_elements->setShieldStatus(m_player->ship()->info().shieldStatus());
     } else {
         m_elements->setSpeed("-");
+        m_elements->setShieldStatus("-");
     }
 
     Ray toCrossHair = Ray::fromTo(m_player->cameraHead().position(), m_crossHair->worldPosition());

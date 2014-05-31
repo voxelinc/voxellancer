@@ -25,6 +25,7 @@ public:
 
     static VoxelFont* instance();
 
+
 protected:
     static VoxelFont* s_instance;
 

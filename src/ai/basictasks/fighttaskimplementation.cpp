@@ -2,6 +2,9 @@
 
 #include "ai/boardcomputer.h"
 #include "utils/worldobjectgeometryhelper.h"
+#include "worldobject/worldobject.h"
+#include "worldobject/worldobjectcomponents.h"
+#include "worldobject/helper/componentsinfo.h"
 
 
 FightTaskImplementation::FightTaskImplementation(BoardComputer* boardComputer, const std::vector<Handle<WorldObject>>& targets) :
@@ -32,6 +35,7 @@ void FightTaskImplementation::updateTargets() {
             iterator++;
         }
     }
+
     if (!m_targets.empty()) {
         m_primaryTarget = m_targets.front().get();
     } else {
@@ -41,5 +45,9 @@ void FightTaskImplementation::updateTargets() {
 
 float FightTaskImplementation::targetDistance() {
     return WorldObjectGeometryHelper::sphereToSphereDistance(boardComputer()->worldObject(), m_primaryTarget);
+}
+
+const ComponentsInfo& FightTaskImplementation::componentsInfo() {
+    return boardComputer()->worldObject()->components().componentsInfo();
 }
 
