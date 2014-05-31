@@ -1,12 +1,17 @@
 #include "hardpointaimhelper.h"
 
-#include "voxel/specialvoxels/hardpointvoxel.h"
 
 #include "equipment/weapon.h"
 #include "equipment/hardpoint.h"
 #include "equipment/weapons/gun.h"
-#include "worldobject/worldobject.h"
+
 #include "physics/physics.h"
+
+#include "utils/safenormalize.h"
+
+#include "voxel/specialvoxels/hardpointvoxel.h"
+
+#include "worldobject/worldobject.h"
 
 
 HardpointAimHelper::HardpointAimHelper(Hardpoint* hardpoint, WorldObject* targetObject):
@@ -14,7 +19,8 @@ HardpointAimHelper::HardpointAimHelper(Hardpoint* hardpoint, WorldObject* target
     m_targetObject(targetObject),
     m_bulletSpeed(0.0f),
     m_hitable(false),
-    m_aimed(false)
+    m_aimed(false),
+    m_bulletLifetime(0.0f)
 {
     assert(m_hardpoint->weapon());
 
@@ -25,7 +31,7 @@ HardpointAimHelper::HardpointAimHelper(Hardpoint* hardpoint, WorldObject* target
     m_targetPosition = m_targetObject->transform().position();
     m_targetSpeed = m_targetObject->physics().speed().directional();
     m_bulletSpeed = gun.bulletSpeed();
-    m_bulletLifetime = gun.bulletLifetime();
+    m_bulletLifetime = Property<float>::get(gun.projectileName() + ".general.lifetime");
 }
 
 void HardpointAimHelper::aim() {
@@ -52,12 +58,12 @@ void HardpointAimHelper::aim() {
     } while(offset > 0.1f);
 
     m_hitable = true;
-    m_direction = glm::normalize(m_point - m_hardpointPosition);
+    m_direction = safeNormalize(m_point - m_hardpointPosition, glm::vec3(0.0f, 0.0f, -1.0f));
 
     m_aimed = true;
 }
 
-bool HardpointAimHelper::isHitable() {
+bool HardpointAimHelper::isHittable() {
     if(!m_aimed) {
         aim();
     }

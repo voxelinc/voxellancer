@@ -6,7 +6,7 @@
 
 #include "factions/factionmatrix.h"
 
-#include "ui/objectinfo.h"
+#include "worldobject/worldobjectinfo.h"
 
 #include "world/world.h"
 
@@ -15,17 +15,13 @@ Ship::Ship():
     WorldObject(),
     m_character(new Character(*this, World::instance()->factionMatrix().unknownFaction())),
     m_boardComputer(new BoardComputer(this)),
-    m_squadLogic(new SquadLogic(*this)),
-    m_shipHandle(Handle<Ship>(this)),
-    m_targetObjectHandle(Handle<WorldObject>(nullptr))
+    m_squadLogic(new SquadLogic(*this))
 {
-    m_objectInfo->setShowOnHud(true);
-    m_objectInfo->setCanLockOn(true);
+    m_info->setShowOnHud(true);
+    m_info->setCanLockOn(true);
 }
 
-Ship::~Ship() {
-    m_shipHandle.invalidate();
-}
+Ship::~Ship() = default;
 
 WorldObjectType Ship::objectType() const {
     return WorldObjectType::Ship;
@@ -38,12 +34,8 @@ void Ship::update(float deltaSec) {
     m_boardComputer->update(deltaSec);
 }
 
-Handle<Ship>& Ship::handle() {
-    return m_shipHandle;
-}
-
 void Ship::setTargetObject(WorldObject* target) {
-    m_targetObjectHandle = target ? target->handle() : Handle<WorldObject>(nullptr);
+    m_targetObjectHandle = target ? makeHandle(target) : Handle<WorldObject>();
 }
 
 WorldObject* Ship::targetObject() {

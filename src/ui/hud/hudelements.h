@@ -11,10 +11,10 @@ class HudgetAnimation;
 class HudgetHideAnimation;
 class TextFieldHudget;
 
-/*
-    Class that holds all passive elements of the HUD, such
-    as labels etc., to lift some weight from the main HUD class
-*/
+/**
+ * Class that holds all passive elements of the HUD, such
+ * as labels etc., to lift some weight from the main HUD class
+ */
 class HUDElements {
 public:
     HUDElements(HUD& hud);
@@ -29,6 +29,7 @@ public:
 
     void setTargetName(const std::string& name);
     void setSpeed(const std::string& speed);
+    void setShieldStatus(const std::string& shieldStatus);
 
     void showMissionInfo(const std::string& title, const std::string& caption);
     void showMissionMessage(const std::string& message);
@@ -45,6 +46,7 @@ protected:
     std::list<std::unique_ptr<HudgetAnimation>> m_animations;
 
     TextFieldHudget* m_speedLabel;
+    TextFieldHudget* m_shieldLabel;
     TextFieldHudget* m_targetName;
 
     TextFieldHudget* m_missionTitle;

@@ -14,6 +14,7 @@ public:
     TextFieldHudgetVoxels(TextFieldHudget* textFieldHudget, const glm::vec3& direction, float scale = 0.5f, const std::string& text = "", FontSize fontSize = FontSize::SIZE5x7);
 
     void setText(const std::string& text);
+    void setDirection(const glm::vec3& direction);
 
     void update(float deltaSec);
     void draw();

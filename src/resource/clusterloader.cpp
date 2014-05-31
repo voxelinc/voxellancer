@@ -60,7 +60,7 @@ void ClusterLoader::readZox(std::string &content, std::vector<Voxel*> *list){
 
     std::string frame, voxelString;
     std::vector<std::string> voxelStrings;
-    
+
     while (currentFrame < frameCount){
         frame = "\"frame" + std::to_string(currentFrame + 1) + "\": [";
         int position = content.find(frame) + frame.size();
@@ -121,6 +121,7 @@ void ClusterLoader::readCsv(std::vector<Voxel*> *list){
     }
 
 }
+
 void ClusterLoader::splitStr(const std::string &s, char delim, std::vector<std::string> &elems) {
     std::istringstream ss(s);
     std::string item;
@@ -128,3 +129,4 @@ void ClusterLoader::splitStr(const std::string &s, char delim, std::vector<std::
         elems.push_back(item);
     }
 }
+

@@ -2,12 +2,15 @@
 
 #include <cassert>
 
-#include "worldobject/worldobject.h"
-
-#include "utils/tostring.h"
 #include "collision/voxelcollision.h"
-#include "voxel/voxel.h"
+
 #include "physics/physics.h"
+
+#include "utils/safenormalize.h"
+
+#include "voxel/voxel.h"
+
+#include "worldobject/worldobject.h"
 
 
 void ElasticImpulseGenerator::parse(std::list<WorldObjectCollision>& worldObjectCollisions) {
@@ -40,9 +43,9 @@ void ElasticImpulseGenerator::generateImpulse(VoxelCollisionParticipant &from, V
         glm::vec3(from.voxel()->gridCell())) -
         from.worldObject()->transform().applyTo(glm::vec3(from.voxel()->gridCell()));
 
-    glm::vec3 normal = glm::normalize(
+    glm::vec3 normal = safeNormalize(
         to.worldObject()->transform().applyTo(glm::vec3(to.voxel()->gridCell())) -
-        from.worldObject()->transform().applyTo(glm::vec3(from.voxel()->gridCell())));
+        from.worldObject()->transform().applyTo(glm::vec3(from.voxel()->gridCell())), glm::vec3(0.0f, 0.0f, 1.0f));
 
     m_worldObjectImpulses.push_back(Impulse(to.worldObject(), to.voxel(), speed, from.worldObject()->physics().mass(), normal));
 }

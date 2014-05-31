@@ -10,8 +10,6 @@
 
 #include "resource/clustercache.h"
 
-#include "utils/tostring.h"
-
 #include "voxelrenderdata.h"
 #include "voxel.h"
 #include "voxelclusterbounds.h"
@@ -21,7 +19,8 @@ VoxelCluster::VoxelCluster(float scale):
     m_voxels(),
     m_bounds(new VoxelClusterBounds(this)),
     m_voxelRenderData(new VoxelRenderData(m_voxels)),
-    m_transform(glm::vec3(0), scale)
+    m_transform(glm::vec3(0), scale),
+    m_emissiveness(0)
 {
 }
 
@@ -96,6 +95,10 @@ int VoxelCluster::voxelCount() const {
 }
 
 float VoxelCluster::emissiveness() const {
-    return 0.0f;
+    return m_emissiveness;
+}
+
+void VoxelCluster::setEmissiveness(float emissiveness) {
+    m_emissiveness = emissiveness;
 }
 

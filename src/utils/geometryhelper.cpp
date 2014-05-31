@@ -1,8 +1,10 @@
 #include "geometryhelper.h"
 
-#include "randvec3.h"
-#include "worldobject/worldobject.h"
 #include "geometry/ray.h"
+
+#include "utils/safenormalize.h"
+
+#include "randvec3.h"
 
 
 bool GeometryHelper::intersectRectangle(const Ray* ray, const glm::vec3& p, const glm::vec3& q, const glm::vec3& r, const glm::vec3& s) {
@@ -28,8 +30,13 @@ glm::vec3 GeometryHelper::plane(const glm::vec3& p, const glm::vec3& q, const gl
 }
 
 float GeometryHelper::angleBetween(const glm::vec3& u, const glm::vec3& v) {
+    if (!normalizeable(u) || !normalizeable(v)) {
+        return 0.0f;
+    }
+
     float angle = glm::acos(glm::clamp(glm::dot(glm::normalize(u), glm::normalize(v)), -1.0f, 1.0f));
     assert(std::isfinite(angle));
+
     return angle;
 }
 
@@ -42,9 +49,11 @@ float GeometryHelper::angleBetweenVectorPlane(const glm::vec3& u, const glm::vec
 glm::quat GeometryHelper::quatFromTo(const glm::vec3& u, const glm::vec3& v) {
     float angle = angleBetween(u, v);
     glm::vec3 w = glm::cross(u, v);
-    if (w == glm::vec3(0)) {
-        w = RandVec3::randUnitVec();
+
+    if (!normalizeable(w)) {
+        return glm::quat();
     }
+
     return glm::angleAxis(angle, glm::normalize(w));
 }
 
@@ -54,23 +63,10 @@ glm::quat GeometryHelper::quatFromViewDirection(const glm::vec3& direction) {
 
     float angle = angleBetween(u, v);
     glm::vec3 w = glm::cross(u, v);
-    if (w == glm::vec3(0)) {
-        w = RandVec3::randUnitVec();
+
+    if (!normalizeable(w)) {
+        return glm::quat();
     }
 
     return glm::angleAxis(angle, glm::normalize(w));
-}
-
-WorldObject* GeometryHelper::closestObject(WorldObject& self, std::unordered_set<WorldObject*>* objects){
-    WorldObject* closestObject = nullptr;
-    float closestDistance = std::numeric_limits<float>::max();
-
-    for (WorldObject* object : *objects) {
-        float distance = glm::length(object->transform().position() - self.transform().position());
-        if (distance < closestDistance) {
-            closestDistance = distance;
-            closestObject = object;
-        }
-    }
-    return closestObject;
 }

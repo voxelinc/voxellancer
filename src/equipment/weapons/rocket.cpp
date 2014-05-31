@@ -10,7 +10,7 @@
 #include "sound/sound.h"
 #include "sound/soundmanager.h"
 
-#include "ui/objectinfo.h"
+#include "voxeleffect/voxelexplosiongenerator.h"
 
 #include "worldobject/worldobjectcomponents.h"
 
@@ -20,14 +20,10 @@
 
 Rocket::Rocket():
     Projectile(),
-    m_targetHandle(nullptr),
     m_boardComputer(this),
     m_aiTask(nullptr)
 {
     collisionFilter().setCollideableWith(WorldObjectType::Rocket, false);
-
-    m_objectInfo->setShowOnHud(false);
-    m_objectInfo->setCanLockOn(false);
 }
 
 WorldObjectType Rocket::objectType() const {
@@ -40,14 +36,13 @@ WorldObject* Rocket::target() {
 
 void Rocket::setTarget(WorldObject* targetObject) {
     if (targetObject) {
-        m_targetHandle = targetObject->handle();
+        m_targetHandle = makeHandle(targetObject);
         m_aiTask.reset(new DirectSuicideTask(&m_boardComputer, targetObject));
     } else {
-        m_targetHandle = Handle<WorldObject>(nullptr);
+        m_targetHandle = Handle<WorldObject>();
         m_aiTask.reset(nullptr);
     }
 }
-
 
 void Rocket::update(float deltaSec) {
     Projectile::update(deltaSec);
@@ -62,3 +57,22 @@ void Rocket::update(float deltaSec) {
             ));
     }
 }
+
+void Rocket::spawnExplosion() {
+    VoxelExplosionGenerator generator(this);
+
+    generator.setPosition(m_transform.position());
+    generator.setScale(m_transform.scale() / 3.0f);
+    generator.setColor(0xFF0000);
+    generator.setEmissiveness(0.4f);
+    generator.setCount(150);
+    generator.setLifetime(1.0f, 0.2f);
+    generator.setForce(1.5f);
+
+    generator.spawn();
+}
+
+void Rocket::onLifetimeOver() {
+    spawnExplosion();
+}
+

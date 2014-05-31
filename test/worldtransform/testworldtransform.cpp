@@ -26,16 +26,17 @@ go_bandit([](){
 
             glm::quat q1;
             glm::quat q2;
-                /*x 0.324251682  float
-                y - 0.124075770  float
-                z   0.936692774  float
-                w - 0.0455596969 float
-
-                x   0.324240237  float
-                y - 0.124073826  float
-                z   0.936697066  float
-                w - 0.0455590598 float
-*/
+                /**
+                 * x - 0.324251682  float
+                 * y - 0.124075770  float
+                 * z - 0.936692774  float
+                 * w - 0.0455596969 float
+                 *
+                 * x   0.324240237  float
+                 * y - 0.124073826  float
+                 * z   0.936697066  float
+                 * w - 0.0455590598 float
+                */
 
             AssertThat(glm::angle(glm::inverse(q1)*q2), EqualsWithDelta(0, 0.01));
 

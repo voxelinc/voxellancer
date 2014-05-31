@@ -22,9 +22,12 @@
 #include "world/world.h"
 #include "world/god.h"
 
+#include "worldobject/worldobject.h"
+
 #include "utils/randvec3.h"
+#include "utils/handle/handle.h"
 #include "player.h"
-#include "ui/objectinfo.h"
+#include "worldobject/worldobjectinfo.h"
 
 
 BattleScenario::BattleScenario(GamePlay* gamePlay):
@@ -37,11 +40,11 @@ void BattleScenario::populateWorld() {
 
     glow::debug("Create WorldObjects");
 
-    Ship *playerShip = WorldObjectBuilder("specialbasicship").buildShip();
+    Ship *playerShip = WorldObjectBuilder("mox").buildShip();
     playerShip->transform().setPosition(glm::vec3(0, 0, 10));
-    playerShip->objectInfo().setName("basicship");
-    playerShip->objectInfo().setShowOnHud(false);
-    playerShip->objectInfo().setCanLockOn(false);
+    playerShip->info().setName("basicship");
+    playerShip->info().setShowOnHud(false);
+    playerShip->info().setCanLockOn(false);
 
     m_world->god().scheduleSpawn(playerShip);
     World::instance()->player().setShip(playerShip);
@@ -49,18 +52,20 @@ void BattleScenario::populateWorld() {
     // create enemy ai driven ship
     Ship *aitester = WorldObjectBuilder("basicship").buildShip();
     aitester->transform().setPosition(glm::vec3(0, 0, 10));
-    aitester->objectInfo().setName("basicship");
-    aitester->objectInfo().setShowOnHud(false);
-    aitester->character()->setTask(std::make_shared<FightTask>(aitester->boardComputer(), std::vector<Handle<WorldObject>>{ playerShip->WorldObject::handle() }));
+
+    aitester->info().setName("basicship");
+    aitester->info().setShowOnHud(false);
+    aitester->character()->setTask(std::make_shared<FightTask>(aitester->boardComputer(), std::vector<Handle<WorldObject>>{ playerShip->handle<WorldObject>() }));
+
     //m_world->god().scheduleSpawn(aitester);
 
 
     WorldObject* banner = WorldObjectBuilder("banner").buildWorldObject();
     banner->transform().setScale(30.0f);
     banner->transform().move(glm::vec3(0, 0, -600));
-    banner->objectInfo().setShowOnHud(false);
-    banner->objectInfo().setCanLockOn(false);
-    m_world->god().scheduleSpawn(banner);
+    banner->info().setShowOnHud(false);
+    banner->info().setCanLockOn(false);
+    //m_world->god().scheduleSpawn(banner);
 
     // create two opposing enemy forces
     populateBattle(3, 3);
@@ -77,9 +82,9 @@ void BattleScenario::populateBattle(int numberOfEnemies1, int numberOfEnemies2) 
         float r = 600;
         ship->transform().move(RandVec3::rand(0.0f, r) + glm::vec3(-200, 0, -200));
 
-        ship->objectInfo().setName("enemy2");
-        ship->objectInfo().setShowOnHud(true);
-        ship->objectInfo().setCanLockOn(true);
+        ship->info().setName("enemy2");
+        ship->info().setShowOnHud(true);
+        ship->info().setCanLockOn(true);
 
         m_world->god().scheduleSpawn(ship);
         fleet2.push_back(ship);
@@ -88,8 +93,8 @@ void BattleScenario::populateBattle(int numberOfEnemies1, int numberOfEnemies2) 
         Ship *ship = WorldObjectBuilder("basicship").buildShip();
         float r = 600;
         ship->transform().move(RandVec3::rand(0.0f, r) + glm::vec3(200, 0, -200));
-        ship->objectInfo().setName("enemy1");
-        ship->objectInfo().setShowOnHud(true);
+        ship->info().setName("enemy1");
+        ship->info().setShowOnHud(true);
 
         m_world->god().scheduleSpawn(ship);
         fleet1.push_back(ship);
@@ -103,14 +108,15 @@ void BattleScenario::populateBattle(int numberOfEnemies1, int numberOfEnemies2) 
 
 void BattleScenario::spawnCapital(const std::vector<Ship*>& enemies) {
     Ship *ship = WorldObjectBuilder("normandy").buildShip();
-    ship->objectInfo().setShowOnHud(true);
-    ship->objectInfo().setCanLockOn(true);
+    ship->info().setShowOnHud(true);
+    ship->info().setCanLockOn(true);
 
     ship->transform().move(glm::vec3(-200, 300, -200));
 
     std::vector<Handle<WorldObject>> enemyHandles;
     for (Ship* enemy : enemies) {
-        enemyHandles.push_back(enemy->WorldObject::handle());
+        Handle<WorldObject> handle = enemy->handle<WorldObject>();
+        enemyHandles.push_back(handle);
     }
     ship->character()->setTask(std::make_shared<FightTask>(ship->boardComputer(), enemyHandles));
     m_world->god().scheduleSpawn(ship);
@@ -119,9 +125,9 @@ void BattleScenario::spawnCapital(const std::vector<Ship*>& enemies) {
 void BattleScenario::setTargets(const std::vector<Ship*>& fleet, const std::vector<Ship*>& enemies) {
     std::vector<Handle<WorldObject>> enemyHandles;
     for (Ship* enemy : enemies) {
-        enemyHandles.push_back(enemy->WorldObject::handle());
+        enemyHandles.push_back(enemy->handle<WorldObject>());
     }
-    enemyHandles.push_back(World::instance()->player().ship()->WorldObject::handle());
+    enemyHandles.push_back(World::instance()->player().ship()->handle<WorldObject>());
     for (Ship* ship : fleet) {
         std::random_shuffle(enemyHandles.begin(), enemyHandles.end());
         ship->character()->setTask(std::make_shared<FightTask>(ship->boardComputer(), enemyHandles));

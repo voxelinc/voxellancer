@@ -1,5 +1,7 @@
 #include "defendareatask.h"
 
+#include <memory>
+
 #include "worldobject/ship.h"
 #include "ai/squadlogic.h"
 #include "ai/squad.h"
@@ -17,13 +19,14 @@
 
 
 DefendAreaTask::DefendAreaTask(Squad& squad, std::list<glm::vec3> points, float defendRange) :
-AiGroupTask(squad),
-m_points(points),
-m_currentPoint(m_points.begin()),
-m_fightTask(nullptr),
-m_leaderFlyTask(nullptr),
-m_defendRange(defendRange),
-m_collisionFilter(new CollisionFilter(nullptr,0))
+    AiGroupTask(squad),
+    m_points(points),
+    m_currentPoint(m_points.begin()),
+    m_leaderFightTask(nullptr),
+    m_leaderFlyTask(nullptr),
+    m_defendRange(defendRange),
+    m_collisionFilter(new CollisionFilter(nullptr,0)),
+    m_fighting(false)
 {
 }
 
@@ -31,17 +34,26 @@ DefendAreaTask::~DefendAreaTask() = default;
 
 void DefendAreaTask::update(float deltaSec) {
     if (m_squad.leader()) {
-        if (isEnemyInRange()) {
-            updateFight();
+        if (m_fighting) {
+            if (isEnemyInRange()) {
+                updateFight();
+            } else {
+                setPatrol();
+            }
         } else {
-            updatePatrol();
+            if (isEnemyInRange()) {
+                setFight();
+            } else {
+                updatePatrol();
+            }
         }
+
         // update called by the leader himself
     }
 }
 
 void DefendAreaTask::onNewLeader(Ship* leader) {
-    m_fightTask = std::make_shared<FightTask>(leader->boardComputer(), std::vector<Handle<WorldObject>>());
+    m_leaderFightTask = std::make_shared<FightTask>(leader->boardComputer(), std::vector<Handle<WorldObject>>());
     m_leaderFlyTask = std::make_shared<FlyToTask>(leader->boardComputer());
     leader->character()->setTask(m_leaderFlyTask);
     m_collisionFilter = std::unique_ptr<CollisionFilter>(new CollisionFilter(leader, 0));
@@ -49,7 +61,11 @@ void DefendAreaTask::onNewLeader(Ship* leader) {
 }
 
 void DefendAreaTask::onMemberJoin(Ship* member) {
-    member->character()->setTask(std::make_shared<FormationMemberTask>(*member));
+    if (m_fighting) {
+        setFight();
+    } else {
+        setPatrol();
+    }
 }
 
 bool DefendAreaTask::isEnemyInRange() {
@@ -61,13 +77,31 @@ bool DefendAreaTask::isEnemyInRange() {
         if (ship) {
             Faction& enemyFaction = ship->character()->faction();
             if (enemyFaction.relationTo(m_squad.leader()->character()->faction()).type() == FactionRelationType::Enemy) {
-                m_enemies.push_back(worldObject->handle());
+                m_enemies.push_back(makeHandle(worldObject));
             } else {
                 continue;
             }
         }
     }
     return m_enemies.size() > 0;
+}
+
+void DefendAreaTask::setPatrol() {
+    updatePatrol();
+    m_squad.leader()->character()->setTask(m_leaderFlyTask);
+    for (Ship* ship : m_squad.members()) {
+        ship->character()->setTask(std::make_shared<FormationMemberTask>(*ship));
+    }
+    m_fighting = false;
+}
+
+void DefendAreaTask::setFight() {
+    m_leaderFightTask->setTargets(m_enemies);
+    m_squad.leader()->character()->setTask(m_leaderFightTask);
+    for (Ship* ship : m_squad.members()) {
+        ship->character()->setTask(std::make_shared<FightTask>(ship->boardComputer(), m_enemies));
+    }
+    m_fighting = true;
 }
 
 void DefendAreaTask::updatePatrol() {
@@ -79,17 +113,17 @@ void DefendAreaTask::updatePatrol() {
         }
     }
     m_leaderFlyTask->setTargetPoint(*m_currentPoint);
-    m_squad.leader()->character()->setTask(m_leaderFlyTask);
-    for (Ship* ship : m_squad.members()) {
-        ship->character()->setTask(std::make_shared<FormationMemberTask>(*ship));
-    }
 }
 
 void DefendAreaTask::updateFight() {
-    m_fightTask->setTargets(m_enemies);
-    m_squad.leader()->character()->setTask(std::make_shared<FightTask>(m_squad.leader()->boardComputer(), m_enemies));
+    assert(m_fighting); // they already have FightTasks
+    m_leaderFightTask->setTargets(m_enemies);
     for (Ship* ship : m_squad.members()) {
-        ship->character()->setTask(std::make_shared<FightTask>(ship->boardComputer(), m_enemies));
+        FightTask* task = dynamic_cast<FightTask*>(ship->character()->task().get());
+        assert(task);
+        if (task) {
+            task->setTargets(m_enemies);
+        }
     }
 }
 

@@ -13,20 +13,18 @@
 
 #include "world/world.h"
 
-#include "utils/tostring.h"
 #include "voxel/voxel.h"
 #include "movement.h"
 
 
-Physics::Physics(WorldObject& worldObject, float scale):
+Physics::Physics(WorldObject& worldObject):
     m_directionalDampening(Property<float>("physics.globalDirectionalDampening")),
     m_angularDampening(Property<float>("physics.globalAngularDampening")),
-    m_mass(0),
-    m_maxMass(0),
-    m_accumulatedMassVec(0.0f, 0.0f, 0.0f),
+    m_densitySum(0.0f),
+    m_maxDensitySum(0.0f),
+    m_densitySumVec(0.0f, 0.0f, 0.0f),
     m_worldObject(worldObject)
 {
-    m_massScaleFactor = glm::pow(scale, 3.f);
 }
 
 float Physics::directionalDampening() const {
@@ -62,11 +60,11 @@ void Physics::setAcceleration(const Acceleration& acceleration) {
 }
 
 float Physics::mass() const {
-    return m_mass;
+    return m_densitySum * std::pow(m_worldObject.transform().scale(), 3);
 }
 
 float Physics::maxMass() const {
-    return m_maxMass;
+    return m_maxDensitySum * std::pow(m_worldObject.transform().scale(), 3);
 }
 
 const Transform Physics::projectedTransformIn(float deltaSec){
@@ -93,9 +91,7 @@ std::list<VoxelCollision> &Physics::move(float deltaSec) {
 
 void Physics::addVoxel(Voxel* voxel) {
     voxelChanged(voxel, true);
-    if (m_mass > m_maxMass) {
-        m_maxMass = m_mass;
-    }
+    m_maxDensitySum = std::max(m_maxDensitySum, m_densitySum);
 }
 
 void Physics::removeVoxel(Voxel* voxel) {
@@ -118,16 +114,13 @@ void Physics::updateSpeed(float deltaSec) {
 }
 
 void Physics::voxelChanged(Voxel* voxel, bool isAdd) {
-    float scaledVoxelMass = voxel->normalizedMass() * m_massScaleFactor;
-    if (!isAdd) {
-        scaledVoxelMass *= -1;
-    }
+    float densitySumDelta = (isAdd ? 1 : -1) * voxel->density();
 
-    m_mass = m_mass + scaledVoxelMass;
-    m_accumulatedMassVec = m_accumulatedMassVec + glm::vec3(voxel->gridCell()) * scaledVoxelMass;
+    m_densitySum += densitySumDelta;
+    m_densitySumVec += glm::vec3(voxel->gridCell()) * densitySumDelta;
 
-    if (m_mass > 0.0f) {
-        m_worldObject.transform().setCenterAndAdjustPosition(m_accumulatedMassVec / m_mass);
+    if (m_densitySum > 0.0f) {
+        m_worldObject.transform().setCenterAndAdjustPosition(m_densitySumVec / m_densitySum);
     }  else {
         m_worldObject.transform().setCenterAndAdjustPosition(glm::vec3(0.0f, 0.0f, 0.0f));
     }

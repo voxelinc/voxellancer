@@ -6,7 +6,6 @@
 #include <glm/gtc/quaternion.hpp>
 
 #include <glow/ref_ptr.h>
-#include <glow/Array.h>
 
 #include "property/property.h"
 #include "display/rendering/renderpass.h"
@@ -21,15 +20,14 @@ namespace glow {
 };
 
 
-
-/*
-   Renders a starfield around the camera.
-   Old camera positions/orientations are stored in order to stretch the
-   Stars on movement. As stereorendering renders twice per frame
-   with slightly different cameras, the Starfield needs to know which
-   side is drawn currently.
-   http://chrdw.de/uploads/Eyeside.pdf
-*/
+/**
+ * Renders a starfield around the camera.
+ * Old camera positions/orientations are stored in order to stretch the
+ * Stars on movement. As stereorendering renders twice per frame
+ * with slightly different cameras, the Starfield needs to know which
+ * side is drawn currently.
+ * http://chrdw.de/uploads/Eyeside.pdf
+ */
 class Starfield : public RenderPass, public ContextDependant {
 public:
     Starfield();
@@ -61,7 +59,7 @@ protected:
     glow::ref_ptr<glow::Program> m_shaderProgram;
     glow::ref_ptr<glow::VertexArrayObject> m_vertexArrayObject;
     glow::ref_ptr<glow::Buffer> m_gpuBuffer;
-    glow::Array<StarData> m_cpuBuffer;
+    std::vector<StarData> m_cpuBuffer;
 
     void createAndSetupShaders();
     void createAndSetupGeometry();

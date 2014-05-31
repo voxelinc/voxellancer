@@ -12,7 +12,6 @@
 
 #include "utils/geometryhelper.h"
 
-
 TextFieldHudgetVoxels::TextFieldHudgetVoxels(TextFieldHudget* textFieldHudget, const glm::vec3& direction, float scale, const std::string& text, FontSize fontSize) :
     m_textFieldHudget(textFieldHudget),
     m_voxelFont(VoxelFont::instance()),
@@ -29,6 +28,10 @@ TextFieldHudgetVoxels::TextFieldHudgetVoxels(TextFieldHudget* textFieldHudget, c
 void TextFieldHudgetVoxels::setText(const std::string& text) {
     m_text = text;
     m_offset = -1.f * ((m_text.length() - 1) / 2.0f) * m_width;
+}
+
+void TextFieldHudgetVoxels::setDirection(const glm::vec3& direction) {
+    m_direction = direction;
 }
 
 void TextFieldHudgetVoxels::draw() {

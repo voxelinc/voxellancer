@@ -25,7 +25,7 @@
 #include "voxel/voxel.h"
 #include "world/god.h"
 #include "player.h"
-#include "ui/objectinfo.h"
+#include "worldobject/worldobjectinfo.h"
 
 
 FrozenGameScenario::FrozenGameScenario(GamePlay* inGame) :
@@ -39,9 +39,9 @@ void FrozenGameScenario::populateWorld() {
 
     Ship* normandy = WorldObjectBuilder("normandy").buildShip();
     normandy->transform().setPosition(glm::vec3(0, 0, -100));
-    normandy->objectInfo().setName("Normandy");
-    normandy->objectInfo().setShowOnHud(true);
-    normandy->objectInfo().setCanLockOn(true);
+    normandy->info().setName("Normandy");
+    normandy->info().setShowOnHud(true);
+    normandy->info().setCanLockOn(true);
     normandy->squadLogic()->joinSquad(squadA);
     m_world->god().scheduleSpawn(normandy);
 
@@ -49,9 +49,9 @@ void FrozenGameScenario::populateWorld() {
     for (int i = 0; i < nmember_count; i++) {
         Ship *follower = WorldObjectBuilder("basicship").buildShip();
         follower->transform().setPosition(glm::vec3(100 * (-nmember_count / 2.0f + i), 50, 0));
-        follower->objectInfo().setName("member");
-        follower->objectInfo().setShowOnHud(true);
-        follower->objectInfo().setCanLockOn(true);
+        follower->info().setName("member");
+        follower->info().setShowOnHud(true);
+        follower->info().setCanLockOn(true);
         follower->squadLogic()->joinSquad(squadA);
         m_world->god().scheduleSpawn(follower);
     }
@@ -61,9 +61,9 @@ void FrozenGameScenario::populateWorld() {
 
     Ship *leader = WorldObjectBuilder("eagle").buildShip();
     leader->transform().setPosition(glm::vec3(0, 200, -100));
-    leader->objectInfo().setName("leader");
-    leader->objectInfo().setShowOnHud(true);
-    leader->objectInfo().setCanLockOn(true);
+    leader->info().setName("leader");
+    leader->info().setShowOnHud(true);
+    leader->info().setCanLockOn(true);
     leader->squadLogic()->joinSquad(squadB);
     m_world->god().scheduleSpawn(leader);
 
@@ -71,17 +71,17 @@ void FrozenGameScenario::populateWorld() {
     for (int i = 0; i < lmember_count; i++) {
         Ship *follower = WorldObjectBuilder("basicship").buildShip();
         follower->transform().setPosition(glm::vec3(100 * (-lmember_count / 2.0f + i), 200, 0));
-        follower->objectInfo().setName("member");
-        follower->objectInfo().setShowOnHud(true);
-        follower->objectInfo().setCanLockOn(true);
+        follower->info().setName("member");
+        follower->info().setShowOnHud(true);
+        follower->info().setCanLockOn(true);
         follower->squadLogic()->joinSquadOf(leader);
         m_world->god().scheduleSpawn(follower);
     }
 
-    Ship *testCluster = WorldObjectBuilder("basicship").buildShip();
+    Ship *testCluster = WorldObjectBuilder("mox").buildShip();
     testCluster->transform().setPosition(glm::vec3(0, 0, 10));
-    testCluster->objectInfo().setName("basicship");
-    testCluster->objectInfo().setShowOnHud(false);
+    testCluster->info().setName("basicship");
+    testCluster->info().setShowOnHud(false);
     m_world->god().scheduleSpawn(testCluster);
 
     World::instance()->player().setShip(testCluster);
@@ -96,9 +96,9 @@ void FrozenGameScenario::populateWorld() {
             }
         }
     }
-    wall->objectInfo().setName("Wall");
-    wall->objectInfo().setShowOnHud(true);
-    wall->objectInfo().setCanLockOn(true);
+    wall->info().setName("Wall");
+    wall->info().setShowOnHud(true);
+    wall->info().setCanLockOn(true);
     m_world->god().scheduleSpawn(wall);
 
     glow::debug("Create Planet");
@@ -118,9 +118,9 @@ void FrozenGameScenario::populateWorld() {
         }
     }
     planet->setCrucialVoxel(glm::ivec3(middle));
-    planet->objectInfo().setName("Planet");
-    planet->objectInfo().setShowOnHud(true);
-    planet->objectInfo().setCanLockOn(true);
+    planet->info().setName("Planet");
+    planet->info().setShowOnHud(true);
+    planet->info().setCanLockOn(true);
     m_world->god().scheduleSpawn(planet);
 
     for(int e = 0; e < 15; e++) {
@@ -135,9 +135,9 @@ void FrozenGameScenario::populateWorld() {
                 }
             }
         }
-        enemy->objectInfo().setName("enemy");
-        enemy->objectInfo().setShowOnHud(false);
-        enemy->objectInfo().setCanLockOn(false);
+        enemy->info().setName("enemy");
+        enemy->info().setShowOnHud(false);
+        enemy->info().setCanLockOn(false);
         m_world->god().scheduleSpawn(enemy);
 
     }

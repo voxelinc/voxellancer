@@ -5,8 +5,8 @@
 
 
 /**
- *   A pool that can be used just as RandFloat except that it is
- *   faster and values will repeat over time
+ * A pool that can be used just as RandFloat except that it is
+ * faster and values will repeat over time
  */
 class RandFloatPool {
 public:

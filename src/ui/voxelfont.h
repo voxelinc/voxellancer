@@ -25,6 +25,7 @@ public:
 
     static VoxelFont* instance();
 
+
 protected:
     static VoxelFont* s_instance;
 
@@ -33,5 +34,5 @@ protected:
 
     std::map<char, std::unique_ptr<Letter>> m_font3x5;
     std::map<char, std::unique_ptr<Letter>> m_font5x7;
-
 };
+

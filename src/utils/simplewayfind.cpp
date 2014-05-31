@@ -4,7 +4,8 @@
 #include "geometry/capsule.h"
 #include "worldtree/worldtreequery.h"
 #include "worldobject/worldobject.h"
-#include "utils/geometryhelper.h"
+#include "utils/safenormalize.h"
+#include "utils/worldobjectgeometryhelper.h"
 #include "collision/collisionfilter.h"
 #include "collision/collisiondetector.h"
 #include "worldtree/worldtreegeode.h"
@@ -12,16 +13,16 @@
 
 
 glm::vec3 SimpleWayfind::calculateTravelPoint(WorldObject& object, glm::vec3 targetPoint) {
-    //Wayfinding doesn't care about projectiles
+    // Wayfinding doesn't care about projectiles
     CollisionFilter filter(object.collisionFilter());
     filter.setCollideableWith(WorldObjectType::Bullet, false);
     filter.setCollideableWith(WorldObjectType::Rocket, false);
 
     Capsule capsule = Capsule(object.transform().position(), targetPoint - object.transform().position(), object.bounds().sphere().radius());
-    std::unordered_set<WorldObject*> obstacles = WorldTreeQuery(&World::instance()->worldTree(), &capsule, object.collisionDetector().geode()->containingNode(), &filter).intersectingWorldObjects();
+    std::unordered_set<WorldObject*> obstacles = WorldTreeQuery(&World::instance()->worldTree(), &capsule, object.collisionDetector().geode()->hint(), &filter).intersectingWorldObjects();
 
     if (!obstacles.empty()) {
-        WorldObject* obstacle = GeometryHelper::closestObject(object, &obstacles);
+        WorldObject* obstacle = WorldObjectGeometryHelper::closestObject(object, &obstacles);
         if (obstacle) {
             targetPoint = calculateEvasionPointFor(object, *obstacle, targetPoint);
         }
@@ -38,8 +39,8 @@ glm::vec3 SimpleWayfind::calculateEvasionDirectionFor(WorldObject& self, WorldOb
     float dotP = glm::dot(toTarget, toObject);
     float cosAlpha = dotP / (glm::length(toTarget) * glm::length(toObject));
 
-    glm::vec3 crossPoint = self.transform().position() + (glm::normalize(toTarget) * cosAlpha * glm::length(toObject));
-    return glm::normalize(crossPoint - obstacle.transform().position());
+    glm::vec3 crossPoint = self.transform().position() + (safeNormalize(toTarget, glm::vec3(0.0f)) * cosAlpha * glm::length(toObject));
+    return safeNormalize(crossPoint - obstacle.transform().position(), glm::vec3(0.0f, 0.0f, 1.0f));
 }
 
 glm::vec3 SimpleWayfind::calculateEvasionPointFor(WorldObject& self, WorldObject& obstacle, const glm::vec3& targetPoint) {

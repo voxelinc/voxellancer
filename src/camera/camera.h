@@ -1,72 +1,24 @@
 #pragma once
 
+#include <glowutils/Camera.h>
+
 #include <glm/glm.hpp>
 
 #include "geometry/transform.h"
 
-/**
- *  Represents the camera. matrix thus is the view matrix for all other objects
- */
-class Camera : protected Transform { //protected so we don't have matrix, because we want view
+
+class Camera : public glowutils::Camera {
 public:
     Camera(int viewportWidth, int viewportHeight);
-    virtual ~Camera();
 
-    /* Overwrite WorldObject functions for performance:
-    *  WorldObject recalculates the matrix on every read access,
-    *  Camera should recalculate on every write access, as reads are more common */
+    glm::quat orientation() const;
+    void setOrientation(const glm::quat& orientation);
 
-    void move(glm::vec3 dist);
-    void setPosition(glm::vec3 pos);
-
-    void rotateX(float rot);
-    void rotateY(float rot);
-    void rotateZ(float rot);
-    void setOrientation(glm::quat quat);
-
-    const glm::mat4& view() const;
-    const glm::mat4& viewInverted() const;
-    const glm::quat& orientation() const;
-    const glm::vec3& position() const;
-
-    /* Projection from glow::Camera */
-
-    float zNear() const;
-    void setZNear(float zNear);
-    float zFar() const;
-    void setZFar(float zFar);
-
-    float fovy() const;
-    void setFovy(float fovy);
-
-    const glm::ivec2 viewport() const;
-    void setViewport(const glm::ivec2 & viewport);
-
-    const glm::vec3& projectionOffset() const;
-    void setProjectionOffset(const glm::vec3& projectionOffset);
-
-    float aspectRatio() const;
-
-    const glm::mat4& projection() const;
-
-    const glm::mat4& viewProjection() const;
+    virtual void changed() const override;
 
 
 protected:
-    void viewDirty();
-    void projectionDirty();
-
-    float m_fovy;
-    float m_aspect;
-    float m_zNear;
-    float m_zFar;
-
-    glm::ivec2 m_viewport;
-
-    glm::vec3 m_projectionOffset;
-
-    glm::mat4 m_view;
-    glm::mat4 m_projection;
-    glm::mat4 m_viewProjection;
+    mutable bool m_orientationDirty;
+    glm::quat m_orientation;
 };
 

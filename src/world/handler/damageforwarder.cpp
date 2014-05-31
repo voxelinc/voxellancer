@@ -4,11 +4,12 @@
 #include <algorithm>
 #include <glm/glm.hpp>
 
+#include "utils/safenormalize.h"
+
 #include "voxel/voxelcluster.h"
 #include "voxel/voxeltreenode.h"
 
 #include "voxel/voxelneighbourhelper.h"
-#include "utils/tostring.h"
 
 #include "worldobject/worldobject.h"
 #include "voxel/voxel.h"
@@ -39,9 +40,9 @@ void DamageForwarder::forwardDamageImpacts(std::list<DamageImpact> &dampedDeadly
             glm::vec3 forwardedDamage = dampedDeadlyDamageImpact.damageVec() * forwardFactor(dotProduct, dampedDeadlyDamageImpact.fieldOfDamage(), neighbours.size());
             glm::vec3 createdDamage = voxelVec * deadVoxel->damageForwardingDestructionDamage();
 
-            DamageImpact forwarded(m_currentWorldObject, 
-                                    neighbour, 
-                                    distanceFactor * (forwardedDamage + createdDamage), 
+            DamageImpact forwarded(m_currentWorldObject,
+                                    neighbour,
+                                    distanceFactor * (forwardedDamage + createdDamage),
                                     dampedDeadlyDamageImpact.fieldOfDamage());
             m_damageImpactAccumulator.parse(forwarded);
         }

@@ -16,9 +16,14 @@ class Transform;
 class Voxel;
 class VoxelCollision;
 
+/**
+ * Component of the WorldObject that is managing
+ *  - Movement (updating speed, performing the movement until collision)
+ *  - The mass and center(that is shifted with added/removed Voxels) of the WorldObject
+ */
 class Physics {
 public:
-    Physics(WorldObject& worldObject, float scale);
+    Physics(WorldObject& worldObject);
 
     float directionalDampening() const;
     void setDirectionalDampening(const Property<float>& directionalDampening);
@@ -51,10 +56,9 @@ protected:
     Property<float> m_directionalDampening;
     Property<float> m_angularDampening;
 
-    float m_mass;
-    float m_maxMass;
-    glm::vec3 m_accumulatedMassVec; // For fast recalc of center of mass on voxel addition/removal
-    float m_massScaleFactor;
+    float m_densitySum;
+    float m_maxDensitySum;
+    glm::vec3 m_densitySumVec; // For fast recalc of center of mass on voxel addition/removal
 
     void voxelChanged(Voxel* voxel, bool isAdd);
     virtual void updateSpeed(float deltaSec);

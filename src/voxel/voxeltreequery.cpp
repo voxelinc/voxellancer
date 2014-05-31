@@ -5,7 +5,6 @@
 #include "voxel/voxel.h"
 #include "voxel/voxeltree.h"
 #include "voxel/voxeltreenode.h"
-#include "utils/tostring.h"
 
 
 VoxelTreeQuery::VoxelTreeQuery(VoxelTree* voxelTree, const AbstractShape* shape):
@@ -60,3 +59,4 @@ void VoxelTreeQuery::query(VoxelTreeNode* node, std::function<void(Voxel*)> onVo
         }
     }
 }
+

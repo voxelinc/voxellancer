@@ -11,8 +11,7 @@
 #include "test/bandit_extension/vec3helper.h"
 
 #include "geometry/acceleration.h"
-#include "ui/objectinfo.h"
-#include "utils/tostring.h"
+#include "worldobject/worldobjectinfo.h"
 #include "player.h"
 #include "physics/physics.h"
 #include "resource/clustercache.h"
@@ -51,7 +50,7 @@ static WorldObject* createPlanet(int diameter)
         }
     }
     planet->setCrucialVoxel(glm::ivec3(middle));
-    planet->objectInfo().setName("Planet");	return planet;
+    planet->info().setName("Planet");	return planet;
 }
 
 static void doSplitDetection(WorldObject* planet, WorldObjectModification &mod, int assumedSplits)
@@ -71,7 +70,6 @@ static void doSplitDetection(WorldObject* planet, WorldObjectModification &mod, 
 
 go_bandit([](){
     describe("VoxelTree", [](){
-        World *world;
         PropertyManager::instance()->reset();
         PropertyManager::instance()->load("data/config.ini");
         PropertyManager::instance()->load("data/voxels.ini", "voxels");
@@ -79,8 +77,6 @@ go_bandit([](){
 
         before_each([&]() {
             World::reset();
-            world = World::instance();
-            world->setPlayer(*new Player());
         });
 
         after_each([&]() {
@@ -183,14 +179,14 @@ go_bandit([](){
                 normandy = new Ship();
                 ClusterCache::instance()->fillObject(normandy, "data/voxelcluster/normandy.csv");
                 normandy->transform().setPosition(glm::vec3(0, 0, -100));
-                normandy->objectInfo().setName("Normandy");
+                normandy->info().setName("Normandy");
                 World::instance()->god().scheduleSpawn(normandy);
 
                 ship = new Ship();
                 ClusterCache::instance()->fillObject(ship, "data/voxelcluster/basicship.csv");
                 ship->transform().setPosition(glm::vec3(0, 0, 10));
-                ship->objectInfo().setName("basicship");
-                ship->objectInfo().setShowOnHud(false);
+                ship->info().setName("basicship");
+                ship->info().setShowOnHud(false);
                 World::instance()->god().scheduleSpawn(ship);
 
                 WorldObject *wall = new WorldObject();
@@ -204,7 +200,7 @@ go_bandit([](){
                         }
                     }
                 }
-                wall->objectInfo().setName("Wall");
+                wall->info().setName("Wall");
                 World::instance()->god().scheduleSpawn(wall);
 
                 planet = createPlanet(28);
@@ -221,7 +217,7 @@ go_bandit([](){
                 for (int i = 0; i < 1000; i++) {
                     ship->setTargetObject(planet);
                     //ship->fireAtObject();
-                    ship->components().fireAtPoint(planet->transform().position());
+                    ship->components().fireAtPoint(planet->transform().position(), false);
                     World::instance()->update(0.016f);
                 }
             }

@@ -3,6 +3,8 @@
 #include "gamestate/game.h"
 #include "gamestate/gameplay/running/gameplayrunning.h"
 #include "gamestate/gameplay/paused/gameplaypaused.h"
+#include "gamestate/gameplay/input/gameplaynormalinput.h"
+#include "gamestate/gameplay/input/gameplayfreecaminput.h"
 #include "gameplayscene.h"
 
 #include "utils/statemachine/trigger.h"
@@ -12,6 +14,7 @@
 #include "scenarios/battlescenario.h"
 #include "scenarios/gamescenario.h"
 #include "scenarios/frozengamescenario.h"
+#include "scenarios/friendlyfirescenario.h"
 #include "scenarios/missionscenario.h"
 #include "scenarios/scriptedscenario.h"
 #include "scenarios/piratescenario.h"
@@ -23,9 +26,12 @@
 #include "world/world.h"
 
 #include "player.h"
+#include "camera/camerahead.h"
+#include "camera/cameradolly.h"
 #include "ui/hud/hud.h"
 #include "display/viewer.h"
 
+#include "display/rendering/texturerenderer.h"
 
 
 GamePlay::GamePlay(Game* game) :
@@ -33,9 +39,11 @@ GamePlay::GamePlay(Game* game) :
     m_game(game),
     m_runningState(new GamePlayRunning(this)),
     m_pausedState(new GamePlayPaused(this)),
+    m_normalInput(new GamePlayNormalInput(*this)),
+    m_freecamInput(new GamePlayFreecamInput(*this)),
+    m_freecamActive(false),
     m_scene(new GamePlayScene(*this)),
-    m_soundManager(new SoundManager()),
-    m_scenario(new ScriptedScenario(this, "data/scripts/scenarios/demo.lua"))
+    m_soundManager(new SoundManager())
 {
     updateView();
     setInitialSubState(m_runningState);
@@ -60,12 +68,40 @@ GamePlayPaused& GamePlay::paused() {
     return *m_pausedState;
 }
 
+bool GamePlay::freecamActive() const {
+    return m_freecamActive;
+}
+
+void GamePlay::setFreecamActive(bool active) {
+    m_freecamActive = active;
+
+    if (m_freecamActive) {
+        m_freecamInput->setPosition(World::instance()->player().cameraHead().cameraDolly()->position());
+        m_freecamInput->setOrientation(World::instance()->player().cameraHead().cameraDolly()->orientation());
+
+        World::instance()->player().move(glm::vec3(0));
+        World::instance()->player().rotate(glm::vec3(0));
+
+        Property<bool>("vfx.drawhud").set(false);
+    } else {
+        Property<bool>("vfx.drawhud").set(true);
+    }
+}
+
 const Scene& GamePlay::scene() const {
     return *m_scene;
 }
 
 const CameraHead& GamePlay::cameraHead() const {
-    return World::instance()->player().cameraHead();
+    return m_freecamActive ? m_freecamInput->cameraHead() : World::instance()->player().cameraHead();
+}
+
+InputHandler& GamePlay::inputHandler() {
+    if (m_freecamActive) {
+        return *m_freecamInput.get();
+    } else {
+        return *m_normalInput.get();
+    }
 }
 
 SoundManager& GamePlay::soundManager() {
@@ -73,6 +109,9 @@ SoundManager& GamePlay::soundManager() {
 }
 
 void GamePlay::loadScenario(int i) {
+    TextureRenderer loadRenderer("data/textures/loading.dds");
+    loadRenderer.display("Loading Scenario...");
+
     m_soundManager->stopAll();
     m_scenario->clear();
     updateView();
@@ -93,6 +132,9 @@ void GamePlay::loadScenario(int i) {
     case 4:
         m_scenario.reset(new PirateScenario(this));
         break;
+    case 5:
+        m_scenario.reset(new FriendlyFireScenario(this));
+        break;
     default:
         m_scenario.reset(new BaseScenario(this));
     }
@@ -101,6 +143,14 @@ void GamePlay::loadScenario(int i) {
 }
 
 void GamePlay::update(float deltaSec) {
+    inputHandler().update(deltaSec);
+
+    if (m_freecamActive) {
+        m_soundManager->setListener(m_freecamInput->cameraHead().position(), m_freecamInput->cameraHead().orientation());
+    } else {
+        m_soundManager->setListener(World::instance()->player().cameraHead().position(), World::instance()->player().cameraHead().orientation());
+    }
+
     GameState::update(deltaSec);
     m_scene->update(deltaSec);
 }
@@ -108,7 +158,7 @@ void GamePlay::update(float deltaSec) {
 void GamePlay::onEntered() {
     GameState::onEntered();
     m_soundManager->activate();
-    m_scenario->load();
+    loadScenario(0);
 }
 
 void GamePlay::onLeft() {

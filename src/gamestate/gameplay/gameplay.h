@@ -10,13 +10,16 @@ class Game;
 class GamePlayRunning;
 class GamePlayPaused;
 class GamePlayScene;
+class GamePlayInput;
+class GamePlayNormalInput;
+class GamePlayFreecamInput;
 class Player;
 class SoundManager;
 
 /**
- *   State that is active whenever the the game is actually played and not
- *   in some menustate etc.
-*/
+ * State that is active whenever the the game is actually played and not
+ * in some menustate etc.
+ */
 class GamePlay: public GameState {
 public:
     GamePlay(Game* game);
@@ -28,8 +31,13 @@ public:
     GamePlayRunning& running();
     GamePlayPaused& paused();
 
+    bool freecamActive() const;
+    void setFreecamActive(bool active);
+
     virtual const Scene& scene() const override;
     virtual const CameraHead& cameraHead() const override;
+
+    virtual InputHandler& inputHandler() override;
 
     SoundManager& soundManager();
 
@@ -39,7 +47,9 @@ public:
 
     virtual void onEntered() override;
     virtual void onLeft() override;
+
     void updateView();
+
 
 protected:
     Game* m_game;
@@ -50,5 +60,9 @@ protected:
 
     GamePlayRunning* m_runningState;
     GamePlayPaused* m_pausedState;
+    std::unique_ptr<GamePlayNormalInput> m_normalInput;
+    std::unique_ptr<GamePlayFreecamInput> m_freecamInput;
+
+    bool m_freecamActive;
 };
 
