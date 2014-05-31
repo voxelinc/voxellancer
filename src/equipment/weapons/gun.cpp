@@ -150,6 +150,7 @@ void Gun::setBulletExtend() {
     m_bulletMaxWidth = glm::max(bullet->bounds().minimalGridAABB().extent(XAxis), bullet->bounds().minimalGridAABB().extent(YAxis))* bullet->transform().scale();
     m_bulletLength = bullet->bounds().minimalGridAABB().extent(ZAxis) * bullet->transform().scale();
     m_spawnDistance = glm::root_two<float>() * bullet->transform().scale();
+    m_bulletLifetime = bullet->lifetime();
 
     delete bullet;
 }
@@ -158,3 +159,6 @@ void Gun::onProjectileNameChanged() {
     setBulletExtend();
 }
 
+float Gun::bulletLifetime() const {
+    return m_bulletLifetime;
+}

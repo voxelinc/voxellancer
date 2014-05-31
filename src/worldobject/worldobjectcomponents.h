@@ -6,12 +6,18 @@
 #include "equipment/enginepower.h"
 #include "equipment/enginestate.h"
 
+#include "worldobjectinfo.h"
+
+#include "util/observer.h"
+#include "util/observable.h"
+
 
 class EngineSlot;
 class Hardpoint;
 class HardpointVoxel;
 class ShieldSlot;
 class WorldObject;
+class ComponentsInfo;
 
 /**
  * Module of the WorldObject that is responsible for managing all
@@ -20,7 +26,7 @@ class WorldObject;
  * Also provides functions to trigger actions or retrieve values from
  * a whole category of components. (like, fire all weapons, set all engines)
  */
-class WorldObjectComponents {
+class WorldObjectComponents : public Observable, public Observer {
 public:
     WorldObjectComponents(WorldObject* worldObject);
     ~WorldObjectComponents();
@@ -29,7 +35,7 @@ public:
     const WorldObject* worldObject() const;
 
     void addEngineSlot(std::shared_ptr<EngineSlot> engineSlot);
-    void removeEngineSlot(const EngineSlot* engineSlot);
+    void removeEngineSlot(EngineSlot* engineSlot);
 
     /**
      * Access EngineSlots either by index in the model or all of them
@@ -58,7 +64,7 @@ public:
 
 
     void addHardpoint(std::shared_ptr<Hardpoint> hardpoint);
-    void removeHardpoint(const Hardpoint* hardpoint);
+    void removeHardpoint(Hardpoint* hardpoint);
 
     /**
      * Access Hardpoints either by index in the model or all of them
@@ -89,6 +95,8 @@ public:
      */
     void update(float deltaSec);
 
+    const ComponentsInfo& componentsInfo() const;
+
 
 
 protected:
@@ -98,6 +106,11 @@ protected:
     std::list<std::shared_ptr<Hardpoint>> m_hardpoints;
     std::list<std::shared_ptr<ShieldSlot>> m_shieldSlots;
 
+    std::unique_ptr<ComponentsInfo> m_componentsInfo;
+
     EngineState m_engineState;
+
+
+    virtual void updateObserver();
 };
 
