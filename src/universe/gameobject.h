@@ -13,6 +13,12 @@
 class Sector;
 class Universe;
 
+enum class GameObjectState {
+    Created,
+    Spawned,
+    Unspawned
+};
+
 class GameObject : public glow::Referenced, public HandleOwner, public Scriptable {
 public:
     GameObject();
@@ -21,9 +27,9 @@ public:
     Universe* universe() const;
     Sector* sector() const;
 
-    virtual void update(float deltaSecs);
+    GameObjectState gameObjectState() const;
 
-    bool canSpawnFail() const;
+    virtual void update(float deltaSecs);
 
     bool canSpawn(Universe& universe) const;
     bool canSpawn(Sector& sector) const;
@@ -39,9 +45,9 @@ public:
 protected:
     Universe* m_universe;
     Sector* m_sector;
+    GameObjectState m_state;
 
 
-    virtual bool doCanSpawnFail() const;
     virtual bool doCanSpawn(Universe& universe, Sector* sector) const;
     virtual void doSpawn() = 0;
 

@@ -12,12 +12,13 @@
 class PropertyDirectory {
 public:
     PropertyDirectory();
-    PropertyDirectory(const std::string& path);
+    PropertyDirectory(const std::string& path, const std::string& prefix = "");
 
     void read();
 
 
 protected:
     std::string m_path;
+    std::string m_prefix;
 };
 

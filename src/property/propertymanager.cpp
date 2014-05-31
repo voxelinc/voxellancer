@@ -1,10 +1,11 @@
 #include "propertymanager.h"
 
-
 #include <string>
 #include <fstream>
 
 #include <glow/logging.h>
+
+#include "utils/stringhelper.h"
 
 #include "propertycollection.h"
 #include "propertyconverter.h"
@@ -13,8 +14,7 @@
 #include "input/inputmapping.h"
 
 
-PropertyManager::PropertyManager()
-{
+PropertyManager::PropertyManager() {
     addPropertyCollection(new PropertyCollection<float>(float_regex(), PropertyConverter::floatConverter));
     addPropertyCollection(new PropertyCollection<int>(int_regex(), [](std::string s) { return std::stoi(s, nullptr, 0); })); // base=0 allows adding 0x to parse hex
     addPropertyCollection(new PropertyCollection<uint32_t>(uint32_regex(), [](std::string s) { return std::stoul(s, nullptr, 0); })); // base=0 allows adding 0x to parse hex
@@ -28,21 +28,16 @@ PropertyManager::PropertyManager()
     addPropertyCollection(new PropertyCollection<std::list<std::string>>(list_regex(), PropertyConverter::listConverter));
 }
 
-PropertyManager::~PropertyManager() {
-
-}
-
+PropertyManager::~PropertyManager() = default;
 
 void PropertyManager::load(const std::string& file, const std::string& prefix) {
     std::ifstream input(file);
     std::string line;
-    std::string title = "";
+    std::string title;
 
     if (!input.is_open()) {
         glow::fatal("PropertyManager: could not open %;", file);
         throw std::runtime_error("Critical configuration file not readable");
-    } else {
-        //glow::info("PropertyManager: Loading %; with prefix '%;'", file, prefix);
     }
 
     std::string keyPrefix = prefix.empty() ? "" : prefix + ".";
@@ -62,16 +57,22 @@ void PropertyManager::load(const std::string& file, const std::string& prefix) {
             key_temp = matches[1];
             key = keyPrefix + title + '.' + key_temp;
             value = matches[2];
-            int success = 0;
+            bool success = false;
+
 
             for (auto& pair: m_propertyCollections) {
                 if (pair.second->update(key, value)) {
-                    success++;
+                    success = true;
                 }
             }
-            
-            if (success == 0) {
+
+            if (!success) {
                 glow::warning("PropertyManager: no match %;: %; (line: %;)", key, value, line);
+            } else {
+                std::string group = key.substr(0, key.rfind("."));
+                std::cout << "Group: " << prefix << " " << group << std::endl;
+                std::vector<std::string> path = StringHelper(group).split('.');
+                m_rootNode.insert(path);
             }
         }
     }
@@ -91,6 +92,17 @@ void PropertyManager::reset() {
     if (s_instance != nullptr) {
         delete s_instance;
         s_instance = nullptr;
+    }
+}
+
+std::vector<std::string> PropertyManager::groups(const std::string& prefix) const {
+    const PropertyNode* node = m_rootNode.find(StringHelper(prefix).split('.'));
+
+    if (!node) {
+        glow::debug() << "No such propertypath '" << prefix << "'";
+        return std::vector<std::string>();
+    } else {
+        return node->childrenNames();
     }
 }
 

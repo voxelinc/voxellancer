@@ -1,5 +1,7 @@
 #include "propertydirectory.h"
 
+#include <glow/logging.h>
+
 #include "utils/directoryreader.h"
 
 #include "def_regex.h"
@@ -7,13 +9,14 @@
 
 
 PropertyDirectory::PropertyDirectory():
-    PropertyDirectory("")
+    PropertyDirectory("", "")
 {
 
 }
 
-PropertyDirectory::PropertyDirectory(const std::string& path):
-    m_path(path)
+PropertyDirectory::PropertyDirectory(const std::string& path, const std::string& prefix):
+    m_path(path),
+    m_prefix(prefix)
 {
 
 }
@@ -21,15 +24,21 @@ PropertyDirectory::PropertyDirectory(const std::string& path):
 void PropertyDirectory::read() {
     std::list<std::string> files = DirectoryReader(m_path).read();
 
-    regexns::regex iniRegex(R"(^.*?([^\/\\]+)\.ini$)");
+    regexns::regex iniRegex(R"(^.*?([^\/\\]+)\.(.+)$)");
 
     for (std::string& file : files) {
         regexns::smatch matches;
         regexns::regex_match(file, matches, iniRegex);
 
+        if (matches.size() < 3 || matches[2] != "ini") {
+            glow::debug("'%;' is no .ini file, skipping", file);
+            continue;
+        }
+
         if (matches.size() > 1) {
             std::string basename = matches[1];
-            PropertyManager::instance()->load(file, basename);
+            std::string prefix = m_prefix.empty() ? basename : m_prefix + "." + basename;
+            PropertyManager::instance()->load(file, prefix);
         }
     }
 }

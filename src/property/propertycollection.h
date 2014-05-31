@@ -40,7 +40,6 @@ protected:
 
     PropertyImpl<T>* getOrCreate(const std::string& key);
     PropertyImpl<T>* create(const std::string& key);
-
 };
 
 #include "propertycollection.inl"

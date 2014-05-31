@@ -20,6 +20,8 @@
 #include "utils/statemachine/trigger.h"
 #include "utils/statemachine/triggeredtransition.h"
 
+#include "resource/universeloader.h"
+
 #include "scenarios/basescenario.h"
 
 #include "sound/soundmanager.h"
@@ -117,6 +119,7 @@ void GamePlay::loadScenario(int i) {
 
     switch (i) {
     default:
+        m_universe.reset(UniverseLoader("data/universe").load());
         m_scenario.reset(new BaseScenario(*m_universe.get()));
     }
 

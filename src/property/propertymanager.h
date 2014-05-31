@@ -2,14 +2,17 @@
 
 #include <list>
 #include <memory>
-#include <stdint.h>
+#include <cstdint>
 #include <string>
+#include <unordered_map>
+#include <map>
+#include <vector>
 
 #include <glm/glm.hpp>
 
 #include <glow/Changeable.h>
-#include <unordered_map>
-#include <map>
+
+#include "propertynode.h"
 
 
 class InputMapping;
@@ -40,6 +43,8 @@ public:
     template<typename T> T get(const std::string& name);
     template<typename T> T get(const std::string& name, const T& defaultValue);
 
+    std::vector<std::string> groups(const std::string& prefix) const;
+
 
 protected:
     template<typename T>
@@ -48,6 +53,8 @@ protected:
     void addPropertyCollection(PropertyCollection<T>* collection);
 
     std::unordered_map<const std::type_info*, std::unique_ptr<AbstractPropertyCollection>> m_propertyCollections;
+
+    PropertyNode m_rootNode;
 
     static PropertyManager* s_instance;
 };
