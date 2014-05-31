@@ -3,7 +3,6 @@
 #include <stdint.h>
 
 
-
 class ColorHelper {
 public:
     // Flips bytes from human readable format to OpenGL format

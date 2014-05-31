@@ -78,7 +78,7 @@ void FrozenGameScenario::populateWorld() {
         m_world->god().scheduleSpawn(follower);
     }
 
-    Ship *testCluster = WorldObjectBuilder("specialbasicship").buildShip();
+    Ship *testCluster = WorldObjectBuilder("mox").buildShip();
     testCluster->transform().setPosition(glm::vec3(0, 0, 10));
     testCluster->info().setName("basicship");
     testCluster->info().setShowOnHud(false);
@@ -92,7 +92,7 @@ void FrozenGameScenario::populateWorld() {
     for(int x = 0; x < 20; x++) {
         for(int y = 0; y < 15; y++) {
             for(int z = 0; z < 3; z++) {
-                wall->addVoxel(new Voxel(glm::ivec3(z, x, y), 0xB4787830));
+                wall->addVoxel(new Voxel(glm::ivec3(z, x, y), 0xB47878FF));
             }
         }
     }
@@ -112,7 +112,7 @@ void FrozenGameScenario::populateWorld() {
                 glm::vec3 cell(x, y, z);
 
                 if(glm::length(cell - middle) < diameter/2) {
-                    planet->addVoxel(new Voxel(glm::ivec3(x, y, z), 0x0055AA80));
+                    planet->addVoxel(new Voxel(glm::ivec3(x, y, z), 0x0055AAFF));
                 }
             }
         }

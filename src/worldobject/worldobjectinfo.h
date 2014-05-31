@@ -5,9 +5,11 @@
 #include <glm/glm.hpp>
 
 
-class WorldObjectInfo  {
+class WorldObject;
+
+class WorldObjectInfo {
 public:
-    WorldObjectInfo();
+    WorldObjectInfo(WorldObject& worldObject);
 
     std::string name();
     void setName(const std::string& name);
@@ -18,8 +20,11 @@ public:
     bool canLockOn();
     void setCanLockOn(bool canLockOn);
 
+    std::string shieldStatus();
+
 
 protected:
+    WorldObject& m_worldObject;
     std::string m_name;
     bool m_showOnHud;
     bool m_canLockOn;

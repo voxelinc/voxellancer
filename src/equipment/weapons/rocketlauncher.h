@@ -19,8 +19,9 @@ public:
 
     void fireAtObject(WorldObject* target);
 
-    void update(float deltaSec) override;
+    virtual void update(float deltaSec) override;
 
+    float rocketRange();
 
 protected:
     SoundProperties m_rocketSound;
