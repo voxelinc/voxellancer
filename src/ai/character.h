@@ -36,7 +36,6 @@ public:
 
     void onAggressionBy(WorldObject* aggressor, float friendlinessModifier);
 
-    FactionRelationType relationTypeTo(Faction& other);
     FactionRelationType relationTypeTo(WorldObject* worldObject);
 
     void setFriendlinessToWorldObject(WorldObject* worldObject, float friendliness);

@@ -85,8 +85,11 @@ void Character::onCollisionWith(WorldObject* worldObject) {
     }
     if (aggressor != m_world->player().ship()) {
         return;
+    } else {
+        if (relationTypeTo(aggressor) != FactionRelationType::Enemy) {
+            m_world->player().hud().showMessage(warningMessage);
+        }
     }
-    m_world->player().hud().showMessage(warningMessage);
     onAggressionBy(aggressor, relationModifier);
 }
 
@@ -112,10 +115,6 @@ void Character::onKilledBy(WorldObject* worldObject) {
     if (m_ship.squadLogic()->squad()) {
         m_ship.squadLogic()->squad()->propagadeFriendlinessToWorldObject(ship, glm::min(-30.0f, m_faction->relationTo(ship->character()->faction()).friendliness()));
     }
-}
-
-FactionRelationType Character::relationTypeTo(Faction& other) {
-    return m_faction->relationTo(other).type();
 }
 
 FactionRelationType Character::relationTypeTo(WorldObject* worldObject) {
