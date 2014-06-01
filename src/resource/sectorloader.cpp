@@ -5,23 +5,37 @@ SectorLoader::SectorLoader(const std::string& name, const std::string& prefix, U
     m_name(name),
     m_prefix(prefix),
     m_universe(universe),
-    m_loadedSector(nullptr);
+    m_loaded(false)
 {
 }
 
 SectorLoader::~SectorLoader() = default;
 
-LoadedSector* SectorLoader::load() {
+std::shared_ptr<Sector> SectorLoader::sector() {
+    lazyLoad();
+    return m_sector;
+}
+
+void SectorLoader::foreachJumpgateLoader(const std::function<void(JumpgateLoader*)> function) {
+    lazyLoad();
+
+    for (auto jumpgateLoader : m_jumpgateLoaders) {
+        function(jumpgateLoader.get());
+    }
+}
+
+void SectorLoader::lazyLoad() {
+    if (m_loaded) {
+        return;
+    }
+
     m_sector = std::make_shared<Sector>(m_name, m_universe);
-    
-    delete m_loadedSector;
-    m_loadedSector = new LoadedSector(m_m_sector);
 
     loadSkybox();
     loadLight();
     loadJumpgates();
 
-    return m_sector;
+    m_loaded = true;
 }
 
 void SectorLoader::loadSkybox() {
@@ -36,14 +50,16 @@ void SectorLoader::loadLight() {
 }
 
 void SectorLoader::loadJumpgates() {
-    for (int i = 0; PropertyManager::instance()->hasGroup(prefix + "." + name + ".general.jumpgate" + std::to_string(i); i++) {
+    for (int i = 0; PropertyManager::instance()->hasGroup(prefix + "." + name + ".jumpgate" + std::to_string(i); i++) {
         loadJumpgate(i);
     }
 }
 
 void SectorLoader::loadJumpgate(int index) {
-    Jumpgate* jumpgate = WorldObjectBuilder("jumpgate").buildJumpgate();
-    jumpgate->transform().setPosition();
-}
+    JumpgateLoader* jumpgateLoader = new JumpgateLoader(prefix + "." + name + std::to_string(index));
 
+    jumpgateLoader->jumpgate()->spawn(m_sector);
+
+    m_jumpgateLoaders.push_back(std::unqiue_ptr<JumpgateLoader>(jumpgateLoader));
+}
 

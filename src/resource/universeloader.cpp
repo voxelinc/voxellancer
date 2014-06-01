@@ -11,54 +11,61 @@
 
 UniverseLoader::UniverseLoader(const std::string& path):
     m_path(path),
-    m_universe(nullptr)
+    m_universe(nullptr),
+    m_loaded(false)
 {
     m_prefix = "universe";
 }
 
 UniverseLoader::~UniverseLoader() = default;
 
-Universe* UniverseLoader::load() {
-    delete m_universe;
+Universe* UniverseLoader::universe() {
+    lazyLoad();
+    return m_universe;
+}
+
+void UniverseLoader::lazyLoad() {
+    if (m_loaded) {
+        return;
+    }
+
     m_universe = new Universe();
 
     loadSectors();
-    connectSectors();
+    connectJumpgates();
 
-    return m_universe;
+    m_loaded = true;
 }
 
 void UniverseLoader::loadSectors() {
     std::string sectorsPrefix(m_prefix + ".sectors");
-
     PropertyDirectory(m_path + "/sectors", sectorsPrefix).read();
 
     for (std::string& sector : PropertyManager::instance()->groups(sectorsPrefix)) {
-        SectorLoader loader(sector, sectorsPrefix, *m_universe);
-        std::shared_ptr<LoadedSector> loadedSector = loader.load();
+        SectorLoader* loader = new SectorLoader(sector, sectorsPrefix, *m_universe);
 
-        m_universe->addSector(loadedSector.sector());
-        m_loadedSectors[sector] = loadedSector;
+        m_universe->addSector(loader->sector());
+        m_sectorLoaders[sector].reset(loader);
     }
 }
 
-void UniverseLoader::connectSectors() {
-    for (auto& pair : m_loadedSectors) {
-        std::shared_ptr<LoadedSector>& loadedSector = pair.second;
+void UniverseLoader::connectJumpgates() {
+    for (auto& pair : m_sectorLoaders) {
+        SectorLoader* sectorLoader = pair.second.get();
 
-        for (std::shared_ptr<LoadedJumpgate>& loadedJumpgate : loadedSector.loadedJumpgates()) {
-            std::shared_ptr<LoadedSector>& targetSector = m_loadedSectors[loadedJumpgate->targetSector()];
-            if (!targetSector) {
-                throw std::runtime_error("No such sector '" + loadedJumpgate->targetSector() + "'");           
+        sectorLoader->foreachJumpgateLoader([] (JumpgateLoader* jumpgateLoader) {
+            SectorLoader* targetSectorLoader = m_sectorLoaders[jumpgateLoader->targetSector()].get();
+            if (!targetSectorLoader) {
+                throw std::runtime_error("No such sector '" + jumpgateLoader->targetSector() + "'");
             }
-            
-            glow::ref_ptr<Jumpgate> buddy = targetSector->jumpgate(loadedJumpgate->buddy());
+
+            glow::ref_ptr<Jumpgate> buddy = targetSectorLoader->jumpgate(jumpgateLoader->buddy());
             if (!buddy) {
                 throw std::runtime_error("No such jumpgate '" + std::to_string(loadedJumpgate->buddy()) + "' in sector '" + loadedJumpgate->targetSector() + "'");
-            }            
+            }
 
-            loadedJumpgate->jumpgate()->setBuddy(buddy);
-        }
+            jumpgateLoader->setBuddy(buddy);
+        });
     }
 }
 

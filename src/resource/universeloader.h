@@ -10,15 +10,22 @@ public:
     UniverseLoader(const std::string& path);
     virtual ~UniverseLoader();
 
-    Universe* load();
+    Universe* universe();
 
 
 protected:
     std::string m_path;
     std::string m_prefix;
-    Universe* m_universe;
-    std::unordered_map<std::string, std::shared_ptr<LoadedSector>> m_loadedSectors;
 
+    bool m_loaded;
+
+    Universe* m_universe;
+
+    std::unordered_map<std::string, std::unique_ptr<SectorLoader>> m_sectorLoaders;
+
+
+    void lazyLoad();
     void loadSectors();
+    void connectJumpgates();
 };
 

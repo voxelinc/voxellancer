@@ -3,10 +3,10 @@
 #include "universe/jumpgate.h"
 
 
-class LoadedJumpgate {
+class JumpgateLoader {
 public:
-    LoadedJumpgate(glow::ref_ptr<Jumpgate>& jumpgate, const std::string& targetSector, int buddy);
-    virtual ~LoadedJumpgate();
+    JumpgateLoader(const std::string& group);
+    virtual ~JumpgateLoader();
 
     glow::ref_ptr<Jumpgate>& jumpgate();
     const std::string& targetSector();
@@ -14,7 +14,15 @@ public:
 
 
 protected:
+    std::string& group;
+
+    bool m_loaded;
+
     glow::ref_ptr<Jumpgate> m_jumpgate;
     std::string m_targetSector;
     int m_buddy;
+
+
+    void loadLazy();
 };
+

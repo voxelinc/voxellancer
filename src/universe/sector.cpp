@@ -29,7 +29,7 @@ Sector::Sector(const std::string& name, Universe& universe):
     m_particleEngine(*this),
     m_sectorLogic(*this),
     m_voxelRenderer(VoxelRenderer::instance()),
-    m_lightDir(0.3f, 0.5f, 1.0f),
+    m_lightDirection(0.3f, 0.5f, 1.0f),
     m_functionalObjects(universe),
     m_worldObjects(*this)
 {
@@ -52,10 +52,6 @@ WorldTree& Sector::worldTree() {
 
 VoxelParticleEngine& Sector::particleEngine() {
     return m_particleEngine;
-}
-
-void Sector::foreachWorldObject(const std::function<void(glow::ref_ptr<WorldObject>& object)>& function) {
-    m_worldObjects->foreachObject(function);
 }
 
 void Sector::addFunctionalObject(FunctionalObject* object) {
@@ -93,6 +89,26 @@ void Sector::removeWorldObject(WorldObject* object) {
     m_worldObjects->removeObject(object);
 }
 
+void Sector::foreachWorldObject(const std::function<void(glow::ref_ptr<WorldObject>& object)>& function) {
+    m_worldObjects->foreachObject(function);
+}
+
+Skybox* Sector::skybox() {
+    return m_skybox;
+}
+
+void Sector::setSkybox(Skybox* skybox) {
+    m_skybox = skybox;
+}
+
+const glm::vec3& Sector::lightDirection() const {
+    return m_lightDirection;
+}
+
+void Sector::setLightDirection(const glm::vec3& direction) {
+    m_lightDirection = direction;
+}
+
 void Sector::update(float deltaSec) {
     m_sectorLogic->update(deltaSec);
 
@@ -105,7 +121,7 @@ void Sector::update(float deltaSec) {
 void Sector::draw(const Camera& camera) {
     m_skybox->draw(camera);
 
-    m_voxelRenderer->program()->setUniform("lightdir", m_lightDir);
+    m_voxelRenderer->program()->setUniform("lightdir", m_lightDirection);
 
     m_voxelRenderer->prepareDraw(camera);
 

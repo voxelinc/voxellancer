@@ -18,6 +18,8 @@ public:
 
     T& operator*();
 
+    Component<T>& operator=(T* newValue);
+
 
 protected:
     std::unique_ptr<T> m_value;

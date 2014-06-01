@@ -1,8 +1,11 @@
 #pragma once
 
+#include <string>
+
 #include <glow/ref_ptr.h>
 
 #include "etc/contextdependant.h"
+
 
 namespace glow {
     class Texture;
@@ -15,7 +18,8 @@ class Camera;
 
 class Skybox : public ContextDependant {
 public:
-    Skybox();
+    Skybox(const std::string& directory);
+    virtual ~Skybox();
 
     void draw(const Camera& camera);
 

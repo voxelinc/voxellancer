@@ -36,14 +36,19 @@ public:
     WorldTree& worldTree();
     VoxelParticleEngine& particleEngine();
 
-    void foreachWorldObject(const std::function<void(glow::ref_ptr<WorldObject>& object)>& function);
-
     void addFunctionalObject(FunctionalObject* object);
     void removeFunctionalObject(FunctionalObject* object);
 
     bool canAddWorldObject(const WorldObject* object) const;
     void addWorldObject(WorldObject* object);
     void removeWorldObject(WorldObject* object);
+    void foreachWorldObject(const std::function<void(glow::ref_ptr<WorldObject>& object)>& function);
+
+    Skybox* skybox();
+    void setSkybox(Skybox* skybox);
+
+    const glm::vec3& lightDirection() const;
+    void setLightDirection(const glm::vec3& direction);
 
     void update(float deltaSec);
 
@@ -64,6 +69,6 @@ protected:
     Component<SectorLogic> m_sectorLogic;
 
     std::shared_ptr<VoxelRenderer> m_voxelRenderer;
-    glm::vec3 m_lightDir;
+    glm::vec3 m_lightDirection;
 };
 
