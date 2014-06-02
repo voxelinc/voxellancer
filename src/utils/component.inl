@@ -33,6 +33,7 @@ T& Component<T>::operator*() {
     return *m_value;
 }
 
+template<typename T>
 Component<T>& Component<T>::operator=(T* newValue) {
     m_value.reset(newValue);
     return *this;

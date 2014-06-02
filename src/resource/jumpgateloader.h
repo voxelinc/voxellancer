@@ -8,13 +8,13 @@ public:
     JumpgateLoader(const std::string& group);
     virtual ~JumpgateLoader();
 
-    glow::ref_ptr<Jumpgate>& jumpgate();
+    Jumpgate* jumpgate();
     const std::string& targetSector();
     int buddy();
 
 
 protected:
-    std::string& group;
+    std::string m_group;
 
     bool m_loaded;
 

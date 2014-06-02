@@ -31,7 +31,8 @@ Sector::Sector(const std::string& name, Universe& universe):
     m_voxelRenderer(VoxelRenderer::instance()),
     m_lightDirection(0.3f, 0.5f, 1.0f),
     m_functionalObjects(universe),
-    m_worldObjects(*this)
+    m_worldObjects(*this),
+    m_skybox("data/skybox")
 {
 
 }
@@ -93,7 +94,7 @@ void Sector::foreachWorldObject(const std::function<void(glow::ref_ptr<WorldObje
     m_worldObjects->foreachObject(function);
 }
 
-Skybox* Sector::skybox() {
+Skybox& Sector::skybox() {
     return m_skybox;
 }
 

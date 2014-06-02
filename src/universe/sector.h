@@ -44,7 +44,7 @@ public:
     void removeWorldObject(WorldObject* object);
     void foreachWorldObject(const std::function<void(glow::ref_ptr<WorldObject>& object)>& function);
 
-    Skybox* skybox();
+    Skybox& skybox();
     void setSkybox(Skybox* skybox);
 
     const glm::vec3& lightDirection() const;

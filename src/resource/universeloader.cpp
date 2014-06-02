@@ -8,6 +8,9 @@
 
 #include "universe/universe.h"
 
+#include "jumpgateloader.h"
+#include "sectorloader.h"
+
 
 UniverseLoader::UniverseLoader(const std::string& path):
     m_path(path),
@@ -53,7 +56,7 @@ void UniverseLoader::connectJumpgates() {
     for (auto& pair : m_sectorLoaders) {
         SectorLoader* sectorLoader = pair.second.get();
 
-        sectorLoader->foreachJumpgateLoader([] (JumpgateLoader* jumpgateLoader) {
+        sectorLoader->foreachJumpgateLoader([&] (JumpgateLoader* jumpgateLoader) {
             SectorLoader* targetSectorLoader = m_sectorLoaders[jumpgateLoader->targetSector()].get();
             if (!targetSectorLoader) {
                 throw std::runtime_error("No such sector '" + jumpgateLoader->targetSector() + "'");
@@ -61,10 +64,10 @@ void UniverseLoader::connectJumpgates() {
 
             glow::ref_ptr<Jumpgate> buddy = targetSectorLoader->jumpgate(jumpgateLoader->buddy());
             if (!buddy) {
-                throw std::runtime_error("No such jumpgate '" + std::to_string(loadedJumpgate->buddy()) + "' in sector '" + loadedJumpgate->targetSector() + "'");
+                throw std::runtime_error("No such jumpgate '" + std::to_string(jumpgateLoader->buddy()) + "' in sector '" + jumpgateLoader->targetSector() + "'");
             }
 
-            jumpgateLoader->setBuddy(buddy);
+            jumpgateLoader->jumpgate()->setBuddy(buddy);
         });
     }
 }

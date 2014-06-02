@@ -5,9 +5,10 @@
 #include <vector>
 
 
+class Jumpgate;
+class JumpgateLoader;
 class Sector;
 class Universe;
-class JumpgateLoader;
 
 class SectorLoader {
 public:
@@ -15,6 +16,8 @@ public:
     virtual ~SectorLoader();
 
     std::shared_ptr<Sector> sector();
+
+    Jumpgate* jumpgate(int index);
 
     void foreachJumpgateLoader(const std::function<void(JumpgateLoader*)> function);
 
@@ -32,5 +35,9 @@ protected:
 
 
     void lazyLoad();
+    void loadSkybox();
+    void loadLight();
+    void loadJumpgates();
+    void loadJumpgate(int index);
 };
 

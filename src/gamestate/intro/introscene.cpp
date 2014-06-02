@@ -16,7 +16,7 @@
 IntroScene::IntroScene(Intro& intro):
     m_intro(intro),
     m_font(VoxelFont::instance()),
-    m_skybox(new Skybox()),
+    m_skybox(new Skybox("data/skybox/backen")),
     m_voxelRenderer(VoxelRenderer::instance())
 {
 

@@ -115,13 +115,13 @@ void GamePlay::loadScenario(int i) {
     loadRenderer.display("Loading Scenario...");
 
     m_soundManager->stopAll();
-    updateView();
 
     switch (i) {
     default:
-        m_universe.reset(UniverseLoader("data/universe").load());
+        m_universe.reset(UniverseLoader("data/universe").universe());
         m_scenario.reset(new BaseScenario(*m_universe.get()));
     }
+    updateView();
 
     m_scenario->load();
 }

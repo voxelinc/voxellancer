@@ -22,6 +22,8 @@ Skybox::Skybox(const std::string& directory):
 {
 }
 
+Skybox::~Skybox() = default;
+
 void Skybox::initialize() {
     /* Texture */
     m_texture = new glow::Texture(GL_TEXTURE_CUBE_MAP);
