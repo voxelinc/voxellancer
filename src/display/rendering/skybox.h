@@ -25,6 +25,8 @@ public:
 
 
 protected:
+    std::string m_directory;
+
     glow::ref_ptr<glow::Texture> m_texture;
     glow::ref_ptr<glow::Program> m_shaderProgram;
     glow::ref_ptr<glow::VertexArrayObject> m_vertexArrayObject;

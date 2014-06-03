@@ -15,6 +15,7 @@
 
 
 Skybox::Skybox(const std::string& directory):
+    m_directory(directory),
     m_texture(0),
     m_shaderProgram(0),
     m_vertexArrayObject(0),
@@ -29,14 +30,14 @@ void Skybox::initialize() {
     m_texture = new glow::Texture(GL_TEXTURE_CUBE_MAP);
 
     if (!DdsTexture::loadImageCube(m_texture,
-        "data/textures/skybox/nebula_1024_right1.dds",
-        "data/textures/skybox/nebula_1024_left2.dds",
-        "data/textures/skybox/nebula_1024_top3.dds",
-        "data/textures/skybox/nebula_1024_bottom4.dds",
-        "data/textures/skybox/nebula_1024_front5.dds",
-        "data/textures/skybox/nebula_1024_back6.dds"))
+                                   m_directory + "/right.dds",
+                                   m_directory + "/left.dds",
+                                   m_directory + "/top.dds",
+                                   m_directory + "/bottom.dds",
+                                   m_directory + "/front.dds",
+                                   m_directory + "/back.dds"))
     {
-        throw std::runtime_error("Skybox textures not found. Check working directory?");
+        throw std::runtime_error("Skybox textures in '" + m_directory + "' not found. Check working directory?");
     }
 
     m_texture->setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);

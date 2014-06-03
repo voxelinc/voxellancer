@@ -40,11 +40,11 @@ bool DdsTexture::loadImage2d(glow::Texture * texture, std::string path, GLenum t
     }
 
     file.seekg(0, std::ios::beg);
-    
+
     /* verify the type of file */
     char filecode[4];
     file.read(filecode, 4);
-    
+
     if (strncmp(filecode, "DDS ", 4) != 0) {
         file.close();
         glow::critical("DdsTexture: not a dds file: %;", path);
@@ -84,7 +84,7 @@ bool DdsTexture::loadImage2d(glow::Texture * texture, std::string path, GLenum t
         glow::critical("DdsTexture: not a supported dds format: %", path);
         return false;
     }
-    
+
     unsigned int blockSize = (format == GL_COMPRESSED_RGBA_S3TC_DXT1_EXT) ? 8 : 16;
     unsigned int offset = 0;
 
@@ -100,5 +100,5 @@ bool DdsTexture::loadImage2d(glow::Texture * texture, std::string path, GLenum t
     delete[] buffer;
 
     return true;
-
 }
+
