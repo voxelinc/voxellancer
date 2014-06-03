@@ -12,7 +12,6 @@ JumpgateLoader::JumpgateLoader(const std::string& group):
     m_loaded(false),
     m_buddy(0)
 {
-    std::cout << "GRoup " << m_group << std::endl;
 }
 
 JumpgateLoader::~JumpgateLoader() = default;

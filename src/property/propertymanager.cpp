@@ -70,7 +70,6 @@ void PropertyManager::load(const std::string& file, const std::string& prefix) {
                 glow::warning("PropertyManager: no match %;: %; (line: %;)", key, value, line);
             } else {
                 std::string group = key.substr(0, key.rfind("."));
-                std::cout << "Group: " << prefix << " " << group << std::endl;
                 std::vector<std::string> path = StringHelper(group).split('.');
                 m_rootNode.insert(path);
             }

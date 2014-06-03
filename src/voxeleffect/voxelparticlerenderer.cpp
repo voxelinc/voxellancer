@@ -9,6 +9,8 @@
 
 #include "camera/camera.h"
 
+#include "universe/sector.h"
+
 #include "utils/math.h"
 
 #include "voxelparticleengine.h"
@@ -19,8 +21,7 @@ VoxelParticleRenderer::VoxelParticleRenderer(VoxelParticleEngine* engine):
     m_initialized(false),
     m_engine(engine),
     m_bufferSize(0),
-    m_voxelMesh(new VoxelMesh()),
-    m_defaultLightDir("vfx.lightdir")
+    m_voxelMesh(new VoxelMesh())
 {
 
 }
@@ -51,7 +52,7 @@ void VoxelParticleRenderer::draw(const Camera& camera) {
 
     m_program->setUniform("viewProjection", camera.viewProjection());
     m_program->setUniform("time", m_engine->time());
-    m_program->setUniform("lightdir", m_defaultLightDir.get());
+    m_program->setUniform("lightdir", m_engine->sector().lightDirection());
 
     m_program->use();
 

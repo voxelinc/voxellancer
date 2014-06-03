@@ -167,15 +167,9 @@ void HUD::draw(const Camera& camera) {
         return;
     }
 
-    glow::Uniform<glm::vec3>* lightuniform = VoxelRenderer::instance()->program()->getUniform<glm::vec3>("lightdir");
-    glm::vec3 oldLightdir = lightuniform->value();
-    lightuniform->set(m_player->cameraHead().orientation() * glm::vec3(0,0,1));
-
-    m_voxelRenderer->prepareDraw(camera);
+    m_voxelRenderer->prepareDraw(camera, m_player->cameraHead().orientation() * glm::vec3(0,0,1));
     m_elements->draw();
     m_voxelRenderer->afterDraw();
-
-    lightuniform->set(oldLightdir);
 }
 
 void HUD::onClick(ClickType clickType) {

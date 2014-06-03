@@ -41,8 +41,6 @@ protected:
     VoxelParticleEngine* m_engine;
     int m_bufferSize;
 
-    Property<glm::vec3> m_defaultLightDir;
-
     glow::ref_ptr<glow::Buffer> m_gpuParticleBuffer;
     glow::ref_ptr<glow::Program> m_program;
     glow::ref_ptr<glow::VertexArrayObject> m_vertexArrayObject;

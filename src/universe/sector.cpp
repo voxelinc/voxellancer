@@ -122,9 +122,7 @@ void Sector::update(float deltaSec) {
 void Sector::draw(const Camera& camera) {
     m_skybox->draw(camera);
 
-    m_voxelRenderer->program()->setUniform("lightdir", m_lightDirection);
-
-    m_voxelRenderer->prepareDraw(camera);
+    m_voxelRenderer->prepareDraw(camera, m_lightDirection, true);
 
     m_worldObjects->foreachObject( [&] (glow::ref_ptr<WorldObject>& worldObject) {
         VoxelRenderer::instance()->draw(*worldObject);

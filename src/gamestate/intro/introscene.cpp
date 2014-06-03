@@ -31,9 +31,7 @@ void IntroScene::update(float deltaSec) {
 void IntroScene::drawImpl(const Camera& camera) const {
     m_skybox->draw(camera);
 
-    m_voxelRenderer->program()->setUniform("lightdir", glm::vec3(0, 0, 1));
-
-    m_voxelRenderer->prepareDraw(camera, false);
+    m_voxelRenderer->prepareDraw(camera, glm::vec3(0, 0, 1), false);
     VoxelFont::instance()->drawString("Voxellancer", glm::vec3(0, 0.5f, -1) * 40.f, glm::quat(), FontSize::SIZE5x7, 0.4f, FontAlign::CENTER);
     VoxelFont::instance()->drawString("Pre Alpha Version", glm::vec3(0, 0.3f, -1) * 40.f, glm::quat(), FontSize::SIZE5x7, 0.2f, FontAlign::CENTER);
 
