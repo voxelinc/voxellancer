@@ -26,3 +26,4 @@ void Trigger::trigger() {
 void Trigger::update(float deltaSec) {
 
 }
+

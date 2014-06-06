@@ -1,6 +1,7 @@
 #include "hudget.h"
 
 #include "utils/geometryhelper.h"
+#include "utils/safenormalize.h"
 
 #include "hud.h"
 
@@ -84,10 +85,11 @@ void Hudget::setRelativeDistance(float relativeDistance) {
 }
 
 void Hudget::pointToWorldPoint(const glm::vec3& worldPoint) {
-    m_direction = glm::normalize(glm::inverse(m_hud->orientation()) * (worldPoint - m_hud->position()));
+    m_direction = safeNormalize(glm::inverse(m_hud->orientation()) * (worldPoint - m_hud->position()), glm::vec3(0.0f, 0.0f, -1.0f));
 }
 
 void Hudget::pointToLocalPoint(const glm::vec3& localPoint) {
+    assert(normalizeable(localPoint));
     m_direction = glm::normalize(localPoint);
 }
 
