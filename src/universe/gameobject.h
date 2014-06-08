@@ -13,7 +13,7 @@
 class Sector;
 class Universe;
 
-enum class GameObjectState {
+enum class GameObjectSpawnState {
     Created,
     Spawned,
     Unspawned
@@ -27,7 +27,7 @@ public:
     Universe* universe() const;
     Sector* sector() const;
 
-    GameObjectState gameObjectState() const;
+    GameObjectSpawnState spawnState() const;
 
     virtual void update(float deltaSecs);
 
@@ -45,7 +45,7 @@ public:
 protected:
     Universe* m_universe;
     Sector* m_sector;
-    GameObjectState m_state;
+    GameObjectSpawnState m_spawnState;
 
 
     virtual bool doCanSpawn(Universe& universe, Sector* sector) const;

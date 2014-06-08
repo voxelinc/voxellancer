@@ -6,7 +6,7 @@
 GameObject::GameObject():
     m_universe(nullptr),
     m_sector(nullptr),
-    m_state(GameObjectState::Created)
+    m_spawnState(GameObjectSpawnState::Created)
 {
 }
 
@@ -20,8 +20,8 @@ Sector* GameObject::sector() const {
     return m_sector;
 }
 
-GameObjectState GameObject::gameObjectState() const {
-    return m_state;
+GameObjectSpawnState GameObject::spawnState() const {
+    return m_spawnState;
 }
 
 void GameObject::update(float deltaSecs) {
@@ -42,7 +42,7 @@ void GameObject::spawn(Universe& universe) {
 
     doSpawn();
 
-    m_state = GameObjectState::Spawned;
+    m_spawnState = GameObjectSpawnState::Spawned;
 }
 
 void GameObject::spawn(Sector& sector) {
@@ -51,12 +51,12 @@ void GameObject::spawn(Sector& sector) {
 
     doSpawn();
 
-    m_state = GameObjectState::Spawned;
+    m_spawnState = GameObjectSpawnState::Spawned;
 }
 
 void GameObject::unspawn() {
     doUnspawn();
-    m_state = GameObjectState::Unspawned;
+    m_spawnState = GameObjectSpawnState::Unspawned;
 }
 
 void GameObject::warp(Sector& sector) {
