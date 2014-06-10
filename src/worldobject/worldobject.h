@@ -71,6 +71,9 @@ public:
     void addCockpitVoxel(const glm::ivec3& cell);
     bool areCockpitVoxelsDestroyed();
 
+    bool invincible() const;
+    void setInvincible(bool invincible);
+
     void updateTransformAndGeode(const glm::vec3& position, const glm::quat& orientation);
 
     virtual void onCollision();
@@ -95,6 +98,7 @@ protected:
     Voxel* m_crucialVoxel;
     bool m_crucialVoxelDestroyed;
     float m_collisionFieldOfDamage;
+    bool m_invincible;
 
 
     virtual bool doCanSpawn(Universe& universe, Sector* sector) const override;

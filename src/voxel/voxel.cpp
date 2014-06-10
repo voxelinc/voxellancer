@@ -33,8 +33,7 @@ Voxel::Voxel(const Voxel& other):
     m_visuals = other.visuals();
 }
 
-Voxel::~Voxel() {
-}
+Voxel::~Voxel() = default;
 
 const glm::ivec3& Voxel::gridCell() const {
     return m_gridCell;
@@ -70,6 +69,7 @@ float Voxel::hp() const {
 }
 
 void Voxel::applyDamage(float deltaHp) {
+    assert(!m_voxelTreeNode->voxelTree()->worldObject() || !m_voxelTreeNode->voxelTree()->worldObject()->invincible());
     m_hp = std::max(m_hp - deltaHp, 0.0f);
 }
 

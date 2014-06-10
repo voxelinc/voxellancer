@@ -40,6 +40,8 @@ void JumpgateLoader::loadLazy() {
     m_jumpgate->transform().setPosition(Property<glm::vec3>::get(m_group + ".position"));
     m_jumpgate->transform().setOrientation(glm::quat(Property<glm::vec3>::get(m_group + ".orientation", glm::vec3(0.0f))));
 
+    m_jumpgate->setInvincible(true);
+
     m_targetSector = Property<std::string>::get(m_group + ".targetSector");
     m_buddy = Property<int>(m_group + ".buddy");
 

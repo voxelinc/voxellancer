@@ -15,13 +15,18 @@
 
 Damager::Damager() = default;
 
-void Damager::applyDamages(std::list<DamageImpact> &damageImpacts) {
+void Damager::applyDamages(std::list<DamageImpact>& damageImpacts) {
     m_dampedDeadlyDamageImpacts.clear();
     m_deadlyDamageImpacts.clear();
     m_deadVoxels.clear();
 
-    for(DamageImpact &damageImpact : damageImpacts) {
-        Voxel *voxel = damageImpact.voxel();
+    for(DamageImpact& damageImpact : damageImpacts) {
+        Voxel* voxel = damageImpact.voxel();
+        WorldObject* worldObject = damageImpact.worldObject();
+
+        if (worldObject->invincible()) {
+            continue;
+        }
 
         float hpBeforeDamage = voxel->hp();
         voxel->applyDamage(damageImpact.damage());
@@ -31,11 +36,11 @@ void Damager::applyDamages(std::list<DamageImpact> &damageImpacts) {
             m_deadlyDamageImpacts.push_back(damageImpact);
             m_deadVoxels.push_back(voxel);
 
-            auto i = m_worldObjectModificationMap.find(damageImpact.worldObject());
+            auto i = m_worldObjectModificationMap.find(worldObject);
             if(i == m_worldObjectModificationMap.end()) {
-                WorldObjectModification modification(damageImpact.worldObject());
+                WorldObjectModification modification(worldObject);
                 modification.removedVoxel(voxel->gridCell());
-                m_worldObjectModificationMap.insert(std::pair<WorldObject*, WorldObjectModification>(damageImpact.worldObject(), modification));
+                m_worldObjectModificationMap.insert(std::pair<WorldObject*, WorldObjectModification>(worldObject, modification));
             } else {
                 i->second.removedVoxel(voxel->gridCell());
             }

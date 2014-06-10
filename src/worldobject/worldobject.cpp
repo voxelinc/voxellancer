@@ -25,7 +25,8 @@ WorldObject::WorldObject() :
     m_collisionFieldOfDamage(glm::half_pi<float>()),
     m_collisionFilter(new CollisionFilter(this)),
     m_crucialVoxelDestroyed(false),
-    m_cockpitVoxelsDestroyed(false)
+    m_cockpitVoxelsDestroyed(false),
+    m_invincible(false)
 {
 }
 
@@ -170,6 +171,14 @@ void WorldObject::addCockpitVoxel(const glm::ivec3& cell) {
 
 bool WorldObject::areCockpitVoxelsDestroyed() {
     return m_cockpitVoxelsDestroyed;
+}
+
+bool WorldObject::invincible() const {
+    return m_invincible;
+}
+
+void WorldObject::setInvincible(bool invincible) {
+    m_invincible = invincible;
 }
 
 bool WorldObject::doCanSpawn(Universe& universe, Sector* sector) const {

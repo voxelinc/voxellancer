@@ -45,7 +45,7 @@ public:
 
 protected:
     glm::ivec3 m_gridCell;
-    VoxelTreeNode *m_voxelTreeNode;
+    VoxelTreeNode* m_voxelTreeNode;
     Visuals m_visuals;
     float m_hp;
     float m_density;
