@@ -98,6 +98,7 @@ protected:
     Voxel* m_crucialVoxel;
     bool m_crucialVoxelDestroyed;
     float m_collisionFieldOfDamage;
+
     bool m_invincible;
 
 

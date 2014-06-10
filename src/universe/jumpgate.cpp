@@ -34,6 +34,9 @@ void Jumpgate::setBuddy(Jumpgate* buddy) {
 void Jumpgate::update(float deltaSec) {
     WorldObject::update(deltaSec);
 
+    physics().setSpeed(Speed(physics().speed().directional(),
+                             transform().orientation() * glm::vec3(0.0f, 0.0f, -1.0f) * glm::radians(10.0f)));
+
     m_scanner->setScanRadius(bounds().sphere().radius() * 2.0f);
     m_scanner->update(deltaSec, this);
 
