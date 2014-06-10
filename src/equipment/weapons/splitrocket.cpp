@@ -171,6 +171,6 @@ void SplitRocket::spawnExplosion() {
     generator.setLifetime(1.5f, 0.2f);
     generator.setForce(0.5f);
 
-    generator.spawn(sector());
+    generator.spawn(*sector());
 }
 

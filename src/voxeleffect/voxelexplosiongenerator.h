@@ -18,7 +18,7 @@ public:
     void setRadius(float radius);
     void setCount(int count);
 
-    void spawn(Sector* sector);
+    void spawn(Sector& sector);
 
 
 protected:

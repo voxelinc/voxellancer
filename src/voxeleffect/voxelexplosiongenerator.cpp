@@ -34,7 +34,7 @@ void VoxelExplosionGenerator::setCount(int count) {
     m_count = count;
 }
 
-void VoxelExplosionGenerator::spawn(Sector* sector) {
+void VoxelExplosionGenerator::spawn(Sector& sector) {
     // spawn explosionSpawnCount voxels with color and scale at position within a sphere with radius with a speed of ~force in all directions modified by ~impactVector
     Transform transform;
 
@@ -54,7 +54,7 @@ void VoxelExplosionGenerator::spawn(Sector* sector) {
             createLifetime()
         );
 
-        sector->particleEngine().addParticle(particleSetup, m_creator);
+        sector.particleEngine().addParticle(particleSetup, m_creator);
     }
 }
 
