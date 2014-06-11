@@ -22,6 +22,7 @@
 #include "universe/sector.h"
 
 #include "utils/geometryhelper.h"
+#include "utils/safenormalize.h"
 
 #include "voxel/voxelclusterbounds.h"
 #include "voxel/specialvoxels/hardpointvoxel.h"
@@ -124,13 +125,13 @@ void Gun::setupBullet(Bullet* bullet, const glm::vec3& point) {
     WorldObject* firingWorldObject = m_hardpoint->components()->worldObject();
 
     glm::quat worldObjectOrientation = firingWorldObject->transform().orientation();
-    glm::vec3 bulletDirection = glm::normalize(point - m_hardpoint->voxel()->position());
+    glm::vec3 bulletDirection = safeNormalize(point - m_hardpoint->voxel()->position(), glm::vec3(0, 0, -1));
     glm::vec3 hardpointDirection = worldObjectOrientation * glm::vec3(0, 0, -1);
     glm::vec3 bulletUp = glm::cross(bulletDirection, hardpointDirection);
 
     bulletTransform.setOrientation(m_hardpoint->components()->worldObject()->transform().orientation());
 
-    if (bulletUp != glm::vec3(0)) {
+    if (normalizeable(bulletUp)) {
         glm::vec3 rotationAxis = glm::normalize(bulletUp);
         float angle = GeometryHelper::angleBetween(bulletDirection, hardpointDirection);
         glm::quat bulletOrientation = glm::angleAxis(-angle, rotationAxis);
@@ -156,11 +157,16 @@ void Gun::setBulletExtend() {
     m_bulletMaxWidth = glm::max(bullet->bounds().minimalGridAABB().extent(XAxis), bullet->bounds().minimalGridAABB().extent(YAxis))* bullet->transform().scale();
     m_bulletLength = bullet->bounds().minimalGridAABB().extent(ZAxis) * bullet->transform().scale();
     m_spawnDistance = glm::root_two<float>() * bullet->transform().scale();
+    m_bulletLifetime = bullet->lifetime();
 
     delete bullet;
 }
 
 void Gun::onProjectileNameChanged() {
     setBulletExtend();
+}
+
+float Gun::bulletLifetime() const {
+    return m_bulletLifetime;
 }
 

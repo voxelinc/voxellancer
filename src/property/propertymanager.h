@@ -5,8 +5,8 @@
 #include <cstdint>
 #include <string>
 #include <unordered_map>
-#include <map>
 #include <vector>
+#include <unordered_set>
 
 #include <glm/glm.hpp>
 
@@ -59,5 +59,6 @@ protected:
 
     static PropertyManager* s_instance;
 };
+
 
 #include "propertymanager.inl"

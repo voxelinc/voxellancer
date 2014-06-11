@@ -21,17 +21,19 @@
 #include "input/inputmapping.h"
 #include "input/inputconfigurator.h"
 
-#include "worldobject/worldobject.h"
-#include "worldobject/worldobjectcomponents.h"
-#include "worldobject/ship.h"
-
-#include "player.h"
-
 #include "ui/hud/hud.h"
 #include "ui/targetselector.h"
 #include "ui/hud/crosshair.h"
 
 #include "universe/universe.h"
+
+#include "utils/safenormalize.h"
+
+#include "worldobject/worldobject.h"
+#include "worldobject/worldobjectcomponents.h"
+#include "worldobject/ship.h"
+
+#include "player.h"
 
 
 
@@ -185,18 +187,18 @@ void GamePlayNormalInput::applyUpdates() {
     m_rocketUpdate = false;
 
     if (glm::length(m_moveUpdate) > 1.0f) {
-        m_moveUpdate = glm::normalize(m_moveUpdate);
+        m_moveUpdate = safeNormalize(m_moveUpdate, glm::vec3(0.0f));
     }
     m_gamePlay.universe().player().move(m_moveUpdate);
+
     m_moveUpdate = glm::vec3(0);
 
     if (glm::length(m_rotateUpdate) > 1.0f) {
-        m_rotateUpdate = glm::normalize(m_rotateUpdate);
+        m_rotateUpdate = safeNormalize(m_rotateUpdate, glm::vec3(0.0f));
     }
     m_gamePlay.universe().player().rotate(m_rotateUpdate);
     m_rotateUpdate = glm::vec3(0);
 }
-
 
 void GamePlayNormalInput::retrieveInputValues() {
     m_secondaryInputValues.buttonCnt = 0;

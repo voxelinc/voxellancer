@@ -11,6 +11,8 @@
 
 #include "voxel/voxel.h"
 
+#include "worldobject/helper/componentsinfo.h"
+
 #include "worldobjectcomponents.h"
 #include "worldobjectinfo.h"
 
@@ -19,7 +21,7 @@ WorldObject::WorldObject() :
     VoxelCluster(1.0f),
     m_physics(new Physics(*this)),
     m_collisionDetector(new CollisionDetector(*this)),
-    m_info(new WorldObjectInfo()),
+    m_info(new WorldObjectInfo(*this)),
     m_components(new WorldObjectComponents(this)),
     m_crucialVoxel(nullptr),
     m_collisionFieldOfDamage(glm::half_pi<float>()),
@@ -201,6 +203,4 @@ void WorldObject::doWarp(Sector& sector) {
     this->sector()->removeWorldObject(this);
     spawn(sector);
 }
-
-
 

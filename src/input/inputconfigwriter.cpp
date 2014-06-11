@@ -7,17 +7,15 @@
 #include "input/actionkeymapping.h"
 
 
-InputConfigWriter::InputConfigWriter(const std::string& file):
-    m_file()
-{
+InputConfigWriter::InputConfigWriter(const std::string& file) {
     m_file.open(file, std::ios::out);
     assert(m_file.is_open());
+
     if (m_file.is_open()) {
         m_file << "[input]" << std::endl;
     } else {
         glow::warning("InputConfigWriter: cant open file %;", file);
     }
-
 }
 
 InputConfigWriter::~InputConfigWriter() {

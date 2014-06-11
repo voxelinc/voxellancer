@@ -7,6 +7,7 @@
 #include "utils/randfloat.h"
 #include "utils/randfloatpool.h"
 #include "utils/randvec3.h"
+#include "utils/safenormalize.h"
 
 #include "voxelparticledata.h"
 #include "voxelparticlesetup.h"
@@ -42,7 +43,7 @@ void VoxelExplosionGenerator::spawn(Sector& sector) {
         glm::vec3 directionalSpeed = createDirectionalSpeed();
 
         transform.setScale(createScale());
-        transform.setPosition(m_position + (m_radius * glm::normalize(directionalSpeed)));
+        transform.setPosition(m_position + (m_radius * safeNormalize(directionalSpeed, glm::vec3(0.0f))));
 
         Visuals visuals(m_color, m_emissiveness);
         Speed speed(directionalSpeed, createAngularSpeed());

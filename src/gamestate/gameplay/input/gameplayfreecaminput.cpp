@@ -13,6 +13,8 @@
 
 #include "input/inputmapping.h"
 
+#include "utils/safenormalize.h"
+
 
 GamePlayFreecamInput::GamePlayFreecamInput(GamePlay& gamePlay) :
     GamePlayInput(gamePlay),
@@ -86,7 +88,7 @@ void GamePlayFreecamInput::applyUpdates() {
     // collect them and apply them here
 
     if (glm::length(m_moveUpdate) > 1.0f) {
-        m_moveUpdate = glm::normalize(m_moveUpdate);
+        m_moveUpdate = safeNormalize(m_moveUpdate, glm::vec3(0.0f));
     }
 
     m_position += m_orientation * (m_moveUpdate * m_moveFactor.get());
@@ -248,3 +250,4 @@ void GamePlayFreecamInput::setOrientation(const glm::quat& orientation) {
 CameraHead& GamePlayFreecamInput::cameraHead() {
     return m_cameraDolly->cameraHead();
 }
+

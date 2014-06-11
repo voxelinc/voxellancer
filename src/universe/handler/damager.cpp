@@ -1,12 +1,17 @@
 #include "damager.h"
 
 #include <set>
+
 #include <glow/logging.h>
+
+#include "equipment/shield.h"
+#include "equipment/shieldslot.h"
 
 #include "voxel/voxel.h"
 
-#include "worldobject/worldobject.h"
 #include "worldobject/ship.h"
+#include "worldobject/worldobject.h"
+#include "worldobject/worldobjectcomponents.h"
 
 #include "universe/helper/damageimpact.h"
 
@@ -23,6 +28,11 @@ void Damager::applyDamages(std::list<DamageImpact>& damageImpacts) {
     for(DamageImpact& damageImpact : damageImpacts) {
         Voxel* voxel = damageImpact.voxel();
         WorldObject* worldObject = damageImpact.worldObject();
+
+        applyShields(damageImpact);
+        if(damageImpact.damage() == 0) {
+            continue;
+        }
 
         if (worldObject->invincible()) {
             continue;
@@ -70,10 +80,14 @@ std::list<WorldObjectModification>& Damager::worldObjectModifications() {
 }
 
 DamageImpact Damager::dampDamageImpact(DamageImpact &undamped, float factor) {
-    return DamageImpact(undamped.worldObject(), undamped.voxel(), undamped.damageVec() * factor, undamped.fieldOfDamage());
+    return DamageImpact(undamped.worldObject(), undamped.voxel(), glm::normalize(undamped.damageVec()) * factor, undamped.fieldOfDamage());
 }
 
 void Damager::reset() {
     m_worldObjectModificationMap.clear();
+}
+
+void Damager::applyShields(DamageImpact& damageImpact) {
+    damageImpact.setDamage(damageImpact.worldObject()->components().compensateDamage(damageImpact.damage()));
 }
 

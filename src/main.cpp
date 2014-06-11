@@ -1,4 +1,3 @@
-#include <iostream>
 #include <omp.h>
 
 #ifdef WIN32
@@ -215,13 +214,15 @@ int main(int argc, char* argv[]) {
         PropertyDirectory("data/worldobjects").read();
         loadingScreen->display("Loading... Engines");
         PropertyDirectory("data/equipment/engines").read();
+        loadingScreen->display("Loading... Shields");
+        PropertyDirectory("data/equipment/shields").read();
         loadingScreen->display("Loading... Weapons");
         PropertyDirectory("data/equipment/weapons").read();
         loadingScreen->display("Loading... Projectiles");
         PropertyDirectory("data/equipment/projectiles").read();
 
         loadingScreen->display("Loading... Game");
-        game = new Game(clParser.showIntro());
+        game = new Game(clParser.showIntro() && Property<bool>::get("general.showIntro", true));
 
         if(clParser.hmd()) {
             game->hmdManager().setupHMD(game->viewer());

@@ -1,5 +1,6 @@
 #include "hardpoint.h"
 
+#include "utils/safenormalize.h"
 #include "utils/geometryhelper.h"
 
 #include "voxel/specialvoxels/hardpointvoxel.h"
@@ -29,7 +30,11 @@ const std::shared_ptr<Weapon>& Hardpoint::weapon() {
 
 void Hardpoint::setWeapon(const std::shared_ptr<Weapon>& weapon) {
     m_weapon = weapon;
-    m_weapon->setHardpoint(this);
+    if (m_weapon) {
+        m_weapon->setHardpoint(this);
+    }
+
+    notifyObservers();
 }
 
 const glm::vec3& Hardpoint::direction() const {
@@ -37,7 +42,7 @@ const glm::vec3& Hardpoint::direction() const {
 }
 
 void Hardpoint::setDirection(const glm::vec3& direction) {
-    assert(glm::length(direction) > 0);
+    assert(normalizeable(direction));
     m_direction = glm::normalize(direction);
 }
 
