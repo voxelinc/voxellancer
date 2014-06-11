@@ -14,6 +14,7 @@ class WorldObjectComponents;
 class WorldObjectSlot {
 public:
     WorldObjectSlot(WorldObjectComponents* components, int index);
+    virtual ~WorldObjectSlot();
 
     std::list<std::string> mountables() const;
 
