@@ -11,6 +11,8 @@ ShieldSlot::ShieldSlot(WorldObjectComponents* components, int index):
 
 }
 
+ShieldSlot::~ShieldSlot() = default;
+
 std::shared_ptr<Shield>& ShieldSlot::shield() {
     return m_shield;
 }

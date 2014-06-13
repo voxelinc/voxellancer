@@ -37,7 +37,7 @@ class VoxelRenderer;
 class HUD {
 public:
     HUD(Player* player);
-    ~HUD();
+    virtual ~HUD();
 
     Player* player();
     const Sphere& sphere() const;

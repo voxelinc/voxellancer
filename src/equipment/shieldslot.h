@@ -10,6 +10,7 @@ class Shield;
 class ShieldSlot : public WorldObjectSlot {
 public:
     ShieldSlot(WorldObjectComponents* components, int index);
+    virtual ~ShieldSlot();
 
     std::shared_ptr<Shield>& shield();
     void setShield(const std::shared_ptr<Shield>& shield);
