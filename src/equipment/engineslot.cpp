@@ -34,7 +34,9 @@ const std::shared_ptr<Engine>& EngineSlot::engine() {
 void EngineSlot::setEngine(const std::shared_ptr<Engine>& engine) {
     assert(mountable(engine->equipmentKey()));
 
-    if (m_engine != engine && m_engine) {
+    bool changed = m_engine != engine;
+
+    if (changed && m_engine) {
         m_engine->setEngineSlot(nullptr);
     }
 
@@ -42,6 +44,10 @@ void EngineSlot::setEngine(const std::shared_ptr<Engine>& engine) {
 
     if (m_engine) {
         m_engine->setEngineSlot(this);
+    }
+
+    if (changed) {
+        notifyObservers();
     }
 }
 

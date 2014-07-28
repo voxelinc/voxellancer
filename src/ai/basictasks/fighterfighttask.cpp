@@ -2,17 +2,17 @@
 
 #include "ai/boardcomputer.h"
 #include "utils/geometryhelper.h"
+#include "utils/safenormalize.h"
 #include "utils/randfloat.h"
 #include "voxel/voxelclusterbounds.h"
 #include "worldobject/ship.h"
+#include "worldobject/helper/componentsinfo.h"
 
 
 FighterFightTask::FighterFightTask(BoardComputer* boardComputer, const std::vector<Handle<WorldObject>>& targets) :
     FightTaskImplementation(boardComputer, targets)
 {
     m_state = State::IDLE;
-    m_maxFireDistance = 150.0f;
-    m_maxRocketDistance = 200.0f;
     m_minEnemyDistance = 100.0f;
     m_stateChanged = false;
 }
@@ -33,7 +33,10 @@ void FighterFightTask::update(float deltaSec) {
                 boardComputer()->rotateTo(m_primaryTarget->transform().position());
                 boardComputer()->moveTo(m_primaryTarget->transform().position());
             }
-            boardComputer()->shootBullet(m_targets);
+
+            if (targetDistance() < componentsInfo().maxBulletRange()) {
+                boardComputer()->shootBullet(m_targets);
+            }
             break;
         case State::ENGAGE:
             if (angleToTarget() > 45.0f) {
@@ -42,20 +45,21 @@ void FighterFightTask::update(float deltaSec) {
             } else {
                 boardComputer()->rotateTo(m_primaryTarget->transform().position());
                 boardComputer()->moveTo(m_primaryTarget->transform().position());
-                if (angleToTarget() < 15.0f && targetDistance() < m_maxRocketDistance) {
+                if (angleToTarget() < 15.0f && targetDistance() < componentsInfo().maxRocketRange()) {
                     boardComputer()->shootRockets(m_primaryTarget);
                 }
             }
-            if (targetDistance() < m_maxFireDistance) {
+
+            if (targetDistance() < componentsInfo().maxBulletRange()) {
                 boardComputer()->shootBullet(m_targets);
             }
             break;
         case State::EVADE:
             boardComputer()->rotateTo(m_positionBehindTarget);
             boardComputer()->moveTo(m_positionBehindTarget);
-            boardComputer()->shootBullet(m_targets);
             break;
     }
+
 }
 
 bool FighterFightTask::isFinished() {
@@ -76,7 +80,7 @@ void FighterFightTask::updateState() {
             }
             break;
         case State::APPROACH:
-            if (targetDistance() < m_maxFireDistance) {
+            if (targetDistance() < componentsInfo().maxBulletRange()) {
                 setState(State::ENGAGE);
             }
             break;
@@ -95,7 +99,7 @@ void FighterFightTask::updateState() {
             if (targetDistance() < m_minEnemyDistance) {
                 break;
             }
-            if (targetDistance() < m_maxFireDistance) {
+            if (targetDistance() < componentsInfo().maxBulletRange()) {
                 setState(State::ENGAGE);
             } else {
                 setState(State::APPROACH);
@@ -134,7 +138,8 @@ void FighterFightTask::setState(State newState) {
 float FighterFightTask::angleToTarget() {
     WorldObject* worldObject = boardComputer()->worldObject();
     glm::vec3 shipDirection = glm::vec3(0, 0, -1);
-    glm::vec3 targetDirection = glm::inverse(worldObject->transform().orientation()) * glm::normalize(m_primaryTarget->transform().position() - worldObject->transform().position());
+    glm::vec3 targetDirection = glm::inverse(worldObject->transform().orientation()) * safeNormalize(m_primaryTarget->transform().position() - worldObject->transform().position(), glm::vec3(0, 0, 1));
     float angle = GeometryHelper::angleBetween(shipDirection, targetDirection);
     return glm::degrees(angle);
 }
+

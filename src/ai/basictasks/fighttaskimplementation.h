@@ -10,6 +10,7 @@
 
 class Ship;
 class WorldObject;
+class ComponentsInfo;
 
 /**
  *  Base Class for all FightTask variants, e.g. for FighterFightTask
@@ -32,5 +33,7 @@ protected:
 
     void updateTargets();
     float targetDistance();
+
+    const ComponentsInfo& componentsInfo();
 };
 

@@ -38,10 +38,9 @@ protected:
     float pointDistance(const glm::vec3& point);
     float angleToTarget();
 
+
     State m_state;
     bool m_stateChanged;
-    float m_maxFireDistance;
-    float m_maxRocketDistance;
     float m_minEnemyDistance;
     glm::vec3 m_positionBehindTarget;
 };
