@@ -1,8 +1,8 @@
 #include "shieldslot.h"
 
 #include <cassert>
-#include <iostream>
 
+#include "equipmentchanger.h"
 #include "shield.h"
 
 
@@ -17,23 +17,7 @@ std::shared_ptr<Shield>& ShieldSlot::shield() {
 }
 
 void ShieldSlot::setShield(const std::shared_ptr<Shield>& shield) {
-    assert(mountable(shield->equipmentKey()));
-
-    bool changed = m_shield != shield;
-
-    if (changed && m_shield) {
-        m_shield->setShieldSlot(nullptr);
-    }
-
-    m_shield = shield;
-
-    if (m_shield) {
-        m_shield->setShieldSlot(this);
-    }
-
-    if (changed) {
-        notifyObservers();
-    }
+    EquipmentChanger<ShieldSlot, Shield>(*this, m_shield, shield).change();
 }
 
 void ShieldSlot::update(float deltaSec) {

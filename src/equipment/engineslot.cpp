@@ -4,8 +4,10 @@
 
 #include "voxel/specialvoxels/engineslotvoxel.h"
 
-#include "equipment/engine.h"
 #include "worldobject/worldobjectcomponents.h"
+
+#include "engine.h"
+#include "equipmentchanger.h"
 
 
 EngineSlot::EngineSlot(WorldObjectComponents* components, EngineSlotVoxel* voxel):
@@ -32,23 +34,7 @@ const std::shared_ptr<Engine>& EngineSlot::engine() {
 }
 
 void EngineSlot::setEngine(const std::shared_ptr<Engine>& engine) {
-    assert(mountable(engine->equipmentKey()));
-
-    bool changed = m_engine != engine;
-
-    if (changed && m_engine) {
-        m_engine->setEngineSlot(nullptr);
-    }
-
-    m_engine = engine;
-
-    if (m_engine) {
-        m_engine->setEngineSlot(this);
-    }
-
-    if (changed) {
-        notifyObservers();
-    }
+    EquipmentChanger<EngineSlot, Engine>(*this, m_engine, engine).change();
 }
 
 void EngineSlot::update(float deltaSec) {

@@ -20,3 +20,4 @@ public:
 protected:
     std::shared_ptr<Shield> m_shield;
 };
+
