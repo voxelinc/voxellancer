@@ -7,7 +7,7 @@
 
 
 ShieldSlot::ShieldSlot(WorldObjectComponents* components, int index):
-    WorldObjectSlot(components, index)
+    EquipmentSlot(components, index)
 {
 
 }

@@ -1,5 +1,10 @@
 #include "equipmentchanger.h"
 
+#include "engine.h"
+#include "shield.h"
+#include "weapon.h"
+
+
 template<>
 void EquipmentChanger<EngineSlot, Engine>::setSlot(EngineSlot * slot) {
     m_target->setEngineSlot(slot);

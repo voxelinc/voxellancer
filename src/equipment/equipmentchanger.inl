@@ -2,10 +2,6 @@
 
 #include <cassert>
 
-#include "engine.h"
-#include "shield.h"
-#include "weapon.h"
-
 
 template<typename EquipmentSlotType, typename EquipmentType>
 EquipmentChanger<EquipmentSlotType, EquipmentType>::EquipmentChanger(EquipmentSlotType& slot, std::shared_ptr<EquipmentType>& target, const std::shared_ptr<EquipmentType>& equipment):

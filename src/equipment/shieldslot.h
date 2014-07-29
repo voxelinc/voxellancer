@@ -2,12 +2,12 @@
 
 #include <memory>
 
-#include "worldobjectslot.h"
+#include "equipmentslot.h"
 
 
 class Shield;
 
-class ShieldSlot : public WorldObjectSlot {
+class ShieldSlot : public EquipmentSlot {
 public:
     ShieldSlot(WorldObjectComponents* components, int index);
 

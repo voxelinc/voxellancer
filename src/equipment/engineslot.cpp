@@ -11,7 +11,7 @@
 
 
 EngineSlot::EngineSlot(WorldObjectComponents* components, EngineSlotVoxel* voxel):
-    WorldObjectSlot(components, voxel->index()),
+    EquipmentSlot(components, voxel->index()),
     m_voxel(voxel),
     m_engine(nullptr)
 {
