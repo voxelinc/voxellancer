@@ -6,16 +6,17 @@
 
 
 template<>
-void EquipmentChanger<EngineSlot, Engine>::setSlot(EngineSlot * slot) {
-    m_target->setEngineSlot(slot);
+void EquipmentChanger<EngineSlot, Engine>::setSlot(Engine& engine, EngineSlot* slot) {
+    engine.setEngineSlot(slot);
 }
 
 template<>
-void EquipmentChanger<Hardpoint, Weapon>::setSlot(Hardpoint * hardpoint) {
-    m_target->setHardpoint(hardpoint);
+void EquipmentChanger<Hardpoint, Weapon>::setSlot(Weapon& weapon, Hardpoint* hardpoint) {
+    weapon.setHardpoint(hardpoint);
 }
 
 template<>
-void EquipmentChanger<ShieldSlot, Shield>::setSlot(ShieldSlot * slot) {
-    m_target->setShieldSlot(slot);
+void EquipmentChanger<ShieldSlot, Shield>::setSlot(Shield& shield, ShieldSlot* slot) {
+    shield.setShieldSlot(slot);
 }
+

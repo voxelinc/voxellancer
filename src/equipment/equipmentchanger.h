@@ -10,18 +10,17 @@
 template<typename EquipmentSlotType, typename EquipmentType>
 class EquipmentChanger final {
 public:
-    EquipmentChanger(EquipmentSlotType& slot, std::shared_ptr<EquipmentType>& target, const std::shared_ptr<EquipmentType>& equipment);
+    EquipmentChanger(EquipmentSlotType& slot, std::shared_ptr<EquipmentType>& target, const std::shared_ptr<EquipmentType>& newEquipment);
 
     void change();
-
 
 
 protected:
     EquipmentSlotType& m_slot;
     std::shared_ptr<EquipmentType>& m_target;
-    const std::shared_ptr<EquipmentType>& m_equipment;
+    const std::shared_ptr<EquipmentType>& m_newEquipment;
 
-    void setSlot(EquipmentSlotType * slot);
+    void setSlot(EquipmentType& equipment, EquipmentSlotType* slot);
 };
 
 

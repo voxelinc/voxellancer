@@ -4,32 +4,32 @@
 
 
 template<typename EquipmentSlotType, typename EquipmentType>
-EquipmentChanger<EquipmentSlotType, EquipmentType>::EquipmentChanger(EquipmentSlotType& slot, std::shared_ptr<EquipmentType>& target, const std::shared_ptr<EquipmentType>& equipment):
+EquipmentChanger<EquipmentSlotType, EquipmentType>::EquipmentChanger(EquipmentSlotType& slot, std::shared_ptr<EquipmentType>& target, const std::shared_ptr<EquipmentType>& newEquipment):
     m_slot(slot),
     m_target(target),
-    m_equipment(equipment)
+    m_newEquipment(newEquipment)
 {
 }
 
 template<typename EquipmentSlotType, typename EquipmentType>
 void EquipmentChanger<EquipmentSlotType, EquipmentType>::change() {
-    assert(m_slot.mountable(m_equipment->equipmentKey()));
+    assert(m_slot.mountable(m_newEquipment->equipmentKey()));
 
-    bool changed = m_target != m_equipment;
-
-    if (changed && m_target) {
-        setSlot(nullptr);
+    if (m_target == m_newEquipment) {
+        return;
     }
-
-    m_target = m_equipment;
 
     if (m_target) {
-        setSlot(&m_slot);
+        setSlot(*m_target, nullptr);
     }
 
-    if (changed) {
-        m_slot.notifyObservers();
+    if (m_newEquipment) {
+        setSlot(*m_newEquipment, &m_slot);
     }
+
+    m_target = m_newEquipment;
+
+    m_slot.notifyObservers();
 }
 
 
