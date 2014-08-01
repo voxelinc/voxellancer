@@ -4,7 +4,7 @@
 #include <list>
 #include <string>
 
-#include "util/observable.h"
+#include "utils/observable.h"
 
 
 class WorldObjectComponents;

@@ -20,11 +20,11 @@ class Player;
 
 class GamePlayNormalInput : public GamePlayInput {
 public:
-    GamePlayNormalInput();
+    GamePlayNormalInput(GamePlay& gamePlay);
 
-    virtual void resizeEvent(const unsigned int width, const unsigned int height) override;
-    virtual void keyCallback(int key, int scancode, int action, int mods) override;
-    virtual void mouseButtonCallback(int button, int action, int mods) override;
+    virtual void onResizeEvent(const unsigned int width, const unsigned int height) override;
+    virtual void onKeyEvent(int key, int scancode, int action, int mods) override;
+    virtual void onMouseButtonEvent(int button, int action, int mods) override;
     virtual void update(float deltaSec) override;
 
 

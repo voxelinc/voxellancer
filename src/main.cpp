@@ -77,14 +77,14 @@ static void resizeCallback(GLFWwindow* window, int width, int height) {
     glow::info("Resizing viewport to %;x%;", width, height);
     if (width > 0 && height > 0) {
         glViewport(0, 0, width, height);
-        game->gamePlay().currentInput().resizeEvent(width, height);
+        game->inputHandler().onResizeEvent(width, height);
         game->viewer().setViewport(Viewport(0, 0, width, height));
     }
 }
 
 static void toggleFullScreen();
 
-static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+static void onKeyEvent(GLFWwindow* window, int key, int scancode, int action, int mods) {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, GL_TRUE);
     }
@@ -93,9 +93,7 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
         (glfwGetKey(window, GLFW_KEY_RIGHT_ALT) == GLFW_PRESS))) {
         toggleFullScreen();
     }
-    if (key >= GLFW_KEY_F1 && key <= GLFW_KEY_F7 && action == GLFW_PRESS) {
-        game->gamePlay().loadScenario(key - GLFW_KEY_F1);
-    }
+
     if (key == GLFW_KEY_F8 && action == GLFW_PRESS) {
         glowutils::File::reloadAll();
         PropertyManager::instance()->load("data/config.ini");
@@ -103,26 +101,19 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
     if (key == GLFW_KEY_F9 && action == GLFW_PRESS) {
         World::instance()->printStatus();
     }
-    if (key >= GLFW_KEY_1 && key <= GLFW_KEY_9 && action == GLFW_PRESS) {
-        game->gamePlay().scene().setOutputBuffer(key-GLFW_KEY_1);
-    }
-    if (key == GLFW_KEY_T && action == GLFW_PRESS) {
-        game->gamePlay().scene().setWorldTreeRendererEnabled(!game->gamePlay().scene().worldTreeRendererEnabled());
-    }
 
-    game->gamePlay().keyCallback(key, scancode, action, mods);
-    game->gamePlay().currentInput().keyCallback(key, scancode, action, mods);
+    game->inputHandler().onKeyEvent(key, scancode, action, mods);
 }
 
 
-static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
-    game->gamePlay().currentInput().mouseButtonCallback(button, action, mods);
+static void onMouseButtonEvent(GLFWwindow* window, int button, int action, int mods) {
+    game->inputHandler().onMouseButtonEvent(button, action, mods);
 }
 
 void setGLFWCallbacks(GLFWwindow* window) {
-    glfwSetKeyCallback(window, keyCallback);
+    glfwSetKeyCallback(window, onKeyEvent);
     glfwSetWindowSizeCallback(window, resizeCallback);
-    glfwSetMouseButtonCallback(window, mouseButtonCallback);
+    glfwSetMouseButtonCallback(window, onMouseButtonEvent);
 }
 
 static void miscSettings() {
@@ -235,7 +226,7 @@ int main(int argc, char* argv[]) {
         PropertyDirectory("data/equipment/projectiles").read();
 
         loadingScreen->display("Loading... Game");
-        game = new Game(clParser.showIntro());
+        game = new Game(clParser.showIntro() && Property<bool>::get("general.showIntro", true));
 
         if(clParser.hmd()) {
             game->hmdManager().setupHMD(game->viewer());

@@ -24,6 +24,11 @@ const CameraHead& GameState::cameraHead() const {
     return m_parentGameState->cameraHead();
 }
 
+InputHandler& GameState::inputHandler() {
+    assert(m_parentGameState);
+    return m_parentGameState->inputHandler();
+}
+
 void GameState::update(float deltaSec) {
     State::update(deltaSec);
 }

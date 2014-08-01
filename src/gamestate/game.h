@@ -24,6 +24,8 @@ public:
     virtual const Scene& scene() const override;
     virtual const CameraHead& cameraHead() const override;
 
+    virtual InputHandler& inputHandler() override;
+
     HMDManager& hmdManager();
     Viewer& viewer();
 

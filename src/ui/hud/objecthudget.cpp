@@ -15,11 +15,11 @@
 #include "ui/hud/textfieldhudget.h"
 
 #include "utils/geometryhelper.h"
-
-#include "worldobject/worldobjectinfo.h"
+#include "utils/safenormalize.h"
 
 #include "world/world.h"
 
+#include "worldobject/worldobjectinfo.h"
 #include "worldobject/worldobject.h"
 #include "worldobject/ship.h"
 
@@ -148,19 +148,25 @@ glm::vec3 ObjectHudget::closestPointInsideFov() {
     glm::vec3 pointInsideFov;
 
     if (angleX < angleY) {
+        assert(normalizeable(intersectionX));
         pointInsideFov = glm::normalize(intersectionX);
     } else {
+        assert(normalizeable(intersectionY));
         pointInsideFov = glm::normalize(intersectionY);
     }
+
     pointInsideFov.x = glm::abs(pointInsideFov.x);
     pointInsideFov.y = glm::abs(pointInsideFov.y);
-    pointInsideFov.z = glm::abs(pointInsideFov.z)*-1;
+    pointInsideFov.z = -glm::abs(pointInsideFov.z);
+
     if (localDirection().x < 0) {
         pointInsideFov.x *= -1;
     }
+
     if (localDirection().y < 0) {
         pointInsideFov.y *= -1;
     }
+
     return pointInsideFov;
 }
 

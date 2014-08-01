@@ -13,9 +13,11 @@
 
 #include "input/inputmapping.h"
 
+#include "utils/safenormalize.h"
 
-GamePlayFreecamInput::GamePlayFreecamInput() :
-    GamePlayInput(),
+
+GamePlayFreecamInput::GamePlayFreecamInput(GamePlay& gamePlay) :
+    GamePlayInput(gamePlay),
 
     m_cameraDolly(new CameraDolly()),
 
@@ -55,7 +57,7 @@ GamePlayFreecamInput::GamePlayFreecamInput() :
 }
 
 
-void GamePlayFreecamInput::resizeEvent(const unsigned int width, const unsigned int height) {
+void GamePlayFreecamInput::onResizeEvent(const unsigned int width, const unsigned int height) {
     m_lastfocus = false; // through window resize the cursor position is scrambled
     m_cursorMaxDistance = glm::min(ContextProvider::instance()->resolution().width(), ContextProvider::instance()->resolution().height()) / 2.0f;
 }
@@ -86,10 +88,11 @@ void GamePlayFreecamInput::applyUpdates() {
     // collect them and apply them here
 
     if (glm::length(m_moveUpdate) > 1.0f) {
-        m_moveUpdate = glm::normalize(m_moveUpdate);
+        m_moveUpdate = safeNormalize(m_moveUpdate, glm::vec3(0.0f));
     }
 
     m_position += m_orientation * (m_moveUpdate * m_moveFactor.get());
+
     m_moveUpdate = glm::vec3(0);
 
     m_orientation = m_orientation * glm::quat(m_rotateUpdate * m_rotateFactor.get());
@@ -247,3 +250,4 @@ void GamePlayFreecamInput::setOrientation(const glm::quat& orientation) {
 CameraHead& GamePlayFreecamInput::cameraHead() {
     return m_cameraDolly->cameraHead();
 }
+
