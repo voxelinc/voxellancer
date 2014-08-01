@@ -44,6 +44,7 @@ GamePlay::GamePlay(Game* game) :
     m_freecamInput(new GamePlayFreecamInput(*this)),
     m_freecamActive(false),
     m_scene(new GamePlayScene(*this)),
+    m_scenario(new ScriptedScenario(this, "")),
     m_soundManager(new SoundManager())
 {
 	World::instance()->player().hud().resetButton()->setCallback((std::function<void(ClickType clickType)>)std::bind(&GamePlay::resetButtonCallback, this, std::placeholders::_1));
