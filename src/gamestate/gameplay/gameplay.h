@@ -28,24 +28,28 @@ public:
 
     GamePlayScene& scene();
 
-    GamePlayInput& currentInput();
-
     GamePlayRunning& running();
     GamePlayPaused& paused();
 
+    bool freecamActive() const;
+    void setFreecamActive(bool active);
+
     virtual const Scene& scene() const override;
     virtual const CameraHead& cameraHead() const override;
+
+    virtual InputHandler& inputHandler() override;
 
     SoundManager& soundManager();
 
     void loadScenario(int i);
 
-    void keyCallback(int key, int scancode, int action, int mods);
     virtual void update(float deltaSec) override;
 
     virtual void onEntered() override;
     virtual void onLeft() override;
+
     void updateView();
+
 
 protected:
     Game* m_game;
@@ -58,6 +62,7 @@ protected:
     GamePlayPaused* m_pausedState;
     std::unique_ptr<GamePlayNormalInput> m_normalInput;
     std::unique_ptr<GamePlayFreecamInput> m_freecamInput;
+
     bool m_freecamActive;
 };
 

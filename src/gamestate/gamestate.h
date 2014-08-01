@@ -5,7 +5,9 @@
 
 #include "utils/statemachine/state.h"
 
+
 class CameraHead;
+class InputHandler;
 class Scene;
 
 /**
@@ -25,6 +27,8 @@ public:
 
     virtual const Scene& scene() const;
     virtual const CameraHead& cameraHead() const;
+
+    virtual InputHandler& inputHandler();
 
     virtual void update(float deltaSec) override;
 

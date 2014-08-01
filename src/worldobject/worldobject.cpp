@@ -9,6 +9,7 @@
 #include "worldobject/worldobjectinfo.h"
 #include "voxel/voxel.h"
 #include "worldobjectcomponents.h"
+#include "helper/componentsinfo.h"
 
 
 WorldObject::WorldObject() :
@@ -176,4 +177,3 @@ void WorldObject::addCockpitVoxel(const glm::ivec3& cell) {
 bool WorldObject::areCockpitVoxelsDestroyed() {
     return m_cockpitVoxelsDestroyed;
 }
-

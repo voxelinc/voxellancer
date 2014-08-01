@@ -37,6 +37,10 @@ bool CommandLineParser::fullScreen() const {
     return hmd() || isSet("fullscreen");
 }
 
+bool CommandLineParser::showIntro() const {
+    return !isSet("nointro");
+}
+
 bool CommandLineParser::isSet(const std::string& arg) const {
     return m_options.count(arg) > 0;
 }
@@ -47,6 +51,7 @@ void CommandLineParser::checkHelp() {
         glow::debug("  -fullscreen  fullscreen mode");
         glow::debug("  -stereo      stereo rendering");
         glow::debug("  -hmd         use head mounted display (e.g. OculusRift)");
+        glow::debug("  -nointro     [dev] don't show the intro");
         glow::debug("               automatically activates fullscreen and stereo");
         exit(0);
     }

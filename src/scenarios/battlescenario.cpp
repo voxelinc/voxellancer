@@ -64,7 +64,7 @@ void BattleScenario::populateWorld() {
     banner->transform().move(glm::vec3(0, 0, -600));
     banner->info().setShowOnHud(false);
     banner->info().setCanLockOn(false);
-    m_world->god().scheduleSpawn(banner);
+    //m_world->god().scheduleSpawn(banner);
 
     // create two opposing enemy forces
     populateBattle(3, 3);

@@ -20,16 +20,19 @@
 #include "input/inputmapping.h"
 #include "input/inputconfigurator.h"
 
+#include "ui/hud/hud.h"
+#include "ui/targetselector.h"
+#include "ui/hud/crosshair.h"
+
+#include "utils/safenormalize.h"
+
+
 #include "world/world.h"
 #include "worldobject/worldobject.h"
 #include "worldobject/worldobjectcomponents.h"
 #include "worldobject/ship.h"
 
 #include "player.h"
-
-#include "ui/hud/hud.h"
-#include "ui/targetselector.h"
-#include "ui/hud/crosshair.h"
 
 
 
@@ -56,8 +59,8 @@
  *  B9: right stick
  */
 
-GamePlayNormalInput::GamePlayNormalInput() :
-    GamePlayInput(),
+GamePlayNormalInput::GamePlayNormalInput(GamePlay& gamePlay) :
+    GamePlayInput(gamePlay),
 
     m_deadzoneMouse("input.deadzoneMouse"),
     m_deadzoneGamepad("input.deadzoneGamepad"),
@@ -103,12 +106,14 @@ GamePlayNormalInput::GamePlayNormalInput() :
     m_currentTimePressed = 0;
 }
 
-void GamePlayNormalInput::resizeEvent(const unsigned int width, const unsigned int height) {
+void GamePlayNormalInput::onResizeEvent(const unsigned int width, const unsigned int height) {
     m_lastfocus = false; // through window resize everything becomes scrambled
     m_cursorMaxDistance = glm::min(ContextProvider::instance()->resolution().width(), ContextProvider::instance()->resolution().height()) / 2;
 }
 
-void GamePlayNormalInput::keyCallback(int key, int scancode, int action, int mods) {
+void GamePlayNormalInput::onKeyEvent(int key, int scancode, int action, int mods) {
+    GamePlayInput::onKeyEvent(key, scancode, action, mods);
+
     if (action == GLFW_PRESS) {
         m_inputConfigurator->setLastInput(InputClass::Primary, InputMapping(InputType::Keyboard, key, 1, 0.0f));
     } else {
@@ -136,7 +141,7 @@ void GamePlayNormalInput::keyCallback(int key, int scancode, int action, int mod
 }
 
 
-void GamePlayNormalInput::mouseButtonCallback(int button, int action, int mods) {
+void GamePlayNormalInput::onMouseButtonEvent(int button, int action, int mods) {
     if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_RELEASE) {
         if (m_currentTimePressed > 0 && m_currentTimePressed < m_maxClickTime) {
             World::instance()->player().hud().onClick(ClickType::Selection);
@@ -182,18 +187,18 @@ void GamePlayNormalInput::applyUpdates() {
     m_rocketUpdate = false;
 
     if (glm::length(m_moveUpdate) > 1.0f) {
-        m_moveUpdate = glm::normalize(m_moveUpdate);
+        m_moveUpdate = safeNormalize(m_moveUpdate, glm::vec3(0.0f));
     }
+
     World::instance()->player().move(m_moveUpdate);
     m_moveUpdate = glm::vec3(0);
 
     if (glm::length(m_rotateUpdate) > 1.0f) {
-        m_rotateUpdate = glm::normalize(m_rotateUpdate);
+        m_rotateUpdate = safeNormalize(m_rotateUpdate, glm::vec3(0.0f));
     }
     World::instance()->player().rotate(m_rotateUpdate);
     m_rotateUpdate = glm::vec3(0);
 }
-
 
 void GamePlayNormalInput::retrieveInputValues() {
     m_secondaryInputValues.buttonCnt = 0;

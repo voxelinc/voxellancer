@@ -1,5 +1,6 @@
 #include "enginetrailgenerator.h"
 
+#include "utils/safenormalize.h"
 #include "utils/geometryhelper.h"
 
 #include "voxel/specialvoxels/engineslotvoxel.h"
@@ -67,7 +68,8 @@ void EngineTrailGenerator::spawnTrail() {
 
     glm::vec3 newPosition = calculateSpawnPosition();
     glm::vec3 distance = newPosition - m_lastSpawnPoint;
-    glm::vec3 step = GeometryHelper::safeNormalize(distance) * m_stepDistance.get();
+
+    glm::vec3 step = safeNormalize(distance, glm::vec3(0.0f)) * m_stepDistance.get();
     glm::vec3 currentPosition = m_lastSpawnPoint;
 
     float stepCount = glm::length(distance) / m_stepDistance;
