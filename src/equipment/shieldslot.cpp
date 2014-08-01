@@ -1,12 +1,13 @@
 #include "shieldslot.h"
 
-#include <iostream>
+#include <cassert>
 
+#include "equipmentchanger.h"
 #include "shield.h"
 
 
 ShieldSlot::ShieldSlot(WorldObjectComponents* components, int index):
-    WorldObjectSlot(components, index)
+    EquipmentSlot(components, index)
 {
 
 }
@@ -16,8 +17,7 @@ std::shared_ptr<Shield>& ShieldSlot::shield() {
 }
 
 void ShieldSlot::setShield(const std::shared_ptr<Shield>& shield) {
-    m_shield = shield;
-    notifyObservers();
+    EquipmentChanger<ShieldSlot, Shield>(*this, m_shield, shield).change();
 }
 
 void ShieldSlot::update(float deltaSec) {
