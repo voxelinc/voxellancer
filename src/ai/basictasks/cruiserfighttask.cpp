@@ -5,13 +5,13 @@
 #include "utils/worldobjectgeometryhelper.h"
 #include "voxel/voxelclusterbounds.h"
 #include "worldobject/ship.h"
+#include "worldobject/helper/componentsinfo.h"
 
 
 CruiserFightTask::CruiserFightTask(BoardComputer* boardComputer, const std::vector<Handle<WorldObject>>& targets) :
     FightTaskImplementation(boardComputer, targets)
 {
     m_state = State::IDLE;
-    m_maxFireDistance = 250.0f;
     m_maxRocketDistance = 150.0f;
     m_minEnemyDistance = 50.0f;
     m_stateChanged = false;
@@ -37,7 +37,7 @@ void CruiserFightTask::update(float deltaSec) {
             boardComputer()->shootRockets(m_primaryTarget);
         }
 
-        if (anyTargetDistance() < m_maxFireDistance) {
+        if (anyTargetDistance() < componentsInfo().maxBulletRange()) {
             boardComputer()->shootBullet(m_targets);
         }
         break;

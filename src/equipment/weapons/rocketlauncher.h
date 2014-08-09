@@ -21,6 +21,7 @@ public:
 
     virtual void update(float deltaSec) override;
 
+    float rocketRange();
 
 protected:
     SoundProperties m_rocketSound;

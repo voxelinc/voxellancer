@@ -1,5 +1,7 @@
 #include "hudelements.h"
 
+#include "utils/safenormalize.h"
+
 #include "voxel/voxelrenderer.h"
 
 #include "hud.h"

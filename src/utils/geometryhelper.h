@@ -25,10 +25,5 @@ public:
 
     // Returns the quaternion from (0,0,-1) to dir
     static glm::quat quatFromViewDirection(const glm::vec3& dir);
-
-    // Normalize, and return value again if glm::length(value) is 0
-    template<typename T>
-    static T safeNormalize(const T& value);
 };
 
-#include "geometryhelper.inl"

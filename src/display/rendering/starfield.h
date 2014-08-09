@@ -20,7 +20,6 @@ namespace glow {
 };
 
 
-
 /**
  * Renders a starfield around the camera.
  * Old camera positions/orientations are stored in order to stretch the

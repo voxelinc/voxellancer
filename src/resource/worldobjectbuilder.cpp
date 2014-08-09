@@ -125,7 +125,6 @@ T* WorldObjectBuilder::makeWorldObject() {
     }
 
     equipSomehow(worldObject);
-
     return object;
 }
 

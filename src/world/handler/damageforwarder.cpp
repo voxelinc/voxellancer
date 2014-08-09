@@ -4,6 +4,8 @@
 #include <algorithm>
 #include <glm/glm.hpp>
 
+#include "utils/safenormalize.h"
+
 #include "voxel/voxelcluster.h"
 #include "voxel/voxeltreenode.h"
 
