@@ -129,6 +129,7 @@ FactionRelationType Character::relationTypeTo(WorldObject* worldObject) {
 
 void Character::setFriendlinessToWorldObject(WorldObject* worldObject, float friendliness) {
     m_friendlinessToWorldObject[makeHandle(worldObject)] = friendliness;
+    m_friendlinessResetDelay[makeHandle(worldObject)] = 10.0f;
 }
 
 void Character::changeFriendlinessToAggressor(WorldObject* aggressor, float difference) {
@@ -144,8 +145,8 @@ void Character::changeFriendlinessToAggressor(WorldObject* aggressor, float diff
     if (FactionRelation::type(friendliness) == FactionRelationType::Enemy && m_ship.squadLogic()->squad().get()) {
         m_ship.squadLogic()->squad()->propagadeFriendlinessToWorldObject(aggressor, friendliness);
     }
-    m_world->factionMatrix().changeFriendlinessToFaction(*m_faction, ship->character()->faction(),  difference / 10.0f);
-    m_friendlinessToWorldObject[makeHandle(aggressor)] = friendliness;
+    m_world->factionMatrix().changeFriendlinessToFaction(*m_faction, ship->character()->faction(), difference / 10.0f);
+    setFriendlinessToWorldObject(aggressor, friendliness);
 }
 
 void Character::resetFriendliness(float deltaSec) {
@@ -156,9 +157,19 @@ void Character::resetFriendliness(float deltaSec) {
             continue;
         }
         if (it->first->objectType() != WorldObjectType::Ship) {
-            return;
+            it = m_friendlinessToWorldObject.erase(it);
+            continue;
         }
         const Ship* ship = static_cast<const Ship*>(it->first.get());
+        if (m_friendlinessResetDelay.count(it->first) > 0) {
+            if (m_friendlinessResetDelay[it->first] > 0) {
+                m_friendlinessResetDelay[it->first] -= deltaSec;
+                it++;
+                continue;
+            } else {
+                m_friendlinessResetDelay.erase(it->first);
+            }
+        }
         if (m_faction->relationTo(ship->character()->faction()).friendliness() > friendliness) {
             it->second += deltaSec;
         } else {

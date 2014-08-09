@@ -46,6 +46,7 @@ protected:
     Faction* m_faction;
     std::shared_ptr<AiTask> m_task;
     std::unordered_map<Handle<WorldObject>, float> m_friendlinessToWorldObject;
+    std::unordered_map<Handle<WorldObject>, float> m_friendlinessResetDelay;
 
     void resetFriendliness(float deltaSec);
     void changeFriendlinessToAggressor(WorldObject* aggressor, float difference);
