@@ -13,14 +13,16 @@
 
 #include "input/inputmapping.h"
 
+#include "utils/safenormalize.h"
 
-GamePlayFreecamInput::GamePlayFreecamInput() :
-    GamePlayInput(),
+
+GamePlayFreecamInput::GamePlayFreecamInput(GamePlay& gamePlay) :
+    GamePlayInput(gamePlay),
 
     m_cameraDolly(new CameraDolly()),
 
-    prop_deadzoneMouse("input.deadzoneMouse"),
-    prop_deadzoneGamepad("input.deadzoneGamepad"),
+    m_deadzoneMouse("input.deadzoneMouse"),
+    m_deadzoneGamepad("input.deadzoneGamepad"),
 
     moveLeftAction("input.mappingMoveLeftPrimary", "input.mappingMoveLeftSecondary", "Move Left"),
     moveRightAction("input.mappingMoveRightPrimary", "input.mappingMoveRightSecondary", "Move Right"),
@@ -40,9 +42,9 @@ GamePlayFreecamInput::GamePlayFreecamInput() :
     m_moveUpdate(0),
     m_rotateUpdate(0),
 
-    prop_moveFactor("input.flycamMoveFactor", 1.0f),
-    prop_rotateFactor("input.flycamRotateFactor", 0.5f),
-    prop_mouseMultiplier("input.flycamMouseMultiplier", 1.0f)
+    m_moveFactor("input.flycamMoveFactor", 1.0f),
+    m_rotateFactor("input.flycamRotateFactor", 0.5f),
+    m_mouseMultiplier("input.flycamMouseMultiplier", 1.0f)
 {
     addActionsToVector();
 
@@ -55,7 +57,7 @@ GamePlayFreecamInput::GamePlayFreecamInput() :
 }
 
 
-void GamePlayFreecamInput::resizeEvent(const unsigned int width, const unsigned int height) {
+void GamePlayFreecamInput::onResizeEvent(const unsigned int width, const unsigned int height) {
     m_lastfocus = false; // through window resize the cursor position is scrambled
     m_cursorMaxDistance = glm::min(ContextProvider::instance()->resolution().width(), ContextProvider::instance()->resolution().height()) / 2.0f;
 }
@@ -84,15 +86,16 @@ void GamePlayFreecamInput::applyUpdates() {
     // some actions can be triggered in different ways or multiple times
     // especially those done by the mouse
     // collect them and apply them here
-    
+
     if (glm::length(m_moveUpdate) > 1.0f) {
-        m_moveUpdate = glm::normalize(m_moveUpdate);
+        m_moveUpdate = safeNormalize(m_moveUpdate, glm::vec3(0.0f));
     }
-    
-    m_position += m_orientation * (m_moveUpdate * prop_moveFactor.get());
+
+    m_position += m_orientation * (m_moveUpdate * m_moveFactor.get());
+
     m_moveUpdate = glm::vec3(0);
 
-    m_orientation = m_orientation * glm::quat(m_rotateUpdate * prop_rotateFactor.get());
+    m_orientation = m_orientation * glm::quat(m_rotateUpdate * m_rotateFactor.get());
     m_rotateUpdate = glm::vec3(0);
 }
 
@@ -120,10 +123,10 @@ void GamePlayFreecamInput::processMouseUpdate(float deltaSec) {
     rot = glm::vec3(y, x, 0);
     rot /= m_cursorMaxDistance;
 
-    if (glm::length(rot) < prop_deadzoneMouse) {
+    if (glm::length(rot) < m_deadzoneMouse) {
         rot = glm::vec3(0);
     }
-    m_rotateUpdate += rot * prop_mouseMultiplier.get();
+    m_rotateUpdate += rot * m_mouseMultiplier.get();
 
     x = ContextProvider::instance()->resolution().width() / 2;
     y = ContextProvider::instance()->resolution().height() / 2;
@@ -183,7 +186,7 @@ float GamePlayFreecamInput::getInputValue(InputMapping mapping) {
                 return 0;
             }
         case InputType::GamePadAxis:
-            if (m_secondaryInputValues.axisCnt > mapping.index() && glm::abs(m_secondaryInputValues.axisValues[mapping.index()]) > prop_deadzoneGamepad) {
+            if (m_secondaryInputValues.axisCnt > mapping.index() && glm::abs(m_secondaryInputValues.axisValues[mapping.index()]) > m_deadzoneGamepad) {
                 float relativeValue = m_secondaryInputValues.axisValues[mapping.index()] / mapping.maxValue();
                 if (relativeValue > 0) {
                     return glm::min(relativeValue, 1.0f);
@@ -217,7 +220,7 @@ void GamePlayFreecamInput::processRotateActions() {
     rot.z = -getInputValue(&rotateClockwiseAction)
         + getInputValue(&rotateCClockwiseAction);
 
-    if (glm::length(rot) < prop_deadzoneGamepad) {
+    if (glm::length(rot) < m_deadzoneGamepad) {
         rot = glm::vec3(0);
     }
 
@@ -247,3 +250,4 @@ void GamePlayFreecamInput::setOrientation(const glm::quat& orientation) {
 CameraHead& GamePlayFreecamInput::cameraHead() {
     return m_cameraDolly->cameraHead();
 }
+

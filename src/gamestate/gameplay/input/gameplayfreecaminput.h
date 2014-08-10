@@ -19,11 +19,11 @@ class CameraDolly;
 
 class GamePlayFreecamInput : public GamePlayInput {
 public:
-    GamePlayFreecamInput();
+    GamePlayFreecamInput(GamePlay& gamePlay);
 
-    void resizeEvent(const unsigned int width, const unsigned int height) override;
-    //void keyCallback(int key, int scancode, int action, int mods);
-    //void mouseButtonCallback(int button, int action, int mods);
+    void onResizeEvent(const unsigned int width, const unsigned int height) override;
+    //void onKeyEvent(int key, int scancode, int action, int mods);
+    //void onMouseButtonEvent(int button, int action, int mods);
 	virtual void update(float deltaSec) override;
 
     const glm::vec3& position();
@@ -57,8 +57,8 @@ protected:
     void addActionsToVector();
     void retrieveInputValues();
 
-    Property<float> prop_deadzoneMouse;
-    Property<float> prop_deadzoneGamepad;
+    Property<float> m_deadzoneMouse;
+    Property<float> m_deadzoneGamepad;
 
     ActionKeyMapping moveLeftAction;
     ActionKeyMapping moveRightAction;
@@ -74,9 +74,9 @@ protected:
 
     glm::vec3 m_moveUpdate;
     glm::vec3 m_rotateUpdate;
-    Property<float> prop_moveFactor;
-    Property<float> prop_rotateFactor;
-    Property<float> prop_mouseMultiplier;
+    Property<float> m_moveFactor;
+    Property<float> m_rotateFactor;
+    Property<float> m_mouseMultiplier;
     glm::vec3 m_position;
     glm::quat m_orientation;
 };

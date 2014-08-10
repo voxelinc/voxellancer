@@ -14,7 +14,7 @@ public:
     glm::quat orientation() const;
     void setOrientation(const glm::quat& orientation);
 
-    void changed() const override;
+    virtual void changed() const override;
 
 
 protected:

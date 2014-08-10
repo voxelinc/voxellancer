@@ -4,16 +4,19 @@
 #include <list>
 #include <string>
 
+#include "utils/observable.h"
+
 
 class WorldObjectComponents;
 
-/*
-    Base class for everything on a worldobject that behaves like a slot
-    that can be (or cannot) be equipped with equipment
-*/
-class WorldObjectSlot {
+/**
+ * Base class for everything on a worldobject that behaves like a slot
+ * that can be (or cannot) be equipped with equipment
+ */
+class EquipmentSlot : public Observable {
 public:
-    WorldObjectSlot(WorldObjectComponents* components, int index);
+    EquipmentSlot(WorldObjectComponents* components, int index);
+    virtual ~EquipmentSlot();
 
     std::list<std::string> mountables() const;
 

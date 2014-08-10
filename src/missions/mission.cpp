@@ -13,16 +13,13 @@
 
 Mission::Mission(const std::string& path):
     m_script(new MissionScript(*this, World::instance()->scriptEngine())),
-    m_handle(this),
     m_state(MissionState::Idle)
 {
     m_script->load(path);
     World::instance()->scriptEngine().addScript(m_script);
 }
 
-Mission::~Mission() {
-    m_handle.invalidate();
-}
+Mission::~Mission() = default;
 
 void Mission::start() {
     m_state = MissionState::Running;
@@ -50,10 +47,6 @@ void Mission::fail() {
     m_state = MissionState::Failed;
     m_script->onFailure();
     m_script->stop();
-}
-
-Handle<Mission>& Mission::handle() {
-    return m_handle;
 }
 
 void Mission::update(float deltaSec) {

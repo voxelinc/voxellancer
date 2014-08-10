@@ -1,14 +1,15 @@
-#include "worldobjectslot.h"
+#include "equipmentslot.h"
 
 
-WorldObjectSlot::WorldObjectSlot(WorldObjectComponents* components, int index):
+EquipmentSlot::EquipmentSlot(WorldObjectComponents* components, int index):
     m_components(components),
     m_index(index)
 {
 }
 
+EquipmentSlot::~EquipmentSlot() = default;
 
-std::list<std::string> WorldObjectSlot::mountables() const {
+std::list<std::string> EquipmentSlot::mountables() const {
     std::list<std::string> result;
     for(std::map<std::string, bool>::const_iterator i = m_mountables.begin(); i != m_mountables.end(); ++i) {
         if(i->second) {
@@ -18,24 +19,24 @@ std::list<std::string> WorldObjectSlot::mountables() const {
     return result;
 }
 
-bool WorldObjectSlot::mountable(const std::string& name) const {
+bool EquipmentSlot::mountable(const std::string& name) const {
     std::map<std::string, bool>::const_iterator i = m_mountables.find(name);
     return i == m_mountables.end() ? false : i->second;
 }
 
-void WorldObjectSlot::setMountable(const std::string& name, bool mountable) {
+void EquipmentSlot::setMountable(const std::string& name, bool mountable) {
     m_mountables[name] = mountable;
 }
 
-WorldObjectComponents* WorldObjectSlot::components() {
+WorldObjectComponents* EquipmentSlot::components() {
     return m_components;
 }
 
-const WorldObjectComponents* WorldObjectSlot::components() const {
+const WorldObjectComponents* EquipmentSlot::components() const {
     return m_components;
 }
 
-int WorldObjectSlot::index() const {
+int EquipmentSlot::index() const {
     return m_index;
 }
 
