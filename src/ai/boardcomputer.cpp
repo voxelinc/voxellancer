@@ -147,14 +147,12 @@ void BoardComputer::shootBullet(const std::vector<Handle<WorldObject>>& targets)
                     Gun* gun = dynamic_cast<Gun*>(hardpoint->weapon().get());
                     HardpointAimHelper aimHelper = HardpointAimHelper(hardpoint.get(), target);
                     aimHelper.aim(m_aimHelperMaxOffset);
-                    if (!aimHelper.isHitable()) {
+                    if (!aimHelper.isHittable()) {
                         continue;
                     }
                     glm::vec3 targetPoint = aimHelper.point();
                     targetPoint += RandVec3::rand(-1, 1) * glm::length(targetPoint - hardpoint->voxel()->position()) / m_inaccuracyOffset;
-                    if (gun->isBulletPathClear(targetPoint, m_checkFriendlyFire)) {
-                        gun->fireAtPoint(targetPoint);
-                    }
+                    gun->fireAtPoint(targetPoint, m_checkFriendlyFire);
                 }
             }
         }
