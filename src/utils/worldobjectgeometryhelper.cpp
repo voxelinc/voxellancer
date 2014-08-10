@@ -1,7 +1,14 @@
 #include "worldobjectgeometryhelper.h"
 
 #include "worldobject/worldobject.h"
+#include "voxel/voxelclusterbounds.h"
 
+
+float WorldObjectGeometryHelper::sphereToSphereDistance(WorldObject* self, WorldObject* other) {
+    return glm::length(self->transform().position() - other->transform().position())
+        - self->bounds().minimalGridSphere().radius() * self->transform().scale()
+        - other->bounds().minimalGridSphere().radius() * other->transform().scale();
+}
 
 WorldObject* WorldObjectGeometryHelper::closestObject(WorldObject& self, std::unordered_set<WorldObject*>* objects) {
     WorldObject* closestObject = nullptr;

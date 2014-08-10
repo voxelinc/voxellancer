@@ -1,4 +1,3 @@
-#include <iostream>
 #include <omp.h>
 
 #ifdef WIN32
@@ -19,8 +18,10 @@
 #include <glow/global.h>
 #include <glow/logging.h>
 #include <glow/debugmessageoutput.h>
+#include <glow/Program.h>
 #include <glowutils/global.h>
 #include <glowutils/File.h>
+#include <glowutils/AutoTimer.h>
 
 #include "etc/contextprovider.h"
 #include "etc/hmd/hmdmanager.h"
@@ -30,16 +31,17 @@
 #include "display/viewer.h"
 
 #include "property/propertydirectory.h"
+#include "utils/filesystem.h"
 
 #include "gamestate/gameplay/gameplay.h"
 #include "gamestate/gameplay/running/gameplayrunning.h"
-#include "gamestate/gameplay/running/gameplayrunninginput.h"
+#include "gamestate/gameplay/gameplayinput.h"
 #include "gamestate/game.h"
 #include "gamestate/gameplay/gameplayscene.h"
 
-#include "utils/filesystem.h"
-
 #include "world/world.h"
+
+#include "display/rendering/texturerenderer.h"
 
 static GLint MajorVersionRequire = 3;
 static GLint MinorVersionRequire = 1;
@@ -75,14 +77,14 @@ static void resizeCallback(GLFWwindow* window, int width, int height) {
     glow::info("Resizing viewport to %;x%;", width, height);
     if (width > 0 && height > 0) {
         glViewport(0, 0, width, height);
-        game->gamePlay().running().input().resizeEvent(width, height);
+        game->inputHandler().onResizeEvent(width, height);
         game->viewer().setViewport(Viewport(0, 0, width, height));
     }
 }
 
 static void toggleFullScreen();
 
-static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+static void onKeyEvent(GLFWwindow* window, int key, int scancode, int action, int mods) {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, GL_TRUE);
     }
@@ -91,9 +93,7 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
         (glfwGetKey(window, GLFW_KEY_RIGHT_ALT) == GLFW_PRESS))) {
         toggleFullScreen();
     }
-    if (key >= GLFW_KEY_F1 && key <= GLFW_KEY_F7 && action == GLFW_PRESS) {
-        game->gamePlay().loadScenario(key - GLFW_KEY_F1);
-    }
+
     if (key == GLFW_KEY_F8 && action == GLFW_PRESS) {
         glowutils::File::reloadAll();
         PropertyManager::instance()->load("data/config.ini");
@@ -101,25 +101,19 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
     if (key == GLFW_KEY_F9 && action == GLFW_PRESS) {
         World::instance()->printStatus();
     }
-    if (key >= GLFW_KEY_1 && key <= GLFW_KEY_9 && action == GLFW_PRESS) {
-        game->gamePlay().scene().setOutputBuffer(key-GLFW_KEY_1);
-    }
-    if (key == GLFW_KEY_T && action == GLFW_PRESS) {
-        game->gamePlay().scene().setWorldTreeRendererEnabled(!game->gamePlay().scene().worldTreeRendererEnabled());
-    }
 
-	game->gamePlay().running().input().keyCallback(key, scancode, action, mods);
+    game->inputHandler().onKeyEvent(key, scancode, action, mods);
 }
 
 
-static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
-    game->gamePlay().running().input().mouseButtonCallback(button, action, mods);
+static void onMouseButtonEvent(GLFWwindow* window, int button, int action, int mods) {
+    game->inputHandler().onMouseButtonEvent(button, action, mods);
 }
 
 void setGLFWCallbacks(GLFWwindow* window) {
-    glfwSetKeyCallback(window, keyCallback);
+    glfwSetKeyCallback(window, onKeyEvent);
     glfwSetWindowSizeCallback(window, resizeCallback);
-    glfwSetMouseButtonCallback(window, mouseButtonCallback);
+    glfwSetMouseButtonCallback(window, onMouseButtonEvent);
 }
 
 static void miscSettings() {
@@ -170,6 +164,7 @@ void toggleFullScreen() {
 }
 
 int main(int argc, char* argv[]) {
+    glowutils::AutoTimer* initTimer = new glowutils::AutoTimer("Setup");
     CommandLineParser clParser;
     clParser.parse(argc, argv);
 
@@ -217,12 +212,21 @@ int main(int argc, char* argv[]) {
 #ifdef TRYCATCH
     try {
 #endif
+        TextureRenderer* loadingScreen = new TextureRenderer("data/textures/loading.dds");
+
+        loadingScreen->display("Loading... Objects");
         PropertyDirectory("data/worldobjects").read();
+        loadingScreen->display("Loading... Engines");
         PropertyDirectory("data/equipment/engines").read();
+        loadingScreen->display("Loading... Shields");
+        PropertyDirectory("data/equipment/shields").read();
+        loadingScreen->display("Loading... Weapons");
         PropertyDirectory("data/equipment/weapons").read();
+        loadingScreen->display("Loading... Projectiles");
         PropertyDirectory("data/equipment/projectiles").read();
 
-        game = new Game();
+        loadingScreen->display("Loading... Game");
+        game = new Game(clParser.showIntro() && Property<bool>::get("general.showIntro", true));
 
         if(clParser.hmd()) {
             game->hmdManager().setupHMD(game->viewer());
@@ -231,10 +235,10 @@ int main(int argc, char* argv[]) {
                 game->viewer().switchToStereoView(StereoRenderInfo::dummy());
             }
         }
+        game->gamePlay().updateView();
 
-        int width, height;
-        glfwGetFramebufferSize(window, &width, &height);
-        //game->inputHandler().resizeEvent(width, height);
+        delete loadingScreen;
+        delete initTimer;
 
         mainloop();
 

@@ -11,10 +11,10 @@ class FrameBuffer;
 class Camera;
 
 
-/*
-   a collection of steps to produce a graphical effect
-   can be nested
-*/
+/**
+ * a collection of steps to produce a graphical effect
+ * can be nested
+ */
 class RenderPipeline : RenderPass {
 public:
     RenderPipeline(const std::string& name);

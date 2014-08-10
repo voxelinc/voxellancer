@@ -5,8 +5,9 @@
 
 #include "equipment/weapon.h"
 
+#include "sound/soundproperties.h"
 
-class SoundProperties;
+
 class Bullet;
 class Ray;
 class WorldTreeQuery;
@@ -18,30 +19,35 @@ public:
     Gun(const std::string& equipmentKey);
     ~Gun();
 
-    virtual const SoundProperties& fireSound() const = 0;
+    float bulletSpeed() const;
+    void setBulletSpeed(float bulletSpeed);
 
-    virtual float bulletLifetime() const = 0;
-    virtual float bulletSpeed() const = 0;
+    float bulletLifetime() const;
 
-    virtual void fireAtPoint(const glm::vec3& point);
+    const SoundProperties& fireSound() const;
+    void setFireSound(const SoundProperties& fireSound);
+
+    virtual void fireAtPoint(const glm::vec3& point, bool checkFriendlyFire);
+    virtual bool isBulletPathClear(const glm::vec3& point, bool checkFriendlyFire);
 
     virtual void update(float deltaSec) override;
 
-    virtual void setHardpoint(Hardpoint* hardpoint) override;
-
-    bool isBulletPathClear(const glm::vec3& point, bool checkFriendlyFire = false);
-
-    void createBulletPrototype();
-
 
 protected:
-    virtual Bullet* createBullet() = 0;
-    void setupBullet(Bullet* bullet, const glm::vec3& point);
+    float m_bulletSpeed;
+    Visuals m_visuals;
+    SoundProperties m_fireSound;
+
     WorldObject* m_owner;
 
-    Bullet* bulletPrototype;
-    float spawnDistance;
-    float bulletLength;
-    float bulletMaxWidth;
+    float m_spawnDistance;
+    float m_bulletLength;
+    float m_bulletMaxWidth;
+    float m_bulletLifetime;
+
+
+    void setupBullet(Bullet* bullet, const glm::vec3& point);
+    void setBulletExtend();
+    virtual void onProjectileNameChanged() override;
 };
 

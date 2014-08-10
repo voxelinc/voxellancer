@@ -23,6 +23,7 @@ public:
 
     virtual bool isFinished() override;
 
+
 protected:
     enum class State {
         IDLE,
@@ -36,7 +37,6 @@ protected:
 
     State m_state;
     bool m_stateChanged;
-    float m_maxFireDistance;
     float m_maxRocketDistance;
     float m_minEnemyDistance;
 };

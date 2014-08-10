@@ -3,7 +3,6 @@
 #include <glm/glm.hpp>
 
 #include "utils/geometryhelper.h"
-#include "utils/tostring.h"
 
 #include "worldobject/ship.h"
 
@@ -96,7 +95,7 @@ void AimHelperHudget::calculateTargetPoint(WorldObject* targetObject) {
         HardpointAimHelper aimHelper(hardpoint.get(), targetObject);
         aimHelper.aim();
 
-        if (aimHelper.isHitable()) {
+        if (aimHelper.isHittable()) {
             m_targetPoint += aimHelper.point();
             hitableHardpointCount++;
         }

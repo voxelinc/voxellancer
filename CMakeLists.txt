@@ -113,7 +113,8 @@ else()
 endif()
 
 set(GLOW_SOURCE_DIR ${LIB_DIR}/glow)
-include_directories(${GLOW_SOURCE_DIR}/include)
+include_directories(${GLOW_SOURCE_DIR}/source/glow/include)
+include_directories(${GLOW_SOURCE_DIR}/source/glowutils/include)
 
 # Include directories
 include_directories(
@@ -238,7 +239,6 @@ set(INSTALL_LIB           "lib")
 set(OPTION_BUILD_STATIC   OFF)
 option(OPTION_ERRORS_AS_EXCEPTION "Throw exceptions" OFF)
 
-include_directories(${GLOW_SOURCE_DIR}/pre-build/generated)
 add_subdirectory(${GLOW_SOURCE_DIR}/source/glow)
 add_subdirectory(${GLOW_SOURCE_DIR}/source/glowutils)
 

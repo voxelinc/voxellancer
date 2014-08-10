@@ -1,6 +1,5 @@
 #include "inputconfigurator.h"
 
-
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
@@ -8,7 +7,7 @@
 
 #include "ui/hud/hud.h"
 
-#include "gamestate/gameplay/running/gameplayrunninginput.h"
+#include "input/actionkeymapping.h"
 #include "input/inputconfigwriter.h"
 #include "utils/filesystem.h"
 #include "world/world.h"
@@ -20,7 +19,7 @@ InputConfigurator::InputConfigurator(std::vector<ActionKeyMapping*>* actions, Se
     m_actions(actions),
     m_secondaryInputValues(secondaryInputValues)
 {
-    prop_deadzoneGamepad = deadzone;
+    m_deadzoneGamepad = deadzone;
     m_primaryConfigurationState = -1;
     m_secondaryConfigurationState = -1;
 }
@@ -45,7 +44,7 @@ bool InputConfigurator::isKeyPressed(InputClass inputClass) {
             }
         }
         for (int i = 0; i < m_secondaryInputValues->axisCnt; i++) { // get pushed axes
-            if (glm::abs(m_secondaryInputValues->axisValues[i] - m_idleValues[i]) > *prop_deadzoneGamepad) {
+            if (glm::abs(m_secondaryInputValues->axisValues[i] - m_idleValues[i]) > *m_deadzoneGamepad) {
                 return true;
             }
         }
@@ -64,7 +63,7 @@ bool InputConfigurator::isLastInputValid(InputClass inputClass) {
             }
         }
         for (int i = 0; i < m_secondaryInputValues->axisCnt; i++) { // get pushed axes
-            if (glm::abs(m_secondaryInputValues->axisValues[i] - m_idleValues[i]) > *prop_deadzoneGamepad) {
+            if (glm::abs(m_secondaryInputValues->axisValues[i] - m_idleValues[i]) > *m_deadzoneGamepad) {
                 // greater maxValue for same axes
                 if (lastInput(inputClass).index() == i) {
                     if (glm::abs(lastInput(inputClass).maxValue() - m_idleValues[i]) <= glm::abs(m_secondaryInputValues->axisValues[i] - m_idleValues[i])) {

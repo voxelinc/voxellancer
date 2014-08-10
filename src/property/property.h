@@ -6,7 +6,7 @@ template <class T>
 class PropertyImpl;
 
 /**
- *  represents a value loaded from an .ini file                                                              
+ * Represents a value loaded from an .ini file
  */
 template <class T>
 class Property {
@@ -24,7 +24,7 @@ public:
 
     static T get(const std::string& name);
     static T get(const std::string& name, const T& defaultvalue);
-   
+
     static Property<T> unnamed(const T& value);
 
 protected:
@@ -33,7 +33,7 @@ protected:
 };
 
 /**
- *  helper method to get rid of the <T> as it can be inferred from the value
+ *  Helper method to get rid of the <T> as it can be inferred from the value
  */
 template<class T>
 Property<T> unnamedProperty(const T& value) {

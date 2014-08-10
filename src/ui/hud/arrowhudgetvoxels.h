@@ -31,7 +31,7 @@ protected:
     ObjectHudget* m_hudget;
     mutable VoxelCluster m_arrow;
 
-    Property<float> prop_arrowDistance;
+    Property<float> m_arrowDistance;
 
     glm::vec3 m_targetPoint;
 

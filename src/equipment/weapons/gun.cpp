@@ -1,12 +1,15 @@
 #include "gun.h"
 
 #include "utils/geometryhelper.h"
+#include "utils/safenormalize.h"
 
 #include "bullet.h"
 
 #include "equipment/hardpoint.h"
 
 #include "physics/physics.h"
+
+#include "resource/worldobjectbuilder.h"
 
 #include "sound/soundmanager.h"
 
@@ -32,26 +35,78 @@
 #include "world/world.h"
 #include "world/god.h"
 
+#include "resource/clustercache.h"
+
 
 Gun::Gun(const std::string& equipmentKey):
-    Weapon(WeaponType::Gun, equipmentKey)
+    Weapon(WeaponType::Gun, equipmentKey),
+    m_bulletSpeed(100)
 {
-    bulletPrototype = nullptr;
 }
 
 Gun::~Gun() = default;
 
-void Gun::fireAtPoint(const glm::vec3& point) {
-    if (canFire() && hardpoint()->inFieldOfAim(point)) {
-        Bullet *bullet = createBullet();
-        setupBullet(bullet, point);
+float Gun::bulletSpeed() const {
+    return m_bulletSpeed;
+}
 
-        World::instance()->god().scheduleSpawn(bullet);
+void Gun::setBulletSpeed(float bulletSpeed) {
+    m_bulletSpeed = bulletSpeed;
+}
 
-        SoundManager::current()->play(fireSound(), hardpoint()->voxel()->position());
+const SoundProperties& Gun::fireSound() const {
+    return m_fireSound;
+}
 
-        onFired();
+void Gun::setFireSound(const SoundProperties& fireSound) {
+    m_fireSound = fireSound;
+}
+
+void Gun::fireAtPoint(const glm::vec3& point, bool checkFriendlyFire) {
+    if (!canFire()) {
+        return;
     }
+
+    if (!m_hardpoint->inFieldOfAim(point)) {
+        return;
+    }
+
+    if (!isBulletPathClear(point, checkFriendlyFire)) {
+        return;
+    }
+
+    Bullet *bullet =  WorldObjectBuilder(projectileName()).buildBullet();
+    setupBullet(bullet, point);
+
+    World::instance()->god().scheduleSpawn(bullet);
+
+    SoundManager::current()->play(fireSound(), hardpoint()->voxel()->position());
+
+    onFired();
+}
+
+bool Gun::isBulletPathClear(const glm::vec3& point, bool checkFriendlyFire) {
+    WorldObject* owner = m_hardpoint->components()->worldObject();
+
+    glm::vec3 direction = glm::normalize(point - m_hardpoint->voxel()->position());
+    Capsule capsuleToTarget = Capsule::fromTo(m_hardpoint->voxel()->position() + direction * (m_bulletLength / 2.0f + m_spawnDistance), point, m_bulletMaxWidth / 2);
+
+    WorldTreeQuery fireDirectionQuery(&World::instance()->worldTree(), &capsuleToTarget, owner->collisionDetector().geode()->hint(), nullptr);
+
+    for (WorldObject* object : fireDirectionQuery.intersectingWorldObjects()) {
+        if (object == m_hardpoint->components()->worldObject()) {
+            return false;
+        }
+
+        if (checkFriendlyFire &&
+			owner->objectType() == WorldObjectType::Ship &&
+            object->objectType() == WorldObjectType::Ship &&
+            static_cast<Ship*>(object)->character()->faction().relationTo(static_cast<Ship*>(owner)->character()->faction()).isFriendly())
+        {
+            return false;
+        }
+    }
+    return true;
 }
 
 void Gun::update(float deltaSec) {
@@ -64,23 +119,21 @@ void Gun::setupBullet(Bullet* bullet, const glm::vec3& point) {
     WorldObject* firingWorldObject = m_hardpoint->components()->worldObject();
 
     glm::quat worldObjectOrientation = firingWorldObject->transform().orientation();
-    glm::vec3 bulletDirection = glm::normalize(point - m_hardpoint->voxel()->position());
+    glm::vec3 bulletDirection = safeNormalize(point - m_hardpoint->voxel()->position(), glm::vec3(0, 0, -1));
     glm::vec3 hardpointDirection = worldObjectOrientation * glm::vec3(0, 0, -1);
     glm::vec3 bulletUp = glm::cross(bulletDirection, hardpointDirection);
 
-    //bulletTransform.setOrientation(Math::quatFromDir(bulletDirection));
     bulletTransform.setOrientation(m_hardpoint->components()->worldObject()->transform().orientation());
 
-    if (bulletUp != glm::vec3(0)) {
+    if (normalizeable(bulletUp)) {
         glm::vec3 rotationAxis = glm::normalize(bulletUp);
         float angle = GeometryHelper::angleBetween(bulletDirection, hardpointDirection);
         glm::quat bulletOrientation = glm::angleAxis(-angle, rotationAxis);
         bulletTransform.rotateWorld(bulletOrientation); //then rotate towards target
     }
 
-    float bulletLength = bullet->bounds().minimalGridAABB().extent(ZAxis) * bullet->transform().scale();
-    float spawnDistance = glm::root_two<float>() * bullet->transform().scale();
-    bulletTransform.setPosition(m_hardpoint->voxel()->position() + bulletDirection * (bulletLength / 2.0f + spawnDistance));
+    m_spawnDistance = glm::root_two<float>() * bullet->transform().scale();
+    bulletTransform.setPosition(m_hardpoint->voxel()->position() + bulletDirection * (m_bulletLength / 2.0f + m_spawnDistance));
 
     bullet->setTransform(bulletTransform);
 
@@ -92,32 +145,21 @@ void Gun::setupBullet(Bullet* bullet, const glm::vec3& point) {
     bullet->setCreator(m_hardpoint->components()->worldObject());
 }
 
-bool Gun::isBulletPathClear(const glm::vec3& point, bool checkFriendlyFire) {
-    glm::vec3 direction = glm::normalize(point - m_hardpoint->voxel()->position());
-    Capsule capsuleToTarget = Capsule::fromTo(m_hardpoint->voxel()->position() + direction*(bulletLength / 2.0f + spawnDistance), point, bulletMaxWidth/2);
-    WorldTreeQuery fireDirectionQuery(&World::instance()->worldTree(), &capsuleToTarget, m_owner->collisionDetector().geode()->containingNode(), nullptr);
-    for (WorldObject* object : fireDirectionQuery.intersectingWorldObjects()) {
-        if (object == m_hardpoint->components()->worldObject()) {
-            return false;
-        }
-        if (checkFriendlyFire && 
-            m_owner->objectType() == WorldObjectType::Ship && 
-            object->objectType() == WorldObjectType::Ship &&
-            !static_cast<Ship*>(object)->character()->faction().relationTo(static_cast<Ship*>(m_owner)->character()->faction()).isHostile()) {
-            return false;
-        }
-    }
-    return true;
+void Gun::setBulletExtend() {
+    Bullet* bullet = WorldObjectBuilder(projectileName()).buildBullet();
+
+    m_bulletMaxWidth = glm::max(bullet->bounds().minimalGridAABB().extent(XAxis), bullet->bounds().minimalGridAABB().extent(YAxis))* bullet->transform().scale();
+    m_bulletLength = bullet->bounds().minimalGridAABB().extent(ZAxis) * bullet->transform().scale();
+    m_spawnDistance = glm::root_two<float>() * bullet->transform().scale();
+    m_bulletLifetime = bullet->lifetime();
+
+    delete bullet;
 }
 
-void Gun::setHardpoint(Hardpoint* hardpoint) {
-    Weapon::setHardpoint(hardpoint);
-    m_owner = m_hardpoint->components()->worldObject();
+void Gun::onProjectileNameChanged() {
+    setBulletExtend();
 }
 
-void Gun::createBulletPrototype() {
-    bulletPrototype = createBullet();
-    bulletMaxWidth = glm::max(bulletPrototype->bounds().minimalGridAABB().extent(XAxis), bulletPrototype->bounds().minimalGridAABB().extent(YAxis)) * bulletPrototype->transform().scale();
-    bulletLength = bulletPrototype->bounds().minimalGridAABB().extent(ZAxis) * bulletPrototype->transform().scale();
-    spawnDistance = glm::root_two<float>() * bulletPrototype->transform().scale();
+float Gun::bulletLifetime() const {
+    return m_bulletLifetime;
 }

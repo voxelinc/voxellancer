@@ -3,15 +3,12 @@
 
 EventPoll::EventPoll(const Callback& callback):
     m_callback(callback),
-    m_handle(Handle<EventPoll>(this)),
     m_active(true)
 {
 
 }
 
-EventPoll::~EventPoll() {
-    m_handle.invalidate();
-}
+EventPoll::~EventPoll() = default;
 
 bool EventPoll::isDead() {
     return false;
@@ -37,10 +34,6 @@ void EventPoll::update(float deltaSec) {
 
 void EventPoll::doCallback() {
     m_callback.call();
-}
-
-Handle<EventPoll>& EventPoll::handle() {
-    return m_handle;
 }
 
 void EventPoll::specialOnCallback() {

@@ -16,9 +16,8 @@
 #include "ui/hud/crosshair.h"
 #include "ui/targetselector.h"
 
-#include "worldobject/worldobjectinfo.h"
-
 #include "utils/aimer.h"
+#include "utils/safenormalize.h"
 
 #include "physics/physics.h"
 
@@ -26,6 +25,7 @@
 
 #include "worldobject/ship.h"
 #include "worldobject/worldobjectcomponents.h"
+#include "worldobject/worldobjectinfo.h"
 
 #include "equipment/hardpoint.h"
 #include "equipment/weapon.h"
@@ -35,7 +35,6 @@
 Player::Player():
     m_aimer(new Aimer(nullptr)),
     m_hud(new HUD(this)),
-    m_ship(nullptr),
     m_cameraDolly(new CameraDolly()),
     m_targetSelector(new TargetSelector(this))
 {
@@ -49,7 +48,7 @@ Ship* Player::ship() {
 }
 
 void Player::setShip(Ship* ship) {
-    m_ship = ship->handle();
+    m_ship = makeHandle(ship);
     m_ship->character()->setFaction(World::instance()->factionMatrix().playerFaction());
     m_ship->info().setShowOnHud(false);
     m_cameraDolly->followWorldObject(ship);
@@ -81,18 +80,12 @@ void Player::fire() {
         if(m_hud->aimHelper().hovered()) {
             targetPoint = m_hud->aimHelper().targetPoint();
         } else {
-            glm::vec3 shootDirection(glm::normalize(m_hud->crossHair().worldPosition() - cameraHead().position()));
+            glm::vec3 shootDirection(safeNormalize(m_hud->crossHair().worldPosition() - cameraHead().position(), glm::vec3(0.0f, 0.0f, -1.0f)));
             Ray ray(m_hud->crossHair().worldPosition(), shootDirection);
             targetPoint = m_aimer->aim(ray);
         }
-        for (std::shared_ptr<Hardpoint> hardpoint : m_ship->components().hardpoints()) {
-            if (hardpoint->weapon() && hardpoint->weapon()->type() == WeaponType::Gun) {
-                Gun* gun = dynamic_cast<Gun*>(hardpoint->weapon().get());
-                if (gun->isBulletPathClear(targetPoint)) {
-                    gun->fireAtPoint(targetPoint);
-                }
-            }
-        }
+
+        m_ship->components().fireAtPoint(targetPoint, false);
     }
 }
 

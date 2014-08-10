@@ -5,10 +5,10 @@
 #include "axis.h"
 
 
-/*
-    An AABB inside a grid, which means that an AABB from 0,0,0 to 0,0,0
-    covers exactly one cell
-*/
+/**
+ * An AABB inside a grid, which means that an AABB from 0,0,0 to 0,0,0
+ * covers exactly one cell
+ */
 class GridAABB {
 public:
     GridAABB();
@@ -24,9 +24,9 @@ public:
 
     int extent(Axis axis) const;
 
-    /*
-        Distance from LLF to URB
-    */
+    /**
+     * Distance from LLF to URB
+     */
     float diameter() const;
 
     bool operator==(const GridAABB& other) const;

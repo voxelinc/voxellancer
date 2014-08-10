@@ -1,6 +1,5 @@
 #include "starfield.h"
 
-#include <glow/Array.h>
 #include <glow/Shader.h>
 #include <glow/VertexArrayObject.h>
 #include <glow/VertexAttributeBinding.h>
@@ -144,7 +143,7 @@ void Starfield::createBinding(int index, std::string name, int offset, int size)
 }
 
 void Starfield::addLocation(const Camera& camera, int side) {
-    CameraLocation location = CameraLocation{ m_time, camera.position(), camera.orientation() };
+    CameraLocation location = CameraLocation{ m_time, camera.eye(), camera.orientation() };
     m_locations[side].push_back(location);
 }
 
@@ -173,7 +172,7 @@ glm::mat4 Starfield::getMatrixFromPast(const Camera& camera, int side) {
     assert(interpolation >= 0 && interpolation <= 1);
 
     Camera c(camera);
-    c.setPosition(glm::mix(after.position, before.position, interpolation));
+    c.setEye(glm::mix(after.position, before.position, interpolation));
     c.setOrientation(glm::slerp(after.orientation, before.orientation, interpolation));
 
     return c.viewProjection();
