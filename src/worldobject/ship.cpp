@@ -12,7 +12,6 @@
 
 
 Ship::Ship():
-    WorldObject(),
     m_character(new NonPlayerCharacter()),
     m_boardComputer(new BoardComputer(this)),
     m_squadLogic(new SquadLogic(*this))
@@ -44,12 +43,24 @@ WorldObject* Ship::targetObject() {
     return m_targetObjectHandle.get();
 }
 
-void Ship::setCharacter(Character* character) {
-    m_character.reset(character);
+const std::shared_ptr<Character>& Ship::character() {
+    return m_character;
 }
 
-Character* Ship::character() {
-    return m_character.get();
+void Ship::setCharacter(const std::shared_ptr<Character>& character) {
+    if (m_character == character) {
+        return;
+    }
+
+    if (m_character) {
+        m_character->setShip(nullptr);
+    }
+
+    m_character = character;
+
+    if (m_character) {
+        m_character->setShip(this);
+    }
 }
 
 BoardComputer* Ship::boardComputer() {

@@ -37,7 +37,7 @@ PirateScenario::PirateScenario(GamePlay* gamePlay) :
 void PirateScenario::populateWorld() {
     glow::debug("Create WorldObjects");
 
-    createArmada();
+    //createArmada();
 
     std::shared_ptr<Squad> squadA = std::make_shared<Squad>();
     squadA->setTask(std::make_shared<PatrolWaypointsTask>(*squadA,
@@ -53,7 +53,7 @@ void PirateScenario::populateWorld() {
     normandy->squadLogic()->joinSquad(squadA);
     m_world->god().scheduleSpawn(normandy);
 
-    int nmember_count = 4;
+  /*  int nmember_count = 4;
     for (int i = 0; i < nmember_count; i++) {
         Ship *follower = WorldObjectBuilder("piratelight").buildShip();
         follower->transform().setPosition(glm::vec3(100 * (-nmember_count / 2.0f + i), 50, 0));
@@ -62,10 +62,10 @@ void PirateScenario::populateWorld() {
         follower->info().setCanLockOn(true);
         follower->squadLogic()->joinSquad(squadA);
         m_world->god().scheduleSpawn(follower);
-    }
+    }*/
 
 
-    std::shared_ptr<Squad> squadB = std::make_shared<Squad>();
+  /*  std::shared_ptr<Squad> squadB = std::make_shared<Squad>();
     squadB->setTask(std::make_shared<PatrolWaypointsTask>(*squadB,
         std::list<glm::vec3>{ glm::vec3(500, 0, 500), glm::vec3(-500, 0, 500),
         glm::vec3(-500, 0, -500), glm::vec3(500, 0, -500) }));
@@ -90,14 +90,6 @@ void PirateScenario::populateWorld() {
         follower->squadLogic()->joinSquadOf(leader);
         m_world->god().scheduleSpawn(follower);
     }
-
-    Ship *testCluster = WorldObjectBuilder("pirateheavy").buildShip();
-    testCluster->transform().setPosition(glm::vec3(0, 0, 10));
-    testCluster->info().setName("basicship");
-    testCluster->info().setShowOnHud(false);
-    m_world->god().scheduleSpawn(testCluster);
-
-    World::instance()->player().setShip(testCluster);
 
     WorldObject *wall = new WorldObject();
     wall->transform().move(glm::vec3(-30, 0, -50));
@@ -133,6 +125,22 @@ void PirateScenario::populateWorld() {
     planet->setCrucialVoxel(glm::ivec3(middle));
     planet->info().setName("Planet");
     m_world->god().scheduleSpawn(planet);
+*/
+
+
+    Ship *testCluster = WorldObjectBuilder("pirateheavy").buildShip();
+    testCluster->transform().setPosition(glm::vec3(0, 0, 10));
+    testCluster->info().setName("basicship");
+    testCluster->info().setShowOnHud(false);
+    m_world->god().scheduleSpawn(testCluster);
+
+    World::instance()->player().setShip(testCluster);
+    glow::debug() << "Player: " << &World::instance()->player();
+    glow::debug() << "Player: " << World::instance()->player().name();
+    glow::debug() << "Player: " << World::instance()->player().ship()->character()->name();
+    glow::debug("Player joins squad");
+    testCluster->squadLogic()->joinSquad(squadA);
+    glow::debug("/Player joins squad");
 
     glow::debug("Initial spawn");
     m_world->god().spawn();

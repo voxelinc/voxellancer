@@ -1,6 +1,7 @@
 #include "player.h"
 
 #include "ai/character.h"
+#include "ai/squadlogic.h"
 
 #include "camera/cameradolly.h"
 #include "camera/camerahead.h"
@@ -38,12 +39,14 @@ Player::Player():
     m_cameraDolly(new CameraDolly()),
     m_targetSelector(new TargetSelector(this))
 {
-
+    setName("Commander Voxel");
 }
 
 Player::~Player() = default;
 
 void Player::update(float deltaSec) {
+    Character::update(deltaSec);
+
     m_cameraDolly->update(deltaSec);
     m_hud->update(deltaSec);
     m_aimer->update(deltaSec);

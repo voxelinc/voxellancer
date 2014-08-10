@@ -112,9 +112,9 @@ apikey AiBindings::apiCreateFlyToTask(apikey key) {
     auto flyToTask = std::make_shared<FlyToTask>(ship->boardComputer());
     m_scriptEngine.registerScriptable(flyToTask.get());
 
-    Character* character = ship->character();
+    Character* character = ship->character().get();
     if (!character) {
-        glow::warning("AiBindings: Ship '%;' has no Character", key);
+        glow::warning("AiBindings: Ship '%;' has no character", key);
         return -1;
     }
     character->setTask(flyToTask);
@@ -146,7 +146,12 @@ apikey AiBindings::apiCreateFightTask(apikey key) {
 
     m_scriptEngine.registerScriptable(fightTask);
 
-    Character* character = ship->character();
+    Character* character = ship->character().get();
+    if (!character) {
+        glow::warning("AiBindings: Ship '%;' has no character", key);
+        return -1;
+    }
+
     character->setTask(std::shared_ptr<AiTask>(fightTask));
 
     return fightTask->scriptKey();

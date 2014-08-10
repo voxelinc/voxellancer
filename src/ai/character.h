@@ -16,6 +16,9 @@ public:
     Character();
     virtual ~Character();
 
+    const std::string& name() const;
+    void setName(const std::string& name);
+
     Faction* faction();
     void setFaction(Faction* faction);
 
@@ -29,6 +32,7 @@ public:
 
 
 protected:
+    std::string m_name;
     Handle<Ship> m_ship;
     Faction* m_faction;
     std::shared_ptr<AiTask> m_task;

@@ -17,9 +17,8 @@ Handle<T> HandleOwner::handle() {
 
 template<typename T>
 Handle<T> makeHandle(T* owner) {
-    return owner->template handle<T>();
+    return owner ? owner->template handle<T>() : Handle<T>();
 }
-
 
 template<typename T>
 Handle<T> makeHandle(T& owner) {
