@@ -9,9 +9,9 @@
 class Hudget;
 class VoxelFont;
 
-class TextFieldHudgetVoxels{
+class TextFieldHudgetVoxels {
 public:
-    TextFieldHudgetVoxels(Hudget* textFieldHudget, const glm::vec3& direction, TextOrientation textOrientation = TextOrientation::BACKWARDS, float scale = 0.5f, const std::string& text = "", FontSize fontSize = FontSize::SIZE5x7);
+    TextFieldHudgetVoxels(Hudget* textFieldHudget, const glm::vec3& direction, TextOrientation textOrientation = TextOrientation::FORWARDS, float scale = 0.5f, const std::string& text = "", FontSize fontSize = FontSize::SIZE5x7);
 
     void setText(const std::string& text);
     void setDirection(const glm::vec3& direction);

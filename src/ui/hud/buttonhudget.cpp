@@ -3,7 +3,8 @@
 #include "hud.h"
 #include "buttonhudgetvoxels.h"
 
-ButtonHudget::ButtonHudget(HUD* hud, glm::vec3 direction, const std::function<void(ClickType clickType)>& callback, TextOrientation textOrientation, float scale, std::string content, FontSize fontSize, ButtonStyle buttonStyle) :
+
+ButtonHudget::ButtonHudget(HUD* hud, const glm::vec3 &direction, const std::function<void(ClickType clickType)>& callback, TextOrientation textOrientation, float scale, const std::string& content, FontSize fontSize, ButtonStyle buttonStyle) :
     Hudget(hud),
     m_buttonVoxels(new ButtonHudgetVoxels(this, direction, textOrientation, scale, content, fontSize, buttonStyle)),
     m_callback(callback)

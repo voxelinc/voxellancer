@@ -36,11 +36,7 @@ void TextFieldHudgetVoxels::setDirection(const glm::vec3& direction) {
 }
 
 void TextFieldHudgetVoxels::draw() {
-    if (m_textOrientation == TextOrientation::BACKWARDS) {
         m_voxelFont->drawString(m_text, worldPosition(), orientation(), m_fontSize, m_scale, FontAlign::CENTER);
-    } else if (m_textOrientation == TextOrientation::SPHERE_STRAIGHT) {
-        m_voxelFont->drawString(m_text, worldPosition(), orientation(), m_fontSize, m_scale, FontAlign::CENTER);
-    }
 }
 
 const glm::vec3 TextFieldHudgetVoxels::upperLeft() const {
@@ -105,7 +101,7 @@ TextOrientation TextFieldHudgetVoxels::textOrientation() {
 
 glm::quat TextFieldHudgetVoxels::orientation() const {
     switch (m_textOrientation) {
-    case TextOrientation::BACKWARDS:
+        case TextOrientation::FORWARDS:
         return m_hudget->hud()->orientation();
     case TextOrientation::SPHERE_STRAIGHT:
         return worldOrientation();

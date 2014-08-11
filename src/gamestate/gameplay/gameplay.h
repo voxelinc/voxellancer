@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <string>
 
 #include "gamestate/gamestate.h"
 #include "ui/clicktype.h"
@@ -43,6 +44,8 @@ public:
     SoundManager& soundManager();
 
     void loadScenario(int i);
+    void resetScenario();
+    void displayLoadingScreen(const std::string& status);
 
     virtual void update(float deltaSec) override;
 
@@ -66,7 +69,9 @@ protected:
 
     bool m_freecamActive;
 
-	void resetButtonCallback(ClickType clickType);
+    void resetButtonCallback(ClickType clickType);
+
+    void clearScenario();
 
     void setResetCallback();
 };

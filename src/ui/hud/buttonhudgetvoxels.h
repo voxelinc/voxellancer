@@ -5,16 +5,17 @@
 
 #include "textfieldhudgetvoxels.h"
 
+
 class VoxelFont;
 class ButtonHudget;
 class VoxelCluster;
 
 class ButtonHudgetVoxels : public TextFieldHudgetVoxels {
 public:
-    ButtonHudgetVoxels(ButtonHudget* textFieldHudget, glm::vec3 direction, TextOrientation textOrienation = TextOrientation::BACKWARDS, float scale = 0.5f, std::string content = "", FontSize fontSize = FontSize::SIZE5x7, ButtonStyle buttonStyle = ButtonStyle::BORDERED);
+    ButtonHudgetVoxels(ButtonHudget* textFieldHudget, const glm::vec3& direction, TextOrientation textOrienation = TextOrientation::FORWARDS, float scale = 0.5f, const std::string& content = "", FontSize fontSize = FontSize::SIZE5x7, ButtonStyle buttonStyle = ButtonStyle::BORDERED);
     ~ButtonHudgetVoxels();
 
-    virtual void setText(const std::string& text);
+    void setText(const std::string& text);
 
     void updateBounds();
 

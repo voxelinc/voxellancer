@@ -37,8 +37,6 @@ World::World():
     m_eventPoller(new EventPoller()),
     m_missionSystem(new MissionSystem())
 {
-    m_textLifeTime = 0.0f;
-    m_textTimer = 0.0f;
 }
 
 World::~World() {
@@ -105,11 +103,6 @@ void World::update(float deltaSecs) {
 
     for (WorldObject *worldObject : m_worldObjects) {
         worldObject->update(deltaSecs);
-    }
-
-    if (m_textTimer < m_textLifeTime) {
-        m_textTimer += deltaSecs;
-        m_textHudget->draw();
     }
 }
 

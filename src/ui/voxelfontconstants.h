@@ -12,8 +12,8 @@ enum class FontAlign {
 };
 
 enum class TextOrientation {
-    BACKWARDS,
-    SPHERE_STRAIGHT
+    FORWARDS, // facing straight forward, "normal text"
+    SPHERE_STRAIGHT // on-helmet effect, facing in look direction from pov
 };
 
 enum class ButtonStyle {

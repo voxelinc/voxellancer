@@ -69,11 +69,6 @@ protected:
     std::unique_ptr<EventPoller> m_eventPoller;
     std::unique_ptr<MissionSystem> m_missionSystem;
 
-    std::unique_ptr<TextFieldHudget> m_textHudget;
-    float m_textLifeTime;
-    float m_textTimer;
-    
-
     std::unordered_set<WorldObject*> m_worldObjects;
     std::unordered_set<Ship*> m_ships;
 };

@@ -7,8 +7,8 @@
 #include "hud.h"
 
 
-ButtonHudgetVoxels::ButtonHudgetVoxels(ButtonHudget* buttonHudget, glm::vec3 direction, TextOrientation textOrientation, float scale, std::string content, FontSize fontSize, ButtonStyle buttonStyle) :
-TextFieldHudgetVoxels(buttonHudget, direction, textOrientation, scale, content, fontSize),
+ButtonHudgetVoxels::ButtonHudgetVoxels(ButtonHudget* buttonHudget, const glm::vec3& direction, TextOrientation textOrientation, float scale, const std::string& content, FontSize fontSize, ButtonStyle buttonStyle) :
+    TextFieldHudgetVoxels(buttonHudget, direction, textOrientation, scale, content, fontSize),
     m_buttonVoxels(new VoxelCluster(scale)),
     m_buttonStyle(buttonStyle),
     m_hudget(buttonHudget)
@@ -39,7 +39,7 @@ void ButtonHudgetVoxels::updateBounds() {
 void ButtonHudgetVoxels::draw() {
     if (m_buttonStyle == ButtonStyle::BORDERED || m_buttonStyle == ButtonStyle::BORDERED_FILLED) {
         switch (textOrientation()) {
-        case TextOrientation::BACKWARDS:
+            case TextOrientation::FORWARDS:
             m_buttonVoxels->transform().setPosition(lowerRight());
             m_buttonVoxels->transform().setOrientation(m_hudget->hud()->orientation());
             m_buttonVoxels->transform().rotate(glm::angleAxis(glm::pi<float>(), glm::vec3(0, 1, 0)));

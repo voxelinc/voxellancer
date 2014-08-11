@@ -47,7 +47,7 @@ GamePlay::GamePlay(Game* game) :
     m_scenario(new ScriptedScenario(this, "")),
     m_soundManager(new SoundManager())
 {
-	World::instance()->player().hud().resetButton()->setCallback((std::function<void(ClickType clickType)>)std::bind(&GamePlay::resetButtonCallback, this, std::placeholders::_1));
+    setResetCallback();
     updateView();
     setInitialSubState(m_runningState);
 
@@ -112,12 +112,9 @@ SoundManager& GamePlay::soundManager() {
 }
 
 void GamePlay::loadScenario(int i) {
-    TextureRenderer loadRenderer("data/textures/loading.dds");
-    loadRenderer.display("Loading Scenario...");
+    displayLoadingScreen("Loading Scenario...");
 
-    m_soundManager->stopAll();
-    m_scenario->clear();
-    updateView();
+    clearScenario();
 
     switch (i) {
     case 0:
@@ -175,14 +172,26 @@ void GamePlay::updateView() {
     World::instance()->player().hud().setView(&m_game->viewer().view());
 }
 
-void GamePlay::resetButtonCallback(ClickType clickType){
-    TextureRenderer loadRenderer("data/textures/loading.dds");
-    loadRenderer.display("Loading Scenario...");
+void GamePlay::resetScenario() {
+    displayLoadingScreen("resetting scenario");
+    clearScenario();
 
+    m_scenario->load();
+}
+
+void GamePlay::clearScenario() {
     m_soundManager->stopAll();
     m_scenario->clear();
     updateView();
-    m_scenario->load();
+}
+
+void GamePlay::displayLoadingScreen(const std::string& status) {
+    TextureRenderer loadRenderer("data/textures/loading.dds");
+    loadRenderer.display(status);
+}
+
+void GamePlay::resetButtonCallback(ClickType clickType){
+    resetScenario();
     setResetCallback();
 }
 

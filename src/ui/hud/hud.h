@@ -73,7 +73,7 @@ public:
     void showMissionMessage(const std::string& message);
     void showMessage(const std::string& message);
 
-	ButtonHudget* resetButton();
+    ButtonHudget* resetButton();
 
 
 protected:

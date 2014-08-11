@@ -56,9 +56,9 @@ HUD::HUD(Player* player):
     m_crossHair(new CrossHair(this)),
     m_aimHelper(new AimHelperHudget(this)),
     m_scanner(new WorldTreeScanner()),
-    m_targetName(new TextFieldHudget(this, glm::normalize(glm::vec3(0, -1.1f, -2)), TextOrientation::BACKWARDS, 0.025f, "")),
-    m_speedLabel(new TextFieldHudget(this, glm::normalize(glm::vec3(1.5f, -1.1f, -2)), TextOrientation::BACKWARDS, 0.020f, "")),
-    m_resetButton(new ButtonHudget(this, glm::normalize(glm::vec3(-1.5f, 1.1f, -2)), (std::function<void(ClickType clickType)>)std::bind(&HUD::openMenu, this, std::placeholders::_1), TextOrientation::BACKWARDS, 0.01f, "RESET",FontSize::SIZE5x7,ButtonStyle::BORDERED)),
+    m_targetName(new TextFieldHudget(this, glm::normalize(glm::vec3(0, -1.1f, -2)), TextOrientation::FORWARDS, 0.025f, "")),
+    m_speedLabel(new TextFieldHudget(this, glm::normalize(glm::vec3(1.5f, -1.1f, -2)), TextOrientation::FORWARDS, 0.020f, "")),
+    m_resetButton(new ButtonHudget(this, glm::normalize(glm::vec3(-1.5f, 1.1f, -2)), nullptr, TextOrientation::FORWARDS, 0.01f, "RESET", FontSize::SIZE5x7, ButtonStyle::BORDERED)),
     m_elements(new HUDElements(*this)),
     m_drawHud("vfx.drawhud"),
     m_view(nullptr)
@@ -283,10 +283,6 @@ void HUD::updateFov() {
 
 void HUD::setView(const View* view) {
     m_view = view;
-}
-
-void HUD::openMenu(ClickType clicktype) {
-    glow::debug("Not yet implemented");
 }
 
 ButtonHudget* HUD::resetButton() {
