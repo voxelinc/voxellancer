@@ -8,12 +8,12 @@
 #include "worldobject/worldobject.h"
 #include "worldobject/worldobjectcomponents.h"
 
+#include "equipmentchanger.h"
 #include "weapon.h"
 
 
-
 Hardpoint::Hardpoint(WorldObjectComponents* components, HardpointVoxel* voxel):
-    WorldObjectSlot(components, voxel->group()),
+    EquipmentSlot(components, voxel->group()),
     m_voxel(voxel),
     m_weapon(nullptr),
     m_direction(0, 0, -1)
@@ -29,12 +29,7 @@ const std::shared_ptr<Weapon>& Hardpoint::weapon() {
 }
 
 void Hardpoint::setWeapon(const std::shared_ptr<Weapon>& weapon) {
-    m_weapon = weapon;
-    if (m_weapon) {
-        m_weapon->setHardpoint(this);
-    }
-
-    notifyObservers();
+    EquipmentChanger<Hardpoint, Weapon>(*this, m_weapon, weapon).change();
 }
 
 const glm::vec3& Hardpoint::direction() const {

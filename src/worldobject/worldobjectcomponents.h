@@ -8,8 +8,8 @@
 
 #include "worldobjectinfo.h"
 
-#include "util/observer.h"
-#include "util/observable.h"
+#include "utils/observer.h"
+#include "utils/observable.h"
 
 
 class EngineSlot;

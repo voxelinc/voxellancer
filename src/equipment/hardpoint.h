@@ -4,7 +4,7 @@
 
 #include <glm/glm.hpp>
 
-#include "worldobjectslot.h"
+#include "equipmentslot.h"
 
 
 class Weapon;
@@ -15,7 +15,7 @@ class WorldObjectComponents;
  * Slot into which interchangeable weapons may be mounted
  * direction and fieldOfAim form a cone in which the hardpoint can fire its weapons
  */
-class Hardpoint: public WorldObjectSlot {
+class Hardpoint: public EquipmentSlot {
 public:
     Hardpoint(WorldObjectComponents* components, HardpointVoxel* voxel);
 
