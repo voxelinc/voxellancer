@@ -15,7 +15,7 @@ class WorldObjectComponents;
  */
 class EquipmentSlot : public Observable {
 public:
-    EquipmentSlot(WorldObjectComponents* components, int index);
+    EquipmentSlot(WorldObjectComponents* components, int group);
     virtual ~EquipmentSlot();
 
     std::list<std::string> mountables() const;
@@ -26,12 +26,12 @@ public:
     WorldObjectComponents* components();
     const WorldObjectComponents* components() const;
 
-    int index() const;
+    int group() const;
 
 
 protected:
     WorldObjectComponents* m_components;
     std::map<std::string, bool> m_mountables;
-    int m_index;
+    int m_group;
 };
 

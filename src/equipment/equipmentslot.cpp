@@ -1,9 +1,9 @@
 #include "equipmentslot.h"
 
 
-EquipmentSlot::EquipmentSlot(WorldObjectComponents* components, int index):
+EquipmentSlot::EquipmentSlot(WorldObjectComponents* components, int group):
     m_components(components),
-    m_index(index)
+    m_group(group)
 {
 }
 
@@ -36,7 +36,7 @@ const WorldObjectComponents* EquipmentSlot::components() const {
     return m_components;
 }
 
-int EquipmentSlot::index() const {
-    return m_index;
+int EquipmentSlot::group() const {
+    return m_group;
 }
 

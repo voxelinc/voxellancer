@@ -40,13 +40,6 @@ void WorldObjectComponents::removeEngineSlot(EngineSlot* engineSlot) {
     notifyObservers();
 }
 
-std::shared_ptr<EngineSlot> WorldObjectComponents::engineSlot(int index) {
-    std::list<std::shared_ptr<EngineSlot>>::iterator i = std::find_if(m_engineSlots.begin(), m_engineSlots.end(), [&](std::shared_ptr<EngineSlot> engineSlot) {
-        return engineSlot->index() == index;
-    });
-    return (i == m_engineSlots.end()) ? nullptr : *i;
-}
-
 std::list<std::shared_ptr<EngineSlot>>& WorldObjectComponents::engineSlots() {
     return m_engineSlots;
 }
@@ -95,13 +88,6 @@ void WorldObjectComponents::removeHardpoint(Hardpoint* hardpoint) {
     m_hardpoints.remove_if([&](std::shared_ptr<Hardpoint> hp) { return hp.get() == hardpoint; });
     hardpoint->removeObserver(this);
     notifyObservers();
-}
-
-std::shared_ptr<Hardpoint> WorldObjectComponents::hardpoint(int index) {
-    std::list<std::shared_ptr<Hardpoint>>::iterator i = std::find_if(m_hardpoints.begin(), m_hardpoints.end(), [&](std::shared_ptr<Hardpoint> hardpoint) {
-        return hardpoint->index() == index;
-    });
-    return i == m_hardpoints.end() ? nullptr : *i;
 }
 
 std::list<std::shared_ptr<Hardpoint>>& WorldObjectComponents::hardpoints() {

@@ -13,7 +13,7 @@
 
 
 Hardpoint::Hardpoint(WorldObjectComponents* components, HardpointVoxel* voxel):
-    EquipmentSlot(components, voxel->index()),
+    EquipmentSlot(components, voxel->group()),
     m_voxel(voxel),
     m_weapon(nullptr),
     m_direction(0, 0, -1)

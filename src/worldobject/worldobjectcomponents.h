@@ -82,11 +82,17 @@ public:
 
     void fireAtObject(WorldObject* worldObject);
 
-
+    /**
+     * Add and query shields
+     */
     void addShieldSlot(std::shared_ptr<ShieldSlot>& shieldSlot);
 
     std::list<std::shared_ptr<ShieldSlot>>& shieldSlots();
 
+    /**
+     * Make shield absorb damage. Return damage that couldn't be absorbed
+     * and thus is to be applied to the voxels.
+     */
     float compensateDamage(float damage);
 
 
@@ -96,7 +102,6 @@ public:
     void update(float deltaSec);
 
     const ComponentsInfo& componentsInfo() const;
-
 
 
 protected:
