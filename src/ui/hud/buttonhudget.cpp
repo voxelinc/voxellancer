@@ -26,8 +26,9 @@ bool ButtonHudget::isAt(const Ray& ray) const {
 }
 
 void ButtonHudget::onClick(ClickType clickType) {
-    assert(m_callback);
-    m_callback(clickType);
+    if (m_callback) {
+        m_callback(clickType);
+    }
 }
 
 void ButtonHudget::setCallback(const std::function<void(ClickType clickType)>& callback) {
