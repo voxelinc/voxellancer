@@ -22,6 +22,7 @@ public:
 
     bool contains(const glm::ivec3& cell) const;
 
+    glm::ivec3 extent() const;
     int extent(Axis axis) const;
 
     /**

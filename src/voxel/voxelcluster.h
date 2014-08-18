@@ -32,6 +32,9 @@ public:
     const glm::vec3& position() const;
     const glm::quat& orientation() const;
 
+    float emissiveness() const;
+    void setEmissiveness(float emissiveness);
+
     Voxel* voxel(const glm::ivec3& position);
     const Voxel* voxel(const glm::ivec3& position) const;
 
@@ -43,15 +46,12 @@ public:
 
     VoxelRenderData* voxelRenderData();
 
-    float emissiveness() const;
-    void setEmissiveness(float emissiveness);
-
 
 protected:
     std::unordered_map<glm::ivec3, Voxel*> m_voxels;
     std::unique_ptr<VoxelRenderData> m_voxelRenderData;
     std::unique_ptr<VoxelClusterBounds> m_bounds;
-    float m_emissiveness;
     Transform m_transform;
+    float m_emissiveness;
 };
 

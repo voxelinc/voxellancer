@@ -42,6 +42,13 @@ void DamageImpactGenerator::parse(std::list<WorldObjectCollision>& worldObjectCo
     }
 }
 
+void DamageImpactGenerator::parse(std::list<DamageImpact>& damageImpacts) {
+    for (DamageImpact& damageImpact : damageImpacts) {
+          m_damageImpactAccumulator.parse(damageImpact);
+    }
+}
+
 std::list<DamageImpact>& DamageImpactGenerator::damageImpacts() {
     return m_damageImpactAccumulator.accumulatables();
 }
+

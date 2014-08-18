@@ -35,6 +35,10 @@ bool GridAABB::contains(const glm::ivec3& cell) const {
         cell.z >= m_llf.z && cell.z <= m_urb.z;
 }
 
+glm::ivec3 GridAABB::extent() const {
+    return m_urb - m_llf + glm::ivec3(1);
+}
+
 int GridAABB::extent(Axis axis) const {
     return m_urb[(int)axis] - m_llf[(int)axis] + 1;
 }

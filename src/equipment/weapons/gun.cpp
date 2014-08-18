@@ -9,13 +9,14 @@
 
 #include "physics/physics.h"
 
-#include "resource/worldobjectbuilder.h"
+#include "resource/voxelobjectbuilder.h"
 
 #include "sound/soundmanager.h"
 
 #include "voxel/voxelclusterbounds.h"
 #include "voxel/specialvoxels/hardpointvoxel.h"
 
+#include "worldobject/worldobject.h"
 #include "worldobject/worldobjectcomponents.h"
 #include "worldobject/ship.h"
 
@@ -40,7 +41,10 @@
 
 Gun::Gun(const std::string& equipmentKey):
     Weapon(WeaponType::Gun, equipmentKey),
-    m_bulletSpeed(100)
+    m_bulletSpeed(100),
+    m_spawnDistance(0.0f),
+    m_bulletLength(0.0f),
+    m_bulletCapsuleRadius(0.0f)
 {
 }
 
@@ -75,10 +79,10 @@ void Gun::fireAtPoint(const glm::vec3& point, bool checkFriendlyFire) {
         return;
     }
 
-    Bullet *bullet =  WorldObjectBuilder(projectileName()).buildBullet();
+    Bullet *bullet =  VoxelObjectBuilder(projectileName()).buildBullet();
     setupBullet(bullet, point);
 
-    World::instance()->god().scheduleSpawn(bullet);
+    bullet->spawn();
 
     SoundManager::current()->play(fireSound(), hardpoint()->voxel()->position());
 
@@ -89,7 +93,7 @@ bool Gun::isBulletPathClear(const glm::vec3& point, bool checkFriendlyFire) {
     WorldObject* owner = m_hardpoint->components()->worldObject();
 
     glm::vec3 direction = glm::normalize(point - m_hardpoint->voxel()->position());
-    Capsule capsuleToTarget = Capsule::fromTo(m_hardpoint->voxel()->position() + direction * (m_bulletLength / 2.0f + m_spawnDistance), point, m_bulletMaxWidth / 2);
+    Capsule capsuleToTarget = Capsule::fromTo(m_hardpoint->voxel()->position() + direction * (m_bulletLength / 2.0f + m_spawnDistance), point, m_bulletCapsuleRadius / 2);
 
     WorldTreeQuery fireDirectionQuery(&World::instance()->worldTree(), &capsuleToTarget, owner->collisionDetector().geode()->hint(), nullptr);
 
@@ -133,11 +137,11 @@ void Gun::setupBullet(Bullet* bullet, const glm::vec3& point) {
     }
 
     m_spawnDistance = glm::root_two<float>() * bullet->transform().scale();
-    bulletTransform.setPosition(m_hardpoint->voxel()->position() + bulletDirection * (m_bulletLength / 2.0f + m_spawnDistance));
+    bulletTransform.setPosition(m_hardpoint->voxel()->position() + bulletDirection * (bullet->extent().z / 2.0f + m_spawnDistance));
 
     bullet->setTransform(bulletTransform);
 
-    bullet->physics().setSpeed(Speed(
+    bullet->setSpeed(Speed(
         bulletDirection * bulletSpeed() /*+ firingWorldObject->physics().speed().directional()*/,
         bulletTransform.orientation() * glm::vec3(0, 0, 5.0f)
     ));
@@ -146,10 +150,10 @@ void Gun::setupBullet(Bullet* bullet, const glm::vec3& point) {
 }
 
 void Gun::setBulletExtend() {
-    Bullet* bullet = WorldObjectBuilder(projectileName()).buildBullet();
+    Bullet* bullet = VoxelObjectBuilder(projectileName()).buildBullet();
 
-    m_bulletMaxWidth = glm::max(bullet->bounds().minimalGridAABB().extent(XAxis), bullet->bounds().minimalGridAABB().extent(YAxis))* bullet->transform().scale();
-    m_bulletLength = bullet->bounds().minimalGridAABB().extent(ZAxis) * bullet->transform().scale();
+    m_bulletCapsuleRadius = glm::max(bullet->extent().x, bullet->extent().y) * bullet->transform().scale();
+    m_bulletLength = bullet->extent().z;
     m_spawnDistance = glm::root_two<float>() * bullet->transform().scale();
     m_bulletLifetime = bullet->lifetime();
 
@@ -163,3 +167,4 @@ void Gun::onProjectileNameChanged() {
 float Gun::bulletLifetime() const {
     return m_bulletLifetime;
 }
+

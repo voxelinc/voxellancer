@@ -1,7 +1,8 @@
 #include "gameplayscene.h"
 
-#include <glow/logging.h>
 #include <glow/Program.h>
+
+#include "bulletengine/bulletengine.h"
 
 #include "camera/camera.h"
 #include "camera/camerahead.h"
@@ -50,7 +51,6 @@ bool GamePlayScene::worldTreeRendererEnabled() const {
 
 void GamePlayScene::setWorldTreeRendererEnabled(bool enabled) {
     m_worldTreeRendererEnabled = enabled;
-    glow::debug()<< "Drawing Worldtree " << enabled;
 }
 
 void GamePlayScene::drawImpl(const Camera& camera) const {
@@ -69,6 +69,7 @@ void GamePlayScene::drawImpl(const Camera& camera) const {
     m_voxelRenderer->afterDraw();
 
     World::instance()->particleEngine().draw(camera);
+    World::instance()->bulletEngine().draw(camera);
 
     if (m_worldTreeRendererEnabled) {
         m_worldTreeRenderer->draw(camera);

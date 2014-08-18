@@ -19,7 +19,7 @@
 #include "factions/factionmatrix.h"
 #include "factions/factionrelation.h"
 
-#include "resource/worldobjectbuilder.h"
+#include "resource/voxelobjectbuilder.h"
 
 #include "worldobject/ship.h"
 #include "sound/soundmanager.h"
@@ -39,7 +39,7 @@ FriendlyFireScenario::FriendlyFireScenario(GamePlay* gamePlay) :
 void FriendlyFireScenario::populateWorld() {
     glow::debug("Create WorldObjects");
 
-    Ship *victim = WorldObjectBuilder("mox").buildShip();
+    Ship *victim = VoxelObjectBuilder("mox").buildShip();
     victim->transform().setPosition(glm::vec3(0, 0, 200));
     victim->info().setName("member");
     victim->info().setShowOnHud(true);
@@ -50,7 +50,7 @@ void FriendlyFireScenario::populateWorld() {
     std::shared_ptr<Squad> attacker = std::make_shared<Squad>();
     attacker->setTask(std::make_shared<DefendAreaTask>(*attacker,
         std::list<glm::vec3>{glm::vec3(0, 0, 0)}, 500.0f));
-    Ship* pirate = WorldObjectBuilder("piratelight").buildShip();
+    Ship* pirate = VoxelObjectBuilder("piratelight").buildShip();
     pirate->transform().setPosition(glm::vec3(0, -10, -200));
     pirate->transform().setOrientation(glm::quat(glm::vec3(0, 0, 1)));
     pirate->info().setName("pirate");
@@ -60,7 +60,7 @@ void FriendlyFireScenario::populateWorld() {
     pirate->squadLogic()->joinSquad(attacker);
     m_world->god().scheduleSpawn(pirate);
 
-    Ship *bigship = WorldObjectBuilder("bc304").buildShip();
+    Ship *bigship = VoxelObjectBuilder("bc304").buildShip();
     bigship->transform().setPosition(glm::vec3(0, 0, 10));
     bigship->transform().setOrientation(glm::quat(glm::vec3(0, 0, 1)));
     bigship->info().setName("big");
@@ -69,7 +69,7 @@ void FriendlyFireScenario::populateWorld() {
     bigship->character()->setFaction(World::instance()->factionMatrix().pirateFaction());
     m_world->god().scheduleSpawn(bigship);
 
-    Ship *playerShip = WorldObjectBuilder("basicship").buildShip();
+    Ship *playerShip = VoxelObjectBuilder("basicship").buildShip();
     playerShip->transform().setPosition(glm::vec3(100, 0, 0));
     playerShip->transform().setOrientation(glm::quat(glm::vec3(0, glm::radians(70.0f), 0)));
     playerShip->info().setName("player");

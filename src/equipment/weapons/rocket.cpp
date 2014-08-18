@@ -1,11 +1,16 @@
 #include "rocket.h"
 
+#include <iostream>
+
 #include "ai/aitask.h"
 #include "ai/basictasks/directsuicidetask.h"
 
 #include "collision/collisionfilter.h"
+#include "collision/collisionfilterignoringcreator.h"
 
 #include "equipment/engineslot.h"
+
+#include "physics/physics.h"
 
 #include "sound/sound.h"
 #include "sound/soundmanager.h"
@@ -30,6 +35,30 @@ WorldObjectType Rocket::objectType() const {
     return WorldObjectType::Rocket;
 }
 
+Transform& Rocket::transform() {
+    return WorldObject::transform();
+}
+
+void Rocket::setTransform(const Transform& transform) {
+    WorldObject::setTransform(transform);
+}
+
+void Rocket::setSpeed(const Speed& speed) {
+    physics().setSpeed(speed);
+}
+
+void Rocket::setCreator(WorldObject* creator) {
+    Projectile::setCreator(creator);
+
+    CollisionFilterIgnoringCreator* newCollisionFilter = new CollisionFilterIgnoringCreator(
+        this,
+        m_creator,
+        collisionFilter().collisionMask()
+    );
+
+    setCollisionFilter(newCollisionFilter);
+}
+
 WorldObject* Rocket::target() {
     return m_targetHandle.get();
 }
@@ -46,16 +75,35 @@ void Rocket::setTarget(WorldObject* targetObject) {
 
 void Rocket::update(float deltaSec) {
     Projectile::update(deltaSec);
+    WorldObject::update(deltaSec);
 
     if (m_aiTask) {
         m_aiTask->update(deltaSec);
         m_boardComputer.update(deltaSec);
     } else {
         components().setEngineState(EngineState(
-            glm::vec3(0, 0, -1),
-            glm::vec3(0, 0, 0)
+                glm::vec3(0, 0, -1),
+                glm::vec3(0, 0, 0)
             ));
     }
+}
+
+void Rocket::spawn() {
+    World::instance()->god().scheduleSpawn(this);
+}
+
+void Rocket::remove() {
+    World::instance()->god().scheduleRemoval(this);
+}
+
+void Rocket::onCollision() {
+    Projectile::onCollision();
+    WorldObject::onCollision();
+}
+
+void Rocket::onSpawnFail() {
+    Projectile::onSpawnFail();
+    WorldObject::onSpawnFail();
 }
 
 void Rocket::spawnExplosion() {

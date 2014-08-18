@@ -11,10 +11,9 @@
 class WorldObject;
 class CollisionDetector;
 
-class Movement {
+class Movement final {
 public:
     Movement(WorldObject& worldObject, const Transform& originalTransform, const Transform& targetTransform);
-    virtual ~Movement();
 
     bool perform();
 

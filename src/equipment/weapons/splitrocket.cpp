@@ -5,10 +5,11 @@
 #include "ai/basictasks/splitrockettask.h"
 
 #include "equipment/weapons/bullet.h"
+#include "equipment/weapons/worldobjectbullet.h"
 
 #include "physics/physics.h"
 
-#include "resource/worldobjectbuilder.h"
+#include "resource/voxelobjectbuilder.h"
 
 #include "utils/geometryhelper.h"
 #include "utils/safenormalize.h"
@@ -120,7 +121,7 @@ void SplitRocket::split() {
 void SplitRocket::spawnChildren() {
     if (m_targetHandle.valid()) {
         for (int i = 0; i < m_childrenCount; i++) {
-            WorldObject* child = WorldObjectBuilder(m_childrenType).build();
+            WorldObject* child = VoxelObjectBuilder(m_childrenType).buildWorldObject();
 
             float splitAngle = RandFloatPool::randomize(m_splitAngle, m_splitAngleRandomization);
 
@@ -131,8 +132,7 @@ void SplitRocket::spawnChildren() {
             glm::vec3 spawnOffset = transform().orientation() * circleOrientation * glm::vec3(0, 1, 0);
             glm::vec3 rocketPosition = position() + circleOrientation * spawnOffset;
 
-            child->transform().setOrientation(launchOrientation);
-            child->transform().setPosition(rocketPosition);
+            child->setTransform(Transform(rocketPosition, launchOrientation, child->transform().center(), child->transform().scale()));
 
             setChildSpeed(child, launchOrientation);
 
@@ -142,7 +142,7 @@ void SplitRocket::spawnChildren() {
             }
 
             if (child->objectType() == WorldObjectType::Bullet) {
-                static_cast<Bullet*>(child)->setCreator(m_creator);
+                static_cast<WorldObjectBullet*>(child)->setCreator(m_creator);
             }
 
 

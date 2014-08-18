@@ -40,8 +40,6 @@ public:
     float mass() const;
     float maxMass() const;
 
-    const Transform projectedTransformIn(float deltaSec);
-
     std::list<VoxelCollision>& move(float deltaSec);
 
     void addVoxel(Voxel* voxel);

@@ -20,6 +20,9 @@ public:
     const glm::vec3& b() const;
     void setB(const glm::vec3& b);
 
+    template<typename T>
+    TAABB<T> containingAABB() const;
+
     virtual bool intersects(const Sphere& sphere) const override;
     virtual bool nearTo(const TAABB<int>& aabb) const override;
     virtual bool containedBy(const TAABB<int>& aabb) const override;
@@ -30,3 +33,5 @@ protected:
     glm::vec3 m_b;
 };
 
+
+#include "line.inl"

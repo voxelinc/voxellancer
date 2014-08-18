@@ -12,7 +12,7 @@ template<typename T> class TAABB;
 class Point: public AbstractShape {
 public:
     Point();
-    Point(const glm::vec3& pos);
+    Point(const glm::vec3& position);
 
     const glm::vec3& position() const;
     void setPosition(const glm::vec3& pos);

@@ -22,7 +22,7 @@ void DirectSuicideTask::update(float deltaSec) {
     WorldObject* worldObject = boardComputer()->worldObject();
 
     if (m_target.valid()) {
-        glm::vec3 targetPoint = m_target->physics().projectedTransformIn(0.1f).position();
+        glm::vec3 targetPoint = m_target->physics().speed().moved(m_target->transform(), 0.1f).position();
         boardComputer()->rotateTo(targetPoint);
         glm::vec3 targetDirection = glm::inverse(worldObject->transform().orientation()) * (targetPoint - worldObject->transform().position());
         float angle = GeometryHelper::angleBetween(glm::vec3(0, 0, -1), targetDirection);

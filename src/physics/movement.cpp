@@ -31,8 +31,6 @@ Movement::Movement(WorldObject& worldObject, const Transform& originalTransform,
 {
 }
 
-Movement::~Movement() = default;
-
 bool Movement::perform() {
     assert(m_worldObject.collisionDetector().geode() != nullptr);
 

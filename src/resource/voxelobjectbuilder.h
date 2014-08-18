@@ -4,25 +4,29 @@
 
 
 class Bullet;
+class InstancedBullet;
 class Rocket;
 class Ship;
 class VoxelCluster;
 class WorldObject;
+class WorldObjectBullet;
 class WorldObjectComponents;
 
 /**
  *  Sets up WorldObject by the settings provided by properties
  */
-class WorldObjectBuilder {
+class VoxelObjectBuilder {
 public:
-    WorldObjectBuilder(const std::string& name);
+    VoxelObjectBuilder(const std::string& name);
 
-    WorldObject* build();
+    WorldObject* buildWorldObject();
 
     Bullet* buildBullet();
+    InstancedBullet* buildInstancedBullet();
+    WorldObjectBullet* buildWorldObjectBullet();
     Rocket* buildRocket();
     Ship* buildShip();
-    WorldObject* buildWorldObject();
+    WorldObject* buildOther();
 
 
 

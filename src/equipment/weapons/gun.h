@@ -17,7 +17,7 @@ class Ship;
 class Gun: public Weapon {
 public:
     Gun(const std::string& equipmentKey);
-    ~Gun();
+    virtual ~Gun();
 
     float bulletSpeed() const;
     void setBulletSpeed(float bulletSpeed);
@@ -42,7 +42,7 @@ protected:
 
     float m_spawnDistance;
     float m_bulletLength;
-    float m_bulletMaxWidth;
+    float m_bulletCapsuleRadius;
     float m_bulletLifetime;
 
 

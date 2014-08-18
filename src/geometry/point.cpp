@@ -7,8 +7,8 @@ Point::Point() {
 
 }
 
-Point::Point(const glm::vec3& pos):
-    m_position(pos)
+Point::Point(const glm::vec3& position):
+    m_position(position)
 {
 }
 
@@ -21,7 +21,7 @@ void Point::setPosition(const glm::vec3& pos) {
 }
 
 bool Point::intersects(const Sphere& sphere) const {
-    return glm::length(sphere.position() - m_position) < sphere.radius();
+    return glm::length(sphere.position() - m_position) <= sphere.radius();
 }
 
 bool Point::nearTo(const TAABB<int>& aabb) const {

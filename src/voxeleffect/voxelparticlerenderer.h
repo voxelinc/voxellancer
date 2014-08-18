@@ -27,7 +27,7 @@ class VoxelParticleEngine;
 class VoxelParticleRenderer :  public ContextDependant {
 public:
     VoxelParticleRenderer(VoxelParticleEngine* engine);
-    ~VoxelParticleRenderer();
+    virtual ~VoxelParticleRenderer();
 
     void updateBuffer(int begin, int end, VoxelParticleData* data);
 

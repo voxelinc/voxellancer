@@ -6,6 +6,8 @@
 
 #include "display/rendering/visuals.h"
 
+#include "voxeldata.h"
+
 
 class VoxelCluster;
 class VoxelTreeNode;
@@ -21,6 +23,8 @@ public:
     const glm::ivec3 &gridCell() const;
 
     glm::vec3 position() const;
+
+    VoxelData data() const;
 
     VoxelTreeNode *voxelTreeNode();
     void setVoxelTreeNode(VoxelTreeNode* voxelTreeNode);
