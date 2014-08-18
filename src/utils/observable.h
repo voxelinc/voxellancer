@@ -18,3 +18,4 @@ public:
 protected:
     std::list<Observer*> m_observers;
 };
+

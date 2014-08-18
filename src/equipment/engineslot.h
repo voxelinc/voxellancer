@@ -4,7 +4,7 @@
 
 #include <glm/glm.hpp>
 
-#include "worldobjectslot.h"
+#include "equipmentslot.h"
 
 
 class Engine;
@@ -14,7 +14,7 @@ class WorldObjectComponents;
 /**
  *   Slot with interchangeable engines
  */
-class EngineSlot: public WorldObjectSlot {
+class EngineSlot: public EquipmentSlot {
 public:
     EngineSlot(WorldObjectComponents* components, EngineSlotVoxel* voxel);
 
