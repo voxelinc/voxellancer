@@ -6,11 +6,15 @@
 
 #include "geometry/aabb.h"
 
+#include "utils/handle/handleowner.h"
+
+#include "worldtreehint.h"
+
 
 class WorldTreeGeode;
 class WorldTreeNode;
 
-class WorldTreeNode {
+class WorldTreeNode : public HandleOwner {
 public:
     WorldTreeNode(int octIndex, WorldTreeNode* parent, const IAABB &aabb);
     WorldTreeNode(const IAABB &aabb, WorldTreeNode* initialSubnode);
@@ -24,7 +28,6 @@ public:
     const IAABB& aabb() const;
 
     WorldTreeNode *parent();
-    const WorldTreeNode *parent() const;
     void setParent(WorldTreeNode *parent);
 
     bool active() const;
@@ -40,6 +43,8 @@ public:
 
     void insert(WorldTreeGeode* geode);
     void remove(WorldTreeGeode* geode);
+
+    WorldTreeHint hint();
 
 
 protected:
@@ -57,12 +62,16 @@ protected:
     std::vector<WorldTreeNode*> m_subnodes;
     std::list<WorldTreeNode*> m_activeSubnodes;
 
+    std::shared_ptr<WorldTreeShadowNode> m_shadowNode;
+
+
     /**
-     *  convert a leaf to a node with subnodes
+     * Convert a leaf to a node with subnodes
      */
     void convertToGroup(WorldTreeNode* initialSubnode = nullptr);
+
     /**
-     *  move a geode to the specified subnode if it is contained in its aabb
+     * Move a geode to the specified subnode if it is contained in its aabb
      */
     void moveToSubnode(WorldTreeGeode* geode, WorldTreeNode* subnode);
 

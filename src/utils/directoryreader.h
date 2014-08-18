@@ -9,10 +9,10 @@ public:
     DirectoryReader();
     DirectoryReader(const std::string& path);
 
-    /*
-        Return the list of files in &path,
-        non-recursive
-    */
+    /**
+     * Return the list of files in path,
+     * non-recursive
+     */
     std::list<std::string> read() const;
 
 

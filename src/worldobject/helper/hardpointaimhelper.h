@@ -8,10 +8,10 @@ class Vpxel;
 class WorldObject;
 
 /**
- *   Identifies the direction a hardpoint must shoot to hit a moving WorldObject
- *   given the direction and the speed of this other WorldObject doesn't change too
- *   much
-*/
+ * Identifies the direction a hardpoint must shoot to hit a moving WorldObject
+ * given the direction and the speed of this other WorldObject doesn't change too
+ * much
+ */
 class HardpointAimHelper {
 public:
     HardpointAimHelper(Hardpoint* hardpoint, WorldObject* targetObject);

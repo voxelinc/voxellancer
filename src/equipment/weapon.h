@@ -19,7 +19,7 @@ enum class WeaponType {
 };
 
 /**
- *   Weapon to be mounted to a Hardpoint
+ * Weapon to be mounted to a Hardpoint
  */
 class Weapon: public Equipment {
 public:
@@ -53,5 +53,7 @@ protected:
     float m_cooldownTime;
     Visuals m_visuals;
     std::string m_projectileName;
+
+    virtual void onProjectileNameChanged();
 };
 

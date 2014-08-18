@@ -2,9 +2,9 @@
 
 #include "hudgetanimation.h"
 
-/*
-    Animation that hides a hudget after a given time
-*/
+/**
+ * Animation that hides a hudget after a given time
+ */
 class HudgetHideAnimation : public HudgetAnimation {
 public:
     HudgetHideAnimation(Hudget& hudget);
