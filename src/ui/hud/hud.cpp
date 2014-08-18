@@ -23,7 +23,6 @@
 
 #include "worldobject/worldobjectinfo.h"
 
-#include "utils/tostring.h"
 #include "utils/geometryhelper.h"
 
 #include "voxel/voxelrenderer.h"
@@ -34,6 +33,7 @@
 #include "worldtree/worldtreequery.h"
 
 #include "worldobject/ship.h"
+#include "worldobject/worldobjectcomponents.h"
 
 #include "hudelements.h"
 #include "hudget.h"
@@ -55,7 +55,6 @@ HUD::HUD(Player* player):
     m_aimHelper(new AimHelperHudget(this)),
     m_scanner(new WorldTreeScanner()),
     m_elements(new HUDElements(*this)),
-    m_target(nullptr),
     m_drawHud("vfx.drawhud"),
     m_view(nullptr)
 {
@@ -152,8 +151,10 @@ void HUD::update(float deltaSec) {
 
     if (m_player->ship()) {
         m_elements->setSpeed(std::to_string((int)(glm::length(m_player->ship()->physics().speed().directional()))));
+        m_elements->setShieldStatus(m_player->ship()->info().shieldStatus());
     } else {
         m_elements->setSpeed("-");
+        m_elements->setShieldStatus("-");
     }
 
     Ray toCrossHair = Ray::fromTo(m_player->cameraHead().position(), m_crossHair->worldPosition());
@@ -211,7 +212,7 @@ glm::vec3 HUD::applyTo(const glm::vec3 &vertex) const {
 }
 
 void HUD::setTarget(WorldObject* target) {
-    m_target = target ? target->handle() : Handle<WorldObject>(nullptr);
+    m_target = target ? makeHandle(target) : Handle<WorldObject>();
 }
 
 WorldObject* HUD::target() {

@@ -5,9 +5,11 @@
 
 #include <glm/glm.hpp>
 
-#include <glow/logging.h>
 
-#include "utils/gridneighbourhelper.h"g
+#include "utils/gridneighbourhelper.h"
+#include "utils/safenormalize.h"
+
+#include "voxel/voxelneighbourhelper.h"
 
 #include "voxel/voxel.h"
 #include "voxel/voxelcluster.h"

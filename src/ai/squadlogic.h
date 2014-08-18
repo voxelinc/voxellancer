@@ -10,7 +10,6 @@ class Squad;
 /**
  *  The SquadLogic is the single member's endpoint for interaction with a Squad
  */
-
 class SquadLogic
 {
 public:

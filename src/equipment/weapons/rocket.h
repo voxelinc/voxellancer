@@ -16,9 +16,9 @@
 class Sound;
 
 /**
- *   Base class for Projectiles that follow a target and attempt to crush into it.
- *   Also, currently explodes on any collision
-*/
+ * Base class for Projectiles that follow a target and attempt to crush into it.
+ * Also, currently explodes on any collision
+ */
 class Rocket: public Projectile {
 public:
     Rocket();
@@ -36,7 +36,7 @@ protected:
     BoardComputer m_boardComputer;
     std::unique_ptr<AiTask> m_aiTask;
 
-    void spawnExplosion() override;
-    void onLifetimeOver() override;
+    virtual void spawnExplosion() override;
+    virtual void onLifetimeOver() override;
 };
 

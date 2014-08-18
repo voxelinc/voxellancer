@@ -3,6 +3,7 @@
 #include "scripting/scriptable.h"
 
 #include "utils/handle/handle.h"
+#include "utils/handle/handleowner.h"
 
 
 class BoardComputer;
@@ -11,8 +12,7 @@ class WorldObject;
 /**
  *  Basic unit for AI. A Ship's Character can always execute only one task.
  */
-
-class AiTask : public Scriptable {
+class AiTask : public Scriptable, public HandleOwner {
 public:
     AiTask(BoardComputer* boardComputer);
     virtual ~AiTask();
@@ -22,11 +22,8 @@ public:
     virtual void update(float deltaSec) = 0;
     virtual bool isFinished();
 
-    Handle<AiTask>& handle();
-
 
 protected:
-    Handle<AiTask> m_handle;
     BoardComputer* m_boardComputer;
 };
 
