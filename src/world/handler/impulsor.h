@@ -6,9 +6,9 @@
 #include "property/property.h"
 
 
-class ElasticImpulsor {
+class Impulsor {
 public:
-    ElasticImpulsor();
+    Impulsor();
 
     void parse(std::list<Impulse>& worldObjectImpulses);
 

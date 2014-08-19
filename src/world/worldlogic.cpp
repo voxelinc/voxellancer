@@ -20,9 +20,11 @@ void WorldLogic::update(float deltaSecs) {
     m_voxelCollisionAccumulator.applyOnCollsionHooks();
 
     m_damageImpactGenerator.parse(m_voxelCollisionAccumulator.worldObjectCollisions());
-    m_elasticImpulseGenerator.parse(m_voxelCollisionAccumulator.worldObjectCollisions());
 
-    m_elasticImpulsor.parse(m_elasticImpulseGenerator.worldObjectImpulses());
+    m_impulseGenerator.parse(m_voxelCollisionAccumulator.worldObjectCollisions());
+
+    m_impulsor.parse(m_impulseGenerator.worldObjectImpulses());
+
     damageForwardLoop(m_damageImpactGenerator.damageImpacts());
 
     m_splitDetector.searchSplitOffs(m_damager.worldObjectModifications());

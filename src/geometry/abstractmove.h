@@ -2,6 +2,9 @@
 
 #include <glm/glm.hpp>
 
+#include "geometry/transform.h"
+
+
 class AbstractMove {
 public:
     AbstractMove();
@@ -15,6 +18,8 @@ public:
     const glm::vec3& angular() const;
     void setAngular(const glm::vec3& angular);
 
+    Transform moved(const Transform& transform, float deltaSec) const;
+
     AbstractMove& operator+=(const AbstractMove& other);
     AbstractMove operator*(const AbstractMove& other) const;
     AbstractMove operator*(float multiplier) const;
@@ -25,3 +30,4 @@ protected:
     glm::vec3 m_directional;
     glm::vec3 m_angular;
 };
+
