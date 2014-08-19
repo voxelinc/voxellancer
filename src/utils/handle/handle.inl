@@ -33,6 +33,11 @@ bool Handle<T>::valid() const {
 }
 
 template<typename T>
+Handle<T>::operator bool() const {
+    return m_impl->valid();
+}
+
+template<typename T>
 T* Handle<T>::operator->() {
     return get();
 }
@@ -56,5 +61,15 @@ template<typename T>
 Handle<T>& Handle<T>::operator=(T& other) {
     operator=(makeHandle(other));
     return *this;
+}
+
+template<typename T>
+bool Handle<T>::operator==(const T* other) const {
+    return m_referenced == other;
+}
+
+template<typename T>
+bool Handle<T>::operator==(const T& other) const {
+    return m_referenced == &other;
 }
 

@@ -24,6 +24,8 @@ public:
 
     bool valid() const;
 
+    operator bool() const;
+
     T* operator->();
     const T* operator->() const;
 
@@ -31,6 +33,9 @@ public:
     const T* operator*() const;
 
     Handle& operator=(T& other);
+
+    bool operator==(const T* other) const;
+    bool operator==(const T& other) const;
 
 
 protected:

@@ -37,10 +37,20 @@ Ship* Character::ship() {
 }
 
 void Character::setShip(Ship* ship) {
-    assert(ship->character().get() == this); // Relation has to be established by calling ship->setCharacter()
+    if (m_ship == ship) {
+        return;
+    }
+
+    if (m_ship) {
+        m_ship->setCharacter(nullptr);
+    }
 
     Ship* oldShip = m_ship.get();
     m_ship = makeHandle(ship);
+
+    if (m_ship) {
+        m_ship->setCharacter(this);
+    }
 
     onShipChanged(oldShip);
 }
