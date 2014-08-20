@@ -17,9 +17,7 @@
 #include "world/world.h"
 
 
-RingExplosion::RingExplosion() {
-
-}
+RingExplosion::RingExplosion() = default;
 
 RingExplosion::~RingExplosion() = default;
 
@@ -109,6 +107,7 @@ void RingExplosion::outer(const glm::vec3& position) {
 
 void RingExplosion::fire(const glm::vec3& position) {
     VoxelExplosionGenerator generator(nullptr);
+
     generator.setPosition(position);
     generator.setRadius(1.0f);
     generator.setScale(1.0f / 1.5f, 0.5f);
