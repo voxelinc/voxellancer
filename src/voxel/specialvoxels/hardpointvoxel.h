@@ -10,13 +10,15 @@ class Hardpoint;
 class HardpointVoxel: public SpecialVoxel {
 public:
     HardpointVoxel(const glm::ivec3& gridCell, int index);
+    HardpointVoxel(const HardpointVoxel& other);
 
     virtual Visuals visuals() const override;
 
     virtual void addToObject(WorldObject* object) override;
 
     virtual void onRemoval() override;
-    virtual void onDestruction() override;
+
+    virtual HardpointVoxel* clone() const override;
 
 
 protected:

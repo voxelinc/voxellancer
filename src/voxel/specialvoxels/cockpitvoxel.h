@@ -6,10 +6,10 @@
 class CockpitVoxel: public SpecialVoxel {
 public:
     CockpitVoxel(const glm::ivec3& gridCell, int index);
+    CockpitVoxel(const CockpitVoxel& other);
 
     virtual void addToObject(WorldObject* object) override;
 
-    virtual void onRemoval() override;
-    virtual void onDestruction() override;
+    virtual CockpitVoxel* clone() const override;
 };
 

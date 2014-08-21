@@ -81,6 +81,10 @@ float Voxel::density() const {
     return m_density;
 }
 
+Voxel* Voxel::clone() const {
+    return new Voxel(*this);
+}
+
 void Voxel::onRemoval() {
 
 }

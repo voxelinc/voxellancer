@@ -2,10 +2,11 @@
 
 #include "property/property.h"
 
-#include "voxel/voxelcluster.h"
-
 #include "equipment/engine.h"
 #include "equipment/engineslot.h"
+
+#include "voxel/voxelcluster.h"
+
 #include "worldobject/worldobject.h"
 #include "worldobject/worldobjectcomponents.h"
 
@@ -14,6 +15,12 @@ EngineSlotVoxel::EngineSlotVoxel(const glm::ivec3& gridCell, int index):
     SpecialVoxel(gridCell, index, Property<uint32_t>::get("voxels.engineSlot.color"), Property<float>::get("voxels.engineSlot.density"), Property<float>::get("voxels.engineSlot.hp")),
     m_engineSlot(nullptr)
 {
+}
+
+EngineSlotVoxel::EngineSlotVoxel(const EngineSlotVoxel& other):
+    SpecialVoxel(other)
+{
+    // m_engineSlot remains nullptr
 }
 
 void EngineSlotVoxel::addToObject(WorldObject* worldObject) {
@@ -36,7 +43,7 @@ void EngineSlotVoxel::onRemoval() {
     Voxel::onRemoval();
 }
 
-void EngineSlotVoxel::onDestruction() {
-    Voxel::onDestruction();
+EngineSlotVoxel* EngineSlotVoxel::clone() const {
+    return new EngineSlotVoxel(*this);
 }
 

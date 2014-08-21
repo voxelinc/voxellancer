@@ -17,6 +17,12 @@ HardpointVoxel::HardpointVoxel(const glm::ivec3& gridCell, int index):
 
 }
 
+HardpointVoxel::HardpointVoxel(const HardpointVoxel& other):
+    SpecialVoxel(other)
+{
+    // m_hardpoint remains a nullptr
+}
+
 Visuals HardpointVoxel::visuals() const {
     return Visuals(
         m_hardpoint->weapon() ? m_hardpoint->weapon()->visuals() : Voxel::visuals()
@@ -38,8 +44,7 @@ void HardpointVoxel::onRemoval() {
     Voxel::onRemoval();
 }
 
-void HardpointVoxel::onDestruction() {
-    //Drop Ammo?
-    Voxel::onDestruction();
+HardpointVoxel* HardpointVoxel::clone() const {
+    return new HardpointVoxel(*this);
 }
 

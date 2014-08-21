@@ -1,10 +1,14 @@
 #include "wrecker.h"
 
+#include "physics/physics.h"
+
+#include "voxel/voxel.h"
+
 #include "world/helper/worldobjectmodification.h"
+
 #include "worldobject/worldobject.h"
 #include "worldobject/worldobjectinfo.h"
-#include "physics/physics.h"
-#include "voxel/voxel.h"
+
 
 void Wrecker::detectWreckedObjects(std::list<WorldObjectModification>& worldObjectModifications) {
     m_wreckedObjects.clear();
@@ -17,7 +21,6 @@ void Wrecker::detectWreckedObjects(std::list<WorldObjectModification>& worldObje
             m_newWreckages.push_back(wreckFromObject(object));
         }
     }
-
 }
 
 std::list<WorldObject*>& Wrecker::wreckedObjects() {
@@ -35,8 +38,9 @@ WorldObject* Wrecker::wreckFromObject(WorldObject* object) {
     wreckage->physics().setSpeed(object->physics().speed());
 
     for (auto& pair : object->voxelMap()) {
-        wreckage->addVoxel(new Voxel(*pair.second));
+        wreckage->addVoxel(pair.second->clone());
     }
 
     return wreckage;
 }
+
