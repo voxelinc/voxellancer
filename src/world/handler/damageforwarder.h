@@ -16,13 +16,18 @@ public:
     std::list<DamageImpact> forwardedDamageImpacts();
 
 
-protected:
-    WorldObject *m_currentWorldObject;
-    std::list<Voxel*> *m_currentNeighbours;
-    glm::ivec3 m_currentGridCell;
+protected:;
+    WorldObject* m_currentWorldObject;
+    Voxel* m_currentDeadVoxel;
+    glm::vec3 m_currentDamageVec;
+    float m_currentFieldOfDamage;
 
     VoxelAccumulator<DamageImpact> m_damageImpactAccumulator;
 
-    float forwardFactor(float dotProduct, float fieldOfDamage, int neighbours);
+
+    void forward(DamageImpact& damageImpact);
+    float forwardFactor(float dotProduct, float fieldOfDamage);
+    glm::vec3 calculateForwardingTo(const glm::ivec3& neighbourCell);
+    float calculateDistanceFactor(const glm::ivec3& gridStep) const;
 };
 
