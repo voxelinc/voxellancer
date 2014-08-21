@@ -56,7 +56,7 @@ go_bandit([]() {
             WorldObjectModification modification(w);
 
 
-            modification.removedVoxel(voxels[0]->gridCell());
+            modification.removedVoxel(voxels[0]->cell());
             w->removeVoxel(voxels[0]);
 
             std::list<WorldObjectModification>l{ modification };
@@ -70,7 +70,7 @@ go_bandit([]() {
             WorldObjectModification modification(w);
 
 
-            modification.removedVoxel(voxels[2]->gridCell());
+            modification.removedVoxel(voxels[2]->cell());
             w->removeVoxel(voxels[2]);
 
             std::list<WorldObjectModification>l{ modification };
@@ -85,14 +85,14 @@ go_bandit([]() {
 
 
             Voxel* oneSplittOffVoxel = splitOff->splitOffVoxels().front();
-            AssertThat(oneSplittOffVoxel->gridCell().y, IsGreaterThan(2));
+            AssertThat(oneSplittOffVoxel->cell().y, IsGreaterThan(2));
         });
 
 
         it("detection works with destroyed crucial voxels", [&]() {
             WorldObjectModification modification(w);
 
-            modification.removedVoxel(voxels[1]->gridCell());
+            modification.removedVoxel(voxels[1]->cell());
             w->removeVoxel(voxels[1]);
 
             std::list<WorldObjectModification>l{ modification };
@@ -105,7 +105,7 @@ go_bandit([]() {
         it("detection works with diagonals", [&]() {
             WorldObjectModification modification(w);
 
-            modification.removedVoxel(voxels[3]->gridCell());
+            modification.removedVoxel(voxels[3]->cell());
             w->removeVoxel(voxels[3]);
 
             std::list<WorldObjectModification>l{ modification };
@@ -119,11 +119,11 @@ go_bandit([]() {
             WorldObjectModification modification(w);
 
 
-            modification.removedVoxel(voxels[3]->gridCell());
+            modification.removedVoxel(voxels[3]->cell());
             w->removeVoxel(voxels[3]);
-            modification.removedVoxel(voxels[2]->gridCell());
+            modification.removedVoxel(voxels[2]->cell());
             w->removeVoxel(voxels[2]);
-            modification.removedVoxel(voxels[1]->gridCell());
+            modification.removedVoxel(voxels[1]->cell());
             w->removeVoxel(voxels[1]);
 
             std::list<WorldObjectModification>l{ modification };
@@ -137,7 +137,7 @@ go_bandit([]() {
 
             w->addVoxel(new Voxel(glm::ivec3(3, 0, 0)));
             w->addVoxel(new Voxel(glm::ivec3(3, 1, 0)));
-            modification.removedVoxel(voxels[0]->gridCell());
+            modification.removedVoxel(voxels[0]->cell());
             w->removeVoxel(voxels[0]);
 
             std::list<WorldObjectModification>l{ modification };
@@ -152,7 +152,7 @@ go_bandit([]() {
         it("splits one split correctly", [&]() {
             WorldObjectModification modification(w);
 
-            modification.removedVoxel(voxels[2]->gridCell());
+            modification.removedVoxel(voxels[2]->cell());
             w->removeVoxel(voxels[2]);
 
             std::list<WorldObjectModification>l{ modification };
@@ -174,9 +174,9 @@ go_bandit([]() {
         it("splitting works with multiple splittoffs", [&]() {
             WorldObjectModification modification(w);
 
-            modification.removedVoxel(voxels[2]->gridCell());
+            modification.removedVoxel(voxels[2]->cell());
             w->removeVoxel(voxels[2]);
-            modification.removedVoxel(voxels[3]->gridCell());
+            modification.removedVoxel(voxels[3]->cell());
             w->removeVoxel(voxels[3]);
 
             std::list<WorldObjectModification>l{ modification };

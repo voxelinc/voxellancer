@@ -12,7 +12,7 @@ SplitData::SplitData(WorldObject* worldObject):
 
 void SplitData::addVoxel(Voxel *voxel) {
     m_splitOffVoxels.push_back(voxel);
-    m_llf = glm::min(m_llf, voxel->gridCell());
+    m_llf = glm::min(m_llf, voxel->cell());
 }
 
 WorldObject *SplitData::exWorldObject() {

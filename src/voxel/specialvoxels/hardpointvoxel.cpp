@@ -10,8 +10,8 @@
 #include "worldobject/worldobjectcomponents.h"
 
 
-HardpointVoxel::HardpointVoxel(const glm::ivec3& gridCell, int index):
-    SpecialVoxel(gridCell, index, Property<uint32_t>::get("voxels.hardpoint.color"), Property<float>::get("voxels.hardpoint.density"), Property<float>::get("voxels.hardpoint.hp")),
+HardpointVoxel::HardpointVoxel(const glm::ivec3& cell, int index):
+    SpecialVoxel(cell, index, Property<uint32_t>::get("voxels.hardpoint.color"), Property<float>::get("voxels.hardpoint.density"), Property<float>::get("voxels.hardpoint.hp")),
     m_hardpoint(nullptr)
 {
 

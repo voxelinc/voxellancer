@@ -7,8 +7,8 @@
 #include "worldobject/worldobject.h"
 
 
-CockpitVoxel::CockpitVoxel(const glm::ivec3& gridCell, int index):
-    SpecialVoxel(gridCell, index, Property<uint32_t>::get("voxels.cockpit.color"), Property<float>::get("voxels.cockpit.density"), Property<float>::get("voxels.cockpit.hp"))
+CockpitVoxel::CockpitVoxel(const glm::ivec3& cell, int index):
+    SpecialVoxel(cell, index, Property<uint32_t>::get("voxels.cockpit.color"), Property<float>::get("voxels.cockpit.density"), Property<float>::get("voxels.cockpit.hp"))
 {
 }
 

@@ -22,19 +22,19 @@ Voxel* ColorCoder::newCodedVoxel(const Voxel& voxel) {
     int index = color & 0x0000FF;
 
     if(prefixBits == m_engineSlotPrefix) {
-        return new EngineSlotVoxel(voxel.gridCell(), index);
+        return new EngineSlotVoxel(voxel.cell(), index);
     }
     if(prefixBits == m_hardpointPrefix) {
-        return new HardpointVoxel(voxel.gridCell(), index);
+        return new HardpointVoxel(voxel.cell(), index);
     }
     if(prefixBits == m_cockpitPrefix) {
-        return new CockpitVoxel(voxel.gridCell(), index);
+        return new CockpitVoxel(voxel.cell(), index);
     }
     if(prefixBits == m_fuelPrefix) {
-        return new FuelVoxel(voxel.gridCell(), index);
+        return new FuelVoxel(voxel.cell(), index);
     }
     if(prefixBits == m_crucialPrefix) {
-        return new CrucialVoxel(voxel.gridCell(), index);
+        return new CrucialVoxel(voxel.cell(), index);
     }
 
     return new Voxel(voxel);

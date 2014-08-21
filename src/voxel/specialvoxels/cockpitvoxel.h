@@ -5,7 +5,7 @@
 
 class CockpitVoxel: public SpecialVoxel {
 public:
-    CockpitVoxel(const glm::ivec3& gridCell, int index);
+    CockpitVoxel(const glm::ivec3& cell, int index);
 
     virtual void addToObject(WorldObject* object) override;
 

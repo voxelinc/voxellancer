@@ -14,11 +14,11 @@ class Sphere;
 
 class Voxel {
 public:
-    Voxel(const glm::ivec3& gridCell, uint32_t color = 0xFFFFFF, float density = defaultDensity(), float hp = defaultHp(), float emissiveness = 0);
+    Voxel(const glm::ivec3& cell, uint32_t color = 0xFFFFFF, float density = defaultDensity(), float hp = defaultHp(), float emissiveness = 0);
     Voxel(const Voxel& other);
     virtual ~Voxel();
 
-    const glm::ivec3 &gridCell() const;
+    const glm::ivec3 &cell() const;
 
     glm::vec3 position() const;
 

@@ -113,7 +113,7 @@ void WorldObject::removeVoxel(Voxel* voxel) {
         m_crucialVoxel = nullptr;
     }
 
-    if (m_cockpitVoxels.erase(voxel->gridCell())) {
+    if (m_cockpitVoxels.erase(voxel->cell())) {
         m_cockpitVoxelsDestroyed = m_cockpitVoxels.empty();
     }
 
