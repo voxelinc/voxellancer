@@ -22,8 +22,6 @@ class WorldLogic {
 public:
     WorldLogic(World &world);
 
-    void addDamageImpact(const DamageImpact& damageImpact);
-
     void update(float deltaSecs);
 
     DamageForwarder &damageForwarder();

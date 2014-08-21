@@ -10,10 +10,6 @@ WorldLogic::WorldLogic(World &world):
 
 }
 
-void WorldLogic::addDamageImpact(const DamageImpact& damageImpact) {
-    m_damageImpacts.push_back(damageImpact);
-}
-
 void WorldLogic::update(float deltaSecs) {
     m_world.god().remove();
     m_world.god().spawn();
@@ -24,7 +20,6 @@ void WorldLogic::update(float deltaSecs) {
     m_voxelCollisionAccumulator.applyOnCollsionHooks();
 
     m_damageImpactGenerator.parse(m_voxelCollisionAccumulator.worldObjectCollisions());
-    m_damageImpactGenerator.parse(m_damageImpacts);
 
     m_impulseGenerator.parse(m_voxelCollisionAccumulator.worldObjectCollisions());
 
@@ -49,8 +44,6 @@ void WorldLogic::update(float deltaSecs) {
 
     m_world.god().remove();
     m_world.god().spawn();
-
-    m_damageImpacts.clear();
 }
 
  DamageForwarder &WorldLogic::damageForwarder() {

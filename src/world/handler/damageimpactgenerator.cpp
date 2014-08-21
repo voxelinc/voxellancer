@@ -10,7 +10,6 @@
 #include "worldobject/worldobjectinfo.h"
 
 
-
 DamageImpactGenerator::DamageImpactGenerator():
     m_elasticity("physics.elasticity")
 {
