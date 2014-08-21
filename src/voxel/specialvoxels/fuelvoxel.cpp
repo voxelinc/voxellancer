@@ -6,9 +6,9 @@
 #include "voxel/voxeltree.h"
 #include "voxel/voxeltreenode.h"
 
-#include "worldobject/worldobject.h"
-
 #include "voxeleffect/voxelexplosiongenerator.h"
+
+#include "worldobject/worldobject.h"
 
 
 FuelVoxel::FuelVoxel(const glm::ivec3& gridCell, int index):
@@ -22,10 +22,6 @@ void FuelVoxel::addToObject(WorldObject* worldObject) {
 
 float FuelVoxel::damageForwardingDestructionDamage() {
     return 100.0f;
-}
-
-void FuelVoxel::onRemoval() {
-
 }
 
 void FuelVoxel::onDestruction() {
@@ -44,5 +40,9 @@ void FuelVoxel::onDestruction() {
     generator.setLifetime(0.9f, 0.4f);
 
     generator.spawn();
+}
+
+FuelVoxel* FuelVoxel::clone() const {
+    return new FuelVoxel(*this);
 }
 

@@ -9,6 +9,8 @@ public:
 
     int group() const;
 
+    virtual SpecialVoxel* clone() const override;
+
 
 protected:
     int m_group;

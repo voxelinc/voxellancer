@@ -12,17 +12,17 @@ CockpitVoxel::CockpitVoxel(const glm::ivec3& gridCell, int index):
 {
 }
 
+CockpitVoxel::CockpitVoxel(const CockpitVoxel& other):
+    SpecialVoxel(other)
+{
+}
+
 void CockpitVoxel::addToObject(WorldObject* worldObject) {
     Voxel::addToObject(worldObject);
     worldObject->addCockpitVoxel(m_gridCell);
 }
 
-void CockpitVoxel::onRemoval() {
-    //TODO: Tell my cockpit I'm gone
-}
-
-void CockpitVoxel::onDestruction() {
-    Voxel::onDestruction();
-    // Spawn dead pilot
+CockpitVoxel* CockpitVoxel::clone() const {
+    return new CockpitVoxel(*this);
 }
 

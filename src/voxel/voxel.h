@@ -18,7 +18,7 @@ public:
     Voxel(const Voxel& other);
     virtual ~Voxel();
 
-    const glm::ivec3 &gridCell() const;
+    const glm::ivec3& gridCell() const;
 
     glm::vec3 position() const;
 
@@ -36,6 +36,8 @@ public:
     virtual float damageForwardingDestructionDamage();
 
     float density() const;
+
+    virtual Voxel* clone() const;
 
     // These hooks apply only for WorldObjects and do not need to be called by pure VoxelClusters
     virtual void onRemoval();

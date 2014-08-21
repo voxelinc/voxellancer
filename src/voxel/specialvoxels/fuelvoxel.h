@@ -11,7 +11,8 @@ public:
 
     virtual float damageForwardingDestructionDamage() override;
 
-    virtual void onRemoval() override;
     virtual void onDestruction() override;
+
+    virtual FuelVoxel* clone() const override;
 };
 

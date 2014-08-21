@@ -19,11 +19,7 @@ void CrucialVoxel::addToObject(WorldObject* worldObject){
     worldObject->setCrucialVoxel(m_gridCell);
 }
 
-void CrucialVoxel::onRemoval(){
-    //TODO: Destroy ship / make wreckage?
-}
-
-void CrucialVoxel::onDestruction(){
-    Voxel::onDestruction();
+CrucialVoxel* CrucialVoxel::clone() const {
+    return new CrucialVoxel(*this);
 }
 
