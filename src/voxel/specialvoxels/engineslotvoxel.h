@@ -9,7 +9,7 @@ class EngineSlot;
 
 class EngineSlotVoxel: public SpecialVoxel {
 public:
-    EngineSlotVoxel(const glm::ivec3& gridCell, int index);
+    EngineSlotVoxel(const glm::ivec3& cell, int index);
 
     virtual Visuals visuals() const override;
 

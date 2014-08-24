@@ -52,10 +52,10 @@ void Damager::applyDamages(std::list<DamageImpact> &damageImpacts) {
             auto i = m_worldObjectModificationMap.find(damageImpact.worldObject());
             if(i == m_worldObjectModificationMap.end()) {
                 WorldObjectModification modification(damageImpact.worldObject());
-                modification.removedVoxel(voxel->gridCell());
+                modification.removedVoxel(voxel->cell());
                 m_worldObjectModificationMap.insert(std::pair<WorldObject*, WorldObjectModification>(damageImpact.worldObject(), modification));
             } else {
-                i->second.removedVoxel(voxel->gridCell());
+                i->second.removedVoxel(voxel->cell());
             }
         }
     }

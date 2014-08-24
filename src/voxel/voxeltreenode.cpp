@@ -136,7 +136,7 @@ void VoxelTreeNode::setActive(bool active) {
 }
 
 void VoxelTreeNode::insert(Voxel* voxel) {
-    assert(m_gridAABB.contains(voxel->gridCell()));
+    assert(m_gridAABB.contains(voxel->cell()));
 
     if (isAtomic()) {
         assert(m_voxel == nullptr);
@@ -150,7 +150,7 @@ void VoxelTreeNode::insert(Voxel* voxel) {
             toGroup();
         }
 
-        cellSubnode(voxel->gridCell())->insert(voxel);
+        cellSubnode(voxel->cell())->insert(voxel);
     }
 }
 
@@ -163,7 +163,7 @@ void VoxelTreeNode::remove(Voxel* voxel) {
 
         setActive(false);
     } else {
-        cellSubnode(voxel->gridCell())->remove(voxel);
+        cellSubnode(voxel->cell())->remove(voxel);
     }
 }
 

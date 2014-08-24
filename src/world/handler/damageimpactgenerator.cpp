@@ -29,8 +29,8 @@ void DamageImpactGenerator::parse(std::list<WorldObjectCollision>& worldObjectCo
         Transform targetTransformB = worldObjectB->physics().speed().moved(worldObjectB->transform(), 1.0f);
 
         for(VoxelCollision& voxelCollision :  worldObjectCollision.voxelCollisions()) {
-            glm::vec3 v1 = targetTransformA.applyTo(glm::vec3(voxelCollision.a().voxel()->gridCell())) - voxelCollision.a().voxel()->position();
-            glm::vec3 v2 = targetTransformB.applyTo(glm::vec3(voxelCollision.b().voxel()->gridCell())) - voxelCollision.b().voxel()->position();
+            glm::vec3 v1 = targetTransformA.applyTo(glm::vec3(voxelCollision.a().voxel()->cell())) - voxelCollision.a().voxel()->position();
+            glm::vec3 v2 = targetTransformB.applyTo(glm::vec3(voxelCollision.b().voxel()->cell())) - voxelCollision.b().voxel()->position();
 
             float speedDiff = glm::length(v1 - v2);
             float freedEnergy = ((m1 * m2) / (2*(m1 + m2))) * (speedDiff * speedDiff) * (1.0f - m_elasticity * m_elasticity);

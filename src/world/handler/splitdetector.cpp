@@ -64,7 +64,7 @@ void SplitDetector::init(WorldObject* worldObject) {
 
     for (auto& pair : worldObject->voxelMap())
     {
-        glm::ivec3 pos = pair.second->gridCell() - m_llf;
+        glm::ivec3 pos = pair.second->cell() - m_llf;
         int index = address(pos);
         m_voxelArray[index].voxel = pair.second;
     }
@@ -131,7 +131,7 @@ void SplitDetector::createSplitData(WorldObject* worldObject) {
     int crucialVoxelGroup = UNKNOWN;
     Voxel* v = worldObject->crucialVoxel();
     if (v) {
-        crucialVoxelGroup = m_voxelArray[address(v->gridCell() - m_llf)].groupId;
+        crucialVoxelGroup = m_voxelArray[address(v->cell() - m_llf)].groupId;
     }
 
     for (const VoxelGroup& v : m_voxelArray) {

@@ -9,7 +9,7 @@ class Hardpoint;
 
 class HardpointVoxel: public SpecialVoxel {
 public:
-    HardpointVoxel(const glm::ivec3& gridCell, int index);
+    HardpointVoxel(const glm::ivec3& cell, int index);
 
     virtual Visuals visuals() const override;
 

@@ -75,8 +75,8 @@ Sphere VoxelClusterBounds::sphere(const Transform& transform) {
 void VoxelClusterBounds::calculateMinimalGridAABB() {
     if(m_voxelCluster->voxelCount() > 0) {
         m_minimalGridAABB = GridAABB(
-            glm::ivec3((*m_voxelsXSorted.begin())->gridCell().x, (*m_voxelsYSorted.begin())->gridCell().y, (*m_voxelsZSorted.begin())->gridCell().z),
-            glm::ivec3((*m_voxelsXSorted.rbegin())->gridCell().x, (*m_voxelsYSorted.rbegin())->gridCell().y, (*m_voxelsZSorted.rbegin())->gridCell().z)
+            glm::ivec3((*m_voxelsXSorted.begin())->cell().x, (*m_voxelsYSorted.begin())->cell().y, (*m_voxelsZSorted.begin())->cell().z),
+            glm::ivec3((*m_voxelsXSorted.rbegin())->cell().x, (*m_voxelsYSorted.rbegin())->cell().y, (*m_voxelsZSorted.rbegin())->cell().z)
         );
     }
     else {

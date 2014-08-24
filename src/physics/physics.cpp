@@ -117,7 +117,7 @@ void Physics::voxelChanged(Voxel* voxel, bool isAdd) {
     float densitySumDelta = (isAdd ? 1 : -1) * voxel->density();
 
     m_densitySum += densitySumDelta;
-    m_densitySumVec += glm::vec3(voxel->gridCell()) * densitySumDelta;
+    m_densitySumVec += glm::vec3(voxel->cell()) * densitySumDelta;
 
     if (m_densitySum > 0.0f) {
         m_worldObject.transform().setCenterAndAdjustPosition(m_densitySumVec / m_densitySum);

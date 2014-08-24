@@ -14,21 +14,21 @@
 Property<float>* Voxel::s_defaultDensity;
 Property<float>* Voxel::s_defaultHp;
 
-Voxel::Voxel(const glm::ivec3& gridCell, uint32_t color, float density, float hp, float emissiveness):
-    m_gridCell(gridCell),
+Voxel::Voxel(const glm::ivec3& cell, uint32_t color, float density, float hp, float emissiveness):
+    m_gridCell(cell),
     m_voxelTreeNode(nullptr),
     m_visuals(color, 0.0f),
     m_density(density),
     m_hp(hp)
 {
     assert(m_density > 0.0f);
-    assert( gridCell.x >= 0 && gridCell.x < 256 &&
-            gridCell.y >= 0 && gridCell.y < 256 &&
-            gridCell.z >= 0 && gridCell.z < 256);
+    assert( cell.x >= 0 && cell.x < 256 &&
+            cell.y >= 0 && cell.y < 256 &&
+            cell.z >= 0 && cell.z < 256);
 }
 
 Voxel::Voxel(const Voxel& other):
-    Voxel(other.gridCell(), other.visuals().color(), other.density(), other.hp())
+    Voxel(other.cell(), other.visuals().color(), other.density(), other.hp())
 {
     m_visuals = other.visuals();
 }
@@ -36,7 +36,7 @@ Voxel::Voxel(const Voxel& other):
 Voxel::~Voxel() {
 }
 
-const glm::ivec3& Voxel::gridCell() const {
+const glm::ivec3& Voxel::cell() const {
     return m_gridCell;
 }
 

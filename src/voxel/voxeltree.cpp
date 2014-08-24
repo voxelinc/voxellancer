@@ -22,7 +22,7 @@ VoxelTreeNode* VoxelTree::root() {
 }
 
 void VoxelTree::insert(Voxel* voxel) {
-    while(!m_currentRoot->gridAABB().contains(voxel->gridCell())) {
+    while(!m_currentRoot->gridAABB().contains(voxel->cell())) {
         if(m_currentRoot->parent() != nullptr) {
             m_currentRoot = m_currentRoot->parent();
         } else {

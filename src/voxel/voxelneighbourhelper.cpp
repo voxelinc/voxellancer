@@ -13,7 +13,7 @@ VoxelNeighbourHelper::VoxelNeighbourHelper(VoxelCluster* voxelCluster, bool incl
 }
 
 const std::vector<Voxel*>& VoxelNeighbourHelper::neighbours(Voxel* voxel) {
-    return neighbours(voxel->gridCell());
+    return neighbours(voxel->cell());
 }
 
 

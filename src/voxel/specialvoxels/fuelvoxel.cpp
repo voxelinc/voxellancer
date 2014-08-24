@@ -11,8 +11,8 @@
 #include "voxeleffect/voxelexplosiongenerator.h"
 
 
-FuelVoxel::FuelVoxel(const glm::ivec3& gridCell, int index):
-    SpecialVoxel(gridCell, index, Property<uint32_t>::get("voxels.fuel.color"), Property<float>::get("voxels.fuel.density"), Property<float>::get("voxels.fuel.hp"))
+FuelVoxel::FuelVoxel(const glm::ivec3& cell, int index):
+    SpecialVoxel(cell, index, Property<uint32_t>::get("voxels.fuel.color"), Property<float>::get("voxels.fuel.density"), Property<float>::get("voxels.fuel.hp"))
 {
 }
 

@@ -65,9 +65,9 @@ const Voxel* VoxelCluster::voxel(const glm::ivec3& position) const {
 }
 
 void VoxelCluster::addVoxel(Voxel* voxel) {
-    assert(m_voxels[voxel->gridCell()] == nullptr);
+    assert(m_voxels[voxel->cell()] == nullptr);
 
-    m_voxels[voxel->gridCell()] = voxel;
+    m_voxels[voxel->cell()] = voxel;
     m_bounds->addVoxel(voxel);
     m_voxelRenderData->invalidate();
 }
@@ -76,7 +76,7 @@ void VoxelCluster::removeVoxel(Voxel* voxel) {
     assert(voxel != nullptr);
 
     m_bounds->removeVoxel(voxel); // Needs to be done before removal from m_voxels
-    m_voxels.erase(voxel->gridCell());
+    m_voxels.erase(voxel->cell());
     m_voxelRenderData->invalidate();
 
     delete voxel;

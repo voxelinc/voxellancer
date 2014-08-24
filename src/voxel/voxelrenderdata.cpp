@@ -71,7 +71,7 @@ void VoxelRenderData::updateBuffer() {
     for (auto& pair : m_voxel) {
         Voxel *voxel = pair.second;
         assert(voxel != nullptr);
-        voxelData[i++] = VoxelData{ glm::vec3(voxel->gridCell()), voxel->visuals().color(), voxel->visuals().emissiveness() };
+        voxelData[i++] = VoxelData{ glm::vec3(voxel->cell()), voxel->visuals().color(), voxel->visuals().emissiveness() };
     }
 
     m_voxelDataBuffer->unmap();

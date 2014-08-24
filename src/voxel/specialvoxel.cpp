@@ -1,8 +1,8 @@
 #include "specialvoxel.h"
 
 
-SpecialVoxel::SpecialVoxel(const glm::ivec3& gridCell, int group, uint32_t color, float mass, float hp):
-    Voxel(gridCell, color, mass, hp),
+SpecialVoxel::SpecialVoxel(const glm::ivec3& cell, int group, uint32_t color, float mass, float hp):
+    Voxel(cell, color, mass, hp),
     m_group(group)
 {
 
