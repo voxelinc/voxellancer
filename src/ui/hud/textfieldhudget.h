@@ -11,7 +11,7 @@ class TextFieldHudgetVoxels;
 
 class TextFieldHudget : public Hudget {
 public:
-    TextFieldHudget(HUD* hud, const glm::vec3& direction, float scale = 0.5f, const std::string& content = "", FontSize fontSize = FontSize::SIZE5x7);
+    TextFieldHudget(HUD* hud, const glm::vec3& direction, TextOrientation textOrientation = TextOrientation::FORWARDS, float scale = 0.5f, const std::string& content = "", FontSize fontSize = FontSize::SIZE5x7);
     virtual ~TextFieldHudget();
 
     void setText(const std::string& content);

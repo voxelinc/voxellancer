@@ -29,6 +29,7 @@
 #include "camera/camerahead.h"
 #include "camera/cameradolly.h"
 #include "ui/hud/hud.h"
+#include "ui/hud/buttonhudget.h"
 #include "display/viewer.h"
 
 #include "display/rendering/texturerenderer.h"
@@ -43,8 +44,10 @@ GamePlay::GamePlay(Game* game) :
     m_freecamInput(new GamePlayFreecamInput(*this)),
     m_freecamActive(false),
     m_scene(new GamePlayScene(*this)),
+    m_scenario(new ScriptedScenario(this, "")),
     m_soundManager(new SoundManager())
 {
+    setResetCallback();
     updateView();
     setInitialSubState(m_runningState);
 
@@ -109,12 +112,9 @@ SoundManager& GamePlay::soundManager() {
 }
 
 void GamePlay::loadScenario(int i) {
-    TextureRenderer loadRenderer("data/textures/loading.dds");
-    loadRenderer.display("Loading Scenario...");
+    displayLoadingScreen("Loading Scenario...");
 
-    m_soundManager->stopAll();
-    m_scenario->clear();
-    updateView();
+    clearScenario();
 
     switch (i) {
     case 0:
@@ -140,6 +140,8 @@ void GamePlay::loadScenario(int i) {
     }
 
     m_scenario->load();
+    setResetCallback();
+
 }
 
 void GamePlay::update(float deltaSec) {
@@ -170,3 +172,29 @@ void GamePlay::updateView() {
     World::instance()->player().hud().setView(&m_game->viewer().view());
 }
 
+void GamePlay::resetScenario() {
+    displayLoadingScreen("resetting scenario");
+    clearScenario();
+
+    m_scenario->load();
+}
+
+void GamePlay::clearScenario() {
+    m_soundManager->stopAll();
+    m_scenario->clear();
+    updateView();
+}
+
+void GamePlay::displayLoadingScreen(const std::string& status) {
+    TextureRenderer loadRenderer("data/textures/loading.dds");
+    loadRenderer.display(status);
+}
+
+void GamePlay::resetButtonCallback(ClickType clickType){
+    resetScenario();
+    setResetCallback();
+}
+
+void GamePlay::setResetCallback() {
+    World::instance()->player().hud().resetButton()->setCallback((std::function<void(ClickType clickType)>)std::bind(&GamePlay::resetButtonCallback, this, std::placeholders::_1));
+}

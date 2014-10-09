@@ -57,7 +57,8 @@ protected:
     void addActionsToVector();
     void retrieveInputValues();
 
-    float m_currentTimePressed;
+    float m_currentTimePressedLeft;
+    float m_currentTimePressedRight;
 
     Property<float> m_deadzoneMouse;
     Property<float> m_deadzoneGamepad;

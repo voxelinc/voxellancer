@@ -11,6 +11,9 @@
 #include "worldobject/ship.h"
 #include "worldobject/worldobject.h"
 
+#include "ui/hud/textfieldhudget.h"
+#include "ui/hud/hud.h"
+
 #include "display/rendering/skybox.h"
 #include "scripting/scriptengine.h"
 
@@ -159,5 +162,3 @@ void World::printStatus() {
     glow::info("  VoxelCount: %;", voxelCount);
     glow::info("  ParticleCount: %;", particleCount);
 }
-
-

@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <functional>
 #include <string>
 
 #include <glm/glm.hpp>
@@ -45,6 +46,7 @@
 #include "crosshair.h"
 #include "aimhelperhudget.h"
 #include "textfieldhudget.h"
+#include "buttonhudget.h"
 
 
 
@@ -54,6 +56,9 @@ HUD::HUD(Player* player):
     m_crossHair(new CrossHair(this)),
     m_aimHelper(new AimHelperHudget(this)),
     m_scanner(new WorldTreeScanner()),
+    m_targetName(new TextFieldHudget(this, glm::normalize(glm::vec3(0, -1.1f, -2)), TextOrientation::FORWARDS, 0.025f, "")),
+    m_speedLabel(new TextFieldHudget(this, glm::normalize(glm::vec3(1.5f, -1.1f, -2)), TextOrientation::FORWARDS, 0.020f, "")),
+    m_resetButton(new ButtonHudget(this, glm::normalize(glm::vec3(-1.5f, 1.1f, -2)), nullptr, TextOrientation::FORWARDS, 0.01f, "RESET", FontSize::SIZE5x7, ButtonStyle::BORDERED)),
     m_elements(new HUDElements(*this)),
     m_drawHud("vfx.drawhud"),
     m_view(nullptr)
@@ -62,6 +67,9 @@ HUD::HUD(Player* player):
 
     m_elements->addHudget(m_aimHelper);
     m_elements->addHudget(m_crossHair);
+    m_elements->addHudget(m_targetName);
+    m_elements->addHudget(m_speedLabel);
+    m_elements->addHudget(m_resetButton);
 }
 
 HUD::~HUD() = default;
@@ -277,3 +285,6 @@ void HUD::setView(const View* view) {
     m_view = view;
 }
 
+ButtonHudget* HUD::resetButton() {
+	return m_resetButton;
+}

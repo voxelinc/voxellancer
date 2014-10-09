@@ -10,13 +10,9 @@
 
 #include "property/property.h"
 
+#include "ui/clicktype.h"
+
 #include "utils/handle/handle.h"
-
-
-enum class ClickType {
-    None,
-    Selection
-};
 
 class Player;
 class Hudget;
@@ -30,6 +26,7 @@ class Viewer;
 class WorldTreeScanner;
 class CrossHair;
 class TextFieldHudget;
+class ButtonHudget;
 class View;
 
 class HUD {
@@ -76,6 +73,8 @@ public:
     void showMissionMessage(const std::string& message);
     void showMessage(const std::string& message);
 
+    ButtonHudget* resetButton();
+
 
 protected:
     Player* m_player;
@@ -87,6 +86,9 @@ protected:
     float m_fovy;
     float m_fovx;
 
+    TextFieldHudget* m_speedLabel;
+    TextFieldHudget* m_targetName;
+    ButtonHudget* m_resetButton;
     CrossHair* m_crossHair;
     AimHelperHudget* m_aimHelper;
 
@@ -98,5 +100,6 @@ protected:
 
     void updateScanner(float deltaSec);
     void updateFov();
-};
 
+    void openMenu(ClickType clicktype);
+};

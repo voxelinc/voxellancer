@@ -16,6 +16,8 @@ class VoxelParticleEngine;
 class WorldObject;
 class WorldLogic;
 class WorldTree;
+class TextFieldHudget;
+class HUD;
 
 class World {
 public:
@@ -44,7 +46,6 @@ public:
 
     static World* instance();
     static void reset(bool showWarning=true);
-    
 
 protected:
     friend class God;

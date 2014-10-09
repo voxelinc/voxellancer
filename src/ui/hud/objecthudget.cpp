@@ -39,7 +39,7 @@ ObjectHudget::ObjectHudget(HUD* hud):
     m_objectDelegate(nullptr),
     m_objectVoxels(new ObjectHudgetVoxels(this)),
     m_arrowVoxels(new ArrowHudgetVoxels(this)),
-    m_shieldLabel(new TextFieldHudget(hud, glm::vec3(), 0.010f))
+    m_shieldLabel(new TextFieldHudget(hud, glm::vec3(), TextOrientation::FORWARDS, 0.010f))
 {
     m_insideFov = false;
 }
