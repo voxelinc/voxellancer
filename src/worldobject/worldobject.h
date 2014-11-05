@@ -83,6 +83,8 @@ public:
     void updateTransformAndGeode(const glm::vec3& position, const glm::quat& orientation);
 
     virtual void onCollision();
+    virtual void onCollisionWith(WorldObject* collider);
+    virtual void onDeath();
     virtual void onSpawnFail();
     //virtual void onWrecked();
 
@@ -105,5 +107,6 @@ protected:
     bool m_crucialVoxelDestroyed;
     float m_collisionFieldOfDamage;
     SpawnState m_spawnState;
+    WorldObject* m_lastDamager;
 };
 

@@ -48,6 +48,11 @@ const T* Handle<T>::operator*() const {
 }
 
 template<typename T>
+bool Handle<T>::operator==(const Handle<T>& rhs) const {
+    return get() == rhs.get();
+}
+
+template<typename T>
 bool Handle<T>::valid() const {
     return m_impl->valid();
 }

@@ -33,7 +33,7 @@ void WorldLogic::update(float deltaSecs) {
     m_world.god().scheduleSpawn(m_splitter.splitOffWorldObjects());
 
     m_wrecker.detectWreckedObjects(m_damager.worldObjectModifications());
-    //m_wrecker.applyOnWreckageHooks();
+    m_wrecker.applyOnWreckageHooks();
 
     m_world.god().scheduleRemovals(m_wrecker.wreckedObjects());
     m_world.god().scheduleSpawn(m_wrecker.newWreckages());

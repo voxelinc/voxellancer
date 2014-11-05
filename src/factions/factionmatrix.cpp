@@ -69,6 +69,20 @@ FactionRelation& FactionMatrix::getRelationToPlayer(Faction& faction) {
     return getRelation(faction, playerFaction());
 }
 
+void FactionMatrix::changeFriendlinessToPlayer(Faction& faction, float difference) {
+    changeFriendlinessToFaction(faction, playerFaction(), difference);
+}
+
+void FactionMatrix::changeFriendlinessToFaction(Faction& faction, Faction& otherFaction, float difference) {
+    getRelation(faction, otherFaction).changeFriendliness(difference); //change friendliness to other faction
+    for (auto it = m_factions.begin(); it != m_factions.end(); ++it) { //change all other factions friendliness to other faction
+        if (it->second.get() != &otherFaction && it->second.get() != &faction) {
+            float friendliness = getRelation(faction, *it->second.get()).friendliness();
+            getRelation(*it->second.get(), otherFaction).changeFriendliness(difference*(friendliness / 100));
+        }
+    }
+}
+
 void FactionMatrix::setupRelations() {
     getRelation(playerFaction(), pirateFaction()).setFriendliness(-20.0f);
     getRelation(playerFaction(), policeFaction()).setFriendliness(10.0f);

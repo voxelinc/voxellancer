@@ -64,8 +64,7 @@ void ObjectHudget::update(float deltaSec) {
             // TODO: Replace the following two lines with proper WorldObjectType mechanism
             Ship* ship = dynamic_cast<Ship*>(worldObject);
             if (ship) {
-                Faction& faction = ship->character()->faction();
-                relationType = World::instance()->factionMatrix().getRelationToPlayer(faction).type();
+                relationType = ship->character()->relationTypeTo(m_hud->player()->ship());
             }
         }
     }

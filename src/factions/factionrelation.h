@@ -22,6 +22,7 @@ public:
 
     float friendliness() const;
     void setFriendliness(float friendliness);
+    void changeFriendliness(float difference);
 
     FactionRelationType type() const;
 
@@ -29,6 +30,7 @@ public:
     bool isFriendly() const;
 
     static std::string typeName(FactionRelationType type);
+    static FactionRelationType type(float friendliness);
 
 
 protected:

@@ -28,6 +28,8 @@ public:
     T* operator*();
     const T* operator*() const;
 
+    bool operator==(Handle<T> const& rhs) const;
+
     bool valid() const;
 
 

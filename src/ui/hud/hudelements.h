@@ -34,6 +34,7 @@ public:
     void showMissionInfo(const std::string& title, const std::string& caption);
     void showMissionMessage(const std::string& message);
     void showMessage(const std::string& message);
+    void showCommunicationMessage(const std::string& message);
 
     void update(float deltaSec);
     void draw();
@@ -57,5 +58,8 @@ protected:
 
     TextFieldHudget* m_missionMessage;
     HudgetHideAnimation* m_missionMessageHider;
+
+    TextFieldHudget* m_communicationMessage;
+    HudgetHideAnimation* m_communicationMessageHider;
 };
 

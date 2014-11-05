@@ -27,6 +27,9 @@ public:
     FactionRelation& getRelation(Faction& factionA, Faction& factionB);
     FactionRelation& getRelationToPlayer(Faction& faction);
 
+    void changeFriendlinessToPlayer(Faction& faction, float difference);
+    void changeFriendlinessToFaction(Faction& faction, Faction& otherFaction, float difference);
+
 protected:
     std::unordered_map<std::string, std::shared_ptr<Faction>> m_factions;
     std::unordered_map<std::pair<Faction*, Faction*>, std::shared_ptr<FactionRelation>> m_relations;

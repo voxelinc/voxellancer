@@ -5,6 +5,7 @@
 #include "utils/safenormalize.h"
 #include "physics/physics.h"
 #include "voxel/voxelclusterbounds.h"
+#include "ai/character.h"
 
 Squad::Squad(Ship* leader) :
     m_leader(leader),
@@ -125,3 +126,9 @@ glm::vec3 Squad::calculateFormationPosition(Ship* member, int position) {
     return m_leader->transform().position() + m_leader->physics().speed().directional() + m_leader->transform().orientation() * (distance * glm::normalize(direction));
 }
 
+void Squad::propagadeFriendlinessToWorldObject(WorldObject* worldObject, float friendliness) {
+    m_leader->character()->setFriendlinessToWorldObject(worldObject, friendliness);
+    for (Ship* ship : m_members) {
+        ship->character()->setFriendlinessToWorldObject(worldObject, friendliness);
+    }
+}

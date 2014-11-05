@@ -4,6 +4,8 @@
 #include "ai/character.h"
 #include "ai/squadlogic.h"
 
+#include "player.h"
+
 #include "factions/factionmatrix.h"
 
 #include "worldobject/worldobjectinfo.h"
@@ -50,6 +52,10 @@ Character* Ship::character() {
     return m_character.get();
 }
 
+Character* Ship::character() const {
+    return m_character.get();
+}
+
 BoardComputer* Ship::boardComputer() {
     return m_boardComputer.get();
 }
@@ -58,4 +64,12 @@ SquadLogic* Ship::squadLogic() {
     return m_squadLogic.get();
 }
 
+void Ship::onCollisionWith(WorldObject* worldObject) {
+    WorldObject::onCollisionWith(worldObject);
+    m_character->onCollisionWith(worldObject);
+}
+
+void Ship::onDeath() {
+    m_character->onKilledBy(m_lastDamager);
+}
 

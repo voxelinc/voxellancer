@@ -8,6 +8,7 @@
 
 class Ship;
 class AiGroupTask;
+class WorldObject;
 
 /**
  *  Ships can be joined to Squads to give them AiGroupTasks. The Squad's leader is the one to execute the Squad's task.
@@ -25,6 +26,8 @@ public:
 
     const std::vector<Ship*>& members();
 
+    //void propagadeFriendlinessToPlayer(float friendliness);
+    void propagadeFriendlinessToWorldObject(WorldObject* worldObject, float friendliness);
 
 protected:
     friend class SquadLogic;

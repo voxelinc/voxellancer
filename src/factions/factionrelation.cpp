@@ -3,6 +3,7 @@
 #include <cassert>
 
 #include "faction.h"
+#include "glm/glm.hpp"
 
 
 FactionRelation::FactionRelation(Faction& factionA, Faction& factionB, float friendliness):
@@ -29,24 +30,32 @@ void FactionRelation::setFriendliness(float friendliness) {
 }
 
 bool FactionRelation::isHostile() const {
-    return m_friendliness <= -30.0f;
+    return type() == FactionRelationType::Enemy;
 }
 
 bool FactionRelation::isFriendly() const {
-    return m_friendliness >= 30.0f;
+    return type() == FactionRelationType::Friend;
 }
 
 FactionRelationType FactionRelation::type() const {
-    if (m_friendliness <= -30.0f) {
+    return type(m_friendliness);
+}
+
+void FactionRelation::changeFriendliness(float difference) {
+    m_friendliness = glm::max(-100.0f, glm::min(100.0f, m_friendliness + difference));
+}
+
+FactionRelationType FactionRelation::type(float friendliness) {
+    if (friendliness <= -30.0f) {
         return FactionRelationType::Enemy;
     }
-    if (m_friendliness <= -5.0f) {
+    if (friendliness <= -5.0f) {
         return FactionRelationType::NegativeNeutral;
     }
-    if (m_friendliness <= 5.0f) {
+    if (friendliness <= 5.0f) {
         return FactionRelationType::Neutral;
     }
-    if (m_friendliness <= 30.0f) {
+    if (friendliness <= 30.0f) {
         return FactionRelationType::PositiveNeutral;
     }
     return FactionRelationType::Friend;

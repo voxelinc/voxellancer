@@ -3,11 +3,17 @@
 #include "collision/collisiondetector.h"
 #include "collision/collisionfilter.h"
 
+#include "equipment/weapons/bullet.h"
+#include "equipment/weapons/rocket.h"
+
 #include "resource/clustercache.h"
 
 #include "physics/physics.h"
-#include "worldobject/worldobjectinfo.h"
+
 #include "voxel/voxel.h"
+
+#include "worldobject/ship.h"
+#include "worldobject/worldobjectinfo.h"
 #include "worldobjectcomponents.h"
 #include "helper/componentsinfo.h"
 
@@ -146,6 +152,26 @@ bool WorldObject::isCrucialVoxelDestroyed(){
 }
 
 void WorldObject::onCollision() {
+
+}
+
+void WorldObject::onCollisionWith(WorldObject* worldObject) {
+    switch (worldObject->objectType()) {
+        case WorldObjectType::Ship:
+            m_lastDamager = worldObject;
+        break;
+        case WorldObjectType::Bullet:
+            m_lastDamager = static_cast<Bullet*>(worldObject)->creator();
+        break;
+        case WorldObjectType::Rocket:
+            m_lastDamager = static_cast<Rocket*>(worldObject)->creator();
+        break;
+        default:
+            m_lastDamager = worldObject;
+    }
+}
+
+void WorldObject::onDeath() {
 
 }
 

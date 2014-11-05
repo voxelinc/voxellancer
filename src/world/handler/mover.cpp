@@ -3,6 +3,7 @@
 #include "world/god.h"
 #include "world/world.h"
 #include "worldobject/worldobject.h"
+#include "worldobject/worldobjectinfo.h"
 #include "physics/physics.h"
 
 

@@ -3,6 +3,7 @@
 #include <memory>
 
 #include "worldobject/ship.h"
+#include "player.h"
 #include "ai/squadlogic.h"
 #include "ai/squad.h"
 #include "ai/character.h"
@@ -75,10 +76,10 @@ bool DefendAreaTask::isEnemyInRange() {
     for (WorldObject *worldObject : query.intersectingWorldObjects()) {
         Ship* ship = dynamic_cast<Ship*>(worldObject);
         if (ship) {
-            Faction& enemyFaction = ship->character()->faction();
-            if (enemyFaction.relationTo(m_squad.leader()->character()->faction()).type() == FactionRelationType::Enemy) {
+            if (m_squad.leader()->character()->relationTypeTo(ship) == FactionRelationType::Enemy) {
                 m_enemies.push_back(makeHandle(worldObject));
-            } else {
+            }
+            else {
                 continue;
             }
         }

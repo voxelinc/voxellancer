@@ -13,6 +13,8 @@ public:
     std::list<WorldObject*> &wreckedObjects();
     std::list<WorldObject*> &newWreckages();
 
+    void applyOnWreckageHooks();
+
 protected:
     WorldObject* wreckFromObject(WorldObject* object);
 
