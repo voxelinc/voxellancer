@@ -93,17 +93,25 @@ bool Gun::isBulletPathClear(const glm::vec3& point, bool checkFriendlyFire) {
 
     WorldTreeQuery fireDirectionQuery(&World::instance()->worldTree(), &capsuleToTarget, owner->collisionDetector().geode()->hint(), nullptr);
 
+    Faction* ownerFaction = owner->objectType() == WorldObjectType::Ship ?
+                                static_cast<Ship*>(owner)->character()->faction() :
+                                nullptr;
+
     for (WorldObject* object : fireDirectionQuery.intersectingWorldObjects()) {
         if (object == m_hardpoint->components()->worldObject()) {
             return false;
         }
 
-        if (checkFriendlyFire &&
-			owner->objectType() == WorldObjectType::Ship &&
-            object->objectType() == WorldObjectType::Ship &&
-            static_cast<Ship*>(object)->character()->faction().relationTo(static_cast<Ship*>(owner)->character()->faction()).isFriendly())
-        {
-            return false;
+        Faction* objectFaction = object->objectType() == WorldObjectType::Ship ?
+                                    static_cast<Ship*>(owner)->character()->faction():
+                                    nullptr;
+
+        if (checkFriendlyFire) {
+            if (ownerFaction && objectFaction) {
+                if (ownerFaction->relationTo(*objectFaction).isFriendly()) {
+                    return false;
+                }
+            }
         }
     }
     return true;

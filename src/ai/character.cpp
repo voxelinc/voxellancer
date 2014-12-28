@@ -8,34 +8,70 @@
 #include "worldobject/ship.h"
 
 
-Character::Character(Ship& ship, Faction& faction):
-    m_ship(ship),
-    m_faction(&faction),
-    m_task(nullptr)
+Character::Character():
+    m_name("Unnamed Character"),
+    m_faction(nullptr)
 {
 }
 
-Faction& Character::faction() {
-    return *m_faction;
+Character::~Character() = default;
+
+const std::string& Character::name() const {
+    return m_name;
 }
 
-void Character::setFaction(Faction& faction) {
-    m_faction = &faction;
+void Character::setName(const std::string& name) {
+    m_name = name;
 }
 
-void Character::setTask(std::shared_ptr<AiTask> task) {
-    m_task = task;
+Faction* Character::faction() {
+    return m_faction;
 }
 
-std::shared_ptr<AiTask> Character::task() {
+void Character::setFaction(Faction* faction) {
+    m_faction = faction;
+}
+
+Ship* Character::ship() {
+    return m_ship.get();
+}
+
+void Character::setShip(Ship* ship) {
+    if (m_ship == ship) {
+        return;
+    }
+
+    if (m_ship) {
+        m_ship->setCharacter(nullptr);
+    }
+
+    Ship* oldShip = m_ship.get();
+    m_ship = makeHandle(ship);
+
+    if (m_ship) {
+        m_ship->setCharacter(this);
+    }
+
+    onShipChanged(oldShip);
+}
+
+std::shared_ptr<AiTask>& Character::task() {
     return m_task;
 }
 
+void Character::setTask(std::shared_ptr<AiTask> task) {
+    m_task = task; std::cout << "Setting task " << name() << " " << m_task << std::endl;
+}
+
 void Character::update(float deltaSec) {
-    if (m_ship.squadLogic()->isSquadLeader() && m_ship.squadLogic()->squad()->task().get()) {
-        m_ship.squadLogic()->squad()->task()->update(deltaSec);
-    }
-    if (m_task.get()) {
-        m_task->update(deltaSec);
+    if (m_ship.valid()) {
+        if (m_ship->squadLogic()->isSquadLeader() && m_ship->squadLogic()->squad()->task().get()) {
+            m_ship->squadLogic()->squad()->task()->update(deltaSec);
+        }
     }
 }
+
+void Character::onShipChanged(Ship* oldShip) {
+
+}
+

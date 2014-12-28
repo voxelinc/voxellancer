@@ -17,7 +17,9 @@ class Sphere;
 class VoxelTree;
 class VoxelTreeNode;
 
-// this class contains datastructures for collision detection
+/**
+ * This class contains datastructures for collision detection
+ */
 class CollisionDetector {
 public:
     CollisionDetector(WorldObject& worldObject);
@@ -44,8 +46,8 @@ public:
     WorldTreeGeode* geode();
     void setGeode(WorldTreeGeode* geode);
 
-    void setWorldTree(WorldTree* worldTree);
     WorldTree* worldTree();
+    void setWorldTree(WorldTree* worldTree);
 
     VoxelTree& voxelTree();
 

@@ -28,18 +28,19 @@ public:
 
     virtual void update(float deltaSec) override;
 
-    void setTargetObject(WorldObject* target);
     WorldObject* targetObject();
+    void setTargetObject(WorldObject* target);
 
     BoardComputer* boardComputer();
+
     SquadLogic* squadLogic();
 
-    void setCharacter(Character* character);
-    Character* character();
+    const std::shared_ptr<Character>& character();
+    void setCharacter(const std::shared_ptr<Character>& character);
 
 
 protected:
-    std::unique_ptr<Character> m_character;
+    std::shared_ptr<Character> m_character;
     std::unique_ptr<BoardComputer> m_boardComputer;
 
     std::unique_ptr<SquadLogic> m_squadLogic;

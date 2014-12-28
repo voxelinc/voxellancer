@@ -52,7 +52,7 @@ void PatrolWaypointsTask::onNewLeader(Ship* leader) {
     leader->character()->setTask(m_leaderFlyTask);
 }
 
-void PatrolWaypointsTask::onMemberJoin(Ship* member) {
+void PatrolWaypointsTask::onMemberJoin(Ship* member) { std::cout << "Telling " << member <<" to follow" << std::endl;
     member->character()->setTask(std::make_shared<FormationMemberTask>(*member));
 }
 
@@ -61,7 +61,7 @@ const glm::vec3* PatrolWaypointsTask::currentTargetPoint() {
         return nullptr;
     } else if (m_currentPoint == m_points.end()) {
         m_currentPoint = m_points.begin();
-    } 
+    }
     return &*m_currentPoint;
 }
 

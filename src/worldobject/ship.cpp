@@ -1,7 +1,7 @@
 #include "ship.h"
 
 #include "ai/boardcomputer.h"
-#include "ai/character.h"
+#include "ai/nonplayercharacter.h"
 #include "ai/squadlogic.h"
 
 #include "factions/factionmatrix.h"
@@ -12,11 +12,12 @@
 
 
 Ship::Ship():
-    WorldObject(),
-    m_character(new Character(*this, World::instance()->factionMatrix().unknownFaction())),
+    m_character(new NonPlayerCharacter()),
     m_boardComputer(new BoardComputer(this)),
     m_squadLogic(new SquadLogic(*this))
 {
+    m_character->setShip(this);
+
     m_info->setShowOnHud(true);
     m_info->setCanLockOn(true);
 }
@@ -42,12 +43,24 @@ WorldObject* Ship::targetObject() {
     return m_targetObjectHandle.get();
 }
 
-void Ship::setCharacter(Character* character) {
-    m_character.reset(character);
+const std::shared_ptr<Character>& Ship::character() {
+    return m_character;
 }
 
-Character* Ship::character() {
-    return m_character.get();
+void Ship::setCharacter(const std::shared_ptr<Character>& character) {
+    if (m_character == character) {
+        return;
+    }
+
+    if (m_character) {
+        m_character->setShip(nullptr);
+    }
+
+    m_character = character;
+
+    if (m_character) {
+        m_character->setShip(this);
+    }
 }
 
 BoardComputer* Ship::boardComputer() {

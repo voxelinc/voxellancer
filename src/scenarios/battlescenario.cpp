@@ -37,7 +37,6 @@ BattleScenario::BattleScenario(GamePlay* gamePlay):
 }
 
 void BattleScenario::populateWorld() {
-
     glow::debug("Create WorldObjects");
 
     Ship *playerShip = WorldObjectBuilder("mox").buildShip();

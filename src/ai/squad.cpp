@@ -6,6 +6,7 @@
 #include "physics/physics.h"
 #include "voxel/voxelclusterbounds.h"
 
+
 Squad::Squad(Ship* leader) :
     m_leader(leader),
     m_task(nullptr),
